@@ -12,7 +12,8 @@ import {
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
-import { FunctionComponent, useEffect, useRef, useState } from 'react'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopToFormValue,
@@ -79,7 +80,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const formRef: RefObject<any> = useRef(undefined)
 
   const underarbeidCheck =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
@@ -215,11 +218,25 @@ export const SendInnView: FunctionComponent<TProps> = ({
     })()
   }, [pvkDokument])
 
+  useEffect(() => {
+    if (
+      (!_.isEmpty(formRef?.current?.errors) ||
+        behandlingensLivslopError ||
+        risikoscenarioError !== '' ||
+        tiltakError !== '' ||
+        savnerVurderingError !== '') &&
+      errorSummaryRef.current
+    ) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
+
   return (
     <Formik
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={submit}
+      innerRef={formRef}
       initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
       validate={(value) => {
         try {
@@ -233,6 +250,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
           validateYupSchema(value, pvkDocumentSchema(), true)
         } catch (err) {
           return yupToFormErrors(err)
+        } finally {
+          setSubmitClick(!submitClick)
         }
       }}
     >
@@ -385,9 +404,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 </Alert>
               )}
 
-              {(Object.values(errors).some(Boolean) ||
+              {(!_.isEmpty(errors) ||
                 behandlingensLivslopError ||
-                risikoscenarioError !== '') && (
+                risikoscenarioError !== '' ||
+                tiltakError !== '' ||
+                savnerVurderingError !== '') && (
                 <ErrorSummary
                   ref={errorSummaryRef}
                   heading='Du må rette disse feilene før du kan fortsette'
@@ -459,7 +480,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             } else {
                               await setFieldValue('status', pvkDokument.status)
                             }
-                            submitForm()
+                            await submitForm()
                           }}
                         >
                           Lagre og fortsett senere
@@ -472,7 +493,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           onClick={async () => {
                             await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
                             errorSummaryRef.current?.focus()
-                            submitForm()
+                            await submitForm()
                           }}
                         >
                           Send til Personvernombudet
@@ -485,7 +506,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           type='button'
                           onClick={async () => {
                             await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
-                            submitForm()
+                            await submitForm()
                           }}
                         >
                           Angre godkjenning
@@ -497,7 +518,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           type='button'
                           onClick={async () => {
                             await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-                            submitForm()
+                            await submitForm()
                           }}
                         >
                           Send til godkjenning av risikoeier
@@ -509,7 +530,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           type='button'
                           onClick={async () => {
                             await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-                            submitForm()
+                            await submitForm()
                           }}
                         >
                           Akseptér restrisiko

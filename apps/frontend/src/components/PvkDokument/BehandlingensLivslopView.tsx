@@ -2,7 +2,7 @@ import { BodyShort, Button, ErrorSummary, FileRejected, Heading, Loader } from '
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
-import { RefObject, useEffect, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import {
   createBehandlingensLivslop,
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -47,6 +47,8 @@ export const BehandlingensLivslopView = (props: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -67,6 +69,12 @@ export const BehandlingensLivslopView = (props: IProps) => {
       }
     })()
   }, [etterlevelseDokumentasjon])
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef?.current?.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   const submit = async (submitedValues: any) => {
     if (etterlevelseDokumentasjon) {
@@ -160,7 +168,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
                     </div>
 
                     {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                      <ErrorSummary className='mt-3'>
+                      <ErrorSummary className='mt-3' ref={errorSummaryRef}>
                         <ErrorSummary.Item href={'#vedleggMedFeil'}>
                           Vedlegg med feil
                         </ErrorSummary.Item>
@@ -171,8 +179,9 @@ export const BehandlingensLivslopView = (props: IProps) => {
                       <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
                         <Button
                           type='button'
-                          onClick={() => {
-                            submitForm()
+                          onClick={async () => {
+                            await submitForm()
+                            setSubmitClick(!submitClick)
                           }}
                         >
                           Lagre

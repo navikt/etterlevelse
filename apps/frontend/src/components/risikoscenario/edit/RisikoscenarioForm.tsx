@@ -1,6 +1,7 @@
 import { Button, ErrorSummary } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useRef, useState } from 'react'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import { RisikoscenarioKonsekvensnivaaField } from './RisikoscenarioKonsekvensnivaaField/RisikoscenarioKonsekvensnivaaField'
@@ -23,6 +24,13 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   return (
     <div>
@@ -44,7 +52,7 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
               <RisikoscenarioKonsekvensnivaaField />
             </div>
 
-            {Object.values(errors).some(Boolean) && (
+            {!_.isEmpty(errors) && (
               <div className='mt-5'>
                 <ErrorSummary
                   ref={errorSummaryRef}
@@ -64,10 +72,11 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
             <div className='flex gap-2 mt-5'>
               <Button
                 type='button'
-                onClick={() => {
+                onClick={async () => {
                   errorSummaryRef.current?.focus()
                   setValidateOnBlur(true)
-                  submitForm()
+                  await submitForm()
+                  setSubmitClick(!submitClick)
                 }}
               >
                 Lagre risikoscenario

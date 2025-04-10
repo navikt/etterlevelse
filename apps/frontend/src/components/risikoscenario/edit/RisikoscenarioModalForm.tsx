@@ -1,6 +1,7 @@
 import { Button, ErrorSummary, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, useRef, useState } from 'react'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario } from '../../../constants'
 import { RisikoscenarioKonsekvensnivaaField } from './RisikoscenarioKonsekvensnivaaField/RisikoscenarioKonsekvensnivaaField'
@@ -24,7 +25,15 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
   initialValues,
 }) => {
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const formRef: RefObject<any> = useRef(undefined)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   return (
     <Modal
@@ -39,6 +48,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
         onSubmit={submit}
         validationSchema={risikoscenarioCreateValidation()}
         initialValues={mapRisikoscenarioToFormValue(initialValues)}
+        innerRef={formRef}
       >
         {({ submitForm, errors }) => (
           <Form>
@@ -50,7 +60,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
               <RisikoscenarioKonsekvensnivaaField />
             </Modal.Body>
 
-            {Object.values(errors).some(Boolean) && (
+            {!_.isEmpty(errors) && (
               <div className='mx-5'>
                 <ErrorSummary
                   ref={errorSummaryRef}
@@ -71,10 +81,11 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
               <div className='flex gap-2 mt-5'>
                 <Button
                   type='button'
-                  onClick={() => {
+                  onClick={async () => {
                     errorSummaryRef.current?.focus()
                     setValidateOnBlur(true)
-                    submitForm()
+                    await submitForm()
+                    setSubmitClick(!submitClick)
                   }}
                 >
                   Lagre risikoscenario
