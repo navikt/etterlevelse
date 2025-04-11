@@ -1,7 +1,5 @@
 import {
   BarChartIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   DocPencilIcon,
   HouseIcon,
   InformationIcon,
@@ -9,7 +7,7 @@ import {
   PersonIcon,
   ReceiptIcon,
 } from '@navikt/aksel-icons'
-import { Button, Dropdown, InternalHeader, Label, Link, Spacer, Switch } from '@navikt/ds-react'
+import { Button, Dropdown, InternalHeader, Label, Link, Spacer } from '@navikt/ds-react'
 import * as React from 'react'
 import { useState } from 'react'
 import { Location, useLocation } from 'react-router-dom'
@@ -24,6 +22,7 @@ import { informationIcon, warningAlert } from './Images'
 import { Markdown } from './common/Markdown'
 import { Portrait } from './common/Portrait'
 import SkipToContent from './common/SkipToContent/SkipToContent'
+import ToggleActiveRole from './header/ToggleActiveRole'
 import MainSearch from './search/MainSearch'
 
 export const loginUrl = (location: Location, path?: string) => {
@@ -66,42 +65,6 @@ export const LoginButton = () => {
 }
 
 const LoggedInHeader = () => {
-  const [viewRoller, setViewRoller] = useState(false)
-
-  const roller = (
-    <div>
-      <Button
-        size={'xsmall'}
-        variant='tertiary'
-        onClick={() => setViewRoller(!viewRoller)}
-        icon={
-          viewRoller ? (
-            <ChevronUpIcon area-label='' aria-hidden />
-          ) : (
-            <ChevronDownIcon area-label='' aria-hidden />
-          )
-        }
-      >
-        Endre aktive roller
-      </Button>
-      <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
-        {user.getAvailableGroups().map((availableGroup) => {
-          return (
-            <Switch
-              size='small'
-              key={availableGroup.group}
-              checked={user.hasGroup(availableGroup.group)}
-              onChange={(event) =>
-                user.toggleGroup(availableGroup.group, (event.target as HTMLInputElement).checked)
-              }
-            >
-              {availableGroup.name}
-            </Switch>
-          )
-        })}
-      </div>
-    </div>
-  )
   const pvoPages = user.isPersonvernombud()
     ? [
         {
@@ -140,7 +103,7 @@ const LoggedInHeader = () => {
           kravPages,
           pvoPages,
           adminPages,
-          [{ label: roller }],
+          [{ label: <ToggleActiveRole /> }],
         ]}
         title={user.getIdent()}
         icon={<PersonIcon area-label='' aria-hidden />}
