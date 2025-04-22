@@ -1,6 +1,6 @@
 
 
-query getKrav($etterlevelseDokumentasjonId: String) {
+query getKrav($etterlevelseDokumentasjonId: ID) {
     krav(filter: {etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId}) {
         content{
             id
