@@ -6,7 +6,7 @@ import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumenta
 import { ERelationType } from '../../../constants'
 import { Markdown } from '../../common/Markdown'
 import {
-  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonerUrl,
 } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../../scaffold/Page'
@@ -51,7 +51,7 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
               pathName: 'Dokumentere etterlevelse',
             },
             {
-              href: etterlevelseDokumentasjonUrl(params.id),
+              href: etterlevelseDokumentasjonIdUrl(params.id),
               pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`,
             },
           ]}

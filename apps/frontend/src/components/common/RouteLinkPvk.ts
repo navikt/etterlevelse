@@ -1,10 +1,14 @@
+import { dokumentasjonUrl } from './RouteLinkEtterlevelsesdokumentasjon'
+
+export const pvkdokumentUrl: string = '/pvkdokument'
+
 export const pvkDokumentasjonStepUrl = (
   etterlevelseDokumentId: string | undefined,
-  pvkDokumentId: string | undefined,
-  step: number,
+  pvkDokumentId: number | string | undefined,
+  step: number | string,
   filter?: string
 ): string => {
-  const url: string = `/dokumentasjon/${etterlevelseDokumentId}/pvkdokument/${pvkDokumentId}/${step}`
+  const url: string = `${dokumentasjonUrl}/${etterlevelseDokumentId}${pvkdokumentUrl}/${pvkDokumentId}/${step}`
 
   if (filter) {
     return `${url}/${filter}`
@@ -19,7 +23,7 @@ export const pvkDokumentasjonPvkTypeStepUrl = (
   pvkDokumentId: string,
   step?: number
 ): string => {
-  const url: string = `/dokumentasjon/${etterlevelseDokumentId}/${pvkType}/${pvkDokumentId}`
+  const url: string = `${dokumentasjonUrl}/${etterlevelseDokumentId}/${pvkType}/${pvkDokumentId}`
 
   if (step) {
     return `${url}/${step}`
@@ -34,18 +38,18 @@ export const pvkDokumentasjonCopyUrl = (
   stepUrl: string,
   queryUrl: string
 ): string =>
-  `${locationOrigin}/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokumentId}/${stepUrl}?${queryUrl}`
+  `${locationOrigin}${dokumentasjonUrl}/${etterlevelseDokumentasjonId}${pvkdokumentUrl}/${pvkDokumentId}/${stepUrl}?${queryUrl}`
 
 export const pvkDokumentasjonBehandlingsenLivslopUrl = (
   etterlevelseDokumentId: string,
   behandlingensLivslopId: string
 ): string =>
-  `/dokumentasjon/${etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslopId}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslopId}`
 
 export const pvkDokumentasjonPvkBehovUrl = (
   etterlevelseDokumentId: string,
   pvkId: string
-): string => `/dokumentasjon/${etterlevelseDokumentId}/pvkbehov/${pvkId}`
+): string => `${dokumentasjonUrl}/${etterlevelseDokumentId}/pvkbehov/${pvkId}`
 
 export const risikoscenarioUrl = (pathname: string, risikoId: string): string =>
   `${pathname}?risikoscernario=${risikoId}`
@@ -58,7 +62,7 @@ export const pvkDokumenteringPvoTilbakemeldingUrl = (
   step: number,
   filter?: string
 ): string => {
-  const url: string = `/pvkdokument/${pvkDokumentId}/pvotilbakemelding/${step}`
+  const url: string = `${pvkdokumentUrl}/${pvkDokumentId}/pvotilbakemelding/${step}`
 
   if (filter) {
     return `${url}${filter}`

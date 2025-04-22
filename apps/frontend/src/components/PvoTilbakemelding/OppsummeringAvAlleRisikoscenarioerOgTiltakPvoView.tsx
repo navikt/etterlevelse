@@ -11,7 +11,7 @@ import {
   ITiltak,
 } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
-import { etterlevelseDokumentasjonUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
@@ -252,7 +252,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                               Dere har foreløpig ingen risikoscenarioer
                             </Heading>
                             Risikoscenarioer legges inn under{' '}
-                            <Link href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjonId)}>
+                            <Link
+                              href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}
+                            >
                               PVK-relaterte krav
                             </Link>{' '}
                             (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer

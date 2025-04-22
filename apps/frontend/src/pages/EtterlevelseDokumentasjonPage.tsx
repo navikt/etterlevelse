@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { TKravId } from '../api/KravApi'
-import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { KravView } from '../components/etterlevelseDokumentasjonTema/KravView'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -121,7 +121,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     dokumentasjonerBreadCrumbPath,
     {
       pathName: 'Temaoversikt',
-      href: etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon?.id),
+      href: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id),
     },
   ]
 

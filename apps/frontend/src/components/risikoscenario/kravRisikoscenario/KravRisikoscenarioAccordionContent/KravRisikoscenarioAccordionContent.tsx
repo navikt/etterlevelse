@@ -13,6 +13,7 @@ import {
   getTiltak,
 } from '../../../../api/TiltakApi'
 import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../../constants'
+import { risikoscenarioIdQuery } from '../../../common/RouteLinkRisiko'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../../../tiltak/edit/TiltakForm'
@@ -115,7 +116,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
       navigate(
-        `${window.location.pathname}?risikoscenario=${risikoscenario.id}&tiltak=${response.id}`
+        `${window.location.pathname}${risikoscenarioIdQuery(risikoscenario.id, response.id)}`
       )
     })
   }
@@ -146,7 +147,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
               ...activeRisikoscenario,
               tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
             })
-            navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
+            navigate(risikoscenarioIdQuery(risikoscenario.id))
             window.location.reload()
           })
         })
@@ -156,7 +157,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
             ...activeRisikoscenario,
             tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
           })
-          navigate(`${window.location.pathname}?risikoscenario=${risikoscenario.id}`)
+          navigate(risikoscenarioIdQuery(risikoscenario.id))
           window.location.reload()
         })
       }

@@ -9,6 +9,7 @@ import {
 import { TTemaCode } from '../../services/Codelist'
 import { getNumberOfDaysBetween } from '../../util/checkAge'
 import { getKravForTema } from '../../util/getKravForTema'
+import { temaUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { KravCard } from '../etterlevelseDokumentasjonTema/KravCard'
 
 interface IProps {
@@ -103,7 +104,7 @@ export const KravAccordionList = (props: IProps) => {
                   <Accordion.Content>
                     <div className='flex flex-col gap-6'>
                       <div>
-                        <Link href={`/tema/${tema.code}`} target='_blank'>
+                        <Link href={`${temaUrl}/${tema.code}`} target='_blank'>
                           Lær mer om {tema.shortName} (åpner i en ny fane)
                         </Link>
                       </div>

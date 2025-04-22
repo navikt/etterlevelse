@@ -3,7 +3,7 @@ import { Alert, BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { IKravReference, IRisikoscenario } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
-import { pvkDokumentasjonCopyUrl } from '../common/RouteLinkPvk'
+import { pvkDokumentasjonCopyUrl, pvkDokumentasjonStepUrl } from '../common/RouteLinkPvk'
 import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '../common/RouteLinkRisiko'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
@@ -48,7 +48,8 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       {markdownCopyLinkButton && (
         <CopyButton
           variant='action'
-          copyText={`[${risikoscenario.navn}](${window.location.origin}/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${risikoscenario.pvkDokumentId}/${stepUrl}?${queryUrl})`}
+          copyText={`[${risikoscenario.navn}](${window.location.origin}
+          ${pvkDokumentasjonStepUrl(etterlevelseDokumentasjonId, risikoscenario.pvkDokumentId, stepUrl, `?${queryUrl}`)})`}
           text='Kopiér scenario riktekstfelt lenke med titel'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}

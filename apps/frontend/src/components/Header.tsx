@@ -86,7 +86,7 @@ const LoggedInHeader = () => {
   const roller = (
     <div>
       <Button
-        size={'xsmall'}
+        size='xsmall'
         variant='tertiary'
         onClick={() => setViewRoller(!viewRoller)}
         icon={
@@ -121,14 +121,14 @@ const LoggedInHeader = () => {
     ? [
         {
           label: EPVO.overskrift,
-          href: pvoOversiktUrl(),
+          href: pvoOversiktUrl,
         },
       ]
     : []
   const kravPages = user.isKraveier()
     ? [
         { label: 'Forvalte og opprette krav', href: kravlisteUrl() },
-        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+        //{ label: 'Forvalte og opprette virkemiddel', href: virkemiddellisteUrl }
       ]
     : []
   const adminPages: {
@@ -187,7 +187,7 @@ const LoggedInHeader = () => {
           [
             {
               label: 'Forstå kravene',
-              href: kravTemaUrl(),
+              href: kravTemaUrl,
               icon: <ReceiptIcon area-label='' aria-hidden />,
             },
           ],
@@ -199,7 +199,7 @@ const LoggedInHeader = () => {
             },
           ],
         ]}
-        title={'Meny'}
+        title='Meny'
       />
     </div>
   )

@@ -26,7 +26,7 @@ export const PvoFormButtons = (props: IProps) => {
             variant='tertiary'
             onClick={() => {
               if (activeStep === 1) {
-                navigate(pvoOversiktUrl())
+                navigate(pvoOversiktUrl)
               } else {
                 window.scrollTo(0, 0)
                 setActiveStep(activeStep - 1)

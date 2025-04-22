@@ -8,7 +8,7 @@ import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
 import {
-  etterlevelseDokumentasjonGjenbrukUrl,
+  etterlevelseDokumentasjonGjenbrukIdUrl,
   etterlevelseDokumentasjonRelasjonUrl,
 } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { Teams } from '../common/TeamName'
@@ -206,7 +206,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                   <div className='mt-5'>
                     <Button
                       onClick={() => {
-                        navigate(etterlevelseDokumentasjonGjenbrukUrl(etterlevelseDokumentasjon.id))
+                        navigate(
+                          etterlevelseDokumentasjonGjenbrukIdUrl(etterlevelseDokumentasjon.id)
+                        )
                       }}
                       size='small'
                       variant='secondary'

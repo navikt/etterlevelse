@@ -14,7 +14,7 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokumen
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonStepUrl } from '../components/common/RouteLinkPvk'
 import { risikoscenarioFilterAlleUrl } from '../components/common/RouteLinkRisiko'
 import {
@@ -68,7 +68,7 @@ export const PvkDokumentPage = () => {
     dokumentasjonerBreadCrumbPath,
     {
       pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
-      href: etterlevelseDokumentasjonUrl(params.id),
+      href: etterlevelseDokumentasjonIdUrl(params.id),
     },
   ]
 

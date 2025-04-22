@@ -1,7 +1,7 @@
 import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
-import { pvoUrl } from '../common/RouteLinkPvo'
+import { pvoTabQueryUrl } from '../common/RouteLinkPvo'
 import PvoSistRedigertView from './PvoSistRedigertView'
 import { PvoTilbakemeldingsList } from './PvoTilbakemeldingsList'
 
@@ -25,7 +25,7 @@ const PvoTabs = () => {
       defaultValue={tab}
       onChange={(tabQuery: string) => {
         setTab(tabQuery)
-        navigate(pvoUrl(tabQuery))
+        navigate(pvoTabQueryUrl(tabQuery))
       }}
     >
       <Tabs.List>

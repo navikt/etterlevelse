@@ -13,7 +13,7 @@ import {
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { ExternalLink, paramQueryUrl } from '../common/RouteLink'
-import { etterlevelseDokumentasjonUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
@@ -250,7 +250,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                             Dere har foreløpig ingen risikoscenarioer
                           </Heading>
                           Risikoscenarioer legges inn under{' '}
-                          <Link href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjonId)}>
+                          <Link href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}>
                             PVK-relaterte krav
                           </Link>{' '}
                           (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer (åpner

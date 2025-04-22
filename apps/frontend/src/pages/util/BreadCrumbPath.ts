@@ -9,7 +9,7 @@ export const kravBreadCrumbPath: IBreadCrumbPath = {
 
 export const temaBreadCrumbPath: IBreadCrumbPath = {
   pathName: 'Forstå kravene',
-  href: kravTemaUrl(),
+  href: kravTemaUrl,
 }
 
 export const dokumentasjonerBreadCrumbPath: IBreadCrumbPath = {

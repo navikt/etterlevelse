@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../../../api/EtterlevelseDokumentasjonApi'
 import { user } from '../../../services/User'
 import {
-  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonerUrl,
 } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../../scaffold/Page'
@@ -31,7 +31,7 @@ export const EditEtterlevelseDokumentasjonPage = () => {
               pathName: 'Dokumentere etterlevelse',
             },
             {
-              href: etterlevelseDokumentasjonUrl(params.id),
+              href: etterlevelseDokumentasjonIdUrl(params.id),
               pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`,
             },
           ]}

@@ -20,7 +20,7 @@ import {
   getEtterlevelseArkiv,
   updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
-import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import { EEtterlevelseArkivStatus, IEtterlevelseArkiv } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
@@ -214,7 +214,9 @@ export const ArkivAdminPage = () => {
                     <Table.HeaderCell scope='row'>{arkivering.id}</Table.HeaderCell>
                     <Table.DataCell>
                       <Link
-                        href={etterlevelseDokumentasjonUrl(arkivering.etterlevelseDokumentasjonId)}
+                        href={etterlevelseDokumentasjonIdUrl(
+                          arkivering.etterlevelseDokumentasjonId
+                        )}
                       >
                         {arkivering.etterlevelseDokumentasjonId}
                       </Link>

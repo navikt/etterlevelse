@@ -6,8 +6,9 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import {
   etterlevelseDokumentasjonCreateUrl,
-  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonerUrl,
+  temaUrl,
 } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { EtterlevelseDokumentasjonsPanel } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonsPanel'
 import { PageLayout } from '../components/scaffold/Page'
@@ -203,7 +204,7 @@ const EtterlevelseDokumentasjonList = ({
                     ampli.logEvent('navigere', {
                       app: 'etterlevelse',
                       kilde: 'forside-panel',
-                      til: etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id),
+                      til: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id),
                       fra: '/',
                     })
                   }
@@ -225,12 +226,12 @@ const EtterlevelseDokumentasjonList = ({
 const ForstaKravene = () => (
   <div className='w-full mr-2.5'>
     <LinkPanel
-      href='/tema'
+      href={temaUrl}
       onClick={() => {
         ampli.logEvent('navigere', {
           kilde: 'forside-panel',
           app: 'etterlevelse',
-          til: '/tema',
+          til: temaUrl,
           fra: '/',
         })
       }}

@@ -17,7 +17,7 @@ import {
   dokumentRelationTypeToString,
   getAllDocumentRelation,
 } from '../api/DocumentRelationApi'
-import { etterlevelseDokumentasjonUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import { IDocumentRelation } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
@@ -148,12 +148,12 @@ export const DocumentRelationAdminPage = () => {
                   <Table.Row key={documentRelation.id}>
                     <Table.HeaderCell scope='row'>{documentRelation.id}</Table.HeaderCell>
                     <Table.DataCell>
-                      <Link href={etterlevelseDokumentasjonUrl(documentRelation.toDocument)}>
+                      <Link href={etterlevelseDokumentasjonIdUrl(documentRelation.toDocument)}>
                         {documentRelation.fromDocument}
                       </Link>
                     </Table.DataCell>
                     <Table.DataCell>
-                      <Link href={etterlevelseDokumentasjonUrl(documentRelation.toDocument)}>
+                      <Link href={etterlevelseDokumentasjonIdUrl(documentRelation.toDocument)}>
                         {documentRelation.toDocument}
                       </Link>
                     </Table.DataCell>

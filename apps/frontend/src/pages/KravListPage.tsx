@@ -4,7 +4,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { ListLayout } from '../components/common/ListLayout'
-import { kravlisteUrl } from '../components/common/RouteLinkKrav'
+import { kravUrl, kravlisteOpprettUrl, kravlisteUrl } from '../components/common/RouteLinkKrav'
 import StatusView from '../components/common/StatusTag'
 import { AllKrav } from '../components/kravList/AllKrav'
 import { SistRedigertKrav } from '../components/kravList/SisteRedigertKrav'
@@ -46,7 +46,7 @@ export const KravListPage = () => {
               icon={<PlusIcon area-label='' aria-hidden />}
               size='medium'
               as='a'
-              href='/kravliste/opprett'
+              href={kravlisteOpprettUrl()}
             >
               Nytt krav
             </Button>
@@ -93,7 +93,7 @@ export const KravPanels = ({ kravene, loading }: IKravPanelsProps) => {
                 <ListLayout
                   key={krav.id}
                   id={krav.id}
-                  url={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}
+                  url={`${kravUrl}/${krav.kravNummer}/${krav.kravVersjon}`}
                   documentNumber={`K${krav.kravNummer}.${krav.kravVersjon}`}
                   title={krav.navn}
                   status={<StatusView status={krav.status} />}

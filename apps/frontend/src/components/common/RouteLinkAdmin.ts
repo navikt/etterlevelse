@@ -1,16 +1,21 @@
-export const adminKravUrl = '/admin/krav'
-export const adminDokumentasjonUrl = '/admin/dokumentasjon'
-export const adminDokumentrelasjonUrl = '/admin/dokumentrelasjon'
-export const adminEtterlevelseUrl = '/admin/etterlevelse'
-export const adminArkivUrl = '/admin/arkiv'
-export const adminCodelistUrl = '/admin/codelist'
-export const adminMessagesLogUrl = '/admin/messageslog'
-export const adminVarselUrl = '/admin/varsel'
-export const adminMaillog = '/admin/maillog'
-export const forbiddenUrl = '/forbidden'
+import { dokumentasjonUrl, etterlevelseUrl } from './RouteLinkEtterlevelsesdokumentasjon'
+import { kravUrl } from './RouteLinkKrav'
+
+export const adminUrl: string = '/admin'
+
+export const adminKravUrl: string = `${adminUrl}${kravUrl}`
+export const adminDokumentasjonUrl: string = `${adminUrl}${dokumentasjonUrl}`
+export const adminDokumentrelasjonUrl: string = `${adminUrl}/dokumentrelasjon`
+export const adminEtterlevelseUrl: string = `${adminUrl}${etterlevelseUrl}`
+export const adminArkivUrl: string = `${adminUrl}/arkiv`
+export const adminCodelistUrl: string = `${adminUrl}/codelist`
+export const adminMessagesLogUrl: string = `${adminUrl}/messageslog`
+export const adminVarselUrl: string = `${adminUrl}/varsel`
+export const adminMaillog = `${adminUrl}/maillog`
+export const forbiddenUrl: string = '/forbidden'
 
 export const adminAuditUrl = (id?: string): string => {
-  const url: string = '/admin/audit'
+  const url: string = `${adminUrl}/audit`
 
   if (id) {
     return `${url}/${id}`
@@ -19,4 +24,4 @@ export const adminAuditUrl = (id?: string): string => {
   return url
 }
 
-export const adminCodelist = (listname: string): string => `/admin/codelist/${listname}`
+export const adminCodelist = (listname: string): string => `${adminUrl}/codelist/${listname}`

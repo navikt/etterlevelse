@@ -77,7 +77,7 @@ export const KravView: FunctionComponent<TProps> = ({
     <div className='w-full'>
       {loadingEtterlevelseData && (
         <div className='flex justify-center'>
-          <Loader size={'large'} />
+          <Loader size='large' />
         </div>
       )}
       {!loadingEtterlevelseData && etterlevelse && (

@@ -15,6 +15,7 @@ import { useKravPriorityList } from '../../api/KravPriorityListApi'
 import { EKravStatus, IKrav, IKravPriorityList, IRegelverk } from '../../constants'
 import { CodelistService, EListName, TTemaCode } from '../../services/Codelist'
 import { sortKravListeByPriority } from '../../util/sort'
+import { kravNummerVersjonUrl } from '../common/RouteLinkKrav'
 import StatusView from '../common/StatusTag'
 import { KravPanelHeader } from '../etterlevelseDokumentasjon/KravPanelHeader'
 import { EditPriorityModal } from './edit/EditPriorityModal'
@@ -88,7 +89,7 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => (
   <>
     {kravListe.map((krav: IKrav, index: number) => (
       <List.Item icon={<div />} key={`${krav.navn}_${krav.kravNummer}_${tema}_${index}`}>
-        <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
+        <LinkPanel href={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}>
           <LinkPanel.Title className='flex items-center'>
             <div className='max-w-xl'>
               <BodyShort size='small'>

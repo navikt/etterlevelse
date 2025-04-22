@@ -1,28 +1,53 @@
-export const etterlevelseDokumentasjonCreateUrl = '/dokumentasjon/create'
+import { kravUrl } from './RouteLinkKrav'
 
-export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: string): string =>
-  `/dokumentasjon/edit/${etterlevelseDokumentasjonId}`
+export const temaUrl: string = '/tema'
+export const virkemiddellisteUrl: string = '/virkemiddelliste'
 
-export const etterlevelseDokumentasjonUrl = (etterlevelseDokumentasjonId?: string): string =>
-  `/dokumentasjon/${etterlevelseDokumentasjonId}`
+export const etterlevelseUrl = '/etterlevelse'
+export const dokumentasjonUrl = '/dokumentasjon'
+export const etterlevelseDokumentasjonCreateUrl = `${dokumentasjonUrl}/create`
+export const etterlevelseDokumentasjonGjenbrukUrl = `${dokumentasjonUrl}/gjenbruk`
+
+export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: string): string => {
+  const url: string = `${dokumentasjonUrl}/edit`
+
+  if (etterlevelseDokumentasjonId) {
+    return `${url}/${etterlevelseDokumentasjonId}`
+  }
+
+  return url
+}
+
+export const etterlevelseDokumentasjonIdUrl = (etterlevelseDokumentasjonId?: string): string =>
+  `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}`
 
 export const etterlevelseDokumentasjonAlleUrl = (
   etterlevelseDokumentasjonId: string | undefined
-): string => `/dokumentasjon/${etterlevelseDokumentasjonId}/ALLE`
+): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}/ALLE`
 
 export const etterlevelseDokumentasjonTemaUrl = (
   etterlevelseDokumentasjonId: string | undefined,
   tema: string | undefined
-): string => `/dokumentasjon/${etterlevelseDokumentasjonId}/${tema}`
+): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}/${tema}`
 
 export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string): string =>
-  `/dokumentasjon/${etterlevelseDokumentasjonId}?tab=pvk`
+  `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tab=pvk`
 
-export const etterlevelseDokumentasjonGjenbrukUrl = (etterlevelseDokumentasjonId: string): string =>
-  `/dokumentasjon/gjenbruk/${etterlevelseDokumentasjonId}`
+export const etterlevelseDokumentasjonGjenbrukIdUrl = (
+  etterlevelseDokumentasjonId: string
+): string => `${etterlevelseDokumentasjonGjenbrukUrl}/${etterlevelseDokumentasjonId}`
 
-export const etterlevelseDokumentasjonRelasjonUrl = (etterlevelseDokumentasjonId: string): string =>
-  `/dokumentasjon/relasjon/${etterlevelseDokumentasjonId}`
+export const etterlevelseDokumentasjonRelasjonUrl = (
+  etterlevelseDokumentasjonId?: string
+): string => {
+  const url: string = `${dokumentasjonUrl}/relasjon`
+
+  if (etterlevelseDokumentasjonId) {
+    return `${url}/${etterlevelseDokumentasjonId}`
+  }
+
+  return url
+}
 
 export const etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl = (
   etterlevelseDokumentasjonId: string,
@@ -31,12 +56,14 @@ export const etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl = (
   kravNummer: number,
   kravVersjon: number
 ): string =>
-  `/dokumentasjon/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}/krav/${kravNummer}/${kravVersjon}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}/${temaCode}/${kravStatusFilter}${kravUrl}/${kravNummer}/${kravVersjon}`
 
 export const etterlevelseDokumentasjonerUrl = (tab?: string): string => {
+  const url: string = '/dokumentasjoner'
+
   if (tab) {
-    return `/dokumentasjoner/${tab}`
+    return `${url}/${tab}`
   }
 
-  return `/dokumentasjoner`
+  return url
 }

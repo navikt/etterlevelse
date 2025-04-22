@@ -22,7 +22,7 @@ import {
 import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
-import { etterlevelseDokumentasjonUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonStepUrl } from '../../common/RouteLinkPvk'
 import { pvkBehovSchema } from './pvkDocumentSchema'
 
@@ -223,9 +223,9 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 onClick={() => {
                   if (dirty) {
                     setIsUnsavedModalOpen(true)
-                    setUrlToNavigate(etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id))
+                    setUrlToNavigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
                   } else {
-                    navigate(etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.id))
+                    navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
                   }
                 }}
               >

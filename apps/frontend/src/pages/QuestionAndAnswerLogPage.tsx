@@ -14,6 +14,7 @@ import { ChangeEvent, ReactNode, useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
 import { getTilbakemeldingForKrav } from '../api/TilbakemeldingApi'
 import { PersonName } from '../components/common/PersonName'
+import { kravNummerVersjonUrl } from '../components/common/RouteLinkKrav'
 import { getMelderInfo } from '../components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '../components/scaffold/Page'
 import {
@@ -186,7 +187,11 @@ export const QuestionAndAnswerLogPage = () => {
 
                     <Table.DataCell className='w-[25%]'>
                       <Link
-                        href={`/krav/${message.kravNummer}/${message.kravVersjon}?tilbakemeldingId=${message.id}`}
+                        href={kravNummerVersjonUrl(
+                          message.kravNummer,
+                          message.kravVersjon,
+                          message.id
+                        )}
                       >
                         {message.kravNavn}
                       </Link>

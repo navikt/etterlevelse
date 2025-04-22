@@ -1,3 +1,5 @@
-export const pvoOversiktUrl = (): string => '/pvo/oversikt'
+export const pvoUrl: string = '/pvo'
+export const pvoOversiktUrl: string = `${pvoUrl}/oversikt`
+export const pvotilbakemeldingUrl: string = `${pvoUrl}tilbakemelding`
 
-export const pvoUrl = (tabQuery: string): string => `/pvo/${tabQuery}`
+export const pvoTabQueryUrl = (tabQuery: string): string => `${pvoUrl}/${tabQuery}`

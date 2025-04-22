@@ -55,10 +55,10 @@ import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
 import { Markdown } from '../common/Markdown'
 import {
+  etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonTemaUrl,
-  etterlevelseDokumentasjonUrl,
 } from '../common/RouteLinkEtterlevelsesdokumentasjon'
-import { kravUrl } from '../common/RouteLinkKrav'
+import { kravPathUrl, kravUrl } from '../common/RouteLinkKrav'
 import { getEtterlevelseStatus } from '../etterlevelseDokumentasjon/common/utils'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '../etterlevelseDokumentasjonTema/common/utils'
 import Etterlevelser from '../krav/Etterlevelser'
@@ -181,8 +181,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   }, [])
 
   const getNextKravUrl = (nextKravPath: string): string => {
-    const currentPath: string[] = location.pathname.split('/krav')
-    return kravUrl(currentPath[0], nextKravPath)
+    const currentPath: string[] = location.pathname.split(kravUrl)
+    return kravPathUrl(currentPath[0], nextKravPath)
   }
 
   const activeAlertModalController = () => {
@@ -510,7 +510,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                             setTimeout(
                               () =>
                                 navigate(
-                                  etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon?.id)
+                                  etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)
                                 ),
                               1
                             )

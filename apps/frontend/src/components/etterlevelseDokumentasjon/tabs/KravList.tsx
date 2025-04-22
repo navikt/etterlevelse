@@ -17,7 +17,7 @@ import { isFerdigUtfylt } from '../../../pages/EtterlevelseDokumentasjonTemaPage
 import { TTemaCode } from '../../../services/Codelist'
 import {
   etterlevelseDokumentasjonAlleUrl,
-  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonIdUrl,
 } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { KravAccordionList } from '../KravAccordionList'
 import { filterStatus, filterSuksesskriterieStatus, getNewestKravVersjon } from '../common/utils'
@@ -183,7 +183,7 @@ export const KravList = (props: IProps) => {
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => false))
-              navigate(etterlevelseDokumentasjonUrl(params.id))
+              navigate(etterlevelseDokumentasjonIdUrl(params.id))
             }}
           >
             Lukk alle tema

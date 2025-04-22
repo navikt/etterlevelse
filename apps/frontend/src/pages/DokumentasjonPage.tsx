@@ -9,7 +9,7 @@ import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonAp
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import {
-  etterlevelseDokumentasjonUrl,
+  etterlevelseDokumentasjonIdUrl,
   etterlevelsesDokumentasjonEditUrl,
 } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import {
@@ -227,7 +227,7 @@ export const DokumentasjonPage = () => {
             <BodyShort className='my-5'>
               Dette dokumentet er et arv fra{' '}
               <Link
-                href={etterlevelseDokumentasjonUrl(morDokumentRelasjon.fromDocumentWithData.id)}
+                href={etterlevelseDokumentasjonIdUrl(morDokumentRelasjon.fromDocumentWithData.id)}
               >
                 E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
                 {morDokumentRelasjon.fromDocumentWithData.title}

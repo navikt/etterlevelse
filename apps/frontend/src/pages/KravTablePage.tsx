@@ -11,6 +11,8 @@ import {
 import moment from 'moment'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '../api/KravApi'
+import { temaUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravNummerVersjonUrl } from '../components/common/RouteLinkKrav'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, TKravQL } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
@@ -117,7 +119,9 @@ export const KravTablePage = () => {
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Table.HeaderCell>
                   <Table.DataCell className='w-[25%]'>
-                    <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>{krav.navn}</Link>
+                    <Link href={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}>
+                      {krav.navn}
+                    </Link>
                   </Table.DataCell>
                   <Table.DataCell>
                     {krav.underavdeling && krav.underavdeling.shortName}
@@ -125,7 +129,7 @@ export const KravTablePage = () => {
                   <Table.DataCell>
                     {' '}
                     {krav.tema && (
-                      <Link href={`/tema/${krav.tema}`}>
+                      <Link href={`${temaUrl}/${krav.tema}`}>
                         {codelistUtils.getCode(EListName.TEMA, krav.tema)?.shortName}
                       </Link>
                     )}

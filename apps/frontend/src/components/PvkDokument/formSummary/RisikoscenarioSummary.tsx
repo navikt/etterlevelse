@@ -1,7 +1,7 @@
 import { FormSummary } from '@navikt/ds-react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { ExternalLink } from '../../common/RouteLink'
-import { risikoscenarioFilterAlleUrl } from '../../common/RouteLinkRisiko'
+import { risikoscenarioFilterAlleUrl, tabTiltakQuery } from '../../common/RouteLinkRisiko'
 import FormAlert from './FormAlert'
 
 interface IProps {
@@ -43,7 +43,7 @@ export const RisikoscenarioSummary = (props: IProps) => {
                 <FormSummary.Label id='tiltak'>Tiltak</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett {alleTiltak.length} tiltak.{' '}
-                  <ExternalLink href={risikoscenarioLink + '?tab=tiltak'}>
+                  <ExternalLink href={`${risikoscenarioLink}${tabTiltakQuery}`}>
                     Se alle tiltak
                   </ExternalLink>
                   .
