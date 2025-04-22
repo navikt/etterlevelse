@@ -123,7 +123,12 @@ public class KravGraphQlController {
 
     @SchemaMapping(typeName = "Krav")
     public List<BegrepResponse> begreper(KravGraphQlResponse krav) {
-        return convert(krav.getBegrepIder(), begrep -> begrepService.getBegrep(begrep).orElse(null));
+        try {
+            return convert(krav.getBegrepIder(), begrep -> begrepService.getBegrep(begrep).orElse(null));
+        } catch (Exception e) {
+            log.error("Error could not connect to behandlingskatalog for begreper, error: {}", e.toString());
+            return convert(krav.getBegrepIder(), begrep -> null);
+        }
     }
 
     @SchemaMapping(typeName = "Krav")
