@@ -17,7 +17,7 @@ type Query {
 
 input KravFilter {
     nummer: Int
-    etterlevelseDokumentasjonId: String
+    etterlevelseDokumentasjonId: ID
     etterlevelseDokumentasjonIrrevantKrav: Boolean
     virkemiddelId: String
     underavdeling: String
