@@ -197,7 +197,7 @@ type Etterlevelse {
     version: Int!
 
     behandlingId: String
-    etterlevelseDokumentasjonId: String
+    etterlevelseDokumentasjonId: ID
     etterlevelseDokumentasjon: EtterlevelseDokumentasjon
     kravNummer: Int!
     kravVersjon: Int!
@@ -258,7 +258,7 @@ type EtterlevelseDokumentasjonStats {
 }
 
 type EtterlevelseDokumentasjon {
-    id: String!
+    id: ID!
     changeStamp: ChangeStamp!
     version: Int!
     title: String!
@@ -286,13 +286,13 @@ type EtterlevelseDokumentasjon {
 }
 
 type PvoTilbakemelding {
-    id: String!
+    id: ID!
     changeStamp: ChangeStamp!
     version: Int!
     status: PvoTilbakemeldingStatus
-    pvkDokumentId: String!
+    pvkDokumentId: ID!
     pvkDokumentStatus: String
-    etterlevelseDokumentasjonId: String
+    etterlevelseDokumentasjonId: ID!
     etterlevelseDokumentasjonData: EtterlevelseDokumentasjon
     behandlingenslivslop: Tilbakemeldingsinnhold!
     behandlingensArtOgOmfang: Tilbakemeldingsinnhold!
