@@ -9,7 +9,7 @@ export const ToggleActiveRole = () => {
 
   useEffect(() => {
     if (isAdmin) {
-      const roles = localStorage.getItem('activeRoles')
+      const roles = sessionStorage.getItem('activeRoles')
       if (roles) {
         const parsedRoles = JSON.parse(roles)
         if (parsedRoles.length !== 0) {
@@ -22,7 +22,7 @@ export const ToggleActiveRole = () => {
   const onRoleChange = (group: EGroup, isChecked: boolean) => {
     user.toggleGroup(group, isChecked)
     if (isAdmin) {
-      localStorage.setItem('activeRoles', JSON.stringify(user.getGroups()))
+      sessionStorage.setItem('activeRoles', JSON.stringify(user.getGroups()))
     }
   }
 
