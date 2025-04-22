@@ -64,9 +64,11 @@ export const AllInfo = ({
 
       <LabelWrapper>
         <LabelAboveContent header={header} title='Begreper'>
-          {krav.begreper.map((begrep, index) => (
-            <BegrepView key={'begrep_' + index} begrep={begrep} />
-          ))}
+          {krav.begreper &&
+            krav.begreper.length !== 0 &&
+            krav.begreper.map((begrep, index) => (
+              <BegrepView key={'begrep_' + index} begrep={begrep} />
+            ))}
         </LabelAboveContent>
       </LabelWrapper>
 
