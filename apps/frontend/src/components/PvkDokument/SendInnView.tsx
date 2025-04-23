@@ -35,6 +35,7 @@ import {
   ITiltak,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
+import { user } from '../../services/User'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
@@ -87,6 +88,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const underarbeidCheck =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
+
+  const isRisikoeierCheck = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   const submit = async (submitedValues: IPvkDokument) => {
     if (
@@ -320,28 +323,26 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 </div>
               )}
 
-              {pvoTilbakemelding &&
-                (pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
-                  pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) && (
-                  <div>
-                    <div className='mt-5 mb-3 max-w-[75ch]'>
-                      <Label>Beskjed til personvernombudet</Label>
-                      <DataTextWrapper>
-                        {pvkDokument.merknadTilPvoEllerRisikoeier
-                          ? pvkDokument.merknadTilPvoEllerRisikoeier
-                          : 'Ingen beskjed'}
-                      </DataTextWrapper>
-                    </div>
-                    <div className='mt-5 mb-3 max-w-[75ch]'>
-                      <Label>Beskjed til etterlever</Label>
-                      <DataTextWrapper>
-                        {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-                          ? pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-                          : 'Ingen beskjed'}
-                      </DataTextWrapper>
-                    </div>
+              {pvoTilbakemelding && pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
+                <div>
+                  <div className='mt-5 mb-3 max-w-[75ch]'>
+                    <Label>Beskjed til personvernombudet</Label>
+                    <DataTextWrapper>
+                      {pvkDokument.merknadTilPvoEllerRisikoeier
+                        ? pvkDokument.merknadTilPvoEllerRisikoeier
+                        : 'Ingen beskjed'}
+                    </DataTextWrapper>
                   </div>
-                )}
+                  <div className='mt-5 mb-3 max-w-[75ch]'>
+                    <Label>Beskjed til etterlever</Label>
+                    <DataTextWrapper>
+                      {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
+                        ? pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
+                        : 'Ingen beskjed'}
+                    </DataTextWrapper>
+                  </div>
+                </div>
+              )}
 
               {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
                 <div className='mt-5 mb-3 max-w-[75ch]'>
@@ -514,17 +515,21 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         </Button>
                       )}
 
-                      {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-                        <Button
-                          type='button'
-                          onClick={async () => {
-                            await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-                            await submitForm()
-                          }}
-                        >
-                          Akseptér restrisiko
-                        </Button>
-                      )}
+                      {isRisikoeierCheck &&
+                        pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                          <Button
+                            type='button'
+                            onClick={async () => {
+                              await setFieldValue(
+                                'status',
+                                EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+                              )
+                              await submitForm()
+                            }}
+                          >
+                            Akseptér restrisiko
+                          </Button>
+                        )}
                     </div>
                   }
                 />
