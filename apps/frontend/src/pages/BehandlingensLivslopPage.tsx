@@ -45,7 +45,8 @@ export const BehandlingensLivslopPage = () => {
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.id)
   const [behandlingsLivslop, setBehandlingesLivslop] = useBehandlingensLivslop(
-    params.behandlingsLivslopId
+    params.behandlingsLivslopId,
+    params.id
   )
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
@@ -120,7 +121,7 @@ export const BehandlingensLivslopPage = () => {
                 response.etterlevelseDokumentasjonId +
                 pvkDokumentLink +
                 (pvkDokument ? pvkDokument.id : 'ny') +
-                '/1'
+                (pvkDokument && pvkDokument.skalUtforePvk ? '/1' : '')
             )
           }
         })

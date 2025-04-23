@@ -30,7 +30,7 @@ export const PvkBehovPage = () => {
   > = useParams<{ id?: string; pvkdokumentId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.id)
-  const [pvkdokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
+  const [pvkdokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId, params.id)
   const [profilering, setProfilering] = useState<boolean | null>(false)
   const [automatiskBehandling, setAutomatiskBehandling] = useState<boolean | null>(false)
   const [saerligKategorier, setSaerligKategorier] = useState<boolean>(false)

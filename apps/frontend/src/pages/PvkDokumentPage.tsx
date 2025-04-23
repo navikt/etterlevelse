@@ -49,7 +49,7 @@ export const PvkDokumentPage = () => {
   )
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
-  const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId)
+  const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId, params.id)
 
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()

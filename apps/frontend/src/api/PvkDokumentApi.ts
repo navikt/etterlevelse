@@ -86,7 +86,7 @@ export const deletePvkDokument = async (id: string) => {
   return (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
 }
 
-export const usePvkDokument = (pvkDokumentId?: string) => {
+export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjonId?: string) => {
   const isCreateNew = pvkDokumentId === 'ny'
   const [data, setData] = useState<IPvkDokument | undefined>(
     isCreateNew ? mapPvkDokumentToFormValue({}) : undefined
@@ -101,6 +101,18 @@ export const usePvkDokument = (pvkDokumentId?: string) => {
           setData(pvkDokument)
           setIsLoading(false)
         })
+      })()
+    } else if (etterlevelseDokumentasjonId && isCreateNew) {
+      //double check that pvkdokument doesnt not exist
+      ;(async () => {
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
+          async (pvkDokument) => {
+            if (pvkDokument) {
+              setData(pvkDokument)
+            }
+            setIsLoading(false)
+          }
+        )
       })()
     }
   }, [pvkDokumentId])
