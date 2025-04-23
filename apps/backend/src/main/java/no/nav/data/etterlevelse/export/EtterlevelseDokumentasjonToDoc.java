@@ -33,13 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -390,8 +384,13 @@ public class EtterlevelseDokumentasjonToDoc {
                 addHeading6("Begreper");
                 if (krav.get().getBegrepIder() != null && !krav.get().getBegrepIder().isEmpty()) {
                     for (int b = 0; b < krav.get().getBegrepIder().size(); b++) {
-                        BegrepResponse begrepResponse = begrepService.getBegrep(krav.get().getBegrepIder().get(b)).orElse(null);
-                        addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" + begrepResponse.getId() + ")<br/>" + begrepResponse.getBeskrivelse());
+                        try {
+                            BegrepResponse begrepResponse = begrepService.getBegrep(krav.get().getBegrepIder().get(b)).orElse(null);
+                            addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" + begrepResponse.getId() + ")<br/>" + begrepResponse.getBeskrivelse());
+                        } catch (Exception e) {
+                            log.error("Problem connecting to behandlingskatalog to get begreper, error: ", e);
+                            addMarkdownText("- [ Ingen navn ]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" + krav.get().getBegrepIder() + ")<br/> Ingen beskrivelse");
+                        }
                     }
                 } else {
                     addText("Ikke angitt");
