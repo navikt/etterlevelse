@@ -25,7 +25,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
       }
       setIsEdit(false)
 
-      navigate(risikoscenarioUrl(window.location.pathname, response.id))
+      navigate(risikoscenarioUrl(response.id))
     })
   }
 

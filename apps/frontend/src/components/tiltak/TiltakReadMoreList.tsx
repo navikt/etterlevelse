@@ -125,13 +125,13 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           async () =>
             await deleteTiltak(tiltakId).then(() => {
               setIsDeleteModalOpen(false)
-              navigate(risikoscenarioUrl(window.location.pathname, risikoscenario.id))
+              navigate(risikoscenarioUrl(risikoscenario.id))
               window.location.reload()
             })
         )
       } else {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
-          navigate(risikoscenarioUrl(window.location.pathname, risikoscenario.id))
+          navigate(risikoscenarioUrl(risikoscenario.id))
           window.location.reload()
         })
       }
@@ -151,7 +151,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
               navigate(risikoscenarioTiltakUrl(risikoscenario.id, tiltak.id))
             } else {
               setActiveTiltak('')
-              navigate(risikoscenarioUrl(window.location.pathname, risikoscenario.id))
+              navigate(risikoscenarioUrl(risikoscenario.id))
             }
           }}
           header={tiltak.navn}

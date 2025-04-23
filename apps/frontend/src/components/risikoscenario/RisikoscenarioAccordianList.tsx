@@ -58,11 +58,11 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
-      setNavigateUrl(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
+      setNavigateUrl(risikoscenarioUrl(risikoscenarioId))
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
+        navigate(risikoscenarioUrl(risikoscenarioId))
       }
     } else {
       setNavigateUrl(window.location.pathname)

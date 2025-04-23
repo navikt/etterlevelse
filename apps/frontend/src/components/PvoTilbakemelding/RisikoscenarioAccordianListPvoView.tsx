@@ -43,7 +43,7 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
 
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
-      navigate(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
+      navigate(risikoscenarioUrl(risikoscenarioId))
     } else {
       navigate(window.location.pathname)
     }

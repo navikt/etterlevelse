@@ -97,7 +97,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
       } else {
         setActiveRisikoscenarioId(risikoscenarioId)
 
-        navigate(risikoscenarioUrl(window.location.pathname, risikoscenarioId))
+        navigate(risikoscenarioUrl(risikoscenarioId))
       }
     } else {
       if (formRef.current?.dirty) {
