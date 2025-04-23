@@ -22,6 +22,8 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
       return 'Sendt inn til Personvernombudet'
     case EPvkDokumentStatus.VURDERT_AV_PVO:
       return 'Vurdert av Personvernombudet'
+    case EPvkDokumentStatus.TRENGER_GODKJENNING:
+      return 'Sendt til Risikoeier for godkjenning'
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
       return 'Godkjent av Risikoeier'
   }
