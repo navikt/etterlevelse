@@ -210,7 +210,8 @@ export const DokumentasjonPage = () => {
     pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse === '' &&
     pvkDokument.stemmerPersonkategorier === null &&
     pvkDokument.harInvolvertRepresentant === null &&
-    pvkDokument.harDatabehandlerRepresentantInvolvering === null
+    pvkDokument.harDatabehandlerRepresentantInvolvering === null &&
+    risikoscenarioList.length === 0
 
   const pvkDokumentVurdertCheck =
     pvkDokument &&
