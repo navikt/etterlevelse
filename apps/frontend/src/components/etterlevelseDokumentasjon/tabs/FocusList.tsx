@@ -6,7 +6,12 @@ import {
   getEtterlevelseDokumentasjon,
   updateKravPriorityEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { IKravPriorityList, TEtterlevelseDokumentasjonQL, TKravQL } from '../../../constants'
+import {
+  IKravPriorityList,
+  IRisikoscenario,
+  TEtterlevelseDokumentasjonQL,
+  TKravQL,
+} from '../../../constants'
 import { TTemaCode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { AccordionList } from '../../focusList/AccordionList'
@@ -20,6 +25,8 @@ interface IProps {
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
   temaListe: TTemaCode[]
+  risikoscenarioList: IRisikoscenario[]
+  isRisikoscenarioLoading: boolean
 }
 
 export const FocusList = (props: IProps) => {
@@ -31,6 +38,8 @@ export const FocusList = (props: IProps) => {
     utgaattStats,
     allKravPriority,
     loading,
+    risikoscenarioList,
+    isRisikoscenarioLoading,
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
@@ -78,6 +87,8 @@ export const FocusList = (props: IProps) => {
               allKravPriority={allKravPriority}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               loading={loading}
+              risikoscenarioList={risikoscenarioList}
+              isRisikoscenarioLoading={isRisikoscenarioLoading}
             />
           )}
 

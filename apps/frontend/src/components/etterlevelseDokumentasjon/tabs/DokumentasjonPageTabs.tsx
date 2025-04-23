@@ -7,6 +7,7 @@ import {
   IDocumentRelationWithEtterlevelseDokumetajson,
   IKravPriorityList,
   IPvkDokument,
+  IRisikoscenario,
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../../constants'
@@ -26,6 +27,8 @@ interface IProps {
   loading: boolean
   morDocumentRelation?: IDocumentRelationWithEtterlevelseDokumetajson
   pvkDokument?: IPvkDokument
+  risikoscenarioList: IRisikoscenario[]
+  isRisikoscenarioLoading: boolean
 }
 
 export const DokumentasjonPageTabs = (props: IProps) => {
@@ -38,6 +41,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     loading,
     morDocumentRelation,
     pvkDokument,
+    risikoscenarioList,
+    isRisikoscenarioLoading,
   } = props
 
   const params = useParams<{ id?: string; tema?: string }>()
@@ -93,6 +98,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               allKravPriority={allKravPriority}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               loading={loading}
+              risikoscenarioList={risikoscenarioList}
+              isRisikoscenarioLoading={isRisikoscenarioLoading}
             />
             <div className='w-full flex justify-end items-center'>
               <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
@@ -120,6 +127,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               relevanteStats={relevanteStats}
               utgaattStats={utgaattStats}
               temaListe={temaListe}
+              risikoscenarioList={risikoscenarioList}
+              isRisikoscenarioLoading={isRisikoscenarioLoading}
             />
           </div>
         </Tabs.Panel>
@@ -132,6 +141,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               allKravPriority={allKravPriority}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               loading={loading}
+              risikoscenarioList={risikoscenarioList}
+              isRisikoscenarioLoading={isRisikoscenarioLoading}
             />
           </div>
         </Tabs.Panel>

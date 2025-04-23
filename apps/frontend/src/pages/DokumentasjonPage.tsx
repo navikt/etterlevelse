@@ -7,6 +7,7 @@ import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../api/Behandli
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
+import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
 import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/TillatGjenbrukModal'
@@ -15,12 +16,14 @@ import { PageLayout } from '../components/scaffold/Page'
 import {
   EPvkDokumentStatus,
   ERelationType,
+  ERisikoscenarioType,
   IBehandlingensLivslop,
   IBreadCrumbPath,
   IDocumentRelationWithEtterlevelseDokumetajson,
   IEtterlevelseDokumentasjonStats,
   IPageResponse,
   IPvkDokument,
+  IRisikoscenario,
   TKravQL,
 } from '../constants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
@@ -104,6 +107,8 @@ export const DokumentasjonPage = () => {
 
   const [relevanteStats, setRelevanteStats] = useState<TKravQL[]>([])
   const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
+  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(true)
 
   const filterData = (
     unfilteredData:
@@ -167,8 +172,17 @@ export const DokumentasjonPage = () => {
         })
 
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
-          .then((response: IPvkDokument) => {
-            if (response) setPvkDokument(response)
+          .then((pvkDokument: IPvkDokument) => {
+            if (pvkDokument) {
+              setPvkDokument(pvkDokument)
+              setIsRisikoscenarioLoading(true)
+              getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.KRAV).then(
+                (riskoscenario) => {
+                  setRisikoscenarioList(riskoscenario.content)
+                  setIsRisikoscenarioLoading(false)
+                }
+              )
+            }
           })
           .catch(() => undefined)
 
@@ -407,6 +421,8 @@ export const DokumentasjonPage = () => {
         loading={loading}
         morDocumentRelation={morDokumentRelasjon}
         pvkDokument={pvkDokument}
+        risikoscenarioList={risikoscenarioList}
+        isRisikoscenarioLoading={isRisikoscenarioLoading}
       />
     </PageLayout>
   )
