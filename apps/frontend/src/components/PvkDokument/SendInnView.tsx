@@ -39,6 +39,7 @@ import { user } from '../../services/User'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
+import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -401,6 +402,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   Sendt til Personvernombudet
                 </Alert>
               )}
+
+              <Alert variant='info' className='my-5'>
+                Status: {pvkDokumentStatusToText(pvkDokument.status)}
+              </Alert>
 
               {(!_.isEmpty(errors) ||
                 behandlingensLivslopError ||
