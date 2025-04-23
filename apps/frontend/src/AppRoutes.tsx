@@ -277,7 +277,7 @@ const AppRoutes = (): JSX.Element => {
         caseSensitive={true}
       />
       <Route
-        path={`${adminAuditUrl()}/:id/`}
+        path={`${adminAuditUrl()}/:id`}
         element={<PrivateRoute component={<AuditPage />} adminPage />}
         caseSensitive={true}
       />
@@ -328,7 +328,7 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route path={`${temaUrl}/:tema`} element={<TemaPage />} caseSensitive={true} />
-      <Route path={`${temaUrl}/`} element={<TemaOversiktPage />} caseSensitive={true} />
+      <Route path={`${temaUrl}`} element={<TemaOversiktPage />} caseSensitive={true} />
       <Route path='/help' element={<RedirectHelpUrl />} caseSensitive={true} />
       <Route path='/omstottetiletterlevelse' element={<FAQ />} caseSensitive={true} />
       <Route path='/forbidden' element={<Forbidden />} caseSensitive={true} />
