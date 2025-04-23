@@ -98,10 +98,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     ) {
       await getPvkDokument(submitedValues.id).then((response) => {
         const updatedStatus =
-          submitedValues.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
-          submitedValues.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-          (response.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
-            response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+          submitedValues.status === EPvkDokumentStatus.UNDERARBEID
             ? response.status
             : submitedValues.status
 
@@ -472,14 +469,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           type='button'
                           variant='secondary'
                           onClick={async () => {
-                            if (
-                              pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
-                              pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
-                            ) {
-                              await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
-                            } else {
-                              await setFieldValue('status', pvkDokument.status)
-                            }
                             await submitForm()
                           }}
                         >
