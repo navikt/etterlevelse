@@ -8,7 +8,7 @@ type TFormSummaryPanelProps = {
   href: string
   step: number
   pvkDokumentStatus: EPvkDokumentStatus
-  status?: 'Under arbeid' | 'Ikke påbegynt'
+  status?: ReactNode
   customStatusTag?: ReactNode
 }
 
@@ -46,11 +46,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
         </Link>
       </FormSummary.Value>
       <FormSummary.Value>
-        {status && !customStatusTag && (
-          <Tag variant={status === 'Under arbeid' ? 'warning' : 'neutral'} size='xsmall'>
-            {status}
-          </Tag>
-        )}
+        {status && !customStatusTag && status}
         {customStatusTag && customStatusTag}
         {step === 4 && (
           <Tag

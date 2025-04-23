@@ -39,23 +39,63 @@ export const OversiktView = (props: IProps) => {
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
-  const formStatus = [
-    pvkDokument.stemmerPersonkategorier !== null ||
-      pvkDokument.personkategoriAntallBeskrivelse ||
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
-      pvkDokument.lagringsBeskrivelsePersonopplysningene,
-    pvkDokument.harInvolvertRepresentant !== null ||
-      pvkDokument.representantInvolveringsBeskrivelse ||
-      pvkDokument.harDatabehandlerRepresentantInvolvering !== null ||
-      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse,
-    allRisikoscenario.length > 0,
-    allRisikoscenario.filter(
-      (risikoscenario) =>
-        risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
-        risikoscenario.sannsynlighetsNivaaEtterTiltak ||
-        risikoscenario.nivaaBegrunnelseEtterTiltak !== ''
-    ).length > 0,
-  ]
+  const getFormStatus = (step: number) => {
+    if (step === 0) {
+      if (
+        pvkDokument.stemmerPersonkategorier !== null ||
+        pvkDokument.personkategoriAntallBeskrivelse ||
+        pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
+        pvkDokument.lagringsBeskrivelsePersonopplysningene
+      ) {
+        let answered = 0
+
+        if (pvkDokument.stemmerPersonkategorier !== null) answered += 1
+        if (pvkDokument.personkategoriAntallBeskrivelse) answered += 1
+        if (pvkDokument.tilgangsBeskrivelsePersonopplysningene) answered += 1
+        if (pvkDokument.lagringsBeskrivelsePersonopplysningene) answered += 1
+
+        return (
+          <Tag variant={answered < 4 ? 'warning' : 'success'} size='xsmall'>
+            {answered} av 4 felt har innhold
+          </Tag>
+        )
+      } else {
+        return (
+          <Tag variant='neutral' size='xsmall'>
+            Ikke påbegynt
+          </Tag>
+        )
+      }
+    } else if (step === 1) {
+      if (
+        pvkDokument.harInvolvertRepresentant !== null ||
+        pvkDokument.representantInvolveringsBeskrivelse ||
+        pvkDokument.harDatabehandlerRepresentantInvolvering !== null ||
+        pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse
+      ) {
+        let answered = 0
+
+        if (pvkDokument.harInvolvertRepresentant !== null) answered += 1
+        if (pvkDokument.representantInvolveringsBeskrivelse) answered += 1
+        if (pvkDokument.harDatabehandlerRepresentantInvolvering !== null) answered += 1
+        if (pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse) answered += 1
+
+        return (
+          <Tag variant={answered < 4 ? 'warning' : 'success'} size='xsmall'>
+            {answered} av 4 felt har innhold
+          </Tag>
+        )
+      } else {
+        return (
+          <Tag variant='neutral' size='xsmall'>
+            Ikke påbegynt
+          </Tag>
+        )
+      }
+    } else {
+      return undefined
+    }
+  }
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
@@ -73,14 +113,6 @@ export const OversiktView = (props: IProps) => {
     })
 
     return teamList.substring(2)
-  }
-
-  const getStatus = (step: number) => {
-    if (step === 4) {
-      return undefined
-    } else {
-      return formStatus[step] ? 'Under arbeid' : 'Ikke påbegynt'
-    }
   }
 
   const getRisikoscenarioStatus = (step: number) => {
@@ -292,7 +324,7 @@ export const OversiktView = (props: IProps) => {
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
-                  status={getStatus(index)}
+                  status={getFormStatus(index)}
                   customStatusTag={
                     index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
                   }
