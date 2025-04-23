@@ -1,6 +1,7 @@
 import { Button, Detail, ErrorSummary, Heading, ReadMore, TextField } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { ChangeEvent, RefObject, useRef, useState } from 'react'
+import _ from 'lodash'
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { searchResourceByNameOptions } from '../../../api/TeamApi'
 import { mapTiltakToFormValue } from '../../../api/TiltakApi'
@@ -28,7 +29,14 @@ export const TiltakForm = (props: IProps) => {
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
 
   const [validateOnBlur, setValidateOnBlur] = useState(false)
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   return (
     <Formik
@@ -164,9 +172,10 @@ export const TiltakForm = (props: IProps) => {
           <div className='flex gap-2 mt-5'>
             <Button
               type='button'
-              onClick={() => {
+              onClick={async () => {
                 setValidateOnBlur(true)
-                submitForm()
+                await submitForm()
+                setSubmitClick(!submitClick)
               }}
             >
               Lagre tiltak

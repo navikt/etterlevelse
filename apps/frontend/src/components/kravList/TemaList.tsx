@@ -107,7 +107,7 @@ const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => (
               <BodyShort size='small'>
                 {krav.changeStamp.lastModifiedDate !== undefined &&
                 krav.changeStamp.lastModifiedDate !== ''
-                  ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`
+                  ? `Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('LL')}`
                   : ''}
               </BodyShort>
             </div>

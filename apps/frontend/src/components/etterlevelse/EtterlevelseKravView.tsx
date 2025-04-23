@@ -325,11 +325,11 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                   <div>
                     {krav.aktivertDato !== null && krav.kravVersjon > 1 && (
                       <Tag variant='warning'>
-                        Ny versjon {moment(krav.aktivertDato).format('ll')}
+                        Ny versjon {moment(krav.aktivertDato).format('LL')}
                       </Tag>
                     )}
                     {krav.aktivertDato !== null && krav.kravVersjon === 1 && (
-                      <BodyShort>Opprettet {moment(krav.aktivertDato).format('ll')}</BodyShort>
+                      <BodyShort>Opprettet {moment(krav.aktivertDato).format('LL')}</BodyShort>
                     )}
                   </div>
                   {kravFilter === EKravFilterType.RELEVANTE_KRAV && (

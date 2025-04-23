@@ -29,7 +29,7 @@ export const ArkiveringModal = ({
         return (
           <>
             <BodyShort>
-              Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('lll')}
+              Bestilt: {moment(etterlevelseArkiv?.tilArkiveringDato).format('LLL')}
             </BodyShort>
             <BodyShort>
               Arkivert av:{' '}
@@ -43,7 +43,7 @@ export const ArkiveringModal = ({
         return (
           <>
             <BodyShort>
-              Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('lll')}
+              Sist arkivert: {moment(etterlevelseArkiv?.arkiveringDato).format('LLL')}
             </BodyShort>
 
             <BodyShort>
@@ -95,7 +95,7 @@ export const ArkiveringModal = ({
           )}
         <div>{etterlevelseArkiv ? getStatustext(etterlevelseArkiv.status) : ''}</div>
         {isArchivingCancelled && etterlevelseArkiv?.arkiveringAvbruttDato && (
-          <div>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('lll')}</div>
+          <div>Avbrutt dato: {moment(etterlevelseArkiv?.arkiveringAvbruttDato).format('LLL')}</div>
         )}
         {etterlevelseArkiv &&
           (etterlevelseArkiv.status === EEtterlevelseArkivStatus.ARKIVERT ||

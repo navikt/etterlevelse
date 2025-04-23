@@ -38,7 +38,7 @@ export const KravPriorityPanel = (props: IProps) => {
             <StatusView status={krav.status} />
             <div className='w-44 ml-2.5'>
               <BodyShort size='small'>
-                {`Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('ll')}`}
+                {`Sist endret: ${moment(krav.changeStamp.lastModifiedDate).format('LL')}`}
               </BodyShort>
             </div>
           </div>

@@ -1,6 +1,6 @@
-import { Alert, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
+import { Alert, Button, Heading, Link, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { RefObject } from 'react'
+import { RefObject, useState } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -36,9 +36,12 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
     formRef,
     pvoTilbakemelding,
   } = props
+  const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
 
   const submit = async (pvkDokument: IPvkDokument) => {
-    getPvkDokument(pvkDokument.id).then(async (response) => {
+    await getPvkDokument(pvkDokument.id).then(async (response) => {
       const updatedatePvkDokument = {
         ...response,
         stemmerPersonkategorier: pvkDokument.stemmerPersonkategorier,
@@ -48,7 +51,6 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
       }
       await updatePvkDokument(updatedatePvkDokument).then((response: IPvkDokument) => {
         setPvkDokument(response)
-        window.location.reload()
       })
     })
   }
@@ -64,7 +66,7 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
             initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
             innerRef={formRef}
           >
-            {({ submitForm }) => (
+            {({ submitForm, values, resetForm, setFieldValue, initialValues }) => (
               <Form>
                 <div className='flex justify-center'>
                   <div>
@@ -154,16 +156,122 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
                       />
                     </div>
 
-                    <div className='mt-5'>
+                    {savedSuccessful && (
+                      <div className='mt-5'>
+                        <Alert
+                          variant='success'
+                          closeButton
+                          onClose={() => setSavedSuccessful(false)}
+                        >
+                          Lagring vellyket
+                        </Alert>
+                      </div>
+                    )}
+
+                    <div className='mt-5 flex gap-2'>
                       <Button
                         type='button'
-                        onClick={() => {
-                          submitForm()
+                        onClick={async () => {
+                          await submitForm()
+                          resetForm({ values })
+                          setSavedSuccessful(true)
                         }}
                       >
                         Lagre
                       </Button>
+
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={async () => {
+                          setIsModalOpen(true)
+                        }}
+                      >
+                        Forkast endringer
+                      </Button>
+
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={async () => {
+                          setIsNullStilModalOpen(true)
+                        }}
+                      >
+                        Nullstill svar
+                      </Button>
                     </div>
+
+                    {isNullStilModalOpen && (
+                      <Modal
+                        open={isNullStilModalOpen}
+                        onClose={() => setIsNullStilModalOpen(false)}
+                        header={{ heading: 'Er du sikkert på at du vil nullstille svarene?' }}
+                      >
+                        <Modal.Footer>
+                          <Button
+                            type='button'
+                            onClick={async () => {
+                              await setFieldValue('stemmerPersonkategorier', null)
+                              await setFieldValue('personkategoriAntallBeskrivelse', '')
+                              await setFieldValue('tilgangsBeskrivelsePersonopplysningene', '')
+                              await setFieldValue('lagringsBeskrivelsePersonopplysningene', '')
+                              await submitForm().then(() => {
+                                resetForm({
+                                  values: {
+                                    ...pvkDokument,
+                                    stemmerPersonkategorier: undefined,
+                                    personkategoriAntallBeskrivelse: '',
+                                    tilgangsBeskrivelsePersonopplysningene: '',
+                                    lagringsBeskrivelsePersonopplysningene: '',
+                                  },
+                                })
+                                setIsNullStilModalOpen(false)
+                              })
+                            }}
+                          >
+                            Ja, lagre
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => {
+                              setIsNullStilModalOpen(false)
+                            }}
+                          >
+                            Nei, avbryt
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    )}
+
+                    {isModalOpen && (
+                      <Modal
+                        open={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        header={{ heading: 'Er du sikkert på at du vil forkaste endringene?' }}
+                      >
+                        <Modal.Footer>
+                          <Button
+                            type='button'
+                            onClick={() => {
+                              resetForm({ values: initialValues })
+                              setIsModalOpen(false)
+                            }}
+                          >
+                            Ja
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => {
+                              setIsModalOpen(false)
+                            }}
+                          >
+                            Nei
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    )}
                   </div>
                 </div>
               </Form>

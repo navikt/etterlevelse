@@ -40,21 +40,27 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       setTimeout(() => {
         const element: HTMLElement | null = document.getElementById(risikoscenarioId)
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-
+          element.focus()
+          window.scrollTo({
+            top: element.getBoundingClientRect().top + window.pageYOffset - 30,
+            behavior: 'smooth',
+          })
           if (tiltakId) {
             const tiltakElement: HTMLElement | null = document.getElementById(
               `${risikoscenarioId}_${tiltakId}`
             )
             if (tiltakElement) {
               tiltakElement.focus()
-              tiltakElement.scrollIntoView({ behavior: 'smooth' })
+              window.scrollTo({
+                top: tiltakElement.getBoundingClientRect().top + window.pageYOffset - 30,
+                behavior: 'smooth',
+              })
             }
           }
         }
       }, 200)
     }
-  }, [])
+  }, [risikoscenarioId, tiltakId])
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {

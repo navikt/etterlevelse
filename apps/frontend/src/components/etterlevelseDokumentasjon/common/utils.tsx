@@ -25,7 +25,7 @@ export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: stri
       return 'Ferdig utfylt etterlevelse'
     case EEtterlevelseStatus.OPPFYLLES_SENERE:
       if (frist) {
-        return 'Utsatt til ' + moment(frist).format('ll')
+        return 'Utsatt til ' + moment(frist).format('LL')
       } else {
         return 'Utsatt'
       }

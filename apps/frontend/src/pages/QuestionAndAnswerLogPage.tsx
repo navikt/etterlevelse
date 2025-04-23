@@ -200,10 +200,10 @@ export const QuestionAndAnswerLogPage = () => {
                       {codelistUtils.getCode(EListName.TEMA, message.tema)?.shortName}
                     </Table.DataCell>
                     <Table.DataCell>{message.melderNavn}</Table.DataCell>
-                    <Table.DataCell>{moment(message.tidForSporsmaal).format('lll')}</Table.DataCell>
+                    <Table.DataCell>{moment(message.tidForSporsmaal).format('LLL')}</Table.DataCell>
                     <Table.DataCell>
                       {message.tidForSvar ? (
-                        moment(message.tidForSvar).format('lll')
+                        moment(message.tidForSvar).format('LLL')
                       ) : (
                         <BodyShort>Ikke besvart</BodyShort>
                       )}

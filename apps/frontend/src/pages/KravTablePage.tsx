@@ -136,7 +136,7 @@ export const KravTablePage = () => {
                   </Table.DataCell>
                   <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
                   <Table.DataCell className='w-[10%] text-end'>
-                    {moment(krav.changeStamp.lastModifiedDate).format('ll')}
+                    {moment(krav.changeStamp.lastModifiedDate).format('LL')}
                   </Table.DataCell>
                 </Table.Row>
               ))}

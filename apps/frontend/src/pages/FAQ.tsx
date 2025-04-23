@@ -55,7 +55,7 @@ export const FAQ = () => {
             <div className='mt-20'>
               {user.isAdmin() && melding && (
                 <Detail>
-                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('ll')} av{' '}
+                  Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('LL')} av{' '}
                   {melding.changeStamp.lastModifiedBy.split('-')[1]}
                 </Detail>
               )}

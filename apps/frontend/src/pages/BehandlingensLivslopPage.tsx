@@ -9,7 +9,7 @@ import {
 } from '@navikt/ds-react'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   createBehandlingensLivslop,
@@ -54,6 +54,10 @@ export const BehandlingensLivslopPage = () => {
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const formRef: RefObject<any> = useRef(undefined)
+
   const navigate = useNavigate()
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -78,6 +82,12 @@ export const BehandlingensLivslopPage = () => {
         .catch(() => undefined)
     }
   }, [etterlevelseDokumentasjon])
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef?.current?.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   const submit = async (behandlingensLivslop: any) => {
     if (etterlevelseDokumentasjon) {
@@ -193,6 +203,7 @@ export const BehandlingensLivslopPage = () => {
                   return yupToFormErrors(error)
                 }
               }}
+              innerRef={formRef}
             >
               {({ submitForm, initialValues, errors, isSubmitting }) => (
                 <Form>
@@ -221,7 +232,7 @@ export const BehandlingensLivslopPage = () => {
                     </div>
 
                     {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                      <ErrorSummary className='mt-3'>
+                      <ErrorSummary className='mt-3' ref={errorSummaryRef}>
                         <ErrorSummary.Item href={'#vedleggMedFeil'}>
                           Vedlegg med feil
                         </ErrorSummary.Item>
@@ -244,9 +255,10 @@ export const BehandlingensLivslopPage = () => {
                         <Button
                           type='button'
                           variant='secondary'
-                          onClick={() => {
+                          onClick={async () => {
                             setTilTemaOversikt(true)
-                            submitForm()
+                            await submitForm()
+                            setSubmitClick(!submitClick)
                           }}
                         >
                           Lagre og gå til Temaoversikt

@@ -1,12 +1,16 @@
 import { Accordion, Tag } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, RefObject } from 'react'
 import { IRisikoscenario } from '../../constants'
 
 type TProps = {
   risikoscenario: IRisikoscenario
+  ref?: RefObject<HTMLButtonElement | null>
 }
 
-export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({ risikoscenario }) => {
+export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
+  risikoscenario,
+  ref,
+}) => {
   const ikkeFerdigBeskrevet: boolean =
     risikoscenario.konsekvensNivaa === 0 ||
     risikoscenario.sannsynlighetsNivaa === 0 ||
@@ -22,7 +26,7 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({ risik
     risikoscenario.konsekvensNivaaEtterTiltak !== 0
 
   return (
-    <Accordion.Header>
+    <Accordion.Header ref={ref}>
       {risikoscenario.navn}
       <div className='flex gap-2 mt-1'>
         {mangelfulScenario && <Tag variant='alt2'>Scenario er mangelfullt </Tag>}
@@ -38,6 +42,7 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({ risik
 
 export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
   risikoscenario,
+  ref,
 }) => {
   const ikkeFerdigBeskrevet: boolean =
     risikoscenario.konsekvensNivaa === 0 ||
@@ -46,7 +51,7 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
     risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
 
   return (
-    <Accordion.Header className='z-0'>
+    <Accordion.Header className='z-0' ref={ref}>
       {risikoscenario.navn}
       <div className='flex gap-2 mt-1'>
         {ikkeFerdigBeskrevet && <Tag variant='alt2'>Ikke ferdig utfylt</Tag>}

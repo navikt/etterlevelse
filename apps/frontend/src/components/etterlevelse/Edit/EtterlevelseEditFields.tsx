@@ -75,8 +75,10 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
 
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
 
   const navigate: NavigateFunction = useNavigate()
+
   useEffect(() => {
     if (navigatePath) {
       if (
@@ -118,6 +120,12 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
       }
     })()
   }, [morDokumentRelasjon])
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   return (
     <div className='w-full'>
@@ -243,7 +251,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                       <Button
                         disabled={disableEdit || isOppfylesSenere}
                         type='button'
-                        onClick={() => {
+                        onClick={async () => {
                           setValidateOnBlur(true)
                           values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
                           values.suksesskriterieBegrunnelser.forEach((skb, index) => {
@@ -259,7 +267,8 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                             pagePath: location.pathname,
                             ...userRoleEventProp,
                           })
-                          submitForm()
+                          await submitForm()
+                          setSubmitClick(!submitClick)
                         }}
                       >
                         {/* Sett krav til ferdig utfylt og fortsett til neste krav */}
@@ -339,7 +348,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         <div className='pb-6 flex justify-end w-full'>
                           <BodyShort>
                             Sist utfylt:{' '}
-                            {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av{' '}
+                            {moment(etterlevelse.changeStamp.lastModifiedDate).format('LL')} av{' '}
                             {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
                           </BodyShort>
                         </div>

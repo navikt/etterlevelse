@@ -58,7 +58,7 @@ export const PvoSistRedigertView = () => {
                   title={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer} ${pvoTilbakemelding.etterlevelseDokumentasjonData.title}`}
                   status={<PvoStatusView status={pvoTilbakemelding.status} />}
                   changeStamp={`
-                    Sist endret av meg: ${moment(pvoTilbakemelding.sistEndretAvMeg).format('ll')}`}
+                    Sist endret av meg: ${moment(pvoTilbakemelding.sistEndretAvMeg).format('LL')}`}
                 />
               ))}
           </List>

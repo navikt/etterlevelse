@@ -1,6 +1,6 @@
-import { BodyLong, Button, Heading, List, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { RefObject } from 'react'
+import { RefObject, useState } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -38,9 +38,12 @@ export const InvolveringAvEksterneView = (props: IProps) => {
     formRef,
     pvoTilbakemelding,
   } = props
+  const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
 
   const submit = async (pvkDokument: IPvkDokument) => {
-    getPvkDokument(pvkDokument.id).then(async (response) => {
+    await getPvkDokument(pvkDokument.id).then(async (response) => {
       const updatedatePvkDokument = {
         ...response,
         harInvolvertRepresentant: pvkDokument.harInvolvertRepresentant,
@@ -52,7 +55,6 @@ export const InvolveringAvEksterneView = (props: IProps) => {
       }
       await updatePvkDokument(updatedatePvkDokument).then((response) => {
         setPvkDokument(response)
-        window.location.reload()
       })
     })
   }
@@ -68,7 +70,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
             initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
             innerRef={formRef}
           >
-            {({ submitForm, values }) => (
+            {({ submitForm, values, resetForm, setFieldValue, initialValues }) => (
               <Form>
                 <div className='flex justify-center'>
                   <div>
@@ -81,7 +83,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                     </Heading>
 
                     <List
-                      size='small'
+                      size='medium'
                       className='mt-5'
                       headingTag='label'
                       title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
@@ -206,24 +208,132 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                       />
                     </div>
 
-                    <div className='mt-5'>
+                    {savedSuccessful && (
+                      <div className='mt-5'>
+                        <Alert
+                          variant='success'
+                          closeButton
+                          onClose={() => setSavedSuccessful(false)}
+                        >
+                          Lagring vellyket
+                        </Alert>
+                      </div>
+                    )}
+
+                    <div className='flex gap-2 mt-5'>
                       <Button
                         type='button'
-                        onClick={() => {
-                          if (submitForm) {
-                            submitForm()
-                          }
+                        onClick={async () => {
+                          await submitForm()
+                          resetForm({ values })
+                          setSavedSuccessful(true)
                         }}
                       >
                         Lagre
                       </Button>
+
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={async () => {
+                          setIsModalOpen(true)
+                        }}
+                      >
+                        Forkast endringer
+                      </Button>
+
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={async () => {
+                          setIsNullStilModalOpen(true)
+                        }}
+                      >
+                        Nullstill svar
+                      </Button>
                     </div>
+
+                    {isNullStilModalOpen && (
+                      <Modal
+                        open={isNullStilModalOpen}
+                        onClose={() => setIsNullStilModalOpen(false)}
+                        header={{ heading: 'Er du sikkert på at du vil nullstille svarene?' }}
+                      >
+                        <Modal.Footer>
+                          <Button
+                            type='button'
+                            onClick={async () => {
+                              await setFieldValue('harInvolvertRepresentant', null)
+                              await setFieldValue('representantInvolveringsBeskrivelse', '')
+                              await setFieldValue('harDatabehandlerRepresentantInvolvering', null)
+                              await setFieldValue(
+                                'dataBehandlerRepresentantInvolveringBeskrivelse',
+                                ''
+                              )
+                              await submitForm().then(() => {
+                                resetForm({
+                                  values: {
+                                    ...pvkDokument,
+                                    harInvolvertRepresentant: undefined,
+                                    representantInvolveringsBeskrivelse: '',
+                                    harDatabehandlerRepresentantInvolvering: undefined,
+                                    dataBehandlerRepresentantInvolveringBeskrivelse: '',
+                                  },
+                                })
+                                setIsNullStilModalOpen(false)
+                              })
+                            }}
+                          >
+                            Ja, lagre
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => {
+                              setIsNullStilModalOpen(false)
+                            }}
+                          >
+                            Nei, avbryt
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    )}
+
+                    {isModalOpen && (
+                      <Modal
+                        open={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        header={{ heading: 'Er du sikkert på at du vil forkaste endringene?' }}
+                      >
+                        <Modal.Footer>
+                          <Button
+                            type='button'
+                            onClick={() => {
+                              resetForm({ values: initialValues })
+                              setIsModalOpen(false)
+                            }}
+                          >
+                            Ja
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => {
+                              setIsModalOpen(false)
+                            }}
+                          >
+                            Nei
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    )}
                   </div>
                 </div>
               </Form>
             )}
           </Formik>
         </div>
+
         {/* sidepanel */}
 
         {pvoTilbakemelding && (

@@ -111,7 +111,7 @@ const getKravByLovCodeQuery = gql`
 
 export const getKravMedPrioriteringOgEtterlevelseQuery = gql`
   query getKravByFilter(
-    $etterlevelseDokumentasjonId: String
+    $etterlevelseDokumentasjonId: ID
     $lover: [String!]
     $tema: String!
     $gjeldendeKrav: Boolean

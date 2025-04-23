@@ -99,7 +99,7 @@ export const ViewEtterlevelse = ({
       {etterlevelse.status === EEtterlevelseStatus.OPPFYLLES_SENERE && (
         <div className='my-8'>
           <Heading size='medium'>Oppfylles innen</Heading>
-          <BodyShort>{moment(etterlevelse.fristForFerdigstillelse).format('ll')}</BodyShort>
+          <BodyShort>{moment(etterlevelse.fristForFerdigstillelse).format('LL')}</BodyShort>
         </div>
       )}
       <div className='mt-4'>
@@ -184,7 +184,7 @@ export const ViewEtterlevelse = ({
       </div>
 
       <BodyShort size='small'>
-        Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('ll')} av{' '}
+        Sist endret: {moment(etterlevelse.changeStamp.lastModifiedDate).format('LL')} av{' '}
         {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
       </BodyShort>
     </div>

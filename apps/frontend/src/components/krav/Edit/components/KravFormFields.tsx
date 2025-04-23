@@ -1,6 +1,7 @@
 import { Checkbox, CheckboxGroup, ErrorSummary, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik/dist/types'
-import { useRef } from 'react'
+import _ from 'lodash'
+import { useEffect, useRef } from 'react'
 import { TKravQL } from '../../../../constants'
 import { EListName } from '../../../../services/Codelist'
 import { user } from '../../../../services/User'
@@ -36,6 +37,13 @@ export const KravFormFields = (props: IProps) => {
     isEditingUtgaattKrav,
   } = props
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!_.isEmpty(errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [errors])
+
   return (
     <>
       <div className='mt-5 mb-10'>
@@ -145,7 +153,7 @@ export const KravFormFields = (props: IProps) => {
           <FormError fieldName='varslingsadresserQl' akselStyling />
 
           <div className='w-full'>
-            {Object.values(errors).some(Boolean) && (
+            {!_.isEmpty(errors) && (
               <ErrorSummary
                 ref={errorSummaryRef}
                 heading='Du må rette disse feilene før du kan fortsette'

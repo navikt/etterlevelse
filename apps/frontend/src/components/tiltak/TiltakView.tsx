@@ -1,4 +1,5 @@
 import { List } from '@navikt/ds-react'
+import moment from 'moment'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import ReadOnlyField, {
   ReadOnlyFieldBool,
@@ -25,13 +26,13 @@ export const TiltakView = (props: IProps) => {
         label='Tiltaksansvarlig:'
         description={tiltak.ansvarlig.fullName}
         className='flex gap-2'
-        isFalse={!tiltak.ansvarlig}
+        isFalse={!tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')}
         descriptionFalse='Det er ikke satt en ansvarlig for tiltaket'
       />
 
       <ReadOnlyFieldBool
         label='Tiltaksfrist:'
-        description={tiltak.frist}
+        description={moment(tiltak.frist).format('LL')}
         className='mt-3 flex gap-2'
         isFalse={!tiltak.frist}
         descriptionFalse='Det er ikke satt en frist for tiltaket'

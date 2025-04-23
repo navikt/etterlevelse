@@ -155,12 +155,12 @@ export const PvoTilbakemeldingsList = () => {
                   pvoTilbakemelding.length !== 0 &&
                   pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
                 ) {
-                  changestamp = `Vurdering sendt: ${moment(pvoTilbakemelding[0].sendtDato).format('ll')}`
+                  changestamp = `Vurdering sendt: ${moment(pvoTilbakemelding[0].sendtDato).format('LL')}`
                 } else {
                   const date =
                     pvkDokument.sendtTilPvoDato !== '' && pvkDokument.sendtTilPvoDato !== null
-                      ? moment(pvkDokument.sendtTilPvoDato).format('ll')
-                      : moment(pvkDokument.changeStamp.lastModifiedDate).format('ll')
+                      ? moment(pvkDokument.sendtTilPvoDato).format('LL')
+                      : moment(pvkDokument.changeStamp.lastModifiedDate).format('LL')
                   changestamp = `Mottat: ${date}`
                 }
 

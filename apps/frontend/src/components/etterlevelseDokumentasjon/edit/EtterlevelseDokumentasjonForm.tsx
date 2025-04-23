@@ -10,7 +10,8 @@ import {
   TextField,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import _ from 'lodash'
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
@@ -80,7 +81,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const isForRedigering: boolean = window.location.pathname.includes('/edit')
 
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const formRef: RefObject<any> = useRef(undefined)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -125,6 +128,12 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       }
     })()
   }, [etterlevelseDokumentasjon])
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL): Promise<void> => {
     console.debug(selectedVirkemiddel)
@@ -172,6 +181,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
       validationSchema={etterlevelseDokumentasjonSchema()}
       validateOnChange={false}
       validateOnBlur={validateOnBlur}
+      innerRef={formRef}
     >
       {({ values, submitForm, setFieldValue, errors }) => (
         <Form>
@@ -607,7 +617,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             </div>
           )}
 
-          {Object.values(errors).some(Boolean) && (
+          {!_.isEmpty(errors) && (
             <ErrorSummary
               ref={errorSummaryRef}
               heading='Du må rette disse feilene før du kan fortsette'
@@ -626,7 +636,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <div className='flex flex-row-reverse'>
               <Button
                 type='button'
-                onClick={() => {
+                onClick={async () => {
                   if (!isEditButton) {
                     ampli.logEvent('knapp trykket', {
                       tekst: 'Opprett etterlevelsesdokument',
@@ -634,7 +644,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                   }
                   errorSummaryRef.current?.focus()
                   setValidateOnBlur(true)
-                  submitForm()
+                  await submitForm()
+                  setSubmitClick(!submitClick)
                 }}
                 className='ml-2.5'
               >

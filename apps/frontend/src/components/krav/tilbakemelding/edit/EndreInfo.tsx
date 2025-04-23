@@ -12,7 +12,7 @@ export const EndretInfo = (props: { melding: ITilbakemeldingMelding }) => {
         <div className='mx-1'>
           <PersonName ident={props.melding.endretAvIdent} />
         </div>
-        - {moment(props.melding.endretTid).format('lll')}
+        - {moment(props.melding.endretTid).format('LLL')}
       </BodyShort>
     </div>
   )

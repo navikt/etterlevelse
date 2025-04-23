@@ -86,6 +86,11 @@ const UserService = async (): Promise<IUserProps> => {
     }
   }
 
+  const updateCurrentGroups = (groups: EGroup[]) => {
+    currentGroups = groups
+    updateUser()
+  }
+
   const getGroups = (): string[] => {
     return currentGroups
   }
@@ -130,6 +135,7 @@ const UserService = async (): Promise<IUserProps> => {
     getFirstNameThenLastName,
     getAvailableGroups,
     toggleGroup,
+    updateCurrentGroups,
     getGroups,
     canWrite,
     isAdmin,
@@ -150,6 +156,7 @@ interface IUserProps {
   getFirstNameThenLastName: () => string
   getAvailableGroups: () => { name: string; group: EGroup }[]
   toggleGroup: (group: EGroup, active: boolean) => void
+  updateCurrentGroups: (groups: EGroup[]) => void
   hasGroup: (group: string) => boolean
   getGroups: () => string[]
   canWrite: () => boolean

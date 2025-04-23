@@ -148,7 +148,7 @@ export const KravCard = (props: IProps) => {
                 {krav.etterlevelseChangeStamp?.lastModifiedDate && (
                   <Detail className='whitespace-nowrap'>
                     {'Sist utfylt: ' +
-                      moment(krav.etterlevelseChangeStamp?.lastModifiedDate).format('ll')}
+                      moment(krav.etterlevelseChangeStamp?.lastModifiedDate).format('LL')}
                   </Detail>
                 )}
                 {etterlevelseMetadata &&

@@ -1,5 +1,5 @@
 import { Accordion, Alert, BodyLong, Heading, Label, ReadMore } from '@navikt/ds-react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import {
@@ -26,10 +26,12 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
   const { risikoscenarioList, allRisikoscenarioList, etterlevelseDokumentasjonId, tiltakList } =
     props
   const url = new URL(window.location.href)
+
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const tabQuery: string | null = url.searchParams.get('tab')
   const filterQuery: string | null = url.searchParams.get('filter')
   const navigate: NavigateFunction = useNavigate()
+  const accordionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (risikoscenarioId) {
@@ -45,6 +47,11 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
       navigate(pvkDokumentasjonTabFilterRisikoscenarioUrl(tabQuery, filterQuery, risikoscenarioId))
+      setTimeout(() => {
+        if (accordionRef.current) {
+          window.scrollTo({ top: accordionRef.current.offsetTop - 30, behavior: 'smooth' })
+        }
+      }, 200)
     } else {
       navigate(pvkDokumentasjonTabFilterUrl(tabQuery, filterQuery, tabValues.risikoscenarioer))
     }
@@ -70,7 +77,10 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
-              <RisikoscenarioAccordianHeader risikoscenario={risikoscenario} />
+              <RisikoscenarioAccordianHeader
+                risikoscenario={risikoscenario}
+                ref={expanded ? accordionRef : undefined}
+              />
               <Accordion.Content>
                 <RisikoscenarioView
                   risikoscenario={risikoscenario}

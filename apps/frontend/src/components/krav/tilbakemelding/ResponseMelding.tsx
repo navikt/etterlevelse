@@ -24,7 +24,7 @@ export const ResponseMelding = (props: {
         <div className='flex flex-col w-full ml-2.5'>
           <div className='flex items-center w-full'>
             <Label>{<PersonName ident={melding.fraIdent} kraveier={kraveier} />}</Label>
-            <BodyShort className='ml-6'>Sendt: {moment(melding.tid).format('lll')}</BodyShort>
+            <BodyShort className='ml-6'>Sendt: {moment(melding.tid).format('LLL')}</BodyShort>
           </div>
           <div className='flex w-full'>
             <BodyLong className='mr-7 mt-1'>{melding.innhold}</BodyLong>
