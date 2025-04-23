@@ -151,12 +151,12 @@ const AppRoutes = (): JSX.Element => {
         caseSensitive={true}
       />
       <Route
-        path={`/${behandlingUrl}/:id`}
+        path={`${behandlingUrl}/:id`}
         element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
       <Route
-        path={`/${behandlingUrl}/`}
+        path={`${behandlingUrl}`}
         element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
@@ -166,7 +166,7 @@ const AppRoutes = (): JSX.Element => {
         caseSensitive={true}
       />
       <Route
-        path={`${behandlingerUrl}/`}
+        path={`${behandlingerUrl}`}
         element={<RedirectToEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />
