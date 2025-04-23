@@ -12,6 +12,7 @@ import {
 } from '../../constants'
 import BehandlingensLivsLopSidePanel from '../behandlingensLivlop/BehandlingensLivslopSidePanel'
 import BehandlingensLivslopTextContent from '../behandlingensLivlop/BehandlingensLivslopTextContent'
+import { Markdown } from '../common/Markdown'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
@@ -106,8 +107,10 @@ export const BehandlingensLivslopPvoView = (props: IProps) => {
                   <div className='mt-5'>
                     <Label>Beskrivelse av behandlingens livsløp</Label>
                     <DataTextWrapper>
+                      {behandlingensLivslop.beskrivelse && (
+                        <Markdown source={behandlingensLivslop.beskrivelse} />
+                      )}
                       <BodyLong>
-                        {behandlingensLivslop.beskrivelse && behandlingensLivslop.beskrivelse}
                         {!behandlingensLivslop.beskrivelse && 'Ingen beskrivelse '}
                       </BodyLong>
                     </DataTextWrapper>

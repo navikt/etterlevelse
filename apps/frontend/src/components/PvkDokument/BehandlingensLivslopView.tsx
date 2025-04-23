@@ -160,7 +160,8 @@ export const BehandlingensLivslopView = (props: IProps) => {
 
                     <div className='mt-3'>
                       <TextAreaField
-                        rows={3}
+                        markdown
+                        height='5.75rem'
                         noPlaceholder
                         label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
                         name='beskrivelse'
