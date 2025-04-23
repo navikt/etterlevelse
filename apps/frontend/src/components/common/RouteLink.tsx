@@ -4,6 +4,7 @@ import { EListName } from '../../services/Codelist'
 import { AuditButton } from '../admin/audit/AuditButton'
 import { EObjectType, IAuditItem, TNavigableItem } from '../admin/audit/AuditTypes'
 import { adminCodelistUrl, adminVarselUrl } from './RouteLinkAdmin'
+import { behandlingUrl } from './RouteLinkBehandlingskatalogen'
 import { dokumentasjonUrl, etterlevelseUrl, temaUrl } from './RouteLinkEtterlevelsesdokumentasjon'
 import { kravUrl } from './RouteLinkKrav'
 
@@ -30,7 +31,7 @@ export const urlForObject = (type: TNavigableItem | string, id: string) => {
       return `${dokumentasjonUrl}/${id}`
     case EObjectType.BehandlingData:
     case EObjectType.Behandling:
-      return `/behandling/${id}`
+      return `${behandlingUrl}/${id}`
     case EListName.RELEVANS:
       return `/relevans/${id}`
     case EListName.UNDERAVDELING:

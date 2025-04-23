@@ -12,6 +12,7 @@ import {
 import { DeleteItem } from '../components/DeleteItem'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
+import { temaUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import {
   kravNyVersjonIdUrl,
   kravRedigeringIdUrl,
@@ -174,7 +175,7 @@ export const KravPage = () => {
     if (kravTema?.shortName) {
       breadcrumbPaths.push({
         pathName: kravTema.shortName.toString(),
-        href: '/tema/' + kravTema.code,
+        href: `${temaUrl}${kravTema.code}`,
       })
     }
     return breadcrumbPaths

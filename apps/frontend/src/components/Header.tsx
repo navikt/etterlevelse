@@ -35,8 +35,11 @@ import {
   adminMessagesLogUrl,
   adminVarselUrl,
 } from './common/RouteLinkAdmin'
-import { etterlevelseDokumentasjonerUrl } from './common/RouteLinkEtterlevelsesdokumentasjon'
-import { kravTemaUrl, kravlisteUrl } from './common/RouteLinkKrav'
+import {
+  etterlevelseDokumentasjonerUrl,
+  temaUrl,
+} from './common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravlisteUrl } from './common/RouteLinkKrav'
 import { pvoOversiktUrl } from './common/RouteLinkPvo'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import MainSearch from './search/MainSearch'
@@ -187,7 +190,7 @@ const LoggedInHeader = () => {
           [
             {
               label: 'Forstå kravene',
-              href: kravTemaUrl,
+              href: temaUrl,
               icon: <ReceiptIcon area-label='' aria-hidden />,
             },
           ],

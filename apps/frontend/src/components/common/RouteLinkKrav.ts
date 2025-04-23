@@ -1,5 +1,4 @@
 export const kravUrl: string = '/krav'
-export const kravTemaUrl: string = '/tema'
 
 export const kravlisteOpprettUrl = () => `${kravlisteUrl()}/opprett`
 export const kravRedigeringIdUrl = (kravId?: string): string => {

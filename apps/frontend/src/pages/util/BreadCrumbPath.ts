@@ -1,5 +1,8 @@
-import { etterlevelseDokumentasjonerUrl } from '../../components/common/RouteLinkEtterlevelsesdokumentasjon'
-import { kravTemaUrl, kravlisteUrl } from '../../components/common/RouteLinkKrav'
+import {
+  etterlevelseDokumentasjonerUrl,
+  temaUrl,
+} from '../../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravlisteUrl } from '../../components/common/RouteLinkKrav'
 import { IBreadCrumbPath } from '../../constants'
 
 export const kravBreadCrumbPath: IBreadCrumbPath = {
@@ -9,7 +12,7 @@ export const kravBreadCrumbPath: IBreadCrumbPath = {
 
 export const temaBreadCrumbPath: IBreadCrumbPath = {
   pathName: 'Forstå kravene',
-  href: kravTemaUrl,
+  href: temaUrl,
 }
 
 export const dokumentasjonerBreadCrumbPath: IBreadCrumbPath = {
