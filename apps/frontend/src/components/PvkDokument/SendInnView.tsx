@@ -495,11 +495,17 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         <Button
                           type='button'
                           onClick={async () => {
-                            await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                            if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                              await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+                            } else {
+                              await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                            }
                             await submitForm()
                           }}
                         >
-                          Angre godkjenning
+                          {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+                            ? 'Angre godkjenning'
+                            : 'Angre sending til risikoeier'}
                         </Button>
                       )}
 
