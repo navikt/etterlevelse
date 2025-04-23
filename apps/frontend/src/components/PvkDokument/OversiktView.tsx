@@ -88,7 +88,7 @@ export const OversiktView = (props: IProps) => {
       const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
       if (generelSenario.length === 0) {
         return (
-          <Tag variant='warning' size='xsmall'>
+          <Tag variant='neutral' size='xsmall'>
             Ikke påbegynt
           </Tag>
         )
