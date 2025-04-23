@@ -235,13 +235,13 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path={`${etterlevelseDokumentasjonRelasjonUrl}/:id/`}
+        path={`${etterlevelseDokumentasjonRelasjonUrl}/:id`}
         element={<RelasjonsOversikt />}
         caseSensitive={true}
       />
 
       <Route
-        path={`${dokumentasjonUrl}/`}
+        path={`${dokumentasjonUrl}`}
         element={<MyEtterlevelseDokumentasjonerPage />}
         caseSensitive={true}
       />
