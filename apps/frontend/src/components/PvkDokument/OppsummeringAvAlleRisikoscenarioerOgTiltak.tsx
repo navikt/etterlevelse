@@ -13,7 +13,10 @@ import {
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { ExternalLink, paramQueryUrl } from '../common/RouteLink'
-import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import {
+  etterlevelseDokumentasjonIdUrl,
+  etterlevelseDokumentasjonPvkTabUrl,
+} from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
@@ -308,7 +311,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                               Dere har foreløpig ingen risikoscenarioer
                             </Heading>
                             Risikoscenarioer legges inn under{' '}
-                            <Link href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}>
+                            <Link
+                              href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}
+                            >
                               PVK-relaterte krav
                             </Link>{' '}
                             (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
@@ -347,17 +352,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                             </Heading>
                             Tiltak legges inn under{' '}
                             <ExternalLink
-                              href={'/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk'}
+                              href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId)}
                             >
                               PVK-relaterte krav{' '}
                             </ExternalLink>{' '}
                             eller eventuelt under{' '}
                             <ExternalLink
                               href={pvkDokumentasjonStepUrl(
-                              etterlevelseDokumentasjonId,
-                              pvkDokument.id,
-                              5
-                            )}
+                                etterlevelseDokumentasjonId,
+                                pvkDokument.id,
+                                5
+                              )}
                             >
                               øvrige risikoscenarioer
                             </ExternalLink>
