@@ -134,9 +134,20 @@ public class PvkDokumentToDoc {
 
             generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
 
-            addHeading3("Status");
-            addText(pvkDokumentStatusText(pvkDokument.getStatus()));
+            addHeading3("Hvilken vurdering har dere kommet fram til?");
+            if (pvkDokument.getPvkDokumentData().getSkalUtforePvk() == null) {
+                addText("Ingen vurdering");
+            } else if (!pvkDokument.getPvkDokumentData().getSkalUtforePvk()) {
+                addText("Vi skal ikke gjennomføre PVK");
 
+                addHeading3("Begrunnelse av vurderingen");
+                addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
+            } else {
+                addText("Vi skal gjennomføre en PVK");
+
+                addHeading3("Status");
+                addText(pvkDokumentStatusText(pvkDokument.getStatus()));
+            }
         }
 
         public void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
