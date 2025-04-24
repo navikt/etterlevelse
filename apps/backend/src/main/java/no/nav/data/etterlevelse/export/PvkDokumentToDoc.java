@@ -7,10 +7,12 @@ import no.nav.data.common.utils.ZipFile;
 import no.nav.data.common.utils.ZipUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
-import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service
@@ -127,11 +130,73 @@ public class PvkDokumentToDoc {
             var header = addHeading2("Personvernkonsekvensvurdering");
 
             addBookmark(header, pvkDokument.getId().toString());
-            addHeading2("Følgende egenskaper er hentet fra Behandlingskatalogen:");
+            generateEgenskaperFraBehandlinger(behandlingList);
 
+            generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
 
             addHeading3("Status");
             addText(pvkDokumentStatusText(pvkDokument.getStatus()));
+
+        }
+
+        public void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
+            var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
+
+            addHeading2("Øvrige egenskaper for behandlingene:");
+
+            allYtterligeEgenskaper.forEach(egenskap -> {
+                if (pvkDokument.getPvkDokumentData().getYtterligereEgenskaper().contains(egenskap.getCode())) {
+                    addMarkdownText("- **Det gjelder for** " + egenskap.getShortName().toLowerCase());
+                } else {
+                    addMarkdownText("- **Det gjelder ikke for** " + egenskap.getShortName().toLowerCase());
+                }
+            });
+
+        }
+
+        public void generateEgenskaperFraBehandlinger(List<Behandling> behandlingList) {
+            List<PolicyResponse> alleOpplysningstyper = new ArrayList<>();
+            List<Boolean> alleProfilering = new ArrayList<>();
+            List<Boolean> alleAutomatiskBehandling = new ArrayList<>();
+            AtomicBoolean manglerOpplysningstyper = new AtomicBoolean(false);
+
+            behandlingList.forEach(behandling -> {
+                if(behandling.getPolicies().isEmpty()) {
+                    manglerOpplysningstyper.set(true);
+                } else {
+                    alleOpplysningstyper.addAll(behandling.getPolicies());
+                }
+
+                alleProfilering.add(behandling.getProfilering());
+                alleAutomatiskBehandling.add(behandling.getAutomatiskBehandling());
+            });
+
+            var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
+
+            addHeading2("Følgende egenskaper er hentet fra Behandlingskatalogen:");
+            if (alleProfilering.contains(true)) {
+                addMarkdownText("- **Det gjelder** profilering");
+            } else if (alleProfilering.stream().filter(value -> value == false).toList().size() == alleProfilering.size()) {
+                addMarkdownText("- **Det gjelder ikke** profilering");
+            } else if (alleProfilering.contains(null)) {
+                addMarkdownText("- Mangler informasjon for å vite om profilering");
+            }
+
+            if (alleAutomatiskBehandling.contains(true)) {
+                addMarkdownText("- **Det gjelder** automatisert behandling");
+            } else if (alleAutomatiskBehandling.stream().filter(value -> value == false).toList().size() == alleAutomatiskBehandling.size()) {
+                addMarkdownText("- **Det gjelder ikke** automatisert behandling");
+            } else if (alleAutomatiskBehandling.contains(null)) {
+                addMarkdownText("- Mangler informasjon for å vite om automatisert behandling");
+            }
+
+            if (!manglerOpplysningstyper.get() && !saerligKategorierOppsumert.isEmpty()) {
+                addMarkdownText("- **Det gjelder** saerlig kategorier");
+            } else if (!manglerOpplysningstyper.get() &&  saerligKategorierOppsumert.isEmpty()) {
+                addMarkdownText("- **Det gjelder ikke** saerlig kategorier");
+            } else if (manglerOpplysningstyper.get()) {
+                addMarkdownText("- Mangler informasjon for å vite saerlig kategorier");
+            }
 
         }
 
