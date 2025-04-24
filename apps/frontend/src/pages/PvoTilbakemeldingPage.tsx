@@ -14,7 +14,7 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/Pvo
 import OversiktPvoView from '../components/PvoTilbakemelding/OversiktPvoView'
 import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
-import { etterlevelsesDokumentasjonEditUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '../components/common/RouteLinkPvk'
 import { pvoOversiktUrl } from '../components/common/RouteLinkPvo'
 import { risikoscenarioFilterAlleUrl } from '../components/common/RouteLinkRisiko'
@@ -74,7 +74,7 @@ export const PvoTilbakemeldingPage = () => {
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
         ' ' +
         etterlevelseDokumentasjon?.title,
-      href: etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon?.id),
+      href: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id),
     },
   ]
 
