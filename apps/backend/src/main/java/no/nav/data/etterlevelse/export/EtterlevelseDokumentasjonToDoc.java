@@ -269,7 +269,7 @@ public class EtterlevelseDokumentasjonToDoc {
             super(etterlevelseFactory);
         }
 
-        long listId = 1;
+        long listId = 3;
 
         public void generate(EtterlevelseMedKravData etterlevelseMedKravData) {
 

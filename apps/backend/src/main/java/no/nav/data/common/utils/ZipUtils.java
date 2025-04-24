@@ -2,7 +2,6 @@ package no.nav.data.common.utils;
 
 import net.lingala.zip4j.io.outputstream.ZipOutputStream;
 import net.lingala.zip4j.model.ZipParameters;
-import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,7 +12,8 @@ import java.util.List;
 
 public class ZipUtils {
 
-    public byte[] zipOutputStream(List<ArchiveFile> filesToAdd) throws IOException {
+    //depricated and will replace in the future
+    public byte[] zipOutputStream(List<ZipFile> filesToAdd) throws IOException {
 
         ZipParameters zipParameters = new ZipParameters();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -22,12 +22,12 @@ public class ZipUtils {
         int readLength;
 
         try(ZipOutputStream zos = new ZipOutputStream(bos)) {
-            for (ArchiveFile fileToAdd : filesToAdd) {
+            for (ZipFile fileToAdd : filesToAdd) {
 
-                zipParameters.setFileNameInZip(fileToAdd.getFileName());
+                zipParameters.setFileNameInZip(fileToAdd.getFilnavn() + "." + fileToAdd.getFiltype());
                 zos.putNextEntry(zipParameters);
 
-                try(InputStream inputStream = new ByteArrayInputStream(fileToAdd.getFile())) {
+                try(InputStream inputStream = new ByteArrayInputStream(fileToAdd.getFil())) {
                     while ((readLength = inputStream.read(bufferReader)) != -1) {
                         zos.write(bufferReader, 0, readLength);
                     }

@@ -49,6 +49,8 @@ public class ExportController {
     private final KravService kravService;
     private final CodelistService codelistService;
 
+    private final PvkDokumentToDoc pvkToDoc;
+
     private final CodeUsageService codeUsageService;
 
     private final EtterlevelseService etterlevelseService;
@@ -196,6 +198,25 @@ public class ExportController {
         StreamUtils.copy(doc, response.getOutputStream());
         response.flushBuffer();
     }
+
+    @Operation(summary = "Get export for pvk dokument")
+    @ApiResponse(description = "Doc fetched", content = @Content(schema = @Schema(implementation = byte[].class)))
+    @Transactional(readOnly = true)
+    @SneakyThrows
+    @GetMapping(value = "/pvkdokument", produces = "application/zip")
+    public void getPvkDokument(
+            HttpServletResponse response,
+            @RequestParam(name = "id") UUID id
+    ) {
+        log.info("export pvk dokument to doc");
+        byte[] doc = pvkToDoc.generateDocFor(id);
+
+        response.setContentType("application/zip");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pvkDokument.zip");
+        StreamUtils.copy(doc, response.getOutputStream());
+        response.flushBuffer();
+    }
+
 
     private String cleanCodelistName(ListName listName) {
         return switch (listName) {
