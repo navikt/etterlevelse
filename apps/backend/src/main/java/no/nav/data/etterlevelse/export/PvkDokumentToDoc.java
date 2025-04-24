@@ -130,30 +130,47 @@ public class PvkDokumentToDoc {
             var header = addHeading2("Personvernkonsekvensvurdering");
 
             addBookmark(header, pvkDokument.getId().toString());
+
+            addHeading3("Vurdering");
+
             generateEgenskaperFraBehandlinger(behandlingList);
 
             generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
 
-            addHeading3("Hvilken vurdering har dere kommet fram til?");
+            addHeading4("Hvilken vurdering har dere kommet fram til?");
             if (pvkDokument.getPvkDokumentData().getSkalUtforePvk() == null) {
                 addText("Ingen vurdering");
             } else if (!pvkDokument.getPvkDokumentData().getSkalUtforePvk()) {
                 addText("Vi skal ikke gjennomføre PVK");
 
-                addHeading3("Begrunnelse av vurderingen");
+                addHeading4("Begrunnelse av vurderingen");
                 addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
             } else {
                 addText("Vi skal gjennomføre en PVK");
 
-                addHeading3("Status");
+                addHeading4("Status");
                 addText(pvkDokumentStatusText(pvkDokument.getStatus()));
+
+
+                addHeading3("Behandlingens art og omfang");
+
+
+
+
+                addHeading3("Involvering av eksterne");
+
+
+
+                addHeading3("Risikoscenario og tiltak");
+
+
             }
         }
 
         public void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
             var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
 
-            addHeading3("Øvrige egenskaper for behandlingene:");
+            addHeading4("Øvrige egenskaper for behandlingene:");
 
             allYtterligeEgenskaper.forEach(egenskap -> {
                 if (pvkDokument.getPvkDokumentData().getYtterligereEgenskaper().contains(egenskap.getCode())) {
@@ -184,7 +201,7 @@ public class PvkDokumentToDoc {
 
             var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
 
-            addHeading3("Følgende egenskaper er hentet fra Behandlingskatalogen:");
+            addHeading4("Følgende egenskaper er hentet fra Behandlingskatalogen:");
             if (alleProfilering.contains(true)) {
                 addMarkdownText("- **Det gjelder** profilering");
             } else if (alleProfilering.stream().filter(value -> value == false).toList().size() == alleProfilering.size()) {
