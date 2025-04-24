@@ -9,7 +9,7 @@ export const kravRedigeringIdUrl = (kravId?: string): string => {
   return url
 }
 
-export const kravNyVersjonIdUrl = (kravId: string): string => {
+export const kravNyVersjonIdUrl = (kravId?: string): string => {
   const url: string = `${kravUrl}/ny-versjon`
   if (kravId) {
     return `${url}/${kravId}`

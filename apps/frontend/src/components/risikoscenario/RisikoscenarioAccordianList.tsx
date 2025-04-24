@@ -85,7 +85,6 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       <Accordion>
         {risikoscenarioList.map((risikoscenario: IRisikoscenario, index: number) => {
           const expanded: boolean = risikoscenarioId === risikoscenario.id
-
           return (
             <Accordion.Item
               id={risikoscenario.id}

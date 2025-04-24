@@ -10,10 +10,8 @@ import {
   IRisikoscenario,
   ITiltak,
 } from '../../constants'
-import { ExternalLink } from '../common/RouteLink'
 import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
-  pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '../common/RouteLinkPvk'
@@ -339,22 +337,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                       <Tabs.Panel value={tabValues.tiltak} className='w-full'>
                         {tiltakList.length === 0 && (
                           <div className='my-5'>
-                            <Alert variant='info'>
-                              <Heading spacing size='small' level='3'>
-                                Foreløpig er ingen tiltak satt
-                              </Heading>
-                              Tiltak legges inn under{' '}
-                              <ExternalLink
-                                href={pvkDokumentasjonStepUrl(
-                                  etterlevelseDokumentasjonId,
-                                  pvkDokument.id,
-                                  5
-                                )}
-                              >
-                                Identifisering av risikoscenarioer og tiltak
-                              </ExternalLink>
-                              .
-                            </Alert>
+                            <Alert variant='info'>Foreløpig er ingen tiltak satt</Alert>
                           </div>
                         )}
 

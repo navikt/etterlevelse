@@ -99,17 +99,17 @@ const AppRoutes = (): JSX.Element => {
     <Routes>
       <Route path='/' element={<MainPage />} caseSensitive={true} />
       <Route
-        path={`${kravlisteUrl}/:tab`}
+        path={`${kravlisteUrl()}/:tab`}
         element={<PrivateRoute component={<KravListPage />} kraveierPage />}
         caseSensitive={true}
       />
       <Route
-        path={`${kravlisteUrl}/`}
+        path={`${kravlisteUrl()}`}
         element={<PrivateRoute component={<KravListPage />} kraveierPage />}
         caseSensitive={true}
       />
       <Route
-        path={`${kravlisteOpprettUrl}`}
+        path={`${kravlisteOpprettUrl()}`}
         element={<PrivateRoute component={<KravCreatePage />} kraveierPage />}
         caseSensitive={true}
       />
@@ -120,12 +120,12 @@ const AppRoutes = (): JSX.Element => {
         caseSensitive={true}
       />
       <Route
-        path={`${kravRedigeringIdUrl}/:id`}
+        path={`${kravRedigeringIdUrl()}/:id`}
         element={<PrivateRoute component={<KravEditPage />} kraveierPage />}
         caseSensitive={true}
       />
       <Route
-        path={`${kravNyVersjonIdUrl}/:id`}
+        path={`${kravNyVersjonIdUrl()}/:id`}
         element={<PrivateRoute component={<KravNyVersjonPage />} kraveierPage />}
         caseSensitive={true}
       />
@@ -235,7 +235,7 @@ const AppRoutes = (): JSX.Element => {
       />
 
       <Route
-        path={`${etterlevelseDokumentasjonRelasjonUrl}/:id`}
+        path={`${etterlevelseDokumentasjonRelasjonUrl()}/:id`}
         element={<RelasjonsOversikt />}
         caseSensitive={true}
       />
@@ -246,7 +246,7 @@ const AppRoutes = (): JSX.Element => {
         caseSensitive={true}
       />
       <Route
-        path={`${etterlevelsesDokumentasjonEditUrl}/:id`}
+        path={`${etterlevelsesDokumentasjonEditUrl()}/:id`}
         element={<EditEtterlevelseDokumentasjonPage />}
         caseSensitive={true}
       />

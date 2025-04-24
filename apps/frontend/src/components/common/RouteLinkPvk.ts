@@ -52,7 +52,7 @@ export const pvkDokumentasjonPvkBehovUrl = (
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentId}/pvkbehov/${pvkId}`
 
 export const risikoscenarioUrl = (risikoId: string): string =>
-  `${window.location.pathname}?risikoscernario=${risikoId}`
+  `${window.location.pathname}?risikoscenario=${risikoId}`
 
 export const risikoscenarioTiltakUrl = (activeRisikoscenarioId: string, tiltakId: string): string =>
   `${window.location.pathname}?risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
