@@ -1,7 +1,11 @@
 import { Accordion, Alert, BodyLong, Heading, Label, ReadMore } from '@navikt/ds-react'
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
+import {
+  pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterUrl,
+} from '../common/RouteLinkPvk'
 import RisikoscenarioAccordianHeader from '../risikoscenario/RisikoscenarioAccordionHeader'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
@@ -22,10 +26,11 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
   const { risikoscenarioList, allRisikoscenarioList, etterlevelseDokumentasjonId, tiltakList } =
     props
   const url = new URL(window.location.href)
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
-  const tabQuery = url.searchParams.get('tab')
-  const filterQuery = url.searchParams.get('filter')
-  const navigate = useNavigate()
+
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
+  const tabQuery: string | null = url.searchParams.get('tab')
+  const filterQuery: string | null = url.searchParams.get('filter')
+  const navigate: NavigateFunction = useNavigate()
   const accordionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -39,26 +44,23 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
     }
   }, [])
 
-  const handleAccordionChange = (risikoscenarioId?: string) => {
+  const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
-      navigate(
-        `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
-      )
+      navigate(pvkDokumentasjonTabFilterRisikoscenarioUrl(tabQuery, filterQuery, risikoscenarioId))
       setTimeout(() => {
         if (accordionRef.current) {
           window.scrollTo({ top: accordionRef.current.offsetTop - 30, behavior: 'smooth' })
         }
       }, 200)
     } else {
-      const paramQuery = tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''
-      navigate(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
+      navigate(pvkDokumentasjonTabFilterUrl(tabQuery, filterQuery, tabValues.risikoscenarioer))
     }
   }
 
   return (
     <div>
       <Accordion>
-        {risikoscenarioList.map((risikoscenario, index) => {
+        {risikoscenarioList.map((risikoscenario: IRisikoscenario, index: number) => {
           const expanded = risikoscenarioId === risikoscenario.id
 
           const revurdertEffektCheck =

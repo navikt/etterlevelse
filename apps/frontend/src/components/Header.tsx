@@ -21,6 +21,24 @@ import { intl } from '../util/intl/intl'
 import { informationIcon, warningAlert } from './Images'
 import { Markdown } from './common/Markdown'
 import { Portrait } from './common/Portrait'
+import {
+  adminArkivUrl,
+  adminAuditUrl,
+  adminCodelistUrl,
+  adminDokumentasjonUrl,
+  adminDokumentrelasjonUrl,
+  adminEtterlevelseUrl,
+  adminKravUrl,
+  adminMaillog,
+  adminMessagesLogUrl,
+  adminVarselUrl,
+} from './common/RouteLinkAdmin'
+import {
+  etterlevelseDokumentasjonerUrl,
+  temaUrl,
+} from './common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravlisteUrl } from './common/RouteLinkKrav'
+import { pvoOversiktUrl } from './common/RouteLinkPvo'
 import SkipToContent from './common/SkipToContent/SkipToContent'
 import ToggleActiveRole from './header/ToggleActiveRole'
 import MainSearch from './search/MainSearch'
@@ -69,28 +87,31 @@ const LoggedInHeader = () => {
     ? [
         {
           label: EPVO.overskrift,
-          href: EPVO.oversikt,
+          href: pvoOversiktUrl,
         },
       ]
     : []
   const kravPages = user.isKraveier()
     ? [
-        { label: 'Forvalte og opprette krav', href: '/kravliste' },
-        //{ label: 'Forvalte og opprette virkemiddel', href: '/virkemiddelliste' }
+        { label: 'Forvalte og opprette krav', href: kravlisteUrl() },
+        //{ label: 'Forvalte og opprette virkemiddel', href: virkemiddellisteUrl }
       ]
     : []
-  const adminPages = user.isAdmin()
+  const adminPages: {
+    label: string
+    href: string
+  }[] = user.isAdmin()
     ? [
-        { label: 'Administrere krav', href: '/admin/krav' },
-        { label: 'Administrere dokumentasjon', href: '/admin/dokumentasjon' },
-        { label: 'Administrere dokument relasjon', href: '/admin/dokumentrelasjon' },
-        { label: 'Administrere etterlevelse', href: '/admin/etterlevelse' },
-        { label: 'Administrere arkivering', href: '/admin/arkiv' },
-        { label: intl.audit, href: '/admin/audit' },
-        { label: 'Kodeverk', href: '/admin/codelist' },
-        { label: intl.questionAndAnswers, href: '/admin/messageslog' },
-        { label: intl.notifications, href: '/admin/varsel' },
-        { label: 'Sendt e-post log', href: '/admin/maillog' },
+        { label: 'Administrere krav', href: adminKravUrl },
+        { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl },
+        { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl },
+        { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
+        { label: 'Administrere arkivering', href: adminArkivUrl },
+        { label: intl.audit, href: adminAuditUrl() },
+        { label: 'Kodeverk', href: adminCodelistUrl },
+        { label: intl.questionAndAnswers, href: adminMessagesLogUrl },
+        { label: intl.notifications, href: adminVarselUrl },
+        { label: 'Sendt e-post log', href: adminMaillog },
         // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []
@@ -118,7 +139,7 @@ const LoggedInHeader = () => {
           [
             {
               label: 'Dokumentere etterlevelse',
-              href: '/dokumentasjoner',
+              href: etterlevelseDokumentasjonerUrl(),
               icon: <DocPencilIcon area-label='' aria-hidden />,
             },
           ],
@@ -132,7 +153,7 @@ const LoggedInHeader = () => {
           [
             {
               label: 'Forstå kravene',
-              href: '/tema',
+              href: temaUrl,
               icon: <ReceiptIcon area-label='' aria-hidden />,
             },
           ],
@@ -144,7 +165,7 @@ const LoggedInHeader = () => {
             },
           ],
         ]}
-        title={'Meny'}
+        title='Meny'
       />
     </div>
   )

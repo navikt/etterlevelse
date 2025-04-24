@@ -3,6 +3,10 @@ import React from 'react'
 import { EListName } from '../../services/Codelist'
 import { AuditButton } from '../admin/audit/AuditButton'
 import { EObjectType, IAuditItem, TNavigableItem } from '../admin/audit/AuditTypes'
+import { adminCodelistUrl, adminVarselUrl } from './RouteLinkAdmin'
+import { behandlingUrl } from './RouteLinkBehandlingskatalogen'
+import { dokumentasjonUrl, etterlevelseUrl, temaUrl } from './RouteLinkEtterlevelsesdokumentasjon'
+import { kravUrl } from './RouteLinkKrav'
 
 type TObjectLinkProps = {
   id?: string
@@ -20,14 +24,14 @@ type TObjectLinkProps = {
 export const urlForObject = (type: TNavigableItem | string, id: string) => {
   switch (type) {
     case EObjectType.Krav:
-      return `/krav/${id}`
+      return `${kravUrl}/${id}`
     case EObjectType.Etterlevelse:
-      return `/etterlevelse/${id}`
+      return `${etterlevelseUrl}/${id}`
     case EObjectType.EtterlevelseDokumentasjon:
-      return `/dokumentasjon/${id}`
+      return `${dokumentasjonUrl}/${id}`
     case EObjectType.BehandlingData:
     case EObjectType.Behandling:
-      return `/behandling/${id}`
+      return `${behandlingUrl}/${id}`
     case EListName.RELEVANS:
       return `/relevans/${id}`
     case EListName.UNDERAVDELING:
@@ -35,11 +39,11 @@ export const urlForObject = (type: TNavigableItem | string, id: string) => {
     case EListName.LOV:
       return `/lov/${id}` // will probably never be used
     case EListName.TEMA:
-      return `/tema/${id}`
+      return `${temaUrl}/${id}`
     case EObjectType.Codelist:
-      return `/admin/codelist/${id}`
+      return `${adminCodelistUrl}/${id}`
     case EObjectType.Melding:
-      return '/admin/varsel'
+      return adminVarselUrl
   }
   console.warn("couldn't find object type" + type)
   return ''
@@ -95,3 +99,6 @@ export const ExternalLink = ({
     </Link>
   )
 }
+
+export const paramQueryUrl = (tabQuery: string, paramQuery: string): string =>
+  `${window.location.pathname}?tab=${tabQuery}${paramQuery}`

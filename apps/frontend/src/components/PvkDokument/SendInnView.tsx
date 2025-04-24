@@ -38,6 +38,7 @@ import {
 import { user } from '../../services/User'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
+import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
 import FormButtons from './edit/FormButtons'
@@ -274,7 +275,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere
                   gjøre under{' '}
                   <Link
-                    href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#behandling`}
+                    href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#behandling`}
                     target='_blank'
                     rel='noopener noreferrer'
                     aria-label='redigere etterlevelsesdokumentasjon'

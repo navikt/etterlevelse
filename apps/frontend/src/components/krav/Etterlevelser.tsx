@@ -11,6 +11,7 @@ import {
 import { ettlevColors } from '../../util/theme'
 import { sadFolderIcon } from '../Images'
 import { InfoBlock } from '../common/InfoBlock'
+import { etterlevelseUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import EtterlevelseModal from '../etterlevelse/EtterlevelseModal'
 
 const etterlevelseFilter = [
@@ -153,8 +154,8 @@ export const Etterlevelser = ({
       {!loading && !etterlevelser.length && (
         <InfoBlock
           icon={sadFolderIcon}
-          alt={'Trist mappe ikon'}
-          text={'Det er ikke dokumentert etterlevelse på dette kravet'}
+          alt='Trist mappe ikon'
+          text='Det er ikke dokumentert etterlevelse på dette kravet'
           color={ettlevColors.red50}
         />
       )}
@@ -185,7 +186,7 @@ export const Etterlevelser = ({
                     {productAreaEtterlevelser.map((etterlevelse, index) => (
                       <LinkPanel
                         key={etterlevelse.kravNummer + '_' + index}
-                        href={modalVersion ? undefined : `/etterlevelse/${etterlevelse.id}`}
+                        href={modalVersion ? undefined : `${etterlevelseUrl}/${etterlevelse.id}`}
                         target='_blank'
                         rel='noopener noreferrer'
                         onClick={

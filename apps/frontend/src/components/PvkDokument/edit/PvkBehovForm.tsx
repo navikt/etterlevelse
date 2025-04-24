@@ -22,6 +22,8 @@ import {
 import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
+import { etterlevelseDokumentasjonIdUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonStepUrl } from '../../common/RouteLinkPvk'
 import { pvkBehovSchema } from './pvkDocumentSchema'
 
 type TProps = {
@@ -76,13 +78,13 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       if (pvkDokument.id || existingPvkDokumentId) {
         await updatePvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
-          navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+          navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
           window.location.reload()
         })
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response) => {
           setPvkDokument(response)
-          navigate(`/dokumentasjon/${response.etterlevelseDokumentId}/pvkbehov/${response.id}`)
+          navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
           window.location.reload()
         })
       }
@@ -221,9 +223,9 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 onClick={() => {
                   if (dirty) {
                     setIsUnsavedModalOpen(true)
-                    setUrlToNavigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                    setUrlToNavigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
                   } else {
-                    navigate('/dokumentasjon/' + etterlevelseDokumentasjon.id)
+                    navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
                   }
                 }}
               >
@@ -238,19 +240,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                     if (dirty) {
                       setIsUnsavedModalOpen(true)
                       setUrlToNavigate(
-                        '/dokumentasjon/' +
-                          etterlevelseDokumentasjon.id +
-                          '/pvkdokument/' +
-                          pvkDokument.id +
-                          '/1'
+                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
                       )
                     } else {
                       navigate(
-                        '/dokumentasjon/' +
-                          etterlevelseDokumentasjon.id +
-                          '/pvkdokument/' +
-                          pvkDokument.id +
-                          '/1'
+                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
                       )
                     }
                   }}

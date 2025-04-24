@@ -1,5 +1,6 @@
 import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import { temaUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import { TKravQL } from '../constants'
 import { useKravCounter } from '../query/KravQuery'
@@ -94,7 +95,7 @@ export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
     <>
       {loading && <Loader size='large' className='flex justify-self-center' />}
       {!loading && (
-        <LinkPanel className='mb-2' key={tema.code} href={'/tema/' + tema.code}>
+        <LinkPanel className='mb-2' key={tema.code} href={`${temaUrl}/${tema.code}`}>
           <div className='w-full flex items-center '>
             <div>
               <LinkPanel.Title className={`flex ${subContent ? ' text-xl' : ''}`}>

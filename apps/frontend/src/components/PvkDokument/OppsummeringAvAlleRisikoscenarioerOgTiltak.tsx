@@ -12,7 +12,15 @@ import {
 } from '../../constants'
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
-import { ExternalLink } from '../common/RouteLink'
+import { ExternalLink, paramQueryUrl } from '../common/RouteLink'
+import {
+  etterlevelseDokumentasjonIdUrl,
+  etterlevelseDokumentasjonPvkTabUrl,
+} from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import {
+  pvkDokumentasjonStepUrl,
+  pvkDokumentasjonTabFilterRisikoscenarioUrl,
+} from '../common/RouteLinkPvk'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
@@ -162,12 +170,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const onTabChange = (tab: string) => {
     const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
     const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
-    setNavigateUrl(`${window.location.pathname}?tab=${tab}${paramQuery}`)
+    setNavigateUrl(paramQueryUrl(tab, paramQuery))
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(`${window.location.pathname}?tab=${tab}${paramQuery}`)
+      navigate(paramQueryUrl(tab, paramQuery))
     }
   }
 
@@ -207,15 +215,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
         break
     }
 
-    setNavigateUrl(
-      `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
-    )
+    setNavigateUrl(pvkDokumentasjonTabFilterRisikoscenarioUrl(tab, filter, risikoscenarioId))
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(
-        `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
-      )
+      navigate(pvkDokumentasjonTabFilterRisikoscenarioUrl(tab, filter, risikoscenarioId))
     }
   }
 
@@ -307,7 +311,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                               Dere har foreløpig ingen risikoscenarioer
                             </Heading>
                             Risikoscenarioer legges inn under{' '}
-                            <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
+                            <Link
+                              href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}
+                            >
                               PVK-relaterte krav
                             </Link>{' '}
                             (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
@@ -346,13 +352,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
                             </Heading>
                             Tiltak legges inn under{' '}
                             <ExternalLink
-                              href={'/dokumentasjon/' + etterlevelseDokumentasjonId + '?tab=pvk'}
+                              href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId)}
                             >
                               PVK-relaterte krav{' '}
                             </ExternalLink>{' '}
                             eller eventuelt under{' '}
                             <ExternalLink
-                              href={`/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokument.id}/5`}
+                              href={pvkDokumentasjonStepUrl(
+                                etterlevelseDokumentasjonId,
+                                pvkDokument.id,
+                                5
+                              )}
                             >
                               øvrige risikoscenarioer
                             </ExternalLink>

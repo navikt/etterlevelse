@@ -1,6 +1,6 @@
 import { Alert, BodyLong, Heading, Link, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
@@ -11,6 +11,12 @@ import {
   ITiltak,
 } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
+import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import {
+  pvkDokumentasjonStepUrl,
+  pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterUrl,
+} from '../common/RouteLinkPvk'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
@@ -99,9 +105,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
 
   const url = new URL(window.location.href)
   const tabQuery = url.searchParams.get('tab')
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const filterQuery = url.searchParams.get('filter')
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     if (pvkDokument) {
@@ -158,20 +164,19 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
     }
   }, [filterQuery, risikoscenarioList])
 
-  const onTabChange = (tab: string) => {
-    const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-    const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
-    setNavigateUrl(`${window.location.pathname}?tab=${tab}${paramQuery}`)
+  const onTabChange = (tabQuery: string) => {
+    const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
+    setNavigateUrl(pvkDokumentasjonTabFilterUrl(tabQuery, filter, tabValues.risikoscenarioer))
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(`${window.location.pathname}?tab=${tab}${paramQuery}`)
+      navigate(pvkDokumentasjonTabFilterUrl(tabQuery, filter, tabValues.risikoscenarioer))
     }
   }
 
   const onFilterChange = (filter: string) => {
-    const tab = tabQuery ? tabQuery : tabValues.risikoscenarioer
+    const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
 
     switch (filter) {
       case filterValues.alleRisikoscenarioer:
@@ -179,13 +184,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
         break
       case filterValues.tiltakIkkeAktuelt:
         setFilteredRisikosenarioList(
-          risikoscenarioList.filter((risikoscenario) => risikoscenario.ingenTiltak)
+          risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
         )
         break
       case filterValues.effektIkkeVurdert:
         setFilteredRisikosenarioList(
           risikoscenarioList.filter(
-            (risikoscenario) =>
+            (risikoscenario: IRisikoscenario) =>
               !risikoscenario.ingenTiltak &&
               (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
                 risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -196,7 +201,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
       case filterValues.hoyRisiko:
         setFilteredRisikosenarioList(
           risikoscenarioList.filter(
-            (risikoscenario) =>
+            (risikoscenario: IRisikoscenario) =>
               risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
           )
         )
@@ -206,19 +211,16 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
         break
     }
 
-    setNavigateUrl(
-      `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
-    )
+    setNavigateUrl(pvkDokumentasjonTabFilterRisikoscenarioUrl(tab, filter, risikoscenarioId))
+
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      navigate(
-        `${window.location.pathname}?tab=${tab}&filter=${filter}${risikoscenarioId ? '&risikoscenario=' + risikoscenarioId : ''}`
-      )
+      navigate(pvkDokumentasjonTabFilterRisikoscenarioUrl(tab, filter, risikoscenarioId))
     }
   }
 
-  const onTiltakFilterChange = (filter: string) => {
+  const onTiltakFilterChange = (filter: string): void => {
     setTiltakFilter(filter)
     switch (filter) {
       case tiltakFilterValues.alleTiltak:
@@ -307,7 +309,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                                 Dere har foreløpig ingen risikoscenarioer
                               </Heading>
                               Risikoscenarioer legges inn under{' '}
-                              <Link href={`/dokumentasjon/${etterlevelseDokumentasjonId}`}>
+                              <Link
+                                href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}
+                              >
                                 PVK-relaterte krav
                               </Link>{' '}
                               (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
@@ -341,7 +345,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                               </Heading>
                               Tiltak legges inn under{' '}
                               <ExternalLink
-                                href={`/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${pvkDokument.id}/4`}
+                                href={pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjonId,
+                                  pvkDokument.id,
+                                  5
+                                )}
                               >
                                 Identifisering av risikoscenarioer og tiltak
                               </ExternalLink>

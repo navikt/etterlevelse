@@ -3,6 +3,10 @@ import { FunctionComponent } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../../constants'
 import { user } from '../../../../services/User'
+import {
+  pvkDokumentasjonStepUrl,
+  pvkDokumenteringPvoTilbakemeldingUrl,
+} from '../../../common/RouteLinkPvk'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -22,11 +26,9 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
         type='button'
         onClick={() => {
           if (pvoLink && user.isPersonvernombud()) {
-            navigate(`/pvkdokument/${pvkDokument.id}/pvotilbakemelding/5`)
+            navigate(pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 5))
           } else {
-            navigate(
-              `/dokumentasjon/${pvkDokument.etterlevelseDokumentId}/pvkdokument/${pvkDokument.id}/5`
-            )
+            navigate(pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 5))
           }
         }}
       >

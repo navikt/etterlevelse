@@ -2,7 +2,7 @@ import { Alert, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { RefObject, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { usePvkDokument } from '../api/PvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '../api/PvoApi'
@@ -14,6 +14,9 @@ import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokumen
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
+import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonStepUrl } from '../components/common/RouteLinkPvk'
+import { risikoscenarioFilterAlleUrl } from '../components/common/RouteLinkRisiko'
 import {
   EPvkDokumentStatus,
   IBreadCrumbPath,
@@ -58,24 +61,25 @@ export const PvkDokumentPage = () => {
     currentStep !== null ? parseInt(currentStep) : 1
   )
   const [selectedStep, setSelectedStep] = useState<number>(1)
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      pathName:
-        'E' +
-        etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
-        ' ' +
-        etterlevelseDokumentasjon?.title,
-      href: '/dokumentasjon/' + params.id,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
+      href: etterlevelseDokumentasjonIdUrl(params.id),
     },
   ]
 
-  const updateUrlOnStepChange = (step: number) => {
+  const updateUrlOnStepChange = (step: number): void => {
     navigate(
-      `/dokumentasjon/${pvkDokument?.etterlevelseDokumentId}/pvkdokument/${pvkDokument?.id}/${step}${step === 6 ? '?tab=risikoscenarioer&filter=alle' : ''}`
+      pvkDokumentasjonStepUrl(
+        pvkDokument?.etterlevelseDokumentId,
+        pvkDokument?.id,
+        step,
+        step === 6 ? risikoscenarioFilterAlleUrl() : ''
+      )
     )
   }
 

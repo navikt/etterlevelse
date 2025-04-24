@@ -1,13 +1,14 @@
 import { useQuery } from '@apollo/client'
 import { Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { useMyTeams } from '../../../api/TeamApi'
 import { emptyPage } from '../../../api/util/EmptyPageConstant'
 import { IPageResponse, ITeam, TEtterlevelseDokumentasjonQL } from '../../../constants'
 import { TCustomTeamObject, TVariables } from '../../../pages/MyEtterlevelseDokumentasjonerPage'
 import { getEtterlevelseDokumentasjonListQuery } from '../../../query/EtterlevelseDokumentasjonQuery'
 import { ampli } from '../../../services/Amplitude'
+import { etterlevelseDokumentasjonerUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { AlleEtterlevelsesDokumentasjoner } from './AlleEtterlevelsesDokumentasjoner'
 import BehandlingSok from './BehandlingSok'
 import { MineEtterlevelseDokumentasjoner } from './MineEtterlevelseDokumentasjoner'
@@ -17,7 +18,7 @@ type TSection = 'mine' | 'siste' | 'alle' | 'behandlingsok'
 
 export const DokumentasjonTabs = () => {
   const params = useParams<{ tab?: TSection }>()
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
   const [tab, setTab] = useState<TSection>(params.tab || 'mine')
   const [doneLoading, setDoneLoading] = useState(false)
   const [variables, setVariables] = useState<TVariables>({})
@@ -75,7 +76,7 @@ export const DokumentasjonTabs = () => {
         setVariables({ sistRedigert: 20 })
         break
     }
-    if (tab !== params.tab) navigate(`/dokumentasjoner/${tab}`, { replace: true })
+    if (tab !== params.tab) navigate(etterlevelseDokumentasjonerUrl(tab), { replace: true })
   }, [tab])
 
   useEffect(() => {
@@ -90,9 +91,9 @@ export const DokumentasjonTabs = () => {
         setTab(args as TSection)
         ampli.logEvent('knapp klikket', {
           tekst: 'Valgt dokumentasjons Tab',
-          pagePath: '/dokumentasjoner/' + args,
+          pagePath: etterlevelseDokumentasjonerUrl(args),
         })
-        navigate(`/dokumentasjoner/${args}`)
+        navigate(etterlevelseDokumentasjonerUrl(args))
       }}
     >
       <Tabs.List>

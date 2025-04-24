@@ -20,6 +20,7 @@ import {
   getEtterlevelseArkiv,
   updateAsAdminEtterlevelseArkiv,
 } from '../api/ArkiveringApi'
+import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import { EEtterlevelseArkivStatus, IEtterlevelseArkiv } from '../constants'
 import { ampli, userRoleEventProp } from '../services/Amplitude'
@@ -208,26 +209,28 @@ export const ArkivAdminPage = () => {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {sortedData.map((arkivering: IEtterlevelseArkiv) => {
-                  return (
-                    <Table.Row key={arkivering.id}>
-                      <Table.HeaderCell scope='row'>{arkivering.id}</Table.HeaderCell>
-                      <Table.DataCell>
-                        <Link href={`/dokumentasjon/${arkivering.etterlevelseDokumentasjonId}`}>
-                          {arkivering.etterlevelseDokumentasjonId}
-                        </Link>
-                      </Table.DataCell>
-                      <Table.DataCell>{arkiveringStatusToString(arkivering.status)}</Table.DataCell>
-                      <Table.DataCell>
-                        {' '}
-                        {moment(arkivering.tilArkiveringDato).format('LLL')}
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        {moment(arkivering.arkiveringDato).format('LLL')}
-                      </Table.DataCell>
-                    </Table.Row>
-                  )
-                })}
+                {sortedData.map((arkivering: IEtterlevelseArkiv) => (
+                  <Table.Row key={arkivering.id}>
+                    <Table.HeaderCell scope='row'>{arkivering.id}</Table.HeaderCell>
+                    <Table.DataCell>
+                      <Link
+                        href={etterlevelseDokumentasjonIdUrl(
+                          arkivering.etterlevelseDokumentasjonId
+                        )}
+                      >
+                        {arkivering.etterlevelseDokumentasjonId}
+                      </Link>
+                    </Table.DataCell>
+                    <Table.DataCell>{arkiveringStatusToString(arkivering.status)}</Table.DataCell>
+                    <Table.DataCell>
+                      {' '}
+                      {moment(arkivering.tilArkiveringDato).format('LLL')}
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      {moment(arkivering.arkiveringDato).format('LLL')}
+                    </Table.DataCell>
+                  </Table.Row>
+                ))}
               </Table.Body>
             </Table>
             <div className='flex w-full justify-center items-center mt-3'>

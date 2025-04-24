@@ -3,6 +3,8 @@ import { Alert, BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { IKravReference, IRisikoscenario } from '../../constants'
 import { ExternalLink } from '../common/RouteLink'
+import { pvkDokumentasjonCopyUrl, pvkDokumentasjonStepUrl } from '../common/RouteLinkPvk'
+import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '../common/RouteLinkRisiko'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
@@ -31,7 +33,13 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       {!noCopyButton && (
         <CopyButton
           variant='action'
-          copyText={`${window.location.origin}/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${risikoscenario.pvkDokumentId}/${stepUrl}?${queryUrl}`}
+          copyText={pvkDokumentasjonCopyUrl(
+            window.location.origin,
+            etterlevelseDokumentasjonId,
+            risikoscenario.pvkDokumentId,
+            stepUrl,
+            queryUrl
+          )}
           text='Kopiér scenariolenke'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
@@ -40,7 +48,8 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       {markdownCopyLinkButton && (
         <CopyButton
           variant='action'
-          copyText={`[${risikoscenario.navn}](${window.location.origin}/dokumentasjon/${etterlevelseDokumentasjonId}/pvkdokument/${risikoscenario.pvkDokumentId}/${stepUrl}?${queryUrl})`}
+          copyText={`[${risikoscenario.navn}](${window.location.origin}
+          ${pvkDokumentasjonStepUrl(etterlevelseDokumentasjonId, risikoscenario.pvkDokumentId, stepUrl, `?${queryUrl}`)})`}
           text='Kopiér scenario riktekstfelt lenke med titel'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
@@ -59,7 +68,12 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
-                const kravHref: string = `/dokumentasjon/${etterlevelseDokumentasjonId}/${relevantKrav.temaCode || 'PVK'}/RELEVANTE_KRAV/krav/${relevantKrav.kravNummer}/${relevantKrav.kravVersjon}`
+                const kravHref: string = risikoDokumentasjonTemaKravNummerVersjonUrl(
+                  etterlevelseDokumentasjonId,
+                  relevantKrav.temaCode || 'PVK',
+                  relevantKrav.kravNummer,
+                  relevantKrav.kravVersjon
+                )
 
                 return (
                   <List.Item className='max-w-[75ch]' key={`${relevantKrav.kravNummer}_${index}`}>

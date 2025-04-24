@@ -4,6 +4,8 @@ import { IBehandlingensLivslop, IEtterlevelseDokumentasjon } from '../../../cons
 import { user } from '../../../services/User'
 import { env } from '../../../util/env'
 import { ExternalLink } from '../../common/RouteLink'
+import { etterlevelsesDokumentasjonEditUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
+import { pvkDokumentasjonBehandlingsenLivslopUrl } from '../../common/RouteLinkPvk'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -44,7 +46,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
               Dere har ikke ennå lagt til behandlinger under{' '}
               <ExternalLink
                 className='text-medium'
-                href={'/dokumentasjon/edit/' + etterlevelseDokumentasjon.id}
+                href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
               >
                 Dokumentegenskaper
               </ExternalLink>
@@ -65,12 +67,10 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           <BodyShort>
             Disse egenskapene blir enklere å vurdere hvis{' '}
             <Link
-              href={
-                '/dokumentasjon/' +
-                etterlevelseDokumentasjon.id +
-                '/behandlingens-livslop/' +
-                (behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny')
-              }
+              href={pvkDokumentasjonBehandlingsenLivslopUrl(
+                etterlevelseDokumentasjon.id,
+                behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny'
+              )}
               target='_blank'
               rel='noopener noreferrer'
               aria-label='redigere etterlevelsesdokumentasjon'

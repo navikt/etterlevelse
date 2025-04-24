@@ -1,6 +1,7 @@
 import { Alert, BodyLong, Link } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 import { EKravStatus, IKravVersjon } from '../../constants'
+import { kravUrl } from '../common/RouteLinkKrav'
 
 const ExpiredAlert = ({
   alleKravVersjoner,
@@ -20,7 +21,7 @@ const ExpiredAlert = ({
           {' '}
           Gjeldende versjon:{' '}
           <Link
-            href={`/krav/${alleKravVersjoner[0].kravNummer}/${alleKravVersjoner[0].kravVersjon}`}
+            href={`${kravUrl}/${alleKravVersjoner[0].kravNummer}/${alleKravVersjoner[0].kravVersjon}`}
           >
             K{alleKravVersjoner[0].kravNummer}.{alleKravVersjoner[0].kravVersjon}
           </Link>

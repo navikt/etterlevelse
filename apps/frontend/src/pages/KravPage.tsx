@@ -12,6 +12,12 @@ import {
 import { DeleteItem } from '../components/DeleteItem'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
+import { temaUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import {
+  kravNyVersjonIdUrl,
+  kravRedigeringIdUrl,
+  kravlisteUrl,
+} from '../components/common/RouteLinkKrav'
 import StatusTag from '../components/common/StatusTag'
 import Etterlevelser from '../components/krav/Etterlevelser'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
@@ -169,7 +175,7 @@ export const KravPage = () => {
     if (kravTema?.shortName) {
       breadcrumbPaths.push({
         pathName: kravTema.shortName.toString(),
-        href: '/tema/' + kravTema.code,
+        href: `${temaUrl}${kravTema.code}`,
       })
     }
     return breadcrumbPaths
@@ -273,7 +279,7 @@ export const KravPage = () => {
                         size='small'
                         variant='primary'
                         onClick={() => {
-                          navigate(`/krav/redigering/${krav.id}`)
+                          navigate(kravRedigeringIdUrl(krav.id))
                         }}
                       >
                         Rediger krav
@@ -286,7 +292,7 @@ export const KravPage = () => {
                         className='ml-4'
                         size='small'
                         onClick={() => {
-                          navigate(`/krav/ny-versjon/${krav.id}`)
+                          navigate(kravNyVersjonIdUrl(krav.id))
                         }}
                         variant='secondary'
                       >
@@ -301,7 +307,7 @@ export const KravPage = () => {
                         buttonLabel='Slett krav'
                         buttonSize='small'
                         fun={() => deleteKrav(krav.id)}
-                        redirect='/kravliste'
+                        redirect={`${kravlisteUrl()}`}
                       />
                     </div>
                   )}

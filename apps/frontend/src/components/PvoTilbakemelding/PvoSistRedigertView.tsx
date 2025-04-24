@@ -2,9 +2,10 @@ import { useQuery } from '@apollo/client'
 import { Label, List, Loader } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { EPVO, IPageResponse, TPvoTilbakemeldingQL } from '../../constants'
+import { IPageResponse, TPvoTilbakemeldingQL } from '../../constants'
 import { TPvoVariables, getPvoTilbakemeldingListQuery } from '../../query/PvoTilbakemeldingQuery'
 import { ListLayout2 } from '../common/ListLayout'
+import { pvkDokumenteringPvoTilbakemeldingUrl } from '../common/RouteLinkPvk'
 import PvoStatusView from './common/PvoStatusView'
 
 export const PvoSistRedigertView = () => {
@@ -53,7 +54,7 @@ export const PvoSistRedigertView = () => {
                 <ListLayout2
                   key={pvoTilbakemelding.id}
                   id={pvoTilbakemelding.id}
-                  url={`/pvkdokument/${pvoTilbakemelding.pvkDokumentId}${EPVO.tilbakemelding}/1`}
+                  url={pvkDokumenteringPvoTilbakemeldingUrl(pvoTilbakemelding.pvkDokumentId, 1)}
                   title={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer} ${pvoTilbakemelding.etterlevelseDokumentasjonData.title}`}
                   status={<PvoStatusView status={pvoTilbakemelding.status} />}
                   changeStamp={`

@@ -3,6 +3,10 @@ import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { tabValues } from '../../PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
+import {
+  pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterUrl,
+} from '../../common/RouteLinkPvk'
 import AccordianAlertModal from '../AccordianAlertModal'
 import RisikoscenarioAccordianHeader from '../RisikoscenarioAccordionHeader'
 import OppsumeringAccordianContent from './OppsumeringAccordianContent'
@@ -52,13 +56,13 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
       setNavigateUrl(
-        `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
+        pvkDokumentasjonTabFilterRisikoscenarioUrl(tabQuery, filterQuery, risikoscenarioId)
       )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
         navigate(
-          `${window.location.pathname}?tab=${tabQuery}&filter=${filterQuery}&risikoscenario=${risikoscenarioId}`
+          pvkDokumentasjonTabFilterRisikoscenarioUrl(tabQuery, filterQuery, risikoscenarioId)
         )
       }
       setTimeout(() => {
@@ -67,13 +71,13 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
         }
       }, 200)
     } else {
-      const paramQuery: string =
-        tabQuery === tabValues.risikoscenarioer ? '&filter=' + filterQuery : ''
-      setNavigateUrl(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
+      setNavigateUrl(
+        pvkDokumentasjonTabFilterUrl(tabQuery, filterQuery, tabValues.risikoscenarioer)
+      )
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        navigate(`${window.location.pathname}?tab=${tabQuery}${paramQuery}`)
+        navigate(pvkDokumentasjonTabFilterUrl(tabQuery, filterQuery, tabValues.risikoscenarioer))
       }
     }
   }

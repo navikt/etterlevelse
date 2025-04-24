@@ -11,6 +11,10 @@ import {
 } from '../../../constants'
 import { isFerdigUtfylt } from '../../../pages/EtterlevelseDokumentasjonTemaPage'
 import { TTemaCode } from '../../../services/Codelist'
+import {
+  etterlevelseDokumentasjonAlleUrl,
+  etterlevelseDokumentasjonIdUrl,
+} from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { KravAccordionList } from '../KravAccordionList'
 import { filterStatus, filterSuksesskriterieStatus, getNewestKravVersjon } from '../common/utils'
 
@@ -145,7 +149,7 @@ export const KravList = (props: IProps) => {
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => true))
-              navigate(`/dokumentasjon/${params.id}/ALLE`)
+              navigate(etterlevelseDokumentasjonAlleUrl(params.id))
             }}
           >
             Åpne alle tema
@@ -155,7 +159,7 @@ export const KravList = (props: IProps) => {
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => false))
-              navigate(`/dokumentasjon/${params.id}/`)
+              navigate(etterlevelseDokumentasjonIdUrl(params.id))
             }}
           >
             Lukk alle tema

@@ -1,6 +1,7 @@
 import { Loader } from '@navikt/ds-react'
 import React, { JSX, useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import { forbiddenUrl } from '../components/common/RouteLinkAdmin'
 import { user } from '../services/User'
 
 interface IPrivateRouteProps {
@@ -33,19 +34,19 @@ export const PrivateRoute = ({
       if (user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: '/forbidden' }} />
+        return <Navigate to={{ pathname: forbiddenUrl }} />
       }
     } else if (kraveierPage) {
       if (user.isKraveier() || user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: '/forbidden' }} />
+        return <Navigate to={{ pathname: forbiddenUrl }} />
       }
     } else if (pvoPage) {
       if (user.isPersonvernombud() || user.isAdmin()) {
         return component
       } else {
-        return <Navigate to={{ pathname: '/forbidden' }} />
+        return <Navigate to={{ pathname: forbiddenUrl }} />
       }
     }
   }

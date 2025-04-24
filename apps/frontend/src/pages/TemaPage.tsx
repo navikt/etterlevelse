@@ -7,6 +7,7 @@ import { lovdataBase } from '../components/Lov'
 import { SkeletonPanel } from '../components/common/LoadingSkeleton'
 import { Markdown } from '../components/common/Markdown'
 import { ExternalLink } from '../components/common/RouteLink'
+import { kravNummerVersjonUrl } from '../components/common/RouteLinkKrav'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, IKravPriorityList, TKravQL } from '../constants'
 import { useKravCounter } from '../query/KravQuery'
@@ -123,7 +124,7 @@ const TemaView = ({ tema, codelistUtils }: ITemaViewProps) => {
                 icon={<div />}
                 key={krav.kravNummer + '.' + krav.kravVersjon + '_' + index}
               >
-                <LinkPanel href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`}>
+                <LinkPanel href={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}>
                   <Detail weight='semibold'>{kravNumView(krav)}</Detail>
                   <BodyShort>{krav.navn}</BodyShort>
                 </LinkPanel>

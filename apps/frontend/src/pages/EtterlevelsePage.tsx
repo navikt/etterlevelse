@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 import { useEtterlevelse } from '../api/EtterlevelseApi'
 import { getKravByKravNumberAndVersion } from '../api/KravApi'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { temaUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { kravUrl } from '../components/common/RouteLinkKrav'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { PageLayout } from '../components/scaffold/Page'
 import { IBreadCrumbPath, IEtterlevelse, IKrav } from '../constants'
@@ -75,13 +77,13 @@ export const EtterlevelsePage = () => {
     if (kravTema && kravTema.shortName) {
       breadcrumbPaths.push({
         pathName: kravTema.shortName.toString(),
-        href: '/tema/' + kravTema.code,
+        href: `${temaUrl}/${kravTema.code}`,
       })
     }
 
     breadcrumbPaths.push({
       pathName: `K${krav?.kravNummer}.${krav?.kravVersjon}`,
-      href: '/krav/' + krav?.kravNummer + '/' + krav?.kravVersjon,
+      href: `${kravUrl}/${krav?.kravNummer}/${krav?.kravVersjon}`,
     })
 
     return breadcrumbPaths

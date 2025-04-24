@@ -6,6 +6,7 @@ import { createCodelist } from '../../../api/CodelistApi'
 import { CodelistService, ICode, ICodeListFormValues } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { useAwait, useForceUpdate } from '../../../util/hooks/customHooks'
+import { adminCodelist } from '../../common/RouteLinkAdmin'
 import { PageLayout } from '../../scaffold/Page'
 import CodeListTable from './CodeListStyledTable'
 import ModalCreateCodeList from './ModalCreateCodeList'
@@ -48,7 +49,7 @@ const CodeListPage = () => {
 
   useEffect(() => {
     if (listname && listname !== params.listname) {
-      navigate(`/admin/codelist/${listname}`, { replace: true })
+      navigate(adminCodelist(listname), { replace: true })
     }
   }, [listname, lists])
 

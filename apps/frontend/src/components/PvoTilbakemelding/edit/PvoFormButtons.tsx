@@ -1,8 +1,8 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { EPVO } from '../../../constants'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { pvoOversiktUrl } from '../../common/RouteLinkPvo'
 
 interface IProps {
   activeStep: number
@@ -14,7 +14,7 @@ interface IProps {
 
 export const PvoFormButtons = (props: IProps) => {
   const { activeStep, setActiveStep, setSelectedStep, customButtons } = props
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
   return (
     <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
@@ -26,7 +26,7 @@ export const PvoFormButtons = (props: IProps) => {
             variant='tertiary'
             onClick={() => {
               if (activeStep === 1) {
-                navigate(EPVO.oversikt)
+                navigate(pvoOversiktUrl)
               } else {
                 window.scrollTo(0, 0)
                 setActiveStep(activeStep - 1)

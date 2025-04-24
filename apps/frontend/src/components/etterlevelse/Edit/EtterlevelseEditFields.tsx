@@ -2,8 +2,8 @@ import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '
 import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom'
 import { getDocumentRelationByToIdAndRelationType } from '../../../api/DocumentRelationApi'
 import {
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
@@ -33,7 +33,7 @@ type TEditProps = {
   krav: TKravQL
   etterlevelse: IEtterlevelse
   submit: (etterlevelse: IEtterlevelse) => Promise<void>
-  formRef?: React.RefObject<any>
+  formRef?: RefObject<any>
   varsleMelding?: string
   disableEdit: boolean
   close: (k?: IEtterlevelse | undefined) => void
@@ -45,7 +45,7 @@ type TEditProps = {
   isPreview: boolean
 }
 
-export const EtterlevelseEditFields = ({
+export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   krav,
   etterlevelse,
   submit,
@@ -58,7 +58,7 @@ export const EtterlevelseEditFields = ({
   kravFilter,
   etterlevelseDokumentasjon,
   isPreview,
-}: TEditProps) => {
+}) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
       ? editedEtterlevelse.status
@@ -73,11 +73,11 @@ export const EtterlevelseEditFields = ({
   const [morDokumentRelasjon, setMorDokumentRelasjon] = useState<IDocumentRelation>()
   const [morEtterlevelse, setMorEtterlevelse] = useState<IEtterlevelse>()
 
-  const errorSummaryRef = React.useRef<HTMLDivElement>(null)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
 
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
   useEffect(() => {
     if (navigatePath) {

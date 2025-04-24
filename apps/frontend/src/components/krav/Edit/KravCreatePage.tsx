@@ -8,6 +8,7 @@ import { kravBreadCrumbPath } from '../../../pages/util/BreadCrumbPath'
 import { CodelistService, EListName, ICode, TLovCode } from '../../../services/Codelist'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
+import { kravNummerUrl, kravlisteUrl } from '../../common/RouteLinkKrav'
 import { PageLayout } from '../../scaffold/Page'
 import { kravCreateValidation } from './KravSchemaValidation'
 import { KravFormFields } from './components/KravFormFields'
@@ -40,7 +41,7 @@ export const KravCreatePage = () => {
     createKrav(mutatedKrav)
       .then((krav: IKrav) => {
         setLoading(false)
-        navigate('/krav/' + krav.id)
+        navigate(kravNummerUrl(krav.id))
       })
       .catch((error: any) => setErrorModalMessage(error))
   }
@@ -87,7 +88,7 @@ export const KravCreatePage = () => {
                   <div className='flex w-full'>
                     <KravStandardButtons
                       submitCancelButton={() => {
-                        navigate('/kravliste')
+                        navigate(kravlisteUrl())
                       }}
                       submitSaveButton={() => {
                         values.status = EKravStatus.UTKAST

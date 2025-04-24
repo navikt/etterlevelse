@@ -10,6 +10,7 @@ import { DotTags } from '../common/DotTag'
 import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
 import { ExternalLink } from '../common/RouteLink'
+import { kravUrl } from '../common/RouteLinkKrav'
 import { SuksesskriterieCard } from './Suksesskriterie'
 
 const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -88,7 +89,7 @@ export const AllInfo = ({
 
       {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
         <LabelWrapper>
-          <LabelAboveContent title={'Tidligere versjoner'} header={header}>
+          <LabelAboveContent title='Tidligere versjoner' header={header}>
             {alleKravVersjoner.map((kravRelasjon, index) => {
               if (
                 kravRelasjon.kravVersjon &&
@@ -97,7 +98,7 @@ export const AllInfo = ({
                 return (
                   <BodyShort key={'kravVersjon_list_' + index} className={'break-words'}>
                     <ExternalLink
-                      href={'/krav/' + kravRelasjon.kravNummer + '/' + kravRelasjon.kravVersjon}
+                      href={`${kravUrl}/${kravRelasjon.kravNummer}/${kravRelasjon.kravVersjon}`}
                     >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>
                   </BodyShort>
                 )
@@ -189,7 +190,7 @@ const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<IKrav> }) =>
   <div className='max-w-2xl'>
     <BodyShort className='break-words'>
       <ExternalLink
-        href={`/krav/${kravRelasjon.id}`}
+        href={`${kravUrl}/${kravRelasjon.id}`}
       >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>{' '}
       - {kravRelasjon.navn}
     </BodyShort>

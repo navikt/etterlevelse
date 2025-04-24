@@ -25,38 +25,41 @@ export const getAllRisikoscenario = async () => {
   }
 }
 
-export const getRisikoscenarioPage = async (pageNumber: number, pageSize: number) => {
-  return (
+export const getRisikoscenarioPage = async (
+  pageNumber: number,
+  pageSize: number
+): Promise<IPageResponse<IRisikoscenario>> =>
+  (
     await axios.get<IPageResponse<IRisikoscenario>>(
       `${env.backendBaseUrl}/risikoscenario?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
-}
 
-export const getRisikoscenario = async (id: string) => {
-  return (await axios.get<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
-}
+export const getRisikoscenario = async (id: string): Promise<IRisikoscenario> =>
+  (await axios.get<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
 
 export const getRisikoscenarioByPvkDokumentId = async (
   pvkDokumentId: string,
   scenarioType: ERisikoscenarioType
-) => {
-  return (
+): Promise<IPageResponse<IRisikoscenario>> =>
+  (
     await axios.get<IPageResponse<IRisikoscenario>>(
       `${env.backendBaseUrl}/risikoscenario/pvkdokument/${pvkDokumentId}/${scenarioType}`
     )
   ).data
-}
 
-export const getRisikoscenarioByKravnummer = async (kravnummer: string) => {
-  return (
+export const getRisikoscenarioByKravnummer = async (
+  kravnummer: string
+): Promise<IPageResponse<IRisikoscenario>> =>
+  (
     await axios.get<IPageResponse<IRisikoscenario>>(
       `${env.backendBaseUrl}/risikoscenario/kravnummer/${kravnummer}`
     )
   ).data
-}
 
-export const createRisikoscenario = async (risikoscenario: IRisikoscenario) => {
+export const createRisikoscenario = async (
+  risikoscenario: IRisikoscenario
+): Promise<IRisikoscenario> => {
   const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
   return (await axios.post<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario`, dto)).data
 }
@@ -64,7 +67,7 @@ export const createRisikoscenario = async (risikoscenario: IRisikoscenario) => {
 export const createRisikoscenarioKnyttetTilKrav = async (
   kravnummer: number,
   risikoscenario: IRisikoscenario
-) => {
+): Promise<IRisikoscenario> => {
   const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
   return (
     await axios.post<IRisikoscenario>(
@@ -74,7 +77,9 @@ export const createRisikoscenarioKnyttetTilKrav = async (
   ).data
 }
 
-export const updateRisikoscenario = async (risikoscenario: IRisikoscenario) => {
+export const updateRisikoscenario = async (
+  risikoscenario: IRisikoscenario
+): Promise<IRisikoscenario> => {
   const dto = risikoscenarioToRisikoscenarioDto(risikoscenario)
   return (
     await axios.put<IRisikoscenario>(
@@ -84,8 +89,10 @@ export const updateRisikoscenario = async (risikoscenario: IRisikoscenario) => {
   ).data
 }
 
-export const updateKravForRisikoscenarioer = async (request: IKravRisikoscenarioRelasjon) => {
-  return (
+export const updateKravForRisikoscenarioer = async (
+  request: IKravRisikoscenarioRelasjon
+): Promise<IRisikoscenario[]> =>
+  (
     await axios.put<IRisikoscenario[]>(
       `${env.backendBaseUrl}/risikoscenario/update/addRelevantKrav`,
       {
@@ -94,36 +101,39 @@ export const updateKravForRisikoscenarioer = async (request: IKravRisikoscenario
       }
     )
   ).data
-}
 
-export const deleteRisikoscenario = async (id: string) => {
-  return (await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
-}
+export const deleteRisikoscenario = async (id: string): Promise<IRisikoscenario> =>
+  (await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
 
-export const fjernKravFraRisikoscenario = async (id: string, kravnummer: number) => {
-  return (
+export const fjernKravFraRisikoscenario = async (
+  id: string,
+  kravnummer: number
+): Promise<IRisikoscenario> =>
+  (
     await axios.put<IRisikoscenario>(
       `${env.backendBaseUrl}/risikoscenario/${id}/removeKrav/${kravnummer}`
     )
   ).data
-}
 
-export const addTiltakToRisikoscenario = async (request: ITiltakRisikoscenarioRelasjon) => {
-  return (
+export const addTiltakToRisikoscenario = async (
+  request: ITiltakRisikoscenarioRelasjon
+): Promise<IRisikoscenario> =>
+  (
     await axios.put<IRisikoscenario>(
       `${env.backendBaseUrl}/risikoscenario/update/addRelevanteTiltak`,
       request
     )
   ).data
-}
 
-export const removeTiltakToRisikoscenario = async (risikoscenarioId: string, tiltakId: string) => {
-  return (
+export const removeTiltakToRisikoscenario = async (
+  risikoscenarioId: string,
+  tiltakId: string
+): Promise<IRisikoscenario> =>
+  (
     await axios.put<IRisikoscenario>(
       `${env.backendBaseUrl}/risikoscenario/${risikoscenarioId}/removeTiltak/${tiltakId}`
     )
   ).data
-}
 
 const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
   const dto = {
