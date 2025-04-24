@@ -142,7 +142,7 @@ public class PvkDokumentToDoc {
         public void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
             var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
 
-            addHeading2("Øvrige egenskaper for behandlingene:");
+            addHeading3("Øvrige egenskaper for behandlingene:");
 
             allYtterligeEgenskaper.forEach(egenskap -> {
                 if (pvkDokument.getPvkDokumentData().getYtterligereEgenskaper().contains(egenskap.getCode())) {
@@ -173,7 +173,7 @@ public class PvkDokumentToDoc {
 
             var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
 
-            addHeading2("Følgende egenskaper er hentet fra Behandlingskatalogen:");
+            addHeading3("Følgende egenskaper er hentet fra Behandlingskatalogen:");
             if (alleProfilering.contains(true)) {
                 addMarkdownText("- **Det gjelder** profilering");
             } else if (alleProfilering.stream().filter(value -> value == false).toList().size() == alleProfilering.size()) {
