@@ -109,8 +109,8 @@ export const BehandlingensLivslopPage = () => {
         mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
 
-      const pvkDokumentLink: '/pvkdokument/' | '/pvkbehov/' =
-        pvkDokument && pvkDokument.skalUtforePvk ? '/pvkdokument/' : '/pvkbehov/'
+      const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
+        pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
 
       if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
         await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
