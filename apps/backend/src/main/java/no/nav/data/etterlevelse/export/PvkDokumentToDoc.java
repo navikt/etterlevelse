@@ -51,9 +51,10 @@ public class PvkDokumentToDoc {
                 .build());
 
         behandlingensLivslop.ifPresent(livslop -> livslop.getBehandlingensLivslopData().getFiler().forEach(behandlingensLivslopFil -> {
+            String[] filename = behandlingensLivslopFil.getFilnavn().split("\\.");
             zipFiles.add(ZipFile.builder()
-                    .filnavn(behandlingensLivslopFil.getFilnavn())
-                    .filtype(behandlingensLivslopFil.getFiltype())
+                    .filnavn(filename[0])
+                    .filtype(filename[1])
                     .fil(behandlingensLivslopFil.getFil())
                     .build());
         }));
@@ -82,6 +83,23 @@ public class PvkDokumentToDoc {
                 var header = addHeading2("Behandlingens livsløp");
 
                 addBookmark(header, behandlingensLivslop.get().getId().toString());
+
+                addHeading3("Filer lastet opp:");
+                if(behandlingensLivslop.get().getBehandlingensLivslopData().getFiler().isEmpty()) {
+                    addText("Ingen fil lastet opp");
+                } else {
+                    behandlingensLivslop.get().getBehandlingensLivslopData().getFiler().forEach(fil -> {
+                        addMarkdownText("- " + fil.getFilnavn());
+                    });
+                }
+
+
+                addHeading3("Beskrivelse");
+                if(behandlingensLivslop.get().getBehandlingensLivslopData().getBeskrivelse() != null && !behandlingensLivslop.get().getBehandlingensLivslopData().getBeskrivelse().isBlank()) {
+                    addText(behandlingensLivslop.get().getBehandlingensLivslopData().getBeskrivelse());
+                } else {
+                    addText("Ingen skriftlig beskrivelse");
+                }
             }
 
             var header = addHeading2("Personvernkonsekvensvurdering");
