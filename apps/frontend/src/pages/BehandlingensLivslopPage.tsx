@@ -47,7 +47,8 @@ export const BehandlingensLivslopPage = () => {
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.id)
   const [behandlingsLivslop, setBehandlingesLivslop] = useBehandlingensLivslop(
-    params.behandlingsLivslopId
+    params.behandlingsLivslopId,
+    params.id
   )
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
   const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
@@ -122,7 +123,7 @@ export const BehandlingensLivslopPage = () => {
                 response.etterlevelseDokumentasjonId,
                 pvkDokumentLink,
                 pvkDokument ? pvkDokument.id : 'ny',
-                1
+                (pvkDokument && pvkDokument.skalUtforePvk ? '/1' : '')
               )
             )
           }
@@ -224,10 +225,11 @@ export const BehandlingensLivslopPage = () => {
 
                     <div className='mt-3'>
                       <TextAreaField
-                        rows={3}
+                        markdown
                         noPlaceholder
                         label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
                         name='beskrivelse'
+                        height='5.75rem'
                       />
                     </div>
 

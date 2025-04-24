@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.export;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.utils.WordDocUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
@@ -25,6 +26,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KravToDoc {
 
     private static final ObjectFactory facKrav = Context.getWmlObjectFactory();
@@ -154,8 +156,13 @@ public class KravToDoc {
             addHeading4("Begreper");
             if(krav.getBegrepIder() != null && !krav.getBegrepIder().isEmpty()){
                 for(int b = 0; b < krav.getBegrepIder().size(); b++) {
-                    BegrepResponse begrepResponse = begrepService.getBegrep(krav.getBegrepIder().get(b)).orElse(null);
-                    addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" +  begrepResponse.getId() +")<br/>" + begrepResponse.getBeskrivelse());
+                    try {
+                        BegrepResponse begrepResponse = begrepService.getBegrep(krav.getBegrepIder().get(b)).orElse(null);
+                        addMarkdownText("- [" + begrepResponse.getNavn() + "]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" +  begrepResponse.getId() +")<br/>" + begrepResponse.getBeskrivelse());
+                    } catch (Exception e) {
+                        log.error("Problem connecting to behandlingskatalog to get begreper, error: ", e);
+                        addMarkdownText("- [ Ingen navn ]( " + System.getenv("CLIENT_BEGREPSKATALOG_FRONTEND_URL") + "/" + krav.getBegrepIder().get(b) + ")<br/> Ingen beskrivelse");
+                    }
                 }
             } else {
                 addText("Ikke angitt");

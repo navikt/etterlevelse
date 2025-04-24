@@ -1,6 +1,7 @@
 import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { ITilbakemeldingsinnhold } from '../../../constants'
+import { Markdown } from '../../common/Markdown'
 
 enum EBidragVerdier {
   TILSTREKKELIG = 'TILSTREKELIG',
@@ -46,11 +47,12 @@ export const PvoTilbakemeldingReadOnly = (props: IProps) => {
 
       <div className='my-5'>
         <Label>Tilbakemelding</Label>
+        {tilbakemeldingsinnhold &&
+          tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
+          tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length !== 0 && (
+            <Markdown source={tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere} />
+          )}
         <BodyLong>
-          {tilbakemeldingsinnhold &&
-            tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
-            tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length !== 0 &&
-            tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere}
           {(!tilbakemeldingsinnhold ||
             !tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere ||
             tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length === 0) &&

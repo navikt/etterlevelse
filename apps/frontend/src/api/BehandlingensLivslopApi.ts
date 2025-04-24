@@ -117,7 +117,10 @@ export const deleteBehandlingensLivslop = async (id: string) => {
   ).data
 }
 
-export const useBehandlingensLivslop = (behandlingensLivslopId?: string) => {
+export const useBehandlingensLivslop = (
+  behandlingensLivslopId?: string,
+  etterlevelseDokumentasjonId?: string
+) => {
   const isCreateNew = behandlingensLivslopId === 'ny'
   const [data, setData] = useState<IBehandlingensLivslop | undefined>(
     isCreateNew ? mapBehandlingensLivslopToFormValue({}) : undefined
@@ -132,6 +135,18 @@ export const useBehandlingensLivslop = (behandlingensLivslopId?: string) => {
           setData(behandlingensLivslop)
           setIsLoading(false)
         })
+      })()
+    } else if (etterlevelseDokumentasjonId && isCreateNew) {
+      //double check that behandlingenslivslop doesnt not exist
+      ;(async () => {
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
+          async (behandlingensLivslop) => {
+            if (behandlingensLivslop) {
+              setData(behandlingensLivslop)
+            }
+            setIsLoading(false)
+          }
+        )
       })()
     }
   }, [behandlingensLivslopId])
