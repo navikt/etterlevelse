@@ -309,7 +309,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                                 Dere har foreløpig ingen risikoscenarioer
                               </Heading>
                               Risikoscenarioer legges inn under{' '}
-                              <Link href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}>
+                              <Link
+                                href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}
+                              >
                                 PVK-relaterte krav
                               </Link>{' '}
                               (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
@@ -344,10 +346,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView = (props: IProps)
                               Tiltak legges inn under{' '}
                               <ExternalLink
                                 href={pvkDokumentasjonStepUrl(
-                                etterlevelseDokumentasjonId,
-                                pvkDokument.id,
-                                5
-                              )}
+                                  etterlevelseDokumentasjonId,
+                                  pvkDokument.id,
+                                  5
+                                )}
                               >
                                 Identifisering av risikoscenarioer og tiltak
                               </ExternalLink>
