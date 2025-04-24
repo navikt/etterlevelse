@@ -222,7 +222,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
               <TopBottomWrapper>
                 <div className='flex gap-2'>
                   <Button type='button' onClick={() => submitForm()}>
-                    Lagre tiltakenes effekt
+                    Lagre endringer
                   </Button>
 
                   <Button type='button' variant='secondary' onClick={() => setIsFormActive(false)}>
