@@ -78,6 +78,7 @@ public class PvkDokumentToDoc {
             behandlingensLivslop.ifPresent(livslop -> addListItem("Behandlingens livsløp", currListId, livslop.getId().toString()));
 
             addListItem("Personverkonsekvensvurdering", currListId, pvkDokument.getId().toString());
+            pageBreak();
 
             if (behandlingensLivslop.isPresent()) {
                 var header = addHeading2("Behandlingens livsløp");
@@ -100,6 +101,7 @@ public class PvkDokumentToDoc {
                 } else {
                     addText("Ingen skriftlig beskrivelse");
                 }
+                pageBreak();
             }
 
             var header = addHeading2("Personvernkonsekvensvurdering");
