@@ -123,7 +123,7 @@ export const BehandlingensLivslopPage = () => {
                 response.etterlevelseDokumentasjonId,
                 pvkDokumentLink,
                 pvkDokument ? pvkDokument.id : 'ny',
-                (pvkDokument && pvkDokument.skalUtforePvk ? '/1' : '')
+                pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
               )
             )
           }

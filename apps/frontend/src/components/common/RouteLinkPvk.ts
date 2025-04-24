@@ -21,7 +21,7 @@ export const pvkDokumentasjonPvkTypeStepUrl = (
   etterlevelseDokumentId: string,
   pvkType: string,
   pvkDokumentId: string,
-  step?: number
+  step?: number | string
 ): string => {
   const url: string = `${dokumentasjonUrl}/${etterlevelseDokumentId}/${pvkType}/${pvkDokumentId}`
 
