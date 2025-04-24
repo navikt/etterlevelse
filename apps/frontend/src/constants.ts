@@ -689,6 +689,7 @@ export enum EKonsekvensnivaa {
 
 export enum EPVO {
   overskrift = 'Oversiktsside for Personvernombudet',
+  behandlingAvPersonopplysninger = 'I Behandlingskatalogen står det at dere behandler personopplysninger om:',
 }
 
 export type TReplace<T, K> = Omit<T, keyof K> & K

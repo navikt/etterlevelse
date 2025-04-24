@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading, List, Modal, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Label, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { RefObject, useState } from 'react'
 import {
@@ -6,7 +6,12 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
-import { IPvkDokument, IPvoTilbakemelding, TEtterlevelseDokumentasjonQL } from '../../constants'
+import {
+  EPVO,
+  IPvkDokument,
+  IPvoTilbakemelding,
+  TEtterlevelseDokumentasjonQL,
+} from '../../constants'
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
@@ -82,12 +87,8 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                       Representanter for de registrerte
                     </Heading>
 
-                    <List
-                      size='medium'
-                      className='mt-5'
-                      headingTag='label'
-                      title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
-                    >
+                    <List className='mt-5'>
+                      <Label size='medium'>{EPVO.behandlingAvPersonopplysninger}</Label>
                       {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                       {personkategorier.length > 0 &&
                         personkategorier.map((personkategori) => (
@@ -147,7 +148,8 @@ export const InvolveringAvEksterneView = (props: IProps) => {
                       />
                     </div>
 
-                    <List className='mt-10' title='Representanter for databehandlere'>
+                    <List className='mt-10'>
+                      <Heading size='medium'>Representanter for databehandlere</Heading>
                       <BodyLong>
                         I Behandlingskatalogen står det at følgende databehandlere benyttes:
                       </BodyLong>

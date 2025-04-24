@@ -1,5 +1,5 @@
 import { TrashIcon } from '@navikt/aksel-icons'
-import { Button, List, Modal } from '@navikt/ds-react'
+import { Button, Heading, List, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import {
   deleteRisikoscenario,
@@ -89,7 +89,10 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
         >
           <Modal.Body>
             {risikoscenario.relevanteKravNummer.length > 0 && (
-              <List title='Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:'>
+              <List>
+                <Heading size='medium'>
+                  Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:
+                </Heading>
                 {risikoscenario.relevanteKravNummer.map((krav: IKravReference) => (
                   <List.Item key={`${risikoscenario.id}_${krav.kravNummer}.${krav.kravVersjon}`}>
                     K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
