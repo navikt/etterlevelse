@@ -2,8 +2,8 @@ package no.nav.data.etterlevelse.krav.domain;
 
 import no.nav.data.IntegrationTestBase;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,11 +11,11 @@ class KravRepoTest extends IntegrationTestBase {
 
     @Test
     void saveKrav() {
-        var krav = kravStorageService.save(Krav.builder().build());
+        var krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(0).build());
         assertThat(krav.getVersion()).isEqualTo(0);
 
         krav.setNavn("krav 1");
-        krav = kravStorageService.save(krav);
+        krav = kravService.save(krav);
         assertThat(krav.getVersion()).isEqualTo(1);
 
         var audits = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
@@ -23,6 +23,6 @@ class KravRepoTest extends IntegrationTestBase {
         assertThat(audits.get(0).getVersion()).isEqualTo(1);
         assertThat(audits.get(1).getVersion()).isEqualTo(0);
 
-        assertThat(kravStorageService.getAll(Krav.class, PageRequest.of(0, 10, Sort.by("id"))).getTotalElements()).isOne();
+        assertThat(kravRepo.count()).isOne();
     }
 }

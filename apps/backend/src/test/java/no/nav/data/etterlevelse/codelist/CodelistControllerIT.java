@@ -7,6 +7,7 @@ import no.nav.data.etterlevelse.codelist.dto.AllCodelistResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistRequest;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.etterlevelse.codelist.CodelistUtils.createCodelist;
 import static no.nav.data.etterlevelse.codelist.CodelistUtils.createCodelistRequest;
@@ -224,21 +226,13 @@ class CodelistControllerIT extends IntegrationTestBase {
             assertFalse(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
         }
 
-//        @ParameterizedTest
-//        @ValueSource(strings = {})
-//        void shouldInvalidateDeletingImmutable(String input) {
-//            saveCodelist(createCodelist(ListName.valueOf(input), "DELETE"));
-//            String url = String.format("/codelist/%s/DELETE", input);
-//            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
-//
-//            assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-//            assertThat(responseEntity.getBody()).contains(String.format(ERROR_IMMUTABLE_CODELIST, input));
-//        }
-
         @Test
         void shouldThrowCodelistNotErasableException_whenCodelistToBeDeletedIsStillInUse() {
             saveCodelist(createCodelist(ListName.RELEVANS, "DELETE_CODE"));
-            kravStorageService.save(Krav.builder().relevansFor(List.of("DELETE_CODE")).status(KravStatus.AKTIV).build());
+            kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                    .data(KravData.builder().relevansFor(List.of("DELETE_CODE")).status(KravStatus.AKTIV).build())
+                    .build()
+            );
             assertTrue(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
 
             ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);

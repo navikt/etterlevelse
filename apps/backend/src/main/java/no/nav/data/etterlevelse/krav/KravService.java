@@ -1,5 +1,8 @@
 package no.nav.data.etterlevelse.krav;
 
+
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -7,13 +10,14 @@ import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.etterlevelse.common.domain.DomainService;
+import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
@@ -42,8 +46,9 @@ import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class KravService extends DomainService<Krav> {
+public class KravService {
 
+    private final KravRepo repo;
     private final StorageService<KravImage> imageStorage;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final EtterlevelseService etterlevelseService;
@@ -51,80 +56,83 @@ public class KravService extends DomainService<Krav> {
     private final VarselService varselService;
     private final AuditVersionService auditVersionService;
 
+    public Krav get(UUID uuid) {
+        return repo.findById(uuid).orElse(null);
+    }
+    
     public Page<Krav> getAll(Pageable page) {
-        Page<GenericStorage<Krav>> all = kravRepo.findAll(page);
-        return all.map(GenericStorage::getDomainObjectData);
+        return repo.findAll(page);
     }
 
     public Page<Krav> getAllNonUtkast(Pageable page) {
-        Page<GenericStorage<Krav>> all = kravRepo.findAllNonUtkast(page);
-        return all.map(GenericStorage::getDomainObjectData);
+        return repo.findAllNonUtkast(page);
     }
 
     public Page<Krav> getAllKravStatistics(Pageable page) {
-        Page<GenericStorage<Krav>> all = kravRepo.findAll(page);
-
-        return all.map(GenericStorage::getDomainObjectData);
+        return repo.findAll(page);
     }
 
     public List<Krav> getByFilter(KravFilter filter) {
-        return convert(kravRepo.findBy(filter), GenericStorage::getDomainObjectData);
+        return repo.findBy(filter);
     }
 
     public List<Krav> findByVirkmiddelId(String virkemiddelId) {
-        return convert(kravRepo.findByVirkemiddelIder(virkemiddelId), GenericStorage::getDomainObjectData);
+        return repo.findByVirkemiddelIder(virkemiddelId);
     }
 
     public List<Krav> getByKravNummer(int kravNummer) {
-        return convert(kravRepo.findByKravNummer(kravNummer), GenericStorage::getDomainObjectData);
+        return repo.findByKravNummer(kravNummer);
     }
 
     public Optional<Krav> getByKravNummer(int kravNummer, int kravVersjon) {
-        return kravRepo.findByKravNummer(kravNummer, kravVersjon)
-                .map(GenericStorage::getDomainObjectData);
+        return repo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon);
     }
 
     public List<Krav> search(String name) {
-        List<GenericStorage<Krav>> byNameContaining = new ArrayList<>(kravRepo.findByNameContaining(name));
+        List<Krav> byNameContaining = new ArrayList<>(repo.findByNavnContaining(name));
         if (StringUtils.isNumeric(name)) {
-            byNameContaining.addAll(kravRepo.findByKravNummer(Integer.parseInt(name)));
+            byNameContaining.addAll(repo.findByKravNummer(Integer.parseInt(name)));
         }
         if (!isKravEier()) {
-            byNameContaining.removeIf(gs -> gs.getDomainObjectData().getStatus().erUtkast());
+            byNameContaining.removeIf(k -> k.getStatus().erUtkast());
         }
-        return convert(byNameContaining, GenericStorage::getDomainObjectData);
+        return byNameContaining;
     }
 
     public List<Krav> searchByNumber(String number) {
-        List<GenericStorage<Krav>> byNumberContaining = new ArrayList<>(kravRepo.findByNumberContaining(number));
+        List<Krav> byNumberContaining = new ArrayList<>(repo.findByKravNummerContaining(number));
         if (!isKravEier()) {
-            byNumberContaining.removeIf(gs -> gs.getDomainObjectData().getStatus().erUtkast());
+            byNumberContaining.removeIf(k -> k.getStatus().erUtkast());
         }
-        return convert(byNumberContaining, GenericStorage::getDomainObjectData);
+        return byNumberContaining;
     }
 
     public List<Krav> findByKravNummerAndActiveStatus(int kravNummer) {
-        return convert(kravRepo.findByKravNummerAndActiveStatus(kravNummer), GenericStorage::getDomainObjectData);
+        return repo.findByKravNummerAndAktiveStatus(kravNummer);
     }
 
-
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Krav save(Krav krav) {
+        return repo.save(krav);
+    }
+    
+    // TODO: Avhengighet til DTO
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
-        var krav = request.isUpdate() ? storage.get(request.getId()) : new Krav();
-
+        Krav krav = request.isUpdate() ? repo.findById(request.getId()).get() : new Krav();
         krav.merge(request);
 
         if (request.isNyKravVersjon()) {
             krav.setKravNummer(request.getKravNummer());
-            krav.setKravVersjon(kravRepo.nextKravVersjon(request.getKravNummer()));
+            krav.setKravVersjon(repo.nextKravVersjon(request.getKravNummer()));
         } else if (!request.isUpdate()) {
-            krav.setKravNummer(kravRepo.nextKravNummer());
+            krav.setKravNummer(repo.nextKravNummer());
         }
-
+        
         if (krav.getId() != null) {
-            List<AuditVersion> kravAudits = auditVersionService.getByTableIdAndTimestamp(krav.getId().toString(), LocalDateTime.now().toString());
-            Krav previousKrav = kravAudits.get(0).getDomainObjectData(Krav.class);
-            if (previousKrav.getStatus() != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
+            List<AuditVersion> kravAudits = auditVersionService.getByTableIdAndTimestamp(krav.getId(), LocalDateTime.now());
+            KravStatus previousKravStatus = getKravStatus(kravAudits.get(0));
+            if (previousKravStatus != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
                 krav.setAktivertDato(LocalDateTime.now());
                 varsle(krav, krav.getKravVersjon() > 1);
             }
@@ -136,31 +144,49 @@ public class KravService extends DomainService<Krav> {
         if (krav.getStatus() == KravStatus.AKTIV) {
             if (krav.getKravVersjon() > 1) {
                 int olderKravVersjon = krav.getKravVersjon() - 1;
-                kravRepo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
+                repo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
             }
         }
+        
+        if (krav.getId() == null) {
+            krav.setId(UUID.randomUUID());
+        }
+        
+        return repo.save(krav);
+    }
 
-        return storage.save(krav);
+    private KravStatus getKravStatus(AuditVersion auditVersion) {
+        try {
+            JsonNode root = JsonUtils.getObjectReader().readTree(auditVersion.getData());
+            // The path to status is the same, regardless of what the archived krav is (GenStore vs. Krav)
+            String statusText = root.at("/data/status").asText();
+            return KravStatus.valueOf(statusText);
+        } catch (JacksonException e) {
+            log.error("Could not extract Krav.status from json");
+            throw new RuntimeException("Could not extract Krav.status from json", e);
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav delete(UUID id) {
-        return storage.delete(id);
+        var kravDelete = repo.findById(id);
+        repo.deleteById(id);
+        return kravDelete.orElse(null);
     }
 
-    public List<Krav> findForEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId) {
+    public List<Krav> findForEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).build());
     }
 
-    public List<Krav> findForEtterlevelseDokumentasjon(String etterlevelseDokumentasjonId, String virkemiddelId) {
+    public List<Krav> findForEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId, String virkemiddelId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).build());
     }
 
-    public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(String etterlevelseDokumentasjonId) {
+    public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(UUID etterlevelseDokumentasjonId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).etterlevelseDokumentasjonIrrevantKrav(true).build());
     }
 
-    public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(String etterlevelseDokumentasjonId, String virkemiddelId) {
+    public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(UUID etterlevelseDokumentasjonId, String virkemiddelId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).etterlevelseDokumentasjonIrrevantKrav(true).build());
     }
 
@@ -170,7 +196,7 @@ public class KravService extends DomainService<Krav> {
     }
 
     public KravImage getImage(UUID kravId, UUID fileId) {
-        return kravRepo.findKravImage(kravId, fileId).getDomainObjectData();
+        return repo.findKravImage(kravId, fileId).getDomainObjectData();
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -182,7 +208,7 @@ public class KravService extends DomainService<Krav> {
     @Scheduled(initialDelayString = "PT5M", fixedRateString = "PT1H")
     @Transactional(propagation = Propagation.REQUIRED)
     public void cleanupImages() {
-        var deletes = kravRepo.cleanupImages();
+        var deletes = repo.cleanupImages();
         log.info("Deleted {} unused krav images", deletes);
     }
 
@@ -204,7 +230,6 @@ public class KravService extends DomainService<Krav> {
                                 url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), etterlevelseId )));
 
                 varselService.varsle(recipients, varselBuilder.build());
-                
             }
         });
     }

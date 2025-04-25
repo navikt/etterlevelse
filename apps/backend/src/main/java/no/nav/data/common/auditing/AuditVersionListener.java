@@ -69,24 +69,20 @@ public class AuditVersionListener {
 
     private void audit(Object entity, Action action) {
         Assert.isTrue(entity instanceof Auditable, "Invalid object");
-        if (entity instanceof GenericStorage gs && !isAudited(gs.getType())) {
+        Auditable auditable = (Auditable) entity;
+        if (auditable instanceof GenericStorage gs && !isAudited(gs.getType())) {
             return;
         }
-        AuditVersion auditVersion = convertAuditVersion(entity, action);
+        AuditVersion auditVersion = convertAuditVersion(auditable, action);
         if (auditVersion != null) {
             repository.save(auditVersion);
         }
     }
 
-    public static AuditVersion convertAuditVersion(Object entity, Action action) {
+    public static AuditVersion convertAuditVersion(Auditable entity, Action action) {
         try {
             String tableName = AuditVersion.tableNameFor(entity);
-            int version;
-            if (entity instanceof GenericStorage gs) {
-                version = gs.getVersion() == null ? 0 : gs.getVersion() + 1;
-            } else {
-                version = -1;
-            }
+            int version = entity.getVersion() == null ? 0 : entity.getVersion() + 1;
             String id = getIdForObject(entity);
             String data = wr.writeValueAsString(entity);
             String user = Optional.ofNullable(MdcUtils.getUser()).orElse("no user set");
@@ -99,7 +95,7 @@ public class AuditVersionListener {
         }
     }
 
-    public static String getIdForObject(Object entity) {
+    public static String getIdForObject(Auditable entity) {
         if (entity instanceof Codelist codelist) {
             return codelist.getList() + "-" + codelist.getCode();
         }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.common.domain.DomainService;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Melding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
@@ -107,7 +108,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
     }
 
     private void varsle(Tilbakemelding tilbakemelding, Melding melding, boolean isEdit) {
-        var krav = kravRepo.findByKravNummer(tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon()).orElseThrow().getDomainObjectData();
+        Krav krav = kravRepo.findByKravNummerAndKravVersjon(tilbakemelding.getKravNummer(), tilbakemelding.getKravVersjon()).orElseThrow();
         var sender = resourceClient.getResource(melding.getFraIdent()).orElseThrow();
         var recipients = tilbakemelding.getRecipientsForMelding(krav, melding);
 

@@ -103,20 +103,20 @@ public class KravToDoc {
             addHeading4("Status");
             addText(kravStatusText(krav.getStatus()));
 
-            if(krav.getChangeStamp() != null && krav.getChangeStamp().getLastModifiedBy() != null && krav.getChangeStamp().getLastModifiedDate() != null) {
+            if (krav.getLastModifiedBy() != null && krav.getLastModifiedDate() != null) {
                 addLastEditedBy(krav.getChangeStamp());
             } else {
                 addText("Sist endret: Ikke angitt");
             }
 
-            if(krav.getVarselMelding() != null && !krav.getVarselMelding().isEmpty()) {
+            if (krav.getVarselMelding() != null && !krav.getVarselMelding().isEmpty()) {
                 addHeading4("Varselmelding");
                 addText(krav.getVarselMelding());
             }
 
 
             addHeading4("Hensikten med kravet");
-            if(krav.getHensikt() != null && !krav.getHensikt().isEmpty()) {
+            if (krav.getHensikt() != null && !krav.getHensikt().isEmpty()) {
                 addMarkdownText(krav.getHensikt());
             }
 
@@ -131,7 +131,7 @@ public class KravToDoc {
             }
 
             addHeading4("Kilder");
-            if(!krav.getDokumentasjon().isEmpty()){
+            if (!krav.getDokumentasjon().isEmpty()){
                for(int d = 0; d < krav.getDokumentasjon().size(); d++) {
                    addMarkdownText("- " + krav.getDokumentasjon().get(d));
                }
@@ -140,7 +140,7 @@ public class KravToDoc {
             }
 
             addHeading4("Etiketter");
-            if(krav.getTagger() != null && !krav.getTagger().isEmpty()){
+            if (krav.getTagger() != null && !krav.getTagger().isEmpty()){
                 addText(String.join(", ", krav.getTagger()));
             } else {
                 addText("Ikke angitt");
@@ -154,7 +154,7 @@ public class KravToDoc {
             }
 
             addHeading4("Begreper");
-            if(krav.getBegrepIder() != null && !krav.getBegrepIder().isEmpty()){
+            if (krav.getBegrepIder() != null && !krav.getBegrepIder().isEmpty()){
                 for(int b = 0; b < krav.getBegrepIder().size(); b++) {
                     try {
                         BegrepResponse begrepResponse = begrepService.getBegrep(krav.getBegrepIder().get(b)).orElse(null);
@@ -169,7 +169,7 @@ public class KravToDoc {
             }
 
             addHeading4("Relasjoner til andre krav");
-            if(krav.getKravIdRelasjoner() != null && !krav.getKravIdRelasjoner().isEmpty()){
+            if (krav.getKravIdRelasjoner() != null && !krav.getKravIdRelasjoner().isEmpty()){
                 for(int k = 0; k < krav.getKravIdRelasjoner().size(); k++) {
                     Krav kravResponse = kravService.get(UUID.fromString(krav.getKravIdRelasjoner().get(k)));
                     addText("- K" + kravResponse.getKravNummer() + "." + kravResponse.getVersion() + " " + kravResponse.getNavn());
@@ -179,7 +179,7 @@ public class KravToDoc {
             }
 
             addHeading4("Krav er relevant for");
-            if(krav.getRelevansFor() != null && !krav.getRelevansFor().isEmpty()){
+            if (krav.getRelevansFor() != null && !krav.getRelevansFor().isEmpty()){
                 for(int r = 0; r < krav.getRelevansFor().size(); r++) {
                     Codelist codelist = CodelistService.getCodelist(ListName.RELEVANS, krav.getRelevansFor().get(r));
                     addText("- " + codelist.getShortName());
@@ -189,7 +189,7 @@ public class KravToDoc {
             }
 
             addHeading4( "Dette er nytt fra forrige versjon");
-            if(krav.getVersjonEndringer() != null && !krav.getVersjonEndringer().isEmpty()){
+            if (krav.getVersjonEndringer() != null && !krav.getVersjonEndringer().isEmpty()){
                 addMarkdownText(krav.getVersjonEndringer());
             } else {
                 addText("Ikke angitt");
@@ -197,7 +197,7 @@ public class KravToDoc {
 
 
             addHeading4("Ansvarlig");
-            if(krav.getUnderavdeling() != null && !krav.getUnderavdeling().isEmpty()){
+            if (krav.getUnderavdeling() != null && !krav.getUnderavdeling().isEmpty()){
                     Codelist codelist = CodelistService.getCodelist(ListName.UNDERAVDELING, krav.getUnderavdeling());
                     addText("- " + codelist.getShortName());
             } else {
@@ -205,7 +205,7 @@ public class KravToDoc {
             }
 
             addHeading4("Regelverk");
-            if(krav.getRegelverk() != null && !krav.getRegelverk().isEmpty()){
+            if (krav.getRegelverk() != null && !krav.getRegelverk().isEmpty()){
                 for(int l = 0; l < krav.getRegelverk().size(); l++) {
                     Regelverk regelverk = krav.getRegelverk().get(l);
 
@@ -217,7 +217,7 @@ public class KravToDoc {
             }
 
             addHeading4("Varslingsadresser");
-            if(krav.getVarslingsadresser() != null && !krav.getVarslingsadresser().isEmpty()){
+            if (krav.getVarslingsadresser() != null && !krav.getVarslingsadresser().isEmpty()){
                 for(int v = 0; v < krav.getVarslingsadresser().size(); v++) {
                     Varslingsadresse varslingsadresse = krav.getVarslingsadresser().get(v);
 

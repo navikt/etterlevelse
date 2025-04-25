@@ -9,6 +9,7 @@ import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static no.nav.data.common.utils.StringUtils.formatList;
 import static no.nav.data.etterlevelse.graphql.support.GraphQlResolverUtil.getFilter;
@@ -24,7 +25,7 @@ public class KravFilter {
     private List<String> relevans;
     private Integer nummer;
 
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
     private boolean etterlevelseDokumentasjonIrrevantKrav;
     private String underavdeling;
     private String lov;

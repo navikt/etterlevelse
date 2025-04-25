@@ -5,6 +5,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.UUID;
 
 public class EtterlevelseGraphQlIT extends GraphQLTestBase {
 
@@ -22,11 +24,13 @@ public class EtterlevelseGraphQlIT extends GraphQLTestBase {
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
 
-        var krav = kravStorageService.save(Krav.builder()
-                .navn("Krav 1").kravNummer(50).kravVersjon(1)
-                .relevansFor(List.of("SAK"))
-                .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
-                .status(KravStatus.AKTIV)
+        var krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                .data(KravData.builder()
+                        .navn("Krav 1")
+                        .relevansFor(List.of("SAK"))
+                        .varslingsadresser(List.of(new Varslingsadresse("xyz", AdresseType.SLACK), new Varslingsadresse("notfound", AdresseType.SLACK)))
+                        .status(KravStatus.AKTIV)
+                        .build())
                 .build());
        var etterlevelse = etterlevelseService.save(Etterlevelse.builder()
                 .kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon())

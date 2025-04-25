@@ -1,102 +1,87 @@
 package no.nav.data.etterlevelse.krav.domain;
 
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import no.nav.data.common.storage.domain.DomainObject;
+import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Krav extends DomainObject implements KravId {
+@Entity
+@Table(name = "KRAV")
+public class Krav extends Auditable implements KravId {
 
+    @Id
+    @Column(name = "ID")
+    private UUID id;
+
+    @Column(name = "KRAV_NUMMER", nullable = false)
     private Integer kravNummer;
-    @Default
-    private Integer kravVersjon = 1;
-    private String navn;
-    private String beskrivelse;
-    private String hensikt;
-    private String utdypendeBeskrivelse;
-    private String versjonEndringer;
-    private String notat;
-    private String varselMelding;
 
-    private List<String> dokumentasjon; // Inneholder både lenke og beskrivelse, formattert som markdown
-    private String implementasjoner;
-    private List<String> begrepIder;
-    private List<String> virkemiddelIder;
-    private List<Varslingsadresse> varslingsadresser;
-    private List<String> rettskilder;
-    private List<String> tagger;
+    @Column(name = "KRAV_VERSJON", nullable = false)
     @Builder.Default
-    private List<Regelverk> regelverk = new ArrayList<Regelverk>();
+    private Integer kravVersjon = 1;
 
-    private List<Suksesskriterie> suksesskriterier;
-
-    // Codelist AVDELING
-    private String avdeling;
-    // Codelist UNDERAVDELING
-    private String underavdeling;
-    // Codelist RELEVANS
-    private List<String> relevansFor;
-
-    private List<String> kravIdRelasjoner;
-
-    private LocalDateTime aktivertDato;
-
-    @Default
-    private KravStatus status = KravStatus.UTKAST;
+    @Type(value = JsonBinaryType.class)
+    @Column(name = "DATA", nullable = false)
+    @Builder.Default
+    private KravData data = new KravData();
 
     // Updates all fields from the request except id, kravNummer, kravVersjon, version and changestamp
     public Krav merge(KravRequest request) {
-        navn = request.getNavn();
-        beskrivelse = request.getBeskrivelse();
-        hensikt = request.getHensikt();
-        utdypendeBeskrivelse = request.getUtdypendeBeskrivelse();
-        versjonEndringer = request.getVersjonEndringer();
+        data.setNavn(request.getNavn());
+        data.setBeskrivelse(request.getBeskrivelse());
+        data.setHensikt(request.getHensikt());
+        data.setUtdypendeBeskrivelse(request.getUtdypendeBeskrivelse());
+        data.setVersjonEndringer(request.getVersjonEndringer());
 
-        dokumentasjon = copyOf(request.getDokumentasjon());
-        implementasjoner = request.getImplementasjoner();
-        begrepIder = copyOf(request.getBegrepIder());
-        virkemiddelIder = copyOf(request.getVirkemiddelIder());
-        varslingsadresser = copyOf(request.getVarslingsadresser());
-        rettskilder = copyOf(request.getRettskilder());
-        tagger = copyOf(request.getTagger());
-        regelverk = StreamUtils.convert(request.getRegelverk(), Regelverk::convert);
+        data.setDokumentasjon(copyOf(request.getDokumentasjon()));
+        data.setImplementasjoner(request.getImplementasjoner());
+        data.setBegrepIder(copyOf(request.getBegrepIder()));
+        data.setVirkemiddelIder(copyOf(request.getVirkemiddelIder()));
+        data.setVarslingsadresser(copyOf(request.getVarslingsadresser()));
+        data.setRettskilder(copyOf(request.getRettskilder()));
+        data.setTagger(copyOf(request.getTagger()));
+        data.setRegelverk(StreamUtils.convert(request.getRegelverk(), Regelverk::convert));
 
-        avdeling = request.getAvdeling();
-        underavdeling = request.getUnderavdeling();
-        relevansFor = copyOf(request.getRelevansFor());
-        status = request.getStatus();
-        notat = request.getNotat();
-        varselMelding = request.getVarselMelding();
+        data.setAvdeling(request.getAvdeling());
+        data.setUnderavdeling(request.getUnderavdeling());
+        data.setRelevansFor(copyOf(request.getRelevansFor()));
+        data.setStatus(request.getStatus());
+        data.setNotat(request.getNotat());
+        data.setVarselMelding(request.getVarselMelding());
 
-        suksesskriterier = StreamUtils.convert(request.getSuksesskriterier(), Suksesskriterie::fromRequest);
-        kravIdRelasjoner = copyOf(request.getKravIdRelasjoner());
-        aktivertDato = request.getAktivertDato();
+        data.setSuksesskriterier(StreamUtils.convert(request.getSuksesskriterier(), Suksesskriterie::fromRequest));
+        data.setKravIdRelasjoner(copyOf(request.getKravIdRelasjoner()));
+        data.setAktivertDato(request.getAktivertDato());
 
         return this;
     }
 
     public InstanceId convertToInstanceId() {
-        return new InstanceId(id.toString(), navn, "K" + kravNummer + "." + kravVersjon);
+        return new InstanceId(id.toString(), data.getNavn(), "K" + kravNummer + "." + kravVersjon);
     }
     
     public boolean supersedes(Krav other) {
@@ -104,6 +89,123 @@ public class Krav extends DomainObject implements KravId {
                 getStatus().supersedes(other.getStatus())
                         || (!other.getStatus().supersedes(getStatus()) && other.getKravVersjon() < getKravVersjon())
         );
+    }
+
+    // The rest is just boilerplate to delegate some getters and setters to data
+    
+    public KravStatus getStatus() {
+        return data.getStatus();
+    }
+
+    public void setAktivertDato(LocalDateTime d) {
+        data.setAktivertDato(d);
+    }
+
+    public List<String> getRelevansFor() {
+        return data.getRelevansFor();
+    }
+
+    public List<Varslingsadresse> getVarslingsadresser() {
+        return data.getVarslingsadresser();
+    }
+    
+    public List<String> getBegrepIder() {
+        return data.getBegrepIder();
+    }
+
+    public String getNavn() {
+        return data.getNavn();
+    }
+
+    public String getBeskrivelse() {
+        return data.getBeskrivelse();    }
+
+    public String getHensikt() {
+        return data.getHensikt();
+    }
+
+    public String getUtdypendeBeskrivelse() {
+        return data.getUtdypendeBeskrivelse();
+    }
+
+    public String getVersjonEndringer() {
+        return data.getVersjonEndringer();
+    }
+
+    public List<String> getDokumentasjon() {
+        return data.getDokumentasjon();
+    }
+
+    public String getImplementasjoner() {
+        return data.getImplementasjoner();
+    }
+
+    public List<String> getVirkemiddelIder() {
+        return data.getVirkemiddelIder();
+    }
+
+    public List<String> getRettskilder() {
+        return data.getRettskilder();
+    }
+
+    public List<String> getTagger() {
+        return data.getTagger();
+    }
+
+    public List<Regelverk> getRegelverk() {
+        return data.getRegelverk();
+    }
+
+    public String getNotat() {
+        return data.getNotat();
+    }
+
+    public String getVarselMelding() {
+        return data.getVarselMelding();
+    }
+
+    public List<Suksesskriterie> getSuksesskriterier() {
+          return data.getSuksesskriterier();
+    }
+
+    public String getAvdeling() {
+        return data.getAvdeling();
+    }
+
+    public String getUnderavdeling() {
+        return data.getUnderavdeling();
+    }
+
+    public List<String> getKravIdRelasjoner() {
+        return data.getKravIdRelasjoner();
+    }
+
+    public LocalDateTime getAktivertDato() {
+        return data.getAktivertDato();
+    }
+
+    public void setAvdeling(String avdeling) {
+        data.setAvdeling(avdeling);
+    }
+
+    public void setUnderavdeling(String avdeling) {
+        data.setUnderavdeling(avdeling);
+    }
+
+    public void setHensikt(String hensikt) {
+        data.setHensikt(hensikt);
+    }
+
+    public void setNavn(String navn) {
+        data.setNavn(navn);
+    }
+
+    public void setRelevansFor(List<String> relevansFor) {
+        data.setRelevansFor(relevansFor);
+    }
+
+    public void setVarslingsadresser(List<Varslingsadresse> adresser) {
+        data.setVarslingsadresser(adresser);
     }
 
 }

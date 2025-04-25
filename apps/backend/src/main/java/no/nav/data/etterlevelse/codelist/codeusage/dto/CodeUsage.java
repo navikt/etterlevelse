@@ -24,7 +24,7 @@ public class CodeUsage {
     private String code;
 
     private String shortName;
-    private List<GenericStorage<Krav>> krav = new ArrayList<>();
+    private List<Krav> krav = new ArrayList<>();
     private List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = new ArrayList<>();
     private List<GenericStorage<Virkemiddel>> virkemidler = new ArrayList<>();
     private List<Codelist> codelist = new ArrayList<>();
@@ -45,7 +45,7 @@ public class CodeUsage {
 
     public CodeUsageResponse toResponse() {
         CodeUsageResponse response = new CodeUsageResponse(listName, code, shortName);
-        response.setKrav(convert(krav, k -> k.getDomainObjectData().convertToInstanceId()));
+        response.setKrav(convert(krav, k -> k.convertToInstanceId()));
         response.setEtterlevelseDokumentasjoner(convert(etterlevelseDokumentasjoner, ed -> ed.convertToInstanceId()));
         response.setVirkemidler(convert(virkemidler, v -> v.getDomainObjectData().convertToInstanceId()));
         response.setCodelist(convert(codelist, Codelist::toResponse));

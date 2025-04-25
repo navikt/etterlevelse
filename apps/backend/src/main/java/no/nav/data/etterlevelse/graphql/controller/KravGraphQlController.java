@@ -73,8 +73,8 @@ public class KravGraphQlController {
             return new RestResponsePage<>(kravService.getAll(pageInput.createPage())).convert(KravGraphQlResponse::buildFrom);
         }
 
-        if (filter.getEtterlevelseDokumentasjonId() != null && !filter.getEtterlevelseDokumentasjonId().isEmpty()) {
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(filter.getEtterlevelseDokumentasjonId()));
+        if (filter.getEtterlevelseDokumentasjonId() != null) {
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(filter.getEtterlevelseDokumentasjonId());
             if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null && !etterlevelseDokumentasjon.getVirkemiddelId().isEmpty()){
                 filter.setVirkemiddelId(etterlevelseDokumentasjon.getVirkemiddelId());
             }

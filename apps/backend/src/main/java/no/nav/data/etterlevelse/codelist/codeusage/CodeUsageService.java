@@ -93,16 +93,16 @@ public class CodeUsageService {
         if (usage.isInUse()) {
             switch (listName) {
                 case RELEVANS -> {
-                    usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> replaceAll(k.getRelevansFor(), oldCode, newCode)));
+                    usage.getKrav().forEach(k -> replaceAll(k.getRelevansFor(), oldCode, newCode));
                     usage.getEtterlevelseDokumentasjoner().forEach(ed -> replaceAll(ed.getIrrelevansFor(), oldCode, newCode));
                 }
-                case AVDELING -> usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> k.setAvdeling(newCode)));
+                case AVDELING -> usage.getKrav().forEach(k -> k.setAvdeling(newCode));
                 case UNDERAVDELING -> {
-                    usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> k.setUnderavdeling(newCode)));
+                    usage.getKrav().forEach(k -> k.setUnderavdeling(newCode));
                     usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "underavdeling", oldCode, newCode));
                 }
                 case LOV ->
-                        usage.getKrav().forEach(gs -> gs.consumeDomainObject(k -> replaceLov(oldCode, newCode, k.getRegelverk())));
+                        usage.getKrav().forEach(k -> replaceLov(oldCode, newCode, k.getRegelverk()));
                 case TEMA ->
                         usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
                 case VIRKEMIDDELTYPE ->
@@ -121,7 +121,7 @@ public class CodeUsageService {
                 .forEach(lb -> lb.setLov(newCode));
     }
 
-    private List<GenericStorage<Krav>> findKrav(ListName listName, String code) {
+    private List<Krav> findKrav(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> kravRepo.findByRelevans(code);
             case AVDELING -> kravRepo.findByAvdeling(code);
