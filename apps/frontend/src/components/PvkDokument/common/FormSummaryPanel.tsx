@@ -37,35 +37,33 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
   customStatusTag,
   pvkDokumentStatus,
   step,
-}) => {
-  return (
-    <FormSummary.Answer key={title}>
-      <FormSummary.Value>
-        <Link onClick={onClick} href={href} className='cursor-pointer'>
-          {title}
-        </Link>
-      </FormSummary.Value>
-      <FormSummary.Value>
-        {status && !customStatusTag && status}
-        {customStatusTag && customStatusTag}
-        {step === 4 && (
-          <Tag
-            variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
-            size='xsmall'
-          >
-            {pvkDokumentStatusToText(pvkDokumentStatus)}
-          </Tag>
-        )}
-        {step === 4 && (
-          <BodyShort>
-            Her får dere oversikt over alle deres svar.{' '}
-            {pvkDokumentStatus === EPvkDokumentStatus.UNDERARBEID &&
-              'PVK-dokumentasjon er ikke ennå sendt inn.'}
-          </BodyShort>
-        )}
-      </FormSummary.Value>
-    </FormSummary.Answer>
-  )
-}
+}) => (
+  <FormSummary.Answer key={title}>
+    <FormSummary.Value>
+      <Link onClick={onClick} href={href} className='cursor-pointer'>
+        {title}
+      </Link>
+    </FormSummary.Value>
+    <FormSummary.Value>
+      {status && !customStatusTag && status}
+      {customStatusTag && customStatusTag}
+      {step === 4 && (
+        <Tag
+          variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
+          size='xsmall'
+        >
+          {pvkDokumentStatusToText(pvkDokumentStatus)}
+        </Tag>
+      )}
+      {step === 4 && (
+        <BodyShort>
+          Her får dere oversikt over alle deres svar.{' '}
+          {pvkDokumentStatus === EPvkDokumentStatus.UNDERARBEID &&
+            'PVK-dokumentasjon er ikke ennå sendt inn.'}
+        </BodyShort>
+      )}
+    </FormSummary.Value>
+  </FormSummary.Answer>
+)
 
 export default FormSummaryPanel

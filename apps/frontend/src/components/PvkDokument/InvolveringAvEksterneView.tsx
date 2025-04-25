@@ -1,6 +1,6 @@
 import { Alert, BodyLong, Button, Heading, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useState } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -12,7 +12,7 @@ import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemel
 import { BoolField, TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 
-interface IProps {
+type TProps = {
   personkategorier: string[]
   databehandlere: string[]
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -25,25 +25,24 @@ interface IProps {
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
-export const InvolveringAvEksterneView = (props: IProps) => {
-  const {
-    personkategorier,
-    databehandlere,
-    etterlevelseDokumentasjon,
-    pvkDokument,
-    setPvkDokument,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    formRef,
-    pvoTilbakemelding,
-  } = props
+export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
+  personkategorier,
+  databehandlere,
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  setPvkDokument,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  formRef,
+  pvoTilbakemelding,
+}) => {
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
 
-  const submit = async (pvkDokument: IPvkDokument) => {
-    await getPvkDokument(pvkDokument.id).then(async (response) => {
+  const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
+    await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
       const updatedatePvkDokument = {
         ...response,
         harInvolvertRepresentant: pvkDokument.harInvolvertRepresentant,
@@ -53,7 +52,7 @@ export const InvolveringAvEksterneView = (props: IProps) => {
         dataBehandlerRepresentantInvolveringBeskrivelse:
           pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse,
       }
-      await updatePvkDokument(updatedatePvkDokument).then((response) => {
+      await updatePvkDokument(updatedatePvkDokument).then((response: IPvkDokument) => {
         setPvkDokument(response)
       })
     })
@@ -355,4 +354,5 @@ export const InvolveringAvEksterneView = (props: IProps) => {
     </div>
   )
 }
+
 export default InvolveringAvEksterneView

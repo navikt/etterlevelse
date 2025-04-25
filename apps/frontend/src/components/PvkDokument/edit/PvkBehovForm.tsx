@@ -12,7 +12,7 @@ import {
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import {
   createPvkDokument,
   getPvkDokumentByEtterlevelseDokumentId,
@@ -51,20 +51,21 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   codelistUtils,
   ytterligereEgenskaper,
 }) => {
+  const navigate: NavigateFunction = useNavigate()
+  const formRef: RefObject<any> = useRef(undefined)
+
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
   const [urlToNavigate, setUrlToNavigate] = useState<string>('')
-  const formRef: RefObject<any> = useRef(undefined)
-  const navigate = useNavigate()
 
-  const submit = async (pvkDokument: IPvkDokument) => {
+  const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     if (etterlevelseDokumentasjon) {
-      const mutatedPvkDokument = {
+      const mutatedPvkDokument: IPvkDokument = {
         ...pvkDokument,
         etterlevelseDokumentId: etterlevelseDokumentasjon.id,
       } as IPvkDokument
 
       //double check if etterlevelse already exist before submitting
-      let existingPvkDokumentId = ''
+      let existingPvkDokumentId: string = ''
       if (etterlevelseDokumentasjon) {
         const pvkDokument = await getPvkDokumentByEtterlevelseDokumentId(
           etterlevelseDokumentasjon.id
@@ -76,13 +77,13 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       }
 
       if (pvkDokument.id || existingPvkDokumentId) {
-        await updatePvkDokument(mutatedPvkDokument).then((response) => {
+        await updatePvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
           setPvkDokument(response)
           navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
           window.location.reload()
         })
       } else {
-        await createPvkDokument(mutatedPvkDokument).then((response) => {
+        await createPvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
           setPvkDokument(response)
           navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
           window.location.reload()
@@ -120,7 +121,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                       )
                     }}
                   >
-                    {ytterligereEgenskaper.map((egenskap) => (
+                    {ytterligereEgenskaper.map((egenskap: ICode) => (
                       <Checkbox key={egenskap.code} value={egenskap.code}>
                         {egenskap.shortName}
                       </Checkbox>

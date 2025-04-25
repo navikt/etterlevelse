@@ -2,7 +2,7 @@ import { BodyShort, Button, ErrorSummary, FileRejected, Heading, Loader } from '
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
-import { RefObject, useEffect, useRef, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import {
   createBehandlingensLivslop,
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -25,7 +25,7 @@ import behandlingensLivslopSchema from '../behandlingensLivlop/behandlingensLivs
 import { TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 
-interface IProps {
+type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   activeStep: number
   setActiveStep: (step: number) => void
@@ -34,15 +34,14 @@ interface IProps {
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
-export const BehandlingensLivslopView = (props: IProps) => {
-  const {
-    etterlevelseDokumentasjon,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    formRef,
-    pvoTilbakemelding,
-  } = props
+export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  formRef,
+  pvoTilbakemelding,
+}) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
@@ -55,7 +54,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
       if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
         setIsLoading(true)
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
-          .then((response) => {
+          .then((response: IBehandlingensLivslop) => {
             setBehandlingensLivslop(response)
           })
           .catch((error: AxiosError) => {
@@ -76,7 +75,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
     }
   }, [submitClick])
 
-  const submit = async (submitedValues: any) => {
+  const submit = async (submitedValues: any): Promise<void> => {
     if (etterlevelseDokumentasjon) {
       const mutatedBehandlingensLivslop = {
         ...submitedValues,
@@ -85,7 +84,7 @@ export const BehandlingensLivslopView = (props: IProps) => {
       } as IBehandlingensLivslopRequest
 
       //double check if behandlingslivslop already exist before submitting
-      let existingBehandlingsLivslopId = ''
+      let existingBehandlingsLivslopId: string = ''
       const existingBehandlingensLivsLop = await getBehandlingensLivslopByEtterlevelseDokumentId(
         etterlevelseDokumentasjon.id
       ).catch(() => undefined)
@@ -96,15 +95,19 @@ export const BehandlingensLivslopView = (props: IProps) => {
       }
 
       if (submitedValues.id || existingBehandlingsLivslopId) {
-        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
-          setBehandlingensLivslop(response)
-          window.location.reload()
-        })
+        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then(
+          (response: IBehandlingensLivslop) => {
+            setBehandlingensLivslop(response)
+            window.location.reload()
+          }
+        )
       } else {
-        await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
-          setBehandlingensLivslop(response)
-          window.location.reload()
-        })
+        await createBehandlingensLivslop(mutatedBehandlingensLivslop).then(
+          (response: IBehandlingensLivslop) => {
+            setBehandlingensLivslop(response)
+            window.location.reload()
+          }
+        )
       }
     }
   }
@@ -241,4 +244,5 @@ export const BehandlingensLivslopView = (props: IProps) => {
     </div>
   )
 }
+
 export default BehandlingensLivslopView

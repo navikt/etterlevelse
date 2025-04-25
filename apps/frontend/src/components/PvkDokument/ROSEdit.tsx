@@ -67,8 +67,9 @@ export const ROSEdit = () => {
                   {fieldArrayRenderProps.form.values.risikovurderinger &&
                     fieldArrayRenderProps.form.values.risikovurderinger.map(
                       (ros: string, index: number) => {
-                        const rosReg = /\[(.+)]\((.+)\)/i
-                        const rosParts = ros.match(rosReg)
+                        const rosReg: RegExp = /\[(.+)]\((.+)\)/i
+                        const rosParts: RegExpMatchArray | null = ros.match(rosReg)
+
                         if (rosParts)
                           return (
                             <Table.Row key={ros}>

@@ -18,30 +18,34 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
   customStepNumber,
 }) => {
   const [antallFerdigVurdert, setAntallFerdigVurdert] = useState<number>(0)
-  const currentPath = window.location.pathname
+  const currentPath: string = window.location.pathname
   const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
 
   useEffect(() => {
     if (alleRisikoscenario.length !== 0) {
       let antallFerdigVurdert = 0
 
-      const risikoscenarioMedIngenTiltak = alleRisikoscenario.filter((risiko) => risiko.ingenTiltak)
-      const risikoscenarioMedTiltak = alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak)
+      const risikoscenarioMedIngenTiltak: IRisikoscenario[] = alleRisikoscenario.filter(
+        (risiko: IRisikoscenario) => risiko.ingenTiltak
+      )
+      const risikoscenarioMedTiltak: IRisikoscenario[] = alleRisikoscenario.filter(
+        (risiko: IRisikoscenario) => !risiko.ingenTiltak
+      )
       if (risikoscenarioMedTiltak.length !== 0) {
-        const ferdigVurdertRisikoscenarioMedTiltak = risikoscenarioMedTiltak.filter((risiko) => {
-          return (
-            risiko.tiltakIds.length !== 0 &&
-            risikoscenarioFieldCheck(risiko) &&
-            risiko.sannsynlighetsNivaaEtterTiltak !== 0 &&
-            risiko.konsekvensNivaaEtterTiltak !== 0 &&
-            risiko.nivaaBegrunnelseEtterTiltak !== ''
+        const ferdigVurdertRisikoscenarioMedTiltak: IRisikoscenario[] =
+          risikoscenarioMedTiltak.filter(
+            (risiko: IRisikoscenario) =>
+              risiko.tiltakIds.length !== 0 &&
+              risikoscenarioFieldCheck(risiko) &&
+              risiko.sannsynlighetsNivaaEtterTiltak !== 0 &&
+              risiko.konsekvensNivaaEtterTiltak !== 0 &&
+              risiko.nivaaBegrunnelseEtterTiltak !== ''
           )
-        })
         antallFerdigVurdert += ferdigVurdertRisikoscenarioMedTiltak.length
       }
       if (risikoscenarioMedIngenTiltak.length !== 0) {
         const ferdigVurdertRisikoscenarioUtenTiltak = risikoscenarioMedIngenTiltak.filter(
-          (risiko) => {
+          (risiko: IRisikoscenario) => {
             return risikoscenarioFieldCheck(risiko)
           }
         )
@@ -80,4 +84,5 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
     </FormSummary>
   )
 }
+
 export default RisikoscenarioEtterTitak

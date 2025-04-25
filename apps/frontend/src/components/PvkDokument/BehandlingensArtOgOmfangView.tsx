@@ -1,6 +1,6 @@
 import { Alert, Button, Heading, Link, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useState } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -12,7 +12,7 @@ import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemel
 import { BoolField, TextAreaField } from '../common/Inputs'
 import FormButtons from './edit/FormButtons'
 
-interface IProps {
+type TProps = {
   personkategorier: string[]
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
@@ -24,24 +24,23 @@ interface IProps {
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
-export const BehandlingensArtOgOmfangView = (props: IProps) => {
-  const {
-    personkategorier,
-    etterlevelseDokumentasjon,
-    pvkDokument,
-    setPvkDokument,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    formRef,
-    pvoTilbakemelding,
-  } = props
+export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
+  personkategorier,
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  setPvkDokument,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  formRef,
+  pvoTilbakemelding,
+}) => {
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
 
-  const submit = async (pvkDokument: IPvkDokument) => {
-    await getPvkDokument(pvkDokument.id).then(async (response) => {
+  const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
+    await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
       const updatedatePvkDokument = {
         ...response,
         stemmerPersonkategorier: pvkDokument.stemmerPersonkategorier,
@@ -300,4 +299,5 @@ export const BehandlingensArtOgOmfangView = (props: IProps) => {
     </div>
   )
 }
+
 export default BehandlingensArtOgOmfangView
