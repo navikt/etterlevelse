@@ -1,11 +1,12 @@
 import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
   ERisikoscenarioType,
   IBehandlingensLivslop,
+  IPageResponse,
   IPvkDokument,
   IRisikoscenario,
   ITeam,
@@ -21,7 +22,7 @@ import { pvkDokumentasjonPvkBehovUrl } from '../common/RouteLinkPvk'
 import { risikoscenarioFilterAlleUrl } from '../common/RouteLinkRisiko'
 import PvoFormButtons from './edit/PvoFormButtons'
 
-interface IProps {
+type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
   activeStep: number
@@ -29,22 +30,20 @@ interface IProps {
   updateTitleUrlAndStep: (step: number) => void
 }
 
-export const OversiktPvoView = (props: IProps) => {
-  const {
-    etterlevelseDokumentasjon,
-    pvkDokument,
-    activeStep,
-    setSelectedStep,
-    updateTitleUrlAndStep,
-  } = props
-
+export const OversiktPvoView: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  activeStep,
+  setSelectedStep,
+  updateTitleUrlAndStep,
+}) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
-    membersData.forEach((member) => {
+    membersData.forEach((member: ITeamResource) => {
       memberList += `, ${member.fullName}`
     })
 
@@ -53,7 +52,7 @@ export const OversiktPvoView = (props: IProps) => {
 
   const getTeamsNameToString = (teamsData: ITeam[]): string => {
     let teamList = ''
-    teamsData.forEach((team) => {
+    teamsData.forEach((team: ITeam) => {
       teamList += `, ${team.name}`
     })
 
@@ -62,8 +61,13 @@ export const OversiktPvoView = (props: IProps) => {
 
   const getRisikoscenarioStatus = (step: number) => {
     if (step === 2) {
-      const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
-      const kravSenario = allRisikoscenario.filter((risiko) => !risiko.generelScenario)
+      const generelSenario = allRisikoscenario.filter(
+        (risiko: IRisikoscenario) => risiko.generelScenario
+      )
+      const kravSenario = allRisikoscenario.filter(
+        (risiko: IRisikoscenario) => !risiko.generelScenario
+      )
+
       return (
         <div className='gap-2 flex pt-1'>
           <Tag variant='success' size='xsmall'>
@@ -83,8 +87,12 @@ export const OversiktPvoView = (props: IProps) => {
   }
 
   const getRisikoscenarioEtterTiltakStatus = () => {
-    const risikoscenarioMedIngenTiltak = allRisikoscenario.filter((risiko) => risiko.ingenTiltak)
-    const risikoscenarioMedTiltak = allRisikoscenario.filter((risiko) => !risiko.ingenTiltak)
+    const risikoscenarioMedIngenTiltak: IRisikoscenario[] = allRisikoscenario.filter(
+      (risiko: IRisikoscenario) => risiko.ingenTiltak
+    )
+    const risikoscenarioMedTiltak: IRisikoscenario[] = allRisikoscenario.filter(
+      (risiko: IRisikoscenario) => !risiko.ingenTiltak
+    )
 
     return (
       <div className='gap-2 flex pt-1'>
@@ -103,7 +111,7 @@ export const OversiktPvoView = (props: IProps) => {
     ;(async () => {
       await getBehandlingensLivslopByEtterlevelseDokumentId(
         pvkDokument.etterlevelseDokumentId
-      ).then((response) => {
+      ).then((response: IBehandlingensLivslop) => {
         if (response) {
           setBehandlingensLivslop(response)
         }
@@ -115,12 +123,12 @@ export const OversiktPvoView = (props: IProps) => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response) => {
+          (response: IPageResponse<IRisikoscenario>) => {
             setAllRisikoscenario(response.content)
           }
         )
 
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) =>
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) =>
           setAllTiltak(response.content)
         )
       }
@@ -226,11 +234,13 @@ export const OversiktPvoView = (props: IProps) => {
               </FormSummary.Value>
             </FormSummary.Answer>
 
-            {StepTitle.slice(2).map((title, index) => {
-              let panelHref = window.location.pathname.slice(0, -1) + (index + 3)
+            {StepTitle.slice(2).map((title: string, index: number) => {
+              let panelHref: string = window.location.pathname.slice(0, -1) + (index + 3)
+
               if (index + 3 === 6) {
                 panelHref += risikoscenarioFilterAlleUrl()
               }
+
               return (
                 <FormSummaryPanel
                   key={title}

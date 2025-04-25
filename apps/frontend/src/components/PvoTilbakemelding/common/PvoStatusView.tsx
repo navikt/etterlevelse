@@ -1,12 +1,14 @@
 import { Detail, Tag } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { EPvoTilbakemeldingStatus } from '../../../constants'
 
-interface IProps {
+type TProps = {
   status?: EPvoTilbakemeldingStatus
 }
 
 export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
   if (!status) return 'Ikke påbegynt'
+
   switch (status) {
     case EPvoTilbakemeldingStatus.UNDERARBEID:
       return 'Påbegynt'
@@ -17,17 +19,14 @@ export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
   }
 }
 
-export const PvoStatusView = (props: IProps) => {
-  const { status } = props
-  const getStatusDisplay = (variant: any) => {
-    return (
-      <Tag variant={variant} className='h-fit'>
-        <div className={'flex items-center'}>
-          <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
-        </div>
-      </Tag>
-    )
-  }
+export const PvoStatusView: FunctionComponent<TProps> = ({ status }) => {
+  const getStatusDisplay = (variant: any) => (
+    <Tag variant={variant} className='h-fit'>
+      <div className={'flex items-center'}>
+        <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
+      </div>
+    </Tag>
+  )
 
   switch (status) {
     case EPvoTilbakemeldingStatus.UNDERARBEID:
@@ -38,4 +37,5 @@ export const PvoStatusView = (props: IProps) => {
       return getStatusDisplay('neutral')
   }
 }
+
 export default PvoStatusView

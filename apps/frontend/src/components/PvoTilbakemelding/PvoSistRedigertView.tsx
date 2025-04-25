@@ -22,8 +22,9 @@ export const PvoSistRedigertView = () => {
     if (!isLoading && data && data.pvoTilbakemeldinger.numberOfElements !== 0) {
       //sort wont work without spread copy for some wierd reason
       setSortedPvoTilbakemelding(
-        [...data.pvoTilbakemeldinger.content].sort((a, b) =>
-          b.sistEndretAvMeg.localeCompare(a.sistEndretAvMeg)
+        [...data.pvoTilbakemeldinger.content].sort(
+          (a: TPvoTilbakemeldingQL, b: TPvoTilbakemeldingQL) =>
+            b.sistEndretAvMeg.localeCompare(a.sistEndretAvMeg)
         )
       )
     }
@@ -67,4 +68,5 @@ export const PvoSistRedigertView = () => {
     </div>
   )
 }
+
 export default PvoSistRedigertView

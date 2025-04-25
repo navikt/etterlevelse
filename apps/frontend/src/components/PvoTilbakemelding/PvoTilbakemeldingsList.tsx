@@ -25,9 +25,9 @@ export const PvoTilbakemeldingsList = () => {
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
-      await getAllPvkDokumentListItem().then((response) => {
-        const filteredPvkDokument = response.filter(
-          (pvkDok) =>
+      await getAllPvkDokumentListItem().then((response: IPvkDokumentListItem[]) => {
+        const filteredPvkDokument: IPvkDokumentListItem[] = response.filter(
+          (pvkDok: IPvkDokumentListItem) =>
             pvkDok.status !== EPvkDokumentStatus.AKTIV &&
             pvkDok.status !== EPvkDokumentStatus.UNDERARBEID
         )
@@ -35,7 +35,9 @@ export const PvoTilbakemeldingsList = () => {
         setFilteredPvkDokuement(filteredPvkDokument)
       })
 
-      await getAllPvoTilbakemelding().then((response) => setAllPvoTilbakemelding(response))
+      await getAllPvoTilbakemelding().then((response: IPvoTilbakemelding[]) =>
+        setAllPvoTilbakemelding(response)
+      )
 
       setIsLoading(false)
     })()
@@ -43,8 +45,11 @@ export const PvoTilbakemeldingsList = () => {
 
   useEffect(() => {
     const unsortedData: any = [
-      ...allPvkDocumentListItem.map((pvk) => {
-        const pvoTilbakemelding = allPvoTilbakemelding.filter((pvo) => pvo.pvkDokumentId === pvk.id)
+      ...allPvkDocumentListItem.map((pvk: IPvkDokumentListItem) => {
+        const pvoTilbakemelding: IPvoTilbakemelding[] = allPvoTilbakemelding.filter(
+          (pvo: IPvoTilbakemelding) => pvo.pvkDokumentId === pvk.id
+        )
+
         return {
           ...pvk,
           dateToCompare:
@@ -82,13 +87,16 @@ export const PvoTilbakemeldingsList = () => {
     if (statusFilter !== 'alle') {
       if (statusFilter === 'ikke_påbegynt') {
         filteredData = allPvkDocumentListItem.filter(
-          (pvk) => !allPvoTilbakemelding.map((pvo) => pvo.pvkDokumentId).includes(pvk.id)
+          (pvk: IPvkDokumentListItem) =>
+            !allPvoTilbakemelding
+              .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
+              .includes(pvk.id)
         )
       } else {
-        filteredData = allPvkDocumentListItem.filter((pvk) =>
+        filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
           allPvoTilbakemelding
-            .filter((pvo) => pvo.status === statusFilter)
-            .map((pvo) => pvo.pvkDokumentId)
+            .filter((pvo: IPvoTilbakemelding) => pvo.status === statusFilter)
+            .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
             .includes(pvk.id)
         )
       }
@@ -97,8 +105,8 @@ export const PvoTilbakemeldingsList = () => {
     }
 
     if (seachPvk !== '') {
-      filteredData = filteredData.filter((pvk) => {
-        const pvkName = 'E' + pvk.etterlevelseNummer + ' ' + pvk.title
+      filteredData = filteredData.filter((pvk: IPvkDokumentListItem) => {
+        const pvkName: string = `${pvk.etterlevelseNummer} ${pvk.title}`
 
         return pvkName.toLowerCase().includes(seachPvk.toLowerCase())
       })
@@ -146,7 +154,7 @@ export const PvoTilbakemeldingsList = () => {
             {filteredPvkDokument &&
               filteredPvkDokument.map((pvkDokument: IPvkDokumentListItem) => {
                 const pvoTilbakemelding = allPvoTilbakemelding.filter(
-                  (pvo) => pvo.pvkDokumentId === pvkDokument.id
+                  (pvo: IPvoTilbakemelding) => pvo.pvkDokumentId === pvkDokument.id
                 )
 
                 let changestamp = ''
@@ -157,7 +165,7 @@ export const PvoTilbakemeldingsList = () => {
                 ) {
                   changestamp = `Vurdering sendt: ${moment(pvoTilbakemelding[0].sendtDato).format('LL')}`
                 } else {
-                  const date =
+                  const date: string =
                     pvkDokument.sendtTilPvoDato !== '' && pvkDokument.sendtTilPvoDato !== null
                       ? moment(pvkDokument.sendtTilPvoDato).format('LL')
                       : moment(pvkDokument.changeStamp.lastModifiedDate).format('LL')
