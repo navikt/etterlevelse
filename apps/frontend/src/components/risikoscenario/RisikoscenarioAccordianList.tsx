@@ -28,12 +28,13 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   setIsTiltakFormActive,
   formRef,
 }) => {
-  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
-  const [navigateUrl, setNavigateUrl] = useState<string>('')
+  const navigate: NavigateFunction = useNavigate()
   const url: URL = new URL(window.location.href)
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const tiltakId: string | null = url.searchParams.get('tiltak')
-  const navigate: NavigateFunction = useNavigate()
+
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
+  const [navigateUrl, setNavigateUrl] = useState<string>('')
 
   useEffect(() => {
     if (risikoscenarioId) {

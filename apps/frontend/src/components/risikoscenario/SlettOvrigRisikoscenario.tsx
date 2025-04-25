@@ -23,8 +23,8 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
   risikoscenarioer,
   setRisikoscenarioer,
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
   const navigate: NavigateFunction = useNavigate()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const submit = async (): Promise<void> => {
     await getRisikoscenario(risikoscenario.id).then(async (response: IRisikoscenario) => {
