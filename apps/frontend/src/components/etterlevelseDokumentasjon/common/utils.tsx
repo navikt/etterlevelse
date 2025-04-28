@@ -14,9 +14,9 @@ export const getNewestKravVersjon = (list: any[]) => {
 export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: string) => {
   switch (status) {
     case EEtterlevelseStatus.UNDER_REDIGERING:
-      return 'Under arbeid'
+      return 'Etterlevelse under arbeid'
     case EEtterlevelseStatus.FERDIG:
-      return 'Under arbeid'
+      return 'Etterlevelse under arbeid'
     case EEtterlevelseStatus.IKKE_RELEVANT:
       return 'Ikke relevant'
     case EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
