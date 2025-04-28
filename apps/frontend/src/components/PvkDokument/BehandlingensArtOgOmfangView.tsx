@@ -187,6 +187,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         variant='secondary'
                         onClick={async () => {
                           setIsModalOpen(true)
+                          setSavedSuccessful(false)
                         }}
                       >
                         Forkast endringer
