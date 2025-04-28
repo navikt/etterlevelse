@@ -125,7 +125,7 @@ public class KravRepoImpl implements KravRepoCustom {
                            where table_name in ('Krav', 'KRAV')
                              and user_id like :user_id
                              and exists (select 1 from krav where id = cast(table_id as uuid))
-                           order by time desc
+                           order by table_id, time desc
                        ) sub
                        order by time desc
                        limit :limit
