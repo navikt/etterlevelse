@@ -2,7 +2,7 @@ import { BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
-import { RefObject } from 'react'
+import { FunctionComponent, RefObject } from 'react'
 import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
@@ -19,7 +19,7 @@ enum EBidragVerdier {
   UTILSTREKKELIG = 'UTILSTREKELIG',
 }
 
-interface IProps {
+type TProps = {
   pvkDokumentId: string
   fieldName:
     | 'behandlingenslivslop'
@@ -30,10 +30,13 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const PvoTilbakemeldingForm = (props: IProps) => {
-  const { fieldName, pvkDokumentId, initialValue, formRef } = props
-
-  const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold) => {
+export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+  fieldName,
+  pvkDokumentId,
+  initialValue,
+  formRef,
+}) => {
+  const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold): Promise<void> => {
     const mutatedTilbakemeldingsInnhold: ITilbakemeldingsinnhold = {
       ...tilbakemeldingsInnhold,
       sistRedigertAv: user.getIdent() + ' - ' + user.getName(),
@@ -41,7 +44,7 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
     }
 
     await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
-      .then(async (response) => {
+      .then(async (response: IPvoTilbakemelding) => {
         if (response) {
           const updatedValues: IPvoTilbakemelding = {
             ...response,
@@ -91,7 +94,7 @@ export const PvoTilbakemeldingForm = (props: IProps) => {
     <Formik
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={(values) => {
+      onSubmit={(values: ITilbakemeldingsinnhold) => {
         submit(values)
       }}
       initialValues={initialValue}

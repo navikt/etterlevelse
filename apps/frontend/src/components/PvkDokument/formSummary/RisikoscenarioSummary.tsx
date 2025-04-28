@@ -1,10 +1,11 @@
 import { FormSummary } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import { ExternalLink } from '../../common/RouteLink'
 import { risikoscenarioFilterAlleUrl, tabTiltakQuery } from '../../common/RouteLinkRisiko'
 import FormAlert from './FormAlert'
 
-interface IProps {
+type TProps = {
   alleRisikoscenario: IRisikoscenario[]
   alleTiltak: ITiltak[]
   risikoscenarioError: string
@@ -12,10 +13,14 @@ interface IProps {
   customStepNumber?: number
 }
 
-export const RisikoscenarioSummary = (props: IProps) => {
-  const { alleRisikoscenario, alleTiltak, risikoscenarioError, tiltakError, customStepNumber } =
-    props
-  const currentPath = window.location.pathname
+export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
+  alleRisikoscenario,
+  alleTiltak,
+  risikoscenarioError,
+  tiltakError,
+  customStepNumber,
+}) => {
+  const currentPath: string = window.location.pathname
   const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
 
   return (
@@ -58,4 +63,5 @@ export const RisikoscenarioSummary = (props: IProps) => {
     </FormSummary>
   )
 }
+
 export default RisikoscenarioSummary

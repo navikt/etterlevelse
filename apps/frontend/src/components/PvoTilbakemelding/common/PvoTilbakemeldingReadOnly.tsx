@@ -1,5 +1,6 @@
 import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react'
 import moment from 'moment'
+import { FunctionComponent } from 'react'
 import { ITilbakemeldingsinnhold } from '../../../constants'
 import { Markdown } from '../../common/Markdown'
 
@@ -9,58 +10,57 @@ enum EBidragVerdier {
   UTILSTREKKELIG = 'UTILSTREKELIG',
 }
 
-interface IProps {
+type TProps = {
   tilbakemeldingsinnhold: ITilbakemeldingsinnhold
   sentDate: string
 }
 
-export const PvoTilbakemeldingReadOnly = (props: IProps) => {
-  const { tilbakemeldingsinnhold, sentDate } = props
+export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
+  tilbakemeldingsinnhold,
+  sentDate,
+}) => (
+  <div>
+    <Heading level='2' size='small' className='mb-5'>
+      Tilbakemelding fra personvernombudet
+    </Heading>
 
-  return (
+    {sentDate.length !== 0 && (
+      <BodyShort size='medium' className='pb-5'>
+        Tilbakemeldings dato: {moment(sentDate).format('LL')}
+      </BodyShort>
+    )}
+
     <div>
-      <Heading level='2' size='small' className='mb-5'>
-        Tilbakemelding fra personvernombudet
-      </Heading>
-
-      {sentDate.length !== 0 && (
-        <BodyShort size='medium' className='pb-5'>
-          Tilbakemeldings dato: {moment(sentDate).format('LL')}
-        </BodyShort>
-      )}
-
-      <div>
-        <Label>Vurdéring av etterleverens svar.</Label>
-        <BodyLong>
-          {!tilbakemeldingsinnhold && 'Ikke vurdert'}
-          {tilbakemeldingsinnhold &&
-            tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG &&
-            'Ja, tilstrekkelig'}
-          {tilbakemeldingsinnhold &&
-            tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG_FORBEHOLDT &&
-            ' Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under'}
-          {tilbakemeldingsinnhold &&
-            tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.UTILSTREKKELIG &&
-            'Utilstrekkelig, beskrives nærmere under'}
-        </BodyLong>
-      </div>
-
-      <div className='my-5'>
-        <Label>Tilbakemelding</Label>
+      <Label>Vurdéring av etterleverens svar.</Label>
+      <BodyLong>
+        {!tilbakemeldingsinnhold && 'Ikke vurdert'}
         {tilbakemeldingsinnhold &&
-          tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
-          tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length !== 0 && (
-            <Markdown source={tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere} />
-          )}
-        <BodyLong>
-          {(!tilbakemeldingsinnhold ||
-            !tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere ||
-            tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length === 0) &&
-            'Ingen tilbakemelding'}
-        </BodyLong>
-      </div>
+          tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG &&
+          'Ja, tilstrekkelig'}
+        {tilbakemeldingsinnhold &&
+          tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG_FORBEHOLDT &&
+          ' Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under'}
+        {tilbakemeldingsinnhold &&
+          tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.UTILSTREKKELIG &&
+          'Utilstrekkelig, beskrives nærmere under'}
+      </BodyLong>
     </div>
-  )
-}
+
+    <div className='my-5'>
+      <Label>Tilbakemelding</Label>
+      {tilbakemeldingsinnhold &&
+        tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
+        tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length !== 0 && (
+          <Markdown source={tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere} />
+        )}
+      <BodyLong>
+        {(!tilbakemeldingsinnhold ||
+          !tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere ||
+          tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length === 0) &&
+          'Ingen tilbakemelding'}
+      </BodyLong>
+    </div>
+  </div>
+)
 
 export default PvoTilbakemeldingReadOnly

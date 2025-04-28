@@ -1,5 +1,5 @@
 import { Accordion, Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
-import { useEffect, useRef } from 'react'
+import { FunctionComponent, useEffect, useRef } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import { risikoscenarioUrl } from '../common/RouteLinkPvk'
@@ -7,31 +7,38 @@ import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../risikoscenario
 import RisikoscenarioView from '../risikoscenario/RisikoscenarioView'
 import TiltakView from '../tiltak/TiltakView'
 
-interface IProps {
+type TProps = {
   risikoscenarioList: IRisikoscenario[]
   etterlevelseDokumentasjonId: string
   allRisikoscenarioList: IRisikoscenario[]
   tiltakList: ITiltak[]
 }
 
-export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
-  const { risikoscenarioList, allRisikoscenarioList, tiltakList, etterlevelseDokumentasjonId } =
-    props
+export const RisikoscenarioAccordianListPvoView: FunctionComponent<TProps> = ({
+  risikoscenarioList,
+  allRisikoscenarioList,
+  tiltakList,
+  etterlevelseDokumentasjonId,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
+  const accordionRef = useRef<HTMLButtonElement>(null)
   const url: URL = new URL(window.location.href)
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const tiltakId: string | null = url.searchParams.get('tiltak')
-  const navigate: NavigateFunction = useNavigate()
-  const accordionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (risikoscenarioId) {
       setTimeout(() => {
-        const element = document.getElementById(risikoscenarioId)
+        const element: HTMLElement | null = document.getElementById(risikoscenarioId)
+
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' })
 
           if (tiltakId) {
-            const tiltakElement = document.getElementById(`${risikoscenarioId}_${tiltakId}`)
+            const tiltakElement: HTMLElement | null = document.getElementById(
+              `${risikoscenarioId}_${tiltakId}`
+            )
+
             if (tiltakElement) {
               tiltakElement.focus()
               tiltakElement.scrollIntoView({ behavior: 'smooth' })
@@ -58,14 +65,15 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
   return (
     <div>
       <Accordion>
-        {risikoscenarioList.map((risikoscenario, index) => {
-          const expanded = risikoscenarioId === risikoscenario.id
+        {risikoscenarioList.map((risikoscenario: IRisikoscenario, index: number) => {
+          const expanded: boolean = risikoscenarioId === risikoscenario.id
+
           return (
             <Accordion.Item
               id={risikoscenario.id}
-              key={index + '_' + risikoscenario.navn}
+              key={`${index}_${risikoscenario.navn}`}
               open={expanded}
-              onOpenChange={(open) => {
+              onOpenChange={(open: boolean) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
@@ -91,8 +99,10 @@ export const RisikoscenarioAccordianListPvoView = (props: IProps) => {
                       {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
                         <div className='mt-5'>
                           {tiltakList
-                            .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                            .map((tiltak, index) => (
+                            .filter((tiltak: ITiltak) =>
+                              risikoscenario.tiltakIds.includes(tiltak.id)
+                            )
+                            .map((tiltak: ITiltak, index: number) => (
                               <ReadMore
                                 key={risikoscenario.id + '_' + tiltak.id + '_' + index}
                                 header={tiltak.navn}

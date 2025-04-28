@@ -1,7 +1,7 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, Heading, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useState } from 'react'
 import {
   getRisikoscenario,
   mapRisikoscenarioToFormValue,
@@ -18,7 +18,7 @@ import { PVKFieldWrapper, TopBottomWrapper } from '../StylingLayout'
 import RisikoscenarioKonsekvensnivaaReadMore from '../common/RisikoscenarioKonsekvensnivaaReadMore'
 import RisikoscenarioSannsynlighetReadMore from '../common/RisikoscenarioSannsynlighetReadMore'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   setRisikoscenario: (state: IRisikoscenario) => void
   risikoscenarioList: IRisikoscenario[]
@@ -28,25 +28,25 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const VurdereTiltaksEffekt = (props: IProps) => {
-  const {
-    risikoscenario,
-    setRisikoscenario,
-    risikoscenarioList,
-    setRisikosenarioList,
-    allRisikoscenarioList,
-    setAllRisikoscenarioList,
-    formRef,
-  } = props
+export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
+  risikoscenario,
+  setRisikoscenario,
+  risikoscenarioList,
+  setRisikosenarioList,
+  allRisikoscenarioList,
+  setAllRisikoscenarioList,
+  formRef,
+}) => {
   const [isFormActive, setIsFormActive] = useState<boolean>(false)
+
   const revurdertEffektCheck =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
     risikoscenario.sannsynlighetsNivaaEtterTiltak === null ||
     risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
     risikoscenario.konsekvensNivaaEtterTiltak === null
 
-  const submit = async (submitedValues: IRisikoscenario) => {
-    await getRisikoscenario(risikoscenario.id).then((response) => {
+  const submit = async (submitedValues: IRisikoscenario): Promise<void> => {
+    await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
       const updatedRisikoscenario = {
         ...submitedValues,
         ...response,
@@ -55,7 +55,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
         nivaaBegrunnelseEtterTiltak: submitedValues.nivaaBegrunnelseEtterTiltak,
       }
 
-      updateRisikoscenario(updatedRisikoscenario).then((response) => {
+      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
         setRisikoscenario(response)
         setAllRisikoscenarioList(
           allRisikoscenarioList.map((unfilteredRisikoscenario) => {
@@ -68,7 +68,7 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
         )
 
         setRisikosenarioList(
-          risikoscenarioList.map((filteredRisikoscenario) => {
+          risikoscenarioList.map((filteredRisikoscenario: IRisikoscenario) => {
             if (filteredRisikoscenario.id === response.id) {
               return response
             } else {
@@ -222,7 +222,10 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
               <TopBottomWrapper>
                 <div className='flex gap-2'>
                   <Button type='button' onClick={() => submitForm()}>
-                    Lagre tiltakenes effekt
+                    {!risikoscenario.konsekvensNivaaEtterTiltak ||
+                    !risikoscenario.sannsynlighetsNivaaEtterTiltak
+                      ? 'Lagre tiltakens effekt'
+                      : 'Lagre endringer'}
                   </Button>
 
                   <Button type='button' variant='secondary' onClick={() => setIsFormActive(false)}>
@@ -249,4 +252,5 @@ export const VurdereTiltaksEffekt = (props: IProps) => {
     </div>
   )
 }
+
 export default VurdereTiltaksEffekt

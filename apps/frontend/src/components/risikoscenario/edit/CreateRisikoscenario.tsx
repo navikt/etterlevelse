@@ -1,10 +1,10 @@
 import { Heading } from '@navikt/ds-react'
-import { Dispatch, RefObject, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, RefObject, SetStateAction } from 'react'
 import { createRisikoscenarioKnyttetTilKrav } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, TKravQL } from '../../../constants'
 import RisikoscenarioForm from './RisikoscenarioForm'
 
-interface IProps {
+type TProps = {
   krav: TKravQL
   pvkDokumentId: string
   risikoscenarioer: IRisikoscenario[]
@@ -14,17 +14,15 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const CreateRisikoscenario = (props: IProps) => {
-  const {
-    krav,
-    pvkDokumentId,
-    setIsCreateMode,
-    risikoscenarioer,
-    setRisikoscenarioer,
-    setActiveRisikoscenarioId,
-    formRef,
-  } = props
-
+export const CreateRisikoscenario: FunctionComponent<TProps> = ({
+  krav,
+  pvkDokumentId,
+  setIsCreateMode,
+  risikoscenarioer,
+  setRisikoscenarioer,
+  setActiveRisikoscenarioId,
+  formRef,
+}) => {
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await createRisikoscenarioKnyttetTilKrav(krav.kravNummer, risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])

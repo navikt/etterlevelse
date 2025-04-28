@@ -1,10 +1,10 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
-import { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, ReactNode } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { etterlevelseDokumentasjonIdUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 
-interface IProps {
+type TProps = {
   etterlevelseDokumentasjonId: string
   activeStep: number
   setActiveStep: (step: number) => void
@@ -13,10 +13,14 @@ interface IProps {
   submitForm?: (() => Promise<void>) & (() => Promise<any>)
 }
 
-export const FormButtons = (props: IProps) => {
-  const { etterlevelseDokumentasjonId, activeStep, setActiveStep, setSelectedStep, customButtons } =
-    props
-  const navigate = useNavigate()
+export const FormButtons: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjonId,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  customButtons,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
 
   return (
     <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>

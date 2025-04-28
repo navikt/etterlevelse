@@ -1,5 +1,5 @@
 import { Accordion, Alert, BodyLong, Heading, Label, ReadMore } from '@navikt/ds-react'
-import { useEffect, useRef } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import {
@@ -15,28 +15,31 @@ import RisikoscenarioView from '../risikoscenario/RisikoscenarioView'
 import TiltakView from '../tiltak/TiltakView'
 import { tabValues } from './OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 
-interface IProps {
+type TProps = {
   risikoscenarioList: IRisikoscenario[]
   allRisikoscenarioList: IRisikoscenario[]
   etterlevelseDokumentasjonId: string
   tiltakList: ITiltak[]
 }
 
-export const OppsumeringAccordianListPvoView = (props: IProps) => {
-  const { risikoscenarioList, allRisikoscenarioList, etterlevelseDokumentasjonId, tiltakList } =
-    props
-  const url = new URL(window.location.href)
+export const OppsumeringAccordianListPvoView: FunctionComponent<TProps> = ({
+  risikoscenarioList,
+  allRisikoscenarioList,
+  etterlevelseDokumentasjonId,
+  tiltakList,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
+  const accordionRef: RefObject<HTMLButtonElement | null> = useRef<HTMLButtonElement>(null)
+  const url: URL = new URL(window.location.href)
 
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const tabQuery: string | null = url.searchParams.get('tab')
   const filterQuery: string | null = url.searchParams.get('filter')
-  const navigate: NavigateFunction = useNavigate()
-  const accordionRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (risikoscenarioId) {
       setTimeout(() => {
-        const element = document.getElementById(risikoscenarioId)
+        const element: HTMLElement | null = document.getElementById(risikoscenarioId)
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' })
         }
@@ -71,7 +74,7 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
           return (
             <Accordion.Item
               id={risikoscenario.id}
-              key={index + '_' + risikoscenario.id}
+              key={`${index}_${risikoscenario.id}`}
               open={expanded}
               onOpenChange={(open) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)
@@ -97,10 +100,10 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
                   {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
                     <div className='mt-5'>
                       {tiltakList
-                        .filter((tiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                        .map((tiltak, index) => (
+                        .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                        .map((tiltak: ITiltak, index: number) => (
                           <ReadMore
-                            key={risikoscenario.id + '_' + tiltak.id + '_' + index}
+                            key={`${risikoscenario.id}_${tiltak.id}_${index}`}
                             header={tiltak.navn}
                             className='mb-3'
                           >
@@ -162,4 +165,5 @@ export const OppsumeringAccordianListPvoView = (props: IProps) => {
     </div>
   )
 }
+
 export default OppsumeringAccordianListPvoView

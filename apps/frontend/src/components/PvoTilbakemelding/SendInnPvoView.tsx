@@ -2,7 +2,7 @@ import { FilesIcon } from '@navikt/aksel-icons'
 import { Alert, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
@@ -14,7 +14,7 @@ import { TextAreaField } from '../common/Inputs'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
 
-interface IProps {
+type TProps = {
   pvkDokument: IPvkDokument
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
@@ -25,17 +25,21 @@ interface IProps {
   setSelectedStep: (step: number) => void
 }
 
-export const SendInnPvoView = (props: IProps) => {
-  const { pvkDokument, pvoTilbakemelding, activeStep, setActiveStep, setSelectedStep } = props
-
+export const SendInnPvoView: FunctionComponent<TProps> = ({
+  pvkDokument,
+  pvoTilbakemelding,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+}) => {
   const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
     EPvoTilbakemeldingStatus.UNDERARBEID
   )
 
-  const submit = async (submittedValues: IPvoTilbakemelding) => {
+  const submit = async (submittedValues: IPvoTilbakemelding): Promise<void> => {
     //backend vil oppdatere statusen til PVk dokument til 'VURDERT_AV_PVO', dersom statusen til PVO tilbakemelding = 'FERDIG'
     await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
-      .then(async (response) => {
+      .then(async (response: IPvoTilbakemelding) => {
         if (response) {
           const updatedValues: IPvoTilbakemelding = {
             ...response,

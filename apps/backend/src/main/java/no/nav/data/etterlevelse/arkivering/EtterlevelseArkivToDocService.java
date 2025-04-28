@@ -3,8 +3,8 @@ package no.nav.data.etterlevelse.arkivering;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.utils.ZipFile;
 import no.nav.data.common.utils.ZipUtils;
-import no.nav.data.etterlevelse.arkivering.domain.ArchiveFile;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
@@ -24,11 +24,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -44,7 +40,7 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
         Date date = new Date();
 
         ZipUtils zipUtils = new ZipUtils();
-        List<ArchiveFile> archiveFiles = new ArrayList<>();
+        List<ZipFile> archiveFiles = new ArrayList<>();
 
         for (EtterlevelseArkiv etterlevelseArkiv : etterlevelseArkivList) {
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelseArkiv.getEtterlevelseDokumentasjonId()));
@@ -52,24 +48,26 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
             String xmlFileName = xmlDateFormatter.format(date) + "_Etterlevelse_E" + etterlevelseDokumentasjon.getEtterlevelseNummer();
 
             if (etterlevelseArkiv.isOnlyActiveKrav()) {
-                wordFileName += "_kun_gjeldende_krav_versjon.docx";
-                xmlFileName += "_kun_gjeldende_krav_versjon.xml";
+                wordFileName += "_kun_gjeldende_krav_versjon";
+                xmlFileName += "_kun_gjeldende_krav_versjon";
             } else {
-                wordFileName += "_alle_krav_versjoner.docx";
-                xmlFileName += "_alle_krav_versjoner.xml";
+                wordFileName += "_alle_krav_versjoner";
+                xmlFileName += "_alle_krav_versjoner";
             }
 
             log.info("Generating word and xml file for etterlevelse dokumentation: E" + etterlevelseDokumentasjon.getEtterlevelseNummer());
             byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav());
             byte[] xmlFile = createXml(date, wordFileName, etterlevelseDokumentasjon, etterlevelseArkiv);
             log.info("Adding generated word and xml file to zip file.");
-            archiveFiles.add(ArchiveFile.builder()
-                    .fileName(wordFileName)
-                    .file(wordFile)
+            archiveFiles.add(ZipFile.builder()
+                    .filnavn(wordFileName)
+                    .filtype("doc")
+                    .fil(wordFile)
                     .build());
-            archiveFiles.add(ArchiveFile.builder()
-                    .fileName(xmlFileName)
-                    .file(xmlFile)
+            archiveFiles.add(ZipFile.builder()
+                    .filnavn(xmlFileName)
+                    .filtype("xml")
+                    .fil(xmlFile)
                     .build());
         }
         return zipUtils.zipOutputStream(archiveFiles);

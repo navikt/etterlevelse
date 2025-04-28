@@ -29,6 +29,7 @@ import {
   EPvkDokumentStatus,
   ERisikoscenarioType,
   IBehandlingensLivslop,
+  IPageResponse,
   IPvkDokument,
   IPvoTilbakemelding,
   IRisikoscenario,
@@ -74,6 +75,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
   setSelectedStep,
   pvoTilbakemelding,
 }) => {
+  const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
+  const formRef: RefObject<any> = useRef(undefined)
+
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
   const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
@@ -84,16 +88,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [tiltakError, setTiltakError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
-  const errorSummaryRef = useRef<HTMLDivElement>(null)
-  const formRef: RefObject<any> = useRef(undefined)
 
-  const underarbeidCheck =
+  const underarbeidCheck: boolean =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
 
-  const isRisikoeierCheck = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+  const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
-  const submit = async (submitedValues: IPvkDokument) => {
+  const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (
       !behandlingensLivslopError &&
       risikoscenarioError === '' &&
@@ -101,8 +103,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
       tiltakError === '' &&
       !manglerBehandlingError
     ) {
-      await getPvkDokument(submitedValues.id).then((response) => {
-        const updatedStatus =
+      await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
+        const updatedStatus: EPvkDokumentStatus =
           submitedValues.status === EPvkDokumentStatus.UNDERARBEID
             ? response.status
             : submitedValues.status
@@ -119,7 +121,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
         }
 
-        updatePvkDokument(updatedPvkDokument).then((savedResponse) => {
+        updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
           setPvkDokument(savedResponse)
         })
       })
@@ -146,7 +148,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     if (alleRisikoscenario.length === 0) {
       setRisikoscenarioError('Dere må ha minst 1 risikoscenario.')
     } else {
-      const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko) =>
+      const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko: IRisikoscenario) =>
         isRisikoUnderarbeidCheck(risiko)
       )
 
@@ -176,7 +178,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
   const savnerVurderingCheck = () => {
     const savnerVurdering = alleRisikoscenario
-      .filter((risiko) => !risiko.ingenTiltak)
+      .filter((risiko: IRisikoscenario) => !risiko.ingenTiltak)
       .filter(
         (risiko) =>
           risiko.tiltakIds.length === 0 ||
@@ -199,7 +201,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       if (pvkDokument) {
         setIsLoading(true)
         await getBehandlingensLivslopByEtterlevelseDokumentId(pvkDokument.etterlevelseDokumentId)
-          .then((response) => {
+          .then((response: IBehandlingensLivslop) => {
             setBehandlingensLivslop(response)
           })
           .catch((error: AxiosError) => {
@@ -210,9 +212,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
             }
           })
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response) => setAlleRisikoscenario(response.content)
+          (response: IPageResponse<IRisikoscenario>) => setAlleRisikoscenario(response.content)
         )
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response) =>
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) =>
           setAlleTitltak(response.content)
         )
         setIsLoading(false)
@@ -245,7 +247,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
           manglerBehandlingErrorCheck()
           behandlingensLivslopFieldCheck()
           risikoscenarioCheck()
-          if (alleRisikoscenario.filter((risiko) => !risiko.ingenTiltak).length !== 0) {
+          if (
+            alleRisikoscenario.filter((risiko: IRisikoscenario) => !risiko.ingenTiltak).length !== 0
+          ) {
             tiltakCheck()
             savnerVurderingCheck()
           }

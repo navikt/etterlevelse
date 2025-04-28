@@ -1,5 +1,5 @@
 import { BodyLong, FileObject, FileUpload, Heading, Label, Loader, VStack } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopRequestToFormValue,
@@ -18,7 +18,7 @@ import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
-interface IProps {
+type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
   pvkDokument: IPvkDokument
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -28,16 +28,15 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const BehandlingensLivslopPvoView = (props: IProps) => {
-  const {
-    pvoTilbakemelding,
-    pvkDokument,
-    etterlevelseDokumentasjon,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    formRef,
-  } = props
+export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
+  pvoTilbakemelding,
+  pvkDokument,
+  etterlevelseDokumentasjon,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  formRef,
+}) => {
   const [behandlingensLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslopRequest>(
     mapBehandlingensLivslopRequestToFormValue({})
   )

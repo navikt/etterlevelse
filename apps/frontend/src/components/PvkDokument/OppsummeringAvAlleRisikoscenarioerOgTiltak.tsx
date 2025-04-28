@@ -1,10 +1,11 @@
 import { Alert, BodyLong, Heading, Link, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
   ERisikoscenarioType,
+  IPageResponse,
   IPvkDokument,
   IPvoTilbakemelding,
   IRisikoscenario,
@@ -26,7 +27,7 @@ import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/Op
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import FormButtons from './edit/FormButtons'
 
-interface IProps {
+type TProps = {
   etterlevelseDokumentasjonId: string
   pvkDokument: IPvkDokument
   activeStep: number
@@ -81,16 +82,21 @@ const visTomTiltakListeBeskrivelse = (filter: string | null) => {
   return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
-export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
-  const {
-    etterlevelseDokumentasjonId,
-    pvkDokument,
-    activeStep,
-    setActiveStep,
-    setSelectedStep,
-    formRef,
-    pvoTilbakemelding,
-  } = props
+export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjonId,
+  pvkDokument,
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  formRef,
+  pvoTilbakemelding,
+}) => {
+  const navigate: NavigateFunction = useNavigate()
+  const url: URL = new URL(window.location.href)
+  const tabQuery: string | null = url.searchParams.get('tab')
+  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
+  const filterQuery: string | null = url.searchParams.get('filter')
+
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [filteredRisikoscenarioList, setFilteredRisikosenarioList] = useState<IRisikoscenario[]>([])
@@ -105,28 +111,24 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
   const [antallUtenTiltakAnsvarlig, setAntallUtenTiltakAnsvarlig] = useState<number>(0)
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
 
-  const url = new URL(window.location.href)
-  const tabQuery = url.searchParams.get('tab')
-  const risikoscenarioId = url.searchParams.get('risikoscenario')
-  const filterQuery = url.searchParams.get('filter')
-  const navigate = useNavigate()
-
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
         setIsLoading(true)
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (risikoscenarioer) => {
+          (risikoscenarioer: IPageResponse<IRisikoscenario>) => {
             setRisikoscenarioList(risikoscenarioer.content)
             setFilteredRisikosenarioList(risikoscenarioer.content)
 
             setAntallHoyRisiko(
-              risikoscenarioer.content.filter((risikoscenario) => risikoscenario.ingenTiltak).length
+              risikoscenarioer.content.filter(
+                (risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak
+              ).length
             )
 
             setAntallEffektIkkeVurdert(
               risikoscenarioer.content.filter(
-                (risikoscenario) =>
+                (risikoscenario: IRisikoscenario) =>
                   !risikoscenario.ingenTiltak &&
                   (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
                     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -136,24 +138,24 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
 
             setAntallTiltakIkkeAktuelt(
               risikoscenarioer.content.filter(
-                (risikoscenario) =>
+                (risikoscenario: IRisikoscenario) =>
                   risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
               ).length
             )
           }
         )
 
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak) => {
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak: IPageResponse<ITiltak>) => {
           setTiltakList(tiltak.content)
           setFilteredTiltakList(tiltak.content)
 
           setAntallUtenTiltakAnsvarlig(
             tiltak.content.filter(
-              (tiltak) =>
+              (tiltak: ITiltak) =>
                 !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
             ).length
           )
-          setAntallUtenFrist(tiltak.content.filter((tiltak) => !tiltak.frist).length)
+          setAntallUtenFrist(tiltak.content.filter((tiltak: ITiltak) => !tiltak.frist).length)
         })
 
         setIsLoading(false)
@@ -167,9 +169,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
     }
   }, [filterQuery, risikoscenarioList])
 
-  const onTabChange = (tab: string) => {
-    const filter = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-    const paramQuery = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
+  const onTabChange = (tab: string): void => {
+    const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
+    const paramQuery: string = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
     setNavigateUrl(paramQueryUrl(tab, paramQuery))
 
     if (formRef.current?.dirty) {
@@ -179,8 +181,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
     }
   }
 
-  const onFilterChange = (filter: string) => {
-    const tab = tabQuery ? tabQuery : tabValues.risikoscenarioer
+  const onFilterChange = (filter: string): void => {
+    const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
 
     switch (filter) {
       case filterValues.alleRisikoscenarioer:
@@ -188,13 +190,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
         break
       case filterValues.tiltakIkkeAktuelt:
         setFilteredRisikosenarioList(
-          risikoscenarioList.filter((risikoscenario) => risikoscenario.ingenTiltak)
+          risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
         )
         break
       case filterValues.effektIkkeVurdert:
         setFilteredRisikosenarioList(
           risikoscenarioList.filter(
-            (risikoscenario) =>
+            (risikoscenario: IRisikoscenario) =>
               !risikoscenario.ingenTiltak &&
               (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
                 risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -205,7 +207,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
       case filterValues.hoyRisiko:
         setFilteredRisikosenarioList(
           risikoscenarioList.filter(
-            (risikoscenario) =>
+            (risikoscenario: IRisikoscenario) =>
               risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
           )
         )
@@ -223,7 +225,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
     }
   }
 
-  const onTiltakFilterChange = (filter: string) => {
+  const onTiltakFilterChange = (filter: string): void => {
     setTiltakFilter(filter)
     switch (filter) {
       case tiltakFilterValues.alleTiltak:
@@ -232,12 +234,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak = (props: IProps) => {
       case tiltakFilterValues.utenAnsvarlig:
         setFilteredTiltakList(
           tiltakList.filter(
-            (tiltak) => !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+            (tiltak: ITiltak) =>
+              !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
           )
         )
         break
       case tiltakFilterValues.utenFrist:
-        setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.frist))
+        setFilteredTiltakList(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist))
         break
     }
   }

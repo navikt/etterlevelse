@@ -112,6 +112,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                           .then(() => {
                             window.location.href = exportUrl
                             setIsLoading(false)
+                            setIsExportModalOpen(false)
                           })
                           .catch((error: any) => {
                             setErrorMessage(error.response.data.message)

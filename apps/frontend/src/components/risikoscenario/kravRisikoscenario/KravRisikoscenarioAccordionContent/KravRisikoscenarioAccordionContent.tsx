@@ -1,6 +1,6 @@
 import { Button, Heading } from '@navikt/ds-react'
-import { RefObject, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
@@ -22,7 +22,7 @@ import IngenTiltakField from '../../edit/IngenTiltakField'
 import RisikoscenarioModalForm from '../../edit/RisikoscenarioModalForm'
 import RedigerRisikoscenarioButtons from '../RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
 
-interface IProps {
+type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
   alleRisikoscenarioer: IRisikoscenario[]
@@ -39,22 +39,21 @@ interface IProps {
   formRef: RefObject<any>
 }
 
-export const KravRisikoscenarioAccordionContent = (props: IProps) => {
-  const {
-    risikoscenario,
-    risikoscenarioer,
-    alleRisikoscenarioer,
-    risikoscenarioForKrav,
-    etterlevelseDokumentasjonId,
-    kravnummer,
-    setRisikoscenarioer,
-    setRisikoscenarioForKrav,
-    tiltakList,
-    setTiltakList,
-    isCreateMode,
-    setIsTiltakFormActive,
-    formRef,
-  } = props
+export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
+  risikoscenario,
+  risikoscenarioer,
+  alleRisikoscenarioer,
+  risikoscenarioForKrav,
+  etterlevelseDokumentasjonId,
+  kravnummer,
+  setRisikoscenarioer,
+  setRisikoscenarioForKrav,
+  tiltakList,
+  setTiltakList,
+  isCreateMode,
+  setIsTiltakFormActive,
+  formRef,
+}) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
@@ -62,11 +61,11 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTiltakFormDirty, setIsIngenTilktakFormDirty] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const navigate: NavigateFunction = useNavigate()
 
-  const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario) => {
+  const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
     setRisikoscenarioForKrav(
-      risikoscenarioForKrav.map((risikoscenario) => {
+      risikoscenarioForKrav.map((risikoscenario: IRisikoscenario) => {
         if (risikoscenario.id === updatedRisikoscenario.id) {
           return { ...updatedRisikoscenario }
         } else {
@@ -76,23 +75,23 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     )
   }
 
-  const submit = async (risikoscenario: IRisikoscenario) => {
-    await updateRisikoscenario(risikoscenario).then((response) => {
+  const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
+    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
       updateRisikoscenarioList(response)
       setIsEditModalOpen(false)
     })
   }
 
-  const submitIngenTiltak = async (submitedValues: IRisikoscenario) => {
-    await getRisikoscenario(risikoscenario.id).then((response) => {
+  const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
+    await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
       const updatedRisikoscenario = {
         ...submitedValues,
         ...response,
         ingenTiltak: submitedValues.ingenTiltak,
       }
 
-      updateRisikoscenario(updatedRisikoscenario).then((response) => {
+      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
         setActiveRisikoscenario(response)
         updateRisikoscenarioList(response)
         setIsIngenTilktakFormDirty(false)
@@ -100,11 +99,11 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     })
   }
 
-  const submitCreateTiltak = async (submitedTiltakValues: ITiltak) => {
+  const submitCreateTiltak = async (submitedTiltakValues: ITiltak): Promise<void> => {
     await createTiltakAndRelasjonWithRisikoscenario(
       submitedTiltakValues,
       activeRisikoscenario.id
-    ).then((response) => {
+    ).then((response: ITiltak) => {
       setActiveRisikoscenario({
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
@@ -121,7 +120,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     })
   }
 
-  const submitExistingTiltak = async (request: ITiltakRisikoscenarioRelasjon) => {
+  const submitExistingTiltak = async (request: ITiltakRisikoscenarioRelasjon): Promise<void> => {
     await addTiltakToRisikoscenario(request).then(() => {
       setActiveRisikoscenario({
         ...activeRisikoscenario,
@@ -135,8 +134,8 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
     })
   }
 
-  const submitDeleteTiltak = async (tiltakId: string) => {
-    await getTiltak(tiltakId).then(async (response) => {
+  const submitDeleteTiltak = async (tiltakId: string): Promise<void> => {
+    await getTiltak(tiltakId).then(async (response: ITiltak) => {
       if (
         response.risikoscenarioIds.length === 1 &&
         response.risikoscenarioIds[0] === risikoscenario.id
@@ -145,7 +144,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
           await deleteTiltak(tiltakId).then(() => {
             setActiveRisikoscenario({
               ...activeRisikoscenario,
-              tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
+              tiltakIds: activeRisikoscenario.tiltakIds.filter((id: string) => id !== tiltakId),
             })
             navigate(risikoscenarioIdQuery(risikoscenario.id))
             window.location.reload()
@@ -155,7 +154,7 @@ export const KravRisikoscenarioAccordionContent = (props: IProps) => {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
           setActiveRisikoscenario({
             ...activeRisikoscenario,
-            tiltakIds: activeRisikoscenario.tiltakIds.filter((id) => id !== tiltakId),
+            tiltakIds: activeRisikoscenario.tiltakIds.filter((id: string) => id !== tiltakId),
           })
           navigate(risikoscenarioIdQuery(risikoscenario.id))
           window.location.reload()

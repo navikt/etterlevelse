@@ -1,10 +1,10 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
-import { ReactNode } from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { pvoOversiktUrl } from '../../common/RouteLinkPvo'
 
-interface IProps {
+type TProps = {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -12,8 +12,12 @@ interface IProps {
   submitForm?: (() => Promise<void>) & (() => Promise<any>)
 }
 
-export const PvoFormButtons = (props: IProps) => {
-  const { activeStep, setActiveStep, setSelectedStep, customButtons } = props
+export const PvoFormButtons: FunctionComponent<TProps> = ({
+  activeStep,
+  setActiveStep,
+  setSelectedStep,
+  customButtons,
+}) => {
   const navigate: NavigateFunction = useNavigate()
 
   return (

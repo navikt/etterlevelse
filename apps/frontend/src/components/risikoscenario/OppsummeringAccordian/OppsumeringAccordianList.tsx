@@ -34,13 +34,14 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   isUnsaved,
   setIsUnsaved,
 }) => {
-  const [navigateUrl, setNavigateUrl] = useState<string>('')
+  const navigate: NavigateFunction = useNavigate()
   const url: URL = new URL(window.location.href)
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const tabQuery: string | null = url.searchParams.get('tab')
   const filterQuery: string | null = url.searchParams.get('filter')
-  const navigate: NavigateFunction = useNavigate()
   const accordionRef = useRef<HTMLButtonElement>(null)
+
+  const [navigateUrl, setNavigateUrl] = useState<string>('')
 
   useEffect(() => {
     if (risikoscenarioId) {

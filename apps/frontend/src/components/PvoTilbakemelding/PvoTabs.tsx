@@ -14,6 +14,7 @@ const PvoTabs = () => {
       tab?: string
     }>
   > = useParams<{ tab?: string }>()
+
   const [tab, setTab] = useState<string>(params.tab || 'siste')
 
   useEffect(() => {
