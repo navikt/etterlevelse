@@ -11,11 +11,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -128,8 +124,7 @@ public class KravRepoImpl implements KravRepoCustom {
                            from audit_version
                            where table_name in ('Krav', 'KRAV')
                              and user_id like :user_id
-                             and exists (select 1 from generic_storage where id = cast(table_id as uuid)
-                               union select 1 from krav where id = cast(table_id as uuid))
+                             and exists (select 1 from krav where id = cast(table_id as uuid))
                            order by time desc
                        ) 
                        order by time desc
