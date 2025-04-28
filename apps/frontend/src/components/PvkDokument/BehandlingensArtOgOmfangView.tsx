@@ -197,7 +197,6 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         variant='secondary'
                         onClick={async () => {
                           setIsNullStilModalOpen(true)
-                          setSavedSuccessful(false)
                         }}
                       >
                         Nullstill svar
@@ -229,6 +228,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                                   },
                                 })
                                 setIsNullStilModalOpen(false)
+                                setSavedSuccessful(false)
                               })
                             }}
                           >
@@ -258,6 +258,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                             type='button'
                             onClick={() => {
                               resetForm({ values: initialValues })
+                              setSavedSuccessful(false)
                               setIsModalOpen(false)
                             }}
                           >
