@@ -1,7 +1,7 @@
 import { BodyShort, FormSummary, List } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
-import { EPVO } from '../../../constants'
 import { FunctionComponent } from 'react'
+import { EPVO } from '../../../constants'
 import { StepTitle } from '../../../pages/PvkDokumentPage'
 import FormAlert from './FormAlert'
 
@@ -38,9 +38,7 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
             <FormSummary.Value>
               <FormSummary.Answers>
                 <FormSummary.Answer>
-                  <FormSummary.Label>
-                    I Behandlingskatalogen står det at dere behandler personopplysninger om:
-                  </FormSummary.Label>
+                  <FormSummary.Label>{EPVO.behandlingAvPersonopplysninger}</FormSummary.Label>
                   <FormSummary.Value>
                     <List>
                       {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
