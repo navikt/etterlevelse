@@ -11,7 +11,7 @@ type TProps = {
 export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
   behandlingensLivslop,
   updateTitleUrlAndStep,
-  behandlingensLivslopError
+  behandlingensLivslopError,
 }) => (
   <FormSummary className='my-3'>
     <FormSummary.Header>
@@ -40,7 +40,7 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
                       beskrivelse.
                     </FormAlert>
                   )}
-                  
+
                   {!behandlingensLivslopError && (
                     <div>
                       <BodyShort>Antall filer: {behandlingensLivslop?.filer.length}</BodyShort>

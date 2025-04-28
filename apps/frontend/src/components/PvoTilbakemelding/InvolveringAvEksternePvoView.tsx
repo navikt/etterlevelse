@@ -40,14 +40,14 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
               Representanter for de registrerte
             </Heading>
 
-              <List className='mt-5'>
-                <Label size='medium'>{EPVO.behandlingAvPersonopplysninger}</Label>
-                {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
-                {personkategorier.length > 0 &&
-                  personkategorier.map((personkategori) => (
-                    <List.Item key={personkategori}>{personkategori}</List.Item>
-                  ))}
-              </List>
+            <List className='mt-5'>
+              <Label size='medium'>{EPVO.behandlingAvPersonopplysninger}</Label>
+              {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
+              {personkategorier.length > 0 &&
+                personkategorier.map((personkategori) => (
+                  <List.Item key={personkategori}>{personkategori}</List.Item>
+                ))}
+            </List>
 
             <div className='mt-5 mb-3 max-w-[75ch]'>
               <Label>Har dere involvert en representant for de registrerte?</Label>
