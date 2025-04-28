@@ -126,10 +126,10 @@ public class KravRepoImpl implements KravRepoCustom {
                              and user_id like :user_id
                              and exists (select 1 from krav where id = cast(table_id as uuid))
                            order by time desc
-                       ) 
+                       ) sub
                        order by time desc
                        limit :limit
-                    )
+                    ) 
                     """;
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
