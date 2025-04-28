@@ -30,8 +30,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
       </BodyLong>
 
       <Alert variant='info' inline className='mt-5'>
-        <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dere har dokumentert et sted,
-        kan dere finne og gjenbruke andre steder hvor det er aktuelt.
+        <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dagens tekst et sted, kan dere
+        finne og gjenbruke andre steder hvor det er aktuelt.
       </Alert>
 
       <Heading spacing size='small' level='2' className='mb-5 mt-10'>
