@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.auditing.AuditVersionListener;
+import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.common.storage.domain.ChangeStamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -44,5 +46,22 @@ public abstract class Auditable {
     @Version
     @Column(name = "VERSION")
     protected Integer version;
+
+    public ChangeStampResponse convertChangeStampResponse() {
+        return ChangeStampResponse.builder()
+                .createdDate(createdDate == null ? LocalDateTime.now() : createdDate)
+                .lastModifiedBy(lastModifiedBy)
+                .lastModifiedDate(lastModifiedDate == null ? LocalDateTime.now() : lastModifiedDate)
+                .build();
+    }
+    
+    public ChangeStamp getChangeStamp() {
+        return ChangeStamp.builder()
+                .createdBy(createdBy)
+                .createdDate(createdDate)
+                .lastModifiedBy(lastModifiedBy)
+                .lastModifiedDate(lastModifiedDate)
+                .build();
+    }
 
 }

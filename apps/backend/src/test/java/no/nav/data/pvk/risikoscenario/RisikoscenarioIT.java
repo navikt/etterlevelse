@@ -4,6 +4,7 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
@@ -110,7 +111,11 @@ public class RisikoscenarioIT extends IntegrationTestBase {
     @Test
     void testCrateRisikoscenarioKnyttetTilKrav() {
         PvkDokument pvkDokument = createPvkDokument();
-        kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
+        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build()))
+                        .status(KravStatus.AKTIV).build())
+                .build()
+        );
         RisikoscenarioRequest request = RisikoscenarioRequest.builder()
                 .pvkDokumentId(pvkDokument.getId().toString())
                 .build();
@@ -194,7 +199,8 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
         // Test add Krav...
-        kravStorageService.save(Krav.builder().navn("Krav 40").kravNummer(99).kravVersjon(1).status(KravStatus.AKTIV).build());
+        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(99).kravVersjon(1)
+                .data(KravData.builder().navn("Krav 40").status(KravStatus.AKTIV).build()).build());
         relReq.setKravnummer(99);
         respEntPage = restTemplate.exchange(
                 "/risikoscenario/update/addRelevantKrav", 
@@ -212,7 +218,8 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         Risikoscenario risikoscenario = insertRisikoscenario();
         
         // Should get BAD REQUEST if unknown Krav or Krav not related to Risikoscenario...
-        kravStorageService.save(Krav.builder().navn("Krav 51").kravNummer(51).kravVersjon(1).status(KravStatus.AKTIV).build());
+        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(51).kravVersjon(1)
+                .data(KravData.builder().navn("Krav 51").status(KravStatus.AKTIV).build()).build());
         ResponseEntity<RisikoscenarioResponse> respEntPage = restTemplate.exchange(
                 "/risikoscenario/{id}/removeKrav/{kravnummer}", HttpMethod.PUT, null, RisikoscenarioResponse.class, risikoscenario.getId(), 51
         );
@@ -281,7 +288,10 @@ public class RisikoscenarioIT extends IntegrationTestBase {
    
     private Risikoscenario insertRisikoscenario() {
         PvkDokument pvkDokument = createPvkDokument();
-        Krav krav = kravStorageService.save(Krav.builder().navn("Krav 50").kravNummer(50).kravVersjon(1).regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build());
+        Krav krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder()
+                        .lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build())
+                .build());
 
         Risikoscenario risikoscenario = Risikoscenario.builder()
                 .pvkDokumentId(pvkDokument.getId())

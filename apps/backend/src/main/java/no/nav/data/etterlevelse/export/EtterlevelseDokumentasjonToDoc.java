@@ -169,7 +169,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
         List<EtterlevelseMedKravData> filteredEtterlevelseMedKravData = new ArrayList<>();
 
-        List<Krav> alleAktivKrav = kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjonId.toString())
+        List<Krav> alleAktivKrav = kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
                 .stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV)).toList();
 
         if (!lover.isEmpty()) {

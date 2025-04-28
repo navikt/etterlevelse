@@ -7,6 +7,7 @@ import no.nav.data.etterlevelse.codelist.codeusage.dto.ReplaceCodelistRequest;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistRequest;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import static no.nav.data.etterlevelse.codelist.CodelistUtils.createCodelistRequest;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -127,8 +129,13 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
 
     private void createTestData() {
         createCodelistsByRequests();
-        kravStorageService.save(Krav.builder().avdeling("AVD1").status(KravStatus.AKTIV).relevansFor(List.of("REL1")).build());
-        kravStorageService.save(Krav.builder().underavdeling("UNDAVD1").status(KravStatus.AKTIV).relevansFor(List.of("REL3")).regelverk(List.of(Regelverk.builder().lov("ARKIV").build())).build());
+        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                .data(KravData.builder().avdeling("AVD1").status(KravStatus.AKTIV).relevansFor(List.of("REL1")).build())
+                .build());
+        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(51).kravVersjon(1)
+                .data(KravData.builder().underavdeling("UNDAVD1").status(KravStatus.AKTIV).relevansFor(List.of("REL3"))
+                        .regelverk(List.of(Regelverk.builder().lov("ARKIV").build())).build())
+                .build());
     }
 
     private void createCodelistsByRequests() {

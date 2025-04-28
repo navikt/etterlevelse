@@ -7,6 +7,7 @@ import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,9 +43,7 @@ public class KravToDocTest {
     void setUp() {
         CodelistStub.initializeCodelist();
         lenient().when(kravService.get(KRAV_ID)).thenReturn(
-                Krav.builder()
-                        .kravNummer(101)
-                        .kravVersjon(1)
+                Krav.builder().kravNummer(101).kravVersjon(1).data(KravData.builder()
                         .navn("Test krav")
                         .status(KravStatus.AKTIV)
                         .hensikt("test 3 **BOLD** \n\n# Header1\n\nvanlig text")
@@ -56,7 +55,7 @@ public class KravToDocTest {
                                 .build()))
                         .beskrivelse("test")
                         .dokumentasjon(List.of("test", "test2"))
-                        .build()
+                        .build()).build()
         );
     }
 
@@ -78,10 +77,7 @@ public class KravToDocTest {
     private Krav createKrav() {
         LocalDateTime today = LocalDateTime.now();
 
-        return Krav.builder()
-                .id(KRAV_ID)
-                .kravNummer(101)
-                .kravVersjon(1)
+        return Krav.builder().id(KRAV_ID).kravNummer(101).kravVersjon(1).data(KravData.builder()
                 .navn("Test krav")
                 .status(KravStatus.AKTIV)
                 .hensikt("test 3 **BOLD** \n\n# Header1\n\nvanlig text")
@@ -105,6 +101,6 @@ public class KravToDocTest {
                 .implementasjoner("test implementasjoner")
                 .beskrivelse("test")
                 .dokumentasjon(List.of("test", "test2"))
-                .build();
+                .build()).build();
     }
 }

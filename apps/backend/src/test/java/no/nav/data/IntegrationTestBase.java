@@ -21,8 +21,12 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
+import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
@@ -87,7 +91,9 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected DocumentRelationRepository dokumentRelasjonRepository;
     @Autowired
-    protected StorageService<Krav> kravStorageService;
+    protected KravService kravService;
+    @Autowired
+    protected KravRepo kravRepo;
     @Autowired
     protected StorageService<KravPriorityList> kravPriorityListStorageService;
     @Autowired
@@ -162,6 +168,7 @@ public abstract class IntegrationTestBase {
         pvkDokumentRepo.deleteAll();
         dokumentRelasjonRepository.deleteAll();
         etterlevelseDokumentasjonRepo.deleteAll();
+        kravRepo.deleteAll();
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -241,7 +248,19 @@ public abstract class IntegrationTestBase {
                         .build()
         );
     }
+    
+    protected Krav createKrav(String navn, int kravNummer, int kravVersjon) {
+        Krav krav = Krav.builder().id(UUID.randomUUID()).kravNummer(kravNummer).kravVersjon(kravVersjon)
+                .data(KravData.builder().navn(navn).status(KravStatus.AKTIV).build())
+                .build();
+        return kravService.save(krav);
+    }
 
+    protected Krav createKrav() {
+        return createKrav("Krav 1", 50, 1);
+    }
+
+    
     /*
      * Dette er et lite vakkert men nødvendig hæck. Ellers er det ikke sikkert AuditVersionListener.setRepo blir kalt. JpaConfig har kode som kaller
      * AuditVersionListener.setRepo. Men i test er det av ukjent grunn ikke alltid den koden er kjørt før testene kjøres (ca. 2 av 3 ganger), noe som resulterer

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,16 +41,19 @@ public class AuditVersionService {
         return repository.findAll(pageable);
     }
 
-    public List<AuditVersion> findByTableIdOrderByTimeDesc (String id) {
-       return repository.findByTableIdOrderByTimeDesc(id);
+    public List<AuditVersion> findByTableIdOrderByTimeDesc(String id) {
+        return repository.findByTableIdOrderByTimeDesc(id);
     }
 
+    public List<AuditVersion> findByTableIdOrderByTimeDesc(UUID id) {
+        return findByTableIdOrderByTimeDesc(id.toString());
+    }
 
-    public Page<GenericStorage<MailLog>> findAllMailLog (Pageable pageable) {
+    public Page<GenericStorage<MailLog>> findAllMailLog(Pageable pageable) {
         return mailLogRepository.findAll(pageable);
     }
 
-    public MailLog getMaillogById (UUID id) {
+    public MailLog getMaillogById(UUID id) {
         return storage.get(id);
     }
 
@@ -61,6 +65,9 @@ public class AuditVersionService {
         return customRepo.findLatestByTableIdAndTimeStamp(tableId, timestamp);
     }
 
+    public List<AuditVersion> getByTableIdAndTimestamp(UUID tableId, LocalDateTime timestamp) {
+        return getByTableIdAndTimestamp(tableId.toString(), timestamp.toString());
+    }
 
     public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String etterlevelseDokumentasjonId, String timestamp) {
         return customRepo.findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(etterlevelseDokumentasjonId, timestamp);

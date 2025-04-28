@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseRequest;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +78,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
     @Test
     void updateEtterlevelse() {
-        var krav = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(1).status(KravStatus.AKTIV).build());
+        var krav = createKrav();
         var eDok1 = createEtterlevelseDokumentasjon();
         var eDok2 = createEtterlevelseDokumentasjon();
         var etterlevelse = etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok1.getId()).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
@@ -100,7 +101,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         var eDok = createEtterlevelseDokumentasjon();
         etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(eDok.getId()).build());
 
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+        var krav = createKrav();
 
         restTemplate.delete("/etterlevelse/{id}", krav.getId());
 
@@ -204,7 +205,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         @Test
         void createEtterlevelse() {
-            var krav = kravStorageService.save(Krav.builder().kravNummer(50).status(KravStatus.AKTIV).build());
+            var krav = createKrav();
             var eDok = createEtterlevelseDokumentasjon();
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
@@ -264,7 +265,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         @EnumSource(value = KravStatus.class, names = {"UTKAST", "UTGAATT"})
         void wrongKravStatus(KravStatus status) {
             var etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
-            var krav = kravStorageService.save(Krav.builder().kravNummer(50).status(status).build());
+            var krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).data(KravData.builder().status(status).build()).build());
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())

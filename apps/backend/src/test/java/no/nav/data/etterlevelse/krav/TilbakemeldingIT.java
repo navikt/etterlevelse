@@ -4,6 +4,7 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.TestConfig.MockFilter;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Rolle;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.TilbakemeldingsType;
@@ -45,7 +46,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
 
     @Test
     void tilbakemelding() {
-        Krav krav = createKrav();
+        Krav krav = createKravMedVarslingsadresse();
         var tilbakemeldingId = testCreate(krav.getKravNummer(), krav.getKravVersjon());
         testNewMelding(tilbakemeldingId);
     }
@@ -53,7 +54,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
     @Test
     void getForKrav() {
         MockFilter.setUser("A123456");
-        Krav krav = createKrav();
+        Krav krav = createKravMedVarslingsadresse();
         var req = createCreateTilbakemeldingRequest(krav.getKravNummer(), krav.getKravVersjon());
         restTemplate.postForEntity("/tilbakemelding", req, TilbakemeldingResponse.class);
 
@@ -135,13 +136,15 @@ class TilbakemeldingIT extends IntegrationTestBase {
                 .build();
     }
 
-    private Krav createKrav() {
-        return kravStorageService.save(Krav.builder()
-                .kravNummer(50)
-                .varslingsadresser(List.of(Varslingsadresse.builder()
-                        .type(AdresseType.SLACK)
-                        .adresse("xyz")
-                        .build()))
-                .build());
+    protected Krav createKravMedVarslingsadresse() {
+        Krav krav = Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                .data(KravData.builder().navn("Krav 1")
+                        .varslingsadresser(List.of(Varslingsadresse.builder()
+                                .type(AdresseType.SLACK)
+                                .adresse("xyz")
+                                .build()))
+                        .build())
+                .build();
+        return kravService.save(krav);
     }
 }

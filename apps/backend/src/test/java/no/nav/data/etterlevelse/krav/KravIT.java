@@ -48,28 +48,28 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void getKrav() {
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+        var krav = createKrav();
 
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         KravResponse kravResp = resp.getBody();
-        assertThat(kravResp).isNotNull();
+        assertThat(kravResp.getNavn()).isEqualTo(krav.getNavn());
     }
 
     @Test
     void getKravByNummer() {
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
+        var krav = createKrav();
 
         var resp = restTemplate.getForEntity("/krav/kravnummer/{nummer}/{versjon}", KravResponse.class, krav.getKravNummer(), krav.getKravVersjon());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         KravResponse kravResp = resp.getBody();
-        assertThat(kravResp).isNotNull();
+        assertThat(kravResp.getNavn()).isEqualTo(krav.getNavn());
     }
 
     @Test
     void getAllKrav() {
-        kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).build());
-        kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(2).build());
+        createKrav("Krav 1", 50, 1);
+        createKrav("Krav 1", 50, 2);
 
         var resp = restTemplate.getForEntity("/krav?pageSize=1", KravPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -87,8 +87,8 @@ public class KravIT extends IntegrationTestBase {
     }
 
     @Test
-    void createKrav() {
-        var req = getKravRequest();
+    void testCreateKrav() {
+        var req = buildKravRequest();
 
         var resp = restTemplate.postForEntity("/krav", req, KravResponse.class);
 
@@ -105,7 +105,7 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void getKravEtterlever() {
-        var kravResp = restTemplate.postForEntity("/krav", getKravRequest(), KravResponse.class);
+        var kravResp = restTemplate.postForEntity("/krav", buildKravRequest(), KravResponse.class);
         MockFilter.clearUser();
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, kravResp.getBody().getId());
 
@@ -113,7 +113,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(resp.getBody().getVarslingsadresser()).isEmpty();
     }
 
-    private KravRequest getKravRequest() {
+    private KravRequest buildKravRequest() {
         return KravRequest.builder()
                 .navn("Krav 1")
                 .beskrivelse("beskrivelse")
@@ -160,7 +160,7 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void createKravVersjon() {
-        var kravOne = kravStorageService.save(Krav.builder().kravNummer(50).kravVersjon(2).build());
+        var kravOne = createKrav("", 50, 2);
         var req = KravRequest.builder()
                 .navn("Krav 2")
                 .kravNummer(kravOne.getKravNummer())
@@ -191,7 +191,7 @@ public class KravIT extends IntegrationTestBase {
 
     @Test
     void updateKrav() {
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        Krav krav = createKrav();
         var req = KravRequest.builder()
                 .navn("Krav 2")
                 .id(krav.getId())
@@ -199,41 +199,42 @@ public class KravIT extends IntegrationTestBase {
         var resp = restTemplate.exchange("/krav/{id}", HttpMethod.PUT, new HttpEntity<>(req), KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         KravResponse kravResp = resp.getBody();
+        Krav storedKrav = kravService.get(krav.getId());
         assertThat(kravResp).isNotNull();
-        assertThat(kravResp.getNavn()).isEqualTo("Krav 2");
+        assertThat(kravResp.getNavn()).isEqualTo(storedKrav.getNavn()).isEqualTo("Krav 2");
     }
 
     @Test
     void deleteKrav() {
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(99).kravVersjon(1).build());
+        var krav = createKrav();
         restTemplate.delete("/krav/{id}", krav.getId());
 
-        assertThat(kravStorageService.get(krav.getId())).isNull();
+        assertThat(kravRepo.count()).isZero();
     }
 
     @Test
     void deleteKravWithEtterlevelse() {
         var eDok = createEtterlevelseDokumentasjon();
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        var krav = createKrav();
         etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok.getId()).kravNummer(50).kravVersjon(1).build());
         restTemplate.delete("/krav/{id}", krav.getId());
 
-        assertThat(kravStorageService.getAll(Krav.class)).isNotEmpty();
+        assertThat(kravRepo.count()).isEqualTo(1);
     }
 
     @Test
     void deleteKravWithTilbakemelding() {
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").kravNummer(50).kravVersjon(1).build());
+        var krav = createKrav();
         tilbakemeldingStorageService.save(Tilbakemelding.builder().meldinger(List.of(Tilbakemelding.Melding.builder().build())).kravNummer(50).kravVersjon(1).build());
         restTemplate.delete("/krav/{id}", krav.getId());
 
-        assertThat(kravStorageService.getAll(Krav.class)).isNotEmpty();
+        assertThat(kravRepo.count()).isEqualTo(1);
     }
 
     @SneakyThrows
     @Test
     void uploadImages() {
-        var krav = kravStorageService.save(Krav.builder().navn("Krav 1").build());
+        Krav krav = createKrav();
 
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -260,7 +261,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(imageResized.getBody()).isNotNull();
 
         krav.setHensikt(id1);
-        kravStorageService.save(krav);
+        kravService.save(krav);
 
         jdbcTemplate.update("update generic_storage set last_modified_date = now() - interval '65 minute' where type = 'KravImage'");
         assertThat(kravImageStorageService.getAll(KravImage.class)).hasSize(2);

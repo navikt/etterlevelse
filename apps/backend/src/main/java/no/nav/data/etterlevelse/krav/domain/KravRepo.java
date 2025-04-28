@@ -1,6 +1,7 @@
 package no.nav.data.etterlevelse.krav.domain;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,65 +13,62 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface KravRepo extends JpaRepository<GenericStorage<Krav>, UUID>, KravRepoCustom {
+public interface KravRepo extends JpaRepository<Krav, UUID>, KravRepoCustom {
 
     @Override
-    @Query(value = "select * from generic_storage where type = 'Krav' order by data -> 'kravNummer', data -> 'kravVersjon'",
-            countQuery = "select count(1) from generic_storage where type = 'Krav'",
+    @Query(value = "select * from krav order by krav_nummer, krav_versjon",
+            countQuery = "select count(1) from krav",
             nativeQuery = true)
-    Page<GenericStorage<Krav>> findAll(Pageable pageable);
+    Page<Krav> findAll(Pageable pageable);
 
-    @Query(value = "select * from generic_storage where type = 'Krav' and data ->> 'status' <> 'UTKAST' order by data -> 'kravNummer', data -> 'kravVersjon'",
-            countQuery = "select count(1) from generic_storage where type = 'Krav' and data ->> 'status' <> 'UTKAST'",
+    @Query(value = "select * from krav where data ->> 'status' <> 'UTKAST' order by krav_nummer, krav_versjon",
+            countQuery = "select count(1) from krav where data ->> 'status' <> 'UTKAST'",
             nativeQuery = true)
-    Page<GenericStorage<Krav>> findAllNonUtkast(Pageable pageable);
+    Page<Krav> findAllNonUtkast(Pageable pageable);
 
-    @Query(value = "select * from generic_storage where data ->> 'avdeling' = ?1 and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage<Krav>> findByAvdeling(String code);
+    @Query(value = "select * from krav where data ->> 'avdeling' = ?1", nativeQuery = true)
+    List<Krav> findByAvdeling(String code);
 
-    @Query(value = "select * from generic_storage where data ->> 'underavdeling' = ?1 and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage<Krav>> findByUnderavdeling(String code);
+    @Query(value = "select * from krav where data ->> 'underavdeling' = ?1", nativeQuery = true)
+    List<Krav> findByUnderavdeling(String code);
 
-    @Query(value = "select * from generic_storage where data ->> 'navn' ilike %?1% and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage<Krav>> findByNameContaining(String name);
+    @Query(value = "select * from krav where data ->> 'navn' ilike %?1%", nativeQuery = true)
+    List<Krav> findByNavnContaining(String name);
 
-    @Query(value = "select * from generic_storage where data ->> 'kravNummer' ilike %?1% and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage<Krav>> findByNumberContaining(String number);
+    @Query(value = "select * from krav where cast(krav_nummer as text) ilike %?1%", nativeQuery = true)
+    List<Krav> findByKravNummerContaining(String number);
 
-    @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage<Krav>> findByKravNummer(int nummer);
+    List<Krav> findByKravNummer(int kravNummer);
 
-    @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data ->> 'status' = 'AKTIV' and type = 'Krav'", nativeQuery = true)
-    List<GenericStorage<Krav>> findByKravNummerAndActiveStatus(int nummer);
+    @Query(value = "select * from krav where krav_nummer = ?1 and data ->> 'status' = 'AKTIV'", nativeQuery = true)
+    List<Krav> findByKravNummerAndAktiveStatus(int kravNummer);
 
-    @Query(value = "select * from generic_storage where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Krav'", nativeQuery = true)
-    Optional<GenericStorage<Krav>> findByKravNummer(int nummer, int versjon);
+    Optional<Krav> findByKravNummerAndKravVersjon(int kravNummer, int kravVersjon);
 
     @Query(value = "select nextval('krav_nummer')", nativeQuery = true)
     int nextKravNummer();
 
-    @Query(value = "select max(cast(data -> 'kravVersjon' as integer)) + 1 from generic_storage where type = 'Krav' and data -> 'kravNummer' = to_jsonb(?1)", nativeQuery = true)
+    @Query(value = "select max(krav_versjon) + 1 from krav where krav_nummer = ?1", nativeQuery = true)
     int nextKravVersjon(Integer kravNummer);
 
     @Query(value = "select * from generic_storage where data ->> 'kravId' = cast(?1 as text) and id = ?2 and type = 'KravImage'", nativeQuery = true)
     GenericStorage<KravImage> findKravImage(UUID kravId, UUID fileId);
 
     @Modifying(clearAutomatically = true)
-    @Transactional
-    @Query(value = "update generic_storage set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where data -> 'kravNummer' = to_jsonb(?1) and data -> 'kravVersjon' = to_jsonb(?2) and type = 'Krav' ", nativeQuery = true)
+    @Transactional(propagation = Propagation.MANDATORY)
+    @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where krav_nummer = ?1 kravVersjon = ?2", nativeQuery = true)
     void updateKravToUtgaatt(int kravNummer, int kravVersjon);
 
     @Modifying
-    @Transactional
+    @Transactional(propagation = Propagation.MANDATORY)
     @Query(nativeQuery = true, value = """
             delete from generic_storage image 
-              where type = 'KravImage'
+            where type = 'KravImage'
               and last_modified_date < now() at time zone 'Europe/Oslo' - interval '60 minute'
               and not exists (
-              select 1 from generic_storage krav 
-                where krav.type = 'Krav' 
-                and cast(krav.id as text) = image.data ->> 'kravId'
-                and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "' || image.id || '")' as jsonpath))
+                select 1 from krav 
+                where cast(krav.id as text) = image.data ->> 'kravId'
+                  and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "' || image.id || '")' as jsonpath))
             )""")
     int cleanupImages();
 

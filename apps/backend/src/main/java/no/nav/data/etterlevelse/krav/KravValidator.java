@@ -2,10 +2,10 @@ package no.nav.data.etterlevelse.krav;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravRequest.Fields;
@@ -22,13 +22,14 @@ import static no.nav.data.common.utils.StreamUtils.filter;
 @RequiredArgsConstructor
 public class KravValidator {
 
-    private final StorageService<Krav> storage;
     private final KravService kravService;
+    private final KravRepo kravRepo;
     private final EtterlevelseRepo etterlevelseRepo;
     private final BegrepService begrepService;
 
     public void validate(KravRequest request) {
-        Validator.validate(request, storage::get)
+        Krav krav = request.getId() != null ? kravRepo.findById(request.getId()).orElse(null) : null;
+        Validator.validate(request, krav)
                 .addValidations(this::validateName)
                 .addValidations(this::validateStatus)
                 .addValidations(this::validateKravNummerVersjon)
@@ -43,7 +44,7 @@ public class KravValidator {
             return;
         }
 
-        var items = filter(storage.findByNameAndType(name, Krav.class),
+        var items = filter(kravRepo.findByNavnContaining(name),
                 t -> (!t.getId().equals(validator.getItem().getId())
                 && !t.getKravNummer().equals(validator.getItem().getKravNummer())
                 ));

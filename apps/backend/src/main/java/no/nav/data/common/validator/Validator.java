@@ -62,7 +62,7 @@ public class Validator<T extends Validated> {
     private final String parentField;
     @Getter
     private final T item;
-    private DomainObject domainItem;
+    private Object domainItem; // FIXME: Use generic for this type
 
     public Validator(T item) {
         this.parentField = "";
@@ -74,10 +74,18 @@ public class Validator<T extends Validated> {
         this.item = item;
     }
 
+    @Deprecated // Use validate(R, Object)
     public static <R extends RequestElement> Validator<R> validate(R item, Function<UUID, DomainObject> getDomainObjectForUuid) {
         Validator<R> validator = validate(item);
         UUID uuid = item.getId();
         validator.domainItem = getDomainObjectForUuid.apply(uuid);
+        validator.validateRepositoryValues(item, validator.domainItem != null);
+        return validator;
+    }
+
+    public static <R extends RequestElement> Validator<R> validate(R item, Object domainObject) {
+        Validator<R> validator = validate(item);
+        validator.domainItem = domainObject;
         validator.validateRepositoryValues(item, validator.domainItem != null);
         return validator;
     }
@@ -94,7 +102,7 @@ public class Validator<T extends Validated> {
     }
 
     @SuppressWarnings("unchecked")
-    public <D extends DomainObject> D getDomainItem() {
+    public <D extends Object> D getDomainItem() {
         return (D) domainItem;
     }
 

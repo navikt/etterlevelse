@@ -3,7 +3,6 @@ package no.nav.data.etterlevelse.etterlevelse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseRepo;
@@ -110,7 +109,7 @@ public class EtterlevelseService {
     public void copyEtterlevelse(UUID fromDocumentId, UUID toDocumentId) {
         var etterlevelseToCopy = getByEtterlevelseDokumentasjon(fromDocumentId);
         etterlevelseToCopy.forEach(etterlevelse -> {
-            var krav = kravRepo.findByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).map(GenericStorage::getDomainObjectData).orElse(new Krav());
+            var krav = kravRepo.findByKravNummerAndKravVersjon(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()).orElse(new Krav());
             if (krav.getStatus() == KravStatus.AKTIV) {
                 List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelseRequestList = etterlevelse.getSuksesskriterieBegrunnelser().stream().map((skb) -> SuksesskriterieBegrunnelseRequest.builder()
                         .suksesskriterieId(skb.getSuksesskriterieId())
@@ -158,27 +157,23 @@ public class EtterlevelseService {
 
     // TODO: Validering må flyttes ut til en egen komponent og kalles av Controller eksplisitt. Se lignende kommentar i DomainService.
     private void validateKrav(Validator<EtterlevelseRequest> validator) {
-        Optional<Krav> krav; 
+        // Check if (kravNummer, kravVersjon) point to existing krav...
         Integer kravNummer = validator.getItem().getKravNummer();
         Integer kravVersjon = validator.getItem().getKravVersjon();
-        if (kravNummer != null && kravVersjon != null) {
-            var kravStorage = kravRepo.findByKravNummer(kravNummer, kravVersjon);
-            if (kravStorage.isEmpty()) {
-                validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d KravVersjon %d does not exist".formatted(kravNummer, kravVersjon));
-                return;
-            } else {
-                krav = kravStorage.map(GenericStorage::getDomainObjectData);
-            }
-        } else {
+        if (kravNummer == null || kravVersjon == null) {
             return;
-        }        
-        krav.ifPresent(k -> {
-            if (!validator.getItem().isUpdate() && !k.getStatus().kanEtterleves()) {
+        }
+        Optional<Krav> krav = kravRepo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon);
+        if (krav.isEmpty()) {
+            validator.addError(Fields.kravNummer, Validator.DOES_NOT_EXIST, "KravNummer %d KravVersjon %d does not exist".formatted(kravNummer, kravVersjon));
+            return;
+        }
+        // Check if valid status...
+        if (!validator.getItem().isUpdate() && !krav.get().getStatus().kanEtterleves()) {
                 validator.addError(Fields.kravNummer, "FEIL_KRAVSTATUS", "Krav %s kan ikke ettereleves med status %s".formatted(
-                        k.kravId(), k.getStatus()
+                        krav.get().kravId(), krav.get().getStatus()
                 ));
-            }
-        });
+        }
     }
     
 }

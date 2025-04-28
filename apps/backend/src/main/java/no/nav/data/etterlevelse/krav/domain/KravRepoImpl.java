@@ -1,9 +1,8 @@
 package no.nav.data.etterlevelse.krav.domain;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.common.storage.domain.GenericStorage;
-import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
@@ -27,58 +26,57 @@ import static no.nav.data.common.utils.StreamUtils.exists;
 public class KravRepoImpl implements KravRepoCustom {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final GenericStorageRepository<Krav> repository;
-
+    private final EntityManager entityManager;
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 
     @Override
-    public List<GenericStorage<Krav>> findByRelevans(String code) {
+    public List<Krav> findByRelevans(String code) {
         return findBy(KravFilter.builder().relevans(List.of(code)).build());
     }
 
     @Override
-    public List<GenericStorage<Krav>> findByVirkemiddelIder(String virkemiddelId){
-        var query = "select id from generic_storage where type = 'Krav' and data->'virkemiddelIder' ??| array[ :virkemiddelId ]";
+    public List<Krav> findByVirkemiddelIder(String virkemiddelId){
+        var query = "select id from krav where data -> 'virkemiddelIder' ??| array[ :virkemiddelId ]";
         var par = new MapSqlParameterSource();
 
         par.addValue("virkemiddelId", List.of(virkemiddelId));
 
-        List<GenericStorage<Krav>> kravList = fetch(jdbcTemplate.queryForList(query, par));
+        List<Krav> kravList = fetch(jdbcTemplate.queryForList(query, par));
         return kravList;
     }
 
     @Override
-    public List<GenericStorage<Krav>> findByLov(String lov) {
+    public List<Krav> findByLov(String lov) {
         return findBy(KravFilter.builder().lov(lov).build());
     }
 
     @Override
-    public List<GenericStorage<Krav>> findBy(KravFilter filter) {
-        var query = "select id from generic_storage krav where type = 'Krav' ";
+    public List<Krav> findBy(KravFilter filter) {
+        var query = "select id from krav k where true ";
         var par = new MapSqlParameterSource();
-
         List<String> kravIdSafeList = new ArrayList<>();
+
         if (filter.getNummer() != null) {
-            query += " and data -> 'kravNummer' = to_jsonb(:kravNummer) ";
+            query += " and krav_nummer = :kravNummer ";
             par.addValue("kravNummer", filter.getNummer());
         }
 
         if (filter.getEtterlevelseDokumentasjonId() != null ) {
-            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(UUID.fromString(filter.getEtterlevelseDokumentasjonId())), KravId::kravId));
+            kravIdSafeList.addAll(convert(etterlevelseDokumentasjonRepo.findKravIdsForEtterlevelseDokumentasjon(filter.getEtterlevelseDokumentasjonId()), KravId::kravId));
             if (!filter.isEtterlevelseDokumentasjonIrrevantKrav()) {
                 query += """
                         and (
-                         exists(select 1
-                                from etterlevelse ettlev
-                                where ettlev.krav_nummer = cast(krav.data ->> 'kravNummer' as integer)
-                                  and ettlev.krav_versjon = cast(krav.data ->> 'kravVersjon' as integer)
-                                  and ettlev.etterlevelse_dokumentasjon_id = :etterlevelseDokumentasjonId
-                         ) 
-                         or jsonb_array_length(data -> 'relevansFor') = 0
-                         or jsonb_array_length((data -> 'relevansFor') - array(
+                          exists(select 1
+                                 from etterlevelse ettlev
+                                 where ettlev.krav_nummer = k.krav_nummer
+                                   and ettlev.krav_versjon = k.krav_versjon
+                                   and ettlev.etterlevelse_dokumentasjon_id = :etterlevelseDokumentasjonId
+                          ) 
+                          or jsonb_array_length(data -> 'relevansFor') = 0
+                          or jsonb_array_length((data -> 'relevansFor') - array(
                             select jsonb_array_elements_text(data -> 'irrelevansFor') 
                             from etterlevelse_dokumentasjon where id = :etterlevelseDokumentasjonId)
-                         ) > 0
+                            ) > 0
                         )
                         """;
             } else {
@@ -90,7 +88,7 @@ public class KravRepoImpl implements KravRepoCustom {
                         )
                         """;
             }
-            par.addValue("etterlevelseDokumentasjonId", UUID.fromString(filter.getEtterlevelseDokumentasjonId()));
+            par.addValue("etterlevelseDokumentasjonId", filter.getEtterlevelseDokumentasjonId());
         }
 
         if (filter.getUnderavdeling() != null) {
@@ -125,57 +123,63 @@ public class KravRepoImpl implements KravRepoCustom {
             query += """
                      and cast(id as text) in (
                        select table_id
-                         from (
-                                  select distinct on (table_id) table_id, time
-                                  from audit_version
-                                  where table_name = 'Krav'
-                                    and user_id like :user_id
-                                    and exists(select 1 from generic_storage where id = cast(table_id as uuid))
-                                  order by table_id, time desc
-                              ) sub
-                         order by time desc
-                         limit :limit
+                       from (
+                           select distinct on (table_id) table_id, time
+                           from audit_version
+                           where table_name in ('Krav', 'KRAV')
+                             and user_id like :user_id
+                             and exists (select 1 from generic_storage where id = cast(table_id as uuid)
+                               union select 1 from krav where id = cast(table_id as uuid))
+                           order by time desc
+                       ) 
+                       order by time desc
+                       limit :limit
                     )
                     """;
             par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
 
-        List<GenericStorage<Krav>> kravList = fetch(jdbcTemplate.queryForList(query, par));
-        List<GenericStorage<Krav>> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
+        List<Krav> kravList = fetch(jdbcTemplate.queryForList(query, par));
+        List<Krav> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
         sort(filter, filtered);
         return filtered;
     }
 
-    private void sort(KravFilter filter, List<GenericStorage<Krav>> filtered) {
+    private void sort(KravFilter filter, List<Krav> filtered) {
         if (filter.getSistRedigert() != null) {
-            Comparator<GenericStorage<Krav>> comparator = comparing(gs -> gs.getDomainObjectData().getChangeStamp().getLastModifiedDate());
+            Comparator<Krav> comparator = comparing(k -> k.getLastModifiedDate());
             filtered.sort(comparator.reversed());
         }
     }
 
-    private List<GenericStorage<Krav>> fetch(List<Map<String, Object>> resp) {
-        return repository.findAllById(convert(resp, i -> (UUID) i.values().iterator().next()));
+    private List<Krav> fetch(List<Map<String, Object>> resp) {
+        List<UUID> ids = convert(resp, i -> (UUID) i.values().iterator().next());
+        if (ids.isEmpty()) {
+            return List.of();
+        }
+
+        return entityManager.createQuery("select k from Krav k where k.id in :ids", Krav.class)
+                .setParameter("ids", ids)
+                .getResultList();
     }
 
     /**
      * true = keep
      */
-    private boolean filterStateAndStatus(List<GenericStorage<Krav>> all, GenericStorage<Krav> test, KravFilter filter, List<String> kravIdSafeList) {
-        Krav krav = test.getDomainObjectData();
-
+    private boolean filterStateAndStatus(List<Krav> all, Krav krav, KravFilter filter, List<String> kravIdSafeList) {
         if (kravIdSafeList.contains(krav.kravId())) {
             return true;
         }
 
         // Filtrering for krav relevant for etterlevelseDokumentasjon
         if (filter.getEtterlevelseDokumentasjonId() != null) {
-            var succeeded = exists(all, k2 -> k2.getDomainObjectData().supersedes(krav));
+            var succeeded = exists(all, k2 -> k2.supersedes(krav));
             return !succeeded && krav.getStatus().kanEtterleves();
         }
 
         if (filter.isGjeldendeKrav()) {
-            return !exists(all, k2 -> k2.getDomainObjectData().supersedes(krav));
+            return !exists(all, k2 -> k2.supersedes(krav));
         }
 
         return true;
