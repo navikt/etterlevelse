@@ -103,16 +103,31 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
       {({ submitForm }) => (
         <Form>
           <div>
-            <Heading level='2' size='small' className='mb-5'>
-              Gi tilbakemelding
-            </Heading>
-
             {initialValue.sistRedigertAv && initialValue.sistRedigertDato && (
               <BodyShort size='medium' className='pb-5'>
                 Sist endret: {moment(initialValue.sistRedigertDato).format('LL')} av{' '}
                 {initialValue.sistRedigertAv.split('-')[1]}
               </BodyShort>
             )}
+          </div>
+
+          <div className='my-5'>
+            <TextAreaField
+              noPlaceholder
+              markdown
+              height='15.625rem'
+              name='internDiskusjon'
+              label='Skriv eventuelt intern PVO-notater her'
+              caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
+            />
+          </div>
+
+          <div className='h-0.5  w-full border-2 my-7' />
+
+          <div>
+            <Heading level='2' size='small' className='mb-5'>
+              Gi tilbakemelding
+            </Heading>
 
             <Field name='bidragsVurdering'>
               {(fieldProps: FieldProps) => (
@@ -142,21 +157,9 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               noPlaceholder
               markdown
               height='15.625rem'
-              name='internDiskusjon'
-              label='Skriv intern PVO diskusjon her'
-              caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
-            />
-          </div>
-
-          <div className='my-5'>
-            <TextAreaField
-              noPlaceholder
-              markdown
-              height='15.625rem'
               name='tilbakemeldingTilEtterlevere'
               label='Skriv tilbakemelding til etterleveren'
-              caption='Tilbakemeldingen blir ikke tilgjengelig for etterleveren før du velger å publisere
-              den.'
+              caption='Tilbakemeldingen blir ikke tilgjengelig for etterleveren før PVK-en sendes tilbake.'
             />
           </div>
 
