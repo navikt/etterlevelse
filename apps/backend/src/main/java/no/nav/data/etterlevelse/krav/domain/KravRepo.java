@@ -1,13 +1,13 @@
 package no.nav.data.etterlevelse.krav.domain;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +56,7 @@ public interface KravRepo extends JpaRepository<Krav, UUID>, KravRepoCustom {
 
     @Modifying(clearAutomatically = true)
     @Transactional(propagation = Propagation.MANDATORY)
-    @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where krav_nummer = ?1 kravVersjon = ?2", nativeQuery = true)
+    @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where krav_nummer = ?1 and kravVersjon = ?2", nativeQuery = true)
     void updateKravToUtgaatt(int kravNummer, int kravVersjon);
 
     @Modifying
