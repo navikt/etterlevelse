@@ -56,7 +56,7 @@ public interface KravRepo extends JpaRepository<Krav, UUID>, KravRepoCustom {
 
     @Modifying(clearAutomatically = true)
     @Transactional(propagation = Propagation.MANDATORY)
-    @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where krav_nummer = ?1 and kravVersjon = ?2", nativeQuery = true)
+    @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where krav_nummer = ?1 and krav_versjon = ?2", nativeQuery = true)
     void updateKravToUtgaatt(int kravNummer, int kravVersjon);
 
     @Modifying
