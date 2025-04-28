@@ -1,6 +1,6 @@
 import { Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent, RefObject } from 'react'
-import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { EPVO, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
@@ -34,10 +34,8 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
               Behandlingens art og omfang
             </Heading>
 
-            <List
-              headingTag='label'
-              title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
-            >
+            <List>
+              <Label>{EPVO.behandlingAvPersonopplysninger}</Label>
               {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
               {personkategorier.length > 0 &&
                 personkategorier.map((personkategori) => (

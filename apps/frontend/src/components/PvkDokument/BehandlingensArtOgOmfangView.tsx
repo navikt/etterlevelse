@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, Link, List, Modal, ReadMore } from '@navikt/ds-react'
+import { Alert, Button, Heading, Label, Link, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useState } from 'react'
 import {
@@ -6,7 +6,12 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
-import { IPvkDokument, IPvoTilbakemelding, TEtterlevelseDokumentasjonQL } from '../../constants'
+import {
+  EPVO,
+  IPvkDokument,
+  IPvoTilbakemelding,
+  TEtterlevelseDokumentasjonQL,
+} from '../../constants'
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
@@ -73,10 +78,8 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                       Behandlingens art og omfang
                     </Heading>
 
-                    <List
-                      headingTag='label'
-                      title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
-                    >
+                    <List>
+                      <Label>{EPVO.behandlingAvPersonopplysninger}</Label>
                       {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                       {personkategorier.length > 0 &&
                         personkategorier.map((personkategori) => (

@@ -342,7 +342,8 @@ export const OversiktView: FunctionComponent<TProps> = ({
           </FormSummary.Answers>
         </FormSummary>
 
-        <List title='Deltaker og ansvarlige' className='w-full'>
+        <List className='w-full'>
+          <Heading size='medium'>Deltaker og ansvarlige</Heading>
           <List.Item>
             <BodyShort>
               <strong>Risikoeier:</strong>{' '}

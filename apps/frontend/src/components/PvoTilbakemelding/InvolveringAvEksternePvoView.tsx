@@ -1,6 +1,6 @@
 import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent, RefObject } from 'react'
-import { IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { EPVO, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
@@ -40,12 +40,8 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
               Representanter for de registrerte
             </Heading>
 
-            <List
-              size='medium'
-              className='mt-5'
-              headingTag='label'
-              title='I Behandlingskatalogen står det at dere behandler personopplysninger om:'
-            >
+            <List className='mt-5'>
+              <Label size='medium'>{EPVO.behandlingAvPersonopplysninger}</Label>
               {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
               {personkategorier.length > 0 &&
                 personkategorier.map((personkategori) => (
@@ -67,7 +63,8 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
               <DataTextWrapper>{pvkDokument.representantInvolveringsBeskrivelse}</DataTextWrapper>
             </div>
 
-            <List className='mt-10' title='Representanter for databehandlere'>
+            <List className='mt-10'>
+              <Heading size='medium'>Representanter for databehandlere</Heading>
               <BodyLong>
                 I Behandlingskatalogen står det at følgende databehandlere benyttes:
               </BodyLong>

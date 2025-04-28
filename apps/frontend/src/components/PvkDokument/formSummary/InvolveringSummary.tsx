@@ -1,6 +1,7 @@
 import { BodyShort, FormSummary, List } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
+import { EPVO } from '../../../constants'
 import { StepTitle } from '../../../pages/PvkDokumentPage'
 import FormAlert from './FormAlert'
 
@@ -40,9 +41,7 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
             <FormSummary.Value>
               <FormSummary.Answers>
                 <FormSummary.Answer>
-                  <FormSummary.Label>
-                    I Behandlingskatalogen står det at dere behandler personopplysninger om:
-                  </FormSummary.Label>
+                  <FormSummary.Label>{EPVO.behandlingAvPersonopplysninger}</FormSummary.Label>
                   <FormSummary.Value>
                     <List>
                       {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
@@ -53,7 +52,6 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
                     </List>
                   </FormSummary.Value>
                 </FormSummary.Answer>
-
                 <FormSummary.Answer>
                   <FormSummary.Label id='harInvolvertRepresentant'>
                     Har dere involvert en representant for de registrerte?

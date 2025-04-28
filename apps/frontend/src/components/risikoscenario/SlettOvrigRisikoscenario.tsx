@@ -1,5 +1,5 @@
 import { TrashIcon } from '@navikt/aksel-icons'
-import { Button, List, Modal } from '@navikt/ds-react'
+import { Button, Heading, List, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import {
@@ -82,10 +82,10 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
                 .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
                 .filter((tiltak: ITiltak) => tiltak.risikoscenarioIds.length === 1).length !==
                 0 && (
-                <List
-                  as='ul'
-                  title='Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:'
-                >
+                <List as='ul'>
+                  <Heading size='medium'>
+                    Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:
+                  </Heading>
                   {tiltakList
                     .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
                     .filter((tiltak: ITiltak) => tiltak.risikoscenarioIds.length === 1)
