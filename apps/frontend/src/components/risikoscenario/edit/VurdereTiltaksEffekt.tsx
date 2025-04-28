@@ -224,7 +224,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                   <Button type='button' onClick={() => submitForm()}>
                     {!risikoscenario.konsekvensNivaaEtterTiltak ||
                     !risikoscenario.sannsynlighetsNivaaEtterTiltak
-                      ? 'Lagre tiltakens effekt'
+                      ? 'Lagre vurdering'
                       : 'Lagre endringer'}
                   </Button>
 

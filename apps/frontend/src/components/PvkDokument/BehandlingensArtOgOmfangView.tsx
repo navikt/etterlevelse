@@ -197,6 +197,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         variant='secondary'
                         onClick={async () => {
                           setIsNullStilModalOpen(true)
+                          setSavedSuccessful(false)
                         }}
                       >
                         Nullstill svar
