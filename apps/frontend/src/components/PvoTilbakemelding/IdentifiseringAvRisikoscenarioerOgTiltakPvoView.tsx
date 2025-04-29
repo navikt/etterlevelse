@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Link } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
@@ -81,6 +81,18 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<
           <BodyLong className='mb-5'>
             Disse vil nok utgjøre hovedparten av deres PVK. Slike risikoscenarioer, samt motvirkende
             tiltak, beskriver dere på den aktuelle kravsiden.
+          </BodyLong>
+
+          <BodyLong className='mb-5'>
+            Tips og forslag til hvordan dere kan identifisere risikoscenarioer finner dere i{' '}
+            <Link
+              href='https://navno.sharepoint.com/sites/intranett-personvern/SitePages/Scenariobank.aspx'
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='Scenariobanken'
+            >
+              Scenariobanken (åpner i en ny fane).
+            </Link>
           </BodyLong>
 
           <Button
