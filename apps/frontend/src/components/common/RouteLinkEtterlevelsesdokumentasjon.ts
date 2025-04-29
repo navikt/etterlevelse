@@ -30,9 +30,6 @@ export const etterlevelseDokumentasjonTemaUrl = (
   tema: string | undefined
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}/${tema}`
 
-export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string): string =>
-  `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tab=pvk`
-
 export const etterlevelseDokumentasjonGjenbrukIdUrl = (
   etterlevelseDokumentasjonId: string
 ): string => `${etterlevelseDokumentasjonGjenbrukUrl}/${etterlevelseDokumentasjonId}`

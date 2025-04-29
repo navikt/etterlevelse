@@ -14,11 +14,9 @@ import {
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { ExternalLink, paramQueryUrl } from '../common/RouteLink'
+import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
-  etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonPvkTabUrl,
-} from '../common/RouteLinkEtterlevelsesdokumentasjon'
-import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
 } from '../common/RouteLinkPvk'
