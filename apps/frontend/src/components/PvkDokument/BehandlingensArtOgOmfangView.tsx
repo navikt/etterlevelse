@@ -207,7 +207,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                       <Modal
                         open={isNullStilModalOpen}
                         onClose={() => setIsNullStilModalOpen(false)}
-                        header={{ heading: 'Er du sikkert på at du vil nullstille svarene?' }}
+                        header={{ heading: 'Er du sikker på at du vil nullstille svarene?' }}
                       >
                         <Modal.Footer>
                           <Button
@@ -231,7 +231,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                               })
                             }}
                           >
-                            Ja, lagre
+                            Ja, nullstill
                           </Button>
                           <Button
                             type='button'
@@ -250,7 +250,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                       <Modal
                         open={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
-                        header={{ heading: 'Er du sikkert på at du vil forkaste endringene?' }}
+                        header={{ heading: 'Er du sikker på at du vil forkaste endringene?' }}
                       >
                         <Modal.Footer>
                           <Button

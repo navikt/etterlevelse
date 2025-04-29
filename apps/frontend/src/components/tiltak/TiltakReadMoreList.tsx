@@ -214,7 +214,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           header={{ heading: 'Slette tiltak fra risikoscenario' }}
           onClose={() => setIsDeleteModalOpen(false)}
         >
-          <Modal.Body>Er du sikkert på at du vil slette tiltaket?</Modal.Body>
+          <Modal.Body>Er du sikker på at du vil slette tiltaket?</Modal.Body>
           <Modal.Footer>
             <Button onClick={() => setIsDeleteModalOpen(false)} variant={'secondary'}>
               Avbryt
