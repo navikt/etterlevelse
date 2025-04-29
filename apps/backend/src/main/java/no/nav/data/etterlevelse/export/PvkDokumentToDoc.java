@@ -18,6 +18,7 @@ import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
@@ -162,6 +163,7 @@ public class PvkDokumentToDoc {
         }
 
         private void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList) {
+            addText(" ");
             addHeading3("Behandlingens art og omfang");
             addPersonkategoriList(behandlingList);
 
@@ -177,14 +179,16 @@ public class PvkDokumentToDoc {
         }
 
         private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList) {
+            addText(" ");
             addHeading3("Involvering av eksterne");
-            addHeading4(" Representanter for de registrerte");
+            addHeading4("Representanter for de registrerte");
             addPersonkategoriList(behandlingList);
 
             addBooleanDataText("Har dere involvert en representant for de registrerte?", pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant());
 
             addDataText("Utdyp hvordan dere har involvert representant(er) for de registrerte", pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse());
 
+            addText(" ");
             addHeading3("Representanter for databehandlere");
             addDatabehandlerList(behandlingList);
 
@@ -195,13 +199,7 @@ public class PvkDokumentToDoc {
 
         private void addBooleanDataText(String label, Boolean value) {
             addHeading4(label);
-            if (value == null) {
-                addText("Ikke besvart");
-            } else if (value) {
-                addText("Ja");
-            } else {
-                addText("Nei");
-            }
+            addText(BooleanUtils.toString(value, "Ja", "Nei", "Ikke besvart"));
         }
 
 
