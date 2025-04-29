@@ -48,8 +48,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       {markdownCopyLinkButton && (
         <CopyButton
           variant='action'
-          copyText={`[${risikoscenario.navn}](${window.location.origin}
-          ${pvkDokumentasjonStepUrl(etterlevelseDokumentasjonId, risikoscenario.pvkDokumentId, stepUrl, `?${queryUrl}`)})`}
+          copyText={`[${risikoscenario.navn}](${window.location.origin}${pvkDokumentasjonStepUrl(etterlevelseDokumentasjonId, risikoscenario.pvkDokumentId, stepUrl, `?${queryUrl}`)})`}
           text='Kopiér scenario riktekstfelt lenke med titel'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
