@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
@@ -151,7 +152,7 @@ public class PvkDokumentToDoc {
 
                 generateBehandlingensArtOgOmfang(pvkDokument, behandlingList);
 
-                addHeading3("Involvering av eksterne");
+                generateInnvolveringAvEksterne(pvkDokument, behandlingList);
 
 
                 addHeading3("Risikoscenario og tiltak");
@@ -164,14 +165,8 @@ public class PvkDokumentToDoc {
             addHeading3("Behandlingens art og omfang");
             addPersonkategoriList(behandlingList);
 
-            addHeading4("Stemmer denne lista over personkategorier?");
-            if (pvkDokument.getPvkDokumentData().getStemmerPersonkategorier() == null) {
-                addText("Ikke besvart");
-            } else if (pvkDokument.getPvkDokumentData().getStemmerPersonkategorier()) {
-                addText("Ja");
-            } else {
-                addText("Nei");
-            }
+
+            addBooleanDataText("Stemmer denne lista over personkategorier?", pvkDokument.getPvkDokumentData().getStemmerPersonkategorier());
 
             addDataText("For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.", pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse());
 
@@ -180,6 +175,35 @@ public class PvkDokumentToDoc {
             addDataText("Beskriv hvordan og hvor lenge personopplysningene skal lagres.", pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene());
 
         }
+
+        private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList) {
+            addHeading3("Involvering av eksterne");
+            addHeading4(" Representanter for de registrerte");
+            addPersonkategoriList(behandlingList);
+
+            addBooleanDataText("Har dere involvert en representant for de registrerte?", pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant());
+
+            addDataText("Utdyp hvordan dere har involvert representant(er) for de registrerte", pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse());
+
+            addHeading3("Representanter for databehandlere");
+            addDatabehandlerList(behandlingList);
+
+            addBooleanDataText("Har dere involvert en representant for databehandlere?", pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering());
+
+            addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
+        }
+
+        private void addBooleanDataText(String label, Boolean value) {
+            addHeading4(label);
+            if (value == null) {
+                addText("Ikke besvart");
+            } else if (value) {
+                addText("Ja");
+            } else {
+                addText("Nei");
+            }
+        }
+
 
         private void addDataText(String label, String text) {
             addHeading4(label);
@@ -249,6 +273,20 @@ public class PvkDokumentToDoc {
                 addMarkdownText("- Mangler informasjon for å vite saerlig kategorier");
             }
 
+        }
+
+        private void addDatabehandlerList(List<Behandling> behandlingList) {
+            addHeading3("I Behandlingskatalogen står det at følgende databehandlere benyttes:");
+            List<DataBehandler> databehandlerList = new ArrayList<>();
+
+            behandlingList.forEach(behandling -> {
+                databehandlerList.addAll(behandling.getDataBehandlerList());
+            });
+            List<String> databehandlerNavnList = new ArrayList<>(databehandlerList.stream().map(DataBehandler::getNavn).toList());
+            Set<String> set = new HashSet<>(databehandlerNavnList);
+            databehandlerNavnList.clear();
+            databehandlerNavnList.addAll(set);
+            databehandlerNavnList.forEach(navn -> addMarkdownText("- " + navn));
         }
 
         private void addPersonkategoriList(List<Behandling> behandlingList) {

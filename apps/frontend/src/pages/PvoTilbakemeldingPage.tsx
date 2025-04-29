@@ -110,10 +110,10 @@ export const PvoTilbakemeldingPage = () => {
       etterlevelseDokumentasjon.behandlinger.map((behandling) => {
         if (behandling.dataBehandlerList) {
           alleDatabehandlerIds.push(...behandling.dataBehandlerList)
-          behandling.policies.map((policy) => {
-            allePersonKategorier.push(...policy.personKategorier)
-          })
         }
+        behandling.policies.map((policy) => {
+          allePersonKategorier.push(...policy.personKategorier)
+        })
       })
 
       const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code').map(
