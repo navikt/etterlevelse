@@ -62,7 +62,7 @@ public class Validator<T extends Validated> {
     private final String parentField;
     @Getter
     private final T item;
-    private Object domainItem; // FIXME: Use generic for this type
+    private Object domainItem;
 
     public Validator(T item) {
         this.parentField = "";

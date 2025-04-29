@@ -40,7 +40,7 @@ export const PvoFormButtons: FunctionComponent<TProps> = ({
           >
             {activeStep === 1 && 'Tilbake til PVO oversikt side'}
             {activeStep === 2 && 'Tilbake til Oversikt'}
-            {activeStep === 3 && 'Tilbake til Livsløp'}
+            {activeStep === 3 && 'Tilbake til Behandlingens livsløp'}
             {activeStep === 4 && 'Tilbake til Art og omfang'}
             {activeStep === 5 && 'Tilbake til Involvering av eksterne'}
             {activeStep === 6 && 'Tilbake til Identifisering av risikoscenarioer'}

@@ -2,6 +2,9 @@ import { dokumentasjonUrl } from './RouteLinkEtterlevelsesdokumentasjon'
 
 export const pvkdokumentUrl: string = '/pvkdokument'
 
+export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string): string =>
+  `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tab=pvk`
+
 export const pvkDokumentasjonStepUrl = (
   etterlevelseDokumentId: string | undefined,
   pvkDokumentId: number | string | undefined,
