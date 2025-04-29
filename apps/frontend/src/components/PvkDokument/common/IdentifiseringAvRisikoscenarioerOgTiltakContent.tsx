@@ -2,7 +2,7 @@ import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario } from '../../../constants'
-import { etterlevelseDokumentasjonPvkTabUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonPvkTabUrl } from '../../common/RouteLinkPvk'
 
 type TProps = {
   stylingHeading: string
@@ -30,7 +30,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
       </BodyLong>
 
       <Alert variant='info' inline className='mt-5'>
-        <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dagens tekst et sted, kan dere
+        <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dere dokumenterer, kan dere
         finne og gjenbruke andre steder hvor det er aktuelt.
       </Alert>
 

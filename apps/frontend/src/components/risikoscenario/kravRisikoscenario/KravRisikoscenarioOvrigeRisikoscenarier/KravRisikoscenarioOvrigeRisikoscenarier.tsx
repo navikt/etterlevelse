@@ -1,9 +1,11 @@
-import { Button } from '@navikt/ds-react'
+import { Button, Link } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../../constants'
 import { user } from '../../../../services/User'
 import {
+  etterlevelseDokumentasjonPvkTabUrl,
+  pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
   pvkDokumenteringPvoTilbakemeldingUrl,
 } from '../../../common/RouteLinkPvk'
@@ -34,6 +36,12 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
       >
         Gå til liste over øvrige risikoscenarier
       </Button>
+      <Link href={etterlevelseDokumentasjonPvkTabUrl(pvkDokument.etterlevelseDokumentId)}>
+        Tilbake til liste over alle PVK-relaterte krav
+      </Link>
+      <Link href={pvkDokumentasjonPvkBehovUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id)}>
+        Tilbake til PVK-oversikt
+      </Link>
     </div>
   )
 }
