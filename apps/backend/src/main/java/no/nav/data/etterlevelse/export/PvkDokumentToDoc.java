@@ -9,6 +9,7 @@ import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -22,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
@@ -47,14 +45,14 @@ public class PvkDokumentToDoc {
         etterlevelseDokumentasjon.getBehandlingIds().forEach(id -> {
             try {
                 var behandling = behandlingService.getBehandling(id);
-                    behandlingList.add(behandling);
-                } catch (WebClientResponseException.NotFound e) {
-                    behandlingList.add(Behandling.builder()
-                            .id(id)
-                            .navn("Fant ikke behandling med id: " + id)
-                            .build());
-                }
-            });
+                behandlingList.add(behandling);
+            } catch (WebClientResponseException.NotFound e) {
+                behandlingList.add(Behandling.builder()
+                        .id(id)
+                        .navn("Fant ikke behandling med id: " + id)
+                        .build());
+            }
+        });
 
         var doc = new PvkDocumentBuilder();
 
@@ -151,14 +149,9 @@ public class PvkDokumentToDoc {
                 addHeading4("Status");
                 addText(pvkDokumentStatusText(pvkDokument.getStatus()));
 
-
-                addHeading3("Behandlingens art og omfang");
-
-
-
+                generateBehandlingensArtOgOmfang(pvkDokument, behandlingList);
 
                 addHeading3("Involvering av eksterne");
-
 
 
                 addHeading3("Risikoscenario og tiltak");
@@ -167,7 +160,37 @@ public class PvkDokumentToDoc {
             }
         }
 
-        public void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
+        private void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList) {
+            addHeading3("Behandlingens art og omfang");
+            addPersonkategoriList(behandlingList);
+
+            addHeading4("Stemmer denne lista over personkategorier?");
+            if (pvkDokument.getPvkDokumentData().getStemmerPersonkategorier() == null) {
+                addText("Ikke besvart");
+            } else if (pvkDokument.getPvkDokumentData().getStemmerPersonkategorier()) {
+                addText("Ja");
+            } else {
+                addText("Nei");
+            }
+
+            addDataText("For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.", pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse());
+
+            addDataText("Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.", pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene());
+
+            addDataText("Beskriv hvordan og hvor lenge personopplysningene skal lagres.", pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene());
+
+        }
+
+        private void addDataText(String label, String text) {
+            addHeading4(label);
+            if (text == null) {
+                addText("Ikke besvart");
+            } else {
+                addMarkdownText(text);
+            }
+        }
+
+        private void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
             var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
 
             addHeading4("Øvrige egenskaper for behandlingene:");
@@ -182,14 +205,14 @@ public class PvkDokumentToDoc {
 
         }
 
-        public void generateEgenskaperFraBehandlinger(List<Behandling> behandlingList) {
+        private void generateEgenskaperFraBehandlinger(List<Behandling> behandlingList) {
             List<PolicyResponse> alleOpplysningstyper = new ArrayList<>();
             List<Boolean> alleProfilering = new ArrayList<>();
             List<Boolean> alleAutomatiskBehandling = new ArrayList<>();
             AtomicBoolean manglerOpplysningstyper = new AtomicBoolean(false);
 
             behandlingList.forEach(behandling -> {
-                if(behandling.getPolicies().isEmpty()) {
+                if (behandling.getPolicies().isEmpty()) {
                     manglerOpplysningstyper.set(true);
                 } else {
                     alleOpplysningstyper.addAll(behandling.getPolicies());
@@ -220,7 +243,7 @@ public class PvkDokumentToDoc {
 
             if (!manglerOpplysningstyper.get() && !saerligKategorierOppsumert.isEmpty()) {
                 addMarkdownText("- **Det gjelder** saerlig kategorier");
-            } else if (!manglerOpplysningstyper.get() &&  saerligKategorierOppsumert.isEmpty()) {
+            } else if (!manglerOpplysningstyper.get() && saerligKategorierOppsumert.isEmpty()) {
                 addMarkdownText("- **Det gjelder ikke** saerlig kategorier");
             } else if (manglerOpplysningstyper.get()) {
                 addMarkdownText("- Mangler informasjon for å vite saerlig kategorier");
@@ -228,8 +251,27 @@ public class PvkDokumentToDoc {
 
         }
 
+        private void addPersonkategoriList(List<Behandling> behandlingList) {
+            List<ExternalCode> personkategorier = new ArrayList<>();
 
-        public String pvkDokumentStatusText(PvkDokumentStatus status) {
+            behandlingList.forEach(behandling -> {
+                behandling.getPolicies().forEach(policy -> {
+                    personkategorier.addAll(policy.getPersonKategorier());
+                });
+            });
+
+            addHeading4("I Behandlingskatalogen står det at dere behandler personopplysninger om:");
+            List<String> personkategoriList = new ArrayList<>(personkategorier.stream().map(ExternalCode::getShortName).toList());
+            Set<String> set = new HashSet<>(personkategoriList);
+            personkategoriList.clear();
+            personkategoriList.addAll(set);
+            personkategoriList.forEach(personkategori -> {
+                addMarkdownText("- " + personkategori);
+            });
+        }
+
+
+        private String pvkDokumentStatusText(PvkDokumentStatus status) {
             return switch (status) {
                 case AKTIV, UNDERARBEID -> "Under arbeid";
                 case SENDT_TIL_PVO -> "Sendt til personvernombudet";
