@@ -210,6 +210,17 @@ public class PvkDokumentToDoc {
         private void generateRisikoscenarioOgTiltak(List<Risikoscenario> risikoscenarioList, List<Tiltak> tiltakList) {
             newLine();
             addHeading3("Risikoscenario og tiltak");
+            newLine();
+            risikoscenarioList.forEach(risikoscenario -> {
+                addHeading4(risikoscenario.getRisikoscenarioData().getNavn());
+                addMarkdownText("**Status**: " );
+                addHeading5("Beskrivelse");
+                addMarkdownText(risikoscenario.getRisikoscenarioData().getBeskrivelse());
+                addMarkdownText("**Sannsynlighetsnivå**: ");
+                addMarkdownText(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaaBegrunnelse());
+                addMarkdownText("**Konsekvensnivå**: ");
+                addMarkdownText(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse());
+            });
         }
 
         private void addBooleanDataText(String label, Boolean value) {
