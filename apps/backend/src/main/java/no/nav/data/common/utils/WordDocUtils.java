@@ -237,6 +237,15 @@ public class WordDocUtils {
         main.getContent().add(p);
     }
 
+    public void newLine() {
+        P p = fac.createP();
+        R r = fac.createR();
+        Br br = fac.createBr();
+        r.getContent().add(br);
+        p.getContent().add(r);
+        main.getContent().add(p);
+    }
+
     public Tbl createTable(int rows, int cols) {
         var twips = pack.getDocumentModel().getSections().get(0).getPageDimensions().getWritableWidthTwips();
         Tbl table = TblFactory.createTable(rows, cols, twips / cols);

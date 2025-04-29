@@ -173,7 +173,7 @@ public class PvkDokumentToDoc {
         }
 
         private void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList) {
-            addText(" ");
+            newLine();
             addHeading3("Behandlingens art og omfang");
             addPersonkategoriList(behandlingList);
 
@@ -189,7 +189,7 @@ public class PvkDokumentToDoc {
         }
 
         private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList) {
-            addText(" ");
+            newLine();
             addHeading3("Involvering av eksterne");
             addHeading4("Representanter for de registrerte");
             addPersonkategoriList(behandlingList);
@@ -198,7 +198,7 @@ public class PvkDokumentToDoc {
 
             addDataText("Utdyp hvordan dere har involvert representant(er) for de registrerte", pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse());
 
-            addText(" ");
+            newLine();
             addHeading3("Representanter for databehandlere");
             addDatabehandlerList(behandlingList);
 
@@ -208,7 +208,7 @@ public class PvkDokumentToDoc {
         }
 
         private void generateRisikoscenarioOgTiltak(List<Risikoscenario> risikoscenarioList, List<Tiltak> tiltakList) {
-            addText(" ");
+            newLine();
             addHeading3("Risikoscenario og tiltak");
         }
 
