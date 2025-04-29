@@ -11,6 +11,7 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
@@ -18,6 +19,11 @@ import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.tiltak.TiltakService;
+import no.nav.data.pvk.tiltak.domain.Tiltak;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
@@ -37,12 +43,16 @@ public class PvkDokumentToDoc {
     private final PvkDokumentService pvkDokumentService;
     private final BehandlingensLivslopService behandlingensLivslopService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final RisikoscenarioService risikoscenarioService;
+    private final TiltakService tiltakService;
     private final BehandlingService behandlingService;
 
     public byte[] generateDocFor(UUID pvkDokumentId) throws IOException {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);
         Optional<BehandlingensLivslop> behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
-        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+        List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL);
+        List<Tiltak> tiltakList = tiltakService.getByPvkDokument(pvkDokument.getId());
         List<Behandling> behandlingList = new ArrayList<>();
         etterlevelseDokumentasjon.getBehandlingIds().forEach(id -> {
             try {
@@ -60,7 +70,7 @@ public class PvkDokumentToDoc {
 
         doc.addHeading1("Dokumentet inneholder personverkonsekvensvurdering");
 
-        doc.generate(pvkDokument, behandlingensLivslop, behandlingList);
+        doc.generate(pvkDokument, behandlingensLivslop, behandlingList, risikoscenarioList, tiltakList);
 
         byte[] pvkDoc = doc.build();
 
@@ -94,7 +104,7 @@ public class PvkDokumentToDoc {
 
         long listId = 1;
 
-        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList) {
+        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<Risikoscenario> risikoscenarioList, List<Tiltak> tiltakList ) {
 
             long currListId = listId++;
 
@@ -156,7 +166,7 @@ public class PvkDokumentToDoc {
                 generateInnvolveringAvEksterne(pvkDokument, behandlingList);
 
 
-                addHeading3("Risikoscenario og tiltak");
+                generateRisikoscenarioOgTiltak(risikoscenarioList, tiltakList);
 
 
             }
@@ -195,6 +205,11 @@ public class PvkDokumentToDoc {
             addBooleanDataText("Har dere involvert en representant for databehandlere?", pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering());
 
             addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
+        }
+
+        private void generateRisikoscenarioOgTiltak(List<Risikoscenario> risikoscenarioList, List<Tiltak> tiltakList) {
+            addText(" ");
+            addHeading3("Risikoscenario og tiltak");
         }
 
         private void addBooleanDataText(String label, Boolean value) {
