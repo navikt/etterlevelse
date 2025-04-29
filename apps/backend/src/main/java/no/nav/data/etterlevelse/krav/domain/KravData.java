@@ -6,8 +6,6 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.time.LocalDateTime;
@@ -15,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
+@EqualsAndHashCode
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class KravData extends DomainObject {
+public class KravData {
 
     private String navn;
     private String beskrivelse;

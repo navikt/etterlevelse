@@ -77,7 +77,7 @@ public class KravToDocTest {
     private Krav createKrav() {
         LocalDateTime today = LocalDateTime.now();
 
-        return Krav.builder().id(KRAV_ID).kravNummer(101).kravVersjon(1).data(KravData.builder()
+        return Krav.builder().id(KRAV_ID).kravNummer(101).kravVersjon(1).lastModifiedBy("A12345 - Test bruker").lastModifiedDate(today).data(KravData.builder()
                 .navn("Test krav")
                 .status(KravStatus.AKTIV)
                 .hensikt("test 3 **BOLD** \n\n# Header1\n\nvanlig text")
@@ -90,12 +90,6 @@ public class KravToDocTest {
                         .behovForBegrunnelse(true)
                         .build()
                     )
-                )
-                .changeStamp(
-                        ChangeStamp.builder()
-                        .lastModifiedBy("A12345 - Test bruker")
-                        .lastModifiedDate(today)
-                        .build()
                 )
                 .tagger(List.of("test tag", "test tag 2"))
                 .implementasjoner("test implementasjoner")

@@ -5,9 +5,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.auditing.AuditVersionListener;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.common.storage.domain.ChangeStamp;
@@ -21,10 +24,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@SuperBuilder
 @FieldNameConstants
 @MappedSuperclass
 @JsonFilter("relationFilter")
 @EntityListeners({AuditingEntityListener.class, AuditVersionListener.class})
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class Auditable {
 
     @CreatedBy

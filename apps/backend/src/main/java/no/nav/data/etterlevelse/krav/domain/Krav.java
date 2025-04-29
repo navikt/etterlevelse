@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
@@ -25,7 +26,7 @@ import java.util.UUID;
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
-@Builder
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
