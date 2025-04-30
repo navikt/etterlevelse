@@ -33,13 +33,10 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
           }
         }}
       >
-        Gå til liste over øvrige risikoscenarier
+        Gå til PVK: Identifisering av risikoscenarier og tiltak
       </Button>
       <Link href={etterlevelseDokumentasjonPvkTabUrl(pvkDokument.etterlevelseDokumentId)}>
-        Tilbake til liste over alle PVK-relaterte krav
-      </Link>
-      <Link href={pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 1)}>
-        Tilbake til PVK-oversikt
+        Gå til liste over alle PVK-relaterte krav
       </Link>
     </div>
   )
