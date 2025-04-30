@@ -111,7 +111,7 @@ public class PvkDokumentToDoc {
 
         long listId = 1;
 
-        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<Tiltak> tiltakList ) {
+        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<Tiltak> tiltakList) {
 
             long currListId = listId++;
 
@@ -220,7 +220,7 @@ public class PvkDokumentToDoc {
             newLine();
             risikoscenarioList.forEach(risikoscenario -> {
                 addHeading4(risikoscenario.getNavn());
-                addMarkdownText("**Status**: " + getRisikoscenarioStatus(risikoscenario) );
+                addMarkdownText("**Status**: " + getRisikoscenarioStatus(risikoscenario));
                 addHeading5("Beskrivelse");
                 if (risikoscenario.getBeskrivelse().isEmpty()) {
                     addText("Ikke besvart");
@@ -246,7 +246,7 @@ public class PvkDokumentToDoc {
             });
         }
 
-        private String sannsynlighetsNivaaToText(Integer sannsynlighetsnivaa ) {
+        private String sannsynlighetsNivaaToText(Integer sannsynlighetsnivaa) {
             switch (sannsynlighetsnivaa) {
                 case 1:
                     return "Meget lite sannsynlig";
@@ -278,20 +278,22 @@ public class PvkDokumentToDoc {
                 default:
                     return "Ingen konsekvensnivå satt";
             }
-        };
+        }
+
+        ;
 
         private String getRisikoscenarioStatus(RisikoscenarioResponse risikoscenario) {
-            String status = "";
+            String status;
             if (risikoscenario.getKonsekvensNivaa() == 0 || risikoscenario.getSannsynlighetsNivaa() == 0 || risikoscenario.getKonsekvensNivaaBegrunnelse().isEmpty() || risikoscenario.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
-                status ="Scenario er mangelfullt";
+                status = "Scenario er mangelfullt";
             } else if (risikoscenario.getIngenTiltak() == true) {
-                status ="Tiltak ikke akutelt";
-            } else if (risikoscenario.getTiltakIds().isEmpty()){
-                status ="Mangler tiltak";
+                status = "Tiltak ikke akutelt";
+            } else if (risikoscenario.getTiltakIds().isEmpty()) {
+                status = "Mangler tiltak";
             } else if (risikoscenario.getKonsekvensNivaaEtterTiltak() == 0 || risikoscenario.getSannsynlighetsNivaaEtterTiltak() == 0 || risikoscenario.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
-                status ="Ikke ferdig vurdert";
+                status = "Ikke ferdig vurdert";
             } else {
-                status ="Ferdig vurdert";
+                status = "Ferdig vurdert";
             }
             return status;
         }
