@@ -67,6 +67,8 @@ export const lovdataBase = (nationalLaw: string, codelistUtils: ICodelistProps):
   const lovId: string = findLovId(nationalLaw, codelistUtils)
   if (codelistUtils.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
+  } else if (codelistUtils.isRundskriv(nationalLaw)) {
+    return env.lovdataRundskrivBaseUrl + lovId
   } else {
     return env.lovdataLovBaseUrl + lovId
   }

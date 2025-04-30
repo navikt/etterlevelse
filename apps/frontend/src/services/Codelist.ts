@@ -23,6 +23,8 @@ export enum ELovCodeRelevans {
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
+const LOVDATA_RUNDSKRIV_PREFIX = 'RUNDSKRIV_'
+
 export interface ICodelistProps {
   fetchData: (refresh?: boolean) => Promise<any>
   isLoaded: () => string | IAllCodelists | undefined
@@ -49,6 +51,7 @@ export interface ICodelistProps {
     currentSelected: string[]
   ) => { value: string; label: string }[]
   isForskrift: (nationalLawCode?: string) => boolean | '' | undefined
+  isRundskriv: (nationalLawCode?: string) => boolean | '' | undefined
   makeValueLabelForAllCodeLists: () => { value: string; label: string }[]
   gjelderForLov: (tema: TTemaCode, lov: TLovCode) => boolean
 }
@@ -244,6 +247,10 @@ export const CodelistService = () => {
     return nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
   }
 
+  const isRundskriv = (nationalLawCode?: string): boolean | '' | undefined => {
+    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_RUNDSKRIV_PREFIX)
+  }
+
   const makeValueLabelForAllCodeLists = (): IMakeValueLabelForAllCodeListsProps[] => {
     return Object.keys(EListName).map((key: string) => ({ value: key, label: key }))
   }
@@ -270,6 +277,7 @@ export const CodelistService = () => {
     getParsedOptionsForList,
     getParsedOptionsFilterOutSelected,
     isForskrift,
+    isRundskriv,
     makeValueLabelForAllCodeLists,
     gjelderForLov,
   }
