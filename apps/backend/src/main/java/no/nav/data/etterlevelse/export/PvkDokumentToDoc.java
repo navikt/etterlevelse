@@ -286,7 +286,7 @@ public class PvkDokumentToDoc {
             String status;
             if (risikoscenario.getKonsekvensNivaa() == 0 || risikoscenario.getSannsynlighetsNivaa() == 0 || risikoscenario.getKonsekvensNivaaBegrunnelse().isEmpty() || risikoscenario.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
                 status = "Scenario er mangelfullt";
-            } else if (risikoscenario.getIngenTiltak() == true) {
+            } else if (risikoscenario.getIngenTiltak() != null && risikoscenario.getIngenTiltak()) {
                 status = "Tiltak ikke akutelt";
             } else if (risikoscenario.getTiltakIds().isEmpty()) {
                 status = "Mangler tiltak";
