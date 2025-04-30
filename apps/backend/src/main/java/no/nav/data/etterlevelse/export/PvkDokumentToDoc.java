@@ -21,6 +21,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
@@ -213,7 +214,7 @@ public class PvkDokumentToDoc {
             newLine();
             risikoscenarioList.forEach(risikoscenario -> {
                 addHeading4(risikoscenario.getRisikoscenarioData().getNavn());
-                addMarkdownText("**Status**: " );
+                addMarkdownText("**Status**: " + getRisikoscenarioStatus(risikoscenario) );
                 addHeading5("Beskrivelse");
                 addMarkdownText(risikoscenario.getRisikoscenarioData().getBeskrivelse());
                 addMarkdownText("**Sannsynlighetsnivå**: " + sannsynlighetsNivaaToText(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaa()));
@@ -256,6 +257,24 @@ public class PvkDokumentToDoc {
                     return "Ingen konsekvensnivå satt";
             }
         };
+
+        private String getRisikoscenarioStatus(Risikoscenario risikoscenario) {
+            String status = "";
+            RisikoscenarioData risikoscenarioData = risikoscenario.getRisikoscenarioData();
+            List<UUID>tiltakIDs = risikoscenarioService.getTiltak(risikoscenario.getId());
+            if (risikoscenarioData.getKonsekvensNivaa() == 0 || risikoscenarioData.getSannsynlighetsNivaa() == 0 || risikoscenarioData.getKonsekvensNivaaBegrunnelse().isEmpty() || risikoscenarioData.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
+                status+="Scenario er mangelfullt";
+            } else if (risikoscenarioData.getIngenTiltak()) {
+                status+="Tiltak ikke akutelt";
+            } else if (tiltakIDs.isEmpty()){
+                status+="Mangler tiltak";
+            } else if (risikoscenarioData.getKonsekvensNivaaEtterTiltak() == 0 || risikoscenarioData.getSannsynlighetsNivaaEtterTiltak() == 0 || risikoscenarioData.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
+                status+="Ikke ferdig vurdert";
+            } else {
+                status+="Ferdig vurdert";
+            }
+            return status;
+        }
 
         private void addBooleanDataText(String label, Boolean value) {
             addHeading4(label);
