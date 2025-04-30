@@ -23,7 +23,7 @@ import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.TiltakService;
-import no.nav.data.pvk.tiltak.domain.Tiltak;
+import no.nav.data.pvk.tiltak.dto.TiltakResponse;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -59,7 +60,12 @@ public class PvkDokumentToDoc {
             risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
         });
 
-        List<Tiltak> tiltakList = tiltakService.getByPvkDokument(pvkDokument.getId());
+        List<TiltakResponse> tiltakList = tiltakService.getByPvkDokument(pvkDokument.getId()).stream().map(TiltakResponse::buildFrom).toList();
+
+        tiltakList.forEach(tiltak -> {
+            tiltak.setRisikoscenarioIds(tiltakService.getRisikoscenarioer(tiltak.getId()));
+        });
+
         List<Behandling> behandlingList = new ArrayList<>();
         etterlevelseDokumentasjon.getBehandlingIds().forEach(id -> {
             try {
@@ -111,7 +117,7 @@ public class PvkDokumentToDoc {
 
         long listId = 1;
 
-        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<Tiltak> tiltakList) {
+        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList) {
 
             long currListId = listId++;
 
@@ -214,7 +220,7 @@ public class PvkDokumentToDoc {
             addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
         }
 
-        private void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<Tiltak> tiltakList) {
+        private void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList) {
             newLine();
             addHeading3("Risikoscenario og tiltak");
             newLine();
@@ -243,8 +249,52 @@ public class PvkDokumentToDoc {
                     addMarkdownText(risikoscenario.getKonsekvensNivaaBegrunnelse());
                 }
 
+                addHeading4("Følgende tiltak gjelder for dette risikoscenarioet");
+
+                if (risikoscenario.getIngenTiltak() != null && risikoscenario.getIngenTiltak()) {
+                    addText("Tiltak ikke aktuelt");
+                } else if (risikoscenario.getTiltakIds().isEmpty()) {
+                    addText("Risikoscenario mangler tiltak");
+                } else {
+                    generateTiltak(risikoscenario, tiltakList, risikoscenarioList);
+                }
+
+                newLine();
             });
         }
+
+        private void generateTiltak(RisikoscenarioResponse risikoscenario, List<TiltakResponse> tiltakList, List<RisikoscenarioResponse> risikoscenarioResponseList) {
+            List<TiltakResponse> gjeldendeTiltak = tiltakList.stream()
+                    .filter(tiltak -> risikoscenario.getTiltakIds().contains(tiltak.getId())).toList();
+
+
+
+            gjeldendeTiltak.forEach(tiltak -> {
+                List<UUID> gjenbruktScenarioIds = tiltak.getRisikoscenarioIds().stream().filter(id -> !risikoscenario.getId().equals(id)).toList();
+                List<String> gjenbruktScenarioNames = risikoscenarioResponseList.stream().filter(risikoscenarioResponse -> gjenbruktScenarioIds.contains(risikoscenarioResponse.getId()))
+                        .map(RisikoscenarioResponse::getNavn).toList();
+
+                addHeading5(tiltak.getNavn());
+                addHeading6("Beskrivelse");
+                addMarkdownText(tiltak.getBeskrivelse());
+                addMarkdownText("**Tiltaksansvarlig** :" + tiltak.getAnsvarlig().getFullName());
+                addMarkdownText("**Tiltaksfrist** :" + dateToString(tiltak.getFrist()));
+
+                if(!gjenbruktScenarioIds.isEmpty()) {
+                    addHeading6("Tiltaket er gjenbrukt ved følgende scenarioer:");
+                    gjenbruktScenarioNames.forEach(name -> addMarkdownText("- " + name));
+                }
+            });
+        }
+
+        private String dateToString(LocalDate date) {
+            if (date == null) {
+                return "Det er ikke satt en frist for tiltaket";
+            } else {
+                return date.toString();
+            }
+        }
+
 
         private String sannsynlighetsNivaaToText(Integer sannsynlighetsnivaa) {
             switch (sannsynlighetsnivaa) {
