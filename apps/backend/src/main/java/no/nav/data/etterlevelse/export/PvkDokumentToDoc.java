@@ -300,7 +300,7 @@ public class PvkDokumentToDoc {
             if (date == null) {
                 return "Det er ikke satt en frist for tiltaket";
             } else {
-                return date..toString();
+                return date.toString();
             }
         }
 
