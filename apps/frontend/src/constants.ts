@@ -687,9 +687,12 @@ export enum EKonsekvensnivaa {
   SVAERT_ALVORLIG_KONSEKVENS = 'SVAERT_ALVORLIG_KONSEKVENS',
 }
 
+export enum EPVK {
+  behandlingAvPersonopplysninger = 'I Behandlingskatalogen står det at dere behandler personopplysninger om:',
+}
+
 export enum EPVO {
   overskrift = 'Oversiktsside for Personvernombudet',
-  behandlingAvPersonopplysninger = 'I Behandlingskatalogen står det at dere behandler personopplysninger om:',
 }
 
 export type TReplace<T, K> = Omit<T, keyof K> & K

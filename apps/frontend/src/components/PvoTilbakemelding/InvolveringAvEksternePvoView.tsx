@@ -1,6 +1,6 @@
 import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent, RefObject } from 'react'
-import { EPVO, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { EPVK, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
@@ -41,7 +41,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
             </Heading>
 
             <List className='mt-5'>
-              <Label size='medium'>{EPVO.behandlingAvPersonopplysninger}</Label>
+              <Label size='medium'>{EPVK.behandlingAvPersonopplysninger}</Label>
               {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
               {personkategorier.length > 0 &&
                 personkategorier.map((personkategori) => (
