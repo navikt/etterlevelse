@@ -51,7 +51,7 @@ export const ROSEdit = () => {
                 />
                 <TextField
                   className='w-full my-2.5'
-                  label='Legg inn lenken (URL) til dokumentet'
+                  label='Legg inn lenken (URL) som peker til dokumentet i TryggNok, Sharepoint eller Public 360'
                   value={url}
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setUrl((event.target as HTMLInputElement).value)
