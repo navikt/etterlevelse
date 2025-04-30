@@ -16,6 +16,7 @@ import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
+import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -277,8 +278,8 @@ public class PvkDokumentToDoc {
                 addHeading5(tiltak.getNavn());
                 addHeading6("Beskrivelse");
                 addMarkdownText(tiltak.getBeskrivelse());
-                addMarkdownText("**Tiltaksansvarlig** :" + tiltak.getAnsvarlig().getFullName());
-                addMarkdownText("**Tiltaksfrist** :" + dateToString(tiltak.getFrist()));
+                addMarkdownText("**Tiltaksansvarlig**: " + getAnsvarlig(tiltak.getAnsvarlig()));
+                addMarkdownText("**Tiltaksfrist**: " + dateToString(tiltak.getFrist()));
 
                 if(!gjenbruktScenarioIds.isEmpty()) {
                     addHeading6("Tiltaket er gjenbrukt ved følgende scenarioer:");
@@ -287,11 +288,19 @@ public class PvkDokumentToDoc {
             });
         }
 
+        private String getAnsvarlig(Resource ansvarlig) {
+            if(ansvarlig.getFullName().isEmpty()) {
+                return "Ingen ansvarlig er satt";
+            } else {
+                return ansvarlig.getFullName();
+            }
+        }
+
         private String dateToString(LocalDate date) {
             if (date == null) {
                 return "Det er ikke satt en frist for tiltaket";
             } else {
-                return date.toString();
+                return date..toString();
             }
         }
 
