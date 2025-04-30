@@ -283,15 +283,15 @@ public class PvkDokumentToDoc {
         private String getRisikoscenarioStatus(RisikoscenarioResponse risikoscenario) {
             String status = "";
             if (risikoscenario.getKonsekvensNivaa() == 0 || risikoscenario.getSannsynlighetsNivaa() == 0 || risikoscenario.getKonsekvensNivaaBegrunnelse().isEmpty() || risikoscenario.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
-                status+="Scenario er mangelfullt";
+                status ="Scenario er mangelfullt";
             } else if (risikoscenario.getIngenTiltak() == true) {
-                status+="Tiltak ikke akutelt";
+                status ="Tiltak ikke akutelt";
             } else if (risikoscenario.getTiltakIds().isEmpty()){
-                status+="Mangler tiltak";
+                status ="Mangler tiltak";
             } else if (risikoscenario.getKonsekvensNivaaEtterTiltak() == 0 || risikoscenario.getSannsynlighetsNivaaEtterTiltak() == 0 || risikoscenario.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
-                status+="Ikke ferdig vurdert";
+                status ="Ikke ferdig vurdert";
             } else {
-                status+="Ferdig vurdert";
+                status ="Ferdig vurdert";
             }
             return status;
         }
