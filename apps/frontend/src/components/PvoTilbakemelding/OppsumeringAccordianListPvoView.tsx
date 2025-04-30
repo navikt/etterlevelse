@@ -1,4 +1,4 @@
-import { Accordion, Alert, BodyLong, Heading, Label, ReadMore } from '@navikt/ds-react'
+import { Accordion, Alert, BodyLong, Label, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
@@ -12,6 +12,7 @@ import RisikoscenarioTag, {
   getSannsynlighetsnivaaText,
 } from '../risikoscenario/RisikoscenarioTag'
 import RisikoscenarioView from '../risikoscenario/RisikoscenarioView'
+import { RisikoscenarioTiltakHeader } from '../risikoscenario/common/KravRisikoscenarioHeaders'
 import TiltakView from '../tiltak/TiltakView'
 import { tabValues } from './OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 
@@ -92,9 +93,7 @@ export const OppsumeringAccordianListPvoView: FunctionComponent<TProps> = ({
                   markdownCopyLinkButton={true}
                 />
                 <div className='mt-12'>
-                  <Heading level='3' size='small'>
-                    Følgende tiltak gjelder for dette risikoscenarioet
-                  </Heading>
+                  <RisikoscenarioTiltakHeader />
                   {risikoscenario.ingenTiltak && <BodyLong>Vi skal ikke ha tiltak.</BodyLong>}
 
                   {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (

@@ -1,4 +1,4 @@
-import { Button, Heading } from '@navikt/ds-react'
+import { Button } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import {
@@ -18,6 +18,7 @@ import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
 import TiltakForm from '../../../tiltak/edit/TiltakForm'
 import RisikoscenarioView from '../../RisikoscenarioView'
+import { RisikoscenarioTiltakHeader } from '../../common/KravRisikoscenarioHeaders'
 import IngenTiltakField from '../../edit/IngenTiltakField'
 import RisikoscenarioModalForm from '../../edit/RisikoscenarioModalForm'
 import RedigerRisikoscenarioButtons from '../RedigerRisikoscenarioButtons/RedigerRisikoscenarioButtons'
@@ -195,9 +196,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         )}
 
       <div className='mt-12'>
-        <Heading level='3' size='small'>
-          Følgende tiltak gjelder for dette risikoscenarioet
-        </Heading>
+        <RisikoscenarioTiltakHeader />
 
         {!risikoscenario.ingenTiltak && (
           <div>
