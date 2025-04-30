@@ -20,9 +20,8 @@ import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
-import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
-import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import org.apache.commons.lang3.BooleanUtils;
@@ -52,7 +51,14 @@ public class PvkDokumentToDoc {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);
         Optional<BehandlingensLivslop> behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
-        List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL);
+
+        List<RisikoscenarioResponse> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL)
+                .stream().map(RisikoscenarioResponse::buildFrom).toList();
+
+        risikoscenarioList.forEach(risikoscenario -> {
+            risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
+        });
+
         List<Tiltak> tiltakList = tiltakService.getByPvkDokument(pvkDokument.getId());
         List<Behandling> behandlingList = new ArrayList<>();
         etterlevelseDokumentasjon.getBehandlingIds().forEach(id -> {
@@ -105,7 +111,7 @@ public class PvkDokumentToDoc {
 
         long listId = 1;
 
-        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<Risikoscenario> risikoscenarioList, List<Tiltak> tiltakList ) {
+        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<Tiltak> tiltakList ) {
 
             long currListId = listId++;
 
@@ -208,19 +214,35 @@ public class PvkDokumentToDoc {
             addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
         }
 
-        private void generateRisikoscenarioOgTiltak(List<Risikoscenario> risikoscenarioList, List<Tiltak> tiltakList) {
+        private void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<Tiltak> tiltakList) {
             newLine();
             addHeading3("Risikoscenario og tiltak");
             newLine();
             risikoscenarioList.forEach(risikoscenario -> {
-                addHeading4(risikoscenario.getRisikoscenarioData().getNavn());
+                addHeading4(risikoscenario.getNavn());
                 addMarkdownText("**Status**: " + getRisikoscenarioStatus(risikoscenario) );
                 addHeading5("Beskrivelse");
-                addMarkdownText(risikoscenario.getRisikoscenarioData().getBeskrivelse());
-                addMarkdownText("**Sannsynlighetsnivå**: " + sannsynlighetsNivaaToText(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaa()));
-                addMarkdownText(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaaBegrunnelse());
-                addMarkdownText("**Konsekvensnivå**: " + konsekvensNivaaToText(risikoscenario.getRisikoscenarioData().getKonsekvensNivaa()));
-                addMarkdownText(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse());
+                if (risikoscenario.getBeskrivelse().isEmpty()) {
+                    addText("Ikke besvart");
+                } else {
+                    addMarkdownText(risikoscenario.getBeskrivelse());
+                }
+                addMarkdownText("**Sannsynlighetsnivå**: " + sannsynlighetsNivaaToText(risikoscenario.getSannsynlighetsNivaa()));
+
+                if (risikoscenario.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
+                    addText("Ingen begrunnelse");
+                } else {
+                    addMarkdownText(risikoscenario.getSannsynlighetsNivaaBegrunnelse());
+                }
+
+                addMarkdownText("**Konsekvensnivå**: " + konsekvensNivaaToText(risikoscenario.getKonsekvensNivaa()));
+
+                if (risikoscenario.getKonsekvensNivaaBegrunnelse().isEmpty()) {
+                    addText("Ingen begrunnelse");
+                } else {
+                    addMarkdownText(risikoscenario.getKonsekvensNivaaBegrunnelse());
+                }
+
             });
         }
 
@@ -258,17 +280,15 @@ public class PvkDokumentToDoc {
             }
         };
 
-        private String getRisikoscenarioStatus(Risikoscenario risikoscenario) {
+        private String getRisikoscenarioStatus(RisikoscenarioResponse risikoscenario) {
             String status = "";
-            RisikoscenarioData risikoscenarioData = risikoscenario.getRisikoscenarioData();
-            List<UUID>tiltakIDs = risikoscenarioService.getTiltak(risikoscenario.getId());
-            if (risikoscenarioData.getKonsekvensNivaa() == 0 || risikoscenarioData.getSannsynlighetsNivaa() == 0 || risikoscenarioData.getKonsekvensNivaaBegrunnelse().isEmpty() || risikoscenarioData.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
+            if (risikoscenario.getKonsekvensNivaa() == 0 || risikoscenario.getSannsynlighetsNivaa() == 0 || risikoscenario.getKonsekvensNivaaBegrunnelse().isEmpty() || risikoscenario.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
                 status+="Scenario er mangelfullt";
-            } else if (risikoscenarioData.getIngenTiltak()) {
+            } else if (risikoscenario.getIngenTiltak()) {
                 status+="Tiltak ikke akutelt";
-            } else if (tiltakIDs.isEmpty()){
+            } else if (risikoscenario.getTiltakIds().isEmpty()){
                 status+="Mangler tiltak";
-            } else if (risikoscenarioData.getKonsekvensNivaaEtterTiltak() == 0 || risikoscenarioData.getSannsynlighetsNivaaEtterTiltak() == 0 || risikoscenarioData.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
+            } else if (risikoscenario.getKonsekvensNivaaEtterTiltak() == 0 || risikoscenario.getSannsynlighetsNivaaEtterTiltak() == 0 || risikoscenario.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
                 status+="Ikke ferdig vurdert";
             } else {
                 status+="Ferdig vurdert";
