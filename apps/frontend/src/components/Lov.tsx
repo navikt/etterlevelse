@@ -39,6 +39,7 @@ export const LovView = (props: ILovViewProps) => {
   if (!regelverk) return null
 
   const { spesifisering, lov } = regelverk
+
   const lovCode: string = lov?.code
 
   const lovDisplay: string = lov && codelistUtils.getShortname(EListName.LOV, lovCode)
@@ -80,7 +81,7 @@ const legalBasisLinkProcessor = (
   text?: string,
   openOnSamePage?: boolean
 ): string | JSX.Element[] | undefined => {
-  if (!findLovId(law, codelistUtils).match(/^\d+.*/)) {
+  if (!findLovId(law, codelistUtils).match(/^[\d|D]+.*/)) {
     return text
   }
 
