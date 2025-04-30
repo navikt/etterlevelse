@@ -5,7 +5,6 @@ import { IPvkDokument } from '../../../../constants'
 import { user } from '../../../../services/User'
 import {
   etterlevelseDokumentasjonPvkTabUrl,
-  pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
   pvkDokumenteringPvoTilbakemeldingUrl,
 } from '../../../common/RouteLinkPvk'
@@ -39,7 +38,7 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
       <Link href={etterlevelseDokumentasjonPvkTabUrl(pvkDokument.etterlevelseDokumentId)}>
         Tilbake til liste over alle PVK-relaterte krav
       </Link>
-      <Link href={pvkDokumentasjonPvkBehovUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id)}>
+      <Link href={pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 1)}>
         Tilbake til PVK-oversikt
       </Link>
     </div>
