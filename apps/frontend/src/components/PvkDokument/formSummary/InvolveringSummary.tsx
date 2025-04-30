@@ -1,7 +1,7 @@
 import { BodyShort, FormSummary, List } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
-import { EPVO } from '../../../constants'
+import { EPVK } from '../../../constants'
 import { StepTitle } from '../../../pages/PvkDokumentPage'
 import FormAlert from './FormAlert'
 
@@ -41,7 +41,7 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
             <FormSummary.Value>
               <FormSummary.Answers>
                 <FormSummary.Answer>
-                  <FormSummary.Label>{EPVO.behandlingAvPersonopplysninger}</FormSummary.Label>
+                  <FormSummary.Label>{EPVK.behandlingAvPersonopplysninger}</FormSummary.Label>
                   <FormSummary.Value>
                     <List>
                       {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}

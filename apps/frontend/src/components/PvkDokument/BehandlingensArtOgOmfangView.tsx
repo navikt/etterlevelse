@@ -7,7 +7,7 @@ import {
   updatePvkDokument,
 } from '../../api/PvkDokumentApi'
 import {
-  EPVO,
+  EPVK,
   IPvkDokument,
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
@@ -79,7 +79,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                     </Heading>
 
                     <List>
-                      <Label>{EPVO.behandlingAvPersonopplysninger}</Label>
+                      <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
                       {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                       {personkategorier.length > 0 &&
                         personkategorier.map((personkategori) => (
