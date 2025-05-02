@@ -20,6 +20,8 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
@@ -46,12 +48,14 @@ public class PvkDokumentToDoc {
     private final BehandlingensLivslopService behandlingensLivslopService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final RisikoscenarioService risikoscenarioService;
+    private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final TiltakService tiltakService;
     private final BehandlingService behandlingService;
 
     public byte[] generateDocFor(UUID pvkDokumentId) throws IOException {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);
         Optional<BehandlingensLivslop> behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
+        Optional<PvoTilbakemelding> pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId);
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
 
         List<RisikoscenarioResponse> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL)
@@ -84,7 +88,7 @@ public class PvkDokumentToDoc {
 
         doc.addHeading1("Dokumentet inneholder personverkonsekvensvurdering");
 
-        doc.generate(pvkDokument, behandlingensLivslop, behandlingList, risikoscenarioList, tiltakList);
+        doc.generate(pvkDokument, behandlingensLivslop, behandlingList, risikoscenarioList, tiltakList, pvoTilbakemelding);
 
         byte[] pvkDoc = doc.build();
 
@@ -118,7 +122,7 @@ public class PvkDokumentToDoc {
 
         long listId = 1;
 
-        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList) {
+        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, Optional<PvoTilbakemelding> pvoTilbakemelding) {
 
             long currListId = listId++;
 
@@ -183,6 +187,48 @@ public class PvkDokumentToDoc {
                 generateRisikoscenarioOgTiltak(risikoscenarioList, tiltakList);
 
 
+                addHeading3("Merknad til personvernombudet");
+                if(pvoTilbakemelding.isPresent()) {
+                    if (pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
+                        addText("Ingen merknad");
+                    } else {
+                        addMarkdownText(pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
+                    }
+                } else {
+                    addText("Ingen merknad");
+                }
+
+                if (pvoTilbakemelding.isPresent() && pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
+                    addText("Ingen merknad");
+                } else {
+                    addMarkdownText(pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
+                }
+
+                newLine();
+
+                addHeading3("Merknad fra personvernombudet");
+                if (pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier().isEmpty()) {
+                    addText("Ingen merknad");
+                } else {
+                    addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier());
+                }
+
+                newLine();
+
+                addHeading3("Merknad til risikoeier");
+                if (pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier().isEmpty()) {
+                    addText("Ingen merknad");
+                } else {
+                    addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier());
+                }
+                newLine();
+
+                addHeading3("Merknad fra risikoeier");
+                if (pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier().isEmpty()) {
+                    addText("Ingen merknad");
+                } else {
+                    addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier());
+                }
             }
         }
 
@@ -275,6 +321,7 @@ public class PvkDokumentToDoc {
                 }
 
                 newLine();
+
             });
         }
 
