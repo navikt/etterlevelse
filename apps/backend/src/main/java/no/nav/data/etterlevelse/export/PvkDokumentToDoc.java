@@ -261,13 +261,26 @@ public class PvkDokumentToDoc {
                 }
 
                 newLine();
+
+                if (risikoscenario.getIngenTiltak() == false && !risikoscenario.getTiltakIds().isEmpty()) {
+
+                    addMarkdownText("**Sannsynlighetsnivå etter tiltak**: " + sannsynlighetsNivaaToText(risikoscenario.getSannsynlighetsNivaaEtterTiltak()));
+                    addMarkdownText("**Konsekvensnivå etter tiltak**: " + konsekvensNivaaToText(risikoscenario.getKonsekvensNivaaEtterTiltak()));
+
+                    if (risikoscenario.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
+                        addText("Ingen begrunnelse");
+                    } else {
+                        addMarkdownText(risikoscenario.getNivaaBegrunnelseEtterTiltak());
+                    }
+                }
+
+                newLine();
             });
         }
 
         private void generateTiltak(RisikoscenarioResponse risikoscenario, List<TiltakResponse> tiltakList, List<RisikoscenarioResponse> risikoscenarioResponseList) {
             List<TiltakResponse> gjeldendeTiltak = tiltakList.stream()
                     .filter(tiltak -> risikoscenario.getTiltakIds().contains(tiltak.getId())).toList();
-
 
 
             gjeldendeTiltak.forEach(tiltak -> {
@@ -281,7 +294,7 @@ public class PvkDokumentToDoc {
                 addMarkdownText("**Tiltaksansvarlig**: " + getAnsvarlig(tiltak.getAnsvarlig()));
                 addMarkdownText("**Tiltaksfrist**: " + dateToString(tiltak.getFrist()));
 
-                if(!gjenbruktScenarioIds.isEmpty()) {
+                if (!gjenbruktScenarioIds.isEmpty()) {
                     addHeading6("Tiltaket er gjenbrukt ved følgende scenarioer:");
                     gjenbruktScenarioNames.forEach(name -> addMarkdownText("- " + name));
                 }
@@ -289,7 +302,7 @@ public class PvkDokumentToDoc {
         }
 
         private String getAnsvarlig(Resource ansvarlig) {
-            if(ansvarlig.getFullName().isEmpty()) {
+            if (ansvarlig.getFullName().isEmpty()) {
                 return "Ingen ansvarlig er satt";
             } else {
                 return ansvarlig.getFullName();
