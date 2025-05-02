@@ -16,7 +16,7 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
   <FormSummary className='my-3'>
     <FormSummary.Header>
       <FormSummary.Heading level='2' id='behandlingensLivslop'>
-        Tegn behandlingens livslop
+        Tegn behandlingens livsløp
       </FormSummary.Heading>
       <FormSummary.EditLink
         className='cursor-pointer'
