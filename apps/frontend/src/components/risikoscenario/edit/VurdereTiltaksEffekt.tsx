@@ -236,8 +236,8 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                     type='button'
                     variant='tertiary'
                     onClick={() => {
-                      setFieldValue('sannsynlighetsNivaaEtterTiltak', null)
-                      setFieldValue('konsekvensNivaaEtterTiltak', null)
+                      setFieldValue('sannsynlighetsNivaaEtterTiltak', 0)
+                      setFieldValue('konsekvensNivaaEtterTiltak', 0)
                       setFieldValue('nivaaBegrunnelseEtterTiltak', '')
                     }}
                   >
