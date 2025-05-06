@@ -251,7 +251,7 @@ export const KravPage = () => {
               <Tabs defaultValue={tab} onChange={(section) => setTab(section as TSection)}>
                 <Tabs.List>
                   <Tabs.Tab value='krav' label='Hvordan etterleve?' />
-                  <Tabs.Tab value='etterlevelser' label='Eksempler på etterlevelse' />
+                  <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
                   <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
                 </Tabs.List>
                 <Tabs.Panel value='krav'>
