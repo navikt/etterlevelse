@@ -1,4 +1,4 @@
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons'
+import { ChevronLeftIcon, ChevronRightIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   Button,
@@ -217,42 +217,52 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 Nullstill alle svar
               </Button>
             </div>
-            <div className='mt-5 flex w-full gap-2 items-end'>
-              <Button
-                type='button'
-                variant='tertiary'
-                onClick={() => {
-                  if (dirty) {
-                    setIsUnsavedModalOpen(true)
-                    setUrlToNavigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
-                  } else {
-                    navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
-                  }
-                }}
-              >
-                Gå til Temaoversikt
-              </Button>
-              {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
-                <Button
-                  iconPosition='right'
-                  type='button'
-                  variant={'tertiary'}
-                  onClick={() => {
-                    if (dirty) {
-                      setIsUnsavedModalOpen(true)
-                      setUrlToNavigate(
-                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                      )
-                    } else {
-                      navigate(
-                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                      )
-                    }
-                  }}
-                >
-                  Gå til PVK
-                </Button>
-              )}
+
+            <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
+              <div className='w-full max-w-7xl py-4 px-4 border-t-2 z-2'>
+                <div className='flex w-full gap-2 justify-evenly items-end'>
+                  <Button
+                    icon={<ChevronLeftIcon aria-hidden />}
+                    iconPosition='left'
+                    type='button'
+                    variant='tertiary'
+                    onClick={() => {
+                      if (dirty) {
+                        setIsUnsavedModalOpen(true)
+                        setUrlToNavigate(
+                          etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)
+                        )
+                      } else {
+                        navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                      }
+                    }}
+                  >
+                    Gå til Temaoversikt
+                  </Button>
+                  {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
+                    <Button
+                      icon={<ChevronRightIcon aria-hidden />}
+                      iconPosition='right'
+                      type='button'
+                      variant={'tertiary'}
+                      onClick={() => {
+                        if (dirty) {
+                          setIsUnsavedModalOpen(true)
+                          setUrlToNavigate(
+                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                          )
+                        } else {
+                          navigate(
+                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                          )
+                        }
+                      }}
+                    >
+                      Gå til PVK
+                    </Button>
+                  )}
+                </div>
+              </div>
             </div>
           </Form>
         )}
