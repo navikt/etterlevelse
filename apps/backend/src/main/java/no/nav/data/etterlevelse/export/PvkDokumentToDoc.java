@@ -379,7 +379,7 @@ public class PvkDokumentToDoc {
         }
 
         private String getAnsvarlig(Resource ansvarlig) {
-            if (ansvarlig.getFullName().isEmpty()) {
+            if (ansvarlig.getFullName() != null && ansvarlig.getFullName().isEmpty()) {
                 return "Ingen ansvarlig er satt";
             } else {
                 return ansvarlig.getFullName();
