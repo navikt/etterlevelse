@@ -92,7 +92,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
 
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
-      if (formRef.current?.dirty) {
+      if (formRef.current?.dirty && !isCreateMode) {
         setIsUnsaved(true)
       } else {
         setActiveRisikoscenarioId(risikoscenarioId)
@@ -100,7 +100,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
         navigate(risikoscenarioUrl(risikoscenarioId))
       }
     } else {
-      if (formRef.current?.dirty) {
+      if (formRef.current?.dirty && !isCreateMode) {
         setIsUnsaved(true)
       } else {
         setActiveRisikoscenarioId('')
