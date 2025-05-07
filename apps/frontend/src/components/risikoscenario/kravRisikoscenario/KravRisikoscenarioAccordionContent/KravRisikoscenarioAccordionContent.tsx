@@ -115,9 +115,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       })
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
-      navigate(
-        `${window.location.pathname}${risikoscenarioIdQuery(risikoscenario.id, response.id)}`
-      )
+      navigate(risikoscenarioIdQuery(risikoscenario.id, response.id))
     })
   }
 
