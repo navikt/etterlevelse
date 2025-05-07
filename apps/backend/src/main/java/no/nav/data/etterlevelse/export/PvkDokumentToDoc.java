@@ -139,7 +139,7 @@ public class PvkDokumentToDoc {
             var BLLheader = addHeading2("Behandlingens livsløp");
 
             addBookmark(BLLheader, "Behandlingens_livsløp_bookmark");
-
+            newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
 
             newLine();
