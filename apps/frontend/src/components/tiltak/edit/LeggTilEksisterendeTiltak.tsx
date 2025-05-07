@@ -51,7 +51,7 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
             <Field>
               {(fieldProps: FieldProps) => (
                 <Select
-                  label='Legg til eksisterende risikoscenario'
+                  label='Legg til eksisterende tiltak'
                   onChange={(event) => {
                     if (event.target.value) {
                       addTiltak(event.target.value, fieldProps)
