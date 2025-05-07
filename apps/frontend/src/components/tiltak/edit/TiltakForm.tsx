@@ -78,7 +78,7 @@ export const TiltakForm = (props: IProps) => {
             {(fieldRenderProps: FieldProps) => (
               <div className='mb-5'>
                 <LabelWithTooltip label='Hvem er tiltaksansvarlig?' tooltip='' />
-                <Detail>Skriv for eksempel teamnavn, rolle(r), eller lignende.</Detail>
+                <Detail>Søk etter person</Detail>
                 <div className='w-full'>
                   <AsyncSelect
                     aria-label='Søk etter person'
