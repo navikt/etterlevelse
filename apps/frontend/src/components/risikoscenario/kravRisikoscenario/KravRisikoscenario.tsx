@@ -1,4 +1,4 @@
-import { Accordion, Alert, Button } from '@navikt/ds-react'
+import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
@@ -46,10 +46,12 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
   const url: URL = new URL(window.location.href)
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const navigate: NavigateFunction = useNavigate()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && krav) {
+        setIsLoading(true)
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
           (response: IPageResponse<IRisikoscenario>) => {
             setAlleRisikoscenarioer(response.content)
@@ -80,6 +82,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
         await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
           setTiltakList(response.content)
         })
+        setIsLoading(false)
       }
     })()
   }, [krav, pvkDokument])
@@ -114,141 +117,150 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
 
   return (
     <div className='w-full'>
-      <KravRisikoscenarioReadMore />
+      {isLoading && (
+        <div className='flex justify-center items-center w-full'>
+          <Loader size='2xlarge' title='Loading' />
+        </div>
+      )}
+      {!isLoading && (
+        <div className='w-full'>
+          <KravRisikoscenarioReadMore defaultOpen={risikoscenarioForKrav.length === 0} />
 
-      <div className='mt-5'>
-        {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioForKrav.length === 0 && (
-          <Alert variant='info' className='mb-5'>
-            Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
-          </Alert>
-        )}
+          <div className='mt-5'>
+            {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioForKrav.length === 0 && (
+              <Alert variant='info' className='mb-5'>
+                Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
+              </Alert>
+            )}
 
-        {isLeggTilEksisterendeMode && (
-          <LeggTilEksisterendeRisikoscenario
-            kravnummer={krav.kravNummer}
-            risikoscenarioer={risikoscenarioer}
-            setRisikoscenarioer={setRisikoscenarioer}
-            risikoscenarioForKrav={risikoscenarioForKrav}
-            setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-            setIsLeggTilEksisterendeMode={setIsLeggTilEksisterendeMode}
-            formRef={formRef}
-          />
-        )}
+            {isLeggTilEksisterendeMode && (
+              <LeggTilEksisterendeRisikoscenario
+                kravnummer={krav.kravNummer}
+                risikoscenarioer={risikoscenarioer}
+                setRisikoscenarioer={setRisikoscenarioer}
+                risikoscenarioForKrav={risikoscenarioForKrav}
+                setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+                setIsLeggTilEksisterendeMode={setIsLeggTilEksisterendeMode}
+                formRef={formRef}
+              />
+            )}
 
-        {!isLeggTilEksisterendeMode && (
-          <div className='mb-5'>
-            <Accordion>
-              {risikoscenarioForKrav.map((risikoscenario: IRisikoscenario, index: number) => {
-                const expanded: boolean = risikoscenarioId
-                  ? risikoscenarioId === risikoscenario.id
-                  : activeRisikoscenarioId === risikoscenario.id
+            {!isLeggTilEksisterendeMode && (
+              <div className='mb-5'>
+                <Accordion>
+                  {risikoscenarioForKrav.map((risikoscenario: IRisikoscenario, index: number) => {
+                    const expanded: boolean = risikoscenarioId
+                      ? risikoscenarioId === risikoscenario.id
+                      : activeRisikoscenarioId === risikoscenario.id
 
-                return (
-                  <Accordion.Item
-                    open={expanded}
-                    id={risikoscenario.id}
-                    key={`${index} ${risikoscenario.navn}`}
-                    onOpenChange={(open: boolean) => {
-                      setSelectedRisikoscenarioId(open ? risikoscenario.id : '')
-                      handleAccordionChange(open ? risikoscenario.id : '')
+                    return (
+                      <Accordion.Item
+                        open={expanded}
+                        id={risikoscenario.id}
+                        key={`${index} ${risikoscenario.navn}`}
+                        onOpenChange={(open: boolean) => {
+                          setSelectedRisikoscenarioId(open ? risikoscenario.id : '')
+                          handleAccordionChange(open ? risikoscenario.id : '')
+                        }}
+                      >
+                        <Accordion.Header id={risikoscenario.id}>
+                          {risikoscenario.navn}
+                        </Accordion.Header>
+                        {expanded && (
+                          <Accordion.Content>
+                            <KravRisikoscenarioAccordionContent
+                              risikoscenario={risikoscenario}
+                              alleRisikoscenarioer={alleRisikoscenarioer}
+                              etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
+                              isCreateMode={isCreateMode}
+                              kravnummer={krav.kravNummer}
+                              risikoscenarioer={risikoscenarioer}
+                              setRisikoscenarioer={setRisikoscenarioer}
+                              risikoscenarioForKrav={risikoscenarioForKrav}
+                              setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+                              tiltakList={tiltakList}
+                              setTiltakList={setTiltakList}
+                              setIsTiltakFormActive={setIsTiltakFormActive}
+                              formRef={formRef}
+                            />
+                          </Accordion.Content>
+                        )}
+                      </Accordion.Item>
+                    )
+                  })}
+                </Accordion>
+              </div>
+            )}
+
+            {isCreateMode && (
+              <CreateRisikoscenario
+                krav={krav}
+                pvkDokumentId={pvkDokument.id}
+                risikoscenarioer={risikoscenarioForKrav}
+                setRisikoscenarioer={setRisikoscenarioForKrav}
+                setIsCreateMode={setIsCreateMode}
+                formRef={formRef}
+                setActiveRisikoscenarioId={setActiveRisikoscenarioId}
+              />
+            )}
+
+            {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && (
+              <div className='flex gap-2 mt-8 lg:flex-row flex-col'>
+                <Button
+                  size='small'
+                  type='button'
+                  onClick={() => {
+                    if (formRef.current?.dirty) {
+                      setIsUnsaved(true)
+                    } else {
+                      setIsCreateMode(true)
+                    }
+                  }}
+                >
+                  Opprett nytt risikoscenario
+                </Button>
+                {risikoscenarioer.length !== 0 && (
+                  <Button
+                    size='small'
+                    variant='secondary'
+                    type='button'
+                    onClick={() => {
+                      if (formRef.current?.dirty) {
+                        setIsUnsaved(true)
+                      } else {
+                        setIsLeggTilEksisterendeMode(true)
+                      }
                     }}
                   >
-                    <Accordion.Header id={risikoscenario.id}>
-                      {risikoscenario.navn}
-                    </Accordion.Header>
-                    {expanded && (
-                      <Accordion.Content>
-                        <KravRisikoscenarioAccordionContent
-                          risikoscenario={risikoscenario}
-                          alleRisikoscenarioer={alleRisikoscenarioer}
-                          etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
-                          isCreateMode={isCreateMode}
-                          kravnummer={krav.kravNummer}
-                          risikoscenarioer={risikoscenarioer}
-                          setRisikoscenarioer={setRisikoscenarioer}
-                          risikoscenarioForKrav={risikoscenarioForKrav}
-                          setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-                          tiltakList={tiltakList}
-                          setTiltakList={setTiltakList}
-                          setIsTiltakFormActive={setIsTiltakFormActive}
-                          formRef={formRef}
-                        />
-                      </Accordion.Content>
-                    )}
-                  </Accordion.Item>
-                )
-              })}
-            </Accordion>
-          </div>
-        )}
+                    Legg til eksisterende risikoscenario
+                  </Button>
+                )}
+              </div>
+            )}
 
-        {isCreateMode && (
-          <CreateRisikoscenario
-            krav={krav}
-            pvkDokumentId={pvkDokument.id}
-            risikoscenarioer={risikoscenarioForKrav}
-            setRisikoscenarioer={setRisikoscenarioForKrav}
-            setIsCreateMode={setIsCreateMode}
-            formRef={formRef}
-            setActiveRisikoscenarioId={setActiveRisikoscenarioId}
-          />
-        )}
+            {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
+              <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} />
+            )}
 
-        {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && (
-          <div className='flex gap-2 mt-8 lg:flex-row flex-col'>
-            <Button
-              size='small'
-              type='button'
-              onClick={() => {
-                if (formRef.current?.dirty) {
-                  setIsUnsaved(true)
-                } else {
-                  setIsCreateMode(true)
+            <AccordianAlertModal
+              isOpen={isUnsaved}
+              setIsOpen={setIsUnsaved}
+              formRef={formRef}
+              customOnClick={() => {
+                if (selectedRisikoscenarioId !== '') {
+                  setActiveRisikoscenarioId(selectedRisikoscenarioId)
+                  setIsTiltakFormActive(false)
+                  navigate(risikoscenarioUrl(selectedRisikoscenarioId))
+                } else if (selectedRisikoscenarioId === '') {
+                  setActiveRisikoscenarioId('')
+                  setIsTiltakFormActive(false)
+                  navigate(window.location.pathname)
                 }
               }}
-            >
-              Opprett nytt risikoscenario
-            </Button>
-            {risikoscenarioer.length !== 0 && (
-              <Button
-                size='small'
-                variant='secondary'
-                type='button'
-                onClick={() => {
-                  if (formRef.current?.dirty) {
-                    setIsUnsaved(true)
-                  } else {
-                    setIsLeggTilEksisterendeMode(true)
-                  }
-                }}
-              >
-                Legg til eksisterende risikoscenario
-              </Button>
-            )}
+            />
           </div>
-        )}
-
-        {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
-          <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} />
-        )}
-
-        <AccordianAlertModal
-          isOpen={isUnsaved}
-          setIsOpen={setIsUnsaved}
-          formRef={formRef}
-          customOnClick={() => {
-            if (selectedRisikoscenarioId !== '') {
-              setActiveRisikoscenarioId(selectedRisikoscenarioId)
-              setIsTiltakFormActive(false)
-              navigate(risikoscenarioUrl(selectedRisikoscenarioId))
-            } else if (selectedRisikoscenarioId === '') {
-              setActiveRisikoscenarioId('')
-              setIsTiltakFormActive(false)
-              navigate(window.location.pathname)
-            }
-          }}
-        />
-      </div>
+        </div>
+      )}
     </div>
   )
 }

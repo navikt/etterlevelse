@@ -1,7 +1,21 @@
 import { BodyLong, List, ReadMore } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 
-export const KravRisikoscenarioReadMore = () => (
-  <ReadMore header='Slik dokumenterer dere risikoscenarioer og tiltak'>
+// type TProps = {
+//   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+// }
+// export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
+//   etterlevelseDokumentasjon,
+
+type TProps = {
+  defaultOpen?: boolean
+}
+
+export const KravRisikoscenarioReadMore: FunctionComponent<TProps> = ({ defaultOpen }) => (
+  <ReadMore
+    defaultOpen={defaultOpen !== null ? defaultOpen : false}
+    header='Slik dokumenterer dere risikoscenarioer og tiltak'
+  >
     <BodyLong>
       Her dokumenter dere risikoscenarioer og tiltak som gjelder for dette kravet. Her kan dere:
     </BodyLong>

@@ -56,7 +56,7 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({ krav, pv
 
   return (
     <div className='w-full'>
-      <KravRisikoscenarioReadMore />
+      <KravRisikoscenarioReadMore defaultOpen={risikoscenarioForKrav.length === 0} />
 
       <div className='mt-5'>
         {risikoscenarioForKrav.length === 0 && (
