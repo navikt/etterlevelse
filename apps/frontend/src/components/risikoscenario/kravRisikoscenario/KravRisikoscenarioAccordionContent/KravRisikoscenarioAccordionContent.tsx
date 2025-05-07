@@ -246,14 +246,18 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                   >
                     Opprett nytt tiltak
                   </Button>
-                  <Button
-                    type='button'
-                    size='small'
-                    variant='secondary'
-                    onClick={() => setIsAddExisitingMode(true)}
-                  >
-                    Legg til eksisterende tiltak
-                  </Button>
+                  {tiltakList.filter(
+                    (tiltak) => !activeRisikoscenario.tiltakIds.includes(tiltak.id)
+                  ).length !== 0 && (
+                    <Button
+                      type='button'
+                      size='small'
+                      variant='secondary'
+                      onClick={() => setIsAddExisitingMode(true)}
+                    >
+                      Legg til eksisterende tiltak
+                    </Button>
+                  )}
                 </div>
               )}
           </div>
