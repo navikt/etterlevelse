@@ -324,7 +324,7 @@ public class PvkDokumentToDoc {
 
                 newLine();
 
-                if (risikoscenario.getIngenTiltak() == false && !risikoscenario.getTiltakIds().isEmpty()) {
+                if (risikoscenario.getIngenTiltak() != null && !risikoscenario.getIngenTiltak() && !risikoscenario.getTiltakIds().isEmpty()) {
 
                     addMarkdownText("**Sannsynlighetsnivå etter tiltak**: " + sannsynlighetsNivaaToText(risikoscenario.getSannsynlighetsNivaaEtterTiltak()));
                     addMarkdownText("**Konsekvensnivå etter tiltak**: " + konsekvensNivaaToText(risikoscenario.getKonsekvensNivaaEtterTiltak()));
