@@ -1,4 +1,4 @@
-import { Button, Link } from '@navikt/ds-react'
+import { Link } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../../constants'
@@ -21,9 +21,8 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
   const navigate: NavigateFunction = useNavigate()
 
   return (
-    <div className='mt-5'>
-      <Button
-        variant='tertiary'
+    <div className='mt-5 gap-2.5'>
+      <Link
         type='button'
         onClick={() => {
           if (pvoLink && user.isPersonvernombud()) {
@@ -34,9 +33,9 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
         }}
       >
         Gå til PVK: Identifisering av risikoscenarier og tiltak
-      </Button>
+      </Link>
       <Link href={etterlevelseDokumentasjonPvkTabUrl(pvkDokument.etterlevelseDokumentId)}>
-        Gå til liste over alle PVK-relaterte krav
+        Gå til liste over alle PVK-relaterte krav i Temaoversikt.
       </Link>
     </div>
   )
