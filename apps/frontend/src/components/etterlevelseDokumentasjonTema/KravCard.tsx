@@ -165,16 +165,18 @@ export const KravCard = (props: IProps) => {
             )}
           </div>
         </div>
-        {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && krav.etterlevelseStatus && (
+        {kravFilter === EKravFilterType.RELEVANTE_KRAV && krav && (
           <div className='self-center flex gap-2'>
             {kravMedRelevantRisikoscenario && (
               <StatusView status='Inneholder risikoscenario' variant='alt1' />
             )}
 
-            <StatusView
-              status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
-              variant={getStatusLabelColor(krav.etterlevelseStatus)}
-            />
+            {krav.etterlevelseStatus && (
+              <StatusView
+                status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
+                variant={getStatusLabelColor(krav.etterlevelseStatus)}
+              />
+            )}
           </div>
         )}
 
