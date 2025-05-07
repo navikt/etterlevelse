@@ -237,8 +237,13 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
           setIsOpen={setIsUnsaved}
           formRef={formRef}
           customOnClick={() => {
-            if (selectedRisikoscenarioId) {
+            console.debug(selectedRisikoscenarioId)
+            if (selectedRisikoscenarioId !== '') {
               setActiveRisikoscenarioId(selectedRisikoscenarioId)
+              navigate(risikoscenarioUrl(selectedRisikoscenarioId))
+            } else if (selectedRisikoscenarioId === '') {
+              setActiveRisikoscenarioId('')
+              navigate(window.location.pathname)
             }
           }}
         />
