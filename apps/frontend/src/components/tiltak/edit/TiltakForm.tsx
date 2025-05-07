@@ -1,4 +1,4 @@
-import { Button, Detail, ErrorSummary, Heading, ReadMore, TextField } from '@navikt/ds-react'
+import { BodyLong, Button, ErrorSummary, Heading, ReadMore, TextField } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
@@ -78,7 +78,7 @@ export const TiltakForm = (props: IProps) => {
             {(fieldRenderProps: FieldProps) => (
               <div className='mb-5'>
                 <LabelWithTooltip label='Hvem er tiltaksansvarlig?' tooltip='' />
-                <Detail>Søk etter person</Detail>
+                <BodyLong>Søk etter person</BodyLong>
                 <div className='w-full'>
                   <AsyncSelect
                     aria-label='Søk etter person'
