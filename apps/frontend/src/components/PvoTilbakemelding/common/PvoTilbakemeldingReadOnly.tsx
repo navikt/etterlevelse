@@ -39,7 +39,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
           'Ja, tilstrekkelig'}
         {tilbakemeldingsinnhold &&
           tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG_FORBEHOLDT &&
-          ' Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under'}
+          'Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under'}
         {tilbakemeldingsinnhold &&
           tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.UTILSTREKKELIG &&
           'Utilstrekkelig, beskrives nærmere under'}
