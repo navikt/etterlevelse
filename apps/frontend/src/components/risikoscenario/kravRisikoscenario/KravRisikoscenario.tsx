@@ -26,11 +26,6 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-const unsavedAction = {
-  createRisikoscenario: 'createRisikoscenario',
-  leggTilEksisterendeRisikoscenario: 'leggTilEksisterendeRisikoscenario',
-}
-
 export const KravRisikoscenario: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
@@ -46,7 +41,6 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
-  const [editButtonClicked, setEditButtonClicked] = useState<string>('')
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
 
   const url: URL = new URL(window.location.href)
@@ -95,14 +89,15 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
       if (formRef.current?.dirty && !isCreateMode) {
         setIsUnsaved(true)
       } else {
+        setIsTiltakFormActive(false)
         setActiveRisikoscenarioId(risikoscenarioId)
-
         navigate(risikoscenarioUrl(risikoscenarioId))
       }
     } else {
       if (formRef.current?.dirty && !isCreateMode) {
         setIsUnsaved(true)
       } else {
+        setIsTiltakFormActive(false)
         setActiveRisikoscenarioId('')
         navigate(window.location.pathname)
       }
@@ -207,7 +202,6 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
               onClick={() => {
                 if (formRef.current?.dirty) {
                   setIsUnsaved(true)
-                  setEditButtonClicked(unsavedAction.createRisikoscenario)
                 } else {
                   setIsCreateMode(true)
                 }
@@ -223,7 +217,6 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
                 onClick={() => {
                   if (formRef.current?.dirty) {
                     setIsUnsaved(true)
-                    setEditButtonClicked(unsavedAction.leggTilEksisterendeRisikoscenario)
                   } else {
                     setIsLeggTilEksisterendeMode(true)
                   }
@@ -246,13 +239,6 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
           customOnClick={() => {
             if (selectedRisikoscenarioId) {
               setActiveRisikoscenarioId(selectedRisikoscenarioId)
-            }
-            if (editButtonClicked) {
-              if (editButtonClicked === unsavedAction.createRisikoscenario) {
-                setIsCreateMode(true)
-              } else if (editButtonClicked === unsavedAction.leggTilEksisterendeRisikoscenario) {
-                setIsLeggTilEksisterendeMode(true)
-              }
             }
           }}
         />
