@@ -22,6 +22,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
@@ -54,8 +55,8 @@ public class PvkDokumentToDoc {
 
     public byte[] generateDocFor(UUID pvkDokumentId) throws IOException {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);
-        Optional<BehandlingensLivslop> behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
-        Optional<PvoTilbakemelding> pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId);
+        BehandlingensLivslop behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId()).orElse(null);
+        PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId).orElse(null);
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
 
         List<RisikoscenarioResponse> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL)
@@ -101,14 +102,16 @@ public class PvkDokumentToDoc {
                 .fil(pvkDoc)
                 .build());
 
-        behandlingensLivslop.ifPresent(livslop -> livslop.getBehandlingensLivslopData().getFiler().forEach(behandlingensLivslopFil -> {
-            String[] filename = behandlingensLivslopFil.getFilnavn().split("\\.");
-            zipFiles.add(ZipFile.builder()
-                    .filnavn(filename[0])
-                    .filtype(filename[1])
-                    .fil(behandlingensLivslopFil.getFil())
-                    .build());
-        }));
+        if (behandlingensLivslop != null) {
+            behandlingensLivslop.getBehandlingensLivslopData().getFiler().forEach(behandlingensLivslopFil -> {
+                String[] filename = behandlingensLivslopFil.getFilnavn().split("\\.");
+                zipFiles.add(ZipFile.builder()
+                        .filnavn(filename[0])
+                        .filtype(filename[1])
+                        .fil(behandlingensLivslopFil.getFil())
+                        .build());
+            });
+        }
 
         return zipUtils.zipOutputStream(zipFiles);
     }
@@ -122,39 +125,46 @@ public class PvkDokumentToDoc {
 
         long listId = 1;
 
-        public void generate(PvkDokument pvkDokument, Optional<BehandlingensLivslop> behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, Optional<PvoTilbakemelding> pvoTilbakemelding) {
+        public void generate(PvkDokument pvkDokument, BehandlingensLivslop behandlingensLivslop, List<Behandling> behandlingList, List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding) {
 
             long currListId = listId++;
 
-            behandlingensLivslop.ifPresent(livslop -> addListItem("Behandlingens livsløp", currListId, livslop.getId().toString()));
+            addListItem("Behandlingens livsløp", currListId, "Behandlingens_livsløp_bookmark");
 
             addListItem("Personverkonsekvensvurdering", currListId, pvkDokument.getId().toString());
+
             pageBreak();
 
-            if (behandlingensLivslop.isPresent()) {
-                var header = addHeading2("Behandlingens livsløp");
+            //Behandlingens livslop
+            var BLLheader = addHeading2("Behandlingens livsløp");
 
-                addBookmark(header, behandlingensLivslop.get().getId().toString());
+            addBookmark(BLLheader, "Behandlingens_livsløp_bookmark");
 
-                addHeading3("Filer lastet opp:");
-                if (behandlingensLivslop.get().getBehandlingensLivslopData().getFiler().isEmpty()) {
-                    addText("Ingen fil lastet opp");
-                } else {
-                    behandlingensLivslop.get().getBehandlingensLivslopData().getFiler().forEach(fil -> {
-                        addMarkdownText("- " + fil.getFilnavn());
-                    });
-                }
+            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
 
+            newLine();
 
-                addHeading3("Beskrivelse");
-                if (behandlingensLivslop.get().getBehandlingensLivslopData().getBeskrivelse() != null && !behandlingensLivslop.get().getBehandlingensLivslopData().getBeskrivelse().isBlank()) {
-                    addText(behandlingensLivslop.get().getBehandlingensLivslopData().getBeskrivelse());
-                } else {
-                    addText("Ingen skriftlig beskrivelse");
-                }
-                pageBreak();
+            addHeading3("Filer lastet opp:");
+            if (behandlingensLivslop == null || behandlingensLivslop.getBehandlingensLivslopData().getFiler().isEmpty()) {
+                addText("Ingen fil lastet opp");
+            } else {
+                behandlingensLivslop.getBehandlingensLivslopData().getFiler().forEach(fil -> {
+                    addMarkdownText("- " + fil.getFilnavn());
+                });
             }
 
+            newLine();
+
+            addHeading3("Beskrivelse");
+            if (behandlingensLivslop != null && behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse() != null && !behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse().isBlank()) {
+                addText(behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse());
+            } else {
+                addText("Ingen skriftlig beskrivelse");
+            }
+
+            pageBreak();
+
+            //PVK dokument
             var header = addHeading2("Personvernkonsekvensvurdering");
 
             addBookmark(header, pvkDokument.getId().toString());
@@ -179,29 +189,27 @@ public class PvkDokumentToDoc {
                 addHeading4("Status");
                 addText(pvkDokumentStatusText(pvkDokument.getStatus()));
 
-                generateBehandlingensArtOgOmfang(pvkDokument, behandlingList);
+                generateBehandlingensArtOgOmfang(pvkDokument, behandlingList, pvoTilbakemelding);
 
-                generateInnvolveringAvEksterne(pvkDokument, behandlingList);
+                generateInnvolveringAvEksterne(pvkDokument, behandlingList, pvoTilbakemelding);
 
 
-                generateRisikoscenarioOgTiltak(risikoscenarioList, tiltakList);
+                generateRisikoscenarioOgTiltak(risikoscenarioList, tiltakList, pvoTilbakemelding);
 
 
                 addHeading3("Merknad til personvernombudet");
-                if(pvoTilbakemelding.isPresent()) {
-                    if (pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
-                        addText("Ingen merknad");
-                    } else {
-                        addMarkdownText(pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
-                    }
-                } else {
+
+                if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
                     addText("Ingen merknad");
+                } else {
+                    addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
                 }
 
-                if (pvoTilbakemelding.isPresent() && pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
+
+                if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
                     addText("Ingen merknad");
                 } else {
-                    addMarkdownText(pvoTilbakemelding.get().getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
+                    addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
                 }
 
                 newLine();
@@ -232,11 +240,14 @@ public class PvkDokumentToDoc {
             }
         }
 
-        private void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList) {
+        private void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
             newLine();
             addHeading3("Behandlingens art og omfang");
-            addPersonkategoriList(behandlingList);
+            newLine();
+            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
+            newLine();
 
+            addPersonkategoriList(behandlingList);
 
             addBooleanDataText("Stemmer denne lista over personkategorier?", pvkDokument.getPvkDokumentData().getStemmerPersonkategorier());
 
@@ -248,9 +259,12 @@ public class PvkDokumentToDoc {
 
         }
 
-        private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList) {
+        private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
             newLine();
             addHeading3("Involvering av eksterne");
+            newLine();
+            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
+            newLine();
             addHeading4("Representanter for de registrerte");
             addPersonkategoriList(behandlingList);
 
@@ -267,9 +281,11 @@ public class PvkDokumentToDoc {
             addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
         }
 
-        private void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList) {
+        private void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding) {
             newLine();
             addHeading3("Risikoscenario og tiltak");
+            newLine();
+            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
             newLine();
             risikoscenarioList.forEach(risikoscenario -> {
                 addHeading4(risikoscenario.getNavn());
@@ -348,6 +364,20 @@ public class PvkDokumentToDoc {
             });
         }
 
+        private void generatePvoTilbakemelding(Tilbakemeldingsinnhold tilbakemelding) {
+            addHeading3("Tilbakemelding fra personvernombudet");
+            newLine();
+            addHeading4("Vurdéring av etterleverens svar.");
+            addText(vurderingsBidragToText(tilbakemelding.getBidragsVurdering()));
+            newLine();
+            addHeading4("Tilbakemelding");
+            if (tilbakemelding.getTilbakemeldingTilEtterlevere() != null && !tilbakemelding.getTilbakemeldingTilEtterlevere().isBlank()) {
+                addMarkdownText(tilbakemelding.getTilbakemeldingTilEtterlevere());
+            } else {
+                addText("Ingen tilbakemelding");
+            }
+        }
+
         private String getAnsvarlig(Resource ansvarlig) {
             if (ansvarlig.getFullName().isEmpty()) {
                 return "Ingen ansvarlig er satt";
@@ -364,42 +394,37 @@ public class PvkDokumentToDoc {
             }
         }
 
+        private String vurderingsBidragToText(String vurderingsBidrag) {
+            return switch (vurderingsBidrag) {
+                case "TILSTREKELIG" -> "Ja, tilstrekkelig";
+                case "TILSTREKKELIG_FORBEHOLDT" ->
+                        "Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under";
+                case "UTILSTREKELIG" -> "Utilstrekkelig, beskrives nærmere under";
+                default -> "Ingen  vurdert";
+            };
+        }
 
         private String sannsynlighetsNivaaToText(Integer sannsynlighetsnivaa) {
-            switch (sannsynlighetsnivaa) {
-                case 1:
-                    return "Meget lite sannsynlig";
-                case 2:
-                    return "Lite sannsynlig";
-                case 3:
-                    return "Moderat sannsynlig";
-                case 4:
-                    return "Sannsynlig";
-                case 5:
-                    return "Nesten sikkert";
-                default:
-                    return "Ingen sannsynlighetsnivå satt";
-            }
+            return switch (sannsynlighetsnivaa) {
+                case 1 -> "Meget lite sannsynlig";
+                case 2 -> "Lite sannsynlig";
+                case 3 -> "Moderat sannsynlig";
+                case 4 -> "Sannsynlig";
+                case 5 -> "Nesten sikkert";
+                default -> "Ingen sannsynlighetsnivå satt";
+            };
         }
 
         private String konsekvensNivaaToText(Integer konsekvensnivaa) {
-            switch (konsekvensnivaa) {
-                case 1:
-                    return "Ubetydelig konsekvens";
-                case 2:
-                    return "Lav konsekvens";
-                case 3:
-                    return "Moderat konsekvens";
-                case 4:
-                    return "Alvorlig konsekvens";
-                case 5:
-                    return "Svært alvorlig konsekvens";
-                default:
-                    return "Ingen konsekvensnivå satt";
-            }
+            return switch (konsekvensnivaa) {
+                case 1 -> "Ubetydelig konsekvens";
+                case 2 -> "Lav konsekvens";
+                case 3 -> "Moderat konsekvens";
+                case 4 -> "Alvorlig konsekvens";
+                case 5 -> "Svært alvorlig konsekvens";
+                default -> "Ingen konsekvensnivå satt";
+            };
         }
-
-        ;
 
         private String getRisikoscenarioStatus(RisikoscenarioResponse risikoscenario) {
             String status;
