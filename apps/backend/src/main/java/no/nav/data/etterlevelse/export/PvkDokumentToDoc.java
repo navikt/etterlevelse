@@ -24,6 +24,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
@@ -38,6 +39,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
@@ -63,11 +65,20 @@ public class PvkDokumentToDoc {
         BehandlingensLivslop behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId())
                 .orElse(BehandlingensLivslop.builder()
                         .behandlingensLivslopData(BehandlingensLivslopData.builder()
+                                .beskrivelse("")
+                                .filer(List.of())
                                 .build())
                         .build());
         PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId)
                 .orElse(PvoTilbakemelding.builder()
+                        .status(PvoTilbakemeldingStatus.UNDERARBEID)
                         .pvoTilbakemeldingData(PvoTilbakemeldingData.builder()
+                                .merknadTilEtterleverEllerRisikoeier("")
+                                .sendtDato(LocalDateTime.now())
+                                .behandlingensArtOgOmfang(buildEmptyTilbakemelding())
+                                .behandlingensArtOgOmfang(buildEmptyTilbakemelding())
+                                .innvolveringAvEksterne(buildEmptyTilbakemelding())
+                                .risikoscenarioEtterTiltakk(buildEmptyTilbakemelding())
                                 .build())
                         .build());
 
@@ -116,18 +127,26 @@ public class PvkDokumentToDoc {
                 .fil(pvkDoc)
                 .build());
 
-        if (behandlingensLivslop != null) {
-            behandlingensLivslop.getBehandlingensLivslopData().getFiler().forEach(behandlingensLivslopFil -> {
-                String[] filename = behandlingensLivslopFil.getFilnavn().split("\\.");
-                zipFiles.add(ZipFile.builder()
-                        .filnavn(filename[0])
-                        .filtype(filename[1])
-                        .fil(behandlingensLivslopFil.getFil())
-                        .build());
-            });
-        }
+        behandlingensLivslop.getBehandlingensLivslopData().getFiler().forEach(behandlingensLivslopFil -> {
+            String[] filename = behandlingensLivslopFil.getFilnavn().split("\\.");
+            zipFiles.add(ZipFile.builder()
+                    .filnavn(filename[0])
+                    .filtype(filename[1])
+                    .fil(behandlingensLivslopFil.getFil())
+                    .build());
+        });
 
         return zipUtils.zipOutputStream(zipFiles);
+    }
+
+    private Tilbakemeldingsinnhold buildEmptyTilbakemelding() {
+        return Tilbakemeldingsinnhold.builder()
+                .bidragsVurdering("")
+                .internDiskusjon("")
+                .tilbakemeldingTilEtterlevere("")
+                .sistRedigertAv("")
+                .sistRedigertDato(LocalDateTime.now())
+                .build();
     }
 
 
@@ -160,7 +179,7 @@ public class PvkDokumentToDoc {
             newLine();
 
             addHeading3("Filer lastet opp:");
-            if (behandlingensLivslop == null || behandlingensLivslop.getBehandlingensLivslopData().getFiler().isEmpty()) {
+            if (behandlingensLivslop.getBehandlingensLivslopData().getFiler().isEmpty()) {
                 addText("Ingen fil lastet opp");
             } else {
                 behandlingensLivslop.getBehandlingensLivslopData().getFiler().forEach(fil -> {
@@ -171,7 +190,7 @@ public class PvkDokumentToDoc {
             newLine();
 
             addHeading3("Beskrivelse");
-            if (behandlingensLivslop != null && behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse() != null && !behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse().isBlank()) {
+            if (behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse() != null && !behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse().isBlank()) {
                 addText(behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse());
             } else {
                 addText("Ingen skriftlig beskrivelse");
