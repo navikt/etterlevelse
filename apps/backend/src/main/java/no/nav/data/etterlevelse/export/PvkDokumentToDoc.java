@@ -279,7 +279,7 @@ public class PvkDokumentToDoc {
         private void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
             addText(" ");
             addHeading3("Behandlingens art og omfang");
-            addText(" ");
+            newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
             addText(" ");
 
@@ -298,7 +298,7 @@ public class PvkDokumentToDoc {
         private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
             addText(" ");
             addHeading3("Innvolvering av eksterne");
-            addText(" ");
+            newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
             addText(" ");
             addHeading4("Representanter for de registrerte");
@@ -320,7 +320,7 @@ public class PvkDokumentToDoc {
         private void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding) {
             addText(" ");
             addHeading3("Risikoscenario og tiltak");
-            addText(" ");
+            newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
             addText(" ");
             risikoscenarioList.forEach(risikoscenario -> {
