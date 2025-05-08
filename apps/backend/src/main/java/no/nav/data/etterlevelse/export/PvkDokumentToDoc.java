@@ -176,7 +176,7 @@ public class PvkDokumentToDoc {
 
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
 
-            newLine();
+            addText(" ");
 
             addHeading3("Filer lastet opp:");
             if (behandlingensLivslop.getBehandlingensLivslopData().getFiler().isEmpty()) {
@@ -187,7 +187,7 @@ public class PvkDokumentToDoc {
                 });
             }
 
-            newLine();
+            addText(" ");
 
             addHeading3("Beskrivelse");
             if (behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse() != null && !behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse().isBlank()) {
@@ -200,6 +200,8 @@ public class PvkDokumentToDoc {
 
             //PVK dokument
             var header = addHeading2("Personvernkonsekvensvurdering");
+
+            newLine();
 
             addBookmark(header, pvkDokument.getId().toString());
 
@@ -246,7 +248,7 @@ public class PvkDokumentToDoc {
                     addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
                 }
 
-                newLine();
+                addText(" ");
 
                 addHeading3("Merknad fra personvernombudet");
                 if (pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier().isEmpty()) {
@@ -255,7 +257,7 @@ public class PvkDokumentToDoc {
                     addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier());
                 }
 
-                newLine();
+                addText(" ");
 
                 addHeading3("Merknad til risikoeier");
                 if (pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier() == null || pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier().isEmpty()) {
@@ -263,7 +265,7 @@ public class PvkDokumentToDoc {
                 } else {
                     addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier());
                 }
-                newLine();
+                addText(" ");
 
                 addHeading3("Merknad fra risikoeier");
                 if (pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier() == null || pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier().isEmpty()) {
@@ -275,9 +277,9 @@ public class PvkDokumentToDoc {
         }
 
         private void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
-            newLine();
+            addText(" ");
             addHeading3("Behandlingens art og omfang");
-            newLine();
+            addText(" ");
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
             addText(" ");
 
@@ -294,11 +296,11 @@ public class PvkDokumentToDoc {
         }
 
         private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
-            newLine();
+            addText(" ");
             addHeading3("Innvolvering av eksterne");
-            newLine();
+            addText(" ");
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
-            newLine();
+            addText(" ");
             addHeading4("Representanter for de registrerte");
             addPersonkategoriList(behandlingList);
 
@@ -306,7 +308,7 @@ public class PvkDokumentToDoc {
 
             addDataText("Utdyp hvordan dere har involvert representant(er) for de registrerte", pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse());
 
-            newLine();
+            addText(" ");
             addHeading3("Representanter for databehandlere");
             addDatabehandlerList(behandlingList);
 
@@ -316,11 +318,11 @@ public class PvkDokumentToDoc {
         }
 
         private void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding) {
-            newLine();
+            addText(" ");
             addHeading3("Risikoscenario og tiltak");
-            newLine();
+            addText(" ");
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
-            newLine();
+            addText(" ");
             risikoscenarioList.forEach(risikoscenario -> {
                 addHeading4(risikoscenario.getNavn());
                 addMarkdownText("**Status**: " + getRisikoscenarioStatus(risikoscenario));
@@ -356,7 +358,7 @@ public class PvkDokumentToDoc {
                     generateTiltak(risikoscenario, tiltakList, risikoscenarioList);
                 }
 
-                newLine();
+                addText(" ");
 
                 if (risikoscenario.getIngenTiltak() != null && !risikoscenario.getIngenTiltak() && !risikoscenario.getTiltakIds().isEmpty()) {
 
@@ -370,7 +372,7 @@ public class PvkDokumentToDoc {
                     }
                 }
 
-                newLine();
+                addText(" ");
 
             });
         }
@@ -400,10 +402,10 @@ public class PvkDokumentToDoc {
 
         private void generatePvoTilbakemelding(Tilbakemeldingsinnhold tilbakemelding) {
             addHeading3("Tilbakemelding fra personvernombudet");
-            newLine();
+            addText(" ");
             addHeading4("Vurdéring av etterleverens svar.");
             addText(vurderingsBidragToText(tilbakemelding.getBidragsVurdering()));
-            newLine();
+            addText(" ");
             addHeading4("Tilbakemelding");
             if (tilbakemelding.getTilbakemeldingTilEtterlevere() != null && !tilbakemelding.getTilbakemeldingTilEtterlevere().isBlank()) {
                 addMarkdownText(tilbakemelding.getTilbakemeldingTilEtterlevere());
