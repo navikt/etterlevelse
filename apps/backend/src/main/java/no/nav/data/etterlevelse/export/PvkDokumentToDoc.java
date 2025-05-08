@@ -323,6 +323,8 @@ public class PvkDokumentToDoc {
             newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
             addText(" ");
+            addHeading4("Liste over risikoscenario og tiltak");
+            addText(" ");
             risikoscenarioList.forEach(risikoscenario -> {
                 addHeading4(risikoscenario.getNavn());
                 addMarkdownText("**Status**: " + getRisikoscenarioStatus(risikoscenario));
