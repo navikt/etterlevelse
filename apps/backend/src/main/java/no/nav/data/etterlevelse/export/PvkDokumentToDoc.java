@@ -59,8 +59,18 @@ public class PvkDokumentToDoc {
 
     public byte[] generateDocFor(UUID pvkDokumentId) throws IOException {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);
-        BehandlingensLivslop behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId()).orElse(BehandlingensLivslop.builder().behandlingensLivslopData(BehandlingensLivslopData.builder().build()).build());
-        PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId).orElse(PvoTilbakemelding.builder().pvoTilbakemeldingData(PvoTilbakemeldingData.builder().build()).build());
+
+        BehandlingensLivslop behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId())
+                .orElse(BehandlingensLivslop.builder()
+                        .behandlingensLivslopData(BehandlingensLivslopData.builder()
+                                .build())
+                        .build());
+        PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId)
+                .orElse(PvoTilbakemelding.builder()
+                        .pvoTilbakemeldingData(PvoTilbakemeldingData.builder()
+                                .build())
+                        .build());
+
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
 
         List<RisikoscenarioResponse> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL)
