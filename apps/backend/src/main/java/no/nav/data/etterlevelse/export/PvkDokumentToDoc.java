@@ -75,7 +75,7 @@ public class PvkDokumentToDoc {
                         .pvoTilbakemeldingData(PvoTilbakemeldingData.builder()
                                 .merknadTilEtterleverEllerRisikoeier("")
                                 .sendtDato(LocalDateTime.now())
-                                .behandlingensArtOgOmfang(buildEmptyTilbakemelding())
+                                .behandlingenslivslop(buildEmptyTilbakemelding())
                                 .behandlingensArtOgOmfang(buildEmptyTilbakemelding())
                                 .innvolveringAvEksterne(buildEmptyTilbakemelding())
                                 .risikoscenarioEtterTiltakk(buildEmptyTilbakemelding())
@@ -295,7 +295,7 @@ public class PvkDokumentToDoc {
 
         private void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
             newLine();
-            addHeading3("Involvering av eksterne");
+            addHeading3("Innvolvering av eksterne");
             newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
             newLine();
