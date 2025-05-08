@@ -258,7 +258,7 @@ public class PvkDokumentToDoc {
                 newLine();
 
                 addHeading3("Merknad til risikoeier");
-                if (pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier().isEmpty()) {
+                if (pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier() == null || pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier().isEmpty()) {
                     addText("Ingen merknad");
                 } else {
                     addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier());
@@ -266,7 +266,7 @@ public class PvkDokumentToDoc {
                 newLine();
 
                 addHeading3("Merknad fra risikoeier");
-                if (pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier().isEmpty()) {
+                if (pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier() == null || pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier().isEmpty()) {
                     addText("Ingen merknad");
                 } else {
                     addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier());
