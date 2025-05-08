@@ -7,6 +7,7 @@ import no.nav.data.common.utils.ZipFile;
 import no.nav.data.common.utils.ZipUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
@@ -22,6 +23,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
@@ -36,6 +38,8 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -55,8 +59,8 @@ public class PvkDokumentToDoc {
 
     public byte[] generateDocFor(UUID pvkDokumentId) throws IOException {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);
-        BehandlingensLivslop behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId()).orElse(null);
-        PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId).orElse(null);
+        BehandlingensLivslop behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId()).orElse(BehandlingensLivslop.builder().behandlingensLivslopData(BehandlingensLivslopData.builder().build()).build());
+        PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId).orElse(PvoTilbakemelding.builder().pvoTilbakemeldingData(PvoTilbakemeldingData.builder().build()).build());
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
 
         List<RisikoscenarioResponse> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL)
@@ -140,6 +144,7 @@ public class PvkDokumentToDoc {
 
             addBookmark(BLLheader, "Behandlingens_livsløp_bookmark");
             newLine();
+
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
 
             newLine();
@@ -390,7 +395,7 @@ public class PvkDokumentToDoc {
             if (date == null) {
                 return "Det er ikke satt en frist for tiltaket";
             } else {
-                return date.toString();
+                return DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).format(date);
             }
         }
 
