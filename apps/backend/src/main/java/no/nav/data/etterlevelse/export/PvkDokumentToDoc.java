@@ -279,7 +279,7 @@ public class PvkDokumentToDoc {
             addHeading3("Behandlingens art og omfang");
             newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
-            newLine();
+            addText(" ");
 
             addPersonkategoriList(behandlingList);
 
