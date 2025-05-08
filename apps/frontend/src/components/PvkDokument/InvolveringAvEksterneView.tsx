@@ -15,6 +15,7 @@ import {
 import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
+import { ExternalLink } from '../common/RouteLink'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -149,6 +150,14 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
 
                     <List className='mt-10'>
                       <Heading size='medium'>Representanter for databehandlere</Heading>
+
+                      <ReadMore className='my-3 max-w-[75ch]' header='Hva er en databehandler?'>
+                        En databehandler er en aktør utenfor Nav som behandler data på dine vegne.
+                        <ExternalLink href='https://behandlingskatalog.ansatt.nav.no/processor'>
+                          {'Her er en liste over behandlinger i behandlingskatalogen '}
+                        </ExternalLink>
+                      </ReadMore>
+
                       <BodyLong>
                         I Behandlingskatalogen står det at følgende databehandlere benyttes:
                       </BodyLong>
