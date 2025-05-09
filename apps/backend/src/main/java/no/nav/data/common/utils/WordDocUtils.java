@@ -238,12 +238,7 @@ public class WordDocUtils {
     }
 
     public void newLine() {
-        P p = fac.createP();
-        R r = fac.createR();
-        Br br = fac.createBr();
-        r.getContent().add(br);
-        p.getContent().add(r);
-        main.getContent().add(p);
+        addText("\n");
     }
 
     public Tbl createTable(int rows, int cols) {
