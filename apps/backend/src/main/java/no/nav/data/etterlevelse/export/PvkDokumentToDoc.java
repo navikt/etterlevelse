@@ -199,7 +199,7 @@ public class PvkDokumentToDoc {
             }
 
             if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-                addText("Vurdert av personvernombudet: " + pvoTilbakemelding.getLastModifiedBy() + ", den " + dateToString(pvoTilbakemelding.getLastModifiedDate().toLocalDate()));
+                addText("Vurdert av personvernombudet: " + pvoTilbakemelding.getLastModifiedBy().split(" - ")[1] + ", den " + dateToString(pvoTilbakemelding.getLastModifiedDate().toLocalDate()));
             } else {
                 addText("Vurdert av personvernombudet: Ikke ferdig vurdert");
             }
