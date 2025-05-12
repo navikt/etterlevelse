@@ -319,7 +319,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               />
 
               {underarbeidCheck && (
-                <div className='mt-5 mb-3 max-w-[75ch]'>
+                <div className='mt-5 mb-3'>
                   <TextAreaField
                     rows={3}
                     noPlaceholder
