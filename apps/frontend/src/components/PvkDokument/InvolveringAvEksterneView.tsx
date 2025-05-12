@@ -152,9 +152,10 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                       <Heading size='medium'>Representanter for databehandlere</Heading>
 
                       <ReadMore className='my-3 max-w-[75ch]' header='Hva er en databehandler?'>
-                        En databehandler er en aktør utenfor Nav som behandler data på dine vegne.
+                        En databehandler er en virksomhet utenfor Nav som behandler data på dine
+                        vegne.
                         <ExternalLink href='https://behandlingskatalog.ansatt.nav.no/processor'>
-                          {'Her er en liste over behandlinger i behandlingskatalogen '}
+                          {'Her er en liste over databehandlere i behandlingskatalogen '}
                         </ExternalLink>
                       </ReadMore>
 
