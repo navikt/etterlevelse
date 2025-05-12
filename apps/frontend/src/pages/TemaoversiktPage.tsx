@@ -113,7 +113,9 @@ export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
               </LinkPanel.Description>
             </div>
             <Spacer />
-            <Tag variant='info'>{krav.length || 0} krav</Tag>
+            <div className='min-w-20'>
+              <Tag variant='info'>{krav.length || 0} krav</Tag>
+            </div>
           </div>
         </LinkPanel>
       )}
