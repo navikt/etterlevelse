@@ -33,7 +33,7 @@
     "lodash": "^4.17.21",
     "markdown-draft-js": "^2.4.0",
     "moment": "^2.29.4",
-    "node": "^23.7.0",
+    "node": "^24.0.1",
     "postcss-import": "^16.1.0",
     "react": "^19.0.0",
     "react-app-polyfill": "^3.0.0",
