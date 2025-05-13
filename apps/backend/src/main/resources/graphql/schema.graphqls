@@ -300,6 +300,8 @@ type PvoTilbakemelding {
     risikoscenarioEtterTiltakk: Tilbakemeldingsinnhold!
     merknadTilEtterleverEllerRisikoeier: String
     sendtDato: DateTime
+    ansvarlig: [String!]!
+    ansvarligData: [Resource!]!
     sistEndretAvMeg: DateTime
 }
 

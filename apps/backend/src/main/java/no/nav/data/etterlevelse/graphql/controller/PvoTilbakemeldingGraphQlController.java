@@ -9,6 +9,8 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
+import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
@@ -34,6 +36,7 @@ public class PvoTilbakemeldingGraphQlController {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private  final PvkDokumentService pvkDokumentService;
     private final AuditVersionService auditVersionService;
+    private final TeamcatResourceClient teamcatResourceClient;
 
     @QueryMapping
     public RestResponsePage<PvoTilbakemeldingGraphqlResponse> pvoTilbakemelding(
@@ -86,6 +89,12 @@ public class PvoTilbakemeldingGraphQlController {
     public LocalDateTime sistEndretAvMeg(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse) {
         var pvoTilbakemeldinger = auditVersionService.findLatestPvoTilbakemeldingIdAndCurrentUser(pvoTilbakemeldingGraphqlResponse.getId().toString());
         return sistEndretAudit(pvoTilbakemeldinger);
+    }
+
+    @SchemaMapping(typeName = "PvoTilbakemelding")
+    public List<Resource> ansvarligData(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse) {
+        var resources = teamcatResourceClient.getResources(pvoTilbakemeldingGraphqlResponse.getAnsvarlig());
+        return new ArrayList<>(resources.values());
     }
 
     private LocalDateTime sistEndretAudit(List<AuditVersion> etterlevelser) {

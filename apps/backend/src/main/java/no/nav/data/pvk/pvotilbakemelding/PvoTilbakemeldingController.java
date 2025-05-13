@@ -45,7 +45,7 @@ public class PvoTilbakemeldingController {
         RestResponsePage<PvoTilbakemeldingResponse> response = new RestResponsePage<>(page).convert(PvoTilbakemeldingResponse::buildFrom);
         response.getContent().forEach(res -> {
             res.setAnsvarligData(
-                    addResourceData(res.getAnsvarlig())
+                    getResourceData(res.getAnsvarlig())
             );
         });
         return ResponseEntity.ok(response);
@@ -58,7 +58,7 @@ public class PvoTilbakemeldingController {
         log.info("Get PVO tilbakemelding id={}", id);
         PvoTilbakemeldingResponse response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemeldingService.get(id));
         response.setAnsvarligData(
-                addResourceData(response.getAnsvarlig())
+                getResourceData(response.getAnsvarlig())
         );
         return ResponseEntity.ok(response);
     }
@@ -69,7 +69,14 @@ public class PvoTilbakemeldingController {
     public ResponseEntity<PvoTilbakemeldingResponse> getPvoTilbakemeldingByPvkDokumentId(@PathVariable String pvkdokumentId) {
         log.info("Get PVO tilbakemelding by PVK dokument id={}", pvkdokumentId);
         Optional<PvoTilbakemelding> pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(UUID.fromString(pvkdokumentId));
-        return pvoTilbakemelding.map(tilbakemelding -> ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(tilbakemelding))).orElseGet(() -> ResponseEntity.notFound().build());
+
+        if (pvoTilbakemelding.isPresent()) {
+            PvoTilbakemeldingResponse response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding.get());
+            response.setAnsvarligData(getResourceData(response.getAnsvarlig()));
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Create PVO tilbakemelding")
@@ -134,11 +141,12 @@ public class PvoTilbakemeldingController {
         pvkDokumentService.save(pvkDokument, true);
     }
 
-    private List<Resource> addResourceData(List<String> ansvarlig) {
-        if (ansvarlig == null || ansvarlig.isEmpty()) {
-            return null;
-        }
+    private List<Resource> getResourceData(List<String> ansvarlig) {
         List<Resource> ansvarligData = new ArrayList<>();
+
+        if (ansvarlig == null || ansvarlig.isEmpty()) {
+            return ansvarligData;
+        }
 
         ansvarlig.forEach(resourceId -> {
             var resourceData = teamcatResourceClient.getResource(resourceId);
