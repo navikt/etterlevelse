@@ -3,7 +3,7 @@ import { Field, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
-import { searchResourceByNameOptions } from '../../../api/TeamApi'
+import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
 import { mapTiltakToFormValue } from '../../../api/TiltakApi'
 import { ITiltak } from '../../../constants'
 import { isDev } from '../../../util/config'
@@ -73,6 +73,42 @@ export const TiltakForm = (props: IProps) => {
             noPlaceholder
             marginBottom
           />
+
+          <Heading level='2' size='small' spacing>
+            Legg til minst et team og/eller en person
+          </Heading>
+
+          <Field name='ansvarligTeam'>
+            {(fieldRenderProps: FieldProps) => (
+              <div className='flex-1'>
+                <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                <div className='w-full'>
+                  <AsyncSelect
+                    aria-label='Søk etter team'
+                    placeholder=''
+                    components={{ DropdownIndicator }}
+                    noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                    controlShouldRenderValue={false}
+                    loadingMessage={() => 'Søker...'}
+                    isClearable={false}
+                    loadOptions={useSearchTeamOptions}
+                    onChange={(value: any) => {
+                      if (value && fieldRenderProps.form.values.ansvarligTeam.id !== value.id) {
+                        fieldRenderProps.form.setFieldValue('ansvarligTeam', value)
+                      }
+                    }}
+                    styles={selectOverrides}
+                  />
+                </div>
+                <RenderTagList
+                  list={[fieldRenderProps.form.values.ansvarligTeam.name]}
+                  onRemove={() => {
+                    fieldRenderProps.form.setFieldValue('ansvarligTeam', {})
+                  }}
+                />
+              </div>
+            )}
+          </Field>
 
           <Field name='ansvarlig'>
             {(fieldRenderProps: FieldProps) => (

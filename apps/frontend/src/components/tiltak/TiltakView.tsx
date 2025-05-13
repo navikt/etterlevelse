@@ -23,9 +23,20 @@ export const TiltakView = (props: IProps) => {
       />
 
       <ReadOnlyFieldBool
+        label='Tiltaksansvarlig Team:'
+        description={tiltak.ansvarligTeam.name}
+        className='flex gap-2'
+        isFalse={
+          !tiltak.ansvarligTeam ||
+          (tiltak.ansvarligTeam && ['', null].includes(tiltak.ansvarligTeam.id))
+        }
+        descriptionFalse='Det er ikke satt en ansvarlig team for tiltaket'
+      />
+
+      <ReadOnlyFieldBool
         label='Tiltaksansvarlig:'
         description={tiltak.ansvarlig.fullName}
-        className='flex gap-2'
+        className='flex mt-3 gap-2'
         isFalse={!tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')}
         descriptionFalse='Det er ikke satt en ansvarlig for tiltaket'
       />

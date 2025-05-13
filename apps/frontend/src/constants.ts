@@ -584,6 +584,7 @@ export interface ITiltak {
   ansvarlig: ITeamResource
   frist: string
   risikoscenarioIds: string[]
+  ansvarligTeam: ITeam
 }
 
 export interface IKravRisikoscenarioRelasjon {

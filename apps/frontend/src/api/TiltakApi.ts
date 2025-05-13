@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IPageResponse, ITeamResource, ITiltak } from '../constants'
+import { IPageResponse, ITeam, ITeamResource, ITiltak } from '../constants'
 import { env } from '../util/env'
 
 export const getAllTiltak = async (): Promise<ITiltak[]> => {
@@ -63,6 +63,7 @@ const tiltakTotiltakDto = (tiltak: ITiltak) => {
   const dto = {
     ...tiltak,
     ansvarlig: tiltak.ansvarlig.navIdent || '',
+    ansvarligTeam: tiltak.ansvarligTeam.id || '',
   } as any
   delete dto.changeStamp
   delete dto.version
@@ -81,5 +82,6 @@ export const mapTiltakToFormValue = (tiltak: Partial<ITiltak>): ITiltak => {
     ansvarlig: tiltak.ansvarlig || ({} as ITeamResource),
     frist: tiltak.frist || '',
     risikoscenarioIds: tiltak.risikoscenarioIds || [],
+    ansvarligTeam: tiltak.ansvarligTeam || ({} as ITeam),
   }
 }
