@@ -222,6 +222,8 @@ export const PvoTilbakemeldingPage = () => {
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        formRef={formRef}
                       />
                     )}
                     {activeStep === 2 && (
