@@ -129,7 +129,7 @@ public class PvoTilbakemeldingController {
     }
 
     private void addResourceData(PvoTilbakemeldingResponse response) {
-        if (response.getAnsvarlig() != null && response.getAnsvarlig().isEmpty()) {
+        if (response.getAnsvarlig() != null && !response.getAnsvarlig().isEmpty()) {
             List<Resource> ansvarligData = new ArrayList<>();
 
             response.getAnsvarlig().forEach(ansvarlig -> {
