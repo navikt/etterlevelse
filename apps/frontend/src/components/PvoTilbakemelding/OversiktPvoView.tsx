@@ -1,5 +1,5 @@
 import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
@@ -8,6 +8,7 @@ import {
   IBehandlingensLivslop,
   IPageResponse,
   IPvkDokument,
+  IPvoTilbakemelding,
   IRisikoscenario,
   ITeam,
   ITeamResource,
@@ -21,6 +22,7 @@ import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevel
 import { pvkDokumentasjonPvkBehovUrl } from '../common/RouteLinkPvk'
 import { risikoscenarioFilterAlleUrl } from '../common/RouteLinkRisiko'
 import PvoFormButtons from './edit/PvoFormButtons'
+import { PvoTilbakemeldingAnsvarligForm } from './edit/PvoTilbakemeldingSetAnsvarForm'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -28,6 +30,8 @@ type TProps = {
   activeStep: number
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
+  pvoTilbakemelding: IPvoTilbakemelding
+  formRef: RefObject<any>
 }
 
 export const OversiktPvoView: FunctionComponent<TProps> = ({
@@ -36,6 +40,8 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   activeStep,
   setSelectedStep,
   updateTitleUrlAndStep,
+  pvoTilbakemelding,
+  formRef,
 }) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -136,7 +142,14 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   }, [pvkDokument])
 
   return (
-    <div className='flex justify-center'>
+    <div className='flex flex-col justify-center items-center'>
+      <div className='px-6 py-9 rounded-lg max-w-[766px] w-full bg-[#E3EFF7] mb-18'>
+        <PvoTilbakemeldingAnsvarligForm
+          pvkDokumentId={pvkDokument.id}
+          initialValue={pvoTilbakemelding}
+          formRef={formRef}
+        />
+      </div>
       <div>
         <Heading level='1' size='medium' className='mb-5'>
           Oversikt over PVK-prosessen

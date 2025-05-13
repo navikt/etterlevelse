@@ -1,4 +1,4 @@
-import { Button, ReadMore, TextField } from '@navikt/ds-react'
+import { Button, Heading, ReadMore, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { ChangeEvent, FunctionComponent, RefObject, useState } from 'react'
@@ -36,7 +36,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
         if (response) {
           const updatedValues: IPvoTilbakemelding = {
             ...response,
-            ansvarlig: pvoTilbakmelding.ansvarlig,
+            ansvarligData: pvoTilbakmelding.ansvarligData,
           }
           await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
         }
@@ -45,7 +45,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
         if (error.status === 404) {
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokumentId,
-            ansvarlig: pvoTilbakmelding.ansvarlig,
+            ansvarligData: pvoTilbakmelding.ansvarligData,
           })
           await createPvoTilbakemelding(createValue).then(() => window.location.reload())
         } else {
@@ -66,7 +66,10 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
     >
       {({ submitForm }) => (
         <Form>
-          <div className='mt-10 flex flex-row gap-2'>
+          <div className='flex flex-col gap-2'>
+            <Heading level='2' size='medium'>
+              Legg til ansvarlig
+            </Heading>
             <div id='ansvarligData' className='flex flex-col lg:flex-row gap-5 mb-5'>
               <FieldArray name='ansvarligData'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -133,7 +136,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                           </div>
                         </div>
                         <RenderTagList
-                          list={fieldArrayRenderProps.form.values.resourcesData.map(
+                          list={fieldArrayRenderProps.form.values.ansvarligData.map(
                             (resource: ITeamResource) => resource.fullName
                           )}
                           onRemove={fieldArrayRenderProps.remove}
@@ -146,22 +149,24 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               <div className='flex-1' />
             </div>
 
-            <div>
-              <Button size='small' type='button' onClick={submitForm}>
-                Lagre
-              </Button>
-            </div>
-            <div>
-              <Button
-                size='small'
-                type='button'
-                variant='secondary'
-                onClick={() => {
-                  window.location.reload()
-                }}
-              >
-                Forkast endringer
-              </Button>
+            <div className='flex gap-2'>
+              <div>
+                <Button size='small' type='button' onClick={submitForm}>
+                  Lagre
+                </Button>
+              </div>
+              <div>
+                <Button
+                  size='small'
+                  type='button'
+                  variant='secondary'
+                  onClick={() => {
+                    window.location.reload()
+                  }}
+                >
+                  Forkast endringer
+                </Button>
+              </div>
             </div>
           </div>
         </Form>

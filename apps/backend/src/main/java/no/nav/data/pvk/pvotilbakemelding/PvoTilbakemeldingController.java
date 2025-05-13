@@ -43,7 +43,11 @@ public class PvoTilbakemeldingController {
         log.info("Get all Pvo tilbakemelding");
         Page<PvoTilbakemelding> page = pvoTilbakemeldingService.getAll(pageParameters);
         RestResponsePage<PvoTilbakemeldingResponse> response = new RestResponsePage<>(page).convert(PvoTilbakemeldingResponse::buildFrom);
-        response.getContent().forEach(this::addResourceData);
+        response.getContent().forEach(res -> {
+            res.setAnsvarligData(
+                    addResourceData(res.getAnsvarlig())
+            );
+        });
         return ResponseEntity.ok(response);
     }
 
@@ -53,7 +57,9 @@ public class PvoTilbakemeldingController {
     public ResponseEntity<PvoTilbakemeldingResponse> getById(@PathVariable UUID id) {
         log.info("Get PVO tilbakemelding id={}", id);
         PvoTilbakemeldingResponse response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemeldingService.get(id));
-        addResourceData(response);
+        response.setAnsvarligData(
+                addResourceData(response.getAnsvarlig())
+        );
         return ResponseEntity.ok(response);
     }
 
@@ -122,33 +128,35 @@ public class PvoTilbakemeldingController {
     }
 
     private void updatePvkDokumentStatusToVurdertAvPvo(PvoTilbakemelding pvoTilbakemelding) {
-            log.info("Updating PVK document with id = {}, with status = {}, after PVO has finished the evaluation.", pvoTilbakemelding.getPvkDokumentId(), PvkDokumentStatus.VURDERT_AV_PVO);
-            var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
-            pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
-            pvkDokumentService.save(pvkDokument, true);
+        log.info("Updating PVK document with id = {}, with status = {}, after PVO has finished the evaluation.", pvoTilbakemelding.getPvkDokumentId(), PvkDokumentStatus.VURDERT_AV_PVO);
+        var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
+        pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
+        pvkDokumentService.save(pvkDokument, true);
     }
 
-    private void addResourceData(PvoTilbakemeldingResponse response) {
-        if (response.getAnsvarlig() != null && !response.getAnsvarlig().isEmpty()) {
-            List<Resource> ansvarligData = new ArrayList<>();
-
-            response.getAnsvarlig().forEach(ansvarlig -> {
-                var resourceData = teamcatResourceClient.getResource(ansvarlig);
-                if(resourceData.isPresent()) {
-                    ansvarligData.add(resourceData.get());
-                } else {
-                    ansvarligData.add(Resource.builder()
-                            .navIdent(ansvarlig)
-                            .givenName("Fant ikke person med NAV ident: " + ansvarlig)
-                            .familyName("Fant ikke person med NAV ident: " + ansvarlig)
-                            .fullName("Fant ikke person med NAV ident: " + ansvarlig)
-                            .email("Fant ikke person med NAV ident: " + ansvarlig)
-                            .resourceType(ResourceType.INTERNAL)
-                            .build()
-                    );
-                }
-            });
-            response.setAnsvarligData(ansvarligData);
+    private List<Resource> addResourceData(List<String> ansvarlig) {
+        if (ansvarlig == null || ansvarlig.isEmpty()) {
+            return null;
         }
+        List<Resource> ansvarligData = new ArrayList<>();
+
+        ansvarlig.forEach(resourceId -> {
+            var resourceData = teamcatResourceClient.getResource(resourceId);
+            if (resourceData.isPresent()) {
+                ansvarligData.add(resourceData.get());
+            } else {
+                ansvarligData.add(Resource.builder()
+                        .navIdent(resourceId)
+                        .givenName("Fant ikke person med NAV ident: " + resourceId)
+                        .familyName("Fant ikke person med NAV ident: " + resourceId)
+                        .fullName("Fant ikke person med NAV ident: " + resourceId)
+                        .email("Fant ikke person med NAV ident: " + resourceId)
+                        .resourceType(ResourceType.INTERNAL)
+                        .build()
+                );
+            }
+        });
+        return ansvarligData;
     }
+
 }
