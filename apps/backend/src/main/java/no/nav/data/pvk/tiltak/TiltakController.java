@@ -12,7 +12,9 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
+import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
@@ -42,6 +44,7 @@ public class TiltakController {
 
     private final TiltakService service;
     private final TeamcatResourceClient teamcatResourceClient;
+    private final TeamcatTeamClient teamcatTeamClient;
 
     @Operation(summary = "Get All Tiltak")
     @ApiResponse(description = "ok")
@@ -51,7 +54,7 @@ public class TiltakController {
         Page<Tiltak> page = service.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(TiltakResponse::buildFrom));
     }
-    
+
     @Operation(summary = "Get One Tiltak")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
@@ -64,7 +67,7 @@ public class TiltakController {
         }
         TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(resp);
-        addResourceData(resp);
+        addResourceDataAndTeamData(resp);
         return ResponseEntity.ok(resp);
     }
 
@@ -77,7 +80,7 @@ public class TiltakController {
         List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
         tiltakResponseList.forEach(tiltakResponse -> {
             addRisikoscenarioer(tiltakResponse);
-            addResourceData(tiltakResponse);
+            addResourceDataAndTeamData(tiltakResponse);
         });
         return ResponseEntity.ok(new RestResponsePage<>(tiltakResponseList));
     }
@@ -91,7 +94,7 @@ public class TiltakController {
             Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
             TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
             addRisikoscenarioer(resp);
-            addResourceData(resp);
+            addResourceDataAndTeamData(resp);
             return new ResponseEntity<>(resp, HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
             log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation");
@@ -117,7 +120,7 @@ public class TiltakController {
         Tiltak tiltak = service.save(tiltakToUpdate, null, true);
         var response = TiltakResponse.buildFrom(tiltak);
         addRisikoscenarioer(response);
-        addResourceData(response);
+        addResourceDataAndTeamData(response);
         return ResponseEntity.ok(response);
     }
 
@@ -146,25 +149,35 @@ public class TiltakController {
         return res;
     }
 
-    private TiltakResponse addResourceData(TiltakResponse res) {
-        if (res.getAnsvarlig().getNavIdent() == null || res.getAnsvarlig().getNavIdent().isEmpty()) {
-            return res;
+    private TiltakResponse addResourceDataAndTeamData(TiltakResponse res) {
+        if (res.getAnsvarlig().getNavIdent() != null && !res.getAnsvarlig().getNavIdent().isEmpty()) {
+            var resourceData = teamcatResourceClient.getResource(res.getAnsvarlig().getNavIdent());
+            if (resourceData.isPresent()) {
+                res.setAnsvarlig(resourceData.get());
+            } else {
+                res.setAnsvarlig(Resource.builder()
+                        .navIdent(res.getAnsvarlig().getNavIdent())
+                        .givenName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                        .familyName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                        .fullName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                        .email("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
+                        .resourceType(ResourceType.INTERNAL)
+                        .build());
+            }
         }
 
-        var resourceData = teamcatResourceClient.getResource(res.getAnsvarlig().getNavIdent());
-        if(resourceData.isPresent()) {
-            res.setAnsvarlig(resourceData.get());
-        } else {
-            res.setAnsvarlig(Resource.builder()
-                    .navIdent(res.getAnsvarlig().getNavIdent())
-                    .givenName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
-                    .familyName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
-                    .fullName("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
-                    .email("Fant ikke person med NAV ident: " + res.getAnsvarlig().getNavIdent())
-                    .resourceType(ResourceType.INTERNAL)
-                    .build());
-        }
+        if (res.getAnsvarligTeam() != null && !res.getAnsvarligTeam().getId().isEmpty()) {
+            var teamData = teamcatTeamClient.getTeam(res.getAnsvarligTeam().getId());
 
+            if (teamData.isPresent()) {
+                res.setAnsvarligTeam(teamData.get().toResponse());
+            } else {
+                res.setAnsvarligTeam(TeamResponse.builder()
+                        .id(res.getAnsvarligTeam().getId())
+                        .name("Fant ikke team med id: " + res.getAnsvarligTeam().getId())
+                        .build());
+            }
+        }
         return res;
     }
 

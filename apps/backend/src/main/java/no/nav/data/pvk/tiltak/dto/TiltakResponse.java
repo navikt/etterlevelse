@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakData;
 
@@ -27,6 +29,7 @@ public class TiltakResponse {
     private String navn;
     private String beskrivelse;
     private Resource ansvarlig;
+    private TeamResponse ansvarligTeam;
     private LocalDate frist;
     private List<UUID> risikoscenarioIds; // Merk: Settes ikke i buildFrom
 
@@ -47,6 +50,7 @@ public class TiltakResponse {
                 .navn(td.getNavn())
                 .beskrivelse(td.getBeskrivelse())
                 .ansvarlig(Resource.builder().navIdent(td.getAnsvarlig()).build())
+                .ansvarligTeam(TeamResponse.builder().id(td.getAnsvarligTeam()).build())
                 .frist(td.getFrist())
                 .build();
     }

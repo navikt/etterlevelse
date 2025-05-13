@@ -28,6 +28,7 @@ public class TiltakRequest implements RequestElement {
     private String beskrivelse;
     private String ansvarlig;
     private LocalDate frist;
+    private String ansvarligTeam;
     
     private Boolean update;
 
@@ -53,6 +54,7 @@ public class TiltakRequest implements RequestElement {
                         .navn(navn)
                         .beskrivelse(beskrivelse)
                         .ansvarlig(ansvarlig)
+                        .ansvarligTeam(ansvarligTeam)
                         .frist(frist)
                         .build())
                 .build();
@@ -63,6 +65,7 @@ public class TiltakRequest implements RequestElement {
         tiltakToMerge.getTiltakData().setNavn(navn);
         tiltakToMerge.getTiltakData().setBeskrivelse(beskrivelse);
         tiltakToMerge.getTiltakData().setAnsvarlig(ansvarlig);
+        tiltakToMerge.getTiltakData().setAnsvarligTeam(ansvarligTeam);
         tiltakToMerge.getTiltakData().setFrist(frist);
     }
 }
