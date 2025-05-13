@@ -168,7 +168,7 @@ public class TiltakController {
     }
 
     private TiltakResponse addTeamData(TiltakResponse res) {
-        if (res.getAnsvarligTeam() == null || res.getAnsvarligTeam().getId().isEmpty()) {
+        if (res.getAnsvarligTeam().getId() == null || res.getAnsvarligTeam().getId().isEmpty()) {
             return null;
         }
 
