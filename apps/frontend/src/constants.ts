@@ -634,6 +634,8 @@ export interface IPvoTilbakemelding extends IDomainObject {
   risikoscenarioEtterTiltakk: ITilbakemeldingsinnhold
   merknadTilEtterleverEllerRisikoeier: string
   sendtDato: string
+  ansvarlig: string[]
+  ansvarligData?: ITeamResource[]
 }
 
 export type TPvoTilbakemeldingQL = IPvoTilbakemelding & {

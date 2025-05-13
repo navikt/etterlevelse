@@ -106,6 +106,8 @@ export const mapPvoTilbakemeldingToFormValue = (
     merknadTilEtterleverEllerRisikoeier:
       pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier || '',
     sendtDato: pvoTilbakemelding.sendtDato || '',
+    ansvarlig: pvoTilbakemelding.ansvarlig || [],
+    ansvarligData: pvoTilbakemelding.ansvarligData || [],
     behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
       sistRedigertAv: '',
       sistRedigertDato: '',
