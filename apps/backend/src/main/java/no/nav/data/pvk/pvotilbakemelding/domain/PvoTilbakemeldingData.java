@@ -3,6 +3,7 @@ package no.nav.data.pvk.pvotilbakemelding.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -16,4 +17,5 @@ public class PvoTilbakemeldingData {
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
+    private List<String> ansvarlig;
 }

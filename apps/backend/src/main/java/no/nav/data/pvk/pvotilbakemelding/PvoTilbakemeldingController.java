@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.ResourceType;
+import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
@@ -20,9 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,6 +34,7 @@ public class PvoTilbakemeldingController {
 
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final PvkDokumentService pvkDokumentService;
+    private final TeamcatResourceClient teamcatResourceClient;
 
     @Operation(summary = "Get All PVO tilbakemelding")
     @ApiResponse(description = "ok")
@@ -40,7 +42,9 @@ public class PvoTilbakemeldingController {
     public ResponseEntity<RestResponsePage<PvoTilbakemeldingResponse>> getAll(PageParameters pageParameters) {
         log.info("Get all Pvo tilbakemelding");
         Page<PvoTilbakemelding> page = pvoTilbakemeldingService.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(PvoTilbakemeldingResponse::buildFrom));
+        RestResponsePage<PvoTilbakemeldingResponse> response = new RestResponsePage<>(page).convert(PvoTilbakemeldingResponse::buildFrom);
+        response.getContent().forEach(this::addResourceData);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get One PVO tilbakemelding")
@@ -48,7 +52,9 @@ public class PvoTilbakemeldingController {
     @GetMapping("/{id}")
     public ResponseEntity<PvoTilbakemeldingResponse> getById(@PathVariable UUID id) {
         log.info("Get PVO tilbakemelding id={}", id);
-        return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemeldingService.get(id)));
+        PvoTilbakemeldingResponse response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemeldingService.get(id));
+        addResourceData(response);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get PVO tilbakemelding by PVK dokument id")
@@ -120,5 +126,29 @@ public class PvoTilbakemeldingController {
             var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
             pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
             pvkDokumentService.save(pvkDokument, true);
+    }
+
+    private void addResourceData(PvoTilbakemeldingResponse response) {
+        if (response.getAnsvarlig() != null && response.getAnsvarlig().isEmpty()) {
+            List<Resource> ansvarligData = new ArrayList<>();
+
+            response.getAnsvarlig().forEach(ansvarlig -> {
+                var resourceData = teamcatResourceClient.getResource(ansvarlig);
+                if(resourceData.isPresent()) {
+                    ansvarligData.add(resourceData.get());
+                } else {
+                    ansvarligData.add(Resource.builder()
+                            .navIdent(ansvarlig)
+                            .givenName("Fant ikke person med NAV ident: " + ansvarlig)
+                            .familyName("Fant ikke person med NAV ident: " + ansvarlig)
+                            .fullName("Fant ikke person med NAV ident: " + ansvarlig)
+                            .email("Fant ikke person med NAV ident: " + ansvarlig)
+                            .resourceType(ResourceType.INTERNAL)
+                            .build()
+                    );
+                }
+            });
+            response.setAnsvarligData(ansvarligData);
+        }
     }
 }

@@ -6,11 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -33,6 +35,8 @@ public class PvoTilbakemeldingResponse {
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
+    private List<String> ansvarlig;
+    private List<Resource> ansvarligData;
 
     public static PvoTilbakemeldingResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         return PvoTilbakemeldingResponse.builder()
@@ -46,6 +50,7 @@ public class PvoTilbakemeldingResponse {
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(pvoTilbakemelding.getStatus())
                 .sendtDato(pvoTilbakemelding.getPvoTilbakemeldingData().getSendtDato())
+                .ansvarlig(pvoTilbakemelding.getPvoTilbakemeldingData().getAnsvarlig())
 
                 .behandlingenslivslop(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop())
                 .behandlingensArtOgOmfang(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang())

@@ -13,6 +13,7 @@ import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -34,6 +35,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
+    private List<String> ansvarlig;
 
     private Boolean update;
 
@@ -72,6 +74,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
                 .risikoscenarioEtterTiltakk(risikoscenarioEtterTiltakk)
                 .merknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier)
                 .sendtDato(sendtDato)
+                .ansvarlig(ansvarlig)
                 .build();
 
         return PvoTilbakemelding.builder()
@@ -86,6 +89,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
         pvoTilbakemeldingToMerge.setPvkDokumentId(UUID.fromString(pvkDokumentId));
         pvoTilbakemeldingToMerge.setStatus(status);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setSendtDato(sendtDato);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setAnsvarlig(ansvarlig);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingenslivslop(behandlingenslivslop);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingensArtOgOmfang(behandlingensArtOgOmfang);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setInnvolveringAvEksterne(innvolveringAvEksterne);
