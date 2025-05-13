@@ -13,10 +13,17 @@ import { ListLayout2 } from '../common/ListLayout'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '../common/RouteLinkPvk'
 import PvoStatusView from './common/PvoStatusView'
 
+interface IAnsvarligItem {
+  key: string
+  value: string
+}
+
 export const PvoTilbakemeldingsList = () => {
   const [allPvkDocumentListItem, setAllPvkDocumentListItem] = useState<IPvkDokumentListItem[]>([])
   const [allPvoTilbakemelding, setAllPvoTilbakemelding] = useState<IPvoTilbakemelding[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('alle')
+  const [ansvarligFilter, setAnsvarligFilter] = useState<string>('')
+  const [ansvarligList, setAnsvarligList] = useState<IAnsvarligItem[]>([])
   const [seachPvk, setSearchPvk] = useState<string>('')
 
   const [filteredPvkDokument, setFilteredPvkDokuement] = useState<IPvkDokumentListItem[]>([])
@@ -35,9 +42,26 @@ export const PvoTilbakemeldingsList = () => {
         setFilteredPvkDokuement(filteredPvkDokument)
       })
 
-      await getAllPvoTilbakemelding().then((response: IPvoTilbakemelding[]) =>
+      await getAllPvoTilbakemelding().then((response: IPvoTilbakemelding[]) => {
         setAllPvoTilbakemelding(response)
-      )
+        const list: IAnsvarligItem[] = []
+        response.forEach((tilbakemelding: IPvoTilbakemelding) => {
+          if (tilbakemelding.ansvarligData && tilbakemelding.ansvarligData.length !== 0) {
+            list.push(
+              ...tilbakemelding.ansvarligData.map((data) => {
+                return { key: data.navIdent, value: data.fullName }
+              })
+            )
+          }
+        })
+
+        setAnsvarligList(
+          list.filter(
+            (object, index, arr) =>
+              arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(object)) === index
+          )
+        )
+      })
 
       setIsLoading(false)
     })()
@@ -104,6 +128,18 @@ export const PvoTilbakemeldingsList = () => {
       filteredData = allPvkDocumentListItem
     }
 
+    if (!['', 'ingen'].includes(ansvarligFilter)) {
+      filteredData = filteredData.filter((pvk: IPvkDokumentListItem) =>
+        allPvoTilbakemelding
+          .filter(
+            (pvo: IPvoTilbakemelding) =>
+              pvo.ansvarlig && pvo.ansvarlig.length !== 0 && pvo.ansvarlig.includes(ansvarligFilter)
+          )
+          .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
+          .includes(pvk.id)
+      )
+    }
+
     if (seachPvk !== '') {
       filteredData = filteredData.filter((pvk: IPvkDokumentListItem) => {
         const pvkName: string = `${pvk.etterlevelseNummer} ${pvk.title}`
@@ -113,7 +149,7 @@ export const PvoTilbakemeldingsList = () => {
     }
 
     setFilteredPvkDokuement(filteredData)
-  }, [statusFilter, seachPvk])
+  }, [statusFilter, ansvarligFilter, seachPvk])
 
   return (
     <div>
@@ -130,6 +166,21 @@ export const PvoTilbakemeldingsList = () => {
               <option value='ikke_påbegynt'>Ikke påbegynt</option>
               <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
               <option value={EPvoTilbakemeldingStatus.FERDIG}>Sendt tilbake</option>
+            </Select>
+
+            <Select
+              label='Filtrér ansvarlig'
+              value={ansvarligFilter}
+              onChange={(event) => setAnsvarligFilter(event.target.value)}
+            >
+              <option value='ingen'></option>
+              {ansvarligList.length === 0 && <option value=''>Finner ingen ansvarlig</option>}
+              {ansvarligList.length !== 0 &&
+                ansvarligList.map((ansvarlig) => (
+                  <option value={ansvarlig.key} key={ansvarlig.key}>
+                    {ansvarlig.value}
+                  </option>
+                ))}
             </Select>
 
             <Search
