@@ -88,7 +88,11 @@ export const deletePvoTilbakemelding = async (id: string) => {
 const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakemelding) => {
   const dto = {
     ...pvoTilbakemelding,
+    ansvarlig: pvoTilbakemelding.ansvarligData
+      ? pvoTilbakemelding.ansvarligData.map((resource) => resource.navIdent)
+      : [],
   } as any
+  delete dto.ansvarligData
   delete dto.changeStamp
   delete dto.version
   return dto
