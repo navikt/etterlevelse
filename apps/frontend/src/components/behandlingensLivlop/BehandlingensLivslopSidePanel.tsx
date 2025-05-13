@@ -21,21 +21,23 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
 
     <Label>Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:</Label>
     {etterlevelseDokumentasjon.behandlinger && (
-      <List>
-        {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-          <List.Item key={behandling.nummer}>
-            <ExternalLink
-              className='text-medium'
-              href={behandlingskatalogenProcessUrl(env.pollyBaseUrl, behandling.id)}
-            >
-              {behandlingName(behandling)}
-            </ExternalLink>
-          </List.Item>
-        ))}
-      </List>
+      <>
+        <List>
+          {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
+            <List.Item key={behandling.nummer}>
+              <ExternalLink
+                className='text-medium'
+                href={behandlingskatalogenProcessUrl(env.pollyBaseUrl, behandling.id)}
+              >
+                {behandlingName(behandling)}
+              </ExternalLink>
+            </List.Item>
+          ))}
+        </List>
+      </>
     )}
 
-    {!etterlevelseDokumentasjon.behandlinger && (
+    {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
       <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
     )}
 
