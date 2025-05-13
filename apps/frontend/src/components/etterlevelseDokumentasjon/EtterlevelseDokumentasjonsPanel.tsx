@@ -20,8 +20,6 @@ export const EtterlevelseDokumentasjonsPanel: FunctionComponent<TProps> = ({
     etterlevelseDokumentasjon.sistEndretEtterlevelse !== null &&
     etterlevelseDokumentasjon.sistEndretEtterlevelse !== ''
 
-  const hasNoLastModifiedDate = !hasDateForLastModifiedByUser && !hasDateForLastModified
-
   return (
     <LinkPanel
       href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
@@ -30,13 +28,12 @@ export const EtterlevelseDokumentasjonsPanel: FunctionComponent<TProps> = ({
       <LinkPanel.Title className='text-xl'>
         E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
       </LinkPanel.Title>
-      <LinkPanel.Description>
+      <LinkPanel.Description className='h-7'>
         {hasDateForLastModifiedByUser &&
           `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg).format('LL')}`}
         {hasDateForLastModified &&
           !hasDateForLastModifiedByUser &&
           `Sist endret: ${moment(etterlevelseDokumentasjon.sistEndretEtterlevelse).format('LL')}`}
-        {hasNoLastModifiedDate && 'Ikke påbegynt'}
       </LinkPanel.Description>
     </LinkPanel>
   )
