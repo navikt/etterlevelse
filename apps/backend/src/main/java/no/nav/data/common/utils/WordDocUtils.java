@@ -170,6 +170,10 @@ public class WordDocUtils {
         ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
+    public void addLabel(String text) {
+        addMarkdownText("**" + text + "**");
+    }
+
 
     public Text text(String... values) {
         List<String> strings = filter(Arrays.asList(values), Objects::nonNull);
