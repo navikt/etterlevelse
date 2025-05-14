@@ -1,10 +1,6 @@
 package no.nav.data.pvk.pvkdokument.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
@@ -39,6 +35,7 @@ public class PvkDokumentData {
     private String merknadFraRisikoeier;
 
     private LocalDateTime sendtTilPvoDato;
+    private String sendtTilPvoAv;
 
     public List<CodelistResponse> ytterligereEgenskaperAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.YTTERLIGERE_EGENSKAPER, ytterligereEgenskaper);

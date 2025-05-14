@@ -48,6 +48,7 @@ public class PvkDokumentRequest implements RequestElement {
     private String merknadFraRisikoeier;
 
     private LocalDateTime sendtTilPvoDato;
+    private String sendtTilPvoAv;
 
     private Boolean update;
 
@@ -94,6 +95,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .merknadTilRisikoeier(merknadTilRisikoeier)
                 .merknadFraRisikoeier(merknadFraRisikoeier)
                 .sendtTilPvoDato(sendtTilPvoDato)
+                .sendtTilPvoAv(sendtTilPvoAv)
                 .build();
 
         return PvkDokument.builder()
@@ -122,5 +124,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setMerknadTilRisikoeier(merknadTilRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setMerknadFraRisikoeier(merknadFraRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
+        pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoAv(sendtTilPvoAv);
     }
 }

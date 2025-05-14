@@ -47,6 +47,7 @@ public class PvkDokumentResponse {
     private String merknadFraRisikoeier;
 
     private LocalDateTime sendtTilPvoDato;
+    private String sendtTilPvoAv;
 
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
@@ -75,6 +76,7 @@ public class PvkDokumentResponse {
                 .merknadTilRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier())
                 .merknadFraRisikoeier(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier())
                 .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
+                .sendtTilPvoAv(pvkDokument.getPvkDokumentData().getSendtTilPvoAv())
                 .build();
     }
 
