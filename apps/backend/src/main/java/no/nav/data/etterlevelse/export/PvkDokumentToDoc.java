@@ -13,7 +13,6 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
@@ -56,7 +55,6 @@ public class PvkDokumentToDoc {
     private final RisikoscenarioService risikoscenarioService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final TiltakService tiltakService;
-    private final BehandlingService behandlingService;
 
     public byte[] generateDocFor(UUID pvkDokumentId) throws IOException {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);

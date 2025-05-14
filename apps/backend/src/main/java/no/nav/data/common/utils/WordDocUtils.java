@@ -77,7 +77,7 @@ public class WordDocUtils {
 
     long bookmarkId = 1;
 
-    public void setRprFontSize(RPr rPr, int size) {
+    public void setRprFontPixelSize(RPr rPr, int size) {
         HpsMeasure szValue = fac.createHpsMeasure();
 
         //pixel size is half the value of size. ex.: size=50, pixelSize=25
@@ -91,6 +91,12 @@ public class WordDocUtils {
         Color fontColor = fac.createColor();
         fontColor.setVal(color);
         rPr.setColor(fontColor);
+    }
+
+    public void setRprFontSize(RPr rPr, int size) {
+        var fontSize = new HpsMeasure();
+        fontSize.setVal(BigInteger.valueOf(size));
+        rPr.setSz(fontSize);
     }
 
     public RPr createRpr() {
@@ -116,35 +122,46 @@ public class WordDocUtils {
     public P addHeading1(String text) {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
         RPr rPr = createRpr();
+        setRprFontSize(rPr, 24);
         ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
 
     public P addHeading2(String text) {
         P p = main.addStyledParagraphOfText(HEADING_2, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontSize(rPr, 20);
+        ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
 
     public P addHeading3(String text) {
         P p = main.addStyledParagraphOfText(HEADING_3, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontSize(rPr, 16);
+        ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
 
     public void addHeading4(String text) {
         P p = main.addStyledParagraphOfText(HEADING_4, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontSize(rPr, 14);
+        ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
     public void addHeading5(String text) {
         P p = main.addStyledParagraphOfText(HEADING_5, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontSize(rPr, 14);
+        ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
     public void addHeading6(String text) {
         P p = main.addStyledParagraphOfText(HEADING_6, text);
-        ((R) p.getContent().get(0)).setRPr(createRpr());
+        RPr rPr = createRpr();
+        setRprFontSize(rPr, 12);
+        ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
 
