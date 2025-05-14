@@ -68,7 +68,7 @@ public class WordDocUtils {
     public static final String HEADING_4 = "Heading4";
     public static final String HEADING_5 = "Heading5";
     public static final String HEADING_6 = "Heading6";
-    public static final String FONT_STYLE = "Source Sans Serif";
+    public static final String FONT_STYLE = "Source Sans Pro";
 
     WordprocessingMLPackage pack;
     MainDocumentPart main;
@@ -102,17 +102,16 @@ public class WordDocUtils {
         CTLanguage ctLang = fac.createCTLanguage();
         ctLang.setVal("no-NB");
         rPr.setLang(ctLang);
-        setRFont(rPr);
         return rPr;
     }
 
-    public void setRFont(RPr rpr) {
+    public RFonts getRFonts() {
         RFonts rFonts = new RFonts();
         rFonts.setAscii(FONT_STYLE);
         rFonts.setHAnsi(FONT_STYLE);
         rFonts.setEastAsia(FONT_STYLE);
 
-        rpr.setRFonts(rFonts);
+        return rFonts;
     }
 
     public void addTitle(String text) {
@@ -225,7 +224,6 @@ public class WordDocUtils {
 
     public void addMarkdownText(String text) {
         var markdownText = markdownParser.parse(text);
-
         docxRenderer.render(markdownText, pack);
 
     }
