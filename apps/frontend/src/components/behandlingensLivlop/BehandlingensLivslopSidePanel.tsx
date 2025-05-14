@@ -41,7 +41,7 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
       <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
     )}
 
-    <Label>Dere har koblet følgende ROS-dokumentasjon på denne etterlevelsesdokumentasjonen:</Label>
+    <Label>Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:</Label>
 
     {etterlevelseDokumentasjon.risikovurderinger &&
       etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
@@ -64,8 +64,8 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
         </List>
       )}
 
-    {!etterlevelseDokumentasjon.risikovurderinger && (
-      <BodyShort className='my-5'> Ingen ROS er valgt.</BodyShort>
+    {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
+      <BodyShort className='my-5'>Ingen dokument er valgt.</BodyShort>
     )}
 
     <BodyShort className='inline-block mb-5'>
