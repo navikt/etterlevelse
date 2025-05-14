@@ -21,25 +21,27 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
 
     <Label>Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:</Label>
     {etterlevelseDokumentasjon.behandlinger && (
-      <List>
-        {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
-          <List.Item key={behandling.nummer}>
-            <ExternalLink
-              className='text-medium'
-              href={behandlingskatalogenProcessUrl(env.pollyBaseUrl, behandling.id)}
-            >
-              {behandlingName(behandling)}
-            </ExternalLink>
-          </List.Item>
-        ))}
-      </List>
+      <>
+        <List>
+          {etterlevelseDokumentasjon.behandlinger.map((behandling: IBehandling) => (
+            <List.Item key={behandling.nummer}>
+              <ExternalLink
+                className='text-medium'
+                href={behandlingskatalogenProcessUrl(env.pollyBaseUrl, behandling.id)}
+              >
+                {behandlingName(behandling)}
+              </ExternalLink>
+            </List.Item>
+          ))}
+        </List>
+      </>
     )}
 
-    {!etterlevelseDokumentasjon.behandlinger && (
+    {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
       <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
     )}
 
-    <Label>Dere har koblet følgende ROS-dokumentasjon på denne etterlevelsesdokumentasjonen:</Label>
+    <Label>Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:</Label>
 
     {etterlevelseDokumentasjon.risikovurderinger &&
       etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
@@ -62,8 +64,8 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
         </List>
       )}
 
-    {!etterlevelseDokumentasjon.risikovurderinger && (
-      <BodyShort className='my-5'> Ingen ROS er valgt.</BodyShort>
+    {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
+      <BodyShort className='my-5'>Ingen dokument er valgt.</BodyShort>
     )}
 
     <BodyShort className='inline-block mb-5'>
