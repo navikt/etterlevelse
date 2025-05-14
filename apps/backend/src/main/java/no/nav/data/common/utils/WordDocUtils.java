@@ -54,16 +54,8 @@ public class WordDocUtils {
     @SneakyThrows
     public WordDocUtils(ObjectFactory fac) {
         this.fac = fac;
-
-        RFonts rFonts = new RFonts();
-        rFonts.setAscii("Times New Roman");
-        rFonts.setHAnsi("Times New Roman");
-        rFonts.setEastAsia("Times New Roman");
-
-
         pack = DocxRenderer.getDefaultTemplate();
         main = pack.getMainDocumentPart();
-        main.getPropertyResolver().getDocumentDefaultRPr().setRFonts(rFonts);
         addFooter();
     }
 
@@ -76,6 +68,7 @@ public class WordDocUtils {
     public static final String HEADING_4 = "Heading4";
     public static final String HEADING_5 = "Heading5";
     public static final String HEADING_6 = "Heading6";
+    public static final String FONT_STYLE = "Source Sans Serif";
 
     WordprocessingMLPackage pack;
     MainDocumentPart main;
@@ -109,7 +102,17 @@ public class WordDocUtils {
         CTLanguage ctLang = fac.createCTLanguage();
         ctLang.setVal("no-NB");
         rPr.setLang(ctLang);
+        setRFont(rPr);
         return rPr;
+    }
+
+    public void setRFont(RPr rpr) {
+        RFonts rFonts = new RFonts();
+        rFonts.setAscii(FONT_STYLE);
+        rFonts.setHAnsi(FONT_STYLE);
+        rFonts.setEastAsia(FONT_STYLE);
+
+        rpr.setRFonts(rFonts);
     }
 
     public void addTitle(String text) {
