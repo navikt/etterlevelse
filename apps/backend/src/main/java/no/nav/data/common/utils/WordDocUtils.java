@@ -55,10 +55,14 @@ public class WordDocUtils {
     public WordDocUtils(ObjectFactory fac) {
         this.fac = fac;
 
+        RFonts rFonts = new RFonts();
+        rFonts.setAscii("Source Sans Pro");
+        rFonts.setHAnsi("Source Sans Pro");
+        rFonts.setEastAsia("Source Sans Pro");
 
         pack = DocxRenderer.getDefaultTemplate();
         main = pack.getMainDocumentPart();
-
+        main.getPropertyResolver().getDocumentDefaultRPr().setRFonts(rFonts);
         addFooter();
     }
 
