@@ -77,7 +77,7 @@ public class WordDocUtils {
 
     long bookmarkId = 1;
 
-    public void setRprFontPixelSize(RPr rPr, int size) {
+    public void setRprFontSize(RPr rPr, int size) {
         HpsMeasure szValue = fac.createHpsMeasure();
 
         //pixel size is half the value of size. ex.: size=50, pixelSize=25
@@ -91,12 +91,6 @@ public class WordDocUtils {
         Color fontColor = fac.createColor();
         fontColor.setVal(color);
         rPr.setColor(fontColor);
-    }
-
-    public void setRprFontSize(RPr rPr, int size) {
-        var fontSize = new HpsMeasure();
-        fontSize.setVal(BigInteger.valueOf(size));
-        rPr.setSz(fontSize);
     }
 
     public void setRprFontBold(RPr rPr, boolean isBold) {
