@@ -542,6 +542,7 @@ export interface IPvkDokument {
   merknadFraRisikoeier: string
 
   sendtTilPvoDato: string
+  sendtTilPvoAv: string
 }
 
 export interface IPvkDokumentListItem {

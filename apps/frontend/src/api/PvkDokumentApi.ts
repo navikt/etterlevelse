@@ -165,5 +165,6 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     merknadTilRisikoeier: pvkDokument.merknadTilRisikoeier || '',
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
     sendtTilPvoDato: pvkDokument.sendtTilPvoDato || '',
+    sendtTilPvoAv: pvkDokument.sendtTilPvoAv || '',
   }
 }

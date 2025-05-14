@@ -116,6 +116,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
             updatedStatus === EPvkDokumentStatus.SENDT_TIL_PVO
               ? new Date().toISOString()
               : response.sendtTilPvoDato,
+          sendtTilPvoAv:
+            updatedStatus === EPvkDokumentStatus.SENDT_TIL_PVO
+              ? user.getIdent() + ' - ' + user.getName()
+              : response.sendtTilPvoAv,
           merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
           merknadTilRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
           merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
