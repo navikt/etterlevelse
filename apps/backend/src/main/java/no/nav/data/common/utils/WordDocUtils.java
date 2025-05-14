@@ -56,9 +56,9 @@ public class WordDocUtils {
         this.fac = fac;
 
         RFonts rFonts = new RFonts();
-        rFonts.setAscii("Source Sans Pro");
-        rFonts.setHAnsi("Source Sans Pro");
-        rFonts.setEastAsia("Source Sans Pro");
+        rFonts.setAscii("Source Sans");
+        rFonts.setHAnsi("Source Sans");
+        rFonts.setEastAsia("Source Sans");
 
         pack = DocxRenderer.getDefaultTemplate();
         main = pack.getMainDocumentPart();
