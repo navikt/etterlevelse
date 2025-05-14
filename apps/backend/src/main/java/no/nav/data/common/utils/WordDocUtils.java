@@ -125,6 +125,16 @@ public class WordDocUtils {
         setRprFontSize(rPr, 24);
         setRprFontBold(rPr, true);
         ((R) p.getContent().get(0)).setRPr(rPr);
+
+
+        PPrBase.PBdr bdr = fac.createPPrBasePBdr();
+        CTBorder bottom = fac.createCTBorder();
+        p.getPPr().setPBdr(bdr);
+        bdr.setBottom(bottom);
+        bottom.setVal(org.docx4j.wml.STBorder.SINGLE);
+        bottom.setSz(new java.math.BigInteger("6"));
+        bottom.setSpace(new java.math.BigInteger("1"));
+
         return p;
     }
 
