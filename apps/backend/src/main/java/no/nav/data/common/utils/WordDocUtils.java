@@ -56,9 +56,10 @@ public class WordDocUtils {
         this.fac = fac;
 
         RFonts rFonts = new RFonts();
-        rFonts.setAscii("Source Sans");
-        rFonts.setHAnsi("Source Sans");
-        rFonts.setEastAsia("Source Sans");
+        rFonts.setAscii("Times New Roman");
+        rFonts.setHAnsi("Times New Roman");
+        rFonts.setEastAsia("Times New Roman");
+
 
         pack = DocxRenderer.getDefaultTemplate();
         main = pack.getMainDocumentPart();
