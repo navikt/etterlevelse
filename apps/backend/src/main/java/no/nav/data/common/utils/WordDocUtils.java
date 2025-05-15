@@ -114,6 +114,12 @@ public class WordDocUtils {
         rPr.setB(boldValue);
     }
 
+    public void setRprFontFamilyAndStyle(RPr rPr) {
+        RFonts rFonts = getRFonts();
+        rFonts.setAscii(FONT_FAMILY + " " + FONT_STYLE);
+        rPr.setRFonts(rFonts);
+    }
+
     public RPr createRpr() {
         RPr rPr = fac.createRPr();
         CTLanguage ctLang = fac.createCTLanguage();
@@ -144,11 +150,7 @@ public class WordDocUtils {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
         RPr rPr = createRpr();
         setRprFontSize(rPr, 24);
-        RFonts rFonts = getRFonts();
-        rFonts.setAscii(FONT_FAMILY + " " + FONT_STYLE);
-        rPr.setRFonts(rFonts);
-
-        setRprFontBold(rPr, true);
+        setRprFontFamilyAndStyle(rPr);
         ((R) p.getContent().get(0)).setRPr(rPr);
 
 
@@ -167,7 +169,7 @@ public class WordDocUtils {
         P p = main.addStyledParagraphOfText(HEADING_2, text);
         RPr rPr = createRpr();
         setRprFontSize(rPr, 20);
-        setRprFontBold(rPr, true);
+        setRprFontFamilyAndStyle(rPr);
         ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
@@ -176,7 +178,7 @@ public class WordDocUtils {
         P p = main.addStyledParagraphOfText(HEADING_3, text);
         RPr rPr = createRpr();
         setRprFontSize(rPr, 16);
-        setRprFontBold(rPr, true);
+        setRprFontFamilyAndStyle(rPr);
         ((R) p.getContent().get(0)).setRPr(rPr);
         return p;
     }
@@ -185,7 +187,7 @@ public class WordDocUtils {
         P p = main.addStyledParagraphOfText(HEADING_4, text);
         RPr rPr = createRpr();
         setRprFontSize(rPr, 14);
-        setRprFontBold(rPr, true);
+        setRprFontFamilyAndStyle(rPr);
         ((R) p.getContent().get(0)).setRPr(rPr);
     }
 
