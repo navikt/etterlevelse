@@ -69,7 +69,7 @@ public class WordDocUtils {
             if (rfonts == null) {
                 rfonts = getRFonts();
             }
-            rfonts.setAscii(FONT_STYLE);
+            rfonts.setAscii(FONT_FAMILY);
         });
 
         addFooter();
@@ -84,7 +84,8 @@ public class WordDocUtils {
     public static final String HEADING_4 = "Heading4";
     public static final String HEADING_5 = "Heading5";
     public static final String HEADING_6 = "Heading6";
-    public static final String FONT_STYLE = "Source Sans";
+    public static final String FONT_FAMILY = "Source Sans Pro";
+    public static final String FONT_STYLE = "SemiBold";
 
     WordprocessingMLPackage pack;
     MainDocumentPart main;
@@ -123,7 +124,7 @@ public class WordDocUtils {
 
     public RFonts getRFonts() {
         RFonts rFonts = new RFonts();
-        rFonts.setAscii(FONT_STYLE);
+        rFonts.setAscii(FONT_FAMILY);
         return rFonts;
     }
 
@@ -143,6 +144,10 @@ public class WordDocUtils {
         P p = main.addStyledParagraphOfText(HEADING_1, text);
         RPr rPr = createRpr();
         setRprFontSize(rPr, 24);
+        RFonts rFonts = getRFonts();
+        rFonts.setAscii(FONT_FAMILY + " " + FONT_STYLE);
+        rPr.setRFonts(rFonts);
+
         setRprFontBold(rPr, true);
         ((R) p.getContent().get(0)).setRPr(rPr);
 
