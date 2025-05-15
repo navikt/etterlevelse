@@ -84,7 +84,7 @@ public class WordDocUtils {
     public static final String HEADING_4 = "Heading4";
     public static final String HEADING_5 = "Heading5";
     public static final String HEADING_6 = "Heading6";
-    public static final String FONT_STYLE = "Source Sans Serif";
+    public static final String FONT_STYLE = "Source Sans";
 
     WordprocessingMLPackage pack;
     MainDocumentPart main;
