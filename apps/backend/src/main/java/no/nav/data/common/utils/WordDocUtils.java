@@ -55,9 +55,23 @@ public class WordDocUtils {
     public WordDocUtils(ObjectFactory fac) {
         this.fac = fac;
         pack = DocxRenderer.getDefaultTemplate();
-        pack.getMainDocumentPart().getPropertyResolver().getDocumentDefaultRPr().setRFonts(getRFonts());
-        pack.getMainDocumentPart().getPropertyResolver().getDocumentDefaultPPr().getRPr().setRFonts(getRFonts());
         main = pack.getMainDocumentPart();
+
+        Styles styles = main.getStyleDefinitionsPart().getJaxbElement();
+
+        styles.getStyle().forEach(style -> {
+            RPr rpr = style.getRPr();
+            if (rpr == null) {
+                rpr = createRpr();
+               style.setRPr(rpr);
+            }
+            RFonts rfonts = rpr.getRFonts();
+            if (rfonts == null) {
+                rfonts = getRFonts();
+            }
+            rfonts.setAscii(FONT_STYLE);
+        });
+
         addFooter();
     }
 
@@ -340,6 +354,7 @@ public class WordDocUtils {
 
         // Next, bookmark start
         var bm = fac.createCTBookmark();
+
         bm.setId(id);
         bm.setName(name);
         var bmStart = fac.createBodyBookmarkStart(bm);

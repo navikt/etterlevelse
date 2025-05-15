@@ -211,7 +211,7 @@ public class PvkDokumentToDoc {
             } else {
                 addText("Ingen skriftlig beskrivelse.");
             }
-
+            newLine();
             generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
 
             pageBreak();
