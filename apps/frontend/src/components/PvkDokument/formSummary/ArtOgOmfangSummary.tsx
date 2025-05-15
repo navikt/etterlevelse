@@ -58,7 +58,8 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
                       (fieldProp.form.values.stemmerPersonkategorier === undefined ||
                         fieldProp.form.values.stemmerPersonkategorier === null) &&
                       'Ikke besvart'}
-                    {fieldProp.form.values.stemmerPersonkategorier ? 'Ja' : 'Nei'}
+                    {fieldProp.form.values.stemmerPersonkategorier === true && 'Ja'}
+                    {fieldProp.form.values.stemmerPersonkategorier === false && 'Nei'}
                     {fieldProp.form.errors.stemmerPersonkategorier && (
                       <FormAlert>
                         {fieldProp.form.errors.stemmerPersonkategorier as string}
