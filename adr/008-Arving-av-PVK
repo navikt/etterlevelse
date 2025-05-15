@@ -1,0 +1,28 @@
+**SAKEN: NÅR NOEN ÅPNER FOR GJENBRUK AV ET ETTERLEVELSESDOKUMENT, BURDE PVK MEDFØLGE ARVET DOKUMENTASJON?**
+
+HVORFOR DISKUTERES DET? Fordi vi ikke gjør det pr. nå, men når man først åpener for gjenbruk av dokumenter som kan ha en PVK ved seg, er det er greit at vi er bevisst på hvorfor man skal eller ikke skal ha arving av PVK.
+
+BESLUTNING: Nei, vi skal ikke tillate arving og har ingen planer framover om å bygge den funksjonaliteten. Dukker det opp etter hvert som ekte behov, tar vi det da.
+
+BETYDNING: Lite, da det ikke arves pr. i dag og beslutninga ikke medfører utviklingssarbeid. Det vi kan gjøre er å bygge en scenariobank som tilbyr scenarioer som folk kan 
+
+RESONNEMENT/DISKUSJON:
+
+* Hypotesen vår er at folk flest ikke vil ha bruk for en arvet PVK siden etterlevere holder på hver for seg med sitt og med ulike formål osv. Mor-datter utgjør et lite fåtall av etterlevelsesdokumenter pr. i dag.
+
+* Arving vil eventuelt kunne føre til like mye sletting av arv som nytte av den, noe som kan skape merarbeid eller gjøre at brukeren mister oversikt over hva som er egen dokumentasjon kontra arvet.
+
+* Vi satser heller på å bygge scenariobank og tilgjengeliggjøre andre sine scenarioer til inspirasjon og eventuell gjenbruk
+
+* Det er muligens aktuelt med gjenbruk for blant annet kameraovervåkning på Nav-kontor og bruk av Testlab. Det kan bli mye som er likt for enkelte etterlevere som må dokumentere. Vi kan høre med de som holder i disse arbeidene om hva de tenker. 
+
+* Det koster å utvikle arving av PVK og kan skape mer teknisk kompleksitet, for eksempel på arkivering, eller arving av endringer.
+
+* Det vil også være konseptuelt komplekst med arving av PVK, hvorvidt folk forstår hva de får og hva de skal gjøre videre, og hvordan det skulle funke i tilfellet endringer i mor-PVK. 
+
+* Gjenbruk vil nok forutsette at moren alt har blitt ferdig med PVK? Økt kompleksitet hvis man også skal kunne arve PVK-er som er ved ulike stadier (før innsending, til behandling hos PVO, osv)
+
+* En ulempe med ikke-arving er at etterlevere som holder i forskjellige deler av ett stort behandlings livsløp ikke vil samle seg under én PVK som tar med det hele. PVO vil kun se én del av helheten om gangen. Samme gjelder for så vidt ved f. eks. kameraovervåking hvor mye kan være likt men PVO vil måtte behandle PVK-er en og en.
+
+* Vi har det slik at mor svarer på enkelte etterlevelseskrav, noen datter ikke må svare på eller mor styrer hvordan datter skal svare. Risikoscenarioer vil i så fall også gjelde for datter.
+
