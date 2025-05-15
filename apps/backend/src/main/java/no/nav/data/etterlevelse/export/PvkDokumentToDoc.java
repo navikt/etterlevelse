@@ -177,6 +177,8 @@ public class PvkDokumentToDoc {
                 addText("Ikke ferdig godkjent");
             }
 
+            newLine();
+
             addListItem("Behandlingens livsløp", currListId, "Behandlingens_livsløp_bookmark");
             addListItem("Bør vi gjøre en PVK?", currListId, "pvk_behov");
             addListItem("Behandlingens art og omfang", currListId, "pvk_art_og_omfang");

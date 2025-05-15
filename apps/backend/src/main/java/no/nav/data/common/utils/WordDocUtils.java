@@ -55,6 +55,7 @@ public class WordDocUtils {
     public WordDocUtils(ObjectFactory fac) {
         this.fac = fac;
         pack = DocxRenderer.getDefaultTemplate();
+        pack.getMainDocumentPart().getPropertyResolver().getDocumentDefaultRPr().setRFonts(getRFonts());
         main = pack.getMainDocumentPart();
         addFooter();
     }
@@ -68,7 +69,7 @@ public class WordDocUtils {
     public static final String HEADING_4 = "Heading4";
     public static final String HEADING_5 = "Heading5";
     public static final String HEADING_6 = "Heading6";
-    public static final String FONT_STYLE = "Source Sans Pro";
+    public static final String FONT_STYLE = "Source Sans Serif";
 
     WordprocessingMLPackage pack;
     MainDocumentPart main;
@@ -108,9 +109,6 @@ public class WordDocUtils {
     public RFonts getRFonts() {
         RFonts rFonts = new RFonts();
         rFonts.setAscii(FONT_STYLE);
-        rFonts.setHAnsi(FONT_STYLE);
-        rFonts.setEastAsia(FONT_STYLE);
-
         return rFonts;
     }
 
