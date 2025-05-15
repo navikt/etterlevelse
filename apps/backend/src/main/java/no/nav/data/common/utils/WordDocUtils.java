@@ -56,6 +56,7 @@ public class WordDocUtils {
         this.fac = fac;
         pack = DocxRenderer.getDefaultTemplate();
         pack.getMainDocumentPart().getPropertyResolver().getDocumentDefaultRPr().setRFonts(getRFonts());
+        pack.getMainDocumentPart().getPropertyResolver().getDocumentDefaultPPr().getRPr().setRFonts(getRFonts());
         main = pack.getMainDocumentPart();
         addFooter();
     }
