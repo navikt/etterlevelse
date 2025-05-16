@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.export;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.WordDocUtils;
@@ -13,6 +14,9 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.krav.KravService;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
@@ -55,6 +59,7 @@ public class PvkDokumentToDoc {
     private final RisikoscenarioService risikoscenarioService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final TiltakService tiltakService;
+    private final KravService kravService;
 
     public byte[] generateDocFor(UUID pvkDokumentId) throws IOException {
         PvkDokument pvkDokument = pvkDokumentService.get(pvkDokumentId);
@@ -82,12 +87,38 @@ public class PvkDokumentToDoc {
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId()));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjon);
 
-        List<RisikoscenarioResponse> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL)
-                .stream().map(RisikoscenarioResponse::buildFrom).toList();
+        List<RisikoscenarioResponse> risikoscenarioList = new ArrayList<>(
+                risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL)
+                .stream().map(RisikoscenarioResponse::buildFrom).toList());
 
         risikoscenarioList.forEach(risikoscenario -> {
             risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
+            if (!risikoscenario.isGenerelScenario()) {
+                risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
+                    List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+                    try {
+                        RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+                        JsonNode lovData = regelverk.getLov().getData();
+                        kravShort.setTemaCode(lovData.get("tema").asText());
+                    } catch (RuntimeException e) {
+                        // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
+                    }
+                    kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
+                    kravShort.setNavn(kravList.get(0).getNavn());
+                });
+            }
         });
+
+        risikoscenarioList.sort(( a,  b) -> {
+            if (a.isGenerelScenario() && !b.isGenerelScenario()) {
+                return 1;
+            } else if (!a.isGenerelScenario() && b.isGenerelScenario()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
 
         List<TiltakResponse> tiltakList = tiltakService.getByPvkDokument(pvkDokument.getId()).stream().map(TiltakResponse::buildFrom).toList();
 
@@ -329,7 +360,6 @@ public class PvkDokumentToDoc {
             newLine();
             var header2 = addHeading2("Risikoscenario, tiltak, og tiltakenes effekt");
             addBookmark(header2, "pvk_risikoscenario_og_tiltak");
-
             newLine();
             risikoscenarioList.forEach(risikoscenario -> {
                 addHeading3(risikoscenario.getNavn());
@@ -344,7 +374,11 @@ public class PvkDokumentToDoc {
                 if (risikoscenario.isGenerelScenario()) {
                     addText("Dette scenarioet er ikke tilknyttet spesifikke etterlevelseskrav.");
                 } else {
-                    addText("Dette scenarioet er tilknyttet spesifikke etterlevelseskrav.");
+                    addText("Etterlevelseskrav hvor risikoscenarioet inntreffer");
+                    newLine();
+                    risikoscenario.getRelevanteKravNummer().forEach(kravRef -> {
+                        addMarkdownText("- K" + kravRef.getKravNummer() + "." + kravRef.getKravVersjon() + " " + kravRef.getNavn());
+                    });
                 }
                 newLine();
                 addLabel(sannsynlighetsNivaaToText(risikoscenario.getSannsynlighetsNivaa()));
