@@ -38,6 +38,8 @@ public class PvoTilbakemeldingGraphqlResponse extends PvoTilbakemeldingResponse 
                 .behandlingensArtOgOmfang(pvoTilbakemeldingData.getBehandlingensArtOgOmfang())
                 .innvolveringAvEksterne(pvoTilbakemeldingData.getInnvolveringAvEksterne())
                 .risikoscenarioEtterTiltakk(pvoTilbakemeldingData.getRisikoscenarioEtterTiltakk())
+                .avventer(pvoTilbakemelding.getPvoTilbakemeldingData().isAvventer())
+                .ansvarlig(pvoTilbakemelding.getPvoTilbakemeldingData().getAnsvarlig())
                 .build();
     }
 }
