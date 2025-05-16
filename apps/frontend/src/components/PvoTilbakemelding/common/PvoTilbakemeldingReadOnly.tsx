@@ -45,7 +45,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
       </div>
     )}
 
-    {sentDate.length !== 0 && (
+    {sentDate && sentDate.length !== 0 && (
       <BodyShort size='medium' className='pb-5'>
         Tilbakemeldings dato: {moment(sentDate).format('LL')}
       </BodyShort>
