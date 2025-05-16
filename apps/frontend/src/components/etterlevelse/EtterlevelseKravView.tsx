@@ -453,91 +453,93 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                   />
                 </Tabs.List>
                 <Tabs.Panel value='dokumentasjon'>
-                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
-                    !isPvkTabActive && (
-                      <ToggleGroup
-                        className='mt-6'
-                        defaultValue='OFF'
-                        value={isPreview ? 'ON' : 'OFF'}
-                        onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
-                      >
-                        <ToggleGroup.Item value='OFF' label='Redigeringsvisning' />
-                        <ToggleGroup.Item value='ON' label='Forhåndsvisning' />
-                      </ToggleGroup>
-                    )}
-
-                  {isPvkTabActive && (
-                    <Alert className='mt-6' variant='info'>
-                      Kan ikke redigeres når PVK skjema er aktiv på sidepanelet
-                    </Alert>
-                  )}
-                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
-                    <div className='mt-2'>
-                      {!isPreview && (
-                        <CheckboxGroup
-                          legend='Legg til i Prioritert kravliste'
-                          hideLegend
-                          onChange={handleChange}
-                          value={isPrioritised ? ['check'] : []}
+                  <div className='overflow-auto h-400'>
+                    {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
+                      !isPvkTabActive && (
+                        <ToggleGroup
+                          className='mt-6'
+                          defaultValue='OFF'
+                          value={isPreview ? 'ON' : 'OFF'}
+                          onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
                         >
-                          {
-                            <Checkbox
-                              value='check'
-                              description={
-                                (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
-                                  etterlevelseDokumentasjon?.forGjenbruk) ||
-                                  (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
-                                  'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
-                                ''
-                              }
-                            >
-                              Legg til dette kravet i Prioritert kravliste
-                            </Checkbox>
-                          }
-                        </CheckboxGroup>
+                          <ToggleGroup.Item value='OFF' label='Redigeringsvisning' />
+                          <ToggleGroup.Item value='ON' label='Forhåndsvisning' />
+                        </ToggleGroup>
                       )}
-                      {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
-                        <EtterlevelseEditFields
-                          isPreview={isPreview}
-                          kravFilter={kravFilter}
-                          krav={krav}
-                          etterlevelse={etterlevelse}
-                          submit={submit}
-                          formRef={etterlevelseFormRef}
-                          varsleMelding={varsleMelding}
-                          disableEdit={disableEdit}
-                          close={() => {
-                            setTimeout(
-                              () =>
-                                navigate(
-                                  etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)
-                                ),
-                              1
-                            )
-                          }}
-                          navigatePath={navigatePath}
-                          editedEtterlevelse={editedEtterlevelse}
-                          tidligereEtterlevelser={tidligereEtterlevelser}
-                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                        />
-                      )}
-                      {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
-                        <EtterlevelseViewFields
-                          etterlevelse={etterlevelse}
-                          suksesskriterier={krav.suksesskriterier}
-                          tidligereEtterlevelser={tidligereEtterlevelser}
-                          isBortfiltrert
-                        />
-                      )}
-                    </div>
-                  )}
-                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
-                    <EtterlevelseViewFields
-                      etterlevelse={etterlevelse}
-                      suksesskriterier={krav.suksesskriterier}
-                      tidligereEtterlevelser={tidligereEtterlevelser}
-                    />
-                  )}
+
+                    {isPvkTabActive && (
+                      <Alert className='mt-6' variant='info'>
+                        Kan ikke redigeres når PVK skjema er aktiv på sidepanelet
+                      </Alert>
+                    )}
+                    {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
+                      <div className='mt-2'>
+                        {!isPreview && (
+                          <CheckboxGroup
+                            legend='Legg til i Prioritert kravliste'
+                            hideLegend
+                            onChange={handleChange}
+                            value={isPrioritised ? ['check'] : []}
+                          >
+                            {
+                              <Checkbox
+                                value='check'
+                                description={
+                                  (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
+                                    etterlevelseDokumentasjon?.forGjenbruk) ||
+                                    (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
+                                    'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
+                                  ''
+                                }
+                              >
+                                Legg til dette kravet i Prioritert kravliste
+                              </Checkbox>
+                            }
+                          </CheckboxGroup>
+                        )}
+                        {kravFilter !== EKravFilterType.BORTFILTTERTE_KRAV && (
+                          <EtterlevelseEditFields
+                            isPreview={isPreview}
+                            kravFilter={kravFilter}
+                            krav={krav}
+                            etterlevelse={etterlevelse}
+                            submit={submit}
+                            formRef={etterlevelseFormRef}
+                            varsleMelding={varsleMelding}
+                            disableEdit={disableEdit}
+                            close={() => {
+                              setTimeout(
+                                () =>
+                                  navigate(
+                                    etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)
+                                  ),
+                                1
+                              )
+                            }}
+                            navigatePath={navigatePath}
+                            editedEtterlevelse={editedEtterlevelse}
+                            tidligereEtterlevelser={tidligereEtterlevelser}
+                            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                          />
+                        )}
+                        {kravFilter === EKravFilterType.BORTFILTTERTE_KRAV && (
+                          <EtterlevelseViewFields
+                            etterlevelse={etterlevelse}
+                            suksesskriterier={krav.suksesskriterier}
+                            tidligereEtterlevelser={tidligereEtterlevelser}
+                            isBortfiltrert
+                          />
+                        )}
+                      </div>
+                    )}
+                    {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
+                      <EtterlevelseViewFields
+                        etterlevelse={etterlevelse}
+                        suksesskriterier={krav.suksesskriterier}
+                        tidligereEtterlevelser={tidligereEtterlevelser}
+                      />
+                    )}
+                  </div>
                 </Tabs.Panel>
                 <Tabs.Panel value='etterlevelser'>
                   <div className='mt-2'>
