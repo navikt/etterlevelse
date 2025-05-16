@@ -8,6 +8,7 @@ import {
 } from '../../api/PvkDokumentApi'
 import {
   EPVK,
+  EPvoTilbakemeldingStatus,
   IPvkDokument,
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
@@ -285,7 +286,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
 
         {/* sidepanel */}
 
-        {pvoTilbakemelding && (
+        {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
           <PvoSidePanelWrapper>
             <PvoTilbakemeldingReadOnly
               tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}

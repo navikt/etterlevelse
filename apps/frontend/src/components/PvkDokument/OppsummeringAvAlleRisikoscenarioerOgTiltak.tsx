@@ -4,6 +4,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EPvoTilbakemeldingStatus,
   ERisikoscenarioType,
   IPageResponse,
   IPvkDokument,
@@ -420,7 +421,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         <div>
           {/* sidepanel */}
 
-          {pvoTilbakemelding && (
+          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <PvoSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
                 tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}

@@ -11,6 +11,7 @@ import {
   updateBehandlingensLivslop,
 } from '../../api/BehandlingensLivslopApi'
 import {
+  EPvoTilbakemeldingStatus,
   IBehandlingensLivslop,
   IBehandlingensLivslopRequest,
   IPvoTilbakemelding,
@@ -215,7 +216,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           </div>
 
           {/* Sidepanel */}
-          {pvoTilbakemelding && (
+          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <PvoSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
                 tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}

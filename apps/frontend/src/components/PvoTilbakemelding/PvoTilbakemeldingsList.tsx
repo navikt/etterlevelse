@@ -99,7 +99,7 @@ export const PvoTilbakemeldingsList = () => {
           etterlevelseNummer: data.etterlevelseNummer,
           sendtTilPvoDato: data.sendtTilPvoDato,
           sendtTilPvoAv:
-            data.sendtTilPvoAv === '' || data.sendtTilPvoAv === undefined
+            data.sendtTilPvoAv === '' || data.sendtTilPvoAv === null
               ? ''
               : data.sendtTilPvoAv.split('-')[1],
         } as IPvkDokumentListItem
