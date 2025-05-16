@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { EGroup, user } from '../../services/User'
 
 export const ToggleActiveRole = () => {
-  const [viewRoller, setViewRoller] = useState(false)
+  const [viewRoller, setViewRoller] = useState(true)
   const isAdmin = user.getAvailableGroups().filter((role) => role.group === 'ADMIN').length !== 0
 
   useEffect(() => {
