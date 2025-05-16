@@ -106,12 +106,13 @@ export const mapPvoTilbakemeldingToFormValue = (
     changeStamp: pvoTilbakemelding.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     version: -1,
     pvkDokumentId: pvoTilbakemelding.pvkDokumentId || '',
-    status: pvoTilbakemelding.status || EPvoTilbakemeldingStatus.UNDERARBEID,
+    status: pvoTilbakemelding.status || EPvoTilbakemeldingStatus.IKKE_PABEGYNT,
     merknadTilEtterleverEllerRisikoeier:
       pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier || '',
     sendtDato: pvoTilbakemelding.sendtDato || '',
     ansvarlig: pvoTilbakemelding.ansvarlig || [],
     ansvarligData: pvoTilbakemelding.ansvarligData || [],
+    avventer: pvoTilbakemelding.avventer || false,
     behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
       sistRedigertAv: '',
       sistRedigertDato: '',
