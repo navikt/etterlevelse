@@ -250,6 +250,9 @@ export const PvoTilbakemeldingsList = () => {
                         status={
                           pvoTilbakemelding.length !== 0 ? pvoTilbakemelding[0].status : undefined
                         }
+                        isAvventer={
+                          pvoTilbakemelding.length !== 0 ? pvoTilbakemelding[0].avventer : false
+                        }
                       />
                     }
                     changeStamp={changestamp}

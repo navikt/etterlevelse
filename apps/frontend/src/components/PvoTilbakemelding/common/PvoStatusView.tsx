@@ -4,6 +4,7 @@ import { EPvoTilbakemeldingStatus } from '../../../constants'
 
 type TProps = {
   status?: EPvoTilbakemeldingStatus
+  isAvventer?: boolean
 }
 
 export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
@@ -25,11 +26,14 @@ export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
   }
 }
 
-export const PvoStatusView: FunctionComponent<TProps> = ({ status }) => {
+export const PvoStatusView: FunctionComponent<TProps> = ({ status, isAvventer }) => {
   const getStatusDisplay = (variant: any) => (
-    <Tag variant={variant} className='h-fit'>
+    <Tag variant={isAvventer ? 'neutral' : variant} className='h-fit'>
       <div className={'flex items-center'}>
-        <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
+        <Detail className='whitespace-nowrap'>
+          {isAvventer && 'Avventer'}
+          {!isAvventer && pvoStatusToText(status)}
+        </Detail>
       </div>
     </Tag>
   )
