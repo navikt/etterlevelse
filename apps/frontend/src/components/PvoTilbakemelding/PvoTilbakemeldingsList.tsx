@@ -139,7 +139,7 @@ export const PvoTilbakemeldingsList = () => {
       filteredData = allPvkDocumentListItem
     }
 
-    if (!['', 'ingen'].includes(ansvarligFilter)) {
+    if (!['', 'alle'].includes(ansvarligFilter)) {
       filteredData = filteredData.filter((pvk: IPvkDokumentListItem) =>
         allPvoTilbakemelding
           .filter(
@@ -189,7 +189,7 @@ export const PvoTilbakemeldingsList = () => {
               value={ansvarligFilter}
               onChange={(event) => setAnsvarligFilter(event.target.value)}
             >
-              <option value='ingen'></option>
+              <option value='alle'>Alle</option>
               {ansvarligList.length === 0 && <option value=''>Finner ingen ansvarlig</option>}
               {ansvarligList.length !== 0 &&
                 ansvarligList.map((ansvarlig) => (
