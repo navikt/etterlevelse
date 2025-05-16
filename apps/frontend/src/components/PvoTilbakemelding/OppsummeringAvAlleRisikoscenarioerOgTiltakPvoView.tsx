@@ -4,6 +4,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EPvoTilbakemeldingStatus,
   ERisikoscenarioType,
   IPageResponse,
   IPvkDokument,
@@ -20,6 +21,7 @@ import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoTilbakemeldingReadOnly from './common/PvoTilbakemeldingReadOnly'
 import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
@@ -395,12 +397,21 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
         <div>
           {/* PVO sidepanel */}
           <PvoSidePanelWrapper>
-            <PvoTilbakemeldingForm
-              pvkDokumentId={pvkDokument.id}
-              fieldName='risikoscenarioEtterTiltakk'
-              initialValue={pvoTilbakemelding.risikoscenarioEtterTiltakk}
-              formRef={formRef}
-            />
+            {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+              <PvoTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                sentDate={pvoTilbakemelding.sendtDato}
+                forPvo={true}
+              />
+            )}
+            {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+              <PvoTilbakemeldingForm
+                pvkDokumentId={pvkDokument.id}
+                fieldName='risikoscenarioEtterTiltakk'
+                initialValue={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                formRef={formRef}
+              />
+            )}
           </PvoSidePanelWrapper>
         </div>
       </div>

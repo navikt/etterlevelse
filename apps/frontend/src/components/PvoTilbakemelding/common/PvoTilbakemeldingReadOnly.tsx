@@ -13,16 +13,37 @@ enum EBidragVerdier {
 type TProps = {
   tilbakemeldingsinnhold: ITilbakemeldingsinnhold
   sentDate: string
+  forPvo?: boolean
 }
 
 export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
   tilbakemeldingsinnhold,
   sentDate,
+  forPvo,
 }) => (
   <div>
     <Heading level='2' size='small' className='mb-5'>
       Tilbakemelding fra personvernombudet
     </Heading>
+
+    {forPvo && (
+      <div>
+        <Label>intern PVO-notater</Label>
+        {tilbakemeldingsinnhold &&
+          tilbakemeldingsinnhold.internDiskusjon &&
+          tilbakemeldingsinnhold.internDiskusjon.length !== 0 && (
+            <Markdown source={tilbakemeldingsinnhold.internDiskusjon} />
+          )}
+        <BodyLong>
+          {(!tilbakemeldingsinnhold ||
+            !tilbakemeldingsinnhold.internDiskusjon ||
+            tilbakemeldingsinnhold.internDiskusjon.length === 0) &&
+            'Ingen intern diskusjon'}
+        </BodyLong>
+
+        <div className='h-0.5  w-full border-2 my-7' />
+      </div>
+    )}
 
     {sentDate.length !== 0 && (
       <BodyShort size='medium' className='pb-5'>

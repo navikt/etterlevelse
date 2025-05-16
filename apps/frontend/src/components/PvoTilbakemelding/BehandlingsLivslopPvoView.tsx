@@ -5,6 +5,7 @@ import {
   mapBehandlingensLivslopRequestToFormValue,
 } from '../../api/BehandlingensLivslopApi'
 import {
+  EPvoTilbakemeldingStatus,
   IBehandlingensLivslopRequest,
   IEtterlevelseDokumentasjon,
   IPvkDokument,
@@ -15,6 +16,7 @@ import BehandlingensLivslopTextContent from '../behandlingensLivlop/Behandlingen
 import { Markdown } from '../common/Markdown'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoTilbakemeldingReadOnly from './common/PvoTilbakemeldingReadOnly'
 import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
@@ -128,12 +130,21 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
 
             {/* PVO sidepanel */}
             <PvoSidePanelWrapper>
-              <PvoTilbakemeldingForm
-                pvkDokumentId={pvkDokument.id}
-                fieldName='behandlingenslivslop'
-                initialValue={pvoTilbakemelding.behandlingenslivslop}
-                formRef={formRef}
-              />
+              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+                <PvoTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
+                  sentDate={pvoTilbakemelding.sendtDato}
+                  forPvo={true}
+                />
+              )}
+              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                <PvoTilbakemeldingForm
+                  pvkDokumentId={pvkDokument.id}
+                  fieldName='behandlingenslivslop'
+                  initialValue={pvoTilbakemelding.behandlingenslivslop}
+                  formRef={formRef}
+                />
+              )}
             </PvoSidePanelWrapper>
           </div>
           <PvoFormButtons

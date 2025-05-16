@@ -1,8 +1,9 @@
 import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent, RefObject } from 'react'
-import { EPVK, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { EPVK, EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import PvoTilbakemeldingReadOnly from './common/PvoTilbakemeldingReadOnly'
 import PvoFormButtons from './edit/PvoFormButtons'
 import PvoTilbakemeldingForm from './edit/PvoTilbakemeldingForm'
 
@@ -95,12 +96,21 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
       </div>
       {/* PVO sidepanel */}
       <PvoSidePanelWrapper>
-        <PvoTilbakemeldingForm
-          pvkDokumentId={pvkDokument.id}
-          fieldName='innvolveringAvEksterne'
-          initialValue={pvoTilbakemelding.innvolveringAvEksterne}
-          formRef={formRef}
-        />
+        {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+          <PvoTilbakemeldingReadOnly
+            tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
+            sentDate={pvoTilbakemelding.sendtDato}
+            forPvo={true}
+          />
+        )}
+        {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+          <PvoTilbakemeldingForm
+            pvkDokumentId={pvkDokument.id}
+            fieldName='innvolveringAvEksterne'
+            initialValue={pvoTilbakemelding.innvolveringAvEksterne}
+            formRef={formRef}
+          />
+        )}
       </PvoSidePanelWrapper>
     </div>
     <PvoFormButtons
