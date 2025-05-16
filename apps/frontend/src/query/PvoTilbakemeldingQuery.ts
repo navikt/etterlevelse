@@ -29,7 +29,6 @@ export const getPvoTilbakemeldingListQuery = gql`
         }
         sendtDato
         sistEndretAvMeg
-        avventer
         changeStamp {
           createdDate
         }

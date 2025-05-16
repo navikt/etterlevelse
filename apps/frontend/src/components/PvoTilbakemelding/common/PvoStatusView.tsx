@@ -4,36 +4,36 @@ import { EPvoTilbakemeldingStatus } from '../../../constants'
 
 type TProps = {
   status?: EPvoTilbakemeldingStatus
-  isAvventer?: boolean
 }
 
 export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
   if (!status) return 'Ikke påbegynt'
 
   switch (status) {
+    case EPvoTilbakemeldingStatus.AVVENTER:
+      return 'Avventer'
     case EPvoTilbakemeldingStatus.IKKE_PABEGYNT:
       return 'Ikke påbegynt'
     case EPvoTilbakemeldingStatus.UNDERARBEID:
       return 'Påbegynt'
     case EPvoTilbakemeldingStatus.SNART_FERDIG:
       return 'Straks ferdig'
-    case EPvoTilbakemeldingStatus.TRENGER_KONTROL:
+    case EPvoTilbakemeldingStatus.TIL_KONTROL:
       return '(POV) Trenger kontrol'
     case EPvoTilbakemeldingStatus.FERDIG:
       return 'Sendt tilbake'
+    case EPvoTilbakemeldingStatus.UTGAAR:
+      return 'Utgår'
     default:
       return 'Ikke påbegynt'
   }
 }
 
-export const PvoStatusView: FunctionComponent<TProps> = ({ status, isAvventer }) => {
+export const PvoStatusView: FunctionComponent<TProps> = ({ status }) => {
   const getStatusDisplay = (variant: any) => (
-    <Tag variant={isAvventer ? 'neutral' : variant} className='h-fit'>
+    <Tag variant={variant} className='h-fit'>
       <div className={'flex items-center'}>
-        <Detail className='whitespace-nowrap'>
-          {isAvventer && 'Avventer'}
-          {!isAvventer && pvoStatusToText(status)}
-        </Detail>
+        <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
       </div>
     </Tag>
   )

@@ -45,7 +45,6 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
           const updatedValues: IPvoTilbakemelding = {
             ...response,
             status: submittedStatus,
-            avventer: false,
             sendtDato:
               submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
             merknadTilEtterleverEllerRisikoeier:
@@ -59,7 +58,6 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokument.id,
             status: submittedStatus,
-            avventer: false,
             sendtDato:
               submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
             merknadTilEtterleverEllerRisikoeier:

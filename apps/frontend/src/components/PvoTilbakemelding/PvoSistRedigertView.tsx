@@ -57,12 +57,7 @@ export const PvoSistRedigertView = () => {
                   id={pvoTilbakemelding.id}
                   url={pvkDokumenteringPvoTilbakemeldingUrl(pvoTilbakemelding.pvkDokumentId, 1)}
                   title={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer} ${pvoTilbakemelding.etterlevelseDokumentasjonData.title}`}
-                  status={
-                    <PvoStatusView
-                      status={pvoTilbakemelding.status}
-                      isAvventer={pvoTilbakemelding.avventer}
-                    />
-                  }
+                  status={<PvoStatusView status={pvoTilbakemelding.status} />}
                   changeStamp={`
                     Sist endret av meg: ${moment(pvoTilbakemelding.sistEndretAvMeg).format('LL')}`}
                 />

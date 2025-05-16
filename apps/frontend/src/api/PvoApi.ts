@@ -112,7 +112,6 @@ export const mapPvoTilbakemeldingToFormValue = (
     sendtDato: pvoTilbakemelding.sendtDato || '',
     ansvarlig: pvoTilbakemelding.ansvarlig || [],
     ansvarligData: pvoTilbakemelding.ansvarligData || [],
-    avventer: pvoTilbakemelding.avventer || false,
     behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
       sistRedigertAv: '',
       sistRedigertDato: '',

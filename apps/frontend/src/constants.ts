@@ -638,7 +638,6 @@ export interface IPvoTilbakemelding extends IDomainObject {
   merknadTilEtterleverEllerRisikoeier: string
   sendtDato: string
   ansvarlig: string[]
-  avventer: boolean
   ansvarligData?: ITeamResource[]
 }
 
@@ -659,10 +658,12 @@ export interface ITilbakemeldingsinnhold {
 
 export enum EPvoTilbakemeldingStatus {
   IKKE_PABEGYNT = 'IKKE_PABEGYNT',
+  AVVENTER = 'AVVENTER',
   UNDERARBEID = 'UNDERARBEID',
   SNART_FERDIG = 'SNART_FERDIG',
-  TRENGER_KONTROL = 'TRENGER_KONTROL',
+  TIL_KONTROL = 'TIL_KONTROL',
   FERDIG = 'FERDIG',
+  UTGAAR = 'UTGAAR',
 }
 
 export enum EPvkDokumentStatus {

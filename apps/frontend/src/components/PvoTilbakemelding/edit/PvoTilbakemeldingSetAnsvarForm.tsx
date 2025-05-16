@@ -10,7 +10,7 @@ import {
   updatePvoTilbakemelding,
 } from '../../../api/PvoApi'
 import { searchResourceByNameOptions } from '../../../api/TeamApi'
-import { IPvoTilbakemelding, ITeamResource } from '../../../constants'
+import { EPvoTilbakemeldingStatus, IPvoTilbakemelding, ITeamResource } from '../../../constants'
 import { isDev } from '../../../util/config'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { RenderTagList } from '../../common/TagList'
@@ -29,7 +29,6 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
   formRef,
 }) => {
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
-
   const submit = async (pvoTilbakmelding: IPvoTilbakemelding): Promise<void> => {
     await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
       .then(async (response: IPvoTilbakemelding) => {
@@ -37,7 +36,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
           const updatedValues: IPvoTilbakemelding = {
             ...response,
             ansvarligData: pvoTilbakmelding.ansvarligData,
-            avventer: pvoTilbakmelding.avventer,
+            status: pvoTilbakmelding.status,
           }
           await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
         }
@@ -47,7 +46,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokumentId,
             ansvarligData: pvoTilbakmelding.ansvarligData,
-            avventer: pvoTilbakmelding.avventer,
+            status: pvoTilbakmelding.status,
           })
           await createPvoTilbakemelding(createValue).then(() => window.location.reload())
         } else {
@@ -151,18 +150,20 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               <div className='flex-1' />
             </div>
 
-            <div id='avventerData' className='mb-5'>
-              <Field name='avventer'>
+            <div id='status' className='mb-5'>
+              <Field name='status'>
                 {() => (
                   <CheckboxGroup
                     legend='Sett status til avventer'
                     hideLegend
-                    value={values.avventer ? ['isAvventer'] : []}
+                    value={
+                      values.status === EPvoTilbakemeldingStatus.AVVENTER ? ['isAvventer'] : []
+                    }
                     onChange={(value: string[]) => {
                       if (value.length !== 0) {
-                        setFieldValue('avventer', true)
+                        setFieldValue('status', EPvoTilbakemeldingStatus.AVVENTER)
                       } else {
-                        setFieldValue('avventer', false)
+                        setFieldValue('status', EPvoTilbakemeldingStatus.IKKE_PABEGYNT)
                       }
                     }}
                   >

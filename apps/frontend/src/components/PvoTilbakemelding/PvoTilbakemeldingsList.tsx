@@ -127,7 +127,7 @@ export const PvoTilbakemeldingsList = () => {
       } else if (statusFilter === 'avventer') {
         filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
           allPvoTilbakemelding
-            .filter((pvo: IPvoTilbakemelding) => pvo.avventer)
+            .filter((pvo: IPvoTilbakemelding) => pvo.status === EPvoTilbakemeldingStatus.AVVENTER)
             .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
             .includes(pvk.id)
         )
@@ -180,12 +180,11 @@ export const PvoTilbakemeldingsList = () => {
               <option value='alle'>Alle</option>
               <option value={EPvoTilbakemeldingStatus.IKKE_PABEGYNT}>Ikke påbegynt</option>
               <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
-              <option value={'avventer'}>Avventer</option>
-              <option value={EPvoTilbakemeldingStatus.TRENGER_KONTROL}>
-                (PVO) Trenger kontroll
-              </option>
+              <option value={EPvoTilbakemeldingStatus.AVVENTER}>Avventer</option>
+              <option value={EPvoTilbakemeldingStatus.TIL_KONTROL}>PVO øvrig beslutning</option>
               <option value={EPvoTilbakemeldingStatus.SNART_FERDIG}>Straks ferdig</option>
               <option value={EPvoTilbakemeldingStatus.FERDIG}>Sendt tilbake</option>
+              <option value={EPvoTilbakemeldingStatus.UTGAAR}>Utgår</option>
             </Select>
 
             <Select
@@ -253,9 +252,6 @@ export const PvoTilbakemeldingsList = () => {
                       <PvoStatusView
                         status={
                           pvoTilbakemelding.length !== 0 ? pvoTilbakemelding[0].status : undefined
-                        }
-                        isAvventer={
-                          pvoTilbakemelding.length !== 0 ? pvoTilbakemelding[0].avventer : false
                         }
                       />
                     }

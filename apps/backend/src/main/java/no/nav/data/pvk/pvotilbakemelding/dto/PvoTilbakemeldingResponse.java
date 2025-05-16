@@ -37,7 +37,6 @@ public class PvoTilbakemeldingResponse {
     private LocalDateTime sendtDato;
     private List<String> ansvarlig;
     private List<Resource> ansvarligData;
-    private boolean avventer;
 
     public static PvoTilbakemeldingResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         return PvoTilbakemeldingResponse.builder()
@@ -52,7 +51,6 @@ public class PvoTilbakemeldingResponse {
                 .status(pvoTilbakemelding.getStatus())
                 .sendtDato(pvoTilbakemelding.getPvoTilbakemeldingData().getSendtDato())
                 .ansvarlig(pvoTilbakemelding.getPvoTilbakemeldingData().getAnsvarlig())
-                .avventer(pvoTilbakemelding.getPvoTilbakemeldingData().isAvventer())
 
                 .behandlingenslivslop(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop())
                 .behandlingensArtOgOmfang(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang())
