@@ -24,4 +24,5 @@ public class PvkDokumentListItemResponse {
     private String title;
     private PvkDokumentStatus status;
     private LocalDateTime sendtTilPvoDato;
+    private String sendtTilPvoAv;
 }
