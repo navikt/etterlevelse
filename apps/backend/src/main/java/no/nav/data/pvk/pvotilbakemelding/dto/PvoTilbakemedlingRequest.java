@@ -36,6 +36,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
     private List<String> ansvarlig;
+    private boolean avventer;
 
     private Boolean update;
 
@@ -75,6 +76,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
                 .merknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier)
                 .sendtDato(sendtDato)
                 .ansvarlig(ansvarlig)
+                .avventer(avventer)
                 .build();
 
         return PvoTilbakemelding.builder()
@@ -90,6 +92,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
         pvoTilbakemeldingToMerge.setStatus(status);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setSendtDato(sendtDato);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setAnsvarlig(ansvarlig);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setAvventer(avventer);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingenslivslop(behandlingenslivslop);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingensArtOgOmfang(behandlingensArtOgOmfang);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setInnvolveringAvEksterne(innvolveringAvEksterne);

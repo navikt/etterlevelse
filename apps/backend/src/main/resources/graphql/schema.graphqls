@@ -301,6 +301,7 @@ type PvoTilbakemelding {
     merknadTilEtterleverEllerRisikoeier: String
     sendtDato: DateTime
     ansvarlig: [String!]!
+    avventer: Boolean
     ansvarligData: [Resource!]!
     sistEndretAvMeg: DateTime
 }
@@ -314,7 +315,10 @@ type Tilbakemeldingsinnhold {
 }
 
 enum PvoTilbakemeldingStatus {
+    IKKE_PABEGYNT,
     UNDERARBEID,
+    SNART_FERDIG,
+    TRENGER_KONTROL,
     FERDIG
 }
 
