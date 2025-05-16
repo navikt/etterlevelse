@@ -10,12 +10,18 @@ export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
   if (!status) return 'Ikke påbegynt'
 
   switch (status) {
+    case EPvoTilbakemeldingStatus.IKKE_PABEGYNT:
+      return 'Ikke påbegynt'
     case EPvoTilbakemeldingStatus.UNDERARBEID:
       return 'Påbegynt'
+    case EPvoTilbakemeldingStatus.SNART_FERDIG:
+      return 'Straks ferdig'
+    case EPvoTilbakemeldingStatus.TRENGER_KONTROL:
+      return '(POV) Trenger kontrol'
     case EPvoTilbakemeldingStatus.FERDIG:
       return 'Sendt tilbake'
     default:
-      return status
+      return 'Ikke påbegynt'
   }
 }
 

@@ -37,6 +37,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
           const updatedValues: IPvoTilbakemelding = {
             ...response,
             ansvarligData: pvoTilbakmelding.ansvarligData,
+            avventer: pvoTilbakmelding.avventer,
           }
           await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
         }
@@ -46,6 +47,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokumentId,
             ansvarligData: pvoTilbakmelding.ansvarligData,
+            avventer: pvoTilbakmelding.avventer,
           })
           await createPvoTilbakemelding(createValue).then(() => window.location.reload())
         } else {
@@ -64,7 +66,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
       initialValues={initialValue}
       innerRef={formRef}
     >
-      {({ submitForm, setFieldValue }) => (
+      {({ submitForm, setFieldValue, values }) => (
         <Form>
           <div className='flex flex-col gap-2'>
             <Heading level='2' size='medium'>
@@ -155,6 +157,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                   <CheckboxGroup
                     legend='Sett status til avventer'
                     hideLegend
+                    value={values.avventer ? ['isAvventer'] : []}
                     onChange={(value: string[]) => {
                       if (value.length !== 0) {
                         setFieldValue('avventer', true)

@@ -109,12 +109,23 @@ export const PvoTilbakemeldingsList = () => {
     let filteredData: IPvkDokumentListItem[] = allPvkDocumentListItem
 
     if (statusFilter !== 'alle') {
-      if (statusFilter === 'ikke_påbegynt') {
+      if (statusFilter === EPvoTilbakemeldingStatus.IKKE_PABEGYNT) {
         filteredData = allPvkDocumentListItem.filter(
           (pvk: IPvkDokumentListItem) =>
             !allPvoTilbakemelding
               .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
+              .includes(pvk.id) ||
+            allPvoTilbakemelding
+              .filter((pvo) => pvo.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT)
+              .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
               .includes(pvk.id)
+        )
+      } else if (statusFilter === 'avventer') {
+        filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
+          allPvoTilbakemelding
+            .filter((pvo: IPvoTilbakemelding) => pvo.avventer)
+            .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
+            .includes(pvk.id)
         )
       } else {
         filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
@@ -163,8 +174,13 @@ export const PvoTilbakemeldingsList = () => {
               onChange={(event) => setStatusFilter(event.target.value)}
             >
               <option value='alle'>Alle</option>
-              <option value='ikke_påbegynt'>Ikke påbegynt</option>
+              <option value={EPvoTilbakemeldingStatus.IKKE_PABEGYNT}>Ikke påbegynt</option>
               <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
+              <option value={'avventer'}>Avventer</option>
+              <option value={EPvoTilbakemeldingStatus.TRENGER_KONTROL}>
+                (PVO) Trenger kontroll
+              </option>
+              <option value={EPvoTilbakemeldingStatus.SNART_FERDIG}>Straks ferdig</option>
               <option value={EPvoTilbakemeldingStatus.FERDIG}>Sendt tilbake</option>
             </Select>
 
