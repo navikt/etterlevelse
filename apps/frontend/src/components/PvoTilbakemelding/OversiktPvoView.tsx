@@ -1,9 +1,20 @@
-import { Alert, BodyShort, FormSummary, Heading, Link, List, ReadMore, Tag } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyShort,
+  FormSummary,
+  Heading,
+  Label,
+  Link,
+  List,
+  ReadMore,
+  Tag,
+} from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/BehandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EPvoTilbakemeldingStatus,
   ERisikoscenarioType,
   IBehandlingensLivslop,
   IPageResponse,
@@ -144,11 +155,29 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   return (
     <div className='flex flex-col justify-center items-center'>
       <div className='px-6 py-9 rounded-lg max-w-[766px] w-full bg-[#E3EFF7] mb-18'>
-        <PvoTilbakemeldingAnsvarligForm
-          pvkDokumentId={pvkDokument.id}
-          initialValue={pvoTilbakemelding}
-          formRef={formRef}
-        />
+        {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+          <PvoTilbakemeldingAnsvarligForm
+            pvkDokumentId={pvkDokument.id}
+            initialValue={pvoTilbakemelding}
+            formRef={formRef}
+          />
+        )}
+
+        {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+          <div>
+            <Label>Ansvarlig</Label>
+            <List as='ul'>
+              {pvoTilbakemelding.ansvarlig.length === 0 && (
+                <List.Item>Ingen ansvarlig satt</List.Item>
+              )}
+              {pvoTilbakemelding.ansvarligData &&
+                pvoTilbakemelding.ansvarligData.length !== 0 &&
+                pvoTilbakemelding.ansvarligData.map((data) => (
+                  <List.Item key={data.navIdent}>{data.fullName}</List.Item>
+                ))}
+            </List>
+          </div>
+        )}
       </div>
       <div>
         <Heading level='1' size='medium' className='mb-5'>

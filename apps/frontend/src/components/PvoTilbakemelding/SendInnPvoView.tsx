@@ -1,5 +1,5 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, useState } from 'react'
@@ -11,6 +11,7 @@ import {
 } from '../../api/PvoApi'
 import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import { TextAreaField } from '../common/Inputs'
+import { Markdown } from '../common/Markdown'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
 
@@ -92,14 +93,32 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
-              <div className='mt-5 mb-3 max-w-[75ch]'>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)'
-                  name='merknadTilEtterleverEllerRisikoeier'
-                />
-              </div>
+              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)'
+                    name='merknadTilEtterleverEllerRisikoeier'
+                  />
+                </div>
+              )}
+
+              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+                <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <Label>Tilbakemelding til etterlever</Label>
+
+                  {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier &&
+                    pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier.length !== 0 && (
+                      <Markdown source={pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier} />
+                    )}
+                  <BodyLong>
+                    {(!pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier ||
+                      pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier.length === 0) &&
+                      'Ingen tilbakemelding til etterlever'}
+                  </BodyLong>
+                </div>
+              )}
 
               <CopyButton
                 variant='action'
@@ -136,15 +155,17 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                       </Button>
                     )}
 
-                    <Button
-                      type='button'
-                      onClick={() => {
-                        setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
-                        submitForm()
-                      }}
-                    >
-                      Send tilbakemelding
-                    </Button>
+                    {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                      <Button
+                        type='button'
+                        onClick={() => {
+                          setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
+                          submitForm()
+                        }}
+                      >
+                        Send tilbakemelding
+                      </Button>
+                    )}
                   </div>
                 }
               />
