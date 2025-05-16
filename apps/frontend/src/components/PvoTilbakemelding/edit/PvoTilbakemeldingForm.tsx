@@ -9,7 +9,11 @@ import {
   mapPvoTilbakemeldingToFormValue,
   updatePvoTilbakemelding,
 } from '../../../api/PvoApi'
-import { IPvoTilbakemelding, ITilbakemeldingsinnhold } from '../../../constants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+  ITilbakemeldingsinnhold,
+} from '../../../constants'
 import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
 
@@ -64,6 +68,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               fieldName === 'risikoscenarioEtterTiltakk'
                 ? mutatedTilbakemeldingsInnhold
                 : response.risikoscenarioEtterTiltakk,
+            status: EPvoTilbakemeldingStatus.UNDERARBEID,
           }
           await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
         }
@@ -82,6 +87,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               fieldName === 'risikoscenarioEtterTiltakk'
                 ? mutatedTilbakemeldingsInnhold
                 : undefined,
+            status: EPvoTilbakemeldingStatus.UNDERARBEID,
           })
           await createPvoTilbakemelding(createValue).then(() => window.location.reload())
         } else {

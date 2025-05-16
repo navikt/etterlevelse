@@ -1,6 +1,6 @@
-import { Button, Heading, ReadMore, TextField } from '@navikt/ds-react'
+import { Button, Checkbox, CheckboxGroup, Heading, ReadMore, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { Field, FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { ChangeEvent, FunctionComponent, RefObject, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import {
@@ -64,7 +64,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
       initialValues={initialValue}
       innerRef={formRef}
     >
-      {({ submitForm }) => (
+      {({ submitForm, setFieldValue }) => (
         <Form>
           <div className='flex flex-col gap-2'>
             <Heading level='2' size='medium'>
@@ -147,6 +147,26 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                 )}
               </FieldArray>
               <div className='flex-1' />
+            </div>
+
+            <div id='avventerData' className='mb-5'>
+              <Field name='avventer'>
+                {() => (
+                  <CheckboxGroup
+                    legend='Sett status til avventer'
+                    hideLegend
+                    onChange={(value: string[]) => {
+                      if (value.length !== 0) {
+                        setFieldValue('avventer', true)
+                      } else {
+                        setFieldValue('avventer', false)
+                      }
+                    }}
+                  >
+                    <Checkbox value='isAvventer'>sett til avventer</Checkbox>
+                  </CheckboxGroup>
+                )}
+              </Field>
             </div>
 
             <div className='flex gap-2'>
