@@ -98,6 +98,10 @@ export const PvoTilbakemeldingsList = () => {
           title: data.title,
           etterlevelseNummer: data.etterlevelseNummer,
           sendtTilPvoDato: data.sendtTilPvoDato,
+          sendtTilPvoAv:
+            data.sendtTilPvoAv === '' || data.sendtTilPvoAv === undefined
+              ? ''
+              : data.sendtTilPvoAv.split('-')[1],
         } as IPvkDokumentListItem
       })
 
@@ -236,7 +240,7 @@ export const PvoTilbakemeldingsList = () => {
                     pvkDokument.sendtTilPvoDato !== '' && pvkDokument.sendtTilPvoDato !== null
                       ? moment(pvkDokument.sendtTilPvoDato).format('LL')
                       : moment(pvkDokument.changeStamp.lastModifiedDate).format('LL')
-                  changestamp = `Mottat: ${date}`
+                  changestamp = `Mottat: ${date}, fra ${pvkDokument.sendtTilPvoAv}`
                 }
 
                 return (

@@ -553,6 +553,7 @@ export interface IPvkDokumentListItem {
   title: string
   etterlevelseNummer: number
   sendtTilPvoDato: string
+  sendtTilPvoAv: string
 }
 
 export interface IRisikoscenario {
