@@ -8,6 +8,7 @@ import {
 } from '../../api/PvkDokumentApi'
 import {
   EPVK,
+  EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
   IPvkDokument,
   IPvoTilbakemelding,
@@ -17,6 +18,7 @@ import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
 import { ContentLayout } from '../layout/layout'
+import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -45,6 +47,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
@@ -55,9 +58,15 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
         tilgangsBeskrivelsePersonopplysningene: pvkDokument.tilgangsBeskrivelsePersonopplysningene,
         lagringsBeskrivelsePersonopplysningene: pvkDokument.lagringsBeskrivelsePersonopplysningene,
       }
-      await updatePvkDokument(updatedatePvkDokument).then((response: IPvkDokument) => {
-        setPvkDokument(response)
-      })
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        await updatePvkDokument(updatedatePvkDokument)
+          .then((response: IPvkDokument) => {
+            setPvkDokument(response)
+          })
+          .finally(() => setSavedSuccessful(true))
+      }
     })
   }
 
@@ -178,7 +187,6 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         onClick={async () => {
                           await submitForm()
                           resetForm({ values })
-                          setSavedSuccessful(true)
                         }}
                       >
                         Lagre
@@ -283,6 +291,10 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
               </Form>
             )}
           </Formik>
+          <AlertPvoUnderarbeidModal
+            isOpen={isPvoAlertModalOpen}
+            onClose={() => setIsPvoAlertModalOpen(false)}
+          />
         </div>
 
         {/* sidepanel */}
