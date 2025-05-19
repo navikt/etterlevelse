@@ -647,6 +647,7 @@ public class PvkDokumentToDoc {
             return switch (status) {
                 case AKTIV, UNDERARBEID -> "Under arbeid";
                 case SENDT_TIL_PVO -> "Sendt til personvernombudet";
+                case PVO_UNDERARBEID -> "Personvernombudet jobber med vurderingen";
                 case VURDERT_AV_PVO -> "Vurdert av personvernombudet";
                 case TRENGER_GODKJENNING -> "Trenger godkjenning fra risikoeier";
                 case GODKJENT_AV_RISIKOEIER -> "Godkjent av risikoeier";
