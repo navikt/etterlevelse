@@ -10,7 +10,9 @@ import {
   mapBehandlingensLivslopToFormValue,
   updateBehandlingensLivslop,
 } from '../../api/BehandlingensLivslopApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '../../api/PvkDokumentApi'
 import {
+  EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
   IBehandlingensLivslop,
   IBehandlingensLivslopRequest,
@@ -25,6 +27,7 @@ import CustomFileUpload from '../behandlingensLivlop/CustomFileUpload'
 import behandlingensLivslopSchema from '../behandlingensLivlop/behandlingensLivsLopSchema'
 import { TextAreaField } from '../common/Inputs'
 import { ContentLayout } from '../layout/layout'
+import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -49,6 +52,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
   const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -96,20 +100,31 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
         mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
 
-      if (submitedValues.id || existingBehandlingsLivslopId) {
-        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then(
-          (response: IBehandlingensLivslop) => {
-            setBehandlingensLivslop(response)
-            window.location.reload()
-          }
-        )
+      let pvkStatus = ''
+      await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+        .then((response) => {
+          pvkStatus = response.status
+        })
+        .catch(() => undefined)
+
+      if (pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
       } else {
-        await createBehandlingensLivslop(mutatedBehandlingensLivslop).then(
-          (response: IBehandlingensLivslop) => {
-            setBehandlingensLivslop(response)
-            window.location.reload()
-          }
-        )
+        if (submitedValues.id || existingBehandlingsLivslopId) {
+          await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then(
+            (response: IBehandlingensLivslop) => {
+              setBehandlingensLivslop(response)
+              window.location.reload()
+            }
+          )
+        } else {
+          await createBehandlingensLivslop(mutatedBehandlingensLivslop).then(
+            (response: IBehandlingensLivslop) => {
+              setBehandlingensLivslop(response)
+              window.location.reload()
+            }
+          )
+        }
       }
     }
   }
@@ -214,6 +229,10 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                 </Form>
               )}
             </Formik>
+            <AlertPvoUnderarbeidModal
+              isOpen={isPvoAlertModalOpen}
+              onClose={() => setIsPvoAlertModalOpen(false)}
+            />
           </div>
 
           {/* Sidepanel */}
