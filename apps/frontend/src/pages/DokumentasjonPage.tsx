@@ -21,6 +21,7 @@ import {
 import { EtterlevelseDokumentasjonExpansionCard } from '../components/etterlevelseDokumentasjon/EtterlevelseDokumentasjonExpansionCard'
 import TillatGjenbrukModal from '../components/etterlevelseDokumentasjon/edit/TillatGjenbrukModal'
 import DokumentasjonPageTabs from '../components/etterlevelseDokumentasjon/tabs/DokumentasjonPageTabs'
+import { ContentLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   EPvkDokumentStatus,
@@ -250,7 +251,7 @@ export const DokumentasjonPage = () => {
             </BodyShort>
           )}
 
-          <div className='flex w-full'>
+          <ContentLayout>
             <div className='max-w-5xl flex-1'>
               {etterlevelseDokumentasjon.forGjenbruk &&
                 !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
@@ -399,7 +400,7 @@ export const DokumentasjonPage = () => {
                 </div>
               )}
             </div>
-          </div>
+          </ContentLayout>
         </div>
       </div>
 

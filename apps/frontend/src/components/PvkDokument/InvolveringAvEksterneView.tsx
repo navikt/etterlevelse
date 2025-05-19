@@ -17,6 +17,7 @@ import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
 import { ExternalLink } from '../common/RouteLink'
+import { ContentLayout } from '../layout/layout'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -67,7 +68,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
 
   return (
     <div className='w-full'>
-      <div className='flex w-full'>
+      <ContentLayout>
         <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
           <Formik
             validateOnChange={false}
@@ -356,7 +357,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
             />
           </PvoSidePanelWrapper>
         )}
-      </div>
+      </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
         activeStep={activeStep}

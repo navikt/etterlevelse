@@ -42,6 +42,7 @@ import { Portrait } from '../../common/Portrait'
 import { kravNummerVersjonUrl } from '../../common/RouteLinkKrav'
 import StatusView from '../../common/StatusTag'
 import { ShowWarningMessage } from '../../etterlevelseDokumentasjonTema/KravCard'
+import { ContentLayout } from '../../layout/layout'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
@@ -121,14 +122,14 @@ export const Tilbakemeldinger = ({
                               </div>
                             </div>
                             {!focused && (
-                              <div className='flex w-full'>
+                              <ContentLayout>
                                 <BodyShort className='mr-7 mt-1 w-full'>
                                   {_.truncate(tilbakemelding.meldinger[0].innhold, {
                                     length: 80,
                                     separator: /[.,] +/,
                                   })}
                                 </BodyShort>
-                              </div>
+                              </ContentLayout>
                             )}
                           </div>
                         </div>
@@ -141,9 +142,9 @@ export const Tilbakemeldinger = ({
                   </Accordion.Header>
                   <Accordion.Content>
                     {focused && (
-                      <div className='flex w-full'>
+                      <ContentLayout>
                         <BodyLong>{tilbakemelding.meldinger[0].innhold}</BodyLong>
-                      </div>
+                      </ContentLayout>
                     )}
                     <div className='flex w-full items-center mt-4'>
                       {focused && tilbakemelding.meldinger.length === 1 && (

@@ -10,6 +10,7 @@ import PvkBehovMetadata from '../components/PvkDokument/common/PvkBehovMetadata'
 import PvkBehovReadOnly from '../components/PvkDokument/common/PvkBehovReadOnly'
 import PvkBehovForm from '../components/PvkDokument/edit/PvkBehovForm'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import { ContentLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   IBehandling,
@@ -134,7 +135,7 @@ export const PvkBehovPage = () => {
       )}
 
       {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && pvkdokument && (
-        <div className='flex w-full'>
+        <ContentLayout>
           <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
             <PvkBehovInfoContent
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -172,7 +173,7 @@ export const PvkBehovPage = () => {
               <PvkBehovMetadata etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
             </div>
           )}
-        </div>
+        </ContentLayout>
       )}
     </PageLayout>
   )

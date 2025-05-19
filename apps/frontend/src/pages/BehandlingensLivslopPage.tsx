@@ -27,6 +27,7 @@ import behandlingensLivslopSchema from '../components/behandlingensLivlop/behand
 import { TextAreaField } from '../components/common/Inputs'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonPvkTypeStepUrl } from '../components/common/RouteLinkPvk'
+import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   IBehandlingensLivslop,
@@ -185,117 +186,119 @@ export const BehandlingensLivslopPage = () => {
         etterlevelseDokumentasjon &&
         behandlingsLivslop &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-          <div className='flex w-full'>
-            <Formik
-              validateOnBlur={false}
-              validateOnChange={false}
-              onSubmit={submit}
-              initialValues={mapBehandlingensLivslopRequestToFormValue(
-                behandlingsLivslop as IBehandlingensLivslop
-              )}
-              validate={() => {
-                try {
-                  validateYupSchema(
-                    { rejectedFiles: rejectedFiles },
-                    behandlingensLivslopSchema(),
-                    true
-                  )
-                } catch (error) {
-                  return yupToFormErrors(error)
-                }
-              }}
-              innerRef={formRef}
-            >
-              {({ submitForm, initialValues, errors, isSubmitting }) => (
-                <Form>
-                  <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8'>
-                    <BehandlingensLivslopTextContent />
+          <ContentLayout>
+            <MainPanelLayout>
+              <Formik
+                validateOnBlur={false}
+                validateOnChange={false}
+                onSubmit={submit}
+                initialValues={mapBehandlingensLivslopRequestToFormValue(
+                  behandlingsLivslop as IBehandlingensLivslop
+                )}
+                validate={() => {
+                  try {
+                    validateYupSchema(
+                      { rejectedFiles: rejectedFiles },
+                      behandlingensLivslopSchema(),
+                      true
+                    )
+                  } catch (error) {
+                    return yupToFormErrors(error)
+                  }
+                }}
+                innerRef={formRef}
+              >
+                {({ submitForm, initialValues, errors, isSubmitting }) => (
+                  <Form>
+                    <div>
+                      <BehandlingensLivslopTextContent />
 
-                    <BodyShort className='mt-3'>
-                      Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
-                      oversikt.
-                    </BodyShort>
+                      <BodyShort className='mt-3'>
+                        Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
+                        oversikt.
+                      </BodyShort>
 
-                    <CustomFileUpload
-                      initialValues={initialValues.filer}
-                      rejectedFiles={rejectedFiles}
-                      setRejectedFiles={setRejectedFiles}
-                      setFilesToUpload={setFilesToUpload}
-                    />
-
-                    <div className='mt-3'>
-                      <TextAreaField
-                        markdown
-                        noPlaceholder
-                        label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
-                        name='beskrivelse'
-                        height='5.75rem'
+                      <CustomFileUpload
+                        initialValues={initialValues.filer}
+                        rejectedFiles={rejectedFiles}
+                        setRejectedFiles={setRejectedFiles}
+                        setFilesToUpload={setFilesToUpload}
                       />
+
+                      <div className='mt-3'>
+                        <TextAreaField
+                          markdown
+                          noPlaceholder
+                          label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
+                          name='beskrivelse'
+                          height='5.75rem'
+                        />
+                      </div>
+
+                      {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
+                        <ErrorSummary className='mt-3' ref={errorSummaryRef}>
+                          <ErrorSummary.Item href={'#vedleggMedFeil'}>
+                            Vedlegg med feil
+                          </ErrorSummary.Item>
+                        </ErrorSummary>
+                      )}
+
+                      {!isSubmitting && (
+                        <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
+                          <Button
+                            type='button'
+                            onClick={() => {
+                              setTilPvkDokument(true)
+                              submitForm()
+                            }}
+                          >
+                            {pvkDokument
+                              ? 'Lagre og gå til PVK-Oversikt'
+                              : 'Lagre og vurdér behov for PVK'}
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={async () => {
+                              setTilTemaOversikt(true)
+                              await submitForm()
+                              setSubmitClick(!submitClick)
+                            }}
+                          >
+                            Lagre og gå til Temaoversikt
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='tertiary'
+                            onClick={() => {
+                              navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                            }}
+                          >
+                            Avbryt
+                          </Button>
+                        </div>
+                      )}
+
+                      {isSubmitting && (
+                        <div className='flex mt-5 justify-center items-center'>
+                          <Loader size='large' />
+                        </div>
+                      )}
                     </div>
-
-                    {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                      <ErrorSummary className='mt-3' ref={errorSummaryRef}>
-                        <ErrorSummary.Item href={'#vedleggMedFeil'}>
-                          Vedlegg med feil
-                        </ErrorSummary.Item>
-                      </ErrorSummary>
-                    )}
-
-                    {!isSubmitting && (
-                      <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
-                        <Button
-                          type='button'
-                          onClick={() => {
-                            setTilPvkDokument(true)
-                            submitForm()
-                          }}
-                        >
-                          {pvkDokument
-                            ? 'Lagre og gå til PVK-Oversikt'
-                            : 'Lagre og vurdér behov for PVK'}
-                        </Button>
-                        <Button
-                          type='button'
-                          variant='secondary'
-                          onClick={async () => {
-                            setTilTemaOversikt(true)
-                            await submitForm()
-                            setSubmitClick(!submitClick)
-                          }}
-                        >
-                          Lagre og gå til Temaoversikt
-                        </Button>
-                        <Button
-                          type='button'
-                          variant='tertiary'
-                          onClick={() => {
-                            navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
-                          }}
-                        >
-                          Avbryt
-                        </Button>
-                      </div>
-                    )}
-
-                    {isSubmitting && (
-                      <div className='flex mt-5 justify-center items-center'>
-                        <Loader size='large' />
-                      </div>
-                    )}
-                  </div>
-                </Form>
-              )}
-            </Formik>
+                  </Form>
+                )}
+              </Formik>
+            </MainPanelLayout>
 
             {/* right side */}
             {etterlevelseDokumentasjon && (
-              <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg'>
+              <SidePanelLayout>
                 <BehandlingensLivsLopSidePanel
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 />
-              </div>
+              </SidePanelLayout>
             )}
-          </div>
+          </ContentLayout>
         )}
     </PageLayout>
   )

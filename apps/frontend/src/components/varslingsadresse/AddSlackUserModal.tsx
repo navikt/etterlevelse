@@ -6,6 +6,7 @@ import { EAdresseType, ITeamResource, IVarslingsadresse } from '../../constants'
 import { user } from '../../services/User'
 import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
+import { ContentLayout } from '../layout/layout'
 import { noOptionMessage, selectOverrides } from '../search/util'
 
 interface IProps {
@@ -65,7 +66,7 @@ export const AddSlackUserModal = (props: IProps) => {
         {radioValue === 'slack' && (
           <div className='pl-8 w-full'>
             <div className='flex flex-col'>
-              <div className='flex w-full'>
+              <ContentLayout>
                 <div className='w-full'>
                   <LabelWithDescription
                     label='Søk etter Slack-bruker'
@@ -92,7 +93,7 @@ export const AddSlackUserModal = (props: IProps) => {
                     styles={selectOverrides}
                   />
                 </div>
-              </div>
+              </ContentLayout>
               {loadingSlackId && <Loader size='large' className='flex justify-self-center' />}
               {error && (
                 <Alert className='mt-2.5' variant='error'>
