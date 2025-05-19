@@ -8,6 +8,7 @@ import {
 } from '../../api/PvkDokumentApi'
 import {
   EPVK,
+  EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
   IPvkDokument,
   IPvoTilbakemelding,
@@ -18,6 +19,7 @@ import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemel
 import { BoolField, TextAreaField } from '../common/Inputs'
 import { ExternalLink } from '../common/RouteLink'
 import { ContentLayout } from '../layout/layout'
+import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -48,6 +50,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
@@ -60,9 +63,16 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
         dataBehandlerRepresentantInvolveringBeskrivelse:
           pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse,
       }
-      await updatePvkDokument(updatedatePvkDokument).then((response: IPvkDokument) => {
-        setPvkDokument(response)
-      })
+
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        await updatePvkDokument(updatedatePvkDokument)
+          .then((response: IPvkDokument) => {
+            setPvkDokument(response)
+          })
+          .finally(() => setSavedSuccessful(true))
+      }
     })
   }
 
@@ -239,7 +249,6 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         onClick={async () => {
                           await submitForm()
                           resetForm({ values })
-                          setSavedSuccessful(true)
                         }}
                       >
                         Lagre
@@ -345,6 +354,10 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
               </Form>
             )}
           </Formik>
+          <AlertPvoUnderarbeidModal
+            isOpen={isPvoAlertModalOpen}
+            onClose={() => setIsPvoAlertModalOpen(false)}
+          />
         </div>
 
         {/* sidepanel */}
