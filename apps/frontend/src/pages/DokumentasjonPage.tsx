@@ -359,7 +359,10 @@ export const DokumentasjonPage = () => {
                               pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
                               'Fullfør PVK'}
                             {!pvkDokumentNotStarted &&
-                              pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO &&
+                              [
+                                EPvkDokumentStatus.SENDT_TIL_PVO,
+                                EPvkDokumentStatus.PVO_UNDERARBEID,
+                              ].includes(pvkDokument.status) &&
                               'Les PVK'}
                             {!pvkDokumentNotStarted &&
                               [
