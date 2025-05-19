@@ -133,17 +133,16 @@ public class PvoTilbakemeldingController {
     private void updatePvkDokumentStatus(PvoTilbakemelding pvoTilbakemelding) {
         log.info("Updating PVK document status with id = {}, based on PVO tilbakemelding status = {}.", pvoTilbakemelding.getPvkDokumentId(), pvoTilbakemelding.getStatus());
         var ikkePabegyntStatus = List.of(PvoTilbakemeldingStatus.IKKE_PABEGYNT, PvoTilbakemeldingStatus.AVVENTER);
+        var underabeidStatus = List.of(
+                PvoTilbakemeldingStatus.UNDERARBEID,
+                PvoTilbakemeldingStatus.SNART_FERDIG,
+                PvoTilbakemeldingStatus.TIL_KONTROL
+        );
 
         var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
             pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
-        } else if (
-                List.of(
-                                PvoTilbakemeldingStatus.UNDERARBEID,
-                                PvoTilbakemeldingStatus.SNART_FERDIG,
-                                PvoTilbakemeldingStatus.TIL_KONTROL
-                        )
-                        .contains(pvoTilbakemelding.getStatus())) {
+        } else if (underabeidStatus.contains(pvoTilbakemelding.getStatus())) {
             pvkDokument.setStatus(PvkDokumentStatus.PVO_UNDERARBEID);
         } else if (ikkePabegyntStatus.contains(pvoTilbakemelding.getStatus())) {
             pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO);
