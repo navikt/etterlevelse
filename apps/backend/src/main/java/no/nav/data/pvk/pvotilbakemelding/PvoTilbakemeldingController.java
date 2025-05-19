@@ -86,10 +86,7 @@ public class PvoTilbakemeldingController {
         log.info("Create PVO tilbakemelding");
         // kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
         var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
-
-        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            updatePvkDokumentStatusToVurdertAvPvo(pvoTilbakemelding);
-        }
+        updatePvkDokumentStatus(pvoTilbakemelding);
 
         return new ResponseEntity<>(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding), HttpStatus.CREATED);
     }
@@ -113,9 +110,8 @@ public class PvoTilbakemeldingController {
         request.mergeInto(pvoTilbakemeldingToUpdate);
         var pvoTilbakemelding = pvoTilbakemeldingService.save(pvoTilbakemeldingToUpdate, request.isUpdate());
 
-        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            updatePvkDokumentStatusToVurdertAvPvo(pvoTilbakemelding);
-        }
+        updatePvkDokumentStatus(pvoTilbakemelding);
+
 
         return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
     }
@@ -134,10 +130,19 @@ public class PvoTilbakemeldingController {
         }
     }
 
-    private void updatePvkDokumentStatusToVurdertAvPvo(PvoTilbakemelding pvoTilbakemelding) {
-        log.info("Updating PVK document with id = {}, with status = {}, after PVO has finished the evaluation.", pvoTilbakemelding.getPvkDokumentId(), PvkDokumentStatus.VURDERT_AV_PVO);
+    private void updatePvkDokumentStatus(PvoTilbakemelding pvoTilbakemelding) {
+        log.info("Updating PVK document status with id = {}, based on PVO tilbakemelding status = {}.", pvoTilbakemelding.getPvkDokumentId(), pvoTilbakemelding.getStatus());
+        var ikkePabegyntStatus = List.of(PvoTilbakemeldingStatus.IKKE_PABEGYNT, PvoTilbakemeldingStatus.AVVENTER);
+
         var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
-        pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
+        } else if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.UNDERARBEID){
+            pvkDokument.setStatus(PvkDokumentStatus.PVO_UNDERARBEID);
+        } else if (ikkePabegyntStatus.contains(pvoTilbakemelding.getStatus())) {
+            pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO);
+        }
+
         pvkDokumentService.save(pvkDokument, true);
     }
 
