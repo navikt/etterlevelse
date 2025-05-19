@@ -119,7 +119,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
             setRisikoscenarioList(risikoscenarioer.content)
             setFilteredRisikosenarioList(risikoscenarioer.content)
 
-            setAntallHoyRisiko(
+            setAntallTiltakIkkeAktuelt(
               risikoscenarioer.content.filter(
                 (risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak
               ).length
@@ -135,7 +135,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
               ).length
             )
 
-            setAntallTiltakIkkeAktuelt(
+            setAntallHoyRisiko(
               risikoscenarioer.content.filter(
                 (risikoscenario: IRisikoscenario) =>
                   risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
