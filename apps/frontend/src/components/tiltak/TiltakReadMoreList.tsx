@@ -2,9 +2,11 @@ import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, Modal, ReadMore } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getPvkDokument } from '../../api/PvkDokumentApi'
 import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
-import { IRisikoscenario, ITiltak } from '../../constants'
+import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../constants'
+import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { risikoscenarioTiltakUrl, risikoscenarioUrl } from '../common/RouteLinkPvk'
 import TiltakView from './TiltakView'
 import TiltakForm from './edit/TiltakForm'
@@ -94,6 +96,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const url = new URL(window.location.href)
   const tiltakId = url.searchParams.get('tiltak')
   const navigate = useNavigate()
@@ -133,6 +136,16 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           navigate(risikoscenarioUrl(risikoscenario.id))
           window.location.reload()
         })
+      }
+    })
+  }
+
+  const activeFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
       }
     })
   }
@@ -184,9 +197,11 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                 variant='tertiary'
                 size='small'
                 icon={<PencilIcon title='' aria-hidden />}
-                onClick={() => {
-                  setIsEditTiltakFormActive(true)
-                  setIsEditMode(true)
+                onClick={async () => {
+                  await activeFormButton(() => {
+                    setIsEditTiltakFormActive(true)
+                    setIsEditMode(true)
+                  })
                 }}
               >
                 Redigér tiltak
@@ -197,13 +212,22 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                 variant='tertiary'
                 size='small'
                 icon={<TrashIcon title='' aria-hidden />}
-                onClick={() => setIsDeleteModalOpen(true)}
+                onClick={async () => {
+                  await activeFormButton(() => setIsDeleteModalOpen(true))
+                }}
               >
                 Slett tiltak
               </Button>
             </div>
           )}
       </div>
+
+      {isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
+        />
+      )}
 
       {isDeleteModalOpen && (
         <Modal
