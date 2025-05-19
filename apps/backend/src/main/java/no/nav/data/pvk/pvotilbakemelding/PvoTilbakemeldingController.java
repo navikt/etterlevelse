@@ -137,7 +137,13 @@ public class PvoTilbakemeldingController {
         var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
             pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
-        } else if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.UNDERARBEID){
+        } else if (
+                List.of(
+                                PvoTilbakemeldingStatus.UNDERARBEID,
+                                PvoTilbakemeldingStatus.SNART_FERDIG,
+                                PvoTilbakemeldingStatus.TIL_KONTROL
+                        )
+                        .contains(pvoTilbakemelding.getStatus())) {
             pvkDokument.setStatus(PvkDokumentStatus.PVO_UNDERARBEID);
         } else if (ikkePabegyntStatus.contains(pvoTilbakemelding.getStatus())) {
             pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO);
