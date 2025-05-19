@@ -8,6 +8,7 @@ import {
 } from '../../constants'
 import { Markdown } from '../common/Markdown'
 import { LabelAboveContent } from '../common/PropertyLabel'
+import { ContentLayout } from '../layout/layout'
 import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
@@ -163,7 +164,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
         </Alert>
       )}
 
-      <div className='flex w-full'>
+      <ContentLayout>
         {!suksesskriterie.behovForBegrunnelse && (
           <div className='w-full mt-8 '>
             <Label>Suksesskriteriet har ikke behov for begrunnelse.</Label>
@@ -183,7 +184,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
             />
           </div>
         )}
-      </div>
+      </ContentLayout>
     </Box>
   )
 }

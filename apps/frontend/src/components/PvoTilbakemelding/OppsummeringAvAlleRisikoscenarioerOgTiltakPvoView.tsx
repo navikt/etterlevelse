@@ -17,6 +17,7 @@ import {
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '../common/RouteLinkPvk'
+import { ContentLayout } from '../layout/layout'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
@@ -244,7 +245,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
 
   return (
     <div className='w-full'>
-      <div className='flex w-full'>
+      <ContentLayout>
         <div className='pt-6 w-[816px]'>
           <div>
             <Heading level='1' size='medium' className='mb-5'>
@@ -414,7 +415,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
             )}
           </PvoSidePanelWrapper>
         </div>
-      </div>
+      </ContentLayout>
       <PvoFormButtons
         activeStep={activeStep}
         setActiveStep={setActiveStep}

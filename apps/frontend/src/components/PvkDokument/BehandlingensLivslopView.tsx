@@ -24,6 +24,7 @@ import BehandlingensLivslopTextContent from '../behandlingensLivlop/Behandlingen
 import CustomFileUpload from '../behandlingensLivlop/CustomFileUpload'
 import behandlingensLivslopSchema from '../behandlingensLivlop/behandlingensLivsLopSchema'
 import { TextAreaField } from '../common/Inputs'
+import { ContentLayout } from '../layout/layout'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -121,7 +122,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
         </div>
       )}
       {!isLoading && behandlingensLivslop && (
-        <div className='flex w-full'>
+        <ContentLayout>
           <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
             <Formik
               validateOnBlur={false}
@@ -235,7 +236,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               </div>
             )}
           {/* Slutt på sidepanel innhold*/}
-        </div>
+        </ContentLayout>
       )}
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

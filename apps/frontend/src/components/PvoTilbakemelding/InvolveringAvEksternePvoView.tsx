@@ -1,6 +1,7 @@
 import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent, RefObject } from 'react'
 import { EPVK, EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { ContentLayout } from '../layout/layout'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from './common/PvoTilbakemeldingReadOnly'
@@ -29,7 +30,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
   formRef,
 }) => (
   <div className='w-full'>
-    <div className='flex w-full'>
+    <ContentLayout>
       <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
         <div className='flex justify-center'>
           <div>
@@ -112,7 +113,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
           />
         )}
       </PvoSidePanelWrapper>
-    </div>
+    </ContentLayout>
     <PvoFormButtons
       activeStep={activeStep}
       setActiveStep={setActiveStep}

@@ -10,6 +10,7 @@ import { CodelistService, EListName, ICode, TLovCode } from '../../../services/C
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import { kravNummerVersjonUrl } from '../../common/RouteLinkKrav'
+import { ContentLayout } from '../../layout/layout'
 import { PageLayout } from '../../scaffold/Page'
 import { kravNewVersionValidation } from './KravSchemaValidation'
 import { KravFormFields } from './components/KravFormFields'
@@ -124,7 +125,7 @@ export const KravNyVersjonPage = () => {
                         </div>
                       )}
 
-                      <div className='flex w-full'>
+                      <ContentLayout>
                         <KravStandardButtons
                           submitCancelButton={() => {
                             navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1))
@@ -141,7 +142,7 @@ export const KravNyVersjonPage = () => {
                           }}
                           isSubmitting={isSubmitting}
                         />
-                      </div>
+                      </ContentLayout>
                     </div>
                     <div className='py-12'>
                       <TextAreaField

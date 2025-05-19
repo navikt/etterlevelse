@@ -23,6 +23,7 @@ import Etterlevelser from '../components/krav/Etterlevelser'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
+import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   EKravStatus,
@@ -221,8 +222,8 @@ export const KravPage = () => {
       )}
 
       {krav && !kravLoading && (
-        <div className='flex w-full'>
-          <div className='pr-14 w-full'>
+        <ContentLayout>
+          <MainPanelLayout>
             {hasKravExpired() && krav && (
               <ExpiredAlert
                 alleKravVersjoner={alleKravVersjoner}
@@ -265,8 +266,8 @@ export const KravPage = () => {
                 </Tabs.Panel>
               </Tabs>
             </div>
-          </div>
-          <div className='max-w-sm w-full border-l-2 border-gray-200 pl-3'>
+          </MainPanelLayout>
+          <SidePanelLayout>
             <AllInfo header krav={krav} alleKravVersjoner={alleKravVersjoner} noLastModifiedDate />
 
             <div className='mt-8'>
@@ -314,8 +315,8 @@ export const KravPage = () => {
                 </div>
               )}
             </div>
-          </div>
-        </div>
+          </SidePanelLayout>
+        </ContentLayout>
       )}
     </PageLayout>
   )

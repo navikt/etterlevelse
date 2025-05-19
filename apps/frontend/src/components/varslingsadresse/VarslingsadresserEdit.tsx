@@ -29,6 +29,7 @@ import { LabelWithDescription } from '../common/LabelWithTooltip'
 import { Error } from '../common/ModalSchema'
 import { RenderTagList } from '../common/TagList'
 import { DropdownIndicator } from '../krav/Edit/KravBegreperEdit'
+import { ContentLayout } from '../layout/layout'
 import { noOptionMessage, selectOverrides } from '../search/util'
 import { AddEmailModal } from './AddEmailModal'
 import { AddSlackChannelModal } from './AddSlackChannelModal'
@@ -251,7 +252,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
 
   return (
     <div className='flex flex-col'>
-      <div className='flex w-full'>
+      <ContentLayout>
         <div className='w-full'>
           <AsyncSelect
             aria-label='Søk etter slack-bruker'
@@ -279,7 +280,7 @@ export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
             Meg
           </Button>
         </div>
-      </div>
+      </ContentLayout>
       {loadingSlackId && <Loader size='large' className='flex justify-self-center' />}
       {error && (
         <Alert className='mt-2.5' variant='error'>
@@ -318,7 +319,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
   return (
     <div className='flex flex-col'>
-      <div className='flex w-full'>
+      <ContentLayout>
         <TextField
           label='epost'
           hideLabel
@@ -337,7 +338,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
             <PlusIcon title='legg til epost' aria-label='legg til epost' />
           </Button>
         </div>
-      </div>
+      </ContentLayout>
       {error && <Error message={error} />}
     </div>
   )

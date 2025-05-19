@@ -25,6 +25,7 @@ import { user } from '../../../services/User'
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
 import { kravNummerVersjonUrl, kravlisteUrl } from '../../common/RouteLinkKrav'
+import { ContentLayout } from '../../layout/layout'
 import { PageLayout } from '../../scaffold/Page'
 import { kravEditValidation } from './KravSchemaValidation'
 import { KravEditStatusModal } from './components/KravEditStatusModal'
@@ -208,7 +209,7 @@ export const KravEditPage = () => {
                             }}
                             isSubmitting={isSubmitting}
                           />
-                          <div className='flex w-full'>
+                          <ContentLayout>
                             {krav.status === EKravStatus.AKTIV && (
                               <div className='mr-2'>
                                 <Button
@@ -323,7 +324,7 @@ export const KravEditPage = () => {
                                 Ja, sett til aktiv
                               </Button>
                             </KravEditStatusModal>
-                          </div>
+                          </ContentLayout>
                         </div>
                       </div>
                       <div className='py-12'>

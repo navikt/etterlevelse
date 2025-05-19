@@ -9,6 +9,7 @@ import { CodelistService, EListName, ICode, TLovCode } from '../../../services/C
 import ErrorModal from '../../ErrorModal'
 import { TextAreaField } from '../../common/Inputs'
 import { kravNummerUrl, kravlisteUrl } from '../../common/RouteLinkKrav'
+import { ContentLayout } from '../../layout/layout'
 import { PageLayout } from '../../scaffold/Page'
 import { kravCreateValidation } from './KravSchemaValidation'
 import { KravFormFields } from './components/KravFormFields'
@@ -85,7 +86,7 @@ export const KravCreatePage = () => {
                 />
 
                 <div className='button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-white'>
-                  <div className='flex w-full'>
+                  <ContentLayout>
                     <KravStandardButtons
                       submitCancelButton={() => {
                         navigate(kravlisteUrl())
@@ -102,7 +103,7 @@ export const KravCreatePage = () => {
                       }}
                       isSubmitting={isSubmitting}
                     />
-                  </div>
+                  </ContentLayout>
                 </div>
 
                 <div className=' py-12'>

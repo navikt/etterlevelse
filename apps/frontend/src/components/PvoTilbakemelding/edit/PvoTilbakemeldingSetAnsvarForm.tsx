@@ -1,4 +1,4 @@
-import { Button, Checkbox, CheckboxGroup, Heading, ReadMore, TextField } from '@navikt/ds-react'
+import { Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { ChangeEvent, FunctionComponent, RefObject, useState } from 'react'
@@ -29,14 +29,14 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
   formRef,
 }) => {
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
-  const submit = async (pvoTilbakmelding: IPvoTilbakemelding): Promise<void> => {
+  const submit = async (pvoTilbakemelding: IPvoTilbakemelding): Promise<void> => {
     await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
       .then(async (response: IPvoTilbakemelding) => {
         if (response) {
           const updatedValues: IPvoTilbakemelding = {
             ...response,
-            ansvarligData: pvoTilbakmelding.ansvarligData,
-            status: pvoTilbakmelding.status,
+            ansvarligData: pvoTilbakemelding.ansvarligData,
+            status: pvoTilbakemelding.status,
           }
           await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
         }
@@ -45,8 +45,8 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
         if (error.status === 404) {
           const createValue = mapPvoTilbakemeldingToFormValue({
             pvkDokumentId: pvkDokumentId,
-            ansvarligData: pvoTilbakmelding.ansvarligData,
-            status: pvoTilbakmelding.status,
+            ansvarligData: pvoTilbakemelding.ansvarligData,
+            status: pvoTilbakemelding.status,
           })
           await createPvoTilbakemelding(createValue).then(() => window.location.reload())
         } else {
@@ -153,22 +153,22 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
             <div id='status' className='mb-5'>
               <Field name='status'>
                 {() => (
-                  <CheckboxGroup
-                    legend='Sett status til avventer'
-                    hideLegend
-                    value={
-                      values.status === EPvoTilbakemeldingStatus.AVVENTER ? ['isAvventer'] : []
-                    }
-                    onChange={(value: string[]) => {
-                      if (value.length !== 0) {
-                        setFieldValue('status', EPvoTilbakemeldingStatus.AVVENTER)
-                      } else {
-                        setFieldValue('status', EPvoTilbakemeldingStatus.IKKE_PABEGYNT)
-                      }
+                  <Select
+                    label='Velg status'
+                    value={values.status}
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                      setFieldValue('status', event.target.value)
                     }}
                   >
-                    <Checkbox value='isAvventer'>sett til avventer</Checkbox>
-                  </CheckboxGroup>
+                    <option value={EPvoTilbakemeldingStatus.IKKE_PABEGYNT}>Ikke påbegynt</option>
+                    <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
+                    <option value={EPvoTilbakemeldingStatus.AVVENTER}>Aventer</option>
+                    <option value={EPvoTilbakemeldingStatus.SNART_FERDIG}>Snart Ferdig</option>
+                    <option value={EPvoTilbakemeldingStatus.TIL_KONTROL}>
+                      PVO øvrig beslutning
+                    </option>
+                    <option value={EPvoTilbakemeldingStatus.UTGAAR}>Utgår</option>
+                  </Select>
                 )}
               </Field>
             </div>

@@ -3,6 +3,7 @@ import moment from 'moment'
 import { ETilbakemeldingRolle, ITilbakemelding, ITilbakemeldingMelding } from '../../../constants'
 import { PersonName } from '../../common/PersonName'
 import { Portrait } from '../../common/Portrait'
+import { ContentLayout } from '../../layout/layout'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
 
@@ -19,18 +20,18 @@ export const ResponseMelding = (props: {
 
   return (
     <div className='flex flex-col mb-4 p-2'>
-      <div className='flex w-full'>
+      <ContentLayout>
         <Portrait ident={melding.fraIdent} />
         <div className='flex flex-col w-full ml-2.5'>
           <div className='flex items-center w-full'>
             <Label>{<PersonName ident={melding.fraIdent} kraveier={kraveier} />}</Label>
             <BodyShort className='ml-6'>Sendt: {moment(melding.tid).format('LLL')}</BodyShort>
           </div>
-          <div className='flex w-full'>
+          <ContentLayout>
             <BodyLong className='mr-7 mt-1'>{melding.innhold}</BodyLong>
-          </div>
+          </ContentLayout>
         </div>
-      </div>
+      </ContentLayout>
       <div className='flex items-center mt-4 pl-12'>
         {sisteMelding && (
           <MeldingKnapper

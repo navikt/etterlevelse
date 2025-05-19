@@ -1,15 +1,16 @@
 import { Heading, Skeleton } from '@navikt/ds-react'
 import * as _ from 'lodash'
+import { ContentLayout } from '../layout/layout'
 
 export const LoadingSkeleton = (props: { header: string }) => (
   <div className='w-full'>
     <div className='flex justify-between items-center w-full'>
-      <div className='flex w-full'>
+      <ContentLayout>
         <Heading level='1' size='medium' className='mr-2.5'>
           {props.header}
         </Heading>
         <Skeleton height='2.5rem' width='25rem' />
-      </div>
+      </ContentLayout>
       <div className='flex'>
         <Skeleton height='2.5rem' width='2.5rem' className='mr-2.5' />
         <Skeleton height='2.5rem' width='2.5rem' />
