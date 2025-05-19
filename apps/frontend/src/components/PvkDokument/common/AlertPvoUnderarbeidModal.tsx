@@ -9,7 +9,7 @@ type TProps = {
 export const AlertPvoUnderarbeidModal: FunctionComponent<TProps> = ({ isOpen, onClose }) => {
   return (
     <Modal open={isOpen} onClose={() => onClose()} header={{ heading: 'Kan ikke redigeres' }}>
-      <Modal.Body>Personvernombudet har påbegynt vurdering</Modal.Body>
+      <Modal.Body>Personvernombudet har påbegynt vurderingen</Modal.Body>
       <Modal.Footer>
         <Button type='button' onClick={() => onClose()}>
           Lukk

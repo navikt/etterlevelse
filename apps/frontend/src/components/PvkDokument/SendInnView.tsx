@@ -349,7 +349,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
-                {pvoTilbakemelding && pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
+                {pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
                   <div>
                     <div className='mt-5 mb-3 max-w-[75ch]'>
                       <Label>Beskjed til personvernombudet</Label>
@@ -359,14 +359,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           : 'Ingen beskjed'}
                       </DataTextWrapper>
                     </div>
-                    <div className='mt-5 mb-3 max-w-[75ch]'>
-                      <Label>Beskjed til etterlever</Label>
-                      <DataTextWrapper>
-                        {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-                          ? pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-                          : 'Ingen beskjed'}
-                      </DataTextWrapper>
-                    </div>
+                    {pvoTilbakemelding && (
+                      <div className='mt-5 mb-3 max-w-[75ch]'>
+                        <Label>Beskjed til etterlever</Label>
+                        <DataTextWrapper>
+                          {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
+                            ? pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
+                            : 'Ingen beskjed'}
+                        </DataTextWrapper>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -421,12 +423,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   activeText='Lenken er kopiert'
                   icon={<FilesIcon aria-hidden />}
                 />
-
-                {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-                  <Alert variant='success' className='my-5'>
-                    Sendt til Personvernombudet
-                  </Alert>
-                )}
 
                 <Alert variant='info' className='my-5'>
                   Status: {pvkDokumentStatusToText(pvkDokument.status)}
@@ -517,6 +513,18 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             }}
                           >
                             Send til Personvernombudet
+                          </Button>
+                        )}
+
+                        {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
+                          <Button
+                            type='button'
+                            onClick={async () => {
+                              await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
+                              await submitForm()
+                            }}
+                          >
+                            Angre innsending til personvernombudet
                           </Button>
                         )}
 
