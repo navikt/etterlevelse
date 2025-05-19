@@ -1,8 +1,10 @@
 import { Button } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import { createRisikoscenario } from '../../../api/RisikoscenarioApi'
-import { IPvkDokument, IRisikoscenario } from '../../../constants'
+import { EPvkDokumentStatus, IPvkDokument, IRisikoscenario } from '../../../constants'
+import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
 import RisikoscenarioModalForm from './RisikoscenarioModalForm'
 
@@ -17,6 +19,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
 }) => {
   const navigate: NavigateFunction = useNavigate()
   const [isEdit, setIsEdit] = useState<boolean>(false)
+  const [isPvoAlertModal, setIsPvoAlertModal] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await createRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
@@ -32,9 +35,27 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
   return (
     <div className='mt-5'>
       {!isEdit && (
-        <Button onClick={() => setIsEdit(true)} variant='secondary'>
+        <Button
+          onClick={async () =>
+            await getPvkDokument(pvkDokument.id).then((response) => {
+              if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+                setIsPvoAlertModal(true)
+              } else {
+                setIsEdit(true)
+              }
+            })
+          }
+          variant='secondary'
+        >
           Opprett nytt øvrig risikoscenario
         </Button>
+      )}
+
+      {isPvoAlertModal && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModal}
+          onClose={() => setIsPvoAlertModal(false)}
+        />
       )}
 
       {isEdit && (
