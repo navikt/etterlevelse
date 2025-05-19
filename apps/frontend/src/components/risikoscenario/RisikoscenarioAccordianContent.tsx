@@ -2,9 +2,11 @@ import { PencilIcon } from '@navikt/aksel-icons'
 import { Alert, Button } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { getPvkDokument } from '../../api/PvkDokumentApi'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
-import { IRisikoscenario, ITiltak } from '../../constants'
+import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../constants'
+import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { risikoscenarioTiltakUrl } from '../common/RouteLinkPvk'
 import TiltakReadMoreList from '../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../tiltak/edit/LeggTilEksisterendeTiltak'
@@ -46,6 +48,8 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
+
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
@@ -95,6 +99,16 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     }
   }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive])
 
+  const activeFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
+      }
+    })
+  }
+
   return (
     <div>
       <RisikoscenarioView
@@ -114,7 +128,9 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 variant='tertiary'
                 type='button'
                 icon={<PencilIcon aria-hidden />}
-                onClick={() => setIsEditModalOpen(true)}
+                onClick={async () => {
+                  await activeFormButton(() => setIsEditModalOpen(true))
+                }}
               >
                 Redigèr risikoscenario
               </Button>
@@ -180,21 +196,24 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 <div className='mt-5 flex gap-2'>
                   <Button
                     type='button'
-                    onClick={() => {
-                      setIsCreateTiltakFormActive(true)
-
-                      setIsTiltakFormActive(true)
-                    }}
+                    onClick={async () =>
+                      await activeFormButton(() => {
+                        setIsCreateTiltakFormActive(true)
+                        setIsTiltakFormActive(true)
+                      })
+                    }
                   >
                     Opprett nytt tiltak
                   </Button>
                   <Button
                     type='button'
                     variant='secondary'
-                    onClick={() => {
-                      setIsAddExisitingMode(true)
-                      setIsTiltakFormActive(true)
-                    }}
+                    onClick={async () =>
+                      await activeFormButton(() => {
+                        setIsAddExisitingMode(true)
+                        setIsTiltakFormActive(true)
+                      })
+                    }
                   >
                     Legg til eksisterende tiltak
                   </Button>
@@ -225,6 +244,13 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           setIsOpen={setIsEditModalOpen}
           submit={submit}
           initialValues={activeRisikoscenario}
+        />
+      )}
+
+      {isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
         />
       )}
     </div>

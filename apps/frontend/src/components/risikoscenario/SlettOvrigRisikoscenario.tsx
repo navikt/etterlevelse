@@ -2,13 +2,15 @@ import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, Heading, List, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   deleteRisikoscenario,
   getRisikoscenario,
   removeTiltakToRisikoscenario,
 } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak } from '../../api/TiltakApi'
-import { IRisikoscenario, ITiltak } from '../../constants'
+import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../constants'
+import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
 
 type TProps = {
   risikoscenario: IRisikoscenario
@@ -25,6 +27,7 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
 }) => {
   const navigate: NavigateFunction = useNavigate()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (): Promise<void> => {
     await getRisikoscenario(risikoscenario.id).then(async (response: IRisikoscenario) => {
@@ -60,11 +63,26 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
       <Button
         type='button'
         variant='tertiary'
-        onClick={() => setIsOpen(true)}
+        onClick={async () => {
+          await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+            if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+              setIsPvoAlertModalOpen(true)
+            } else {
+              setIsOpen(true)
+            }
+          })
+        }}
         icon={<TrashIcon aria-hidden title='' />}
       >
         Slett risikoscenario
       </Button>
+
+      {isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
+        />
+      )}
 
       {isOpen && (
         <Modal
