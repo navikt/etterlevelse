@@ -2,12 +2,14 @@ import { PencilIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, Heading, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useState } from 'react'
+import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import {
   getRisikoscenario,
   mapRisikoscenarioToFormValue,
   updateRisikoscenario,
 } from '../../../api/RisikoscenarioApi'
-import { IRisikoscenario } from '../../../constants'
+import { EPvkDokumentStatus, IRisikoscenario } from '../../../constants'
+import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { TextAreaField } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 import RisikoscenarioTag, {
@@ -38,6 +40,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
   formRef,
 }) => {
   const [isFormActive, setIsFormActive] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const revurdertEffektCheck =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -113,12 +116,27 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
           </div>
         )}
 
+        {isPvoAlertModalOpen && (
+          <AlertPvoUnderarbeidModal
+            isOpen={isPvoAlertModalOpen}
+            onClose={() => setIsPvoAlertModalOpen(false)}
+          />
+        )}
+
         {!isFormActive && (
           <Button
             className='mt-3'
             type='button'
             variant={revurdertEffektCheck ? 'primary' : 'tertiary'}
-            onClick={() => setIsFormActive(true)}
+            onClick={async () => {
+              await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+                if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+                  setIsPvoAlertModalOpen(true)
+                } else {
+                  setIsFormActive(true)
+                }
+              })
+            }}
             icon={revurdertEffektCheck ? undefined : <PencilIcon aria-hidden title='' />}
           >
             {revurdertEffektCheck ? 'Vurdér tiltakenes effekt' : 'Redigér tiltakenes effekt'}
