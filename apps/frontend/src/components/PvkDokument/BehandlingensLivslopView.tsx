@@ -225,13 +225,15 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             </PvoSidePanelWrapper>
           )}
 
-          {!pvoTilbakemelding && etterlevelseDokumentasjon && (
-            <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg'>
-              <BehandlingensLivsLopSidePanel
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              />
-            </div>
-          )}
+          {(!pvoTilbakemelding ||
+            (pvoTilbakemelding && pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) &&
+            etterlevelseDokumentasjon && (
+              <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg'>
+                <BehandlingensLivsLopSidePanel
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                />
+              </div>
+            )}
           {/* Slutt på sidepanel innhold*/}
         </div>
       )}
