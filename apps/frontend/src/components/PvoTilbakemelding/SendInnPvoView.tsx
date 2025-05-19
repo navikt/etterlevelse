@@ -155,6 +155,19 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                       </Button>
                     )}
 
+                    {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={() => {
+                          setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
+                          submitForm()
+                        }}
+                      >
+                        Angre tilbakemelding
+                      </Button>
+                    )}
+
                     {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                       <Button
                         type='button'

@@ -70,7 +70,10 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               fieldName === 'risikoscenarioEtterTiltakk'
                 ? mutatedTilbakemeldingsInnhold
                 : response.risikoscenarioEtterTiltakk,
-            status: EPvoTilbakemeldingStatus.UNDERARBEID,
+            status:
+              response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
+                ? EPvoTilbakemeldingStatus.UNDERARBEID
+                : response.status,
           }
 
           if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
