@@ -1,6 +1,7 @@
 import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, Heading, List, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
+import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import {
   deleteRisikoscenario,
   fjernKravFraRisikoscenario,
@@ -8,7 +9,8 @@ import {
   removeTiltakToRisikoscenario,
 } from '../../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak } from '../../../api/TiltakApi'
-import { IKravReference, IRisikoscenario, ITiltak } from '../../../constants'
+import { EPvkDokumentStatus, IKravReference, IRisikoscenario, ITiltak } from '../../../constants'
+import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
 
 type TProps = {
   kravnummer: number
@@ -28,7 +30,17 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
   setRisikoscenarioForKrav,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
+  const activateFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
+      }
+    })
+  }
   const submit = async (): Promise<void> => {
     getRisikoscenario(risikoscenario.id).then(async (response: IRisikoscenario) => {
       const relevanteKravNummer: IKravReference[] = response.relevanteKravNummer
@@ -73,7 +85,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
       <Button
         type='button'
         variant='tertiary'
-        onClick={() => setIsOpen(true)}
+        onClick={async () => await activateFormButton(() => setIsOpen(true))}
         icon={<TrashIcon aria-hidden title='' />}
       >
         Slett risikoscenario
@@ -113,6 +125,13 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
             </Button>
           </Modal.Footer>
         </Modal>
+      )}
+
+      {isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
+        />
       )}
     </div>
   )

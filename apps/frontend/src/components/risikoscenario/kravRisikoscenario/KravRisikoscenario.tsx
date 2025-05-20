@@ -1,9 +1,11 @@
 import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
 import {
+  EPvkDokumentStatus,
   ERisikoscenarioType,
   IPageResponse,
   IPvkDokument,
@@ -11,6 +13,7 @@ import {
   ITiltak,
   TKravQL,
 } from '../../../constants'
+import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
@@ -42,11 +45,22 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const url: URL = new URL(window.location.href)
   const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
   const navigate: NavigateFunction = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const activateFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(pvkDokument.id).then((response) => {
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
+      }
+    })
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -209,13 +223,15 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
                 <Button
                   size='small'
                   type='button'
-                  onClick={() => {
-                    if (formRef.current?.dirty) {
-                      setIsUnsaved(true)
-                    } else {
-                      setIsCreateMode(true)
-                    }
-                  }}
+                  onClick={async () =>
+                    await activateFormButton(() => {
+                      if (formRef.current?.dirty) {
+                        setIsUnsaved(true)
+                      } else {
+                        setIsCreateMode(true)
+                      }
+                    })
+                  }
                 >
                   Opprett nytt risikoscenario
                 </Button>
@@ -224,13 +240,15 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
                     size='small'
                     variant='secondary'
                     type='button'
-                    onClick={() => {
-                      if (formRef.current?.dirty) {
-                        setIsUnsaved(true)
-                      } else {
-                        setIsLeggTilEksisterendeMode(true)
-                      }
-                    }}
+                    onClick={async () =>
+                      await activateFormButton(() => {
+                        if (formRef.current?.dirty) {
+                          setIsUnsaved(true)
+                        } else {
+                          setIsLeggTilEksisterendeMode(true)
+                        }
+                      })
+                    }
                   >
                     Legg til eksisterende risikoscenario
                   </Button>
@@ -240,6 +258,13 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
 
             {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
               <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} />
+            )}
+
+            {isPvoAlertModalOpen && (
+              <AlertPvoUnderarbeidModal
+                isOpen={isPvoAlertModalOpen}
+                onClose={() => setIsPvoAlertModalOpen(false)}
+              />
             )}
 
             <AccordianAlertModal

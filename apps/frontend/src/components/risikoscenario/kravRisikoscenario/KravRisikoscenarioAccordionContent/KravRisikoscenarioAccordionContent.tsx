@@ -1,6 +1,7 @@
 import { Button } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { getPvkDokument } from '../../../../api/PvkDokumentApi'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
@@ -12,7 +13,13 @@ import {
   deleteTiltak,
   getTiltak,
 } from '../../../../api/TiltakApi'
-import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../../constants'
+import {
+  EPvkDokumentStatus,
+  IRisikoscenario,
+  ITiltak,
+  ITiltakRisikoscenarioRelasjon,
+} from '../../../../constants'
+import AlertPvoUnderarbeidModal from '../../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { risikoscenarioIdQuery } from '../../../common/RouteLinkRisiko'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
@@ -62,6 +69,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTiltakFormDirty, setIsIngenTilktakFormDirty] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const navigate: NavigateFunction = useNavigate()
 
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
@@ -162,6 +170,16 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     })
   }
 
+  const activateFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
+      }
+    })
+  }
+
   useEffect(() => {
     if (isCreateTiltakFormActive || isAddExistingMode || isEditTiltakFormActive) {
       setIsTiltakFormActive(true)
@@ -242,7 +260,11 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                   <Button
                     size='small'
                     type='button'
-                    onClick={() => setIsCreateTiltakFormActive(true)}
+                    onClick={async () =>
+                      await activateFormButton(() => {
+                        setIsCreateTiltakFormActive(true)
+                      })
+                    }
                   >
                     Opprett nytt tiltak
                   </Button>
@@ -253,7 +275,11 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                       type='button'
                       size='small'
                       variant='secondary'
-                      onClick={() => setIsAddExisitingMode(true)}
+                      onClick={async () =>
+                        await activateFormButton(() => {
+                          setIsAddExisitingMode(true)
+                        })
+                      }
                     >
                       Legg til eksisterende tiltak
                     </Button>
@@ -285,6 +311,13 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           setIsOpen={setIsEditModalOpen}
           submit={submit}
           initialValues={activeRisikoscenario}
+        />
+      )}
+
+      {isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
         />
       )}
     </div>

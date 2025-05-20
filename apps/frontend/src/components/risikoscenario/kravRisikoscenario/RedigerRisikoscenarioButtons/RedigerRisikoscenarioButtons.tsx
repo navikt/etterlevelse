@@ -1,7 +1,9 @@
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
-import { IRisikoscenario } from '../../../../constants'
+import { FunctionComponent, useState } from 'react'
+import { getPvkDokument } from '../../../../api/PvkDokumentApi'
+import { EPvkDokumentStatus, IRisikoscenario } from '../../../../constants'
+import AlertPvoUnderarbeidModal from '../../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import FjernRisikoscenarioFraKrav from '../../edit/FjernRisikoscenarioFraKrav'
 
 type TProps = {
@@ -22,27 +24,48 @@ export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
   setRisikoscenarioer,
   risikoscenarioForKrav,
   setRisikoscenarioForKrav,
-}) => (
-  <div className='mt-5'>
-    <Button
-      variant='tertiary'
-      type='button'
-      icon={<PencilIcon aria-hidden />}
-      onClick={() => setIsEditModalOpen(true)}
-      className='mb-2'
-    >
-      Redigèr risikoscenario
-    </Button>
+}) => {
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
-    <FjernRisikoscenarioFraKrav
-      kravnummer={kravnummer}
-      risikoscenario={risikoscenario}
-      risikoscenarioer={risikoscenarioer}
-      setRisikoscenarioer={setRisikoscenarioer}
-      risikoscenarioForKrav={risikoscenarioForKrav}
-      setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-    />
-  </div>
-)
+  const activateFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
+      }
+    })
+  }
+
+  return (
+    <div className='mt-5'>
+      <Button
+        variant='tertiary'
+        type='button'
+        icon={<PencilIcon aria-hidden />}
+        onClick={async () => await activateFormButton(() => setIsEditModalOpen(true))}
+        className='mb-2'
+      >
+        Redigèr risikoscenario
+      </Button>
+
+      <FjernRisikoscenarioFraKrav
+        kravnummer={kravnummer}
+        risikoscenario={risikoscenario}
+        risikoscenarioer={risikoscenarioer}
+        setRisikoscenarioer={setRisikoscenarioer}
+        risikoscenarioForKrav={risikoscenarioForKrav}
+        setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+      />
+
+      {isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
+        />
+      )}
+    </div>
+  )
+}
 
 export default RedigerRisikoscenarioButtons
