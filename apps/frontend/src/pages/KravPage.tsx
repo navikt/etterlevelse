@@ -176,7 +176,7 @@ export const KravPage = () => {
     if (kravTema?.shortName) {
       breadcrumbPaths.push({
         pathName: kravTema.shortName.toString(),
-        href: `${temaUrl}${kravTema.code}`,
+        href: `${temaUrl}/${kravTema.code}`,
       })
     }
     return breadcrumbPaths
