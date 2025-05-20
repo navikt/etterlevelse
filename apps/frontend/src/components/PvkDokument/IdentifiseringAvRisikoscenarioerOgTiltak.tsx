@@ -2,6 +2,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EPvkDokumentStatus,
   ERisikoscenarioType,
   IPageResponse,
   IPvkDokument,
@@ -10,6 +11,7 @@ import {
 } from '../../constants'
 import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordianList'
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
+import RisikoscenarioAccordianListReadOnlyView from '../risikoscenario/readOnly/RisikoscenarioAccordianListReadOnlyView'
 import { IdentifiseringAvRisikoscenarioerOgTiltakContent } from './common/IdentifiseringAvRisikoscenarioerOgTiltakContent'
 import FormButtons from './edit/FormButtons'
 
@@ -64,31 +66,44 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
           risikoscenarioList={risikoscenarioList}
         />
 
-        <div className='w-full'>
-          {risikoscenarioList.length !== 0 && (
-            <div className='my-5'>
-              <RisikoscenarioAccordianList
-                risikoscenarioList={risikoscenarioList}
-                allRisikoscenarioList={allRisikoscenarioList}
-                tiltakList={tiltakList}
-                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                setTiltakList={setTiltakList}
-                setRisikoscenarioList={setRisikoscenarioList}
-                setIsTiltakFormActive={setIsTiltakFormActive}
-                formRef={formRef}
-              />
-            </div>
-          )}
+        {pvkDokument && pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
+          <div className='w-full'>
+            {risikoscenarioList.length !== 0 && (
+              <div className='my-5'>
+                <RisikoscenarioAccordianList
+                  risikoscenarioList={risikoscenarioList}
+                  allRisikoscenarioList={allRisikoscenarioList}
+                  tiltakList={tiltakList}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                  setTiltakList={setTiltakList}
+                  setRisikoscenarioList={setRisikoscenarioList}
+                  setIsTiltakFormActive={setIsTiltakFormActive}
+                  formRef={formRef}
+                />
+              </div>
+            )}
 
-          {!isTiltakFormActive && (
-            <CreateRisikoscenarioModal
-              pvkDokument={pvkDokument}
-              onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
-                setRisikoscenarioList([...risikoscenarioList, risikoscenario])
-              }}
+            {!isTiltakFormActive && (
+              <CreateRisikoscenarioModal
+                pvkDokument={pvkDokument}
+                onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
+                  setRisikoscenarioList([...risikoscenarioList, risikoscenario])
+                }}
+              />
+            )}
+          </div>
+        )}
+
+        {pvkDokument && pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
+          <div className='w-full'>
+            <RisikoscenarioAccordianListReadOnlyView
+              risikoscenarioList={risikoscenarioList}
+              etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+              allRisikoscenarioList={allRisikoscenarioList}
+              tiltakList={tiltakList}
             />
-          )}
-        </div>
+          </div>
+        )}
 
         <FormButtons
           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
