@@ -20,6 +20,7 @@ import {
 } from '../api/BehandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
+import AlertPvoUnderarbeidModal from '../components/PvkDokument/common/AlertPvoUnderarbeidModal'
 import BehandlingensLivsLopSidePanel from '../components/behandlingensLivlop/BehandlingensLivslopSidePanel'
 import BehandlingensLivslopTextContent from '../components/behandlingensLivlop/BehandlingensLivslopTextContent'
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
@@ -30,6 +31,7 @@ import { pvkDokumentasjonPvkTypeStepUrl } from '../components/common/RouteLinkPv
 import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EPvkDokumentStatus,
   IBehandlingensLivslop,
   IBehandlingensLivslopRequest,
   IBreadCrumbPath,
@@ -57,6 +59,7 @@ export const BehandlingensLivslopPage = () => {
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
   const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
 
@@ -112,38 +115,48 @@ export const BehandlingensLivslopPage = () => {
 
       const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
         pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
+      let pvkStatus = ''
+      await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+        .then((response) => {
+          pvkStatus = response.status
+        })
+        .catch(() => undefined)
 
-      if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
-        await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
-          setBehandlingesLivslop(response)
-          if (tilTemaOversikt) {
-            navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
-          } else if (tilPvkDokument) {
-            navigate(
-              pvkDokumentasjonPvkTypeStepUrl(
-                response.etterlevelseDokumentasjonId,
-                pvkDokumentLink,
-                pvkDokument ? pvkDokument.id : 'ny',
-                pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
-              )
-            )
-          }
-        })
+      if (pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        setIsPvoAlertModalOpen(true)
       } else {
-        await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
-          setBehandlingesLivslop(response)
-          if (tilTemaOversikt) {
-            navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
-          } else if (tilPvkDokument) {
-            navigate(
-              pvkDokumentasjonPvkTypeStepUrl(
-                response.etterlevelseDokumentasjonId,
-                pvkDokumentLink,
-                pvkDokument ? pvkDokument.id : 'ny'
+        if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
+          await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+            setBehandlingesLivslop(response)
+            if (tilTemaOversikt) {
+              navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
+            } else if (tilPvkDokument) {
+              navigate(
+                pvkDokumentasjonPvkTypeStepUrl(
+                  response.etterlevelseDokumentasjonId,
+                  pvkDokumentLink,
+                  pvkDokument ? pvkDokument.id : 'ny',
+                  pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
+                )
               )
-            )
-          }
-        })
+            }
+          })
+        } else {
+          await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+            setBehandlingesLivslop(response)
+            if (tilTemaOversikt) {
+              navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
+            } else if (tilPvkDokument) {
+              navigate(
+                pvkDokumentasjonPvkTypeStepUrl(
+                  response.etterlevelseDokumentasjonId,
+                  pvkDokumentLink,
+                  pvkDokument ? pvkDokument.id : 'ny'
+                )
+              )
+            }
+          })
+        }
       }
     }
   }
@@ -288,6 +301,12 @@ export const BehandlingensLivslopPage = () => {
                   </Form>
                 )}
               </Formik>
+              <AlertPvoUnderarbeidModal
+                isOpen={isPvoAlertModalOpen}
+                onClose={() => {
+                  setIsPvoAlertModalOpen(false)
+                }}
+              />
             </MainPanelLayout>
 
             {/* right side */}
