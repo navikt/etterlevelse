@@ -1,20 +1,20 @@
 import { Accordion, Alert, BodyLong, Label, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
-import { IRisikoscenario, ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak } from '../../../constants'
+import { tabValues } from '../../PvoTilbakemelding/OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 import {
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
-} from '../common/RouteLinkPvk'
-import RisikoscenarioAccordianHeader from '../risikoscenario/RisikoscenarioAccordionHeader'
+} from '../../common/RouteLinkPvk'
+import TiltakView from '../../tiltak/TiltakView'
+import RisikoscenarioAccordianHeader from '../RisikoscenarioAccordionHeader'
 import RisikoscenarioTag, {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
-} from '../risikoscenario/RisikoscenarioTag'
-import RisikoscenarioView from '../risikoscenario/RisikoscenarioView'
-import { RisikoscenarioTiltakHeader } from '../risikoscenario/common/KravRisikoscenarioHeaders'
-import TiltakView from '../tiltak/TiltakView'
-import { tabValues } from './OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
+} from '../RisikoscenarioTag'
+import RisikoscenarioView from '../RisikoscenarioView'
+import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
 
 type TProps = {
   risikoscenarioList: IRisikoscenario[]
@@ -23,7 +23,7 @@ type TProps = {
   tiltakList: ITiltak[]
 }
 
-export const OppsumeringAccordianListPvoView: FunctionComponent<TProps> = ({
+export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   etterlevelseDokumentasjonId,
@@ -165,4 +165,4 @@ export const OppsumeringAccordianListPvoView: FunctionComponent<TProps> = ({
   )
 }
 
-export default OppsumeringAccordianListPvoView
+export default OppsumeringAccordianListReadOnlyView

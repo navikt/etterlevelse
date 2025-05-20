@@ -19,8 +19,8 @@ import {
 } from '../common/RouteLinkPvk'
 import { ContentLayout } from '../layout/layout'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
+import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
-import OppsumeringAccordianListPvoView from './OppsumeringAccordianListPvoView'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from './common/PvoTilbakemeldingReadOnly'
 import PvoFormButtons from './edit/PvoFormButtons'
@@ -331,7 +331,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                         {risikoscenarioList.length !== 0 &&
                           filteredRisikoscenarioList.length !== 0 && (
                             <div className='my-5'>
-                              <OppsumeringAccordianListPvoView
+                              <OppsumeringAccordianListReadOnlyView
                                 risikoscenarioList={filteredRisikoscenarioList}
                                 allRisikoscenarioList={risikoscenarioList}
                                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
