@@ -1,12 +1,12 @@
 import { Accordion, Alert, BodyLong, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useRef } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
-import { IRisikoscenario, ITiltak } from '../../constants'
-import { risikoscenarioUrl } from '../common/RouteLinkPvk'
-import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../risikoscenario/RisikoscenarioAccordionHeader'
-import RisikoscenarioView from '../risikoscenario/RisikoscenarioView'
-import { RisikoscenarioTiltakHeader } from '../risikoscenario/common/KravRisikoscenarioHeaders'
-import TiltakView from '../tiltak/TiltakView'
+import { IRisikoscenario, ITiltak } from '../../../constants'
+import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
+import TiltakView from '../../tiltak/TiltakView'
+import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../RisikoscenarioAccordionHeader'
+import RisikoscenarioView from '../RisikoscenarioView'
+import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
 
 type TProps = {
   risikoscenarioList: IRisikoscenario[]
@@ -15,7 +15,7 @@ type TProps = {
   tiltakList: ITiltak[]
 }
 
-export const RisikoscenarioAccordianListPvoView: FunctionComponent<TProps> = ({
+export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   tiltakList,
@@ -136,4 +136,4 @@ export const RisikoscenarioAccordianListPvoView: FunctionComponent<TProps> = ({
   )
 }
 
-export default RisikoscenarioAccordianListPvoView
+export default RisikoscenarioAccordianListReadOnlyView

@@ -9,7 +9,7 @@ import {
   ITiltak,
 } from '../../constants'
 import { IdentifiseringAvRisikoscenarioerOgTiltakContent } from '../PvkDokument/common/IdentifiseringAvRisikoscenarioerOgTiltakContent'
-import RisikoscenarioAccordianListPvoView from './RisikoscenarioAccordianListPvoView'
+import RisikoscenarioAccordianListReadOnlyView from '../risikoscenario/readOnly/RisikoscenarioAccordianListReadOnlyView'
 import PvoFormButtons from './edit/PvoFormButtons'
 
 type TProps = {
@@ -63,7 +63,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<
         <div className='w-full'>
           {risikoscenarioList.length !== 0 && (
             <div className='my-5'>
-              <RisikoscenarioAccordianListPvoView
+              <RisikoscenarioAccordianListReadOnlyView
                 risikoscenarioList={risikoscenarioList}
                 allRisikoscenarioList={allRisikoscenarioList}
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
