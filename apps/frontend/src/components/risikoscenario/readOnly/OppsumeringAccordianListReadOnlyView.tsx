@@ -21,6 +21,7 @@ type TProps = {
   allRisikoscenarioList: IRisikoscenario[]
   etterlevelseDokumentasjonId: string
   tiltakList: ITiltak[]
+  noMarkdownCopyLinkButton?: boolean
 }
 
 export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = ({
@@ -28,6 +29,7 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
   allRisikoscenarioList,
   etterlevelseDokumentasjonId,
   tiltakList,
+  noMarkdownCopyLinkButton,
 }) => {
   const navigate: NavigateFunction = useNavigate()
   const accordionRef: RefObject<HTMLButtonElement | null> = useRef<HTMLButtonElement>(null)
@@ -90,7 +92,7 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                   risikoscenario={risikoscenario}
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                   stepUrl='6'
-                  markdownCopyLinkButton={true}
+                  markdownCopyLinkButton={!noMarkdownCopyLinkButton}
                 />
                 <div className='mt-12'>
                   <RisikoscenarioTiltakHeader />

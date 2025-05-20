@@ -4,6 +4,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
   ERisikoscenarioType,
   IPageResponse,
@@ -23,6 +24,7 @@ import {
 } from '../common/RouteLinkPvk'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
+import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import FormButtons from './edit/FormButtons'
 
@@ -331,17 +333,30 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
                           <div className='my-5'>
-                            <OppsumeringAccordianList
-                              risikoscenarioList={filteredRisikoscenarioList}
-                              setRisikosenarioList={setFilteredRisikosenarioList}
-                              allRisikoscenarioList={risikoscenarioList}
-                              setAllRisikoscenarioList={setRisikoscenarioList}
-                              etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                              tiltakList={tiltakList}
-                              formRef={formRef}
-                              isUnsaved={isUnsaved}
-                              setIsUnsaved={setIsUnsaved}
-                            />
+                            {pvkDokument &&
+                              pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
+                                <OppsumeringAccordianList
+                                  risikoscenarioList={filteredRisikoscenarioList}
+                                  setRisikosenarioList={setFilteredRisikosenarioList}
+                                  allRisikoscenarioList={risikoscenarioList}
+                                  setAllRisikoscenarioList={setRisikoscenarioList}
+                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                  tiltakList={tiltakList}
+                                  formRef={formRef}
+                                  isUnsaved={isUnsaved}
+                                  setIsUnsaved={setIsUnsaved}
+                                />
+                              )}
+                            {pvkDokument &&
+                              pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
+                                <OppsumeringAccordianListReadOnlyView
+                                  risikoscenarioList={filteredRisikoscenarioList}
+                                  allRisikoscenarioList={risikoscenarioList}
+                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                  tiltakList={tiltakList}
+                                  noMarkdownCopyLinkButton
+                                />
+                              )}
                           </div>
                         )}
                     </Tabs.Panel>
