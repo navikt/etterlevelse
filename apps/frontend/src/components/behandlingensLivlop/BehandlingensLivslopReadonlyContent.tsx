@@ -10,12 +10,14 @@ type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   behandlingensLivslop: IBehandlingensLivslopRequest
   noSidePanelContent?: boolean
+  noHeader?: boolean
 }
 
 export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingensLivslop,
   noSidePanelContent,
+  noHeader,
 }) => {
   const [files, setFiles] = useState<FileObject[]>([])
 
@@ -33,9 +35,11 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
       <div className='flex justify-center'>
         <div>
-          <Heading level='1' size='medium' className='mb-5'>
-            Behandlingens livsløp
-          </Heading>
+          {!noHeader && (
+            <Heading level='1' size='medium' className='mb-5'>
+              Behandlingens livsløp
+            </Heading>
+          )}
 
           <BehandlingensLivslopTextContent />
 

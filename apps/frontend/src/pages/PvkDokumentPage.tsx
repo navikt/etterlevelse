@@ -214,6 +214,7 @@ export const PvkDokumentPage = () => {
                   {activeStep === 2 && (
                     <BehandlingensLivslopView
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
