@@ -2,6 +2,7 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
 import { Dispatch, RefObject, useEffect, useRef, useState } from 'react'
 import {
+  EPvkDokumentStatus,
   IEtterlevelseMetadata,
   IKravVersjon,
   IPvkDokument,
@@ -124,16 +125,19 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Tabs.Panel value='pvkDokumentasjon'>
             <div className='mt-2 p-4'>
-              {userHasAccess() && (
-                <KravRisikoscenario
-                  krav={krav}
-                  pvkDokument={pvkDokument}
-                  setIsPvkFormActive={setIsPvkFormActive}
-                  formRef={formRef}
-                />
-              )}
+              {userHasAccess() &&
+                pvkDokument &&
+                pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
+                  <KravRisikoscenario
+                    krav={krav}
+                    pvkDokument={pvkDokument}
+                    setIsPvkFormActive={setIsPvkFormActive}
+                    formRef={formRef}
+                  />
+                )}
 
-              {!userHasAccess() && (
+              {(!userHasAccess() ||
+                (pvkDokument && pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID)) && (
                 <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
               )}
             </div>
