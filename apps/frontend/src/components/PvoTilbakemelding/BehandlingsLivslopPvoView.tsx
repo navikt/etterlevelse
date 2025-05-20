@@ -1,4 +1,4 @@
-import { BodyLong, FileObject, FileUpload, Heading, Label, Loader, VStack } from '@navikt/ds-react'
+import { Loader } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -11,11 +11,8 @@ import {
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
-import BehandlingensLivsLopSidePanel from '../behandlingensLivlop/BehandlingensLivslopSidePanel'
-import BehandlingensLivslopTextContent from '../behandlingensLivlop/BehandlingensLivslopTextContent'
-import { Markdown } from '../common/Markdown'
+import BehandlingensLivslopReadOnlyContent from '../behandlingensLivlop/BehandlingensLivslopReadonlyContent'
 import { ContentLayout } from '../layout/layout'
-import DataTextWrapper from './common/DataTextWrapper'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from './common/PvoTilbakemeldingReadOnly'
 import PvoFormButtons from './edit/PvoFormButtons'
@@ -45,7 +42,6 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
   )
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [files, setFiles] = useState<FileObject[]>([])
 
   useEffect(() => {
     ;(async () => {
@@ -55,13 +51,6 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
           .then((response) => {
             const behandlingenslivslop = mapBehandlingensLivslopRequestToFormValue(response)
             setBehandlingsLivslop(behandlingenslivslop)
-            if (behandlingenslivslop.filer && behandlingenslivslop.filer.length > 0) {
-              const initialFiles: FileObject[] = []
-              behandlingenslivslop.filer.forEach((initialFile) => {
-                initialFiles.push({ file: initialFile, error: false })
-              })
-              setFiles(initialFiles)
-            }
           })
           .finally(() => setIsLoading(false))
       }
@@ -78,56 +67,10 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
       {!isLoading && (
         <div className='w-full'>
           <ContentLayout>
-            <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
-              <div className='flex justify-center'>
-                <div>
-                  <Heading level='1' size='medium' className='mb-5'>
-                    Behandlingens livsløp
-                  </Heading>
-
-                  <BehandlingensLivslopTextContent />
-
-                  <VStack gap='6' className='mt-5'>
-                    <VStack gap='2'>
-                      <Heading level='3' size='xsmall'>
-                        {`Behandlingens livsløp filer som er lastet opp. (${files.length})`}
-                      </Heading>
-                      <VStack as='ul' gap='3'>
-                        {files.length > 0 &&
-                          files.map((file, index) => (
-                            <FileUpload.Item
-                              as='li'
-                              key={file.file.name + '_' + index}
-                              file={file.file}
-                            />
-                          ))}
-                        {files.length === 0 && <DataTextWrapper>Ingen filer</DataTextWrapper>}
-                      </VStack>
-                    </VStack>
-                  </VStack>
-
-                  <div className='mt-5'>
-                    <Label>Beskrivelse av behandlingens livsløp</Label>
-                    <DataTextWrapper>
-                      {behandlingensLivslop.beskrivelse && (
-                        <Markdown source={behandlingensLivslop.beskrivelse} />
-                      )}
-                      <BodyLong>
-                        {!behandlingensLivslop.beskrivelse && 'Ingen beskrivelse '}
-                      </BodyLong>
-                    </DataTextWrapper>
-                  </div>
-
-                  <div className='mt-5'>
-                    <div className='pt-6 border-t border-[#071a3636]'>
-                      <BehandlingensLivsLopSidePanel
-                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <BehandlingensLivslopReadOnlyContent
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              behandlingensLivslop={behandlingensLivslop}
+            />
 
             {/* PVO sidepanel */}
             <PvoSidePanelWrapper>
