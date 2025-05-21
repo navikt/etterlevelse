@@ -3,6 +3,7 @@ import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
 import { FunctionComponent, RefObject, useState } from 'react'
+import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
@@ -10,13 +11,14 @@ import {
   updatePvoTilbakemelding,
 } from '../../../api/PvoApi'
 import {
+  EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
   ITilbakemeldingsinnhold,
 } from '../../../constants'
 import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
-import AlertFerdigModal from '../common/AlertFerdigModal'
+import AlertPvoModal from '../common/AlertPvoModal'
 
 enum EBidragVerdier {
   TILSTREKKELIG = 'TILSTREKELIG',
@@ -41,7 +43,8 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
   initialValue,
   formRef,
 }) => {
-  const [isAlertFerdigModalOpen, setIsAlertFerdigModalOpen] = useState<boolean>(false)
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+
   const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold): Promise<void> => {
     const mutatedTilbakemeldingsInnhold: ITilbakemeldingsinnhold = {
       ...tilbakemeldingsInnhold,
@@ -49,61 +52,71 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
       sistRedigertDato: new Date().toISOString(),
     }
 
-    await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
-      .then(async (response: IPvoTilbakemelding) => {
-        if (response) {
-          const updatedValues: IPvoTilbakemelding = {
-            ...response,
-            behandlingenslivslop:
-              fieldName === 'behandlingenslivslop'
-                ? mutatedTilbakemeldingsInnhold
-                : response.behandlingenslivslop,
-            behandlingensArtOgOmfang:
-              fieldName === 'behandlingensArtOgOmfang'
-                ? mutatedTilbakemeldingsInnhold
-                : response.behandlingensArtOgOmfang,
-            innvolveringAvEksterne:
-              fieldName === 'innvolveringAvEksterne'
-                ? mutatedTilbakemeldingsInnhold
-                : response.innvolveringAvEksterne,
-            risikoscenarioEtterTiltakk:
-              fieldName === 'risikoscenarioEtterTiltakk'
-                ? mutatedTilbakemeldingsInnhold
-                : response.risikoscenarioEtterTiltakk,
-            status:
-              response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
-                ? EPvoTilbakemeldingStatus.UNDERARBEID
-                : response.status,
-          }
+    let pvkStatus = ''
 
-          if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
-            setIsAlertFerdigModalOpen(true)
-          } else {
-            await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+    await getPvkDokument(pvkDokumentId).then((response) => (pvkStatus = response.status))
+
+    if (pvkStatus === EPvkDokumentStatus.UNDERARBEID) {
+      setIsAlertModalOpen(true)
+    } else {
+      await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
+        .then(async (response: IPvoTilbakemelding) => {
+          if (response) {
+            const updatedValues: IPvoTilbakemelding = {
+              ...response,
+              behandlingenslivslop:
+                fieldName === 'behandlingenslivslop'
+                  ? mutatedTilbakemeldingsInnhold
+                  : response.behandlingenslivslop,
+              behandlingensArtOgOmfang:
+                fieldName === 'behandlingensArtOgOmfang'
+                  ? mutatedTilbakemeldingsInnhold
+                  : response.behandlingensArtOgOmfang,
+              innvolveringAvEksterne:
+                fieldName === 'innvolveringAvEksterne'
+                  ? mutatedTilbakemeldingsInnhold
+                  : response.innvolveringAvEksterne,
+              risikoscenarioEtterTiltakk:
+                fieldName === 'risikoscenarioEtterTiltakk'
+                  ? mutatedTilbakemeldingsInnhold
+                  : response.risikoscenarioEtterTiltakk,
+              status:
+                response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
+                  ? EPvoTilbakemeldingStatus.UNDERARBEID
+                  : response.status,
+            }
+
+            if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
+              setIsAlertModalOpen(true)
+            } else {
+              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+            }
           }
-        }
-      })
-      .catch(async (error: AxiosError) => {
-        if (error.status === 404) {
-          const createValue = mapPvoTilbakemeldingToFormValue({
-            pvkDokumentId: pvkDokumentId,
-            behandlingenslivslop:
-              fieldName === 'behandlingenslivslop' ? mutatedTilbakemeldingsInnhold : undefined,
-            behandlingensArtOgOmfang:
-              fieldName === 'behandlingensArtOgOmfang' ? mutatedTilbakemeldingsInnhold : undefined,
-            innvolveringAvEksterne:
-              fieldName === 'innvolveringAvEksterne' ? mutatedTilbakemeldingsInnhold : undefined,
-            risikoscenarioEtterTiltakk:
-              fieldName === 'risikoscenarioEtterTiltakk'
-                ? mutatedTilbakemeldingsInnhold
-                : undefined,
-            status: EPvoTilbakemeldingStatus.UNDERARBEID,
-          })
-          await createPvoTilbakemelding(createValue).then(() => window.location.reload())
-        } else {
-          console.debug(error)
-        }
-      })
+        })
+        .catch(async (error: AxiosError) => {
+          if (error.status === 404) {
+            const createValue = mapPvoTilbakemeldingToFormValue({
+              pvkDokumentId: pvkDokumentId,
+              behandlingenslivslop:
+                fieldName === 'behandlingenslivslop' ? mutatedTilbakemeldingsInnhold : undefined,
+              behandlingensArtOgOmfang:
+                fieldName === 'behandlingensArtOgOmfang'
+                  ? mutatedTilbakemeldingsInnhold
+                  : undefined,
+              innvolveringAvEksterne:
+                fieldName === 'innvolveringAvEksterne' ? mutatedTilbakemeldingsInnhold : undefined,
+              risikoscenarioEtterTiltakk:
+                fieldName === 'risikoscenarioEtterTiltakk'
+                  ? mutatedTilbakemeldingsInnhold
+                  : undefined,
+              status: EPvoTilbakemeldingStatus.UNDERARBEID,
+            })
+            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+          } else {
+            console.debug(error)
+          }
+        })
+    }
   }
 
   return (
@@ -203,10 +216,11 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
         )}
       </Formik>
 
-      {isAlertFerdigModalOpen && (
-        <AlertFerdigModal
-          isOpen={isAlertFerdigModalOpen}
-          onClose={() => setIsAlertFerdigModalOpen(false)}
+      {isAlertModalOpen && (
+        <AlertPvoModal
+          isOpen={isAlertModalOpen}
+          onClose={() => setIsAlertModalOpen(false)}
+          pvkDokumentId={pvkDokumentId}
         />
       )}
     </div>

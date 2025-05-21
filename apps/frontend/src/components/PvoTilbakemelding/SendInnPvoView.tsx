@@ -3,15 +3,22 @@ import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, useState } from 'react'
+import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
   mapPvoTilbakemeldingToFormValue,
   updatePvoTilbakemelding,
 } from '../../api/PvoApi'
-import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import {
+  EPvkDokumentStatus,
+  EPvoTilbakemeldingStatus,
+  IPvkDokument,
+  IPvoTilbakemelding,
+} from '../../constants'
 import { TextAreaField } from '../common/Inputs'
 import { Markdown } from '../common/Markdown'
+import AlertPvoModal from './common/AlertPvoModal'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
 
@@ -36,38 +43,50 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
     EPvoTilbakemeldingStatus.UNDERARBEID
   )
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (submittedValues: IPvoTilbakemelding): Promise<void> => {
-    //backend vil oppdatere statusen til PVk dokument til 'VURDERT_AV_PVO', dersom statusen til PVO tilbakemelding = 'FERDIG'
-    await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
-      .then(async (response: IPvoTilbakemelding) => {
-        if (response) {
-          const updatedValues: IPvoTilbakemelding = {
-            ...response,
-            status: submittedStatus,
-            sendtDato:
-              submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
-            merknadTilEtterleverEllerRisikoeier:
-              submittedValues.merknadTilEtterleverEllerRisikoeier,
+    //backend vil oppdatere statusen til PVk dokument til 'SENDT_TIL_PVO', dersom statusen til PVO tilbakemelding = 'ikke påbegynt' eller 'avventer'
+    //backend vil oppdatere statusen til PVk dokument til 'VURDERT_AV_PVO', dersom statusen til PVO tilbakemelding = 'FERDIG', 'utgår'
+    //backend vil oppdatere statusen til PVk dokument til 'PVO_UNDERARBEID', dersom statusen til PVO tilbakemelding = 'Påbegynt', 'snart ferdig' eller 'til kontroll'
+
+    let pvkStatus = ''
+
+    await getPvkDokument(pvkDokument.id).then((response) => (pvkStatus = response.status))
+
+    if (pvkStatus === EPvkDokumentStatus.UNDERARBEID) {
+      setIsAlertModalOpen(true)
+    } else {
+      await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
+        .then(async (response: IPvoTilbakemelding) => {
+          if (response) {
+            const updatedValues: IPvoTilbakemelding = {
+              ...response,
+              status: submittedStatus,
+              sendtDato:
+                submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
+              merknadTilEtterleverEllerRisikoeier:
+                submittedValues.merknadTilEtterleverEllerRisikoeier,
+            }
+            await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
           }
-          await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
-        }
-      })
-      .catch(async (error: AxiosError) => {
-        if (error.status === 404) {
-          const createValue = mapPvoTilbakemeldingToFormValue({
-            pvkDokumentId: pvkDokument.id,
-            status: submittedStatus,
-            sendtDato:
-              submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
-            merknadTilEtterleverEllerRisikoeier:
-              submittedValues.merknadTilEtterleverEllerRisikoeier,
-          })
-          await createPvoTilbakemelding(createValue).then(() => window.location.reload())
-        } else {
-          console.debug(error)
-        }
-      })
+        })
+        .catch(async (error: AxiosError) => {
+          if (error.status === 404) {
+            const createValue = mapPvoTilbakemeldingToFormValue({
+              pvkDokumentId: pvkDokument.id,
+              status: submittedStatus,
+              sendtDato:
+                submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
+              merknadTilEtterleverEllerRisikoeier:
+                submittedValues.merknadTilEtterleverEllerRisikoeier,
+            })
+            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+          } else {
+            console.debug(error)
+          }
+        })
+    }
   }
 
   return (
@@ -183,6 +202,12 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                 }
               />
             </div>
+
+            <AlertPvoModal
+              isOpen={isAlertModalOpen}
+              onClose={() => setIsAlertModalOpen(false)}
+              pvkDokumentId={pvkDokument.id}
+            />
           </div>
         </Form>
       )}

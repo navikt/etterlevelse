@@ -3,6 +3,7 @@ import { AxiosError } from 'axios'
 import { Field, FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { ChangeEvent, FunctionComponent, RefObject, useState } from 'react'
 import AsyncSelect from 'react-select/async'
+import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
@@ -10,12 +11,18 @@ import {
   updatePvoTilbakemelding,
 } from '../../../api/PvoApi'
 import { searchResourceByNameOptions } from '../../../api/TeamApi'
-import { EPvoTilbakemeldingStatus, IPvoTilbakemelding, ITeamResource } from '../../../constants'
+import {
+  EPvkDokumentStatus,
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+  ITeamResource,
+} from '../../../constants'
 import { isDev } from '../../../util/config'
 import LabelWithTooltip from '../../common/LabelWithTooltip'
 import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { noOptionMessage, selectOverrides } from '../../search/util'
+import AlertPvoModal from '../common/AlertPvoModal'
 
 type TProps = {
   pvkDokumentId: string
@@ -29,30 +36,46 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
   formRef,
 }) => {
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+
   const submit = async (pvoTilbakemelding: IPvoTilbakemelding): Promise<void> => {
-    await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
-      .then(async (response: IPvoTilbakemelding) => {
-        if (response) {
-          const updatedValues: IPvoTilbakemelding = {
-            ...response,
-            ansvarligData: pvoTilbakemelding.ansvarligData,
-            status: pvoTilbakemelding.status,
+    let pvkStatus = ''
+
+    await getPvkDokument(pvkDokumentId).then((response) => {
+      pvkStatus = response.status
+    })
+
+    if (pvkStatus === EPvkDokumentStatus.UNDERARBEID) {
+      setIsAlertModalOpen(true)
+    } else {
+      await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
+        .then(async (response: IPvoTilbakemelding) => {
+          if (response) {
+            if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
+              setIsAlertModalOpen(true)
+            } else {
+              const updatedValues: IPvoTilbakemelding = {
+                ...response,
+                ansvarligData: pvoTilbakemelding.ansvarligData,
+                status: pvoTilbakemelding.status,
+              }
+              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+            }
           }
-          await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
-        }
-      })
-      .catch(async (error: AxiosError) => {
-        if (error.status === 404) {
-          const createValue = mapPvoTilbakemeldingToFormValue({
-            pvkDokumentId: pvkDokumentId,
-            ansvarligData: pvoTilbakemelding.ansvarligData,
-            status: pvoTilbakemelding.status,
-          })
-          await createPvoTilbakemelding(createValue).then(() => window.location.reload())
-        } else {
-          console.debug(error)
-        }
-      })
+        })
+        .catch(async (error: AxiosError) => {
+          if (error.status === 404) {
+            const createValue = mapPvoTilbakemeldingToFormValue({
+              pvkDokumentId: pvkDokumentId,
+              ansvarligData: pvoTilbakemelding.ansvarligData,
+              status: pvoTilbakemelding.status,
+            })
+            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+          } else {
+            console.debug(error)
+          }
+        })
+    }
   }
 
   return (
@@ -149,6 +172,12 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               </FieldArray>
               <div className='flex-1' />
             </div>
+
+            <AlertPvoModal
+              isOpen={isAlertModalOpen}
+              onClose={() => setIsAlertModalOpen(false)}
+              pvkDokumentId={pvkDokumentId}
+            />
 
             <div id='status' className='mb-5'>
               <Field name='status'>
