@@ -442,6 +442,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     </Alert>
                   )}
 
+                {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
+                  <Alert variant='info' className='my-5'>
+                    Ved å trekke innsending til personvernombudet vil PVK dokumentet miste plassen i
+                    sakskøen
+                  </Alert>
+                )}
+
                 {(!_.isEmpty(errors) ||
                   behandlingensLivslopError ||
                   risikoscenarioError !== '' ||
