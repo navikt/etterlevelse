@@ -428,6 +428,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   Status: {pvkDokumentStatusToText(pvkDokument.status)}
                 </Alert>
 
+                {pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
+                  pvkDokument.sendtTilPvoDato !== null && (
+                    <Alert variant='info' className='my-5'>
+                      Innsending trukker <br />
+                      Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en
+                      blir deretter behandlet som en ny innsending
+                    </Alert>
+                  )}
+
                 {(!_.isEmpty(errors) ||
                   behandlingensLivslopError ||
                   risikoscenarioError !== '' ||
@@ -524,7 +533,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               await submitForm()
                             }}
                           >
-                            Angre innsending til personvernombudet
+                            Trekk innsending til personvernombudet
                           </Button>
                         )}
 
