@@ -1,5 +1,5 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Heading, Label, Radio, RadioGroup, Stack } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Label, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useState } from 'react'
 import { getPvkDokument } from '../../../api/PvkDokumentApi'
@@ -179,13 +179,11 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                       }
                     >
                       <RisikoscenarioSannsynlighetReadMore />
-                      <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                        <Radio value={1}>Meget lite</Radio>
-                        <Radio value={2}>Lite</Radio>
-                        <Radio value={3}>Moderat</Radio>
-                        <Radio value={4}>Sannsynlig</Radio>
-                        <Radio value={5}>Nesten sikkert</Radio>
-                      </Stack>
+                      <Radio value={1}>Meget lite sannsynlig</Radio>
+                      <Radio value={2}>Lite sannsynlig</Radio>
+                      <Radio value={3}>Moderat sannsynlig</Radio>
+                      <Radio value={4}>Sannsynlig</Radio>
+                      <Radio value={5}>Nesten sikkert</Radio>
                     </RadioGroup>
                   )}
                 </Field>
@@ -207,13 +205,11 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                       }
                     >
                       <RisikoscenarioKonsekvensnivaaReadMore />
-                      <Stack gap='0 6' direction={{ xs: 'column', sm: 'row' }} wrap={false}>
-                        <Radio value={1}>Ubetydelig</Radio>
-                        <Radio value={2}>Lav</Radio>
-                        <Radio value={3}>Moderat</Radio>
-                        <Radio value={4}>Alvorlig </Radio>
-                        <Radio value={5}>Svært alvorlig</Radio>
-                      </Stack>
+                      <Radio value={1}>Ubetydelig</Radio>
+                      <Radio value={2}>Lav konsekvens</Radio>
+                      <Radio value={3}>Moderat konsekvens</Radio>
+                      <Radio value={4}>Alvorlig konsekvens</Radio>
+                      <Radio value={5}>Svært alvorlig konsekvens</Radio>
                     </RadioGroup>
                   )}
                 </Field>
