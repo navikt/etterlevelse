@@ -239,7 +239,7 @@ export const PvoTilbakemeldingsList = () => {
                     pvkDokument.sendtTilPvoDato !== '' && pvkDokument.sendtTilPvoDato !== null
                       ? moment(pvkDokument.sendtTilPvoDato).format('LL')
                       : moment(pvkDokument.changeStamp.lastModifiedDate).format('LL')
-                  changestamp = `Mottat: ${date}, fra ${pvkDokument.sendtTilPvoAv}`
+                  changestamp = `Mottatt: ${date}, fra ${pvkDokument.sendtTilPvoAv}`
                 }
 
                 return (
