@@ -1,7 +1,16 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  CopyButton,
+  Heading,
+  Label,
+  Radio,
+  RadioGroup,
+} from '@navikt/ds-react'
 import { AxiosError } from 'axios'
-import { Form, Formik } from 'formik'
+import { Field, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
@@ -100,33 +109,99 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
         <Form>
           <div className='pt-6 flex justify-center'>
             <div>
+              <div className='my-5 max-w-[75ch]'>
+                <Label>Beskjed fra etterlever</Label>
+                <DataTextWrapper customEmptyMessage='Ingen beskjed'>
+                  {pvkDokument.merknadTilPvoEllerRisikoeier}
+                </DataTextWrapper>
+              </div>
+
               <Heading level='1' size='medium' className='mb-5'>
-                Send tilbakemelding til etterlever
+                Tilbakemelding til etterlever
               </Heading>
 
-              {pvkDokument.merknadTilPvoEllerRisikoeier &&
-                pvkDokument.merknadTilPvoEllerRisikoeier.length > 0 && (
-                  <div className='mt-5 mb-3 max-w-[75ch]'>
-                    <Label>Beskjed fra etterlever</Label>
-                    <DataTextWrapper>{pvkDokument.merknadTilPvoEllerRisikoeier}</DataTextWrapper>
-                  </div>
-                )}
-
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-                <div className='mt-5 mb-3 max-w-[75ch]'>
-                  <TextAreaField
-                    rows={3}
-                    noPlaceholder
-                    label='Er det noe annet dere ønsker å formidle til etterlever? (valgfritt)'
-                    name='merknadTilEtterleverEllerRisikoeier'
-                  />
+                <div>
+                  <Field name='arbeidGarVidere'>
+                    {(fieldProps: FieldProps) => (
+                      <RadioGroup
+                        legend='Anbefales det at arbeidet går videre som planlagt?'
+                        value={
+                          fieldProps.field.value === null
+                            ? null
+                            : fieldProps.field.value === true
+                              ? 'Ja'
+                              : 'Nei'
+                        }
+                        onChange={(value) => {
+                          const boolValue = value === null ? null : value === 'Ja' ? true : false
+                          fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
+                        }}
+                      >
+                        <Radio value='Ja'>Ja</Radio>
+                        <Radio value='Nei'>Nei</Radio>
+                      </RadioGroup>
+                    )}
+                  </Field>
+
+                  <Field name='behovForForhandskonsultasjon'>
+                    {(fieldProps: FieldProps) => (
+                      <RadioGroup
+                        legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
+                        value={
+                          fieldProps.field.value === null
+                            ? null
+                            : fieldProps.field.value === true
+                              ? 'Ja'
+                              : 'Nei'
+                        }
+                        onChange={(value) => {
+                          const boolValue = value === null ? null : value === 'Ja' ? true : false
+                          fieldProps.form.setFieldValue('behovForForhandskonsultasjon', boolValue)
+                        }}
+                      >
+                        <Radio value='Ja'>Ja</Radio>
+                        <Radio value='Nei'>Nei</Radio>
+                      </RadioGroup>
+                    )}
+                  </Field>
+
+                  <div className='mt-5 mb-3 max-w-[75ch]'>
+                    <TextAreaField
+                      rows={3}
+                      noPlaceholder
+                      label='Er det noe annet dere ønsker å formidle til etterlever?'
+                      name='merknadTilEtterleverEllerRisikoeier'
+                    />
+                  </div>
                 </div>
               )}
 
               {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                 <div className='mt-5 mb-3 max-w-[75ch]'>
-                  <Label>Tilbakemelding til etterlever</Label>
+                  <div className='mb-3'>
+                    <Label>Anbefales det at arbeidet går videre som planlagt?</Label>
+                    <DataTextWrapper>
+                      {pvoTilbakemelding.arbeidGarVidere === null
+                        ? null
+                        : pvoTilbakemelding.arbeidGarVidere === true
+                          ? 'Ja'
+                          : 'Nei'}
+                    </DataTextWrapper>
+                  </div>
 
+                  <div className='mb-3'>
+                    <Label>Er det behov for forhåndskonsultasjon med Datatilsynet?</Label>
+                    <DataTextWrapper>
+                      {pvoTilbakemelding.behovForForhandskonsultasjon === null
+                        ? null
+                        : pvoTilbakemelding.behovForForhandskonsultasjon === true
+                          ? 'Ja'
+                          : 'Nei'}
+                    </DataTextWrapper>
+                  </div>
+
+                  <Label>Beskjed til etterlever</Label>
                   {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier &&
                     pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier.length !== 0 && (
                       <Markdown source={pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier} />
