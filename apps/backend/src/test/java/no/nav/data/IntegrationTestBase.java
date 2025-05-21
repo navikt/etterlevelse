@@ -27,7 +27,7 @@ import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
@@ -105,8 +105,6 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<Melding> meldingStorageService;
     @Autowired
-    protected StorageService<Tilbakemelding> tilbakemeldingStorageService;
-    @Autowired
     protected JdbcTemplate jdbcTemplate;
     @Autowired
     protected BehandlingService behandlingService;
@@ -144,6 +142,8 @@ public abstract class IntegrationTestBase {
     protected RisikoscenarioService risikoscenarioService;
     @Autowired
     protected RisikoscenarioRepo risikoscenarioRepo;
+    @Autowired
+    protected TilbakemeldingRepo tilbakemeldingRepo;
 
     @BeforeEach
     @Transactional
@@ -157,6 +157,7 @@ public abstract class IntegrationTestBase {
     @Commit
     @Transactional
     void tearDownBase() {
+        tilbakemeldingRepo.deleteAll();
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();

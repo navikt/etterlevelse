@@ -6,8 +6,8 @@ import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Rolle;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.TilbakemeldingsType;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData.Rolle;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData.TilbakemeldingsType;
 import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -80,7 +81,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
         verify(postRequestedFor(urlEqualTo("/slack/chat.postMessage")));
 
         UUID tilbakemeldingId = resp.getBody().getId();
-        Tilbakemelding tilbakemelding = tilbakemeldingStorageService.get(tilbakemeldingId);
+        Tilbakemelding tilbakemelding = tilbakemeldingRepo.findById(tilbakemeldingId).get();
         assertThat(tilbakemelding.getMelder().getIdent()).isEqualTo("A123456");
         assertThat(tilbakemelding.getMeldinger()).hasSize(1);
         assertThat(tilbakemelding.getLastMelding().getMeldingNr()).isOne();
@@ -104,7 +105,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
 
         verify(postRequestedFor(urlEqualTo("/slack/chat.postMessage")));
 
-        Tilbakemelding tilbakemelding = tilbakemeldingStorageService.get(tilbakemeldingId);
+        Tilbakemelding tilbakemelding = tilbakemeldingRepo.findById(tilbakemeldingId).get();
         assertThat(tilbakemelding.getMeldinger()).hasSize(2);
         assertThat(tilbakemelding.getLastMelding().getMeldingNr()).isEqualTo(2);
     }

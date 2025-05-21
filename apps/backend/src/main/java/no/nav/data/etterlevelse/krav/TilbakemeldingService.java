@@ -3,13 +3,12 @@ package no.nav.data.etterlevelse.krav;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.etterlevelse.common.domain.DomainService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Melding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData.Melding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
-import no.nav.data.etterlevelse.krav.dto.CreateTilbakemeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
 import no.nav.data.etterlevelse.varsel.VarselService;
@@ -25,38 +24,44 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static no.nav.data.common.storage.domain.GenericStorage.convertToDomaionObject;
 import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TilbakemeldingService extends DomainService<Tilbakemelding> {
+public class TilbakemeldingService {
 
     private final TeamcatResourceClient resourceClient;
     private final UrlGenerator urlGenerator;
     private final VarselService varselService;
     private final TilbakemeldingRepo tilbakemeldingRepo;
+    private final KravRepo kravRepo;
 
 
     public List<Tilbakemelding> getForKravByNumberAndVersion(int kravNummer, int kravVersjon) {
-        return convertToDomaionObject(tilbakemeldingRepo.findByKravNummerAndVersion(kravNummer, kravVersjon));
+        return tilbakemeldingRepo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon);
     }
 
     public List<Tilbakemelding> getForKravByNumber(int kravNummer) {
-        return convertToDomaionObject(tilbakemeldingRepo.findByKravNummer(kravNummer));
+        return tilbakemeldingRepo.findByKravNummer(kravNummer);
     }
 
+    public Tilbakemelding get(UUID id) {
+        return tilbakemeldingRepo.findById(id).orElse(null);
+    }
+    
     @Transactional
-    public Tilbakemelding create(CreateTilbakemeldingRequest request) {
-        var tilbakemelding = Tilbakemelding.create(request);
+    public Tilbakemelding create(Tilbakemelding tilbakemelding) {
+        if (tilbakemelding.getId() == null) {
+            tilbakemelding.setId(UUID.randomUUID());
+        }
         var melding = tilbakemelding.getLastMelding();
 
-        tilbakemelding = storage.save(tilbakemelding);
-        varsle(tilbakemelding, melding,false);
+        tilbakemelding = tilbakemeldingRepo.save(tilbakemelding);
+        varsle(tilbakemelding, melding, false);
 
         log.info("New tilbakemelding {} på {} fra {}", tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
-        return storage.save(tilbakemelding);
+        return tilbakemeldingRepo.save(tilbakemelding);
     }
 
     @Transactional
@@ -70,7 +75,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         tilbakemelding.setEndretKrav(request.isEndretKrav());
         log.info("New melding nr {} på tilbakemelding {} på {} fra {}",
                 melding.getMeldingNr(), tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
-        return storage.save(tilbakemelding);
+        return tilbakemelding; //tilbakemeldingRepo.save(tilbakemelding); // FIXME save igjen?
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -79,10 +84,11 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         var melding = tilbakemelding.finnMelding(meldingNr);
         SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
         if (meldingNr == 1) {
-            return storage.delete(tilbakemelding);
+            tilbakemeldingRepo.delete(tilbakemelding);
+            return tilbakemelding;
         }
         tilbakemelding.fjernMelding(melding);
-        return storage.save(tilbakemelding);
+        return tilbakemeldingRepo.save(tilbakemelding);
     }
 
     @Transactional
@@ -92,7 +98,7 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         SecurityUtils.assertIsUserOrAdmin(melding.getFraIdent(), "Ikke din melding");
         melding.endre(body);
         varsle(tilbakemelding, melding, true);
-        return storage.save(tilbakemelding);
+        return tilbakemeldingRepo.save(tilbakemelding);
     }
 
     @Transactional
@@ -100,11 +106,11 @@ public class TilbakemeldingService extends DomainService<Tilbakemelding> {
         var tilbakemelding = get(tilbakemeldingId);
         tilbakemelding.setStatus(tilbakemeldingStatus);
         tilbakemelding.setEndretKrav(endretKrav);
-        return storage.save(tilbakemelding);
+        return tilbakemeldingRepo.save(tilbakemelding);
     }
 
     public Page<Tilbakemelding> getAll(Pageable pageable) {
-        return storage.getAll(Tilbakemelding.class, pageable);
+        return tilbakemeldingRepo.findAll(pageable);
     }
 
     private void varsle(Tilbakemelding tilbakemelding, Melding melding, boolean isEdit) {

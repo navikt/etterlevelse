@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
 import no.nav.data.etterlevelse.krav.dto.RegelverkRequest;
@@ -32,6 +33,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -225,7 +227,12 @@ public class KravIT extends IntegrationTestBase {
     @Test
     void deleteKravWithTilbakemelding() {
         var krav = createKrav();
-        tilbakemeldingStorageService.save(Tilbakemelding.builder().meldinger(List.of(Tilbakemelding.Melding.builder().build())).kravNummer(50).kravVersjon(1).build());
+        Tilbakemelding tilbakemelding = Tilbakemelding.builder()
+                .id(UUID.randomUUID())
+                .data(TilbakemeldingData.builder().meldinger(List.of(TilbakemeldingData.Melding.builder().build())).build())
+                .kravNummer(50).kravVersjon(1)
+                .build();
+        tilbakemeldingRepo.save(tilbakemelding);
         restTemplate.delete("/krav/{id}", krav.getId());
 
         assertThat(kravRepo.count()).isEqualTo(1);

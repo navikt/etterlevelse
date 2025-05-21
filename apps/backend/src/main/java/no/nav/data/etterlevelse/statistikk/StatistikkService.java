@@ -25,6 +25,7 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
@@ -369,7 +370,7 @@ public class StatistikkService {
     private TilbakemeldingStatus getTilbakemeldingStatus(Tilbakemelding tilbakemelding) {
         if (tilbakemelding.getStatus() != null) {
             return tilbakemelding.getStatus();
-        } else if (tilbakemelding.getMeldinger().get(tilbakemelding.getMeldinger().size() - 1).getRolle() == Tilbakemelding.Rolle.KRAVEIER) {
+        } else if (tilbakemelding.getMeldinger().get(tilbakemelding.getMeldinger().size() - 1).getRolle() == TilbakemeldingData.Rolle.KRAVEIER) {
             return TilbakemeldingStatus.BESVART;
         } else {
             return TilbakemeldingStatus.UBESVART;

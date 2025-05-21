@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
-import no.nav.data.common.auditing.domain.Auditable.Fields;
+import no.nav.data.common.auditing.domain.ChangeStamped.Fields;
 
 import java.time.LocalDateTime;
 

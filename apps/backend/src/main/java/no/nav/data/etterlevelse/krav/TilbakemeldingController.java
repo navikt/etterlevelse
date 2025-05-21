@@ -45,7 +45,7 @@ public class TilbakemeldingController {
     public ResponseEntity<TilbakemeldingResponse> createTilbakemelding(@RequestBody CreateTilbakemeldingRequest request) {
         log.info("Create Tilbakemelding");
         validator.validate(request);
-        var tilbakemelding = tilbakemeldingService.create(request);
+        var tilbakemelding = tilbakemeldingService.create(Tilbakemelding.buildFrom(request));
         return new ResponseEntity<>(tilbakemelding.toResponse(), HttpStatus.CREATED);
     }
 
