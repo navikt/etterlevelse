@@ -30,6 +30,7 @@ import { Markdown } from '../common/Markdown'
 import AlertPvoModal from './common/AlertPvoModal'
 import DataTextWrapper from './common/DataTextWrapper'
 import PvoFormButtons from './edit/PvoFormButtons'
+import { sendInnCheck } from './edit/pvoFromSchema'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -104,6 +105,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       validateOnBlur={false}
       onSubmit={submit}
       initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
+      validationSchema={sendInnCheck}
     >
       {({ submitForm, dirty }) => (
         <Form>
@@ -137,6 +139,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                           const boolValue = value === null ? null : value === 'Ja' ? true : false
                           fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
                         }}
+                        error={fieldProps.form.errors.arbeidGarVidere as string}
                       >
                         <Radio value='Ja'>Ja</Radio>
                         <Radio value='Nei'>Nei</Radio>
@@ -159,6 +162,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                           const boolValue = value === null ? null : value === 'Ja' ? true : false
                           fieldProps.form.setFieldValue('behovForForhandskonsultasjon', boolValue)
                         }}
+                        error={fieldProps.form.errors.behovForForhandskonsultasjon as string}
                       >
                         <Radio value='Ja'>Ja</Radio>
                         <Radio value='Nei'>Nei</Radio>
