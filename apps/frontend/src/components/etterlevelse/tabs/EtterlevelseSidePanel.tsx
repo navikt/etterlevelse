@@ -127,7 +127,9 @@ export const EtterlevelseSidePanel = (props: IProps) => {
             <div className='mt-2 p-4'>
               {userHasAccess() &&
                 pvkDokument &&
-                pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
+                ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+                  pvkDokument.status
+                ) && (
                   <KravRisikoscenario
                     krav={krav}
                     pvkDokument={pvkDokument}
@@ -137,9 +139,10 @@ export const EtterlevelseSidePanel = (props: IProps) => {
                 )}
 
               {(!userHasAccess() ||
-                (pvkDokument && pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID)) && (
-                <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
-              )}
+                (pvkDokument &&
+                  [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+                    pvkDokument.status
+                  ))) && <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />}
             </div>
           </Tabs.Panel>
         )}

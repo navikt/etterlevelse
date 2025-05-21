@@ -106,7 +106,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
       !manglerBehandlingError
     ) {
       await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
-        if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+        if (
+          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+            response.status
+          )
+        ) {
           setIsPvoAlertModalOpen(true)
         } else {
           const updatedStatus: EPvkDokumentStatus =
@@ -253,6 +257,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           onClose={() => {
             setIsPvoAlertModalOpen(false)
           }}
+          pvkDokumentId={pvkDokument.id}
         />
       )}
       <Formik

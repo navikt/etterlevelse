@@ -142,7 +142,11 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
 
   const activeFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+      if (
+        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+          response.status
+        )
+      ) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()
@@ -226,6 +230,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         <AlertPvoUnderarbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => setIsPvoAlertModalOpen(false)}
+          pvkDokumentId={risikoscenario.pvkDokumentId}
         />
       )}
 

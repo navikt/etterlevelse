@@ -54,7 +54,11 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
-      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+      if (
+        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+          response.status
+        )
+      ) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()
@@ -264,6 +268,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
               <AlertPvoUnderarbeidModal
                 isOpen={isPvoAlertModalOpen}
                 onClose={() => setIsPvoAlertModalOpen(false)}
+                pvkDokumentId={pvkDokument.id}
               />
             )}
 

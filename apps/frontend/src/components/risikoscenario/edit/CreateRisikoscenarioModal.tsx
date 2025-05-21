@@ -38,7 +38,11 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
         <Button
           onClick={async () =>
             await getPvkDokument(pvkDokument.id).then((response) => {
-              if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+              if (
+                [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+                  response.status
+                )
+              ) {
                 setIsPvoAlertModal(true)
               } else {
                 setIsEdit(true)
@@ -55,6 +59,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
         <AlertPvoUnderarbeidModal
           isOpen={isPvoAlertModal}
           onClose={() => setIsPvoAlertModal(false)}
+          pvkDokumentId={pvkDokument.id}
         />
       )}
 

@@ -111,7 +111,12 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
         })
         .catch(() => undefined)
 
-      if (pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID) {
+      if (
+        [
+          EPvkDokumentStatus.PVO_UNDERARBEID.toString(),
+          EPvkDokumentStatus.SENDT_TIL_PVO.toString(),
+        ].includes(pvkStatus)
+      ) {
         setIsPvoAlertModalOpen(true)
       } else {
         if (submitedValues.id || existingBehandlingsLivslopId) {
@@ -142,112 +147,121 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
       )}
       {!isLoading && behandlingensLivslop && (
         <ContentLayout>
-          {pvkDokument && pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
-            <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
-              <Formik
-                validateOnBlur={false}
-                validateOnChange={false}
-                onSubmit={submit}
-                initialValues={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
-                validate={() => {
-                  try {
-                    validateYupSchema(
-                      { rejectedFiles: rejectedFiles },
-                      behandlingensLivslopSchema(),
-                      true
-                    )
-                  } catch (error) {
-                    return yupToFormErrors(error)
-                  }
-                }}
-                innerRef={formRef}
-              >
-                {({ submitForm, initialValues, errors, isSubmitting }) => (
-                  <Form>
-                    <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8'>
-                      <Heading level='1' size='medium' className='mb-5'>
-                        Behandlingens livsløp
-                      </Heading>
+          {pvkDokument &&
+            ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+              pvkDokument.status
+            ) && (
+              <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+                <Formik
+                  validateOnBlur={false}
+                  validateOnChange={false}
+                  onSubmit={submit}
+                  initialValues={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
+                  validate={() => {
+                    try {
+                      validateYupSchema(
+                        { rejectedFiles: rejectedFiles },
+                        behandlingensLivslopSchema(),
+                        true
+                      )
+                    } catch (error) {
+                      return yupToFormErrors(error)
+                    }
+                  }}
+                  innerRef={formRef}
+                >
+                  {({ submitForm, initialValues, errors, isSubmitting }) => (
+                    <Form>
+                      <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8'>
+                        <Heading level='1' size='medium' className='mb-5'>
+                          Behandlingens livsløp
+                        </Heading>
 
-                      <BehandlingensLivslopTextContent />
+                        <BehandlingensLivslopTextContent />
 
-                      <BodyShort className='mt-3'>
-                        Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
-                        oversikt.
-                      </BodyShort>
+                        <BodyShort className='mt-3'>
+                          Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
+                          oversikt.
+                        </BodyShort>
 
-                      <CustomFileUpload
-                        initialValues={initialValues.filer}
-                        rejectedFiles={rejectedFiles}
-                        setRejectedFiles={setRejectedFiles}
-                        setFilesToUpload={setFilesToUpload}
-                      />
-
-                      <div className='mt-3'>
-                        <TextAreaField
-                          markdown
-                          height='5.75rem'
-                          noPlaceholder
-                          label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
-                          name='beskrivelse'
+                        <CustomFileUpload
+                          initialValues={initialValues.filer}
+                          rejectedFiles={rejectedFiles}
+                          setRejectedFiles={setRejectedFiles}
+                          setFilesToUpload={setFilesToUpload}
                         />
-                      </div>
 
-                      {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                        <ErrorSummary className='mt-3' ref={errorSummaryRef}>
-                          <ErrorSummary.Item href={'#vedleggMedFeil'}>
-                            Vedlegg med feil
-                          </ErrorSummary.Item>
-                        </ErrorSummary>
-                      )}
-
-                      {!isSubmitting && (
-                        <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
-                          <Button
-                            type='button'
-                            onClick={async () => {
-                              await submitForm()
-                              setSubmitClick(!submitClick)
-                            }}
-                          >
-                            Lagre
-                          </Button>
-                        </div>
-                      )}
-
-                      {isSubmitting && (
-                        <div className='flex mt-5 justify-center items-center'>
-                          <Loader size='large' />
-                        </div>
-                      )}
-                    </div>
-
-                    {pvoTilbakemelding && etterlevelseDokumentasjon && (
-                      <div className='mt-5'>
-                        <div className='pt-6 border-t border-[#071a3636]'>
-                          <BehandlingensLivsLopSidePanel
-                            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        <div className='mt-3'>
+                          <TextAreaField
+                            markdown
+                            height='5.75rem'
+                            noPlaceholder
+                            label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
+                            name='beskrivelse'
                           />
                         </div>
-                      </div>
-                    )}
-                  </Form>
-                )}
-              </Formik>
-              <AlertPvoUnderarbeidModal
-                isOpen={isPvoAlertModalOpen}
-                onClose={() => setIsPvoAlertModalOpen(false)}
-              />
-            </div>
-          )}
 
-          {pvkDokument && pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
-            <BehandlingensLivslopReadOnlyContent
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
-              noSidePanelContent
-            />
-          )}
+                        {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
+                          <ErrorSummary className='mt-3' ref={errorSummaryRef}>
+                            <ErrorSummary.Item href={'#vedleggMedFeil'}>
+                              Vedlegg med feil
+                            </ErrorSummary.Item>
+                          </ErrorSummary>
+                        )}
+
+                        {!isSubmitting && (
+                          <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
+                            <Button
+                              type='button'
+                              onClick={async () => {
+                                await submitForm()
+                                setSubmitClick(!submitClick)
+                              }}
+                            >
+                              Lagre
+                            </Button>
+                          </div>
+                        )}
+
+                        {isSubmitting && (
+                          <div className='flex mt-5 justify-center items-center'>
+                            <Loader size='large' />
+                          </div>
+                        )}
+                      </div>
+
+                      {pvoTilbakemelding && etterlevelseDokumentasjon && (
+                        <div className='mt-5'>
+                          <div className='pt-6 border-t border-[#071a3636]'>
+                            <BehandlingensLivsLopSidePanel
+                              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </Form>
+                  )}
+                </Formik>
+                <AlertPvoUnderarbeidModal
+                  isOpen={isPvoAlertModalOpen}
+                  onClose={() => setIsPvoAlertModalOpen(false)}
+                  pvkDokumentId={pvkDokument.id}
+                />
+              </div>
+            )}
+
+          {pvkDokument &&
+            [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+              pvkDokument.status
+            ) && (
+              <BehandlingensLivslopReadOnlyContent
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(
+                  behandlingensLivslop
+                )}
+                noSidePanelContent
+              />
+            )}
 
           {/* Sidepanel */}
           {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (

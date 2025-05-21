@@ -334,7 +334,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         filteredRisikoscenarioList.length !== 0 && (
                           <div className='my-5'>
                             {pvkDokument &&
-                              pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
+                              ![
+                                EPvkDokumentStatus.PVO_UNDERARBEID,
+                                EPvkDokumentStatus.SENDT_TIL_PVO,
+                              ].includes(pvkDokument.status) && (
                                 <OppsumeringAccordianList
                                   risikoscenarioList={filteredRisikoscenarioList}
                                   setRisikosenarioList={setFilteredRisikosenarioList}
@@ -348,7 +351,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                 />
                               )}
                             {pvkDokument &&
-                              pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
+                              [
+                                EPvkDokumentStatus.PVO_UNDERARBEID,
+                                EPvkDokumentStatus.SENDT_TIL_PVO,
+                              ].includes(pvkDokument.status) && (
                                 <OppsumeringAccordianListReadOnlyView
                                   risikoscenarioList={filteredRisikoscenarioList}
                                   allRisikoscenarioList={risikoscenarioList}

@@ -101,7 +101,11 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   const activeFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-      if (response.status === EPvkDokumentStatus.PVO_UNDERARBEID) {
+      if (
+        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+          response.status
+        )
+      ) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()
@@ -251,6 +255,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         <AlertPvoUnderarbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => setIsPvoAlertModalOpen(false)}
+          pvkDokumentId={risikoscenario.pvkDokumentId}
         />
       )}
     </div>
