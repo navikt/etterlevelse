@@ -106,27 +106,18 @@ export const SendInnView: FunctionComponent<TProps> = ({
       !manglerBehandlingError
     ) {
       await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
-        if (
-          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-            response.status
-          )
-        ) {
+        if ([EPvkDokumentStatus.PVO_UNDERARBEID].includes(response.status)) {
           setIsPvoAlertModalOpen(true)
         } else {
-          const updatedStatus: EPvkDokumentStatus =
-            submitedValues.status === EPvkDokumentStatus.UNDERARBEID
-              ? response.status
-              : submitedValues.status
-
           const updatedPvkDokument: IPvkDokument = {
             ...response,
-            status: updatedStatus,
+            status: submitedValues.status,
             sendtTilPvoDato:
-              updatedStatus === EPvkDokumentStatus.SENDT_TIL_PVO
+              submitedValues.status === EPvkDokumentStatus.SENDT_TIL_PVO
                 ? new Date().toISOString()
                 : response.sendtTilPvoDato,
             sendtTilPvoAv:
-              updatedStatus === EPvkDokumentStatus.SENDT_TIL_PVO
+              submitedValues.status === EPvkDokumentStatus.SENDT_TIL_PVO
                 ? user.getIdent() + ' - ' + user.getName()
                 : response.sendtTilPvoAv,
             merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,

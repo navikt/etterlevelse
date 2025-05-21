@@ -24,7 +24,7 @@ export const AlertPvoUnderarbeidModal: FunctionComponent<TProps> = ({
         .then(setPvkDokument)
         .finally(() => setIsLoading(false))
     })()
-  })
+  }, [])
 
   return (
     <Modal open={isOpen} onClose={() => onClose()} header={{ heading: 'Kan ikke redigeres' }}>
