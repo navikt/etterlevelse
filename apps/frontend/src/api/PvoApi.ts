@@ -112,6 +112,8 @@ export const mapPvoTilbakemeldingToFormValue = (
     sendtDato: pvoTilbakemelding.sendtDato || '',
     ansvarlig: pvoTilbakemelding.ansvarlig || [],
     ansvarligData: pvoTilbakemelding.ansvarligData || [],
+    arbeidGarVidere: pvoTilbakemelding.arbeidGarVidere || false,
+    behovForForhandskonsultasjon: pvoTilbakemelding.behovForForhandskonsultasjon || false,
     behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
       sistRedigertAv: '',
       sistRedigertDato: '',
