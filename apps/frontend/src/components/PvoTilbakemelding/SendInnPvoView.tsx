@@ -107,7 +107,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
       validationSchema={sendInnCheck}
     >
-      {({ submitForm, dirty }) => (
+      {({ submitForm, dirty, setFieldValue }) => (
         <Form>
           <div className='pt-6 flex justify-center'>
             <div>
@@ -244,9 +244,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                       <Button
                         type='button'
                         variant='secondary'
-                        onClick={() => {
+                        onClick={async () => {
+                          await setFieldValue('status', EPvoTilbakemeldingStatus.UNDERARBEID)
                           setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
-                          submitForm()
+                          await submitForm()
                         }}
                       >
                         Lagre og fortsett senere
@@ -257,9 +258,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                       <Button
                         type='button'
                         variant='secondary'
-                        onClick={() => {
+                        onClick={async () => {
+                          await setFieldValue('status', EPvoTilbakemeldingStatus.UNDERARBEID)
                           setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
-                          submitForm()
+                          await submitForm()
                         }}
                       >
                         Angre tilbakemelding
@@ -269,9 +271,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                     {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                       <Button
                         type='button'
-                        onClick={() => {
+                        onClick={async () => {
+                          await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                           setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
-                          submitForm()
+                          await submitForm()
                         }}
                       >
                         Send tilbakemelding

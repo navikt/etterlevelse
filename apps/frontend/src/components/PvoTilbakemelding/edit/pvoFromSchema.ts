@@ -9,7 +9,7 @@ const boolCheck = (fieldName: string, errorMessage?: string) =>
       message: errorMessage ? errorMessage : 'Dette er et påkrevd felt',
       test: function (boolField) {
         const { parent } = this
-        if (parent.status !== EPvoTilbakemeldingStatus.FERDIG) {
+        if (parent.status === EPvoTilbakemeldingStatus.FERDIG) {
           if (boolField === undefined || boolField === null) {
             return false
           } else {
@@ -38,7 +38,7 @@ export const sendInnCheck = () => {
       test: function (stringField) {
         const { parent } = this
         if (
-          parent.status !== EPvoTilbakemeldingStatus.FERDIG &&
+          parent.status === EPvoTilbakemeldingStatus.FERDIG &&
           (parent.arbeidGarVidere === false ||
             parent.behovForForhandskonsultasjon === true ||
             (parent.arbeidGarVidere === false && parent.behovForForhandskonsultasjon === true))
