@@ -303,6 +303,8 @@ type PvoTilbakemelding {
     ansvarlig: [String!]!
     ansvarligData: [Resource!]!
     sistEndretAvMeg: DateTime
+    arbeidGarVidere: Boolean
+    behovForForhandskonsultasjon: Boolean
 }
 
 type Tilbakemeldingsinnhold {

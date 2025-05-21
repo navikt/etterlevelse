@@ -18,6 +18,9 @@ public class PvoTilbakemeldingData {
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
     private List<String> ansvarlig;
+
+    private Boolean arbeidGarVidere;
+    private Boolean behovForForhandskonsultasjon;
 }
 
 

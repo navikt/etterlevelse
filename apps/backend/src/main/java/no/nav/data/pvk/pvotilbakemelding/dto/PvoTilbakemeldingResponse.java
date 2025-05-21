@@ -38,6 +38,9 @@ public class PvoTilbakemeldingResponse {
     private List<String> ansvarlig;
     private List<Resource> ansvarligData;
 
+    private Boolean arbeidGarVidere;
+    private Boolean behovForForhandskonsultasjon;
+
     public static PvoTilbakemeldingResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         return PvoTilbakemeldingResponse.builder()
                 .id(pvoTilbakemelding.getId())
