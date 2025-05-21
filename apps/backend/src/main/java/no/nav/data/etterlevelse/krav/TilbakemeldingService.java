@@ -61,7 +61,7 @@ public class TilbakemeldingService {
         varsle(tilbakemelding, melding, false);
 
         log.info("New tilbakemelding {} på {} fra {}", tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
-        return tilbakemeldingRepo.save(tilbakemelding);
+        return tilbakemelding;
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class TilbakemeldingService {
         tilbakemelding.setEndretKrav(request.isEndretKrav());
         log.info("New melding nr {} på tilbakemelding {} på {} fra {}",
                 melding.getMeldingNr(), tilbakemelding.getId(), tilbakemelding.kravId(), tilbakemelding.getMelder().getIdent());
-        return tilbakemelding; //tilbakemeldingRepo.save(tilbakemelding); // FIXME save igjen?
+        return tilbakemeldingRepo.save(tilbakemelding);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
