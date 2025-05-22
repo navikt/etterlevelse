@@ -77,6 +77,8 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                 submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
               merknadTilEtterleverEllerRisikoeier:
                 submittedValues.merknadTilEtterleverEllerRisikoeier,
+              arbeidGarVidere: submittedValues.arbeidGarVidere,
+              behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
             }
             await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
           }
@@ -90,6 +92,8 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                 submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
               merknadTilEtterleverEllerRisikoeier:
                 submittedValues.merknadTilEtterleverEllerRisikoeier,
+              arbeidGarVidere: submittedValues.arbeidGarVidere,
+              behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
             })
             await createPvoTilbakemelding(createValue).then(() => window.location.reload())
           } else {
@@ -135,9 +139,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                               ? 'Ja'
                               : 'Nei'
                         }
-                        onChange={(value) => {
+                        onChange={async (value) => {
                           const boolValue = value === null ? null : value === 'Ja' ? true : false
-                          fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
+                          await fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
                         }}
                         error={fieldProps.form.errors.arbeidGarVidere as string}
                       >
@@ -158,9 +162,12 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                               ? 'Ja'
                               : 'Nei'
                         }
-                        onChange={(value) => {
+                        onChange={async (value) => {
                           const boolValue = value === null ? null : value === 'Ja' ? true : false
-                          fieldProps.form.setFieldValue('behovForForhandskonsultasjon', boolValue)
+                          await fieldProps.form.setFieldValue(
+                            'behovForForhandskonsultasjon',
+                            boolValue
+                          )
                         }}
                         error={fieldProps.form.errors.behovForForhandskonsultasjon as string}
                       >
