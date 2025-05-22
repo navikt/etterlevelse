@@ -9,7 +9,7 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Rolle;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData.Rolle;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 
 import java.util.UUID;

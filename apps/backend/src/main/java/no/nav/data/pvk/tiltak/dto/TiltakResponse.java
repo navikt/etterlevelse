@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.pvk.tiltak.domain.Tiltak;

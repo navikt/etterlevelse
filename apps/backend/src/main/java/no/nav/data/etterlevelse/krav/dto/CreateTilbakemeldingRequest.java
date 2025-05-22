@@ -10,7 +10,7 @@ import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.common.domain.KravId;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.TilbakemeldingsType;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData.TilbakemeldingsType;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 

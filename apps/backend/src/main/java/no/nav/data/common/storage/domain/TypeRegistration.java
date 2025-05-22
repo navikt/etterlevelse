@@ -5,7 +5,6 @@ import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
@@ -30,7 +29,6 @@ public final class TypeRegistration {
         addDomainClass(EtterlevelseArkiv.class, true);
         addDomainClass(Virkemiddel.class, true);
 
-        addDomainClass(Tilbakemelding.class, false);
         addDomainClass(KravImage.class, false);
         addDomainClass(MailTask.class, false);
         addDomainClass(MailLog.class, false);

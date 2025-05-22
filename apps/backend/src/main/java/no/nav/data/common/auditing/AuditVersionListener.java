@@ -26,6 +26,8 @@ import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.common.utils.MdcUtils;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Optional;
@@ -53,16 +55,19 @@ public class AuditVersionListener {
     }
 
     @PrePersist
+    @Transactional(propagation = Propagation.MANDATORY)
     public void prePersist(Object entity) {
         audit(entity, Action.CREATE);
     }
 
     @PreUpdate
+    @Transactional(propagation = Propagation.MANDATORY)
     public void preUpdate(Object entity) {
         audit(entity, Action.UPDATE);
     }
 
     @PreRemove
+    @Transactional(propagation = Propagation.MANDATORY)
     public void preRemove(Object entity) {
         audit(entity, Action.DELETE);
     }

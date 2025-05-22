@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.Rolle;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding.TilbakemeldingsType;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData.Rolle;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData.TilbakemeldingsType;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
 
 import java.time.LocalDateTime;
