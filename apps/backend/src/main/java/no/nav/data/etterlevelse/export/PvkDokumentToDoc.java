@@ -290,10 +290,16 @@ public class PvkDokumentToDoc {
                 newLine();
 
                 addLabel("Beskjed fra personvernombudet til etterlever:");
-                if (pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier().isEmpty()) {
+                newLine();
+                addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere());
+                newLine();
+                addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon());
+                newLine();
+                addLabel("Er det noe annet dere ønsker å formidle til etterlever?");
+                if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
                     addText("Ingen merknad.");
                 } else {
-                    addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier());
+                    addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
                 }
 
                 newLine();
