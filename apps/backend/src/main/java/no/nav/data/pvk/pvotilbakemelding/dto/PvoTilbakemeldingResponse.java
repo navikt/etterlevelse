@@ -60,7 +60,8 @@ public class PvoTilbakemeldingResponse {
                 .innvolveringAvEksterne(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne())
                 .risikoscenarioEtterTiltakk(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk())
                 .merknadTilEtterleverEllerRisikoeier(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier())
-
+                .arbeidGarVidere(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere())
+                .behovForForhandskonsultasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon())
                 .build();
     }
 }
