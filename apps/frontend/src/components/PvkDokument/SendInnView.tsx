@@ -277,7 +277,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           }
         }}
       >
-        {({ setFieldValue, submitForm, dirty, errors }) => (
+        {({ setFieldValue, submitForm, errors }) => (
           <Form>
             <div className='flex justify-center'>
               <div>
@@ -527,18 +527,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     submitForm={submitForm}
                     customButtons={
                       <div className='mt-5 flex gap-2 items-center'>
-                        {!dirty && <div className='min-w-[223px]'></div>}
-                        {dirty && (
-                          <Button
-                            type='button'
-                            variant='secondary'
-                            onClick={async () => {
-                              await submitForm()
-                            }}
-                          >
-                            Lagre og fortsett senere
-                          </Button>
-                        )}
+                        <Button
+                          type='button'
+                          variant='secondary'
+                          onClick={async () => {
+                            await submitForm()
+                          }}
+                        >
+                          Lagre og fortsett senere
+                        </Button>
 
                         {underarbeidCheck && (
                           <Button
