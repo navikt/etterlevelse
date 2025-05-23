@@ -8,6 +8,7 @@ import {
   Heading,
   Label,
   Link,
+  List,
   Loader,
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
@@ -356,7 +357,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       </DataTextWrapper>
                     </div>
                     {pvoTilbakemelding && (
-                      <div className='mt-9 mb-3 max-w-[75ch]'>
+                      <div className='pt-9 mb-3 max-w-[75ch]'>
                         <Heading level='2' size='small' className='mb-5'>
                           Tilbakemelding til etterlever
                         </Heading>
@@ -394,11 +395,36 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
-                  <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <div className='pt-9 mb-3 max-w-[75ch]'>
+                    <Heading level='2' size='small' className='mb-5'>
+                      Nå er det din tur, etterlever
+                    </Heading>
+
+                    <div className='mb-3 mt-5'>
+                      <Alert variant='info'>
+                        <Heading size='xsmall' level='3'>
+                          Dette gjør dere nå
+                        </Heading>
+                        <List as='ul'>
+                          <List.Item>
+                            Gjør eventuelle endringer basert på PVOs tilbakemelding
+                          </List.Item>
+                          <List.Item>
+                            Oppsummér for risikoeieren hvordan dere har tatt stilling til PVOs
+                            tilbakemelding, og hvilke endringer som er gjort.
+                          </List.Item>
+                          <List.Item>
+                            Risikoeieren skal så vurdere om restrisiko kan aksepteres, og godkjenner
+                            og arkiverer PVK.
+                          </List.Item>
+                        </List>
+                      </Alert>
+                    </div>
+
                     <TextAreaField
                       rows={3}
                       noPlaceholder
-                      label='Kommentar til risikoeier? (valgfritt)'
+                      label='Oppsummér'
                       name='merknadTilRisikoeier'
                     />
                   </div>
