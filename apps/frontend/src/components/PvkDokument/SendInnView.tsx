@@ -356,8 +356,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       </DataTextWrapper>
                     </div>
                     {pvoTilbakemelding && (
-                      <div className='mt-5 mb-3 max-w-[75ch]'>
-                        <Heading level='1' size='medium' className='mb-5'>
+                      <div className='mt-9 mb-3 max-w-[75ch]'>
+                        <Heading level='2' size='small' className='mb-5'>
                           Tilbakemelding til etterlever
                         </Heading>
                         <div className='mb-3'>
