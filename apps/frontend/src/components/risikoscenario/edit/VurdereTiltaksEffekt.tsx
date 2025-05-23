@@ -48,6 +48,15 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
     risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
     risikoscenario.konsekvensNivaaEtterTiltak === null
 
+  const ikkeFerdigBeskrevet: boolean =
+    risikoscenario.konsekvensNivaa === 0 ||
+    risikoscenario.sannsynlighetsNivaa === 0 ||
+    risikoscenario.konsekvensNivaaBegrunnelse === '' ||
+    risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
+
+  const mangelfulScenario: boolean =
+    ikkeFerdigBeskrevet || (!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0)
+
   const submit = async (submitedValues: IRisikoscenario): Promise<void> => {
     await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
       const updatedRisikoscenario = {
@@ -124,7 +133,15 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
           />
         )}
 
-        {!isFormActive && (
+        {mangelfulScenario && (
+          <div className='my-5'>
+            <Alert variant='info'>
+              Det er ikke mulig å vurdere tiltakets effekt når scenario er mangelfullt.
+            </Alert>
+          </div>
+        )}
+
+        {!isFormActive && !mangelfulScenario && (
           <Button
             className='mt-3'
             type='button'
