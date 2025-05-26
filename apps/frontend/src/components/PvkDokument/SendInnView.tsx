@@ -27,6 +27,7 @@ import {
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EEtterlevelseStatus,
   EPvkDokumentStatus,
   ERisikoscenarioType,
   IBehandlingensLivslop,
@@ -36,6 +37,7 @@ import {
   IRisikoscenario,
   ITiltak,
   TEtterlevelseDokumentasjonQL,
+  TEtterlevelseQL,
 } from '../../constants'
 import { useKravFilter } from '../../query/KravQuery'
 import { user } from '../../services/User'
@@ -89,6 +91,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
+  const [pvkKravError, setPvkKravError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
@@ -119,6 +122,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       risikoscenarioError === '' &&
       savnerVurderingError === '' &&
       tiltakError === '' &&
+      // pvkKravError === '' &&
       !manglerBehandlingError
     ) {
       await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
@@ -162,6 +166,29 @@ export const SendInnView: FunctionComponent<TProps> = ({
       setBehandlingensLivslopError(true)
     } else {
       setBehandlingensLivslopError(false)
+    }
+  }
+
+  const pvkKravCheck = () => {
+    if (!isPvkKravLoading) {
+      const antallPvkKrav = pvkKrav?.krav.totalElements
+      const pvkEtterlevelser: TEtterlevelseQL[] = []
+
+      pvkKrav?.krav.content.forEach((krav) => {
+        pvkEtterlevelser.push(...krav.etterlevelser)
+      })
+
+      const ferdigPvkEtterlevelser = pvkEtterlevelser.filter(
+        (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+      )
+
+      if (ferdigPvkEtterlevelser.length !== antallPvkKrav) {
+        setPvkKravError(
+          'Alle krav relatert til personvernkonsekvens vurdering må være ferdig dokumentert'
+        )
+      } else {
+        setPvkKravError('')
+      }
     }
   }
 
@@ -249,7 +276,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
         behandlingensLivslopError ||
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
-        savnerVurderingError !== '') &&
+        savnerVurderingError !== '' ||
+        pvkKravError !== '') &&
       errorSummaryRef.current
     ) {
       errorSummaryRef.current.focus()
@@ -277,6 +305,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           try {
             manglerBehandlingErrorCheck()
             behandlingensLivslopFieldCheck()
+            pvkKravCheck()
             risikoscenarioCheck()
             if (
               alleRisikoscenario.filter((risiko: IRisikoscenario) => !risiko.ingenTiltak).length !==
@@ -510,7 +539,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   behandlingensLivslopError ||
                   risikoscenarioError !== '' ||
                   tiltakError !== '' ||
-                  savnerVurderingError !== '') && (
+                  savnerVurderingError !== '' ||
+                  pvkKravError !== '') && (
                   <ErrorSummary
                     ref={errorSummaryRef}
                     heading='Du må rette disse feilene før du kan fortsette'
@@ -518,6 +548,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     {manglerBehandlingError && (
                       <ErrorSummary.Item href='#behandling-error' className='max-w-[75ch]'>
                         Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen.
+                      </ErrorSummary.Item>
+                    )}
+
+                    {pvkKravError !== '' && (
+                      <ErrorSummary.Item href='#WIP' className='max-w-[75ch]'>
+                        {pvkKravError}
                       </ErrorSummary.Item>
                     )}
 
