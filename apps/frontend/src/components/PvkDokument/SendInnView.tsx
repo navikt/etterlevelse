@@ -604,15 +604,25 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     submitForm={submitForm}
                     customButtons={
                       <div className='mt-5 flex gap-2 items-center'>
-                        <Button
-                          type='button'
-                          variant='secondary'
-                          onClick={async () => {
-                            await submitForm()
-                          }}
-                        >
-                          Lagre og fortsett senere
-                        </Button>
+                        {[
+                          EPvkDokumentStatus.SENDT_TIL_PVO,
+                          EPvkDokumentStatus.PVO_UNDERARBEID,
+                        ].includes(pvkDokument.status) && <div className='min-w-[446px]' />}
+
+                        {![
+                          EPvkDokumentStatus.SENDT_TIL_PVO,
+                          EPvkDokumentStatus.PVO_UNDERARBEID,
+                        ].includes(pvkDokument.status) && (
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={async () => {
+                              await submitForm()
+                            }}
+                          >
+                            Lagre og fortsett senere
+                          </Button>
+                        )}
 
                         {underarbeidCheck && (
                           <Button
