@@ -37,6 +37,7 @@ import {
   ITiltak,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
+import { useKravFilter } from '../../query/KravQuery'
 import { user } from '../../services/User'
 import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
@@ -91,6 +92,20 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+
+  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
+    {
+      gjeldendeKrav: true,
+      tagger: ['Personvernkonsekvensvurdering'],
+      etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
+    },
+    { skip: !etterlevelseDokumentasjon },
+    true
+  )
+
+  if (!isPvkKravLoading) {
+    console.debug(pvkKrav)
+  }
 
   const underarbeidCheck: boolean =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||

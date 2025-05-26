@@ -56,6 +56,7 @@ export type TKravFilters = {
   lov?: string
   status?: string[]
   lover?: string[]
+  tagger?: string[]
   gjeldendeKrav?: boolean
   sistRedigert?: number
   pageNumber?: number
