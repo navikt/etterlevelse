@@ -33,6 +33,7 @@ public class KravFilter {
     private List<String> status;
     // any of
     private List<String> lover;
+    private List<String> tagger;
     private boolean gjeldendeKrav;
     private Integer sistRedigert;
     private String virkemiddelId;
@@ -49,6 +50,8 @@ public class KravFilter {
         return formatList(status);
     }
 
+    public List<String> getTagger() {return formatList(tagger);}
+
     public boolean isEmpty() {
         validate();
         return getRelevans().isEmpty()
@@ -59,6 +62,7 @@ public class KravFilter {
                 && tema == null
                 && getStatus().isEmpty()
                 && getLover().isEmpty()
+                && getTagger().isEmpty()
                 && !gjeldendeKrav
                 && sistRedigert == null
                 && !etterlevelseDokumentasjonIrrevantKrav

@@ -27,6 +27,8 @@ input KravFilter {
     """ en av """
     lover: [String!]
     """ en av """
+    tagger: [String!]
+    """ en av """
     relevans: [String!]
     gjeldendeKrav: Boolean = false
     """min 1, max 20"""

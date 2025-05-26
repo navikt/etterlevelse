@@ -107,6 +107,14 @@ public class KravRepoImpl implements KravRepoCustom {
             }
             query += " and ( " + String.join(" or ", loverQuery) + " ) ";
         }
+        if (!filter.getTagger().isEmpty()) {
+            var taggerQuery = new ArrayList<String>();
+            for (int i = 0, taggerSize = filter.getTagger().size(); i < taggerSize; i++) {
+                taggerQuery.add(" data #> '{tagger}' @> :tag_%d::jsonb ".formatted(i));
+                par.addValue("tag_" + i, String.format(filter.getTagger().get(i)));
+            }
+            query += " and ( " + String.join(" or ", taggerQuery) + " ) ";
+        }
         if (filter.getLov() != null) {
             query += " and data #> '{regelverk}' @> :lov::jsonb ";
             par.addValue("lov", String.format("[{\"lov\": \"%s\"}]", filter.getLov()));
