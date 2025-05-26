@@ -97,17 +97,15 @@ public class KravGraphQlController {
         Integer versjon = krav.getKravVersjon();
         log.info("etterlevelse for krav {}.{}", nummer, versjon);
 
-        if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null) {
+        if (onlyForEtterlevelseDokumentasjon || etterlevelseDokumentasjonId != null || KravFilter.get(env, Fields.etterlevelseDokumentasjonId) != null) {
             UUID dokumentasjonId = etterlevelseDokumentasjonId != null ? etterlevelseDokumentasjonId : UUID.fromString(KravFilter.get(env, Fields.etterlevelseDokumentasjonId));
-            if (dokumentasjonId != null) {
-                try {
-                    return etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon())
-                            .map(value -> List.of(EtterlevelseResponse.buildFrom(value))).orElseGet(List::of);
-                } catch (Exception e) {
-                    throw new ValidationException("Found duplicate etterlevelse for dokumentasjon with id = " + dokumentasjonId + " for krav K" + krav.getKravNummer() + "." + krav.getKravVersjon()
-                            + ", error: " + e
-                    );
-                }
+            try {
+                return etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(dokumentasjonId, krav.getKravNummer(), krav.getKravVersjon())
+                        .map(value -> List.of(EtterlevelseResponse.buildFrom(value))).orElseGet(List::of);
+            } catch (Exception e) {
+                throw new ValidationException("Found duplicate etterlevelse for dokumentasjon with id = " + dokumentasjonId + " for krav K" + krav.getKravNummer() + "." + krav.getKravVersjon()
+                        + ", error: " + e
+                );
             }
         }
 
