@@ -82,6 +82,18 @@ public class AADStatelessAuthenticationFilter extends OncePerRequestFilter {
             log.error("Failed to parse active directory key discovery uri.", e);
             throw new IllegalStateException("Failed to parse active directory key discovery uri.", e);
         }
+
+        /*
+        this.validAudiences.add(aadAuthProps.getClientId());
+        try {
+            URL jwkSetUri = oidcProviderMetadata.getJWKSetURI().toURL();
+            JWKSet jwkSet = JWKSet.load(jwkSetUri);
+            keySource = new ImmutableJWKSet<>(jwkSet);
+        } catch (ParseException | IOException e) {
+            log.error("Failed to parse active directory key discovery uri: " + e.getMessage());
+            throw new IllegalStateException("Failed to parse active directory key discovery uri.", e);
+        }
+        */
     }
 
     @Override

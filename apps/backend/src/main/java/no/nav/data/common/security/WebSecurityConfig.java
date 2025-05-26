@@ -13,8 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 @Configuration
 @EnableMethodSecurity(jsr250Enabled = true)
 public class WebSecurityConfig {
@@ -92,29 +90,29 @@ public class WebSecurityConfig {
                     "/etterlevelsearkiv/admin/update"
             );
 
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/krav/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/tilbakemelding/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/tilbakemelding/status/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/export/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/kravprioritylist/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelse/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/documentrelation/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/behandling/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsedokumentasjon/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsemetadata/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/pvotilbakemelding/**")).hasAnyRole(AppRole.ADMIN.name(), AppRole.PERSONVERNOMBUD.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/melding/**")).hasAnyRole(AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/etterlevelsearkiv/**")).hasAnyRole(AppRole.WRITE.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/behandlingenslivslop/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/pvkdokument/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/pvkdokument/pvo")).hasAnyRole(AppRole.PERSONVERNOMBUD.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/risikoscenario/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/tiltak/**")).hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/virkemiddel/**")).hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/status/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/export/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/kravprioritylist/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelse/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/documentrelation/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/behandling/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsedokumentasjon/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsemetadata/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvotilbakemelding/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.PERSONVERNOMBUD.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsearkiv/**").hasAnyRole(AppRole.WRITE.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/behandlingenslivslop/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvkdokument/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvkdokument/pvo").hasAnyRole(AppRole.PERSONVERNOMBUD.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/risikoscenario/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/tiltak/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/virkemiddel/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
 
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/logout")).authenticated());
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/logout").authenticated());
 
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher("/**")).permitAll());
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll());
             http.authorizeHttpRequests(auth -> auth.anyRequest().hasRole(AppRole.WRITE.name()));
         }
         return http.build();
@@ -122,20 +120,20 @@ public class WebSecurityConfig {
 
     private void adminOnly(HttpSecurity http, String... paths) throws Exception {
         for (String path : paths) {
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher(path)).hasRole(AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(path).hasRole(AppRole.ADMIN.name()));
         }
     }
 
     private void allowAll(HttpSecurity http, String... paths) throws Exception {
         for (String path : paths) {
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher(path)).permitAll());
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(path).permitAll());
         }
     }
 
     private void allowGetAndOptions(HttpSecurity http, String... paths) throws Exception {
         for (String path : paths) {
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher(HttpMethod.GET, path)).permitAll());
-            http.authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher(HttpMethod.OPTIONS, path)).permitAll());
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, path).permitAll());
+            http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, path).permitAll());
         }
     }
 

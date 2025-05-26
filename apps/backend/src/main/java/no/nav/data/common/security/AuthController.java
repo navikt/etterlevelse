@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static no.nav.data.Constants.APP_POD_NAME;
 import static no.nav.data.Constants.COOKIE_NAME;
@@ -146,9 +148,17 @@ public class AuthController {
         if (url.contains(APP_POD_NAME)) {
             url = securityProperties.findBaseUrl();
         }
-        String redirectUri = UriComponentsBuilder.fromHttpUrl(url)
-                .replacePath(OAUTH_2_CALLBACK_URL)
-                .replaceQuery(null).build().toUriString();
+        
+        URI uri;
+        try {
+            uri = new URI(url);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid URL: " + url, e);
+        }
+        String redirectUri = UriComponentsBuilder.fromUri(uri)
+                        .replacePath(OAUTH_2_CALLBACK_URL)
+                        .replaceQuery(null).encode().build().toUri().toString();
+        
         Assert.isTrue(securityProperties.isValidRedirectUri(redirectUri), "Invalid redirect uri " + redirectUri);
         return redirectUri;
     }

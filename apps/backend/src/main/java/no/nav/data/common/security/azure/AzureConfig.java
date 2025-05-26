@@ -3,7 +3,7 @@ package no.nav.data.common.security.azure;
 import com.microsoft.aad.msal4j.ClientCredentialFactory;
 import com.microsoft.aad.msal4j.ConfidentialClientApplication;
 import com.microsoft.aad.msal4j.PublicClientApplication;
-import com.nimbusds.jose.jwk.source.RemoteJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSourceBuilder;
 import com.nimbusds.jose.util.DefaultResourceRetriever;
 import com.nimbusds.jose.util.ResourceRetriever;
 import com.nimbusds.oauth2.sdk.id.Issuer;
@@ -25,7 +25,7 @@ public class AzureConfig {
 
     @Bean
     public ResourceRetriever getJWTResourceRetriever() {
-        return new DefaultResourceRetriever(RemoteJWKSet.DEFAULT_HTTP_CONNECT_TIMEOUT * 2, RemoteJWKSet.DEFAULT_HTTP_READ_TIMEOUT * 2, RemoteJWKSet.DEFAULT_HTTP_SIZE_LIMIT);
+        return new DefaultResourceRetriever(JWKSourceBuilder.DEFAULT_HTTP_CONNECT_TIMEOUT * 2, JWKSourceBuilder.DEFAULT_HTTP_READ_TIMEOUT * 2, JWKSourceBuilder.DEFAULT_HTTP_SIZE_LIMIT);
     }
 
     @Bean

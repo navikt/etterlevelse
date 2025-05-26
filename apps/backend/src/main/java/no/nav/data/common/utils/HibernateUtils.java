@@ -23,7 +23,7 @@ public final class HibernateUtils {
             }
         }
         try {
-            return (UUID) ReflectionUtils.findRequiredMethod(entity.getClass(), "getId").invoke(entity);
+            return (UUID) ReflectionUtils.getRequiredMethod(entity.getClass(), "getId").invoke(entity);
         } catch (Exception e) {
             throw new TechnicalException("id error", e);
         }

@@ -60,7 +60,7 @@ public class VirkemiddelService extends DomainService<Virkemiddel> {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Virkemiddel save(VirkemiddelRequest request) {
-        Validator.validate(request, storage::get)
+        Validator.validate(request, storage.get(request.getId()))
                 .addValidations(this::validateName)
                 .ifErrorsThrowValidationException();
 

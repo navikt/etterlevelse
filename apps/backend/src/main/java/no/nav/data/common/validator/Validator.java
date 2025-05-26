@@ -3,7 +3,6 @@ package no.nav.data.common.validator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import org.apache.commons.lang3.EnumUtils;
@@ -72,15 +71,6 @@ public class Validator<T extends Validated> {
     public Validator(T item, String parentField) {
         this.parentField = StringUtils.appendIfMissing(parentField, ".");
         this.item = item;
-    }
-
-    @Deprecated // Use validate(R, Object)
-    public static <R extends RequestElement> Validator<R> validate(R item, Function<UUID, DomainObject> getDomainObjectForUuid) {
-        Validator<R> validator = validate(item);
-        UUID uuid = item.getId();
-        validator.domainItem = getDomainObjectForUuid.apply(uuid);
-        validator.validateRepositoryValues(item, validator.domainItem != null);
-        return validator;
     }
 
     public static <R extends RequestElement> Validator<R> validate(R item, Object domainObject) {
