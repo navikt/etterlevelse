@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class RisikoscenarioService {
 
     public List<Risikoscenario> getByPvkDokument(String pvkDokumentId, RisikoscenarioType scenarioType) {
         List<Risikoscenario> risikoscenarioList = risikoscenarioRepo.findByPvkDokumentId(UUID.fromString(pvkDokumentId));
+        risikoscenarioList.sort(Comparator.comparing(Risikoscenario::getCreatedDate));
         switch (scenarioType) {
             case GENERAL -> {
                 return risikoscenarioList.stream().filter((scenario) -> scenario.getRisikoscenarioData().isGenerelScenario()).collect(Collectors.toList());
