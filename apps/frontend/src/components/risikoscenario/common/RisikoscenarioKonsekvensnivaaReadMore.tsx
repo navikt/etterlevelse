@@ -26,7 +26,7 @@ export const RisikoscenarioKonsekvensnivaaReadMore = () => (
         Den registrertes rett til personvern utfordres i en kort periode eller uten å involvere
         særlige kategorier/sårbare grupper
       </List.Item>
-      <List.Item>Den registrertes tillit til NAV utfordres midlertidig</List.Item>
+      <List.Item>Den registrertes tillit til Nav utfordres midlertidig</List.Item>
     </List>
     <h2>
       <b>Moderat konsekvens</b>
@@ -41,7 +41,7 @@ export const RisikoscenarioKonsekvensnivaaReadMore = () => (
         Den registrertes rett til personvern krenkes i en større periode eller involverer særlige
         kategorier/sårbare grupper
       </List.Item>
-      <List.Item>Den registrertes tillit til NAV utfordres</List.Item>
+      <List.Item>Den registrertes tillit til Nav utfordres</List.Item>
     </List>
     <h2>
       <b>Alvorlig konsekvens</b>
@@ -54,7 +54,7 @@ export const RisikoscenarioKonsekvensnivaaReadMore = () => (
         Den registrertes rett til personvern krenkes alvorlig i en større periode og involverer
         særlige kategorier/sårbare grupper
       </List.Item>
-      <List.Item>Den registrerte taper tilleten til NAV</List.Item>
+      <List.Item>Den registrerte taper tilleten til Nav</List.Item>
     </List>
     <h2>
       <b>Svært alvorlig</b>
@@ -65,7 +65,7 @@ export const RisikoscenarioKonsekvensnivaaReadMore = () => (
       <List.Item>Varig og betydelig økonomisk tap for den registrerte</List.Item>
       <List.Item>Varig og alvorlig tap av den registrertes omdømme</List.Item>
       <List.Item>Den registrertes rett til personvern krenkes på en svært alvorlig måte</List.Item>
-      <List.Item>Den registrerte og samfunnet taper tilliten til NAV</List.Item>
+      <List.Item>Den registrerte og samfunnet taper tilliten til Nav</List.Item>
     </List>
   </ReadMore>
 )

@@ -151,7 +151,7 @@ const KriterieBegrunnelse = (props: IKriterieBegrunnelseProps) => {
       {suksesskriterieBegrunnelse.veiledningsTekst && (
         <div className='my-5'>
           <Alert variant='info'>
-            <Label>NAVs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
+            <Label>Navs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
             <Markdown source={suksesskriterieBegrunnelse.veiledningsTekst} />
           </Alert>
         </div>

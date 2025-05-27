@@ -11,7 +11,7 @@ export const BehandlingensLivslopTextContent = () => (
     <List>
       <List.Item>Hvor opplysningene innhentes fra.</List.Item>
       <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
-      <List.Item>Om og hvor opplysningene sendes videre i NAV eller til eksterne.</List.Item>
+      <List.Item>Om og hvor opplysningene sendes videre i Nav eller til eksterne.</List.Item>
     </List>
     <Alert inline variant='info' className='mt-3'>
       Det er kun påkrevd å tegne behandlingens livsløp hvis dere gjennomfører en PVK, men vi

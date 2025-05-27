@@ -56,7 +56,7 @@ export const MainPage = () => {
         <div className='max-w-7xl w-full px-2'>
           <div className='flex flex-col'>
             <Heading className='flex justify-center' size='large' level='1'>
-              Etterlevelse i NAV
+              Etterlevelse i Nav
             </Heading>
             <span className='flex justify-center'>Forstå og dokumentér</span>
           </div>
@@ -91,7 +91,7 @@ export const MainPage = () => {
               {data?.etterlevelseDokumentasjoner.content.length === 0 && (
                 <div>
                   <Heading size='medium' level='2'>
-                    Etterlevelse i NAV
+                    Etterlevelse i Nav
                   </Heading>
                   <span>
                     For å dokumentere etterlevelse må du opprette et etterlevelsesdokument. Du vil
@@ -260,7 +260,7 @@ const StatusIOrganisasjonen = () => (
     >
       <LinkPanel.Title>Status i organisasjonen</LinkPanel.Title>
       <LinkPanel.Description>
-        Følg med på status og se hvor godt NAV sine områder dokumenterer på kravene
+        Følg med på status og se hvor godt Nav sine områder dokumenterer på kravene
       </LinkPanel.Description>
     </LinkPanel>
   </div>

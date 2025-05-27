@@ -149,7 +149,7 @@ export const TiltakForm = (props: IProps) => {
                   <ReadMore header='Hva hvis jeg ikke finner person'>
                     <div className='flex gap-2 items-end my-2'>
                       <TextField
-                        label='Skriv inn NAV ident dersom du ikke finner person over'
+                        label='Skriv inn Nav ident dersom du ikke finner person over'
                         value={customPersonForDev}
                         onChange={(event: ChangeEvent<HTMLInputElement>) =>
                           setCustomPersonForDev(event.target.value)

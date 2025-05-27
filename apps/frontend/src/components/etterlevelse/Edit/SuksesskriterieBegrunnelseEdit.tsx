@@ -331,7 +331,7 @@ const KriterieBegrunnelse = ({
                 {veiledningsTekstMode === 'view' && (
                   <Alert variant='info'>
                     <Label>
-                      NAVs tolkning av loven og besluttede praksiser i denne konteksten:
+                      Navs tolkning av loven og besluttede praksiser i denne konteksten:
                     </Label>
                     <Markdown source={veiledningTekst} />
                   </Alert>
@@ -385,7 +385,7 @@ const KriterieBegrunnelse = ({
               {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
             </Label>
             <br />
-            <Label>NAVs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
+            <Label>Navs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
             <Markdown
               source={getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
             />

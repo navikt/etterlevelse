@@ -62,14 +62,14 @@ export const Footer = () => {
               />
               Støtte til etterlevelse
             </BodyShort>
-            <BodyShort>2023 NAV</BodyShort>
+            <BodyShort>2023 Nav</BodyShort>
             <BodyShort>Arbeids- og velferdsetaten</BodyShort>
           </div>
           <Spacer />
           <div className='flex flex-col gap-4'>
             <BodyShort>Nyttige lenker</BodyShort>
             <Link className='text-white' href={statusPageLink}>
-              Status på etterlevelse i NAV
+              Status på etterlevelse i Nav
             </Link>
             <Link className='text-white' href={omEtterlevelsePaNavet}>
               Om etterlevelse på Navet

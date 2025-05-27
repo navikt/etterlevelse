@@ -159,7 +159,7 @@ const LoggedInHeader = () => {
           ],
           [
             {
-              label: 'Mer om etterlevelse i NAV',
+              label: 'Mer om etterlevelse i Nav',
               href: '/omstottetiletterlevelse',
               icon: <InformationIcon area-label='' aria-hidden />,
             },
