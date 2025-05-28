@@ -81,6 +81,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
             setSelectedTab(tabValue)
             setIsUnsaved(true)
           } else {
+            setIsPvkFormActive(false)
             setActiveTab(tabValue)
           }
         }}
