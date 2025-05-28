@@ -53,6 +53,7 @@ import {
 import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
 import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
+import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { Markdown } from '../common/Markdown'
 import {
   etterlevelseDokumentasjonIdUrl,
@@ -124,6 +125,9 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [isPreview, setIsPreview] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  //venter til krav K114 er satt til utgått
+  // const [isPvoUnderarbeidWarningActive, setIsPvoUnderarbeidWarningActive] = useState<boolean>(false)
 
   const location: Location<any> = useLocation()
   const navigate: NavigateFunction = useNavigate()
@@ -161,7 +165,9 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
 
         getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
           .then((response: IPvkDokument) => {
-            if (response) setPvkDokument(response)
+            if (response) {
+              setPvkDokument(response)
+            }
           })
           .catch(() => undefined)
       }
@@ -179,6 +185,21 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       setIsPrioritised(priorityCheck)
     }
   }, [])
+
+  //venter til krav K114 er satt til utgått
+  // useEffect(() => {
+  //   if (
+  //     pvkDokument &&
+  //     [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+  //       pvkDokument.status
+  //     ) &&
+  //     krav &&
+  //     krav.tagger.includes('Personvernkonsekvensvurdering')
+  //   ) {
+  //     setIsPreview(true)
+  //     setIsPvoUnderarbeidWarningActive(true)
+  //   }
+  // }, [krav, pvkDokument])
 
   const getNextKravUrl = (nextKravPath: string): string => {
     const currentPath: string[] = location.pathname.split(kravUrl)
@@ -223,6 +244,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       }
     }
 
+    //slett if else setning når K114 er satt til utgått
     if (etterlevelse.id || existingEtterlevelseId) {
       await updateEtterlevelse(mutatedEtterlevelse).then((res) => {
         if (nextKravToDocument !== '') {
@@ -250,6 +272,49 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
         }
       })
     }
+
+    //venter til krav K114 er satt til utgått
+    // await getPvkDokumentByEtterlevelseDokumentId(etterlevelse.etterlevelseDokumentasjonId).then(
+    //   async (response) => {
+    //     if (
+    //       response &&
+    //       [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+    //         response.status
+    //       ) &&
+    //       krav?.tagger.includes('Personvernkonsekvensvurdering')
+    //     ) {
+    //       setIsPvoAlertModalOpen(true)
+    //     } else {
+    //       if (etterlevelse.id || existingEtterlevelseId) {
+    //         await updateEtterlevelse(mutatedEtterlevelse).then((res) => {
+    //           if (nextKravToDocument !== '') {
+    //             setStatustext(res.status)
+    //             setHasNextKrav(true)
+    //             activeAlertModalController()
+    //           } else {
+    //             setStatustext(res.status)
+    //             setHasNextKrav(false)
+    //             activeAlertModalController()
+    //             setEtterlevelse(res)
+    //           }
+    //         })
+    //       } else {
+    //         await createEtterlevelse(mutatedEtterlevelse).then((res) => {
+    //           if (nextKravToDocument !== '') {
+    //             setStatustext(res.status)
+    //             setHasNextKrav(true)
+    //             activeAlertModalController()
+    //           } else {
+    //             setStatustext(res.status)
+    //             setHasNextKrav(false)
+    //             activeAlertModalController()
+    //             setEtterlevelse(res)
+    //           }
+    //         })
+    //       }
+    //     }
+    //   }
+    // )
   }
 
   useEffect(() => {
@@ -455,6 +520,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 <Tabs.Panel value='dokumentasjon'>
                   {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
                     !isPvkTabActive && (
+                      //venter til krav K114 er satt til utgått
+                      // !isPvoUnderarbeidWarningActive && (
                       <ToggleGroup
                         className='mt-6'
                         defaultValue='OFF'
@@ -465,6 +532,14 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                         <ToggleGroup.Item value='ON' label='Forhåndsvisning' />
                       </ToggleGroup>
                     )}
+
+                  {/* 
+                  //venter til krav K114 er satt til utgått
+                  {isPvoUnderarbeidWarningActive && (
+                    <Alert className='mt-6' variant='info'>
+                      Kan ikke redigeres når personvernombudet har påbegynt vurderingen
+                    </Alert>
+                  )} */}
 
                   {isPvkTabActive && (
                     <Alert className='mt-6' variant='info'>
@@ -563,6 +638,14 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
           </div>
+
+          {pvkDokument && isPvoAlertModalOpen && (
+            <AlertPvoUnderarbeidModal
+              isOpen={isPvoAlertModalOpen}
+              onClose={() => setIsPvoAlertModalOpen(false)}
+              pvkDokumentId={pvkDokument.id}
+            />
+          )}
 
           <Modal
             open={isTabAlertActive}
