@@ -72,106 +72,108 @@ export const EtterlevelseSidePanel = (props: IProps) => {
 
   return (
     <div className='pl-4 border-l border-[#071a3636] w-full max-w-lg'>
-      <Tabs
-        defaultValue='mer'
-        value={activeTab}
-        size='small'
-        onChange={(tabValue) => {
-          if (formRef.current?.dirty) {
-            setSelectedTab(tabValue)
-            setIsUnsaved(true)
-          } else {
-            setIsPvkFormActive(false)
-            setActiveTab(tabValue)
-          }
-        }}
-      >
-        <Tabs.List>
-          <Tabs.Tab
-            className='whitespace-nowrap'
-            value='mer'
-            label={
-              <Heading level='2' size='xsmall'>
-                Mer om kravet
-              </Heading>
+      <div className='sticky top-4'>
+        <Tabs
+          defaultValue='mer'
+          value={activeTab}
+          size='small'
+          onChange={(tabValue) => {
+            if (formRef.current?.dirty) {
+              setSelectedTab(tabValue)
+              setIsUnsaved(true)
+            } else {
+              setIsPvkFormActive(false)
+              setActiveTab(tabValue)
             }
-          />
-          {pvkDokument &&
-            pvkDokument.skalUtforePvk &&
-            krav.tagger.includes('Personvernkonsekvensvurdering') && (
-              <Tabs.Tab
-                className='whitespace-nowrap'
-                value='pvkDokumentasjon'
-                label={
-                  <Heading level='2' size='xsmall'>
-                    PVK-dokumentasjon
-                  </Heading>
-                }
-              />
-            )}
-          <Tabs.Tab
-            value='notat'
-            label={
-              <Heading level='2' size='xsmall'>
-                Notat
-              </Heading>
-            }
-          />
-        </Tabs.List>
-        <Tabs.Panel value='mer'>
-          <div className='mt-2 p-4'>
-            <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
-          </div>
-        </Tabs.Panel>
-        {pvkDokument && pvkDokument.skalUtforePvk && (
-          <Tabs.Panel value='pvkDokumentasjon'>
+          }}
+        >
+          <Tabs.List>
+            <Tabs.Tab
+              className='whitespace-nowrap'
+              value='mer'
+              label={
+                <Heading level='2' size='xsmall'>
+                  Mer om kravet
+                </Heading>
+              }
+            />
+            {pvkDokument &&
+              pvkDokument.skalUtforePvk &&
+              krav.tagger.includes('Personvernkonsekvensvurdering') && (
+                <Tabs.Tab
+                  className='whitespace-nowrap'
+                  value='pvkDokumentasjon'
+                  label={
+                    <Heading level='2' size='xsmall'>
+                      PVK-dokumentasjon
+                    </Heading>
+                  }
+                />
+              )}
+            <Tabs.Tab
+              value='notat'
+              label={
+                <Heading level='2' size='xsmall'>
+                  Notat
+                </Heading>
+              }
+            />
+          </Tabs.List>
+          <Tabs.Panel value='mer'>
             <div className='mt-2 p-4'>
-              {userHasAccess() &&
-                pvkDokument &&
-                ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                  pvkDokument.status
-                ) && (
-                  <KravRisikoscenario
-                    krav={krav}
-                    pvkDokument={pvkDokument}
-                    setIsPvkFormActive={setIsPvkFormActive}
-                    formRef={formRef}
-                  />
-                )}
-
-              {(!userHasAccess() ||
-                (pvkDokument &&
-                  [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                    pvkDokument.status
-                  ))) && <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />}
+              <AllInfo krav={krav} alleKravVersjoner={alleKravVersjoner} />
             </div>
           </Tabs.Panel>
-        )}
-        <Tabs.Panel value='notat'>
-          <div className='mt-2 p-4'>
-            <div className='flex justify-between mb-2.5'>
-              <Label className='flex gap-1' size='medium'>
-                <FileTextIcon fontSize='1.5rem' area-label='' aria-hidden />
-                Notat
-              </Label>
-              <Button variant='secondary' size='xsmall' onClick={() => setIsNotatModalOpen(true)}>
-                Rediger
-              </Button>
-            </div>
+          {pvkDokument && pvkDokument.skalUtforePvk && (
+            <Tabs.Panel className='overflow-auto h-[90vh]' value='pvkDokumentasjon'>
+              <div className='mt-2 p-4'>
+                {userHasAccess() &&
+                  pvkDokument &&
+                  ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+                    pvkDokument.status
+                  ) && (
+                    <KravRisikoscenario
+                      krav={krav}
+                      pvkDokument={pvkDokument}
+                      setIsPvkFormActive={setIsPvkFormActive}
+                      formRef={formRef}
+                    />
+                  )}
 
-            <EditNotatfelt
-              isOpen={isNotatModalOpen}
-              setIsNotatfeltOpen={setIsNotatModalOpen}
-              etterlevelseMetadata={etterlevelseMetadata}
-              setEtterlevelseMetadata={setEtterlevelseMetadata}
-            />
+                {(!userHasAccess() ||
+                  (pvkDokument &&
+                    [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+                      pvkDokument.status
+                    ))) && <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />}
+              </div>
+            </Tabs.Panel>
+          )}
+          <Tabs.Panel className='overflow-auto h-[90vh]' value='notat'>
+            <div className='mt-2 p-4'>
+              <div className='flex justify-between mb-2.5'>
+                <Label className='flex gap-1' size='medium'>
+                  <FileTextIcon fontSize='1.5rem' area-label='' aria-hidden />
+                  Notat
+                </Label>
+                <Button variant='secondary' size='xsmall' onClick={() => setIsNotatModalOpen(true)}>
+                  Rediger
+                </Button>
+              </div>
 
-            <div className='break-words'>
-              <Markdown source={etterlevelseMetadata.notater} />
+              <EditNotatfelt
+                isOpen={isNotatModalOpen}
+                setIsNotatfeltOpen={setIsNotatModalOpen}
+                etterlevelseMetadata={etterlevelseMetadata}
+                setEtterlevelseMetadata={setEtterlevelseMetadata}
+              />
+
+              <div className='break-words'>
+                <Markdown source={etterlevelseMetadata.notater} />
+              </div>
             </div>
-          </div>
-        </Tabs.Panel>
-      </Tabs>
+          </Tabs.Panel>
+        </Tabs>
+      </div>
 
       <AccordianAlertModal
         isOpen={isUnsaved}
