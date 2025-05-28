@@ -139,14 +139,14 @@ export const useBehandlingensLivslop = (
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
       //double check that behandlingenslivslop doesnt not exist
       ;(async () => {
-        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
-          async (behandlingensLivslop) => {
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+          .then(async (behandlingensLivslop) => {
             if (behandlingensLivslop) {
               setData(behandlingensLivslop)
             }
             setIsLoading(false)
-          }
-        )
+          })
+          .catch(() => undefined)
       })()
     }
   }, [behandlingensLivslopId])
