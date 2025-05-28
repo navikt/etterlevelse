@@ -69,7 +69,7 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
           </div>
 
           {!noSidePanelContent && (
-            <div className='mt-5'>
+            <div className='mt-5 sticky top-4'>
               <div className='pt-6 border-t border-[#071a3636]'>
                 <BehandlingensLivsLopSidePanel
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}

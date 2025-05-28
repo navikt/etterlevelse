@@ -17,7 +17,14 @@ export const MainPanelLayout = ({ children }: TMainSidePanelProps) => (
 )
 
 export const SidePanelLayout = ({ children }: TSidePanelLayoutProps) => (
-  <div className='max-w-sm w-full border-l-2 border-gray-200 pl-3'>{children}</div>
+  // Don't remove this div. Sticky will not work without it.
+  <div>
+    <div className='sticky top-4'>
+      <div className='max-w-lg w-full border-l-2 border-gray-200 pl-3'>
+        <div className='overflow-auto h-[90vh]'>{children}</div>
+      </div>
+    </div>
+  </div>
 )
 
 export const ContentLayout = ({ children }: TContentLayoutProps) => (
