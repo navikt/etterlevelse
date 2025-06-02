@@ -1,9 +1,14 @@
-import { Alert, BodyLong, ReadMore } from '@navikt/ds-react'
+import { PencilIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, Button, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useState } from 'react'
-import { IRisikoscenario, ITiltak } from '../../../constants'
+import { getPvkDokument } from '../../../api/PvkDokumentApi'
+import { updateRisikoscenario } from '../../../api/RisikoscenarioApi'
+import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../../constants'
+import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import TiltakView from '../../tiltak/TiltakView'
 import RisikoscenarioView from '../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
+import RisikoscenarioModalForm from '../edit/RisikoscenarioModalForm'
 import VurdereTiltaksEffekt from '../edit/VurdereTiltaksEffekt'
 
 type TProps = {
@@ -28,6 +33,30 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
   formRef,
 }) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+
+  const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
+    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
+      setActiveRisikoscenario(response)
+      setIsEditModalOpen(false)
+      window.location.reload()
+    })
+  }
+
+  const activeFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+      if (
+        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+          response.status
+        )
+      ) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
+      }
+    })
+  }
 
   return (
     <div>
@@ -37,6 +66,18 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
         stepUrl='6'
       />
 
+      <div className='mt-12 flex gap-2 items-center'>
+        <Button
+          variant='tertiary'
+          type='button'
+          icon={<PencilIcon aria-hidden />}
+          onClick={async () => {
+            await activeFormButton(() => setIsEditModalOpen(true))
+          }}
+        >
+          Redigèr risikoscenario
+        </Button>
+      </div>
       <div className='mt-12'>
         <RisikoscenarioTiltakHeader />
 
@@ -91,6 +132,24 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
           </div>
         )}
       </div>
+
+      {isEditModalOpen && (
+        <RisikoscenarioModalForm
+          headerText='Redigér øvrig risikoscenario'
+          isOpen={isEditModalOpen}
+          setIsOpen={setIsEditModalOpen}
+          submit={submit}
+          initialValues={activeRisikoscenario}
+        />
+      )}
+
+      {isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
+          pvkDokumentId={risikoscenario.pvkDokumentId}
+        />
+      )}
     </div>
   )
 }
