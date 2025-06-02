@@ -1,6 +1,6 @@
 import { Accordion, Tag } from '@navikt/ds-react'
 import { FunctionComponent, RefObject } from 'react'
-import { IRisikoscenario } from '../../constants'
+import { IKravReference, IRisikoscenario } from '../../constants'
 
 type TProps = {
   risikoscenario: IRisikoscenario
@@ -35,6 +35,13 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
           <Tag variant='alt1'>Ikke ferdig vurdert </Tag>
         )}
         {!risikoscenario.ingenTiltak && ferdigVurdert && <Tag variant='info'>Ferdig vurdert </Tag>}
+
+        {risikoscenario.generelScenario && <Tag variant='neutral'>Øvrig</Tag>}
+        {risikoscenario.relevanteKravNummer.map((krav: IKravReference, index: number) => (
+          <Tag key={index} variant='neutral'>
+            K{krav.kravNummer}.{krav.kravVersjon}
+          </Tag>
+        ))}
       </div>
     </Accordion.Header>
   )
