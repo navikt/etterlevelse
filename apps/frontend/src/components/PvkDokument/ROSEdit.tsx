@@ -37,7 +37,8 @@ export const ROSEdit = () => {
           return (
             <div className='my-8'>
               <Heading level='2' size='small' spacing>
-                Legg til ROS eller annen aktuell dokumentasjon
+                Legg til annen aktuell dokumentasjon. ROS som er aktuell(e), skal dere legge til
+                her.
               </Heading>
 
               <div className='w-full my-2.5'>
