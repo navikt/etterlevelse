@@ -87,15 +87,21 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
 
       return (
         <div className='gap-2 flex pt-1'>
-          <Tag variant='success' size='xsmall'>
-            Antall kravspesifikk risikoscenario: {kravSenario.length}
-          </Tag>
-          <Tag variant='success' size='xsmall'>
-            Antall øvrig risikoscenario: {generelSenario.length}
-          </Tag>
-          <Tag variant='success' size='xsmall'>
-            Antall tiltak: {allTiltak.length}
-          </Tag>
+          {kravSenario.length > 0 && (
+            <Tag variant='success' size='xsmall'>
+              {kravSenario.length} kravspesifikke risikoscenario
+            </Tag>
+          )}
+          {generelSenario.length > 0 && (
+            <Tag variant='success' size='xsmall'>
+              {generelSenario.length} øvrige risikoscenario
+            </Tag>
+          )}
+          {allTiltak.length > 0 && (
+            <Tag variant='success' size='xsmall'>
+              {allTiltak.length} tiltak
+            </Tag>
+          )}
         </div>
       )
     } else {
