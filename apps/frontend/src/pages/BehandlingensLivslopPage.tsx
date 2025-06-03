@@ -206,7 +206,7 @@ export const BehandlingensLivslopPage = () => {
         behandlingsLivslop &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <ContentLayout>
-            <MainPanelLayout>
+            <MainPanelLayout hasSidePanel>
               {((pvkDokument &&
                 ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
                   pvkDokument.status

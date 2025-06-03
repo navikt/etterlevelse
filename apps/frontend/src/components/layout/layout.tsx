@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 type TMainSidePanelProps = {
   children: ReactNode
+  hasSidePanel?: boolean
 }
 
 type TSidePanelLayoutProps = {
@@ -12,8 +13,8 @@ type TContentLayoutProps = {
   children: ReactNode
 }
 
-export const MainPanelLayout = ({ children }: TMainSidePanelProps) => (
-  <div className='pr-14 w-full'>{children}</div>
+export const MainPanelLayout = ({ children, hasSidePanel }: TMainSidePanelProps) => (
+  <div className={`pr-14 w-full ${hasSidePanel ? 'max-w-[849px]' : ''}`}>{children}</div>
 )
 
 export const SidePanelLayout = ({ children }: TSidePanelLayoutProps) => (
