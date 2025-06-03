@@ -16,7 +16,7 @@ import { noOptionMessage, selectOverrides } from '../../search/util'
 import { tiltakSchemaValidation } from './tiltakSchema'
 
 interface IProps {
-  title: string
+  title?: string
   initialValues: ITiltak
   pvkDokumentId: string
   submit: (tiltak: ITiltak) => void
@@ -52,11 +52,13 @@ export const TiltakForm = (props: IProps) => {
     >
       {({ values, resetForm, submitForm, errors }) => (
         <Form>
-          <div className='mb-5 border-t-2 mt-5'>
-            <Heading size='medium' className='mt-5'>
-              {title}
-            </Heading>
-          </div>
+          {title && (
+            <div className='mb-5 border-t-2 mt-5'>
+              <Heading size='medium' className='mt-5'>
+                {title}
+              </Heading>
+            </div>
+          )}
 
           <InputField
             marginBottom
