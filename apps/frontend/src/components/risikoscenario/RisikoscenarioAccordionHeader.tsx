@@ -11,34 +11,36 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
   risikoscenario,
   ref,
 }) => {
-  const ikkeFerdigBeskrevet: boolean =
-    risikoscenario.konsekvensNivaa === 0 ||
-    risikoscenario.sannsynlighetsNivaa === 0 ||
-    risikoscenario.konsekvensNivaaBegrunnelse === '' ||
-    risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
-  const mangelfulScenario: boolean =
-    ikkeFerdigBeskrevet || (!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0)
-  const ikkeFerdigVurdert: boolean =
-    risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
-    risikoscenario.konsekvensNivaaEtterTiltak === 0
   const ferdigVurdert: boolean =
+    risikoscenario.konsekvensNivaa !== 0 &&
+    risikoscenario.sannsynlighetsNivaa !== 0 &&
+    risikoscenario.konsekvensNivaaBegrunnelse !== '' &&
+    risikoscenario.sannsynlighetsNivaaBegrunnelse !== '' &&
     risikoscenario.sannsynlighetsNivaaEtterTiltak !== 0 &&
-    risikoscenario.konsekvensNivaaEtterTiltak !== 0
+    risikoscenario.konsekvensNivaaEtterTiltak !== 0 &&
+    risikoscenario.nivaaBegrunnelseEtterTiltak !== '' &&
+    !risikoscenario.ingenTiltak &&
+    risikoscenario.tiltakIds.length > 0
 
   return (
     <Accordion.Header ref={ref}>
       {risikoscenario.navn}
       <div className='flex gap-2 mt-1'>
-        {mangelfulScenario && <Tag variant='alt2'>Scenario er mangelfullt </Tag>}
         {risikoscenario.ingenTiltak && <Tag variant='neutral'>Tiltak ikke aktuelt</Tag>}
-        {!risikoscenario.ingenTiltak && ikkeFerdigVurdert && (
-          <Tag variant='alt1'>Ikke ferdig vurdert </Tag>
-        )}
-        {!risikoscenario.ingenTiltak && ferdigVurdert && <Tag variant='info'>Ferdig vurdert </Tag>}
 
-        {risikoscenario.generelScenario && <Tag variant='neutral'>Øvrig</Tag>}
+        {ferdigVurdert && <Tag variant='alt3'>Ferdig vurdert </Tag>}
+
+        {!ferdigVurdert && !risikoscenario.ingenTiltak && (
+          <Tag variant='alt2'>Ikke ferdig vurdert</Tag>
+        )}
+
+        {risikoscenario.generelScenario && (
+          <Tag className='bg-white' variant='neutral'>
+            Øvrig
+          </Tag>
+        )}
         {risikoscenario.relevanteKravNummer.map((krav: IKravReference, index: number) => (
-          <Tag key={index} variant='neutral'>
+          <Tag className='bg-white' key={index} variant='neutral'>
             K{krav.kravNummer}.{krav.kravVersjon}
           </Tag>
         ))}
