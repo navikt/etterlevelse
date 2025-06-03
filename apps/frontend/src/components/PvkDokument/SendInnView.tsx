@@ -537,11 +537,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 )}
 
                 {(!_.isEmpty(errors) ||
+                  // pvkKravError !== '' ||
                   behandlingensLivslopError ||
                   risikoscenarioError !== '' ||
                   tiltakError !== '' ||
-                  savnerVurderingError !== '' ||
-                  pvkKravError !== '') && (
+                  savnerVurderingError !== '') && (
                   <ErrorSummary
                     ref={errorSummaryRef}
                     heading='Du må rette disse feilene før du kan fortsette'
@@ -552,11 +552,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       </ErrorSummary.Item>
                     )}
 
-                    {pvkKravError !== '' && (
-                      <ErrorSummary.Item href='#WIP' className='max-w-[75ch]'>
+                    {/* {pvkKravError !== '' && (
+                      <ErrorSummary.Item
+                        href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjon.id)}
+                        className='max-w-[75ch]'
+                      >
                         {pvkKravError}
                       </ErrorSummary.Item>
-                    )}
+                    )} */}
 
                     {behandlingensLivslopError && (
                       <ErrorSummary.Item href='#behandlingensLivslop' className='max-w-[75ch]'>
