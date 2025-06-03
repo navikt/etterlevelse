@@ -1,15 +1,29 @@
-import { Accordion, Tag } from '@navikt/ds-react'
+import { PencilIcon } from '@navikt/aksel-icons'
+import { Accordion, Button, Modal, Tag } from '@navikt/ds-react'
+import { FunctionComponent, useState } from 'react'
+import { mapTiltakToFormValue, updateTiltak } from '../../api/TiltakApi'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import TiltakView from './TiltakView'
+import TiltakForm from './edit/TiltakForm'
 
-interface IProps {
+type TProps = {
   tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
   risikoscenarioList: IRisikoscenario[]
 }
 
-export const TiltakAccordionList = (props: IProps) => {
-  const { tiltakList, risikoscenarioList } = props
+type TContentProps = {
+  tiltak: ITiltak
+  tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
+  risikoscenarioList: IRisikoscenario[]
+}
 
+export const TiltakAccordionList: FunctionComponent<TProps> = ({
+  tiltakList,
+  setTiltakList,
+  risikoscenarioList,
+}) => {
   return (
     <Accordion>
       {tiltakList.map((tiltak) => {
@@ -23,12 +37,73 @@ export const TiltakAccordionList = (props: IProps) => {
               </div>
             </Accordion.Header>
             <Accordion.Content>
-              <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
+              <TiltakAccordionContent
+                tiltak={tiltak}
+                risikoscenarioList={risikoscenarioList}
+                tiltakList={tiltakList}
+                setTiltakList={setTiltakList}
+              />
             </Accordion.Content>
           </Accordion.Item>
         )
       })}
     </Accordion>
+  )
+}
+
+export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
+  tiltak,
+  risikoscenarioList,
+  tiltakList,
+  setTiltakList,
+}) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const submit = async (submitedValues: ITiltak) => {
+    await updateTiltak(submitedValues)
+      .then((response) => {
+        setTiltakList(
+          tiltakList.map((tiltak) => {
+            if (tiltak.id === response.id) {
+              return { ...response }
+            } else {
+              return tiltak
+            }
+          })
+        )
+      })
+      .finally(() => {
+        setIsEditModalOpen(false)
+      })
+  }
+  return (
+    <div>
+      <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
+      <Button
+        type='button'
+        variant='tertiary'
+        size='small'
+        icon={<PencilIcon title='' aria-hidden />}
+        onClick={() => setIsEditModalOpen(true)}
+      >
+        Redigér tiltak
+      </Button>
+      {isEditModalOpen && (
+        <Modal
+          open={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          header={{ heading: 'Rediger tiltak' }}
+        >
+          <Modal.Body>
+            <TiltakForm
+              initialValues={mapTiltakToFormValue(tiltak)}
+              pvkDokumentId={tiltak.pvkDokumentId}
+              submit={submit}
+              close={() => setIsEditModalOpen(false)}
+            />
+          </Modal.Body>
+        </Modal>
+      )}
+    </div>
   )
 }
 

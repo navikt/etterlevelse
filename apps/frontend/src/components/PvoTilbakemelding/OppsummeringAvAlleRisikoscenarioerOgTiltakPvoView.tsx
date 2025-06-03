@@ -20,7 +20,7 @@ import {
 import { ContentLayout } from '../layout/layout'
 import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
-import TiltakAccordionList from '../tiltak/TiltakAccordionList'
+import TiltakAccordionListReadOnly from '../tiltak/TiltakAccordionListReadOnly'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from './common/PvoTilbakemeldingReadOnly'
 import PvoFormButtons from './edit/PvoFormButtons'
@@ -370,7 +370,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                         )}
 
                         {filteredTiltakList.length !== 0 && (
-                          <TiltakAccordionList
+                          <TiltakAccordionListReadOnly
                             tiltakList={filteredTiltakList}
                             risikoscenarioList={risikoscenarioList}
                           />

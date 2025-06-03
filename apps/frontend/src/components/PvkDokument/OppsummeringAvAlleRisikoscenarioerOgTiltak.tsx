@@ -26,6 +26,7 @@ import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
 import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
+import TiltakAccordionListReadOnly from '../tiltak/TiltakAccordionListReadOnly'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -417,12 +418,31 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         </ToggleGroup>
                       )}
 
-                      {filteredTiltakList.length !== 0 && (
-                        <TiltakAccordionList
-                          tiltakList={filteredTiltakList}
-                          risikoscenarioList={risikoscenarioList}
-                        />
-                      )}
+                      {pvkDokument &&
+                        ![
+                          EPvkDokumentStatus.PVO_UNDERARBEID,
+                          EPvkDokumentStatus.SENDT_TIL_PVO,
+                        ].includes(pvkDokument.status) &&
+                        filteredTiltakList.length !== 0 && (
+                          <TiltakAccordionList
+                            tiltakList={filteredTiltakList}
+                            risikoscenarioList={risikoscenarioList}
+                            setTiltakList={setTiltakList}
+                          />
+                        )}
+
+                      {pvkDokument &&
+                        [
+                          EPvkDokumentStatus.PVO_UNDERARBEID,
+                          EPvkDokumentStatus.SENDT_TIL_PVO,
+                        ].includes(pvkDokument.status) &&
+                        filteredTiltakList.length !== 0 && (
+                          <TiltakAccordionListReadOnly
+                            tiltakList={filteredTiltakList}
+                            risikoscenarioList={risikoscenarioList}
+                          />
+                        )}
+
                       {filteredTiltakList.length === 0 &&
                         visTomTiltakListeBeskrivelse(tiltakFilter)}
                     </Tabs.Panel>
