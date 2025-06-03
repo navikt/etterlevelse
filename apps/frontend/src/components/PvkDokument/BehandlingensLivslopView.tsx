@@ -151,7 +151,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
               pvkDokument.status
             ) && (
-              <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8 max-w-[849px]'>
+              <div className='pt-6 pr-4 flex flex-col gap-4 col-span-8 w-full max-w-[849px]'>
                 <Formik
                   validateOnBlur={false}
                   validateOnChange={false}
@@ -172,7 +172,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                 >
                   {({ submitForm, initialValues, errors, isSubmitting }) => (
                     <Form>
-                      <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8'>
+                      <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8 w-full'>
                         <Heading level='1' size='medium' className='mb-5'>
                           Behandlingens livsløp
                         </Heading>
