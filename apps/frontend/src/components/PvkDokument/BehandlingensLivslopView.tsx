@@ -151,7 +151,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
               pvkDokument.status
             ) && (
-              <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+              <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8 max-w-[849px]'>
                 <Formik
                   validateOnBlur={false}
                   validateOnChange={false}
