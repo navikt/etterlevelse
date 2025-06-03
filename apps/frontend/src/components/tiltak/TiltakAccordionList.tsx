@@ -73,6 +73,7 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
       })
       .finally(() => {
         setIsEditModalOpen(false)
+        window.location.reload()
       })
   }
   return (

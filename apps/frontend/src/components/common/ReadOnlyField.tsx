@@ -7,17 +7,19 @@ interface IProps {
 }
 
 export const ReadOnlyField = ({ label, description, className }: IProps) => {
-  const displayInline: boolean = description.length < 26
-  const displayBlock: boolean = description.length > 27
+  const displayInline: boolean = description.length <= 26
+  const displayBlock: boolean = description.length >= 27
 
   return (
     <div className={className}>
-      {displayInline && [
-        <Label key='description_label'>{label}</Label>,
-        <BodyShort className={`var(--a-font-line-height-large)`} key='description_text'>
-          {description}
-        </BodyShort>,
-      ]}
+      {displayInline && (
+        <div>
+          <Label key='description_label'>{label}</Label>
+          <BodyShort className={`var(--a-font-line-height-large)`} key='description_text'>
+            {description}
+          </BodyShort>
+        </div>
+      )}
       {displayBlock && (
         <div>
           <Label>{label}</Label>
