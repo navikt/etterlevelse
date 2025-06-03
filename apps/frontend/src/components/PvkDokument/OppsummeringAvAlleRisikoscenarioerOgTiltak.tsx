@@ -345,6 +345,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                   setAllRisikoscenarioList={setRisikoscenarioList}
                                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                                   tiltakList={tiltakList}
+                                  setTiltakList={setTiltakList}
                                   formRef={formRef}
                                   isUnsaved={isUnsaved}
                                   setIsUnsaved={setIsUnsaved}

@@ -18,6 +18,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
   formRef: RefObject<any>
   isUnsaved: boolean
   setIsUnsaved: (state: boolean) => void
@@ -30,6 +31,7 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   setAllRisikoscenarioList,
   etterlevelseDokumentasjonId,
   tiltakList,
+  setTiltakList,
   formRef,
   isUnsaved,
   setIsUnsaved,
@@ -111,6 +113,7 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
                   allRisikoscenarioList={allRisikoscenarioList}
                   setAllRisikoscenarioList={setAllRisikoscenarioList}
                   tiltakList={tiltakList}
+                  setTiltakList={setTiltakList}
                   formRef={formRef}
                 />
               </Accordion.Content>

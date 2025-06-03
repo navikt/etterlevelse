@@ -19,6 +19,7 @@ type TProps = {
   allRisikoscenarioList: IRisikoscenario[]
   setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
   formRef: RefObject<any>
 }
 
@@ -30,6 +31,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
   allRisikoscenarioList,
   setAllRisikoscenarioList,
   tiltakList,
+  setTiltakList,
   formRef,
 }) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
@@ -85,6 +87,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
           risikoscenario={risikoscenario}
           tiltakList={tiltakList}
           allRisikoscenarioList={allRisikoscenarioList}
+          setTiltakList={setTiltakList}
         />
 
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
