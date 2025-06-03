@@ -119,6 +119,9 @@ export const OversiktView: FunctionComponent<TProps> = ({
   const getRisikoscenarioStatus = (step: number): JSX.Element => {
     if (step === 2) {
       const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
+      const kravSenario = allRisikoscenario.filter(
+        (risiko: IRisikoscenario) => !risiko.generelScenario
+      )
       if (generelSenario.length === 0) {
         return (
           <Tag variant='neutral' size='xsmall'>
@@ -126,19 +129,21 @@ export const OversiktView: FunctionComponent<TProps> = ({
           </Tag>
         )
       } else {
-        const isUnderarbeid =
-          generelSenario.filter((risiko) => isRisikoUnderarbeidCheck(risiko)).length > 0
         return (
           <div className='gap-2 flex pt-1'>
-            <Tag variant={isUnderarbeid ? 'info' : 'success'} size='xsmall'>
-              Antall risikoscenario: {generelSenario.length}
-            </Tag>
-            <Tag variant={isUnderarbeid ? 'info' : 'success'} size='xsmall'>
-              Antall tiltak: {allTiltak.length}
-            </Tag>
-            {isUnderarbeid && (
-              <Tag variant='warning' size='xsmall'>
-                Under arbeid
+            {kravSenario.length > 0 && (
+              <Tag variant='success' size='xsmall'>
+                {kravSenario.length} kravspesifikke risikoscenario
+              </Tag>
+            )}
+            {generelSenario.length > 0 && (
+              <Tag variant='success' size='xsmall'>
+                {generelSenario.length} øvrige risikoscenario
+              </Tag>
+            )}
+            {allTiltak.length > 0 && (
+              <Tag variant='success' size='xsmall'>
+                {allTiltak.length} tiltak
               </Tag>
             )}
           </div>
