@@ -92,7 +92,7 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
         <Modal
           open={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          header={{ heading: 'Rediger tiltak' }}
+          header={{ heading: 'Redigér tiltak' }}
         >
           <Modal.Body>
             <TiltakForm
