@@ -56,8 +56,6 @@ export const BehandlingensLivslopPage = () => {
     params.behandlingsLivslopId,
     params.id
   )
-  const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
-  const [tilTemaOversikt] = useState<boolean>(false)
 
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
@@ -117,8 +115,6 @@ export const BehandlingensLivslopPage = () => {
         mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
 
-      const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
-        pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
       let pvkStatus = ''
       await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
         .then((response) => {
@@ -137,37 +133,26 @@ export const BehandlingensLivslopPage = () => {
         if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
           await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
             setBehandlingesLivslop(response)
-            if (tilTemaOversikt) {
-              navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
-            } else if (tilPvkDokument) {
-              navigate(
-                pvkDokumentasjonPvkTypeStepUrl(
-                  response.etterlevelseDokumentasjonId,
-                  pvkDokumentLink,
-                  pvkDokument ? pvkDokument.id : 'ny',
-                  pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
-                )
-              )
-            }
           })
         } else {
           await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
             setBehandlingesLivslop(response)
-            if (tilTemaOversikt) {
-              navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
-            } else if (tilPvkDokument) {
-              navigate(
-                pvkDokumentasjonPvkTypeStepUrl(
-                  response.etterlevelseDokumentasjonId,
-                  pvkDokumentLink,
-                  pvkDokument ? pvkDokument.id : 'ny'
-                )
-              )
-            }
           })
         }
       }
     }
+  }
+
+  const getPvkLink = (etterlevelseDokumentasjonId: string) => {
+    const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
+      pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
+
+    return pvkDokumentasjonPvkTypeStepUrl(
+      etterlevelseDokumentasjonId,
+      pvkDokumentLink,
+      pvkDokument ? pvkDokument.id : 'ny',
+      pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
+    )
   }
 
   return (
@@ -276,26 +261,12 @@ export const BehandlingensLivslopPage = () => {
                               <Button
                                 type='button'
                                 onClick={() => {
-                                  setTilPvkDokument(false)
                                   submitForm()
                                 }}
                               >
                                 Lagre
-                                {/* {pvkDokument
-                                  ? 'Lagre og gå til PVK-Oversikt'
-                                  : 'Lagre og vurdér behov for PVK'} */}
                               </Button>
-                              {/* <Button
-                                type='button'
-                                variant='secondary'
-                                onClick={async () => {
-                                  setTilTemaOversikt(true)
-                                  await submitForm()
-                                  setSubmitClick(!submitClick)
-                                }}
-                              >
-                                Lagre og gå til Temaoversikt
-                              </Button> */}
+
                               <Button
                                 type='button'
                                 variant='tertiary'
@@ -333,10 +304,10 @@ export const BehandlingensLivslopPage = () => {
                       variant='action'
                       href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
                     >
-                      Gå til Temaoversikt
+                      Temaoversikt
                     </Link>
-                    <Link variant='action' href='variants'>
-                      Gå til vurdér behov for PVK
+                    <Link variant='action' href={getPvkLink(etterlevelseDokumentasjon.id)}>
+                      {pvkDokument ? 'PVK-Oversikt' : 'Vurdér behov for PVK'}
                     </Link>
                   </VStack>
                 </div>
