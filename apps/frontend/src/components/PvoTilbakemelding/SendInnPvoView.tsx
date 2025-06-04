@@ -25,6 +25,7 @@ import {
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
+import { FieldRadioLayout, IndentLayoutTextField } from '../common/IndentLayout'
 import { TextAreaField } from '../common/Inputs'
 import { Markdown } from '../common/Markdown'
 import AlertPvoModal from './common/AlertPvoModal'
@@ -128,63 +129,99 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
 
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                 <div>
-                  <Field name='arbeidGarVidere'>
-                    {(fieldProps: FieldProps) => (
-                      <RadioGroup
-                        legend='Anbefales det at arbeidet går videre som planlagt?'
-                        value={
-                          fieldProps.field.value === null
-                            ? null
-                            : fieldProps.field.value === true
-                              ? 'Ja'
-                              : 'Nei'
-                        }
-                        onChange={async (value) => {
-                          const boolValue = value === null ? null : value === 'Ja' ? true : false
-                          await fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
-                        }}
-                        error={fieldProps.form.errors.arbeidGarVidere as string}
-                      >
-                        <Radio value='Ja'>Ja</Radio>
-                        <Radio value='Nei'>Nei</Radio>
-                      </RadioGroup>
-                    )}
-                  </Field>
-
-                  <Field name='behovForForhandskonsultasjon'>
-                    {(fieldProps: FieldProps) => (
-                      <RadioGroup
-                        legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
-                        value={
-                          fieldProps.field.value === null
-                            ? null
-                            : fieldProps.field.value === true
-                              ? 'Ja'
-                              : 'Nei'
-                        }
-                        onChange={async (value) => {
-                          const boolValue = value === null ? null : value === 'Ja' ? true : false
-                          await fieldProps.form.setFieldValue(
-                            'behovForForhandskonsultasjon',
-                            boolValue
-                          )
-                        }}
-                        error={fieldProps.form.errors.behovForForhandskonsultasjon as string}
-                      >
-                        <Radio value='Ja'>Ja</Radio>
-                        <Radio value='Nei'>Nei</Radio>
-                      </RadioGroup>
-                    )}
-                  </Field>
-
-                  <div className='mt-5 mb-3 max-w-[75ch]'>
+                  <FieldRadioLayout>
                     <TextAreaField
                       rows={3}
                       noPlaceholder
                       label='Er det noe annet dere ønsker å formidle til etterlever?'
                       name='merknadTilEtterleverEllerRisikoeier'
                     />
-                  </div>
+                  </FieldRadioLayout>
+                  <FieldRadioLayout>
+                    <Field name='arbeidGarVidere'>
+                      {(fieldProps: FieldProps) => (
+                        <RadioGroup
+                          legend='Anbefales det at arbeidet går videre som planlagt?'
+                          value={
+                            fieldProps.field.value === null
+                              ? null
+                              : fieldProps.field.value === true
+                                ? 'Ja'
+                                : 'Nei'
+                          }
+                          onChange={async (value) => {
+                            const boolValue = value === null ? null : value === 'Ja' ? true : false
+                            await fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
+                          }}
+                          error={fieldProps.form.errors.arbeidGarVidere as string}
+                        >
+                          <Radio value='Ja'>Ja</Radio>
+                          <Radio value='Nei'>Nei</Radio>
+                        </RadioGroup>
+                      )}
+                    </Field>
+
+                    <Field>
+                      {(fieldProps: FieldProps) => (
+                        <>
+                          {fieldProps.form.values.arbeidGarVidere === true && (
+                            <IndentLayoutTextField>
+                              <TextAreaField
+                                rows={3}
+                                noPlaceholder
+                                label='Beskriv anbefalingen nærmere:'
+                                name='placeholder2'
+                              />
+                            </IndentLayoutTextField>
+                          )}
+                        </>
+                      )}
+                    </Field>
+                  </FieldRadioLayout>
+
+                  <FieldRadioLayout>
+                    <Field name='behovForForhandskonsultasjon'>
+                      {(fieldProps: FieldProps) => (
+                        <RadioGroup
+                          legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
+                          value={
+                            fieldProps.field.value === null
+                              ? null
+                              : fieldProps.field.value === true
+                                ? 'Ja'
+                                : 'Nei'
+                          }
+                          onChange={async (value) => {
+                            const boolValue = value === null ? null : value === 'Ja' ? true : false
+                            await fieldProps.form.setFieldValue(
+                              'behovForForhandskonsultasjon',
+                              boolValue
+                            )
+                          }}
+                          error={fieldProps.form.errors.behovForForhandskonsultasjon as string}
+                        >
+                          <Radio value='Ja'>Ja</Radio>
+                          <Radio value='Nei'>Nei</Radio>
+                        </RadioGroup>
+                      )}
+                    </Field>
+                    <Field>
+                      {(fieldProps: FieldProps) => (
+                        <>
+                          {fieldProps.form.values.behovForForhandskonsultasjon === true && (
+                            <IndentLayoutTextField>
+                              <TextAreaField
+                                rows={3}
+                                noPlaceholder
+                                label='Beskriv anbefalingen nærmere:'
+                                name='placeholder2'
+                              />
+                            </IndentLayoutTextField>
+                          )}
+                        </>
+                      )}
+                    </Field>
+                  </FieldRadioLayout>
                 </div>
               )}
 
