@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyShort,
@@ -5,9 +6,7 @@ import {
   ErrorSummary,
   FileRejected,
   Heading,
-  Link,
   Loader,
-  VStack,
 } from '@navikt/ds-react'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -31,7 +30,13 @@ import behandlingensLivslopSchema from '../components/behandlingensLivlop/behand
 import { TextAreaField } from '../components/common/Inputs'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonPvkTypeStepUrl } from '../components/common/RouteLinkPvk'
-import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../components/layout/layout'
+import UnsavedModalAlert from '../components/common/UnsavedModalAlert'
+import {
+  ContentLayout,
+  MainPanelLayout,
+  SidePanelLayout,
+  StickyFooterButtonLayout,
+} from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   EPvkDokumentStatus,
@@ -62,6 +67,8 @@ export const BehandlingensLivslopPage = () => {
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
   const [submitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
+  const [urlToNavigate, setUrlToNavigate] = useState<string>('')
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
 
@@ -299,19 +306,51 @@ export const BehandlingensLivslopPage = () => {
                       pvkDokumentId={pvkDokument.id}
                     />
                   )}
-                  <VStack className='mt-5' gap='3' align='start'>
-                    <Link
-                      variant='action'
-                      href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
+                  <StickyFooterButtonLayout>
+                    <Button
+                      icon={<ChevronLeftIcon aria-hidden />}
+                      iconPosition='left'
+                      type='button'
+                      variant='tertiary'
+                      onClick={() => {
+                        if (formRef.current.dirty) {
+                          setIsUnsavedModalOpen(true)
+                          setUrlToNavigate(
+                            etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)
+                          )
+                        } else {
+                          navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                        }
+                      }}
                     >
-                      Temaoversikt
-                    </Link>
-                    <Link variant='action' href={getPvkLink(etterlevelseDokumentasjon.id)}>
+                      Gå til Temaoversikt
+                    </Button>
+                    <Button
+                      icon={<ChevronRightIcon aria-hidden />}
+                      iconPosition='right'
+                      type='button'
+                      variant={'tertiary'}
+                      onClick={() => {
+                        if (formRef.current.dirty) {
+                          setIsUnsavedModalOpen(true)
+                          setUrlToNavigate(getPvkLink(etterlevelseDokumentasjon.id))
+                        } else {
+                          navigate(getPvkLink(etterlevelseDokumentasjon.id))
+                        }
+                      }}
+                    >
                       {pvkDokument ? 'PVK-Oversikt' : 'Vurdér behov for PVK'}
-                    </Link>
-                  </VStack>
+                    </Button>
+                  </StickyFooterButtonLayout>
                 </div>
               )}
+
+              <UnsavedModalAlert
+                isOpen={isUnsavedModalOpen}
+                setIsOpen={setIsUnsavedModalOpen}
+                urlToNavigate={urlToNavigate}
+                formRef={formRef}
+              />
 
               {pvkDokument &&
                 [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
