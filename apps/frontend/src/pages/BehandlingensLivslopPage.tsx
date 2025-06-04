@@ -5,7 +5,9 @@ import {
   ErrorSummary,
   FileRejected,
   Heading,
+  Link,
   Loader,
+  VStack,
 } from '@navikt/ds-react'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -55,11 +57,12 @@ export const BehandlingensLivslopPage = () => {
     params.id
   )
   const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
-  const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
+  const [tilTemaOversikt] = useState<boolean>(false)
+
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
-  const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [submitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
@@ -273,15 +276,16 @@ export const BehandlingensLivslopPage = () => {
                               <Button
                                 type='button'
                                 onClick={() => {
-                                  setTilPvkDokument(true)
+                                  setTilPvkDokument(false)
                                   submitForm()
                                 }}
                               >
-                                {pvkDokument
+                                Lagre
+                                {/* {pvkDokument
                                   ? 'Lagre og gå til PVK-Oversikt'
-                                  : 'Lagre og vurdér behov for PVK'}
+                                  : 'Lagre og vurdér behov for PVK'} */}
                               </Button>
-                              <Button
+                              {/* <Button
                                 type='button'
                                 variant='secondary'
                                 onClick={async () => {
@@ -291,7 +295,7 @@ export const BehandlingensLivslopPage = () => {
                                 }}
                               >
                                 Lagre og gå til Temaoversikt
-                              </Button>
+                              </Button> */}
                               <Button
                                 type='button'
                                 variant='tertiary'
@@ -301,7 +305,7 @@ export const BehandlingensLivslopPage = () => {
                                   )
                                 }}
                               >
-                                Avbryt
+                                Forkast endringer
                               </Button>
                             </div>
                           )}
@@ -324,6 +328,17 @@ export const BehandlingensLivslopPage = () => {
                       pvkDokumentId={pvkDokument.id}
                     />
                   )}
+                  <VStack className='mt-5' gap='3' align='start'>
+                    <Link
+                      variant='action'
+                      href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
+                    >
+                      Gå til Temaoversikt
+                    </Link>
+                    <Link variant='action' href='variants'>
+                      Gå til vurdér behov for PVK
+                    </Link>
+                  </VStack>
                 </div>
               )}
 
