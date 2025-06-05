@@ -21,6 +21,8 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravData;
@@ -101,7 +103,7 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
     @Autowired
-    protected StorageService<EtterlevelseMetadata> etterlevelseMetadataStorageService;
+    protected EtterlevelseMetadataRepo etterlevelseMetadataRepo;
     @Autowired
     protected StorageService<Melding> meldingStorageService;
     @Autowired
@@ -157,6 +159,7 @@ public abstract class IntegrationTestBase {
     @Commit
     @Transactional
     void tearDownBase() {
+        etterlevelseMetadataRepo.deleteAll();
         tilbakemeldingRepo.deleteAll();
         repository.deleteAll();
         MockFilter.clearUser();
@@ -250,6 +253,26 @@ public abstract class IntegrationTestBase {
         );
     }
     
+    protected EtterlevelseMetadata createEtterlevelseMetadata(int kravNummer, int kravVersjon) {
+        UUID etterlevelseDokumentasjonId = createEtterlevelseDokumentasjon().getId();
+        return createEtterlevelseMetadata(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
+    }
+
+    protected EtterlevelseMetadata createEtterlevelseMetadata(UUID etterlevelseDokumentasjonId, int kravNummer, int kravVersjon) {
+        try {
+            createKrav("Krav 1", kravNummer, kravVersjon);
+        } catch (Exception e) {
+            // Ignore (probably created previouysly)
+        }
+        return etterlevelseMetadataRepo.save(EtterlevelseMetadata.builder()
+                .id(UUID.randomUUID())
+                .kravNummer(kravNummer).kravVersjon(kravVersjon)
+                .etterlevelseDokumentasjon(etterlevelseDokumentasjonId)
+                .data(EtterlevelseMetadataData.builder().build())
+                .build()
+        );
+    }
+
     protected Krav createKrav(String navn, int kravNummer, int kravVersjon) {
         Krav krav = Krav.builder().id(UUID.randomUUID()).kravNummer(kravNummer).kravVersjon(kravVersjon)
                 .data(KravData.builder().navn(navn).status(KravStatus.AKTIV).build())
