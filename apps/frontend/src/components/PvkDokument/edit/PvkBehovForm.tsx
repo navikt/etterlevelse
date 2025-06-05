@@ -18,13 +18,14 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../../api/PvkDokumentApi'
-import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
+import { EPvkDokumentStatus, IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
 import { etterlevelseDokumentasjonIdUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonStepUrl } from '../../common/RouteLinkPvk'
 import UnsavedModalAlert from '../../common/UnsavedModalAlert'
 import { StickyFooterButtonLayout } from '../../layout/layout'
+import AlertPvoUnderarbeidModal from '../common/AlertPvoUnderarbeidModal'
 import { pvkBehovSchema } from './pvkDocumentSchema'
 
 type TProps = {
@@ -57,6 +58,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
 
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
   const [urlToNavigate, setUrlToNavigate] = useState<string>('')
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     if (etterlevelseDokumentasjon) {
@@ -78,11 +80,19 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       }
 
       if (pvkDokument.id || existingPvkDokumentId) {
-        await updatePvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
-          setPvkDokument(response)
-          navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
-          window.location.reload()
-        })
+        if (
+          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+            pvkDokument.status
+          )
+        ) {
+          setIsPvoAlertModalOpen(true)
+        } else {
+          await updatePvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
+            setPvkDokument(response)
+            navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+            window.location.reload()
+          })
+        }
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
           setPvkDokument(response)
@@ -262,6 +272,13 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
           </Form>
         )}
       </Formik>
+
+      <AlertPvoUnderarbeidModal
+        isOpen={isPvoAlertModalOpen}
+        onClose={() => setIsPvoAlertModalOpen(false)}
+        pvkDokumentId={pvkDokument.id}
+      />
+
       <UnsavedModalAlert
         isOpen={isUnsavedModalOpen}
         setIsOpen={setIsUnsavedModalOpen}
