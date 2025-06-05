@@ -41,7 +41,6 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
         validator.checkNull(Fields.kravVersjon, kravVersjon);
     }
 
-    // Updates all fields of the input with this request, except id and behandlingId
     public void mergeInto(EtterlevelseMetadata emd) {
         emd.setKravNummer(kravNummer);
         emd.setKravVersjon(kravVersjon);
