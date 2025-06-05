@@ -502,7 +502,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div className='flex flex-col lg:flex-row gap-5'>
+          <div id='avdeling' className='flex flex-col lg:flex-row gap-5'>
             <FieldWrapper marginTop full>
               <Field name='avdeling'>
                 {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
@@ -524,7 +524,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <div className='flex-1' />
           </div>
 
-          <div className='flex flex-col lg:flex-row gap-5 mt-5'>
+          <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className='flex-1'>

@@ -15,6 +15,7 @@ import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopToFormValue,
@@ -80,12 +81,17 @@ export const SendInnView: FunctionComponent<TProps> = ({
   setSelectedStep,
   pvoTilbakemelding,
 }) => {
+  const navigate: NavigateFunction = useNavigate()
+
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
 
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
   const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
+  const [risikoeiereDataError, setRisikoeiereDataError] = useState<boolean>(false)
+  const [avdelingError, setAvdelingError] = useState<boolean>(false)
+  const [teamsDataError, setTeamsDataError] = useState<boolean>(false)
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
   const [manglerBehandlingError, setManglerBehandlingError] = useState<boolean>(false)
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
@@ -159,6 +165,30 @@ export const SendInnView: FunctionComponent<TProps> = ({
       setManglerBehandlingError(true)
     } else {
       setManglerBehandlingError(false)
+    }
+  }
+
+  const risikoeiereDataFieldCheck = () => {
+    if (etterlevelseDokumentasjon.risikoeiereData?.length === 0) {
+      setRisikoeiereDataError(true)
+    } else {
+      setRisikoeiereDataError(false)
+    }
+  }
+
+  const avdelingFieldCheck = () => {
+    if (!etterlevelseDokumentasjon.avdeling) {
+      setAvdelingError(true)
+    } else {
+      setAvdelingError(false)
+    }
+  }
+
+  const teamsDataFieldCheck = () => {
+    if (etterlevelseDokumentasjon.teamsData === undefined) {
+      setTeamsDataError(true)
+    } else {
+      setTeamsDataError(false)
     }
   }
 
@@ -305,6 +335,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
         validate={(value) => {
           try {
             manglerBehandlingErrorCheck()
+            risikoeiereDataFieldCheck()
+            avdelingFieldCheck()
+            teamsDataFieldCheck()
             behandlingensLivslopFieldCheck()
             pvkKravCheck()
             risikoscenarioCheck()
@@ -538,6 +571,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
                 {(!_.isEmpty(errors) ||
                   // pvkKravError !== '' ||
+                  risikoeiereDataError ||
+                  avdelingError ||
+                  teamsDataError ||
                   behandlingensLivslopError ||
                   risikoscenarioError !== '' ||
                   tiltakError !== '' ||
@@ -588,6 +624,45 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     {savnerVurderingError !== '' && (
                       <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
                         {savnerVurderingError}
+                      </ErrorSummary.Item>
+                    )}
+
+                    {risikoeiereDataError && (
+                      <ErrorSummary.Item
+                        onClick={() => {
+                          navigate(
+                            `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#risikoeiereData`
+                          )
+                        }}
+                        className='max-w-[75ch]'
+                      >
+                        Legg til risikoeier (Redigér dokumentegenskaper)
+                      </ErrorSummary.Item>
+                    )}
+
+                    {avdelingError && (
+                      <ErrorSummary.Item
+                        onClick={() => {
+                          navigate(
+                            `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#avdeling`
+                          )
+                        }}
+                        className='max-w-[75ch]'
+                      >
+                        Legg til avdeling (Redigér dokumentegenskaper)
+                      </ErrorSummary.Item>
+                    )}
+
+                    {teamsDataError && (
+                      <ErrorSummary.Item
+                        onClick={() => {
+                          navigate(
+                            `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#teamsData`
+                          )
+                        }}
+                        className='max-w-[75ch]'
+                      >
+                        Legg til team eller personer (Redigér dokumentegenskaper)
                       </ErrorSummary.Item>
                     )}
                   </ErrorSummary>
