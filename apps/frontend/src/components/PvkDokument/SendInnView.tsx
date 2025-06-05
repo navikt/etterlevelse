@@ -556,7 +556,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 {pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
                   pvkDokument.sendtTilPvoDato !== null && (
                     <Alert variant='info' className='my-5'>
-                      Innsending trukker <br />
+                      Innsending trukket <br />
                       Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en
                       blir deretter behandlet som en ny innsending
                     </Alert>
