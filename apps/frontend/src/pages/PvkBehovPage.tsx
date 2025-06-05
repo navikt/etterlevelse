@@ -13,6 +13,7 @@ import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEt
 import { ContentLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
+  EPvkDokumentStatus,
   IBehandling,
   IBehandlingensLivslop,
   IBreadCrumbPath,
@@ -145,27 +146,34 @@ export const PvkBehovPage = () => {
               saerligKategorier={saerligKategorier}
               behandlingensLivslop={behandlingensLivslop}
             />
-            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-              <PvkBehovForm
-                pvkDokument={pvkdokument}
-                setPvkDokument={setPvkDokument}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                profilering={profilering}
-                automatiskBehandling={automatiskBehandling}
-                saerligKategorier={saerligKategorier}
-                checkedYtterligereEgenskaper={checkedYtterligereEgenskaper}
-                setCheckedYtterligereEgenskaper={setCheckedYtterligereEgenskaper}
-                codelistUtils={codelistUtils}
-                ytterligereEgenskaper={ytterligereEgenskaper}
-              />
-            )}
+            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+              ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+                pvkdokument.status
+              ) && (
+                <PvkBehovForm
+                  pvkDokument={pvkdokument}
+                  setPvkDokument={setPvkDokument}
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  profilering={profilering}
+                  automatiskBehandling={automatiskBehandling}
+                  saerligKategorier={saerligKategorier}
+                  checkedYtterligereEgenskaper={checkedYtterligereEgenskaper}
+                  setCheckedYtterligereEgenskaper={setCheckedYtterligereEgenskaper}
+                  codelistUtils={codelistUtils}
+                  ytterligereEgenskaper={ytterligereEgenskaper}
+                />
+              )}
 
-            {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
-              <PvkBehovReadOnly
-                pvkDokument={pvkdokument}
-                ytterligereEgenskaper={ytterligereEgenskaper}
-              />
-            )}
+            {!etterlevelseDokumentasjon.hasCurrentUserAccess &&
+              !user.isAdmin() &&
+              [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+                pvkdokument.status
+              ) && (
+                <PvkBehovReadOnly
+                  pvkDokument={pvkdokument}
+                  ytterligereEgenskaper={ytterligereEgenskaper}
+                />
+              )}
           </div>
 
           {etterlevelseDokumentasjon && (
