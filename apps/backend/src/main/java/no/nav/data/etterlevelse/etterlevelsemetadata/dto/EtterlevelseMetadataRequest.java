@@ -25,7 +25,7 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
     private UUID id;
     private Integer kravVersjon;
     private Integer kravNummer;
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
     private List<String> tildeltMed;
     private Boolean update;
     private String notater;
@@ -41,11 +41,10 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
         validator.checkNull(Fields.kravVersjon, kravVersjon);
     }
 
-    // Updates all fields of the input with this request, except id, behandlingId, version and changestamp
     public void mergeInto(EtterlevelseMetadata emd) {
         emd.setKravNummer(kravNummer);
         emd.setKravVersjon(kravVersjon);
-        emd.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
+        emd.setEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
         emd.setTildeltMed(copyOf(tildeltMed));
         emd.setNotater(notater);
     }
