@@ -23,7 +23,7 @@ import Etterlevelser from '../components/krav/Etterlevelser'
 import ExpiredAlert from '../components/krav/ExpiredAlert'
 import { AllInfo, ViewKrav } from '../components/krav/ViewKrav'
 import { Tilbakemeldinger } from '../components/krav/tilbakemelding/Tilbakemelding'
-import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../components/layout/layout'
+import { ContentLayout, MainPanelLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   EKravStatus,
@@ -267,7 +267,7 @@ export const KravPage = () => {
               </Tabs>
             </div>
           </MainPanelLayout>
-          <SidePanelLayout>
+          <div className='max-w-lg w-full border-l-2 border-gray-200 pl-3'>
             <AllInfo header krav={krav} alleKravVersjoner={alleKravVersjoner} noLastModifiedDate />
 
             <div className='mt-8'>
@@ -315,7 +315,7 @@ export const KravPage = () => {
                 </div>
               )}
             </div>
-          </SidePanelLayout>
+          </div>
         </ContentLayout>
       )}
     </PageLayout>
