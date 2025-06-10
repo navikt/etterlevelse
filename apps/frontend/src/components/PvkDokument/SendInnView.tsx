@@ -712,7 +712,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               await submitForm()
                             }}
                           >
-                            Send til Personvernombudet
+                            Lagre og send til Personvernombudet
                           </Button>
                         )}
 
@@ -760,7 +760,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               await submitForm()
                             }}
                           >
-                            Send til godkjenning av risikoeier
+                            Lagre og send til godkjenning av risikoeier
                           </Button>
                         )}
 
