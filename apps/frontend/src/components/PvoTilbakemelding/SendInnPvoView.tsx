@@ -284,7 +284,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                           await submitForm()
                         }}
                       >
-                        Send tilbakemelding
+                        Lagre og send tilbakemelding
                       </Button>
                     )}
                   </div>
