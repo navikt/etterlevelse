@@ -5,11 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.common.domain.KravId;
@@ -39,8 +35,8 @@ public class EtterlevelseMetadata extends Auditable implements KravId {
     @Builder.Default
     private Integer kravVersjon = 1;
 
-    @Column(name = "ETTERLEVELSE_DOKUMENTASJON", nullable = false)
-    private UUID etterlevelseDokumentasjon;
+    @Column(name = "etterlevelse_dokumentasjon_id", nullable = false)
+    private UUID etterlevelseDokumentasjonId;
     
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)

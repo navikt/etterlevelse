@@ -12,11 +12,11 @@ public interface EtterlevelseMetadataRepo extends JpaRepository<EtterlevelseMeta
 
     List<EtterlevelseMetadata> findByKravNummerAndKravVersjon(int kravNummer, int kravVersjon);
 
-    List<EtterlevelseMetadata> findByEtterlevelseDokumentasjon(UUID etterlevelseDokumentId);
+    List<EtterlevelseMetadata> findByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentId);
 
-    @Query(value = "select * from etterlevelse_metadata where etterlevelse_dokumentasjon = ?1 and krav_nummer = ?2 and krav_versjon = ?3", nativeQuery = true)
-    List<EtterlevelseMetadata> findByEtterlevelseDokumentasjonAndKrav(UUID etterlevelseDokumentId, int kravNummer, int kravVersjon);
+    @Query(value = "select * from etterlevelse_metadata where etterlevelse_dokumentasjon_id = ?1 and krav_nummer = ?2 and krav_versjon = ?3", nativeQuery = true)
+    List<EtterlevelseMetadata> findByEtterlevelseDokumentasjonIdAndKrav(UUID etterlevelseDokumentId, int kravNummer, int kravVersjon);
 
-    List<EtterlevelseMetadata> findByEtterlevelseDokumentasjonAndKravNummer(UUID etterlevelseDokumentId, int kravNummer);
+    List<EtterlevelseMetadata> findByEtterlevelseDokumentasjonIdAndKravNummer(UUID etterlevelseDokumentId, int kravNummer);
 
 }

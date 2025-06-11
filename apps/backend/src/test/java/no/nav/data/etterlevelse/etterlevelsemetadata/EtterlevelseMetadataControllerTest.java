@@ -51,7 +51,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
 
     @Test
     void getByEtterlevelseDokumentasjonAndKrav_createTwoEtterlevelseMetadataWithDifferentEtterlevelseDokumentasjonId_getOnlyOne() {
-        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjon();
+        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjonId();
         createEtterlevelseMetadata(200, 1);
 
         var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/{ettDokId}/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class, etterlevelseDokumentasjonId);
@@ -63,7 +63,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
 
     @Test
     void getByEtterlevelseDokumentasjonAndKrav_createTwoEtterlevelseMetadataWithDifferentEtterlevelseDokumentasjonId_getTwo() {
-        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjon();
+        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjonId();
         createEtterlevelseMetadata(etterlevelseDokumentasjonId, 200, 2);
         createEtterlevelseMetadata(200, 1);
         
@@ -76,7 +76,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
 
     @Test
     void getByEtterlevelseDokumentasjonAndKrav_createOneEtterlevelseMetadata_getNone() {
-        createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjon();
+        createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjonId();
 
         var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/{ettDokId}/200", EtterlevelseMetadataController.EtterlevelseMetadataPage.class, UUID.randomUUID());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -87,7 +87,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
 
     @Test
     void getByEtterlevelseDokumentasjonAndKrav_createOneEtterlevelseMetadataWithKravNummerAndKravVersjon_getNone() {
-        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjon();
+        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjonId();
 
         var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/{ettDokId}/200/2", EtterlevelseMetadataController.EtterlevelseMetadataPage.class, etterlevelseDokumentasjonId);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -169,7 +169,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
 
     @Test
     void getByEtterlevelseDokumentasjonId_creatingTwoEtterlevelseMetadataWithSameEtterlevelseDokumentasjonId_getTwoOfThem() {
-        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjon();
+        UUID etterlevelseDokumentasjonId = createEtterlevelseMetadata(200, 1).getEtterlevelseDokumentasjonId();
         createEtterlevelseMetadata(etterlevelseDokumentasjonId, 180, 2);
 
         var resp = restTemplate.getForEntity("/etterlevelsemetadata/etterlevelseDokumentasjon/" + etterlevelseDokumentasjonId, EtterlevelseMetadataController.EtterlevelseMetadataPage.class);
@@ -207,7 +207,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
         em = etterlevelseMetadataRepo.save(em);
 
         var req = EtterlevelseMetadataRequest.builder()
-                .etterlevelseDokumentasjonId(em.getEtterlevelseDokumentasjon())
+                .etterlevelseDokumentasjonId(em.getEtterlevelseDokumentasjonId())
                 .kravNummer(200)
                 .kravVersjon(1)
                 .tildeltMed(List.of("Y123456 - Rogan, Joe"))

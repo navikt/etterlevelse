@@ -72,7 +72,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         assertThat(etterlevelseDokumentasjonRepo.findAll().size()).isEqualTo(1); // Only etterlevelseDokumentasjon_2 should remain
         assertThat(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId()).size()).isEqualTo(0);
-        assertThat(etterlevelseMetadataService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId()).size()).isEqualTo(0);
+        assertThat(etterlevelseMetadataService.getByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId()).size()).isEqualTo(0);
         assertThat(etterlevelseArkivService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
     }
 

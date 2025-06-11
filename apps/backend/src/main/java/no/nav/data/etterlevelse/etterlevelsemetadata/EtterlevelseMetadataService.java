@@ -41,19 +41,19 @@ public class EtterlevelseMetadataService {
         return repo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon);
     }
 
-    public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {
-        return repo.findByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
+    public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId) {
+        return repo.findByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
     }
 
-    public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjonAndKravNummer(UUID etterlevelseDokumentasjonId, int kravNummer) {
-        return repo.findByEtterlevelseDokumentasjonAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
+    public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjonIdAndKravNummer(UUID etterlevelseDokumentasjonId, int kravNummer) {
+        return repo.findByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
     }
 
-    public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjonAndKrav(UUID etterlevelseDokumentasjonId, int kravNummer, @Nullable Integer kravVersjon) {
+    public List<EtterlevelseMetadata> getByEtterlevelseDokumentasjonIdAndKrav(UUID etterlevelseDokumentasjonId, int kravNummer, @Nullable Integer kravVersjon) {
         if (kravVersjon == null) {
-            return getByEtterlevelseDokumentasjonAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
+            return getByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
         }
-        return repo.findByEtterlevelseDokumentasjonAndKrav(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
+        return repo.findByEtterlevelseDokumentasjonIdAndKrav(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -67,7 +67,7 @@ public class EtterlevelseMetadataService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId){
-        List<EtterlevelseMetadata> etterlevelseMetadataer = repo.findByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
+        List<EtterlevelseMetadata> etterlevelseMetadataer = repo.findByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         etterlevelseMetadataer.forEach(em -> log.info("deleting etterlevelse metadata with id={}, connected to etterlevelse dokumentasjon with id={}", em.getId(), etterlevelseDokumentasjonId));
         repo.deleteAll(etterlevelseMetadataer);
     }

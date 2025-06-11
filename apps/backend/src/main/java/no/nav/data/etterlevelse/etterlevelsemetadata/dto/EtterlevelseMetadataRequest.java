@@ -44,7 +44,7 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
     public void mergeInto(EtterlevelseMetadata emd) {
         emd.setKravNummer(kravNummer);
         emd.setKravVersjon(kravVersjon);
-        emd.setEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
+        emd.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         emd.setTildeltMed(copyOf(tildeltMed));
         emd.setNotater(notater);
     }

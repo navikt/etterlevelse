@@ -36,7 +36,7 @@ public class EtterlevelseMetadataResponse {
                 .changeStamp(emd.convertChangeStampResponse())
                 .kravNummer(emd.getKravNummer())
                 .kravVersjon(emd.getKravVersjon())
-                .etterlevelseDokumentasjonId(emd.getEtterlevelseDokumentasjon())
+                .etterlevelseDokumentasjonId(emd.getEtterlevelseDokumentasjonId())
                 .tildeltMed(copyOf(emd.getTildeltMed()))
                 .notater(emd.getNotater())
                 .build();

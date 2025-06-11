@@ -7,7 +7,7 @@ create table if not exists etterlevelse_metadata
     id                 uuid primary key,
     krav_nummer        integer   not null,
     krav_versjon       integer   not null,
-    etterlevelse_dokumentasjon      uuid not null,
+    etterlevelse_dokumentasjon_id      uuid not null,
     data               jsonb     not null,
     version            integer   not null,
     created_by         text      not null,
