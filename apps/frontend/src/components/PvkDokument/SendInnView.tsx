@@ -44,6 +44,8 @@ import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
+import { BeskjedFraPvoReadOnly } from './SendInnComponents/BeskjedFraPvoReadOnly'
+import BeskjedTilPvoReadOnly from './SendInnComponents/BeskjedTilPvoReadOnly'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
@@ -426,48 +428,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
                 {pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
                   <div>
-                    <div className='mt-5 mb-3 max-w-[75ch]'>
-                      <Label>Beskjed til personvernombudet</Label>
-                      <DataTextWrapper>
-                        {pvkDokument.merknadTilPvoEllerRisikoeier
-                          ? pvkDokument.merknadTilPvoEllerRisikoeier
-                          : 'Ingen beskjed'}
-                      </DataTextWrapper>
-                    </div>
+                    <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
                     {pvoTilbakemelding && (
-                      <div className='pt-9 mb-3 max-w-[75ch]'>
-                        <Heading level='2' size='small' className='mb-5'>
-                          Tilbakemelding til etterlever
-                        </Heading>
-                        <div className='mb-3'>
-                          <Label>Anbefales det at arbeidet går videre som planlagt?</Label>
-                          <DataTextWrapper>
-                            {pvoTilbakemelding.arbeidGarVidere === null
-                              ? null
-                              : pvoTilbakemelding.arbeidGarVidere === true
-                                ? 'Ja'
-                                : 'Nei'}
-                          </DataTextWrapper>
-                        </div>
-
-                        <div className='mb-3'>
-                          <Label>Er det behov for forhåndskonsultasjon med Datatilsynet?</Label>
-                          <DataTextWrapper>
-                            {pvoTilbakemelding.behovForForhandskonsultasjon === null
-                              ? null
-                              : pvoTilbakemelding.behovForForhandskonsultasjon === true
-                                ? 'Ja'
-                                : 'Nei'}
-                          </DataTextWrapper>
-                        </div>
-
-                        <Label>Beskjed til etterlever</Label>
-                        <DataTextWrapper>
-                          {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-                            ? pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-                            : 'Ingen beskjed'}
-                        </DataTextWrapper>
-                      </div>
+                      <BeskjedFraPvoReadOnly pvoTilbakemelding={pvoTilbakemelding} />
                     )}
                   </div>
                 )}
