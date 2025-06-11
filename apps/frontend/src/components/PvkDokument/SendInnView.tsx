@@ -677,6 +677,96 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
+                <div className='mt-5 flex gap-2 items-center'>
+                  {[EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.PVO_UNDERARBEID].includes(
+                    pvkDokument.status
+                  ) && <div className='min-w-[446px]' />}
+
+                  {![EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.PVO_UNDERARBEID].includes(
+                    pvkDokument.status
+                  ) && (
+                    <Button
+                      type='button'
+                      variant='secondary'
+                      onClick={async () => {
+                        await setFieldValue('status', initialValues.status)
+                        await submitForm()
+                      }}
+                    >
+                      Lagre og fortsett senere
+                    </Button>
+                  )}
+
+                  {underarbeidCheck && (
+                    <Button
+                      type='button'
+                      onClick={async () => {
+                        await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
+                        errorSummaryRef.current?.focus()
+                        await submitForm()
+                      }}
+                    >
+                      Lagre og send til Personvernombudet
+                    </Button>
+                  )}
+
+                  {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
+                    <Button
+                      type='button'
+                      onClick={async () => {
+                        await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
+                        await submitForm()
+                      }}
+                    >
+                      Trekk innsending til personvernombudet
+                    </Button>
+                  )}
+
+                  {(pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
+                    pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) && (
+                    <Button
+                      type='button'
+                      onClick={async () => {
+                        if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                          await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+                        } else {
+                          await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                        }
+                        await submitForm()
+                      }}
+                    >
+                      {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+                        ? 'Angre godkjenning'
+                        : 'Angre sending til risikoeier'}
+                    </Button>
+                  )}
+
+                  {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
+                    <Button
+                      type='button'
+                      onClick={async () => {
+                        await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+                        await submitForm()
+                      }}
+                    >
+                      Lagre og send til godkjenning av risikoeier
+                    </Button>
+                  )}
+
+                  {isRisikoeierCheck &&
+                    pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+                      <Button
+                        type='button'
+                        onClick={async () => {
+                          await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                          await submitForm()
+                        }}
+                      >
+                        Akseptér restrisiko
+                      </Button>
+                    )}
+                </div>
+
                 {!isLoading && (
                   <FormButtons
                     etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -686,103 +776,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     submitForm={submitForm}
                     customButtons={
                       <div className='mt-5 flex gap-2 items-center'>
-                        {[
-                          EPvkDokumentStatus.SENDT_TIL_PVO,
-                          EPvkDokumentStatus.PVO_UNDERARBEID,
-                        ].includes(pvkDokument.status) && <div className='min-w-[446px]' />}
-
-                        {![
-                          EPvkDokumentStatus.SENDT_TIL_PVO,
-                          EPvkDokumentStatus.PVO_UNDERARBEID,
-                        ].includes(pvkDokument.status) && (
-                          <Button
-                            type='button'
-                            variant='secondary'
-                            onClick={async () => {
-                              await setFieldValue('status', initialValues.status)
-                              await submitForm()
-                            }}
-                          >
-                            Lagre og fortsett senere
-                          </Button>
-                        )}
-
-                        {underarbeidCheck && (
-                          <Button
-                            type='button'
-                            onClick={async () => {
-                              await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
-                              errorSummaryRef.current?.focus()
-                              await submitForm()
-                            }}
-                          >
-                            Lagre og send til Personvernombudet
-                          </Button>
-                        )}
-
-                        {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-                          <Button
-                            type='button'
-                            onClick={async () => {
-                              await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
-                              await submitForm()
-                            }}
-                          >
-                            Trekk innsending til personvernombudet
-                          </Button>
-                        )}
-
-                        {(pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
-                          pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) && (
-                          <Button
-                            type='button'
-                            onClick={async () => {
-                              if (
-                                pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
-                              ) {
-                                await setFieldValue(
-                                  'status',
-                                  EPvkDokumentStatus.TRENGER_GODKJENNING
-                                )
-                              } else {
-                                await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
-                              }
-                              await submitForm()
-                            }}
-                          >
-                            {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
-                              ? 'Angre godkjenning'
-                              : 'Angre sending til risikoeier'}
-                          </Button>
-                        )}
-
-                        {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
-                          <Button
-                            type='button'
-                            onClick={async () => {
-                              await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-                              await submitForm()
-                            }}
-                          >
-                            Lagre og send til godkjenning av risikoeier
-                          </Button>
-                        )}
-
-                        {isRisikoeierCheck &&
-                          pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-                            <Button
-                              type='button'
-                              onClick={async () => {
-                                await setFieldValue(
-                                  'status',
-                                  EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
-                                )
-                                await submitForm()
-                              }}
-                            >
-                              Akseptér restrisiko
-                            </Button>
-                          )}
+                        <div className='min-w-[446px]' />
                       </div>
                     }
                   />
