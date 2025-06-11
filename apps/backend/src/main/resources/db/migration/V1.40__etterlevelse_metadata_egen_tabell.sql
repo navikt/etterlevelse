@@ -39,13 +39,13 @@ insert into etterlevelse_metadata
 create index idx_metadata_krav_nummer_versjon on etterlevelse_metadata(krav_nummer, krav_versjon)
 ;
 
-create index idx_metadata_etterlevelse_dokumentasjon on etterlevelse_metadata(etterlevelse_dokumentasjon)
+create index idx_metadata_etterlevelse_dokumentasjon_id on etterlevelse_metadata(etterlevelse_dokumentasjon_id)
 ;
 
 -- Fjern foreldreløse etterlevelse_metadata...
 delete from etterlevelse_metadata etmet
 where not exists (select 1 from krav k where etmet.krav_nummer = k.krav_nummer and etmet.krav_versjon = k.krav_versjon)
-  or not exists (select 1 from etterlevelse_dokumentasjon ed where etmet.etterlevelse_dokumentasjon = ed.id)
+  or not exists (select 1 from etterlevelse_dokumentasjon ed where etmet.etterlevelse_dokumentasjon_id = ed.id)
 ;
 
 -- Legg på fremmednøkkler...
@@ -57,7 +57,7 @@ references krav (krav_nummer, krav_versjon)
 
 alter table etterlevelse_metadata
 add constraint fk_metadata_etterlevelse_dokumentasjon_id
-foreign key (etterlevelse_dokumentasjon)
+foreign key (etterlevelse_dokumentasjon_id)
 references etterlevelse_dokumentasjon (id)
 ;
 
