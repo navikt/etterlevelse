@@ -24,12 +24,7 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.KravService;
-import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.domain.KravData;
-import no.nav.data.etterlevelse.krav.domain.KravImage;
-import no.nav.data.etterlevelse.krav.domain.KravRepo;
-import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
+import no.nav.data.etterlevelse.krav.domain.*;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
@@ -267,7 +262,7 @@ public abstract class IntegrationTestBase {
         return etterlevelseMetadataRepo.save(EtterlevelseMetadata.builder()
                 .id(UUID.randomUUID())
                 .kravNummer(kravNummer).kravVersjon(kravVersjon)
-                .etterlevelseDokumentasjon(etterlevelseDokumentasjonId)
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .data(EtterlevelseMetadataData.builder().build())
                 .build()
         );
