@@ -264,6 +264,7 @@ public abstract class IntegrationTestBase {
                 .kravNummer(kravNummer).kravVersjon(kravVersjon)
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .data(EtterlevelseMetadataData.builder().build())
+
                 .build()
         );
     }
