@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading, Link, List, Loader } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Link } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -32,13 +32,12 @@ import { user } from '../../services/User'
 import { TextAreaField } from '../common/Inputs'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
-import CopyAndStatusView from './SendInnComponents/CopyAndStatusView'
-import LagreOgFortsettSenereButton from './SendInnComponents/LagreOgFortsettSenereButton'
+import GodkjentAvRisikoeierFields from './SendInnComponents/GodkjentAvRisikoeierFields'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
-import { BeskjedFraPvoReadOnly } from './SendInnComponents/readOnly/BeskjedFraPvoReadOnly'
-import BeskjedFraRisikoeierReadOnly from './SendInnComponents/readOnly/BeskjedFraRisikoeierReadOnly'
-import BeskjedTilPvoReadOnly from './SendInnComponents/readOnly/BeskjedTilPvoReadOnly'
-import BeskjedTilRisikoeierReadOnly from './SendInnComponents/readOnly/BeskjedTilRisikoeierReadOnly'
+import SendtTilPvoFields from './SendInnComponents/SendtTilPvoFields'
+import TrengerRisikoeierGodkjenningFields from './SendInnComponents/TrengerRisikoeierGodkjenningFields'
+import UnderArbeidFields from './SendInnComponents/UnderArbeidFields'
+import VurdertAvPvoFields from './SendInnComponents/VurdertAvPvoFields'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
@@ -105,8 +104,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const underarbeidCheck: boolean =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
-
-  const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (
@@ -417,192 +414,120 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
-                {pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
-                  <div>
-                    <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
-                    {pvoTilbakemelding && (
-                      <BeskjedFraPvoReadOnly pvoTilbakemelding={pvoTilbakemelding} />
-                    )}
-                  </div>
-                )}
-
-                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
-                  <div className='pt-9 mb-3 max-w-[75ch]'>
-                    <Heading level='2' size='small' className='mb-5'>
-                      Nå er det din tur, etterlever
-                    </Heading>
-
-                    <div className='mb-3 mt-5'>
-                      <Alert variant='info'>
-                        <Heading size='xsmall' level='3'>
-                          Dette gjør dere nå
-                        </Heading>
-                        <List as='ul'>
-                          <List.Item>
-                            Gjør eventuelle endringer basert på PVOs tilbakemelding
-                          </List.Item>
-                          <List.Item>
-                            Oppsummér for risikoeieren hvordan dere har tatt stilling til PVOs
-                            tilbakemelding, og hvilke endringer som er gjort.
-                          </List.Item>
-                          <List.Item>
-                            Risikoeieren skal så vurdere om restrisiko kan aksepteres, og godkjenner
-                            og arkiverer PVK.
-                          </List.Item>
-                        </List>
-                      </Alert>
-                    </div>
-
-                    <TextAreaField
-                      rows={3}
-                      noPlaceholder
-                      label='Oppsummér'
-                      name='merknadTilRisikoeier'
-                    />
-                  </div>
-                )}
-
-                {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-                  <BeskjedTilRisikoeierReadOnly
-                    merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier}
+                {underarbeidCheck && (
+                  <UnderArbeidFields
+                    pvkDokument={pvkDokument}
+                    isLoading={isLoading}
+                    setFieldValue={setFieldValue}
+                    submitForm={submitForm}
+                    initialStatus={initialValues.status}
+                    errorSummaryRef={errorSummaryRef}
+                    errorSummaryComponent={
+                      <SendInnErrorSummary
+                        errors={errors}
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        risikoeiereDataError={risikoeiereDataError}
+                        avdelingError={avdelingError}
+                        teamsDataError={teamsDataError}
+                        behandlingensLivslopError={behandlingensLivslopError}
+                        risikoscenarioError={risikoscenarioError}
+                        tiltakError={tiltakError}
+                        savnerVurderingError={savnerVurderingError}
+                        manglerBehandlingError={manglerBehandlingError}
+                        errorSummaryRef={errorSummaryRef}
+                      />
+                    }
                   />
                 )}
-
-                {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-                  <div className='mt-5 mb-3 max-w-[75ch]'>
-                    <TextAreaField
-                      rows={3}
-                      noPlaceholder
-                      label='Kommentar til etterlever? (valgfritt)'
-                      name='merknadFraRisikoeier'
-                    />
-                  </div>
-                )}
-
-                {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
-                  <BeskjedFraRisikoeierReadOnly
-                    merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier}
-                  />
-                )}
-
-                <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
-
-                {pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
-                  pvkDokument.sendtTilPvoDato !== null && (
-                    <Alert variant='info' className='my-5'>
-                      Innsending trukket <br />
-                      Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en
-                      blir deretter behandlet som en ny innsending
-                    </Alert>
-                  )}
 
                 {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-                  <Alert variant='info' className='my-5'>
-                    Ved å trekke innsending til personvernombudet vil PVK dokumentet miste plassen i
-                    sakskøen
-                  </Alert>
+                  <SendtTilPvoFields
+                    pvkDokument={pvkDokument}
+                    isLoading={isLoading}
+                    setFieldValue={setFieldValue}
+                    submitForm={submitForm}
+                  />
                 )}
 
-                <SendInnErrorSummary
-                  errors={errors}
-                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                  risikoeiereDataError={risikoeiereDataError}
-                  avdelingError={avdelingError}
-                  teamsDataError={teamsDataError}
-                  behandlingensLivslopError={behandlingensLivslopError}
-                  risikoscenarioError={risikoscenarioError}
-                  tiltakError={tiltakError}
-                  savnerVurderingError={savnerVurderingError}
-                  manglerBehandlingError={manglerBehandlingError}
-                  errorSummaryRef={errorSummaryRef}
-                />
-
-                {isLoading && (
-                  <div className='flex justify-center items-center w-full'>
-                    <Loader size='2xlarge' title='lagrer endringer' />
-                  </div>
+                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
+                  <VurdertAvPvoFields
+                    pvkDokument={pvkDokument}
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    setFieldValue={setFieldValue}
+                    submitForm={submitForm}
+                    initialStatus={initialValues.status}
+                    isLoading={isLoading}
+                    errorSummaryComponent={
+                      <SendInnErrorSummary
+                        errors={errors}
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        risikoeiereDataError={risikoeiereDataError}
+                        avdelingError={avdelingError}
+                        teamsDataError={teamsDataError}
+                        behandlingensLivslopError={behandlingensLivslopError}
+                        risikoscenarioError={risikoscenarioError}
+                        tiltakError={tiltakError}
+                        savnerVurderingError={savnerVurderingError}
+                        manglerBehandlingError={manglerBehandlingError}
+                        errorSummaryRef={errorSummaryRef}
+                      />
+                    }
+                  />
                 )}
 
-                <div className='mt-5 flex gap-2 items-center'>
-                  {![EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.PVO_UNDERARBEID].includes(
-                    pvkDokument.status
-                  ) && (
-                    <LagreOgFortsettSenereButton
+                {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
+                  pvoTilbakemelding && (
+                    <TrengerRisikoeierGodkjenningFields
+                      pvkDokument={pvkDokument}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      isLoading={isLoading}
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
                       initialStatus={initialValues.status}
+                      errorSummaryComponent={
+                        <SendInnErrorSummary
+                          errors={errors}
+                          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                          risikoeiereDataError={risikoeiereDataError}
+                          avdelingError={avdelingError}
+                          teamsDataError={teamsDataError}
+                          behandlingensLivslopError={behandlingensLivslopError}
+                          risikoscenarioError={risikoscenarioError}
+                          tiltakError={tiltakError}
+                          savnerVurderingError={savnerVurderingError}
+                          manglerBehandlingError={manglerBehandlingError}
+                          errorSummaryRef={errorSummaryRef}
+                        />
+                      }
                     />
                   )}
 
-                  {underarbeidCheck && (
-                    <Button
-                      type='button'
-                      onClick={async () => {
-                        await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
-                        errorSummaryRef.current?.focus()
-                        await submitForm()
-                      }}
-                    >
-                      Lagre og send til Personvernombudet
-                    </Button>
+                {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                  pvoTilbakemelding && (
+                    <GodkjentAvRisikoeierFields
+                      pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      isLoading={isLoading}
+                      setFieldValue={setFieldValue}
+                      submitForm={submitForm}
+                      errorSummaryComponent={
+                        <SendInnErrorSummary
+                          errors={errors}
+                          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                          risikoeiereDataError={risikoeiereDataError}
+                          avdelingError={avdelingError}
+                          teamsDataError={teamsDataError}
+                          behandlingensLivslopError={behandlingensLivslopError}
+                          risikoscenarioError={risikoscenarioError}
+                          tiltakError={tiltakError}
+                          savnerVurderingError={savnerVurderingError}
+                          manglerBehandlingError={manglerBehandlingError}
+                          errorSummaryRef={errorSummaryRef}
+                        />
+                      }
+                    />
                   )}
-
-                  {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-                    <Button
-                      type='button'
-                      onClick={async () => {
-                        await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
-                        await submitForm()
-                      }}
-                    >
-                      Trekk innsending til personvernombudet
-                    </Button>
-                  )}
-
-                  {(pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
-                    pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) && (
-                    <Button
-                      type='button'
-                      onClick={async () => {
-                        if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
-                          await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-                        } else {
-                          await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
-                        }
-                        await submitForm()
-                      }}
-                    >
-                      {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
-                        ? 'Angre godkjenning'
-                        : 'Angre sending til risikoeier'}
-                    </Button>
-                  )}
-
-                  {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
-                    <Button
-                      type='button'
-                      onClick={async () => {
-                        await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-                        await submitForm()
-                      }}
-                    >
-                      Lagre og send til godkjenning av risikoeier
-                    </Button>
-                  )}
-
-                  {isRisikoeierCheck &&
-                    pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-                      <Button
-                        type='button'
-                        onClick={async () => {
-                          await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-                          await submitForm()
-                        }}
-                      >
-                        Akseptér restrisiko
-                      </Button>
-                    )}
-                </div>
 
                 {!isLoading && (
                   <FormButtons
