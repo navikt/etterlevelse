@@ -112,10 +112,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
     true
   )
 
-  if (!isPvkKravLoading) {
-    console.debug(pvkKrav)
-  }
-
   const underarbeidCheck: boolean =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
     pvkDokument.status === EPvkDokumentStatus.AKTIV
@@ -148,7 +144,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 ? user.getIdent() + ' - ' + user.getName()
                 : response.sendtTilPvoAv,
             merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
-            merknadTilRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
+            merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
           }
 
@@ -334,20 +330,27 @@ export const SendInnView: FunctionComponent<TProps> = ({
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         validate={(value) => {
           try {
-            manglerBehandlingErrorCheck()
-            risikoeiereDataFieldCheck()
-            avdelingFieldCheck()
-            teamsDataFieldCheck()
-            behandlingensLivslopFieldCheck()
-            pvkKravCheck()
-            risikoscenarioCheck()
             if (
-              alleRisikoscenario.filter((risiko: IRisikoscenario) => !risiko.ingenTiltak).length !==
-              0
+              [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.TRENGER_GODKJENNING].includes(
+                value.status
+              )
             ) {
-              tiltakCheck()
-              savnerVurderingCheck()
+              manglerBehandlingErrorCheck()
+              risikoeiereDataFieldCheck()
+              avdelingFieldCheck()
+              teamsDataFieldCheck()
+              behandlingensLivslopFieldCheck()
+              pvkKravCheck()
+              risikoscenarioCheck()
+              if (
+                alleRisikoscenario.filter((risiko: IRisikoscenario) => !risiko.ingenTiltak)
+                  .length !== 0
+              ) {
+                tiltakCheck()
+                savnerVurderingCheck()
+              }
             }
+
             validateYupSchema(value, pvkDocumentSchema(), true)
           } catch (err) {
             return yupToFormErrors(err)
@@ -356,7 +359,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           }
         }}
       >
-        {({ setFieldValue, submitForm, errors }) => (
+        {({ setFieldValue, submitForm, errors, initialValues }) => (
           <Form>
             <div className='flex justify-center'>
               <div>
@@ -696,6 +699,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             type='button'
                             variant='secondary'
                             onClick={async () => {
+                              await setFieldValue('status', initialValues.status)
                               await submitForm()
                             }}
                           >

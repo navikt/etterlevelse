@@ -1,16 +1,15 @@
 import * as yup from 'yup'
 import { EPvkDokumentStatus } from '../../../constants'
 
+const editStatus = [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.TRENGER_GODKJENNING]
+
 const stringCheck = (fielName: string, errorMessage?: string) =>
   yup.string().test({
     name: fielName,
     message: errorMessage ? errorMessage : 'Dette er et påkrevd felt',
     test: function (stringField) {
       const { parent } = this
-      if (
-        parent.status !== EPvkDokumentStatus.UNDERARBEID &&
-        parent.status !== EPvkDokumentStatus.AKTIV
-      ) {
+      if (editStatus.includes(parent.status)) {
         if (stringField === undefined || stringField === '') {
           return false
         } else {
@@ -30,10 +29,7 @@ const boolCheck = (fieldName: string, errorMessage?: string) =>
       message: errorMessage ? errorMessage : 'Dette er et påkrevd felt',
       test: function (boolField) {
         const { parent } = this
-        if (
-          parent.status !== EPvkDokumentStatus.UNDERARBEID &&
-          parent.status !== EPvkDokumentStatus.AKTIV
-        ) {
+        if (editStatus.includes(parent.status)) {
           if (boolField === undefined || boolField === null) {
             return false
           } else {
