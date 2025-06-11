@@ -29,7 +29,6 @@ import {
 } from '../../constants'
 import { useKravFilter } from '../../query/KravQuery'
 import { user } from '../../services/User'
-import { TextAreaField } from '../common/Inputs'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import GodkjentAvRisikoeierFields from './SendInnComponents/GodkjentAvRisikoeierFields'
@@ -402,17 +401,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   alleRisikoscenario={alleRisikoscenario}
                   savnerVurderingError={savnerVurderingError}
                 />
-
-                {underarbeidCheck && (
-                  <div className='mt-5 mb-3'>
-                    <TextAreaField
-                      rows={3}
-                      noPlaceholder
-                      label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-                      name='merknadTilPvoEllerRisikoeier'
-                    />
-                  </div>
-                )}
 
                 {underarbeidCheck && (
                   <UnderArbeidFields
