@@ -1,7 +1,13 @@
 import { Button, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
-import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../../constants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+  IPvoTilbakemelding,
+  TEtterlevelseDokumentasjonQL,
+} from '../../../constants'
+import { user } from '../../../services/User'
 import CopyAndStatusView from './CopyAndStatusView'
 import { BeskjedFraPvoReadOnly } from './readOnly/BeskjedFraPvoReadOnly'
 import BeskjedFraRisikoeierReadOnly from './readOnly/BeskjedFraRisikoeierReadOnly'
@@ -11,6 +17,7 @@ import BeskjedTilRisikoeierReadOnly from './readOnly/BeskjedTilRisikoeierReadOnl
 type TProps = {
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   isLoading: boolean
   setFieldValue: (
     field: string,
@@ -24,11 +31,13 @@ type TProps = {
 export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
+  etterlevelseDokumentasjon,
   isLoading,
   setFieldValue,
   submitForm,
   errorSummaryComponent,
 }) => {
+  const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
   return (
     <div>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
@@ -46,17 +55,19 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='mt-5 flex gap-2 items-center'>
-        <Button
-          type='button'
-          onClick={async () => {
-            await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-            await submitForm()
-          }}
-        >
-          Angre godkjenning
-        </Button>
-      </div>
+      {isRisikoeierCheck && (
+        <div className='mt-5 flex gap-2 items-center'>
+          <Button
+            type='button'
+            onClick={async () => {
+              await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+              await submitForm()
+            }}
+          >
+            Angre godkjenning
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

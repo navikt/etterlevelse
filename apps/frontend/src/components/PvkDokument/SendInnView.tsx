@@ -507,6 +507,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   pvoTilbakemelding && (
                     <GodkjentAvRisikoeierFields
                       pvkDokument={pvkDokument}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvoTilbakemelding={pvoTilbakemelding}
                       isLoading={isLoading}
                       setFieldValue={setFieldValue}
