@@ -35,7 +35,7 @@ public class EtterlevelseMetadata extends Auditable implements KravId {
     @Builder.Default
     private Integer kravVersjon = 1;
 
-    @Column(name = "etterlevelse_dokumentasjon_id", nullable = false)
+    @Column(name = "etterlevelse_dokumentasjon", nullable = false)
     private UUID etterlevelseDokumentasjonId;
     
     @Type(value = JsonBinaryType.class)
