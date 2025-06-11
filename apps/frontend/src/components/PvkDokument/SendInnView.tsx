@@ -37,6 +37,7 @@ import BeskjedFraRisikoeier from './SendInnComponents/BeskjedFraRisikoeier'
 import BeskjedTilPvoReadOnly from './SendInnComponents/BeskjedTilPvoReadOnly'
 import BeskjedTilRisikoeier from './SendInnComponents/BeskjedTilRisikoeier'
 import CopyAndStatusView from './SendInnComponents/CopyAndStatusView'
+import LagreOgFortsettSenereButton from './SendInnComponents/LagreOgFortsettSenereButton'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import FormButtons from './edit/FormButtons'
@@ -519,23 +520,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 )}
 
                 <div className='mt-5 flex gap-2 items-center'>
-                  {[EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.PVO_UNDERARBEID].includes(
-                    pvkDokument.status
-                  ) && <div className='min-w-[446px]' />}
-
                   {![EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.PVO_UNDERARBEID].includes(
                     pvkDokument.status
                   ) && (
-                    <Button
-                      type='button'
-                      variant='secondary'
-                      onClick={async () => {
-                        await setFieldValue('status', initialValues.status)
-                        await submitForm()
-                      }}
-                    >
-                      Lagre og fortsett senere
-                    </Button>
+                    <LagreOgFortsettSenereButton
+                      setFieldValue={setFieldValue}
+                      submitForm={submitForm}
+                      initialStatus={initialValues.status}
+                    />
                   )}
 
                   {underarbeidCheck && (
