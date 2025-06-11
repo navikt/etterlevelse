@@ -1,15 +1,4 @@
-import { FilesIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  Button,
-  CopyButton,
-  Heading,
-  Label,
-  Link,
-  List,
-  Loader,
-} from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Label, Link, List, Loader } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -46,9 +35,9 @@ import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevel
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import { BeskjedFraPvoReadOnly } from './SendInnComponents/BeskjedFraPvoReadOnly'
 import BeskjedTilPvoReadOnly from './SendInnComponents/BeskjedTilPvoReadOnly'
+import CopyAndStatusView from './SendInnComponents/CopyAndStatusView'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
-import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -504,17 +493,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
-                <CopyButton
-                  variant='action'
-                  copyText={window.location.href}
-                  text='Kopiér lenken til denne siden'
-                  activeText='Lenken er kopiert'
-                  icon={<FilesIcon aria-hidden />}
-                />
-
-                <Alert variant='info' className='my-5'>
-                  Status: {pvkDokumentStatusToText(pvkDokument.status)}
-                </Alert>
+                <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
 
                 {pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
                   pvkDokument.sendtTilPvoDato !== null && (
