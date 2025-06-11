@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading, Label, Link, List, Loader } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Link, List, Loader } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -29,12 +29,13 @@ import {
 } from '../../constants'
 import { useKravFilter } from '../../query/KravQuery'
 import { user } from '../../services/User'
-import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import { BeskjedFraPvoReadOnly } from './SendInnComponents/BeskjedFraPvoReadOnly'
+import BeskjedFraRisikoeier from './SendInnComponents/BeskjedFraRisikoeier'
 import BeskjedTilPvoReadOnly from './SendInnComponents/BeskjedTilPvoReadOnly'
+import BeskjedTilRisikoeier from './SendInnComponents/BeskjedTilRisikoeier'
 import CopyAndStatusView from './SendInnComponents/CopyAndStatusView'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
@@ -461,14 +462,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-                  <div className='mt-5 mb-3 max-w-[75ch]'>
-                    <Label>Etterleverens kommmentarer til risikoeier</Label>
-                    <DataTextWrapper>
-                      {pvkDokument.merknadTilRisikoeier
-                        ? pvkDokument.merknadTilRisikoeier
-                        : 'Ingen beskjed'}
-                    </DataTextWrapper>
-                  </div>
+                  <BeskjedTilRisikoeier merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier} />
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
@@ -483,14 +477,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
-                  <div className='mt-5 mb-3 max-w-[75ch]'>
-                    <Label>Risikoeierens kommmentarer</Label>
-                    <DataTextWrapper>
-                      {pvkDokument.merknadFraRisikoeier
-                        ? pvkDokument.merknadFraRisikoeier
-                        : 'Ingen beskjed'}
-                    </DataTextWrapper>
-                  </div>
+                  <BeskjedFraRisikoeier merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier} />
                 )}
 
                 <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
