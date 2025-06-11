@@ -36,10 +36,10 @@ where type = 'EtterlevelseMetadata'
 ;
 
 -- Legg på index på kravId og etterlevelse_dokumentasjon_id...
-create index idx_metadata_krav_nummer_versjon on etterlevelse_metadata(krav_nummer, krav_versjon)
+create index if not exists idx_metadata_krav_nummer_versjon on etterlevelse_metadata(krav_nummer, krav_versjon)
 ;
 
-create index idx_metadata_etterlevelse_dokumentasjon on etterlevelse_metadata(etterlevelse_dokumentasjon)
+create index if not exists idx_metadata_etterlevelse_dokumentasjon on etterlevelse_metadata(etterlevelse_dokumentasjon)
 ;
 
 -- Fjern foreldreløse etterlevelse_metadata...
