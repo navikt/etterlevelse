@@ -32,13 +32,13 @@ import { user } from '../../services/User'
 import { TextAreaField } from '../common/Inputs'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
-import { BeskjedFraPvoReadOnly } from './SendInnComponents/BeskjedFraPvoReadOnly'
-import BeskjedFraRisikoeier from './SendInnComponents/BeskjedFraRisikoeier'
-import BeskjedTilPvoReadOnly from './SendInnComponents/BeskjedTilPvoReadOnly'
-import BeskjedTilRisikoeier from './SendInnComponents/BeskjedTilRisikoeier'
 import CopyAndStatusView from './SendInnComponents/CopyAndStatusView'
 import LagreOgFortsettSenereButton from './SendInnComponents/LagreOgFortsettSenereButton'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
+import { BeskjedFraPvoReadOnly } from './SendInnComponents/readOnly/BeskjedFraPvoReadOnly'
+import BeskjedFraRisikoeierReadOnly from './SendInnComponents/readOnly/BeskjedFraRisikoeierReadOnly'
+import BeskjedTilPvoReadOnly from './SendInnComponents/readOnly/BeskjedTilPvoReadOnly'
+import BeskjedTilRisikoeierReadOnly from './SendInnComponents/readOnly/BeskjedTilRisikoeierReadOnly'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
@@ -463,7 +463,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-                  <BeskjedTilRisikoeier merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier} />
+                  <BeskjedTilRisikoeierReadOnly
+                    merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier}
+                  />
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
@@ -478,7 +480,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
-                  <BeskjedFraRisikoeier merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier} />
+                  <BeskjedFraRisikoeierReadOnly
+                    merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier}
+                  />
                 )}
 
                 <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />

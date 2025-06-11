@@ -1,12 +1,14 @@
 import { Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
-import DataTextWrapper from '../../PvoTilbakemelding/common/DataTextWrapper'
+import DataTextWrapper from '../../../PvoTilbakemelding/common/DataTextWrapper'
 
 type TProps = {
   merknadFraRisikoeier: string
 }
 
-export const BeskjedFraRisikoeier: FunctionComponent<TProps> = ({ merknadFraRisikoeier }) => {
+export const BeskjedFraRisikoeierReadOnly: FunctionComponent<TProps> = ({
+  merknadFraRisikoeier,
+}) => {
   return (
     <div className='mt-5 mb-3 max-w-[75ch]'>
       <Label>Risikoeierens kommmentarer</Label>
@@ -16,4 +18,4 @@ export const BeskjedFraRisikoeier: FunctionComponent<TProps> = ({ merknadFraRisi
     </div>
   )
 }
-export default BeskjedFraRisikoeier
+export default BeskjedFraRisikoeierReadOnly

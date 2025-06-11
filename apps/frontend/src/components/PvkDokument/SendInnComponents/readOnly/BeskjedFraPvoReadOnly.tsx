@@ -1,7 +1,7 @@
 import { Heading, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
-import { IPvoTilbakemelding } from '../../../constants'
-import DataTextWrapper from '../../PvoTilbakemelding/common/DataTextWrapper'
+import { IPvoTilbakemelding } from '../../../../constants'
+import DataTextWrapper from '../../../PvoTilbakemelding/common/DataTextWrapper'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding

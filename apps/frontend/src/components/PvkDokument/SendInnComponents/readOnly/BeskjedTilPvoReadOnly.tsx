@@ -1,7 +1,7 @@
 import { Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
-import { IPvkDokument } from '../../../constants'
-import DataTextWrapper from '../../PvoTilbakemelding/common/DataTextWrapper'
+import { IPvkDokument } from '../../../../constants'
+import DataTextWrapper from '../../../PvoTilbakemelding/common/DataTextWrapper'
 
 type TProps = {
   pvkDokument: IPvkDokument
