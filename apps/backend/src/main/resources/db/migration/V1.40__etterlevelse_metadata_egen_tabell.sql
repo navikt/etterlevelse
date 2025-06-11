@@ -50,13 +50,13 @@ where not exists (select 1 from krav k where etmet.krav_nummer = k.krav_nummer a
 
 -- Legg på fremmednøkkler...
 alter table etterlevelse_metadata
-    add constraint fk_metadata_krav_krav_id
+    add constraint if not exists fk_metadata_krav_krav_id
         foreign key (krav_nummer, krav_versjon)
             references krav (krav_nummer, krav_versjon)
 ;
 
 alter table etterlevelse_metadata
-    add constraint fk_metadata_etterlevelse_dokumentasjon_id
+    add constraint if not exists fk_metadata_etterlevelse_dokumentasjon_id
         foreign key (etterlevelse_dokumentasjon)
             references etterlevelse_dokumentasjon (id)
 ;
