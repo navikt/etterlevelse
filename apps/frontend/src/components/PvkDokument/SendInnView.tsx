@@ -4,7 +4,6 @@ import {
   BodyLong,
   Button,
   CopyButton,
-  ErrorSummary,
   Heading,
   Label,
   Link,
@@ -15,7 +14,6 @@ import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
-import { NavigateFunction, useNavigate } from 'react-router-dom'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopToFormValue,
@@ -46,6 +44,7 @@ import DataTextWrapper from '../PvoTilbakemelding/common/DataTextWrapper'
 import { TextAreaField } from '../common/Inputs'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
+import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
 import FormButtons from './edit/FormButtons'
@@ -81,8 +80,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
   setSelectedStep,
   pvoTilbakemelding,
 }) => {
-  const navigate: NavigateFunction = useNavigate()
-
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
 
@@ -572,104 +569,19 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </Alert>
                 )}
 
-                {(!_.isEmpty(errors) ||
-                  // pvkKravError !== '' ||
-                  risikoeiereDataError ||
-                  avdelingError ||
-                  teamsDataError ||
-                  behandlingensLivslopError ||
-                  risikoscenarioError !== '' ||
-                  tiltakError !== '' ||
-                  savnerVurderingError !== '') && (
-                  <ErrorSummary
-                    ref={errorSummaryRef}
-                    heading='Du må rette disse feilene før du kan fortsette'
-                  >
-                    {manglerBehandlingError && (
-                      <ErrorSummary.Item href='#behandling-error' className='max-w-[75ch]'>
-                        Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen.
-                      </ErrorSummary.Item>
-                    )}
-
-                    {/* {pvkKravError !== '' && (
-                      <ErrorSummary.Item
-                        href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjon.id)}
-                        className='max-w-[75ch]'
-                      >
-                        {pvkKravError}
-                      </ErrorSummary.Item>
-                    )} */}
-
-                    {behandlingensLivslopError && (
-                      <ErrorSummary.Item href='#behandlingensLivslop' className='max-w-[75ch]'>
-                        Behandlingens livsløp må ha minimum 1 opplastet tegning, eller en skriftlig
-                        beskrivelse.
-                      </ErrorSummary.Item>
-                    )}
-
-                    {Object.entries(errors)
-                      .filter(([, error]) => error)
-                      .map(([key, error]) => (
-                        <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
-                          {error as string}
-                        </ErrorSummary.Item>
-                      ))}
-                    {risikoscenarioError !== '' && (
-                      <ErrorSummary.Item href='#risikoscenarioer' className='max-w-[75ch]'>
-                        {risikoscenarioError}
-                      </ErrorSummary.Item>
-                    )}
-                    {tiltakError !== '' && (
-                      <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
-                        {tiltakError}
-                      </ErrorSummary.Item>
-                    )}
-                    {savnerVurderingError !== '' && (
-                      <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
-                        {savnerVurderingError}
-                      </ErrorSummary.Item>
-                    )}
-
-                    {risikoeiereDataError && (
-                      <ErrorSummary.Item
-                        onClick={() => {
-                          navigate(
-                            `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#risikoeiereData`
-                          )
-                        }}
-                        className='max-w-[75ch]'
-                      >
-                        Legg til risikoeier (Redigér dokumentegenskaper)
-                      </ErrorSummary.Item>
-                    )}
-
-                    {avdelingError && (
-                      <ErrorSummary.Item
-                        onClick={() => {
-                          navigate(
-                            `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#avdeling`
-                          )
-                        }}
-                        className='max-w-[75ch]'
-                      >
-                        Legg til avdeling (Redigér dokumentegenskaper)
-                      </ErrorSummary.Item>
-                    )}
-
-                    {teamsDataError && (
-                      <ErrorSummary.Item
-                        onClick={() => {
-                          navigate(
-                            `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#teamsData`
-                          )
-                        }}
-                        className='max-w-[75ch]'
-                      >
-                        Legg til team eller personer (Redigér dokumentegenskaper)
-                      </ErrorSummary.Item>
-                    )}
-                  </ErrorSummary>
-                )}
+                <SendInnErrorSummary
+                  errors={errors}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                  risikoeiereDataError={risikoeiereDataError}
+                  avdelingError={avdelingError}
+                  teamsDataError={teamsDataError}
+                  behandlingensLivslopError={behandlingensLivslopError}
+                  risikoscenarioError={risikoscenarioError}
+                  tiltakError={tiltakError}
+                  savnerVurderingError={savnerVurderingError}
+                  manglerBehandlingError={manglerBehandlingError}
+                  errorSummaryRef={errorSummaryRef}
+                />
 
                 {isLoading && (
                   <div className='flex justify-center items-center w-full'>
