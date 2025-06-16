@@ -1,4 +1,4 @@
-import { BodyShort, FormSummary } from '@navikt/ds-react'
+import { FormSummary, Tag } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { IBehandlingensLivslop } from '../../../constants'
 import FormAlert from './FormAlert'
@@ -31,20 +31,50 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
         <FormSummary.Value>
           <FormSummary.Answers>
             <FormSummary.Answer>
-              <FormSummary.Label>Behandlingens livsløp</FormSummary.Label>
+              <FormSummary.Label>
+                Last opp behandlingens livsløp, og/eller legg inn en skriftlig beskrivelse
+              </FormSummary.Label>
               <FormSummary.Value>
+                <div className='gap-2 flex pt-1'>
+                  {!behandlingensLivslop && (
+                    <Tag variant='warning' size='xsmall'>
+                      Ikke påbegynt
+                    </Tag>
+                  )}
+                  {behandlingensLivslop && behandlingensLivslop.filer.length === 0 && (
+                    <Tag variant='neutral' size='xsmall'>
+                      Ingen filer er lastet opp
+                    </Tag>
+                  )}
+                  {behandlingensLivslop && behandlingensLivslop.filer.length !== 0 && (
+                    <Tag variant='success' size='xsmall'>
+                      Lastet opp {behandlingensLivslop.filer.length}{' '}
+                      {behandlingensLivslop.filer.length === 1 ? 'fil' : 'filer'}
+                    </Tag>
+                  )}
+                  {behandlingensLivslop && (
+                    <Tag
+                      variant={
+                        behandlingensLivslop.beskrivelse !== '' &&
+                        behandlingensLivslop.beskrivelse !== undefined
+                          ? 'success'
+                          : 'neutral'
+                      }
+                      size='xsmall'
+                    >
+                      {behandlingensLivslop.beskrivelse !== '' &&
+                      behandlingensLivslop.beskrivelse !== undefined
+                        ? 'Skriftlig beskrivelse'
+                        : 'Ingen skriftlig beskrivelse'}
+                    </Tag>
+                  )}
+                </div>
                 <div>
                   {behandlingensLivslopError && (
                     <FormAlert>
-                      Behandlingens livsløp må ha minimum 1 opplastet tegning eller en skriftlig
-                      beskrivelse.
+                      Behandlingens livsløp må få minst én opplastet tegning eller en skriftlig
+                      beskrivelse
                     </FormAlert>
-                  )}
-
-                  {!behandlingensLivslopError && (
-                    <div>
-                      <BodyShort>Antall filer: {behandlingensLivslop?.filer.length}</BodyShort>
-                    </div>
                   )}
                 </div>
               </FormSummary.Value>
