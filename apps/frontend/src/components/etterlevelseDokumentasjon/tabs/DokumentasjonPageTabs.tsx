@@ -133,16 +133,6 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             />
           </div>
         </Tabs.Panel>
-        {/* 
-        export enum EPvkDokumentStatus {
-  UNDERARBEID = 'UNDERARBEID',
-  SENDT_TIL_PVO = 'SENDT_TIL_PVO',
-  PVO_UNDERARBEID = 'PVO_UNDERARBEID',
-  VURDERT_AV_PVO = 'VURDERT_AV_PVO',
-  TRENGER_GODKJENNING = 'TRENGER_GODKJENNING',
-  GODKJENT_AV_RISIKOEIER = 'GODKJENT_AV_RISIKOEIER',
-  AKTIV = 'AKTIV',
-} */}
 
         <Tabs.Panel value='pvkRelaterteKrav'>
           <div className='pt-4 flex flex-col gap-4'>
