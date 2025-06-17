@@ -110,6 +110,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
       risikoscenarioError === '' &&
       savnerVurderingError === '' &&
       tiltakError === '' &&
+      !teamsDataError &&
+      !avdelingError &&
+      !risikoeiereDataError &&
       //venter til krav K114 er satt til utgått
       // pvkKravError === '' &&
       !manglerBehandlingError
