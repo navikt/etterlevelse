@@ -41,7 +41,7 @@ public class EtterlevelseDokumentasjonData {
     private List<Varslingsadresse> varslingsadresser;
 
     //Url id for p360
-    private String P360Recno;
+    private Integer P360Recno;
     private String P360CaseNumber;
 
 }

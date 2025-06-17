@@ -370,7 +370,7 @@ export interface IEtterlevelseDokumentasjon {
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
   risikovurderinger: string[]
-  P360Recno: string
+  P360Recno: number
   P360CaseNumber: string
 }
 

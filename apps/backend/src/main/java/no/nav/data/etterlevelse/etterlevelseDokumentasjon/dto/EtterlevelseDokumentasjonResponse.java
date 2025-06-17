@@ -58,7 +58,7 @@ public class EtterlevelseDokumentasjonResponse {
     private List<Varslingsadresse> varslingsadresser;
     private boolean hasCurrentUserAccess;
 
-    private String P360Recno;
+    private Integer P360Recno;
     private String P360CaseNumber;
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {

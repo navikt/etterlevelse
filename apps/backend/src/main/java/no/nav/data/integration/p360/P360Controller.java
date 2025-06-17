@@ -10,6 +10,8 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.export.EtterlevelseDokumentasjonToDoc;
 import no.nav.data.integration.p360.dto.P360Case;
 import no.nav.data.integration.p360.dto.P360CaseRequest;
@@ -42,7 +44,38 @@ public class P360Controller {
 
     private final P360Service p360Service;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
+
+    @Operation(summary = "Arkiver dokumeter")
+    @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})
+    @PostMapping("/arkiver/etterlevelseDokumentasjon/{id}")
+    public ResponseEntity<EtterlevelseDokumentasjon> archiveDocument(@PathVariable String id) {
+        log.info("Archiving etterlevelse dokumentasjon with id {}", id);
+        var eDok = etterlevelseDokumentasjonService.get(UUID.fromString(id));
+        try {
+            if(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber() == null || eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber().isEmpty()) {
+                P360Case sak = p360Service.createCase(P360CaseRequest.builder()
+                        .CaseType("Sak")
+                        .DefaultValueSet("Etterlevelse")
+                        .Title("E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", "-"))
+                        .Status("B")
+                        .AccessCode("U")
+                        .AccessGroup("Alle ansatte i Nav")
+                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
+                        .build());
+
+                eDok.getEtterlevelseDokumentasjonData().setP360CaseNumber(sak.CaseNumber);
+                eDok.getEtterlevelseDokumentasjonData().setP360Recno(sak.Recno);
+                etterlevelseDokumentasjonRepo.save(eDok);
+            }
+            return ResponseEntity.ok(eDok);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @Operation(summary = "Get Cases")
     @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})

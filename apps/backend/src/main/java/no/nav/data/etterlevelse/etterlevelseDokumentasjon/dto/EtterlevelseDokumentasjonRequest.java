@@ -47,7 +47,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<String> resources;
     private List<String> risikoeiere;
 
-    private String P360Recno;
+    private Integer P360Recno;
     private String P360CaseNumber;
 
 
@@ -68,7 +68,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setVarslingsadresser(copyOf(varslingsadresser));
         setAvdeling(toUpperCaseAndTrim(avdeling));
         setRisikovurderinger(formatList(risikovurderinger));
-        setP360Recno(trimToNull(P360Recno));
+        setP360Recno(P360Recno);
         setP360CaseNumber(trimToNull(P360CaseNumber));
     }
 
