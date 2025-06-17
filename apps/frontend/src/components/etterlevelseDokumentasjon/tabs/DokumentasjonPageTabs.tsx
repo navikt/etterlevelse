@@ -1,9 +1,10 @@
-import { Tabs } from '@navikt/ds-react'
+import { Alert, Heading, Link, List, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { useArkiveringByEtterlevelseDokumentasjonId } from '../../../api/ArkiveringApi'
 import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
 import {
+  EPvkDokumentStatus,
   IDocumentRelationWithEtterlevelseDokumetajson,
   IKravPriorityList,
   IPvkDokument,
@@ -132,8 +133,76 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             />
           </div>
         </Tabs.Panel>
+
         <Tabs.Panel value='pvkRelaterteKrav'>
           <div className='pt-4 flex flex-col gap-4'>
+            {pvkDokument &&
+              pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO &&
+              pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+              pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
+                <Alert className='max-w-[75ch]' variant='info'>
+                  <Heading spacing size='small' level='3'>
+                    Personvernkonsekvensvurdering: slik gjør dere nå
+                  </Heading>
+                  <List as='ul'>
+                    <List.Item>
+                      Beskriv risikoscenarioer og tiltak ved siden av deres
+                      etterlevelsesdokumentasjon der dette er aktuelt.
+                    </List.Item>
+                    <List.Item>
+                      Husk at dere kan gjenbruke deres egne risikoscenarioer eller tiltak dersom
+                      disse gjelder flere steder.
+                    </List.Item>
+                    <List.Item>
+                      Øvrige risikoscenarioer og tiltak som ikke er tilknyttet spesifikke
+                      etterlevelseskrav beskriver dere på{' '}
+                      <Link href='demo'>PVK: Identifisering av risikoscenarier og tiltak.</Link>
+                    </List.Item>
+                  </List>
+                </Alert>
+              )}
+
+            {pvkDokument &&
+              (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
+                pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID) && (
+                <Alert className='max-w-[75ch]' variant='warning'>
+                  <Heading spacing size='small' level='3'>
+                    PVK ligger til vurdering hos Personvernombudet om dagen.
+                  </Heading>
+                  Dokumentasjon tilknyttet deres PVK er låst og kan ikke redigeres.
+                  <br />
+                  Dette gjelder for:
+                  <List as='ul'>
+                    <List.Item>
+                      Dokumentasjon av risikoscenarioer og tiltak i forbindelse med PVK
+                    </List.Item>
+                    <List.Item>
+                      Etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav.
+                    </List.Item>
+                    Etterlevelseskrav som ikke er tilknyttet PVK kan forsatt redigeres som normalt.
+                    <br />
+                    <br />
+                    Hvis dere oppdager betydelig behov for å endre på dokumentasjonen i forbindelse
+                    med vurdering av PVK, ta kontakt med PVO på personvernombudet@nav.no.
+                  </List>
+                </Alert>
+              )}
+
+            {pvkDokument && pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
+              <Alert className='max-w-[75ch]' variant='info'>
+                <Heading spacing size='small' level='3'>
+                  Nå som Personvernombudet har sendt sin tilbakemelding, kan dere redigere
+                  PVK-dokumentasjonen på nytt.
+                </Heading>
+                Dette gjelder for:
+                <List as='ul'>
+                  <List.Item>Risikoscenario- og tiltaksbeskrivelser</List.Item>
+                  <List.Item>Etterlevelsesdokumentasjon tilknyttet PVK-relaterte krav.</List.Item>
+                </List>
+                Resten av deres etterlevelsesdokumentasjon er alltid redigerbar.
+              </Alert>
+            )}
+
             <PvkRelatedKravList
               temaListe={temaListe}
               relevanteStats={relevanteStats}
