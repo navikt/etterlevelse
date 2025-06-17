@@ -56,6 +56,8 @@ public class EtterlevelseDokumentasjonToDoc {
 
     private final KravPriorityListService kravPriorityListService;
 
+    private final PvkDokumentToDoc pvkDokumentToDoc;
+
     public void getEtterlevelseDokumentasjonData(EtterlevelseDokumentasjon etterlevelseDokumentasjon, EtterlevelseDocumentBuilder doc) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd'.' MMMM yyyy 'kl 'HH:mm");
         Date date = new Date();
@@ -238,6 +240,11 @@ public class EtterlevelseDokumentasjonToDoc {
         var doc = new EtterlevelseDocumentBuilder();
         getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
 
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getIrrelevansFor().contains("PERSONOPPLYSNINGER")) {
+            pvkDokumentToDoc.generateDocForP360(doc, etterlevelseDokumentasjon);
+        }
+
+
         doc.addHeading1("Dokumentet inneholder etterlevelse for " + filteredEtterlevelseMedKravData.size() + " krav");
 
         doc.addTableOfContent(filteredEtterlevelseMedKravData, temaListe);
@@ -263,13 +270,13 @@ public class EtterlevelseDokumentasjonToDoc {
         return doc.build();
     }
 
-    class EtterlevelseDocumentBuilder extends WordDocUtils {
+    public class EtterlevelseDocumentBuilder extends WordDocUtils {
 
         public EtterlevelseDocumentBuilder() {
             super(etterlevelseFactory);
         }
 
-        long listId = 3;
+        public long listId = 1;
 
         public void generate(EtterlevelseMedKravData etterlevelseMedKravData) {
 
