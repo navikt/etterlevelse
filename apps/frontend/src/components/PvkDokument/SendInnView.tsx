@@ -233,8 +233,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
         (tiltak) =>
           tiltak.beskrivelse === '' ||
           tiltak.navn === '' ||
-          tiltak.ansvarlig.navIdent === '' ||
-          tiltak.ansvarligTeam.name === ''
+          (tiltak.ansvarlig.navIdent === '' && tiltak.ansvarligTeam.name === '')
       )
       if (ikkeFerdigBeskrevetTiltak.length !== 0) {
         setTiltakError(`${ikkeFerdigBeskrevetTiltak.length} tiltak er ikke ferdig beskrevet`)
