@@ -32,6 +32,7 @@ import { user } from '../../services/User'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import GodkjentAvRisikoeierFields from './SendInnComponents/GodkjentAvRisikoeierFields'
+import PVOUnderArbeidFIelds from './SendInnComponents/PVOUnderArbeidFIelds'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
 import SendtTilPvoFields from './SendInnComponents/SendtTilPvoFields'
 import TrengerRisikoeierGodkjenningFields from './SendInnComponents/TrengerRisikoeierGodkjenningFields'
@@ -438,6 +439,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     setFieldValue={setFieldValue}
                     submitForm={submitForm}
                   />
+                )}
+
+                {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
+                  <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
                 )}
 
                 {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
