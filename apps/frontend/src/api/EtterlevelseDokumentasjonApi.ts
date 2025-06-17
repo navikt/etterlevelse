@@ -201,6 +201,8 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   varslingsadresser: etterlevelseDokumentasjon.varslingsadresser || [],
   forGjenbruk: etterlevelseDokumentasjon.forGjenbruk || false,
   risikovurderinger: etterlevelseDokumentasjon.risikovurderinger || [],
+  P360Recno: etterlevelseDokumentasjon.P360Recno || '',
+  P360CaseNumber: etterlevelseDokumentasjon.P360CaseNumber || '',
 })
 
 export const etterlevelseDokumentasjonWithRelationMapToFormVal = (

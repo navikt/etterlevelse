@@ -40,4 +40,8 @@ public class EtterlevelseDokumentasjonData {
     private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
 
+    //Url id for p360
+    private String P360Recno;
+    private String P360CaseNumber;
+
 }

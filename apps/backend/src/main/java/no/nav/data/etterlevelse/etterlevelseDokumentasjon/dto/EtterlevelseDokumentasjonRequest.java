@@ -47,6 +47,9 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<String> resources;
     private List<String> risikoeiere;
 
+    private String P360Recno;
+    private String P360CaseNumber;
+
 
     @Schema(description = "Codelist AVDELING")
     private String avdeling;
@@ -65,6 +68,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setVarslingsadresser(copyOf(varslingsadresser));
         setAvdeling(toUpperCaseAndTrim(avdeling));
         setRisikovurderinger(formatList(risikovurderinger));
+        setP360Recno(trimToNull(P360Recno));
+        setP360CaseNumber(trimToNull(P360CaseNumber));
     }
 
     @Override
@@ -96,6 +101,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));
+        eDokData.setP360Recno(P360Recno);
+        eDokData.setP360CaseNumber(P360CaseNumber);
     }
 
 }

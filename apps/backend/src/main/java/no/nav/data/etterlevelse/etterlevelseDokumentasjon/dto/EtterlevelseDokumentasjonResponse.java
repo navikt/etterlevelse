@@ -57,6 +57,9 @@ public class EtterlevelseDokumentasjonResponse {
     private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
     private boolean hasCurrentUserAccess;
+
+    private String P360Recno;
+    private String P360CaseNumber;
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {
         EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
@@ -82,6 +85,8 @@ public class EtterlevelseDokumentasjonResponse {
                 .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, eDokData.getAvdeling()))
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
                 .risikovurderinger(eDokData.getRisikovurderinger())
+                .P360Recno(eDokData.getP360Recno())
+                .P360CaseNumber(eDokData.getP360CaseNumber())
                 .build();
     }
     

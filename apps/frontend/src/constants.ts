@@ -370,6 +370,8 @@ export interface IEtterlevelseDokumentasjon {
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
   risikovurderinger: string[]
+  P360Recno: string
+  P360CaseNumber: string
 }
 
 export interface IDocumentRelation {
