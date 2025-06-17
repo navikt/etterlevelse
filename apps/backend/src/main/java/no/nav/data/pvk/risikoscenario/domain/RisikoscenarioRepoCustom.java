@@ -18,7 +18,7 @@ public class RisikoscenarioRepoCustom {
     private final JpaRepository<Risikoscenario, UUID> repository;
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<Risikoscenario> findByKravNummer(String kravNummer) {
+    public List<Risikoscenario> findByKravNummer(Integer kravNummer) {
         var query = "select id from risikoscenario where data #> '{relevanteKravNummer}' @> :kravnummerList::jsonb";
         var par = new MapSqlParameterSource();
         par.addValue("kravnummerList", String.format("[%s]", kravNummer));

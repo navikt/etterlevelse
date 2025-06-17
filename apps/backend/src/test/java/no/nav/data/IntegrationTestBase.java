@@ -24,7 +24,13 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.KravService;
-import no.nav.data.etterlevelse.krav.domain.*;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
+import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
@@ -278,6 +284,23 @@ public abstract class IntegrationTestBase {
 
     protected Krav createKrav() {
         return createKrav("Krav 1", 50, 1);
+    }
+
+    protected Risikoscenario insertRisikoscenario() {
+        PvkDokument pvkDokument = createPvkDokument();
+        Krav krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder()
+                        .lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build())
+                .build());
+
+        Risikoscenario risikoscenario = Risikoscenario.builder()
+                .pvkDokumentId(pvkDokument.getId())
+                .risikoscenarioData(RisikoscenarioData.builder()
+                        .relevanteKravNummer(List.of(krav.getKravNummer()))
+                        .build()
+                )
+                .build();
+        return risikoscenarioService.save(risikoscenario, false);
     }
 
     
