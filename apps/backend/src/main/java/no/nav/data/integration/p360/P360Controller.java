@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -31,13 +33,20 @@ public class P360Controller {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
+    private final BehandlingensLivslopService behandlingensLivslopService;
+
 
     @Operation(summary = "Arkiver dokumeter")
     @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})
-    @PostMapping("/arkiver/etterlevelseDokumentasjon/{id}")
-    public ResponseEntity<EtterlevelseDokumentasjonResponse> archiveDocument(@PathVariable String id) {
-        log.info("Archiving etterlevelse dokumentasjon with id {}", id);
-        var eDok = etterlevelseDokumentasjonService.get(UUID.fromString(id));
+    @PostMapping("/arkiver")
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> archiveDocument(@RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId, @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav) {
+        log.info("Archiving etterlevelse dokumentasjon with id {}", etterlevelseDokumentasjonId);
+        var eDok = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
+        SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
+        Date date = new Date();
+
         try {
             if(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber() == null || eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber().isEmpty()) {
                 P360Case sak = p360Service.createCase(P360CaseRequest.builder()
@@ -56,17 +65,56 @@ public class P360Controller {
                     eDok.getEtterlevelseDokumentasjonData().setP360CaseNumber(sak.CaseNumber);
                     eDok.getEtterlevelseDokumentasjonData().setP360Recno(sak.Recno);
                     etterlevelseDokumentasjonRepo.save(eDok);
-
-                    //Opprette word doc filen
-
-                    // hente behandlingenslivslop filene
-
-                    // opprette P360DocumentCreateRequest
-
-
-                    // lagre i den nye tabellen som het P360ArchiveDocument
                 }
             }
+
+
+            String filename = titleDateformatter.format(date) + "_Etterlevelse_E"  + eDok.getEtterlevelseNummer();
+            if (onlyActiveKrav) {
+                filename += "_kun_gjeldende_krav_versjon";
+            } else {
+                filename += "_alle_krav_versjone";
+            }
+
+            //Opprette word doc filen
+            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav);
+
+            // hente behandlingenslivslop filene
+            var behandlingenslivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(eDok.getId()).orElse(new BehandlingensLivslop());
+            var BLLFiler = behandlingenslivslop.getBehandlingensLivslopData().getFiler();
+
+            // opprette P360DocumentCreateRequest
+            var p360DocumentCreateRequest = P360DocumentCreateRequest.builder()
+                    .CaseNumber(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber())
+                    .Archive("Saksdokument")
+                    .DefaultValueSet("Etterlevelse")
+                    .Title("E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", "-"))
+                    .DocumentDate(formatter.format(date))
+                    .Category("Internt notat uten oppfølging")
+                    .Status("J")
+                    .AccessGroup("Alle ansatte i Nav")
+                    .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                    .Files(List.of(P360File.builder()
+                            .Title(filename)
+                            .Format("docx")
+                            .Base64Data(Base64.getEncoder().encodeToString(wordFile))
+                            .build()))
+                    .build();
+
+            BLLFiler.forEach(behandlingensLivslopFil -> {
+                String[] bllFileName = behandlingensLivslopFil.getFilnavn().split("\\.");
+                p360DocumentCreateRequest.getFiles().add(
+                        P360File.builder()
+                                .Title(bllFileName[0])
+                                .Format(bllFileName[1])
+                                .Base64Data(Base64.getEncoder().encodeToString(behandlingensLivslopFil.getFil()))
+                                .build()
+                );
+            });
+
+            // lagre i den nye tabellen som het P360ArchiveDocument
+            p360Service.save(p360DocumentCreateRequest);
+
             return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(eDok));
         }
         catch (Exception e) {
@@ -94,39 +142,6 @@ public class P360Controller {
         log.info("Finding all documents by case number");
         List<P360Document> documents = p360Service.getDocumentByCaseNumber(request.getCaseNumber());
         return ResponseEntity.ok(new RestResponsePage<>(documents));
-    }
-
-    @Operation(summary = "Create Document")
-    @ApiResponses(value = {@ApiResponse(description = "Cases created")})
-    @PostMapping("/create/documentCases/etterlevelseDokumentasjon/{id}")
-    public ResponseEntity<P360Document> createDocument(@PathVariable String id, @RequestBody P360DocumentRequest request) {
-        log.info("Creating document for sak: {}", request.getCaseNumber());
-        if (request.getCaseNumber() == null || request.getCaseNumber().isEmpty()) {
-            throw new ValidationException("Cannot create document because caseNumber is empty");
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
-        Date date = new Date();
-
-        var etterlevelsedokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(id));
-        byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true);
-
-        P360Document document = p360Service.createDocument(P360DocumentCreateRequest.builder()
-                        .CaseNumber(request.getCaseNumber())
-                        .Archive("Saksdokument")
-                        .DefaultValueSet("Etterlevelse")
-                        .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
-                        .DocumentDate(formatter.format(date))
-                        .Category("Internt notat uten oppfølging")
-                        .Status("J")
-                        .AccessGroup("Alle ansatte i Nav")
-                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
-                        .Files(List.of(P360File.builder()
-                                        .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())
-                                        .Format("docx")
-                                        .Base64Data(Base64.getEncoder().encodeToString(wordFile))
-                                .build()))
-                .build());
-        return ResponseEntity.ok(document);
     }
 
 

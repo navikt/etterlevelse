@@ -165,7 +165,7 @@ public class PvkDokumentToDoc {
 
     public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
-        BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(pvkDokument.getEtterlevelseDokumentId());
+        BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
         PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId());
 
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(etterlevelseDokumentasjon.getId()));
@@ -211,6 +211,7 @@ public class PvkDokumentToDoc {
 
         doc.newLine();
 
+        doc.addHeading3("Personvernkonsekvensvurderingen inneholder:");
         doc.addListItem("Behandlingens livsløp", currListId, "Behandlingens_livsløp_bookmark");
         doc.addListItem("Bør vi gjøre en PVK?", currListId, "pvk_behov");
         doc.addListItem("Behandlingens art og omfang", currListId, "pvk_art_og_omfang");
@@ -265,7 +266,7 @@ public class PvkDokumentToDoc {
             doc.newLine();
             doc.addHeading4("Begrunnelse av vurderingen");
             doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
-            doc.newLine();
+            doc.pageBreak();
         } else {
             doc.addText("Vi skal gjennomføre en PVK.");
 
@@ -319,6 +320,7 @@ public class PvkDokumentToDoc {
             } else {
                 doc.addMarkdownText(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier());
             }
+            doc.pageBreak();
         }
     }
 
