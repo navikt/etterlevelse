@@ -67,7 +67,7 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
               setUpdateMessage('')
               await axios
                 .post<any>(
-                  `${env.backendBaseUrl}/p360/arkiver/etterlevelseDokumentasjon/${etterlevelseDokumentasjonIdArkiv}`
+                  `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonIdArkiv}&onlyActiveKrav=true`
                 )
                 .then((response) => {
                   setUpdateMessage(

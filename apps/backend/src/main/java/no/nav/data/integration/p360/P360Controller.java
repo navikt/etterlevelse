@@ -11,6 +11,7 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -81,10 +82,11 @@ public class P360Controller {
 
             // hente behandlingenslivslop filene
             var behandlingenslivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(eDok.getId()).orElse(new BehandlingensLivslop());
-            var BLLFiler = behandlingenslivslop.getBehandlingensLivslopData().getFiler();
+            List<BehandlingensLivslopFil> BLLFiler = behandlingenslivslop.getBehandlingensLivslopData().getFiler();
 
             // opprette P360DocumentCreateRequest
-            var p360DocumentCreateRequest = P360DocumentCreateRequest.builder()
+            List<P360File> filer = new ArrayList<>();
+            P360DocumentCreateRequest p360DocumentCreateRequest = P360DocumentCreateRequest.builder()
                     .CaseNumber(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber())
                     .Archive("Saksdokument")
                     .DefaultValueSet("Etterlevelse")
@@ -94,16 +96,17 @@ public class P360Controller {
                     .Status("J")
                     .AccessGroup("Alle ansatte i Nav")
                     .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
-                    .Files(List.of(P360File.builder()
-                            .Title(filename)
-                            .Format("docx")
-                            .Base64Data(Base64.getEncoder().encodeToString(wordFile))
-                            .build()))
                     .build();
+
+            filer.add(P360File.builder()
+                    .Title(filename)
+                    .Format("docx")
+                    .Base64Data(Base64.getEncoder().encodeToString(wordFile))
+                    .build());
 
             BLLFiler.forEach(behandlingensLivslopFil -> {
                 String[] bllFileName = behandlingensLivslopFil.getFilnavn().split("\\.");
-                p360DocumentCreateRequest.getFiles().add(
+                filer.add(
                         P360File.builder()
                                 .Title(bllFileName[0])
                                 .Format(bllFileName[1])
@@ -111,6 +114,8 @@ public class P360Controller {
                                 .build()
                 );
             });
+
+            p360DocumentCreateRequest.setFiles(filer);
 
             // lagre i den nye tabellen som het P360ArchiveDocument
             p360Service.save(p360DocumentCreateRequest);
