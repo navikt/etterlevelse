@@ -163,13 +163,13 @@ public class PvkDokumentToDoc {
         return zipUtils.zipOutputStream(zipFiles);
     }
 
-    public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon EtterlevelseDokumentasjon) {
-        PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(EtterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
+    public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
+        PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(pvkDokument.getEtterlevelseDokumentId());
         PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId());
 
-        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(EtterlevelseDokumentasjon.getId()));
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjon);
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(etterlevelseDokumentasjon.getId()));
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         List<RisikoscenarioResponse> risikoscenarioList = getRisikoscenario(pvkDokument.getId().toString());
         List<TiltakResponse> tiltakList = getTiltak(pvkDokument.getId());
@@ -202,7 +202,7 @@ public class PvkDokumentToDoc {
         doc.addLabel("Godkjent av risikoeier:");
         if (pvkDokument.getStatus() == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
             doc.addText(
-                    etterlevelseDokumentasjon.getRisikoeiereData().stream().map(risikoeier -> risikoeier.getFullName() + ", ") +
+                    etterlevelseDokumentasjonResponse.getRisikoeiereData().stream().map(risikoeier -> risikoeier.getFullName() + ", ") +
                             "den " + doc.dateToString(pvkDokument.getLastModifiedDate().toLocalDate())
             );
         } else {
@@ -252,7 +252,7 @@ public class PvkDokumentToDoc {
         var pvkBehovHeading = doc.addHeading2("Bør vi gjøre en PVK?");
         doc.addBookmark(pvkBehovHeading, "pvk_behov");
         doc.newLine();
-        doc.generateEgenskaperFraBehandlinger(etterlevelseDokumentasjon.getBehandlinger());
+        doc.generateEgenskaperFraBehandlinger(etterlevelseDokumentasjonResponse.getBehandlinger());
         doc.newLine();
         doc.generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
         doc.newLine();
@@ -271,9 +271,9 @@ public class PvkDokumentToDoc {
 
             doc.newLine();
 
-            doc.generateBehandlingensArtOgOmfang(pvkDokument, etterlevelseDokumentasjon.getBehandlinger(), pvoTilbakemelding);
+            doc.generateBehandlingensArtOgOmfang(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding);
             doc.newLine();
-            doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjon.getBehandlinger(), pvoTilbakemelding);
+            doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding);
             doc.newLine();
             doc.generateRisikoscenarioOgTiltak(risikoscenarioList, tiltakList, pvoTilbakemelding);
             doc.newLine();
