@@ -2,11 +2,15 @@ package no.nav.data.integration.p360;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.integration.p360.domain.P360ArchiveDocument;
+import no.nav.data.integration.p360.domain.P360ArchiveDocumentRepo;
 import no.nav.data.integration.p360.dto.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
@@ -14,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 import static no.nav.data.common.utils.Constants.PUBLIC_360_AUTHKEY;
@@ -27,6 +32,11 @@ public class P360Service {
 
     private final RestTemplate restTemplate;
     private final P360Properties p360Properties;
+    private final P360ArchiveDocumentRepo p360ArchiveDocumentRepo;
+
+    public P360ArchiveDocument get(UUID uuid) {
+        return p360ArchiveDocumentRepo.findById(uuid).orElse(null);
+    }
 
 
     public List<P360Case> getCasesByTitle(String title) {
@@ -146,5 +156,23 @@ public class P360Service {
             return null;
         }
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public P360ArchiveDocument save(P360DocumentCreateRequest request) {
+        var p360ArchiveDocument = new P360ArchiveDocument();
+        p360ArchiveDocument.setData(request);
+        return p360ArchiveDocumentRepo.save(p360ArchiveDocument);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public P360ArchiveDocument delete(UUID id) {
+        var p360ArchiveDocument = get(id);
+        p360ArchiveDocumentRepo.deleteById(id);
+        return p360ArchiveDocument;
+    }
+
+
+
+    // trenger en scheduler som henter fra tabell og publiserer til websak
 
 }
