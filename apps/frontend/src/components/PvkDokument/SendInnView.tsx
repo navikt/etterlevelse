@@ -31,6 +31,7 @@ import { useKravFilter } from '../../query/KravQuery'
 import { user } from '../../services/User'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
+import CopyAndStatusView from './SendInnComponents/CopyAndStatusView'
 import GodkjentAvRisikoeierFields from './SendInnComponents/GodkjentAvRisikoeierFields'
 import PVOUnderArbeidFIelds from './SendInnComponents/PVOUnderArbeidFIelds'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
@@ -369,6 +370,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å
                   legge til ytterligere informasjon dersom det er aktuelt.
                 </BodyLong>
+                <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
 
                 {manglerBehandlingError && (
                   <Alert variant='warning' id='behandling-error' className='mt-7 mb-4'>

@@ -3,7 +3,6 @@ import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, RefObject } from 'react'
 import { EPvkDokumentStatus, IPvkDokument } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
-import CopyAndStatusView from './CopyAndStatusView'
 import LagreOgFortsettSenereButton from './LagreOgFortsettSenereButton'
 
 type TProps = {
@@ -39,7 +38,11 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
           name='merknadTilPvoEllerRisikoeier'
         />
 
-        <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
+        <Alert variant='info' inline className='my-5'>
+          Når dere sender inn PVK, vil hele dokumentasjonen, inkludert etterlevelsesdokumentasjon
+          ved PVK-relaterte krav, låses og ikke kunne redigeres. Dette innholdet forbli låst enn så
+          lenge saken ligger hos Personvernombudet.
+        </Alert>
 
         {pvkDokument.sendtTilPvoDato !== null && (
           <Alert variant='info' className='my-5'>
