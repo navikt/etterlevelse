@@ -32,7 +32,9 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
             <Accordion.Header>
               {tiltak.navn}{' '}
               <div className='flex gap-2'>
-                {!tiltak.ansvarlig.navIdent && <Tag variant='alt2'>Tiltaksansvarlig savnes</Tag>}
+                {!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name && (
+                  <Tag variant='alt2'>Tiltaksansvarlig savnes</Tag>
+                )}
                 {!tiltak.frist && <Tag variant='alt2'>Tiltaksfrist savnes</Tag>}
               </div>
             </Accordion.Header>
