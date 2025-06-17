@@ -138,7 +138,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
           <div className='pt-4 flex flex-col gap-4'>
             {pvkDokument &&
               pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO &&
-              pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO && (
+              pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+              pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
                 <Alert className='max-w-[75ch]' variant='info'>
                   <Heading spacing size='small' level='3'>
                     Personvernkonsekvensvurdering: slik gjør dere nå
@@ -161,29 +162,31 @@ export const DokumentasjonPageTabs = (props: IProps) => {
                 </Alert>
               )}
 
-            {pvkDokument && pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-              <Alert className='max-w-[75ch]' variant='warning'>
-                <Heading spacing size='small' level='3'>
-                  PVK ligger til vurdering hos Personvernombudet om dagen.
-                </Heading>
-                Dokumentasjon tilknyttet deres PVK er låst og kan ikke redigeres.
-                <br />
-                Dette gjelder for:
-                <List as='ul'>
-                  <List.Item>
-                    Dokumentasjon av risikoscenarioer og tiltak i forbindelse med PVK
-                  </List.Item>
-                  <List.Item>
-                    Etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav.
-                  </List.Item>
-                  Etterlevelseskrav som ikke er tilknyttet PVK kan forsatt redigeres som normalt.
+            {pvkDokument &&
+              (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
+                pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID) && (
+                <Alert className='max-w-[75ch]' variant='warning'>
+                  <Heading spacing size='small' level='3'>
+                    PVK ligger til vurdering hos Personvernombudet om dagen.
+                  </Heading>
+                  Dokumentasjon tilknyttet deres PVK er låst og kan ikke redigeres.
                   <br />
-                  <br />
-                  Hvis dere oppdager betydelig behov for å endre på dokumentasjonen i forbindelse
-                  med vurdering av PVK, ta kontakt med PVO på personvernombudet@nav.no.
-                </List>
-              </Alert>
-            )}
+                  Dette gjelder for:
+                  <List as='ul'>
+                    <List.Item>
+                      Dokumentasjon av risikoscenarioer og tiltak i forbindelse med PVK
+                    </List.Item>
+                    <List.Item>
+                      Etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav.
+                    </List.Item>
+                    Etterlevelseskrav som ikke er tilknyttet PVK kan forsatt redigeres som normalt.
+                    <br />
+                    <br />
+                    Hvis dere oppdager betydelig behov for å endre på dokumentasjonen i forbindelse
+                    med vurdering av PVK, ta kontakt med PVO på personvernombudet@nav.no.
+                  </List>
+                </Alert>
+              )}
 
             {pvkDokument && pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && (
               <Alert className='max-w-[75ch]' variant='info'>
