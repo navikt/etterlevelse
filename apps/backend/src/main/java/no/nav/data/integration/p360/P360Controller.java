@@ -46,7 +46,7 @@ public class P360Controller {
                         .Status("B")
                         .AccessCode("U")
                         .AccessGroup("Alle ansatte i Nav")
-                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
+                        .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
                         .build());
 
                 eDok.getEtterlevelseDokumentasjonData().setP360CaseNumber(sak.CaseNumber);
@@ -91,7 +91,7 @@ public class P360Controller {
                         .Status("B")
                         .AccessCode("U")
                         .AccessGroup("Alle ansatte i Nav")
-                        .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
+                        .ResponsiblePersonIdNumber(SecurityUtils.getCurrentEmail())
                 .build());
         return ResponseEntity.ok(sak);
     }

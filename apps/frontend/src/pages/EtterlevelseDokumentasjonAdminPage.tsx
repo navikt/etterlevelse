@@ -3,7 +3,6 @@ import axios from 'axios'
 import { useState } from 'react'
 import { deleteEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { PageLayout } from '../components/scaffold/Page'
-import { IEtterlevelseDokumentasjon } from '../constants'
 import { env } from '../util/env'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 
@@ -67,7 +66,7 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
             onClick={async () => {
               setUpdateMessage('')
               await axios
-                .post<IEtterlevelseDokumentasjon>(
+                .post<any>(
                   `${env.backendBaseUrl}/p360/arkiver/etterlevelseDokumentasjon/${etterlevelseDokumentasjonIdArkiv}`
                 )
                 .then((response) => {

@@ -20,5 +20,5 @@ public class P360CaseRequest {
         private String Status;
         private String AccessCode;
         private String AccessGroup;
-        private String ResponsiblePersonEmail;
+        private String ResponsiblePersonIdNumber;
 }
