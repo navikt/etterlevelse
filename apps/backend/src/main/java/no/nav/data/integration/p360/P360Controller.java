@@ -11,7 +11,6 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.export.EtterlevelseDokumentasjonToDoc;
 import no.nav.data.integration.p360.dto.*;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,7 @@ public class P360Controller {
     @Operation(summary = "Arkiver dokumeter")
     @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})
     @PostMapping("/arkiver/etterlevelseDokumentasjon/{id}")
-    public ResponseEntity<EtterlevelseDokumentasjonResponse> archiveDocument(@PathVariable String id) {
+    public ResponseEntity<P360Case> archiveDocument(@PathVariable String id) {
         log.info("Archiving etterlevelse dokumentasjon with id {}", id);
         var eDok = etterlevelseDokumentasjonService.get(UUID.fromString(id));
         try {
@@ -53,8 +52,11 @@ public class P360Controller {
                 eDok.getEtterlevelseDokumentasjonData().setP360CaseNumber(sak.CaseNumber);
                 eDok.getEtterlevelseDokumentasjonData().setP360Recno(sak.Recno);
                 etterlevelseDokumentasjonRepo.save(eDok);
+
+                return ResponseEntity.ok(sak);
+            } else {
+                return ResponseEntity.badRequest().build();
             }
-            return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(eDok));
         }
         catch (Exception e) {
             log.error(e.getMessage(), e);
