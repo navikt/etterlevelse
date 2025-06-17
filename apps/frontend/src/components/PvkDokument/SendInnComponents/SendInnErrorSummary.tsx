@@ -11,7 +11,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   risikoeiereDataError: boolean
   avdelingError: boolean
-  teamsDataError: boolean
+  medlemError: boolean
   behandlingensLivslopError: boolean
   manglerBehandlingError: boolean
   risikoscenarioError: string
@@ -25,7 +25,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjonId,
   risikoeiereDataError,
   avdelingError,
-  teamsDataError,
+  medlemError,
   behandlingensLivslopError,
   risikoscenarioError,
   tiltakError,
@@ -40,7 +40,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         // pvkKravError !== '' ||
         risikoeiereDataError ||
         avdelingError ||
-        teamsDataError ||
+        medlemError ||
         behandlingensLivslopError ||
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
@@ -120,7 +120,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
             </ErrorSummary.Item>
           )}
 
-          {teamsDataError && (
+          {medlemError && (
             <ErrorSummary.Item
               onClick={() => {
                 navigate(

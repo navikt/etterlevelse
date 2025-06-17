@@ -80,7 +80,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [alleTiltak, setAlleTitltak] = useState<ITiltak[]>([])
   const [risikoeiereDataError, setRisikoeiereDataError] = useState<boolean>(false)
   const [avdelingError, setAvdelingError] = useState<boolean>(false)
-  const [teamsDataError, setTeamsDataError] = useState<boolean>(false)
+  const [medlemError, setMedlemError] = useState<boolean>(false)
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
   const [manglerBehandlingError, setManglerBehandlingError] = useState<boolean>(false)
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
@@ -111,7 +111,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       risikoscenarioError === '' &&
       savnerVurderingError === '' &&
       tiltakError === '' &&
-      !teamsDataError &&
+      !medlemError &&
       !avdelingError &&
       !risikoeiereDataError &&
       //venter til krav K114 er satt til utgått
@@ -170,11 +170,17 @@ export const SendInnView: FunctionComponent<TProps> = ({
     }
   }
 
-  const teamsDataFieldCheck = () => {
-    if (etterlevelseDokumentasjon.teamsData === undefined) {
-      setTeamsDataError(true)
+  const medlemErrorCheck = () => {
+    console.debug(etterlevelseDokumentasjon.teamsData)
+    if (
+      (etterlevelseDokumentasjon.teamsData === undefined ||
+        etterlevelseDokumentasjon.teamsData?.length === 0) &&
+      (etterlevelseDokumentasjon.resourcesData === undefined ||
+        etterlevelseDokumentasjon.resourcesData?.length === 0)
+    ) {
+      setMedlemError(true)
     } else {
-      setTeamsDataError(false)
+      setMedlemError(false)
     }
   }
 
@@ -330,7 +336,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               manglerBehandlingErrorCheck()
               risikoeiereDataFieldCheck()
               avdelingFieldCheck()
-              teamsDataFieldCheck()
+              medlemErrorCheck()
               behandlingensLivslopFieldCheck()
               pvkKravCheck()
               risikoscenarioCheck()
@@ -422,7 +428,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         risikoeiereDataError={risikoeiereDataError}
                         avdelingError={avdelingError}
-                        teamsDataError={teamsDataError}
+                        medlemError={medlemError}
                         behandlingensLivslopError={behandlingensLivslopError}
                         risikoscenarioError={risikoscenarioError}
                         tiltakError={tiltakError}
@@ -461,7 +467,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         risikoeiereDataError={risikoeiereDataError}
                         avdelingError={avdelingError}
-                        teamsDataError={teamsDataError}
+                        medlemError={medlemError}
                         behandlingensLivslopError={behandlingensLivslopError}
                         risikoscenarioError={risikoscenarioError}
                         tiltakError={tiltakError}
@@ -489,7 +495,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                           risikoeiereDataError={risikoeiereDataError}
                           avdelingError={avdelingError}
-                          teamsDataError={teamsDataError}
+                          medlemError={medlemError}
                           behandlingensLivslopError={behandlingensLivslopError}
                           risikoscenarioError={risikoscenarioError}
                           tiltakError={tiltakError}
@@ -516,7 +522,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                           risikoeiereDataError={risikoeiereDataError}
                           avdelingError={avdelingError}
-                          teamsDataError={teamsDataError}
+                          medlemError={medlemError}
                           behandlingensLivslopError={behandlingensLivslopError}
                           risikoscenarioError={risikoscenarioError}
                           tiltakError={tiltakError}
