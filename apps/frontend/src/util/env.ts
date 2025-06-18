@@ -11,4 +11,5 @@ export const env = {
   lovdataLovBaseUrl: process.env.REACT_APP_LOVDATA_LOV_BASE_URL!,
   lovdataForskriftBaseUrl: process.env.REACT_APP_LOVDATA_FORSKRIFT_BASE_URL!,
   lovdataRundskrivBaseUrl: process.env.REACT_APP_LOVDATA_RUNDSKRIV_BASE_URL!,
+  p360BaseUrl: process.env.REACT_APP_P360_BASE_URL!,
 }
