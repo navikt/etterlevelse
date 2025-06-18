@@ -44,7 +44,7 @@ public class KravValidator {
             return;
         }
 
-        var items = filter(kravRepo.findByNavnContaining(name),
+        var items = filter(kravRepo.findByNavn(name),
                 t -> (!t.getId().equals(validator.getItem().getId())
                 && !t.getKravNummer().equals(validator.getItem().getKravNummer())
                 ));

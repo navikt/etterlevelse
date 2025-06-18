@@ -35,6 +35,9 @@ public interface KravRepo extends JpaRepository<Krav, UUID>, KravRepoCustom {
     @Query(value = "select * from krav where data ->> 'navn' ilike %?1%", nativeQuery = true)
     List<Krav> findByNavnContaining(String name);
 
+    @Query(value = "select * from krav where data ->> 'navn' = ?1", nativeQuery = true)
+    List<Krav> findByNavn(String name);
+
     @Query(value = "select * from krav where cast(krav_nummer as text) ilike %?1%", nativeQuery = true)
     List<Krav> findByKravNummerContaining(String number);
 
