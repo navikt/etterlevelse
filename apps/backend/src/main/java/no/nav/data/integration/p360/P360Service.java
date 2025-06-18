@@ -38,6 +38,9 @@ public class P360Service {
         return p360ArchiveDocumentRepo.findById(uuid).orElse(null);
     }
 
+    public List<P360ArchiveDocument> getAllP360ArchiveDocuments() {
+        return p360ArchiveDocumentRepo.findAll();
+    }
 
     public List<P360Case> getCasesByTitle(String title) {
         List<P360Case> cases = new ArrayList<>();
@@ -111,10 +114,13 @@ public class P360Service {
             var response = restTemplate.postForEntity(p360Properties.getDocumentUrl() + "/CreateDocument",
                     new HttpEntity<>(request, createHeadersWithAuth()),
                     P360Document.class);
+            if(!response.getBody().getErrorMessage().isEmpty()) {
+                throw new RestClientException(response.getBody().getErrorMessage());
+            }
             return response.getBody();
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
-            return null;
+            throw new RestClientException(e.getMessage());
         }
     }
 
