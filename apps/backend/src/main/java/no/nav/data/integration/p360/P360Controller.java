@@ -49,7 +49,7 @@ public class P360Controller {
         Date date = new Date();
 
         try {
-            if(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber() == null || eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber().isEmpty()) {
+            if (eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber() == null || eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber().isEmpty()) {
                 P360Case sak = p360Service.createCase(P360CaseRequest.builder()
                         .CaseType("Sak")
                         .DefaultValueSet("Etterlevelse")
@@ -70,7 +70,7 @@ public class P360Controller {
             }
 
 
-            String filename = titleDateformatter.format(date) + "_Etterlevelse_E"  + eDok.getEtterlevelseNummer();
+            String filename = titleDateformatter.format(date) + "_Etterlevelse_E" + eDok.getEtterlevelseNummer();
             if (onlyActiveKrav) {
                 filename += "_kun_gjeldende_krav_versjon";
             } else {
@@ -121,8 +121,7 @@ public class P360Controller {
             p360Service.save(p360DocumentCreateRequest);
 
             return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(eDok));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().build();
         }
