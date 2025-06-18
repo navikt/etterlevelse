@@ -60,15 +60,10 @@ public class P360Controller {
                         .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
                         .build());
 
-                if (!sak.getErrorMessage().isEmpty()) {
-                    throw new ValidationException(sak.getErrorMessage());
-                } else {
-                    eDok.getEtterlevelseDokumentasjonData().setP360CaseNumber(sak.CaseNumber);
-                    eDok.getEtterlevelseDokumentasjonData().setP360Recno(sak.Recno);
-                    etterlevelseDokumentasjonRepo.save(eDok);
-                }
+                eDok.getEtterlevelseDokumentasjonData().setP360CaseNumber(sak.CaseNumber);
+                eDok.getEtterlevelseDokumentasjonData().setP360Recno(sak.Recno);
+                etterlevelseDokumentasjonRepo.save(eDok);
             }
-
 
             String filename = titleDateformatter.format(date) + "_Etterlevelse_E" + eDok.getEtterlevelseNummer();
             if (onlyActiveKrav) {
