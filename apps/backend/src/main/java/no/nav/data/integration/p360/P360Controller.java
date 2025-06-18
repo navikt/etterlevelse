@@ -40,7 +40,9 @@ public class P360Controller {
     @Operation(summary = "Arkiver dokumeter")
     @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})
     @PostMapping("/arkiver")
-    public ResponseEntity<EtterlevelseDokumentasjonResponse> archiveDocument(@RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId, @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav) {
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> archiveDocument(@RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId,
+                                                                             @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav,
+                                                                             @RequestParam(name = "pvoTilbakemelding", required = false) boolean pvoTilbakemelding) {
         log.info("Archiving etterlevelse dokumentasjon with id {}", etterlevelseDokumentasjonId);
         var eDok = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
 
@@ -79,13 +81,21 @@ public class P360Controller {
             var behandlingenslivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(eDok.getId()).orElse(new BehandlingensLivslop());
             List<BehandlingensLivslopFil> BLLFiler = behandlingenslivslop.getBehandlingensLivslopData().getFiler();
 
+
+            String documentTitle  = "";
+            if (pvoTilbakemelding) {
+                documentTitle += "Tilbakemelding fra Personvernombudet for ";
+            }
+
+            documentTitle += "E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -");
+
             // opprette P360DocumentCreateRequest
             List<P360File> filer = new ArrayList<>();
             P360DocumentCreateRequest p360DocumentCreateRequest = P360DocumentCreateRequest.builder()
                     .CaseNumber(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber())
                     .Archive("Saksdokument")
                     .DefaultValueSet("Etterlevelse")
-                    .Title("E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -"))
+                    .Title(documentTitle)
                     .DocumentDate(formatter.format(date))
                     .Category("Internt notat uten oppfølging")
                     .Status("J")
