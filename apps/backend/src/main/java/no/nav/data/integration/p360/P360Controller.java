@@ -79,14 +79,10 @@ public class P360Controller {
             if (pvoTilbakemelding) {
                 documentTitle += "Tilbakemelding fra Personvernombudet for ";
             } else if (risikoeier) {
-                documentTitle += "Tilbakemelding fra Risikoeier for ";
+                documentTitle += "Personvernkonsekvensvurdering for ";
             }
 
-            documentTitle += "E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -");
-
-            if(pvoTilbakemelding || risikoeier) {
-                documentTitle += " med personvernkonsekvensvurdering";
-            }
+            documentTitle += "E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -").trim();
 
             //Opprette word doc filen
             byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, (pvoTilbakemelding || risikoeier));
@@ -115,16 +111,18 @@ public class P360Controller {
                     .Base64Data(Base64.getEncoder().encodeToString(wordFile))
                     .build());
 
-            BLLFiler.forEach(behandlingensLivslopFil -> {
-                String[] bllFileName = behandlingensLivslopFil.getFilnavn().split("\\.");
-                filer.add(
-                        P360File.builder()
-                                .Title(bllFileName[0])
-                                .Format(bllFileName[1])
-                                .Base64Data(Base64.getEncoder().encodeToString(behandlingensLivslopFil.getFil()))
-                                .build()
-                );
-            });
+            if (pvoTilbakemelding || risikoeier) {
+                BLLFiler.forEach(behandlingensLivslopFil -> {
+                    String[] bllFileName = behandlingensLivslopFil.getFilnavn().split("\\.");
+                    filer.add(
+                            P360File.builder()
+                                    .Title(bllFileName[0])
+                                    .Format(bllFileName[1])
+                                    .Base64Data(Base64.getEncoder().encodeToString(behandlingensLivslopFil.getFil()))
+                                    .build()
+                    );
+                });
+            }
 
             p360DocumentCreateRequest.setFiles(filer);
 
