@@ -38,6 +38,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   errorSummaryComponent,
 }) => {
   const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+
   return (
     <div>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />

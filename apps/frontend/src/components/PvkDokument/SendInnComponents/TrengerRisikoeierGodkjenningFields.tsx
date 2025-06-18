@@ -1,6 +1,7 @@
 import { Button, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
+import { arkiver } from '../../../api/P360Api'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -89,9 +90,10 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             onClick={async () => {
               await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
               await submitForm()
+              await arkiver(etterlevelseDokumentasjon.id, false, false)
             }}
           >
-            Akseptér restrisiko
+            Akseptér restrisiko og arkivér i Public 360
           </Button>
         )}
       </div>

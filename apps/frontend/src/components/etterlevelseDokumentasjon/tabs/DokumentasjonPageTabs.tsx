@@ -104,6 +104,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
                 arkivModal={arkivModal}
                 setArkivModal={setArkivModal}
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                pvoTilbakemelding={false}
               />
             </div>
           </div>

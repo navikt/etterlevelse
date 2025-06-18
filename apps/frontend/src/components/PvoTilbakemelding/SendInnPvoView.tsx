@@ -12,6 +12,7 @@ import {
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, useState } from 'react'
+import { arkiver } from '../../api/P360Api'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -22,6 +23,7 @@ import {
 import {
   EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
+  IEtterlevelseDokumentasjon,
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
@@ -33,6 +35,7 @@ import PvoFormButtons from './edit/PvoFormButtons'
 import { sendInnCheck } from './edit/pvoFromSchema'
 
 type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
@@ -44,6 +47,7 @@ type TProps = {
 }
 
 export const SendInnPvoView: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
   activeStep,
@@ -282,9 +286,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                           await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                           setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                           await submitForm()
+                          await arkiver(etterlevelseDokumentasjon.id, false, true)
                         }}
                       >
-                        Lagre og send tilbakemelding
+                        Lagre, send tilbakemelding, og arkivér i Public 360
                       </Button>
                     )}
                   </div>
