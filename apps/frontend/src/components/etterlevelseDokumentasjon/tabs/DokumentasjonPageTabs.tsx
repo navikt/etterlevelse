@@ -12,6 +12,7 @@ import {
   TKravQL,
 } from '../../../constants'
 import { TTemaCode } from '../../../services/Codelist'
+import { isDev } from '../../../util/config'
 import ExportEtterlevelseModal from '../../export/ExportEtterlevelseModal'
 import { ArkiveringModal } from '../ArkiveringModal'
 import FocusList from './FocusList'
@@ -95,18 +96,22 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               risikoscenarioList={risikoscenarioList}
               isRisikoscenarioLoading={isRisikoscenarioLoading}
             />
-            <div className='w-full flex justify-end items-center'>
-              <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-              <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
-                Arkivér i Public 360
-              </Button>
-              <ArkiveringModal
-                arkivModal={arkivModal}
-                setArkivModal={setArkivModal}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                pvoTilbakemelding={false}
-              />
-            </div>
+            {isDev && (
+              <div className='w-full flex justify-end items-center'>
+                <ExportEtterlevelseModal
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                />
+                <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
+                  Arkivér i Public 360
+                </Button>
+                <ArkiveringModal
+                  arkivModal={arkivModal}
+                  setArkivModal={setArkivModal}
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  pvoTilbakemelding={false}
+                />
+              </div>
+            )}
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='prioritertKravliste'>

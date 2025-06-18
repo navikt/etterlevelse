@@ -27,6 +27,7 @@ import {
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
+import { isDev } from '../../util/config'
 import { TextAreaField } from '../common/Inputs'
 import { Markdown } from '../common/Markdown'
 import AlertPvoModal from './common/AlertPvoModal'
@@ -286,7 +287,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                           await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                           setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                           await submitForm()
-                          await arkiver(etterlevelseDokumentasjon.id, false, true)
+                          if (isDev) {
+                            await arkiver(etterlevelseDokumentasjon.id, false, true)
+                          }
                         }}
                       >
                         Lagre, send tilbakemelding, og arkivér i Public 360
