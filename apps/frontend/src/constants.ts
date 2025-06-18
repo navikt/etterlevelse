@@ -29,19 +29,6 @@ export enum EYupErrorMessage {
   PAAKREVD = 'Feltet er påkrevd',
 }
 
-export interface IEtterlevelseArkiv extends IDomainObject {
-  id: string
-  behandlingId: string
-  etterlevelseDokumentasjonId: string
-  status: EEtterlevelseArkivStatus
-  arkiveringDato: string
-  arkivertAv: string
-  tilArkiveringDato: string
-  arkiveringAvbruttDato: string
-  webSakNummer: string
-  onlyActiveKrav: boolean
-}
-
 export enum EKravFilterType {
   RELEVANTE_KRAV = 'RELEVANTE_KRAV',
   BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV',
@@ -115,14 +102,6 @@ export enum EKravListFilter {
 export enum EVirkemiddelListFilter {
   VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
   SORTDATE = 'SORTDATE',
-}
-
-export enum EEtterlevelseArkivStatus {
-  TIL_ARKIVERING = 'TIL_ARKIVERING',
-  BEHANDLER_ARKIVERING = 'BEHANDLER_ARKIVERING',
-  ARKIVERT = 'ARKIVERT',
-  IKKE_ARKIVER = 'IKKE_ARKIVER',
-  ERROR = 'ERROR',
 }
 
 export enum EAdresseType {
@@ -370,8 +349,8 @@ export interface IEtterlevelseDokumentasjon {
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
   risikovurderinger: string[]
-  P360Recno: number
-  P360CaseNumber: string
+  p360Recno: number
+  p360CaseNumber: string
 }
 
 export interface IDocumentRelation {

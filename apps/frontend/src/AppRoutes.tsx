@@ -6,7 +6,6 @@ import CodeListPage from './components/admin/CodeList/CodelistPage'
 import { AuditPage } from './components/admin/audit/AuditPage'
 import { MailLogPage } from './components/admin/maillog/MailLogPage'
 import {
-  adminArkivUrl,
   adminAuditUrl,
   adminCodelistUrl,
   adminDokumentasjonUrl,
@@ -53,7 +52,6 @@ import { KravCreatePage } from './components/krav/Edit/KravCreatePage'
 import { KravEditPage } from './components/krav/Edit/KravEditPage'
 import { KravNyVersjonPage } from './components/krav/Edit/KravNyVersjonPage'
 import { IEtterlevelseDokumentasjon } from './constants'
-import ArkivAdminPage from './pages/ArkivAdminPage'
 import BehandlingensLivslopPage from './pages/BehandlingensLivslopPage'
 import DocumentRelationAdminPage from './pages/DocumentRelationAdminPage'
 import { DokumentasjonPage } from './pages/DokumentasjonPage'
@@ -304,11 +302,6 @@ const AppRoutes = (): JSX.Element => {
       <Route
         path={adminEtterlevelseUrl}
         element={<PrivateRoute component={<EtterlevelseAdminPage />} adminPage />}
-        caseSensitive={true}
-      />
-      <Route
-        path={adminArkivUrl}
-        element={<PrivateRoute component={<ArkivAdminPage />} adminPage />}
         caseSensitive={true}
       />
       <Route
