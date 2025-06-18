@@ -128,8 +128,7 @@ export const PvkDokumentPage = () => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
         if (
-          pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
-          pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+          ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(pvkDokument.status)
         ) {
           await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id).then(setPvoTilbakemelding)
         }

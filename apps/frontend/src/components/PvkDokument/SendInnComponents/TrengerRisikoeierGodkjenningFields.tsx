@@ -40,7 +40,8 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   initialStatus,
   errorSummaryComponent,
 }) => {
-  const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+  const isRisikoeierCheck: boolean =
+    etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) || user.isAdmin()
 
   return (
     <div>

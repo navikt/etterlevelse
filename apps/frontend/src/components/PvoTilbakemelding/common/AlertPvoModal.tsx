@@ -40,7 +40,9 @@ export const AlertPvoModal: FunctionComponent<TProps> = ({ isOpen, onClose, pvkD
             <Modal.Body>Kan ikke redigere på en sendt Pvo tilbakemelding</Modal.Body>
           )}
           <Modal.Footer>
-            <Button onClick={() => onClose()}>Lukk</Button>
+            <Button type='button' onClick={() => onClose()}>
+              Lukk
+            </Button>
           </Modal.Footer>
         </div>
       )}
