@@ -2,9 +2,16 @@ package no.nav.data.integration.p360;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.security.SecurityProperties;
+import no.nav.data.etterlevelse.varsel.VarselService;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.etterlevelse.varsel.domain.Varsel;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.p360.domain.P360ArchiveDocument;
 import no.nav.data.integration.p360.domain.P360ArchiveDocumentRepo;
 import no.nav.data.integration.p360.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,6 +40,11 @@ public class P360Service {
     private final RestTemplate restTemplate;
     private final P360Properties p360Properties;
     private final P360ArchiveDocumentRepo p360ArchiveDocumentRepo;
+    private final VarselService varselService;
+    private final SecurityProperties securityProperties;
+
+    @Autowired
+    private Environment env;
 
     public P360ArchiveDocument get(UUID uuid) {
         return p360ArchiveDocumentRepo.findById(uuid).orElse(null);
@@ -86,10 +98,17 @@ public class P360Service {
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/CreateCase",
                     new HttpEntity<>( request, createHeadersWithAuth()),
                     P360Case.class);
+
+            assert response.getBody() != null;
+            if (!response.getBody().getErrorMessage().isEmpty()) {
+                throw new RestClientException(response.getBody().getErrorMessage());
+            }
+
             return response.getBody();
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
-            return null;
+            errorVarsling("Feil ved oppretting av sakNummer i P360 for " + request.getTitle(), String.valueOf(e) );
+            throw new RestClientException(e.getMessage());
         }
     }
 
@@ -110,6 +129,7 @@ public class P360Service {
     }
 
     public P360Document createDocument(P360DocumentCreateRequest request) {
+        String channelToRecieve = securityProperties.isDev() ? env.getProperty("client.devmail.slack-channel-id") : env.getProperty("client.prodmail.slack-channel-id");
         try {
             var response = restTemplate.postForEntity(p360Properties.getDocumentUrl() + "/CreateDocument",
                     new HttpEntity<>(request, createHeadersWithAuth()),
@@ -120,8 +140,22 @@ public class P360Service {
             return response.getBody();
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
+            errorVarsling("Feil ved oppretting av document i P360 for " + request.getTitle(), String.valueOf(e) );
             throw new RestClientException(e.getMessage());
         }
+    }
+
+    private void errorVarsling (String title, String melding) {
+        String channelToRecieve = securityProperties.isDev() ? env.getProperty("client.devmail.slack-channel-id") : env.getProperty("client.prodmail.slack-channel-id");
+
+        var varselBuilder = Varsel.builder();
+        varselBuilder.title(title);
+        varselBuilder.paragraph(new Varsel.Paragraph(melding));
+
+        varselService.varsle(List.of(Varslingsadresse.builder()
+                .type(AdresseType.SLACK)
+                .adresse(channelToRecieve)
+                .build()), varselBuilder.build());
     }
 
     public P360Document updateDocument(P360DocumentUpdateRequest request) {
