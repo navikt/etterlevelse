@@ -1,7 +1,6 @@
-import { Alert, Heading, Link, List, Tabs } from '@navikt/ds-react'
+import { Alert, Button, Heading, Link, List, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
-import { useArkiveringByEtterlevelseDokumentasjonId } from '../../../api/ArkiveringApi'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
 import {
   EPvkDokumentStatus,
@@ -46,14 +45,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     isRisikoscenarioLoading,
   } = props
 
-  const params = useParams<{ id?: string; tema?: string }>()
-
   const [arkivModal, setArkivModal] = useState<boolean>(false)
   const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
-
-  const [etterlevelseArkiv, setEtterlevelseArkiv] = useArkiveringByEtterlevelseDokumentasjonId(
-    params.id
-  )
 
   const [tabValue, setTabValue] = useState('alleKrav')
   const url = new URL(window.location.href)
@@ -104,16 +97,13 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             />
             <div className='w-full flex justify-end items-center'>
               <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-              {/* DISABLED UNTIL P360 arkivering is integrated and planned*/}
-              {/* <Button variant="tertiary" size="small" onClick={() => setArkivModal(true)}>
-                Arkivér i WebSak
-              </Button> */}
+              <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
+                Arkivér i Public 360
+              </Button>
               <ArkiveringModal
                 arkivModal={arkivModal}
                 setArkivModal={setArkivModal}
-                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                etterlevelseArkiv={etterlevelseArkiv}
-                setEtterlevelseArkiv={setEtterlevelseArkiv}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               />
             </div>
           </div>
