@@ -8,14 +8,12 @@ type TArkiveringModalProps = {
   arkivModal: boolean
   setArkivModal: React.Dispatch<React.SetStateAction<boolean>>
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  pvoTilbakemelding: boolean
 }
 
 export const ArkiveringModal = ({
   arkivModal,
   setArkivModal,
   etterlevelseDokumentasjon,
-  pvoTilbakemelding,
 }: TArkiveringModalProps) => {
   const [onlyActiveKrav, setOnlyActiveKrav] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -87,11 +85,9 @@ export const ArkiveringModal = ({
             disabled={isLoading}
             onClick={async () => {
               setIsLoading(true)
-              await arkiver(
-                etterlevelseDokumentasjon.id,
-                onlyActiveKrav,
-                pvoTilbakemelding
-              ).finally(() => setIsLoading(false))
+              await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false).finally(
+                () => setIsLoading(false)
+              )
             }}
           >
             Arkivér

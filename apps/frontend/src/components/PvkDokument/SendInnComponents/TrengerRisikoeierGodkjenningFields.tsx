@@ -93,7 +93,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
               await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
               await submitForm()
               if (isDev) {
-                await arkiver(etterlevelseDokumentasjon.id, false, false)
+                await arkiver(etterlevelseDokumentasjon.id, true, false, true)
               }
             }}
           >

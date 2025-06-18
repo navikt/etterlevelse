@@ -160,7 +160,7 @@ public class EtterlevelseDokumentasjonToDoc {
         );
     }
 
-    public byte[] generateDocFor(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover, boolean onlyActiveKrav) {
+    public byte[] generateDocFor(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover, boolean onlyActiveKrav, boolean withPvkDocument) {
 
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
 
@@ -240,7 +240,7 @@ public class EtterlevelseDokumentasjonToDoc {
         var doc = new EtterlevelseDocumentBuilder();
         getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
 
-        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getIrrelevansFor().contains("PERSONOPPLYSNINGER")) {
+        if (withPvkDocument) {
             pvkDokumentToDoc.generateDocForP360(doc, etterlevelseDokumentasjon);
         }
 

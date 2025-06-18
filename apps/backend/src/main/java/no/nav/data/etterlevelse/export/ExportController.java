@@ -182,7 +182,7 @@ public class ExportController {
                 filename += etterlevelseDokumentasjon.getEtterlevelseNummer();
             }
 
-            doc = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjonId, statusKoder, lover, onlyActiveKrav);
+            doc = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjonId, statusKoder, lover, onlyActiveKrav, false);
         } else {
             throw new ValidationException("No paramater given");
         }

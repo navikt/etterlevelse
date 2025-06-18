@@ -288,7 +288,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                           setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                           await submitForm()
                           if (isDev) {
-                            await arkiver(etterlevelseDokumentasjon.id, false, true)
+                            await arkiver(etterlevelseDokumentasjon.id, true, true, false)
                           }
                         }}
                       >

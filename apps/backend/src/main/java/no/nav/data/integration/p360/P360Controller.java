@@ -42,7 +42,8 @@ public class P360Controller {
     @PostMapping("/arkiver")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> archiveDocument(@RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId,
                                                                              @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav,
-                                                                             @RequestParam(name = "pvoTilbakemelding", required = false) boolean pvoTilbakemelding) {
+                                                                             @RequestParam(name = "pvoTilbakemelding", required = false) boolean pvoTilbakemelding,
+                                                                             @RequestParam(name = "risikoeier", required = false) boolean risikoeier) {
         log.info("Archiving etterlevelse dokumentasjon with id {}", etterlevelseDokumentasjonId);
         var eDok = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
 
@@ -74,20 +75,25 @@ public class P360Controller {
                 filename += "_alle_krav_versjone";
             }
 
+            String documentTitle  = "";
+            if (pvoTilbakemelding) {
+                documentTitle += "Tilbakemelding fra Personvernombudet for ";
+            } else if (risikoeier) {
+                documentTitle += "Tilbakemelding fra Risikoeier for ";
+            }
+
+            documentTitle += "E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -");
+
+            if(pvoTilbakemelding || risikoeier) {
+                documentTitle += " med personvernkonsekvensvurdering";
+            }
+
             //Opprette word doc filen
-            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav);
+            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, (pvoTilbakemelding || risikoeier));
 
             // hente behandlingenslivslop filene
             var behandlingenslivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(eDok.getId()).orElse(new BehandlingensLivslop());
             List<BehandlingensLivslopFil> BLLFiler = behandlingenslivslop.getBehandlingensLivslopData().getFiler();
-
-
-            String documentTitle  = "";
-            if (pvoTilbakemelding) {
-                documentTitle += "Tilbakemelding fra Personvernombudet for ";
-            }
-
-            documentTitle += "E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -");
 
             // opprette P360DocumentCreateRequest
             List<P360File> filer = new ArrayList<>();
@@ -166,7 +172,7 @@ public class P360Controller {
         Date date = new Date();
 
         var etterlevelsedokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(id));
-        byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true);
+        byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelsedokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), true, true);
 
         P360Document document = p360Service.updateDocument(P360DocumentUpdateRequest.builder()
                 .DocumentNumber(request.getDocumentNumber())
