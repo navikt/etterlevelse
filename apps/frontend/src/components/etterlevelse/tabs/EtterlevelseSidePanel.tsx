@@ -126,7 +126,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
           </Tabs.Panel>
           {pvkDokument && pvkDokument.skalUtforePvk && (
             <Tabs.Panel className='overflow-auto h-[90vh]' value='pvkDokumentasjon'>
-              <div className='mt-2 p-4'>
+              <div className='mt-2 p-4 mb-52'>
                 {userHasAccess() &&
                   pvkDokument &&
                   ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
