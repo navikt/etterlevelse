@@ -29,3 +29,5 @@ env:
     value: 1e0cb856-a8ba-4294-aab3-8162e3ebe1ea
   - name: CLIENT_BEGREPSKATALOG_FRONTEND_URL
     value: https://begrepskatalog.intern.nav.no/begrep
+  - name: CLIENT_NOM_GRAPHQL_URL
+    value: http://nom-api.nom.svc.cluster.local/graphql

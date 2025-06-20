@@ -130,6 +130,9 @@ client:
     client-id: ${AZURE_APP_CLIENT_ID:clientId}
     client-secret: ${AZURE_APP_CLIENT_SECRET:client-secret}
     token-url: https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/token
+  nom:
+    graphql:
+      url: https://nom/graphql
   slack:
     base-url: https://slack.com/api
     token: ${SLACK_TOKEN:token}

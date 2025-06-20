@@ -78,7 +78,8 @@ public class WebSecurityConfig {
                     "/risikoscenario/**",
                     "/tiltak/**",
                     "/virkemiddel/**",
-                    "/p360/**"
+                    "/p360/**",
+                    "/nom/**"
             );
 
             adminOnly(http,

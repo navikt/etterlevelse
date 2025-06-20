@@ -7,4 +7,6 @@ public interface TokenProvider {
     void destroySession();
 
     String createAuthRequestRedirectUrl(String postLoginRedirectUri, String postLoginErrorUri, String redirectUri);
+
+    String getConsumerToken(String resource);
 }
