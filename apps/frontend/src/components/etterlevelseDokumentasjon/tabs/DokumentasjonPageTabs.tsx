@@ -96,21 +96,22 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               risikoscenarioList={risikoscenarioList}
               isRisikoscenarioLoading={isRisikoscenarioLoading}
             />
-            {isDev && (
-              <div className='w-full flex justify-end items-center'>
-                <ExportEtterlevelseModal
-                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                />
-                <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
-                  Arkivér i Public 360
-                </Button>
-                <ArkiveringModal
-                  arkivModal={arkivModal}
-                  setArkivModal={setArkivModal}
-                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                />
-              </div>
-            )}
+
+            <div className='w-full flex justify-end items-center'>
+              <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
+              {isDev && (
+                <div>
+                  <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
+                    Arkivér i Public 360
+                  </Button>
+                  <ArkiveringModal
+                    arkivModal={arkivModal}
+                    setArkivModal={setArkivModal}
+                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='prioritertKravliste'>
