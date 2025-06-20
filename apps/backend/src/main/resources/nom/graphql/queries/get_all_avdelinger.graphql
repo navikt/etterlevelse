@@ -1,0 +1,14 @@
+query alleAvdelinger{
+    orgEnhet(where: {id:"bu431e"}) {
+        id
+        navn
+        under: organiseringer(retning: under) {
+            orgEnhet {
+                id
+                navn
+                orgEnhetsType
+                nomNivaa
+            }
+        }
+    }
+}
