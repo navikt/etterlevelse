@@ -2,7 +2,7 @@ query alleAvdelinger($id: String){
     orgEnhet(where: {id: $id}) {
         id
         navn
-        under: organiseringer(retning: under) {
+        organiseringer(retning: under) {
             orgEnhet {
                 id
                 navn
