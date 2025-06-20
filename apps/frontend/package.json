@@ -103,7 +103,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
-    "@trivago/prettier-plugin-sort-imports": "^5.2.1",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/amplitude-js": "^8.16.3",
     "@types/lodash": "^4.14.199",
     "@types/node": "24.0.3",
