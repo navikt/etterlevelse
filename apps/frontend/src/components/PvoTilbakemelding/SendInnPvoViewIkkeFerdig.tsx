@@ -1,12 +1,15 @@
-import { FilesIcon } from '@navikt/aksel-icons'
-import { Button, CopyButton, Heading, Label, Radio, RadioGroup } from '@navikt/ds-react'
+import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
 import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import { FieldRadioLayout, IndentLayoutTextField } from '../common/IndentLayout'
 import { TextAreaField } from '../common/Inputs'
 import AlertPvoModal from './common/AlertPvoModal'
-import DataTextWrapper from './common/DataTextWrapper'
+import {
+  BeskjedTilbakemeldingEtterlever,
+  CopyButtonCommon,
+  LagreFortsettSenereButton,
+} from './common/SendInnPvoView'
 import PvoFormButtons from './edit/PvoFormButtons'
 
 type TProps = {
@@ -37,164 +40,212 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   setSelectedStep,
   isAlertModalOpen,
   setIsAlertModalOpen,
-}) => (
-  <div className='pt-6 flex justify-center'>
-    <div>
-      <div className='my-5 max-w-[75ch]'>
-        <Label>Beskjed fra etterlever</Label>
-        <DataTextWrapper customEmptyMessage='Ingen beskjed'>
-          {pvkDokument.merknadTilPvoEllerRisikoeier}
-        </DataTextWrapper>
-      </div>
+}) => {
+  const [radioValue, setRadioValue] = useState<number>()
+  const [checkboxValue, setCheckboxValue] = useState<string[]>([''])
 
-      <Heading level='1' size='medium' className='mb-5'>
-        Tilbakemelding til etterlever
-      </Heading>
+  useEffect(() => {
+    if (radioValue && radioValue < 2) {
+      setCheckboxValue([''])
+    }
+    if (radioValue && radioValue > 1) {
+      setCheckboxValue(['1'])
+    }
+    if (radioValue && radioValue > 2) {
+      setCheckboxValue(['1', '2'])
+    }
+  }, [radioValue])
 
+  return (
+    <div className='pt-6 flex justify-center'>
       <div>
-        <FieldRadioLayout>
-          <TextAreaField
-            rows={3}
-            noPlaceholder
-            label='Er det noe annet dere ønsker å formidle til etterlever?'
-            name='merknadTilEtterleverEllerRisikoeier'
-          />
-        </FieldRadioLayout>
-        <FieldRadioLayout>
-          <Field name='arbeidGarVidere'>
-            {(fieldProps: FieldProps) => (
-              <RadioGroup
-                legend='Anbefales det at arbeidet går videre som planlagt?'
-                value={
-                  fieldProps.field.value === null
-                    ? null
-                    : fieldProps.field.value === true
-                      ? 'Ja'
-                      : 'Nei'
-                }
-                onChange={async (value) => {
-                  const boolValue = value === null ? null : value === 'Ja' ? true : false
-                  await fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
-                }}
-                error={fieldProps.form.errors.arbeidGarVidere as string}
-              >
-                <Radio value='Ja'>Ja</Radio>
-                <Radio value='Nei'>Nei</Radio>
-              </RadioGroup>
-            )}
-          </Field>
+        <BeskjedTilbakemeldingEtterlever pvkDokument={pvkDokument} />
 
-          <Field>
-            {(fieldProps: FieldProps) => (
-              <>
-                {fieldProps.form.values.arbeidGarVidere === true && (
-                  <IndentLayoutTextField>
-                    <TextAreaField
-                      rows={3}
-                      noPlaceholder
-                      label='Beskriv anbefalingen nærmere:'
-                      name='placeholder2'
-                    />
-                  </IndentLayoutTextField>
-                )}
-              </>
-            )}
-          </Field>
-        </FieldRadioLayout>
+        <div>
+          <FieldRadioLayout>
+            <TextAreaField
+              rows={3}
+              noPlaceholder
+              label='Er det noe annet dere ønsker å formidle til etterlever?'
+              name='merknadTilEtterleverEllerRisikoeier'
+            />
+          </FieldRadioLayout>
+          <FieldRadioLayout>
+            <Field name='arbeidGarVidere'>
+              {(fieldProps: FieldProps) => (
+                <RadioGroup
+                  legend='Anbefales det at arbeidet går videre som planlagt?'
+                  value={
+                    fieldProps.field.value === null
+                      ? null
+                      : fieldProps.field.value === true
+                        ? 'Ja'
+                        : 'Nei'
+                  }
+                  onChange={async (value) => {
+                    const boolValue = value === null ? null : value === 'Ja' ? true : false
+                    await fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
+                  }}
+                  error={fieldProps.form.errors.arbeidGarVidere as string}
+                >
+                  <Radio value='Ja'>Ja</Radio>
+                  <Radio value='Nei'>Nei</Radio>
+                </RadioGroup>
+              )}
+            </Field>
 
-        <FieldRadioLayout>
-          <Field name='behovForForhandskonsultasjon'>
-            {(fieldProps: FieldProps) => (
-              <RadioGroup
-                legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
-                value={
-                  fieldProps.field.value === null
-                    ? null
-                    : fieldProps.field.value === true
-                      ? 'Ja'
-                      : 'Nei'
-                }
-                onChange={async (value) => {
-                  const boolValue = value === null ? null : value === 'Ja' ? true : false
-                  await fieldProps.form.setFieldValue('behovForForhandskonsultasjon', boolValue)
-                }}
-                error={fieldProps.form.errors.behovForForhandskonsultasjon as string}
-              >
-                <Radio value='Ja'>Ja</Radio>
-                <Radio value='Nei'>Nei</Radio>
-              </RadioGroup>
-            )}
-          </Field>
-          <Field>
-            {(fieldProps: FieldProps) => (
-              <>
-                {fieldProps.form.values.behovForForhandskonsultasjon === true && (
-                  <IndentLayoutTextField>
-                    <TextAreaField
-                      rows={3}
-                      noPlaceholder
-                      label='Beskriv anbefalingen nærmere:'
-                      name='placeholder2'
-                    />
-                  </IndentLayoutTextField>
-                )}
-              </>
-            )}
-          </Field>
-        </FieldRadioLayout>
-      </div>
+            <Field>
+              {(fieldProps: FieldProps) => (
+                <>
+                  {fieldProps.form.values.arbeidGarVidere === true && (
+                    <IndentLayoutTextField>
+                      <TextAreaField
+                        rows={3}
+                        noPlaceholder
+                        label='Beskriv anbefalingen nærmere:'
+                        name='placeholder2'
+                      />
+                    </IndentLayoutTextField>
+                  )}
+                </>
+              )}
+            </Field>
+          </FieldRadioLayout>
 
-      <CopyButton
-        variant='action'
-        copyText={window.location.href}
-        text='Kopiér lenken til denne siden'
-        activeText='Lenken er kopiert'
-        icon={<FilesIcon aria-hidden />}
-      />
+          <FieldRadioLayout>
+            <Field name='behovForForhandskonsultasjon'>
+              {(fieldProps: FieldProps) => (
+                <RadioGroup
+                  legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
+                  value={
+                    fieldProps.field.value === null
+                      ? null
+                      : fieldProps.field.value === true
+                        ? 'Ja'
+                        : 'Nei'
+                  }
+                  onChange={async (value) => {
+                    const boolValue = value === null ? null : value === 'Ja' ? true : false
+                    await fieldProps.form.setFieldValue('behovForForhandskonsultasjon', boolValue)
+                  }}
+                  error={fieldProps.form.errors.behovForForhandskonsultasjon as string}
+                >
+                  <Radio value='Ja'>Ja</Radio>
+                  <Radio value='Nei'>Nei</Radio>
+                </RadioGroup>
+              )}
+            </Field>
+            <Field>
+              {(fieldProps: FieldProps) => (
+                <>
+                  {fieldProps.form.values.behovForForhandskonsultasjon === true && (
+                    <IndentLayoutTextField>
+                      <TextAreaField
+                        rows={3}
+                        noPlaceholder
+                        label='Beskriv anbefalingen nærmere:'
+                        name='placeholder2'
+                      />
+                    </IndentLayoutTextField>
+                  )}
+                </>
+              )}
+            </Field>
+          </FieldRadioLayout>
 
-      <PvoFormButtons
-        activeStep={activeStep}
-        setActiveStep={setActiveStep}
-        setSelectedStep={setSelectedStep}
-        submitForm={submitForm}
-        customButtons={
-          <div className='mt-5 flex gap-2 items-center'>
-            {!dirty && <div className='min-w-[223px]'></div>}
-            {dirty && (
+          <FieldRadioLayout>
+            <Field name='pvosVurdering'>
+              {(fieldProps: FieldProps) => (
+                <>
+                  <RadioGroup
+                    legend='PVOs vurdering'
+                    onChange={(value) => {
+                      fieldProps.form.setFieldValue('pvosVurdering', value)
+                      setRadioValue(value)
+                    }}
+                  >
+                    <Radio value='1'>
+                      En bra PVK. Nå må dere lese, ta stilling til tilbakemeldinger og gjøre
+                      eventuelle endringer endringer. Så må dere få PVK-en godkjent hos
+                      risikoeieren.
+                    </Radio>
+                    <Radio value='2'>
+                      Stort sett en bra PVK. Nå må dere lese, ta stilling til tilbakemeldinger og
+                      gjøre eventuelle endringer. Så må dere få PVK-en godkjent hos risikoeieren.
+                    </Radio>
+                    <Radio value='3'>
+                      PVO er uenig i risikobildet dere presenterer. Nå må dere lese, ta stilling til
+                      tilbakemeldinger og gjøre eventuelle endringer. Det er viktig at dere kobler
+                      på risikoeieren direkte.
+                    </Radio>
+                    <Radio value='4'>
+                      PVO er uenig i risikobildet dere presenterer. Nå må dere lese, ta stilling til
+                      tilbakemeldinger og gjøre eventuelle endringer. Det er viktig at dere kobler
+                      på risikoeieren direkte. PVO kommer til å eskalere denne saken på grunn av
+                      sine bekymringer.
+                    </Radio>
+                    <Radio value='5'>
+                      PVO mener at PVK-en ikke er av god nok kvalitet til å vurdere. Nå må dere
+                      lese, ta stilling til tilbakemeldinger og gjøre eventuelle endringer.
+                    </Radio>
+                  </RadioGroup>
+                  <CheckboxGroup
+                    legend='PVOs vudering'
+                    hideLegend
+                    value={checkboxValue}
+                    onChange={(value: string[]) => setCheckboxValue(value)}
+                  >
+                    <Checkbox value='1'>PVO vil følge opp endringer dere gjør.</Checkbox>
+                    <Checkbox value='2'>
+                      PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
+                    </Checkbox>
+                  </CheckboxGroup>
+                </>
+              )}
+            </Field>
+          </FieldRadioLayout>
+        </div>
+
+        <CopyButtonCommon />
+
+        <PvoFormButtons
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+          setSelectedStep={setSelectedStep}
+          submitForm={submitForm}
+          customButtons={
+            <div className='mt-5 flex gap-2 items-center'>
+              {!dirty && <div className='min-w-[223px]'></div>}
+              {dirty && (
+                <LagreFortsettSenereButton
+                  setFieldValue={setFieldValue}
+                  setSubmittedStatus={setSubmittedStatus}
+                  submitForm={submitForm}
+                />
+              )}
+
               <Button
                 type='button'
-                variant='secondary'
                 onClick={async () => {
-                  await setFieldValue('status', EPvoTilbakemeldingStatus.UNDERARBEID)
-                  setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
+                  await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
+                  setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                   await submitForm()
                 }}
               >
-                Lagre og fortsett senere
+                Send tilbakemelding
               </Button>
-            )}
+            </div>
+          }
+        />
+      </div>
 
-            <Button
-              type='button'
-              onClick={async () => {
-                await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
-                setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
-                await submitForm()
-              }}
-            >
-              Send tilbakemelding
-            </Button>
-          </div>
-        }
+      <AlertPvoModal
+        isOpen={isAlertModalOpen}
+        onClose={() => setIsAlertModalOpen(false)}
+        pvkDokumentId={pvkDokument.id}
       />
     </div>
-
-    <AlertPvoModal
-      isOpen={isAlertModalOpen}
-      onClose={() => setIsAlertModalOpen(false)}
-      pvkDokumentId={pvkDokument.id}
-    />
-  </div>
-)
+  )
+}
 
 export default SendInnPvoViewIkkeFerdig

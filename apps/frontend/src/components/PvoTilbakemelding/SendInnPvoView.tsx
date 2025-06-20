@@ -100,37 +100,33 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       {({ submitForm, dirty, setFieldValue }) => (
         <Form>
           {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-            <>
-              <SendInnPvoViewIkkeFerdig
-                dirty={dirty}
-                submitForm={submitForm}
-                setFieldValue={setFieldValue}
-                setSubmittedStatus={setSubmittedStatus}
-                pvkDokument={pvkDokument}
-                activeStep={activeStep}
-                setSelectedStep={setSelectedStep}
-                setActiveStep={setActiveStep}
-                isAlertModalOpen={isAlertModalOpen}
-                setIsAlertModalOpen={setIsAlertModalOpen}
-              />
-            </>
+            <SendInnPvoViewIkkeFerdig
+              dirty={dirty}
+              submitForm={submitForm}
+              setFieldValue={setFieldValue}
+              setSubmittedStatus={setSubmittedStatus}
+              pvkDokument={pvkDokument}
+              activeStep={activeStep}
+              setSelectedStep={setSelectedStep}
+              setActiveStep={setActiveStep}
+              isAlertModalOpen={isAlertModalOpen}
+              setIsAlertModalOpen={setIsAlertModalOpen}
+            />
           )}
           {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-            <>
-              <SendInnPvoViewFerdig
-                dirty={dirty}
-                submitForm={submitForm}
-                setFieldValue={setFieldValue}
-                setSubmittedStatus={setSubmittedStatus}
-                pvkDokument={pvkDokument}
-                pvoTilbakemelding={pvoTilbakemelding}
-                activeStep={activeStep}
-                setSelectedStep={setSelectedStep}
-                setActiveStep={setActiveStep}
-                isAlertModalOpen={isAlertModalOpen}
-                setIsAlertModalOpen={setIsAlertModalOpen}
-              />
-            </>
+            <SendInnPvoViewFerdig
+              dirty={dirty}
+              submitForm={submitForm}
+              setFieldValue={setFieldValue}
+              setSubmittedStatus={setSubmittedStatus}
+              pvkDokument={pvkDokument}
+              pvoTilbakemelding={pvoTilbakemelding}
+              activeStep={activeStep}
+              setSelectedStep={setSelectedStep}
+              setActiveStep={setActiveStep}
+              isAlertModalOpen={isAlertModalOpen}
+              setIsAlertModalOpen={setIsAlertModalOpen}
+            />
           )}
         </Form>
       )}

@@ -1,11 +1,15 @@
-import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Label } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Label } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import { Markdown } from '../common/Markdown'
 import AlertPvoModal from './common/AlertPvoModal'
 import DataTextWrapper from './common/DataTextWrapper'
+import {
+  BeskjedTilbakemeldingEtterlever,
+  CopyButtonCommon,
+  LagreFortsettSenereButton,
+} from './common/SendInnPvoView'
 import PvoFormButtons from './edit/PvoFormButtons'
 
 type TProps = {
@@ -41,16 +45,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
 }) => (
   <div className='pt-6 flex justify-center'>
     <div>
-      <div className='my-5 max-w-[75ch]'>
-        <Label>Beskjed fra etterlever</Label>
-        <DataTextWrapper customEmptyMessage='Ingen beskjed'>
-          {pvkDokument.merknadTilPvoEllerRisikoeier}
-        </DataTextWrapper>
-      </div>
-
-      <Heading level='1' size='medium' className='mb-5'>
-        Tilbakemelding til etterlever
-      </Heading>
+      <BeskjedTilbakemeldingEtterlever pvkDokument={pvkDokument} />
 
       <div className='mt-5 mb-3 max-w-[75ch]'>
         <div className='mb-3'>
@@ -87,13 +82,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
         </BodyLong>
       </div>
 
-      <CopyButton
-        variant='action'
-        copyText={window.location.href}
-        text='Kopiér lenken til denne siden'
-        activeText='Lenken er kopiert'
-        icon={<FilesIcon aria-hidden />}
-      />
+      <CopyButtonCommon />
 
       <Alert variant='success' className='my-5'>
         Tilbakemelding er sendt
@@ -108,17 +97,11 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
           <div className='mt-5 flex gap-2 items-center'>
             {!dirty && <div className='min-w-[223px]'></div>}
             {dirty && (
-              <Button
-                type='button'
-                variant='secondary'
-                onClick={async () => {
-                  await setFieldValue('status', EPvoTilbakemeldingStatus.UNDERARBEID)
-                  setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
-                  await submitForm()
-                }}
-              >
-                Lagre og fortsett senere
-              </Button>
+              <LagreFortsettSenereButton
+                setFieldValue={setFieldValue}
+                setSubmittedStatus={setSubmittedStatus}
+                submitForm={submitForm}
+              />
             )}
 
             <Button
