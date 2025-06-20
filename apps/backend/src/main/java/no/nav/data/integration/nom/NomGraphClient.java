@@ -21,8 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import static no.nav.data.common.web.TraceHeaderRequestInterceptor.correlationInterceptor;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -44,7 +42,7 @@ public class NomGraphClient {
 
     public OrgEnhet getAllAvdelinger() {
         var request = new GraphQLRequest(getAvdelingQuery, Map.of());
-        var res = restTemplate.postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
+        var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
         return res.getBody().getData().getOrgEnhet();
     }
@@ -52,7 +50,7 @@ public class NomGraphClient {
     private RestOperations template() {
         if (restTemplate == null) {
             restTemplate = restTemplateBuilder
-                    .additionalInterceptors(correlationInterceptor(), tokenInterceptor())
+//                    .additionalInterceptors(correlationInterceptor(), tokenInterceptor())
                     .messageConverters(new MappingJackson2HttpMessageConverter())
                     .build();
         }
