@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
@@ -16,7 +17,9 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentas
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.export.EtterlevelseDokumentasjonToDoc;
+import no.nav.data.integration.p360.domain.P360ArchiveDocument;
 import no.nav.data.integration.p360.dto.*;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +39,14 @@ public class P360Controller {
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
     private final BehandlingensLivslopService behandlingensLivslopService;
 
+    @Operation(summary = "Get all p360 archive document")
+    @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})
+    @GetMapping("/getP360ArchiveDocuments")
+    public ResponseEntity<RestResponsePage<P360ArchiveDocument>> getP360ArchiveDocuments(PageParameters pageParameters) {
+        log.info("Get all p360 archive documents");
+        Page<P360ArchiveDocument> p360ArchiveDocuments = p360Service.getAllPageP360ArchiveDocuments(pageParameters);
+        return ResponseEntity.ok(new RestResponsePage<>(p360ArchiveDocuments));
+    }
 
     @Operation(summary = "Arkiver dokumeter")
     @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})

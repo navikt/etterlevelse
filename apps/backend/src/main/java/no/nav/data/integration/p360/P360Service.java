@@ -2,6 +2,7 @@ package no.nav.data.integration.p360;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.etterlevelse.varsel.VarselService;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
@@ -12,6 +13,7 @@ import no.nav.data.integration.p360.domain.P360ArchiveDocumentRepo;
 import no.nav.data.integration.p360.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -52,6 +54,10 @@ public class P360Service {
 
     public List<P360ArchiveDocument> getAllP360ArchiveDocuments() {
         return p360ArchiveDocumentRepo.findAll();
+    }
+
+    public Page<P360ArchiveDocument> getAllPageP360ArchiveDocuments(PageParameters pageParameters) {
+        return p360ArchiveDocumentRepo.findAll(pageParameters.createPage());
     }
 
     public List<P360Case> getCasesByTitle(String title) {
