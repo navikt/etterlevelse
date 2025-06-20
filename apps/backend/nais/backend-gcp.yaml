@@ -85,7 +85,7 @@ spec:
         - application: behandlingskatalog-backend
         - application: nom-api
           namespace: nom
-          cluster: dev-gcp
+          cluster: {{cluster_location}}
       external:
         - host: {{teamcat_ingress}}
         - host: {{p360_ingress}}
