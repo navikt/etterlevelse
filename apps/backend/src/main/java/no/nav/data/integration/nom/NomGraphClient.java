@@ -3,6 +3,7 @@ package no.nav.data.integration.nom;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.graphql.GraphQLRequest;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.security.TokenProvider;
 import no.nav.data.integration.nom.domain.OrgEnhet;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import static no.nav.data.common.web.TraceHeaderRequestInterceptor.correlationInterceptor;
 
@@ -41,7 +43,8 @@ public class NomGraphClient {
     }
 
     public OrgEnhet getAllAvdelinger() {
-        var res = restTemplate.postForEntity(nomGraphQlProperties.getUrl(), getAvdelingQuery, OrgEnhetGraphqlResponse.class);
+        var request = new GraphQLRequest(getAvdelingQuery, Map.of());
+        var res = restTemplate.postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
         return res.getBody().getData().getOrgEnhet();
     }
