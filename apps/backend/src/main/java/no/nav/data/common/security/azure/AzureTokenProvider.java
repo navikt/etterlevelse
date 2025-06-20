@@ -67,6 +67,7 @@ public class AzureTokenProvider implements TokenProvider {
         this.encryptor = encryptor;
         this.tokenMetrics = MetricUtils.summary()
                 .labels("accessToken")
+                .labels("lookupGrantedAuthorities")
                 .labelNames("action")
                 .name(Constants.APP_ID.replace('-', '_') + "_token_summary")
                 .help("Time taken for azure token lookups")
