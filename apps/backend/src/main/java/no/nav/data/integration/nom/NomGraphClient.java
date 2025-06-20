@@ -41,7 +41,7 @@ public class NomGraphClient {
     }
 
     public OrgEnhet getAllAvdelinger() {
-        var res = template().postForEntity(nomGraphQlProperties.getUrl(), getAvdelingQuery, OrgEnhetGraphqlResponse.class);
+        var res = restTemplate.postForEntity(nomGraphQlProperties.getUrl(), getAvdelingQuery, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
         return res.getBody().getData().getOrgEnhet();
     }
