@@ -51,8 +51,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private Integer P360Recno;
     private String P360CaseNumber;
 
-    private String avdeling;
-    private String produktOmradet;
+    private String nomAvdelingId;
+    private String avdelingNavn;
     private List<Varslingsadresse> varslingsadresser;
     @Override
     public void format() {
@@ -66,8 +66,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setResources(formatList(resources));
         setRisikoeiere(formatList(risikoeiere));
         setVarslingsadresser(copyOf(varslingsadresser));
-        setAvdeling(avdeling);
-        setProduktOmradet(produktOmradet);
+        setNomAvdelingId(nomAvdelingId);
+        setAvdelingNavn(avdelingNavn);
         setRisikovurderinger(formatList(risikovurderinger));
         setP360Recno(P360Recno);
         setP360CaseNumber(trimToNull(P360CaseNumber));
@@ -97,8 +97,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
         eDokData.setKnyttetTilVirkemiddel(knyttetTilVirkemiddel);
         eDokData.setForGjenbruk(forGjenbruk);
-        eDokData.setAvdeling(avdeling);
-        eDokData.setProduktOmradet(produktOmradet);
+        eDokData.setNomAvdelingId(nomAvdelingId);
+        eDokData.setAvdelingNavn(avdelingNavn);
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));

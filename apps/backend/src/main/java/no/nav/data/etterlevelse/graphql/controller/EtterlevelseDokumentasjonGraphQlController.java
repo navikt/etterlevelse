@@ -17,16 +17,13 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentas
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGraphQlResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonStats;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
-import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
-import no.nav.data.integration.team.dto.ProductAreaResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
@@ -87,11 +84,6 @@ public class EtterlevelseDokumentasjonGraphQlController {
     public List<TeamResponse> teamsData(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         var teams = getTeams(etterlevelseDokumentasjonResponse.getTeams());
         return new ArrayList<>(teams.values());
-    }
-
-    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
-    public ProductAreaResponse produktOmradetData(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
-        return getProduktOmradetData(etterlevelseDokumentasjonResponse);
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
@@ -196,17 +188,5 @@ public class EtterlevelseDokumentasjonGraphQlController {
         missing.removeAll(map.keySet());
         missing.forEach(id -> map.put(id, new TeamResponse(id)));
         return map;
-    }
-
-    private ProductAreaResponse getProduktOmradetData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
-        if(etterlevelseDokumentasjonResponse.getProduktOmradet() != null) {
-            var po = teamsService.getProductArea(etterlevelseDokumentasjonResponse.getProduktOmradet()).orElse(ProductArea.builder()
-                    .id(etterlevelseDokumentasjonResponse.getProduktOmradet())
-                    .name("Fant ikke produkt området")
-                    .build());
-
-            return po.toResponse();
-        }
-        return null;
     }
 }

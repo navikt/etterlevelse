@@ -51,8 +51,8 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
                 .resources(eDokData.getResources() != null ? copyOf(eDokData.getResources()) : List.of())
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
                 .knyttetTilVirkemiddel(eDokData.isKnyttetTilVirkemiddel())
-                .avdeling(eDokData.getAvdeling())
-                .produktOmradet(eDokData.getProduktOmradet())
+                .nomAvdelingId(eDokData.getNomAvdelingId())
+                .avdelingNavn(eDokData.getAvdelingNavn())
                 .varslingsadresser(eDokData.getVarslingsadresser() != null ? copyOf(eDokData.getVarslingsadresser()): List.of())
                 .build();
     }

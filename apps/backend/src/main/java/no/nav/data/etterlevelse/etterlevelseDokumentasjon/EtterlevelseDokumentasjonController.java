@@ -14,7 +14,6 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
-import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.dto.MemberResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -83,8 +82,6 @@ public class EtterlevelseDokumentasjonController {
                 response.setHasCurrentUserAccess(false);
             }
         }
-
-        addProduktOmradetData(response);
 
         return ResponseEntity.ok(response);
     }
@@ -211,17 +208,5 @@ public class EtterlevelseDokumentasjonController {
     }
 
     static class EtterlevelseDokumentasjonPage extends RestResponsePage<EtterlevelseDokumentasjonResponse> {
-    }
-
-    private void addProduktOmradetData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
-        if(etterlevelseDokumentasjonResponse.getProduktOmradet() != null) {
-            var po = teamcatTeamClient.getProductArea(etterlevelseDokumentasjonResponse.getProduktOmradet()).orElse(ProductArea.builder()
-                            .id(etterlevelseDokumentasjonResponse.getProduktOmradet())
-                            .name("Fant ikke produkt området")
-                    .build());
-
-            etterlevelseDokumentasjonResponse.setProduktOmradetData(po.toResponse());
-
-        }
     }
 }

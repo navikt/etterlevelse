@@ -52,8 +52,8 @@ public class EtterlevelseDokumentasjonResponse {
     private List<String> risikoeiere;
     private List<Resource> risikoeiereData;
     private List<Behandling> behandlinger;
-    private String avdeling;
-    private String produktOmradet;
+    private String nomAvdelingId;
+    private String avdelingNavn;
     private ProductAreaResponse produktOmradetData;
     private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
@@ -83,8 +83,8 @@ public class EtterlevelseDokumentasjonResponse {
                 .risikoeiere(nullsafeCopyOf(eDokData.getRisikoeiere()))
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
                 .knyttetTilVirkemiddel(eDokData.isKnyttetTilVirkemiddel())
-                .avdeling(eDokData.getAvdeling())
-                .produktOmradet(eDokData.getProduktOmradet())
+                .nomAvdelingId(eDokData.getNomAvdelingId())
+                .avdelingNavn(eDokData.getAvdelingNavn())
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
                 .risikovurderinger(eDokData.getRisikovurderinger())
                 .P360Recno(eDokData.getP360Recno())

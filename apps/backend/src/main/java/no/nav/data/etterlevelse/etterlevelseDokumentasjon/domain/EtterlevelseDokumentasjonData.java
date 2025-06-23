@@ -30,8 +30,8 @@ public class EtterlevelseDokumentasjonData {
     private List<String> teams;
     private List<String> resources;
     private List<String> risikoeiere;
-    private String avdeling;
-    private String produktOmradet;
+    private String nomAvdelingId;
+    private String avdelingNavn;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
     private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
