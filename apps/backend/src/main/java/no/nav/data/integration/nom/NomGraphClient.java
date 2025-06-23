@@ -73,9 +73,15 @@ public class NomGraphClient {
         var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
 
-        var allAvdelinger = res.getBody().getData().getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
+        var response = res.getBody().getData();
 
-        return safeStream(allAvdelinger)
+        if(response.getOrgEnhet() == null) {
+            return null;
+        }
+
+       var alleAvdelinger =  response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
+
+        return safeStream(alleAvdelinger)
                 .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
     }
 
