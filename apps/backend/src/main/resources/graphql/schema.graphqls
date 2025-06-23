@@ -288,6 +288,9 @@ type EtterlevelseDokumentasjon {
     sistEndretDokumentasjonAvMeg: DateTime
     stats: EtterlevelseDokumentasjonStats!
     varslingsadresser: [Varslingsadresse!]!
+    avdeling: String
+    produktOmradet: String
+    produktOmradetData: ProductArea
 }
 
 type PvoTilbakemelding {
@@ -346,6 +349,20 @@ type Team {
     productAreaName: String
     tags: [String!]
     members: [Member!]
+}
+
+type ProductArea {
+    id: String!
+    name: String
+    description: String
+    slackChannel: String
+    productAreaId: String
+    productAreaName: String
+    tags: [String!]
+    members: [Member!]
+    nomId: String
+    avdelingNomId: String
+    avdeling: OrgEnhet
 }
 
 type Resource {
