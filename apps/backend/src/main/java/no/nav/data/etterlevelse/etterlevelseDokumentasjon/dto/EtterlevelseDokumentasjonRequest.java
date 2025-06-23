@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
-import static no.nav.data.common.utils.StringUtils.*;
+import static no.nav.data.common.utils.StringUtils.formatList;
+import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -50,9 +51,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private Integer P360Recno;
     private String P360CaseNumber;
 
-
-    @Schema(description = "Codelist AVDELING")
     private String avdeling;
+    private String produktOmradet;
     private List<Varslingsadresse> varslingsadresser;
     @Override
     public void format() {
@@ -66,7 +66,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setResources(formatList(resources));
         setRisikoeiere(formatList(risikoeiere));
         setVarslingsadresser(copyOf(varslingsadresser));
-        setAvdeling(toUpperCaseAndTrim(avdeling));
+        setAvdeling(avdeling);
+        setProduktOmradet(produktOmradet);
         setRisikovurderinger(formatList(risikovurderinger));
         setP360Recno(P360Recno);
         setP360CaseNumber(trimToNull(P360CaseNumber));
@@ -76,7 +77,6 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     public void validateFieldValues(Validator<?> validator) {
         validator.checkId(this);
         validator.checkCodelists(EtterlevelseDokumentasjonRequest.Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
-        validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
         validator.validateType(Fields.varslingsadresser, varslingsadresser);
     }
     
@@ -98,6 +98,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setKnyttetTilVirkemiddel(knyttetTilVirkemiddel);
         eDokData.setForGjenbruk(forGjenbruk);
         eDokData.setAvdeling(avdeling);
+        eDokData.setProduktOmradet(produktOmradet);
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));

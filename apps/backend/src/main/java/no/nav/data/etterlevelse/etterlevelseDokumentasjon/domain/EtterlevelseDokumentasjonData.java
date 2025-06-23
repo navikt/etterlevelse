@@ -1,10 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -35,6 +31,7 @@ public class EtterlevelseDokumentasjonData {
     private List<String> resources;
     private List<String> risikoeiere;
     private String avdeling;
+    private String produktOmradet;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
     private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown

@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.etterlevelse.codelist.CodelistService;
-import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.team.dto.ProductAreaResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 
@@ -53,7 +52,9 @@ public class EtterlevelseDokumentasjonResponse {
     private List<String> risikoeiere;
     private List<Resource> risikoeiereData;
     private List<Behandling> behandlinger;
-    private CodelistResponse avdeling;
+    private String avdeling;
+    private String produktOmradet;
+    private ProductAreaResponse produktOmradetData;
     private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
     private boolean hasCurrentUserAccess;
@@ -82,7 +83,8 @@ public class EtterlevelseDokumentasjonResponse {
                 .risikoeiere(nullsafeCopyOf(eDokData.getRisikoeiere()))
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
                 .knyttetTilVirkemiddel(eDokData.isKnyttetTilVirkemiddel())
-                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, eDokData.getAvdeling()))
+                .avdeling(eDokData.getAvdeling())
+                .produktOmradet(eDokData.getProduktOmradet())
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
                 .risikovurderinger(eDokData.getRisikovurderinger())
                 .P360Recno(eDokData.getP360Recno())
