@@ -36,6 +36,8 @@ public class ProductArea {
                 .name(name)
                 .description(description)
                 .tags(tags)
+                .nomId(nomId)
+                .avdelingNomId(avdelingNomId)
                 .build();
     }
 }
