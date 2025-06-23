@@ -23,7 +23,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -69,12 +72,13 @@ public class NomGraphClient {
         var request = new GraphQLRequest(getAvdelingQuery, Map.of("id", "bu431e"));
         var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
+        assert res.getBody().getData() != null;
 
         var response = res.getBody().getData();
 
-        if(response.getOrgEnhet() == null) {
-            return new HashMap<>();
-        }
+//        if(response.getOrgEnhet() == null) {
+//            return new HashMap<>();
+//        }
 
        var alleAvdelinger =  response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
 
