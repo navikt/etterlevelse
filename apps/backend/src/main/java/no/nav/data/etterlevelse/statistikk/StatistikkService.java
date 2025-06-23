@@ -20,13 +20,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentas
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.TilbakemeldingService;
-import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.krav.domain.Regelverk;
-import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
-import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
-import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData;
-import no.nav.data.etterlevelse.krav.domain.TilbakemeldingStatus;
+import no.nav.data.etterlevelse.krav.domain.*;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.statistikk.domain.BehandlingStatistikk;
 import no.nav.data.etterlevelse.statistikk.dto.EtterlevelseStatistikkResponse;
@@ -41,12 +35,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -154,7 +143,7 @@ public class StatistikkService {
             String ansvarlig;
 
             if(etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
-                ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
+                ansvarlig = etterlevelseDokumentasjon.getAvdeling();
             } else {
                 ansvarlig = "";
             }
@@ -186,7 +175,7 @@ public class StatistikkService {
                                     .etterlevelseDokumentasjonTittel("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + " " + etterlevelseDokumentasjon.getTitle())
                                     .behandlingId(behandling.getId())
                                     .behandlingNavn(behandlingNavn)
-                                    .ansvarligId(etterlevelseDokumentasjon.getAvdeling())
+                                    .ansvarligId(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId())
                                     .ansvarlig(ansvarlig)
                                     .totalKrav(aktivKravList.size())
                                     .antallIkkeFiltrertKrav(antallIkkeFiltrertKrav)
@@ -239,7 +228,7 @@ public class StatistikkService {
         String ansvarlig;
 
         if (etterlevelseDokumentasjon.getAvdeling() != null && !etterlevelseDokumentasjon.getAvdeling().isEmpty()) {
-            ansvarlig = CodelistService.getCodelist(ListName.AVDELING, etterlevelseDokumentasjon.getAvdeling()).getShortName();
+            ansvarlig = etterlevelseDokumentasjon.getAvdeling();
         } else {
             ansvarlig = "";
         }
@@ -262,7 +251,7 @@ public class StatistikkService {
                 .etterlevelseDokumentasjonId(etterlevelse.getEtterlevelseDokumentasjonId().toString())
                 .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjon.getTitle())
                 .etterlevelseDokumentasjonNummer("E" + etterlevelseDokumentasjon.getEtterlevelseNummer())
-                .ansvarligId(etterlevelseDokumentasjon.getAvdeling())
+                .ansvarligId(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId())
                 .ansvarlig(ansvarlig)
                 .kravNummer(etterlevelse.getKravNummer())
                 .kravVersjon(etterlevelse.getKravVersjon())
