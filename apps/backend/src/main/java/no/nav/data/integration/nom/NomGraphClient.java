@@ -2,6 +2,7 @@ package no.nav.data.integration.nom;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.graphql.GraphQLRequest;
@@ -23,10 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,6 +33,7 @@ import static no.nav.data.common.web.TraceHeaderRequestInterceptor.correlationIn
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class NomGraphClient {
 
     private RestTemplate restTemplate;
@@ -47,21 +46,11 @@ public class NomGraphClient {
     private static final String getByIdQuery = readCpFile("nom/graphql/queries/get_by_id.graphql");
     private static final String scopeTemplate = "api://%s-gcp.nom.nom-api/.default";
 
-    private final LoadingCache<String, Map<String, OrgEnhet>> allAvdelingCache;
-
-    public NomGraphClient(RestTemplate restTemplate, RestTemplateBuilder restTemplateBuilder, SecurityProperties securityProperties, TokenProvider tokenProvider, NomGraphQlProperties nomGraphQlProperties) {
-        this.restTemplate = restTemplate;
-        this.restTemplateBuilder = restTemplateBuilder;
-        this.securityProperties = securityProperties;
-        this.tokenProvider = tokenProvider;
-        this.nomGraphQlProperties = nomGraphQlProperties;
-
-        this.allAvdelingCache = Caffeine.newBuilder().recordStats()
+    private final LoadingCache<String, Map<String, OrgEnhet>> allAvdelingCache = MetricUtils
+            .register("nomAvdelingCache", Caffeine.newBuilder().recordStats()
                 .expireAfterWrite(Duration.ofMinutes(10))
-                .maximumSize(1).build(k -> getAvdelingCache());
+                .maximumSize(1).build(k -> getAvdelingCache()));
 
-        MetricUtils.register("nomsCache", allAvdelingCache);
-    }
 
     @SneakyThrows
     private static String readCpFile(String path) {
@@ -76,9 +65,9 @@ public class NomGraphClient {
 
         var response = res.getBody().getData();
 
-//        if(response.getOrgEnhet() == null) {
-//            return new HashMap<>();
-//        }
+        if(response.getOrgEnhet() == null) {
+            return new HashMap<>();
+        }
 
        var alleAvdelinger =  response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
 
