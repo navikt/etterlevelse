@@ -1,12 +1,15 @@
 package no.nav.data.integration.nom;
 
-import lombok.RequiredArgsConstructor;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.graphql.GraphQLRequest;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.security.TokenProvider;
+import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.integration.nom.domain.OrgEnhet;
+import no.nav.data.integration.nom.domain.Organisering;
 import no.nav.data.integration.nom.dto.OrgEnhetGraphqlResponse;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.io.ClassPathResource;
@@ -15,18 +18,23 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 import static no.nav.data.common.web.TraceHeaderRequestInterceptor.correlationInterceptor;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class NomGraphClient {
 
     private RestTemplate restTemplate;
@@ -39,19 +47,53 @@ public class NomGraphClient {
     private static final String getByIdQuery = readCpFile("nom/graphql/queries/get_by_id.graphql");
     private static final String scopeTemplate = "api://%s-gcp.nom.nom-api/.default";
 
+    private final LoadingCache<String, Map<String, OrgEnhet>> allAvdelingCache;
+
+    public NomGraphClient(RestTemplate restTemplate, RestTemplateBuilder restTemplateBuilder, SecurityProperties securityProperties, TokenProvider tokenProvider, NomGraphQlProperties nomGraphQlProperties) {
+        this.restTemplate = restTemplate;
+        this.restTemplateBuilder = restTemplateBuilder;
+        this.securityProperties = securityProperties;
+        this.tokenProvider = tokenProvider;
+        this.nomGraphQlProperties = nomGraphQlProperties;
+
+        this.allAvdelingCache = Caffeine.newBuilder().recordStats()
+                .expireAfterWrite(Duration.ofMinutes(10))
+                .maximumSize(1).build(k -> getAvdelingCache());
+
+        MetricUtils.register("nomsCache", allAvdelingCache);
+    }
+
     @SneakyThrows
     private static String readCpFile(String path) {
         return StreamUtils.copyToString(new ClassPathResource(path).getInputStream(), StandardCharsets.UTF_8);
     }
 
-    public OrgEnhet getAllAvdelinger() {
+    private Map<String, OrgEnhet> getAvdelingCache() {
         var request = new GraphQLRequest(getAvdelingQuery, Map.of("id", "bu431e"));
         var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
-        return res.getBody().getData().getOrgEnhet();
+
+        var allAvdelinger = res.getBody().getData().getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
+
+        return safeStream(allAvdelinger)
+                .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
     }
 
-    public OrgEnhet getById(@PathVariable String id) {
+    private Map<String, OrgEnhet> getAvdelingerFromCache() {
+        return allAvdelingCache.get("singleton");
+    }
+
+    public List<OrgEnhet> getAllAvdelinger() {
+        return new ArrayList<>(getAvdelingerFromCache().values());
+    }
+
+    public Optional<OrgEnhet> getAvdelingById(String id) {
+        return Optional.ofNullable(getAvdelingCache().get(id));
+    }
+
+
+
+    public OrgEnhet getById(String id) {
         var request = new GraphQLRequest(getByIdQuery, Map.of("id", id));
         var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
