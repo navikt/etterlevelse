@@ -21,6 +21,8 @@ public class ProductArea {
     private String description;
     private List<String> tags;
     private List<Member> members;
+    private String nomId;
+    private String avdelingNomId;
 
     public ProductAreaResponse toResponseWithMembers() {
         var resp = toResponse();
