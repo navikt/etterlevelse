@@ -15,6 +15,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,6 +36,7 @@ public class NomGraphClient {
     private final NomGraphQlProperties nomGraphQlProperties;
 
     private static final String getAvdelingQuery = readCpFile("nom/graphql/queries/get_all_avdelinger.graphql");
+    private static final String getByIdQuery = readCpFile("nom/graphql/queries/get_by_id.graphql");
     private static final String scopeTemplate = "api://%s-gcp.nom.nom-api/.default";
 
     @SneakyThrows
@@ -44,6 +46,13 @@ public class NomGraphClient {
 
     public OrgEnhet getAllAvdelinger() {
         var request = new GraphQLRequest(getAvdelingQuery, Map.of("id", "bu431e"));
+        var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
+        assert res.getBody() != null;
+        return res.getBody().getData().getOrgEnhet();
+    }
+
+    public OrgEnhet getById(@PathVariable String id) {
+        var request = new GraphQLRequest(getByIdQuery, Map.of("id", id));
         var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
         return res.getBody().getData().getOrgEnhet();
