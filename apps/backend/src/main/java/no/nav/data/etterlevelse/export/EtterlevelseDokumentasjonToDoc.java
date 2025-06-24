@@ -78,6 +78,13 @@ public class EtterlevelseDokumentasjonToDoc {
             });
         }
 
+        doc.addHeading3("Avdeling");
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId() == null || etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId().isEmpty()) {
+            doc.addMarkdownText("Ingen avdeling satt");
+        } else {
+            doc.addMarkdownText(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getAvdelingNavn());
+        }
+
         doc.addHeading3("Team");
         if (etterlevelseDokumentasjon.getTeams() != null && !etterlevelseDokumentasjon.getTeams().isEmpty()) {
             etterlevelseDokumentasjon.getTeams().forEach(teamId -> {
