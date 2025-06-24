@@ -48,8 +48,8 @@ public class NomGraphClient {
 
     private final LoadingCache<String, Map<String, OrgEnhet>> allAvdelingCache = MetricUtils
             .register("nomAvdelingCache", Caffeine.newBuilder().recordStats()
-                .expireAfterWrite(Duration.ofMinutes(10))
-                .maximumSize(1).build(k -> getAvdelingCache()));
+                    .expireAfterWrite(Duration.ofMinutes(10))
+                    .maximumSize(1).build(k -> getAvdelingCache()));
 
 
     @SneakyThrows
@@ -58,27 +58,27 @@ public class NomGraphClient {
     }
 
     private Map<String, OrgEnhet> getAvdelingCache() {
-        if(securityProperties.isDev()) {
+        if (securityProperties.isDev()) {
             var devAvdelinger = List.of(createDevAvdeling("avdeling_1"), createDevAvdeling("avdeling_2"));
             return safeStream(devAvdelinger)
                     .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
         } else {
+            var request = new GraphQLRequest(getAvdelingQuery, Map.of("id", "bu431e"));
+            var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
 
-        var request = new GraphQLRequest(getAvdelingQuery, Map.of("id", "bu431e"));
-        var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
-        assert res.getBody() != null;
-        assert res.getBody().getData() != null;
+            assert res.getBody() != null;
+            assert res.getBody().getData() != null;
 
-        var response = res.getBody().getData();
+            var response = res.getBody().getData();
 
-        if(response.getOrgEnhet() == null) {
-            return new HashMap<>();
-        }
+            if (response.getOrgEnhet() == null) {
+                return new HashMap<>();
+            }
 
-       var alleAvdelinger =  response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
+            var alleAvdelinger = response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
 
-        return safeStream(alleAvdelinger)
-                .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
+            return safeStream(alleAvdelinger)
+                    .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
         }
     }
 
@@ -93,7 +93,6 @@ public class NomGraphClient {
     public Optional<OrgEnhet> getAvdelingById(String id) {
         return Optional.ofNullable(getAvdelingCache().get(id));
     }
-
 
 
     public OrgEnhet getById(String id) {
@@ -118,7 +117,7 @@ public class NomGraphClient {
     private ClientHttpRequestInterceptor tokenInterceptor() {
         return (request, body, execution) -> {
             String token = tokenProvider.getConsumerToken(getScope());
-            log.debug("tokenInterceptor adding token: %s... for scope '%s'".formatted( (token != null && token.length() > 12 ? token.substring(0,11) : token ), getScope()));
+            log.debug("tokenInterceptor adding token: %s... for scope '%s'".formatted((token != null && token.length() > 12 ? token.substring(0, 11) : token), getScope()));
             request.getHeaders().add(HttpHeaders.AUTHORIZATION, token);
             return execution.execute(request, body);
         };
