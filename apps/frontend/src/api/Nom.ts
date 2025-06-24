@@ -13,3 +13,16 @@ export const getAvdelingByNomId = async (id: string) => {
 export const getByNomId = async (id: string) => {
   return (await axios.get<IOrgEnhet>(`${env.backendBaseUrl}/nom/${id}`)).data
 }
+
+export const getAvdelingOptions = async () => {
+  const avdelinger = await getAllNomAvdelinger()
+  if (avdelinger && avdelinger.length) {
+    return avdelinger.map((avdeling) => {
+      return {
+        value: avdeling.id,
+        label: avdeling.navn,
+      }
+    })
+  }
+  return []
+}

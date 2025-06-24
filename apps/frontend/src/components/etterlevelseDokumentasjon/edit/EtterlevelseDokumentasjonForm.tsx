@@ -21,6 +21,7 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
+import { getAvdelingOptions } from '../../../api/Nom'
 import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
 import {
   ERelationType,
@@ -32,13 +33,13 @@ import {
   ITeamResource,
   IVirkemiddel,
   TEtterlevelseDokumentasjonQL,
+  TOption,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import {
   CodelistService,
   EListName,
   ICode,
-  ICodeListFormValues,
   IGetParsedOptionsProps,
 } from '../../../services/Codelist'
 import { user } from '../../../services/User'
@@ -84,6 +85,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const formRef: RefObject<any> = useRef(undefined)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [alleAvdelingOptions, setAllAvdelingOptions] = useState<TOption[]>([])
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -125,6 +127,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
         ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) =>
           setDokumentRelasjon(response[0])
         )
+
+        await getAvdelingOptions().then(setAllAvdelingOptions)
       }
     })()
   }, [etterlevelseDokumentasjon])
@@ -494,16 +498,21 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
           <div id='avdeling' className='flex flex-col lg:flex-row gap-5'>
             <FieldWrapper marginTop full>
-              <Field name='avdeling'>
-                {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
+              <Field name='nomAvdelingId'>
+                {(fieldProps: FieldProps) => (
                   <div>
                     <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
                     <OptionList
-                      listName={EListName.AVDELING}
                       label='Avdeling'
-                      value={fieldProps.field.value?.code}
-                      onChange={(value: any) => {
-                        fieldProps.form.setFieldValue('avdeling', value)
+                      options={alleAvdelingOptions}
+                      value={fieldProps.field.value}
+                      onChange={async (value: any) => {
+                        await fieldProps.form.setFieldValue('nomAvdelingId', value)
+                        await fieldProps.form.setFieldValue(
+                          'avdelingNavn',
+                          alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
+                            .label
+                        )
                       }}
                     />
                   </div>
