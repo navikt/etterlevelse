@@ -149,7 +149,6 @@ export const etterlevelseDokumentasjonToDomainToObject = (
     teams: etterlevelseDokumentasjon.teamsData
       ? etterlevelseDokumentasjon.teamsData.map((team) => team.id)
       : [],
-    avdeling: etterlevelseDokumentasjon.avdeling?.code,
     resources: etterlevelseDokumentasjon.resourcesData
       ? etterlevelseDokumentasjon.resourcesData.map((resource) => resource.navIdent)
       : [],
@@ -189,7 +188,8 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   teams: etterlevelseDokumentasjon.teams || [],
   resources: etterlevelseDokumentasjon.resources || [],
   risikoeiere: etterlevelseDokumentasjon.risikoeiere || [],
-  avdeling: etterlevelseDokumentasjon.avdeling,
+  nomAvdelingId: etterlevelseDokumentasjon.nomAvdelingId || '',
+  avdelingNavn: etterlevelseDokumentasjon.avdelingNavn || '',
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   resourcesData: etterlevelseDokumentasjon.resourcesData || [],
   risikoeiereData: etterlevelseDokumentasjon.risikoeiereData || [],

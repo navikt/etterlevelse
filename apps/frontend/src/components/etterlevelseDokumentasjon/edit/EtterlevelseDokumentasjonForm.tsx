@@ -345,16 +345,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                           if (value) {
                             fieldArrayRenderProps.push(value)
                           }
-                          if (value && !values.avdeling && values.behandlinger?.length === 0) {
-                            const behandling = value as IBehandling
-                            const newAvdeling = {
-                              list: EListName.AVDELING,
-                              shortName: behandling.avdeling?.shortName || '',
-                              code: behandling.avdeling?.code || '',
-                              description: behandling.avdeling?.description || '',
-                            } as ICodeListFormValues
-                            setFieldValue('avdeling', newAvdeling)
-                          }
                         }}
                         styles={selectOverrides}
                       />

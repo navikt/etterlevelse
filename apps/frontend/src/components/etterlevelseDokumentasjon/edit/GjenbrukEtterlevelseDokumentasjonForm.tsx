@@ -67,7 +67,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ values, setFieldValue, errors, submitForm }) => (
+      {({ values, errors, submitForm }) => (
         <Form className='flex flex-col gap-3'>
           <FieldWrapper marginBottom>
             <Field name='relationType'>
@@ -142,16 +142,6 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                         onChange={(value) => {
                           if (value) {
                             fieldArrayRenderProps.push(value)
-                          }
-                          if (value && !values.avdeling && values.behandlinger?.length === 0) {
-                            const behandling = value as IBehandling
-                            const newAvdeling = {
-                              list: EListName.AVDELING,
-                              shortName: behandling.avdeling?.shortName || '',
-                              code: behandling.avdeling?.code || '',
-                              description: behandling.avdeling?.description || '',
-                            } as ICodeListFormValues
-                            setFieldValue('avdeling', newAvdeling)
                           }
                         }}
                         styles={selectOverrides}
