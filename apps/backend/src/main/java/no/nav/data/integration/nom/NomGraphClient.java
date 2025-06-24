@@ -66,6 +66,11 @@ public class NomGraphClient {
         var response = res.getBody().getData();
 
         if(response.getOrgEnhet() == null) {
+            if(securityProperties.isDev()) {
+              var devAvdelinger = List.of(createDevAvdeling("avdeling_1"), createDevAvdeling("avdeling_2"));
+                return safeStream(devAvdelinger)
+                        .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
+            }
             return new HashMap<>();
         }
 
@@ -119,5 +124,9 @@ public class NomGraphClient {
 
     private String getScope() {
         return scopeTemplate.formatted(securityProperties.isDev() ? "dev" : "prod");
+    }
+
+    private OrgEnhet createDevAvdeling(String id) {
+        return OrgEnhet.builder().id(id).navn(id).build();
     }
 }
