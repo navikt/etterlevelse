@@ -9,7 +9,6 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
 import { user } from '../../../services/User'
-import { isDev } from '../../../util/config'
 import { TextAreaField } from '../../common/Inputs'
 import CopyAndStatusView from './CopyAndStatusView'
 import LagreOgFortsettSenereButton from './LagreOgFortsettSenereButton'
@@ -92,9 +91,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             onClick={async () => {
               await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
               await submitForm()
-              if (isDev) {
-                await arkiver(etterlevelseDokumentasjon.id, true, false, true)
-              }
+              await arkiver(etterlevelseDokumentasjon.id, true, false, true)
             }}
           >
             Akseptér restrisiko og arkivér i Public 360

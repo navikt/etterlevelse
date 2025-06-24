@@ -12,7 +12,6 @@ import {
   TKravQL,
 } from '../../../constants'
 import { TTemaCode } from '../../../services/Codelist'
-import { isDev } from '../../../util/config'
 import ExportEtterlevelseModal from '../../export/ExportEtterlevelseModal'
 import { ArkiveringModal } from '../ArkiveringModal'
 import FocusList from './FocusList'
@@ -99,18 +98,16 @@ export const DokumentasjonPageTabs = (props: IProps) => {
 
             <div className='w-full flex justify-end items-center'>
               <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-              {isDev && (
-                <div>
-                  <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
-                    Arkivér i Public 360
-                  </Button>
-                  <ArkiveringModal
-                    arkivModal={arkivModal}
-                    setArkivModal={setArkivModal}
-                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  />
-                </div>
-              )}
+              <div>
+                <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
+                  Arkivér i Public 360
+                </Button>
+                <ArkiveringModal
+                  arkivModal={arkivModal}
+                  setArkivModal={setArkivModal}
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                />
+              </div>
             </div>
           </div>
         </Tabs.Panel>
