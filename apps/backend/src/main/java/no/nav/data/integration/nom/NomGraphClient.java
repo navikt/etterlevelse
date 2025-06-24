@@ -58,6 +58,12 @@ public class NomGraphClient {
     }
 
     private Map<String, OrgEnhet> getAvdelingCache() {
+        if(securityProperties.isDev()) {
+            var devAvdelinger = List.of(createDevAvdeling("avdeling_1"), createDevAvdeling("avdeling_2"));
+            return safeStream(devAvdelinger)
+                    .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
+        } else {
+
         var request = new GraphQLRequest(getAvdelingQuery, Map.of("id", "bu431e"));
         var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
         assert res.getBody() != null;
@@ -66,11 +72,6 @@ public class NomGraphClient {
         var response = res.getBody().getData();
 
         if(response.getOrgEnhet() == null) {
-            if(securityProperties.isDev()) {
-              var devAvdelinger = List.of(createDevAvdeling("avdeling_1"), createDevAvdeling("avdeling_2"));
-                return safeStream(devAvdelinger)
-                        .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
-            }
             return new HashMap<>();
         }
 
@@ -78,6 +79,7 @@ public class NomGraphClient {
 
         return safeStream(alleAvdelinger)
                 .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
+        }
     }
 
     private Map<String, OrgEnhet> getAvdelingerFromCache() {
