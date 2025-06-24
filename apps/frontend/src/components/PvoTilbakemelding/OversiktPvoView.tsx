@@ -323,8 +323,8 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
           <List.Item>
             <BodyShort>
               <strong>Avdeling:</strong>{' '}
-              {etterlevelseDokumentasjon.avdeling && etterlevelseDokumentasjon.avdeling.shortName}
-              {!etterlevelseDokumentasjon.avdeling && 'Avdeling er ikke angitt'}
+              {etterlevelseDokumentasjon.nomAvdelingId && etterlevelseDokumentasjon.avdelingNavn}
+              {!etterlevelseDokumentasjon.nomAvdelingId && 'Avdeling er ikke angitt'}
             </BodyShort>
           </List.Item>
           <List.Item>

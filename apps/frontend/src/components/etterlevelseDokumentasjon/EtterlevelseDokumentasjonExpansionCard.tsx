@@ -175,9 +175,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 <div className='flex items-start gap-2 mb-2.5'>
                   <Label size='medium'>Avdeling:</Label>
                   <BodyLong size='medium'>
-                    {etterlevelseDokumentasjon.avdeling &&
-                      etterlevelseDokumentasjon.avdeling.shortName}
-                    {!etterlevelseDokumentasjon.avdeling && 'Ikke angitt'}
+                    {etterlevelseDokumentasjon.nomAvdelingId &&
+                      etterlevelseDokumentasjon.avdelingNavn}
+                    {!etterlevelseDokumentasjon.nomAvdelingId && 'Ikke angitt'}
                   </BodyLong>
                 </div>
 

@@ -164,7 +164,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const avdelingFieldCheck = () => {
-    if (!etterlevelseDokumentasjon.avdeling) {
+    if (!etterlevelseDokumentasjon.nomAvdelingId) {
       setAvdelingError(true)
     } else {
       setAvdelingError(false)
