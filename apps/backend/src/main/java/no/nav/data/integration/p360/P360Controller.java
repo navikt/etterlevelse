@@ -110,7 +110,6 @@ public class P360Controller {
                     .DefaultValueSet("Etterlevelse")
                     .Title(documentTitle)
                     .DocumentDate(formatter.format(date))
-                    .Category("Internt notat uten oppfølging")
                     .Status("J")
                     .AccessGroup("Alle ansatte i Nav")
                     .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
