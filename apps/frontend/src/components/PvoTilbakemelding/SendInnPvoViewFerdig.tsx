@@ -17,7 +17,6 @@ type TProps = {
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
   activeStep: number
-  dirty: boolean
   submitForm: () => Promise<void>
   setFieldValue: (
     field: string,
@@ -36,7 +35,6 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   activeStep,
-  dirty,
   submitForm,
   setFieldValue,
   setSubmittedStatus,
@@ -155,14 +153,11 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
           submitForm={submitForm}
           customButtons={
             <div className='mt-5 flex gap-2 items-center'>
-              {!dirty && <div className='min-w-[223px]'></div>}
-              {dirty && (
-                <LagreFortsettSenereButton
-                  setFieldValue={setFieldValue}
-                  setSubmittedStatus={setSubmittedStatus}
-                  submitForm={submitForm}
-                />
-              )}
+              <LagreFortsettSenereButton
+                setFieldValue={setFieldValue}
+                setSubmittedStatus={setSubmittedStatus}
+                submitForm={submitForm}
+              />
 
               <Button
                 type='button'

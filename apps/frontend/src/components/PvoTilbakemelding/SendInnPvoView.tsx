@@ -124,11 +124,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
       validationSchema={sendInnCheck}
     >
-      {({ submitForm, dirty, setFieldValue }) => (
+      {({ submitForm, setFieldValue }) => (
         <Form>
           {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
             <SendInnPvoViewIkkeFerdig
-              dirty={dirty}
               submitForm={submitForm}
               setFieldValue={setFieldValue}
               setSubmittedStatus={setSubmittedStatus}
@@ -144,7 +143,6 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
           )}
           {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <SendInnPvoViewFerdig
-              dirty={dirty}
               submitForm={submitForm}
               setFieldValue={setFieldValue}
               setSubmittedStatus={setSubmittedStatus}

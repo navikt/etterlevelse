@@ -23,7 +23,6 @@ type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   activeStep: number
-  dirty: boolean
   submitForm: () => Promise<void>
   setFieldValue: (
     field: string,
@@ -42,7 +41,6 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
   activeStep,
-  dirty,
   submitForm,
   setFieldValue,
   setSubmittedStatus,
@@ -101,23 +99,14 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 </RadioGroup>
               )}
             </Field>
-
-            <Field>
-              {(fieldProps: FieldProps) => (
-                <>
-                  {fieldProps.form.values.arbeidGarVidere === true && (
-                    <IndentLayoutTextField>
-                      <TextAreaField
-                        rows={3}
-                        noPlaceholder
-                        label='Beskriv anbefalingen nærmere:'
-                        name='arbeidGarVidereBegrunnelse'
-                      />
-                    </IndentLayoutTextField>
-                  )}
-                </>
-              )}
-            </Field>
+            <IndentLayoutTextField>
+              <TextAreaField
+                rows={3}
+                noPlaceholder
+                label='Beskriv anbefalingen nærmere:'
+                name='arbeidGarVidereBegrunnelse'
+              />
+            </IndentLayoutTextField>
           </FieldRadioLayout>
 
           <FieldRadioLayout>
@@ -143,22 +132,15 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 </RadioGroup>
               )}
             </Field>
-            <Field>
-              {(fieldProps: FieldProps) => (
-                <>
-                  {fieldProps.form.values.behovForForhandskonsultasjon === true && (
-                    <IndentLayoutTextField>
-                      <TextAreaField
-                        rows={3}
-                        noPlaceholder
-                        label='Beskriv anbefalingen nærmere:'
-                        name='behovForForhandskonsultasjonBegrunnelse'
-                      />
-                    </IndentLayoutTextField>
-                  )}
-                </>
-              )}
-            </Field>
+
+            <IndentLayoutTextField>
+              <TextAreaField
+                rows={3}
+                noPlaceholder
+                label='Beskriv anbefalingen nærmere:'
+                name='behovForForhandskonsultasjonBegrunnelse'
+              />
+            </IndentLayoutTextField>
           </FieldRadioLayout>
 
           <FieldRadioLayout>
@@ -171,6 +153,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     fieldProps.form.setFieldValue('pvoVurdering', value)
                     updateCheckBoxOnRadioChange(value)
                   }}
+                  error={fieldProps.form.errors.pvoVurdering as string}
                 >
                   {pvoVurderingList.map((vurdering, index) => (
                     <Radio key={vurdering.code + '_' + index} value={vurdering.code}>
@@ -233,22 +216,20 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           submitForm={submitForm}
           customButtons={
             <div className='mt-5 flex gap-2 items-center'>
-              {!dirty && <div className='min-w-[223px]'></div>}
-              {dirty && (
-                <LagreFortsettSenereButton
-                  setFieldValue={setFieldValue}
-                  setSubmittedStatus={setSubmittedStatus}
-                  submitForm={submitForm}
-                />
-              )}
+              <LagreFortsettSenereButton
+                setFieldValue={setFieldValue}
+                setSubmittedStatus={setSubmittedStatus}
+                submitForm={submitForm}
+              />
 
               <Button
                 type='button'
                 onClick={async () => {
                   await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                   setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
-                  await submitForm()
-                  await arkiver(etterlevelseDokumentasjon.id, true, true, false)
+                  await submitForm().then(async () => {
+                    await arkiver(etterlevelseDokumentasjon.id, true, true, false)
+                  })
                 }}
               >
                 Lagre, send tilbakemelding, og arkivér i Public 360

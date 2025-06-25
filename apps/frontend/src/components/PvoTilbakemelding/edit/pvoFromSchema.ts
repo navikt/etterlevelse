@@ -28,10 +28,62 @@ export const sendInnCheck = () => {
       'arbeidGarVidere',
       'Dere må oppgi om det anbefales at arbeidet går videre som planlagt'
     ),
+    arbeidGarVidereBegrunnelse: yup.string().test({
+      name: 'arbeidGarVidereBegrunnelse',
+      message: 'Dere må beskriv anbefalingen nærmere',
+      test: function (stringField) {
+        const { parent } = this
+        if (parent.status === EPvoTilbakemeldingStatus.FERDIG) {
+          if (stringField === undefined || stringField === '') {
+            return false
+          } else {
+            return true
+          }
+        } else {
+          return true
+        }
+      },
+    }),
     behovForForhandskonsultasjon: boolCheck(
       'behovForForhandskonsultasjon',
       'Dere må oppgi om det er behov for forhåndskonsultasjon med Datatilsynet'
     ),
+    behovForForhandskonsultasjonBegrunnelse: yup.string().test({
+      name: 'behovForForhandskonsultasjonBegrunnelse',
+      message: 'Dere må beskriv anbefalingen nærmere',
+      test: function (stringField) {
+        const { parent } = this
+        if (
+          parent.behovForForhandskonsultasjon === false &&
+          parent.status === EPvoTilbakemeldingStatus.FERDIG
+        ) {
+          if (stringField === undefined || stringField === '') {
+            return false
+          } else {
+            return true
+          }
+        } else {
+          return true
+        }
+      },
+    }),
+
+    pvoVurdering: yup.string().test({
+      name: 'pvoVurdering',
+      message: 'Dette er et påkrevd felt',
+      test: function (stringField) {
+        const { parent } = this
+        if (parent.status === EPvoTilbakemeldingStatus.FERDIG) {
+          if (stringField === undefined || stringField === '') {
+            return false
+          } else {
+            return true
+          }
+        } else {
+          return true
+        }
+      },
+    }),
     merknadTilEtterleverEllerRisikoeier: yup.string().test({
       name: 'merknadTilEtterleverEllerRisikoeier',
       message: 'Dette er et påkrevd felt',
