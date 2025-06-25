@@ -17,12 +17,14 @@ export const getByNomId = async (id: string) => {
 export const getAvdelingOptions = async () => {
   const avdelinger = await getAllNomAvdelinger()
   if (avdelinger && avdelinger.length) {
-    return avdelinger.map((avdeling) => {
-      return {
-        value: avdeling.id,
-        label: avdeling.navn,
-      }
-    })
+    return avdelinger
+      .map((avdeling) => {
+        return {
+          value: avdeling.id,
+          label: avdeling.navn,
+        }
+      })
+      .sort((a, b) => a.label.localeCompare(b.label))
   }
   return []
 }
