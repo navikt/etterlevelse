@@ -1,6 +1,6 @@
 import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { arkiver } from '../../api/P360Api'
 import {
   EPvoTilbakemeldingStatus,
@@ -52,18 +52,17 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   setIsAlertModalOpen,
   pvoVurderingList,
 }) => {
-  const [radioValue, setRadioValue] = useState<string>()
-  const [checkboxValue, setCheckboxValue] = useState<string[]>([])
-
-  useEffect(() => {
-    if (radioValue === 'BRA_PVK' || radioValue === undefined) {
-      setCheckboxValue([''])
-    } else if (radioValue === 'OK_PVK') {
-      setCheckboxValue(['pvoFolgeOppEndringer'])
+  const updateCheckBoxOnRadioChange = async (value: string) => {
+    if (value === 'BRA_PVK' || value === undefined) {
+      await setFieldValue('pvoFolgeOppEndringer', false)
+      await setFieldValue('vilFaPvkIRetur', false)
+    } else if (value === 'OK_PVK') {
+      await setFieldValue('pvoFolgeOppEndringer', true)
     } else {
-      setCheckboxValue(['pvoFolgeOppEndringer', 'vilFaPvkIRetur'])
+      await setFieldValue('pvoFolgeOppEndringer', true)
+      await setFieldValue('vilFaPvkIRetur', true)
     }
-  }, [radioValue])
+  }
 
   return (
     <div className='pt-6 flex justify-center'>
@@ -163,53 +162,66 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           </FieldRadioLayout>
 
           <FieldRadioLayout>
-            <Field name='pvosVurdering'>
+            <Field name='pvoVurdering'>
               {(fieldProps: FieldProps) => (
-                <>
-                  <RadioGroup
-                    legend='PVOs vurdering'
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('pvoVurdering', value)
-                      setRadioValue(value)
-                    }}
-                  >
-                    {pvoVurderingList.map((vurdering, index) => (
-                      <Radio key={vurdering.code + '_' + index} value={vurdering.code}>
-                        {vurdering.description}
-                      </Radio>
-                    ))}
-                  </RadioGroup>
-                  <CheckboxGroup
-                    legend='PVOs vudering'
-                    hideLegend
-                    value={checkboxValue}
-                    onChange={async (value: string[]) => {
-                      setCheckboxValue(value)
-                      if (value.includes('pvoFolgeOppEndringer')) {
-                        await setFieldValue('pvoFolgeOppEndringer', true)
-                      }
-                      if (value.includes('vilFaPvkIRetur')) {
-                        await setFieldValue('vilFaPvkIRetur', true)
-                      }
-                      if (!value.includes('pvoFolgeOppEndringer')) {
-                        await setFieldValue('pvoFolgeOppEndringer', false)
-                      }
-                      if (!value.includes('vilFaPvkIRetur')) {
-                        await setFieldValue('vilFaPvkIRetur', false)
-                      }
-                    }}
-                  >
-                    <Checkbox value='pvoFolgeOppEndringer'>
-                      PVO vil følge opp endringer dere gjør.
-                    </Checkbox>
-                    <Checkbox value='vilFaPvkIRetur'>
-                      PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
-                    </Checkbox>
-                  </CheckboxGroup>
-                </>
+                <RadioGroup
+                  legend='PVOs vurdering'
+                  value={fieldProps.form.values.pvoVurdering}
+                  onChange={(value) => {
+                    fieldProps.form.setFieldValue('pvoVurdering', value)
+                    updateCheckBoxOnRadioChange(value)
+                  }}
+                >
+                  {pvoVurderingList.map((vurdering, index) => (
+                    <Radio key={vurdering.code + '_' + index} value={vurdering.code}>
+                      {vurdering.description}
+                    </Radio>
+                  ))}
+                </RadioGroup>
               )}
             </Field>
           </FieldRadioLayout>
+
+          <Field>
+            {(fieldProps: FieldProps) => (
+              <CheckboxGroup
+                className='my-5'
+                legend='PVOs vudering'
+                hideLegend
+                value={(() => {
+                  const valueList: string[] = []
+                  if (fieldProps.form.values.pvoFolgeOppEndringer) {
+                    valueList.push('pvoFolgeOppEndringer')
+                  }
+                  if (fieldProps.form.values.vilFaPvkIRetur) {
+                    valueList.push('vilFaPvkIRetur')
+                  }
+                  return valueList
+                })()}
+                onChange={async (value: string[]) => {
+                  if (value.includes('pvoFolgeOppEndringer')) {
+                    await setFieldValue('pvoFolgeOppEndringer', true)
+                  }
+                  if (value.includes('vilFaPvkIRetur')) {
+                    await setFieldValue('vilFaPvkIRetur', true)
+                  }
+                  if (!value.includes('pvoFolgeOppEndringer')) {
+                    await setFieldValue('pvoFolgeOppEndringer', false)
+                  }
+                  if (!value.includes('vilFaPvkIRetur')) {
+                    await setFieldValue('vilFaPvkIRetur', false)
+                  }
+                }}
+              >
+                <Checkbox value='pvoFolgeOppEndringer'>
+                  PVO vil følge opp endringer dere gjør.
+                </Checkbox>
+                <Checkbox value='vilFaPvkIRetur'>
+                  PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
+                </Checkbox>
+              </CheckboxGroup>
+            )}
+          </Field>
         </div>
 
         <CopyButtonCommon />

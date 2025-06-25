@@ -71,7 +71,13 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               merknadTilEtterleverEllerRisikoeier:
                 submittedValues.merknadTilEtterleverEllerRisikoeier,
               arbeidGarVidere: submittedValues.arbeidGarVidere,
+              arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
               behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
+              behovForForhandskonsultasjonBegrunnelse:
+                submittedValues.behovForForhandskonsultasjonBegrunnelse,
+              pvoVurdering: submittedValues.pvoVurdering,
+              pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
+              vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
             }
             await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
           }
@@ -86,7 +92,13 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               merknadTilEtterleverEllerRisikoeier:
                 submittedValues.merknadTilEtterleverEllerRisikoeier,
               arbeidGarVidere: submittedValues.arbeidGarVidere,
+              arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
               behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
+              behovForForhandskonsultasjonBegrunnelse:
+                submittedValues.behovForForhandskonsultasjonBegrunnelse,
+              pvoVurdering: submittedValues.pvoVurdering,
+              pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
+              vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
             })
             await createPvoTilbakemelding(createValue).then(() => window.location.reload())
           } else {
