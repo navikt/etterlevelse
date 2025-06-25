@@ -7,6 +7,7 @@ import {
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
+import { ICode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import CopyAndStatusView from './CopyAndStatusView'
 import { BeskjedFraPvoReadOnly } from './readOnly/BeskjedFraPvoReadOnly'
@@ -26,6 +27,7 @@ type TProps = {
   ) => Promise<void | FormikErrors<IPvkDokument>>
   submitForm: () => Promise<void>
   errorSummaryComponent: ReactNode
+  pvoVurderingList: ICode[]
 }
 
 export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
@@ -36,6 +38,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   setFieldValue,
   submitForm,
   errorSummaryComponent,
+  pvoVurderingList,
 }) => {
   const isRisikoeierCheck: boolean =
     etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) || user.isAdmin()
@@ -43,7 +46,10 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   return (
     <div>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
-      <BeskjedFraPvoReadOnly pvoTilbakemelding={pvoTilbakemelding} />
+      <BeskjedFraPvoReadOnly
+        pvoTilbakemelding={pvoTilbakemelding}
+        pvoVurderingList={pvoVurderingList}
+      />
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier} />
       <BeskjedFraRisikoeierReadOnly merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier} />
 

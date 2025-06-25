@@ -28,6 +28,7 @@ import {
   TEtterlevelseQL,
 } from '../../constants'
 import { useKravFilter } from '../../query/KravQuery'
+import { EListName, ICode, ICodelistProps } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
@@ -58,6 +59,7 @@ type TProps = {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  codelistUtils: ICodelistProps
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
@@ -71,6 +73,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   activeStep,
   setActiveStep,
   setSelectedStep,
+  codelistUtils,
   pvoTilbakemelding,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
@@ -91,6 +94,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
 
   const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
     {
@@ -292,6 +296,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
           setAlleTitltak(response.content)
         )
         setIsLoading(false)
+
+        setPvoVurderingList(
+          codelistUtils
+            .getCodes(EListName.PVO_VURDERING)
+            .sort((a, b) => a.shortName.localeCompare(b.shortName)) as ICode[]
+        )
       }
     })()
   }, [pvkDokument])
@@ -463,6 +473,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     submitForm={submitForm}
                     initialStatus={initialValues.status}
                     isLoading={isLoading}
+                    pvoVurderingList={pvoVurderingList}
                     errorSummaryComponent={
                       <SendInnErrorSummary
                         errors={errors}
@@ -491,6 +502,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
                       initialStatus={initialValues.status}
+                      pvoVurderingList={pvoVurderingList}
                       errorSummaryComponent={
                         <SendInnErrorSummary
                           errors={errors}
@@ -518,6 +530,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       isLoading={isLoading}
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
+                      pvoVurderingList={pvoVurderingList}
                       errorSummaryComponent={
                         <SendInnErrorSummary
                           errors={errors}

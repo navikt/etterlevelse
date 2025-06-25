@@ -24,6 +24,7 @@ import {
   IExternalCode,
   IPvoTilbakemelding,
 } from '../constants'
+import { CodelistService } from '../services/Codelist'
 import { user } from '../services/User'
 import { isInLimitedAccess } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
@@ -63,6 +64,7 @@ export const PvkDokumentPage = () => {
   const [selectedStep, setSelectedStep] = useState<number>(1)
   const navigate: NavigateFunction = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
+  const [codelistUtils] = CodelistService()
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -281,6 +283,7 @@ export const PvkDokumentPage = () => {
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
+                      codelistUtils={codelistUtils}
                     />
                   )}
                 </div>

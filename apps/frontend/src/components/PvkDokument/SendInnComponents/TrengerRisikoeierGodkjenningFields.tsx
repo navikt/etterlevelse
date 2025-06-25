@@ -8,6 +8,7 @@ import {
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
 } from '../../../constants'
+import { ICode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
 import CopyAndStatusView from './CopyAndStatusView'
@@ -29,6 +30,7 @@ type TProps = {
   submitForm: () => Promise<void>
   initialStatus: EPvkDokumentStatus
   errorSummaryComponent: ReactNode
+  pvoVurderingList: ICode[]
 }
 export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   pvkDokument,
@@ -39,6 +41,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   submitForm,
   initialStatus,
   errorSummaryComponent,
+  pvoVurderingList,
 }) => {
   const isRisikoeierCheck: boolean =
     etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) || user.isAdmin()
@@ -46,7 +49,10 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   return (
     <div>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
-      <BeskjedFraPvoReadOnly pvoTilbakemelding={pvoTilbakemelding} />
+      <BeskjedFraPvoReadOnly
+        pvoTilbakemelding={pvoTilbakemelding}
+        pvoVurderingList={pvoVurderingList}
+      />
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier} />
 
       <div className='mt-5 mb-3 max-w-[75ch]'>

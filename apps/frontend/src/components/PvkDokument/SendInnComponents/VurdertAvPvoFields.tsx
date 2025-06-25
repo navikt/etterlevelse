@@ -2,6 +2,7 @@ import { Alert, Button, Heading, List, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../../constants'
+import { ICode } from '../../../services/Codelist'
 import { TextAreaField } from '../../common/Inputs'
 import CopyAndStatusView from './CopyAndStatusView'
 import LagreOgFortsettSenereButton from './LagreOgFortsettSenereButton'
@@ -20,6 +21,7 @@ type TProps = {
   initialStatus: EPvkDokumentStatus
   isLoading: boolean
   errorSummaryComponent: ReactNode
+  pvoVurderingList: ICode[]
 }
 
 export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
@@ -30,11 +32,15 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   initialStatus,
   isLoading,
   errorSummaryComponent,
+  pvoVurderingList,
 }) => {
   return (
     <div>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
-      <BeskjedFraPvoReadOnly pvoTilbakemelding={pvoTilbakemelding} />
+      <BeskjedFraPvoReadOnly
+        pvoTilbakemelding={pvoTilbakemelding}
+        pvoVurderingList={pvoVurderingList}
+      />
 
       <div className='pt-9 mb-3 max-w-[75ch]'>
         <Heading level='2' size='small' className='mb-5'>
