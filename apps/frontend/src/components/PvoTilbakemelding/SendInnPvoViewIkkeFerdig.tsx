@@ -1,7 +1,13 @@
 import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
-import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { arkiver } from '../../api/P360Api'
+import {
+  EPvoTilbakemeldingStatus,
+  IEtterlevelseDokumentasjon,
+  IPvkDokument,
+  IPvoTilbakemelding,
+} from '../../constants'
 import { FieldRadioLayout, IndentLayoutTextField } from '../common/IndentLayout'
 import { TextAreaField } from '../common/Inputs'
 import AlertPvoModal from './common/AlertPvoModal'
@@ -13,6 +19,7 @@ import {
 import PvoFormButtons from './edit/PvoFormButtons'
 
 type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   activeStep: number
   dirty: boolean
@@ -31,6 +38,7 @@ type TProps = {
 
 export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   pvkDokument,
+  etterlevelseDokumentasjon,
   activeStep,
   dirty,
   submitForm,
@@ -230,9 +238,10 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                   setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                   await submitForm()
+                  await arkiver(etterlevelseDokumentasjon.id, true, true, false)
                 }}
               >
-                Send tilbakemelding
+                Lagre, send tilbakemelding, og arkivér i Public 360
               </Button>
             </div>
           }

@@ -1,7 +1,6 @@
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, useState } from 'react'
-import { arkiver } from '../../api/P360Api'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -110,6 +109,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               setFieldValue={setFieldValue}
               setSubmittedStatus={setSubmittedStatus}
               pvkDokument={pvkDokument}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               activeStep={activeStep}
               setSelectedStep={setSelectedStep}
               setActiveStep={setActiveStep}
