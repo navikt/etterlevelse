@@ -16,6 +16,8 @@ public class CodelistStub {
         add(ListName.VIRKEMIDDELTYPE, "YTELSE", "Ytelse");
         add(ListName.YTTERLIGERE_EGENSKAPER, "PROFILERING", "Profilering");
         add(ListName.YTTERLIGERE_EGENSKAPER, "TEKNOLOGI", "Bruk av teknologi");
+        add(ListName.PVO_VURDERING, "IKKEBRA", "Ikke bra nok");
+        add(ListName.PVO_VURDERING, "BRA", "Bra");
 
     }
 
