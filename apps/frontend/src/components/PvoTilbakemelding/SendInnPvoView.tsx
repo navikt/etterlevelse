@@ -155,6 +155,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               setActiveStep={setActiveStep}
               isAlertModalOpen={isAlertModalOpen}
               setIsAlertModalOpen={setIsAlertModalOpen}
+              pvoVurderingList={pvoVurderingList}
             />
           )}
         </Form>
