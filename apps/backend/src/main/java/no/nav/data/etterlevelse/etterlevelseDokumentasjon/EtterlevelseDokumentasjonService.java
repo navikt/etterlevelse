@@ -171,7 +171,7 @@ public class EtterlevelseDokumentasjonService {
         }
 
         log.info("deleting etterlevelse metadata connected to etterlevelse dokumentasjon with id={}", id);
-        etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id.toString());
+        etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id);
 
         log.info("deleting etterlevelse arkiv connected to etterlevelse dokumentasjon with id={}", id);
         etterlevelseArkivService.deleteByEtterlevelseDokumentsjonId(id.toString());

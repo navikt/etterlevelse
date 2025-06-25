@@ -9,7 +9,6 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
-import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioRequest;
@@ -73,7 +72,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         Risikoscenario risikoscenario = insertRisikoscenario();
         risikoscenario = risikoscenarioService.save(risikoscenario, true);
         
-        // Get by pvkDocId should return no risikoscenario for unknown kravnummer...
+        // Get by kravnummer should return no risikoscenario for unknown kravnummer...
         ResponseEntity<RestResponsePage> respEntPage = restTemplate.getForEntity("/risikoscenario/kravnummer/{kravNummer}", RestResponsePage.class, 404);
         assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(respEntPage.getBody().getNumberOfElements()).isEqualTo(0);
@@ -286,23 +285,6 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         assertThat(risikoscenarioService.getTiltak(risikoscenario.getId())).isEmpty();
     }
    
-    private Risikoscenario insertRisikoscenario() {
-        PvkDokument pvkDokument = createPvkDokument();
-        Krav krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
-                .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder()
-                        .lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build())
-                .build());
-
-        Risikoscenario risikoscenario = Risikoscenario.builder()
-                .pvkDokumentId(pvkDokument.getId())
-                .risikoscenarioData(RisikoscenarioData.builder()
-                        .relevanteKravNummer(List.of(krav.getKravNummer()))
-                        .build()
-                )
-                .build();
-        return risikoscenarioService.save(risikoscenario, false);
-    }
-
     private Tiltak insertTiltak(UUID pvkDokId) {
         Tiltak tiltak = Tiltak.builder()
                 .pvkDokumentId(pvkDokId)

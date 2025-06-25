@@ -30,6 +30,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.List;
@@ -236,6 +237,27 @@ public class KravIT extends IntegrationTestBase {
         restTemplate.delete("/krav/{id}", krav.getId());
 
         assertThat(kravRepo.count()).isEqualTo(1);
+    }
+    
+    @Test
+    void deleteKravReferencedByRisikoscenario_shouldFail() {
+        // Delete krav should fail if the krav is referenced by a risikoscenario, and there is no other versions of that krav
+        int kravNummer = insertRisikoscenario().getRisikoscenarioData().getRelevanteKravNummer().get(0);
+        UUID kravId = kravRepo.findByKravNummer(kravNummer).get(0).getId();
+        ResponseEntity<?> resp = restTemplate.exchange("/krav/{id}", HttpMethod.DELETE, null, Void.class, kravId);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(kravRepo.count()).isOne();
+    }
+
+    @Test
+    void deleteKravReferencedByRisikoscenario_shouldDelete() {
+        // Delete krav should work if the krav is referenced by a risikoscenario and we have another versions of the krav
+        int kravNummer = insertRisikoscenario().getRisikoscenarioData().getRelevanteKravNummer().get(0);
+        UUID kravId = kravRepo.findByKravNummer(kravNummer).get(0).getId();
+        createKrav("Another Krav", kravNummer, 2);
+        ResponseEntity<KravResponse> resp = restTemplate.exchange("/krav/{id}", HttpMethod.DELETE, null, KravResponse.class, kravId);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(kravRepo.count()).isOne();
     }
 
     @SneakyThrows

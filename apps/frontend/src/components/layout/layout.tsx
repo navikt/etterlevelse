@@ -13,6 +13,10 @@ type TContentLayoutProps = {
   children: ReactNode
 }
 
+type TStickyFooterButtonLayoutProps = {
+  children: ReactNode
+}
+
 export const MainPanelLayout = ({ children, hasSidePanel }: TMainSidePanelProps) => (
   <div className={`pr-14 w-full ${hasSidePanel ? 'max-w-[849px]' : ''}`}>{children}</div>
 )
@@ -30,4 +34,12 @@ export const SidePanelLayout = ({ children }: TSidePanelLayoutProps) => (
 
 export const ContentLayout = ({ children }: TContentLayoutProps) => (
   <div className='flex w-full'>{children}</div>
+)
+
+export const StickyFooterButtonLayout = ({ children }: TStickyFooterButtonLayoutProps) => (
+  <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
+    <div className='w-full max-w-7xl py-4 px-4 border-t-2 z-2'>
+      <div className='flex w-full gap-2 justify-evenly items-end'> {children}</div>
+    </div>
+  </div>
 )

@@ -13,6 +13,9 @@ type Query {
     etterlevelseDokumentasjon(filter: EtterlevelseDokumentasjonFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): EtterlevelseDokumentasjonPage!
 
     pvoTilbakemelding(filter: PvoTilbakemeldingFilter, pageNumber: NonNegativeInt = 0, pageSize: NonNegativeInt = 0): PvoTilbakemeldingPage!
+
+    # nom queries
+    orgEnhet(where: OrgEnhetSearch!): OrgEnhet
 }
 
 input KravFilter {
@@ -285,6 +288,8 @@ type EtterlevelseDokumentasjon {
     sistEndretDokumentasjonAvMeg: DateTime
     stats: EtterlevelseDokumentasjonStats!
     varslingsadresser: [Varslingsadresse!]!
+    nomAvdelingId: String
+    avdelingNavn: String
 }
 
 type PvoTilbakemelding {
@@ -306,7 +311,12 @@ type PvoTilbakemelding {
     ansvarligData: [Resource!]!
     sistEndretAvMeg: DateTime
     arbeidGarVidere: Boolean
+    arbeidGarVidereBegrunnelse: String
     behovForForhandskonsultasjon: Boolean
+    behovForForhandskonsultasjonBegrunnelse: String
+    pvoVurdering: String
+    pvoFolgeOppEndringer: Boolean
+    vilFaPvkIRetur: Boolean
 }
 
 type Tilbakemeldingsinnhold {
@@ -421,4 +431,56 @@ type PvoTilbakemeldingPage {
     totalElements: Int!
     paged: Boolean
     content: [PvoTilbakemelding!]!
+}
+
+
+
+# nom types and inputs
+
+input OrgEnhetSearch {
+    agressoId: String
+    orgNiv: String
+    navn: String
+    id: String
+}
+
+type Organisering {
+    retning: Retning!
+    orgEnhet : OrgEnhet!
+}
+
+type OrgEnhet {
+    id: ID!
+    navn: String!
+    organiseringer (retning: Retning) : [Organisering!]!
+    orgEnhetsType: OrgEnhetsType
+    nomNivaa: NomNivaa
+}
+
+enum Retning {
+    over,
+    under,
+}
+
+enum NomNivaa {
+    LINJEENHET
+    DRIFTSENHET
+    ARBEIDSOMRAADE
+}
+
+enum OrgEnhetsType {
+    ARBEIDSLIVSSENTER
+    NAV_ARBEID_OG_YTELSER
+    ARBEIDSRAADGIVNING
+    DIREKTORAT
+    DIR
+    FYLKE
+    NAV_FAMILIE_OG_PENSJONSYTELSER
+    HJELPEMIDLER_OG_TILRETTELEGGING
+    KLAGEINSTANS
+    NAV_KONTAKTSENTER
+    KONTROLL_KONTROLLENHET
+    NAV_KONTOR
+    TILTAK
+    NAV_OKONOMITJENESTE
 }

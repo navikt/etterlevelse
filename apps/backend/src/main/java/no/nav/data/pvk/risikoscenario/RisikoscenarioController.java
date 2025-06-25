@@ -82,7 +82,7 @@ public class RisikoscenarioController {
     @Operation(summary = "Get Risikoscenario by kravnummer")
     @ApiResponse(description = "ok")
     @GetMapping("/kravnummer/{kravnummer}")
-    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRisikoscenarioByKravnummer(@PathVariable String kravnummer) {
+    public ResponseEntity<RestResponsePage<RisikoscenarioResponse>> getRisikoscenarioByKravnummer(@PathVariable Integer kravnummer) {
         log.info("Get Risikoscenario by kravnummer={}", kravnummer);
         List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByKravNummer(kravnummer);
         List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
@@ -113,7 +113,6 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> createRisikoscenarioKnyttetTilKrav(@PathVariable Integer kravnummer , @RequestBody RisikoscenarioRequest request) {
         log.info("Create Risikoscenario knyttet til krav");
 
-        // TODO: This validity check should be moved to DB
         if (!kravService.isActiveKrav(kravnummer)) {
             log.warn("Requested to create Risikoscenario with reference to non-existing Krav");
             throw new ValidationException("Could not insert Risikoscenario: non-existing Krav");
@@ -184,7 +183,6 @@ public class RisikoscenarioController {
     public ResponseEntity<List<RisikoscenarioResponse>> addRelevantKravToRisikoscenarioer(@RequestBody KravRisikoscenarioRequest request) {
         log.info("Add relevantKrav for risikoscenarioer");
 
-        // This validity check will be moved to DB.
         if (!kravService.isActiveKrav(request.getKravnummer())) {
             log.warn("Requested to add non-existing or non-active Krav to Risikoscenario");
             return ResponseEntity.badRequest().build(); // Somehow we may get client-side MismatchedInputException if we just throw ValidationException here

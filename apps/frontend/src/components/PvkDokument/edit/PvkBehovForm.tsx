@@ -5,7 +5,6 @@ import {
   Checkbox,
   CheckboxGroup,
   CopyButton,
-  Modal,
   Radio,
   RadioGroup,
   ReadMore,
@@ -19,11 +18,14 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../../api/PvkDokumentApi'
-import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
+import { EPvkDokumentStatus, IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
 import { etterlevelseDokumentasjonIdUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonStepUrl } from '../../common/RouteLinkPvk'
+import UnsavedModalAlert from '../../common/UnsavedModalAlert'
+import { StickyFooterButtonLayout } from '../../layout/layout'
+import AlertPvoUnderarbeidModal from '../common/AlertPvoUnderarbeidModal'
 import { pvkBehovSchema } from './pvkDocumentSchema'
 
 type TProps = {
@@ -56,6 +58,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
 
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
   const [urlToNavigate, setUrlToNavigate] = useState<string>('')
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     if (etterlevelseDokumentasjon) {
@@ -77,11 +80,19 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       }
 
       if (pvkDokument.id || existingPvkDokumentId) {
-        await updatePvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
-          setPvkDokument(response)
-          navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
-          window.location.reload()
-        })
+        if (
+          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+            pvkDokument.status
+          )
+        ) {
+          setIsPvoAlertModalOpen(true)
+        } else {
+          await updatePvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
+            setPvkDokument(response)
+            navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+            window.location.reload()
+          })
+        }
       } else {
         await createPvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
           setPvkDokument(response)
@@ -218,100 +229,62 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               </Button>
             </div>
 
-            <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
-              <div className='w-full max-w-7xl py-4 px-4 border-t-2 z-2'>
-                <div className='flex w-full gap-2 justify-evenly items-end'>
-                  <Button
-                    icon={<ChevronLeftIcon aria-hidden />}
-                    iconPosition='left'
-                    type='button'
-                    variant='tertiary'
-                    onClick={() => {
-                      if (dirty) {
-                        setIsUnsavedModalOpen(true)
-                        setUrlToNavigate(
-                          etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)
-                        )
-                      } else {
-                        navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
-                      }
-                    }}
-                  >
-                    Gå til Temaoversikt
-                  </Button>
-                  {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
-                    <Button
-                      icon={<ChevronRightIcon aria-hidden />}
-                      iconPosition='right'
-                      type='button'
-                      variant={'tertiary'}
-                      onClick={() => {
-                        if (dirty) {
-                          setIsUnsavedModalOpen(true)
-                          setUrlToNavigate(
-                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                          )
-                        } else {
-                          navigate(
-                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                          )
-                        }
-                      }}
-                    >
-                      Gå til PVK
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
+            <StickyFooterButtonLayout>
+              <Button
+                icon={<ChevronLeftIcon aria-hidden />}
+                iconPosition='left'
+                type='button'
+                variant='tertiary'
+                onClick={() => {
+                  if (dirty) {
+                    setIsUnsavedModalOpen(true)
+                    setUrlToNavigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                  } else {
+                    navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                  }
+                }}
+              >
+                Gå til Temaoversikt
+              </Button>
+              {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
+                <Button
+                  icon={<ChevronRightIcon aria-hidden />}
+                  iconPosition='right'
+                  type='button'
+                  variant={'tertiary'}
+                  onClick={() => {
+                    if (dirty) {
+                      setIsUnsavedModalOpen(true)
+                      setUrlToNavigate(
+                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                      )
+                    } else {
+                      navigate(
+                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                      )
+                    }
+                  }}
+                >
+                  Gå til PVK
+                </Button>
+              )}
+            </StickyFooterButtonLayout>
           </Form>
         )}
       </Formik>
-      {isUnsavedModalOpen && (
-        <Modal
-          onClose={() => setIsUnsavedModalOpen(false)}
-          open={isUnsavedModalOpen}
-          header={{
-            heading: 'Vil du lagre endringene dine før du går videre?',
-            closeButton: false,
-          }}
-        >
-          <Modal.Body>
-            <br />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              type='button'
-              onClick={() => {
-                formRef.current?.submitForm()
-                navigate(urlToNavigate)
-                setIsUnsavedModalOpen(false)
-              }}
-            >
-              Lagre og fortsette
-            </Button>
-            <Button
-              type='button'
-              variant='secondary'
-              onClick={() => {
-                navigate(urlToNavigate)
-                setIsUnsavedModalOpen(false)
-              }}
-            >
-              Fortsett uten å lagre
-            </Button>
-            <Button
-              type='button'
-              variant='tertiary'
-              onClick={() => {
-                setIsUnsavedModalOpen(false)
-              }}
-            >
-              Avbryt
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+
+      <AlertPvoUnderarbeidModal
+        isOpen={isPvoAlertModalOpen}
+        onClose={() => setIsPvoAlertModalOpen(false)}
+        pvkDokumentId={pvkDokument.id}
+      />
+
+      <UnsavedModalAlert
+        isOpen={isUnsavedModalOpen}
+        setIsOpen={setIsUnsavedModalOpen}
+        urlToNavigate={urlToNavigate}
+        formRef={formRef}
+      />
     </>
   )
 }

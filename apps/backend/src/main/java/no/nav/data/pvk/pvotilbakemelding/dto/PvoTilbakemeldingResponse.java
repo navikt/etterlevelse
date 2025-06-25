@@ -39,7 +39,13 @@ public class PvoTilbakemeldingResponse {
     private List<Resource> ansvarligData;
 
     private Boolean arbeidGarVidere;
+    private String arbeidGarVidereBegrunnelse;
     private Boolean behovForForhandskonsultasjon;
+    private String behovForForhandskonsultasjonBegrunnelse;
+
+    private String pvoVurdering;
+    private Boolean pvoFolgeOppEndringer;
+    private Boolean vilFaPvkIRetur;
 
     public static PvoTilbakemeldingResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         return PvoTilbakemeldingResponse.builder()
@@ -61,7 +67,12 @@ public class PvoTilbakemeldingResponse {
                 .risikoscenarioEtterTiltakk(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk())
                 .merknadTilEtterleverEllerRisikoeier(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier())
                 .arbeidGarVidere(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere())
+                .arbeidGarVidereBegrunnelse(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse())
                 .behovForForhandskonsultasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon())
+                .behovForForhandskonsultasjonBegrunnelse(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse())
+                .pvoVurdering(pvoTilbakemelding.getPvoTilbakemeldingData().getPvoVurdering())
+                .pvoFolgeOppEndringer(pvoTilbakemelding.getPvoTilbakemeldingData().getPvoFolgeOppEndringer())
+                .vilFaPvkIRetur(pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur())
                 .build();
     }
 }

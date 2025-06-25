@@ -1,6 +1,6 @@
 import { Button, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
@@ -8,6 +8,7 @@ import {
   createEtterlevelseDokumentasjonWithRelataion,
   etterlevelseDokumentasjonWithRelationMapToFormVal,
 } from '../../../api/EtterlevelseDokumentasjonApi'
+import { getAvdelingOptions } from '../../../api/Nom'
 import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
 import {
   ERelationType,
@@ -17,9 +18,9 @@ import {
   ITeam,
   ITeamResource,
   TEtterlevelseDokumentasjonQL,
+  TOption,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { EListName, ICode, ICodeListFormValues } from '../../../services/Codelist'
 import { ScrollToFieldError } from '../../../util/formikUtils'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
@@ -40,6 +41,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
   etterlevelseDokumentasjon,
   isInheritingFrom,
 }) => {
+  const [alleAvdelingOptions, setAlleAvdelingOptions] = useState<TOption[]>([])
   const navigate: NavigateFunction = useNavigate()
 
   const submit = async (
@@ -52,6 +54,12 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
       navigate(etterlevelseDokumentasjonIdUrl(response.id))
     )
   }
+
+  useEffect(() => {
+    ;(async () => {
+      await getAvdelingOptions().then(setAlleAvdelingOptions)
+    })()
+  }, [])
 
   return (
     <Formik
@@ -67,7 +75,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ values, setFieldValue, errors, submitForm }) => (
+      {({ values, errors, submitForm }) => (
         <Form className='flex flex-col gap-3'>
           <FieldWrapper marginBottom>
             <Field name='relationType'>
@@ -142,16 +150,6 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                         onChange={(value) => {
                           if (value) {
                             fieldArrayRenderProps.push(value)
-                          }
-                          if (value && !values.avdeling && values.behandlinger?.length === 0) {
-                            const behandling = value as IBehandling
-                            const newAvdeling = {
-                              list: EListName.AVDELING,
-                              shortName: behandling.avdeling?.shortName || '',
-                              code: behandling.avdeling?.code || '',
-                              description: behandling.avdeling?.description || '',
-                            } as ICodeListFormValues
-                            setFieldValue('avdeling', newAvdeling)
                           }
                         }}
                         styles={selectOverrides}
@@ -248,19 +246,23 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
 
           {errors.teamsData && <Error message={errors.teamsData as string} />}
           <FieldWrapper>
-            <Field name='avdeling'>
-              {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
+            <Field name='nomAvdelingId'>
+              {(fieldProps: FieldProps) => (
                 <div>
                   <LabelWithDescription
                     label='Avdeling'
                     description='Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier.'
                   />
                   <OptionList
-                    listName={EListName.AVDELING}
                     label='Avdeling'
-                    value={fieldProps.field.value?.code}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('avdeling', value)
+                    options={alleAvdelingOptions}
+                    value={fieldProps.field.value}
+                    onChange={async (value: any) => {
+                      await fieldProps.form.setFieldValue('nomAvdelingId', value)
+                      await fieldProps.form.setFieldValue(
+                        'avdelingNavn',
+                        alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0].label
+                      )
                     }}
                   />
                 </div>

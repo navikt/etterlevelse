@@ -56,7 +56,7 @@ public class EtterlevelseArkivToDocService extends DomainService<EtterlevelseArk
             }
 
             log.info("Generating word and xml file for etterlevelse dokumentation: E" + etterlevelseDokumentasjon.getEtterlevelseNummer());
-            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav());
+            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjon.getId(), Collections.emptyList(), Collections.emptyList(), etterlevelseArkiv.isOnlyActiveKrav(), false);
             byte[] xmlFile = createXml(date, wordFileName, etterlevelseDokumentasjon, etterlevelseArkiv);
             log.info("Adding generated word and xml file to zip file.");
             archiveFiles.add(ZipFile.builder()

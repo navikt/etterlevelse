@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, useState } from 'react'
+import { arkiver } from '../../api/P360Api'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -11,6 +12,7 @@ import {
 import {
   EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
+  IEtterlevelseDokumentasjon,
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
@@ -19,6 +21,7 @@ import SendInnPvoViewIkkeFerdig from './SendInnPvoViewIkkeFerdig'
 import { sendInnCheck } from './edit/pvoFromSchema'
 
 type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   updateTitleUrlAndStep: (step: number) => void
   personkategorier: string[]
@@ -30,6 +33,7 @@ type TProps = {
 }
 
 export const SendInnPvoView: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
   activeStep,

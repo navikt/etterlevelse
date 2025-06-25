@@ -29,19 +29,6 @@ export enum EYupErrorMessage {
   PAAKREVD = 'Feltet er påkrevd',
 }
 
-export interface IEtterlevelseArkiv extends IDomainObject {
-  id: string
-  behandlingId: string
-  etterlevelseDokumentasjonId: string
-  status: EEtterlevelseArkivStatus
-  arkiveringDato: string
-  arkivertAv: string
-  tilArkiveringDato: string
-  arkiveringAvbruttDato: string
-  webSakNummer: string
-  onlyActiveKrav: boolean
-}
-
 export enum EKravFilterType {
   RELEVANTE_KRAV = 'RELEVANTE_KRAV',
   BORTFILTTERTE_KRAV = 'BORTFILTERTE_KRAV',
@@ -115,14 +102,6 @@ export enum EKravListFilter {
 export enum EVirkemiddelListFilter {
   VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
   SORTDATE = 'SORTDATE',
-}
-
-export enum EEtterlevelseArkivStatus {
-  TIL_ARKIVERING = 'TIL_ARKIVERING',
-  BEHANDLER_ARKIVERING = 'BEHANDLER_ARKIVERING',
-  ARKIVERT = 'ARKIVERT',
-  IKKE_ARKIVER = 'IKKE_ARKIVER',
-  ERROR = 'ERROR',
 }
 
 export enum EAdresseType {
@@ -357,7 +336,8 @@ export interface IEtterlevelseDokumentasjon {
   teams: string[]
   resources: string[]
   risikoeiere: string[]
-  avdeling?: ICode
+  nomAvdelingId?: string
+  avdelingNavn?: string
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]
@@ -370,6 +350,8 @@ export interface IEtterlevelseDokumentasjon {
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
   risikovurderinger: string[]
+  p360Recno: number
+  p360CaseNumber: string
 }
 
 export interface IDocumentRelation {
@@ -657,6 +639,36 @@ export interface ITilbakemeldingsinnhold {
   bidragsVurdering: string
   internDiskusjon: string
   tilbakemeldingTilEtterlevere: string
+}
+
+export interface IOrgEnhet {
+  id: string
+  navn: string
+  orgEnhetsType: EOrgEnhetsType
+  nomNivaa: ENomNivaa
+}
+
+export enum EOrgEnhetsType {
+  ARBEIDSLIVSSENTER = 'ARBEIDSLIVSSENTER',
+  NAV_ARBEID_OG_YTELSER = 'NAV_ARBEID_OG_YTELSER',
+  ARBEIDSRAADGIVNING = 'ARBEIDSRAADGIVNING',
+  DIREKTORAT = 'DIREKTORAT',
+  DIR = 'DIR',
+  FYLKE = 'FYLKE',
+  NAV_FAMILIE_OG_PENSJONSYTELSER = 'NAV_FAMILIE_OG_PENSJONSYTELSER',
+  HJELPEMIDLER_OG_TILRETTELEGGING = 'HJELPEMIDLER_OG_TILRETTELEGGING',
+  KLAGEINSTANS = 'KLAGEINSTANS',
+  NAV_KONTAKTSENTER = 'NAV_KONTAKTSENTER',
+  KONTROLL_KONTROLLENHET = 'KONTROLL_KONTROLLENHET',
+  NAV_KONTOR = 'NAV_KONTOR',
+  TILTAK = 'TILTAK',
+  NAV_OKONOMITJENESTE = 'NAV_OKONOMITJENESTE',
+}
+
+export enum ENomNivaa {
+  LINJEENHET = 'LINJEENHET',
+  DRIFTSENHET = 'DRIFTSENHET',
+  ARBEIDSOMRAADE = 'ARBEIDSOMRAADE',
 }
 
 export enum EPvoTilbakemeldingStatus {

@@ -53,7 +53,7 @@ public class RisikoscenarioService {
         }
     }
 
-    public List<Risikoscenario> getByKravNummer(String kravNummer) {
+    public List<Risikoscenario> getByKravNummer(Integer kravNummer) {
         return risikoscenarioRepoCustom.findByKravNummer(kravNummer);
     }
 

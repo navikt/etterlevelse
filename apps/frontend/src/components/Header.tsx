@@ -22,7 +22,6 @@ import { informationIcon, warningAlert } from './Images'
 import { Markdown } from './common/Markdown'
 import { Portrait } from './common/Portrait'
 import {
-  adminArkivUrl,
   adminAuditUrl,
   adminCodelistUrl,
   adminDokumentasjonUrl,
@@ -106,7 +105,6 @@ const LoggedInHeader = () => {
         { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl },
         { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl },
         { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
-        { label: 'Administrere arkivering', href: adminArkivUrl },
         { label: intl.audit, href: adminAuditUrl() },
         { label: 'Kodeverk', href: adminCodelistUrl },
         { label: intl.questionAndAnswers, href: adminMessagesLogUrl },

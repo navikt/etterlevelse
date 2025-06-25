@@ -83,6 +83,9 @@ spec:
     outbound:
       rules:
         - application: behandlingskatalog-backend
+        - application: nom-api
+          namespace: nom
+          cluster: {{cluster_location}}
       external:
         - host: {{teamcat_ingress}}
         - host: {{p360_ingress}}

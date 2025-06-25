@@ -1,10 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -34,10 +30,15 @@ public class EtterlevelseDokumentasjonData {
     private List<String> teams;
     private List<String> resources;
     private List<String> risikoeiere;
-    private String avdeling;
+    private String nomAvdelingId;
+    private String avdelingNavn;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
     private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
+
+    //Url id for p360
+    private Integer P360Recno;
+    private String P360CaseNumber;
 
 }

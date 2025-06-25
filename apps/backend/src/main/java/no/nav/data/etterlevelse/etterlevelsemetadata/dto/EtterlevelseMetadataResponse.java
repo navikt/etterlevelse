@@ -18,26 +18,24 @@ import static no.nav.data.common.utils.StreamUtils.copyOf;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "kravNummer", "kravVersjon", "behandlingId", "tildeltMed"})
+@JsonPropertyOrder({"id", "kravNummer", "kravVersjon", "tildeltMed"})
 public class EtterlevelseMetadataResponse {
     private UUID id;
     private Integer version;
     private Integer kravNummer;
     private Integer kravVersjon;
-    private String behandlingId;
-    private String etterlevelseDokumentasjonId;
+    private UUID etterlevelseDokumentasjonId;
     private List<String> tildeltMed;
     private ChangeStampResponse changeStamp;
     private String notater;
     
-    public static EtterlevelseMetadataResponse buildFrom(EtterlevelseMetadata emd){
+    public static EtterlevelseMetadataResponse buildFrom(EtterlevelseMetadata emd) {
         return EtterlevelseMetadataResponse.builder()
                 .id(emd.getId())
                 .version(emd.getVersion())
                 .changeStamp(emd.convertChangeStampResponse())
                 .kravNummer(emd.getKravNummer())
                 .kravVersjon(emd.getKravVersjon())
-                .behandlingId(emd.getBehandlingId())
                 .etterlevelseDokumentasjonId(emd.getEtterlevelseDokumentasjonId())
                 .tildeltMed(copyOf(emd.getTildeltMed()))
                 .notater(emd.getNotater())

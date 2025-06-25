@@ -15,14 +15,7 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRes
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +48,12 @@ public class EtterlevelseMetadataController {
             @PathVariable UUID id
     ) {
         log.info("Get etterlevelsemetadata by id={}", id);
-        return ResponseEntity.ok(EtterlevelseMetadataResponse.buildFrom(service.get(id)));
+        EtterlevelseMetadata etMet = service.get(id);
+        if (etMet == null) {
+            log.warn("No EtterlevelseMetadata with id={}", id);
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(EtterlevelseMetadataResponse.buildFrom(etMet));
     }
 
     @Operation(summary = "Get etterlevelsemetadata by KravNummer and KravVersjon")
@@ -74,10 +72,10 @@ public class EtterlevelseMetadataController {
     @ApiResponse(description = "ok")
     @GetMapping({"/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}"})
     public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByEtterlevelseDokumnetasjonId(
-            @PathVariable String etterlevelseDokumentasjonId
+            @PathVariable UUID etterlevelseDokumentasjonId
     ) {
         log.info("Get etterlevelsemetadatafor etterlevelseDokumentasjonId={}", etterlevelseDokumentasjonId);
-        List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
+        List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadataResponse::buildFrom));
     }
 
@@ -85,12 +83,12 @@ public class EtterlevelseMetadataController {
     @ApiResponse(description = "ok")
     @GetMapping({"/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}/{kravVersjon}" , "/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}"})
     public ResponseEntity<RestResponsePage<EtterlevelseMetadataResponse>> getByEtterlevelseDokumentasjonAndKrav(
-            @PathVariable String etterlevelseDokumentasjonId,
+            @PathVariable UUID etterlevelseDokumentasjonId,
             @PathVariable Integer kravNummer,
             @PathVariable(required = false) Integer kravVersjon
     ) {
         log.info("Get etterlevelsemetadatafor etterlevelseDokumentasjonId={}, kravNummer={}", etterlevelseDokumentasjonId, kravNummer);
-        List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByEtterlevelseDokumentasjonAndKrav(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
+        List<EtterlevelseMetadata> etterlevelseMetadataList = service.getByEtterlevelseDokumentasjonIdAndKrav(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseMetadataList).convert(EtterlevelseMetadataResponse::buildFrom));
     }
 
@@ -106,7 +104,10 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Update etterlevelsemetadata")
     @ApiResponse(description = "ok")
     @PutMapping("/{id}")
-    public ResponseEntity<EtterlevelseMetadataResponse> updateEtterlevelseMetadata(@PathVariable UUID id, @Valid @RequestBody EtterlevelseMetadataRequest request) {
+    public ResponseEntity<EtterlevelseMetadataResponse> updateEtterlevelseMetadata(
+            @PathVariable UUID id, 
+            @Valid @RequestBody EtterlevelseMetadataRequest request
+    ) {
         log.info("Update EtterlevelseMetadataResponseid={}", id);
 
         if (!Objects.equals(id, request.getId())) {

@@ -12,6 +12,8 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
 import no.nav.data.etterlevelse.varsel.domain.SlackUser;
+import no.nav.data.integration.nom.NomGraphClient;
+import no.nav.data.integration.nom.domain.OrgEnhet;
 import no.nav.data.integration.slack.SlackClient;
 import no.nav.data.integration.team.domain.ProductArea;
 import no.nav.data.integration.team.domain.Team;
@@ -22,11 +24,7 @@ import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +47,7 @@ public class TeamController {
     private final TeamcatTeamClient teamsService;
     private final TeamcatResourceClient resourceService;
     private final SlackClient slackClient;
+    private final NomGraphClient nomGraphClient;
 
     // Teams
 
@@ -101,7 +100,11 @@ public class TeamController {
             var ident = SecurityUtils.getCurrentIdent();
             productAreas = filter(productAreas, pa -> pa.getMembers().stream().anyMatch(m -> m.getNavIdent().equals(ident)));
         }
-        return new RestResponsePage<>(convert(productAreas, ProductArea::toResponse));
+
+        List<ProductAreaResponse> response = productAreas.stream().map(ProductArea::toResponse).toList();
+        response.forEach(this::addAvdelingFromNom);
+
+        return new RestResponsePage<>(response);
     }
 
     @Operation(summary = "Get product area")
@@ -113,7 +116,11 @@ public class TeamController {
         if (pa.isEmpty()) {
             throw new NotFoundException("Couldn't find product area " + paId);
         }
-        return new ResponseEntity<>(pa.get().toResponseWithMembers(), HttpStatus.OK);
+
+        ProductAreaResponse response = pa.get().toResponseWithMembers();
+        addAvdelingFromNom(response);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Search product areas")
@@ -125,7 +132,11 @@ public class TeamController {
         var pas = filter(teamsService.getAllProductAreas(), pa -> containsIgnoreCase(pa.getName(), name));
         pas.sort(comparing(ProductArea::getName, startsWith(name)));
         log.info("Returned {} pas", pas.size());
-        return new ResponseEntity<>(new RestResponsePage<>(convert(pas, ProductArea::toResponse)), HttpStatus.OK);
+
+        List<ProductAreaResponse> response = pas.stream().map(ProductArea::toResponse).toList();
+        response.forEach(this::addAvdelingFromNom);
+
+        return new ResponseEntity<>(new RestResponsePage<>(response), HttpStatus.OK);
     }
 
     // Resources
@@ -230,5 +241,16 @@ public class TeamController {
 
     static class ProductAreaPage extends RestResponsePage<ProductAreaResponse> {
 
+    }
+
+    private void addAvdelingFromNom(ProductAreaResponse productArea) {
+        if(productArea.getAvdelingNomId() != null) {
+            OrgEnhet nomAvdeling = nomGraphClient.getAvdelingById(productArea.getAvdelingNomId())
+                    .orElse(OrgEnhet.builder()
+                            .id(productArea.getAvdelingNomId())
+                            .navn("Fant ikke avdelingen i nom")
+                            .build());
+            productArea.setAvdeling(nomAvdeling);
+        }
     }
 }

@@ -19,6 +19,8 @@ import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,6 +56,7 @@ public class KravController {
     private final KravValidator validator;
     private final EtterlevelseService etterlevelseService;
     private final TilbakemeldingService tilbakemeldingService;
+    private final RisikoscenarioService risikoscenarioService;
 
     @Operation(summary = "Get All Krav")
     @ApiResponse(description = "ok")
@@ -69,7 +72,7 @@ public class KravController {
         }
     }
 
-    @Operation(summary = "Get All Krav Without Login ")
+    @Operation(summary = "Get All Krav Without Login")
     @ApiResponse(description = "ok")
     @GetMapping("/statistic")
     public ResponseEntity<RestResponsePage<KravResponse>> getAllKravStatistics(PageParameters pageParameters) {
@@ -197,7 +200,15 @@ public class KravController {
         if (!tilbakemeldingList.isEmpty()) {
             throw new ValidationException(String.format("Can not delete krav. Found %s tilbakemelding connected to krav.", tilbakemeldingList.size()));
         }
-        // TODO: Sjekke om krav har relasjon til risikoscenario
+        List<Risikoscenario> risikoscenarios = risikoscenarioService.getByKravNummer(krav.getKravNummer());
+        if (!risikoscenarios.isEmpty()) {
+            List<Krav> kravVersjons = service.getByKravNummer(krav.getKravNummer());
+            if (kravVersjons.stream().noneMatch(k -> k.getKravVersjon() != krav.getKravVersjon())) {
+                // We are here only if the krav is referenced by a risikoscenario, and we have no other versions og the krav
+                throw new ValidationException(String.format("Can not delete krav. Relevant for at least one risikoscenario (%s).", risikoscenarios.get(0).getId()));
+            }
+        }
+        // FIXME: Sjekke om krav har relasjon til risikoscenario
         var deletedKrav = service.delete(id);
         return ResponseEntity.ok(KravResponse.buildFrom(deletedKrav));
     }

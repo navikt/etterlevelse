@@ -31,6 +31,14 @@ export const updateEtterlevelseMetadata = async (etterlevelseMetadata: IEtterlev
   ).data
 }
 
+export const deleteEtterlevelseMetadata = async (etterlevelseMetadata: string) => {
+  return (
+    await axios.delete<IEtterlevelseMetadata>(
+      `${env.backendBaseUrl}/etterlevelsemetadata/${etterlevelseMetadata}`
+    )
+  ).data
+}
+
 function etterlevelseMetadataToEtterlevelseMetadataDto(
   etterlevelseMetadata: IEtterlevelseMetadata
 ): IEtterlevelseMetadata {

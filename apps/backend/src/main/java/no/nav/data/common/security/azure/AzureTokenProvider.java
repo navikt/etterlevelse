@@ -2,15 +2,7 @@ package no.nav.data.common.security.azure;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
-import com.microsoft.aad.msal4j.AuthorizationRequestUrlParameters;
-import com.microsoft.aad.msal4j.ClientCredentialParameters;
-import com.microsoft.aad.msal4j.IAuthenticationResult;
-import com.microsoft.aad.msal4j.IConfidentialClientApplication;
-import com.microsoft.aad.msal4j.PublicClientApplication;
-import com.microsoft.aad.msal4j.RefreshTokenParameters;
-import com.microsoft.aad.msal4j.ResponseMode;
-import com.microsoft.aad.msal4j.UserNamePasswordParameters;
+import com.microsoft.aad.msal4j.*;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.kiota.authentication.AccessTokenProvider;
 import com.microsoft.kiota.authentication.AllowedHostsValidator;
@@ -75,6 +67,7 @@ public class AzureTokenProvider implements TokenProvider {
         this.encryptor = encryptor;
         this.tokenMetrics = MetricUtils.summary()
                 .labels("accessToken")
+                .labels("lookupGrantedAuthorities")
                 .labelNames("action")
                 .name(Constants.APP_ID.replace('-', '_') + "_token_summary")
                 .help("Time taken for azure token lookups")
@@ -110,6 +103,7 @@ public class AzureTokenProvider implements TokenProvider {
 
     }
 
+    @Override
     public String getConsumerToken(String resource) {
         return Credential.getCredential()
                 .filter(Credential::hasAuth)

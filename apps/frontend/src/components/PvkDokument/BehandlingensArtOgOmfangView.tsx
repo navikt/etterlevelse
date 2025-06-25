@@ -213,7 +213,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
 
                           <Button
                             type='button'
-                            variant='secondary'
+                            variant='tertiary'
                             onClick={async () => {
                               setIsNullStilModalOpen(true)
                             }}

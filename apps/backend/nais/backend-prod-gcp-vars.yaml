@@ -5,6 +5,7 @@ replies:
   - https://etterlevelse.ansatt.nav.no/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.nav.no
 p360_ingress: nav.public360online.com
+cluster_location: prod-gcp
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
     value: https://etterlevelse.ansatt.nav.no, https://etterlevelse.intern.nav.no
@@ -26,3 +27,5 @@ env:
     value: 1e0cb856-a8ba-4294-aab3-8162e3ebe1ea
   - name: CLIENT_BEGREPSKATALOG_FRONTEND_URL
     value: https://begrepskatalog.intern.nav.no/begrep
+  - name: CLIENT_NOM_GRAPHQL_URL
+    value: http://nom-api.nom.svc.cluster.local/graphql

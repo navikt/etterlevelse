@@ -282,6 +282,7 @@ export const PvoTilbakemeldingPage = () => {
                     )}
                     {activeStep === 7 && (
                       <SendInnPvoView
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         pvkDokument={pvkDokument}
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}

@@ -56,6 +56,8 @@ public class EtterlevelseDokumentasjonToDoc {
 
     private final KravPriorityListService kravPriorityListService;
 
+    private final PvkDokumentToDoc pvkDokumentToDoc;
+
     public void getEtterlevelseDokumentasjonData(EtterlevelseDokumentasjon etterlevelseDokumentasjon, EtterlevelseDocumentBuilder doc) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd'.' MMMM yyyy 'kl 'HH:mm");
         Date date = new Date();
@@ -74,6 +76,13 @@ public class EtterlevelseDokumentasjonToDoc {
                 }
 
             });
+        }
+
+        doc.addHeading3("Avdeling");
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId() == null || etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId().isEmpty()) {
+            doc.addMarkdownText("Ingen avdeling satt");
+        } else {
+            doc.addMarkdownText(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getAvdelingNavn());
         }
 
         doc.addHeading3("Team");
@@ -158,7 +167,7 @@ public class EtterlevelseDokumentasjonToDoc {
         );
     }
 
-    public byte[] generateDocFor(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover, boolean onlyActiveKrav) {
+    public byte[] generateDocFor(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover, boolean onlyActiveKrav, boolean withPvkDocument) {
 
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
 
@@ -238,6 +247,11 @@ public class EtterlevelseDokumentasjonToDoc {
         var doc = new EtterlevelseDocumentBuilder();
         getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
 
+        if (withPvkDocument) {
+            pvkDokumentToDoc.generateDocForP360(doc, etterlevelseDokumentasjon);
+        }
+
+
         doc.addHeading1("Dokumentet inneholder etterlevelse for " + filteredEtterlevelseMedKravData.size() + " krav");
 
         doc.addTableOfContent(filteredEtterlevelseMedKravData, temaListe);
@@ -263,13 +277,13 @@ public class EtterlevelseDokumentasjonToDoc {
         return doc.build();
     }
 
-    class EtterlevelseDocumentBuilder extends WordDocUtils {
+    public class EtterlevelseDocumentBuilder extends WordDocUtils {
 
         public EtterlevelseDocumentBuilder() {
             super(etterlevelseFactory);
         }
 
-        long listId = 3;
+        public long listId = 1;
 
         public void generate(EtterlevelseMedKravData etterlevelseMedKravData) {
 

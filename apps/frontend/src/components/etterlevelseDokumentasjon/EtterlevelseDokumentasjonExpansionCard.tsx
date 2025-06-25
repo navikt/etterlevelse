@@ -4,6 +4,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
 import { user } from '../../services/User'
+import { p360Url } from '../../util/LinkUrlUtils'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
@@ -155,11 +156,28 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className='flex items-start gap-2 mb-2.5'>
+                  <Label size='medium'>Saksnummer i Public 360:</Label>
+                  {etterlevelseDokumentasjon.p360CaseNumber !== '' && (
+                    <Link
+                      href={p360Url(etterlevelseDokumentasjon.p360Recno)}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      {etterlevelseDokumentasjon.p360CaseNumber} (åpner i en ny fane)
+                    </Link>
+                  )}
+
+                  {etterlevelseDokumentasjon.p360CaseNumber === '' && (
+                    <BodyLong>Ingen saksnummer</BodyLong>
+                  )}
+                </div>
+
+                <div className='flex items-start gap-2 mb-2.5'>
                   <Label size='medium'>Avdeling:</Label>
                   <BodyLong size='medium'>
-                    {etterlevelseDokumentasjon.avdeling &&
-                      etterlevelseDokumentasjon.avdeling.shortName}
-                    {!etterlevelseDokumentasjon.avdeling && 'Ikke angitt'}
+                    {etterlevelseDokumentasjon.nomAvdelingId &&
+                      etterlevelseDokumentasjon.avdelingNavn}
+                    {!etterlevelseDokumentasjon.nomAvdelingId && 'Ikke angitt'}
                   </BodyLong>
                 </div>
 

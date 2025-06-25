@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.etterlevelse.codelist.CodelistService;
-import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
@@ -53,7 +51,8 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
                 .resources(eDokData.getResources() != null ? copyOf(eDokData.getResources()) : List.of())
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
                 .knyttetTilVirkemiddel(eDokData.isKnyttetTilVirkemiddel())
-                .avdeling(CodelistService.getCodelistResponse(ListName.AVDELING, eDokData.getAvdeling()))
+                .nomAvdelingId(eDokData.getNomAvdelingId())
+                .avdelingNavn(eDokData.getAvdelingNavn())
                 .varslingsadresser(eDokData.getVarslingsadresser() != null ? copyOf(eDokData.getVarslingsadresser()): List.of())
                 .build();
     }

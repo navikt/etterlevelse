@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.copyOf;
-import static no.nav.data.common.utils.StringUtils.*;
+import static no.nav.data.common.utils.StringUtils.formatList;
+import static no.nav.data.common.utils.StringUtils.formatListToUppercase;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -47,9 +48,11 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<String> resources;
     private List<String> risikoeiere;
 
+    private Integer P360Recno;
+    private String P360CaseNumber;
 
-    @Schema(description = "Codelist AVDELING")
-    private String avdeling;
+    private String nomAvdelingId;
+    private String avdelingNavn;
     private List<Varslingsadresse> varslingsadresser;
     @Override
     public void format() {
@@ -63,15 +66,17 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setResources(formatList(resources));
         setRisikoeiere(formatList(risikoeiere));
         setVarslingsadresser(copyOf(varslingsadresser));
-        setAvdeling(toUpperCaseAndTrim(avdeling));
+        setNomAvdelingId(nomAvdelingId);
+        setAvdelingNavn(avdelingNavn);
         setRisikovurderinger(formatList(risikovurderinger));
+        setP360Recno(P360Recno);
+        setP360CaseNumber(trimToNull(P360CaseNumber));
     }
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
         validator.checkId(this);
         validator.checkCodelists(EtterlevelseDokumentasjonRequest.Fields.irrelevansFor, irrelevansFor, ListName.RELEVANS);
-        validator.checkCodelist(Fields.avdeling, avdeling, ListName.AVDELING);
         validator.validateType(Fields.varslingsadresser, varslingsadresser);
     }
     
@@ -92,10 +97,13 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
         eDokData.setKnyttetTilVirkemiddel(knyttetTilVirkemiddel);
         eDokData.setForGjenbruk(forGjenbruk);
-        eDokData.setAvdeling(avdeling);
+        eDokData.setNomAvdelingId(nomAvdelingId);
+        eDokData.setAvdelingNavn(avdelingNavn);
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));
+        eDokData.setP360Recno(P360Recno);
+        eDokData.setP360CaseNumber(P360CaseNumber);
     }
 
 }

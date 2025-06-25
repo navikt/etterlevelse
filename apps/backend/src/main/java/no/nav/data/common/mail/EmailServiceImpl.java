@@ -50,8 +50,8 @@ public class EmailServiceImpl implements EmailService {
 
     @Transactional
     protected void sendMailAndDelete(MailTask task) {
-        sendMail(task);
         storage.delete(task);
+        sendMail(task);
     }
 
 }

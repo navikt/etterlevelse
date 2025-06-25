@@ -169,9 +169,12 @@ public class KravService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav delete(UUID id) {
-        var kravDelete = repo.findById(id);
+        var kravDelete = get(id);
+        if (kravDelete == null) {
+            return null;
+        }
         repo.deleteById(id);
-        return kravDelete.orElse(null);
+        return kravDelete;
     }
 
     public List<Krav> findForEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {

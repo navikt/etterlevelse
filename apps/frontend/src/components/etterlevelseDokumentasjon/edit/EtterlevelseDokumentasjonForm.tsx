@@ -21,6 +21,7 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '../../../api/EtterlevelseDokumentasjonApi'
+import { getAvdelingOptions } from '../../../api/Nom'
 import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
 import {
   ERelationType,
@@ -32,13 +33,13 @@ import {
   ITeamResource,
   IVirkemiddel,
   TEtterlevelseDokumentasjonQL,
+  TOption,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
 import {
   CodelistService,
   EListName,
   ICode,
-  ICodeListFormValues,
   IGetParsedOptionsProps,
 } from '../../../services/Codelist'
 import { user } from '../../../services/User'
@@ -84,6 +85,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   const formRef: RefObject<any> = useRef(undefined)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [alleAvdelingOptions, setAllAvdelingOptions] = useState<TOption[]>([])
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -125,6 +127,8 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
         ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) =>
           setDokumentRelasjon(response[0])
         )
+
+        await getAvdelingOptions().then(setAllAvdelingOptions)
       }
     })()
   }, [etterlevelseDokumentasjon])
@@ -345,16 +349,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                           if (value) {
                             fieldArrayRenderProps.push(value)
                           }
-                          if (value && !values.avdeling && values.behandlinger?.length === 0) {
-                            const behandling = value as IBehandling
-                            const newAvdeling = {
-                              list: EListName.AVDELING,
-                              shortName: behandling.avdeling?.shortName || '',
-                              code: behandling.avdeling?.code || '',
-                              description: behandling.avdeling?.description || '',
-                            } as ICodeListFormValues
-                            setFieldValue('avdeling', newAvdeling)
-                          }
                         }}
                         styles={selectOverrides}
                       />
@@ -457,7 +451,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     <ReadMore header='Hva hvis jeg ikke finner person'>
                       <div className='flex gap-2 items-end my-2'>
                         <TextField
-                          label='Skriv inn NAV ident dersom du ikke finner person over'
+                          label='Skriv inn Nav ident dersom du ikke finner person over'
                           value={customPersonForDev}
                           onChange={(event: ChangeEvent<HTMLInputElement>) =>
                             setCustomPersonForDev(event.target.value)
@@ -502,18 +496,23 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div className='flex flex-col lg:flex-row gap-5'>
+          <div id='avdeling' className='flex flex-col lg:flex-row gap-5'>
             <FieldWrapper marginTop full>
-              <Field name='avdeling'>
-                {(fieldProps: FieldProps<ICode, ICodeListFormValues>) => (
+              <Field name='nomAvdelingId'>
+                {(fieldProps: FieldProps) => (
                   <div>
                     <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
                     <OptionList
-                      listName={EListName.AVDELING}
                       label='Avdeling'
-                      value={fieldProps.field.value?.code}
-                      onChange={(value: any) => {
-                        fieldProps.form.setFieldValue('avdeling', value)
+                      options={alleAvdelingOptions}
+                      value={fieldProps.field.value}
+                      onChange={async (value: any) => {
+                        await fieldProps.form.setFieldValue('nomAvdelingId', value)
+                        await fieldProps.form.setFieldValue(
+                          'avdelingNavn',
+                          alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
+                            .label
+                        )
                       }}
                     />
                   </div>
@@ -524,7 +523,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
             <div className='flex-1' />
           </div>
 
-          <div className='flex flex-col lg:flex-row gap-5 mt-5'>
+          <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className='flex-1'>
@@ -565,7 +564,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                     <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
                       <div className='flex gap-2 items-end my-2'>
                         <TextField
-                          label='Skriv inn NAV ident dersom du ikke finner risikoeier over'
+                          label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
                           value={customRisikoeierForDev}
                           onChange={(event: ChangeEvent<HTMLInputElement>) =>
                             setCustomRisikoeierForDev(event.target.value)

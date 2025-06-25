@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyShort,
@@ -29,7 +30,13 @@ import behandlingensLivslopSchema from '../components/behandlingensLivlop/behand
 import { TextAreaField } from '../components/common/Inputs'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonPvkTypeStepUrl } from '../components/common/RouteLinkPvk'
-import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../components/layout/layout'
+import UnsavedModalAlert from '../components/common/UnsavedModalAlert'
+import {
+  ContentLayout,
+  MainPanelLayout,
+  SidePanelLayout,
+  StickyFooterButtonLayout,
+} from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
   EPvkDokumentStatus,
@@ -54,13 +61,14 @@ export const BehandlingensLivslopPage = () => {
     params.behandlingsLivslopId,
     params.id
   )
-  const [tilPvkDokument, setTilPvkDokument] = useState<boolean>(false)
-  const [tilTemaOversikt, setTilTemaOversikt] = useState<boolean>(false)
+
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
-  const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [submitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
+  const [urlToNavigate, setUrlToNavigate] = useState<string>('')
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
 
@@ -114,8 +122,6 @@ export const BehandlingensLivslopPage = () => {
         mutatedBehandlingensLivslop.id = existingBehandlingensLivsLop.id
       }
 
-      const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
-        pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
       let pvkStatus = ''
       await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
         .then((response) => {
@@ -134,37 +140,26 @@ export const BehandlingensLivslopPage = () => {
         if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
           await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
             setBehandlingesLivslop(response)
-            if (tilTemaOversikt) {
-              navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
-            } else if (tilPvkDokument) {
-              navigate(
-                pvkDokumentasjonPvkTypeStepUrl(
-                  response.etterlevelseDokumentasjonId,
-                  pvkDokumentLink,
-                  pvkDokument ? pvkDokument.id : 'ny',
-                  pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
-                )
-              )
-            }
           })
         } else {
           await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
             setBehandlingesLivslop(response)
-            if (tilTemaOversikt) {
-              navigate(etterlevelseDokumentasjonIdUrl(response.etterlevelseDokumentasjonId))
-            } else if (tilPvkDokument) {
-              navigate(
-                pvkDokumentasjonPvkTypeStepUrl(
-                  response.etterlevelseDokumentasjonId,
-                  pvkDokumentLink,
-                  pvkDokument ? pvkDokument.id : 'ny'
-                )
-              )
-            }
           })
         }
       }
     }
+  }
+
+  const getPvkLink = (etterlevelseDokumentasjonId: string) => {
+    const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
+      pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
+
+    return pvkDokumentasjonPvkTypeStepUrl(
+      etterlevelseDokumentasjonId,
+      pvkDokumentLink,
+      pvkDokument ? pvkDokument.id : 'ny',
+      pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
+    )
   }
 
   return (
@@ -273,25 +268,12 @@ export const BehandlingensLivslopPage = () => {
                               <Button
                                 type='button'
                                 onClick={() => {
-                                  setTilPvkDokument(true)
                                   submitForm()
                                 }}
                               >
-                                {pvkDokument
-                                  ? 'Lagre og gå til PVK-Oversikt'
-                                  : 'Lagre og vurdér behov for PVK'}
+                                Lagre
                               </Button>
-                              <Button
-                                type='button'
-                                variant='secondary'
-                                onClick={async () => {
-                                  setTilTemaOversikt(true)
-                                  await submitForm()
-                                  setSubmitClick(!submitClick)
-                                }}
-                              >
-                                Lagre og gå til Temaoversikt
-                              </Button>
+
                               <Button
                                 type='button'
                                 variant='tertiary'
@@ -301,7 +283,7 @@ export const BehandlingensLivslopPage = () => {
                                   )
                                 }}
                               >
-                                Avbryt
+                                Forkast endringer
                               </Button>
                             </div>
                           )}
@@ -324,8 +306,51 @@ export const BehandlingensLivslopPage = () => {
                       pvkDokumentId={pvkDokument.id}
                     />
                   )}
+                  <StickyFooterButtonLayout>
+                    <Button
+                      icon={<ChevronLeftIcon aria-hidden />}
+                      iconPosition='left'
+                      type='button'
+                      variant='tertiary'
+                      onClick={() => {
+                        if (formRef.current.dirty) {
+                          setIsUnsavedModalOpen(true)
+                          setUrlToNavigate(
+                            etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)
+                          )
+                        } else {
+                          navigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                        }
+                      }}
+                    >
+                      Gå til Temaoversikt
+                    </Button>
+                    <Button
+                      icon={<ChevronRightIcon aria-hidden />}
+                      iconPosition='right'
+                      type='button'
+                      variant={'tertiary'}
+                      onClick={() => {
+                        if (formRef.current.dirty) {
+                          setIsUnsavedModalOpen(true)
+                          setUrlToNavigate(getPvkLink(etterlevelseDokumentasjon.id))
+                        } else {
+                          navigate(getPvkLink(etterlevelseDokumentasjon.id))
+                        }
+                      }}
+                    >
+                      {pvkDokument ? 'PVK-Oversikt' : 'Vurdér behov for PVK'}
+                    </Button>
+                  </StickyFooterButtonLayout>
                 </div>
               )}
+
+              <UnsavedModalAlert
+                isOpen={isUnsavedModalOpen}
+                setIsOpen={setIsUnsavedModalOpen}
+                urlToNavigate={urlToNavigate}
+                formRef={formRef}
+              />
 
               {pvkDokument &&
                 [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(

@@ -21,12 +21,15 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
+import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravData;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
@@ -101,7 +104,7 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
     @Autowired
-    protected StorageService<EtterlevelseMetadata> etterlevelseMetadataStorageService;
+    protected EtterlevelseMetadataRepo etterlevelseMetadataRepo;
     @Autowired
     protected StorageService<Melding> meldingStorageService;
     @Autowired
@@ -157,6 +160,7 @@ public abstract class IntegrationTestBase {
     @Commit
     @Transactional
     void tearDownBase() {
+        etterlevelseMetadataRepo.deleteAll();
         tilbakemeldingRepo.deleteAll();
         repository.deleteAll();
         MockFilter.clearUser();
@@ -250,6 +254,27 @@ public abstract class IntegrationTestBase {
         );
     }
     
+    protected EtterlevelseMetadata createEtterlevelseMetadata(int kravNummer, int kravVersjon) {
+        UUID etterlevelseDokumentasjonId = createEtterlevelseDokumentasjon().getId();
+        return createEtterlevelseMetadata(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
+    }
+
+    protected EtterlevelseMetadata createEtterlevelseMetadata(UUID etterlevelseDokumentasjonId, int kravNummer, int kravVersjon) {
+        try {
+            createKrav("Krav 1", kravNummer, kravVersjon);
+        } catch (Exception e) {
+            // Ignore (probably created previouysly)
+        }
+        return etterlevelseMetadataRepo.save(EtterlevelseMetadata.builder()
+                .id(UUID.randomUUID())
+                .kravNummer(kravNummer).kravVersjon(kravVersjon)
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
+                .data(EtterlevelseMetadataData.builder().build())
+
+                .build()
+        );
+    }
+
     protected Krav createKrav(String navn, int kravNummer, int kravVersjon) {
         Krav krav = Krav.builder().id(UUID.randomUUID()).kravNummer(kravNummer).kravVersjon(kravVersjon)
                 .data(KravData.builder().navn(navn).status(KravStatus.AKTIV).build())
@@ -259,6 +284,23 @@ public abstract class IntegrationTestBase {
 
     protected Krav createKrav() {
         return createKrav("Krav 1", 50, 1);
+    }
+
+    protected Risikoscenario insertRisikoscenario() {
+        PvkDokument pvkDokument = createPvkDokument();
+        Krav krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+                .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder()
+                        .lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build())
+                .build());
+
+        Risikoscenario risikoscenario = Risikoscenario.builder()
+                .pvkDokumentId(pvkDokument.getId())
+                .risikoscenarioData(RisikoscenarioData.builder()
+                        .relevanteKravNummer(List.of(krav.getKravNummer()))
+                        .build()
+                )
+                .build();
+        return risikoscenarioService.save(risikoscenario, false);
     }
 
     

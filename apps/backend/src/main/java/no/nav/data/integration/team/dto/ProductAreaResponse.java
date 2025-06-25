@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.integration.nom.domain.OrgEnhet;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ProductAreaResponse {
     private String description;
     private List<String> tags;
     private List<MemberResponse> members;
-
-
+    private String nomId;
+    private String avdelingNomId;
+    private OrgEnhet avdeling;
 }

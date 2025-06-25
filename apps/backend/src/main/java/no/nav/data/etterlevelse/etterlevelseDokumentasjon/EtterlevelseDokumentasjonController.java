@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
 import no.nav.data.integration.team.dto.MemberResponse;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ import java.util.UUID;
 public class EtterlevelseDokumentasjonController {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final TeamcatTeamClient teamcatTeamClient;
 
     @Operation(summary = "Get All Etterlevelse Dokumentasjon")
     @ApiResponse(description = "ok")

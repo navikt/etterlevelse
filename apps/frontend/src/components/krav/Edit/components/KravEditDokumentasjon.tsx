@@ -17,7 +17,7 @@ export const KravEditDokumentasjon = ({ maxInputWidth }: IPropsKravEditDokumenta
       linkLabel='Navn på kilde'
       name='dokumentasjon'
       link
-      label='Lenke eller websaknr'
+      label='Lenke'
       tooltip='Lenke til dokumentasjon'
       linkTooltip='Legg inn referanse til utdypende dokumentasjon (lenke). Eksempelvis til navet, eksterne nettsider eller WebSak.'
     />

@@ -1,4 +1,5 @@
 import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
+import moment from 'moment'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -60,6 +61,15 @@ export const EtterlevelseViewFields = (props: IProps) => {
           </div>
         )
       })}
+
+      {etterlevelse.changeStamp.lastModifiedDate && etterlevelse.changeStamp.lastModifiedBy && (
+        <div className='pb-6 flex justify-end w-full'>
+          <BodyShort>
+            Sist utfylt: {moment(etterlevelse.changeStamp.lastModifiedDate).format('LL')} av{' '}
+            {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+          </BodyShort>
+        </div>
+      )}
     </div>
   )
 }

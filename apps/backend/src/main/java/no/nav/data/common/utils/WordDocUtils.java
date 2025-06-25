@@ -12,7 +12,20 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 import lombok.SneakyThrows;
 import no.nav.data.common.storage.domain.ChangeStamp;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.behandling.dto.DataBehandler;
+import no.nav.data.integration.behandling.dto.PolicyResponse;
+import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
+import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
+import no.nav.data.pvk.tiltak.dto.TiltakResponse;
 import org.apache.commons.lang3.BooleanUtils;
 import org.docx4j.model.table.TblFactory;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -22,11 +35,11 @@ import org.docx4j.wml.*;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.time.format.FormatStyle;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static no.nav.data.common.utils.StreamUtils.filter;
 
@@ -391,5 +404,345 @@ public class WordDocUtils {
         var outStream = new ByteArrayOutputStream();
         pack.save(outStream);
         return outStream.toByteArray();
+    }
+
+    //PVK docu
+    public void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
+        newLine();
+        var header2 = addHeading2("Behandlingens art og omfang");
+        addBookmark(header2, "pvk_art_og_omfang");
+        newLine();
+        addPersonkategoriList(behandlingList);
+        newLine();
+        addBooleanDataText("Stemmer denne lista over personkategorier?", pvkDokument.getPvkDokumentData().getStemmerPersonkategorier());
+        newLine();
+        addDataText("For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.", pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse());
+        newLine();
+        addDataText("Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.", pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene());
+        newLine();
+        addDataText("Beskriv hvordan og hvor lenge personopplysningene skal lagres.", pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene());
+        newLine();
+        generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
+    }
+
+    public void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
+        newLine();
+        var header2 = addHeading2("Innvolvering av eksterne");
+        addBookmark(header2, "pvk_innvolvering_av_ekstern");
+
+        newLine();
+        addHeading3("Representanter for de registrerte");
+        addPersonkategoriList(behandlingList);
+        newLine();
+        addBooleanDataText("Har dere involvert en representant for de registrerte?", pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant());
+        newLine();
+        addDataText("Utdyp hvordan dere har involvert representant(er) for de registrerte", pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse());
+        newLine();
+        addHeading3("Representanter for databehandlere");
+        addDatabehandlerList(behandlingList);
+        newLine();
+        addBooleanDataText("Har dere involvert en representant for databehandlere?", pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering());
+        newLine();
+        addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
+        newLine();
+        generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
+    }
+
+    public void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding) {
+        newLine();
+        var header2 = addHeading2("Risikoscenario, tiltak, og tiltakenes effekt");
+        addBookmark(header2, "pvk_risikoscenario_og_tiltak");
+        newLine();
+        risikoscenarioList.forEach(risikoscenario -> {
+            addHeading3(risikoscenario.getNavn());
+            addMarkdownText("**Status**: " + getRisikoscenarioStatus(risikoscenario));
+            newLine();
+            if (risikoscenario.getBeskrivelse().isEmpty()) {
+                addText("Ikke besvart");
+            } else {
+                addMarkdownText(risikoscenario.getBeskrivelse());
+            }
+            newLine();
+            if (risikoscenario.isGenerelScenario()) {
+                addText("Dette scenarioet er ikke tilknyttet spesifikke etterlevelseskrav.");
+            } else {
+                addText("Etterlevelseskrav hvor risikoscenarioet inntreffer");
+                newLine();
+                risikoscenario.getRelevanteKravNummer().forEach(kravRef -> {
+                    addMarkdownText("- K" + kravRef.getKravNummer() + "." + kravRef.getKravVersjon() + " " + kravRef.getNavn());
+                });
+            }
+            newLine();
+            addLabel(sannsynlighetsNivaaToText(risikoscenario.getSannsynlighetsNivaa()));
+            newLine();
+            if (risikoscenario.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
+                addText("Ingen begrunnelse");
+            } else {
+                addMarkdownText(risikoscenario.getSannsynlighetsNivaaBegrunnelse());
+            }
+            newLine();
+            addLabel(konsekvensNivaaToText(risikoscenario.getKonsekvensNivaa()));
+            newLine();
+            if (risikoscenario.getKonsekvensNivaaBegrunnelse().isEmpty()) {
+                addText("Ingen begrunnelse");
+            } else {
+                addMarkdownText(risikoscenario.getKonsekvensNivaaBegrunnelse());
+            }
+            newLine();
+            addHeading4("Følgende tiltak gjelder for dette risikoscenarioet");
+            newLine();
+            if (risikoscenario.getIngenTiltak() != null && risikoscenario.getIngenTiltak()) {
+                addText("Tiltak ikke aktuelt");
+            } else if (risikoscenario.getTiltakIds().isEmpty()) {
+                addText("Risikoscenario mangler tiltak");
+            } else {
+                generateTiltak(risikoscenario, tiltakList, risikoscenarioList);
+            }
+            newLine();
+            addHeading4("Antatt risikonivå etter gjennomførte tiltak");
+            addLabel(sannsynlighetsNivaaToText(risikoscenario.getSannsynlighetsNivaaEtterTiltak()));
+            newLine();
+            addLabel(konsekvensNivaaToText(risikoscenario.getKonsekvensNivaaEtterTiltak()));
+            newLine();
+            if (risikoscenario.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
+                addText("Ingen begrunnelse");
+            } else {
+                addMarkdownText(risikoscenario.getNivaaBegrunnelseEtterTiltak());
+            }
+            newLine();
+
+        });
+        newLine();
+        generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
+    }
+
+    public void generateTiltak(RisikoscenarioResponse risikoscenario, List<TiltakResponse> tiltakList, List<RisikoscenarioResponse> risikoscenarioResponseList) {
+        List<TiltakResponse> gjeldendeTiltak = tiltakList.stream()
+                .filter(tiltak -> risikoscenario.getTiltakIds().contains(tiltak.getId())).toList();
+
+
+        gjeldendeTiltak.forEach(tiltak -> {
+            List<UUID> gjenbruktScenarioIds = tiltak.getRisikoscenarioIds().stream().filter(id -> !risikoscenario.getId().equals(id)).toList();
+            List<String> gjenbruktScenarioNames = risikoscenarioResponseList.stream().filter(risikoscenarioResponse -> gjenbruktScenarioIds.contains(risikoscenarioResponse.getId()))
+                    .map(RisikoscenarioResponse::getNavn).toList();
+
+            addHeading5(tiltak.getNavn());
+            newLine();
+            addMarkdownText(tiltak.getBeskrivelse());
+            newLine();
+            addLabel("Tiltaksansvarlig:");
+            addText(getAnsvarlig(tiltak.getAnsvarlig()));
+            newLine();
+            addLabel("Tiltaksfrist:");
+            addText( dateToString(tiltak.getFrist()));
+            newLine();
+            if (!gjenbruktScenarioIds.isEmpty()) {
+                addLabel("Tiltaket er gjenbrukt ved følgende scenarioer:");
+                gjenbruktScenarioNames.forEach(name -> addMarkdownText("- " + name));
+                newLine();
+            }
+        });
+    }
+
+    public void generatePvoTilbakemelding(Tilbakemeldingsinnhold tilbakemelding) {
+        addHeading3("Tilbakemelding fra Personvernombudet");
+        newLine();
+        addLabel("Vurdéring av etterleverens svar.");
+        addText(vurderingsBidragToText(tilbakemelding.getBidragsVurdering()));
+        newLine();
+        addLabel("Tilbakemelding");
+        if (tilbakemelding.getTilbakemeldingTilEtterlevere() != null && !tilbakemelding.getTilbakemeldingTilEtterlevere().isBlank()) {
+            addMarkdownText(tilbakemelding.getTilbakemeldingTilEtterlevere());
+        } else {
+            addText("Ingen tilbakemelding");
+        }
+    }
+
+    public String getAnsvarlig(Resource ansvarlig) {
+        if (ansvarlig.getFullName() == null || ansvarlig.getFullName().isEmpty()) {
+            return "Ingen ansvarlig er satt";
+        } else {
+            return ansvarlig.getFullName();
+        }
+    }
+
+    public String dateToString(LocalDate date) {
+        if (date == null) {
+            return "Det er ikke satt en frist for tiltaket";
+        } else {
+            return DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).format(date);
+        }
+    }
+
+    public String vurderingsBidragToText(String vurderingsBidrag) {
+        return switch (vurderingsBidrag) {
+            case "TILSTREKELIG" -> "Ja, tilstrekkelig";
+            case "TILSTREKKELIG_FORBEHOLDT" ->
+                    "Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under";
+            case "UTILSTREKELIG" -> "Utilstrekkelig, beskrives nærmere under";
+            default -> "Ingen  vurdert";
+        };
+    }
+
+    public String sannsynlighetsNivaaToText(Integer sannsynlighetsnivaa) {
+        return switch (sannsynlighetsnivaa) {
+            case 1 -> "Meget lite sannsynlig";
+            case 2 -> "Lite sannsynlig";
+            case 3 -> "Moderat sannsynlig";
+            case 4 -> "Sannsynlig";
+            case 5 -> "Nesten sikkert";
+            default -> "Ingen sannsynlighetsnivå satt";
+        };
+    }
+
+    public String konsekvensNivaaToText(Integer konsekvensnivaa) {
+        return switch (konsekvensnivaa) {
+            case 1 -> "Ubetydelig konsekvens";
+            case 2 -> "Lav konsekvens";
+            case 3 -> "Moderat konsekvens";
+            case 4 -> "Alvorlig konsekvens";
+            case 5 -> "Svært alvorlig konsekvens";
+            default -> "Ingen konsekvensnivå satt";
+        };
+    }
+
+    public String getRisikoscenarioStatus(RisikoscenarioResponse risikoscenario) {
+        String status;
+        if (risikoscenario.getKonsekvensNivaa() == 0 || risikoscenario.getSannsynlighetsNivaa() == 0 || risikoscenario.getKonsekvensNivaaBegrunnelse().isEmpty() || risikoscenario.getSannsynlighetsNivaaBegrunnelse().isEmpty()) {
+            status = "Scenario er mangelfullt";
+        } else if (risikoscenario.getIngenTiltak() != null && risikoscenario.getIngenTiltak()) {
+            status = "Tiltak ikke akutelt";
+        } else if (risikoscenario.getTiltakIds().isEmpty()) {
+            status = "Mangler tiltak";
+        } else if (risikoscenario.getKonsekvensNivaaEtterTiltak() == 0 || risikoscenario.getSannsynlighetsNivaaEtterTiltak() == 0 || risikoscenario.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
+            status = "Ikke ferdig vurdert";
+        } else {
+            status = "Ferdig vurdert";
+        }
+        return status;
+    }
+
+    public void addBooleanDataText(String label, Boolean value) {
+        addLabel(label);
+        addText(BooleanUtils.toString(value, "Ja", "Nei", "Ikke besvart"));
+    }
+
+
+    public void addDataText(String label, String text) {
+        addLabel(label);
+        if (text == null) {
+            addText("Ikke besvart");
+        } else {
+            addMarkdownText(text);
+        }
+    }
+
+    public void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
+        var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
+
+        addLabel("Øvrige egenskaper for behandlingene:");
+        newLine();
+        allYtterligeEgenskaper.forEach(egenskap -> {
+            if (pvkDokument.getPvkDokumentData().getYtterligereEgenskaper().contains(egenskap.getCode())) {
+                addMarkdownText("- **Det gjelder for** " + egenskap.getShortName().toLowerCase());
+            } else {
+                addMarkdownText("- **Det gjelder ikke for** " + egenskap.getShortName().toLowerCase());
+            }
+        });
+
+    }
+
+    public void generateEgenskaperFraBehandlinger(List<Behandling> behandlingList) {
+        List<PolicyResponse> alleOpplysningstyper = new ArrayList<>();
+        List<Boolean> alleProfilering = new ArrayList<>();
+        List<Boolean> alleAutomatiskBehandling = new ArrayList<>();
+        AtomicBoolean manglerOpplysningstyper = new AtomicBoolean(false);
+
+        behandlingList.forEach(behandling -> {
+            if (behandling.getPolicies().isEmpty()) {
+                manglerOpplysningstyper.set(true);
+            } else {
+                alleOpplysningstyper.addAll(behandling.getPolicies());
+            }
+
+            alleProfilering.add(behandling.getProfilering());
+            alleAutomatiskBehandling.add(behandling.getAutomatiskBehandling());
+        });
+
+        var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
+
+        addLabel("Følgende egenskaper er hentet fra Behandlingskatalogen:");
+        newLine();
+        if (alleProfilering.contains(true)) {
+            addMarkdownText("- **Det gjelder** profilering");
+        } else if (alleProfilering.stream().filter(value -> value == false).toList().size() == alleProfilering.size()) {
+            addMarkdownText("- **Det gjelder ikke** profilering");
+        } else if (alleProfilering.contains(null)) {
+            addMarkdownText("- Mangler informasjon for å vite om profilering");
+        }
+
+        if (alleAutomatiskBehandling.contains(true)) {
+            addMarkdownText("- **Det gjelder** automatisert behandling");
+        } else if (alleAutomatiskBehandling.stream().filter(value -> value == false).toList().size() == alleAutomatiskBehandling.size()) {
+            addMarkdownText("- **Det gjelder ikke** automatisert behandling");
+        } else if (alleAutomatiskBehandling.contains(null)) {
+            addMarkdownText("- Mangler informasjon for å vite om automatisert behandling");
+        }
+
+        if (!manglerOpplysningstyper.get() && !saerligKategorierOppsumert.isEmpty()) {
+            addMarkdownText("- **Det gjelder** saerlig kategorier");
+        } else if (!manglerOpplysningstyper.get() && saerligKategorierOppsumert.isEmpty()) {
+            addMarkdownText("- **Det gjelder ikke** saerlig kategorier");
+        } else if (manglerOpplysningstyper.get()) {
+            addMarkdownText("- Mangler informasjon for å vite saerlig kategorier");
+        }
+
+    }
+
+    public void addDatabehandlerList(List<Behandling> behandlingList) {
+        addLabel("I Behandlingskatalogen står det at følgende databehandlere benyttes:");
+        newLine();
+        List<DataBehandler> databehandlerList = new ArrayList<>();
+
+        behandlingList.forEach(behandling -> {
+            databehandlerList.addAll(behandling.getDataBehandlerList());
+        });
+        List<String> databehandlerNavnList = new ArrayList<>(databehandlerList.stream().map(DataBehandler::getNavn).toList());
+        Set<String> set = new HashSet<>(databehandlerNavnList);
+        databehandlerNavnList.clear();
+        databehandlerNavnList.addAll(set);
+        databehandlerNavnList.forEach(navn -> addMarkdownText("- " + navn));
+    }
+
+    public void addPersonkategoriList(List<Behandling> behandlingList) {
+        List<ExternalCode> personkategorier = new ArrayList<>();
+
+        behandlingList.forEach(behandling -> {
+            behandling.getPolicies().forEach(policy -> {
+                personkategorier.addAll(policy.getPersonKategorier());
+            });
+        });
+
+        addLabel("I Behandlingskatalogen står det at dere behandler personopplysninger om:");
+        newLine();
+        List<String> personkategoriList = new ArrayList<>(personkategorier.stream().map(ExternalCode::getShortName).toList());
+        Set<String> set = new HashSet<>(personkategoriList);
+        personkategoriList.clear();
+        personkategoriList.addAll(set);
+        personkategoriList.forEach(personkategori -> {
+            addMarkdownText("- " + personkategori);
+        });
+    }
+
+
+    public String pvkDokumentStatusText(PvkDokumentStatus status) {
+        return switch (status) {
+            case AKTIV, UNDERARBEID -> "Under arbeid";
+            case SENDT_TIL_PVO -> "Sendt til personvernombudet";
+            case PVO_UNDERARBEID -> "Personvernombudet jobber med vurderingen";
+            case VURDERT_AV_PVO -> "Vurdert av personvernombudet";
+            case TRENGER_GODKJENNING -> "Trenger godkjenning fra risikoeier";
+            case GODKJENT_AV_RISIKOEIER -> "Godkjent av risikoeier";
+        };
     }
 }

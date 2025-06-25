@@ -21,6 +21,8 @@ public class TeamKatProductArea {
     private String description;
     private List<String> tags;
     private List<TeamKatMember> members;
+    private String nomId;
+    private String avdelingNomId;
 
     public ProductArea convertToProductArea() {
         return ProductArea.builder()
@@ -29,6 +31,8 @@ public class TeamKatProductArea {
                 .description(description)
                 .tags(tags)
                 .members(convert(members, TeamKatMember::convertToMember))
+                .nomId(nomId)
+                .avdelingNomId(avdelingNomId)
                 .build();
     }
 }
