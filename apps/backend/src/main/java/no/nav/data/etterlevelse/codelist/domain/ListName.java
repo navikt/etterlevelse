@@ -8,4 +8,5 @@ public enum ListName {
     TEMA,
     VIRKEMIDDELTYPE,
     YTTERLIGERE_EGENSKAPER,
+    PVO_VURDERING,
 }
