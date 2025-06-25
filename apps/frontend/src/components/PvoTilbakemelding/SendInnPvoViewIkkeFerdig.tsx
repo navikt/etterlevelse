@@ -111,7 +111,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                         rows={3}
                         noPlaceholder
                         label='Beskriv anbefalingen nærmere:'
-                        name='placeholder2'
+                        name='arbeidGarVidereBegrunnelse'
                       />
                     </IndentLayoutTextField>
                   )}
@@ -152,7 +152,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                         rows={3}
                         noPlaceholder
                         label='Beskriv anbefalingen nærmere:'
-                        name='placeholder2'
+                        name='behovForForhandskonsultasjonBegrunnelse'
                       />
                     </IndentLayoutTextField>
                   )}
