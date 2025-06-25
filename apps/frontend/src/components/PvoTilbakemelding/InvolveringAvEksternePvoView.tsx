@@ -36,23 +36,25 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
         pvkDokument={pvkDokument}
       />
       {/* PVO sidepanel */}
-      <PvoSidePanelWrapper>
-        {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvoTilbakemeldingReadOnly
-            tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
-            sentDate={pvoTilbakemelding.sendtDato}
-            forPvo={true}
-          />
-        )}
-        {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-          <PvoTilbakemeldingForm
-            pvkDokumentId={pvkDokument.id}
-            fieldName='innvolveringAvEksterne'
-            initialValue={pvoTilbakemelding.innvolveringAvEksterne}
-            formRef={formRef}
-          />
-        )}
-      </PvoSidePanelWrapper>
+      <div>
+        <PvoSidePanelWrapper>
+          {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+            <PvoTilbakemeldingReadOnly
+              tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
+              sentDate={pvoTilbakemelding.sendtDato}
+              forPvo={true}
+            />
+          )}
+          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+            <PvoTilbakemeldingForm
+              pvkDokumentId={pvkDokument.id}
+              fieldName='innvolveringAvEksterne'
+              initialValue={pvoTilbakemelding.innvolveringAvEksterne}
+              formRef={formRef}
+            />
+          )}
+        </PvoSidePanelWrapper>
+      </div>
     </ContentLayout>
     <PvoFormButtons
       activeStep={activeStep}

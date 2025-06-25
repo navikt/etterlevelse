@@ -73,23 +73,25 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
             />
 
             {/* PVO sidepanel */}
-            <PvoSidePanelWrapper>
-              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-                <PvoTilbakemeldingReadOnly
-                  tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
-                  sentDate={pvoTilbakemelding.sendtDato}
-                  forPvo={true}
-                />
-              )}
-              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-                <PvoTilbakemeldingForm
-                  pvkDokumentId={pvkDokument.id}
-                  fieldName='behandlingenslivslop'
-                  initialValue={pvoTilbakemelding.behandlingenslivslop}
-                  formRef={formRef}
-                />
-              )}
-            </PvoSidePanelWrapper>
+            <div>
+              <PvoSidePanelWrapper>
+                {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+                  <PvoTilbakemeldingReadOnly
+                    tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
+                    sentDate={pvoTilbakemelding.sendtDato}
+                    forPvo={true}
+                  />
+                )}
+                {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                  <PvoTilbakemeldingForm
+                    pvkDokumentId={pvkDokument.id}
+                    fieldName='behandlingenslivslop'
+                    initialValue={pvoTilbakemelding.behandlingenslivslop}
+                    formRef={formRef}
+                  />
+                )}
+              </PvoSidePanelWrapper>
+            </div>
           </ContentLayout>
           <PvoFormButtons
             activeStep={activeStep}

@@ -31,23 +31,25 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
       <ArtOgOmfangReadOnlyContent pvkDokument={pvkDokument} personkategorier={personkategorier} />
 
       {/* PVO sidepanel */}
-      <PvoSidePanelWrapper>
-        {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvoTilbakemeldingReadOnly
-            tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
-            sentDate={pvoTilbakemelding.sendtDato}
-            forPvo={true}
-          />
-        )}
-        {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-          <PvoTilbakemeldingForm
-            pvkDokumentId={pvkDokument.id}
-            fieldName='behandlingensArtOgOmfang'
-            initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
-            formRef={formRef}
-          />
-        )}
-      </PvoSidePanelWrapper>
+      <div>
+        <PvoSidePanelWrapper>
+          {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+            <PvoTilbakemeldingReadOnly
+              tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
+              sentDate={pvoTilbakemelding.sendtDato}
+              forPvo={true}
+            />
+          )}
+          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+            <PvoTilbakemeldingForm
+              pvkDokumentId={pvkDokument.id}
+              fieldName='behandlingensArtOgOmfang'
+              initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
+              formRef={formRef}
+            />
+          )}
+        </PvoSidePanelWrapper>
+      </div>
     </ContentLayout>
     <PvoFormButtons
       activeStep={activeStep}
