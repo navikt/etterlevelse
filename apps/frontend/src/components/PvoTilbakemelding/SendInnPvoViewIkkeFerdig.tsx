@@ -8,6 +8,7 @@ import {
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
+import { ICode } from '../../services/Codelist'
 import { FieldRadioLayout, IndentLayoutTextField } from '../common/IndentLayout'
 import { TextAreaField } from '../common/Inputs'
 import AlertPvoModal from './common/AlertPvoModal'
@@ -34,6 +35,7 @@ type TProps = {
   setSelectedStep: (step: number) => void
   isAlertModalOpen: boolean
   setIsAlertModalOpen: Dispatch<SetStateAction<boolean>>
+  pvoVurderingList: ICode[]
 }
 
 export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
@@ -48,19 +50,18 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   setSelectedStep,
   isAlertModalOpen,
   setIsAlertModalOpen,
+  pvoVurderingList,
 }) => {
-  const [radioValue, setRadioValue] = useState<number>()
-  const [checkboxValue, setCheckboxValue] = useState<string[]>([''])
+  const [radioValue, setRadioValue] = useState<string>()
+  const [checkboxValue, setCheckboxValue] = useState<string[]>([])
 
   useEffect(() => {
-    if (radioValue && radioValue < 2) {
+    if (radioValue === 'BRA_PVK' || radioValue === undefined) {
       setCheckboxValue([''])
-    }
-    if (radioValue && radioValue > 1) {
-      setCheckboxValue(['1'])
-    }
-    if (radioValue && radioValue > 2) {
-      setCheckboxValue(['1', '2'])
+    } else if (radioValue === 'OK_PVK') {
+      setCheckboxValue(['pvoFolgeOppEndringer'])
+    } else {
+      setCheckboxValue(['pvoFolgeOppEndringer', 'vilFaPvkIRetur'])
     }
   }, [radioValue])
 
@@ -168,43 +169,40 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   <RadioGroup
                     legend='PVOs vurdering'
                     onChange={(value) => {
-                      fieldProps.form.setFieldValue('pvosVurdering', value)
+                      fieldProps.form.setFieldValue('pvoVurdering', value)
                       setRadioValue(value)
                     }}
                   >
-                    <Radio value='1'>
-                      En bra PVK. Nå må dere lese, ta stilling til tilbakemeldinger og gjøre
-                      eventuelle endringer endringer. Så må dere få PVK-en godkjent hos
-                      risikoeieren.
-                    </Radio>
-                    <Radio value='2'>
-                      Stort sett en bra PVK. Nå må dere lese, ta stilling til tilbakemeldinger og
-                      gjøre eventuelle endringer. Så må dere få PVK-en godkjent hos risikoeieren.
-                    </Radio>
-                    <Radio value='3'>
-                      PVO er uenig i risikobildet dere presenterer. Nå må dere lese, ta stilling til
-                      tilbakemeldinger og gjøre eventuelle endringer. Det er viktig at dere kobler
-                      på risikoeieren direkte.
-                    </Radio>
-                    <Radio value='4'>
-                      PVO er uenig i risikobildet dere presenterer. Nå må dere lese, ta stilling til
-                      tilbakemeldinger og gjøre eventuelle endringer. Det er viktig at dere kobler
-                      på risikoeieren direkte. PVO kommer til å eskalere denne saken på grunn av
-                      sine bekymringer.
-                    </Radio>
-                    <Radio value='5'>
-                      PVO mener at PVK-en ikke er av god nok kvalitet til å vurdere. Nå må dere
-                      lese, ta stilling til tilbakemeldinger og gjøre eventuelle endringer.
-                    </Radio>
+                    {pvoVurderingList.map((vurdering, index) => (
+                      <Radio key={vurdering.code + '_' + index} value={vurdering.code}>
+                        {vurdering.description}
+                      </Radio>
+                    ))}
                   </RadioGroup>
                   <CheckboxGroup
                     legend='PVOs vudering'
                     hideLegend
                     value={checkboxValue}
-                    onChange={(value: string[]) => setCheckboxValue(value)}
+                    onChange={async (value: string[]) => {
+                      setCheckboxValue(value)
+                      if (value.includes('pvoFolgeOppEndringer')) {
+                        await setFieldValue('pvoFolgeOppEndringer', true)
+                      }
+                      if (value.includes('vilFaPvkIRetur')) {
+                        await setFieldValue('vilFaPvkIRetur', true)
+                      }
+                      if (!value.includes('pvoFolgeOppEndringer')) {
+                        await setFieldValue('pvoFolgeOppEndringer', false)
+                      }
+                      if (!value.includes('vilFaPvkIRetur')) {
+                        await setFieldValue('vilFaPvkIRetur', false)
+                      }
+                    }}
                   >
-                    <Checkbox value='1'>PVO vil følge opp endringer dere gjør.</Checkbox>
-                    <Checkbox value='2'>
+                    <Checkbox value='pvoFolgeOppEndringer'>
+                      PVO vil følge opp endringer dere gjør.
+                    </Checkbox>
+                    <Checkbox value='vilFaPvkIRetur'>
                       PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
                     </Checkbox>
                   </CheckboxGroup>

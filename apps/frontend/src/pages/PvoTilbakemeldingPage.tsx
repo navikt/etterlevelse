@@ -24,6 +24,7 @@ import {
   IEtterlevelseDokumentasjon,
   IExternalCode,
 } from '../constants'
+import { CodelistService } from '../services/Codelist'
 import { user } from '../services/User'
 
 export const StepTitle: string[] = [
@@ -62,6 +63,7 @@ export const PvoTilbakemeldingPage = () => {
   const [selectedStep, setSelectedStep] = useState<number>(1)
   const navigate: NavigateFunction = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
+  const [codelistUtils] = CodelistService()
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
@@ -291,6 +293,7 @@ export const PvoTilbakemeldingPage = () => {
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
+                        codelistUtils={codelistUtils}
                       />
                     )}
                   </div>

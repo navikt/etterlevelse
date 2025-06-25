@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -15,6 +15,7 @@ import {
   IPvkDokument,
   IPvoTilbakemelding,
 } from '../../constants'
+import { EListName, ICode, ICodelistProps } from '../../services/Codelist'
 import SendInnPvoViewFerdig from './SendInnPvoViewFerdig'
 import SendInnPvoViewIkkeFerdig from './SendInnPvoViewIkkeFerdig'
 import { sendInnCheck } from './edit/pvoFromSchema'
@@ -29,6 +30,7 @@ type TProps = {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  codelistUtils: ICodelistProps
 }
 
 export const SendInnPvoView: FunctionComponent<TProps> = ({
@@ -38,11 +40,13 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   activeStep,
   setActiveStep,
   setSelectedStep,
+  codelistUtils,
 }) => {
   const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
     EPvoTilbakemeldingStatus.UNDERARBEID
   )
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+  const [pvoVurderingList, setPvoVurderlist] = useState<ICode[]>([])
 
   const submit = async (submittedValues: IPvoTilbakemelding): Promise<void> => {
     //backend vil oppdatere statusen til PVk dokument til 'SENDT_TIL_PVO', dersom statusen til PVO tilbakemelding = 'ikke påbegynt' eller 'avventer'
@@ -92,6 +96,14 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
     }
   }
 
+  useEffect(() => {
+    setPvoVurderlist(
+      codelistUtils
+        .getCodes(EListName.PVO_VURDERING)
+        .sort((a, b) => a.shortName.localeCompare(b.shortName)) as ICode[]
+    )
+  })
+
   return (
     <Formik
       validateOnChange={false}
@@ -115,6 +127,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               setActiveStep={setActiveStep}
               isAlertModalOpen={isAlertModalOpen}
               setIsAlertModalOpen={setIsAlertModalOpen}
+              pvoVurderingList={pvoVurderingList}
             />
           )}
           {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
