@@ -311,7 +311,12 @@ type PvoTilbakemelding {
     ansvarligData: [Resource!]!
     sistEndretAvMeg: DateTime
     arbeidGarVidere: Boolean
+    arbeidGarVidereBegrunnelse: String
     behovForForhandskonsultasjon: Boolean
+    behovForForhandskonsultasjonBegrunnelse: String
+    pvoVurdering: String
+    pvoFolgeOppEndringer: Boolean
+    vilFaPvkIRetur: Boolean
 }
 
 type Tilbakemeldingsinnhold {

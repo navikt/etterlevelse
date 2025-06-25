@@ -20,7 +20,13 @@ public class PvoTilbakemeldingData {
     private List<String> ansvarlig;
 
     private Boolean arbeidGarVidere;
+    private String arbeidGarVidereBegrunnelse;
     private Boolean behovForForhandskonsultasjon;
+    private String behovForForhandskonsultasjonBegrunnelse;
+
+    private String pvoVurdering;
+    private Boolean pvoFolgeOppEndringer;
+    private Boolean vilFaPvkIRetur;
 }
 
 

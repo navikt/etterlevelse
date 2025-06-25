@@ -37,7 +37,13 @@ public class PvoTilbakemedlingRequest implements RequestElement {
     private LocalDateTime sendtDato;
     private List<String> ansvarlig;
     private Boolean arbeidGarVidere;
+    private String arbeidGarVidereBegrunnelse;
     private Boolean behovForForhandskonsultasjon;
+    private String behovForForhandskonsultasjonBegrunnelse;
+
+    private String pvoVurdering;
+    private Boolean pvoFolgeOppEndringer;
+    private Boolean vilFaPvkIRetur;
 
 
     private Boolean update;
@@ -61,7 +67,13 @@ public class PvoTilbakemedlingRequest implements RequestElement {
         setMerknadTilEtterleverEllerRisikoeier(trimToNull(merknadTilEtterleverEllerRisikoeier));
 
         setArbeidGarVidere(arbeidGarVidere);
+        setArbeidGarVidereBegrunnelse(arbeidGarVidereBegrunnelse);
         setBehovForForhandskonsultasjon(behovForForhandskonsultasjon);
+        setBehovForForhandskonsultasjonBegrunnelse(behovForForhandskonsultasjonBegrunnelse);
+
+        setPvoVurdering(pvoVurdering);
+        setPvoFolgeOppEndringer(pvoFolgeOppEndringer);
+        setVilFaPvkIRetur(vilFaPvkIRetur);
     }
 
     @Override
@@ -82,7 +94,12 @@ public class PvoTilbakemedlingRequest implements RequestElement {
                 .sendtDato(sendtDato)
                 .ansvarlig(ansvarlig)
                 .arbeidGarVidere(arbeidGarVidere)
+                .arbeidGarVidereBegrunnelse(arbeidGarVidereBegrunnelse)
                 .behovForForhandskonsultasjon(behovForForhandskonsultasjon)
+                .behovForForhandskonsultasjonBegrunnelse(behovForForhandskonsultasjonBegrunnelse)
+                .pvoVurdering(pvoVurdering)
+                .pvoFolgeOppEndringer(pvoFolgeOppEndringer)
+                .vilFaPvkIRetur(vilFaPvkIRetur)
                 .build();
 
         return PvoTilbakemelding.builder()
@@ -99,7 +116,12 @@ public class PvoTilbakemedlingRequest implements RequestElement {
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setSendtDato(sendtDato);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setAnsvarlig(ansvarlig);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setArbeidGarVidere(arbeidGarVidere);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setArbeidGarVidereBegrunnelse(arbeidGarVidereBegrunnelse);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehovForForhandskonsultasjon(behovForForhandskonsultasjon);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehovForForhandskonsultasjonBegrunnelse(behovForForhandskonsultasjonBegrunnelse);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setPvoVurdering(pvoVurdering);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setPvoFolgeOppEndringer(pvoFolgeOppEndringer);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setVilFaPvkIRetur(vilFaPvkIRetur);
 
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingenslivslop(behandlingenslivslop);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingensArtOgOmfang(behandlingensArtOgOmfang);
