@@ -624,6 +624,11 @@ export interface IPvoTilbakemelding extends IDomainObject {
   ansvarligData?: ITeamResource[]
   arbeidGarVidere?: boolean
   behovForForhandskonsultasjon?: boolean
+  arbeidGarVidereBegrunnelse?: string
+  behovForForhandskonsultasjonBegrunnelse?: string
+  pvoVurdering?: string
+  pvoFolgeOppEndringer?: boolean
+  vilFaPvkIRetur?: boolean
 }
 
 export type TPvoTilbakemeldingQL = IPvoTilbakemelding & {
