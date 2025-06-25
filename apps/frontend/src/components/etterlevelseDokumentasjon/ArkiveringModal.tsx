@@ -2,18 +2,20 @@ import { Alert, BodyLong, Button, Link, Loader, Modal, Radio, RadioGroup } from 
 import React, { useState } from 'react'
 import { arkiver } from '../../api/P360Api'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
-import { p360Url } from '../../util/LinkUrlUtils'
+import { p360Url } from '../p360/LinkUrlUtils'
 
 type TArkiveringModalProps = {
   arkivModal: boolean
   setArkivModal: React.Dispatch<React.SetStateAction<boolean>>
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
 }
 
 export const ArkiveringModal = ({
   arkivModal,
   setArkivModal,
   etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
 }: TArkiveringModalProps) => {
   const [onlyActiveKrav, setOnlyActiveKrav] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -92,7 +94,14 @@ export const ArkiveringModal = ({
             onClick={async () => {
               setIsLoading(true)
               await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false)
-                .then(() => setSuccessMessageOpen(true))
+                .then((response) => {
+                  setSuccessMessageOpen(true)
+                  setEtterlevelseDokumentasjon({
+                    ...etterlevelseDokumentasjon,
+                    p360CaseNumber: response.p360CaseNumber,
+                    p360Recno: response.p360Recno,
+                  })
+                })
                 .finally(() => setIsLoading(false))
             }}
           >

@@ -4,7 +4,6 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
 import { user } from '../../services/User'
-import { p360Url } from '../../util/LinkUrlUtils'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
@@ -13,6 +12,7 @@ import {
   etterlevelseDokumentasjonRelasjonUrl,
 } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { Teams } from '../common/TeamName'
+import { p360Url } from '../p360/LinkUrlUtils'
 import { VarslingsadresserView } from './VarslingsAddresseView'
 
 interface IProps {
