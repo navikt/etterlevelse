@@ -1,4 +1,4 @@
-import { BodyLong, Button, Link, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Link, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import React, { useState } from 'react'
 import { arkiver } from '../../api/P360Api'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
@@ -17,7 +17,7 @@ export const ArkiveringModal = ({
 }: TArkiveringModalProps) => {
   const [onlyActiveKrav, setOnlyActiveKrav] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
+  const [successMessageOpen, setSuccessMessageOpen] = useState<boolean>(false)
   return (
     <Modal
       open={arkivModal}
@@ -67,6 +67,12 @@ export const ArkiveringModal = ({
           </div>
         )}
 
+        {successMessageOpen && (
+          <Alert variant='success' closeButton onClose={() => setSuccessMessageOpen(false)}>
+            Arkivéring vellyket
+          </Alert>
+        )}
+
         <div className='flex justify-end pt-4 mt-4'>
           <Button
             className='mr-2.5'
@@ -85,9 +91,9 @@ export const ArkiveringModal = ({
             disabled={isLoading}
             onClick={async () => {
               setIsLoading(true)
-              await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false).finally(
-                () => setIsLoading(false)
-              )
+              await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false)
+                .then(() => setSuccessMessageOpen(true))
+                .finally(() => setIsLoading(false))
             }}
           >
             Arkivér
