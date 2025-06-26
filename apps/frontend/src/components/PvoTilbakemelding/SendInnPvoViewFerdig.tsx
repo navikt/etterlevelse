@@ -25,6 +25,7 @@ type TProps = {
   isAlertModalOpen: boolean
   setIsAlertModalOpen: Dispatch<SetStateAction<boolean>>
   pvoVurderingList: ICode[]
+  setIsAngreInnsending: (state: boolean) => void
 }
 
 export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
@@ -39,6 +40,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   isAlertModalOpen,
   setIsAlertModalOpen,
   pvoVurderingList,
+  setIsAngreInnsending,
 }) => {
   const getPvoVurdering = () => {
     const vurderingen = pvoVurderingList.filter(
@@ -155,6 +157,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
                 onClick={async () => {
                   await setFieldValue('status', EPvoTilbakemeldingStatus.UNDERARBEID)
                   setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
+                  setIsAngreInnsending(true)
                   await submitForm()
                 }}
               >
