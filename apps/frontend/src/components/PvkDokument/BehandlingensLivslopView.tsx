@@ -264,14 +264,17 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             )}
 
           {/* Sidepanel */}
-          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-            <PvoSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvoSidePanelWrapper>
-          )}
+          {pvoTilbakemelding &&
+            [EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+              pvoTilbakemelding.status
+            ) && (
+              <PvoSidePanelWrapper>
+                <PvoTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
+                  sentDate={pvoTilbakemelding.sendtDato}
+                />
+              </PvoSidePanelWrapper>
+            )}
 
           {(!pvoTilbakemelding ||
             (pvoTilbakemelding && pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) &&

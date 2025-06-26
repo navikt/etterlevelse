@@ -463,14 +463,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         <div>
           {/* sidepanel */}
 
-          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-            <PvoSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvoSidePanelWrapper>
-          )}
+          {pvoTilbakemelding &&
+            [EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+              pvoTilbakemelding.status
+            ) && (
+              <PvoSidePanelWrapper>
+                <PvoTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                  sentDate={pvoTilbakemelding.sendtDato}
+                />
+              </PvoSidePanelWrapper>
+            )}
         </div>
       </div>
       <FormButtons
