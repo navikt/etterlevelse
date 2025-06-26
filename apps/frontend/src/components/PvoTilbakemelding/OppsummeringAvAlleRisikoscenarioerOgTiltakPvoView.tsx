@@ -398,14 +398,18 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
         <div>
           {/* PVO sidepanel */}
           <PvoSidePanelWrapper>
-            {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+            {[EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+              pvoTilbakemelding.status
+            ) && (
               <PvoTilbakemeldingReadOnly
                 tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
                 sentDate={pvoTilbakemelding.sendtDato}
                 forPvo={true}
               />
             )}
-            {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+            {![EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+              pvoTilbakemelding.status
+            ) && (
               <PvoTilbakemeldingForm
                 pvkDokumentId={pvkDokument.id}
                 fieldName='risikoscenarioEtterTiltakk'
