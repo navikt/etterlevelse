@@ -114,7 +114,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
         .getCodes(EListName.PVO_VURDERING)
         .sort((a, b) => a.shortName.localeCompare(b.shortName)) as ICode[]
     )
-  })
+  }, [])
 
   return (
     <Formik
