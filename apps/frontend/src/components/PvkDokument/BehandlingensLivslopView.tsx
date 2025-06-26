@@ -13,7 +13,6 @@ import {
 import { getPvkDokumentByEtterlevelseDokumentId } from '../../api/PvkDokumentApi'
 import {
   EPvkDokumentStatus,
-  EPvoTilbakemeldingStatus,
   IBehandlingensLivslop,
   IBehandlingensLivslopRequest,
   IPvkDokument,
@@ -265,8 +264,8 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
 
           {/* Sidepanel */}
           {pvoTilbakemelding &&
-            [EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-              pvoTilbakemelding.status
+            ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+              pvkDokument.status
             ) && (
               <PvoSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
@@ -277,7 +276,10 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             )}
 
           {(!pvoTilbakemelding ||
-            (pvoTilbakemelding && pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) &&
+            (pvoTilbakemelding &&
+              [EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+                pvkDokument.status
+              ))) &&
             etterlevelseDokumentasjon && (
               // Don't remove this div. Sticky will not work without it.
               <div>

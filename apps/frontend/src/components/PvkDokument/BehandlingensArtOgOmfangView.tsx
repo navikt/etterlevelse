@@ -9,7 +9,6 @@ import {
 import {
   EPVK,
   EPvkDokumentStatus,
-  EPvoTilbakemeldingStatus,
   IPvkDokument,
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
@@ -320,8 +319,8 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
 
         {/* sidepanel */}
         {pvoTilbakemelding &&
-          [EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-            pvoTilbakemelding.status
+          ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+            pvkDokument.status
           ) && (
             <PvoSidePanelWrapper>
               <PvoTilbakemeldingReadOnly

@@ -5,7 +5,6 @@ import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
   EPvkDokumentStatus,
-  EPvoTilbakemeldingStatus,
   ERisikoscenarioType,
   IPageResponse,
   IPvkDokument,
@@ -472,8 +471,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           {/* sidepanel */}
 
           {pvoTilbakemelding &&
-            [EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-              pvoTilbakemelding.status
+            ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+              pvkDokument.status
             ) && (
               <PvoSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
