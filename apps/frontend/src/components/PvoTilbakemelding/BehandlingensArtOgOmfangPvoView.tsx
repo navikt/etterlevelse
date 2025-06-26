@@ -1,5 +1,5 @@
 import { FunctionComponent, RefObject } from 'react'
-import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
+import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import ArtOgOmfangReadOnlyContent from '../PvkDokument/readOnly/ArtOgOmfangReadOnlyContent'
 import { ContentLayout } from '../layout/layout'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
@@ -33,18 +33,14 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
       {/* PVO sidepanel */}
       <div>
         <PvoSidePanelWrapper>
-          {![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
-            pvkDokument.status
-          ) && (
+          {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <PvoTilbakemeldingReadOnly
               tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
               sentDate={pvoTilbakemelding.sendtDato}
               forPvo={true}
             />
           )}
-          {[EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
-            pvkDokument.status
-          ) && (
+          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
             <PvoTilbakemeldingForm
               pvkDokumentId={pvkDokument.id}
               fieldName='behandlingensArtOgOmfang'

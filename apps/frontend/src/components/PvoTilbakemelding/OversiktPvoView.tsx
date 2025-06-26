@@ -161,9 +161,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   return (
     <div className='flex flex-col justify-center items-center'>
       <div className='px-6 py-9 rounded-lg max-w-[766px] w-full bg-[#E3EFF7] mb-18'>
-        {![EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-          pvoTilbakemelding.status
-        ) && (
+        {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
           <PvoTilbakemeldingAnsvarligForm
             pvkDokumentId={pvkDokument.id}
             initialValue={pvoTilbakemelding}
@@ -171,9 +169,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
           />
         )}
 
-        {[EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-          pvoTilbakemelding.status
-        ) && (
+        {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
           <div>
             <Label>Ansvarlig</Label>
             <List as='ul'>

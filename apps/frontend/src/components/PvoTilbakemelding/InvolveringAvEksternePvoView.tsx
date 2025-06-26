@@ -38,18 +38,14 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
       {/* PVO sidepanel */}
       <div>
         <PvoSidePanelWrapper>
-          {[EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-            pvoTilbakemelding.status
-          ) && (
+          {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <PvoTilbakemeldingReadOnly
               tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
               sentDate={pvoTilbakemelding.sendtDato}
               forPvo={true}
             />
           )}
-          {![EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-            pvoTilbakemelding.status
-          ) && (
+          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
             <PvoTilbakemeldingForm
               pvkDokumentId={pvkDokument.id}
               fieldName='innvolveringAvEksterne'

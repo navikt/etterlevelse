@@ -6,11 +6,7 @@ import { ICode } from '../../services/Codelist'
 import { Markdown } from '../common/Markdown'
 import AlertPvoModal from './common/AlertPvoModal'
 import DataTextWrapper from './common/DataTextWrapper'
-import {
-  BeskjedTilbakemeldingEtterlever,
-  CopyButtonCommon,
-  LagreFortsettSenereButton,
-} from './common/SendInnPvoView'
+import { BeskjedTilbakemeldingEtterlever, CopyButtonCommon } from './common/SendInnPvoView'
 import PvoFormButtons from './edit/PvoFormButtons'
 
 type TProps = {
@@ -153,12 +149,6 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
           submitForm={submitForm}
           customButtons={
             <div className='mt-5 flex gap-2 items-center'>
-              <LagreFortsettSenereButton
-                setFieldValue={setFieldValue}
-                setSubmittedStatus={setSubmittedStatus}
-                submitForm={submitForm}
-              />
-
               <Button
                 type='button'
                 variant='secondary'

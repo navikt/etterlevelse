@@ -14,7 +14,6 @@ import {
 } from '../../constants'
 import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
-  pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '../common/RouteLinkPvk'
@@ -319,16 +318,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                               >
                                 PVK-relaterte krav
                               </Link>{' '}
-                              eller eventuelt under{' '}
-                              <Link
-                                href={pvkDokumentasjonStepUrl(
-                                  etterlevelseDokumentasjonId,
-                                  pvkDokument.id,
-                                  5
-                                )}
-                              >
-                                øvrige risikoscenarioer
-                              </Link>
+                              (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
+                              (åpner i en ny fane).
                             </Alert>
                           </div>
                         )}
@@ -407,18 +398,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
         <div>
           {/* PVO sidepanel */}
           <PvoSidePanelWrapper>
-            {[EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-              pvoTilbakemelding.status
-            ) && (
+            {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingReadOnly
                 tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
                 sentDate={pvoTilbakemelding.sendtDato}
                 forPvo={true}
               />
             )}
-            {![EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-              pvoTilbakemelding.status
-            ) && (
+            {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingForm
                 pvkDokumentId={pvkDokument.id}
                 fieldName='risikoscenarioEtterTiltakk'

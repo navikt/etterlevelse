@@ -231,9 +231,7 @@ export const PvoTilbakemeldingsList = () => {
 
                 if (
                   pvoTilbakemelding.length !== 0 &&
-                  [EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-                    pvoTilbakemelding[0].status
-                  )
+                  pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
                 ) {
                   changestamp = `Vurdering sendt: ${moment(pvoTilbakemelding[0].sendtDato).format('LL')}`
                 } else {
