@@ -126,7 +126,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
     >
       {({ submitForm, setFieldValue }) => (
         <Form>
-          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+          {![EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+            pvoTilbakemelding.status
+          ) && (
             <SendInnPvoViewIkkeFerdig
               submitForm={submitForm}
               setFieldValue={setFieldValue}
@@ -141,7 +143,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               pvoVurderingList={pvoVurderingList}
             />
           )}
-          {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+          {[EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+            pvoTilbakemelding.status
+          ) && (
             <SendInnPvoViewFerdig
               submitForm={submitForm}
               setFieldValue={setFieldValue}

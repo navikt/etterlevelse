@@ -75,14 +75,18 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
             {/* PVO sidepanel */}
             <div>
               <PvoSidePanelWrapper>
-                {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+                {[EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+                  pvoTilbakemelding.status
+                ) && (
                   <PvoTilbakemeldingReadOnly
                     tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
                     sentDate={pvoTilbakemelding.sendtDato}
                     forPvo={true}
                   />
                 )}
-                {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                {![EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
+                  pvoTilbakemelding.status
+                ) && (
                   <PvoTilbakemeldingForm
                     pvkDokumentId={pvkDokument.id}
                     fieldName='behandlingenslivslop'
