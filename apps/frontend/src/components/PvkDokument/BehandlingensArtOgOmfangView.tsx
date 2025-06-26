@@ -307,12 +307,15 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
             </div>
           )}
 
-        {pvkDokument && (
-          <ArtOgOmfangReadOnlyContent
-            pvkDokument={pvkDokument}
-            personkategorier={personkategorier}
-          />
-        )}
+        {pvkDokument &&
+          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+            pvkDokument.status
+          ) && (
+            <ArtOgOmfangReadOnlyContent
+              pvkDokument={pvkDokument}
+              personkategorier={personkategorier}
+            />
+          )}
 
         {/* sidepanel */}
         {pvoTilbakemelding && (
