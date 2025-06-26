@@ -387,17 +387,14 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
           )}
         {/* sidepanel */}
 
-        {pvoTilbakemelding &&
-          ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
-            pvkDokument.status
-          ) && (
-            <PvoSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvoSidePanelWrapper>
-          )}
+        {pvoTilbakemelding && (
+          <PvoSidePanelWrapper>
+            <PvoTilbakemeldingReadOnly
+              tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
+              sentDate={pvoTilbakemelding.sendtDato}
+            />
+          </PvoSidePanelWrapper>
+        )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
