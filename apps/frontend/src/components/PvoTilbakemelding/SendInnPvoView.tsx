@@ -45,6 +45,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
     EPvoTilbakemeldingStatus.UNDERARBEID
   )
+  const [isAngreInnsending, setIsAngreInnsending] = useState<boolean>(false)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderlist] = useState<ICode[]>([])
 
@@ -63,23 +64,29 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
         .then(async (response: IPvoTilbakemelding) => {
           if (response) {
-            const updatedValues: IPvoTilbakemelding = {
-              ...response,
-              status: submittedStatus,
-              sendtDato:
-                submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
-              merknadTilEtterleverEllerRisikoeier:
-                submittedValues.merknadTilEtterleverEllerRisikoeier,
-              arbeidGarVidere: submittedValues.arbeidGarVidere,
-              arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
-              behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
-              behovForForhandskonsultasjonBegrunnelse:
-                submittedValues.behovForForhandskonsultasjonBegrunnelse,
-              pvoVurdering: submittedValues.pvoVurdering,
-              pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
-              vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
+            if (response.status === EPvoTilbakemeldingStatus.FERDIG && !isAngreInnsending) {
+              setIsAlertModalOpen(true)
+            } else {
+              const updatedValues: IPvoTilbakemelding = {
+                ...response,
+                status: submittedStatus,
+                sendtDato:
+                  submittedStatus === EPvoTilbakemeldingStatus.FERDIG
+                    ? new Date().toISOString()
+                    : '',
+                merknadTilEtterleverEllerRisikoeier:
+                  submittedValues.merknadTilEtterleverEllerRisikoeier,
+                arbeidGarVidere: submittedValues.arbeidGarVidere,
+                arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
+                behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
+                behovForForhandskonsultasjonBegrunnelse:
+                  submittedValues.behovForForhandskonsultasjonBegrunnelse,
+                pvoVurdering: submittedValues.pvoVurdering,
+                pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
+                vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
+              }
+              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
             }
-            await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
           }
         })
         .catch(async (error: AxiosError) => {
@@ -154,6 +161,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               isAlertModalOpen={isAlertModalOpen}
               setIsAlertModalOpen={setIsAlertModalOpen}
               pvoVurderingList={pvoVurderingList}
+              setIsAngreInnsending={setIsAngreInnsending}
             />
           )}
         </Form>
