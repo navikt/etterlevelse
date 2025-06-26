@@ -388,9 +388,12 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
         {/* sidepanel */}
 
         {pvoTilbakemelding &&
-          ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
-            pvkDokument.status
-          ) && (
+          ![
+            EPvkDokumentStatus.UNDERARBEID,
+            EPvkDokumentStatus.AKTIV,
+            EPvkDokumentStatus.PVO_UNDERARBEID,
+            EPvkDokumentStatus.SENDT_TIL_PVO,
+          ].includes(pvkDokument.status) && (
             <PvoSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
                 tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}

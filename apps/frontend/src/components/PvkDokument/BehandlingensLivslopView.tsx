@@ -264,9 +264,12 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
 
           {/* Sidepanel */}
           {pvoTilbakemelding &&
-            ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
-              pvkDokument.status
-            ) && (
+            ![
+              EPvkDokumentStatus.UNDERARBEID,
+              EPvkDokumentStatus.AKTIV,
+              EPvkDokumentStatus.PVO_UNDERARBEID,
+              EPvkDokumentStatus.SENDT_TIL_PVO,
+            ].includes(pvkDokument.status) && (
               <div>
                 <PvoSidePanelWrapper>
                   <PvoTilbakemeldingReadOnly
@@ -279,9 +282,12 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
 
           {!pvoTilbakemelding ||
             (pvoTilbakemelding &&
-              [EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
-                pvkDokument.status
-              ) && (
+              [
+                EPvkDokumentStatus.UNDERARBEID,
+                EPvkDokumentStatus.AKTIV,
+                EPvkDokumentStatus.PVO_UNDERARBEID,
+                EPvkDokumentStatus.SENDT_TIL_PVO,
+              ].includes(pvkDokument.status) && (
                 // Don't remove this div. Sticky will not work without it.
                 <div>
                   <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
