@@ -3,6 +3,8 @@ ingresses:
 replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
   - https://etterlevelse.ansatt.nav.no/oauth2/callback
+  - http://localhost:8080/oauth2/callback
+  - http://localhost:3000/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.nav.no
 p360_ingress: nav.public360online.com
 cluster_location: prod-gcp
