@@ -247,7 +247,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
               <FormSummary.Value className='gap-2 flex'>
                 <div className='gap-2 flex pt-1'>
                   {!behandlingensLivslop && (
-                    <Tag variant='warning' size='xsmall'>
+                    <Tag variant='neutral' size='xsmall'>
                       Ikke påbegynt
                     </Tag>
                   )}

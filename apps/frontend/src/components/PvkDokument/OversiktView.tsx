@@ -157,7 +157,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
   const getRisikoscenarioEtterTiltakStatus = (): JSX.Element => {
     if (allRisikoscenario.length === 0) {
       return (
-        <Tag variant='warning' size='xsmall'>
+        <Tag variant='neutral' size='xsmall'>
           Ikke påbegynt
         </Tag>
       )
@@ -288,7 +288,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
               <FormSummary.Value className='gap-2 flex'>
                 <div className='gap-2 flex pt-1'>
                   {!behandlingensLivslop && (
-                    <Tag variant='warning' size='xsmall'>
+                    <Tag variant='neutral' size='xsmall'>
                       Ikke påbegynt
                     </Tag>
                   )}
