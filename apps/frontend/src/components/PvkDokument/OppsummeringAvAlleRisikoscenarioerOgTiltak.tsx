@@ -321,8 +321,16 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             >
                               PVK-relaterte krav
                             </Link>{' '}
-                            (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
-                            (åpner i en ny fane).
+                            eller eventuelt under{' '}
+                            <Link
+                              href={pvkDokumentasjonStepUrl(
+                                etterlevelseDokumentasjonId,
+                                pvkDokument.id,
+                                5
+                              )}
+                            >
+                              øvrige risikoscenarioer
+                            </Link>
                           </Alert>
                         </div>
                       )}

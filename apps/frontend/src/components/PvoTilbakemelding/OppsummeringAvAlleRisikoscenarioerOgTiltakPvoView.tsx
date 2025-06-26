@@ -14,6 +14,7 @@ import {
 } from '../../constants'
 import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
+  pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '../common/RouteLinkPvk'
@@ -318,8 +319,16 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                               >
                                 PVK-relaterte krav
                               </Link>{' '}
-                              (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
-                              (åpner i en ny fane).
+                              eller eventuelt under{' '}
+                              <Link
+                                href={pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjonId,
+                                  pvkDokument.id,
+                                  5
+                                )}
+                              >
+                                øvrige risikoscenarioer
+                              </Link>
                             </Alert>
                           </div>
                         )}
