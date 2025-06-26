@@ -470,14 +470,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         <div>
           {/* sidepanel */}
 
-          {pvoTilbakemelding && (
-            <PvoSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvoSidePanelWrapper>
-          )}
+          {pvoTilbakemelding &&
+            ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+              pvkDokument.status
+            ) && (
+              <PvoSidePanelWrapper>
+                <PvoTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                  sentDate={pvoTilbakemelding.sendtDato}
+                />
+              </PvoSidePanelWrapper>
+            )}
         </div>
       </div>
       <FormButtons

@@ -263,27 +263,36 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             )}
 
           {/* Sidepanel */}
-          {pvoTilbakemelding && (
-            <PvoSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvoSidePanelWrapper>
-          )}
-
-          {!pvoTilbakemelding && (
-            // Don't remove this div. Sticky will not work without it.
-            <div>
-              <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
-                <div className='overflow-auto h-[90vh]'>
-                  <BehandlingensLivsLopSidePanel
-                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          {pvoTilbakemelding &&
+            ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+              pvkDokument.status
+            ) && (
+              <div>
+                <PvoSidePanelWrapper>
+                  <PvoTilbakemeldingReadOnly
+                    tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
+                    sentDate={pvoTilbakemelding.sendtDato}
                   />
-                </div>
+                </PvoSidePanelWrapper>
               </div>
-            </div>
-          )}
+            )}
+
+          {!pvoTilbakemelding ||
+            (pvoTilbakemelding &&
+              [EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+                pvkDokument.status
+              ) && (
+                // Don't remove this div. Sticky will not work without it.
+                <div>
+                  <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
+                    <div className='overflow-auto h-[90vh]'>
+                      <BehandlingensLivsLopSidePanel
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
           {/* Slutt på sidepanel innhold*/}
         </ContentLayout>
       )}

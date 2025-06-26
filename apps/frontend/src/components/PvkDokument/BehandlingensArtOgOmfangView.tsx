@@ -318,14 +318,17 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
           )}
 
         {/* sidepanel */}
-        {pvoTilbakemelding && (
-          <PvoSidePanelWrapper>
-            <PvoTilbakemeldingReadOnly
-              tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
-              sentDate={pvoTilbakemelding.sendtDato}
-            />
-          </PvoSidePanelWrapper>
-        )}
+        {pvoTilbakemelding &&
+          ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(
+            pvkDokument.status
+          ) && (
+            <PvoSidePanelWrapper>
+              <PvoTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
+                sentDate={pvoTilbakemelding.sendtDato}
+              />
+            </PvoSidePanelWrapper>
+          )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
