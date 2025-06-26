@@ -9,6 +9,7 @@ import {
 import {
   EPVK,
   EPvkDokumentStatus,
+  EPvoTilbakemeldingStatus,
   IPvkDokument,
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
@@ -318,20 +319,14 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
           )}
 
         {/* sidepanel */}
-        {pvoTilbakemelding &&
-          ![
-            EPvkDokumentStatus.UNDERARBEID,
-            EPvkDokumentStatus.AKTIV,
-            EPvkDokumentStatus.PVO_UNDERARBEID,
-            EPvkDokumentStatus.SENDT_TIL_PVO,
-          ].includes(pvkDokument.status) && (
-            <PvoSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvoSidePanelWrapper>
-          )}
+        {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+          <PvoSidePanelWrapper>
+            <PvoTilbakemeldingReadOnly
+              tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
+              sentDate={pvoTilbakemelding.sendtDato}
+            />
+          </PvoSidePanelWrapper>
+        )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

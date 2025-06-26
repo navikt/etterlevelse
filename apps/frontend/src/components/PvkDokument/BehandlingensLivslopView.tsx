@@ -13,6 +13,7 @@ import {
 import { getPvkDokumentByEtterlevelseDokumentId } from '../../api/PvkDokumentApi'
 import {
   EPvkDokumentStatus,
+  EPvoTilbakemeldingStatus,
   IBehandlingensLivslop,
   IBehandlingensLivslopRequest,
   IPvkDokument,
@@ -263,42 +264,30 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             )}
 
           {/* Sidepanel */}
-          {pvoTilbakemelding &&
-            ![
-              EPvkDokumentStatus.UNDERARBEID,
-              EPvkDokumentStatus.AKTIV,
-              EPvkDokumentStatus.PVO_UNDERARBEID,
-              EPvkDokumentStatus.SENDT_TIL_PVO,
-            ].includes(pvkDokument.status) && (
-              <div>
-                <PvoSidePanelWrapper>
-                  <PvoTilbakemeldingReadOnly
-                    tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
-                    sentDate={pvoTilbakemelding.sendtDato}
-                  />
-                </PvoSidePanelWrapper>
-              </div>
-            )}
+          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+            <div>
+              <PvoSidePanelWrapper>
+                <PvoTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
+                  sentDate={pvoTilbakemelding.sendtDato}
+                />
+              </PvoSidePanelWrapper>
+            </div>
+          )}
 
           {!pvoTilbakemelding ||
-            (pvoTilbakemelding &&
-              [
-                EPvkDokumentStatus.UNDERARBEID,
-                EPvkDokumentStatus.AKTIV,
-                EPvkDokumentStatus.PVO_UNDERARBEID,
-                EPvkDokumentStatus.SENDT_TIL_PVO,
-              ].includes(pvkDokument.status) && (
-                // Don't remove this div. Sticky will not work without it.
-                <div>
-                  <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
-                    <div className='overflow-auto h-[90vh]'>
-                      <BehandlingensLivsLopSidePanel
-                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      />
-                    </div>
+            (pvoTilbakemelding && pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+              // Don't remove this div. Sticky will not work without it.
+              <div>
+                <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
+                  <div className='overflow-auto h-[90vh]'>
+                    <BehandlingensLivsLopSidePanel
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    />
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
           {/* Slutt på sidepanel innhold*/}
         </ContentLayout>
       )}

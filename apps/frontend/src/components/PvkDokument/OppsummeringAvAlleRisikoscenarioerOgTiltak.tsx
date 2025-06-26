@@ -5,6 +5,7 @@ import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
   EPvkDokumentStatus,
+  EPvoTilbakemeldingStatus,
   ERisikoscenarioType,
   IPageResponse,
   IPvkDokument,
@@ -470,20 +471,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         <div>
           {/* sidepanel */}
 
-          {pvoTilbakemelding &&
-            ![
-              EPvkDokumentStatus.UNDERARBEID,
-              EPvkDokumentStatus.AKTIV,
-              EPvkDokumentStatus.PVO_UNDERARBEID,
-              EPvkDokumentStatus.SENDT_TIL_PVO,
-            ].includes(pvkDokument.status) && (
-              <PvoSidePanelWrapper>
-                <PvoTilbakemeldingReadOnly
-                  tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
-                  sentDate={pvoTilbakemelding.sendtDato}
-                />
-              </PvoSidePanelWrapper>
-            )}
+          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+            <PvoSidePanelWrapper>
+              <PvoTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                sentDate={pvoTilbakemelding.sendtDato}
+              />
+            </PvoSidePanelWrapper>
+          )}
         </div>
       </div>
       <FormButtons
