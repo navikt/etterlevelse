@@ -9,7 +9,6 @@ import {
 import {
   EPVK,
   EPvkDokumentStatus,
-  EPvoTilbakemeldingStatus,
   IPvkDokument,
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
@@ -388,17 +387,14 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
           )}
         {/* sidepanel */}
 
-        {pvoTilbakemelding &&
-          [EPvoTilbakemeldingStatus.FERDIG, EPvoTilbakemeldingStatus.UTGAAR].includes(
-            pvoTilbakemelding.status
-          ) && (
-            <PvoSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvoSidePanelWrapper>
-          )}
+        {pvoTilbakemelding && (
+          <PvoSidePanelWrapper>
+            <PvoTilbakemeldingReadOnly
+              tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
+              sentDate={pvoTilbakemelding.sendtDato}
+            />
+          </PvoSidePanelWrapper>
+        )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
