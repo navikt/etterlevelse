@@ -18,7 +18,6 @@ public class P360DocumentUpdateRequest {
     private String DefaultValueSet;
     private String Title;
     private String DocumentDate;
-    private String Category;
     private String Status;
     private String AccessGroup;
     private String ResponsiblePersonEmail;

@@ -188,7 +188,6 @@ public class P360Controller {
                 .DefaultValueSet("Etterlevelse")
                 .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
                 .DocumentDate(formatter.format(date))
-                .Category("Internt notat uten oppfølging")
                 .Status("J")
                 .AccessGroup("Alle ansatte i Nav")
                 .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
