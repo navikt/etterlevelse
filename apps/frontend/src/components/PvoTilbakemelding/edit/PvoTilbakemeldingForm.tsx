@@ -193,23 +193,25 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               />
             </div>
 
-            <div className='mt-10 flex flex-row gap-2'>
-              <div>
-                <Button size='small' type='button' onClick={submitForm}>
-                  Lagre
-                </Button>
-              </div>
-              <div>
-                <Button
-                  size='small'
-                  type='button'
-                  variant='secondary'
-                  onClick={() => {
-                    window.location.reload()
-                  }}
-                >
-                  Forkast endringer
-                </Button>
+            <div className='z-10 flex flex-col w-full button_container sticky bottom-0 bg-[#e3eff7]'>
+              <div className='mt-5 flex flex-row gap-2'>
+                <div>
+                  <Button size='small' type='button' onClick={submitForm}>
+                    Lagre
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    size='small'
+                    type='button'
+                    variant='secondary'
+                    onClick={() => {
+                      window.location.reload()
+                    }}
+                  >
+                    Forkast endringer
+                  </Button>
+                </div>
               </div>
             </div>
           </Form>
