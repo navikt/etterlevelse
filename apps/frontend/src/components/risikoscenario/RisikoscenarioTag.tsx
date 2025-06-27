@@ -12,9 +12,9 @@ export const RisikoscenarioTag: FunctionComponent<TProps> = ({ text, level }) =>
       case 1:
         return 'success'
       case 2:
-        return 'success'
+        return 'alt2'
       case 3:
-        return 'warning'
+        return 'neutral'
       case 4:
         return 'warning'
       case 5:
@@ -24,21 +24,25 @@ export const RisikoscenarioTag: FunctionComponent<TProps> = ({ text, level }) =>
     }
   }
 
-  return <Tag variant={getVariantFromLevel(level)}>{text}</Tag>
+  return (
+    <Tag variant={getVariantFromLevel(level)} className={`${level === 3 ? 'bg-[#FFF9C2]' : ''}`}>
+      {text}
+    </Tag>
+  )
 }
 
 export const getKonsekvenssnivaaText = (konsekvensnivaa: number) => {
   switch (konsekvensnivaa) {
     case 1:
-      return 'Ubetydelig konsekvens'
+      return '1 - Ubetydelig konsekvens'
     case 2:
-      return 'Lav konsekvens'
+      return '2 - Lav konsekvens'
     case 3:
-      return 'Moderat konsekvens'
+      return '3 - Moderat konsekvens'
     case 4:
-      return 'Alvorlig konsekvens'
+      return '4 - Alvorlig konsekvens'
     case 5:
-      return 'Svært alvorlig konsekvens'
+      return '5 - Svært alvorlig konsekvens'
     default:
       return 'Ingen konsekvensnivå satt'
   }
@@ -47,15 +51,15 @@ export const getKonsekvenssnivaaText = (konsekvensnivaa: number) => {
 export const getSannsynlighetsnivaaText = (sannsynlighetsnivaa: number) => {
   switch (sannsynlighetsnivaa) {
     case 1:
-      return 'Meget lite sannsynlig'
+      return '1 - Meget lite sannsynlig'
     case 2:
-      return 'Lite sannsynlig'
+      return '2 - Lite sannsynlig'
     case 3:
-      return 'Moderat sannsynlig'
+      return '3 - Moderat sannsynlig'
     case 4:
-      return 'Sannsynlig'
+      return '4 - Sannsynlig'
     case 5:
-      return 'Nesten sikkert'
+      return '5 - Nesten sikkert'
     default:
       return 'Ingen sannsynlighetsnivå satt'
   }

@@ -17,11 +17,11 @@ export const RisikoscenarioSannsynligNivaaRadioField = () => (
           )
         }
       >
-        <Radio value={1}>Meget lite sannsynlig</Radio>
-        <Radio value={2}>Lite sannsynlig</Radio>
-        <Radio value={3}>Moderat sannsynlig</Radio>
-        <Radio value={4}>Sannsynlig</Radio>
-        <Radio value={5}>Nesten sikkert</Radio>
+        <Radio value={1}>1 - Meget lite sannsynlig</Radio>
+        <Radio value={2}>2 - Lite sannsynlig</Radio>
+        <Radio value={3}>3 - Moderat sannsynlig</Radio>
+        <Radio value={4}>4 - Sannsynlig</Radio>
+        <Radio value={5}>5 - Nesten sikkert</Radio>
       </RadioGroup>
     )}
   </Field>

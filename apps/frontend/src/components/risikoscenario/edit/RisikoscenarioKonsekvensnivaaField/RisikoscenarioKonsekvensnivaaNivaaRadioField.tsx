@@ -15,11 +15,11 @@ export const RisikoscenarioKonsekvensnivaaNivaaRadioField = () => (
           fieldProps.form.errors['konsekvensNivaa'] && <FormError fieldName='konsekvensNivaa' />
         }
       >
-        <Radio value={1}>Ubetydelig</Radio>
-        <Radio value={2}>Lav konsekvens</Radio>
-        <Radio value={3}>Moderat konsekvens</Radio>
-        <Radio value={4}>Alvorlig konsekvens</Radio>
-        <Radio value={5}>Svært alvorlig konsekvens</Radio>
+        <Radio value={1}>1 - Ubetydelig</Radio>
+        <Radio value={2}>2 - Lav konsekvens</Radio>
+        <Radio value={3}>3 - Moderat konsekvens</Radio>
+        <Radio value={4}>4 - Alvorlig konsekvens</Radio>
+        <Radio value={5}>5 - Svært alvorlig konsekvens</Radio>
       </RadioGroup>
     )}
   </Field>
