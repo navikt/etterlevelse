@@ -177,7 +177,7 @@ public class PvkDokumentToDoc {
 
         long currListId = doc.listId++;
 
-        doc.addHeading1("Personverkonsekvensvurdering");
+        doc.addHeading1("Personvernkonsekvensvurdering");
         doc.newLine();
         if (pvkDokument.getStatus() != PvkDokumentStatus.VURDERT_AV_PVO && pvkDokument.getStatus() != PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
             doc.addLabel("PVK dokument status");
