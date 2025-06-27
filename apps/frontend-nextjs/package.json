@@ -5,9 +5,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "test": "yarn lint-staged",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky"
+    "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
+    "postinstall": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --list-different --write",
+      "eslint --max-warnings 0",
+      "bash -c 'yarn run type-check'"
+    ]
   },
   "dependencies": {
     "@navikt/ds-tailwind": "^7.24.0",
@@ -23,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "typescript": "^5"
   }
 }
