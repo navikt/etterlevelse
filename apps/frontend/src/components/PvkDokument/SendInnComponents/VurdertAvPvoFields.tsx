@@ -4,6 +4,7 @@ import { FunctionComponent, ReactNode } from 'react'
 import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../../constants'
 import { ICode } from '../../../services/Codelist'
 import { TextAreaField } from '../../common/Inputs'
+import ExportPvkModal from '../../export/ExportPvkModal'
 import CopyAndStatusView from './CopyAndStatusView'
 import LagreOgFortsettSenereButton from './LagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from './readOnly/BeskjedFraPvoReadOnly'
@@ -95,6 +96,9 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
         >
           Lagre og send til godkjenning av risikoeier
         </Button>
+      </div>
+      <div className='w-full flex justify-end items-center'>
+        <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
       </div>
     </div>
   )

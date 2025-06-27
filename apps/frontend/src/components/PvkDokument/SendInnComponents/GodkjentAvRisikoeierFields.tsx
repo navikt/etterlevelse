@@ -1,6 +1,7 @@
 import { Button, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
+import { arkiver } from '../../../api/P360Api'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -9,6 +10,7 @@ import {
 } from '../../../constants'
 import { ICode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
+import ExportPvkModal from '../../export/ExportPvkModal'
 import CopyAndStatusView from './CopyAndStatusView'
 import { BeskjedFraPvoReadOnly } from './readOnly/BeskjedFraPvoReadOnly'
 import BeskjedFraRisikoeierReadOnly from './readOnly/BeskjedFraRisikoeierReadOnly'
@@ -74,8 +76,23 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
           >
             Angre godkjenning
           </Button>
+
+          {user.isAdmin() && (
+            <Button
+              type='button'
+              onClick={async () => {
+                await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+              }}
+            >
+              Arkiver kun synlig for ADMIN :D
+            </Button>
+          )}
         </div>
       )}
+
+      <div className='w-full flex justify-end items-center'>
+        <ExportPvkModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
+      </div>
     </div>
   )
 }

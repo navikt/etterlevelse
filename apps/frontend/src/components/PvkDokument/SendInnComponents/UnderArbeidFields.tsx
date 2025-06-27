@@ -3,6 +3,7 @@ import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, RefObject } from 'react'
 import { EPvkDokumentStatus, IPvkDokument } from '../../../constants'
 import { TextAreaField } from '../../common/Inputs'
+import ExportPvkModal from '../../export/ExportPvkModal'
 import LagreOgFortsettSenereButton from './LagreOgFortsettSenereButton'
 
 type TProps = {
@@ -78,6 +79,10 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
         >
           Lagre og send til Personvernombudet
         </Button>
+      </div>
+
+      <div className='w-full flex justify-end items-center'>
+        <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
       </div>
     </div>
   )

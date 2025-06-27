@@ -11,6 +11,7 @@ import {
 import { ICode } from '../../../services/Codelist'
 import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
+import ExportPvkModal from '../../export/ExportPvkModal'
 import CopyAndStatusView from './CopyAndStatusView'
 import LagreOgFortsettSenereButton from './LagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from './readOnly/BeskjedFraPvoReadOnly'
@@ -104,6 +105,9 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             Akseptér restrisiko og arkivér i Public 360
           </Button>
         )}
+      </div>
+      <div className='w-full flex justify-end items-center'>
+        <ExportPvkModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
       </div>
     </div>
   )

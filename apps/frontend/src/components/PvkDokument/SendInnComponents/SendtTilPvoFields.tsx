@@ -2,6 +2,7 @@ import { Alert, Button, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent } from 'react'
 import { EPvkDokumentStatus, IPvkDokument } from '../../../constants'
+import ExportPvkModal from '../../export/ExportPvkModal'
 import CopyAndStatusView from './CopyAndStatusView'
 import BeskjedTilPvoReadOnly from './readOnly/BeskjedTilPvoReadOnly'
 
@@ -47,6 +48,9 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         >
           Trekk innsending til personvernombudet
         </Button>
+      </div>
+      <div className='w-full flex justify-end items-center'>
+        <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
       </div>
     </div>
   )
