@@ -168,12 +168,11 @@ public class PvkDokumentToDoc {
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
         PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId());
 
-        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(etterlevelseDokumentasjon.getId()));
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         List<RisikoscenarioResponse> risikoscenarioList = getRisikoscenario(pvkDokument.getId().toString());
         List<TiltakResponse> tiltakList = getTiltak(pvkDokument.getId());
-
 
         long currListId = doc.listId++;
 
@@ -201,8 +200,24 @@ public class PvkDokumentToDoc {
         doc.newLine();
         doc.addLabel("Godkjent av risikoeier:");
         if (pvkDokument.getStatus() == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+            String risikoeiere = "";
+            List<String> risikoeierNameList = etterlevelseDokumentasjonResponse.getRisikoeiereData().stream().map(risikoeier -> risikoeier.getFullName() + ", ").toList();
+            var nameListLength = risikoeierNameList.size();
+
+            if (nameListLength > 1) {
+                for (int i = 1; i <= nameListLength; i++) {
+                    if (i == nameListLength - 1) {
+                        risikoeiere = risikoeiere.concat("og ");
+                    }
+                    risikoeiere = risikoeiere.concat(risikoeierNameList.get(i));
+                }
+            } else {
+                risikoeiere = risikoeiere.concat(risikoeierNameList.get(0));
+            }
+
+
             doc.addText(
-                    etterlevelseDokumentasjonResponse.getRisikoeiereData().stream().map(risikoeier -> risikoeier.getFullName() + ", ") +
+                    risikoeiere +
                             "den " + doc.dateToString(pvkDokument.getLastModifiedDate().toLocalDate())
             );
         } else {
