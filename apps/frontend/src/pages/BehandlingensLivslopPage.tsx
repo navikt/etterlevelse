@@ -228,7 +228,7 @@ export const BehandlingensLivslopPage = () => {
                     }}
                     innerRef={formRef}
                   >
-                    {({ submitForm, initialValues, errors, isSubmitting }) => (
+                    {({ submitForm, resetForm, values, initialValues, errors, isSubmitting }) => (
                       <Form>
                         <div>
                           <BehandlingensLivslopTextContent />
@@ -267,8 +267,8 @@ export const BehandlingensLivslopPage = () => {
                             <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
                               <Button
                                 type='button'
-                                onClick={() => {
-                                  submitForm()
+                                onClick={async () => {
+                                  await submitForm().then(() => resetForm({ values }))
                                 }}
                               >
                                 Lagre
