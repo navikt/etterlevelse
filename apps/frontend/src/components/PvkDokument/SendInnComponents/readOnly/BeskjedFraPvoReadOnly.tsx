@@ -82,22 +82,14 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
       <div className='mb-3'>
         <Label>PVO vil følge opp endringer dere gjør.</Label>
         <DataTextWrapper>
-          {pvoTilbakemelding.pvoFolgeOppEndringer === null
-            ? null
-            : pvoTilbakemelding.pvoFolgeOppEndringer === true
-              ? 'Ja'
-              : 'Nei'}
+          {pvoTilbakemelding.pvoFolgeOppEndringer === true ? 'Ja' : 'Nei'}
         </DataTextWrapper>
       </div>
 
       <div className='mb-3'>
         <Label>PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.</Label>
         <DataTextWrapper>
-          {pvoTilbakemelding.vilFaPvkIRetur === null
-            ? null
-            : pvoTilbakemelding.vilFaPvkIRetur === true
-              ? 'Ja'
-              : 'Nei'}
+          {pvoTilbakemelding.vilFaPvkIRetur === true ? 'Ja' : 'Nei'}
         </DataTextWrapper>
       </div>
     </div>
