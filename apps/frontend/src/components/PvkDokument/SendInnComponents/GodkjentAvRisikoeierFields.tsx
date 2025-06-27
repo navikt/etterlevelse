@@ -52,7 +52,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
         pvoTilbakemelding={pvoTilbakemelding}
         pvoVurderingList={pvoVurderingList}
       />
-      <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier} />
+      <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
       <BeskjedFraRisikoeierReadOnly merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier} />
 
       <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
