@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
+    "type-check": "tsc --project tsconfig.json",
     "postinstall": "husky"
   },
   "lint-staged": {
