@@ -4,7 +4,7 @@
   "private": true,
   "type": "commonjs",
   "dependencies": {
-    "@apollo/client": "^3.8.4",
+    "@apollo/client": "^3.13.8",
     "@fontsource/source-sans-pro": "^5.2.5",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
