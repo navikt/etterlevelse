@@ -29,10 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -206,14 +203,31 @@ public class ExportController {
     @GetMapping(value = "/pvkdokument", produces = "application/zip")
     public void getPvkDokument(
             HttpServletResponse response,
-            @RequestParam(name = "id") UUID id
+            @RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId,
+            @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav
     ) {
         log.info("export pvk dokument to doc");
-        byte[] doc = pvkToDoc.generateDocFor(id);
+        var eDok = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
+
+        SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
+        Date date = new Date();
+
+        String filename = "attachment; filename=" + titleDateformatter.format(date) + "_Etterlevelse_E" + eDok.getEtterlevelseNummer();
+        if (onlyActiveKrav) {
+            filename += "_kun_gjeldende_krav_versjon.zip";
+        } else {
+            filename += "_alle_krav_versjone.zip";
+        }
+
+        String documentTitle  = "Personvernkonsekvensvurdering for E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -").trim();
+
+        byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, true);
+
+        byte[] zipFile = pvkToDoc.generateZipWithBLLFilesFromDoc(wordFile, etterlevelseDokumentasjonId, documentTitle);
 
         response.setContentType("application/zip");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pvkDokument.zip");
-        StreamUtils.copy(doc, response.getOutputStream());
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, filename);
+        StreamUtils.copy(zipFile, response.getOutputStream());
         response.flushBuffer();
     }
 

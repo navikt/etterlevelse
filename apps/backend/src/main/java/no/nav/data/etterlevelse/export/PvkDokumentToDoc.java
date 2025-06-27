@@ -163,6 +163,30 @@ public class PvkDokumentToDoc {
         return zipUtils.zipOutputStream(zipFiles);
     }
 
+    public byte[] generateZipWithBLLFilesFromDoc(byte[] pvkDokument, UUID etterlevelseDokumentasjonId, String documentTittle) throws IOException {
+        ZipUtils zipUtils = new ZipUtils();
+        List<ZipFile> zipFiles = new ArrayList<>();
+
+        BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjonId);
+
+        zipFiles.add(ZipFile.builder()
+                .filnavn(documentTittle)
+                .filtype("docx")
+                .fil(pvkDokument)
+                .build());
+
+        behandlingensLivslop.getBehandlingensLivslopData().getFiler().forEach(behandlingensLivslopFil -> {
+            String[] filename = behandlingensLivslopFil.getFilnavn().split("\\.");
+            zipFiles.add(ZipFile.builder()
+                    .filnavn(filename[0])
+                    .filtype(filename[1])
+                    .fil(behandlingensLivslopFil.getFil())
+                    .build());
+        });
+
+        return zipUtils.zipOutputStream(zipFiles);
+    }
+
     public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
