@@ -118,8 +118,8 @@ export const mapPvoTilbakemeldingToFormValue = (
     behovForForhandskonsultasjonBegrunnelse:
       pvoTilbakemelding.behovForForhandskonsultasjonBegrunnelse || '',
     pvoVurdering: pvoTilbakemelding.pvoVurdering || '',
-    pvoFolgeOppEndringer: pvoTilbakemelding.pvoFolgeOppEndringer,
-    vilFaPvkIRetur: pvoTilbakemelding.vilFaPvkIRetur,
+    pvoFolgeOppEndringer: pvoTilbakemelding.pvoFolgeOppEndringer || false,
+    vilFaPvkIRetur: pvoTilbakemelding.vilFaPvkIRetur || false,
     behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
       sistRedigertAv: '',
       sistRedigertDato: '',
