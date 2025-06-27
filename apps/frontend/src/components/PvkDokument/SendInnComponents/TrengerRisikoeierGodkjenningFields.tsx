@@ -96,8 +96,9 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             type='button'
             onClick={async () => {
               await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-              await submitForm()
-              await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+              await submitForm().then(async () => {
+                await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+              })
             }}
           >
             Akseptér restrisiko og arkivér i Public 360
