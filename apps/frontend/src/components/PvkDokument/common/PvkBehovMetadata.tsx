@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react'
 import { behandlingName } from '../../../api/BehandlingApi'
 import { IBehandling, IEtterlevelseDokumentasjon } from '../../../constants'
 import { user } from '../../../services/User'
-import { env } from '../../../util/env'
+import { getPollyBaseUrl } from '../../behandling/utils/pollyUrlUtils'
 import { ExternalLink } from '../../common/RouteLink'
 import { etterlevelsesDokumentasjonEditUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 
@@ -24,7 +24,7 @@ export const PvkBehovMetadata: FunctionComponent<TProps> = ({ etterlevelseDokume
           <List.Item key={behandling.nummer}>
             <ExternalLink
               className='text-medium'
-              href={`${env.pollyBaseUrl}process/${behandling.id}`}
+              href={`${getPollyBaseUrl()}process/${behandling.id}`}
             >
               {behandlingName(behandling)}
             </ExternalLink>

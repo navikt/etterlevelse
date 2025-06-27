@@ -1,3 +1,4 @@
+import { getPollyBaseUrl } from '../components/behandling/utils/pollyUrlUtils'
 import { env } from './env'
 
 export const navSlackTeamId = 'T5LNAMWNA'
@@ -24,7 +25,7 @@ export const rutineForArkivering =
 export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}resource/${navIdent}`
 export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
 export const teamKatTeamLink = (id: string) => `${env.teamKatBaseUrl}team/${id}`
-export const behandlingLink = (id: string) => `${env.pollyBaseUrl}process/${id}`
+export const behandlingLink = (id: string) => `${getPollyBaseUrl()}process/${id}`
 export const termUrl = (termId: string) =>
   `https://navno.sharepoint.com/sites/begreper/SitePages/Begrep.aspx?bid=${termId}`
 

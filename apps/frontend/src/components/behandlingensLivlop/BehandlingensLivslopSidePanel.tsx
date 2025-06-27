@@ -2,7 +2,7 @@ import { BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { behandlingName } from '../../api/BehandlingApi'
 import { IBehandling, IEtterlevelseDokumentasjon } from '../../constants'
-import { env } from '../../util/env'
+import { getPollyBaseUrl } from '../behandling/utils/pollyUrlUtils'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
 import { behandlingskatalogenProcessUrl } from '../common/RouteLinkBehandlingskatalogen'
@@ -27,7 +27,7 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
             <List.Item key={behandling.nummer}>
               <ExternalLink
                 className='text-medium'
-                href={behandlingskatalogenProcessUrl(env.pollyBaseUrl, behandling.id)}
+                href={behandlingskatalogenProcessUrl(getPollyBaseUrl(), behandling.id)}
               >
                 {behandlingName(behandling)}
               </ExternalLink>

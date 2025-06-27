@@ -1,8 +1,8 @@
 import { BodyLong, Label } from '@navikt/ds-react'
 import { behandlingName } from '../../api/BehandlingApi'
 import { IBehandling } from '../../constants'
-import { env } from '../../util/env'
 import { ExternalLink } from '../common/RouteLink'
+import { getPollyBaseUrl } from './utils/pollyUrlUtils'
 
 interface IProps {
   behandlingIds: string[]
@@ -24,7 +24,7 @@ export const BehandlingList = (props: IProps) => {
               {behandlinger && behandlinger[index].navn && (
                 <ExternalLink
                   className='text-medium'
-                  href={`${env.pollyBaseUrl}process/${behandlingId}`}
+                  href={`${getPollyBaseUrl()}process/${behandlingId}`}
                 >
                   {behandlinger?.length > 0
                     ? `${behandlingName(behandlinger[index])}`

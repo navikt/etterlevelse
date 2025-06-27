@@ -2,7 +2,7 @@ import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/
 import { FunctionComponent } from 'react'
 import { IBehandlingensLivslop, IEtterlevelseDokumentasjon } from '../../../constants'
 import { user } from '../../../services/User'
-import { env } from '../../../util/env'
+import { getPollyBaseUrl } from '../../behandling/utils/pollyUrlUtils'
 import { ExternalLink } from '../../common/RouteLink'
 import { etterlevelsesDokumentasjonEditUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonBehandlingsenLivslopUrl } from '../../common/RouteLinkPvk'
@@ -116,7 +116,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           )}
         </List>
         Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
-        <ExternalLink className='text-medium' href={`${env.pollyBaseUrl}`}>
+        <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
           Behandlingskatalogen
         </ExternalLink>{' '}
         før dere vurderer behov for PVK.
