@@ -47,7 +47,7 @@
     "react-process-string": "^1.2.0",
     "react-select": "^5.10.1",
     "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.0",
+    "remark-gfm": "^4.0.1",
     "tailwindcss": "^4.0.3",
     "ts-prune": "^0.10.3",
     "typescript": "^5.8.3",
