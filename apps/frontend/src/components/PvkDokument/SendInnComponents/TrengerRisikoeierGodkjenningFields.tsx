@@ -54,7 +54,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
         pvoTilbakemelding={pvoTilbakemelding}
         pvoVurderingList={pvoVurderingList}
       />
-      <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadFraRisikoeier} />
+      <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
 
       <div className='mt-5 mb-3 max-w-[75ch]'>
         <TextAreaField
