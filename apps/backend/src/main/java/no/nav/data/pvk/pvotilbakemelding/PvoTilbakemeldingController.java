@@ -149,7 +149,11 @@ public class PvoTilbakemeldingController {
         } else if (underabeidStatus.contains(pvoTilbakemelding.getStatus())) {
             pvkDokument.setStatus(PvkDokumentStatus.PVO_UNDERARBEID);
         } else if (ikkePabegyntStatus.contains(pvoTilbakemelding.getStatus())) {
-            pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO);
+            if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING) {
+                pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING);
+            } else {
+                pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO);
+            }
         }
 
         pvkDokumentService.save(pvkDokument, true);
