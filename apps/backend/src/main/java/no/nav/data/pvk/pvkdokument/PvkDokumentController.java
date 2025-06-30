@@ -17,7 +17,6 @@ import no.nav.data.pvk.pvkdokument.dto.PvkDokumentListItemResponse;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -150,16 +149,14 @@ public class PvkDokumentController {
     private void updatePvoTilbakemeldingStatus(PvkDokument pvkDokument) {
         log.info("Updating PVO tilbakemelding status with id = {}", pvkDokument.getId());
 
-        var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
-
-        if (pvoTilbakmelding != null) {
-            if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+        if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+            var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
+            if (pvoTilbakmelding != null) {
                 pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.TRENGER_REVURDERING);
                 pvoTilbakemeldingService.save(pvoTilbakmelding,true);
+            } else {
+                throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
             }
-        } else {
-            throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
         }
     }
-
 }
