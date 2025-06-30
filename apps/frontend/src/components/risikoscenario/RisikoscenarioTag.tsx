@@ -25,7 +25,10 @@ export const RisikoscenarioTag: FunctionComponent<TProps> = ({ text, level }) =>
   }
 
   return (
-    <Tag variant={getVariantFromLevel(level)} className={`${level === 3 ? 'bg-[#FFF9C2]' : ''}`}>
+    <Tag
+      variant={getVariantFromLevel(level)}
+      className={`${level === 3 ? 'bg-[#FFF9C2]' : level === 2 ? 'bg-[#EBF4A9]' : ''}`}
+    >
       {text}
     </Tag>
   )
