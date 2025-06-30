@@ -161,7 +161,7 @@ export const TextEditor = (props: TTextEditorProps) => {
               ? ['inline', 'list', 'link']
               : ['inline', 'blockType', 'list', 'link', 'history'],
             blockType: {},
-            inline: { options: ['bold'] },
+            inline: { options: ['bold', 'italic', 'underline', 'strikethrough'] },
             // old toolbar
             // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
             list: { options: ['unordered', 'ordered'] },
