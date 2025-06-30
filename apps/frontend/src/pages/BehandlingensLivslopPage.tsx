@@ -22,6 +22,7 @@ import {
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import AlertPvoUnderarbeidModal from '../components/PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../components/PvkDokument/common/util'
 import BehandlingensLivslopReadOnlyContent from '../components/behandlingensLivlop/BehandlingensLivslopReadonlyContent'
 import BehandlingensLivsLopSidePanel from '../components/behandlingensLivlop/BehandlingensLivslopSidePanel'
 import BehandlingensLivslopTextContent from '../components/behandlingensLivlop/BehandlingensLivslopTextContent'
@@ -129,12 +130,7 @@ export const BehandlingensLivslopPage = () => {
         })
         .catch(() => undefined)
 
-      if (
-        [
-          EPvkDokumentStatus.PVO_UNDERARBEID.toString(),
-          EPvkDokumentStatus.SENDT_TIL_PVO.toString(),
-        ].includes(pvkStatus)
-      ) {
+      if (isReadOnlyPvkStatus(pvkStatus as EPvkDokumentStatus)) {
         setIsPvoAlertModalOpen(true)
       } else {
         if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
@@ -202,11 +198,7 @@ export const BehandlingensLivslopPage = () => {
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <ContentLayout>
             <MainPanelLayout hasSidePanel>
-              {((pvkDokument &&
-                ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                  pvkDokument.status
-                )) ||
-                !pvkDokument) && (
+              {((pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status)) || !pvkDokument) && (
                 <div>
                   <Formik
                     validateOnBlur={false}
@@ -352,19 +344,16 @@ export const BehandlingensLivslopPage = () => {
                 formRef={formRef}
               />
 
-              {pvkDokument &&
-                [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                  pvkDokument.status
-                ) && (
-                  <BehandlingensLivslopReadOnlyContent
-                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(
-                      behandlingsLivslop
-                    )}
-                    noSidePanelContent
-                    noHeader
-                  />
-                )}
+              {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
+                <BehandlingensLivslopReadOnlyContent
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(
+                    behandlingsLivslop
+                  )}
+                  noSidePanelContent
+                  noHeader
+                />
+              )}
             </MainPanelLayout>
 
             {/* right side */}

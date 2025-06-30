@@ -2,7 +2,6 @@ import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
 import { Dispatch, RefObject, useEffect, useRef, useState } from 'react'
 import {
-  EPvkDokumentStatus,
   IEtterlevelseMetadata,
   IKravVersjon,
   IPvkDokument,
@@ -10,6 +9,7 @@ import {
   TKravQL,
 } from '../../../constants'
 import { user } from '../../../services/User'
+import { isReadOnlyPvkStatus } from '../../PvkDokument/common/util'
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
@@ -127,24 +127,18 @@ export const EtterlevelseSidePanel = (props: IProps) => {
           {pvkDokument && pvkDokument.skalUtforePvk && (
             <Tabs.Panel className='overflow-auto h-[90vh]' value='pvkDokumentasjon'>
               <div className='mt-2 p-4 mb-52'>
-                {userHasAccess() &&
-                  pvkDokument &&
-                  ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                    pvkDokument.status
-                  ) && (
-                    <KravRisikoscenario
-                      krav={krav}
-                      pvkDokument={pvkDokument}
-                      setIsPvkFormActive={setIsPvkFormActive}
-                      formRef={formRef}
-                    />
-                  )}
+                {userHasAccess() && pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
+                  <KravRisikoscenario
+                    krav={krav}
+                    pvkDokument={pvkDokument}
+                    setIsPvkFormActive={setIsPvkFormActive}
+                    formRef={formRef}
+                  />
+                )}
 
-                {(!userHasAccess() ||
-                  (pvkDokument &&
-                    [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                      pvkDokument.status
-                    ))) && <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />}
+                {(!userHasAccess() || (pvkDokument && isReadOnlyPvkStatus(pvkDokument.status))) && (
+                  <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
+                )}
               </div>
             </Tabs.Panel>
           )}

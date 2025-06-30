@@ -5,7 +5,6 @@ import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../../api/TiltakApi'
 import {
-  EPvkDokumentStatus,
   ERisikoscenarioType,
   IPageResponse,
   IPvkDokument,
@@ -14,6 +13,7 @@ import {
   TKravQL,
 } from '../../../constants'
 import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../../PvkDokument/common/util'
 import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
 import AccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
@@ -54,11 +54,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
-      if (
-        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-          response.status
-        )
-      ) {
+      if (isReadOnlyPvkStatus(response.status)) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()

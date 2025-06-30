@@ -8,12 +8,12 @@ import { usePvkDokument } from '../api/PvkDokumentApi'
 import PvkBehovInfoContent from '../components/PvkDokument/common/PvkBehovInfoContent'
 import PvkBehovMetadata from '../components/PvkDokument/common/PvkBehovMetadata'
 import PvkBehovReadOnly from '../components/PvkDokument/common/PvkBehovReadOnly'
+import { isReadOnlyPvkStatus } from '../components/PvkDokument/common/util'
 import PvkBehovForm from '../components/PvkDokument/edit/PvkBehovForm'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { ContentLayout } from '../components/layout/layout'
 import { PageLayout } from '../components/scaffold/Page'
 import {
-  EPvkDokumentStatus,
   IBehandling,
   IBehandlingensLivslop,
   IBreadCrumbPath,
@@ -147,9 +147,7 @@ export const PvkBehovPage = () => {
               behandlingensLivslop={behandlingensLivslop}
             />
             {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-              ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                pvkdokument.status
-              ) && (
+              !isReadOnlyPvkStatus(pvkdokument.status) && (
                 <PvkBehovForm
                   pvkDokument={pvkdokument}
                   setPvkDokument={setPvkDokument}
@@ -166,9 +164,7 @@ export const PvkBehovPage = () => {
 
             {!etterlevelseDokumentasjon.hasCurrentUserAccess &&
               !user.isAdmin() &&
-              [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                pvkdokument.status
-              ) && (
+              isReadOnlyPvkStatus(pvkdokument.status) && (
                 <PvkBehovReadOnly
                   pvkDokument={pvkdokument}
                   ytterligereEgenskaper={ytterligereEgenskaper}

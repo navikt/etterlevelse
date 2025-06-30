@@ -42,7 +42,11 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         <Button
           type='button'
           onClick={async () => {
-            await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
+            if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+              await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+            } else {
+              await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
+            }
             await submitForm()
           }}
         >

@@ -131,14 +131,18 @@ export const SendInnView: FunctionComponent<TProps> = ({
           const updatedPvkDokument: IPvkDokument = {
             ...response,
             status: submitedValues.status,
-            sendtTilPvoDato:
-              submitedValues.status === EPvkDokumentStatus.SENDT_TIL_PVO
-                ? new Date().toISOString()
-                : response.sendtTilPvoDato,
-            sendtTilPvoAv:
-              submitedValues.status === EPvkDokumentStatus.SENDT_TIL_PVO
-                ? user.getIdent() + ' - ' + user.getName()
-                : response.sendtTilPvoAv,
+            sendtTilPvoDato: [
+              EPvkDokumentStatus.SENDT_TIL_PVO,
+              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+            ].includes(submitedValues.status)
+              ? new Date().toISOString()
+              : response.sendtTilPvoDato,
+            sendtTilPvoAv: [
+              EPvkDokumentStatus.SENDT_TIL_PVO,
+              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+            ].includes(submitedValues.status)
+              ? user.getIdent() + ' - ' + user.getName()
+              : response.sendtTilPvoAv,
             merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
@@ -341,9 +345,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
         validate={(value) => {
           try {
             if (
-              [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.TRENGER_GODKJENNING].includes(
-                value.status
-              )
+              [
+                EPvkDokumentStatus.SENDT_TIL_PVO,
+                EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+                EPvkDokumentStatus.TRENGER_GODKJENNING,
+              ].includes(value.status)
             ) {
               manglerBehandlingErrorCheck()
               risikoeiereDataFieldCheck()
@@ -453,7 +459,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
+                {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
+                  pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
                   <SendtTilPvoFields
                     pvkDokument={pvkDokument}
                     isLoading={isLoading}

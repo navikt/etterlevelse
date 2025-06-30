@@ -8,6 +8,7 @@ import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/Documen
 import { useEtterlevelseDokumentasjon } from '../api/EtterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '../api/PvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '../api/RisikoscenarioApi'
+import { isReadOnlyPvkStatus } from '../components/PvkDokument/common/util'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import {
   etterlevelseDokumentasjonIdUrl,
@@ -359,10 +360,7 @@ export const DokumentasjonPage = () => {
                               pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
                               'Fullfør PVK'}
                             {!pvkDokumentNotStarted &&
-                              [
-                                EPvkDokumentStatus.SENDT_TIL_PVO,
-                                EPvkDokumentStatus.PVO_UNDERARBEID,
-                              ].includes(pvkDokument.status) &&
+                              isReadOnlyPvkStatus(pvkDokument.status) &&
                               'Les PVK'}
                             {!pvkDokumentNotStarted &&
                               [

@@ -4,7 +4,6 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
-  EPvkDokumentStatus,
   EPvoTilbakemeldingStatus,
   ERisikoscenarioType,
   IPageResponse,
@@ -27,6 +26,7 @@ import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/Op
 import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import TiltakAccordionListReadOnly from '../tiltak/TiltakAccordionListReadOnly'
+import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -342,37 +342,29 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
                           <div className='my-5'>
-                            {pvkDokument &&
-                              ![
-                                EPvkDokumentStatus.PVO_UNDERARBEID,
-                                EPvkDokumentStatus.SENDT_TIL_PVO,
-                              ].includes(pvkDokument.status) && (
-                                <OppsumeringAccordianList
-                                  risikoscenarioList={filteredRisikoscenarioList}
-                                  setRisikosenarioList={setFilteredRisikosenarioList}
-                                  allRisikoscenarioList={risikoscenarioList}
-                                  setAllRisikoscenarioList={setRisikoscenarioList}
-                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                                  tiltakList={tiltakList}
-                                  setTiltakList={setTiltakList}
-                                  formRef={formRef}
-                                  isUnsaved={isUnsaved}
-                                  setIsUnsaved={setIsUnsaved}
-                                />
-                              )}
-                            {pvkDokument &&
-                              [
-                                EPvkDokumentStatus.PVO_UNDERARBEID,
-                                EPvkDokumentStatus.SENDT_TIL_PVO,
-                              ].includes(pvkDokument.status) && (
-                                <OppsumeringAccordianListReadOnlyView
-                                  risikoscenarioList={filteredRisikoscenarioList}
-                                  allRisikoscenarioList={risikoscenarioList}
-                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                                  tiltakList={tiltakList}
-                                  noMarkdownCopyLinkButton
-                                />
-                              )}
+                            {pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
+                              <OppsumeringAccordianList
+                                risikoscenarioList={filteredRisikoscenarioList}
+                                setRisikosenarioList={setFilteredRisikosenarioList}
+                                allRisikoscenarioList={risikoscenarioList}
+                                setAllRisikoscenarioList={setRisikoscenarioList}
+                                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                tiltakList={tiltakList}
+                                setTiltakList={setTiltakList}
+                                formRef={formRef}
+                                isUnsaved={isUnsaved}
+                                setIsUnsaved={setIsUnsaved}
+                              />
+                            )}
+                            {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
+                              <OppsumeringAccordianListReadOnlyView
+                                risikoscenarioList={filteredRisikoscenarioList}
+                                allRisikoscenarioList={risikoscenarioList}
+                                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                tiltakList={tiltakList}
+                                noMarkdownCopyLinkButton
+                              />
+                            )}
                           </div>
                         )}
                     </Tabs.Panel>
@@ -427,10 +419,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       )}
 
                       {pvkDokument &&
-                        ![
-                          EPvkDokumentStatus.PVO_UNDERARBEID,
-                          EPvkDokumentStatus.SENDT_TIL_PVO,
-                        ].includes(pvkDokument.status) &&
+                        !isReadOnlyPvkStatus(pvkDokument.status) &&
                         filteredTiltakList.length !== 0 && (
                           <TiltakAccordionList
                             tiltakList={filteredTiltakList}
@@ -440,10 +429,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         )}
 
                       {pvkDokument &&
-                        [
-                          EPvkDokumentStatus.PVO_UNDERARBEID,
-                          EPvkDokumentStatus.SENDT_TIL_PVO,
-                        ].includes(pvkDokument.status) &&
+                        isReadOnlyPvkStatus(pvkDokument.status) &&
                         filteredTiltakList.length !== 0 && (
                           <TiltakAccordionListReadOnly
                             tiltakList={filteredTiltakList}

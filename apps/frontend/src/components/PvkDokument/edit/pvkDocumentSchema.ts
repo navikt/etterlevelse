@@ -1,7 +1,11 @@
 import * as yup from 'yup'
 import { EPvkDokumentStatus } from '../../../constants'
 
-const editStatus = [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.TRENGER_GODKJENNING]
+const editStatus = [
+  EPvkDokumentStatus.SENDT_TIL_PVO,
+  EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+  EPvkDokumentStatus.TRENGER_GODKJENNING,
+]
 
 const stringCheck = (fielName: string, errorMessage?: string) =>
   yup.string().test({

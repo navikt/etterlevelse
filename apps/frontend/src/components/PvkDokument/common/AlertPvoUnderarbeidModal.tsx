@@ -35,12 +35,20 @@ export const AlertPvoUnderarbeidModal: FunctionComponent<TProps> = ({
       )}
       {!isLoading && (
         <div>
-          {pvkDokument && pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO && (
-            <Modal.Body>Pvk dokumentet er sendt til Personvernombudet</Modal.Body>
-          )}
-          {pvkDokument && pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO && (
-            <Modal.Body>Personvernombudet har påbegynt vurderingen</Modal.Body>
-          )}
+          {pvkDokument &&
+            [
+              EPvkDokumentStatus.SENDT_TIL_PVO,
+              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+            ].includes(pvkDokument.status) && (
+              <Modal.Body>Pvk dokumentet er sendt til Personvernombudet</Modal.Body>
+            )}
+          {pvkDokument &&
+            ![
+              EPvkDokumentStatus.SENDT_TIL_PVO,
+              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+            ].includes(pvkDokument.status) && (
+              <Modal.Body>Personvernombudet har påbegynt vurderingen</Modal.Body>
+            )}
           <Modal.Footer>
             <Button type='button' onClick={() => onClose()}>
               Lukk

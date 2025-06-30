@@ -18,7 +18,7 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '../../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
+import { IEtterlevelseDokumentasjon, IPvkDokument } from '../../../constants'
 import { EListName, ICode, ICodelistProps } from '../../../services/Codelist'
 import { FieldWrapper, TextAreaField } from '../../common/Inputs'
 import { etterlevelseDokumentasjonIdUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -26,6 +26,7 @@ import { pvkDokumentasjonPvkBehovUrl, pvkDokumentasjonStepUrl } from '../../comm
 import UnsavedModalAlert from '../../common/UnsavedModalAlert'
 import { StickyFooterButtonLayout } from '../../layout/layout'
 import AlertPvoUnderarbeidModal from '../common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../common/util'
 import { pvkBehovSchema } from './pvkDocumentSchema'
 
 type TProps = {
@@ -80,11 +81,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       }
 
       if (pvkDokument.id || existingPvkDokumentId) {
-        if (
-          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-            pvkDokument.status
-          )
-        ) {
+        if (isReadOnlyPvkStatus(pvkDokument.status)) {
           setIsPvoAlertModalOpen(true)
         } else {
           await updatePvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {

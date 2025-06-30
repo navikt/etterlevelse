@@ -9,8 +9,9 @@ import {
   removeTiltakToRisikoscenario,
 } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak } from '../../api/TiltakApi'
-import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak } from '../../constants'
 import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../PvkDokument/common/util'
 
 type TProps = {
   risikoscenario: IRisikoscenario
@@ -65,11 +66,7 @@ export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
         variant='tertiary'
         onClick={async () => {
           await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-            if (
-              [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                response.status
-              )
-            ) {
+            if (isReadOnlyPvkStatus(response.status)) {
               setIsPvoAlertModalOpen(true)
             } else {
               setIsOpen(true)

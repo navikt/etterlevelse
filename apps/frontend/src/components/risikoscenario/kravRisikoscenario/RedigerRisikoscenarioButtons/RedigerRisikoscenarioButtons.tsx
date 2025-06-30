@@ -2,8 +2,9 @@ import { PencilIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { getPvkDokument } from '../../../../api/PvkDokumentApi'
-import { EPvkDokumentStatus, IRisikoscenario } from '../../../../constants'
+import { IRisikoscenario } from '../../../../constants'
 import AlertPvoUnderarbeidModal from '../../../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../../../PvkDokument/common/util'
 import FjernRisikoscenarioFraKrav from '../../edit/FjernRisikoscenarioFraKrav'
 
 type TProps = {
@@ -29,11 +30,7 @@ export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-      if (
-        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-          response.status
-        )
-      ) {
+      if (isReadOnlyPvkStatus(response.status)) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()

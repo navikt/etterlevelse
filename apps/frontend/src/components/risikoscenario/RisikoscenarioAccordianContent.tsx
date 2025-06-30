@@ -5,8 +5,9 @@ import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
-import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak } from '../../constants'
 import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../PvkDokument/common/util'
 import { risikoscenarioTiltakUrl } from '../common/RouteLinkPvk'
 import TiltakReadMoreList from '../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../tiltak/edit/LeggTilEksisterendeTiltak'
@@ -101,11 +102,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   const activeFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-      if (
-        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-          response.status
-        )
-      ) {
+      if (isReadOnlyPvkStatus(response.status)) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()

@@ -13,13 +13,9 @@ import {
   deleteTiltak,
   getTiltak,
 } from '../../../../api/TiltakApi'
-import {
-  EPvkDokumentStatus,
-  IRisikoscenario,
-  ITiltak,
-  ITiltakRisikoscenarioRelasjon,
-} from '../../../../constants'
+import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../../constants'
 import AlertPvoUnderarbeidModal from '../../../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../../../PvkDokument/common/util'
 import { risikoscenarioIdQuery } from '../../../common/RouteLinkRisiko'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
@@ -172,11 +168,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-      if (
-        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-          response.status
-        )
-      ) {
+      if (isReadOnlyPvkStatus(response.status)) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()

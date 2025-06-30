@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import { removeTiltakToRisikoscenario } from '../../api/RisikoscenarioApi'
 import { deleteTiltak, getTiltak, updateTiltak } from '../../api/TiltakApi'
-import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak } from '../../constants'
 import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../PvkDokument/common/util'
 import { risikoscenarioTiltakUrl, risikoscenarioUrl } from '../common/RouteLinkPvk'
 import TiltakView from './TiltakView'
 import TiltakForm from './edit/TiltakForm'
@@ -142,11 +143,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
 
   const activeFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-      if (
-        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-          response.status
-        )
-      ) {
+      if (isReadOnlyPvkStatus(response.status)) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()

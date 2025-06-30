@@ -133,6 +133,8 @@ export const DokumentasjonPageTabs = (props: IProps) => {
             {pvkDokument &&
               pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO &&
               pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO &&
+              pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
+              pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING &&
               pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
                 <Alert className='max-w-[75ch]' variant='info'>
                   <Heading spacing size='small' level='3'>

@@ -3,8 +3,9 @@ import { Alert, Button } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useState } from 'react'
 import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import { updateRisikoscenario } from '../../../api/RisikoscenarioApi'
-import { EPvkDokumentStatus, IRisikoscenario, ITiltak } from '../../../constants'
+import { IRisikoscenario, ITiltak } from '../../../constants'
 import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../../PvkDokument/common/util'
 import RisikoscenarioView from '../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
 import RisikoscenarioModalForm from '../edit/RisikoscenarioModalForm'
@@ -48,11 +49,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
 
   const activeFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-      if (
-        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-          response.status
-        )
-      ) {
+      if (isReadOnlyPvkStatus(response.status)) {
         setIsPvoAlertModalOpen(true)
       } else {
         runFunction()

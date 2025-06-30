@@ -3,8 +3,9 @@ import { FunctionComponent, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import { createRisikoscenario } from '../../../api/RisikoscenarioApi'
-import { EPvkDokumentStatus, IPvkDokument, IRisikoscenario } from '../../../constants'
+import { IPvkDokument, IRisikoscenario } from '../../../constants'
 import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
+import { isReadOnlyPvkStatus } from '../../PvkDokument/common/util'
 import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
 import RisikoscenarioModalForm from './RisikoscenarioModalForm'
 
@@ -38,11 +39,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
         <Button
           onClick={async () =>
             await getPvkDokument(pvkDokument.id).then((response) => {
-              if (
-                [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-                  response.status
-                )
-              ) {
+              if (isReadOnlyPvkStatus(response.status)) {
                 setIsPvoAlertModal(true)
               } else {
                 setIsEdit(true)
