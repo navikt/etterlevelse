@@ -40,6 +40,7 @@ import SendtTilPvoFields from './SendInnComponents/SendtTilPvoFields'
 import TrengerRisikoeierGodkjenningFields from './SendInnComponents/TrengerRisikoeierGodkjenningFields'
 import UnderArbeidFields from './SendInnComponents/UnderArbeidFields'
 import VurdertAvPvoFields from './SendInnComponents/VurdertAvPvoFields'
+import VurdertAvPvoOgTrengerMerArbeidFields from './SendInnComponents/VurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
@@ -464,6 +465,34 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
                   <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
                 )}
+
+                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
+                  pvoTilbakemelding && (
+                    <VurdertAvPvoOgTrengerMerArbeidFields
+                      pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      setFieldValue={setFieldValue}
+                      submitForm={submitForm}
+                      initialStatus={initialValues.status}
+                      isLoading={isLoading}
+                      pvoVurderingList={pvoVurderingList}
+                      errorSummaryComponent={
+                        <SendInnErrorSummary
+                          errors={errors}
+                          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                          risikoeiereDataError={risikoeiereDataError}
+                          avdelingError={avdelingError}
+                          medlemError={medlemError}
+                          behandlingensLivslopError={behandlingensLivslopError}
+                          risikoscenarioError={risikoscenarioError}
+                          tiltakError={tiltakError}
+                          savnerVurderingError={savnerVurderingError}
+                          manglerBehandlingError={manglerBehandlingError}
+                          errorSummaryRef={errorSummaryRef}
+                        />
+                      }
+                    />
+                  )}
 
                 {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
                   <VurdertAvPvoFields

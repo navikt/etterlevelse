@@ -9,6 +9,7 @@ import {
   IPvoTilbakemelding,
 } from '../../constants'
 import { ICode } from '../../services/Codelist'
+import { isDev } from '../../util/config'
 import { FieldRadioLayout, IndentLayoutTextField } from '../common/IndentLayout'
 import { TextAreaField } from '../common/Inputs'
 import AlertPvoModal from './common/AlertPvoModal'
@@ -228,7 +229,9 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                   setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                   await submitForm().then(async () => {
-                    await arkiver(etterlevelseDokumentasjon.id, true, true, false)
+                    if (!isDev) {
+                      await arkiver(etterlevelseDokumentasjon.id, true, true, false)
+                    }
                   })
                 }}
               >
