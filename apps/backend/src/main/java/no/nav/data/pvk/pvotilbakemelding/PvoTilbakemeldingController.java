@@ -141,7 +141,11 @@ public class PvoTilbakemeldingController {
 
         var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
+            if(pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur()) {
+                pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID);
+            } else {
+                pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
+            }
         } else if (underabeidStatus.contains(pvoTilbakemelding.getStatus())) {
             pvkDokument.setStatus(PvkDokumentStatus.PVO_UNDERARBEID);
         } else if (ikkePabegyntStatus.contains(pvoTilbakemelding.getStatus())) {

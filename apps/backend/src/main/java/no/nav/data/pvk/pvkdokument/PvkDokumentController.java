@@ -12,9 +12,13 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentListItemResponse;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
+import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,7 @@ public class PvkDokumentController {
 
     private final PvkDokumentService pvkDokumentService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final PvoTilbakemeldingService pvoTilbakemeldingService;
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")
@@ -124,6 +129,7 @@ public class PvkDokumentController {
 
         request.mergeInto(pvkDokumentToUpdate);
         var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
+        updatePvoTilbakemeldingStatus(pvkDokument);
         return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
     }
 
@@ -138,6 +144,21 @@ public class PvkDokumentController {
             throw new ValidationException("Could not delete pvk dokument: Non-existing og related to other resources");
         } else {
             return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+        }
+    }
+
+    private void updatePvoTilbakemeldingStatus(PvkDokument pvkDokument) {
+        log.info("Updating PVO tilbakemelding status with id = {}", pvkDokument.getId());
+
+        var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
+
+        if (pvoTilbakmelding != null) {
+            if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+                pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.TRENGER_REVURDERING);
+                pvoTilbakemeldingService.save(pvoTilbakmelding,true);
+            }
+        } else {
+            throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
         }
     }
 
