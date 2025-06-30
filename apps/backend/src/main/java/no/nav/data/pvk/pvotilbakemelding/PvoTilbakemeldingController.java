@@ -141,7 +141,7 @@ public class PvoTilbakemeldingController {
 
         var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            if(pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur()) {
+            if(pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur().equals(true)) {
                 pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID);
             } else {
                 pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
@@ -149,7 +149,7 @@ public class PvoTilbakemeldingController {
         } else if (underabeidStatus.contains(pvoTilbakemelding.getStatus())) {
             pvkDokument.setStatus(PvkDokumentStatus.PVO_UNDERARBEID);
         } else if (ikkePabegyntStatus.contains(pvoTilbakemelding.getStatus())) {
-            if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING) {
+            if (pvoTilbakemelding.getStatus().equals(PvoTilbakemeldingStatus.TRENGER_REVURDERING)) {
                 pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING);
             } else {
                 pvkDokument.setStatus(PvkDokumentStatus.SENDT_TIL_PVO);
