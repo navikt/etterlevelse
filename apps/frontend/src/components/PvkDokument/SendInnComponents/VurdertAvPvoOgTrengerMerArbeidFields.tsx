@@ -105,7 +105,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
 
         <Button
           type='button'
-          variant='secondary'
+          variant='tertiary'
           onClick={async () => {
             await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
             await submitForm()
@@ -114,7 +114,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
           Lagre og send tilbake til PVO
         </Button>
       </div>
-      <div className='w-full flex justify-end items-center'>
+      <div className='w-full flex justify-end items-center mt-3'>
         <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
       </div>
     </div>
