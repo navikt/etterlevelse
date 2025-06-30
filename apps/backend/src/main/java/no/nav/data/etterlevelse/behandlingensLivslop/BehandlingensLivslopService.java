@@ -60,4 +60,15 @@ public class BehandlingensLivslopService {
         return behandlingensLivslopToDelete.orElse(null);
     }
 
+    @Transactional
+    public void copyBehandlingenslivslop(UUID fromDocumentId, UUID toDocumentId) {
+        var bllToCopy = getByEtterlevelseDokumentasjon(fromDocumentId).orElse(null);
+
+        if(bllToCopy != null) {
+            var newBll = new BehandlingensLivslop();
+            newBll.setEtterlevelseDokumentasjonId(toDocumentId);
+            newBll.setBehandlingensLivslopData(bllToCopy.getBehandlingensLivslopData());
+            save(newBll, false);
+        }
+    }
 }

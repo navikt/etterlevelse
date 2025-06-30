@@ -6,6 +6,7 @@ import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
+import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
@@ -58,6 +59,7 @@ public class EtterlevelseDokumentasjonService {
     private final TeamcatTeamClient teamcatTeamClient;
     private final TeamcatResourceClient teamcatResourceClient;
     private final DocumentRelationService documentRelationService;
+    private final BehandlingensLivslopService behandlingensLivslopService;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
@@ -141,7 +143,7 @@ public class EtterlevelseDokumentasjonService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public EtterlevelseDokumentasjon saveAndCreateRelationWithEtterlevelseCopy(UUID fromDocumentId, EtterlevelseDokumentasjonWithRelationRequest request) {
+    public EtterlevelseDokumentasjon saveAndCreateRelationWithEtterlevelseAndBehandlingenslivslopCopy(UUID fromDocumentId, EtterlevelseDokumentasjonWithRelationRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = new EtterlevelseDokumentasjon();
         request.mergeInto(etterlevelseDokumentasjon);
         etterlevelseDokumentasjon.setEtterlevelseNummer(etterlevelseDokumentasjonRepo.nextEtterlevelseDokumentasjonNummer());
@@ -149,6 +151,8 @@ public class EtterlevelseDokumentasjonService {
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
 
         etterlevelseService.copyEtterlevelse(fromDocumentId, newEtterlevelseDokumentasjon.getId());
+
+        behandlingensLivslopService.copyBehandlingenslivslop(fromDocumentId, newEtterlevelseDokumentasjon.getId());
 
         var newDocumentRelation = documentRelationService.save(
                 DocumentRelation.builder()
