@@ -4,12 +4,7 @@
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
-  "importOrder": [
-    "^components/(.*)$",
-    "<THIRD_PARTY_MODULES>",
-    "^@ui/(.*)$",
-    "^[./]"
-  ],
+  "importOrder": ["^components/(.*)$", "<THIRD_PARTY_MODULES>", "^@ui/(.*)$", "^[./]"],
   "importOrderSeparation": false,
   "importOrderSortSpecifiers": true,
   "plugins": ["react", "@trivago/prettier-plugin-sort-imports"],
