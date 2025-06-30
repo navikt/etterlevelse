@@ -132,6 +132,28 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
       >
         {({ submitForm }) => (
           <Form>
+            <div className='z-10 flex flex-col w-full button_container sticky top-0 bg-[#e3eff7]'>
+              <div className='mt-2 mb-5 flex flex-row gap-2'>
+                <div>
+                  <Button size='small' type='button' onClick={submitForm}>
+                    Lagre
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    size='small'
+                    type='button'
+                    variant='secondary'
+                    onClick={() => {
+                      window.location.reload()
+                    }}
+                  >
+                    Forkast endringer
+                  </Button>
+                </div>
+              </div>
+            </div>
+
             <div>
               {initialValue.sistRedigertAv && initialValue.sistRedigertDato && (
                 <BodyShort size='medium' className='pb-5'>
@@ -191,26 +213,6 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 label='Skriv tilbakemelding til etterleveren'
                 caption='Tilbakemeldingen blir ikke tilgjengelig for etterleveren før PVK-en sendes tilbake.'
               />
-            </div>
-
-            <div className='mt-10 flex flex-row gap-2'>
-              <div>
-                <Button size='small' type='button' onClick={submitForm}>
-                  Lagre
-                </Button>
-              </div>
-              <div>
-                <Button
-                  size='small'
-                  type='button'
-                  variant='secondary'
-                  onClick={() => {
-                    window.location.reload()
-                  }}
-                >
-                  Forkast endringer
-                </Button>
-              </div>
             </div>
           </Form>
         )}
