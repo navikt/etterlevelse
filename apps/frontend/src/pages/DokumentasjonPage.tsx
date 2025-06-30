@@ -365,6 +365,7 @@ export const DokumentasjonPage = () => {
                             {!pvkDokumentNotStarted &&
                               [
                                 EPvkDokumentStatus.VURDERT_AV_PVO,
+                                EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
                                 EPvkDokumentStatus.TRENGER_GODKJENNING,
                               ].includes(pvkDokument.status) &&
                               'Les PVO-tilbakemelding'}
