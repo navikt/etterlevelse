@@ -26,6 +26,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@amplitude/analytics-browser": "^2.17.12",
     "@eslint/eslintrc": "^3.3.1",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^24.0.4",
