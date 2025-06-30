@@ -317,7 +317,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             </Heading>
                             Risikoscenarioer legges inn under{' '}
                             <Link
-                              href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}
+                              href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}?tab=pvk`}
                             >
                               PVK-relaterte krav
                             </Link>{' '}
