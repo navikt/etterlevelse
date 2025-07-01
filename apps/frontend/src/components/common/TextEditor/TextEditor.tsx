@@ -1,4 +1,4 @@
-import { RawDraftContentState, convertToRaw } from 'draft-js'
+import { RawDraftContentState, RawDraftInlineStyleRange, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { useEffect, useState } from 'react'
@@ -51,7 +51,7 @@ export const TextEditor = (props: TTextEditorProps) => {
         },
         'bgcolor-rgb(252, 221, 205)': {
           open: () => {
-            return `<span className='bg-[#FCDDCD]'>`
+            return `<span style='background-color: rgb(252, 221, 205)'>`
           },
           close: () => {
             return '</span>'
@@ -59,7 +59,7 @@ export const TextEditor = (props: TTextEditorProps) => {
         },
         'bgcolor-rgb(255, 217, 230)': {
           open: () => {
-            return `<span className='bg-[#FFD9E6]'>`
+            return `<span style='background-color: rgb(255, 217, 230)'>`
           },
           close: () => {
             return '</span>'
@@ -67,7 +67,7 @@ export const TextEditor = (props: TTextEditorProps) => {
         },
         'bgcolor-rgb(235, 222, 252)': {
           open: () => {
-            return `<span className='bg-[#EBDEFC]'>`
+            return `<span style='background-color: rgb(235, 222, 252)'>`
           },
           close: () => {
             return '</span>'
@@ -75,7 +75,7 @@ export const TextEditor = (props: TTextEditorProps) => {
         },
         'bgcolor-rgb(225, 227, 231)': {
           open: () => {
-            return `<span className='bg-[#E1E3E7]'>`
+            return `<span style='background-color: rgb(225, 227, 231)'>`
           },
           close: () => {
             return '</span>'
@@ -95,7 +95,7 @@ export const TextEditor = (props: TTextEditorProps) => {
   }
 
   const CustomMarkdownToDraft = (data: string) => {
-    return markdownToDraft(data, {
+    const draftData = markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -110,6 +110,28 @@ export const TextEditor = (props: TTextEditorProps) => {
       },
       preserveNewlines: true,
     })
+
+    draftData.blocks.map((data) => {
+      const plainText = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
+      const underlineStyles: RawDraftInlineStyleRange[] = []
+      const match = data.text.matchAll(/<ins>(.*?)<\/ins>/g)
+      match.forEach((result) => {
+        console.debug(result)
+        result.forEach((value: string, index: number) => {
+          if (index === 1) {
+            underlineStyles.push({
+              offset: plainText.indexOf(value),
+              length: value.length,
+              style: 'UNDERLINE',
+            })
+          }
+        })
+      })
+      data.text = plainText
+      data.inlineStyleRanges = [...data.inlineStyleRanges, ...underlineStyles]
+    })
+
+    return draftData
   }
 
   useEffect(() => {
