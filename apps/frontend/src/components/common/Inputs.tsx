@@ -168,7 +168,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
 
                 {mode === 'view' && (
                   <div className='p-8 border-border-subtle-hover border border-solid rounded-md'>
-                    <Markdown source={fieldProps.field.value} />
+                    <Markdown source={fieldProps.field.value} escapeHtml={false} />
                   </div>
                 )}
                 <div className='flex flex-col items-end justify-end mt-[-1px]'>
