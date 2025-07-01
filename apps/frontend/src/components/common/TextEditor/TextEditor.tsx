@@ -49,13 +49,53 @@ export const TextEditor = (props: TTextEditorProps) => {
             return '\n```'
           },
         },
+        'bgcolor-rgb(252, 221, 205)': {
+          open: () => {
+            return `<span className='bg-[#FCDDCD]'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        'bgcolor-rgb(255, 217, 230)': {
+          open: () => {
+            return `<span className='bg-[#FFD9E6]'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        'bgcolor-rgb(235, 222, 252)': {
+          open: () => {
+            return `<span className='bg-[#EBDEFC]'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        'bgcolor-rgb(225, 227, 231)': {
+          open: () => {
+            return `<span className='bg-[#E1E3E7]'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        UNDERLINE: {
+          open: () => {
+            return `<ins>`
+          },
+          close: () => {
+            return '</ins>'
+          },
+        },
       },
       preserveNewlines: true,
     })
   }
 
-  const CustomMarkdownToDraft = (data: string) =>
-    markdownToDraft(data, {
+  const CustomMarkdownToDraft = (data: string) => {
+    return markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -70,6 +110,7 @@ export const TextEditor = (props: TTextEditorProps) => {
       },
       preserveNewlines: true,
     })
+  }
 
   useEffect(() => {
     //--------ADD nessesary roles to toolbar options and editor------------
@@ -159,7 +200,7 @@ export const TextEditor = (props: TTextEditorProps) => {
           toolbar={{
             options: simple
               ? ['inline', 'list', 'link']
-              : ['inline', 'blockType', 'list', 'link', 'history'],
+              : ['inline', 'blockType', 'list', 'link', 'history', 'colorPicker'],
             blockType: {},
             inline: { options: ['bold', 'italic', 'strikethrough'] },
             // old toolbar
@@ -168,6 +209,15 @@ export const TextEditor = (props: TTextEditorProps) => {
             link: {
               defaultTargetOption: '_blank',
               options: ['link'],
+            },
+            colorPicker: {
+              colors: [
+                'rgb(252, 221, 205)',
+                'rgb(255, 217, 230)',
+                'rgb(235, 222, 252)',
+                'rgb(225, 227, 231)',
+                'rgb(255, 255, 255)',
+              ],
             },
             //image: { alt: { present: true, mandatory: true }, },
           }}
