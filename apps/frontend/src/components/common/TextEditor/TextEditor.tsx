@@ -201,6 +201,11 @@ const translations = {
   'components.controls.history.undo': 'Undo',
   'components.controls.history.redo': 'Redo',
 
+  //colorPicker
+  'components.controls.colorpicker.colorpicker': 'Color Picker',
+  'components.controls.colorpicker.text': 'Text',
+  'components.controls.colorpicker.background': 'Highlight',
+
   // Inline
   'components.controls.inline.bold': 'Bold',
   'components.controls.inline.italic': 'Italic',
