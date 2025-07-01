@@ -111,6 +111,12 @@ export const TextEditor = (props: TTextEditorProps) => {
       preserveNewlines: true,
     })
 
+    translateUnderlineToDraft(draftData)
+
+    return draftData
+  }
+
+  const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
     draftData.blocks.map((data) => {
       const plainText = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
       const underlineStyles: RawDraftInlineStyleRange[] = []
@@ -130,8 +136,6 @@ export const TextEditor = (props: TTextEditorProps) => {
       data.text = plainText
       data.inlineStyleRanges = [...data.inlineStyleRanges, ...underlineStyles]
     })
-
-    return draftData
   }
 
   useEffect(() => {
