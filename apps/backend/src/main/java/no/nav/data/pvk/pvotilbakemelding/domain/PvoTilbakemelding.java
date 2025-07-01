@@ -2,10 +2,7 @@ package no.nav.data.pvk.pvotilbakemelding.domain;
 
 
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import no.nav.data.common.auditing.domain.Auditable;
 import org.hibernate.annotations.Type;
@@ -31,7 +28,9 @@ public class PvoTilbakemelding extends Auditable {
 
     @Builder.Default
     @Column(name = "STATUS", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PvoTilbakemeldingStatus status = PvoTilbakemeldingStatus.UNDERARBEID;
+
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
