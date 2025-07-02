@@ -1,7 +1,7 @@
 import { RawDraftContentState, RawDraftInlineStyleRange } from 'draft-js'
 
 export const translateUnderlineWithHighlightToDraft = (draftData: RawDraftContentState) => {
-  return translateMixedStyleToDraft(
+  return translateMixedUnderlineHighlightStyleToDraft(
     draftData,
     /<ins><span style='background-color: rgb(.*?)'>(.*?)<.*><.*>/g,
     /<ins><span style='background-color: rgb(.*?)'>/g,
@@ -10,7 +10,7 @@ export const translateUnderlineWithHighlightToDraft = (draftData: RawDraftConten
 }
 
 export const translateHighlightWithUnderlineToDraft = (draftData: RawDraftContentState) => {
-  return translateMixedStyleToDraft(
+  return translateMixedUnderlineHighlightStyleToDraft(
     draftData,
     /<span style='background-color: rgb(.*?)'><ins>(.*?)<.*><.*>/g,
     /<span style='background-color: rgb(.*?)'><ins>/g,
@@ -18,7 +18,7 @@ export const translateHighlightWithUnderlineToDraft = (draftData: RawDraftConten
   )
 }
 
-const translateMixedStyleToDraft = (
+const translateMixedUnderlineHighlightStyleToDraft = (
   draftData: RawDraftContentState,
   regex: RegExp,
   startTagToRemove: RegExp,
@@ -58,9 +58,11 @@ const translateMixedStyleToDraft = (
   })
 }
 
-export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
+export const translateUnderlineToDraft = (draftData: RawDraftContentState, cleanText?: string) => {
   draftData.blocks.map((data) => {
-    const plainText = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
+    const plainText = cleanText
+      ? cleanText
+      : data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
     const underlineStyles: RawDraftInlineStyleRange[] = []
     const match = data.text.matchAll(/<ins>(.*?)<\/ins>/g)
     match.forEach((result) => {
@@ -80,11 +82,13 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
   })
 }
 
-export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
+export const translateHighlightToDraft = (draftData: RawDraftContentState, cleanText?: string) => {
   draftData.blocks.map((data) => {
-    const plainText = data.text
-      .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
-      .replaceAll('</span>', '')
+    const plainText = cleanText
+      ? cleanText
+      : data.text
+          .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
+          .replaceAll('</span>', '')
     const highlightStyles: RawDraftInlineStyleRange[] = []
     const match = data.text.matchAll(/<span style='background-color: rgb(.*?)'>(.*?)<\/span>/g)
     match.forEach((result) => {
