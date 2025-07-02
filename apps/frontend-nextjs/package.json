@@ -41,12 +41,14 @@
     "@navikt/ds-css": "^7.24.0",
     "@navikt/ds-react": "^7.24.0",
     "@navikt/ds-tailwind": "^7.24.0",
+    "@tailwindcss/postcss": "^4.1.11",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
     "next": "15.3.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-helmet-async": "^2.0.5"
+    "react-helmet-async": "^2.0.5",
+    "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
@@ -64,6 +66,7 @@
     "formik": "^2.4.6",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
+    "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   }
