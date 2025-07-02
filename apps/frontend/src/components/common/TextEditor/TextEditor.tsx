@@ -21,11 +21,22 @@ type TTextEditorProps = {
   width?: string
   maxWidth?: string
   setIsFormDirty?: (v: boolean) => void
+  commentField?: boolean
 }
 
 export const TextEditor = (props: TTextEditorProps) => {
-  const { initialValue, setValue, height, errors, name, simple, width, maxWidth, setIsFormDirty } =
-    props
+  const {
+    initialValue,
+    setValue,
+    height,
+    errors,
+    name,
+    simple,
+    width,
+    maxWidth,
+    setIsFormDirty,
+    commentField,
+  } = props
   const [isFocused, setIsFocused] = useState(false)
   const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
 
@@ -206,9 +217,15 @@ export const TextEditor = (props: TTextEditorProps) => {
           toolbar={{
             options: simple
               ? ['inline', 'list', 'link']
-              : ['inline', 'blockType', 'list', 'link', 'history', 'colorPicker'],
+              : commentField
+                ? ['inline', 'blockType', 'list', 'link', 'history', 'colorPicker']
+                : ['inline', 'blockType', 'list', 'link', 'history'],
             blockType: {},
-            inline: { options: ['bold', 'italic', 'underline', 'strikethrough'] },
+            inline: {
+              options: commentField
+                ? ['bold', 'italic', 'underline', 'strikethrough']
+                : ['bold', 'italic'],
+            },
             // old toolbar
             // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
             list: { options: ['unordered', 'ordered'] },
