@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <a className='underline' href='/pages'>
+        <a className='underline' href='/test'>
           ETTERLEVELSE TEST LENKE
         </a>
         <Image
