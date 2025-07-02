@@ -1,4 +1,4 @@
-import { RawDraftContentState, RawDraftInlineStyleRange, convertToRaw } from 'draft-js'
+import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { useEffect, useState } from 'react'
@@ -9,6 +9,12 @@ import { ettlevColors } from '../../../util/theme'
 import { FormError } from '../ModalSchema'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
+import {
+  translateHighlightToDraft,
+  translateHighlightWithUnderlineToDraft,
+  translateUnderlineToDraft,
+  translateUnderlineWithHighlightToDraft,
+} from './utils'
 
 type TTextEditorProps = {
   initialValue: string
@@ -73,9 +79,9 @@ export const TextEditor = (props: TTextEditorProps) => {
             return '</span>'
           },
         },
-        'bgcolor-rgb(225, 227, 231)': {
+        'bgcolor-rgb(215, 215, 215)': {
           open: () => {
-            return `<span style='background-color: rgb(225, 227, 231)'>`
+            return `<span style='background-color: rgb(215, 215, 215)'>`
           },
           close: () => {
             return '</span>'
@@ -111,31 +117,12 @@ export const TextEditor = (props: TTextEditorProps) => {
       preserveNewlines: true,
     })
 
+    translateUnderlineWithHighlightToDraft(draftData)
+    translateHighlightWithUnderlineToDraft(draftData)
     translateUnderlineToDraft(draftData)
+    translateHighlightToDraft(draftData)
 
     return draftData
-  }
-
-  const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
-    draftData.blocks.map((data) => {
-      const plainText = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
-      const underlineStyles: RawDraftInlineStyleRange[] = []
-      const match = data.text.matchAll(/<ins>(.*?)<\/ins>/g)
-      match.forEach((result) => {
-        console.debug(result)
-        result.forEach((value: string, index: number) => {
-          if (index === 1) {
-            underlineStyles.push({
-              offset: plainText.indexOf(value),
-              length: value.length,
-              style: 'UNDERLINE',
-            })
-          }
-        })
-      })
-      data.text = plainText
-      data.inlineStyleRanges = [...data.inlineStyleRanges, ...underlineStyles]
-    })
   }
 
   useEffect(() => {
@@ -241,7 +228,7 @@ export const TextEditor = (props: TTextEditorProps) => {
                 'rgb(252, 221, 205)',
                 'rgb(255, 217, 230)',
                 'rgb(235, 222, 252)',
-                'rgb(225, 227, 231)',
+                'rgb(215, 215, 215)',
                 'rgb(255, 255, 255)',
               ],
             },
