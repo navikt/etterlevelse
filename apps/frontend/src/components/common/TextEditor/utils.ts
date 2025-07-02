@@ -46,7 +46,7 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
       })
     })
 
-    data.text = plainText
+    data.text = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
     data.inlineStyleRanges = [...data.inlineStyleRanges, ...newStyles]
   })
 }
@@ -95,7 +95,9 @@ export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
       newStyles.push(highlightStyle as RawDraftInlineStyleRange)
     })
 
-    data.text = plainText
+    data.text = data.text
+      .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
+      .replaceAll('</span>', '')
     data.inlineStyleRanges = [...data.inlineStyleRanges, ...newStyles]
   })
 }
