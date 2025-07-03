@@ -1,4 +1,5 @@
-import { Alert, BodyLong, Heading, Link } from '@navikt/ds-react'
+import { FilesIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, CopyButton, Heading, Link } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -32,7 +33,6 @@ import { EListName, ICode, ICodelistProps } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
-import CopyAndStatusView from './SendInnComponents/CopyAndStatusView'
 import GodkjentAvRisikoeierFields from './SendInnComponents/GodkjentAvRisikoeierFields'
 import PVOUnderArbeidFIelds from './SendInnComponents/PVOUnderArbeidFIelds'
 import SendInnErrorSummary from './SendInnComponents/SendInnErrorSummary'
@@ -42,6 +42,7 @@ import UnderArbeidFields from './SendInnComponents/UnderArbeidFields'
 import VurdertAvPvoFields from './SendInnComponents/VurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from './SendInnComponents/VurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -387,7 +388,18 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å
                   legge til ytterligere informasjon dersom det er aktuelt.
                 </BodyLong>
-                <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
+                <CopyButton
+                  variant='action'
+                  copyText={window.location.href}
+                  text='Kopiér lenken til denne siden'
+                  activeText='Lenken er kopiert'
+                  icon={<FilesIcon aria-hidden />}
+                />
+                {pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
+                  <Alert variant='info' className='my-5'>
+                    Status: {pvkDokumentStatusToText(pvkDokument.status)}
+                  </Alert>
+                )}
 
                 {manglerBehandlingError && (
                   <Alert variant='warning' id='behandling-error' className='mt-7 mb-4'>
