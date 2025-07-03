@@ -10,11 +10,6 @@ const underlineTagRegex: RegExp = /<ins>(.*?)<\/ins>/g
 
 export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
   draftData.blocks.map((data) => {
-    const plainText = data.text
-      .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
-      .replaceAll('</span>', '')
-      .replaceAll('<ins>', '')
-      .replaceAll('</ins>', '')
     const newStyles: RawDraftInlineStyleRange[] = []
     const match = data.text.matchAll(underlineTagRegex)
 
@@ -42,8 +37,8 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
           textWithoutUnderlineTag = textWithoutUnderlineTag
             .replace(/<span style='background-color: rgb(.*?)'>/, '')
             .replace('</span>', '')
-          highlightStyle.offset = textWithoutUnderlineTag.indexOf('<span')
         }
+        highlightStyle.offset = textWithoutUnderlineTag.indexOf('<span')
 
         highlight.map((value: string, index: number) => {
           if (index === 1) {
@@ -51,9 +46,6 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
           }
           if (index === 2) {
             highlightStyle.length = value.length
-            if (matchIndex === 0) {
-              highlightStyle.offset = plainText.indexOf(value)
-            }
           }
         })
         newStyles.push(highlightStyle as RawDraftInlineStyleRange)
@@ -63,18 +55,14 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
         draftTextWithOuthighlightTags = draftTextWithOuthighlightTags
           .replace('<ins>', '')
           .replace('</ins>', '')
-        newUnderlineStyle.offset = draftTextWithOuthighlightTags.indexOf('<ins')
       }
+      newUnderlineStyle.offset = draftTextWithOuthighlightTags.indexOf('<ins')
 
       result.forEach((value: string, index: number) => {
         if (index === 1) {
           const textWithOuthighlightTags = value
             .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
             .replaceAll('</span>', '')
-
-          if (matchIndex === 0) {
-            newUnderlineStyle.offset = plainText.indexOf(textWithOuthighlightTags)
-          }
           newUnderlineStyle.length = textWithOuthighlightTags.length
           newUnderlineStyle.style = 'UNDERLINE'
 
@@ -92,11 +80,6 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
 export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
   draftData.blocks.map((data) => {
     const match = data.text.matchAll(highlightTagRegex)
-    const plainText = data.text
-      .replaceAll('<ins>', '')
-      .replaceAll('</ins>', '')
-      .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
-      .replaceAll('</span>', '')
     const newStyles: RawDraftInlineStyleRange[] = []
 
     let draftTextWithoutUnderlineTags = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
@@ -105,6 +88,7 @@ export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
       let textWithOuthighlightTags = data.text
         .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
         .replaceAll('</span>', '')
+
       underlineMatches.forEach((underline, matchIndex) => {
         const newUnderlineStyle = {
           offset: 0,
@@ -116,14 +100,11 @@ export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
           textWithOuthighlightTags = textWithOuthighlightTags
             .replace('<ins>', '')
             .replace('</ins>', '')
-          newUnderlineStyle.offset = textWithOuthighlightTags.indexOf('<ins')
         }
+        newUnderlineStyle.offset = textWithOuthighlightTags.indexOf('<ins')
 
-        underline.forEach((value: string, index: number) => {
+        underline.forEach((_value, index: number) => {
           if (index === 1) {
-            if (matchIndex === 0) {
-              newUnderlineStyle.offset = plainText.indexOf(value)
-            }
             newUnderlineStyle.length = textWithOuthighlightTags.length
             newUnderlineStyle.style = 'UNDERLINE'
 
@@ -142,8 +123,8 @@ export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
         draftTextWithoutUnderlineTags = draftTextWithoutUnderlineTags
           .replace(/<span style='background-color: rgb(.*?)'>/, '')
           .replace('</span>', '')
-        highlightStyle.offset = draftTextWithoutUnderlineTags.indexOf('<span')
       }
+      highlightStyle.offset = draftTextWithoutUnderlineTags.indexOf('<span')
 
       result.forEach((value: string, index: number) => {
         if (index === 1) {
@@ -151,9 +132,6 @@ export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
         }
         if (index === 2) {
           const textWithOutUnderlineTags = value.replaceAll('<ins>', '').replaceAll('</ins>', '')
-          if (matchIndex === 0) {
-            highlightStyle.offset = plainText.indexOf(textWithOutUnderlineTags)
-          }
           highlightStyle.length = textWithOutUnderlineTags.length
         }
       })
