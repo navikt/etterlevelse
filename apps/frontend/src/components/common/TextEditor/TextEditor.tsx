@@ -9,7 +9,7 @@ import { ettlevColors } from '../../../util/theme'
 import { FormError } from '../ModalSchema'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
-import { translateHighlightToDraft, translateUnderlineToDraft } from './utils'
+import { translateUnderlineAndHighlight } from './utils'
 
 type TTextEditorProps = {
   initialValue: string
@@ -123,9 +123,7 @@ export const TextEditor = (props: TTextEditorProps) => {
       preserveNewlines: true,
     })
 
-    translateUnderlineToDraft(draftData)
-    translateHighlightToDraft(draftData)
-
+    translateUnderlineAndHighlight(draftData)
     return draftData
   }
 
