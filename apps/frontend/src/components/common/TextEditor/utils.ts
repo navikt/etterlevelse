@@ -1,5 +1,10 @@
 import { RawDraftContentState, RawDraftInlineStyleRange } from 'draft-js'
 
+export const translateUnderlineAndHighlight = (draftData: RawDraftContentState) => {
+  translateUnderlineToDraft(draftData)
+  translateHighlightToDraft(draftData)
+}
+
 export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
   draftData.blocks.map((data) => {
     const plainText = data.text
@@ -20,7 +25,7 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
           length: 0,
           style: '',
         }
-        highlight.forEach((value: string, index: number) => {
+        highlight.map((value: string, index: number) => {
           if (index === 1) {
             highlightStyle.style = 'bgcolor-rgb' + value
           }
@@ -47,7 +52,8 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
     })
 
     data.text = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
-    data.inlineStyleRanges = [...data.inlineStyleRanges, ...newStyles]
+    const inlineStyleRanges = data.inlineStyleRanges ? data.inlineStyleRanges : []
+    data.inlineStyleRanges = [...inlineStyleRanges, ...newStyles]
   })
 }
 
@@ -98,6 +104,9 @@ export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
     data.text = data.text
       .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
       .replaceAll('</span>', '')
-    data.inlineStyleRanges = [...data.inlineStyleRanges, ...newStyles]
+
+    const inlineStyleRanges = data.inlineStyleRanges ? data.inlineStyleRanges : []
+
+    data.inlineStyleRanges = [...inlineStyleRanges, ...newStyles]
   })
 }
