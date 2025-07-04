@@ -8,7 +8,7 @@
     "build": "next build",
     "test": "yarn lint-staged",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next . --ignore-path ../../.eslintignore && prettier -c . --ignore-path ../../.prettierignore lint",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write \"./app\"",
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
@@ -24,7 +24,7 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app",
+    "extends": "next",
     "rules": {
       "semi": [
         "warn",
@@ -33,7 +33,8 @@
       "quotes": [
         "warn",
         "single"
-      ]
+      ],
+      "react-hooks/exhaustive-deps": "off"
     }
   },
   "dependencies": {

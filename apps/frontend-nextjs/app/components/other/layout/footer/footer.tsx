@@ -1,4 +1,6 @@
-import { BodyShort, Spacer } from '@navikt/ds-react'
+import { ArrowUpIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Spacer } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
 
 // import {
 //   VeilederEtterlevelseskrav,
@@ -14,23 +16,23 @@ import { BodyShort, Spacer } from '@navikt/ds-react'
 // import { etterlevelseLogoWhiteIcon } from '../Images'
 
 export const Footer = () => {
-  //   const [showButtonToTop, setShowButtonToTop] = useState(false)
-  //   const [pageScroll, setPageScroll] = useState(window.scrollY)
+  const [showButtonToTop, setShowButtonToTop] = useState(false)
+  const [pageScroll, setPageScroll] = useState(window.scrollY)
 
-  //   useEffect(() => {
-  //     const checkScrollTop = () => {
-  //       setPageScroll(window.scrollY)
-  //       if (!showButtonToTop && window.scrollY > 100) {
-  //         setShowButtonToTop(true)
-  //       } else if (showButtonToTop && window.scrollY <= 100) {
-  //         setShowButtonToTop(false)
-  //       }
-  //     }
+  useEffect(() => {
+    const checkScrollTop = () => {
+      setPageScroll(window.scrollY)
+      if (!showButtonToTop && window.scrollY > 100) {
+        setShowButtonToTop(true)
+      } else if (showButtonToTop && window.scrollY <= 100) {
+        setShowButtonToTop(false)
+      }
+    }
 
-  //     window.addEventListener('scroll', checkScrollTop)
+    window.addEventListener('scroll', checkScrollTop)
 
-  //     return () => window.removeEventListener('scroll', checkScrollTop)
-  //   }, [pageScroll])
+    return () => window.removeEventListener('scroll', checkScrollTop)
+  }, [pageScroll])
 
   return (
     <div
@@ -38,7 +40,7 @@ export const Footer = () => {
       role='contentinfo'
     >
       <div className='max-w-7xl w-full'>
-        {/* {showButtonToTop && (
+        {showButtonToTop && (
           <Button
             className='text-white'
             size='xsmall'
@@ -48,7 +50,7 @@ export const Footer = () => {
           >
             Til toppen
           </Button>
-        )} */}
+        )}
         <div className='flex mt-11'>
           <div className=' flex flex-col'>
             <BodyShort className='text-2xl mb-5 flex items-baseline'>
