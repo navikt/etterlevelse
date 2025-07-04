@@ -123,6 +123,7 @@ interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   maxCharacter?: number
   rows?: number
   setIsFormDirty?: (v: boolean) => void
+  commentField?: boolean
 }
 
 export const TextAreaField = (props: IPropsTextAreaField) => {
@@ -138,6 +139,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
     maxCharacter,
     rows,
     setIsFormDirty,
+    commentField,
   } = props
 
   const [mode, setMode] = useState('edit')
@@ -163,12 +165,13 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                     errors={fieldProps.form.errors}
                     name={name}
                     setIsFormDirty={setIsFormDirty}
+                    commentField={commentField}
                   />
                 )}
 
                 {mode === 'view' && (
                   <div className='p-8 border-border-subtle-hover border border-solid rounded-md'>
-                    <Markdown source={fieldProps.field.value} />
+                    <Markdown source={fieldProps.field.value} escapeHtml={false} />
                   </div>
                 )}
                 <div className='flex flex-col items-end justify-end mt-[-1px]'>

@@ -10,7 +10,6 @@ public class P360Document {
 
     public Integer Recno;
     public String DocumentNumber;
-    public String Title;
     public Boolean Successful;
     public String ErrorMessage;
     public String ErrorDetails;
