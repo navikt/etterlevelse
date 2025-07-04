@@ -48,7 +48,7 @@ export const Footer = () => {
             onClick={() => window.scrollTo(0, 0)}
             variant='tertiary-neutral'
           >
-            Til toppen
+            Til toppen lkjegrljkhdgf
           </Button>
         )}
         <div className='flex mt-11'>
