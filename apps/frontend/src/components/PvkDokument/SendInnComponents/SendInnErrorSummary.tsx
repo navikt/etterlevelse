@@ -50,8 +50,16 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
           heading='Du må rette disse feilene før du kan fortsette'
         >
           {manglerBehandlingError && (
-            <ErrorSummary.Item href='#behandling-error' className='max-w-[75ch]'>
-              Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen.
+            <ErrorSummary.Item
+              onClick={() => {
+                navigate(
+                  `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#behandling`
+                )
+              }}
+              className='max-w-[75ch]'
+            >
+              Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen (Redigér
+              dokumentegenskaper)
             </ErrorSummary.Item>
           )}
 

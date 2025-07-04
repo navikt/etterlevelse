@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Heading, Link, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
@@ -316,13 +316,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               Dere har foreløpig ingen risikoscenarioer
                             </Heading>
                             Risikoscenarioer legges inn under{' '}
-                            <Link
+                            <ExternalLink
                               href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}?tab=pvk`}
                             >
                               PVK-relaterte krav
-                            </Link>{' '}
+                            </ExternalLink>{' '}
                             eller eventuelt under{' '}
-                            <Link
+                            <ExternalLink
                               href={pvkDokumentasjonStepUrl(
                                 etterlevelseDokumentasjonId,
                                 pvkDokument.id,
@@ -330,7 +330,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               )}
                             >
                               øvrige risikoscenarioer
-                            </Link>
+                            </ExternalLink>
                           </Alert>
                         </div>
                       )}

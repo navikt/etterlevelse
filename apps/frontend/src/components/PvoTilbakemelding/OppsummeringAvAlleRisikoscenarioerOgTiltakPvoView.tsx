@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Heading, Link, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
@@ -12,8 +12,10 @@ import {
   IRisikoscenario,
   ITiltak,
 } from '../../constants'
+import { ExternalLink } from '../common/RouteLink'
 import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import {
+  pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '../common/RouteLinkPvk'
@@ -313,13 +315,21 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                 Dere har foreløpig ingen risikoscenarioer
                               </Heading>
                               Risikoscenarioer legges inn under{' '}
-                              <Link
-                                href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}
+                              <ExternalLink
+                                href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}?tab=pvk`}
                               >
                                 PVK-relaterte krav
-                              </Link>{' '}
-                              (åpner i en ny fane) eller eventuelt under øvrige risikoscenarioer
-                              (åpner i en ny fane).
+                              </ExternalLink>{' '}
+                              eller eventuelt under{' '}
+                              <ExternalLink
+                                href={pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjonId,
+                                  pvkDokument.id,
+                                  5
+                                )}
+                              >
+                                øvrige risikoscenarioer
+                              </ExternalLink>
                             </Alert>
                           </div>
                         )}
