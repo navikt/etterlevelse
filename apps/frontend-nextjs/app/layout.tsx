@@ -2,7 +2,7 @@
 
 import { FunctionComponent, ReactNode } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
-import { Footer } from './components/other/layout/footer/footer'
+import { Footer } from './components/others/layout/footer/footer'
 import './globals.css'
 
 type TProps = {
@@ -10,7 +10,7 @@ type TProps = {
 }
 
 const Main: FunctionComponent<TProps> = ({ children }) => (
-  <html>
+  <html lang='no'>
     <body>
       <HelmetProvider>
         <Helmet>

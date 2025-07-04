@@ -1,6 +1,10 @@
+'use client'
+
 import { ArrowUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Spacer } from '@navikt/ds-react'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { etterlevelseLogoWhiteIcon } from '../../images/images'
 
 // import {
 //   VeilederEtterlevelseskrav,
@@ -54,13 +58,13 @@ export const Footer = () => {
         <div className='flex mt-11'>
           <div className=' flex flex-col'>
             <BodyShort className='text-2xl mb-5 flex items-baseline'>
-              {/* <img
+              <Image
                 className='mr-2.5'
                 src={etterlevelseLogoWhiteIcon}
-                alt='Etterlevlese logo'
+                alt='Etterlevelse logo'
                 aria-hidden
                 aria-label=''
-              /> */}
+              />
               Støtte til etterlevelse
             </BodyShort>
             <BodyShort>2023 Nav</BodyShort>
