@@ -3,8 +3,20 @@
 import { ArrowUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { etterlevelseLogoWhiteIcon } from '../../images/images'
+import {
+  behandlingsKatalogLink,
+  datajegerSlackLink,
+  dokumentasjonLink,
+  githubRepo,
+  omEtterlevelsePaNavet,
+  rutineForArkivering,
+  statusPageLink,
+  teamInfoLink,
+  veilederEtterlevelseskrav,
+} from '../../utils/config/config'
 
 // import {
 //   VeilederEtterlevelseskrav,
@@ -73,7 +85,7 @@ export const Footer = () => {
           <Spacer />
           <div className='flex flex-col gap-4'>
             <BodyShort>Nyttige lenker</BodyShort>
-            {/* <Link className='text-white' href={statusPageLink}>
+            <Link className='text-white' href={statusPageLink}>
               Status på etterlevelse i Nav
             </Link>
             <Link className='text-white' href={omEtterlevelsePaNavet}>
@@ -82,24 +94,24 @@ export const Footer = () => {
             <Link className='text-white' href={behandlingsKatalogLink}>
               Behandlingskatalogen
             </Link>
-            <Link className='text-white' href={VeilederEtterlevelseskrav}>
+            <Link className='text-white' href={veilederEtterlevelseskrav}>
               Veileder for å skrive etterlevelseskrav
             </Link>
             <Link className='text-white' href={rutineForArkivering}>
               Rutine for arkivering av Etterlevelse
-            </Link> */}
+            </Link>
           </div>
           <Spacer />
           <div className='flex flex-col gap-4'>
             <BodyShort>Om nettstedet</BodyShort>
-            {/* <Link className='text-white' href={documentationLink}>
+            <Link className='text-white' href={dokumentasjonLink}>
               Hva er Støtte til etterlevelse?
-            </Link> */}
+            </Link>
           </div>
           <Spacer />
           <div className='flex flex-col gap-4'>
             <BodyShort>Finn oss</BodyShort>
-            {/* <Link className='text-white' href={datajegerSlackLink}>
+            <Link className='text-white' href={datajegerSlackLink}>
               Slack
             </Link>
             <Link className='text-white' href={githubRepo}>
@@ -107,7 +119,7 @@ export const Footer = () => {
             </Link>
             <Link className='text-white' href={teamInfoLink}>
               Teamkatalogen
-            </Link> */}
+            </Link>
           </div>
         </div>
       </div>
