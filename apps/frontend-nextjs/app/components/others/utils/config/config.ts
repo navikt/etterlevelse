@@ -17,5 +17,6 @@ export const dokumentasjonLink: string = '/omstottetiletterlevelse'
 export const githubRepo: string = 'https://github.com/navikt/etterlevelse'
 export const teamInfoLink: string =
   'https://teamkatalog.nav.no/team/264cebfa-ad46-4af9-8867-592f99f491e6'
+export const markdownLink: string = 'https://guides.github.com/features/mastering-markdown/'
 
 export const datajegerSlackLink: string = slackLink(etterlevelseSlackChannelId)
