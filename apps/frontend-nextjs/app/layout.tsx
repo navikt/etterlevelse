@@ -3,6 +3,7 @@
 import { FunctionComponent, ReactNode } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Footer } from './components/others/layout/footer/footer'
+import Header from './components/others/layout/header/header'
 import './globals.css'
 
 type TProps = {
@@ -19,7 +20,7 @@ const Main: FunctionComponent<TProps> = ({ children }) => (
         </Helmet>
 
         <div className='flex flex-col w-full items-center min-h-screen bg-white'>
-          <header>HEADER</header>
+          <Header />
           {children}
           <Footer />
         </div>
