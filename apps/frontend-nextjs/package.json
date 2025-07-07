@@ -44,6 +44,7 @@
     "@navikt/ds-react": "^7.24.0",
     "@navikt/ds-tailwind": "^7.24.0",
     "@tailwindcss/postcss": "^4.1.11",
+    "amplitude-js": "^8.21.9",
     "axios": "^1.10.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
@@ -61,6 +62,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/amplitude-js": "^8.16.3",
     "@types/node": "^24.0.7",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
