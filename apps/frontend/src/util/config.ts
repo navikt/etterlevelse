@@ -104,4 +104,5 @@ export const isInLimitedAccess = (ident: string) =>
     'S142779',
     'S158862',
     'T164319',
+    'H149146',
   ].includes(ident)
