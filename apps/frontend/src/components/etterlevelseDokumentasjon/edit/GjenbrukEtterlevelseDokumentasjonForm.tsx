@@ -8,7 +8,7 @@ import {
   createEtterlevelseDokumentasjonWithRelataion,
   etterlevelseDokumentasjonWithRelationMapToFormVal,
 } from '../../../api/EtterlevelseDokumentasjonApi'
-import { getAvdelingOptions } from '../../../api/Nom'
+import { getAvdelingOptions } from '../../../api/NomApi'
 import { searchResourceByNameOptions, useSearchTeamOptions } from '../../../api/TeamApi'
 import {
   ERelationType,
