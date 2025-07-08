@@ -171,6 +171,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 name='internDiskusjon'
                 label='Skriv eventuelt intern PVO-notater her'
                 caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
+                commentField={true}
               />
             </div>
 

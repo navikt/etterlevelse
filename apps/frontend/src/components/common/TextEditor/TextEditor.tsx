@@ -9,6 +9,7 @@ import { ettlevColors } from '../../../util/theme'
 import { FormError } from '../ModalSchema'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
+import { translateUnderlineAndHighlight } from './utils'
 
 type TTextEditorProps = {
   initialValue: string
@@ -20,11 +21,22 @@ type TTextEditorProps = {
   width?: string
   maxWidth?: string
   setIsFormDirty?: (v: boolean) => void
+  commentField?: boolean
 }
 
 export const TextEditor = (props: TTextEditorProps) => {
-  const { initialValue, setValue, height, errors, name, simple, width, maxWidth, setIsFormDirty } =
-    props
+  const {
+    initialValue,
+    setValue,
+    height,
+    errors,
+    name,
+    simple,
+    width,
+    maxWidth,
+    setIsFormDirty,
+    commentField,
+  } = props
   const [isFocused, setIsFocused] = useState(false)
   const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
 
@@ -49,13 +61,53 @@ export const TextEditor = (props: TTextEditorProps) => {
             return '\n```'
           },
         },
+        'bgcolor-rgb(252, 221, 205)': {
+          open: () => {
+            return `<span style='background-color: rgb(252, 221, 205)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        'bgcolor-rgb(255, 217, 230)': {
+          open: () => {
+            return `<span style='background-color: rgb(255, 217, 230)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        'bgcolor-rgb(235, 222, 252)': {
+          open: () => {
+            return `<span style='background-color: rgb(235, 222, 252)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        'bgcolor-rgb(215, 215, 215)': {
+          open: () => {
+            return `<span style='background-color: rgb(215, 215, 215)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        UNDERLINE: {
+          open: () => {
+            return `<ins>`
+          },
+          close: () => {
+            return '</ins>'
+          },
+        },
       },
       preserveNewlines: true,
     })
   }
 
-  const CustomMarkdownToDraft = (data: string) =>
-    markdownToDraft(data, {
+  const CustomMarkdownToDraft = (data: string) => {
+    const draftData = markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -70,6 +122,10 @@ export const TextEditor = (props: TTextEditorProps) => {
       },
       preserveNewlines: true,
     })
+
+    translateUnderlineAndHighlight(draftData)
+    return draftData
+  }
 
   useEffect(() => {
     //--------ADD nessesary roles to toolbar options and editor------------
@@ -159,15 +215,30 @@ export const TextEditor = (props: TTextEditorProps) => {
           toolbar={{
             options: simple
               ? ['inline', 'list', 'link']
-              : ['inline', 'blockType', 'list', 'link', 'history'],
+              : commentField
+                ? ['inline', 'blockType', 'list', 'link', 'history', 'colorPicker']
+                : ['inline', 'blockType', 'list', 'link', 'history'],
             blockType: {},
-            inline: { options: ['bold', 'italic', 'strikethrough'] },
+            inline: {
+              options: commentField
+                ? ['bold', 'italic', 'underline', 'strikethrough']
+                : ['bold', 'italic'],
+            },
             // old toolbar
             // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
             list: { options: ['unordered', 'ordered'] },
             link: {
               defaultTargetOption: '_blank',
               options: ['link'],
+            },
+            colorPicker: {
+              colors: [
+                'rgb(252, 221, 205)',
+                'rgb(255, 217, 230)',
+                'rgb(235, 222, 252)',
+                'rgb(215, 215, 215)',
+                'rgb(255, 255, 255)',
+              ],
             },
             //image: { alt: { present: true, mandatory: true }, },
           }}
