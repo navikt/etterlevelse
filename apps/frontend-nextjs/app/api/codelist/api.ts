@@ -1,5 +1,5 @@
 import { env } from '@/components/others/utils/env/env'
-import { EListName, IAllCodelists, ICode, ICodeUsage } from '@/services/codelist'
+import { EListName, IAllCodelists, ICode, ICodeUsage } from '@/constants/codelist/constants'
 import axios from 'axios'
 
 // refresh will force backend to re-read codelists from db, due to caching and multibackend

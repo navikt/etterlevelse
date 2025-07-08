@@ -2,8 +2,8 @@
 
 import { getMeldingByType, mapMeldingToFormValue } from '@/api/other/meldingApi/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
-import { PageLayout } from '@/components/others/scaffold/page'
-import { EMeldingType, IMelding, IPageResponse } from '@/constants/constant'
+import { PageLayout } from '@/components/others/scaffold/PageLayout'
+import { EMeldingType, IMelding, IPageResponse } from '@/constants/common/constants'
 import { user } from '@/services/user/user'
 import { BodyLong, Detail, Heading } from '@navikt/ds-react'
 import moment from 'moment'

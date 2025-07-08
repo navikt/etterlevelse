@@ -1,5 +1,6 @@
 import { env } from '@/components/others/utils/env/env'
-import { EKravStatus, IKrav, IPageResponse, TKravQL, TOr } from '@/constants/constant'
+import { IPageResponse } from '@/constants/common/constants'
+import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/constants'
 import axios from 'axios'
 
 export const getAllKrav = async () => {
@@ -33,40 +34,9 @@ export const searchKrav = async (name: string) => {
     .content
 }
 
-export const searchKravByNumber = async (number: string) => {
-  return (
-    await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/search/number/${number}`)
-  ).data.content
-}
-
-export const getKravByKravNumberAndVersion = async (
-  kravNummer: number | string,
-  kravVersjon: number | string
-) => {
-  return await axios
-    .get<IKrav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
-    .then((resp) => {
-      return resp.data
-    })
-    .catch(() => {
-      return undefined
-    })
-}
-
-export const getKravByKravNummer = async (kravNummer: number | string) => {
-  return (
-    await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}`)
-  ).data
-}
-
 export const createKrav = async (krav: TKravQL) => {
   const domainToObject = kravToKravDomainObject(krav)
   return (await axios.post<IKrav>(`${env.backendBaseUrl}/krav`, domainToObject)).data
-}
-
-export const updateKrav = async (krav: TKravQL) => {
-  const domainToObject = kravToKravDomainObject(krav)
-  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, domainToObject)).data
 }
 
 function kravToKravDomainObject(krav: TKravQL): IKrav {
@@ -92,62 +62,6 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
   delete domainToObject.virkemidler
   delete domainToObject.kravRelasjoner
   return domainToObject
-}
-
-export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
-export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
-
-export const useSearchKrav = async (searchParams: string) => {
-  if (searchParams && searchParams.length > 2) {
-    if (searchParams.toLowerCase().match(/k\d{1,3}/)) {
-      let kravNumber = searchParams
-      if (kravNumber[0].toLowerCase() === 'k') {
-        kravNumber = kravNumber.substring(1)
-      }
-
-      if (searchParams.length > 3) {
-        if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
-          const kravNummerMedVersjon = kravNumber.split('.')
-          const kravRes = await getKravByKravNumberAndVersion(
-            kravNummerMedVersjon[0],
-            kravNummerMedVersjon[1]
-          )
-          if (kravRes && kravRes.status === EKravStatus.AKTIV) {
-            return [
-              {
-                value: kravRes.id,
-                label: 'K' + kravRes.kravNummer + '.' + kravRes.kravVersjon + ' ' + kravRes.navn,
-                ...kravRes,
-              },
-            ]
-          }
-        } else {
-          const kravRes = await searchKrav(kravNumber)
-          return kravRes
-            .filter((krav) => krav.status === EKravStatus.AKTIV)
-            .map((krav) => {
-              return {
-                value: krav.id,
-                label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
-                ...krav,
-              }
-            })
-        }
-      }
-    } else {
-      const kravRes = await searchKrav(searchParams)
-      return kravRes
-        .filter((krav) => krav.status === EKravStatus.AKTIV)
-        .map((krav) => {
-          return {
-            value: krav.id,
-            label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
-            ...krav,
-          }
-        })
-    }
-  }
-  return []
 }
 
 export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
