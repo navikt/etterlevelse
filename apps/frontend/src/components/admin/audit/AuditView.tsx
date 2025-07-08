@@ -35,26 +35,28 @@ const ComparisonView = (props: TComparisonViewProps) => {
         variant='tertiary'
         icon={<ArrowRightLeftIcon title='se forskjell' />}
       />
-      <Modal
-        key={audit.id}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        width='75%'
-        className='h-3/4 overflow-y-scroll'
-        header={{ heading: 'Sammenligning' }}
-      >
-        <Modal.Body>
-          <Viewer
-            diff={new Differ().diff(
-              auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},
-              audit.data
-            )}
-            highlightInlineDiff={true}
-            lineNumbers={true}
-            indent={4}
-          />
-        </Modal.Body>
-      </Modal>
+      {modalOpen && (
+        <Modal
+          key={audit.id}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          width='75%'
+          className='h-3/4 overflow-y-scroll'
+          header={{ heading: 'Sammenligning' }}
+        >
+          <Modal.Body>
+            <Viewer
+              diff={new Differ().diff(
+                auditLog && auditLog.audits[index + 1] ? auditLog.audits[index + 1].data : {},
+                audit.data
+              )}
+              highlightInlineDiff={true}
+              lineNumbers={true}
+              indent={4}
+            />
+          </Modal.Body>
+        </Modal>
+      )}
     </div>
   )
 }
