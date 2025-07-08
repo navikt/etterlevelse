@@ -44,6 +44,7 @@
     "@navikt/ds-react": "^7.25.1",
     "@navikt/ds-tailwind": "^7.25.1",
     "@tailwindcss/postcss": "^4.1.11",
+    "amplitude-js": "^8.21.9",
     "axios": "^1.10.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
@@ -60,6 +61,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/amplitude-js": "^8.16.5",
     "@types/node": "^24.0.10",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
@@ -76,6 +78,8 @@
     "lint-staged": "^16.1.2",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
+    "react-localization": "^2.0.6",
+    "react-select": "^5.10.1",
     "typescript": "^5.8.3"
   }
 }

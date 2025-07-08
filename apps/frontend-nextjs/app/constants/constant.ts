@@ -1,17 +1,14 @@
-export enum EMeldingType {
-  SYSTEM = 'SYSTEM',
-  FORSIDE = 'FORSIDE',
-  OM_ETTERLEVELSE = 'OM_ETTERLEVELSE',
-}
-
-export enum EMeldingStatus {
-  ACTIVE = 'ACTIVE',
-  DEACTIVE = 'DEACTIVE',
-}
+import { ICode, TLovCode } from './codelist/constants'
 
 export enum EAlertType {
   INFO = 'INFO',
   WARNING = 'WARNING',
+}
+
+export enum EAdresseType {
+  EPOST = 'EPOST',
+  SLACK = 'SLACK',
+  SLACK_USER = 'SLACK_USER',
 }
 export interface IBreadCrumbPath {
   href: string
@@ -29,6 +26,18 @@ export interface IDomainObject {
   version: number
 }
 
+export interface IVarslingsadresse {
+  adresse: string
+  type: EAdresseType
+}
+
+export type TReplace<T, K> = Omit<T, keyof K> & K
+
+export interface IRegelverk {
+  lov: TLovCode
+  spesifisering?: string
+}
+
 export interface IPageResponse<T> {
   pageNumber: number
   pageSize: number
@@ -37,12 +46,18 @@ export interface IPageResponse<T> {
   totalElements: number
   content: T[]
 }
-export interface IMelding extends IDomainObject {
+
+export interface ISuksesskriterie {
+  id: number
+  navn: string
+  beskrivelse?: string
+  behovForBegrunnelse: boolean
+}
+
+export interface IVirkemiddel extends IDomainObject {
   id: string
-  melding: string
-  secondaryTittel: string
-  secondaryMelding: string
-  meldingType: EMeldingType
-  meldingStatus: EMeldingStatus
-  alertType: EAlertType
+  navn: string
+  regelverk: IRegelverk[]
+  virkemiddelType?: ICode
+  livsSituasjon: string
 }

@@ -1,13 +1,19 @@
 import { logApi } from '@/api/other/logApi/logApi'
 import { getMeldingByType } from '@/api/other/meldingApi/meldingApi'
+import { Markdown } from '@/components/common/markdown/markdown'
 import SkipToContent from '@/components/common/skipToContent/skipToContent'
-import { EMeldingType, IMelding } from '@/constants/constant'
+import { EAlertType, IPageResponse } from '@/constants/constant'
+import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/other/message/constants'
+import { loginUrl } from '@/routes/other/login/routes'
 import { user } from '@/services/user/user'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { InternalHeader, Spacer } from '@navikt/ds-react'
-import { useParams, usePathname } from 'next/navigation'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
-import { loginUrl } from './loginUrl/loginUrl'
+import { informationIcon, warningAlert } from '../../images/images'
+import { LoggedInHeader, LoginHeaderButton } from './login/login'
+import MainSearch from './mainSearch/mainSearch'
 
 let sourceReported = false
 
@@ -19,8 +25,6 @@ type TProps = {
 const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
-  const router = useParams()
-  console.log('router', router)
 
   const source = useQueryParam('source')
   if (!sourceReported) {
@@ -38,9 +42,9 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
 
   useEffect(() => {
     ;(async () => {
-      await getMeldingByType(EMeldingType.SYSTEM).then((r) => {
-        if (r.numberOfElements > 0) {
-          setSystemVarsel(r.content[0])
+      await getMeldingByType(EMeldingType.SYSTEM).then((response: IPageResponse<IMelding>) => {
+        if (response.numberOfElements > 0) {
+          setSystemVarsel(response.content[0])
         }
       })
     })()
@@ -78,7 +82,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
       >
         <div className=' max-w-xl w-full '>{/* <MainSearch /> */}</div>
       </div>
-      {/* {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
+      {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
         <div className='w-full flex justify-center'>
           <div
             className={`flex
@@ -98,10 +102,10 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
           >
             <div className='flex gap-2'>
               <div className='flex items-baseline pt-1'>
-                <img
+                <Image
                   src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
-                  width='18px'
-                  height='18px'
+                  width='18'
+                  height='18'
                   alt={
                     systemVarsel.alertType === EAlertType.INFO ? 'information icon' : 'warning icon'
                   }
@@ -111,7 +115,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   )
 }

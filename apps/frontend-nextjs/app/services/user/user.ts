@@ -1,5 +1,5 @@
 import { getUserInfo } from '@/api/other/userApi/userApi'
-import { IUserInfo } from '@/constants/iUserInfo/iUserInfo'
+import { IUserInfo } from '@/constants/user/constants'
 import { updateUser } from '@/util/hooks/customHooks/customHooks'
 import { AxiosResponse } from 'axios'
 
