@@ -1,4 +1,4 @@
-import { IBreadCrumbPath } from '@/constants/constant'
+import { IBreadCrumbPath } from '@/constants/common/constants'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { BodyShort, Link } from '@navikt/ds-react'
 

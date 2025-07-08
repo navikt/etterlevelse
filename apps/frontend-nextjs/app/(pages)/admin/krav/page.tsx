@@ -3,10 +3,11 @@
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/api'
 import { temaUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
 import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
-import { PageLayout } from '@/components/others/scaffold/page'
-import { EKravStatus, IKrav, TKravQL } from '@/constants/constant'
+import { PageLayout } from '@/components/others/scaffold/PageLayout'
+import { EListName } from '@/constants/codelist/constants'
+import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/constants'
 import { ampli, userRoleEventProp } from '@/services/amplitude'
-import { CodelistService, EListName } from '@/services/codelist'
+import { CodelistService } from '@/services/codelist'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -35,7 +36,7 @@ const kravStatus = (status: EKravStatus | string) => {
   }
 }
 
-const KravTablePage = () => {
+const AdministrereKrav = () => {
   const [codelistUtils] = CodelistService()
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
@@ -192,4 +193,4 @@ const KravTablePage = () => {
   )
 }
 
-export default KravTablePage
+export default AdministrereKrav
