@@ -15,7 +15,6 @@ import { kravlisteUrl } from '@/routes/kraveier/routes'
 import { loginUrl } from '@/routes/other/login/routes'
 import { pvoOversiktUrl } from '@/routes/personvernkonsekvensevurdering/personvernombud/routes'
 import { user } from '@/services/user/user'
-import { intl } from '@/util/internationalLanguages/util'
 import {
   BarChartIcon,
   DocPencilIcon,
@@ -71,10 +70,10 @@ export const LoggedInHeader = () => {
         { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl },
         { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl },
         { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
-        { label: intl.audit, href: adminAuditUrl() },
+        { label: 'Audit', href: adminAuditUrl() },
         { label: 'Kodeverk', href: adminCodelistUrl },
-        { label: intl.questionAndAnswers, href: adminMessagesLogUrl },
-        { label: intl.notifications, href: adminVarselUrl },
+        { label: 'Spørsmål og svar', href: adminMessagesLogUrl },
+        { label: 'Varslinger', href: adminVarselUrl },
         { label: 'Sendt e-post log', href: adminMaillog },
         // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]

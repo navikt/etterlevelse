@@ -1,16 +1,14 @@
 import { logApi } from '@/api/other/logApi/logApi'
-import { getMeldingByType } from '@/api/other/meldingApi/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import SkipToContent from '@/components/common/skipToContent/skipToContent'
-import { EAlertType, IPageResponse } from '@/constants/constant'
-import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/other/message/constants'
-import { loginUrl } from '@/routes/other/login/routes'
+import { EAlertType } from '@/constants/constant'
+import { EMeldingStatus, IMelding } from '@/constants/other/message/constants'
 import { user } from '@/services/user/user'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { InternalHeader, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { informationIcon, warningAlert } from '../../images/images'
 import { LoggedInHeader, LoginHeaderButton } from './login/login'
 import MainSearch from './mainSearch/mainSearch'
@@ -32,23 +30,23 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
     logApi('info', 'pageload', `pageload from ${source}`)
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (!user.isLoggedIn()) {
-        window.location.href = loginUrl(pathname)
-      }
-    }, 1000)
-  }, [])
+  //   useEffect(() => {
+  //     setTimeout(() => {
+  //       if (!user.isLoggedIn()) {
+  //         window.location.href = loginUrl(pathname)
+  //       }
+  //     }, 1000)
+  //   }, [])
 
-  useEffect(() => {
-    ;(async () => {
-      await getMeldingByType(EMeldingType.SYSTEM).then((response: IPageResponse<IMelding>) => {
-        if (response.numberOfElements > 0) {
-          setSystemVarsel(response.content[0])
-        }
-      })
-    })()
-  }, [pathname])
+  //   useEffect(() => {
+  //     ;(async () => {
+  //       await getMeldingByType(EMeldingType.SYSTEM).then((response: IPageResponse<IMelding>) => {
+  //         if (response.numberOfElements > 0) {
+  //           setSystemVarsel(response.content[0])
+  //         }
+  //       })
+  //     })()
+  //   }, [pathname])
 
   return (
     <div className='w-full'>
