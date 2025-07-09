@@ -1,14 +1,16 @@
 import { logApi } from '@/api/other/logApi/logApi'
+import { getMeldingByType } from '@/api/other/meldingApi/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import SkipToContent from '@/components/common/skipToContent/skipToContent'
-import { EAlertType } from '@/constants/constant'
-import { EMeldingStatus, IMelding } from '@/constants/other/message/constants'
+import { EAlertType, IPageResponse } from '@/constants/constant'
+import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/other/message/constants'
+import { loginUrl } from '@/routes/other/login/routes'
 import { user } from '@/services/user/user'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { InternalHeader, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { informationIcon, warningAlert } from '../../images/images'
 import { LoggedInHeader, LoginHeaderButton } from './login/login'
 import MainSearch from './mainSearch/mainSearch'
@@ -30,23 +32,23 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
     logApi('info', 'pageload', `pageload from ${source}`)
   }
 
-  //   useEffect(() => {
-  //     setTimeout(() => {
-  //       if (!user.isLoggedIn()) {
-  //         window.location.href = loginUrl(pathname)
-  //       }
-  //     }, 1000)
-  //   }, [])
+  useEffect(() => {
+    setTimeout(() => {
+      if (!user.isLoggedIn()) {
+        window.location.href = loginUrl(pathname)
+      }
+    }, 1000)
+  }, [])
 
-  //   useEffect(() => {
-  //     ;(async () => {
-  //       await getMeldingByType(EMeldingType.SYSTEM).then((response: IPageResponse<IMelding>) => {
-  //         if (response.numberOfElements > 0) {
-  //           setSystemVarsel(response.content[0])
-  //         }
-  //       })
-  //     })()
-  //   }, [pathname])
+  useEffect(() => {
+    ;(async () => {
+      await getMeldingByType(EMeldingType.SYSTEM).then((response: IPageResponse<IMelding>) => {
+        if (response.numberOfElements > 0) {
+          setSystemVarsel(response.content[0])
+        }
+      })
+    })()
+  }, [pathname])
 
   return (
     <div className='w-full'>
@@ -78,7 +80,9 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
         className='flex lg:hidden bg-gray-900 py-1 px-1 w-full justify-center items-center'
         role='search'
       >
-        <div className=' max-w-xl w-full '>{/* <MainSearch /> */}</div>
+        <div className=' max-w-xl w-full '>
+          <MainSearch />
+        </div>
       </div>
       {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
         <div className='w-full flex justify-center'>
