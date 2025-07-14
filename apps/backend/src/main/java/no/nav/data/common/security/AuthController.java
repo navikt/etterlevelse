@@ -62,11 +62,13 @@ public class AuthController {
         Assert.isTrue(securityProperties.isValidRedirectUri(redirectUri), "Illegal redirect_uri " + redirectUri);
         log.debug("Checking error uri: {}", redirectUri);
         Assert.isTrue(securityProperties.isValidRedirectUri(errorUri), "Illegal error_uri " + errorUri);
+        log.debug("Checking for uri done");
         var usedRedirect = redirectUri != null ? redirectUri : securityProperties.findBaseUrl();
         if ( redirectUri == null ) {
             log.debug("No rediret uri found, using base uri: {}", securityProperties.findBaseUrl());
         }
         String redirectUrl = tokenProvider.createAuthRequestRedirectUrl(usedRedirect, errorUri, callbackRedirectUri(request));
+        log.debug("Final redirect uri: {}", redirectUrl);
         redirectStrategy.sendRedirect(request, response, redirectUrl);
     }
 
