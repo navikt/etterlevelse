@@ -106,7 +106,7 @@
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/amplitude-js": "^8.16.3",
     "@types/lodash": "^4.17.19",
-    "@types/node": "24.0.10",
+    "@types/node": "24.0.12",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@types/react-router-dom": "^5.3.3",
