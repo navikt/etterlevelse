@@ -143,6 +143,7 @@ public class AuthController {
 
     private String callbackRedirectUri(HttpServletRequest request) {
         String url = buildFullRequestUrl(request);
+        log.debug("Url from request {}", url);
         if (url.contains(APP_POD_NAME)) {
             url = securityProperties.findBaseUrl();
         }
