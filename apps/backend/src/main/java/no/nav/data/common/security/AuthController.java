@@ -156,7 +156,7 @@ public class AuthController {
         String redirectUri = UriComponentsBuilder.fromUri(uri)
                         .replacePath(OAUTH_2_CALLBACK_URL)
                         .replaceQuery(null).encode().build().toUri().toString();
-        
+        log.debug("Checking callback redirect URI {}", redirectUri);
         Assert.isTrue(securityProperties.isValidRedirectUri(redirectUri), "Invalid redirect uri " + redirectUri);
         return redirectUri;
     }
