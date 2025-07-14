@@ -21,11 +21,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -35,12 +31,7 @@ import java.net.URISyntaxException;
 import static no.nav.data.Constants.APP_POD_NAME;
 import static no.nav.data.Constants.COOKIE_NAME;
 import static no.nav.data.common.utils.Constants.SESSION_LENGTH;
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.CODE;
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ERROR;
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ERROR_DESCRIPTION;
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.ERROR_URI;
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REDIRECT_URI;
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.STATE;
+import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.*;
 import static org.springframework.security.web.util.UrlUtils.buildFullRequestUrl;
 
 @Slf4j
@@ -67,9 +58,14 @@ public class AuthController {
             @RequestParam(value = ERROR_URI, required = false) String errorUri
     ) throws IOException {
         log.debug("Request to login");
+        log.debug("Checking redirect uri: {}", redirectUri);
         Assert.isTrue(securityProperties.isValidRedirectUri(redirectUri), "Illegal redirect_uri " + redirectUri);
+        log.debug("Checking error uri: {}", redirectUri);
         Assert.isTrue(securityProperties.isValidRedirectUri(errorUri), "Illegal error_uri " + errorUri);
         var usedRedirect = redirectUri != null ? redirectUri : securityProperties.findBaseUrl();
+        if ( redirectUri == null ) {
+            log.debug("No rediret uri found, using base uri: {}", securityProperties.findBaseUrl());
+        }
         String redirectUrl = tokenProvider.createAuthRequestRedirectUrl(usedRedirect, errorUri, callbackRedirectUri(request));
         redirectStrategy.sendRedirect(request, response, redirectUrl);
     }
