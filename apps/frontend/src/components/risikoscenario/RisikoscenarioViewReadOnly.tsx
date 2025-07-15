@@ -45,7 +45,7 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer'>
+        <ReadMore header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer' className='mt-5'>
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
