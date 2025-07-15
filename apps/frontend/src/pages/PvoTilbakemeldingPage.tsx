@@ -67,7 +67,7 @@ export const PvoTilbakemeldingPage = () => {
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
-      pathName: 'Oversikt siden for personvernombudet',
+      pathName: 'Oversiktssiden for personvernombudet',
       href: pvoOversiktUrl,
     },
     {

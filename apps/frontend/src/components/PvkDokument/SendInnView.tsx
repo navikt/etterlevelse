@@ -411,7 +411,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       rel='noopener noreferrer'
                       aria-label='redigere etterlevelsesdokumentasjon'
                     >
-                      Redigér dokumentegenskaper.
+                      Redigér dokumentegenskaper (åpner i en ny fane)
                     </Link>
                   </Alert>
                 )}

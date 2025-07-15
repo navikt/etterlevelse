@@ -130,7 +130,7 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
 
                     {revurdertEffektCheck && (
                       <Alert className='mt-3' variant='warning'>
-                        Du må vurdere tiltakenes effekt
+                        Dere må vurdere tiltakenes effekt
                       </Alert>
                     )}
 
