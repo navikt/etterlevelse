@@ -42,6 +42,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
           noPlaceholder
           label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
           name='merknadTilPvoEllerRisikoeier'
+          markdown
         />
       </div>
       <BeskjedFraPvoReadOnly

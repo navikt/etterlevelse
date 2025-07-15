@@ -1,6 +1,7 @@
 import { BodyLong, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import DataTextWrapper from '../../../PvoTilbakemelding/common/DataTextWrapper'
+import { Markdown } from '../../../common/Markdown'
 
 type TProps = {
   merknadFraRisikoeier: string
@@ -14,7 +15,7 @@ export const BeskjedFraRisikoeierReadOnly: FunctionComponent<TProps> = ({
       <Label>Risikoeierens kommmentarer</Label>
       <DataTextWrapper>
         <BodyLong className='break-all'>
-          {merknadFraRisikoeier ? merknadFraRisikoeier : 'Ingen beskjed'}
+          {merknadFraRisikoeier ? <Markdown source={merknadFraRisikoeier} /> : 'Ingen beskjed'}
         </BodyLong>
       </DataTextWrapper>
     </div>
