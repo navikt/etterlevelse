@@ -63,6 +63,7 @@ export const PvkRelatedKravList = (props: IProps) => {
       loading={loading}
       risikoscenarioList={risikoscenarioList}
       isRisikoscenarioLoading={isRisikoscenarioLoading}
+      defaultOpen={true}
     />
   )
 }
