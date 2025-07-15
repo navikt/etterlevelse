@@ -142,7 +142,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
 
                       <div className='mt-3'>
                         <BoolField
-                          label='Har dere involvert en representant for de registrerte?'
+                          label='1. Har dere involvert en representant for de registrerte?'
                           name='harInvolvertRepresentant'
                           horizontal
                         />
@@ -155,8 +155,8 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           label={
                             values.harInvolvertRepresentant ||
                             values.harInvolvertRepresentant === null
-                              ? 'Beskriv hvordan dere har involvert representant(er) for de registrerte'
-                              : 'Beskriv hvorfor dere ikke har involvert representant(er) for de registrerte'
+                              ? '2. Beskriv hvordan dere har involvert representant(er) for de registrerte'
+                              : '2. Beskriv hvorfor dere ikke har involvert representant(er) for de registrerte'
                           }
                           name='representantInvolveringsBeskrivelse'
                         />
@@ -214,7 +214,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
 
                       <div className='mt-5'>
                         <BoolField
-                          label='Har dere involvert en representant for databehandlere?'
+                          label='3. Har dere involvert en representant for databehandlere?'
                           name='harDatabehandlerRepresentantInvolvering'
                           horizontal
                         />
@@ -227,8 +227,8 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           label={
                             values.harDatabehandlerRepresentantInvolvering ||
                             values.harDatabehandlerRepresentantInvolvering === null
-                              ? 'Beskriv hvordan dere har involvert representant(er) for databehandler(e)'
-                              : 'Beskriv hvorfor dere ikke har involvert representant(er) for databehandler(e)'
+                              ? '4. Beskriv hvordan dere har involvert representant(er) for databehandler(e)'
+                              : '4. Beskriv hvorfor dere ikke har involvert representant(er) for databehandler(e)'
                           }
                           name='dataBehandlerRepresentantInvolveringBeskrivelse'
                         />

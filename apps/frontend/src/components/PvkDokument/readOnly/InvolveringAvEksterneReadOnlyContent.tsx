@@ -36,7 +36,7 @@ export const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = (
           </List>
 
           <div className='mt-5 mb-3 max-w-[75ch]'>
-            <Label>Har dere involvert en representant for de registrerte?</Label>
+            <Label>1. Har dere involvert en representant for de registrerte?</Label>
             <DataTextWrapper>
               {pvkDokument.harInvolvertRepresentant === null && 'Ikke besvart'}
               {pvkDokument.harInvolvertRepresentant === true && 'Ja'}
@@ -45,7 +45,7 @@ export const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = (
           </div>
 
           <div className='mt-5 mb-3 max-w-[75ch]'>
-            <Label>Utdyp hvordan dere har involvert representant(er) for de registrerte</Label>
+            <Label>2. Utdyp hvordan dere har involvert representant(er) for de registrerte</Label>
             <DataTextWrapper>{pvkDokument.representantInvolveringsBeskrivelse}</DataTextWrapper>
           </div>
 
@@ -62,7 +62,7 @@ export const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = (
           </List>
 
           <div className='mt-5 mb-3 max-w-[75ch]'>
-            <Label>Har dere involvert en representant for databehandlere?</Label>
+            <Label>3. Har dere involvert en representant for databehandlere?</Label>
             <DataTextWrapper>
               {pvkDokument.harDatabehandlerRepresentantInvolvering === null && 'Ingen svar'}
               {pvkDokument.harDatabehandlerRepresentantInvolvering === true && 'Ja'}
@@ -71,7 +71,7 @@ export const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = (
           </div>
 
           <div className='mt-5 mb-3 max-w-[75ch]'>
-            <Label>Utdyp hvordan dere har involvert representant(er) for databehandler(e)</Label>
+            <Label>4. Utdyp hvordan dere har involvert representant(er) for databehandler(e)</Label>
             <DataTextWrapper>
               {pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse}
             </DataTextWrapper>
