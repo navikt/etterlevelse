@@ -37,7 +37,6 @@ export const BehandlingensLivslopTextContent = () => (
       <br />
       Noen tips til hvordan lage gode tegninger:
       <List>
-        <List.Item>Sørg for at tegningen dekker X, Y, Z</List.Item>
         <List.Item>
           Husk god kontrast mellom tekst og bakgrunn. Les mer om kontrast (åpner i en ny fane).
         </List.Item>
