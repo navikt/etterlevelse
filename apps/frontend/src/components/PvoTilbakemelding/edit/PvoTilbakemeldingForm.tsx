@@ -130,13 +130,26 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
         initialValues={initialValue}
         innerRef={formRef}
       >
-        {({ submitForm }) => (
+        {({ setFieldValue, submitForm }) => (
           <Form>
             <div className='z-10 flex flex-col w-full button_container sticky top-0 bg-[#e3eff7]'>
               <div className='mt-2 mb-5 flex flex-row gap-2'>
                 <div>
                   <Button size='small' type='button' onClick={submitForm}>
                     Lagre
+                  </Button>
+                </div>
+
+                <div>
+                  <Button
+                    size='small'
+                    type='button'
+                    variant='secondary'
+                    onClick={async () => {
+                      await setFieldValue('bidragsVurdering', '')
+                    }}
+                  >
+                    Nullstill radio valgene
                   </Button>
                 </div>
                 <div>

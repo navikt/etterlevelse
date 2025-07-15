@@ -207,6 +207,23 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
               </CheckboxGroup>
             )}
           </Field>
+
+          <div className='mb-5'>
+            <Button
+              size='small'
+              type='button'
+              variant='secondary'
+              onClick={async () => {
+                await setFieldValue('arbeidGarVidere', null)
+                await setFieldValue('behovForForhandskonsultasjon', null)
+                await setFieldValue('pvoVurdering', null)
+                await setFieldValue('pvoFolgeOppEndringer', false)
+                await setFieldValue('vilFaPvkIRetur', false)
+              }}
+            >
+              Nullstill radio valgene
+            </Button>
+          </div>
         </div>
 
         <CopyButtonCommon />
