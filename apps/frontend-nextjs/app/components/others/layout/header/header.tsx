@@ -38,7 +38,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
         window.location.href = loginUrl(pathname)
       }
     }, 1000)
-  }, [])
+  }, [pathname])
 
   useEffect(() => {
     ;(async () => {
