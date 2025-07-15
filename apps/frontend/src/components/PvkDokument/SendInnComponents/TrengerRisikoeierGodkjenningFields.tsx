@@ -58,7 +58,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
 
       <div className='mt-5 mb-3 max-w-[75ch]'>
         <TextAreaField
-          rows={3}
+          height='150px'
           noPlaceholder
           label='Kommentar til etterlever? (valgfritt)'
           name='merknadFraRisikoeier'

@@ -71,10 +71,11 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
         <div>
           <FieldRadioLayout>
             <TextAreaField
-              rows={3}
+              height='150px'
               noPlaceholder
               label='Er det noe annet dere ønsker å formidle til etterlever?'
               name='merknadTilEtterleverEllerRisikoeier'
+              markdown
             />
           </FieldRadioLayout>
           <FieldRadioLayout>

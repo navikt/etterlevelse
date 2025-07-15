@@ -38,7 +38,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
     <div>
       <div className='mt-5 mb-3'>
         <TextAreaField
-          rows={3}
+          height='150px'
           noPlaceholder
           label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
           name='merknadTilPvoEllerRisikoeier'
