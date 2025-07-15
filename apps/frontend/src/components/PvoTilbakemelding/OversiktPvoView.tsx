@@ -309,7 +309,9 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
         </FormSummary>
 
         <List className='w-full'>
-          <Heading size='medium'>Deltaker og ansvarlige</Heading>
+          <Heading size='medium' className='mb-3'>
+            Deltaker og ansvarlige
+          </Heading>
           <List.Item>
             <BodyShort>
               <strong>Risikoeier:</strong>{' '}
