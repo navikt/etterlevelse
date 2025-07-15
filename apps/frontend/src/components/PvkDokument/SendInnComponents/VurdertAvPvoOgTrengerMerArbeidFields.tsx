@@ -74,6 +74,10 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
           </Alert>
         </div>
 
+        <Heading size='medium' level='2' className='mb-5'>
+          Arbeid med PVK etter tilbakemelding fra PVO
+        </Heading>
+
         <TextAreaField rows={3} noPlaceholder label='Oppsummér' name='merknadTilRisikoeier' />
       </div>
 
