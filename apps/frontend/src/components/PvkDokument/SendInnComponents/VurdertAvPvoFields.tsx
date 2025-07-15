@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, List, Loader } from '@navikt/ds-react'
+import { Button, Heading, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import { EPvkDokumentStatus, IPvkDokument, IPvoTilbakemelding } from '../../../constants'
@@ -44,29 +44,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
       />
 
       <div className='pt-9 mb-3 max-w-[75ch]'>
-        <Heading level='2' size='small' className='mb-5'>
-          Nå er det din tur, etterlever
-        </Heading>
-
-        <div className='mb-3 mt-5'>
-          <Alert variant='info'>
-            <Heading size='xsmall' level='3'>
-              Dette gjør dere nå
-            </Heading>
-            <List as='ul'>
-              <List.Item>Gjør eventuelle endringer basert på PVOs tilbakemelding</List.Item>
-              <List.Item>
-                Oppsummér for risikoeieren hvordan dere har tatt stilling til PVOs tilbakemelding,
-                og hvilke endringer som er gjort.
-              </List.Item>
-              <List.Item>
-                Risikoeieren skal så vurdere om restrisiko kan aksepteres, og godkjenner og
-                arkiverer PVK.
-              </List.Item>
-            </List>
-          </Alert>
-        </div>
-
         <Heading size='medium' level='2' className='mb-5'>
           Arbeid med PVK etter tilbakemelding fra PVO
         </Heading>
@@ -74,7 +51,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
         <TextAreaField
           height='150px'
           noPlaceholder
-          label='Oppsummér'
+          label='Oppsummér for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
           name='merknadTilRisikoeier'
           markdown
         />

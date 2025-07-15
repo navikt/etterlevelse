@@ -29,7 +29,7 @@ import { user } from '../services/User'
 import { isInLimitedAccess } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
-const StepTitle: string[] = [
+export const StepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens livsløp',
   'Behandlingens art og omfang',
