@@ -26,7 +26,6 @@ import {
   ITiltak,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
-import { StepTitle } from '../../pages/PvkDokumentPage'
 import { FormSummaryPanel } from '../PvkDokument/common/FormSummaryPanel'
 import { ExternalLink } from '../common/RouteLink'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -44,6 +43,16 @@ type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
   formRef: RefObject<any>
 }
+
+const StepTitle: string[] = [
+  'Oversikt og status',
+  'Behandlingens livsløp',
+  'Behandlingens art og omfang',
+  'Involvering av eksterne',
+  'Identifisering av risikoscenarioer og tiltak',
+  'Risikobildet etter tiltak',
+  'Send tilbakemelding',
+]
 
 export const OversiktPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
