@@ -14,6 +14,7 @@ import {
   adminKravUrl,
   adminMaillog,
   adminMessagesLogUrl,
+  adminPvkUrl,
   adminVarselUrl,
 } from './components/common/RouteLinkAdmin'
 import {
@@ -67,6 +68,7 @@ import { KravTablePage } from './pages/KravTablePage'
 import { MainPage } from './pages/MainPage'
 import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
 import NotFound from './pages/NotFound'
+import PvkAdminPage from './pages/PvkAdminPage'
 import PvkBehovPage from './pages/PvkBehovPage'
 import PvkDokumentPage from './pages/PvkDokumentPage'
 import PvoOversiktPage from './pages/PvoOversiktPage'
@@ -317,6 +319,12 @@ const AppRoutes = (): JSX.Element => {
       <Route
         path={adminDokumentrelasjonUrl}
         element={<PrivateRoute component={<DocumentRelationAdminPage />} adminPage />}
+        caseSensitive={true}
+      />
+
+      <Route
+        path={adminPvkUrl}
+        element={<PrivateRoute component={<PvkAdminPage />} adminPage />}
         caseSensitive={true}
       />
 

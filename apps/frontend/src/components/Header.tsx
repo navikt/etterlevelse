@@ -30,6 +30,7 @@ import {
   adminKravUrl,
   adminMaillog,
   adminMessagesLogUrl,
+  adminPvkUrl,
   adminVarselUrl,
 } from './common/RouteLinkAdmin'
 import {
@@ -105,6 +106,7 @@ const LoggedInHeader = () => {
         { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl },
         { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl },
         { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
+        { label: 'Administrere pvk dokument', href: adminPvkUrl },
         { label: intl.audit, href: adminAuditUrl() },
         { label: 'Kodeverk', href: adminCodelistUrl },
         { label: intl.questionAndAnswers, href: adminMessagesLogUrl },

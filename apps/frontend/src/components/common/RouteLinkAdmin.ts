@@ -11,6 +11,7 @@ export const adminArkivUrl: string = `${adminUrl}/arkiv`
 export const adminCodelistUrl: string = `${adminUrl}/codelist`
 export const adminMessagesLogUrl: string = `${adminUrl}/messageslog`
 export const adminVarselUrl: string = `${adminUrl}/varsel`
+export const adminPvkUrl: string = `${adminUrl}/pvk`
 export const adminMaillog = `${adminUrl}/maillog`
 export const forbiddenUrl: string = '/forbidden'
 
