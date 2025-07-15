@@ -68,7 +68,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
         </div>
 
         <TextAreaField
-          rows={3}
+          height='150px'
           noPlaceholder
           label='Oppsummér'
           name='merknadTilRisikoeier'
