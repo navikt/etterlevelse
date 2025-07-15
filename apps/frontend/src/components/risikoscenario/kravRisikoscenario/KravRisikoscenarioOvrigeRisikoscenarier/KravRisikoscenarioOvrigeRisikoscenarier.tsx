@@ -1,6 +1,5 @@
 import { Link } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
-import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../../constants'
 import { user } from '../../../../services/User'
 import {
@@ -18,19 +17,15 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
   pvkDokument,
   pvoLink,
 }) => {
-  const navigate: NavigateFunction = useNavigate()
-
   return (
     <div className='mt-5 gap-2.5'>
       <Link
         type='button'
-        onClick={() => {
-          if (pvoLink && user.isPersonvernombud()) {
-            navigate(pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 5))
-          } else {
-            navigate(pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 5))
-          }
-        }}
+        href={
+          pvoLink && user.isPersonvernombud()
+            ? pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 5)
+            : pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 5)
+        }
       >
         Gå til PVK: Identifisering av risikoscenarier og tiltak
       </Link>
