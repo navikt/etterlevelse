@@ -67,7 +67,13 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
           </Alert>
         </div>
 
-        <TextAreaField rows={3} noPlaceholder label='Oppsummér' name='merknadTilRisikoeier' />
+        <TextAreaField
+          rows={3}
+          noPlaceholder
+          label='Oppsummér'
+          name='merknadTilRisikoeier'
+          markdown
+        />
       </div>
 
       <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />

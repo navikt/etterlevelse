@@ -62,6 +62,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           noPlaceholder
           label='Kommentar til etterlever? (valgfritt)'
           name='merknadFraRisikoeier'
+          markdown
         />
       </div>
 

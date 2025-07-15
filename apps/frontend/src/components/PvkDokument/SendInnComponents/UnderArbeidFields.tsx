@@ -37,6 +37,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
           noPlaceholder
           label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
           name='merknadTilPvoEllerRisikoeier'
+          markdown
         />
 
         <Alert variant='info' inline className='my-5'>

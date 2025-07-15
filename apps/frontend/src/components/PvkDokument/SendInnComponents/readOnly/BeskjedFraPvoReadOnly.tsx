@@ -3,6 +3,7 @@ import { FunctionComponent } from 'react'
 import { IPvoTilbakemelding } from '../../../../constants'
 import { ICode } from '../../../../services/Codelist'
 import DataTextWrapper from '../../../PvoTilbakemelding/common/DataTextWrapper'
+import { Markdown } from '../../../common/Markdown'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
@@ -32,9 +33,11 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
       <div className='mb-3'>
         <Label>Beskjed til etterlever</Label>
         <DataTextWrapper>
-          {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-            ? pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier
-            : 'Ingen beskjed'}
+          {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier ? (
+            <Markdown source={pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier} />
+          ) : (
+            'Ingen beskjed'
+          )}
         </DataTextWrapper>
       </div>
 
