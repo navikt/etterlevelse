@@ -30,7 +30,7 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
           </List>
 
           <div className='pt-5 pb-3 max-w-[75ch]'>
-            <Label>Stemmer denne lista over personkategorier?</Label>
+            <Label>1. Stemmer denne lista over personkategorier?</Label>
             <DataTextWrapper>
               {pvkDokument.stemmerPersonkategorier === null && 'Ikke besvart'}
               {pvkDokument.stemmerPersonkategorier === true && 'Ja'}
@@ -40,7 +40,7 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
 
           <div className='pt-5 pb-3 max-w-[75ch]'>
             <Label>
-              For hver av personkategoriene over, beskriv hvor mange personer dere behandler
+              2. For hver av personkategoriene over, beskriv hvor mange personer dere behandler
               personopplysninger om.
             </Label>
             <DataTextWrapper>{pvkDokument.personkategoriAntallBeskrivelse}</DataTextWrapper>
@@ -48,14 +48,14 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
 
           <div className='pt-5 pb-3 max-w-[75ch]'>
             <Label>
-              Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av
+              3. Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av
               rollene, beskriv hvor mange som har tilgang.
             </Label>
             <DataTextWrapper>{pvkDokument.tilgangsBeskrivelsePersonopplysningene}</DataTextWrapper>
           </div>
 
           <div className='pt-5 pb-3 max-w-[75ch]'>
-            <Label>Beskriv hvordan og hvor lenge personopplysningene skal lagres.</Label>
+            <Label>4. Beskriv hvordan og hvor lenge personopplysningene skal lagres.</Label>
             <DataTextWrapper>{pvkDokument.lagringsBeskrivelsePersonopplysningene}</DataTextWrapper>
           </div>
         </div>

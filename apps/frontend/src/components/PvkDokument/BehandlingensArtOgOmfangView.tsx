@@ -101,7 +101,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                       </List>
 
                       <BoolField
-                        label='Stemmer denne lista over personkategorier?'
+                        label='1. Stemmer denne lista over personkategorier?'
                         name='stemmerPersonkategorier'
                         horizontal
                       />
@@ -148,7 +148,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         <TextAreaField
                           rows={3}
                           noPlaceholder
-                          label='For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.'
+                          label='2. For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.'
                           name='personkategoriAntallBeskrivelse'
                         />
                       </div>
@@ -157,7 +157,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         <TextAreaField
                           rows={3}
                           noPlaceholder
-                          label='Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.'
+                          label='3. Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.'
                           name='tilgangsBeskrivelsePersonopplysningene'
                         />
                       </div>
@@ -166,7 +166,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         <TextAreaField
                           rows={3}
                           noPlaceholder
-                          label='Beskriv hvordan og hvor lenge personopplysningene skal lagres.'
+                          label='4. Beskriv hvordan og hvor lenge personopplysningene skal lagres.'
                           name='lagringsBeskrivelsePersonopplysningene'
                         />
                       </div>
