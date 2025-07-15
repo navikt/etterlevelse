@@ -26,7 +26,7 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
   }
   return (
     <div className='pt-9 mb-3 max-w-[75ch]'>
-      <Heading level='2' size='small' className='mb-5'>
+      <Heading level='2' size='medium' className='mb-5'>
         Tilbakemelding til etterlever
       </Heading>
 

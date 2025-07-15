@@ -67,6 +67,10 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
           </Alert>
         </div>
 
+        <Heading size='medium' level='2' className='mb-5'>
+          Arbeid med PVK etter tilbakemelding fra PVO
+        </Heading>
+
         <TextAreaField
           height='150px'
           noPlaceholder
