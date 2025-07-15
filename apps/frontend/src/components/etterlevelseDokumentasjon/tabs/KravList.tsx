@@ -27,6 +27,7 @@ interface IProps {
   loading: boolean
   risikoscenarioList: IRisikoscenario[]
   isRisikoscenarioLoading: boolean
+  defaultOpen?: boolean
 }
 
 export const KravList = (props: IProps) => {
@@ -41,6 +42,7 @@ export const KravList = (props: IProps) => {
     etterlevelseDokumentasjon,
     risikoscenarioList,
     isRisikoscenarioLoading,
+    defaultOpen,
   } = props
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const [statusFilter, setStatusFilter] = useState<string>('ALLE')
@@ -63,6 +65,13 @@ export const KravList = (props: IProps) => {
       )
     }
   }, [temaListe])
+
+  useEffect(() => {
+    if (defaultOpen) {
+      setOpenAccordions(temaListe.map(() => true))
+      navigate(etterlevelseDokumentasjonAlleUrl(params.id))
+    }
+  }, [defaultOpen])
 
   useEffect(() => {
     let relevanteStatusListe: TKravQL[] = relevanteStats
