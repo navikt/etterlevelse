@@ -137,7 +137,7 @@ public class PvkDokumentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {
         log.info("Delete Pvk Document id={}", id);
-        var pvkDokument = pvkDokumentService.delete(id);
+        var pvkDokument = pvkDokumentService.deletePvkAndAllChildren(id);
         if (pvkDokument == null) {
             log.warn("Could not delete pvk dokument with id = {}: Non-existing og related to other resources", id);
             throw new ValidationException("Could not delete pvk dokument: Non-existing og related to other resources");

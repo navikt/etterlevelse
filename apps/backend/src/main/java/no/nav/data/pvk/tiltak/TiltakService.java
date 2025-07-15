@@ -71,4 +71,12 @@ public class TiltakService {
         return repo.getRisikoscenarioForTiltak(id);
     }
 
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteByPvkDokumentId(UUID pvkDokumentId) {
+        List<Tiltak> tiltakList = repo.findByPvkDokumentId(pvkDokumentId);
+        tiltakList.forEach(t -> log.info("deleting tiltak with id={}, connected to pvk dokument with id={}", t.getId(), pvkDokumentId));
+        repo.deleteAll(tiltakList);
+    }
+
 }
