@@ -81,5 +81,14 @@ public class PvoTilbakemeldingService {
         pvoTilbakemeldingRepo.deleteById(id);
         return pvoTilbakemeldingToDelete.orElse(null);
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteByPvkDokumentId(UUID pvkDokumentId) {
+        PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingRepo.findByPvkDokumentId(pvkDokumentId).orElse(null);
+        if (pvoTilbakemelding != null) {
+            log.info("deleting risikoscenario with id={}, connected to pvk dokument with id={}", pvoTilbakemelding.getId(), pvkDokumentId);
+            pvoTilbakemeldingRepo.delete(pvoTilbakemelding);
+        }
+    }
 }
 

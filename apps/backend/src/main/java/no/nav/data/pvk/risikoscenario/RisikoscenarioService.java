@@ -111,4 +111,11 @@ public class RisikoscenarioService {
         return tiltakRepo.getTiltakForRisikoscenario(uuid);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteByPvkDokumentId(UUID pvkDokumentId) {
+        List<Risikoscenario> risikoscenarioList = risikoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
+        risikoscenarioList.forEach(r -> log.info("deleting risikoscenario with id={}, connected to pvk dokument with id={}", r.getId(), pvkDokumentId));
+        risikoscenarioRepo.deleteAll(risikoscenarioList);
+    }
+
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
+import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
@@ -24,6 +25,7 @@ public class PvkDokumentService {
     private final PvkDokumentRepo pvkDokumentRepo;
     private final RisikoscenarioService risikoscenarioService;
     private final TiltakService tiltakService;
+    private final PvoTilbakemeldingService pvoTilbakemeldingService;
 
     public PvkDokument get(UUID uuid) {
         return pvkDokumentRepo.findById(uuid).orElse(null);
@@ -68,6 +70,21 @@ public class PvkDokumentService {
         PvkDokument pvkDokumentToDelete = pvkDokumentRepo.findById(id).orElse(null);
         pvkDokumentRepo.deleteById(id);
         return pvkDokumentToDelete;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public PvkDokument deletePvkAndAllChildren(UUID id) {
+
+        log.info("deleting tiltak connected to pvk dokument with id={}", id);
+        tiltakService.deleteByPvkDokumentId(id);
+
+        log.info("deleting risikoscenario connected to pvk dokument with id={}", id);
+        risikoscenarioService.deleteByPvkDokumentId(id);
+
+        log.info("deleting pvo tilbakemelding connected to pvk dokument with id={}", id);
+        pvoTilbakemeldingService.deleteByPvkDokumentId(id);
+
+        return delete(id);
     }
 
 }
