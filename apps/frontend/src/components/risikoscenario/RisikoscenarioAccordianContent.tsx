@@ -124,7 +124,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           !isCreateTiltakFormActive &&
           !isEditTiltakFormActive &&
           !isAddExistingMode && (
-            <div className='mt-12 flex gap-2 items-center'>
+            <div className='mt-5 flex gap-2 items-center'>
               <Button
                 variant='tertiary'
                 type='button'
