@@ -1,7 +1,7 @@
 // EXPECTED AND SHOULD CRASH APPLICATION IF VALUES ARE NOT DEFINED
 
 export const env = {
-  backendBaseUrl: process.env.REACT_APP_BACKEND_ENDPOINT!,
+  backendBaseUrl: process.env.REACT_APP_BACKEND_ENDPOINT || 'localhost:8080',
   amplitudeEndpoint: process.env.REACT_APP_AMPLITUDE_ENDPOINT!,
   amplitudeApiKey: process.env.REACT_APP_AMPLITUDE_API_KEY!,
   teamKatBaseUrl: process.env.REACT_APP_TEAMKAT_BASE_URL!,
