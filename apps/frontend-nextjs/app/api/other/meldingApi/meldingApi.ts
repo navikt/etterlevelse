@@ -5,7 +5,7 @@ import {
   EMeldingType,
   IMelding,
   IPageResponse,
-} from '@/constants/constant'
+} from '@/constants/common/constants'
 import axios from 'axios'
 
 export const getMeldingByType = async (meldingType: EMeldingType) => {
