@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { URL } from 'url'
 
 export async function middleware(request: NextRequest) {
-  const backendUrl: URL = new URL(request.nextUrl)
+  const backendUrl = new URL(request.nextUrl)
   backendUrl.host = 'localhost:8080'
 
   if (backendUrl.pathname.includes('/api')) {
