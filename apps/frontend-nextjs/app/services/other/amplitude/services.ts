@@ -11,7 +11,7 @@ const AmplitudeConfig = {
     city: false,
     ip_address: false,
   },
-  platform: window.location.toString(),
+  platform: window.location.href,
 }
 
 export const instance = amplitude.getInstance()
