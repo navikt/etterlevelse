@@ -26,7 +26,6 @@ import {
 } from '@navikt/aksel-icons'
 import { InternalHeader, Link } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
 import { UserInfoView } from '../user/userInfoView/userInfoView'
@@ -34,18 +33,11 @@ import { UserInfoView } from '../user/userInfoView/userInfoView'
 export const LoginHeaderButton = () => {
   // updates window.location on navigation
   const pathname: string = usePathname()
-  const [locationUrl, setLocationUrl] = useState<string>('')
-
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      setLocationUrl(window.location.href)
-    }
-  }, [])
 
   return (
     <InternalHeader.Button
       as={Link}
-      href={loginUrl(locationUrl, pathname)}
+      href={loginUrl(window.location.href, pathname)}
       className='text-white'
       underline={false}
     >
