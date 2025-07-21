@@ -1,8 +1,6 @@
-export const loginUrl = (path?: string) => {
-  const frontpage = window.location.href.substring(
-    0,
-    window.location.href.length - window.location.pathname.length
-  )
+export const loginUrl = (locationUrl: string, path?: string) => {
+  const pathLength = path ? path.length : 0
+  const frontpage = locationUrl.substring(0, locationUrl.length - pathLength)
 
   return `/login?redirect_uri=${frontpage}${path || ''}`
 }

@@ -31,7 +31,13 @@ import {
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = useState(false)
-  const [pageScroll, setPageScroll] = useState(window.scrollY)
+  const [pageScroll, setPageScroll] = useState(0)
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setPageScroll(window.scrollY)
+    }
+  }, [])
 
   useEffect(() => {
     const checkScrollTop = () => {

@@ -42,7 +42,7 @@ export const Menu = (props: {
                   as={Link}
                   href={page.href}
                   onClick={() => {
-                    ampli.logEvent('navigere', {
+                    ampli().logEvent('navigere', {
                       kilde: 'header',
                       app: 'etterlevelse',
                       til: page.href,
