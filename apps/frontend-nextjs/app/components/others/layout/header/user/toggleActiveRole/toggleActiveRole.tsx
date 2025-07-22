@@ -44,7 +44,7 @@ export const ToggleActiveRole = () => {
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
-        {user.getAvailableGroups().map((availableGroup) => (
+        {user.getAvailableGroups().map((availableGroup: { name: string; group: EGroup }) => (
           <Switch
             size='small'
             key={availableGroup.group}
