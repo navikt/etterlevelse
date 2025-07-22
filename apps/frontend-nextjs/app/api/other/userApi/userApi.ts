@@ -1,4 +1,4 @@
-import { IUserInfo } from '@/constants/user/constants'
+import { IUserInfo } from '@/constants/user/userConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 

@@ -1,4 +1,4 @@
-import { TReplace } from '../constant'
+import { TReplace } from '../commonConstants'
 
 export enum EListName {
   AVDELING = 'AVDELING',

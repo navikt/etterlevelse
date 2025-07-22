@@ -1,4 +1,4 @@
-import { ICode, TLovCode } from './codelist/constants'
+import { ICode, TLovCode } from './kodeverk/kodeverkConstants'
 
 export enum EAlertType {
   INFO = 'INFO',

@@ -1,5 +1,5 @@
-import { IBehandling } from '@/constants/common/behandlingskatalogen/constants'
-import { IPageResponse } from '@/constants/constant'
+import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 

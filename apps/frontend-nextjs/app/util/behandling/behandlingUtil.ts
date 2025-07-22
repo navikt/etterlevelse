@@ -1,4 +1,4 @@
-import { IBehandling } from '@/constants/common/behandlingskatalogen/constants'
+import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 
 export const behandlingName = (behandling?: IBehandling): string => {
   let behandlingName = ''

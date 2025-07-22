@@ -1,10 +1,10 @@
-import { ICode } from '@/constants/codelist/constants'
 import {
   IDomainObject,
   IRegelverk,
   ISuksesskriterie,
   IVarslingsadresse,
-} from '@/constants/constant'
+} from '@/constants/commonConstants'
+import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 
 export enum EKravStatus {
   UTKAST = 'UTKAST',

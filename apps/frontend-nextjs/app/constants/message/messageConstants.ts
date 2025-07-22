@@ -1,4 +1,4 @@
-import { EAlertType, IDomainObject } from '@/constants/constant'
+import { EAlertType, IDomainObject } from '@/constants/commonConstants'
 
 export enum EMeldingType {
   SYSTEM = 'SYSTEM',

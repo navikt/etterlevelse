@@ -1,4 +1,4 @@
-import { EPVO } from '@/constants/personvernkonsekvensevurdering/personvernombud/constants'
+import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { adminAuditUrl } from '@/routes/admin/audit/routes'
 import { adminDokumentrelasjonUrl } from '@/routes/admin/dokumentrelasjon/routes'
 import {

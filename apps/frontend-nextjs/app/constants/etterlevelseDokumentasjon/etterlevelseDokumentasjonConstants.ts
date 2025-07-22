@@ -1,7 +1,7 @@
-import { ICode } from '../codelist/constants'
-import { IBehandling } from '../common/behandlingskatalogen/constants'
-import { ITeam, ITeamResource } from '../common/teamkatalogen/constants'
-import { IChangeStamp, IVarslingsadresse, IVirkemiddel } from '../constant'
+import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
+import { IChangeStamp, IVarslingsadresse, IVirkemiddel } from '../commonConstants'
+import { ICode } from '../kodeverk/kodeverkConstants'
+import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
 
 export interface IEtterlevelseDokumentasjon {
   id: string
