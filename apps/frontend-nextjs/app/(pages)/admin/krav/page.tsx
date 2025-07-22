@@ -1,10 +1,10 @@
 'use client'
 
-import { getAllKrav, kravMapToFormVal } from '@/api/krav/api'
+import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { temaUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
 import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
 import { PageLayout } from '@/components/others/scaffold/page'
-import { EKravStatus, IKrav, TKravQL } from '@/constants/constant'
+import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { ampli, userRoleEventProp } from '@/services/amplitude'
 import { CodelistService, EListName } from '@/services/codelist'
 import { handleSort } from '@/util/handleTableSort'
