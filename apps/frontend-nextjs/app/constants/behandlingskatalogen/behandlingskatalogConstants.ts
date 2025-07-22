@@ -34,3 +34,9 @@ export interface IBehandling {
   automatiskBehandling: boolean
   profilering: boolean
 }
+
+export interface IBegrep {
+  id: string
+  navn: string
+  beskrivelse: string
+}

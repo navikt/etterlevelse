@@ -1,5 +1,14 @@
-import { IDomainObject, IRegelverk, IVarslingsadresse } from '@/constants/commonConstants'
+import {
+  IDomainObject,
+  IRegelverk,
+  IVarslingsadresse,
+  IVirkemiddel,
+  TReplace,
+  TVarslingsadresseQL,
+} from '@/constants/commonConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { IBegrep } from '../behandlingskatalogen/behandlingskatalogConstants'
+import { TEtterlevelseQL } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 
 export enum EKravStatus {
   UTKAST = 'UTKAST',
@@ -44,3 +53,15 @@ export interface ISuksesskriterie {
   beskrivelse?: string
   behovForBegrunnelse: boolean
 }
+
+export type TKravQL = TReplace<
+  IKrav,
+  {
+    etterlevelser: TEtterlevelseQL[]
+    varslingsadresserQl: TVarslingsadresseQL[]
+    begreper: IBegrep[]
+    virkemidler: IVirkemiddel[]
+    kravRelasjoner: IKrav[]
+    prioriteringsId: number
+  }
+>
