@@ -3,6 +3,7 @@ import {
   IRegelverk,
   IVarslingsadresse,
   IVirkemiddel,
+  TOr,
   TReplace,
   TVarslingsadresseQL,
 } from '@/constants/commonConstants'
@@ -65,3 +66,6 @@ export type TKravQL = TReplace<
     prioriteringsId: number
   }
 >
+
+export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
+export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>

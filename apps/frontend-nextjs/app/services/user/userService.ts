@@ -1,4 +1,4 @@
-import { getUserInfo } from '@/api/other/userApi/userApi'
+import { getUserInfo } from '@/api/userApi/userApi'
 import { IUserInfo } from '@/constants/user/userConstants'
 import { updateUser } from '@/util/hooks/customHooks/customHooks'
 import { AxiosResponse } from 'axios'

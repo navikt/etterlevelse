@@ -1,5 +1,5 @@
-import { logApi } from '@/api/other/logApi/logApi'
-import { getMeldingByType } from '@/api/other/meldingApi/meldingApi'
+import { logApi } from '@/api/logApi/logApi'
+import { getMeldingByType } from '@/api/meldingApi/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import SkipToContent from '@/components/common/skipToContent/skipToContent'
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'

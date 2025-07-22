@@ -1,5 +1,5 @@
-import { getAllCodelists } from '@/api/codelist/api'
-import { TReplace } from '@/constants/constant'
+import { getAllCodelists } from '@/api/kodeverk/kodeverkApi'
+import { TReplace } from '@/constants/commonConstants'
 import { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
 import * as yup from 'yup'
