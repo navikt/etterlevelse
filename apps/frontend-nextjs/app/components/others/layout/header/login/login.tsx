@@ -7,6 +7,7 @@ import { adminCodelistUrl } from '@/routes/admin/kodeverk.ts/kodeverkRoutes'
 import { adminKravUrl } from '@/routes/admin/krav/adminKravRoutes'
 import { adminMaillog } from '@/routes/admin/maillog/maillogRoutes'
 import { adminMessagesLogUrl } from '@/routes/admin/messagesLog/messagesLogRoutes'
+import { adminPvkUrl } from '@/routes/admin/personvernkonsekvensvurdering/adminPersonvernkonsekvensvurderingRoutes'
 import { adminVarselUrl } from '@/routes/admin/varsel/varselRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterelevelseDokumentasjonRoutes'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
@@ -83,6 +84,7 @@ export const LoggedInHeader = () => {
         { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl },
         { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl },
         { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
+        { label: 'Administrere pvk dokument', href: adminPvkUrl },
         { label: 'Audit', href: adminAuditUrl() },
         { label: 'Kodeverk', href: adminCodelistUrl },
         { label: 'Spørsmål og svar', href: adminMessagesLogUrl },
