@@ -33,7 +33,7 @@ const getKravByKravNumberAndVersion = async (
 
 export const kravMainHeaderSearch = async (searchParam: string): Promise<TSearchItem[]> => {
   let result: TSearchItem[] = []
-  const add: (items: TSearchItem[]) => void = (items: TSearchItem[]): void => {
+  const add = (items: TSearchItem[]): void => {
     result = [...result, ...items]
     result = result.filter(
       (item: TSearchItem, index: number, self: TSearchItem[]) =>
