@@ -30,23 +30,30 @@ const DropdownIndicator = (props: DropdownIndicatorProps<TSearchItem>) => (
   </components.DropdownIndicator>
 )
 
-const EtterlevelseDokumentasjonMap = (t: IEtterlevelseDokumentasjon): TSearchItem => ({
-  value: t.id,
-  label: etterlevelseDokumentasjonName(t),
+const EtterlevelseDokumentasjonMap = (props: IEtterlevelseDokumentasjon): TSearchItem => ({
+  value: props.id,
+  label: etterlevelseDokumentasjonName(props),
   tag: 'Dokumentasjon',
-  url: `dokumentasjon/${t.id}`,
+  url: `dokumentasjon/${props.id}`,
 })
 
-const behandlingMap = (t: IBehandling): TSearchItem => ({
-  value: t.id,
-  label: behandlingName(t),
+const behandlingMap = (props: IBehandling): TSearchItem => ({
+  value: props.id,
+  label: behandlingName(props),
   tag: EObjectType.Behandling,
-  url: `dokumentasjoner/behandlingsok?behandlingId=${t.id}`,
+  url: `dokumentasjoner/behandlingsok?behandlingId=${props.id}`,
 })
 
-const useMainSearch = async (searchParam: string) => {
+const useMainSearch = async (
+  searchParam: string
+): Promise<
+  {
+    label: string
+    options: TSearchItem[]
+  }[]
+> => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
-    const result = await Promise.all([
+    const result: [TSearchItem[], TSearchItem[], TSearchItem[]] = await Promise.all([
       await kravSearch(searchParam),
       (await searchEtterlevelsedokumentasjon(searchParam)).map(EtterlevelseDokumentasjonMap),
       (await searchBehandling(searchParam)).map(behandlingMap),
@@ -86,7 +93,7 @@ const MainSearch = () => {
         onChange={(selectedOption) => selectedOption && router.push([selectedOption].flat()[0].url)}
         styles={{
           // Updates default focus-border so it can be replaced with focus from DesignSystem
-          control: (base) =>
+          control: (base: CSSObjectWithLabel) =>
             ({
               ...base,
               boxShadow: 'none',
@@ -102,8 +109,9 @@ const MainSearch = () => {
               cursor: 'text',
               div: { div: { color: 'var(--a-text-default)' } },
             }) as CSSObjectWithLabel,
-          option: (base) => ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
-          groupHeading: (base) =>
+          option: (base: CSSObjectWithLabel) =>
+            ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
+          groupHeading: (base: CSSObjectWithLabel) =>
             ({
               ...base,
               color: 'black',
@@ -114,9 +122,11 @@ const MainSearch = () => {
               maring: 0,
             }) as CSSObjectWithLabel,
           // Make border and size of input box to be identical with those from DesignSystem
-          valueContainer: (base) => ({ ...base, color: 'black' }) as CSSObjectWithLabel,
+          valueContainer: (base: CSSObjectWithLabel) =>
+            ({ ...base, color: 'black' }) as CSSObjectWithLabel,
           // Remove separator
-          indicatorSeparator: (base) => ({ ...base, display: 'none' }) as CSSObjectWithLabel,
+          indicatorSeparator: (base: CSSObjectWithLabel) =>
+            ({ ...base, display: 'none' }) as CSSObjectWithLabel,
         }}
       />
     </div>
