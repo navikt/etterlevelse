@@ -1,8 +1,8 @@
 import { Portrait } from '@/components/common/portrait/portrait'
 import { user } from '@/services/user/user'
+import { getUserRole } from '@/util/user/userUtil'
 import { Label, Link } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
-import { getUserRole } from '../user'
 
 export const UserInfoView = () => {
   const pathname: string = usePathname()
