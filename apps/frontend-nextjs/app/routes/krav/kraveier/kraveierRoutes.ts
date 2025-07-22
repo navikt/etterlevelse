@@ -1,4 +1,4 @@
-export const kravUrl: string = '/krav'
+import { kravUrl } from '../kravRoutes'
 
 export const kravlisteUrl = (tabQuery?: string): string => {
   const url: string = `${kravUrl}liste`
