@@ -60,6 +60,17 @@ public class BehandlingensLivslopService {
         return behandlingensLivslopToDelete.orElse(null);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public BehandlingensLivslop deleteByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId) {
+        var behandlingensLivslopToDelete = repo.findByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
+        if(behandlingensLivslopToDelete.isEmpty()) {
+            return null;
+        } else {
+            repo.deleteById(behandlingensLivslopToDelete.get().getId());
+            return behandlingensLivslopToDelete.get();
+        }
+    }
+
     @Transactional
     public void copyBehandlingenslivslop(UUID fromDocumentId, UUID toDocumentId) {
         var bllToCopy = getByEtterlevelseDokumentasjon(fromDocumentId).orElse(null);
