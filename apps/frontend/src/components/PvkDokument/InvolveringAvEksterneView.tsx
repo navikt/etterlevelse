@@ -97,6 +97,11 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         Involvering av eksterne deltakere
                       </Heading>
 
+                      <BodyLong className='mb-3'>
+                        Personene Nav behandler personopplysninger om, kaller vi for &quot;de
+                        registrerte&quot;.
+                      </BodyLong>
+
                       <Heading level='2' size='small' className='mb-3'>
                         Representanter for de registrerte
                       </Heading>
@@ -125,6 +130,10 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         konsekvenser en behandling av personopplysninger kan ha for den enkelte. Når
                         vi gjennomfører en personvernkonsekvensvurdering (PVK), må vi derfor alltid
                         vurdere om det er behov for å involvere en representant for de registrerte.
+                        mer informasjon finner dere i{' '}
+                        <ExternalLink href='https://navno.sharepoint.com/sites/intranett-personvern/SiteAssets/Forms/AllItems.aspx?id=%2Fsites%2Fintranett%2Dpersonvern%2FSiteAssets%2FSitePages%2FPVK%2FBrosjyre%5FInvolvering%2Dav%2Dden%2Dregistrerte%2Dved%2Dgjennomf%C3%B8ring%2Dav%2DPVK%2Epdf&parent=%2Fsites%2Fintranett%2Dpersonvern%2FSiteAssets%2FSitePages%2FPVK'>
+                          {'Brosjyre om involvering av den registrerte (åpner i ny fane).'}
+                        </ExternalLink>
                       </BodyLong>
 
                       <BodyLong className='mt-3'>
