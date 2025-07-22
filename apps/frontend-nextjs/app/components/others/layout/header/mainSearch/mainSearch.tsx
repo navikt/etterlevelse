@@ -2,9 +2,8 @@ import {
   etterlevelseDokumentasjonName,
   searchEtterlevelsedokumentasjon,
 } from '@/api/etterlevelse/dokumentasjon/dokumentasjon'
-import { behandlingName, searchBehandling } from '@/api/krav/kravApi'
+import { behandlingName, kravSearch, searchBehandling } from '@/api/krav/kravApi'
 import { EObjectType } from '@/components/kraveier/admin/audit/audit'
-import { kravSearch } from '@/components/kraveier/krav'
 import { noOptionMessage } from '@/components/others/utils/search/search'
 import { IBehandling } from '@/constants/common/behandlingskatalogen/constants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelse/constants'
