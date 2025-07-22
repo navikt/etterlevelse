@@ -119,6 +119,7 @@ export const DokumentasjonPage = () => {
   const [relevanteStats, setRelevanteStats] = useState<TKravQL[]>([])
   const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [kravRisikoscenarioList, setKravRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(false)
 
   const filterData = (
@@ -187,9 +188,14 @@ export const DokumentasjonPage = () => {
             if (pvkDokument) {
               setPvkDokument(pvkDokument)
               setIsRisikoscenarioLoading(true)
-              getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.KRAV)
+              getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL)
                 .then((riskoscenario) => {
                   setRisikoscenarioList(riskoscenario.content)
+                  setKravRisikoscenarioList(
+                    riskoscenario.content.filter(
+                      (r: IRisikoscenario) => r.generelScenario === false
+                    )
+                  )
                 })
                 .finally(() => setIsRisikoscenarioLoading(false))
             }
@@ -427,7 +433,7 @@ export const DokumentasjonPage = () => {
         loading={loading}
         morDocumentRelation={morDokumentRelasjon}
         pvkDokument={pvkDokument}
-        risikoscenarioList={risikoscenarioList}
+        risikoscenarioList={kravRisikoscenarioList}
         isRisikoscenarioLoading={isRisikoscenarioLoading}
       />
     </PageLayout>
