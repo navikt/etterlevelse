@@ -132,7 +132,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         vurdere om det er behov for å involvere en representant for de registrerte.
                         mer informasjon finner dere i{' '}
                         <ExternalLink href='https://navno.sharepoint.com/sites/intranett-personvern/SiteAssets/Forms/AllItems.aspx?id=%2Fsites%2Fintranett%2Dpersonvern%2FSiteAssets%2FSitePages%2FPVK%2FBrosjyre%5FInvolvering%2Dav%2Dden%2Dregistrerte%2Dved%2Dgjennomf%C3%B8ring%2Dav%2DPVK%2Epdf&parent=%2Fsites%2Fintranett%2Dpersonvern%2FSiteAssets%2FSitePages%2FPVK'>
-                          {'Brosjyre om involvering av den registrerte (åpner i ny fane).'}
+                          {'Brosjyre om involvering av den registrerte.'}
                         </ExternalLink>
                       </BodyLong>
 
