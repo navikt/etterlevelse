@@ -31,7 +31,7 @@ const getKravByKravNumberAndVersion = async (
     })
 }
 
-export const kravSearch = async (searchParam: string): Promise<TSearchItem[]> => {
+export const kravMainHeaderSearch = async (searchParam: string): Promise<TSearchItem[]> => {
   let result: TSearchItem[] = []
   const add: (items: TSearchItem[]) => void = (items: TSearchItem[]): void => {
     result = [...result, ...items]

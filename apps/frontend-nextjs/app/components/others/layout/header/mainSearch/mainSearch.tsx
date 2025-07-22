@@ -1,6 +1,6 @@
 import { searchBehandling } from '@/api/behandlingskatalog/behandlingskatalogApi'
 import { searchEtterlevelsedokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { kravSearch } from '@/api/krav/kravApi'
+import { kravMainHeaderSearch } from '@/api/krav/kravApi'
 import { EObjectType } from '@/components/kraveier/admin/audit/audit'
 import { noOptionMessage } from '@/components/others/utils/search/search'
 import { IBehandling } from '@/constants/common/behandlingskatalogen/constants'
@@ -53,7 +53,7 @@ const useMainSearch = async (
 > => {
   if (searchParam && searchParam.replace(/ /g, '').length > 2) {
     const result: [TSearchItem[], TSearchItem[], TSearchItem[]] = await Promise.all([
-      await kravSearch(searchParam),
+      await kravMainHeaderSearch(searchParam),
       (await searchEtterlevelsedokumentasjon(searchParam)).map(EtterlevelseDokumentasjonMap),
       (await searchBehandling(searchParam)).map(behandlingMap),
     ])
