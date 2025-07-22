@@ -3,7 +3,9 @@ import { IPageResponse } from '@/constants/constant'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelse/constants'
 import axios from 'axios'
 
-export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
+export const searchEtterlevelsedokumentasjon = async (
+  searchParam: string
+): Promise<IEtterlevelseDokumentasjon[]> => {
   return (
     await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`
@@ -13,7 +15,7 @@ export const searchEtterlevelsedokumentasjon = async (searchParam: string) => {
 
 export const etterlevelseDokumentasjonName = (
   etterlevelseDokumentasjon?: IEtterlevelseDokumentasjon
-) =>
+): string =>
   etterlevelseDokumentasjon
-    ? 'E' + etterlevelseDokumentasjon.etterlevelseNummer + ' ' + etterlevelseDokumentasjon.title
+    ? `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`
     : ''
