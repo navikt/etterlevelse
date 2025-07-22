@@ -1,5 +1,3 @@
-'use client'
-
 import { logApi } from '@/api/other/logApi/logApi'
 import { getMeldingByType } from '@/api/other/meldingApi/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
