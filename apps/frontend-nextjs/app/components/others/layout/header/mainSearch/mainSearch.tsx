@@ -1,13 +1,13 @@
-import {
-  etterlevelseDokumentasjonName,
-  searchEtterlevelsedokumentasjon,
-} from '@/api/etterlevelse/dokumentasjon/dokumentasjon'
-import { behandlingName, kravSearch, searchBehandling } from '@/api/krav/kravApi'
+import { searchBehandling } from '@/api/behandlingskatalog/behandlingskatalogApi'
+import { searchEtterlevelsedokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { kravSearch } from '@/api/krav/kravApi'
 import { EObjectType } from '@/components/kraveier/admin/audit/audit'
 import { noOptionMessage } from '@/components/others/utils/search/search'
 import { IBehandling } from '@/constants/common/behandlingskatalogen/constants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelse/constants'
 import { TSearchItem } from '@/constants/other/search/constants'
+import { behandlingName } from '@/util/behandling/behandlingUtil'
+import { etterlevelseDokumentasjonName } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 import { BodyShort } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'

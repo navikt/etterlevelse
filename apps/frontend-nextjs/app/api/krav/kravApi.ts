@@ -1,39 +1,14 @@
 import { EObjectType } from '@/components/kraveier/admin/audit/audit'
-import { IBehandling } from '@/constants/common/behandlingskatalogen/constants'
+import { env } from '@/components/others/utils/env/env'
 import { IPageResponse } from '@/constants/constant'
 import { EKravStatus, IKrav } from '@/constants/etterlevelse/krav/constants'
 import { TSearchItem } from '@/constants/other/search/constants'
 import { kravMap, kravName } from '@/util/krav/kravUtil'
 import axios from 'axios'
-import { env } from 'process'
 
 const searchKrav = async (name: string): Promise<IKrav[]> => {
   return (await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data
     .content
-}
-
-export const searchBehandling = async (name: string): Promise<IBehandling[]> => {
-  return (
-    await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)
-  ).data.content
-}
-
-export const behandlingName = (behandling?: IBehandling): string => {
-  let behandlingName = ''
-
-  if (behandling) {
-    if (behandling.nummer) {
-      behandlingName += 'B' + behandling.nummer + ' '
-    }
-    if (behandling.overordnetFormaal && behandling.overordnetFormaal.shortName) {
-      behandlingName += behandling.overordnetFormaal.shortName + ': '
-    }
-    if (behandling.navn) {
-      behandlingName += behandling.navn
-    }
-  }
-
-  return behandlingName
 }
 
 const searchKravByNumber = async (number: string) => {
