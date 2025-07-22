@@ -1,3 +1,3 @@
-export const adminUrl: string = '/admin'
+import { adminUrl } from '../adminRoutes'
 
 export const adminCodelistUrl: string = `${adminUrl}/codelist`

@@ -1,6 +1,4 @@
 import { dokumentasjonUrl } from '@/routes/etterlevelse/dokumentasjon/routes'
-import { kravUrl } from '../routes'
+import { adminUrl } from '../adminRoutes'
 
-export const adminUrl: string = '/admin'
-export const adminKravUrl: string = `${adminUrl}${kravUrl}`
 export const adminDokumentasjonUrl: string = `${adminUrl}${dokumentasjonUrl}`

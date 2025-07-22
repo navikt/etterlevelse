@@ -1,3 +1,3 @@
-import { adminUrl } from '../routes'
+import { adminUrl } from '../adminRoutes'
 
 export const adminDokumentrelasjonUrl: string = `${adminUrl}/dokumentrelasjon`

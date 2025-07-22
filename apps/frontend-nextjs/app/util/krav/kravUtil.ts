@@ -1,4 +1,4 @@
-import { EObjectType } from '@/components/kraveier/admin/audit/audit'
+import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IKrav } from '@/constants/krav/kravConstants'
 
 export const kravName = (krav: IKrav): string => `${kravNumView(krav)} ${krav.navn}`

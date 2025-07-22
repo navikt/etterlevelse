@@ -1,7 +1,7 @@
 import { searchBehandling } from '@/api/behandlingskatalog/behandlingskatalogApi'
 import { searchEtterlevelsedokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { kravMainHeaderSearch } from '@/api/krav/kravApi'
-import { EObjectType } from '@/components/kraveier/admin/audit/audit'
+import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TSearchItem } from '@/constants/search/searchConstants'

@@ -1,4 +1,4 @@
-import { EObjectType } from '@/components/kraveier/admin/audit/audit'
+import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { EKravStatus, IKrav } from '@/constants/krav/kravConstants'
 import { TSearchItem } from '@/constants/search/searchConstants'
