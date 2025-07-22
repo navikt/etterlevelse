@@ -1,4 +1,4 @@
-import { user } from '@/services/user/user'
+import { user } from '@/services/user/userService'
 import { env } from '@/util/env/env'
 import amplitude from 'amplitude-js'
 

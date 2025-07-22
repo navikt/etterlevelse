@@ -1,4 +1,4 @@
-import { EGroup, user } from '@/services/user/user'
+import { EGroup, user } from '@/services/user/userService'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Button, Switch } from '@navikt/ds-react'
 import { ChangeEvent, useEffect, useState } from 'react'

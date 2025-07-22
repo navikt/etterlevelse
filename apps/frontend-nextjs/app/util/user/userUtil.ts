@@ -1,4 +1,4 @@
-import { user } from '@/services/user/user'
+import { user } from '@/services/user/userService'
 
 export const getUserRole = () => {
   if (user.isAdmin()) return 'Admin'

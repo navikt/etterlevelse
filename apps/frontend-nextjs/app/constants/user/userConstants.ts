@@ -1,4 +1,4 @@
-import { EGroup } from '@/services/user/user'
+import { EGroup } from '@/services/user/userService'
 
 export interface IUserInfo {
   loggedIn: boolean

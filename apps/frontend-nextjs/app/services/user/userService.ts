@@ -11,7 +11,7 @@ export enum EGroup {
   ADMIN = 'ADMIN',
 }
 
-class ReUserService {
+class UserService {
   private loaded: boolean = false
   private userInfo: IUserInfo = { loggedIn: false, groups: [] }
   private currentGroups = [EGroup.READ]
@@ -129,7 +129,7 @@ class ReUserService {
   }
 }
 
-export const user = new ReUserService()
+export const user = new UserService()
 
 const nameFor = (group: EGroup) => {
   switch (group) {

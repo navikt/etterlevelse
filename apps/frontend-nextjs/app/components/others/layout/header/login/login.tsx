@@ -14,7 +14,7 @@ import { adminDokumentasjonUrl, adminKravUrl } from '@/routes/kraveier/admin/com
 import { kravlisteUrl } from '@/routes/kraveier/routes'
 import { loginUrl } from '@/routes/other/login/routes'
 import { pvoOversiktUrl } from '@/routes/personvernkonsekvensevurdering/personvernombud/routes'
-import { user } from '@/services/user/user'
+import { user } from '@/services/user/userService'
 import {
   BarChartIcon,
   DocPencilIcon,

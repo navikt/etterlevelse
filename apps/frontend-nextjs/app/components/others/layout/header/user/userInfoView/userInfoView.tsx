@@ -1,5 +1,5 @@
 import { Portrait } from '@/components/common/portrait/portrait'
-import { user } from '@/services/user/user'
+import { user } from '@/services/user/userService'
 import { getUserRole } from '@/util/user/userUtil'
 import { Label, Link } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
