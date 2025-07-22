@@ -10,16 +10,12 @@ type TMenuItem = {
   icon?: ReactNode
 }
 
-export const Menu = (props: {
-  pages: TMenuItem[][]
-  title: ReactNode
-  icon?: ReactNode
-  kind?: 'secondary' | 'tertiary'
-}) => {
+export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: ReactNode }) => {
   const pathname: string = usePathname()
+  const { pages, title, icon } = props
 
-  const allPages: TMenuItem[] = props.pages.length
-    ? props.pages
+  const allPages: TMenuItem[] = pages.length
+    ? pages
         .filter((page) => page.length)
         .reduce((previousValue, currentValue) => [
           ...((previousValue as TMenuItem[]) || []),
@@ -31,7 +27,7 @@ export const Menu = (props: {
   return (
     <Dropdown>
       <InternalHeader.Button as={Dropdown.Toggle}>
-        {props.icon} {props.title}
+        {icon} {title}
       </InternalHeader.Button>
       <Dropdown.Menu className='min-w-max h-auto'>
         <Dropdown.Menu.List>
