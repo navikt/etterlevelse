@@ -10,14 +10,14 @@ const kravName = (krav: IKrav): string => `${kravNumView(krav)} ${krav.navn}`
 const kravNumView = (it: { kravVersjon: number; kravNummer: number }): string =>
   `K${it.kravNummer}.${it.kravVersjon}`
 
-const kravMap = (t: IKrav) => ({
-  value: t.id,
-  label: kravName(t),
+const kravMap = (krav: IKrav) => ({
+  value: krav.id,
+  label: kravName(krav),
   tag: EObjectType.Krav as string,
-  url: `krav/${t.id}`,
+  url: `krav/${krav.id}`,
 })
 
-const searchKrav = async (name: string) => {
+const searchKrav = async (name: string): Promise<IKrav[]> => {
   return (await axios.get<IPageResponse<IKrav>>(`${env.backendBaseUrl}/krav/search/${name}`)).data
     .content
 }
@@ -31,7 +31,7 @@ const searchKravByNumber = async (number: string) => {
 const getKravByKravNumberAndVersion = async (
   kravNummer: number | string,
   kravVersjon: number | string
-) => {
+): Promise<IKrav | undefined> => {
   return await axios
     .get<IKrav>(`${env.backendBaseUrl}/krav/kravnummer/${kravNummer}/${kravVersjon}`)
     .then((resp) => {
@@ -44,7 +44,7 @@ const getKravByKravNumberAndVersion = async (
 
 export const kravSearch = async (searchParam: string): Promise<TSearchItem[]> => {
   let result: TSearchItem[] = []
-  const add = (items: TSearchItem[]): void => {
+  const add: (items: TSearchItem[]) => void = (items: TSearchItem[]): void => {
     result = [...result, ...items]
     result = result.filter(
       (item: TSearchItem, index: number, self: TSearchItem[]) =>
@@ -55,12 +55,13 @@ export const kravSearch = async (searchParam: string): Promise<TSearchItem[]> =>
   if (searchParam) {
     result.push(
       ...(await searchKrav(searchParam))
-        .filter((k) => k.status !== EKravStatus.UTGAATT)
+        .filter((krav: IKrav) => krav.status !== EKravStatus.UTGAATT)
         .map(kravMap)
     )
   }
 
-  let kravNumber = searchParam
+  let kravNumber: string = searchParam
+
   if (kravNumber[0].toLowerCase() === 'k') {
     kravNumber = kravNumber.substring(1)
   }
@@ -68,8 +69,8 @@ export const kravSearch = async (searchParam: string): Promise<TSearchItem[]> =>
   if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 === 0) {
     add(
       (await searchKravByNumber(Number.parseFloat(kravNumber).toString()))
-        .filter((k) => k.status !== EKravStatus.UTGAATT)
-        .sort((a, b) => {
+        .filter((krav: IKrav) => krav.status !== EKravStatus.UTGAATT)
+        .sort((a: IKrav, b: IKrav) => {
           if (a.kravNummer === b.kravNummer) {
             return b.kravVersjon - a.kravVersjon
           } else {
@@ -81,12 +82,17 @@ export const kravSearch = async (searchParam: string): Promise<TSearchItem[]> =>
   }
 
   if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
-    const kravNummerMedVersjon = kravNumber.split('.')
-    const searchResult = [
+    const kravNummerMedVersjon: string[] = kravNumber.split('.')
+    const searchResult: (IKrav | undefined)[] = [
       await getKravByKravNumberAndVersion(kravNummerMedVersjon[0], kravNummerMedVersjon[1]),
-    ].filter((k) => k && k.status !== EKravStatus.UTGAATT)
+    ].filter((krav: IKrav | undefined) => krav && krav.status !== EKravStatus.UTGAATT)
     if (typeof searchResult[0] !== 'undefined') {
-      const mappedResult = [
+      const mappedResult: {
+        value: string
+        label: string
+        tag: EObjectType
+        url: string
+      }[] = [
         {
           value: searchResult[0].id,
           label: kravName(searchResult[0]),
