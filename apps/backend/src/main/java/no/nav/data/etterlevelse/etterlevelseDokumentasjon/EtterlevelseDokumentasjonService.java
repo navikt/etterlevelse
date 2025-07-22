@@ -27,6 +27,8 @@ import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,6 +62,8 @@ public class EtterlevelseDokumentasjonService {
     private final TeamcatResourceClient teamcatResourceClient;
     private final DocumentRelationService documentRelationService;
     private final BehandlingensLivslopService behandlingensLivslopService;
+    private final PvkDokumentService pvkDokumentService;
+    private final PvoTilbakemeldingService pvoTilbakemeldingService;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
@@ -182,6 +186,15 @@ public class EtterlevelseDokumentasjonService {
 
         log.info("deleting etterlevelse connected to etterlevelse dokumentasjon with id={}", id);
         etterlevelseService.deleteByEtterlevelseDokumentasjonId(id);
+
+        log.info("deleting behandlingenslivslop connected to etterlevelse dokumentasjon with id={}", id);
+        behandlingensLivslopService.deleteByEtterlevelseDokumentasjonId(id);
+
+        var pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(id);
+        if (pvkDokument.isPresent()) {
+            log.info("deleting pvkDokument and all children connected to etterlevelse dokumentasjon with id={}", id);
+            pvkDokumentService.deletePvkAndAllChildren(pvkDokument.get().getId());
+        }
 
         return delete(id);
     }
