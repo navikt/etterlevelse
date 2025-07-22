@@ -1,5 +1,5 @@
-import { env } from '@/components/others/utils/env/env'
-import { IUserInfo } from '@/constants/iUserInfo/iUserInfo'
+import { IUserInfo } from '@/constants/user/userConstants'
+import { env } from '@/util/env/env'
 import axios from 'axios'
 
 // Add auth cookie to rest calls

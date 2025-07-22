@@ -1,11 +1,8 @@
-'use client'
-
 import { ArrowUpIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { etterlevelseLogoWhiteIcon } from '../../images/images'
 import {
   behandlingsKatalogLink,
   datajegerSlackLink,
@@ -16,7 +13,8 @@ import {
   statusPageLink,
   teamInfoLink,
   veilederEtterlevelseskrav,
-} from '../../utils/config/config'
+} from '../../../../util/footer/footerUtil'
+import { etterlevelseLogoWhiteIcon } from '../../images/images'
 
 // import {
 //   VeilederEtterlevelseskrav,
@@ -33,7 +31,13 @@ import {
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = useState(false)
-  const [pageScroll, setPageScroll] = useState(window.scrollY)
+  const [pageScroll, setPageScroll] = useState(0)
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setPageScroll(window.scrollY)
+    }
+  }, [])
 
   useEffect(() => {
     const checkScrollTop = () => {

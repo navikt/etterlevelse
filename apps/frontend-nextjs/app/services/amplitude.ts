@@ -1,6 +1,7 @@
-import { env } from '@/components/others/utils/env/env'
-import { user } from '@/services/user/user'
+
+import { env } from '@/util/env/env'
 import amplitude from 'amplitude-js'
+import { user } from './user/userService'
 
 const AmplitudeConfig = {
   apiEndpoint: env.amplitudeEndpoint,

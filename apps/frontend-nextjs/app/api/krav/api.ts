@@ -1,5 +1,5 @@
-import { env } from '@/components/others/utils/env/env'
 import { EKravStatus, IKrav, IPageResponse, TKravQL, TOr } from '@/constants/constant'
+import { env } from '@/util/env/env'
 import axios from 'axios'
 
 export const getAllKrav = async () => {

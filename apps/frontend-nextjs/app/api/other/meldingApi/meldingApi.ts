@@ -1,11 +1,6 @@
-import { env } from '@/components/others/utils/env/env'
-import {
-  EAlertType,
-  EMeldingStatus,
-  EMeldingType,
-  IMelding,
-  IPageResponse,
-} from '@/constants/constant'
+import { EAlertType, IPageResponse } from '@/constants/commonConstants'
+import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/message/messageConstants'
+import { env } from '@/util/env/env'
 import axios from 'axios'
 
 export const getMeldingByType = async (meldingType: EMeldingType) => {

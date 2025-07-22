@@ -1,4 +1,4 @@
-import { IBreadCrumbPath } from '@/constants/constant'
+import { IBreadCrumbPath } from '@/constants/commonConstants'
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import CustomizedBreadcrumbs from '../../common/customizedBreadcrumbs/customizedBreadcrumbs'
