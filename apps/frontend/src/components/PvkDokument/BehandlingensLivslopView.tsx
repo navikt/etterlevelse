@@ -1,4 +1,12 @@
-import { BodyShort, Button, ErrorSummary, FileRejected, Heading, Loader } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyShort,
+  Button,
+  ErrorSummary,
+  FileRejected,
+  Heading,
+  Loader,
+} from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -58,6 +66,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
   const [rejectedFiles, setRejectedFiles] = useState<FileRejected[]>([])
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -119,14 +128,12 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then(
             (response: IBehandlingensLivslop) => {
               setBehandlingensLivslop(response)
-              window.location.reload()
             }
           )
         } else {
           await createBehandlingensLivslop(mutatedBehandlingensLivslop).then(
             (response: IBehandlingensLivslop) => {
               setBehandlingensLivslop(response)
-              window.location.reload()
             }
           )
         }
@@ -163,7 +170,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                 }}
                 innerRef={formRef}
               >
-                {({ submitForm, initialValues, errors, isSubmitting }) => (
+                {({ submitForm, initialValues, errors, isSubmitting, resetForm, values }) => (
                   <Form>
                     <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8 w-full'>
                       <Heading level='1' size='medium' className='mb-5'>
@@ -202,12 +209,27 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                         </ErrorSummary>
                       )}
 
+                      {savedSuccessful && (
+                        <div className='mt-5'>
+                          <Alert
+                            variant='success'
+                            closeButton
+                            onClose={() => setSavedSuccessful(false)}
+                          >
+                            Lagring vellyket
+                          </Alert>
+                        </div>
+                      )}
+
                       {!isSubmitting && (
                         <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
                           <Button
                             type='button'
                             onClick={async () => {
-                              await submitForm()
+                              await submitForm().then(() => {
+                                resetForm({ values })
+                                setSavedSuccessful(true)
+                              })
                               setSubmitClick(!submitClick)
                             }}
                           >
