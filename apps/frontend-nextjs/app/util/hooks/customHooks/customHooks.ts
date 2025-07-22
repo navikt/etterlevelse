@@ -2,18 +2,18 @@
 
 import { user } from '@/services/user/user'
 import { useSearchParams } from 'next/navigation'
-import React, { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
+import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
 
 export function useDebouncedState<T>(
   initialValue: T,
   delay: number,
-  passThrough?: (val: T) => void
+  passThrough?: (value: T) => void
 ): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
   useEffect(() => {
-    const handler = setTimeout(() => {
+    const handler: NodeJS.Timeout = setTimeout(() => {
       setDebouncedValue(value)
       if (passThrough) {
         passThrough(value)
@@ -101,7 +101,7 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
 
   return [searchResult, setSearch, loading, search] as [
     T[],
-    React.Dispatch<React.SetStateAction<string>>,
+    Dispatch<SetStateAction<string>>,
     boolean,
     string,
   ]
