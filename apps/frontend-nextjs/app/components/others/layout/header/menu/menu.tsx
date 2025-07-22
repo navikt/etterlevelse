@@ -1,4 +1,4 @@
-import { ampli } from '@/services/other/amplitude/services'
+import { ampli } from '@/services/other/amplitude/amplitudeService'
 import { Dropdown, InternalHeader, Link } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
