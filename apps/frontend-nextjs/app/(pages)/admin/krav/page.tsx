@@ -1,13 +1,39 @@
 'use client'
 
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/api'
+import { temaUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
+import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
 import { PageLayout } from '@/components/others/scaffold/page'
-import { IKrav, TKravQL } from '@/constants/constant'
+import { EKravStatus, IKrav, TKravQL } from '@/constants/constant'
+import { ampli, userRoleEventProp } from '@/services/amplitude'
 import { CodelistService, EListName } from '@/services/codelist'
 import { handleSort } from '@/util/handleTableSort'
-import { BodyShort, Heading, Pagination, Select, SortState, Spacer, Table } from '@navikt/ds-react'
+import {
+  BodyShort,
+  Heading,
+  Link,
+  Pagination,
+  Select,
+  SortState,
+  Spacer,
+  Table,
+} from '@navikt/ds-react'
 import moment from 'moment'
 import { ChangeEvent, useEffect, useState } from 'react'
+
+const kravStatus = (status: EKravStatus | string) => {
+  if (!status) return ''
+  switch (status) {
+    case EKravStatus.UTKAST:
+      return 'Utkast'
+    case EKravStatus.AKTIV:
+      return 'Aktiv'
+    case EKravStatus.UTGAATT:
+      return 'Utgått'
+    default:
+      return status
+  }
+}
 
 const KravTablePage = () => {
   const [codelistUtils] = CodelistService()
@@ -57,11 +83,11 @@ const KravTablePage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
-      // ampli.logEvent('sidevisning', {
-      //   side: 'Krav admin side',
-      //   sidetittel: 'Administrere Krav',
-      //   ...userRoleEventProp,
-      // })
+      ampli.logEvent('sidevisning', {
+        side: 'Krav admin side',
+        sidetittel: 'Administrere Krav',
+        ...userRoleEventProp,
+      })
     })()
   }, [])
 
@@ -108,9 +134,9 @@ const KravTablePage = () => {
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Table.HeaderCell>
                   <Table.DataCell className='w-[25%]'>
-                    {/*<Link href={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}>*/}
-                    {/*  {krav.navn}*/}
-                    {/*</Link>*/}
+                    <Link href={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}>
+                      {krav.navn}
+                    </Link>
                   </Table.DataCell>
                   <Table.DataCell>
                     {krav.underavdeling && krav.underavdeling.shortName}
@@ -118,13 +144,12 @@ const KravTablePage = () => {
                   <Table.DataCell>
                     {' '}
                     {krav.tema && (
-                      // <Link href={`${temaUrl}/${krav.tema}`}>
-                      //   {codelistUtils.getCode(EListName.TEMA, krav.tema)?.shortName}
-                      // </Link>
-                      <BodyShort>test</BodyShort>
+                      <Link href={`${temaUrl}/${krav.tema}`}>
+                        {codelistUtils.getCode(EListName.TEMA, krav.tema)?.shortName}
+                      </Link>
                     )}
                   </Table.DataCell>
-                  {/*<Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>*/}
+                  <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
                   <Table.DataCell>{krav.tema}</Table.DataCell>
                   <Table.DataCell className='w-[10%] text-end'>
                     {moment(krav.changeStamp.lastModifiedDate).format('LL')}
