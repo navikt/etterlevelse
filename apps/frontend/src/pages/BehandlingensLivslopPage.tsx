@@ -279,9 +279,10 @@ export const BehandlingensLivslopPage = () => {
                               <Button
                                 type='button'
                                 onClick={async () => {
-                                  await submitForm()
-                                    .then(() => resetForm({ values }))
-                                    .finally(() => setSavedSuccessful(true))
+                                  await submitForm().then(() => {
+                                    resetForm({ values })
+                                    setSavedSuccessful(true)
+                                  })
                                 }}
                               >
                                 Lagre
