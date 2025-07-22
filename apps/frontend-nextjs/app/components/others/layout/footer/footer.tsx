@@ -3,7 +3,6 @@ import { BodyShort, Button, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { etterlevelseLogoWhiteIcon } from '../../images/images'
 import {
   behandlingsKatalogLink,
   datajegerSlackLink,
@@ -14,7 +13,8 @@ import {
   statusPageLink,
   teamInfoLink,
   veilederEtterlevelseskrav,
-} from '../../utils/config/config'
+} from '../../../../util/footer/footerUtil'
+import { etterlevelseLogoWhiteIcon } from '../../images/images'
 
 // import {
 //   VeilederEtterlevelseskrav,

@@ -1,5 +1,5 @@
-import { env } from '@/components/others/utils/env/env'
 import { user } from '@/services/user/user'
+import { env } from '@/util/env/env'
 import amplitude from 'amplitude-js'
 
 export const ampli = () => {

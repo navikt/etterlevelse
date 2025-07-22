@@ -1,5 +1,5 @@
 import { avatarPlaceholder } from '@/components/others/images/images'
-import { personImageLink } from '@/util/config/utils'
+import { personImageLink } from '@/util/teamkatalog/utils'
 import { Loader } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'

@@ -1,8 +1,8 @@
 import { EObjectType } from '@/components/kraveier/admin/audit/audit'
-import { env } from '@/components/others/utils/env/env'
 import { IPageResponse } from '@/constants/constant'
 import { EKravStatus, IKrav } from '@/constants/etterlevelse/krav/constants'
 import { TSearchItem } from '@/constants/other/search/constants'
+import { env } from '@/util/env/env'
 import { kravMap, kravName } from '@/util/krav/kravUtil'
 import axios from 'axios'
 

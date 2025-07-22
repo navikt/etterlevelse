@@ -4,8 +4,8 @@ import ReactMarkdown from 'react-markdown'
 import 'react-markdown-editor-lite/lib/index.css'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
-import { markdownLink } from '../../others/utils/config/config'
-import { ettlevColors } from '../../others/utils/theme/theme'
+import { markdownLink } from '../../../util/footer/footerUtil'
+import { ettlevColors } from '../../../util/theme/theme'
 import { ExternalLink } from '../routeLink/routeLink'
 
 type TProps = {

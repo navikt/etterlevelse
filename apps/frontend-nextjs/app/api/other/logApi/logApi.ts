@@ -1,4 +1,4 @@
-import { env } from '@/components/others/utils/env/env'
+import { env } from '@/util/env/env'
 import axios from 'axios'
 
 export const logApi = (

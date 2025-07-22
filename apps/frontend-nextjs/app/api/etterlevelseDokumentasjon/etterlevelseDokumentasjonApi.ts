@@ -1,6 +1,6 @@
-import { env } from '@/components/others/utils/env/env'
 import { IPageResponse } from '@/constants/constant'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelse/constants'
+import { env } from '@/util/env/env'
 import axios from 'axios'
 
 export const searchEtterlevelsedokumentasjon = async (
