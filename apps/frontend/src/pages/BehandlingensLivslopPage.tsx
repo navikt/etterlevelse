@@ -29,7 +29,10 @@ import BehandlingensLivslopTextContent from '../components/behandlingensLivlop/B
 import { CustomFileUpload } from '../components/behandlingensLivlop/CustomFileUpload'
 import behandlingensLivslopSchema from '../components/behandlingensLivlop/behandlingensLivsLopSchema'
 import { TextAreaField } from '../components/common/Inputs'
-import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
+import {
+  dokumentasjonUrl,
+  etterlevelseDokumentasjonIdUrl,
+} from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonPvkTypeStepUrl } from '../components/common/RouteLinkPvk'
 import UnsavedModalAlert from '../components/common/UnsavedModalAlert'
 import {
@@ -70,6 +73,7 @@ export const BehandlingensLivslopPage = () => {
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
   const [urlToNavigate, setUrlToNavigate] = useState<string>('')
+  const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
 
@@ -140,6 +144,9 @@ export const BehandlingensLivslopPage = () => {
         } else {
           await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
             setBehandlingesLivslop(response)
+            navigate(
+              `${dokumentasjonUrl}/${response.etterlevelseDokumentasjonId}/behandlingens-livslop/${response.id}`
+            )
           })
         }
       }
@@ -255,12 +262,26 @@ export const BehandlingensLivslopPage = () => {
                             </ErrorSummary>
                           )}
 
+                          {savedSuccessful && (
+                            <div className='mt-5'>
+                              <Alert
+                                variant='success'
+                                closeButton
+                                onClose={() => setSavedSuccessful(false)}
+                              >
+                                Lagring vellyket
+                              </Alert>
+                            </div>
+                          )}
+
                           {!isSubmitting && (
                             <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
                               <Button
                                 type='button'
                                 onClick={async () => {
-                                  await submitForm().then(() => resetForm({ values }))
+                                  await submitForm()
+                                    .then(() => resetForm({ values }))
+                                    .finally(() => setSavedSuccessful(true))
                                 }}
                               >
                                 Lagre
