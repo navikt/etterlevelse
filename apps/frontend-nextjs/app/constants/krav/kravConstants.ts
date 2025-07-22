@@ -1,9 +1,4 @@
-import {
-  IDomainObject,
-  IRegelverk,
-  ISuksesskriterie,
-  IVarslingsadresse,
-} from '@/constants/commonConstants'
+import { IDomainObject, IRegelverk, IVarslingsadresse } from '@/constants/commonConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 
 export enum EKravStatus {
@@ -41,4 +36,11 @@ export interface IKrav extends IDomainObject {
   nyKravVersjon: boolean
   kravIdRelasjoner: string[]
   aktivertDato: string
+}
+
+export interface ISuksesskriterie {
+  id: number
+  navn: string
+  beskrivelse?: string
+  behovForBegrunnelse: boolean
 }

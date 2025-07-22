@@ -47,13 +47,6 @@ export interface IPageResponse<T> {
   content: T[]
 }
 
-export interface ISuksesskriterie {
-  id: number
-  navn: string
-  beskrivelse?: string
-  behovForBegrunnelse: boolean
-}
-
 export interface IVirkemiddel extends IDomainObject {
   id: string
   navn: string
