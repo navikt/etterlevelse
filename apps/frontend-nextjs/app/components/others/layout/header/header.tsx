@@ -1,3 +1,5 @@
+'use client'
+
 import { logApi } from '@/api/other/logApi/logApi'
 import { getMeldingByType } from '@/api/other/meldingApi/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -34,7 +36,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (!user.isLoggedIn()) {
+      if (!user.isLoggedIn() && typeof window !== 'undefined') {
         window.location.href = loginUrl(window.location.href, pathname)
       }
     }, 1000)
