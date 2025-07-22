@@ -55,7 +55,10 @@ export const LoginHeaderButton = () => {
 }
 
 export const LoggedInHeader = () => {
-  const pvoPages = user.isPersonvernombud()
+  const pvoPages: {
+    label: EPVO
+    href: string
+  }[] = user.isPersonvernombud()
     ? [
         {
           label: EPVO.overskrift,
@@ -63,7 +66,10 @@ export const LoggedInHeader = () => {
         },
       ]
     : []
-  const kravPages = user.isKraveier()
+  const kravPages: {
+    label: string
+    href: string
+  }[] = user.isKraveier()
     ? [
         { label: 'Forvalte og opprette krav', href: kravlisteUrl() },
         //{ label: 'Forvalte og opprette virkemiddel', href: virkemiddellisteUrl }
