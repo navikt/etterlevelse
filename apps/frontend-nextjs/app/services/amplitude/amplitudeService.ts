@@ -1,9 +1,9 @@
 import { user } from '@/services/user/userService'
 import { env } from '@/util/env/env'
-import amplitude from 'amplitude-js'
+import amplitude, { AmplitudeClient } from 'amplitude-js'
 
 export const ampli = () => {
-  const ampliInstance = amplitude.getInstance()
+  const ampliInstance: AmplitudeClient = amplitude.getInstance()
 
   const AmplitudeConfig = {
     apiEndpoint: env.amplitudeEndpoint,
@@ -22,6 +22,7 @@ export const ampli = () => {
 
   return ampliInstance
 }
+
 export const userRoleEventProp = {
   role: user.isAdmin()
     ? 'ADMIN'

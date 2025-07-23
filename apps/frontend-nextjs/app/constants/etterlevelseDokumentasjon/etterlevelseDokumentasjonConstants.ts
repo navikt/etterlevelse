@@ -1,7 +1,10 @@
 import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
-import { IChangeStamp, IVarslingsadresse, IVirkemiddel } from '../commonConstants'
+import { IChangeStamp, IVarslingsadresse, TReplace, TVarslingsadresseQL } from '../commonConstants'
 import { ICode } from '../kodeverk/kodeverkConstants'
+import { ILovStats, TKravQL } from '../krav/kravConstants'
 import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
+import { IVirkemiddel } from '../virkemiddel/virkemiddelConstants'
+import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 
 export interface IEtterlevelseDokumentasjon {
   id: string
@@ -35,4 +38,24 @@ export interface IEtterlevelseDokumentasjon {
   risikovurderinger: string[]
   p360Recno: number
   p360CaseNumber: string
+}
+
+export type TEtterlevelseDokumentasjonQL = TReplace<
+  IEtterlevelseDokumentasjon,
+  {
+    varslingsadresser: TVarslingsadresseQL[]
+    etterlevelser?: IEtterlevelse[]
+    sistEndretEtterlevelse?: string
+    sistEndretDokumentasjon?: string
+    sistEndretEtterlevelseAvMeg?: string
+    sistEndretDokumentasjonAvMeg?: string
+    stats?: IEtterlevelseDokumentasjonStats
+  }
+>
+
+export interface IEtterlevelseDokumentasjonStats {
+  relevantKrav: TKravQL[]
+  irrelevantKrav: TKravQL[]
+  utgaattKrav: TKravQL[]
+  lovStats: ILovStats[]
 }

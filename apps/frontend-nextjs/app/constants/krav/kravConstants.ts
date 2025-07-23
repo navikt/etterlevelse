@@ -2,7 +2,6 @@ import {
   IDomainObject,
   IRegelverk,
   IVarslingsadresse,
-  IVirkemiddel,
   TOr,
   TReplace,
   TVarslingsadresseQL,
@@ -10,6 +9,7 @@ import {
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IBegrep } from '../behandlingskatalogen/behandlingskatalogConstants'
 import { TEtterlevelseQL } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { IVirkemiddel } from '../virkemiddel/virkemiddelConstants'
 
 export enum EKravStatus {
   UTKAST = 'UTKAST',
@@ -67,5 +67,18 @@ export type TKravQL = TReplace<
   }
 >
 
+export interface IKravVersjon {
+  kravNummer: string | number
+  kravVersjon: string | number
+  kravStatus: string
+}
+
 export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
 export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
+
+export interface ILovStats {
+  lovCode: ICode
+  relevantKrav: TKravQL[]
+  irrelevantKrav: TKravQL[]
+  utgaattKrav: TKravQL[]
+}

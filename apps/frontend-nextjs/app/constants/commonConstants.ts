@@ -1,4 +1,4 @@
-import { ICode, TLovCode } from './kodeverk/kodeverkConstants'
+import { TLovCode } from './kodeverk/kodeverkConstants'
 
 export enum EAlertType {
   INFO = 'INFO',
@@ -45,14 +45,6 @@ export interface IPageResponse<T> {
   numberOfElements: number
   totalElements: number
   content: T[]
-}
-
-export interface IVirkemiddel extends IDomainObject {
-  id: string
-  navn: string
-  regelverk: IRegelverk[]
-  virkemiddelType?: ICode
-  livsSituasjon: string
 }
 
 export interface ISlackChannel {
