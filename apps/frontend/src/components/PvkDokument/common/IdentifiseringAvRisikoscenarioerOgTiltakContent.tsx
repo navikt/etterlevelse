@@ -51,7 +51,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
             navigate(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId))
         }}
       >
-        Gå til liste over PVK-relaterte krav
+        Vurdér risikoscenarioer ved PVK-relaterte krav
       </Button>
 
       <Heading level='2' size='small' className='mb-5 mt-10'>
