@@ -1,4 +1,4 @@
-import { IPageResponse } from '@/constants/commonConstants'
+import { IPageResponse, ISlackChannel } from '@/constants/commonConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
 import { useForceUpdate } from '@/util/hooks/customHooks/customHooks'
@@ -18,6 +18,10 @@ const pSubscribe = (id: string, done: () => void): void => {
   }
 }
 
+export const getResourceById = async (resourceId: string) => {
+  return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
+}
+
 export const searchResourceByName = async (resourceName: string): Promise<ITeamResource[]> => {
   return (
     await axios.get<IPageResponse<ITeamResource>>(
@@ -26,11 +30,15 @@ export const searchResourceByName = async (resourceName: string): Promise<ITeamR
   ).data.content
 }
 
-export const getResourceById = async (resourceId: string): Promise<ITeamResource> => {
-  return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
+export const searchSlackChannel = async (name: string) => {
+  return (
+    await axios.get<IPageResponse<ISlackChannel>>(
+      `${env.backendBaseUrl}/team/slack/channel/search/${name}`
+    )
+  ).data.content
 }
 
-const addPerson = (person: ITeamResource): void => {
+const addPerson = (person: ITeamResource) => {
   people.set(person.navIdent, { f: true, v: person.fullName })
   psubs.get(person.navIdent)?.forEach((f) => f())
   psubs.delete(person.navIdent)
@@ -69,6 +77,26 @@ export const usePersonSearch = async (
     const searchResult: ITeamResource[] = await searchResourceByName(searchParam)
     return searchResult.map((person: ITeamResource) => {
       return { value: person.navIdent, label: person.fullName, ...person }
+    })
+  }
+  return []
+}
+
+export const useSlackChannelSearch = async (
+  searchParam: string
+): Promise<
+  {
+    id: string
+    name?: string
+    numMembers?: number
+    value: string
+    label: string | undefined
+  }[]
+> => {
+  if (searchParam && searchParam.replace(/ /g, '').length > 2) {
+    const searchResult: ISlackChannel[] = await searchSlackChannel(searchParam)
+    return searchResult.map((slackChannel: ISlackChannel) => {
+      return { value: slackChannel.id, label: slackChannel.name, ...slackChannel }
     })
   }
   return []
