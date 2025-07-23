@@ -202,16 +202,14 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         databehandlere, kan det være til hjelp å se på behandlingens livsløp.
                       </BodyLong>
 
-                      <BodyLong className='mt-5'>
+                      <ReadMore
+                        className='mt-3 max-w-[75ch]'
+                        header='Trenger vi å involvere databehandlere?'
+                      >
                         Dersom det skal benyttes en databehandler i hele eller deler av
                         behandlingen, skal dere som hovedregel inkludere en representant for
                         databehandler i vurderingen av personvernkonsekvenser (PVK).
-                      </BodyLong>
-
-                      <ReadMore
-                        className='mt-3 max-w-[75ch]'
-                        header='Trenger vi å snakke direkte med databehandlere?'
-                      >
+                        <br />
                         Når dere vurderer personvernrisiko, må dere sette dere inn i hvordan
                         databehandlere behandler personopplysninger. Det kan være aktuelt å
                         diskutere endringer i databehandleravtalen, for eksempel ved å be om
