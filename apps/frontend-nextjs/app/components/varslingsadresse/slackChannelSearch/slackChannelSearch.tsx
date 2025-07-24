@@ -1,16 +1,18 @@
-import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
+import { useSlackChannelSearch } from '@/api/teamkatalogen/slack/slackApi'
 import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
-import { EAdresseType, ISlackChannel, IVarslingsadresse } from '@/constants/commonConstants'
+import { EAdresseType, IVarslingsadresse } from '@/constants/commonConstants'
+import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
+import { FunctionComponent } from 'react'
 import AsyncSelect from 'react-select/async'
 
-type TAddVarslingsadresseProps = {
+type TProps = {
   add: (varsling: IVarslingsadresse) => void
   added?: IVarslingsadresse[]
   close?: () => void
 }
 
-export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) => (
+export const SlackChannelSearch: FunctionComponent<TProps> = ({ add, close }) => (
   <AsyncSelect
     aria-label='Søk etter slack-kanal'
     placeholder='Søk etter slack-kanal'

@@ -1,12 +1,14 @@
 'use client'
 
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
-import { temaUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
-import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
+import { kravStatus } from '@/components/etterlevelse/krav/kravComponents'
 import { PageLayout } from '@/components/others/scaffold/page'
-import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { ampli, userRoleEventProp } from '@/services/amplitude'
-import { CodelistService, EListName } from '@/services/codelist'
+import { EListName } from '@/constants/kodeverk/kodeverkConstants'
+import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
+import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
+import { CodelistService } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -21,21 +23,7 @@ import {
 import moment from 'moment'
 import { ChangeEvent, useEffect, useState } from 'react'
 
-const kravStatus = (status: EKravStatus | string) => {
-  if (!status) return ''
-  switch (status) {
-    case EKravStatus.UTKAST:
-      return 'Utkast'
-    case EKravStatus.AKTIV:
-      return 'Aktiv'
-    case EKravStatus.UTGAATT:
-      return 'Utgått'
-    default:
-      return status
-  }
-}
-
-const KravTablePage = () => {
+const AdministrereKrav = () => {
   const [codelistUtils] = CodelistService()
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
@@ -44,7 +32,7 @@ const KravTablePage = () => {
 
   let sortedData: IKrav[] = tableContent
 
-  const comparator = (a: IKrav, b: IKrav, orderBy: string) => {
+  const sortKrav = (a: IKrav, b: IKrav, orderBy: string) => {
     switch (orderBy) {
       case 'kravNummer':
         return a.kravNummer - b.kravNummer
@@ -71,8 +59,8 @@ const KravTablePage = () => {
     .sort((a: IKrav, b: IKrav) => {
       if (sort) {
         return sort.direction === 'ascending'
-          ? comparator(b, a, sort.orderBy)
-          : comparator(a, b, sort.orderBy)
+          ? sortKrav(b, a, sort.orderBy)
+          : sortKrav(a, b, sort.orderBy)
       }
       return 1
     })
@@ -142,7 +130,6 @@ const KravTablePage = () => {
                     {krav.underavdeling && krav.underavdeling.shortName}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {' '}
                     {krav.tema && (
                       <Link href={`${temaUrl}/${krav.tema}`}>
                         {codelistUtils.getCode(EListName.TEMA, krav.tema)?.shortName}
@@ -150,7 +137,6 @@ const KravTablePage = () => {
                     )}
                   </Table.DataCell>
                   <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
-                  <Table.DataCell>{krav.tema}</Table.DataCell>
                   <Table.DataCell className='w-[10%] text-end'>
                     {moment(krav.changeStamp.lastModifiedDate).format('LL')}
                   </Table.DataCell>
@@ -192,4 +178,4 @@ const KravTablePage = () => {
   )
 }
 
-export default KravTablePage
+export default AdministrereKrav
