@@ -24,6 +24,7 @@ import {
   Loader,
   Spacer,
 } from '@navikt/ds-react'
+import * as _ from 'lodash'
 import moment from 'moment'
 import { usePathname, useRouter } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
