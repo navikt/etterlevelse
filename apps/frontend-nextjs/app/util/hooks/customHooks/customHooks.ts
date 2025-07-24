@@ -105,3 +105,23 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
     string,
   ]
 }
+
+export function useLocationState<T>() {
+  const navigate: NavigateFunction = useNavigate()
+  const location: Location<any> = useLocation()
+
+  const changeState = (newState: Partial<T>) => {
+    navigate(
+      { ...location },
+      {
+        replace: true,
+        state: {
+          ...(location.state as Partial<T>),
+          ...newState,
+        },
+      }
+    )
+  }
+
+  return { location, navigate, state: location.state as T, changeState }
+}

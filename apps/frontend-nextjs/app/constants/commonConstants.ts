@@ -38,22 +38,6 @@ export interface IPageResponse<T> {
   content: T[]
 }
 
-export interface ISlackChannel {
-  id: string
-  name?: string
-  numMembers?: number
-}
-
-export interface ISlackUser {
-  id: string
-  name?: string
-}
-
-export type TVarslingsadresseQL = IVarslingsadresse & {
-  slackChannel?: ISlackChannel
-  slackUser?: ISlackUser
-}
-
 type TNot<T> = { [key in keyof T]?: never }
 
 export type TOr<T, U> = (T & TNot<U>) | (U & TNot<T>)
