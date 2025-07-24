@@ -1,4 +1,4 @@
-import { IVirkemiddel } from '@/constants/commonConstants'
+import { IVirkemiddel } from '@/constants/virkemiddel/virkemiddelConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 

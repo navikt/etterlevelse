@@ -1,8 +1,12 @@
 import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
-import { IChangeStamp, IVarslingsadresse, TReplace, TVarslingsadresseQL } from '../commonConstants'
+import { IChangeStamp, TReplace } from '../commonConstants'
 import { ICode } from '../kodeverk/kodeverkConstants'
 import { ILovStats, TKravQL } from '../krav/kravConstants'
 import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
+import {
+  IVarslingsadresse,
+  TVarslingsadresseQL,
+} from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { IVirkemiddel } from '../virkemiddel/virkemiddelConstants'
 import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 

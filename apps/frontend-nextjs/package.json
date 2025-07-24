@@ -69,9 +69,13 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/amplitude-js": "^8.16.5",
+    "@types/draft-js": "^0.11.18",
+    "@types/lodash": "^4.17.20",
+    "@types/markdown-draft-js": "^2.2.7",
     "@types/node": "^24.0.15",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@types/react-draft-wysiwyg": "^1.13.8",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "eslint": "^9.31.0",

@@ -1,4 +1,4 @@
-import { RawDraftContentState, RawDraftInlineStyleRange } from 'draft-js'
+import { RawDraftContentBlock, RawDraftContentState, RawDraftInlineStyleRange } from 'draft-js'
 
 const highlightTagRegex: RegExp = /<span style='background-color: rgb(.*?)'>(.*?)<\/span>/g
 const underlineTagRegex: RegExp = /<ins>(.*?)<\/ins>/g
@@ -9,14 +9,14 @@ export const translateUnderlineAndHighlight = (draftData: RawDraftContentState) 
 }
 
 export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
-  draftData.blocks.map((data) => {
+  draftData.blocks.map((data: RawDraftContentBlock) => {
     const newStyles: RawDraftInlineStyleRange[] = []
     const match = data.text.matchAll(underlineTagRegex)
 
     let draftTextWithOuthighlightTags = data.text
       .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
       .replaceAll('</span>', '')
-    match.forEach((result, matchIndex) => {
+    match.forEach((result: RegExpExecArray, matchIndex: number) => {
       const newUnderlineStyle = {
         offset: 0,
         length: 0,
@@ -50,12 +50,12 @@ export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
 }
 
 export const translateHighlightToDraft = (draftData: RawDraftContentState) => {
-  draftData.blocks.map((data) => {
+  draftData.blocks.map((data: RawDraftContentBlock) => {
     const match = data.text.matchAll(highlightTagRegex)
     const newStyles: RawDraftInlineStyleRange[] = []
 
     let draftTextWithoutUnderlineTags = data.text.replaceAll('<ins>', '').replaceAll('</ins>', '')
-    match.forEach((result, matchIndex) => {
+    match.forEach((result: any, matchIndex: number) => {
       const highlightStyle = {
         offset: 0,
         length: 0,

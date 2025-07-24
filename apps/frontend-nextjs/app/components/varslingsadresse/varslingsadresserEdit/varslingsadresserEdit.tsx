@@ -1,6 +1,9 @@
 import { Error } from '@/components/common/error/error'
 import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
-import { EAdresseType, IVarslingsadresse } from '@/constants/commonConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { user } from '@/services/user/userService'
 import { emailValidator } from '@/util/teamkatalog/utils'
 import { PlusIcon } from '@navikt/aksel-icons'

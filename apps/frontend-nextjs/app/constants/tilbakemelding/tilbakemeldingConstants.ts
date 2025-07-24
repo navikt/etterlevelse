@@ -1,4 +1,4 @@
-import { IVarslingsadresse } from '../commonConstants'
+import { IVarslingsadresse } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 
 export enum ETilbakemeldingRolle {
   KRAVEIER = 'KRAVEIER',

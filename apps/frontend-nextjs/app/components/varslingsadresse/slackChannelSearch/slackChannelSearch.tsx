@@ -1,7 +1,10 @@
 import { useSlackChannelSearch } from '@/api/teamkatalogen/slack/slackApi'
 import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
-import { EAdresseType, IVarslingsadresse } from '@/constants/commonConstants'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { FunctionComponent } from 'react'
 import AsyncSelect from 'react-select/async'

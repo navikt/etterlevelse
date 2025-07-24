@@ -1,4 +1,4 @@
-import { EAdresseType } from '@/constants/commonConstants'
+import { EAdresseType } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { ETilbakemeldingMeldingStatus } from '@/constants/tilbakemelding/tilbakemeldingConstants'
 
 export const tilbakemeldingStatusToText = (status: ETilbakemeldingMeldingStatus) => {

@@ -1,14 +1,11 @@
-import {
-  IDomainObject,
-  IRegelverk,
-  IVarslingsadresse,
-  TOr,
-  TReplace,
-  TVarslingsadresseQL,
-} from '@/constants/commonConstants'
+import { IDomainObject, IRegelverk, TOr, TReplace } from '@/constants/commonConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IBegrep } from '../behandlingskatalogen/behandlingskatalogConstants'
 import { TEtterlevelseQL } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import {
+  IVarslingsadresse,
+  TVarslingsadresseQL,
+} from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { IVirkemiddel } from '../virkemiddel/virkemiddelConstants'
 
 export enum EKravStatus {

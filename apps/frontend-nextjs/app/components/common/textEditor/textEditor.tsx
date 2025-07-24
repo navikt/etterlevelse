@@ -14,7 +14,7 @@ import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { useEffect, useState } from 'react'
-import { Editor } from 'react-draft-wysiwyg'
+import { Editor, EditorState } from 'react-draft-wysiwyg'
 import { FormError } from '../modalSchema/formError/formError'
 
 type TTextEditorProps = {

@@ -2,9 +2,12 @@ import { getSlackUserByEmail } from '@/api/teamkatalogen/slack/slackApi'
 import { usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
-import { EAdresseType, IVarslingsadresse } from '@/constants/commonConstants'
 import { ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { user } from '@/services/user/userService'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Alert, Button, Loader } from '@navikt/ds-react'
