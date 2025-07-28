@@ -1,4 +1,4 @@
-import AdminKravPage from '@/components/admin/krav/kravAdminPage'
+import AdminKravPage from '@/components/admin/krav/xkravAdminPage'
 
 const Page = () => <AdminKravPage />
 
