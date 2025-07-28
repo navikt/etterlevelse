@@ -1,4 +1,4 @@
-import EtterlevelseDokumentRelasjonAdminPage from '@/components/admin/dokumentRelasjon/xEtterlevelseDokumentRelasjonAdminPage'
+import { EtterlevelseDokumentRelasjonAdminPage } from '@/components/admin/dokumentRelasjon/EtterlevelseDokumentRelasjonAdminPage'
 
 const Page = () => <EtterlevelseDokumentRelasjonAdminPage />
 
