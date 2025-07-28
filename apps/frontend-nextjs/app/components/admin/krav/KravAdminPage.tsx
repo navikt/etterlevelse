@@ -36,7 +36,7 @@ const kravStatus = (status: EKravStatus | string) => {
   }
 }
 
-const AdminKravPage = () => {
+const KravAdminPage = () => {
   const [codelistUtils] = CodelistService()
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
@@ -192,4 +192,4 @@ const AdminKravPage = () => {
   )
 }
 
-export default AdminKravPage
+export default KravAdminPage

@@ -1,4 +1,4 @@
-import PvkDokumentAdminPage from '@/components/admin/pvkDokument/pvkDokumentAdminPage'
+import PvkDokumentAdminPage from '@/components/admin/pvkDokument/xpvkDokumentAdminPage'
 
 const Page = () => <PvkDokumentAdminPage />
 
