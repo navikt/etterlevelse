@@ -1,6 +1,7 @@
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { BodyShort, Link } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
 
 interface IProps {
   paths?: IBreadCrumbPath[]
@@ -12,12 +13,11 @@ type TCustomizedProps = IProps
 
 const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
   const { paths, currentPage } = props
+  const pathName = usePathname()
 
   const getName = (pathName: string) =>
     pathName.length > 40 ? pathName.substring(0, 40) + '...' : pathName
-  const linkColor = /^\/(lov|etterlevelse)\//.test(window.location.pathname)
-    ? 'text-white'
-    : 'text-gray-800'
+  const linkColor = /^\/(lov|etterlevelse)\//.test(pathName) ? 'text-white' : 'text-gray-800'
 
   return (
     <div className='flex gap-1 items-center my-6'>
