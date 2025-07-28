@@ -30,17 +30,19 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
       <Button key={audit.id} onClick={() => setModalOpen(!modalOpen)} variant='tertiary'>
         Vis data
       </Button>
-      <Modal
-        key={audit.id}
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        className='max-h-[75%] overflow-y-scroll'
-        header={{ heading: 'Data visning' }}
-      >
-        <Modal.Body>
-          <JsonView data={audit.data} />
-        </Modal.Body>
-      </Modal>
+      {modalOpen && (
+        <Modal
+          key={audit.id}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          className='max-h-[75%] overflow-y-scroll'
+          header={{ heading: 'Data visning' }}
+        >
+          <Modal.Body>
+            <JsonView data={audit.data} />
+          </Modal.Body>
+        </Modal>
+      )}
     </div>
   )
 }
