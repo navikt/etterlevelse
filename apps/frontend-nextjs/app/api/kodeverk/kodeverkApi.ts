@@ -1,4 +1,5 @@
-import { EListName, IAllCodelists, ICode, ICodeUsage } from '@/services/codelist'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { IAllCodelists, ICodeUsage } from '@/services/kodeverk/kodeverkService'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 

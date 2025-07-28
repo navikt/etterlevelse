@@ -6,7 +6,7 @@ import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import { markdownLink } from '../../../util/footer/footerUtil'
 import { ettlevColors } from '../../../util/theme/theme'
-import { ExternalLink } from '../routeLink/routeLink'
+import { ExternalLink } from '../externalLink/externalLink'
 
 type TProps = {
   source?: string

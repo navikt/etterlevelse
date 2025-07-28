@@ -1,3 +1,6 @@
+import { TReplace } from '../commonConstants'
+import { ICode } from '../kodeverk/kodeverkConstants'
+
 export interface IMember {
   navIdent?: string
   name?: string
@@ -22,4 +25,11 @@ export interface ITeamResource {
   fullName: string
   email: string
   resourceType: string
+}
+
+export type TTemaCode = TReplace<ICode, { data?: ITemaCodeData }>
+
+export interface ITemaCodeData {
+  image?: string
+  shortDesciption?: string
 }

@@ -1,0 +1,6 @@
+export enum ESuksesskriterieStatus {
+  UNDER_ARBEID = 'UNDER_ARBEID',
+  OPPFYLT = 'OPPFYLT',
+  IKKE_RELEVANT = 'IKKE_RELEVANT',
+  IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+}

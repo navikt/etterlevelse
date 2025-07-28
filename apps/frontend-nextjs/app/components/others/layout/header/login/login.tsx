@@ -9,7 +9,7 @@ import { adminMaillog } from '@/routes/admin/maillog/maillogRoutes'
 import { adminMessagesLogUrl } from '@/routes/admin/messagesLog/messagesLogRoutes'
 import { adminPvkUrl } from '@/routes/admin/personvernkonsekvensvurdering/adminPersonvernkonsekvensvurderingRoutes'
 import { adminVarselUrl } from '@/routes/admin/varsel/varselRoutes'
-import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterelevelseDokumentasjonRoutes'
+import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteUrl } from '@/routes/krav/kraveier/kraveierRoutes'
 import { loginUrl } from '@/routes/login/loginRoutes'
@@ -24,8 +24,9 @@ import {
   PersonIcon,
   ReceiptIcon,
 } from '@navikt/aksel-icons'
-import { InternalHeader, Link } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
+import { Button, InternalHeader, Link } from '@navikt/ds-react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
@@ -146,5 +147,22 @@ export const LoggedInHeader = () => {
         title='Meny'
       />
     </div>
+  )
+}
+
+export const LoginButton = () => {
+  // updates window.location on navigation
+  const router: AppRouterInstance = useRouter()
+  const pathname: string = usePathname()
+
+  return (
+    <Button
+      as={Link}
+      href={loginUrl(router.toString(), pathname)}
+      className='text-white'
+      underline={false}
+    >
+      Logg inn
+    </Button>
   )
 }
