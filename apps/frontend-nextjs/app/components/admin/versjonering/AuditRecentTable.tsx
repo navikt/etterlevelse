@@ -188,7 +188,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
           <Pagination
             page={page}
             onPageChange={(page) => handlePageChange(page)}
-            count={audits.pages}
+            count={audits.pages === 0 ? 1 : audits.pages}
             prevNextTexts
             size='small'
           />
