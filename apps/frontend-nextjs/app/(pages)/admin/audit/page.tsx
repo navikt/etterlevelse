@@ -1,4 +1,4 @@
-import VersjoneringAdminPage from '@/components/admin/versjonering/versjoneringAdminPage'
+import VersjoneringAdminPage from '@/components/admin/versjonering/xversjoneringAdminPage'
 
 const Page = () => <VersjoneringAdminPage />
 
