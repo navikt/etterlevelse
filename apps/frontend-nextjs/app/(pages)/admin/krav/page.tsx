@@ -1,5 +1,5 @@
-import AdminKravPage from '@/components/admin/krav/xkravAdminPage'
+import KravAdminPage from '@/components/admin/krav/KravAdminPage'
 
-const Page = () => <AdminKravPage />
+const Page = () => <KravAdminPage />
 
 export default Page
