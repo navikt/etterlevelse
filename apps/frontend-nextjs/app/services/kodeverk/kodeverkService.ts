@@ -1,11 +1,11 @@
 import { getAllCodelists } from '@/api/kodeverk/kodeverkApi'
-import { TReplace } from '@/constants/commonConstants'
 import {
   EListName,
   ELovCodeRelevans,
   ICode,
   TLovCode,
 } from '@/constants/kodeverk/kodeverkConstants'
+import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
 import * as yup from 'yup'
@@ -281,8 +281,6 @@ export interface IAllCodelists {
 export interface IList {
   [name: string]: ICode[]
 }
-
-export type TTemaCode = TReplace<ICode, { data?: ITemaCodeData }>
 
 export interface ICodeListFormValues {
   list: string
