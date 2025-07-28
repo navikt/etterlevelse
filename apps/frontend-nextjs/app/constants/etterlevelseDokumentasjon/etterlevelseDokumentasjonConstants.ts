@@ -1,7 +1,16 @@
 import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
-import { IChangeStamp, IVarslingsadresse, IVirkemiddel } from '../commonConstants'
+import {
+  IChangeStamp,
+  IVarslingsadresse,
+  IVirkemiddel,
+  TReplace,
+  TVarslingsadresseQL,
+} from '../commonConstants'
 import { ICode } from '../kodeverk/kodeverkConstants'
+import { TKravQL } from '../krav/kravConstants'
 import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
+import { ERelationType } from './dokumentRelasjon/dokumentRelasjonConstants'
+import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 
 export interface IEtterlevelseDokumentasjon {
   id: string
@@ -35,4 +44,35 @@ export interface IEtterlevelseDokumentasjon {
   risikovurderinger: string[]
   p360Recno: number
   p360CaseNumber: string
+}
+
+export type TEtterlevelseDokumentasjonQL = TReplace<
+  IEtterlevelseDokumentasjon,
+  {
+    varslingsadresser: TVarslingsadresseQL[]
+    etterlevelser?: IEtterlevelse[]
+    sistEndretEtterlevelse?: string
+    sistEndretDokumentasjon?: string
+    sistEndretEtterlevelseAvMeg?: string
+    sistEndretDokumentasjonAvMeg?: string
+    stats?: IEtterlevelseDokumentasjonStats
+  }
+>
+
+export interface IEtterlevelseDokumentasjonStats {
+  relevantKrav: TKravQL[]
+  irrelevantKrav: TKravQL[]
+  utgaattKrav: TKravQL[]
+  lovStats: ILovStats[]
+}
+
+export interface ILovStats {
+  lovCode: ICode
+  relevantKrav: TKravQL[]
+  irrelevantKrav: TKravQL[]
+  utgaattKrav: TKravQL[]
+}
+
+export interface IEtterlevelseDokumentasjonWithRelation extends TEtterlevelseDokumentasjonQL {
+  relationType?: ERelationType
 }
