@@ -63,3 +63,10 @@ export interface IEtterlevelseDokumentasjonStats {
   utgaattKrav: TKravQL[]
   lovStats: ILovStats[]
 }
+
+export interface ILovStats {
+  lovCode: ICode
+  relevantKrav: TKravQL[]
+  irrelevantKrav: TKravQL[]
+  utgaattKrav: TKravQL[]
+}

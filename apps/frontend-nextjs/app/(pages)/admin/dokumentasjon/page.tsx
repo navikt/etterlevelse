@@ -1,3 +1,5 @@
-const AdminDokumentasjon = () => <></>
+import EtterlevelseDokumentasjonAdminPage from '@/components/admin/dokumentasjon/EtterlevelseDokumentasjonAdminPage'
 
-export default AdminDokumentasjon
+const Page = () => <EtterlevelseDokumentasjonAdminPage />
+
+export default Page

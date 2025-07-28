@@ -84,7 +84,7 @@ const AdminKravPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', {
+      ampli().logEvent('sidevisning', {
         side: 'Krav admin side',
         sidetittel: 'Administrere Krav',
         ...userRoleEventProp,

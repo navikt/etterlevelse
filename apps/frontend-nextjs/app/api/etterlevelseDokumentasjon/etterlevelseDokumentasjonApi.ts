@@ -9,6 +9,14 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { getVirkemiddel } from '../virkemiddelApi/virkemiddelApi'
 
+const getEtterlevelseDokumentasjon = async (id: string) => {
+  return (
+    await axios.get<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`
+    )
+  ).data
+}
+
 export const searchEtterlevelsedokumentasjon = async (
   searchParam: string
 ): Promise<IEtterlevelseDokumentasjon[]> => {
@@ -19,10 +27,10 @@ export const searchEtterlevelsedokumentasjon = async (
   ).data.content
 }
 
-export const getEtterlevelseDokumentasjon = async (id: string) => {
+export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
   return (
-    await axios.get<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`
+    await axios.delete<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`
     )
   ).data
 }
@@ -67,7 +75,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   ]
 }
 
-export const etterlevelseDokumentasjonMapToFormVal = (
+const etterlevelseDokumentasjonMapToFormVal = (
   etterlevelseDokumentasjon: Partial<TEtterlevelseDokumentasjonQL>
 ): TEtterlevelseDokumentasjonQL => ({
   id: etterlevelseDokumentasjon.id || '',
