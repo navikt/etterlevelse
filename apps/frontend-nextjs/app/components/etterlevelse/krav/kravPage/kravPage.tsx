@@ -63,8 +63,7 @@ export const KravPage = () => {
       })}
       breadcrumbPaths={getBreadcrumbPaths(kravTema)}
     >
-      ergphjsteld
-      <KravOverview />
+      <KravOverview kravLoading={kravLoading} />
       <KravMainContent />
     </PageLayout>
   )
