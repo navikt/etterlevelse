@@ -25,7 +25,7 @@ const hasKravExpired = ({ krav, alleKravVersjoner }: TProps) => {
   }
 }
 
-export const KravHasExpiredPage: FunctionComponent<TProps> = ({ krav, alleKravVersjoner }) => (
+export const KravHasExpired: FunctionComponent<TProps> = ({ krav, alleKravVersjoner }) => (
   <>
     {hasKravExpired({ krav, alleKravVersjoner }) && krav && (
       <ExpiredAlert

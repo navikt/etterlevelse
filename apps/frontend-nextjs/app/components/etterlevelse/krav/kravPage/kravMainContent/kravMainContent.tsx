@@ -1,14 +1,14 @@
 'use client'
 
-import { Markdown } from '@/components/common/markdown/markdown'
-import { KravHasExpiredPage } from '@/components/etterlevelse/krav/kravPage/kravHasExpiredPage/kravHasExpiredPage'
+import { KravHasExpired } from '@/components/etterlevelse/krav/kravPage/kravHasExpired/kravHasExpired'
 import {
   ContentLayout,
   MainPanelLayout,
 } from '@/components/others/layout/contentLayout/contentLayoutComponent'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
-import { Heading, Spacer } from '@navikt/ds-react'
+import { Spacer } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
+import { KravHensikt } from '../kravHensikt/kravHensikt'
 
 type TProps = {
   krav: TKravQL
@@ -22,13 +22,8 @@ export const KravMainContent: FunctionComponent<TProps> = ({ krav }) => {
   return (
     <ContentLayout>
       <MainPanelLayout>
-        <KravHasExpiredPage krav={krav} alleKravVersjoner={alleKravVersjoner} />
-        <div className='bg-blue-50 px-5 py-3 mb-5'>
-          <Heading size='small' level='2'>
-            Hensikten med kravet
-          </Heading>
-          <Markdown source={krav.hensikt} />
-        </div>
+        <KravHasExpired krav={krav} alleKravVersjoner={alleKravVersjoner} />
+        <KravHensikt krav={krav} />
       </MainPanelLayout>
       <div className='max-w-lg w-full border-l-2 border-gray-200 pl-3'>
         <div>ALLINFO</div>
