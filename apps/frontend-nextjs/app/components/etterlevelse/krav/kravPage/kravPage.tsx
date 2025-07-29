@@ -57,7 +57,7 @@ export const KravPage = () => {
       breadcrumbPaths={getBreadcrumbPaths(kravTema)}
     >
       <KravOverview kravLoading={kravLoading} krav={krav} />
-      <KravMainContent />
+      {krav && !kravLoading && <KravMainContent krav={krav} />}
     </PageLayout>
   )
 }
