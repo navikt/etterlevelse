@@ -1,5 +1,6 @@
 'use client'
 
+import { Markdown } from '@/components/common/markdown/markdown'
 import { KravHasExpiredPage } from '@/components/etterlevelse/krav/kravPage/kravHasExpiredPage/kravHasExpiredPage'
 import {
   ContentLayout,
@@ -26,7 +27,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({ krav }) => {
           <Heading size='small' level='2'>
             Hensikten med kravet
           </Heading>
-          <div className='w-full'>TEST</div>
+          <Markdown source={krav.hensikt} />
         </div>
       </MainPanelLayout>
       <div className='max-w-lg w-full border-l-2 border-gray-200 pl-3'>
