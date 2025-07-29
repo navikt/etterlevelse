@@ -7,17 +7,10 @@ import { PageLayout } from '@/components/others/scaffold/page'
 import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
+import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
 import { useQuery } from '@apollo/client'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-
-type TProps = { kravVersjon: number; kravNummer: number }
-
-export const kravNumView = (props: TProps): string => {
-  const { kravNummer, kravVersjon } = props
-
-  return `K${kravNummer}.${kravVersjon}`
-}
 
 const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
   if (params.id) {
@@ -53,17 +46,17 @@ export const KravPage = () => {
   return (
     <PageLayout
       key={`K${krav?.kravNummer}/${krav?.kravVersjon}`}
-      pageTitle={`${kravNumView({
+      pageTitle={`${kravNummerView({
         kravNummer: krav?.kravNummer ? krav.kravNummer : 0,
         kravVersjon: krav?.kravVersjon ? krav.kravVersjon : 0,
       })} ${krav?.navn}`}
-      currentPage={kravNumView({
+      currentPage={kravNummerView({
         kravNummer: krav?.kravNummer ? krav.kravNummer : 0,
         kravVersjon: krav?.kravVersjon ? krav.kravVersjon : 0,
       })}
       breadcrumbPaths={getBreadcrumbPaths(kravTema)}
     >
-      <KravOverview kravLoading={kravLoading} />
+      <KravOverview kravLoading={kravLoading} krav={krav} />
       <KravMainContent />
     </PageLayout>
   )
