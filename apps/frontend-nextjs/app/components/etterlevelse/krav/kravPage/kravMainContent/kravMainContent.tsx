@@ -12,9 +12,10 @@ import { KravHensikt } from '../kravHensikt/kravHensikt'
 
 type TProps = {
   krav: TKravQL
+  kravLoading: boolean
 }
 
-export const KravMainContent: FunctionComponent<TProps> = ({ krav }) => {
+export const KravMainContent: FunctionComponent<TProps> = ({ krav, kravLoading }) => {
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
@@ -24,6 +25,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({ krav }) => {
       <MainPanelLayout>
         <KravHasExpired krav={krav} alleKravVersjoner={alleKravVersjoner} />
         <KravHensikt krav={krav} />
+        {/* <KravMeny krav={krav} kravLoading={kravLoading} /> */}
       </MainPanelLayout>
       <div className='max-w-lg w-full border-l-2 border-gray-200 pl-3'>
         <div>ALLINFO</div>

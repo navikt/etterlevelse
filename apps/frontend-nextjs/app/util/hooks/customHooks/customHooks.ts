@@ -1,7 +1,7 @@
 'use client'
 
 import { user } from '@/services/user/userService'
-import { useSearchParams } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
 
 export function useDebouncedState<T>(
