@@ -1,28 +1,13 @@
 'use client'
 
+import { getMailLog } from '@/api/audit/auditApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { PageLayout } from '@/components/others/scaffold/page'
+import { IMailLog } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
-import { env } from '@/util/env/env'
 import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-react'
-import axios from 'axios'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-
-interface IMailLog {
-  time: string
-  to: string
-  subject: string
-  body: string
-}
-
-const getMailLog = async (start: number, count: number) => {
-  return (
-    await axios.get<IPageResponse<IMailLog>>(
-      `${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`
-    )
-  ).data
-}
 
 export const MailLogAdminPage = () => {
   const [log, setLog] = useState<IPageResponse<IMailLog>>({
