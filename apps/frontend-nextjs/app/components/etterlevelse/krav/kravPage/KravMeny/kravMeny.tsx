@@ -1,6 +1,8 @@
 import { Etterlevelser } from '@/components/etterlevelse/etterlevelse'
+import { Tilbakemeldinger } from '@/components/etterlevelse/tilbakemelding/tilbakemelding'
 import { ViewKrav } from '@/components/etterlevelse/viewKrav/viewKravComponent'
-import { TKravQL } from '@/constants/krav/kravConstants'
+import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
 import { useLocationState, useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Tabs } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
@@ -11,9 +13,10 @@ type TLocationState = { tab: TSection; avdelingOpen?: string }
 type TProps = {
   krav: TKravQL
   kravLoading: boolean
+  alleKravVersjoner: IKravVersjon[]
 }
 
-export const KravMeny: FunctionComponent<TProps> = ({ krav, kravLoading }) => {
+export const KravMeny: FunctionComponent<TProps> = ({ krav, kravLoading, alleKravVersjoner }) => {
   const { state, navigate, changeState } = useLocationState<TLocationState>()
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
 
@@ -41,7 +44,7 @@ export const KravMeny: FunctionComponent<TProps> = ({ krav, kravLoading }) => {
           <Etterlevelser loading={etterlevelserLoading} krav={krav} />
         </Tabs.Panel>
         <Tabs.Panel value='tilbakemeldinger'>
-          <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired()} />
+          <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired(krav, alleKravVersjoner)} />
         </Tabs.Panel>
       </Tabs>
     </div>

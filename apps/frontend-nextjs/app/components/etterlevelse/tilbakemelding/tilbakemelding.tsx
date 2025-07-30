@@ -26,6 +26,7 @@ import {
 } from '@navikt/ds-react'
 import * as _ from 'lodash'
 import moment from 'moment'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { usePathname, useRouter } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { MeldingKnapper } from '../edit/meldingKnapper/meldingKnapper'
@@ -51,7 +52,7 @@ export const Tilbakemeldinger: FunctionComponent<TProps> = ({ krav, hasKravExpir
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
-  const router = useRouter()
+  const router: AppRouterInstance = useRouter()
   const pathname: string = usePathname()
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((tilbakemelding) => tilbakemelding.id))
@@ -194,8 +195,8 @@ export const Tilbakemeldinger: FunctionComponent<TProps> = ({ krav, hasKravExpir
       {!loading && !tilbakemeldinger.length && (
         <InfoBlock
           icon={mailboxPoppingIcon}
-          alt={'Åpen mailboks icon'}
-          text={'Det har ikke kommet inn noen tilbakemeldinger'}
+          alt='Åpen mailboks icon'
+          text='Det har ikke kommet inn noen tilbakemeldinger'
           color={ettlevColors.red50}
         />
       )}
