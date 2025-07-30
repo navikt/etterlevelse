@@ -15,6 +15,8 @@ public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID
 
     Page<AuditVersion> findByTable(String table, Pageable pageable);
 
+    Page<AuditVersion> findByTableId(String tableId, Pageable pageable);
+
     List<AuditVersion> findByTableIdOrderByTimeDesc(String tableId);
 
     @Query(value = "select cast(audit_id as text) as id, time, action, table_name as tableName, table_id as tableId "

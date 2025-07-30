@@ -36,6 +36,9 @@ public class AuditVersionService {
         return repository.findByTable(table, pageable);
     }
 
+    public Page<AuditVersion> findByTableId(String tableId, Pageable pageable) {
+        return repository.findByTableId(tableId, pageable);
+    }
 
     public Page<AuditVersion> findAll(Pageable pageable) {
         return repository.findAll(pageable);
