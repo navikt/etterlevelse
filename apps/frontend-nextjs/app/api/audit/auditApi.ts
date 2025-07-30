@@ -18,3 +18,11 @@ export const getAudits = async (page: number, count: number, table?: EObjectType
     )
   ).data
 }
+
+export const getAuditsByTableId = async (page: number, count: number, tableId: string) => {
+  return (
+    await axios.get<IPageResponse<IAuditItem>>(
+      `${env.backendBaseUrl}/audit/tableid/?pageNumber=${page}&pageSize=${count}&tableid=${tableId}`
+    )
+  ).data
+}
