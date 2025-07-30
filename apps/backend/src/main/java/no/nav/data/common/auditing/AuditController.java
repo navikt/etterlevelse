@@ -51,7 +51,7 @@ public class AuditController {
     @Operation(summary = "Get Audit log")
     @ApiResponse(description = "Audit log fetched")
     @GetMapping("/tableid/{id}")
-    public ResponseEntity<RestResponsePage<AuditResponse>> findByTableId(PageParameters paging, @PathVariable(required = false) UUID id) {
+    public ResponseEntity<RestResponsePage<AuditResponse>> findByTableId(PageParameters paging, @PathVariable UUID id) {
         log.info("Received request for Audit {} table id {}", paging, id);
         Pageable pageable = paging.createSortedPageByFieldDescending(AuditVersion.Fields.time);
         Page<AuditResponse> page = service.findByTableId(id.toString(), pageable).map(AuditVersion::toResponse);
