@@ -27,6 +27,12 @@ export interface IAuditItem {
   user: string
   data: object
 }
+export interface IMailLog {
+  time: string
+  to: string
+  subject: string
+  body: string
+}
 
 export enum EAuditAction {
   CREATE = 'CREATE',
