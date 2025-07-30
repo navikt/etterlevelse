@@ -1,6 +1,16 @@
-# 250730 Dersom dev og prod feiler
+# Dersom dev og prod feiler mens local funker for frontend
 
-Hvis disse feiler, kan det være vanskelig å vite hvilke av frontend eller backend som feiler.
+## Dato
+
+30.07.2025
+
+## Beslutning
+Pushe opp yarn.lock og fjerne hattene i package.json. Lage et rutine for å oppdatere dependencies og teamet og endringer 
+
+## Status
+besluttet
+
+## Kontekst
 
 ## Er det frontend?
 
@@ -24,6 +34,9 @@ Dersom dev fungerer igjen, vet vi dette;
 2. Finn ut hvorfor det brant
    1. Gå gjennom dependencies i package.json og finn ut hvilken pakke som trigget feilen
 3. Fjern yarn.lock fil i dev, og vente på neste gang det feiler for å fikse den nye feilen
+
+
+## Tiltak og konsekvenser
 
 ### Tiltak 1
 
