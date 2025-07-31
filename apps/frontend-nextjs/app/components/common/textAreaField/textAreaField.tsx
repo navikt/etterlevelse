@@ -4,7 +4,7 @@ import { ChangeEvent, ReactNode, useState } from 'react'
 import { FieldWrapper } from '../fieldWrapper/fieldWrapper'
 import { Markdown } from '../markdown/markdown'
 import { FormError } from '../modalSchema/formError/formError'
-import { TextEditor } from '../textEditor/textEditor'
+import { TextEditor } from '../textEditor/xTextEditor'
 
 interface ILabel {
   label: string

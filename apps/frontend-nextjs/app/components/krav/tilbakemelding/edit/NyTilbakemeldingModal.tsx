@@ -1,8 +1,23 @@
 import { createNewTilbakemelding } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
+import { TextAreaField } from '@/components/common/inputs'
 import { Markdown } from '@/components/common/markdown/markdown'
-
+import {
+  AddEmail,
+  SlackChannelSearch,
+  SlackUserSearch,
+  VarslingsadresserTagList,
+} from '@/components/varslingsadresse/VarslingsadresserEdit'
 import { IKrav } from '@/constants/krav/kravConstants'
-import { ETilbakemeldingMeldingStatus, ETilbakemeldingType, ICreateTilbakemeldingRequest, ITilbakemelding } from '@/constants/message/messageConstants'
+import {
+  ETilbakemeldingMeldingStatus,
+  ETilbakemeldingType,
+  ICreateTilbakemeldingRequest,
+  ITilbakemelding,
+} from '@/constants/message/messageConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { EnvelopeClosedIcon, HashtagIcon, PersonCircleIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import {
   Accordion,
@@ -19,10 +34,6 @@ import {
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import * as yup from 'yup'
-import { TextAreaField } from '@/components/common/inputs'
-import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '@/components/varslingsadresse/VarslingsadresserEdit'
-import { EAdresseType, IVarslingsadresse } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-
 
 type TNyTilbakemeldingModalProps = {
   open?: boolean
@@ -81,7 +92,12 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                 {showNotification ? (
                   <Box className='mb-9' padding='8'>
                     <div className='flex items-center'>
-                      <ThumbUpIcon title="thumb up icon" fontSize="1.5rem" aria-hidden aria-label=''/>
+                      <ThumbUpIcon
+                        title='thumb up icon'
+                        fontSize='1.5rem'
+                        aria-hidden
+                        aria-label=''
+                      />
                       <Heading size='large'>Spørsmålet er sendt til kraveier!</Heading>
                     </div>
                     <BodyLong className='mt-4'>
@@ -130,7 +146,14 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                                 <Button
                                   type='button'
                                   variant='secondary'
-                                  icon={<HashtagIcon title="hash tag icon" fontSize="1.5rem" aria-hidden aria-label=''/>}
+                                  icon={
+                                    <HashtagIcon
+                                      title='hash tag icon'
+                                      fontSize='1.5rem'
+                                      aria-hidden
+                                      aria-label=''
+                                    />
+                                  }
                                   onClick={() => setAdresseType(EAdresseType.SLACK)}
                                 >
                                   Slack-kanal

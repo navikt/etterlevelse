@@ -1,18 +1,15 @@
-
-import { FormikErrors } from 'formik'
-
-import { useEffect, useState } from 'react'
+import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
+import { ettlevColors } from '@/util/theme/theme'
 import { RawDraftContentState, convertToRaw } from 'draft-js'
+import { FormikErrors } from 'formik'
+import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { useEffect, useState } from 'react'
+import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-
+import { FormError } from '../modalSchema/ModalSchema'
 import './customStyle.css'
 import { translateUnderlineAndHighlight } from './utils'
-import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
-import { FormError } from '../modalSchema/ModalSchema'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
-import { Editor } from 'react-draft-wysiwyg'
-import { ettlevColors } from '@/util/theme/theme'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
 
 type TTextEditorProps = {
   initialValue: string

@@ -42,4 +42,3 @@ export interface ITemaCodeData {
   image?: string
   shortDesciption?: string
 }
-

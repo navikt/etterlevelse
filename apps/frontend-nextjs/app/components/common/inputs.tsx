@@ -1,6 +1,8 @@
 import { Markdown } from '@/components/common/markdown/markdown'
-
+import { Error, FormError } from '@/components/common/modalSchema/ModalSchema'
 import { TOption, TOr } from '@/constants/commonConstants'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistService } from '@/services/kodeverk/kodeverkService'
 import {
   BodyShort,
   Button,
@@ -18,12 +20,8 @@ import {
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import React, { ChangeEvent, ReactNode, useRef, useState } from 'react'
 import LabelWithTooltip from './labelWithoTootip.tsx/LabelWithTooltip'
-import { Error, FormError } from './modalSchema/ModalSchema'
-import { RenderTagList } from './taglist/TagList'
-import { TextEditor } from './TextEditor/textEditor'
-import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { CodelistService } from '@/services/kodeverk/kodeverkService'
-
+import { RenderTagList } from './renderTagList/renderTagList'
+import TextEditor from './textEditor/xTextEditor'
 
 interface ILabel {
   label: string

@@ -1,13 +1,15 @@
+import { PersonName } from '@/components/common/personName/PersonName'
+import { Portrait } from '@/components/common/portrait/portrait'
+import { ContentLayout } from '@/components/others/layout/content/content'
+import {
+  ETilbakemeldingRolle,
+  ITilbakemelding,
+  ITilbakemeldingMelding,
+} from '@/constants/message/messageConstants'
 import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
-
-
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
-import { ETilbakemeldingRolle, ITilbakemelding, ITilbakemeldingMelding } from '@/constants/message/messageConstants'
-import { Portrait } from '@/components/common/portrait/portrait'
-import { PersonName } from '@/components/common/personName/PersonName'
-import { ContentLayout } from '@/components/others/layout/content/content'
 
 export const ResponseMelding = (props: {
   melding: ITilbakemeldingMelding

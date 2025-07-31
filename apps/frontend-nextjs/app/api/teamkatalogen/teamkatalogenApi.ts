@@ -1,4 +1,5 @@
-import { IPageResponse, ISlackChannel, ISlackUser } from '@/constants/commonConstants'
+import { IPageResponse } from '@/constants/commonConstants'
+import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import { IProductArea, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { user } from '@/services/user/userService'
 import { env } from '@/util/env/env'
@@ -93,7 +94,6 @@ const addPerson = (person: ITeamResource) => {
   psubs.get(person.navIdent)?.forEach((f) => f())
   psubs.delete(person.navIdent)
 }
-
 const addTeam = (team: ITeam) => {
   teams.set(team.id, { f: true, v: team })
   tsubs.get(team.id)?.forEach((f) => f())
