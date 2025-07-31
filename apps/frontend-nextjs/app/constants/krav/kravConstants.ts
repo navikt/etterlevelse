@@ -79,3 +79,8 @@ export interface ILovStats {
   irrelevantKrav: TKravQL[]
   utgaattKrav: TKravQL[]
 }
+
+export type TKravViewProps = {
+  krav: TKravQL
+  header?: boolean
+}

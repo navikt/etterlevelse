@@ -1,6 +1,7 @@
 'use client'
 
 import { KravHasExpired } from '@/components/etterlevelse/krav/kravPage/kravHasExpired/kravHasExpired'
+import { KravView } from '@/components/etterlevelse/kravView/kravView'
 import {
   ContentLayout,
   MainPanelLayout,
@@ -28,7 +29,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({ krav, kravLoading }
         {/* <KravMeny krav={krav} kravLoading={kravLoading} setAlleKravVersjoner={setAlleKravVersjoner}/> */}
       </MainPanelLayout>
       <div className='max-w-lg w-full border-l-2 border-gray-200 pl-3'>
-        <div>ALLINFO</div>
+        <KravView header krav={krav} alleKravVersjoner={alleKravVersjoner} noLastModifiedDate />
         <div className='mt-8'>
           KRAV
           <div>

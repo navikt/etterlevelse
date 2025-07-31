@@ -91,7 +91,7 @@ type TExternalLinkProps = {
   noNewTabLabel?: boolean
 }
 
-export const ExternalLink: FunctionComponent<TExternalLinkProps> = ({
+const ExternalLink: FunctionComponent<TExternalLinkProps> = ({
   href,
   children,
   className,

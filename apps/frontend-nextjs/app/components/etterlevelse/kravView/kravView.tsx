@@ -1,173 +1,98 @@
-import { DotTags } from '@/components/common/dotTags/dotTags'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
-import { Markdown } from '@/components/common/markdown/markdown'
+import { LabelWrapper } from '@/components/common/labelWrapper/labelWrapper'
 import { LovViewList } from '@/components/lov/lov'
-import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
-import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { IKravVersjon, TKravViewProps } from '@/constants/krav/kravConstants'
 import { EAdresseType } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { kravUrl } from '@/routes/krav/kravRoutes'
 import { user } from '@/services/user/userService'
-import { slackLink, slackUserLink, termUrl } from '@/util/config/config'
-import { BodyShort, Label } from '@navikt/ds-react'
+import { slackLink, slackUserLink } from '@/util/config/config'
+import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
+import { FunctionComponent } from 'react'
+import { KravBegreper } from './kravBegreper/kravBegreper'
+import { KravDokumentasjon } from './kravDokumentasjon/kravDokumentasjon'
+import { KravErRelevantFor } from './kravErRelevantFor/kravErRelevantFor'
+import { KravRelasjonerTilAndreKrav } from './kravRelasjonerTilAndreKrav/kravRelasjonerTilAndreKrav'
+import { KravTidligereVersjoner } from './kravTidligereVersjoner/kravTidligereVersjoner'
 
-const LabelWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className='mb-4'>{children}</div>
-)
+interface IProps extends TKravViewProps {
+  alleKravVersjoner: IKravVersjon[]
+  noLastModifiedDate?: boolean
+}
 
-export const AllInfo = ({
+export const KravView: FunctionComponent<IProps> = ({
   krav,
   alleKravVersjoner,
   noLastModifiedDate,
   header,
-}: {
-  krav: TKravQL
-  alleKravVersjoner: IKravVersjon[]
-  noLastModifiedDate?: boolean
-  header?: boolean
-}) => {
-  return (
-    <div>
-      {krav.dokumentasjon.length > 0 && (
-        <LabelWrapper>
-          <LabelAboveContent header={header} title='Kilder'>
-            <DotTags items={krav.dokumentasjon} markdown inColumn />
-          </LabelAboveContent>
-        </LabelWrapper>
-      )}
+}) => (
+  <div>
+    <KravDokumentasjon krav={krav} header={header} />
 
+    <KravBegreper krav={krav} header={header} />
+
+    <KravRelasjonerTilAndreKrav krav={krav} header={header} />
+
+    <KravErRelevantFor krav={krav} header={header} />
+
+    <KravTidligereVersjoner alleKravVersjoner={alleKravVersjoner} header={header} krav={krav} />
+
+    {krav.regelverk.length && (
       <LabelWrapper>
-        <LabelAboveContent header={header} title='Begreper'>
-          {krav.begreper &&
-            krav.begreper.length !== 0 &&
-            krav.begreper.map((begrep, index) => (
-              <BegrepView key={'begrep_' + index} begrep={begrep} />
-            ))}
+        <LabelAboveContent header={header} title='Regelverk'>
+          <LovViewList regelverkListe={krav.regelverk} />
         </LabelAboveContent>
       </LabelWrapper>
+    )}
 
-      <LabelWrapper>
-        <LabelAboveContent header={header} title='Relasjoner til andre krav'>
-          {krav.kravRelasjoner.map((kravRelasjon, index) => (
-            <KravRelasjonView key={'kravRelasjon' + index} kravRelasjon={kravRelasjon} />
-          ))}
-        </LabelAboveContent>
-      </LabelWrapper>
+    <LabelWrapper>
+      <LabelAboveContent header={header} title='Ansvarlig'>
+        {krav.underavdeling?.shortName}
+      </LabelAboveContent>
+    </LabelWrapper>
 
-      <LabelWrapper>
-        <LabelAboveContent header={header} title='Kravet er relevant for'>
-          <DotTags list={EListName.RELEVANS} codes={krav.relevansFor} inColumn />
-        </LabelAboveContent>
-      </LabelWrapper>
-
-      {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
-        <LabelWrapper>
-          <LabelAboveContent title='Tidligere versjoner' header={header}>
-            {alleKravVersjoner.map((kravRelasjon, index) => {
-              if (
-                kravRelasjon.kravVersjon &&
-                parseInt(kravRelasjon.kravVersjon.toString()) < krav.kravVersjon
-              ) {
-                return (
-                  <BodyShort key={'kravVersjon_list_' + index} className={'break-words'}>
-                    <ExternalLink
-                      href={`${kravUrl}/${kravRelasjon.kravNummer}/${kravRelasjon.kravVersjon}`}
-                    >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>
-                  </BodyShort>
-                )
-              }
-              return null
-            })}
-            {krav.versjonEndringer && (
-              <div className='my-8'>
-                <Label size='medium'>Dette er nytt fra forrige versjon</Label>
-                <Markdown source={krav.versjonEndringer} />
-              </div>
-            )}
-          </LabelAboveContent>
-        </LabelWrapper>
-      )}
-
-      {krav.regelverk.length && (
-        <LabelWrapper>
-          <LabelAboveContent header={header} title='Regelverk'>
-            <LovViewList regelverkListe={krav.regelverk} />
-          </LabelAboveContent>
-        </LabelWrapper>
-      )}
-
-      <LabelWrapper>
-        <LabelAboveContent header={header} title='Ansvarlig'>
-          {krav.underavdeling?.shortName}
-        </LabelAboveContent>
-      </LabelWrapper>
-
-      <LabelWrapper>
-        <LabelAboveContent header={header} title='Varslingsadresser'>
-          {krav.varslingsadresserQl.map((varslingsaddresse, index) => {
-            if (varslingsaddresse.type === EAdresseType.SLACK)
-              return (
-                <div className='flex mb-2' key={'kravVarsling_list_SLACK_' + index}>
-                  <div className='mr-1'>Slack:</div>
-                  <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
-                    varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
-                  }`}</ExternalLink>
-                </div>
-              )
-            if (varslingsaddresse.type === EAdresseType.SLACK_USER)
-              return (
-                <div className='flex mb-2' key={`kravVarsling_list_SLACK_USER_${index}`}>
-                  <div className='mr-1'>Slack:</div>
-                  <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
-                    varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
-                  }`}</ExternalLink>
-                </div>
-              )
+    <LabelWrapper>
+      <LabelAboveContent header={header} title='Varslingsadresser'>
+        {krav.varslingsadresserQl.map((varslingsaddresse, index) => {
+          if (varslingsaddresse.type === EAdresseType.SLACK)
             return (
-              <div className='flex mb-2' key={`kravVarsling_list_EMAIL_${index}`}>
-                <div className='mr-1'>Epost:</div>
-                <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
-                  {varslingsaddresse.adresse}
-                </ExternalLink>
+              <div className='flex mb-2' key={'kravVarsling_list_SLACK_' + index}>
+                <div className='mr-1'>Slack:</div>
+                <ExternalLink href={slackLink(varslingsaddresse.adresse)}>{`#${
+                  varslingsaddresse.slackChannel?.name || varslingsaddresse.adresse
+                }`}</ExternalLink>
               </div>
             )
-          })}
-        </LabelAboveContent>
-      </LabelWrapper>
+          if (varslingsaddresse.type === EAdresseType.SLACK_USER)
+            return (
+              <div className='flex mb-2' key={`kravVarsling_list_SLACK_USER_${index}`}>
+                <div className='mr-1'>Slack:</div>
+                <ExternalLink href={slackUserLink(varslingsaddresse.adresse)}>{`${
+                  varslingsaddresse.slackUser?.name || varslingsaddresse.adresse
+                }`}</ExternalLink>
+              </div>
+            )
+          return (
+            <div className='flex mb-2' key={`kravVarsling_list_EMAIL_${index}`}>
+              <div className='mr-1'>Epost:</div>
+              <ExternalLink href={`mailto:${varslingsaddresse.adresse}`} openOnSamePage>
+                {varslingsaddresse.adresse}
+              </ExternalLink>
+            </div>
+          )
+        })}
+      </LabelAboveContent>
+    </LabelWrapper>
 
-      {!noLastModifiedDate && (
-        <div>
-          <BodyShort size='small'>
-            Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
-            {user.isAdmin() || user.isKraveier()
-              ? `av ${krav.changeStamp.lastModifiedBy.split(' - ')[1]}`
-              : ''}
-          </BodyShort>
-        </div>
-      )}
-    </div>
-  )
-}
-
-const BegrepView = ({ begrep }: { begrep: IBegrep }) => (
-  <div className='max-w-2xl'>
-    <BodyShort className='break-words'>
-      <ExternalLink href={termUrl(begrep.id)}>{begrep.navn}</ExternalLink>
-      {/* {' '}
-      - {begrep.beskrivelse} */}
-    </BodyShort>
-  </div>
-)
-
-const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<IKrav> }) => (
-  <div className='max-w-2xl'>
-    <BodyShort className='break-words'>
-      <ExternalLink
-        href={`${kravUrl}/${kravRelasjon.id}`}
-      >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>{' '}
-      - {kravRelasjon.navn}
-    </BodyShort>
+    {!noLastModifiedDate && (
+      <div>
+        <BodyShort size='small'>
+          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
+          {user.isAdmin() || user.isKraveier()
+            ? `av ${krav.changeStamp.lastModifiedBy.split(' - ')[1]}`
+            : ''}
+        </BodyShort>
+      </div>
+    )}
   </div>
 )
