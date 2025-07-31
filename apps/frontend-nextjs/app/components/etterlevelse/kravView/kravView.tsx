@@ -8,6 +8,7 @@ import { slackLink, slackUserLink } from '@/util/config/config'
 import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
+import { KravViewAnsvarlig } from './kravViewAnsvarlig/kravViewAnsvarlig'
 import { KravViewBegreper } from './kravViewBegreper/kravViewBegreper'
 import { KravViewDokumentasjon } from './kravViewDokumentasjon/kravViewDokumentasjon'
 import { KravViewErRelevantFor } from './kravViewErRelevantFor/kravViewErRelevantFor'
@@ -39,11 +40,7 @@ export const KravView: FunctionComponent<IProps> = ({
 
     <KravViewRegelverk header={header} krav={krav} />
 
-    <LabelWrapper>
-      <LabelAboveContent header={header} title='Ansvarlig'>
-        {krav.underavdeling?.shortName}
-      </LabelAboveContent>
-    </LabelWrapper>
+    <KravViewAnsvarlig header={header} krav={krav} />
 
     <LabelWrapper>
       <LabelAboveContent header={header} title='Varslingsadresser'>
