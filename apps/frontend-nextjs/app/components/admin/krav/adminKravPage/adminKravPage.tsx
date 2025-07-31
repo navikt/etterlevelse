@@ -151,7 +151,6 @@ const AdminKravPage = () => {
                     )}
                   </Table.DataCell>
                   <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
-                  <Table.DataCell>{krav.tema}</Table.DataCell>
                   <Table.DataCell className='w-[10%] text-end'>
                     {moment(krav.changeStamp.lastModifiedDate).format('LL')}
                   </Table.DataCell>
