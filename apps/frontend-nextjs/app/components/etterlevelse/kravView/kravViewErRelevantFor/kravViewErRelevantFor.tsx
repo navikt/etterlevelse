@@ -5,7 +5,7 @@ import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravViewProps } from '@/constants/krav/kravConstants'
 import { FunctionComponent } from 'react'
 
-export const KravErRelevantFor: FunctionComponent<TKravViewProps> = ({ header, krav }) => (
+export const KravViewErRelevantFor: FunctionComponent<TKravViewProps> = ({ header, krav }) => (
   <LabelWrapper>
     <LabelAboveContent header={header} title='Kravet er relevant for'>
       <DotTags list={EListName.RELEVANS} codes={krav.relevansFor} inColumn />

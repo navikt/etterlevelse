@@ -1,7 +1,6 @@
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { LabelWrapper } from '@/components/common/labelWrapper/labelWrapper'
-import { LovViewList } from '@/components/lov/lov'
 import { IKravVersjon, TKravViewProps } from '@/constants/krav/kravConstants'
 import { EAdresseType } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { user } from '@/services/user/userService'
@@ -9,11 +8,12 @@ import { slackLink, slackUserLink } from '@/util/config/config'
 import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
-import { KravBegreper } from './kravBegreper/kravBegreper'
-import { KravDokumentasjon } from './kravDokumentasjon/kravDokumentasjon'
-import { KravErRelevantFor } from './kravErRelevantFor/kravErRelevantFor'
-import { KravRelasjonerTilAndreKrav } from './kravRelasjonerTilAndreKrav/kravRelasjonerTilAndreKrav'
-import { KravTidligereVersjoner } from './kravTidligereVersjoner/kravTidligereVersjoner'
+import { KravViewBegreper } from './kravViewBegreper/kravViewBegreper'
+import { KravViewDokumentasjon } from './kravViewDokumentasjon/kravViewDokumentasjon'
+import { KravViewErRelevantFor } from './kravViewErRelevantFor/kravViewErRelevantFor'
+import { KravViewRegelverk } from './kravViewRegelverk/kravViewRegelverk'
+import { KravViewRelasjonerTilAndreKrav } from './kravViewRelasjonerTilAndreKrav/kravViewRelasjonerTilAndreKrav'
+import { KravViewTidligereVersjoner } from './kravViewTidligereVersjoner/kravViewTidligereVersjoner'
 
 interface IProps extends TKravViewProps {
   alleKravVersjoner: IKravVersjon[]
@@ -27,23 +27,17 @@ export const KravView: FunctionComponent<IProps> = ({
   header,
 }) => (
   <div>
-    <KravDokumentasjon krav={krav} header={header} />
+    <KravViewDokumentasjon krav={krav} header={header} />
 
-    <KravBegreper krav={krav} header={header} />
+    <KravViewBegreper krav={krav} header={header} />
 
-    <KravRelasjonerTilAndreKrav krav={krav} header={header} />
+    <KravViewRelasjonerTilAndreKrav krav={krav} header={header} />
 
-    <KravErRelevantFor krav={krav} header={header} />
+    <KravViewErRelevantFor krav={krav} header={header} />
 
-    <KravTidligereVersjoner alleKravVersjoner={alleKravVersjoner} header={header} krav={krav} />
+    <KravViewTidligereVersjoner alleKravVersjoner={alleKravVersjoner} header={header} krav={krav} />
 
-    {krav.regelverk.length && (
-      <LabelWrapper>
-        <LabelAboveContent header={header} title='Regelverk'>
-          <LovViewList regelverkListe={krav.regelverk} />
-        </LabelAboveContent>
-      </LabelWrapper>
-    )}
+    <KravViewRegelverk header={header} krav={krav} />
 
     <LabelWrapper>
       <LabelAboveContent header={header} title='Ansvarlig'>

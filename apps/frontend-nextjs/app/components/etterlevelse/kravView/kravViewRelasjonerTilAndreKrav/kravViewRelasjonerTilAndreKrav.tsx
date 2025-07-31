@@ -6,7 +6,10 @@ import { kravUrl } from '@/routes/krav/kravRoutes'
 import { BodyShort } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
-export const KravRelasjonerTilAndreKrav: FunctionComponent<TKravViewProps> = ({ header, krav }) => (
+export const KravViewRelasjonerTilAndreKrav: FunctionComponent<TKravViewProps> = ({
+  header,
+  krav,
+}) => (
   <LabelWrapper>
     <LabelAboveContent header={header} title='Relasjoner til andre krav'>
       {krav.kravRelasjoner.map((kravRelasjon: IKrav, index: number) => (

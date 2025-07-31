@@ -7,7 +7,7 @@ import { termUrl } from '@/util/config/config'
 import { BodyShort } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
-export const KravBegreper: FunctionComponent<TKravViewProps> = ({ krav, header }) => (
+export const KravViewBegreper: FunctionComponent<TKravViewProps> = ({ krav, header }) => (
   <LabelWrapper>
     <LabelAboveContent header={header} title='Begreper'>
       {krav.begreper &&

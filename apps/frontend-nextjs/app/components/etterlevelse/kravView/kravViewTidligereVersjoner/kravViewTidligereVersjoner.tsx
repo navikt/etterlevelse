@@ -11,7 +11,7 @@ interface IProps extends TKravViewProps {
   alleKravVersjoner: IKravVersjon[]
 }
 
-export const KravTidligereVersjoner: FunctionComponent<IProps> = ({
+export const KravViewTidligereVersjoner: FunctionComponent<IProps> = ({
   alleKravVersjoner,
   krav,
   header,
