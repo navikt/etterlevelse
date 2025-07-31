@@ -1,0 +1,40 @@
+.rdw-option-wrapper:hover {
+  box-shadow: 0.063rem 0.063rem 0rem #14483f;
+  background-color: #eaf0ef;
+}
+.rdw-option-wrapper:active {
+  box-shadow: 0.063rem 0.063rem 0rem #14483f inset;
+  background-color: #eaf0ef;
+}
+.rdw-option-active {
+  box-shadow: 0.063rem 0.063rem 0rem #14483f inset;
+  background-color: #eaf0ef;
+}
+.rdw-dropdown-wrapper:hover {
+  box-shadow: 0.063rem 0.063rem 0rem #14483f;
+  background-color: #eaf0ef;
+}
+.rdw-dropdownoption-highlighted {
+  background: #eaf0ef;
+}
+.rdw-dropdownoption-active {
+  background: #eaf0ef;
+}
+.rdw-link-modal-target-option {
+  display: none;
+}
+.rdw-link-modal-target-option > span {
+  display: none;
+}
+.rdw-link-modal {
+  height: 9.375rem;
+}
+.rdw-editor-main {
+  font-family: sans-serif;
+}
+.DraftEditor-root {
+  height: calc(100% - 1.25rem);
+}
+.public-DraftStyleDefault-block {
+  margin: 0;
+}

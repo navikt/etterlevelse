@@ -23,3 +23,11 @@ export interface ITeamResource {
   email: string
   resourceType: string
 }
+
+export interface IProductArea {
+  id: string
+  name: string
+  description: string
+  tags: string[]
+  members: IMember[]
+}

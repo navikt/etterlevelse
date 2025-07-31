@@ -71,6 +71,11 @@ export type TVarslingsadresseQL = IVarslingsadresse & {
   slackUser?: ISlackUser
 }
 
+export type TOption = Readonly<{
+  value?: string | number
+  label?: React.ReactNode
+}>
+
 type TNot<T> = { [key in keyof T]?: never }
 
 export type TOr<T, U> = (T & TNot<U>) | (U & TNot<T>)
