@@ -34,7 +34,7 @@ export const ArkiveringModal = ({
     >
       <Modal.Body>
         <BodyLong className='mb-4'>
-          Arkiveringen skjer hvert 2 minutter. Du finne din etterlevelsesdokumentasjon i Public 360
+          Arkiveringen skjer hvert 2 minutter. Du finner din etterlevelsesdokumentasjon i Public 360
           ved å søke på ditt etterlevelsesnummer. Etterlevelsesnummeret begynner med E etterfulgt av
           tre tall.
         </BodyLong>
