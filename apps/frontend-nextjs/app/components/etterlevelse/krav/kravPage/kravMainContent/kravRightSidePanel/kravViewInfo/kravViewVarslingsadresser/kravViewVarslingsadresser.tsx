@@ -13,11 +13,11 @@ export const KravViewVarslingsadresser: FunctionComponent<TKravViewInfoProps> = 
   <LabelWrapper>
     <LabelAboveContent header title='Varslingsadresser'>
       {krav.varslingsadresserQl.map((varslingsaddresse: TVarslingsadresseQL, index: number) => (
-        <>
+        <div key={`${varslingsaddresse}_${index}`}>
           <SlackAdresse varslingsaddresse={varslingsaddresse} index={index} />
           <SlackBruker varslingsaddresse={varslingsaddresse} index={index} />
           <AnnenAdresse varslingsaddresse={varslingsaddresse} index={index} />
-        </>
+        </div>
       ))}
     </LabelAboveContent>
   </LabelWrapper>
