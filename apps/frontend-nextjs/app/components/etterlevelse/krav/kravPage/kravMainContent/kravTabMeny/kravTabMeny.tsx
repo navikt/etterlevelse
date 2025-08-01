@@ -2,6 +2,7 @@ import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Tabs } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
+import { KravView } from './kravView/kravView'
 
 type TSection = 'krav' | 'etterlevelser' | 'tilbakemeldinger'
 
@@ -11,7 +12,11 @@ type TProps = {
   alleKravVersjoner: IKravVersjon[]
 }
 
-export const KravMeny: FunctionComponent<TProps> = ({ krav, kravLoading, alleKravVersjoner }) => {
+export const KravTabMeny: FunctionComponent<TProps> = ({
+  krav,
+  kravLoading,
+  alleKravVersjoner,
+}) => {
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
 
   // todo split loading krav and subelements?
@@ -23,13 +28,15 @@ export const KravMeny: FunctionComponent<TProps> = ({ krav, kravLoading, alleKra
 
   return (
     <div className='w-full'>
-      <Tabs defaultValue={tab} onChange={(section) => setTab(section as TSection)}>
+      <Tabs defaultValue={tab} onChange={(section: string) => setTab(section as TSection)}>
         <Tabs.List>
           <Tabs.Tab value='krav' label='Hvordan etterleve?' />
           <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
           <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
         </Tabs.List>
-        <Tabs.Panel value='krav'>0{/* <ViewKrav krav={krav} /> */}</Tabs.Panel>
+        <Tabs.Panel value='krav'>
+          <KravView krav={krav} />
+        </Tabs.Panel>
         <Tabs.Panel value='etterlevelser'>
           1{/* <Etterlevelser loading={etterlevelserLoading} krav={krav} /> */}
         </Tabs.Panel>

@@ -6,10 +6,10 @@ import {
 } from '@/components/others/layout/contentLayout/contentLayoutComponent'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { FunctionComponent, useState } from 'react'
-import { KravMeny } from './KravMeny/kravMeny'
 import { KravHasExpired } from './kravHasExpired/kravHasExpired'
 import { KravHensikt } from './kravHensikt/kravHensikt'
 import { KravRightSidePanel } from './kravRightSidePanel/kravRightSidePanel'
+import { KravTabMeny } from './kravTabMeny/kravTabMeny'
 
 type TProps = {
   krav: TKravQL
@@ -26,7 +26,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({ krav, kravLoading }
       <MainPanelLayout>
         <KravHasExpired krav={krav} alleKravVersjoner={alleKravVersjoner} />
         <KravHensikt krav={krav} />
-        <KravMeny
+        <KravTabMeny
           krav={krav}
           kravLoading={kravLoading}
           setAlleKravVersjoner={setAlleKravVersjoner}
