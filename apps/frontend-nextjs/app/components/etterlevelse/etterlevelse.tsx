@@ -8,11 +8,12 @@ import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/su
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { etterlevelseUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
+import { etterlevelserSorted } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { ettlevColors } from '@/util/theme/theme'
 import { Accordion, BodyShort, Label, LinkPanel, Loader, Select, Spacer } from '@navikt/ds-react'
 import _ from 'lodash'
 import moment from 'moment'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FunctionComponent, useState } from 'react'
 import { InfoBlock } from '../common/infoBlock/infoBlock'
 import EtterlevelseModal from './etterlevelseModal/etterlevelseModal'
 
@@ -23,67 +24,20 @@ const etterlevelseFilter = [
   { label: 'Ikke oppfylt', id: ESuksesskriterieStatus.IKKE_OPPFYLT },
 ]
 
-export const Etterlevelser = ({
-  loading,
-  krav,
-  modalVersion,
-}: {
+type TProps = {
   loading: boolean
   krav: TKravQL
   modalVersion?: boolean
-}) => {
+}
+
+export const Etterlevelser: FunctionComponent<TProps> = ({ loading, krav, modalVersion }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [openEtterlevelse, setOpenEtterlevelse] = useState<TEtterlevelseQL>()
   const [filter, setFilter] = useState<string>('ALLE')
 
-  const etterlevelser = (krav.etterlevelser || [])
-    .filter(
-      (etterlevelse: TEtterlevelseQL) =>
-        etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-        etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-    )
-    .sort((a, b) => {
-      if (a.etterlevelseDokumentasjon && b.etterlevelseDokumentasjon) {
-        return a.etterlevelseDokumentasjon.title.localeCompare(b.etterlevelseDokumentasjon.title)
-      } else {
-        return -1
-      }
-    })
-    .filter(
-      (etterlevelse: TEtterlevelseQL) =>
-        etterlevelse.etterlevelseDokumentasjon &&
-        etterlevelse.etterlevelseDokumentasjon.title !== 'LEGACY_DATA'
-    )
+  const etterlevelser: TEtterlevelseQL[] = etterlevelserSorted(krav)
 
-  etterlevelser.map((etterlevelse: TEtterlevelseQL) => {
-    if (
-      !etterlevelse.etterlevelseDokumentasjon.teamsData ||
-      etterlevelse.etterlevelseDokumentasjon.teamsData.length === 0
-    ) {
-      etterlevelse.etterlevelseDokumentasjon.teamsData = [
-        {
-          id: 'INGEN_TEAM',
-          name: 'Ingen team',
-          description: 'ingen',
-          tags: [],
-          members: [],
-          productAreaId: 'INGEN_PO',
-          productAreaName: 'Ingen produktområde',
-        },
-      ]
-    }
-    if (etterlevelse.etterlevelseDokumentasjon.teamsData) {
-      etterlevelse.etterlevelseDokumentasjon.teamsData.forEach((teamData: ITeam) => {
-        if (!teamData.productAreaId && !teamData.productAreaName) {
-          teamData.productAreaId = 'INGEN_PO'
-          teamData.productAreaName = 'Ingen produktområde'
-        }
-      })
-      return etterlevelse
-    }
-  })
-
-  const filteredEtterlevelse = etterlevelser.filter((etterlevelse) => {
+  const filteredEtterlevelse = etterlevelser.filter((etterlevelse: TEtterlevelseQL) => {
     if (filter !== 'ALLE') {
       if (filter === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
         return (
