@@ -96,6 +96,7 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/tilbakemelding/status/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/export/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/p360/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name(), AppRole.KRAVEIER.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/kravprioritylist/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelse/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/documentrelation/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
