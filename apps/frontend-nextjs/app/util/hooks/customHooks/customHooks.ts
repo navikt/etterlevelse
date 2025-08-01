@@ -1,7 +1,7 @@
 'use client'
 
 import { user } from '@/services/user/userService'
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
 
 export function useDebouncedState<T>(
@@ -105,24 +105,4 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
     boolean,
     string,
   ]
-}
-
-export function useLocationState<T>() {
-  const navigate: NavigateFunction = useNavigate()
-  const location: Location<any> = useLocation()
-
-  const changeState = (newState: Partial<T>) => {
-    navigate(
-      { ...location },
-      {
-        replace: true,
-        state: {
-          ...(location.state as Partial<T>),
-          ...newState,
-        },
-      }
-    )
-  }
-
-  return { location, navigate, state: location.state as T, changeState }
 }
