@@ -11,7 +11,7 @@ import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterelevel
 import { kravUrl } from '@/routes/krav/kravRoutes'
 import { EListName } from '@/services/codelist'
 import { BodyShort } from '@navikt/ds-react'
-import { AuditButton } from '../versjonering/auditView/AuditButton'
+import { AuditButton } from '../versjonering/common/AuditButton'
 
 export const UpdateMessage = ({ message }: { message?: string }) => {
   return (
