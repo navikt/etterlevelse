@@ -1,3 +1,5 @@
+'use client'
+
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { getTilbakemeldingForKrav } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'

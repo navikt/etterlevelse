@@ -1,12 +1,9 @@
-import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { createNewTilbakemelding } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { EAdresseType, IVarslingsadresse } from '@/constants/commonConstants'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { ETilbakemeldingMeldingStatus, ETilbakemeldingType, ICreateTilbakemeldingRequest, ITilbakemelding } from '@/constants/message/messageConstants'
-import { EnvelopeClosedIcon, PersonCircleIcon } from '@navikt/aksel-icons'
+import { EnvelopeClosedIcon, HashtagIcon, PersonCircleIcon, ThumbUpIcon } from '@navikt/aksel-icons'
 import {
   Accordion,
   Alert,
@@ -23,6 +20,7 @@ import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import * as yup from 'yup'
 import { TextAreaField } from '@/components/common/inputs'
+import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '@/components/varslingsadresse/VarslingsadresserEdit'
 
 
 type TNyTilbakemeldingModalProps = {
@@ -82,7 +80,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                 {showNotification ? (
                   <Box className='mb-9' padding='8'>
                     <div className='flex items-center'>
-                      <FontAwesomeIcon icon={faThumbsUp} size='lg' />
+                      <ThumbUpIcon title="thumb up icon" fontSize="1.5rem" aria-hidden aria-label=''/>
                       <Heading size='large'>Spørsmålet er sendt til kraveier!</Heading>
                     </div>
                     <BodyLong className='mt-4'>
@@ -131,7 +129,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
                                 <Button
                                   type='button'
                                   variant='secondary'
-                                  icon={<FontAwesomeIcon icon={faSlackHash} />}
+                                  icon={<HashtagIcon title="hash tag icon" fontSize="1.5rem" aria-hidden aria-label=''/>}
                                   onClick={() => setAdresseType(EAdresseType.SLACK)}
                                 >
                                   Slack-kanal

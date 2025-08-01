@@ -7,6 +7,7 @@ import MeldingKnapper from './edit/MeldingKnapper'
 import { ETilbakemeldingRolle, ITilbakemelding, ITilbakemeldingMelding } from '@/constants/message/messageConstants'
 import { Portrait } from '@/components/common/portrait/portrait'
 import { PersonName } from '@/components/common/personName/PersonName'
+import { ContentLayout } from '@/components/others/layout/content/content'
 
 export const ResponseMelding = (props: {
   melding: ITilbakemeldingMelding
