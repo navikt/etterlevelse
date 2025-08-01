@@ -127,3 +127,14 @@ export const produktOmradeSorted = (krav: TKravQL, filter: string) => {
 
   return produktOmrade
 }
+
+export const etterlevelseTeamNavnId = (etterlevelse: TEtterlevelseQL): string => {
+  if (etterlevelse.etterlevelseDokumentasjon.teamsData) {
+    const teamData: string = etterlevelse.etterlevelseDokumentasjon.teamsData
+      .map((team: ITeam) => (team.name ? team.name : team.id))
+      .join(', ')
+    return teamData
+  } else {
+    return 'Ingen team'
+  }
+}
