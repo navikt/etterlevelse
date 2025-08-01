@@ -1,7 +1,5 @@
 type TProps = { kravVersjon: number; kravNummer: number }
 
-export const kravNummerView = (props: TProps): string => {
-  const { kravNummer, kravVersjon } = props
-
+export const kravNummerView = ({ kravNummer, kravVersjon }: TProps): string => {
   return `K${kravNummer}.${kravVersjon}`
 }

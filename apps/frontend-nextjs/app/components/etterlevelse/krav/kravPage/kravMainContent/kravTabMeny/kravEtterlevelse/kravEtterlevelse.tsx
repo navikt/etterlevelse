@@ -5,9 +5,9 @@ import { etterlevelseFilter, etterlevelserSorted } from '@/util/etterlevelseUtil
 import { ettlevColors } from '@/util/theme/theme'
 import { Label, Loader, Select } from '@navikt/ds-react'
 import { ChangeEvent, FunctionComponent, useState } from 'react'
-import { InfoBlock } from '../common/infoBlock/infoBlock'
-import EtterlevelseModal from './etterlevelseModal/etterlevelseModal'
-import { EtterlevelseProduktOmrade } from './etterlevelseProduktOmrade/etterlevelseProduktOmrade'
+import { InfoBlock } from '../../../../../../common/infoBlock/infoBlock'
+import EtterlevelseModal from '../../../../../etterlevelseModal/etterlevelseModal'
+import { EtterlevelseProduktOmrade } from '../../../../../etterlevelseProduktOmrade/etterlevelseProduktOmrade'
 
 type TProps = {
   loading: boolean
@@ -15,7 +15,7 @@ type TProps = {
   modalVersion?: boolean
 }
 
-export const Etterlevelser: FunctionComponent<TProps> = ({ loading, krav, modalVersion }) => {
+export const KravEtterlevelser: FunctionComponent<TProps> = ({ loading, krav, modalVersion }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [openEtterlevelse, setOpenEtterlevelse] = useState<TEtterlevelseQL>()
   const [filter, setFilter] = useState<string>('ALLE')
