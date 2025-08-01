@@ -1,3 +1,4 @@
+import { Etterlevelser } from '@/components/etterlevelse/etterlevelse'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Tabs } from '@navikt/ds-react'
@@ -38,7 +39,7 @@ export const KravTabMeny: FunctionComponent<TProps> = ({
           <KravView krav={krav} />
         </Tabs.Panel>
         <Tabs.Panel value='etterlevelser'>
-          1{/* <Etterlevelser loading={etterlevelserLoading} krav={krav} /> */}
+          <Etterlevelser loading={etterlevelserLoading} krav={krav} />
         </Tabs.Panel>
         <Tabs.Panel value='tilbakemeldinger'>
           2
