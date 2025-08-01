@@ -1,28 +1,13 @@
 import { sadFolderIcon } from '@/components/others/images/images'
-import {
-  EEtterlevelseStatus,
-  ISuksesskriterieBegrunnelse,
-  TEtterlevelseQL,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/suksesskriterier/suksesskriterierConstant'
+import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { etterlevelseUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
-import { etterlevelserSorted } from '@/util/etterlevelseUtil/etterlevelseUtil'
+import { etterlevelseFilter, etterlevelserSorted } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { ettlevColors } from '@/util/theme/theme'
-import { Accordion, BodyShort, Label, LinkPanel, Loader, Select, Spacer } from '@navikt/ds-react'
-import _ from 'lodash'
-import moment from 'moment'
+import { Label, Loader, Select } from '@navikt/ds-react'
 import { ChangeEvent, FunctionComponent, useState } from 'react'
 import { InfoBlock } from '../common/infoBlock/infoBlock'
 import EtterlevelseModal from './etterlevelseModal/etterlevelseModal'
-
-const etterlevelseFilter = [
-  { label: 'Alle', id: 'ALLE' },
-  { label: 'Oppfylt', id: ESuksesskriterieStatus.OPPFYLT },
-  { label: 'Ikke relevant', id: EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT },
-  { label: 'Ikke oppfylt', id: ESuksesskriterieStatus.IKKE_OPPFYLT },
-]
+import { EtterlevelseProduktOmrade } from './etterlevelseProduktOmrade/etterlevelseProduktOmrade'
 
 type TProps = {
   loading: boolean
@@ -36,56 +21,6 @@ export const Etterlevelser: FunctionComponent<TProps> = ({ loading, krav, modalV
   const [filter, setFilter] = useState<string>('ALLE')
 
   const etterlevelser: TEtterlevelseQL[] = etterlevelserSorted(krav)
-
-  const filteredEtterlevelse = etterlevelser.filter((etterlevelse: TEtterlevelseQL) => {
-    if (filter !== 'ALLE') {
-      if (filter === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) {
-        return (
-          etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT ||
-          etterlevelse.suksesskriterieBegrunnelser.filter(
-            (suksesskriterium: ISuksesskriterieBegrunnelse) =>
-              suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_RELEVANT
-          ).length > 0
-        )
-      } else if (filter === ESuksesskriterieStatus.IKKE_OPPFYLT) {
-        return (
-          etterlevelse.suksesskriterieBegrunnelser.filter(
-            (suksesskriterium: ISuksesskriterieBegrunnelse) =>
-              suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT
-          ).length > 0
-        )
-      } else if (filter === ESuksesskriterieStatus.OPPFYLT) {
-        return (
-          etterlevelse.suksesskriterieBegrunnelser.filter(
-            (suksesskriterium: ISuksesskriterieBegrunnelse) =>
-              suksesskriterium.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
-          ).length > 0
-        )
-      } else {
-        return etterlevelse.status === filter
-      }
-    } else {
-      return (
-        etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-        etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-      )
-    }
-  })
-
-  const productAreas: ITeam[] = _.sortedUniqBy(
-    filteredEtterlevelse
-      ?.map(
-        (etterlevelse: TEtterlevelseQL) =>
-          etterlevelse.etterlevelseDokumentasjon.teamsData &&
-          etterlevelse.etterlevelseDokumentasjon.teamsData
-      )
-      .flat()
-      .sort((a: ITeam | undefined, b: ITeam | undefined) =>
-        (a?.productAreaName || '').localeCompare(b?.productAreaName || '')
-      )
-      .filter((team: ITeam | undefined) => !!team) || [],
-    (a: ITeam) => a?.productAreaId
-  )
 
   return (
     <div>
@@ -128,99 +63,13 @@ export const Etterlevelser: FunctionComponent<TProps> = ({ loading, krav, modalV
         />
       )}
 
-      {productAreas.length > 0 && (
-        <Accordion>
-          {productAreas.map((produktOmradeTeam: ITeam) => {
-            const productAreaEtterlevelser: TEtterlevelseQL[] = filteredEtterlevelse?.filter(
-              (etterlevelse: TEtterlevelseQL) =>
-                etterlevelse.etterlevelseDokumentasjon.teamsData &&
-                produktOmradeTeam &&
-                etterlevelse.etterlevelseDokumentasjon.teamsData.filter(
-                  (team: ITeam) => produktOmradeTeam.productAreaId === team.productAreaId
-                ).length > 0
-            )
-
-            return (
-              <Accordion.Item key={produktOmradeTeam && produktOmradeTeam.productAreaId}>
-                <Accordion.Header>
-                  {produktOmradeTeam
-                    ? produktOmradeTeam.productAreaName
-                      ? produktOmradeTeam.productAreaName
-                      : produktOmradeTeam.productAreaId
-                    : ''}
-                </Accordion.Header>
-                <Accordion.Content>
-                  <div className='flex flex-col gap-2'>
-                    {productAreaEtterlevelser.map(
-                      (etterlevelse: TEtterlevelseQL, index: number) => (
-                        <LinkPanel
-                          key={`${etterlevelse.kravNummer}_${index}`}
-                          href={modalVersion ? undefined : `${etterlevelseUrl}/${etterlevelse.id}`}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          onClick={
-                            modalVersion
-                              ? () => {
-                                  setOpenEtterlevelse({
-                                    ...etterlevelse,
-                                    etterlevelseDokumentasjonId:
-                                      etterlevelse.etterlevelseDokumentasjon.id,
-                                  })
-                                  setIsModalOpen(true)
-                                }
-                              : undefined
-                          }
-                        >
-                          <LinkPanel.Title className='flex items-center'>
-                            <div>
-                              <BodyShort>
-                                <strong>
-                                  E{etterlevelse.etterlevelseDokumentasjon.etterlevelseNummer}
-                                </strong>
-                                : {etterlevelse.etterlevelseDokumentasjon.title}
-                              </BodyShort>
-                            </div>
-                            <Spacer />
-                            <div className='w-44'>
-                              <BodyShort>
-                                {!!etterlevelse.etterlevelseDokumentasjon.teamsData &&
-                                !!etterlevelse.etterlevelseDokumentasjon.teamsData.length
-                                  ? etterlevelse.etterlevelseDokumentasjon.teamsData
-                                      .map((team: ITeam) => (team.name ? team.name : team.id))
-                                      .join(', ')
-                                  : 'Ingen team'}
-                              </BodyShort>
-                              <BodyShort>{`Utfylt: ${moment(
-                                etterlevelse.changeStamp.lastModifiedDate
-                              ).format('LL')}`}</BodyShort>
-                            </div>
-                          </LinkPanel.Title>
-                        </LinkPanel>
-                      )
-                    )}
-                  </div>
-                </Accordion.Content>
-              </Accordion.Item>
-            )
-          })}
-        </Accordion>
-      )}
-
-      {productAreas.length === 0 && (
-        <div className='flex item-center'>
-          {etterlevelser.length >= 1 && (
-            <Label>
-              Ingen etterlevelser med{' '}
-              {
-                etterlevelseFilter.filter(
-                  (etterlevelse: { label: string; id: string }) => etterlevelse.id === filter
-                )[0].label
-              }{' '}
-              status
-            </Label>
-          )}
-        </div>
-      )}
+      <EtterlevelseProduktOmrade
+        krav={krav}
+        modalVersion={modalVersion}
+        setOpenEtterlevelse={setOpenEtterlevelse}
+        setIsModalOpen={setIsModalOpen}
+        filter={filter}
+      />
 
       {modalVersion && openEtterlevelse && krav && (
         <EtterlevelseModal
