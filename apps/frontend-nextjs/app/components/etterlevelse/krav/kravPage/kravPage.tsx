@@ -3,7 +3,7 @@
 import { getBreadcrumbPaths } from '@/components/common/breadcrumbs/breadcrumbs'
 import { KravMainContent } from '@/components/etterlevelse/krav/kravPage/kravMainContent/kravMainContent'
 import { KravOverview } from '@/components/etterlevelse/krav/kravPage/kravOverview/kravOverview'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
@@ -57,7 +57,14 @@ export const KravPage = () => {
       breadcrumbPaths={getBreadcrumbPaths(kravTema)}
     >
       <KravOverview kravLoading={kravLoading} krav={krav} />
-      {krav && !kravLoading && <KravMainContent krav={krav} kravLoading={kravLoading} />}
+      {krav && !kravLoading && (
+        <KravMainContent
+          krav={krav}
+          kravLoading={kravLoading}
+          kravTema={kravTema}
+          setKravTema={setKravTema}
+        />
+      )}
     </PageLayout>
   )
 }

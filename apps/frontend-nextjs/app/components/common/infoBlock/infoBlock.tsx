@@ -2,7 +2,7 @@ import { ettlevColors } from '@/util/theme/theme'
 import { BodyShort, Heading } from '@navikt/ds-react'
 import Image from 'next/image'
 import { FunctionComponent, ReactNode } from 'react'
-import { IconInCircle } from '../icon/icon'
+import IconInCircle from '../iconInCircle/iconInCircle'
 
 type TInfoBlockProps = { icon: string; alt: string; text: string; color: string }
 
@@ -13,7 +13,7 @@ export const InfoBlock: FunctionComponent<TInfoBlockProps> = (props) => {
     <div>
       <div className='w-full flex justify-center items-center'>
         <div className='flex flex-col items-center p-5'>
-          <IconInCircle icon={icon} alt={alt} backgroundColor={color} size='4rem' />
+          <IconInCircle icon={icon} alt={alt} backgroundColor={color} size={4} />
           <BodyShort>{text}</BodyShort>
         </div>
       </div>

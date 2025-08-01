@@ -1,3 +1,5 @@
+'use client'
+
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { BodyShort, Link } from '@navikt/ds-react'
@@ -13,7 +15,7 @@ type TCustomizedProps = IProps
 
 const CustomizedBreadcrumbs = (props: TCustomizedProps) => {
   const { paths, currentPage } = props
-  const pathName = usePathname()
+  const pathName: string = usePathname()
 
   const getName = (pathName: string) =>
     pathName.length > 40 ? pathName.substring(0, 40) + '...' : pathName

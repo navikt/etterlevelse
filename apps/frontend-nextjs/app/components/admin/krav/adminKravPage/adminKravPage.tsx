@@ -1,7 +1,7 @@
 'use client'
 
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'

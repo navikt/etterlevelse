@@ -9,7 +9,7 @@ type TProps = {
   alleKravVersjoner: IKravVersjon[]
 }
 
-const hasKravExpired = ({ krav, alleKravVersjoner }: TProps) => {
+const hasKravExpired: FunctionComponent<TProps> = ({ krav, alleKravVersjoner }) => {
   if (krav?.status === EKravStatus.UTGAATT && alleKravVersjoner.length === 1) {
     return true
   } else {

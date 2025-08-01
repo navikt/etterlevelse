@@ -1,10 +1,10 @@
+import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
-import React from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 import { Helmet } from 'react-helmet-async'
-import CustomizedBreadcrumbs from '../../common/customizedBreadcrumbs/customizedBreadcrumbs'
 
-interface IPropsPageLayout {
-  children: React.ReactNode
+type TProps = {
+  children: ReactNode
   pageTitle?: string
   fullWidth?: boolean
   noPadding?: boolean
@@ -12,14 +12,14 @@ interface IPropsPageLayout {
   breadcrumbPaths?: IBreadCrumbPath[]
 }
 
-export const PageLayout = ({
+export const PageLayout: FunctionComponent<TProps> = ({
   children,
   pageTitle,
   fullWidth,
   noPadding,
   currentPage,
   breadcrumbPaths,
-}: IPropsPageLayout) => (
+}) => (
   <div
     id='content'
     role='main'

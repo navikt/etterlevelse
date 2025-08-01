@@ -1,3 +1,6 @@
+import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
+import EtterlevelseModal from '@/components/etterlevelse/etterlevelseModal/etterlevelseModal'
+import { EtterlevelseProduktOmrade } from '@/components/etterlevelse/etterlevelseProduktOmrade/etterlevelseProduktOmrade'
 import { sadFolderIcon } from '@/components/others/images/images'
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
@@ -5,9 +8,6 @@ import { etterlevelseFilter, etterlevelserSorted } from '@/util/etterlevelseUtil
 import { ettlevColors } from '@/util/theme/theme'
 import { Label, Loader, Select } from '@navikt/ds-react'
 import { ChangeEvent, FunctionComponent, useState } from 'react'
-import { InfoBlock } from '../../../../../../common/infoBlock/infoBlock'
-import EtterlevelseModal from '../../../../../etterlevelseModal/etterlevelseModal'
-import { EtterlevelseProduktOmrade } from '../../../../../etterlevelseProduktOmrade/etterlevelseProduktOmrade'
 
 type TProps = {
   loading: boolean

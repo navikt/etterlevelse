@@ -2,7 +2,7 @@
 
 import { getMeldingByType, mapMeldingToFormValue } from '@/api/meldingApi/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IPageResponse } from '@/constants/commonConstants'
 import { EMeldingType, IMelding } from '@/constants/message/messageConstants'
 import { user } from '@/services/user/userService'

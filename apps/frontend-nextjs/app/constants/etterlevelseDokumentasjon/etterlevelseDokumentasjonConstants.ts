@@ -1,7 +1,7 @@
 import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
 import { IChangeStamp, TReplace } from '../commonConstants'
 import { ICode } from '../kodeverk/kodeverkConstants'
-import { ILovStats, TKravQL } from '../krav/kravConstants'
+import { TKravQL } from '../krav/kravConstants'
 import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
 import {
   IVarslingsadresse,

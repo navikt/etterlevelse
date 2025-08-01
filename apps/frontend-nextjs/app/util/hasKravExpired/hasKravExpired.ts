@@ -1,9 +1,6 @@
 import { EKravStatus, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 
-export const hasKravExpired = (
-  krav: TKravQL | undefined,
-  alleKravVersjoner: IKravVersjon[]
-): boolean => {
+export const hasKravExpired = (alleKravVersjoner: IKravVersjon[], krav?: TKravQL): boolean => {
   if (krav?.status === EKravStatus.UTGAATT && alleKravVersjoner.length === 1) {
     return true
   } else {

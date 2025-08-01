@@ -1,8 +1,11 @@
+'use client'
+
 import { KravEtterlevelser } from '@/components/etterlevelse/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
+import { KravTilbakemeldinger } from '@/components/etterlevelse/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Tabs } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, Suspense, useState } from 'react'
 import { KravView } from './kravView/kravView'
 
 type TSection = 'krav' | 'etterlevelser' | 'tilbakemeldinger'
@@ -28,24 +31,25 @@ export const KravTabMeny: FunctionComponent<TProps> = ({
   )
 
   return (
-    <div className='w-full'>
-      <Tabs defaultValue={tab} onChange={(section: string) => setTab(section as TSection)}>
-        <Tabs.List>
-          <Tabs.Tab value='krav' label='Hvordan etterleve?' />
-          <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
-          <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
-        </Tabs.List>
-        <Tabs.Panel value='krav'>
-          <KravView krav={krav} />
-        </Tabs.Panel>
-        <Tabs.Panel value='etterlevelser'>
-          <KravEtterlevelser loading={etterlevelserLoading} krav={krav} />
-        </Tabs.Panel>
-        <Tabs.Panel value='tilbakemeldinger'>
-          2
-          {/* <Tilbakemeldinger krav={krav} hasKravExpired={hasKravExpired(krav, alleKravVersjoner)} /> */}
-        </Tabs.Panel>
-      </Tabs>
-    </div>
+    <Suspense>
+      <div className='w-full'>
+        <Tabs defaultValue={tab} onChange={(section: string) => setTab(section as TSection)}>
+          <Tabs.List>
+            <Tabs.Tab value='krav' label='Hvordan etterleve?' />
+            <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
+            <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
+          </Tabs.List>
+          <Tabs.Panel value='krav'>
+            <KravView krav={krav} />
+          </Tabs.Panel>
+          <Tabs.Panel value='etterlevelser'>
+            <KravEtterlevelser loading={etterlevelserLoading} krav={krav} />
+          </Tabs.Panel>
+          <Tabs.Panel value='tilbakemeldinger'>
+            <KravTilbakemeldinger krav={krav} alleKravVersjoner={alleKravVersjoner} />
+          </Tabs.Panel>
+        </Tabs>
+      </div>
+    </Suspense>
   )
 }
