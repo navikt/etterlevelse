@@ -55,7 +55,7 @@ export function useAwait<T>(promise: Promise<T>, setLoading?: Dispatch<SetStateA
   }, [])
 }
 
-type TRefs<T> = { [id: string]: RefObject<T> }
+export type TRefs<T> = { [id: string]: RefObject<T> }
 
 export function useRefs<T>(ids: string[]) {
   const refs: TRefs<T> =

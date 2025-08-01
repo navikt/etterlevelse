@@ -5,23 +5,21 @@ import { ITilbakemelding } from '@/constants/tilbakemelding/tilbakemeldingConsta
 import { user } from '@/services/user/userService'
 import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { FunctionComponent, useState } from 'react'
 
 type TProps = {
   krav: IKrav
   alleKravVersjoner: IKravVersjon[]
-  addTilbakemelding: boolean
-  setAddTilbakemelding: Dispatch<SetStateAction<boolean>>
   add: (tilbakemelding: ITilbakemelding) => void
 }
 
 export const KravTilbakemeldingKravValid: FunctionComponent<TProps> = ({
   alleKravVersjoner,
   krav,
-  addTilbakemelding,
-  setAddTilbakemelding,
   add,
 }) => {
+  const [addTilbakemelding, setAddTilbakemelding] = useState(false)
+
   const getKravExpired: boolean = hasKravExpired(alleKravVersjoner, krav as TKravQL | undefined)
 
   return (

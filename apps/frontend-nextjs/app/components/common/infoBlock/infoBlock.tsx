@@ -13,7 +13,7 @@ export const InfoBlock: FunctionComponent<TInfoBlockProps> = (props) => {
     <div>
       <div className='w-full flex justify-center items-center'>
         <div className='flex flex-col items-center p-5'>
-          <IconInCircle icon={icon} alt={alt} backgroundColor={color} size={4} />
+          <IconInCircle icon={icon} alt={alt} backgroundColor={color} size={25} />
           <BodyShort>{text}</BodyShort>
         </div>
       </div>

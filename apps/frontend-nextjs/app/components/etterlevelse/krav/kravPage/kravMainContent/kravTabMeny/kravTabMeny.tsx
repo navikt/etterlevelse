@@ -31,25 +31,25 @@ export const KravTabMeny: FunctionComponent<TProps> = ({
   )
 
   return (
-    <Suspense>
-      <div className='w-full'>
-        <Tabs defaultValue={tab} onChange={(section: string) => setTab(section as TSection)}>
-          <Tabs.List>
-            <Tabs.Tab value='krav' label='Hvordan etterleve?' />
-            <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
-            <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
-          </Tabs.List>
-          <Tabs.Panel value='krav'>
-            <KravView krav={krav} />
-          </Tabs.Panel>
-          <Tabs.Panel value='etterlevelser'>
-            <KravEtterlevelser loading={etterlevelserLoading} krav={krav} />
-          </Tabs.Panel>
-          <Tabs.Panel value='tilbakemeldinger'>
+    <div className='w-full'>
+      <Tabs defaultValue={tab} onChange={(section: string) => setTab(section as TSection)}>
+        <Tabs.List>
+          <Tabs.Tab value='krav' label='Hvordan etterleve?' />
+          <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
+          <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
+        </Tabs.List>
+        <Tabs.Panel value='krav'>
+          <KravView krav={krav} />
+        </Tabs.Panel>
+        <Tabs.Panel value='etterlevelser'>
+          <KravEtterlevelser loading={etterlevelserLoading} krav={krav} />
+        </Tabs.Panel>
+        <Tabs.Panel value='tilbakemeldinger'>
+          <Suspense>
             <KravTilbakemeldinger krav={krav} alleKravVersjoner={alleKravVersjoner} />
-          </Tabs.Panel>
-        </Tabs>
-      </div>
-    </Suspense>
+          </Suspense>
+        </Tabs.Panel>
+      </Tabs>
+    </div>
   )
 }
