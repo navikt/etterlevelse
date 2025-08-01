@@ -74,9 +74,10 @@ export const Tilbakemeldinger: FunctionComponent<TProps> = ({ krav, hasKravExpir
       {!loading && !!tilbakemeldinger.length && (
         <div className='flex flex-col'>
           <Accordion>
-            {tilbakemeldinger.slice(0, count).map((tilbakemelding) => {
+            {tilbakemeldinger.slice(0, count).map((tilbakemelding: ITilbakemelding) => {
               const focused = focusNr === tilbakemelding.id
               const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(tilbakemelding)
+
               return (
                 <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>
                   <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.id)}>
