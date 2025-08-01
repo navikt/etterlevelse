@@ -21,9 +21,9 @@ import * as _ from 'lodash'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
-import { AuditActionIcon } from './AuditActionIcon'
-import { AuditButton } from './AuditButton'
-import { AuditLabel } from './AuditLabel'
+import { AuditActionIcon } from './auditView/AuditActionIcon'
+import { AuditButton } from './auditView/AuditButton'
+import { AuditLabel } from './auditView/AuditLabel'
 
 const CodeView = ({ audit }: { audit: IAuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
