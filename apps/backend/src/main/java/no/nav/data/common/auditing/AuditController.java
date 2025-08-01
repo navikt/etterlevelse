@@ -17,11 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -49,6 +45,16 @@ public class AuditController {
         } else {
             page = service.findAll(pageable).map(AuditVersion::toResponse);
         }
+        return new ResponseEntity<>(new RestResponsePage<>(page), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get Audit log")
+    @ApiResponse(description = "Audit log fetched")
+    @GetMapping("/tableid/{id}")
+    public ResponseEntity<RestResponsePage<AuditResponse>> findByTableId(PageParameters paging, @PathVariable UUID id) {
+        log.info("Received request for Audit {} table id {}", paging, id);
+        Pageable pageable = paging.createSortedPageByFieldDescending(AuditVersion.Fields.time);
+        Page<AuditResponse> page = service.findByTableId(id.toString(), pageable).map(AuditVersion::toResponse);
         return new ResponseEntity<>(new RestResponsePage<>(page), HttpStatus.OK);
     }
 

@@ -1,4 +1,9 @@
-import { EObjectType, IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
+import {
+  EObjectType,
+  IAuditItem,
+  IAuditLog,
+  IMailLog,
+} from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
@@ -23,6 +28,14 @@ export const getAuditsByTableId = async (page: number, count: number, tableId: s
   return (
     await axios.get<IPageResponse<IAuditItem>>(
       `${env.backendBaseUrl}/audit/tableid/${tableId}?pageNumber=${page}&pageSize=${count}`
+          )
+  ).data
+}
+
+export const getMailLog = async (start: number, count: number) => {
+  return (
+    await axios.get<IPageResponse<IMailLog>>(
+      `${env.backendBaseUrl}/audit/maillog?pageNumber=${start}&pageSize=${count}`
     )
   ).data
 }
