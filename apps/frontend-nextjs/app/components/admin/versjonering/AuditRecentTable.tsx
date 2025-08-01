@@ -1,8 +1,9 @@
-import { getAudits } from '@/api/audit/auditApi'
+import { getAudits, getAuditsByTableId } from '@/api/audit/auditApi'
 import { EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { emptyPage } from '@/util/common/emptyPageUtil'
+import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import {
   BodyShort,
   Button,
@@ -13,14 +14,16 @@ import {
   Select,
   Spacer,
   Table,
+  TextField,
   Tooltip,
 } from '@navikt/ds-react'
 import * as _ from 'lodash'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
-import { AuditActionIcon } from './AuditActionIcon'
-import { AuditButton } from './AuditButton'
+import { AuditActionIcon } from './common/AuditActionIcon'
+import { AuditButton } from './common/AuditButton'
+import { AuditLabel } from './common/AuditLabel'
 
 const CodeView = ({ audit }: { audit: IAuditItem }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -47,11 +50,14 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
   )
 }
 
+const format = (id: string) => _.trim(id, '"')
+
 export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType }) => {
   const [audits, setAudits] = useState<IPageResponse<IAuditItem>>(emptyPage)
   const [limit, setLimit] = useState(20)
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
+  const [, setIdInput, idInput] = useDebouncedState('', 400)
 
   useEffect(() => {
     ampli().logEvent('sidevisning', {
@@ -64,10 +70,14 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   useEffect(() => {
     ;(async () => {
       if (props.show) {
-        setAudits(await getAudits(page - 1, limit, table))
+        if (idInput.length > 2) {
+          setAudits(await getAuditsByTableId(page - 1, limit, idInput))
+        } else {
+          setAudits(await getAudits(page - 1, limit, table))
+        }
       }
     })()
-  }, [page, limit, props.show, table])
+  }, [page, limit, props.show, table, idInput])
 
   const handlePageChange = (nextPage: number) => {
     if (nextPage < 1) {
@@ -94,6 +104,18 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
 
   return (
     <div>
+      <div className='my-4'>
+        <AuditLabel label='Søk etter id'>
+          <TextField
+            label='Søk etter id'
+            hideLabel
+            value={idInput}
+            placeholder='Id'
+            onChange={(e) => setIdInput(format((e.target as HTMLInputElement).value))}
+            className='w-72'
+          />
+        </AuditLabel>
+      </div>
       <div className='flex justify-between my-4'>
         <Heading size='small' level='2'>
           Siste endringer

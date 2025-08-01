@@ -68,7 +68,8 @@
     "tailwindcss": "^4.1.11",
     "yup": "^1.6.1",
     "lodash": "^4.17.21",
-    "react-json-view-lite": "2.4.1"
+    "react-json-view-lite": "2.4.1",
+    "json-diff-kit": "1.0.32"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",

@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @import '@navikt/ds-css' layer(components);
+@import 'react-json-view-lite/dist/index.css';
+@import './jsonViewer.css';
 
 .navds-link-panel__content {
   width: 100%;
