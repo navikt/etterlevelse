@@ -1,15 +1,14 @@
 'use client'
 
-import { KravHasExpired } from '@/components/etterlevelse/krav/kravPage/kravHasExpired/kravHasExpired'
-import { KravView } from '@/components/etterlevelse/kravView/kravView'
 import {
   ContentLayout,
   MainPanelLayout,
 } from '@/components/others/layout/contentLayout/contentLayoutComponent'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
-import { Spacer } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
-import { KravHensikt } from '../kravHensikt/kravHensikt'
+import { KravHasExpired } from './kravHasExpired/kravHasExpired'
+import { KravHensikt } from './kravHensikt/kravHensikt'
+import { KravRightSidePanel } from './kravRightSidePanel/kravRightSidePanel'
 
 type TProps = {
   krav: TKravQL
@@ -28,19 +27,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({ krav, kravLoading }
         <KravHensikt krav={krav} />
         {/* <KravMeny krav={krav} kravLoading={kravLoading} setAlleKravVersjoner={setAlleKravVersjoner}/> */}
       </MainPanelLayout>
-      <div className='max-w-lg w-full border-l-2 border-gray-200 pl-3'>
-        <KravView header krav={krav} alleKravVersjoner={alleKravVersjoner} noLastModifiedDate />
-        <div className='mt-8'>
-          KRAV
-          <div>
-            <div className='flex flex-1'>
-              KNAPPER
-              <Spacer />
-            </div>
-            <div className='mt-2.5 flex'>SLETT KRAV</div>
-          </div>
-        </div>
-      </div>
+      <KravRightSidePanel krav={krav} alleKravVersjoner={alleKravVersjoner} />
     </ContentLayout>
   )
 }

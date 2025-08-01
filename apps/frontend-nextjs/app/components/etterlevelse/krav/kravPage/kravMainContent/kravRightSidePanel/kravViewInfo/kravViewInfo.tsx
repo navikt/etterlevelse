@@ -1,4 +1,4 @@
-import { IKravVersjon, TKravViewProps } from '@/constants/krav/kravConstants'
+import { IKravVersjon, TKravViewInfoProps } from '@/constants/krav/kravConstants'
 import { user } from '@/services/user/userService'
 import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
@@ -12,33 +12,32 @@ import { KravViewRelasjonerTilAndreKrav } from './kravViewRelasjonerTilAndreKrav
 import { KravViewTidligereVersjoner } from './kravViewTidligereVersjoner/kravViewTidligereVersjoner'
 import { KravViewVarslingsadresser } from './kravViewVarslingsadresser/kravViewVarslingsadresser'
 
-interface IProps extends TKravViewProps {
+interface IProps extends TKravViewInfoProps {
   alleKravVersjoner: IKravVersjon[]
   noLastModifiedDate?: boolean
 }
 
-export const KravView: FunctionComponent<IProps> = ({
+export const KravViewInfo: FunctionComponent<IProps> = ({
   krav,
   alleKravVersjoner,
   noLastModifiedDate,
-  header,
 }) => (
   <div>
-    <KravViewDokumentasjon krav={krav} header={header} />
+    <KravViewDokumentasjon krav={krav} />
 
-    <KravViewBegreper krav={krav} header={header} />
+    <KravViewBegreper krav={krav} />
 
-    <KravViewRelasjonerTilAndreKrav krav={krav} header={header} />
+    <KravViewRelasjonerTilAndreKrav krav={krav} />
 
-    <KravViewErRelevantFor krav={krav} header={header} />
+    <KravViewErRelevantFor krav={krav} />
 
-    <KravViewTidligereVersjoner alleKravVersjoner={alleKravVersjoner} header={header} krav={krav} />
+    <KravViewTidligereVersjoner alleKravVersjoner={alleKravVersjoner} krav={krav} />
 
-    <KravViewRegelverk header={header} krav={krav} />
+    <KravViewRegelverk krav={krav} />
 
-    <KravViewAnsvarlig header={header} krav={krav} />
+    <KravViewAnsvarlig krav={krav} />
 
-    <KravViewVarslingsadresser header={header} krav={krav} />
+    <KravViewVarslingsadresser krav={krav} />
 
     {!noLastModifiedDate && (
       <div>

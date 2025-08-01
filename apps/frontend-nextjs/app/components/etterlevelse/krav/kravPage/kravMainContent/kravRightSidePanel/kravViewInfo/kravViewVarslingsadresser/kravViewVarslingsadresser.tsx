@@ -1,7 +1,7 @@
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { LabelWrapper } from '@/components/common/labelWrapper/labelWrapper'
-import { TKravViewProps } from '@/constants/krav/kravConstants'
+import { TKravViewInfoProps } from '@/constants/krav/kravConstants'
 import {
   EAdresseType,
   TVarslingsadresseQL,
@@ -9,9 +9,9 @@ import {
 import { slackLink, slackUserLink } from '@/util/config/config'
 import { FunctionComponent } from 'react'
 
-export const KravViewVarslingsadresser: FunctionComponent<TKravViewProps> = ({ header, krav }) => (
+export const KravViewVarslingsadresser: FunctionComponent<TKravViewInfoProps> = ({ krav }) => (
   <LabelWrapper>
-    <LabelAboveContent header={header} title='Varslingsadresser'>
+    <LabelAboveContent header title='Varslingsadresser'>
       {krav.varslingsadresserQl.map((varslingsaddresse: TVarslingsadresseQL, index: number) => (
         <>
           <SlackAdresse varslingsaddresse={varslingsaddresse} index={index} />

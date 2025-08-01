@@ -1,17 +1,14 @@
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { LabelWrapper } from '@/components/common/labelWrapper/labelWrapper'
-import { IKrav, TKravViewProps } from '@/constants/krav/kravConstants'
+import { IKrav, TKravViewInfoProps } from '@/constants/krav/kravConstants'
 import { kravUrl } from '@/routes/krav/kravRoutes'
 import { BodyShort } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
-export const KravViewRelasjonerTilAndreKrav: FunctionComponent<TKravViewProps> = ({
-  header,
-  krav,
-}) => (
+export const KravViewRelasjonerTilAndreKrav: FunctionComponent<TKravViewInfoProps> = ({ krav }) => (
   <LabelWrapper>
-    <LabelAboveContent header={header} title='Relasjoner til andre krav'>
+    <LabelAboveContent header title='Relasjoner til andre krav'>
       {krav.kravRelasjoner.map((kravRelasjon: IKrav, index: number) => (
         <KravRelasjonView key={`kravRelasjon${index}`} kravRelasjon={kravRelasjon} />
       ))}

@@ -80,7 +80,6 @@ export interface ILovStats {
   utgaattKrav: TKravQL[]
 }
 
-export type TKravViewProps = {
+export type TKravViewInfoProps = {
   krav: TKravQL
-  header?: boolean
 }

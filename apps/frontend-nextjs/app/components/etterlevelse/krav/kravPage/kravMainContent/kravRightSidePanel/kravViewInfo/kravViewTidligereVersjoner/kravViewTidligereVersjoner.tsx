@@ -2,24 +2,23 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { LabelWrapper } from '@/components/common/labelWrapper/labelWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
-import { IKravVersjon, TKravViewProps } from '@/constants/krav/kravConstants'
+import { IKravVersjon, TKravViewInfoProps } from '@/constants/krav/kravConstants'
 import { kravUrl } from '@/routes/krav/kravRoutes'
 import { BodyShort, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
-interface IProps extends TKravViewProps {
+interface IProps extends TKravViewInfoProps {
   alleKravVersjoner: IKravVersjon[]
 }
 
 export const KravViewTidligereVersjoner: FunctionComponent<IProps> = ({
   alleKravVersjoner,
   krav,
-  header,
 }) => (
   <>
     {alleKravVersjoner.length !== 0 && krav.kravVersjon > 1 && (
       <LabelWrapper>
-        <LabelAboveContent title='Tidligere versjoner' header={header}>
+        <LabelAboveContent title='Tidligere versjoner' header>
           {alleKravVersjoner.map((kravRelasjon: IKravVersjon, index: number) => (
             <>
               {kravRelasjon.kravVersjon &&
