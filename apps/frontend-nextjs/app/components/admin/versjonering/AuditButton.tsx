@@ -16,7 +16,7 @@ export const AuditButton = (props: IAuditButtonProps) => {
   return user.isAdmin() ? (
     <Link
       className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`}
-      href={adminAuditUrl(id) + (auditId ? `?tableId=${auditId}` : '')}
+      href={adminAuditUrl(id) + (auditId ? `?auditId=${auditId}` : '')}
     >
       {children && children}{' '}
       {!children && (

@@ -4,11 +4,11 @@ import { getAuditLog } from '@/api/audit/auditApi'
 import { ObjectLink } from '@/components/common/routeLink/routeLink'
 import { PageLayout } from '@/components/others/scaffold/page'
 import { EAuditAction, IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
+import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
 import { useRefs } from '@/util/hooks/customHooks/customHooks'
-import { XMarkIcon } from '@navikt/aksel-icons'
-import { Box, Button, Heading, Label, Loader, Tooltip } from '@navikt/ds-react'
+import { Box, Button, Heading, Label, Loader } from '@navikt/ds-react'
 import moment from 'moment'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { AuditActionIcon } from './AuditActionIcon'
@@ -17,7 +17,9 @@ import ComparisonView from './ComparisonView'
 
 export const AuditViewPage = () => {
   const params = useParams()
-  const auditId = params.auditId
+  const searchParams = useSearchParams()
+  const auditId = searchParams.get('auditId')
+  const id = params.id
   const [isLoading, setIsloading] = useState<boolean>(false)
   const [auditLog, setAuditLog] = useState<IAuditLog>()
   const [newestAudit, setNewestAudit] = useState<IAuditItem>()
@@ -27,9 +29,9 @@ export const AuditViewPage = () => {
 
   useEffect(() => {
     ;(async () => {
-      if (auditId) {
+      if (id) {
         setIsloading(true)
-        await getAuditLog(auditId as string)
+        await getAuditLog(id as string)
           .then((response) => {
             setAuditLog(response)
             if (response.audits.length === 0) {
@@ -44,8 +46,23 @@ export const AuditViewPage = () => {
     })()
   }, [])
 
+  useEffect(() => {
+    if (auditId && auditLog && refs[auditId] && auditId !== auditLog.audits[0].id) {
+      refs[auditId].current!.scrollIntoView({ block: 'start' })
+    }
+  }, [auditId, auditLog])
+
   return (
-    <PageLayout pageTitle='Versjonering' currentPage='Versjonering'>
+    <PageLayout
+      pageTitle='Versjon view'
+      currentPage='Versjon view'
+      breadcrumbPaths={[
+        {
+          pathName: 'Versjonering',
+          href: adminAuditUrl(),
+        },
+      ]}
+    >
       <Heading size='medium' level='1'>
         Versjonering
       </Heading>
@@ -78,13 +95,6 @@ export const AuditViewPage = () => {
                       <Button variant='tertiary'>Vis bruk (åpner i en ny fane)</Button>
                     </ObjectLink>
                   )}
-                  <Tooltip content='Lukk' placement='top'>
-                    <Button
-                      variant='tertiary'
-                      onClick={() => console.debug('test')}
-                      icon={<XMarkIcon title='Lukk' />}
-                    />
-                  </Tooltip>
                 </div>
               </div>
 
