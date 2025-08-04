@@ -1,7 +1,6 @@
 import { Markdown } from '@/components/common/markdown/markdown'
 
 import { TOption, TOr } from '@/constants/commonConstants'
-import { CodelistService, EListName, ICode } from '@/services/codelist'
 import {
   BodyShort,
   Button,
@@ -18,10 +17,12 @@ import {
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import React, { ChangeEvent, ReactNode, useRef, useState } from 'react'
-import TextEditor from './TextEditor/TextEditor'
 import LabelWithTooltip from './labelWithoTootip.tsx/LabelWithTooltip'
 import { Error, FormError } from './modalSchema/ModalSchema'
 import { RenderTagList } from './taglist/TagList'
+import { TextEditor } from './TextEditor/textEditor'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistService } from '@/services/kodeverk/kodeverkService'
 
 
 interface ILabel {

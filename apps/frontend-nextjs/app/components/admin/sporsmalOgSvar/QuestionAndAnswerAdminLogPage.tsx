@@ -3,15 +3,19 @@
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { getTilbakemeldingForKrav } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
-import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
 import { getMelderInfo } from '@/components/krav/tilbakemelding/Tilbakemelding'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IPageResponse } from '@/constants/commonConstants'
+import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { ETilbakemeldingMeldingStatus, ITilbakemelding, TSporsmaalOgSvarKrav } from '@/constants/message/messageConstants'
-import { ampli } from '@/services/amplitude'
-
-import { CodelistService, EListName } from '@/services/codelist'
+import {
+  ETilbakemeldingMeldingStatus,
+  ITilbakemelding,
+  TSporsmaalOgSvarKrav,
+} from '@/constants/message/messageConstants'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import { ampli } from '@/services/amplitude/amplitudeService'
+import { CodelistService } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -26,7 +30,6 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { ChangeEvent, useEffect, useState } from 'react'
-
 
 type TKravMessage = ITilbakemelding & TSporsmaalOgSvarKrav
 
@@ -77,7 +80,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
-      ampli.logEvent('sidevisning', {
+      ampli().logEvent('sidevisning', {
         side: 'Log side for spørsmål og svar',
         sidetittel: 'Spørsmål og svar',
       })

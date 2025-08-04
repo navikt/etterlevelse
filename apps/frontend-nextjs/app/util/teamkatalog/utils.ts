@@ -5,8 +5,6 @@ import * as yup from 'yup'
 export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
 export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}resource/${navIdent}`
 
-export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`
-
 export const emailValidator = yup
   .string()
   .email()

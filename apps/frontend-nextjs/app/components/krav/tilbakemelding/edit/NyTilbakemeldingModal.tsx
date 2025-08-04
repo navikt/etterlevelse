@@ -1,6 +1,6 @@
 import { createNewTilbakemelding } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
-import { EAdresseType, IVarslingsadresse } from '@/constants/commonConstants'
+
 import { IKrav } from '@/constants/krav/kravConstants'
 import { ETilbakemeldingMeldingStatus, ETilbakemeldingType, ICreateTilbakemeldingRequest, ITilbakemelding } from '@/constants/message/messageConstants'
 import { EnvelopeClosedIcon, HashtagIcon, PersonCircleIcon, ThumbUpIcon } from '@navikt/aksel-icons'
@@ -21,6 +21,7 @@ import { useState } from 'react'
 import * as yup from 'yup'
 import { TextAreaField } from '@/components/common/inputs'
 import { AddEmail, SlackChannelSearch, SlackUserSearch, VarslingsadresserTagList } from '@/components/varslingsadresse/VarslingsadresserEdit'
+import { EAdresseType, IVarslingsadresse } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 
 
 type TNyTilbakemeldingModalProps = {

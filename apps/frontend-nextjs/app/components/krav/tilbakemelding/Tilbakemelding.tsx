@@ -1,3 +1,28 @@
+import {
+  tilbakemeldingNewMelding,
+  tilbakemeldingslettMelding,
+  updateTilbakemeldingStatusOgEndretKrav,
+  useTilbakemeldinger,
+} from '@/api/tilbakemedlingApi/tilbakemeldingApi'
+import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
+import { PersonName } from '@/components/common/personName/PersonName'
+import { Portrait } from '@/components/common/portrait/portrait'
+import StatusView from '@/components/common/statusTag/StatusTag'
+import { ShowWarningMessage } from '@/components/etterlevelse/kravCard/kravCard'
+import { mailboxPoppingIcon } from '@/components/others/images/images'
+import { ContentLayout } from '@/components/others/layout/content/content'
+import { LoginButton } from '@/components/others/layout/header/login/login'
+import { IKrav } from '@/constants/krav/kravConstants'
+import {
+  ETilbakemeldingMeldingStatus,
+  ETilbakemeldingRolle,
+  ITilbakemelding,
+  ITilbakemeldingNewMeldingRequest,
+} from '@/constants/message/messageConstants'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import { user } from '@/services/user/userService'
+import { useQueryParam, useRefs } from '@/util/hooks/customHooks/customHooks'
+import { ettlevColors } from '@/util/theme/theme'
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 import {
   Accordion,
@@ -16,8 +41,8 @@ import {
 } from '@navikt/ds-react'
 import * as _ from 'lodash'
 import moment from 'moment'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
@@ -27,18 +52,6 @@ import {
   getTilbakeMeldingStatusToOption,
   tilbakemeldingStatusToText,
 } from './utils'
-import { tilbakemeldingNewMelding, tilbakemeldingslettMelding, updateTilbakemeldingStatusOgEndretKrav, useTilbakemeldinger } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
-import { useQueryParam, useRefs } from '@/util/hooks/customHooks/customHooks'
-import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
-import { Portrait } from '@/components/common/portrait/portrait'
-import { IKrav } from '@/constants/krav/kravConstants'
-import { user } from '@/services/user/userService'
-import { ETilbakemeldingMeldingStatus, ETilbakemeldingRolle, ITilbakemelding, ITilbakemeldingNewMeldingRequest } from '@/constants/message/messageConstants'
-import { PersonName } from '@/components/common/personName/PersonName'
-import { ShowWarningMessage } from '@/components/etterlevelse/kravCard/KravCard'
-import { ContentLayout } from '@/components/others/layout/content/content'
-import { usePathname, useRouter } from 'next/navigation'
-import StatusView from '@/components/common/statusTag/StatusTag'
 
 const DEFAULT_COUNT_SIZE = 5
 
