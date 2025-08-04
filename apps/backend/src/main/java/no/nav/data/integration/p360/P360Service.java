@@ -26,6 +26,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -146,7 +147,7 @@ public class P360Service {
             return response.getBody();
         } catch (Exception e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
-            errorVarsling("Feil ved oppretting av document i P360 for " + request.getTitle(), String.valueOf(e) );
+            errorVarsling("Feil ved oppretting av document i P360 for " + request.getTitle(), String.valueOf(e) + " stack trace: "  + Arrays.toString(e.getStackTrace()));
             throw new RestClientException(e.getMessage());
         }
     }
