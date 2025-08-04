@@ -15,6 +15,7 @@ import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { useEffect, useState } from 'react'
 import { Editor, EditorState } from 'react-draft-wysiwyg'
+import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { FormError } from '../modalSchema/formError/formError'
 
 type TTextEditorProps = {

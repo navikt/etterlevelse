@@ -1,5 +1,4 @@
 import { TLovCode } from './kodeverk/kodeverkConstants'
-import { IVarslingsadresse } from './teamkatalogen/varslingsadresse/varslingsadresseConstants'
 
 export enum EAlertType {
   INFO = 'INFO',
