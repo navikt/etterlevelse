@@ -7,7 +7,7 @@ import {
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Accordion } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
-import EtterlevelseLinkPanel from './xetterlevelseLinkPanel/EtterlevelseLinkPanel'
+import EtterlevelseLinkPanel from './etterlevelseLinkPanel/EtterlevelseLinkPanel'
 
 type TProps = {
   krav: TKravQL
