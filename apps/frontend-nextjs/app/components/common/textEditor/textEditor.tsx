@@ -1,22 +1,18 @@
-import {
-  borderColor,
-  borderRadius,
-  borderStyle,
-  borderWidth,
-} from '@/components/others/styling/styling'
-import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
-import {
-  editorTranslations,
-  translateUnderlineAndHighlight,
-} from '@/util/textEditor/textEditorUtil'
-import { ettlevColors } from '@/util/theme/theme'
-import { RawDraftContentState, convertToRaw } from 'draft-js'
+
 import { FormikErrors } from 'formik'
-import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+
 import { useEffect, useState } from 'react'
-import { Editor, EditorState } from 'react-draft-wysiwyg'
+import { RawDraftContentState, convertToRaw } from 'draft-js'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { FormError } from '../modalSchema/formError/formError'
+
+import './customStyle.css'
+import { translateUnderlineAndHighlight } from './utils'
+import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
+import { FormError } from '../modalSchema/ModalSchema'
+import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import { Editor } from 'react-draft-wysiwyg'
+import { ettlevColors } from '@/util/theme/theme'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
 
 type TTextEditorProps = {
   initialValue: string
@@ -202,7 +198,7 @@ export const TextEditor = (props: TTextEditorProps) => {
             backgroundColor: ettlevColors.white,
             borderBottom: `0.063rem solid ${ettlevColors.textAreaBorder}`,
           }}
-          onEditorStateChange={(data: EditorState) => {
+          onEditorStateChange={(data) => {
             setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
             if (setIsFormDirty) {
               setIsFormDirty(true)
@@ -210,7 +206,7 @@ export const TextEditor = (props: TTextEditorProps) => {
           }}
           initialContentState={CustomMarkdownToDraft(val)}
           localization={{
-            translations: editorTranslations,
+            translations: translations,
           }}
           onFocus={() => {
             setIsFocused(true)
@@ -254,4 +250,57 @@ export const TextEditor = (props: TTextEditorProps) => {
       {errors && name && errors[name] && <FormError fieldName={name as string} akselStyling />}
     </div>
   )
+}
+
+export default TextEditor
+
+const translations = {
+  // Generic
+  'generic.add': 'Legg Til',
+  'generic.cancel': 'Avbryt',
+
+  // BlockType
+  'components.controls.blocktype.h2': 'H2',
+  'components.controls.blocktype.h3': 'H3',
+  'components.controls.blocktype.h4': 'H4',
+  'components.controls.blocktype.h5': 'H5',
+  'components.controls.blocktype.h6': 'H6',
+  'components.controls.blocktype.blockquote': 'Blockquote',
+  'components.controls.blocktype.code': 'Code',
+  'components.controls.blocktype.blocktype': 'Block Type',
+  'components.controls.blocktype.normal': 'Normal',
+
+  // History
+  'components.controls.history.history': 'History',
+  'components.controls.history.undo': 'Undo',
+  'components.controls.history.redo': 'Redo',
+
+  //colorPicker
+  'components.controls.colorpicker.colorpicker': 'Color Picker',
+  'components.controls.colorpicker.text': 'Text',
+  'components.controls.colorpicker.background': 'Highlight',
+
+  // Inline
+  'components.controls.inline.bold': 'Bold',
+  'components.controls.inline.italic': 'Italic',
+  'components.controls.inline.underline': 'Underline',
+  'components.controls.inline.strikethrough': 'Strikethrough',
+  'components.controls.inline.monospace': 'Monospace',
+
+  // Link
+  'components.controls.link.linkTitle': 'Link Tittel',
+  'components.controls.link.linkTarget': 'Link Url',
+  'components.controls.link.linkTargetOption': 'Åpne link i en ny fane',
+  'components.controls.link.link': 'Link',
+  'components.controls.link.unlink': 'Unlink',
+
+  // List
+  'components.controls.list.list': 'List',
+  'components.controls.list.unordered': 'Unordered',
+  'components.controls.list.ordered': 'Ordered',
+  'components.controls.list.indent': 'Indent',
+  'components.controls.list.outdent': 'Outdent',
+
+  // Remove
+  'components.controls.remove.remove': 'Fjerne',
 }
