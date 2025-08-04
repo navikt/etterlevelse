@@ -58,3 +58,4 @@ export const EtterlevelseLinkPanel: FunctionComponent<TProps> = ({
     </LinkPanel.Title>
   </LinkPanel>
 )
+export default EtterlevelseLinkPanel

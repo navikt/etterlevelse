@@ -1,4 +1,4 @@
-import { etterlevelseDokumentasjonerUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
+import { etterlevelseDokumentasjonerUrl } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 
 export const behandlingUrl: string = '/behandling'
 export const behandlingerUrl: string = '/behandlinger'

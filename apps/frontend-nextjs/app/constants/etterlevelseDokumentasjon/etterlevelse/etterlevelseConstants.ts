@@ -1,6 +1,5 @@
 import { IDomainObject } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '../etterlevelseDokumentasjonConstants'
-import { ESuksesskriterieStatus } from '../suksesskriterier/suksesskriterierConstant'
 
 export interface IEtterlevelse extends IDomainObject {
   id: string
@@ -38,4 +37,11 @@ export enum EEtterlevelseStatus {
 
 export type TEtterlevelseQL = IEtterlevelse & {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+}
+
+export enum ESuksesskriterieStatus {
+  UNDER_ARBEID = 'UNDER_ARBEID',
+  OPPFYLT = 'OPPFYLT',
+  IKKE_RELEVANT = 'IKKE_RELEVANT',
+  IKKE_OPPFYLT = 'IKKE_OPPFYLT',
 }

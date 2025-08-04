@@ -1,6 +1,6 @@
 'use client'
 
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { Heading } from '@navikt/ds-react'
 import { AuditRecentTable } from './AuditRecentTable'
 

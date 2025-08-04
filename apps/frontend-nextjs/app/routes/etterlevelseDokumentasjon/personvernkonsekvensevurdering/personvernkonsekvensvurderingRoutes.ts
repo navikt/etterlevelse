@@ -1,4 +1,4 @@
-import { dokumentasjonUrl } from '../etterelevelseDokumentasjonRoutes'
+import { dokumentasjonUrl } from '../etterlevelseDokumentasjonRoutes'
 
 export const personvernKonsekvensvurderingUrl = '/pvkdokument'
 

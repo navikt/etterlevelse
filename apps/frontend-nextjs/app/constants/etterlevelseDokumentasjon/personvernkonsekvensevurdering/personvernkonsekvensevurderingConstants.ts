@@ -1,5 +1,5 @@
 import { IChangeStamp } from '@/constants/commonConstants'
-import { ICode } from '@/services/codelist'
+import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 
 export interface IPvkDokument {
   id: string

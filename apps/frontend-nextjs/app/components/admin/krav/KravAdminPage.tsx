@@ -7,7 +7,7 @@ import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
-import { CodelistService, EListName } from '@/services/kodeverk/kodeverkService'
+import { CodelistService } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,

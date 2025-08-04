@@ -1,7 +1,7 @@
 'use client'
 
 import { getAuditLog } from '@/api/audit/auditApi'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
 import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
 import { useRefs } from '@/util/hooks/customHooks/customHooks'

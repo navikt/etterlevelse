@@ -14,7 +14,7 @@ export const ViewKrav: FunctionComponent<TProps> = ({ krav }) => (
         <SuksesskriterieCard
           key={suksesskriterium.id}
           suksesskriterie={suksesskriterium}
-          num={index + 1}
+          number={index + 1}
           totalt={krav.suksesskriterier.length}
         />
       ))}

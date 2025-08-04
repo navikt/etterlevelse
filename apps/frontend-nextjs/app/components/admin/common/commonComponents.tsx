@@ -1,15 +1,13 @@
-import { ExternalLink } from '@/components/common/routeLink/routeLink'
-import {
-  etterlevelseUrl,
-  temaUrl,
-} from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { EObjectType, IAuditItem, TNavigableItem } from '@/constants/admin/audit/auditConstants'
+import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { adminCodelistUrl } from '@/routes/admin/kodeverk.ts/kodeverkRoutes'
 import { adminVarselUrl } from '@/routes/admin/varsel/varselRoutes'
 import { behandlingUrl } from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
-import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterelevelseDokumentasjonRoutes'
+import { etterlevelseUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
+import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravUrl } from '@/routes/krav/kravRoutes'
-import { EListName } from '@/services/codelist'
 import { BodyShort } from '@navikt/ds-react'
 import { AuditButton } from '../versjonering/common/AuditButton'
 
