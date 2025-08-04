@@ -1,0 +1,113 @@
+import { gql } from '@apollo/client'
+
+export const getKravWithEtterlevelseQuery = gql`
+  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
+    kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
+      id
+      kravNummer
+      kravVersjon
+      changeStamp {
+        lastModifiedBy
+        lastModifiedDate
+      }
+      navn
+      beskrivelse
+      hensikt
+      notat
+      varselMelding
+      utdypendeBeskrivelse
+      versjonEndringer
+      aktivertDato
+      dokumentasjon
+      implementasjoner
+      begrepIder
+      begreper {
+        id
+        navn
+        beskrivelse
+      }
+      virkemidler {
+        id
+        navn
+      }
+      virkemiddelIder
+      varslingsadresserQl {
+        adresse
+        type
+        slackChannel {
+          id
+          name
+          numMembers
+        }
+        slackUser {
+          id
+          name
+        }
+      }
+      rettskilder
+      regelverk {
+        lov {
+          code
+          shortName
+        }
+        spesifisering
+      }
+      tagger
+
+      avdeling {
+        code
+        shortName
+      }
+      underavdeling {
+        code
+        shortName
+      }
+      relevansFor {
+        code
+        shortName
+      }
+      status
+
+      suksesskriterier {
+        id
+        navn
+        beskrivelse
+        behovForBegrunnelse
+      }
+
+      kravIdRelasjoner
+      kravRelasjoner {
+        id
+        kravNummer
+        kravVersjon
+        navn
+      }
+      etterlevelser(onlyForEtterlevelseDokumentasjon: false) {
+        id
+        etterlevelseDokumentasjon {
+          id
+          etterlevelseNummer
+          title
+          teamsData {
+            id
+            name
+            productAreaId
+            productAreaName
+          }
+        }
+        changeStamp {
+          lastModifiedDate
+          lastModifiedBy
+        }
+        status
+        suksesskriterieBegrunnelser {
+          suksesskriterieId
+          begrunnelse
+          suksesskriterieStatus
+        }
+      }
+    }
+  }
+`
+
+// eslint-enable-next-line @typescript-eslint/ban-types

@@ -1,15 +1,13 @@
 import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
-import {
-  IChangeStamp,
-  IVarslingsadresse,
-  IVirkemiddel,
-  TReplace,
-  TVarslingsadresseQL,
-} from '../commonConstants'
+import { IChangeStamp, TReplace } from '../commonConstants'
 import { ICode } from '../kodeverk/kodeverkConstants'
 import { TKravQL } from '../krav/kravConstants'
 import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
-import { ERelationType } from './dokumentRelasjon/dokumentRelasjonConstants'
+import {
+  IVarslingsadresse,
+  TVarslingsadresseQL,
+} from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { IVirkemiddel } from '../virkemiddel/virkemiddelConstants'
 import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 
 export interface IEtterlevelseDokumentasjon {
@@ -71,8 +69,4 @@ export interface ILovStats {
   relevantKrav: TKravQL[]
   irrelevantKrav: TKravQL[]
   utgaattKrav: TKravQL[]
-}
-
-export interface IEtterlevelseDokumentasjonWithRelation extends TEtterlevelseDokumentasjonQL {
-  relationType?: ERelationType
 }

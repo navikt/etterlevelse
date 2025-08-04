@@ -1,4 +1,4 @@
-import { CSSObjectWithLabel } from "react-select"
+import { CSSObjectWithLabel } from 'react-select'
 
 export const noOptionMessage = (inputValue: string) => {
   if (inputValue.length < 3 && inputValue.length > 0) {

@@ -6,9 +6,9 @@ import {
   dokumentRelationTypeToString,
   getAllDocumentRelation,
 } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
-import { etterlevelseDokumentasjonIdUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IDocumentRelation } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
+import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { handleSort } from '@/util/handleTableSort'
 import {

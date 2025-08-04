@@ -35,13 +35,13 @@ export enum EEtterlevelseStatus {
   IKKE_RELEVANT_FERDIG_DOKUMENTERT = 'IKKE_RELEVANT_FERDIG_DOKUMENTERT',
 }
 
+export type TEtterlevelseQL = IEtterlevelse & {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+}
+
 export enum ESuksesskriterieStatus {
   UNDER_ARBEID = 'UNDER_ARBEID',
   OPPFYLT = 'OPPFYLT',
   IKKE_RELEVANT = 'IKKE_RELEVANT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
-}
-
-export type TEtterlevelseQL = IEtterlevelse & {
-  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
 }

@@ -9,6 +9,29 @@ export const getMeldingByType = async (meldingType: EMeldingType) => {
   ).data
 }
 
+export const deleteMelding = async (id: string) => {
+  return (await axios.delete<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
+}
+
+export const createMelding = async (melding: IMelding) => {
+  const dto = MeldingToMeldingDto(melding)
+  return (await axios.post<IMelding>(`${env.backendBaseUrl}/melding`, dto)).data
+}
+
+export const updateMelding = async (melding: IMelding) => {
+  const dto = MeldingToMeldingDto(melding)
+  return (await axios.put<IMelding>(`${env.backendBaseUrl}/melding/${melding.id}`, dto)).data
+}
+
+function MeldingToMeldingDto(melding: IMelding): IMelding {
+  const dto = {
+    ...melding,
+  } as any
+  delete dto.changeStamp
+  delete dto.version
+  return dto
+}
+
 export const mapMeldingToFormValue = (melding: Partial<IMelding>): IMelding => {
   return {
     id: melding.id || '',

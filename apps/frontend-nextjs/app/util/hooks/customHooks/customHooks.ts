@@ -1,5 +1,3 @@
-'use client'
-
 import { user } from '@/services/user/userService'
 import { useSearchParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
@@ -57,7 +55,7 @@ export function useAwait<T>(promise: Promise<T>, setLoading?: Dispatch<SetStateA
   }, [])
 }
 
-type TRefs<T> = { [id: string]: RefObject<T> }
+export type TRefs<T> = { [id: string]: RefObject<T> }
 
 export function useRefs<T>(ids: string[]) {
   const refs: TRefs<T> =
@@ -68,6 +66,7 @@ export function useRefs<T>(ids: string[]) {
 
   return refs
 }
+
 function useQuery() {
   return new URLSearchParams(useSearchParams())
 }

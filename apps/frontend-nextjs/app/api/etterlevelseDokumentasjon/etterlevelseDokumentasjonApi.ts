@@ -1,15 +1,15 @@
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   IEtterlevelseDokumentasjon,
-  IEtterlevelseDokumentasjonWithRelation,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IVirkemiddel } from '@/constants/virkemiddel/virkemiddelConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { getVirkemiddel } from '../virkemiddel/virkemiddelApi'
+import { getVirkemiddel } from '../virkemiddelApi/virkemiddelApi'
 
-export const getEtterlevelseDokumentasjon = async (id: string) => {
+const getEtterlevelseDokumentasjon = async (id: string) => {
   return (
     await axios.get<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`
@@ -25,63 +25,6 @@ export const searchEtterlevelsedokumentasjon = async (
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/${searchParam}`
     )
   ).data.content
-}
-
-export const searchEtterlevelsedokumentasjonByBehandlingId = async (behandlingId: string) => {
-  return (
-    await axios.get<IPageResponse<IEtterlevelseDokumentasjon>>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/search/behandling/${behandlingId}`
-    )
-  ).data.content
-}
-
-export const updateEtterlevelseDokumentasjon = async (
-  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
-  return (
-    await axios.put<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`,
-      dto
-    )
-  ).data
-}
-
-export const updateKravPriorityEtterlevelseDokumentasjon = async (
-  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
-  return (
-    await axios.put<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/kravpriority/${etterlevelseDokumentasjon.id}`,
-      dto
-    )
-  ).data
-}
-
-export const createEtterlevelseDokumentasjon = async (
-  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
-  return (
-    await axios.post<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon`,
-      dto
-    )
-  ).data
-}
-
-export const createEtterlevelseDokumentasjonWithRelataion = async (
-  fromDocumentId: string,
-  etterlevelseDokumentasjon: IEtterlevelseDokumentasjonWithRelation
-) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
-  return (
-    await axios.post<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/relation/${fromDocumentId}`,
-      dto
-    )
-  ).data
 }
 
 export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
@@ -109,7 +52,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
           async (etterlevelseDokumentasjon) => {
             if (etterlevelseDokumentasjon.virkemiddelId) {
               await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then(
-                (virkemiddelResponse) => (virkmiddel = virkemiddelResponse)
+                (virkemiddelResponse: IVirkemiddel) => (virkmiddel = virkemiddelResponse)
               )
             }
             setData(
@@ -132,34 +75,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   ]
 }
 
-export const etterlevelseDokumentasjonToDomainToObject = (
-  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-): IEtterlevelseDokumentasjon => {
-  const domainToObject = {
-    ...etterlevelseDokumentasjon,
-    behandlingIds: etterlevelseDokumentasjon.behandlinger
-      ? etterlevelseDokumentasjon.behandlinger.map((behandling) => behandling.id)
-      : [],
-    irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((irrelevans) => irrelevans.code),
-    teams: etterlevelseDokumentasjon.teamsData
-      ? etterlevelseDokumentasjon.teamsData.map((team) => team.id)
-      : [],
-    resources: etterlevelseDokumentasjon.resourcesData
-      ? etterlevelseDokumentasjon.resourcesData.map((resource) => resource.navIdent)
-      : [],
-    risikoeiere: etterlevelseDokumentasjon.risikoeiereData
-      ? etterlevelseDokumentasjon.risikoeiereData.map((resource) => resource.navIdent)
-      : [],
-  } as any
-  delete domainToObject.changeStamp
-  delete domainToObject.version
-  delete domainToObject.teamsData
-  delete domainToObject.resourcesData
-  delete domainToObject.behandlinger
-  return domainToObject
-}
-
-export const etterlevelseDokumentasjonMapToFormVal = (
+const etterlevelseDokumentasjonMapToFormVal = (
   etterlevelseDokumentasjon: Partial<TEtterlevelseDokumentasjonQL>
 ): TEtterlevelseDokumentasjonQL => ({
   id: etterlevelseDokumentasjon.id || '',
@@ -199,15 +115,3 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   p360Recno: etterlevelseDokumentasjon.p360Recno || 0,
   p360CaseNumber: etterlevelseDokumentasjon.p360CaseNumber || '',
 })
-
-export const etterlevelseDokumentasjonWithRelationMapToFormVal = (
-  etterlevelseDokumentasjon: Partial<IEtterlevelseDokumentasjonWithRelation>
-): IEtterlevelseDokumentasjonWithRelation => {
-  const etterlevelseDokumentasjonWithOutRelation =
-    etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)
-
-  return {
-    ...etterlevelseDokumentasjonWithOutRelation,
-    relationType: etterlevelseDokumentasjon.relationType,
-  }
-}

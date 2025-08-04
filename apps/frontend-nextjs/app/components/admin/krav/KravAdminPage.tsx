@@ -1,12 +1,13 @@
 'use client'
 
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
-import { temaUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
-import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { ampli, userRoleEventProp } from '@/services/amplitude'
-import { CodelistService, EListName } from '@/services/codelist'
+import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
+import { CodelistService } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -83,7 +84,7 @@ const KravAdminPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', {
+      ampli().logEvent('sidevisning', {
         side: 'Krav admin side',
         sidetittel: 'Administrere Krav',
         ...userRoleEventProp,
@@ -150,7 +151,6 @@ const KravAdminPage = () => {
                     )}
                   </Table.DataCell>
                   <Table.DataCell>{kravStatus(krav.status)}</Table.DataCell>
-                  <Table.DataCell>{krav.tema}</Table.DataCell>
                   <Table.DataCell className='w-[10%] text-end'>
                     {moment(krav.changeStamp.lastModifiedDate).format('LL')}
                   </Table.DataCell>

@@ -5,9 +5,9 @@ import {
   getAllPvkDokument,
   mapPvkDokumentToFormValue,
 } from '@/api/pvkDokument/pvkDokumentApi'
-import { etterlevelseDokumentasjonIdUrl } from '@/components/common/routeLink/routeLinkEtterlevelsesDokumentasjon'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { handleSort } from '@/util/handleTableSort'

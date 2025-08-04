@@ -83,7 +83,6 @@ export const searchSlackChannel = async (name: string) => {
 }
 
 // Overly complicated async fetch of people and teams
-
 const people: Map<string, { f: boolean; v: string }> = new Map<string, { f: boolean; v: string }>()
 const teams: Map<string, { f: boolean; v: ITeam }> = new Map<string, { f: boolean; v: ITeam }>()
 const psubs: Map<string, (() => void)[]> = new Map<string, (() => void)[]>()
@@ -94,6 +93,7 @@ const addPerson = (person: ITeamResource) => {
   psubs.get(person.navIdent)?.forEach((f) => f())
   psubs.delete(person.navIdent)
 }
+
 const addTeam = (team: ITeam) => {
   teams.set(team.id, { f: true, v: team })
   tsubs.get(team.id)?.forEach((f) => f())
