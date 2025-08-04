@@ -1,3 +1,5 @@
+"use client"
+
 import { getMeldingByType, mapMeldingToFormValue } from '@/api/meldingApi/meldingApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
@@ -51,10 +53,10 @@ const VarselTabs = () => {
     ;(async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
-        ampli.logEvent('sidevisning', {
-          side: 'Varsel side for admin',
-          sidetittel: 'Opprett varsel melding for ' + tab,
-        })
+        // ampli.logEvent('sidevisning', {
+        //   side: 'Varsel side for admin',
+        //   sidetittel: 'Opprett varsel melding for ' + tab,
+        // })
         const response = await getMeldingByType(getMeldingType(tab))
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])
@@ -117,3 +119,5 @@ const VarselTabs = () => {
     </Tabs>
   )
 }
+
+export default VarselAdminPage
