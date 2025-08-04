@@ -6,7 +6,9 @@ import {
   dokumentRelationTypeToString,
   getAllDocumentRelation,
 } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IDocumentRelation } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
+import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { handleSort } from '@/util/handleTableSort'
 import {
@@ -23,8 +25,6 @@ import {
 } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { UpdateMessage } from '../common/commonComponents'
-import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
 
 export const EtterlevelseDokumentRelasjonAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
