@@ -1,7 +1,7 @@
 'use client'
 
 import { deleteEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { PageLayout } from '@/components/others/scaffold/page'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { env } from '@/util/env/env'
 import { Box, Button, Heading, TextField } from '@navikt/ds-react'
 import axios from 'axios'

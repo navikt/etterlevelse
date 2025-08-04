@@ -1,7 +1,9 @@
 'use client'
 
+import { ApolloProvider } from '@apollo/client'
 import { FunctionComponent, ReactNode } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { apolloClient } from './api/apolloClient/apolloClient'
 import { Footer } from './components/others/layout/footer/footer'
 import Header from './components/others/layout/header/header'
 import './globals.css'
@@ -17,16 +19,18 @@ const Main: FunctionComponent<TProps> = ({ children }) => {
     <html lang='no'>
       <body>
         <HelmetProvider>
-          <Helmet>
-            <meta charSet='utf-8' />
-            <title>Etterlevelse</title>
-          </Helmet>
+          <ApolloProvider client={apolloClient}>
+            <Helmet>
+              <meta charSet='utf-8' />
+              <title>Etterlevelse</title>
+            </Helmet>
 
-          <div className='flex flex-col w-full items-center min-h-screen bg-white'>
-            <Header />
-            {children}
-            <Footer />
-          </div>
+            <div className='flex flex-col w-full items-center min-h-screen bg-white'>
+              <Header />
+              {children}
+              <Footer />
+            </div>
+          </ApolloProvider>
         </HelmetProvider>
       </body>
     </html>

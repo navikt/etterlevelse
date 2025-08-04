@@ -1,5 +1,3 @@
-'use client'
-
 import { user } from '@/services/user/userService'
 import { useSearchParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
@@ -68,6 +66,7 @@ export function useRefs<T>(ids: string[]) {
 
   return refs
 }
+
 function useQuery() {
   return new URLSearchParams(useSearchParams())
 }
@@ -105,4 +104,24 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
     boolean,
     string,
   ]
+}
+
+export function useLocationState<T>() {
+  const navigate: NavigateFunction = useNavigate()
+  const location: Location<any> = useLocation()
+
+  const changeState = (newState: Partial<T>) => {
+    navigate(
+      { ...location },
+      {
+        replace: true,
+        state: {
+          ...(location.state as Partial<T>),
+          ...newState,
+        },
+      }
+    )
+  }
+
+  return { location, navigate, state: location.state as T, changeState }
 }
