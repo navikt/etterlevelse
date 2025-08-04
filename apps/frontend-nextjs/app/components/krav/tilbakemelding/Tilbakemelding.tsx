@@ -28,13 +28,17 @@ import {
   tilbakemeldingStatusToText,
 } from './utils'
 import { tilbakemeldingNewMelding, tilbakemeldingslettMelding, updateTilbakemeldingStatusOgEndretKrav, useTilbakemeldinger } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
-import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
+import { useQueryParam, useRefs } from '@/util/hooks/customHooks/customHooks'
 import { kravNummerVersjonUrl } from '@/components/common/routeLink/routeLinkKrav'
 import { Portrait } from '@/components/common/portrait/portrait'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { user } from '@/services/user/userService'
 import { ETilbakemeldingMeldingStatus, ETilbakemeldingRolle, ITilbakemelding, ITilbakemeldingNewMeldingRequest } from '@/constants/message/messageConstants'
 import { PersonName } from '@/components/common/personName/PersonName'
+import { ShowWarningMessage } from '@/components/etterlevelse/kravCard/KravCard'
+import { ContentLayout } from '@/components/others/layout/content/content'
+import { usePathname, useRouter } from 'next/navigation'
+import StatusView from '@/components/common/statusTag/StatusTag'
 
 const DEFAULT_COUNT_SIZE = 5
 
@@ -52,8 +56,8 @@ export const Tilbakemeldinger = ({
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
-  const location = useLocation()
-  const navigate = useNavigate()
+  const pathname = usePathname()
+  const router = useRouter()
 
   const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((tilbakemelding) => tilbakemelding.id))
   useEffect(() => {
@@ -64,10 +68,8 @@ export const Tilbakemeldinger = ({
 
   const setFocus = (id: string) => {
     setFocusNr(id)
-    if (location.pathname.split('/')[1] === 'krav')
-      navigate(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon, id), {
-        replace: true,
-      })
+    if (pathname.split('/')[1] === 'krav')
+      router.push(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon, id))
   }
 
   return (
