@@ -1,9 +1,10 @@
+import { TVarslingsadresseQL } from '@/constants/commonConstants'
+import { EAdresseType } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { user } from '@/services/user/userService'
 import { Button, Label, Modal, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { useState } from 'react'
 import { Error } from '../common/modalSchema/ModalSchema'
 import { emailValidator } from './VarslingsadresserEdit'
-import { EAdresseType, TVarslingsadresseQL } from '@/constants/commonConstants'
-import { user } from '@/services/user/userService'
 
 interface IProps {
   isOpen: boolean

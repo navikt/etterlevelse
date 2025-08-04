@@ -1,4 +1,4 @@
-import { kravStatus } from '@/components/krav/kravPage/KravPage'
+import { kravStatus } from '@/components/etterlevelse/krav/kravComponents'
 import { EKravStatus } from '@/constants/krav/kravConstants'
 import { Detail, Tag } from '@navikt/ds-react'
 

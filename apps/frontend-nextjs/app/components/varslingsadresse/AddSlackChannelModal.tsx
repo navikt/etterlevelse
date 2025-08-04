@@ -1,5 +1,9 @@
 import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
-import { EAdresseType, ISlackChannel, IVarslingsadresse } from '@/constants/commonConstants'
+import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Button, Modal } from '@navikt/ds-react'
 import { useState } from 'react'

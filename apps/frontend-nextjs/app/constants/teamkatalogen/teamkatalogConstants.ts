@@ -27,7 +27,6 @@ export interface ITeamResource {
   resourceType: string
 }
 
-
 export interface IProductArea {
   id: string
   name: string

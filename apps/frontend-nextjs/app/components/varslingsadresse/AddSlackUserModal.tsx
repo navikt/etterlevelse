@@ -1,15 +1,17 @@
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
-import { EAdresseType, IVarslingsadresse } from '@/constants/commonConstants'
+import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { user } from '@/services/user/userService'
+import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { useState } from 'react'
 import AsyncSelect from 'react-select/async'
-import { ContentLayout } from '../others/layout/content/content'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
-import { user } from '@/services/user/userService'
-import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DropdownIndicator } from '../krav/edit/KravBegreperEdit'
-import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
-
+import { ContentLayout } from '../others/layout/content/content'
 
 interface IProps {
   isOpen: boolean

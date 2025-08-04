@@ -1,5 +1,4 @@
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { ReactNode } from 'react'
 
 export enum EObjectType {
   Codelist = 'CODELIST',

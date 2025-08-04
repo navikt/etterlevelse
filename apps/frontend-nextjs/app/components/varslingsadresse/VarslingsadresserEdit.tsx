@@ -1,27 +1,35 @@
-
+import {
+  getSlackChannelById,
+  getSlackUserByEmail,
+  getSlackUserById,
+  usePersonSearch,
+  useSlackChannelSearch,
+} from '@/api/teamkatalogen/teamkatalogenApi'
+import { ISlackChannel, ISlackUser, TVarslingsadresseQL } from '@/constants/commonConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TKravQL } from '@/constants/krav/kravConstants'
+import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { user } from '@/services/user/userService'
+import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { EnvelopeClosedIcon, HashtagIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
 import { Alert, Button, Loader, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import React, { useEffect, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
+import { FieldWrapper } from '../common/inputs'
+import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Error } from '../common/modalSchema/ModalSchema'
-
+import { RenderTagList } from '../common/taglist/TagList'
+import { DropdownIndicator } from '../krav/edit/KravBegreperEdit'
+import { ContentLayout } from '../others/layout/content/content'
 import { AddEmailModal } from './AddEmailModal'
 import { AddSlackChannelModal } from './AddSlackChannelModal'
 import { AddSlackUserModal } from './AddSlackUserModal'
-import { FieldWrapper } from '../common/inputs'
-import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
-import { EAdresseType, ISlackChannel, ISlackUser, IVarslingsadresse, TVarslingsadresseQL } from '@/constants/commonConstants'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
-import { getSlackChannelById, getSlackUserByEmail, getSlackUserById, usePersonSearch, useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
-import { RenderTagList } from '../common/taglist/TagList'
-import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { DropdownIndicator } from '../krav/edit/KravBegreperEdit'
-import { ContentLayout } from '../others/layout/content/content'
-import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { user } from '@/services/user/userService'
 
 interface IVarslingsadresserEditProps {
   fieldName: 'varslingsadresser' | 'varslingsadresserQl'
@@ -60,7 +68,14 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
                     variant='secondary'
                     type='button'
                     onClick={() => setAddSlackChannel(true)}
-                    icon={<HashtagIcon title="hash tag icon" aria-hidden aria-label='' fontSize="1.5rem" />}
+                    icon={
+                      <HashtagIcon
+                        title='hash tag icon'
+                        aria-hidden
+                        aria-label=''
+                        fontSize='1.5rem'
+                      />
+                    }
                   >
                     Legg til slack-kanal
                   </Button>

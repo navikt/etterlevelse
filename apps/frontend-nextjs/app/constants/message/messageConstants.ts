@@ -1,5 +1,6 @@
-import { EAlertType, IDomainObject, IVarslingsadresse } from '@/constants/commonConstants'
+import { EAlertType, IDomainObject } from '@/constants/commonConstants'
 import { ReactNode } from 'react'
+import { IVarslingsadresse } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 
 export enum EMeldingType {
   SYSTEM = 'SYSTEM',
