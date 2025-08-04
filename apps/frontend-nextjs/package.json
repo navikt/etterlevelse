@@ -38,6 +38,7 @@
     }
   },
   "dependencies": {
+    "@apollo/client": "3.13.8",
     "@fontsource/source-sans-pro": "^5.2.5",
     "@navikt/aksel-icons": "^7.25.1",
     "@navikt/ds-css": "^7.25.1",
