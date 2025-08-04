@@ -5,6 +5,7 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IPageResponse } from '@/constants/commonConstants'
 import { EMeldingType, IMelding } from '@/constants/message/messageConstants'
+import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { user } from '@/services/user/userService'
 import { BodyLong, Detail, Heading } from '@navikt/ds-react'
 import moment from 'moment'
@@ -24,11 +25,11 @@ const OmStotteTilEtterlevelse = () => {
     })()
   }, [])
 
-  //   ampli.logEvent('sidevisning', {
-  //     side: 'FAQ side',
-  //     sidetittel: 'Om Støtte til etterlevelse',
-  //     ...userRoleEventProp,
-  //   })
+  ampli().logEvent('sidevisning', {
+    side: 'FAQ side',
+    sidetittel: 'Om Støtte til etterlevelse',
+    ...userRoleEventProp,
+  })
   /* eslint-disable jsx-a11y/media-has-caption */
   return (
     <PageLayout pageTitle='Om Støtte til etterlevelse' currentPage='Om Støtte til etterlevelse'>
