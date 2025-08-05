@@ -1,5 +1,9 @@
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
+import {
+  editorTranslations,
+  translateUnderlineAndHighlight,
+} from '@/util/textEditor/textEditorUtil'
 import { ettlevColors } from '@/util/theme/theme'
 import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
@@ -9,7 +13,6 @@ import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { FormError } from '../modalSchema/ModalSchema'
 import './customStyle.css'
-import { translateUnderlineAndHighlight } from './utils'
 
 type TTextEditorProps = {
   initialValue: string
@@ -203,7 +206,7 @@ export const TextEditor = (props: TTextEditorProps) => {
           }}
           initialContentState={CustomMarkdownToDraft(val)}
           localization={{
-            translations: translations,
+            translations: editorTranslations,
           }}
           onFocus={() => {
             setIsFocused(true)
@@ -250,54 +253,3 @@ export const TextEditor = (props: TTextEditorProps) => {
 }
 
 export default TextEditor
-
-const translations = {
-  // Generic
-  'generic.add': 'Legg Til',
-  'generic.cancel': 'Avbryt',
-
-  // BlockType
-  'components.controls.blocktype.h2': 'H2',
-  'components.controls.blocktype.h3': 'H3',
-  'components.controls.blocktype.h4': 'H4',
-  'components.controls.blocktype.h5': 'H5',
-  'components.controls.blocktype.h6': 'H6',
-  'components.controls.blocktype.blockquote': 'Blockquote',
-  'components.controls.blocktype.code': 'Code',
-  'components.controls.blocktype.blocktype': 'Block Type',
-  'components.controls.blocktype.normal': 'Normal',
-
-  // History
-  'components.controls.history.history': 'History',
-  'components.controls.history.undo': 'Undo',
-  'components.controls.history.redo': 'Redo',
-
-  //colorPicker
-  'components.controls.colorpicker.colorpicker': 'Color Picker',
-  'components.controls.colorpicker.text': 'Text',
-  'components.controls.colorpicker.background': 'Highlight',
-
-  // Inline
-  'components.controls.inline.bold': 'Bold',
-  'components.controls.inline.italic': 'Italic',
-  'components.controls.inline.underline': 'Underline',
-  'components.controls.inline.strikethrough': 'Strikethrough',
-  'components.controls.inline.monospace': 'Monospace',
-
-  // Link
-  'components.controls.link.linkTitle': 'Link Tittel',
-  'components.controls.link.linkTarget': 'Link Url',
-  'components.controls.link.linkTargetOption': 'Åpne link i en ny fane',
-  'components.controls.link.link': 'Link',
-  'components.controls.link.unlink': 'Unlink',
-
-  // List
-  'components.controls.list.list': 'List',
-  'components.controls.list.unordered': 'Unordered',
-  'components.controls.list.ordered': 'Ordered',
-  'components.controls.list.indent': 'Indent',
-  'components.controls.list.outdent': 'Outdent',
-
-  // Remove
-  'components.controls.remove.remove': 'Fjerne',
-}

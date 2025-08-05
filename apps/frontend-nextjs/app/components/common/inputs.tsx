@@ -162,7 +162,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                   <TextEditor
                     height={height}
                     initialValue={fieldProps.field.value}
-                    setValue={(v) => fieldProps.form.setFieldValue(name, v)}
+                    setValue={(v: string) => fieldProps.form.setFieldValue(name, v)}
                     errors={fieldProps.form.errors}
                     name={name}
                     setIsFormDirty={setIsFormDirty}
