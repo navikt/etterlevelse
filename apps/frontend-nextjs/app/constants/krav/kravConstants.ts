@@ -73,13 +73,6 @@ export interface IKravVersjon {
 export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
 export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
 
-export interface ILovStats {
-  lovCode: ICode
-  relevantKrav: TKravQL[]
-  irrelevantKrav: TKravQL[]
-  utgaattKrav: TKravQL[]
-}
-
 export type TKravViewInfoProps = {
   krav: TKravQL
 }

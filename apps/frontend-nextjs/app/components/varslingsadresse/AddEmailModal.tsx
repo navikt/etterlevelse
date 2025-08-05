@@ -1,5 +1,7 @@
-import { TVarslingsadresseQL } from '@/constants/commonConstants'
-import { EAdresseType } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import {
+  EAdresseType,
+  TVarslingsadresseQL,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { user } from '@/services/user/userService'
 import { Button, Label, Modal, Radio, RadioGroup, TextField } from '@navikt/ds-react'
 import { useState } from 'react'

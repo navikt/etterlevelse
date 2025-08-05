@@ -1,5 +1,4 @@
 import { ICode, TLovCode } from './kodeverk/kodeverkConstants'
-import { IVarslingsadresse } from './teamkatalogen/varslingsadresse/varslingsadresseConstants'
 
 export enum EAlertType {
   INFO = 'INFO',
@@ -44,22 +43,6 @@ export interface IVirkemiddel extends IDomainObject {
   regelverk: IRegelverk[]
   virkemiddelType?: ICode
   livsSituasjon: string
-}
-
-export interface ISlackChannel {
-  id: string
-  name?: string
-  numMembers?: number
-}
-
-export interface ISlackUser {
-  id: string
-  name?: string
-}
-
-export type TVarslingsadresseQL = IVarslingsadresse & {
-  slackChannel?: ISlackChannel
-  slackUser?: ISlackUser
 }
 
 export type TOption = Readonly<{

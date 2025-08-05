@@ -5,13 +5,14 @@ import {
   usePersonSearch,
   useSlackChannelSearch,
 } from '@/api/teamkatalogen/teamkatalogenApi'
-import { ISlackChannel, ISlackUser, TVarslingsadresseQL } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
+import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import {
   EAdresseType,
   IVarslingsadresse,
+  TVarslingsadresseQL,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { user } from '@/services/user/userService'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
