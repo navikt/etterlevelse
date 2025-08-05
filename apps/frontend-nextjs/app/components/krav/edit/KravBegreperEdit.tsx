@@ -1,4 +1,4 @@
-import { useBegrepSearch } from '@/api/begrep/xBegrepApi'
+import { useBegrepSearch } from '@/api/begrep/begrepApi'
 import { FieldWrapper } from '@/components/common/inputs'
 import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from '@/components/common/modalSchema/ModalSchema'
