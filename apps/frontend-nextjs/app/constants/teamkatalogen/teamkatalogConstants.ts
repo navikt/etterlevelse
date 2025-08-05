@@ -27,6 +27,14 @@ export interface ITeamResource {
   resourceType: string
 }
 
+export interface IProductArea {
+  id: string
+  name: string
+  description: string
+  tags: string[]
+  members: IMember[]
+}
+
 export type TTemaCode = TReplace<ICode, { data?: ITemaCodeData }>
 
 export interface ITemaCodeData {

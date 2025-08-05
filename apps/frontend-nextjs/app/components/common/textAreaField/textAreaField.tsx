@@ -4,7 +4,7 @@ import { ChangeEvent, ReactNode, useState } from 'react'
 import { FieldWrapper } from '../fieldWrapper/fieldWrapper'
 import { Markdown } from '../markdown/markdown'
 import { FormError } from '../modalSchema/formError/formError'
-import { TextEditor } from '../textEditor/textEditor'
+import { TextEditor } from '../textEditor/TextEditor'
 
 interface ILabel {
   label: string
@@ -70,7 +70,7 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                   <TextEditor
                     height={height}
                     initialValue={fieldProps.field.value}
-                    setValue={(v) => fieldProps.form.setFieldValue(name, v)}
+                    setValue={(v: string) => fieldProps.form.setFieldValue(name, v)}
                     errors={fieldProps.form.errors}
                     name={name}
                     setIsFormDirty={setIsFormDirty}
