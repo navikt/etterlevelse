@@ -1,4 +1,4 @@
-import { TNavigableItem } from '@/constants/audit/auditConstants'
+import { TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { urlForObject } from '@/routes/urlForObject/urlForObject'
 import { CodelistService } from '@/services/kodeverk/kodeverkService'

@@ -1,6 +1,5 @@
 import { AuditButton } from '@/components/admin/auditButton/auditButton'
-import { EObjectType } from '@/constants/admin/audit/auditConstants'
-import { IAuditItem, TNavigableItem } from '@/constants/audit/auditConstants'
+import { EObjectType, IAuditItem, TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { Link } from '@navikt/ds-react'
 import { FunctionComponent, ReactNode } from 'react'
