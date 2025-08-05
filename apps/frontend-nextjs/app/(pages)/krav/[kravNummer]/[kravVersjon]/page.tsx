@@ -1,4 +1,4 @@
-import KravPage from '@/components/etterlevelse/krav/kravPage/xKravPage'
+import KravPage from '@/components/etterlevelse/krav/kravPage/KravPage'
 
 const Page = () => <KravPage />
 
