@@ -2,9 +2,9 @@ import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { Markdown } from '@/components/common/markdown/markdown'
 import {
   EEtterlevelseStatus,
+  ESuksesskriterieStatus,
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/suksesskriterier/suksesskriterierConstant'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'

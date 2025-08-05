@@ -1,10 +1,10 @@
 import { sadFolderIcon } from '@/components/others/images/images'
 import {
   EEtterlevelseStatus,
+  ESuksesskriterieStatus,
   ISuksesskriterieBegrunnelse,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/suksesskriterier/suksesskriterierConstant'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { etterlevelseUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
