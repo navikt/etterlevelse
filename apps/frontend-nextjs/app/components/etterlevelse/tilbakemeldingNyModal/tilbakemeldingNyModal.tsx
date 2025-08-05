@@ -7,15 +7,15 @@ import { AddEmail } from '@/components/varslingsadresse/varslingsadresserEdit/va
 import { VarslingsadresserTagList } from '@/components/varslingsadresse/varslingsadresserTagList/varslingsadresseTagList'
 import { IKrav, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import {
-  EAdresseType,
-  IVarslingsadresse,
-} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import {
   ETilbakemeldingMeldingStatus,
   ETilbakemeldingType,
   ICreateTilbakemeldingRequest,
   ITilbakemelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { getMessageType } from '@/util/tilbakemelding/tilbakemeldingUtils'
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'

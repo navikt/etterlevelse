@@ -1,16 +1,16 @@
-"use client"
+'use client'
 
 import { getMeldingByType, mapMeldingToFormValue } from '@/api/meldingApi/meldingApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
-import { EMeldingType, IMelding } from '@/constants/message/messageConstants'
+import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
+import { ampli } from '@/services/amplitude/amplitudeService'
 import { Heading, Tabs } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AuditRecentTable } from '../versjonering/AuditRecentTable'
 import EditMelding from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
-import { ampli } from '@/services/amplitude/amplitudeService'
 
 type TSection =
   | 'utsendtMelding'

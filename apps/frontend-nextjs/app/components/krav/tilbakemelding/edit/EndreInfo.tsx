@@ -1,8 +1,7 @@
 import { PersonName } from '@/components/common/personName/PersonName'
-import { ITilbakemeldingMelding } from '@/constants/message/messageConstants'
+import { ITilbakemeldingMelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
-
 
 export const EndretInfo = (props: { melding: ITilbakemeldingMelding }) => {
   if (!props.melding.endretAvIdent) return null

@@ -1,4 +1,4 @@
-import { EMeldingType } from '@/constants/message/messageConstants'
+import { EMeldingType } from '@/constants/admin/message/messageConstants'
 
 export type TWarningSection =
   | 'utsendtMelding'

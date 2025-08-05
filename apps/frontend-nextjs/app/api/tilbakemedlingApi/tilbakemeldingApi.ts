@@ -1,5 +1,10 @@
 import { IPageResponse } from '@/constants/commonConstants'
-import { ETilbakemeldingMeldingStatus, ICreateTilbakemeldingRequest, ITilbakemelding, ITilbakemeldingNewMeldingRequest } from '@/constants/message/messageConstants'
+import {
+  ETilbakemeldingMeldingStatus,
+  ICreateTilbakemeldingRequest,
+  ITilbakemelding,
+  ITilbakemeldingNewMeldingRequest,
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import moment from 'moment'

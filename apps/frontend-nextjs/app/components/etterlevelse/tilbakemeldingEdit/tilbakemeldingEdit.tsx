@@ -2,7 +2,7 @@ import { tilbakemeldingEditMelding } from '@/api/tilbakemelding/tilbakemeldingAp
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { Alert, Button, Textarea } from '@navikt/ds-react'
 import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction, useState } from 'react'
 

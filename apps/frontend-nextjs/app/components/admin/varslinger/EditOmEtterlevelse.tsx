@@ -1,11 +1,15 @@
-import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '@/api/meldingApi/meldingApi'
+import {
+  createMelding,
+  deleteMelding,
+  mapMeldingToFormValue,
+  updateMelding,
+} from '@/api/meldingApi/meldingApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { EMeldingStatus, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
-import { EMeldingStatus, IMelding } from '@/constants/message/messageConstants'
 import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
-
 
 export const EditOmEtterlevelse = ({
   melding,

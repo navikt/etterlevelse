@@ -2,7 +2,7 @@ import {
   ETilbakemeldingMeldingStatus,
   ETilbakemeldingRolle,
   ITilbakemelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { user } from '@/services/user/userService'
 
 const getStatus = (tilbakemelding: ITilbakemelding) => {

@@ -1,5 +1,5 @@
 import PersonNavn from '@/components/common/personNavn/personNavn'
-import { ITilbakemelding } from '@/constants/tilbakemelding/tilbakemeldingConstants'
+import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'

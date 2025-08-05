@@ -1,11 +1,15 @@
-import { createMelding, deleteMelding, mapMeldingToFormValue, updateMelding } from '@/api/meldingApi/meldingApi'
+import {
+  createMelding,
+  deleteMelding,
+  mapMeldingToFormValue,
+  updateMelding,
+} from '@/api/meldingApi/meldingApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
-import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/message/messageConstants'
 import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import React, { useEffect, useState } from 'react'
-
 
 export const getAlertTypeText = (type: EAlertType) => {
   if (!type) return ''

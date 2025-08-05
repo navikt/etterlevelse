@@ -1,13 +1,15 @@
 import { tilbakemeldingslettMelding } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
-import { ITilbakemelding, ITilbakemeldingMelding } from '@/constants/message/messageConstants'
+import { PersonName } from '@/components/common/personName/PersonName'
+import {
+  ITilbakemelding,
+  ITilbakemeldingMelding,
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { user } from '@/services/user/userService'
 import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import moment from 'moment'
 import { useState } from 'react'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
-import { PersonName } from '@/components/common/personName/PersonName'
-
 
 export const MeldingKnapper = (props: {
   melding: ITilbakemeldingMelding

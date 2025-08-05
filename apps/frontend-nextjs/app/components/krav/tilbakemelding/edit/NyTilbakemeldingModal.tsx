@@ -13,7 +13,7 @@ import {
   ETilbakemeldingType,
   ICreateTilbakemeldingRequest,
   ITilbakemelding,
-} from '@/constants/message/messageConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import {
   EAdresseType,
   IVarslingsadresse,

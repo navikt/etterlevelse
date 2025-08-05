@@ -1,5 +1,5 @@
+import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'
-import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/message/messageConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 

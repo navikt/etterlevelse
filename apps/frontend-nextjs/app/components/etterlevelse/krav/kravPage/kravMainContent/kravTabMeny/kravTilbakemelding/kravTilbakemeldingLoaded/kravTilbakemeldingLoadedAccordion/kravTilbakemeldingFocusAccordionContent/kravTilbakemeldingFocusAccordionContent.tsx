@@ -6,7 +6,7 @@ import { ContentLayout } from '@/components/others/layout/contentLayout/contentL
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { user } from '@/services/user/userService'
 import { BodyLong } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'

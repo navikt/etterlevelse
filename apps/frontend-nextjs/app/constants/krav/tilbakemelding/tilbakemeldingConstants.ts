@@ -1,4 +1,4 @@
-import { IVarslingsadresse } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { IVarslingsadresse } from '../../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 
 export enum ETilbakemeldingRolle {
   KRAVEIER = 'KRAVEIER',
@@ -44,6 +44,14 @@ export interface ICreateTilbakemeldingRequest {
   type: ETilbakemeldingType
   varslingsadresse: IVarslingsadresse
   foersteMelding: string
+  status: ETilbakemeldingMeldingStatus
+  endretKrav: boolean
+}
+
+export interface ITilbakemeldingNewMeldingRequest {
+  tilbakemeldingId: string
+  melding: string
+  rolle: ETilbakemeldingRolle
   status: ETilbakemeldingMeldingStatus
   endretKrav: boolean
 }

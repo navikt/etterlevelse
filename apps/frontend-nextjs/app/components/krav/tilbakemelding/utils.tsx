@@ -1,5 +1,4 @@
-import { ETilbakemeldingMeldingStatus } from "@/constants/message/messageConstants"
-
+import { ETilbakemeldingMeldingStatus } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 
 export const tilbakemeldingStatusToText = (status: ETilbakemeldingMeldingStatus) => {
   switch (status) {

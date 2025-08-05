@@ -7,8 +7,8 @@ import PersonNavn from '@/components/common/personNavn/personNavn'
 import {
   ETilbakemeldingMeldingStatus,
   ITilbakemelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
-import { ITilbakemeldingNewMeldingRequest } from '@/constants/tilbakemelding/tilbakemeldingNyMelding/tilbakemeldingNyMelding'
+  ITilbakemeldingNewMeldingRequest,
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { user } from '@/services/user/userService'
 import {
   getParsedOptionsforTilbakeMelding,

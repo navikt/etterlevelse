@@ -1,5 +1,8 @@
 import { tilbakemeldingEditMelding } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
-import { ITilbakemelding, ITilbakemeldingMelding } from '@/constants/message/messageConstants'
+import {
+  ITilbakemelding,
+  ITilbakemeldingMelding,
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { Alert, Button, Textarea } from '@navikt/ds-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 

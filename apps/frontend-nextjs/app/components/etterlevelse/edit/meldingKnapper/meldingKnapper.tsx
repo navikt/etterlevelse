@@ -3,7 +3,7 @@ import PersonNavn from '@/components/common/personNavn/personNavn'
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { user } from '@/services/user/userService'
 import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'

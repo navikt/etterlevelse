@@ -1,5 +1,5 @@
-import { IDomainObject, IRegelverk } from '../commonConstants'
-import { ICode } from '../kodeverk/kodeverkConstants'
+import { IDomainObject } from '../commonConstants'
+import { ICode, IRegelverk } from '../kodeverk/kodeverkConstants'
 
 export interface IVirkemiddel extends IDomainObject {
   id: string

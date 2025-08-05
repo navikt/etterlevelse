@@ -5,14 +5,14 @@ import { getTilbakemeldingForKrav } from '@/api/tilbakemedlingApi/tilbakemelding
 import { PersonName } from '@/components/common/personName/PersonName'
 import { getMelderInfo } from '@/components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { TSporsmaalOgSvarKrav } from '@/constants/admin/kravTilbakemelding/kravTilbakemelding'
 import { IPageResponse } from '@/constants/commonConstants'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import {
   ETilbakemeldingMeldingStatus,
   ITilbakemelding,
-  TSporsmaalOgSvarKrav,
-} from '@/constants/message/messageConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { ampli } from '@/services/amplitude/amplitudeService'
 import { CodelistService } from '@/services/kodeverk/kodeverkService'

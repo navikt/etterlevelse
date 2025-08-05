@@ -18,7 +18,7 @@ import {
   ETilbakemeldingRolle,
   ITilbakemelding,
   ITilbakemeldingNewMeldingRequest,
-} from '@/constants/message/messageConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { user } from '@/services/user/userService'
 import { useQueryParam, useRefs } from '@/util/hooks/customHooks/customHooks'

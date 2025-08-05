@@ -74,3 +74,8 @@ export interface ITemaCodeData {
   image?: string
   shortDesciption?: string
 }
+
+export interface IRegelverk {
+  lov: TLovCode
+  spesifisering?: string
+}

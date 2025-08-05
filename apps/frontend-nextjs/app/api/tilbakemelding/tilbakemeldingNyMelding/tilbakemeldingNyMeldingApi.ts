@@ -1,5 +1,7 @@
-import { ITilbakemelding } from '@/constants/tilbakemelding/tilbakemeldingConstants'
-import { ITilbakemeldingNewMeldingRequest } from '@/constants/tilbakemelding/tilbakemeldingNyMelding/tilbakemeldingNyMelding'
+import {
+  ITilbakemelding,
+  ITilbakemeldingNewMeldingRequest,
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 

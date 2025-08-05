@@ -5,7 +5,7 @@ import {
   ETilbakemeldingRolle,
   ITilbakemelding,
   ITilbakemeldingMelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'

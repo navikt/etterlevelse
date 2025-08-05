@@ -1,7 +1,7 @@
 import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
 import { mailboxPoppingIcon } from '@/components/others/images/images'
 import { IKrav } from '@/constants/krav/kravConstants'
-import { ITilbakemelding } from '@/constants/tilbakemelding/tilbakemeldingConstants'
+import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { ettlevColors } from '@/util/theme/theme'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { KravTilbakemeldingLoadedAccordion } from './kravTilbakemeldingLoadedAccordion/kravTilbakemeldingLoadedAccordion'

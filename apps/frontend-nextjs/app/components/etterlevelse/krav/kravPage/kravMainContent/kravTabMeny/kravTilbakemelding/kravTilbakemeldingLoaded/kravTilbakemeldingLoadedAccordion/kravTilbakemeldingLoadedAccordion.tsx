@@ -4,7 +4,7 @@ import { getMelderInfo } from '@/components/etterlevelse/getMelderInfo/getMelder
 import { ShowWarningMessage } from '@/components/etterlevelse/kravCard/KravCard'
 import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
 import { IKrav } from '@/constants/krav/kravConstants'
-import { ITilbakemelding } from '@/constants/tilbakemelding/tilbakemeldingConstants'
+import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { TRefs, useRefs } from '@/util/hooks/customHooks/customHooks'
 import { tilbakemeldingStatusToText } from '@/util/tilbakemelding/tilbakemeldingUtils'

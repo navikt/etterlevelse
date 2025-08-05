@@ -1,5 +1,5 @@
+import { ETilbakemeldingMeldingStatus } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { EAdresseType } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { ETilbakemeldingMeldingStatus } from '@/constants/tilbakemelding/tilbakemeldingConstants'
 
 export const tilbakemeldingStatusToText = (status: ETilbakemeldingMeldingStatus) => {
   switch (status) {

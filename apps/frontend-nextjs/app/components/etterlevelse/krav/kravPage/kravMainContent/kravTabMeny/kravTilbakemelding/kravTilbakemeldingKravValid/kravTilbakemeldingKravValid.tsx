@@ -1,7 +1,7 @@
 import { TilbakemeldingNyModal } from '@/components/etterlevelse/tilbakemeldingNyModal/tilbakemeldingNyModal'
 import { LoginButton } from '@/components/others/layout/header/login/login'
 import { IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
-import { ITilbakemelding } from '@/constants/tilbakemelding/tilbakemeldingConstants'
+import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { user } from '@/services/user/userService'
 import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'

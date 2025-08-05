@@ -3,7 +3,7 @@ import {
   ETilbakemeldingMeldingStatus,
   ICreateTilbakemeldingRequest,
   ITilbakemelding,
-} from '@/constants/tilbakemelding/tilbakemeldingConstants'
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import moment from 'moment'

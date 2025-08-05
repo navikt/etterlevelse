@@ -1,5 +1,5 @@
-import { IDomainObject, IRegelverk, TOr, TReplace } from '@/constants/commonConstants'
-import { ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { IDomainObject, TOr, TReplace } from '@/constants/commonConstants'
+import { ICode, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
 import { IBegrep } from '../behandlingskatalogen/behandlingskatalogConstants'
 import { TEtterlevelseQL } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {

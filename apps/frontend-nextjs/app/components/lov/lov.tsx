@@ -1,5 +1,4 @@
-import { IRegelverk } from '@/constants/commonConstants'
-import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, IRegelverk, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistService, ICodelistProps } from '@/services/kodeverk/kodeverkService'
 import { env } from '@/util/env/env'
 import { Link } from '@navikt/ds-react'
