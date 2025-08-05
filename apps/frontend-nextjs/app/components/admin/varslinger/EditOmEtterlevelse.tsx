@@ -3,7 +3,7 @@ import {
   deleteMelding,
   mapMeldingToFormValue,
   updateMelding,
-} from '@/api/meldingApi/meldingApi'
+} from '@/api/melding/meldingApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'

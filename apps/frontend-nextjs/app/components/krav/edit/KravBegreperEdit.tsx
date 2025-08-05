@@ -1,4 +1,4 @@
-import { useBegrepSearch } from '@/api/begrepApi.ts/BegrepApi'
+import { useBegrepSearch } from '@/api/begrep/xBegrepApi'
 import { FieldWrapper } from '@/components/common/inputs'
 import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from '@/components/common/modalSchema/ModalSchema'
@@ -9,7 +9,6 @@ import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { DropdownIndicatorProps, components } from 'react-select'
 import AsyncSelect from 'react-select/async'
-
 
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (

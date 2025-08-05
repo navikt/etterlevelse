@@ -3,7 +3,6 @@ import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
-
 export const searchBegrep = async (begrepSearch: string) => {
   return (
     await axios.get<IPageResponse<IBegrep>>(`${env.backendBaseUrl}/begrep/search/${begrepSearch}`)

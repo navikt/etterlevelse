@@ -33,6 +33,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/types/**/*.tsx"
-  ],
+, "app/api/begrep"  ],
   "exclude": ["node_modules"]
 }

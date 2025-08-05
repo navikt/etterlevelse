@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteEtterlevelse } from '@/api/etterlevelseApi/etterlevelseApi'
+import { deleteEtterlevelse } from '@/api/etterlevelse/etterlevelseApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { BodyShort, Button, Heading, TextField } from '@navikt/ds-react'
 import { useState } from 'react'

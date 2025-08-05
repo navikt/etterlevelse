@@ -1,7 +1,7 @@
 'use client'
 
-import { logApi } from '@/api/logApi/logApi'
-import { getMeldingByType } from '@/api/meldingApi/meldingApi'
+import { logApi } from '@/api/log/logApi'
+import { getMeldingByType } from '@/api/melding/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import SkipToContent from '@/components/common/skipToContent/skipToContent'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'

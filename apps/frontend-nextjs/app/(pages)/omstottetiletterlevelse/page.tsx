@@ -1,6 +1,6 @@
 'use client'
 
-import { getMeldingByType, mapMeldingToFormValue } from '@/api/meldingApi/meldingApi'
+import { getMeldingByType, mapMeldingToFormValue } from '@/api/melding/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
