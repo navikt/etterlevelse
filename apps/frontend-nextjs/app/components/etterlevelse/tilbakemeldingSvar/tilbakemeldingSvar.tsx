@@ -1,8 +1,8 @@
 import {
+  tilbakemeldingNewMelding,
   tilbakemeldingSlettMelding,
   updateTilbakemeldingStatusOgEndretKrav,
-} from '@/api/tilbakemelding/tilbakemeldingApi'
-import { tilbakemeldingNewMelding } from '@/api/tilbakemelding/tilbakemeldingNyMelding/tilbakemeldingNyMeldingApi'
+} from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import PersonNavn from '@/components/common/personNavn/personNavn'
 import {
   ETilbakemeldingMeldingStatus,

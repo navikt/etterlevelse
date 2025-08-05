@@ -1,6 +1,6 @@
 'use client'
 
-import { useTilbakemeldinger } from '@/api/tilbakemelding/tilbakemeldingApi'
+import { useTilbakemeldinger } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { IKrav, IKravVersjon } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Loader } from '@navikt/ds-react'

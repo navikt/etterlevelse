@@ -1,4 +1,4 @@
-import { tilbakemeldingEditMelding } from '@/api/tilbakemelding/tilbakemeldingApi'
+import { tilbakemeldingEditMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,

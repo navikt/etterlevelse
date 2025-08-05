@@ -1,4 +1,4 @@
-import { tilbakemeldingslettMelding } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
+import { tilbakemeldingslettMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
 import {
   ITilbakemelding,

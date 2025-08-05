@@ -1,4 +1,4 @@
-import { createNewTilbakemelding } from '@/api/tilbakemelding/tilbakemeldingApi'
+import { createNewTilbakemelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { SlackChannelSearch } from '@/components/varslingsadresse/slackChannelSearch/slackChannelSearch'

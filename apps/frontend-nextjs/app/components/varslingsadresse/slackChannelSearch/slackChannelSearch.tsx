@@ -1,4 +1,4 @@
-import { useSlackChannelSearch } from '@/api/teamkatalogen/slack/slackApi'
+import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import {

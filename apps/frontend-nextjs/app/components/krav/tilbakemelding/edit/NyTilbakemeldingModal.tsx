@@ -1,4 +1,4 @@
-import { createNewTilbakemelding } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
+import { createNewTilbakemelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { TextAreaField } from '@/components/common/inputs'
 import { Markdown } from '@/components/common/markdown/markdown'
 import {

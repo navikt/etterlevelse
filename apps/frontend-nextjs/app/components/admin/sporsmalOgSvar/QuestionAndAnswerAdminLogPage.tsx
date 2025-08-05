@@ -1,7 +1,7 @@
 'use client'
 
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
-import { getTilbakemeldingForKrav } from '@/api/tilbakemedlingApi/tilbakemeldingApi'
+import { getTilbakemeldingForKrav } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
 import { getMelderInfo } from '@/components/krav/tilbakemelding/Tilbakemelding'
 import { PageLayout } from '@/components/others/scaffold/scaffold'

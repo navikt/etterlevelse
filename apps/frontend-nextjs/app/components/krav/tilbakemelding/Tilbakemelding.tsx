@@ -3,7 +3,7 @@ import {
   tilbakemeldingslettMelding,
   updateTilbakemeldingStatusOgEndretKrav,
   useTilbakemeldinger,
-} from '@/api/tilbakemedlingApi/tilbakemeldingApi'
+} from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
 import { PersonName } from '@/components/common/personName/PersonName'
 import { Portrait } from '@/components/common/portrait/portrait'

@@ -1,5 +1,4 @@
-import { getSlackUserByEmail } from '@/api/teamkatalogen/slack/slackApi'
-import { usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
+import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
 import { ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'

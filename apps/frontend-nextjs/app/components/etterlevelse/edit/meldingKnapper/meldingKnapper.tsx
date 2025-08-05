@@ -1,4 +1,4 @@
-import { tilbakemeldingSlettMelding } from '@/api/tilbakemelding/tilbakemeldingApi'
+import { tilbakemeldingSlettMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import PersonNavn from '@/components/common/personNavn/personNavn'
 import {
   ITilbakemelding,

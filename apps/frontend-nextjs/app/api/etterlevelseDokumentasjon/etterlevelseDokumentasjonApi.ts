@@ -7,7 +7,7 @@ import { IVirkemiddel } from '@/constants/virkemiddel/virkemiddelConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { getVirkemiddel } from '../virkemiddelApi/virkemiddelApi'
+import { getVirkemiddel } from '../virkemiddel/virkemiddelApi'
 
 const getEtterlevelseDokumentasjon = async (id: string) => {
   return (
