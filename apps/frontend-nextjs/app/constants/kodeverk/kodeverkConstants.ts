@@ -34,3 +34,43 @@ export interface ILovCodeData {
   tema?: string
   relevantFor?: ELovCodeRelevans
 }
+
+export interface IAllCodelists {
+  codelist: IList
+}
+
+export interface IList {
+  [name: string]: ICode[]
+}
+
+export interface ICodeListFormValues {
+  list: string
+  code: string
+  shortName?: string
+  description?: string
+  data?: ILovCodeData | ITemaCodeData
+}
+export interface ICodeUsage {
+  listName: EListName
+  code: string
+  inUse: boolean
+  krav: [IUse]
+  etterlevelseDokumentasjoner: [IUse]
+  codelist: [ICode]
+}
+
+export interface IUse {
+  id: string
+  name: string
+  number: string
+}
+
+export interface ICategoryUsage {
+  listName: string
+  codesInUse: ICodeUsage[]
+}
+
+export interface ITemaCodeData {
+  image?: string
+  shortDesciption?: string
+}

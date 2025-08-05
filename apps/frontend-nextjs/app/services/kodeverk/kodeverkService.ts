@@ -2,7 +2,9 @@ import { getAllCodelists } from '@/api/kodeverk/kodeverkApi'
 import {
   EListName,
   ELovCodeRelevans,
+  IAllCodelists,
   ICode,
+  ICodeListFormValues,
   TLovCode,
 } from '@/constants/kodeverk/kodeverkConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
@@ -45,7 +47,7 @@ export interface ICodelistProps {
   gjelderForLov: (tema: TTemaCode, lov: TLovCode) => boolean
 }
 
-export interface IGetParsedOptionsProps {
+interface IGetParsedOptionsProps {
   value: string
   label: string
   description: string
@@ -272,53 +274,6 @@ export const CodelistService = () => {
   }
 
   return [utils, lists] as [ICodelistProps, IAllCodelists | undefined]
-}
-
-export interface IAllCodelists {
-  codelist: IList
-}
-
-export interface IList {
-  [name: string]: ICode[]
-}
-
-export interface ICodeListFormValues {
-  list: string
-  code: string
-  shortName?: string
-  description?: string
-  data?: ILovCodeData | ITemaCodeData
-}
-export interface ICodeUsage {
-  listName: EListName
-  code: string
-  inUse: boolean
-  krav: [IUse]
-  etterlevelseDokumentasjoner: [IUse]
-  codelist: [ICode]
-}
-
-export interface IUse {
-  id: string
-  name: string
-  number: string
-}
-
-export interface ICategoryUsage {
-  listName: string
-  codesInUse: ICodeUsage[]
-}
-
-export interface ILovCodeData {
-  lovId?: string
-  underavdeling?: string
-  tema?: string
-  relevantFor?: ELovCodeRelevans
-}
-
-export interface ITemaCodeData {
-  image?: string
-  shortDesciption?: string
 }
 
 const containsLovCodeDataCheck = (data?: string, list?: string): boolean => {
