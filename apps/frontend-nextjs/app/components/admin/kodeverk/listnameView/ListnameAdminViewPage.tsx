@@ -11,8 +11,8 @@ import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Loader, Select } from '@navikt/ds-react'
 import { useParams, useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
+import ModalCreateCodeList from '../edit/ModalCreateCodeList'
 import CodeListTable from './CodelistStyledTable'
-import ModalCreateCodeList from './ModalCreateCodeList'
 
 export const ListnameAdminViewPage = () => {
   const params = useParams()

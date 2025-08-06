@@ -13,9 +13,9 @@ import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { AuditButton } from '../../versjonering/common/AuditButton'
+import DeleteCodeListModal from '../edit/ModalDeleteCodeList'
+import UpdateCodeListModal from '../edit/ModalUpdateCodeList'
 import { Usage } from './CodeListUsage'
-import DeleteCodeListModal from './ModalDeleteCodeList'
-import UpdateCodeListModal from './ModalUpdateCodeList'
 
 type TTableCodelistProps = {
   tableData: ICode[]
