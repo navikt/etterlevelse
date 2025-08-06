@@ -3,7 +3,6 @@
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { adminCodelist } from '@/routes/admin/adminRoutes'
 import { codelist } from '@/services/kodeverk/kodeverkService'
-import { user } from '@/services/user/userService'
 import { Heading, Select } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
@@ -23,7 +22,6 @@ const CodeListAdminPage = () => {
       pageTitle={listname ? listname : 'Velg kodeverk'}
       currentPage='Administrering av kodeverk'
     >
-      {user.isAdmin() ? 'true' : 'false'}
       <Heading size='medium' level='1'>
         Administrering av kodeverk
       </Heading>
