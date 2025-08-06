@@ -7,7 +7,7 @@ import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
-import { CodelistService } from '@/services/kodeverk/kodeverkService'
+import { codelist } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -37,7 +37,6 @@ const kravStatus = (status: EKravStatus | string) => {
 }
 
 const KravAdminPage = () => {
-  const [codelistUtils] = CodelistService()
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -54,8 +53,8 @@ const KravAdminPage = () => {
       case 'avdeling':
         return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
       case 'tema':
-        return (codelistUtils.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
-          codelistUtils.getCode(EListName.TEMA, b.tema)?.shortName || ''
+        return (codelist.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
+          codelist.getCode(EListName.TEMA, b.tema)?.shortName || ''
         )
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
@@ -146,7 +145,7 @@ const KravAdminPage = () => {
                     {' '}
                     {krav.tema && (
                       <Link href={`${temaUrl}/${krav.tema}`}>
-                        {codelistUtils.getCode(EListName.TEMA, krav.tema)?.shortName}
+                        {codelist.getCode(EListName.TEMA, krav.tema)?.shortName}
                       </Link>
                     )}
                   </Table.DataCell>

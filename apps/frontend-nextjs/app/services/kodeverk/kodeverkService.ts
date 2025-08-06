@@ -9,43 +9,11 @@ import {
 } from '@/constants/kodeverk/kodeverkConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { AxiosResponse } from 'axios'
-import { useEffect, useState } from 'react'
 import * as yup from 'yup'
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
 const LOVDATA_RUNDSKRIV_PREFIX = 'RUNDSKRIV_'
-
-export interface ICodelistProps {
-  fetchData: (refresh?: boolean) => Promise<any>
-  isLoaded: () => string | IAllCodelists | undefined
-  getCodes: (list: EListName) => TLovCode[] | TTemaCode[] | ICode[]
-  getCode: (list: EListName, codeName?: string) => TLovCode | TTemaCode | ICode | undefined
-  valid: (list: EListName, codeName?: string) => boolean
-  getLovCodesForTema: (codeName?: string) => TLovCode[]
-  getShortnameForCode: (code: ICode) => string
-  getShortnameForCodes: (codes: ICode[]) => string
-  getShortname: (list: EListName, codeName: string) => string
-  getShortnames: (list: EListName, codeNames: string[]) => string[]
-  getDescription: (list: EListName, codeName: string) => string
-  getParsedOptions: (listName: EListName) => IGetParsedOptionsProps[]
-  getOptionsForCode: (codes: ICode[]) => { id: string; label: string; description: string }[]
-  getParsedOptionsForLov: (
-    forVirkemiddel?: boolean
-  ) => { value: string; label: string; description: string }[]
-  getParsedOptionsForList: (
-    listName: EListName,
-    selected: string[]
-  ) => { id: string; label: string }[]
-  getParsedOptionsFilterOutSelected: (
-    listName: EListName,
-    currentSelected: string[]
-  ) => { value: string; label: string }[]
-  isForskrift: (nationalLawCode?: string) => boolean | '' | undefined
-  isRundskriv: (nationalLawCode?: string) => boolean | '' | undefined
-  makeValueLabelForAllCodeLists: () => { value: string; label: string }[]
-  gjelderForLov: (tema: TTemaCode, lov: TLovCode) => boolean
-}
 
 export interface IGetParsedOptionsProps {
   value: string
@@ -80,129 +48,116 @@ interface IMakeValueLabelForAllCodeListsProps {
   label: string
 }
 
-export const CodelistService = () => {
-  const [lists, setLists] = useState<IAllCodelists | undefined>()
-  const [error, setError] = useState<string | undefined>()
+class CodelistService {
+  lists?: IAllCodelists
+  error?: string
+  promise: Promise<any>
 
-  useEffect(() => {
-    ;(async () => {
-      await fetchData()
-    })()
-  }, [])
-
-  const fetchData = async (refresh?: boolean): Promise<any> => {
-    if (lists === undefined || refresh) {
-      getAllCodelists(refresh)
-        .then(handleGetCodelistResponse)
-        .catch((error: any) => (error = error.message))
-    }
+  constructor() {
+    this.promise = this.fetchData()
   }
 
-  const handleGetCodelistResponse = (response: AxiosResponse<IAllCodelists>) => {
+  private fetchData = async (refresh?: boolean) => {
+    const codeListPromise = getAllCodelists(refresh)
+      .then(this.handleGetCodelistResponse)
+      .catch((err) => (this.error = err.message))
+    return Promise.all([codeListPromise])
+  }
+
+  handleGetCodelistResponse = (response: AxiosResponse<IAllCodelists>) => {
     if (typeof response.data === 'object' && response.data !== null) {
-      setLists(response.data)
+      this.lists = response.data
     } else {
-      setError(response.data)
+      this.error = response.data
     }
   }
 
-  const isLoaded = (): string | IAllCodelists | undefined => {
-    return lists || error
+  refreshCodeLists() {
+    this.promise = this.fetchData(true)
+    return this.promise
+  }
+
+  async wait() {
+    await this.promise
+  }
+
+  isLoaded() {
+    return this.lists || this.error
   }
 
   // overloads
-  // getCodes(list: EListName.LOV): TLovCode[]
-  // getCodes(list: EListName.TEMA): TTemaCode[]
-  // getCodes(list: EListName): ICode[]¨
+  getCodes(list: EListName.LOV): TLovCode[]
+  getCodes(list: EListName.TEMA): TTemaCode[]
+  getCodes(list: EListName): ICode[]
 
-  const getCodes = (list: EListName): TLovCode[] | TTemaCode[] | ICode[] => {
-    const newList: TLovCode[] | TTemaCode[] | ICode[] =
-      lists && lists.codelist[list]
-        ? lists.codelist[list].sort((c1: ICode, c2: ICode) =>
-            c1.shortName.localeCompare(c2.shortName, 'nb')
-          )
-        : []
-
-    if (list === EListName.LOV) {
-      return newList as TLovCode[]
-    }
-
-    if (list === EListName.TEMA) {
-      return newList as TTemaCode[]
-    }
-
-    return newList as ICode[]
+  getCodes(list: EListName): ICode[] {
+    return this.lists && this.lists.codelist[list]
+      ? this.lists.codelist[list].sort((c1, c2) => c1.shortName.localeCompare(c2.shortName, 'nb'))
+      : []
   }
 
   // overloads
-  //  getCode(list: EListName.LOV, codeName?: string): TLovCode | undefined
-  //  getCode(list: EListName.TEMA, codeName?: string): TTemaCode | undefined
-  //  getCode(list: EListName, codeName?: string): ICode | undefined
+  getCode(list: EListName.LOV, codeName?: string): TLovCode | undefined
+  getCode(list: EListName.TEMA, codeName?: string): TTemaCode | undefined
+  getCode(list: EListName, codeName?: string): ICode | undefined
 
-  const getCode = (
-    list: EListName,
-    codeName?: string
-  ): TLovCode | TTemaCode | ICode | undefined => {
-    const code: ICode | TLovCode | TTemaCode | undefined = getCodes(list).find(
-      (getCode) => getCode.code === codeName
-    )
-
-    if (list === EListName.LOV) {
-      return code as TLovCode | undefined
-    }
-
-    if (list === EListName.TEMA) {
-      return code as TTemaCode | undefined
-    }
-
-    return code as ICode | undefined
+  getCode(list: EListName, codeName?: string): ICode | undefined {
+    return this.getCodes(list).find((c) => c.code === codeName)
   }
 
-  const getLovCodesForTema = (codeName?: string): TLovCode[] => {
-    return getCodes(EListName.LOV).filter((code) => code.data?.tema === codeName) as TLovCode[]
+  getLovCodesForTema(codeName?: string): TLovCode[] {
+    return this.getCodes(EListName.LOV).filter((c) => c.data?.tema === codeName)
   }
 
-  const valid = (list: EListName, codeName?: string): boolean => {
-    return !!codeName && !!getCode(list, codeName)
+  valid(list: EListName, codeName?: string): boolean {
+    return !!codeName && !!this.getCode(list, codeName)
   }
 
-  const getShortnameForCode = (code: ICode): string => {
-    return getShortname(code.list, code.code)
+  getShortnameForCode(code: ICode): string {
+    return this.getShortname(code.list, code.code)
   }
 
-  const getShortnameForCodes = (codes: ICode[]): string => {
-    return codes.map((code: ICode) => getShortname(code.list, code.code)).join(', ')
+  getShortnameForCodes(codes: ICode[]): string {
+    return codes.map((code: ICode) => this.getShortname(code.list, code.code)).join(', ')
   }
 
-  const getShortname = (list: EListName, codeName: string): string => {
-    const code: ICode | TLovCode | TTemaCode | undefined = getCode(list, codeName)
+  getShortname(list: EListName, codeName: string): string {
+    const code = this.getCode(list, codeName)
     return code ? code.shortName : codeName
   }
 
-  const getShortnames = (list: EListName, codeNames: string[]): string[] => {
-    return codeNames.map((codeName: string) => getShortname(list, codeName))
+  getShortnames(list: EListName, codeNames: string[]): string[] {
+    return codeNames.map((codeName) => this.getShortname(list, codeName))
   }
 
-  const getDescription = (list: EListName, codeName: string): string => {
-    const code: ICode | TLovCode | TTemaCode | undefined = getCode(list, codeName)
+  getDescription(list: EListName, codeName: string): string {
+    const code = this.getCode(list, codeName)
     return code ? code.description : codeName
   }
 
-  const getParsedOptions = (listName: EListName): IGetParsedOptionsProps[] => {
-    return getCodes(listName).map((code: ICode | TLovCode | TTemaCode) => {
+  isForskrift(nationalLawCode?: string): boolean | '' | undefined {
+    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
+  }
+
+  isRundskriv(nationalLawCode?: string): boolean | '' | undefined {
+    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_RUNDSKRIV_PREFIX)
+  }
+
+  getParsedOptions(listName: EListName): IGetParsedOptionsProps[] {
+    return this.getCodes(listName).map((code: ICode) => {
       return { value: code.code, label: code.shortName, description: code.description }
     })
   }
 
-  const getOptionsForCode = (codes: ICode[]): IGetOptionsForCodeProps[] => {
+  getOptionsForCode(codes: ICode[]): IGetOptionsForCodeProps[] {
     return codes.map((code: ICode) => {
       return { id: code.code, label: code.shortName, description: code.description }
     })
   }
 
-  const getParsedOptionsForLov = (forVirkemiddel?: boolean): IGetParsedOptionsForLovProps[] => {
-    const lovList: TLovCode[] = getCodes(EListName.LOV) as TLovCode[]
-    let filteredLovList: TLovCode[] = []
+  getParsedOptionsForLov(forVirkemiddel?: boolean): IGetParsedOptionsForLovProps[] {
+    const lovList = this.getCodes(EListName.LOV)
+    let filteredLovList = []
 
     if (forVirkemiddel) {
       filteredLovList = filterLovCodeListForRelevans(lovList, ELovCodeRelevans.VIRKEMIDDEL)
@@ -215,18 +170,18 @@ export const CodelistService = () => {
     })
   }
 
-  const getParsedOptionsForList = (
+  getParsedOptionsForList(
     listName: EListName,
     selected: string[]
-  ): IGetParsedOptionsForListProps[] => {
-    return selected.map((code: string) => ({ id: code, label: getShortname(listName, code) }))
+  ): IGetParsedOptionsForListProps[] {
+    return selected.map((code) => ({ id: code, label: this.getShortname(listName, code) }))
   }
 
-  const getParsedOptionsFilterOutSelected = (
+  getParsedOptionsFilterOutSelected(
     listName: EListName,
     currentSelected: string[]
-  ): IGetParsedOptionsFilterOutSelectedProps[] => {
-    const parsedOptions = getParsedOptions(listName)
+  ): IGetParsedOptionsFilterOutSelectedProps[] {
+    const parsedOptions = this.getParsedOptions(listName)
     return !currentSelected
       ? parsedOptions
       : parsedOptions.filter((option) =>
@@ -234,46 +189,13 @@ export const CodelistService = () => {
         )
   }
 
-  const isForskrift = (nationalLawCode?: string): boolean | '' | undefined => {
-    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_FORSKRIFT_PREFIX)
+  makeValueLabelForAllCodeLists(): IMakeValueLabelForAllCodeListsProps[] {
+    return Object.keys(EListName).map((key) => ({ value: key, label: key }))
   }
 
-  const isRundskriv = (nationalLawCode?: string): boolean | '' | undefined => {
-    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_RUNDSKRIV_PREFIX)
+  gjelderForLov(tema: TTemaCode, lov: TLovCode) {
+    return !!this.getLovCodesForTema(tema.code).filter((l) => l.code === lov.code).length
   }
-
-  const makeValueLabelForAllCodeLists = (): IMakeValueLabelForAllCodeListsProps[] => {
-    return Object.keys(EListName).map((key: string) => ({ value: key, label: key }))
-  }
-
-  const gjelderForLov = (tema: TTemaCode, lov: TLovCode): boolean => {
-    return !!getLovCodesForTema(tema.code).filter((code: TLovCode) => code.code === lov.code).length
-  }
-
-  const utils: ICodelistProps = {
-    fetchData,
-    isLoaded,
-    getCodes,
-    getCode,
-    getLovCodesForTema,
-    valid,
-    getShortnameForCode,
-    getShortnameForCodes,
-    getShortname,
-    getShortnames,
-    getDescription,
-    getParsedOptions,
-    getOptionsForCode,
-    getParsedOptionsForLov,
-    getParsedOptionsForList,
-    getParsedOptionsFilterOutSelected,
-    isForskrift,
-    isRundskriv,
-    makeValueLabelForAllCodeLists,
-    gjelderForLov,
-  }
-
-  return [utils, lists] as [ICodelistProps, IAllCodelists | undefined]
 }
 
 const containsLovCodeDataCheck = (data?: string, list?: string): boolean => {
@@ -352,3 +274,5 @@ export const filterLovCodeListForRelevans = (
     return false
   })
 }
+
+export const codelist = new CodelistService()

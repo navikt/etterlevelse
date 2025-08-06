@@ -1,7 +1,7 @@
 import { TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { urlForObject } from '@/routes/urlForObject/urlForObject'
-import { CodelistService } from '@/services/kodeverk/kodeverkService'
+import { codelist } from '@/services/kodeverk/kodeverkService'
 import { BodyShort } from '@navikt/ds-react'
 import { Fragment, FunctionComponent, ReactNode } from 'react'
 import { ExternalLink } from '../externalLink/externalLink'
@@ -29,16 +29,15 @@ type TListCodelist = {
 
 const ListCodelist: FunctionComponent<TListCodelist> = ({ item, linkCodelist, list }) => {
   const itemString = item as string
-  const [codelistUtils] = CodelistService()
 
   return (
     <>
       {linkCodelist && (
         <ExternalLink href={urlForObject(list as EListName & TNavigableItem, itemString)}>
-          {codelistUtils.getShortname(list as EListName & TNavigableItem, itemString)}
+          {codelist.getShortname(list as EListName & TNavigableItem, itemString)}
         </ExternalLink>
       )}
-      {!linkCodelist && <>{codelistUtils.getShortname(list, itemString)}</>}
+      {!linkCodelist && <>{codelist.getShortname(list, itemString)}</>}
     </>
   )
 }

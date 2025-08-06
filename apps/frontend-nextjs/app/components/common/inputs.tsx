@@ -2,7 +2,7 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { Error, FormError } from '@/components/common/modalSchema/ModalSchema'
 import { TOption, TOr } from '@/constants/commonConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { CodelistService } from '@/services/kodeverk/kodeverkService'
+import { codelist } from '@/services/kodeverk/kodeverkService'
 import {
   BodyShort,
   Button,
@@ -425,8 +425,7 @@ type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName, error } = props
-  const [codelistUtils] = CodelistService()
-  const optionsList: TOption[] = options || codelistUtils.getParsedOptions(listName)
+  const optionsList: TOption[] = options || codelist.getParsedOptions(listName)
 
   return (
     <Select
@@ -438,7 +437,7 @@ export const OptionList = (props: TPropsOptionList) => {
       onChange={(event: ChangeEvent<HTMLSelectElement>) => {
         const val: string = event.target.value
         const toSet: string | ICode =
-          listName && val ? (codelistUtils.getCode(listName, val) as ICode) : val
+          listName && val ? (codelist.getCode(listName, val) as ICode) : val
         return onChange(toSet)
       }}
     >

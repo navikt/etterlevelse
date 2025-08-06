@@ -15,7 +15,7 @@ import {
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { ampli } from '@/services/amplitude/amplitudeService'
-import { CodelistService } from '@/services/kodeverk/kodeverkService'
+import { codelist } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -34,7 +34,6 @@ import { ChangeEvent, useEffect, useState } from 'react'
 type TKravMessage = ITilbakemelding & TSporsmaalOgSvarKrav
 
 export const QuestionAndAnswerAdminLogPage = () => {
-  const [codelistUtils] = CodelistService()
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [kravMessages, setKravMessages] = useState<TKravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
@@ -192,7 +191,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
                       </Link>
                     </Table.DataCell>
                     <Table.DataCell>
-                      {codelistUtils.getCode(EListName.TEMA, message.tema)?.shortName}
+                      {codelist.getCode(EListName.TEMA, message.tema)?.shortName}
                     </Table.DataCell>
                     <Table.DataCell>{message.melderNavn}</Table.DataCell>
                     <Table.DataCell>{moment(message.tidForSporsmaal).format('LLL')}</Table.DataCell>
