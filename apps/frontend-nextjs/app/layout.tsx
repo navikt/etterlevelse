@@ -7,7 +7,8 @@ import { apolloClient } from './api/apolloClient/apolloClient'
 import { Footer } from './components/others/layout/footer/footer'
 import Header from './components/others/layout/header/header'
 import './globals.css'
-import { useAwaitUser } from './util/hooks/customHooks/customHooks'
+import { codelist } from './services/kodeverk/kodeverkService'
+import { useAwait, useAwaitUser } from './util/hooks/customHooks/customHooks'
 
 type TProps = {
   children: ReactNode
@@ -15,6 +16,8 @@ type TProps = {
 
 const Main: FunctionComponent<TProps> = ({ children }) => {
   useAwaitUser()
+  useAwait(codelist.wait())
+
   return (
     <html lang='no'>
       <body>
