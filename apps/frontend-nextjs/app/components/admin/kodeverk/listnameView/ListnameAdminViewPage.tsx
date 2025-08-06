@@ -19,9 +19,9 @@ export const ListnameAdminViewPage = () => {
   const router = useRouter()
   const listname = params.listname as string
   const [selectedListname, setSelectedListname] = useState<string>(listname)
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [createCodeListModal, setCreateCodeListModal] = React.useState(false)
-  const [errorOnResponse, setErrorOnResponse] = React.useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [createCodeListModal, setCreateCodeListModal] = useState(false)
+  const [errorOnResponse, setErrorOnResponse] = useState(null)
   const forceUpdate = useForceUpdate()
   useAwait(codelist.wait(), setIsLoading)
 
