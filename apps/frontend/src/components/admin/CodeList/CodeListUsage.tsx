@@ -79,7 +79,6 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [codelistUtils] = CodelistService()
 
   const { usage, refresh } = props
-
   useEffect(() => {
     setShowReplace(false)
     setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
