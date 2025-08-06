@@ -1,5 +1,5 @@
-import KodeverkAdminViewPage from '@/components/admin/kodeverk/kodeverkAdminViewPage/KodeverkAdminViewPage'
+import ListnameAdminViewPage from '@/components/admin/kodeverk/listnameView/ListnameAdminViewPage'
 
-const Page = () => <KodeverkAdminViewPage />
+const Page = () => <ListnameAdminViewPage />
 
 export default Page
