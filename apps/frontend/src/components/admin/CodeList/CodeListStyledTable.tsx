@@ -14,7 +14,7 @@ import {
 import { handleSort } from '../../../util/handleTableSort'
 import { AuditButton } from '../audit/AuditButton'
 import { Usage } from './CodeListUsage'
-import DeleteCodeListModal from './ModalDeleteCodeList'
+import DeleteCoCdeListModal from './ModalDeleteCodeList'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 
 type TTableCodelistProps = {
