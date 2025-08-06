@@ -10,6 +10,7 @@ import { useParams } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
 import CodeListTable from './CodelistStyledTable'
 import ModalCreateCodeList from './ModalCreateCodeList'
+import { adminCodelist } from '@/routes/admin/adminRoutes'
 
 
 
