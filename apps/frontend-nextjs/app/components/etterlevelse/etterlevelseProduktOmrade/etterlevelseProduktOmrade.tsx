@@ -2,7 +2,7 @@ import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterleve
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { EtterlevelseProduktOmradeIngen } from './etterlevelseProduktOmradeIngen/etterlevelseProduktOmradeIngen'
-import { EtterlevelseProduktOmradeFinnes } from './xetterlevelseProduktOmradeFinnes/EtterlevelseProduktOmradeFinnes'
+import { EtterlevelseProduktOmradeFinnes } from './xetterlevelseProduktOmradeFinnes/xEtterlevelseProduktOmradeFinnes'
 
 type TProps = {
   krav: TKravQL
