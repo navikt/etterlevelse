@@ -21,7 +21,7 @@ import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import React, { ChangeEvent, ReactNode, useRef, useState } from 'react'
 import LabelWithTooltip from './labelWithoTootip.tsx/LabelWithTooltip'
 import { RenderTagList } from './renderTagList/renderTagList'
-import TextEditor from './textEditor/TextEditor'
+import TextEditor from './xtextEditor/TextEditor'
 
 interface ILabel {
   label: string
