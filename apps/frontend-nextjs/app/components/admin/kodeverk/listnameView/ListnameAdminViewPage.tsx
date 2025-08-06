@@ -4,6 +4,7 @@ import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { adminCodelist, adminUrl } from '@/routes/admin/adminRoutes'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { user } from '@/services/user/userService'
+import { useAwait } from '@/util/hooks/customHooks/customHooks'
 import { Heading, Loader, Select } from '@navikt/ds-react'
 import { useParams, useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'
@@ -13,6 +14,10 @@ export const ListnameAdminViewPage = () => {
   const router = useRouter()
   const listname = params.listname
   const [selectedListname, setSelectedListname] = useState<string>(listname as string)
+  const [createCodeListModal, setCreateCodeListModal] = React.useState(false)
+  const [errorOnResponse, setErrorOnResponse] = React.useState(null)
+  const forceUpdate = useForceUpdate()
+  useAwait(codelist.wait(), setIsLoading)
 
   useEffect(() => {
     if (selectedListname && selectedListname !== listname) {
