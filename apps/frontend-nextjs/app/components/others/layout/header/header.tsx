@@ -8,7 +8,7 @@ import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/messag
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'
 import { loginUrl } from '@/routes/login/loginRoutes'
 import { user } from '@/services/user/userService'
-import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
+import { useAwaitUser, useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { InternalHeader, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -27,6 +27,7 @@ type TProps = {
 const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
+  useAwaitUser()
 
   const source = useQueryParam('source')
   if (!sourceReported) {
