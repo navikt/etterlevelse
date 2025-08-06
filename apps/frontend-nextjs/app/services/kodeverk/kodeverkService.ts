@@ -47,7 +47,7 @@ export interface ICodelistProps {
   gjelderForLov: (tema: TTemaCode, lov: TLovCode) => boolean
 }
 
-interface IGetParsedOptionsProps {
+export interface IGetParsedOptionsProps {
   value: string
   label: string
   description: string
