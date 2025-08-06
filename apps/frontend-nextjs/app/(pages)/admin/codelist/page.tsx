@@ -1,3 +1,5 @@
-const Page = () => <div>Kodeverk page</div>
+import CodeListAdminPage from "@/components/admin/kodeverk/CodelistAdminPage"
+
+const Page = () => <CodeListAdminPage />
 
 export default Page
