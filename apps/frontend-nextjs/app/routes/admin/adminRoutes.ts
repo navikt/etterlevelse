@@ -1,6 +1,6 @@
-import { etterlevelseUrl } from "../etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes"
-import { dokumentasjonUrl } from "../etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes"
-import { kravUrl } from "../krav/kravRoutes"
+import { etterlevelseUrl } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
+import { dokumentasjonUrl } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { kravUrl } from '../krav/kravRoutes'
 
 export const adminUrl: string = '/admin'
 
