@@ -1,9 +1,10 @@
+import { replaceCodelistUsage } from '@/api/kodeverk/kodeverkApi'
+import { EObjectType } from '@/constants/admin/audit/auditConstants'
+import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistService, IGetParsedOptionsProps } from '@/services/kodeverk/kodeverkService'
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import { ChangeEvent, createRef, useEffect, useState } from 'react'
-import { replaceCodelistUsage } from '../../../api/CodelistApi'
-import { CodelistService, ICodeUsage, IGetParsedOptionsProps } from '../../../services/Codelist'
-import { ObjectLink } from '../../common/RouteLink'
-import { EObjectType } from '../audit/AuditTypes'
+import { ObjectLink } from '../common/commonComponents'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props

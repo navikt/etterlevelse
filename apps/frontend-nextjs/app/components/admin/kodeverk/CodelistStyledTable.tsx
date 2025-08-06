@@ -1,8 +1,4 @@
-import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
+import { deleteCodelist, getCodelistUsage, updateCodelist } from '@/api/kodeverk/kodeverkApi'
 import {
   EListName,
   ELovCodeRelevans,
@@ -10,11 +6,15 @@ import {
   ICodeListFormValues,
   ICodeUsage,
   ILovCodeData,
-} from '../../../services/Codelist'
-import { handleSort } from '../../../util/handleTableSort'
-import { AuditButton } from '../audit/AuditButton'
+} from '@/constants/kodeverk/kodeverkConstants'
+import { handleSort } from '@/util/handleTableSort'
+import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
+import * as React from 'react'
+import { useEffect, useState } from 'react'
+import { AuditButton } from '../auditButton/auditButton'
 import { Usage } from './CodeListUsage'
-import DeleteCoCdeListModal from './ModalDeleteCodeList'
+import DeleteCodeListModal from './ModalDeleteCodeList'
 import UpdateCodeListModal from './ModalUpdateCodeList'
 
 type TTableCodelistProps = {
