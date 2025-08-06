@@ -4,7 +4,7 @@ import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
 import { IGetParsedOptionsProps, codelist } from '@/services/kodeverk/kodeverkService'
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import { ChangeEvent, createRef, useEffect, useState } from 'react'
-import { ObjectLink } from '../common/commonComponents'
+import { ObjectLink } from '../../common/commonComponents'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props

@@ -1,8 +1,5 @@
-import { AuditButton } from '@/components/admin/auditButton/auditButton'
-import { EObjectType, IAuditItem, TNavigableItem } from '@/constants/admin/audit/auditConstants'
+import { EObjectType, TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { Link } from '@navikt/ds-react'
-import { FunctionComponent, ReactNode } from 'react'
 import { adminCodelistUrl } from '../admin/kodeverk.ts/kodeverkRoutes'
 import { adminVarselUrl } from '../admin/varsel/varselRoutes'
 import { behandlingUrl } from '../behandlingskatalogen/behandlingskatalogen'
@@ -10,19 +7,6 @@ import { etterlevelseUrl } from '../etterlevelseDokumentasjon/etterlevelse/etter
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { temaUrl } from '../kodeverk/tema/kodeverkTemaRoutes'
 import { kravUrl } from '../krav/kravRoutes'
-
-type TObjectLinkProps = {
-  id?: string
-  type: TNavigableItem
-  audit?: IAuditItem
-  withHistory?: boolean
-  children?: any
-  disable?: boolean
-  hideUnderline?: boolean
-  fontColor?: string
-  external?: boolean
-  noNewTabLabel?: boolean
-}
 
 export const urlForObject = (type: TNavigableItem | string, id: string) => {
   switch (type) {
@@ -51,63 +35,6 @@ export const urlForObject = (type: TNavigableItem | string, id: string) => {
   console.warn("couldn't find object type" + type)
   return ''
 }
-
-export const ObjectLink: FunctionComponent<TObjectLinkProps> = (props) => {
-  const { id, disable, children, noNewTabLabel, type, withHistory, fontColor } = props
-
-  if (!id) return null
-
-  let link
-
-  if (disable) {
-    link = children
-  } else
-    link = (
-      <ExternalLink noNewTabLabel={noNewTabLabel} href={urlForObject(type, id)}>
-        {children}
-      </ExternalLink>
-    )
-
-  return (
-    <>
-      {withHistory && (
-        <div className='flex justify-between w-full items-center'>
-          {link}
-          <AuditButton fontColor={fontColor} id={id} variant='tertiary' />
-        </div>
-      )}
-      {!withHistory && link}
-    </>
-  )
-}
-
-type TExternalLinkProps = {
-  href: string
-  className?: string
-  label?: string
-  children: ReactNode
-  openOnSamePage?: boolean
-  noNewTabLabel?: boolean
-}
-
-const ExternalLink: FunctionComponent<TExternalLinkProps> = ({
-  href,
-  children,
-  className,
-  label,
-  openOnSamePage,
-  noNewTabLabel,
-}) => (
-  <Link
-    className={className}
-    href={href}
-    target={openOnSamePage ? '_self' : '_blank'}
-    rel='noopener noreferrer'
-    aria-label={label}
-  >
-    {children} {!openOnSamePage && !noNewTabLabel && ' (åpner i en ny fane)'}
-  </Link>
-)
 
 export const paramQueryUrl = (tabQuery: string, paramQuery: string): string =>
   `${window.location.pathname}?tab=${tabQuery}${paramQuery}`
