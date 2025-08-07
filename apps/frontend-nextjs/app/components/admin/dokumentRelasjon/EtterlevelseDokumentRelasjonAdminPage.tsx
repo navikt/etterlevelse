@@ -110,7 +110,8 @@ export const EtterlevelseDokumentRelasjonAdminPage = () => {
                 setDeleteDokumentRelasjonId('')
                 setReloadTable(!reloadTable)
                 setDeleteMessage(
-                  'Sletting vellykket for arkivering med uid: ' + deleleDokumentRelasjonId
+                  'Sletting vellykket for relasjon til etterlevelse dokumentasjon med uid: ' +
+                    deleleDokumentRelasjonId
                 )
               })
               .catch((e) => {

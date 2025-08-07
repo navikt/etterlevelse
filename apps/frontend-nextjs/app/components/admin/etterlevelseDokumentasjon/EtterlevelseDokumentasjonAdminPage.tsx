@@ -2,15 +2,12 @@
 
 import { deleteEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { env } from '@/util/env/env'
 import { Box, Button, Heading, TextField } from '@navikt/ds-react'
-import axios from 'axios'
 import { useState } from 'react'
 import { UpdateMessage } from '../common/commonComponents'
 
 export const EtterlevelseDokumentasjonAdminPage = () => {
   const [etterlevelseDokumentasjonId, setEtterlevelseDokumentasjonId] = useState('')
-  const [etterlevelseDokumentasjonIdArkiv, setEtterlevelseDokumentasjonIdArkiv] = useState('')
   const [updateMessage, setUpdateMessage] = useState('')
 
   return (
@@ -52,39 +49,6 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
             }}
           >
             Slett
-          </Button>
-        </div>
-
-        <div className='flex items-end pt-10'>
-          <TextField
-            label='Arkiver etterlevelse dokumentasjon med uid'
-            placeholder='Etterlevelse dokumentasjon UID'
-            onChange={(e) => setEtterlevelseDokumentasjonIdArkiv(e.target.value)}
-            className='w-full mr-3'
-          />
-          <Button
-            disabled={!etterlevelseDokumentasjonIdArkiv}
-            variant='secondary'
-            onClick={async () => {
-              setUpdateMessage('')
-              await axios
-                .post<any>(
-                  `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonIdArkiv}&onlyActiveKrav=true`
-                )
-                .then((response) => {
-                  setUpdateMessage(
-                    'Arkivering vellykket for etterlevelses med uid: ' + etterlevelseDokumentasjonId
-                  )
-
-                  console.debug(response)
-                  setEtterlevelseDokumentasjonIdArkiv('')
-                })
-                .catch((e) => {
-                  setUpdateMessage('Sletting mislykket, error: ' + e)
-                })
-            }}
-          >
-            Arkiver
           </Button>
         </div>
       </div>
