@@ -1,4 +1,35 @@
-import { gql } from '@apollo/client'
+import { IPageResponse } from '@/constants/commonConstants'
+import { TKravFilters, TKravQL } from '@/constants/krav/kravConstants'
+import { QueryHookOptions, gql, useQuery } from '@apollo/client'
+
+export const useKravCounter = (
+  variables: { lover: string[] },
+  options?: QueryHookOptions<any, { lover?: string[] }>
+) => {
+  let filter = {}
+  if (options) {
+    filter = { ...options }
+  }
+  filter = { ...filter, variables }
+  return useQuery<{ krav: IPageResponse<TKravQL> }, TKravFilters>(getKravByLovCodeQuery, filter)
+}
+
+const getKravByLovCodeQuery = gql`
+  query countKrav($lover: [String!]) {
+    krav(filter: { lover: $lover, gjeldendeKrav: true }) {
+      numberOfElements
+      content {
+        id
+        kravNummer
+        kravVersjon
+        navn
+        relevansFor {
+          code
+        }
+      }
+    }
+  }
+`
 
 export const getKravWithEtterlevelseQuery = gql`
   query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {

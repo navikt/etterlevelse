@@ -73,3 +73,18 @@ export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: nu
 export type TKravViewInfoProps = {
   krav: TKravQL
 }
+
+export type TKravFilters = {
+  relevans?: string[]
+  nummer?: number
+  etterlevelseDokumentasjonId?: string
+  underavdeling?: string
+  lov?: string
+  status?: string[]
+  lover?: string[]
+  tagger?: string[]
+  gjeldendeKrav?: boolean
+  sistRedigert?: number
+  pageNumber?: number
+  pageSize?: number
+}
