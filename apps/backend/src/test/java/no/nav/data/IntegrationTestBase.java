@@ -6,8 +6,6 @@ import no.nav.data.common.auditing.domain.AuditVersionRepository;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
 import no.nav.data.common.utils.SpringUtils;
-import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
-import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopRepo;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
@@ -102,8 +100,6 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<KravImage> kravImageStorageService;
     @Autowired
-    protected StorageService<EtterlevelseArkiv> etterlevelseArkivStorageService;
-    @Autowired
     protected EtterlevelseMetadataRepo etterlevelseMetadataRepo;
     @Autowired
     protected StorageService<Melding> meldingStorageService;
@@ -119,8 +115,6 @@ public abstract class IntegrationTestBase {
     protected EtterlevelseService etterlevelseService;
     @Autowired
     protected EtterlevelseMetadataService etterlevelseMetadataService;
-    @Autowired
-    protected EtterlevelseArkivService etterlevelseArkivService;
     @Autowired
     protected DocumentRelationService documentRelationService;
     @Autowired
