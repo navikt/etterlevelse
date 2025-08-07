@@ -258,11 +258,6 @@ export const getKravWithEtterlevelseQuery = gql`
         navn
         beskrivelse
       }
-      virkemidler {
-        id
-        navn
-      }
-      virkemiddelIder
       varslingsadresserQl {
         adresse
         type

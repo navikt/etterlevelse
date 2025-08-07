@@ -11,15 +11,8 @@ export enum EListName {
   RELEVANS = 'RELEVANS',
   LOV = 'LOV',
   TEMA = 'TEMA',
-  VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
   YTTERLIGERE_EGENSKAPER = 'YTTERLIGERE_EGENSKAPER',
   PVO_VURDERING = 'PVO_VURDERING',
-}
-
-export enum ELovCodeRelevans {
-  KRAV_OG_VIRKEMIDDEL = 'KRAV_OG_VIRKEMIDDEL',
-  KRAV = 'KRAV',
-  VIRKEMIDDEL = 'VIRKEMIDDEL',
 }
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
@@ -41,7 +34,6 @@ export interface ICodelistProps {
   getParsedOptions: (listName: EListName) => IGetParsedOptionsProps[]
   getOptionsForCode: (codes: ICode[]) => { id: string; label: string; description: string }[]
   getParsedOptionsForLov: (
-    forVirkemiddel?: boolean
   ) => { value: string; label: string; description: string }[]
   getParsedOptionsForList: (
     listName: EListName,
@@ -210,17 +202,9 @@ export const CodelistService = () => {
     })
   }
 
-  const getParsedOptionsForLov = (forVirkemiddel?: boolean): IGetParsedOptionsForLovProps[] => {
+  const getParsedOptionsForLov = (): IGetParsedOptionsForLovProps[] => {
     const lovList: TLovCode[] = getCodes(EListName.LOV) as TLovCode[]
-    let filteredLovList: TLovCode[] = []
-
-    if (forVirkemiddel) {
-      filteredLovList = filterLovCodeListForRelevans(lovList, ELovCodeRelevans.VIRKEMIDDEL)
-    } else {
-      filteredLovList = filterLovCodeListForRelevans(lovList, ELovCodeRelevans.KRAV)
-    }
-
-    return filteredLovList.map((code: TLovCode) => {
+    return lovList.map((code: TLovCode) => {
       return { value: code.code, label: code.shortName, description: code.description }
     })
   }
@@ -337,7 +321,6 @@ export interface ILovCodeData {
   lovId?: string
   underavdeling?: string
   tema?: string
-  relevantFor?: ELovCodeRelevans
 }
 
 export interface ITemaCodeData {
@@ -379,45 +362,3 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
     tema: lovCodeListDataCheck('temaCheck'),
   }),
 })
-
-export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
-  switch (lovCodeRelevans) {
-    case ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL.toString():
-      return 'Krav og virkemiddel'
-    case ELovCodeRelevans.KRAV.toString():
-      return 'Krav'
-    case ELovCodeRelevans.VIRKEMIDDEL.toString():
-      return 'Virkemiddel'
-  }
-}
-
-interface ILovCodeRelevansToOptionsProps {
-  value: string
-  label: string | undefined
-}
-
-export const lovCodeRelevansToOptions = (): ILovCodeRelevansToOptionsProps[] => {
-  return Object.keys(ELovCodeRelevans).map((key: string) => {
-    return { value: key, label: lovCodeRelevansToText(key) }
-  })
-}
-
-export const filterLovCodeListForRelevans = (
-  codeList: TLovCode[],
-  relevantFor: ELovCodeRelevans
-): TLovCode[] => {
-  return codeList.filter((code: TLovCode) => {
-    if (code.data) {
-      //for old data
-      if (!code.data.relevantFor) {
-        return true
-      } else if (
-        code.data.relevantFor === ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL ||
-        code.data.relevantFor === relevantFor
-      ) {
-        return true
-      }
-    }
-    return false
-  })
-}

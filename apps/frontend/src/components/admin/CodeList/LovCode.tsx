@@ -1,11 +1,6 @@
 import { Label, TextField } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
-import {
-  EListName,
-  ICodeListFormValues,
-  ILovCodeData,
-  lovCodeRelevansToOptions,
-} from '../../../services/Codelist'
+import { EListName, ICodeListFormValues, ILovCodeData } from '../../../services/Codelist'
 import { OptionList } from '../../common/Inputs'
 import { FormError } from '../../common/ModalSchema'
 
@@ -66,18 +61,6 @@ export const LovCodeDataForm = () => (
                       <FormError fieldName='data.tema' />
                     ) : undefined
                   }
-                />
-              </div>
-            </div>
-
-            <div className='w-full mt-4'>
-              <Label>Relevant for</Label>
-              <div className='mt-1.5'>
-                <OptionList
-                  options={lovCodeRelevansToOptions()}
-                  value={data.relevantFor ? data.relevantFor : undefined}
-                  onChange={(val) => set({ relevantFor: val })}
-                  label='relevant for'
                 />
               </div>
             </div>

@@ -31,7 +31,6 @@ import {
   IMember,
   ITeam,
   ITeamResource,
-  IVirkemiddel,
   TEtterlevelseDokumentasjonQL,
   TOption,
 } from '../../../constants'
@@ -72,7 +71,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
 
   const [selectedFilter, setSelectedFilter] = useState<number[]>([])
 
-  const [selectedVirkemiddel, setSelectedVirkemiddel] = useState<IVirkemiddel>()
   const [dokumentRelasjon, setDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
 
@@ -112,10 +110,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
         })
       )
     }
-
-    if (etterlevelseDokumentasjon?.virkemiddel?.navn) {
-      setSelectedVirkemiddel(etterlevelseDokumentasjon.virkemiddel)
-    }
   }, [etterlevelseDokumentasjon, list])
 
   useEffect(() => {
@@ -140,8 +134,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   }, [submitClick])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL): Promise<void> => {
-    console.debug(selectedVirkemiddel)
-
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
       const mutatedEtterlevelsesDokumentasjon = etterlevelseDokumentasjon
       const members = getMembersFromEtterlevelseDokumentasjon(etterlevelseDokumentasjon)
@@ -220,48 +212,6 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
               markdown
             />
           </div>
-
-          {/* <BoolField label="Er produktet/systemet tilknyttet et virkemiddel?" name="knyttetTilVirkemiddel" /> */}
-
-          {/* {values.knyttetTilVirkemiddel ? (
-                    <FieldWrapper>
-                      <Field name="virkemiddelId">
-                        {(fp: FieldProps) => {
-                          return (
-                              <div>
-                              <LabelWithTooltip label={'Legg til virkemiddel'} tooltip="Søk og legg til virkemiddel" />
-                              <CustomizedSelect
-                                  labelKey={'navn'}
-                                  options={virkemiddelSearchResult}
-                                  placeholder={'Søk virkemiddel'}
-                                  onInputChange={(event) => setVirkemiddelSearchResult(event.currentTarget.value)}
-                                  onChange={(params) => {
-                                    let virkemiddel = params.value.length ? params.value[0] : undefined
-                                    if (virkemiddel) {
-                                      fp.form.values['virkemiddelId'] = virkemiddel.id
-                                      setSelectedVirkemiddel(virkemiddel as Virkemiddel)
-                                    }
-                                  }}
-                                  isLoading={loadingVirkemiddelSearchResult}
-                                />
-                                {selectedVirkemiddel && (
-                                  <Tag
-                                    variant={VARIANT.outlined}
-                                    onActionClick={() => {
-                                      setSelectedVirkemiddel(undefined)
-                                      fp.form.setFieldValue('virkemiddelId', '')
-                                    }}
-                                  >
-                                    {selectedVirkemiddel.navn}
-                                  </Tag>
-                                )}
-                              </div>
-                          )
-                        }}
-                      </Field>
-                      <Error fieldName="virkemiddelId" fullWidth />
-                    </FieldWrapper>
-                  ) : ( */}
 
           {!dokumentRelasjon && (
             <FieldArray name='test'>

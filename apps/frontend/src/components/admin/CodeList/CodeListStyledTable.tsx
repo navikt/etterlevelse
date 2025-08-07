@@ -3,14 +3,7 @@ import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '../../../api/CodelistApi'
-import {
-  EListName,
-  ELovCodeRelevans,
-  ICode,
-  ICodeListFormValues,
-  ICodeUsage,
-  ILovCodeData,
-} from '../../../services/Codelist'
+import { EListName, ICode, ICodeListFormValues, ICodeUsage } from '../../../services/Codelist'
 import { handleSort } from '../../../util/handleTableSort'
 import { AuditButton } from '../audit/AuditButton'
 import { Usage } from './CodeListUsage'
@@ -100,12 +93,8 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
     if (selectedCode.data && (list === EListName.LOV || list === EListName.TEMA)) {
       initialValues.data = selectedCode.data
       if (list === EListName.LOV) {
-        const codeListData = selectedCode.data as ILovCodeData
         initialValues.data = {
           ...selectedCode.data,
-          relevantFor: codeListData.relevantFor
-            ? codeListData.relevantFor
-            : ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
         }
       }
     }

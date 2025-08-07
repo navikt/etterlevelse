@@ -99,11 +99,6 @@ export enum EKravListFilter {
   STATUS = 'STATUS',
 }
 
-export enum EVirkemiddelListFilter {
-  VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
-  SORTDATE = 'SORTDATE',
-}
-
 export enum EAdresseType {
   EPOST = 'EPOST',
   SLACK = 'SLACK',
@@ -184,7 +179,6 @@ export interface IKrav extends IDomainObject {
   varselMelding?: string
   prioriteringsId?: number
   begrepIder: string[]
-  virkemiddelIder: string[]
   varslingsadresser: IVarslingsadresse[]
   rettskilder: string[]
   tagger: string[]
@@ -198,14 +192,6 @@ export interface IKrav extends IDomainObject {
   nyKravVersjon: boolean
   kravIdRelasjoner: string[]
   aktivertDato: string
-}
-
-export interface IVirkemiddel extends IDomainObject {
-  id: string
-  navn: string
-  regelverk: IRegelverk[]
-  virkemiddelType?: ICode
-  livsSituasjon: string
 }
 
 export interface IEtterlevelseMetadata extends IDomainObject {
@@ -329,7 +315,6 @@ export interface IEtterlevelseDokumentasjon {
   tilgjengeligForGjenbruk: boolean
   gjenbrukBeskrivelse: string
   behandlingIds: string[]
-  virkemiddelId: string
   irrelevansFor: ICode[]
   prioritertKravNummer: string[]
   etterlevelseNummer: number
@@ -344,8 +329,6 @@ export interface IEtterlevelseDokumentasjon {
   risikoeiereData?: ITeamResource[]
   behandlinger?: IBehandling[]
   behandlerPersonopplysninger: boolean
-  virkemiddel?: IVirkemiddel
-  knyttetTilVirkemiddel: boolean
   forGjenbruk: boolean
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean
@@ -470,7 +453,6 @@ export type TKravQL = TReplace<
     etterlevelser: TEtterlevelseQL[]
     varslingsadresserQl: TVarslingsadresseQL[]
     begreper: IBegrep[]
-    virkemidler: IVirkemiddel[]
     kravRelasjoner: IKrav[]
     prioriteringsId: number
   }

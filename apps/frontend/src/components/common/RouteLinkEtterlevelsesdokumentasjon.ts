@@ -1,7 +1,6 @@
 import { kravUrl } from './RouteLinkKrav'
 
 export const temaUrl: string = '/tema'
-export const virkemiddellisteUrl: string = '/virkemiddelliste'
 
 export const etterlevelseUrl = '/etterlevelse'
 export const dokumentasjonUrl = '/dokumentasjon'

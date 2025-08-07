@@ -12,11 +12,7 @@ import { Error, FormError } from '../../common/ModalSchema'
 import { borderWidth } from '../../common/Style'
 import { RenderTagList } from '../../common/TagList'
 
-type TRegelverkEditProps = {
-  forVirkemiddel?: boolean
-}
-
-export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
+export const RegelverkEdit = () => {
   const [codelistUtils] = CodelistService()
   const [lov, setLov] = useState({ value: '', label: '', description: '' })
   const [text, setText] = useState('')
@@ -34,7 +30,7 @@ export const RegelverkEdit = ({ forVirkemiddel }: TRegelverkEditProps) => {
     value: string
     label: string
     description: string
-  }[] = codelistUtils.getParsedOptionsForLov(forVirkemiddel)
+  }[] = codelistUtils.getParsedOptionsForLov()
 
   return (
     <FieldWrapper marginBottom id='regelverk'>

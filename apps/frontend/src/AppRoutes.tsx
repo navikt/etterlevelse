@@ -32,7 +32,6 @@ import {
   etterlevelseUrl,
   etterlevelsesDokumentasjonEditUrl,
   temaUrl,
-  virkemiddellisteUrl,
 } from './components/common/RouteLinkEtterlevelsesdokumentasjon'
 import {
   kravNummerVersjonUrl,
@@ -78,7 +77,6 @@ import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
 import { TemaPage } from './pages/TemaPage'
 import { TemaOversiktPage } from './pages/TemaoversiktPage'
 import { VarselPage } from './pages/VarselPage'
-import { VirkemiddelListPage } from './pages/VirkemiddelListPage'
 import { ampli } from './services/Amplitude'
 import PrivateRoute from './util/PrivateRoute'
 
@@ -127,11 +125,6 @@ const AppRoutes = (): JSX.Element => {
       <Route
         path={`${kravNyVersjonIdUrl()}/:id`}
         element={<PrivateRoute component={<KravNyVersjonPage />} kraveierPage />}
-        caseSensitive={true}
-      />
-      <Route
-        path={`${virkemiddellisteUrl}/`}
-        element={<PrivateRoute component={<VirkemiddelListPage />} kraveierPage />}
         caseSensitive={true}
       />
       <Route path={`${etterlevelseUrl}/:id`} element={<EtterlevelsePage />} caseSensitive={true} />

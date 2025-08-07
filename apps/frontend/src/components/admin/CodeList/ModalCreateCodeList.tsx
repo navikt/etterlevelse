@@ -2,7 +2,6 @@ import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import {
   EListName,
-  ELovCodeRelevans,
   ICodeListFormValues,
   ILovCodeData,
   codeListSchema,
@@ -43,7 +42,6 @@ const ModalCreateCodeList = ({
           lovId: '',
           underavdeling: '',
           tema: '',
-          relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
         } as ILovCodeData
       }
     }
