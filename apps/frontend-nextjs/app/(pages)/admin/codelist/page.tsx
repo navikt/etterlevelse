@@ -1,4 +1,4 @@
-import CodeListAdminPage from "@/components/admin/kodeverk/CodelistAdminPage"
+import CodeListAdminPage from '@/components/admin/kodeverk/CodelistAdminPage'
 
 const Page = () => <CodeListAdminPage />
 
