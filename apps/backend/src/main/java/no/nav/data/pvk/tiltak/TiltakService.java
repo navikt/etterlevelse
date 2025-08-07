@@ -75,8 +75,16 @@ public class TiltakService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteByPvkDokumentId(UUID pvkDokumentId) {
         List<Tiltak> tiltakList = repo.findByPvkDokumentId(pvkDokumentId);
-        tiltakList.forEach(t -> log.info("deleting tiltak with id={}, connected to pvk dokument with id={}", t.getId(), pvkDokumentId));
+        tiltakList.forEach(t -> {
+            log.info("deleting tiltak and relation with risikoscenario with id={}, connected to pvk dokument with id={}", t.getId(), pvkDokumentId);
+            deleteTiltakRisikoscenarioRelationByTiltakId(t.getId());
+        });
         repo.deleteAll(tiltakList);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTiltakRisikoscenarioRelationByTiltakId(UUID tiltakId) {
+        repo.deleteTiltakRisikoscenarioRelationByTiltakId(tiltakId);
     }
 
 }
