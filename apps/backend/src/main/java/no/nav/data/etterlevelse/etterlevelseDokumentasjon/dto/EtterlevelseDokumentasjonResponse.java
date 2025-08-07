@@ -38,8 +38,6 @@ public class EtterlevelseDokumentasjonResponse {
     private String gjenbrukBeskrivelse;
     private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
-    private String virkemiddelId;
-    private boolean knyttetTilVirkemiddel;
     @Singular("relevansForSingle")
     private List<CodelistResponse> irrelevansFor;
     private List<String> prioritertKravNummer;
@@ -74,7 +72,6 @@ public class EtterlevelseDokumentasjonResponse {
                 .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
                 .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
                 .behandlingIds(nullsafeCopyOf(eDokData.getBehandlingIds()))
-                .virkemiddelId(eDokData.getVirkemiddelId())
                 .irrelevansFor(eDok.irrelevantForAsCodes())
                 .prioritertKravNummer(nullsafeCopyOf(eDokData.getPrioritertKravNummer()))
                 .forGjenbruk(eDokData.isForGjenbruk())
@@ -82,7 +79,6 @@ public class EtterlevelseDokumentasjonResponse {
                 .resources(nullsafeCopyOf(eDokData.getResources()))
                 .risikoeiere(nullsafeCopyOf(eDokData.getRisikoeiere()))
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
-                .knyttetTilVirkemiddel(eDokData.isKnyttetTilVirkemiddel())
                 .nomAvdelingId(eDokData.getNomAvdelingId())
                 .avdelingNavn(eDokData.getAvdelingNavn())
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))

@@ -5,7 +5,6 @@ import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityListRepo;
 import no.nav.data.etterlevelse.melding.domain.MeldingRepo;
-import no.nav.data.etterlevelse.virkemiddel.domain.VirkemiddelRepo;
 import no.nav.data.integration.begrep.BegrepService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,8 +21,6 @@ public class DomainService<T extends DomainObject> {
     protected BegrepService begrepService;
     @Autowired
     protected MeldingRepo meldingRepo;
-    @Autowired
-    protected VirkemiddelRepo virkemiddelRepo;
 
     public T get(UUID uuid) {
         return storage.get(uuid);

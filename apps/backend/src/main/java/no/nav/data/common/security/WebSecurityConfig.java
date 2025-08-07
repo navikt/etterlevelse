@@ -77,7 +77,6 @@ public class WebSecurityConfig {
                     "/pvkdokument/**",
                     "/risikoscenario/**",
                     "/tiltak/**",
-                    "/virkemiddel/**",
                     "/p360/**",
                     "/nom/**"
             );
@@ -110,8 +109,6 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvkdokument/pvo").hasAnyRole(AppRole.PERSONVERNOMBUD.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/risikoscenario/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/tiltak/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/virkemiddel/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
-
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/logout").authenticated());
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll());

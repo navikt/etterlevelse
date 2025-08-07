@@ -87,16 +87,8 @@ public class EtterlevelseDokumentasjon extends Auditable  {
         return etterlevelseDokumentasjonData.getVarslingsadresser();
     }
 
-    public String getVirkemiddelId() {
-        return etterlevelseDokumentasjonData.getVirkemiddelId();
-    }
-
     public boolean isTilgjengeligForGjenbruk() {
         return etterlevelseDokumentasjonData.isTilgjengeligForGjenbruk();
-    }
-
-    public boolean isKnyttetTilVirkemiddel() {
-        return etterlevelseDokumentasjonData.isKnyttetTilVirkemiddel();
     }
 
     public List<String> getIrrelevansFor() {

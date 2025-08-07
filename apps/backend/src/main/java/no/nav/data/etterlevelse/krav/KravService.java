@@ -76,10 +76,6 @@ public class KravService {
         return repo.findBy(filter);
     }
 
-    public List<Krav> findByVirkmiddelId(String virkemiddelId) {
-        return repo.findByVirkemiddelIder(virkemiddelId);
-    }
-
     public List<Krav> getByKravNummer(int kravNummer) {
         return repo.findByKravNummer(kravNummer);
     }
@@ -181,18 +177,9 @@ public class KravService {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).build());
     }
 
-    public List<Krav> findForEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId, String virkemiddelId) {
-        return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).build());
-    }
-
     public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(UUID etterlevelseDokumentasjonId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).etterlevelseDokumentasjonIrrevantKrav(true).build());
     }
-
-    public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(UUID etterlevelseDokumentasjonId, String virkemiddelId) {
-        return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).virkemiddelId(virkemiddelId).etterlevelseDokumentasjonIrrevantKrav(true).build());
-    }
-
     @Transactional(propagation = Propagation.REQUIRED)
     public List<KravImage> saveImages(List<KravImage> images) {
         return convert(imageStorage.saveAll(images), GenericStorage::getDomainObjectData);

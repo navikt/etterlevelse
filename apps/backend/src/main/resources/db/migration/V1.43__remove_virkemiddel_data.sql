@@ -1,0 +1,1 @@
+delete from generic_storage where type = 'Virkemiddel';

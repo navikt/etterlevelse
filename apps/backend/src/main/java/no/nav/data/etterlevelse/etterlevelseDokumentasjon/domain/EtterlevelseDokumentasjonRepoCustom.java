@@ -69,11 +69,6 @@ public class EtterlevelseDokumentasjonRepoCustom {
             par.addValue("behandlerPersonopplysninger", filter.getBehandlerPersonopplysninger());
         }
 
-        if (filter.getKnyttetTilVirkemiddel() != null) {
-            query += " and data -> 'knyttetTilVirkemiddel' = :knyttetTilVirkemiddel";
-            par.addValue("knyttetTilVirkemiddel", filter.getKnyttetTilVirkemiddel());
-        }
-
         if (filter.getSistRedigert() != null) {
             query += """
                      and (id in (

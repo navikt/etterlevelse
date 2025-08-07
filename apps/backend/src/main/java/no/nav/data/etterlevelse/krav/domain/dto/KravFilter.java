@@ -36,7 +36,6 @@ public class KravFilter {
     private List<String> tagger;
     private boolean gjeldendeKrav;
     private Integer sistRedigert;
-    private String virkemiddelId;
 
     public List<String> getRelevans() {
         return formatList(relevans);
@@ -66,7 +65,6 @@ public class KravFilter {
                 && !gjeldendeKrav
                 && sistRedigert == null
                 && !etterlevelseDokumentasjonIrrevantKrav
-                && virkemiddelId == null
                 ;
     }
 

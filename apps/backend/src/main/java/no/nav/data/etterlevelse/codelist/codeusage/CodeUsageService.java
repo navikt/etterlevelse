@@ -17,8 +17,6 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
-import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
-import no.nav.data.etterlevelse.virkemiddel.domain.VirkemiddelRepo;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,14 +36,12 @@ public class CodeUsageService {
 
     private final KravRepo kravRepo;
     private final EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom;
-    private final VirkemiddelRepo virkemiddelRepo;
     private final Summary summary;
     private final CodelistService codelistService;
 
-    public CodeUsageService(EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom, KravRepo kravRepo, VirkemiddelRepo virkemiddelRepo, @Lazy CodelistService codelistService) {
+    public CodeUsageService(EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom, KravRepo kravRepo, @Lazy CodelistService codelistService) {
         this.etterlevelseDokumentasjonRepoCustom = etterlevelseDokumentasjonRepoCustom;
         this.kravRepo = kravRepo;
-        this.virkemiddelRepo = virkemiddelRepo;
         this.codelistService = codelistService;
         List<String[]> listnames = Stream.of(ListName.values()).map(e -> new String[]{e.name()}).collect(toList());
         this.summary = MetricUtils.summary()
@@ -81,7 +77,6 @@ public class CodeUsageService {
             CodeUsage codeUsage = new CodeUsage(listName, code, codelist.getShortName());
             codeUsage.setKrav(findKrav(listName, code));
             codeUsage.setEtterlevelseDokumentasjoner(findEtterlevelseDokumentasjoner(listName, code));
-            codeUsage.setVirkemidler(findVirkemiddel(listName, code));
             codeUsage.setCodelist(findCodelists(listName, code));
             return codeUsage;
         });
@@ -105,8 +100,6 @@ public class CodeUsageService {
                         usage.getKrav().forEach(k -> replaceLov(oldCode, newCode, k.getRegelverk()));
                 case TEMA ->
                         usage.getCodelist().forEach(c -> codelistService.replaceDataField(c, "tema", oldCode, newCode));
-                case VIRKEMIDDELTYPE ->
-                        usage.getVirkemidler().forEach(gs -> gs.consumeDomainObject(v -> v.setVirkemiddelType(newCode)));
             }
         }
         if (!usage.getCodelist().isEmpty()) {
@@ -127,21 +120,14 @@ public class CodeUsageService {
             case AVDELING -> kravRepo.findByAvdeling(code);
             case UNDERAVDELING -> kravRepo.findByUnderavdeling(code);
             case LOV -> kravRepo.findByLov(code);
-            case TEMA, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER, PVO_VURDERING -> List.of();
-        };
-    }
-
-    private List<GenericStorage<Virkemiddel>> findVirkemiddel(ListName listName, String code) {
-        return switch (listName) {
-            case VIRKEMIDDELTYPE -> virkemiddelRepo.findByVirkemiddelType(code);
-            case TEMA, RELEVANS, AVDELING, UNDERAVDELING, LOV, YTTERLIGERE_EGENSKAPER, PVO_VURDERING-> List.of();
+            case TEMA, YTTERLIGERE_EGENSKAPER, PVO_VURDERING -> List.of();
         };
     }
 
     private List<EtterlevelseDokumentasjon> findEtterlevelseDokumentasjoner(ListName listName, String code) {
         return switch (listName) {
             case RELEVANS -> etterlevelseDokumentasjonRepoCustom.findByIrrelevans(List.of(code));
-            case AVDELING, UNDERAVDELING, LOV, TEMA, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER, PVO_VURDERING -> List.of();
+            case AVDELING, UNDERAVDELING, LOV, TEMA, YTTERLIGERE_EGENSKAPER, PVO_VURDERING -> List.of();
         };
     }
 
@@ -149,7 +135,7 @@ public class CodeUsageService {
         return switch (listName) {
             case TEMA -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "tema")));
             case UNDERAVDELING -> filter(getCodelist(ListName.LOV), c -> code.equals(getField(c, "underavdeling")));
-            case AVDELING, LOV, RELEVANS, VIRKEMIDDELTYPE, YTTERLIGERE_EGENSKAPER, PVO_VURDERING -> List.of();
+            case AVDELING, LOV, RELEVANS, YTTERLIGERE_EGENSKAPER, PVO_VURDERING -> List.of();
         };
     }
 

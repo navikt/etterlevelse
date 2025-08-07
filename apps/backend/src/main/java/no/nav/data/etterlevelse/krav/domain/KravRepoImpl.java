@@ -31,17 +31,6 @@ public class KravRepoImpl implements KravRepoCustom {
     }
 
     @Override
-    public List<Krav> findByVirkemiddelIder(String virkemiddelId){
-        var query = "select id from krav where data -> 'virkemiddelIder' ??| array[ :virkemiddelId ]";
-        var par = new MapSqlParameterSource();
-
-        par.addValue("virkemiddelId", List.of(virkemiddelId));
-
-        List<Krav> kravList = fetch(jdbcTemplate.queryForList(query, par));
-        return kravList;
-    }
-
-    @Override
     public List<Krav> findByLov(String lov) {
         return findBy(KravFilter.builder().lov(lov).build());
     }

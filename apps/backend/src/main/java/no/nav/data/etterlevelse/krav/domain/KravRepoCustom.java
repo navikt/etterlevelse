@@ -8,8 +8,6 @@ public interface KravRepoCustom {
 
     List<Krav> findByRelevans(String code);
 
-    List<Krav> findByVirkemiddelIder(String virkemiddelId);
-
     List<Krav> findBy(KravFilter filter);
 
     List<Krav> findByLov(String lov);

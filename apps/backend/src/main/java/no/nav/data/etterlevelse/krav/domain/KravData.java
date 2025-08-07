@@ -30,7 +30,6 @@ public class KravData {
     private List<String> dokumentasjon; // Inneholder både lenke og beskrivelse, formattert som markdown
     private String implementasjoner;
     private List<String> begrepIder;
-    private List<String> virkemiddelIder;
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;

@@ -13,7 +13,6 @@ public class CodelistStub {
         add(ListName.UNDERAVDELING, "UNDERAVDELING", "Underavdeling");
         add(ListName.LOV, "ARKIV", "Arkivloven");
         add(ListName.TEMA, "PERSONVERN", "Personvern");
-        add(ListName.VIRKEMIDDELTYPE, "YTELSE", "Ytelse");
         add(ListName.YTTERLIGERE_EGENSKAPER, "PROFILERING", "Profilering");
         add(ListName.YTTERLIGERE_EGENSKAPER, "TEKNOLOGI", "Bruk av teknologi");
         add(ListName.PVO_VURDERING, "IKKEBRA", "Ikke bra nok");

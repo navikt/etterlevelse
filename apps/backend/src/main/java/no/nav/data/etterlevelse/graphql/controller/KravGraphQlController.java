@@ -20,8 +20,6 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter.Fields;
 import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
 import no.nav.data.etterlevelse.kravprioritylist.KravPriorityListService;
-import no.nav.data.etterlevelse.virkemiddel.VirkemiddelService;
-import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -45,7 +43,6 @@ public class KravGraphQlController {
     private final TilbakemeldingService tilbakemeldingService;
     private final BegrepService begrepService;
     private final KravPriorityListService kravPriorityListService;
-    private final VirkemiddelService virkemiddelService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @QueryMapping
@@ -75,9 +72,6 @@ public class KravGraphQlController {
 
         if (filter.getEtterlevelseDokumentasjonId() != null) {
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(filter.getEtterlevelseDokumentasjonId());
-            if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && etterlevelseDokumentasjon.getVirkemiddelId() != null && !etterlevelseDokumentasjon.getVirkemiddelId().isEmpty()){
-                filter.setVirkemiddelId(etterlevelseDokumentasjon.getVirkemiddelId());
-            }
         }
 
         List<Krav> filtered = new ArrayList<>(kravService.getByFilter(filter));
@@ -140,8 +134,4 @@ public class KravGraphQlController {
         return convert(krav.getKravIdRelasjoner(), kravId -> KravGraphQlResponse.buildFrom(kravService.get(UUID.fromString(kravId))));
     }
 
-    @SchemaMapping(typeName = "Krav")
-    public List<VirkemiddelResponse> virkemidler(KravGraphQlResponse krav) {
-        return convert(krav.getVirkemiddelIder(), virkemiddel -> virkemiddelService.get(UUID.fromString(virkemiddel)).toResponse());
-    }
 }

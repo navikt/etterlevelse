@@ -239,7 +239,6 @@ public class ExportController {
             case AVDELING -> "Avdeling";
             case UNDERAVDELING -> "underavdeling";
             case RELEVANS -> "Relevans";
-            case VIRKEMIDDELTYPE -> "Virkemiddel type";
             case YTTERLIGERE_EGENSKAPER -> "Ytterligere egenskaper";
             case PVO_VURDERING -> "Pvo vurdering";
         };

@@ -47,7 +47,6 @@ public class KravResponse implements KravId {
     private List<String> dokumentasjon; // Inneholder både lenke og beskrivelse, formattert som markdown
     private String implementasjoner;
     private List<String> begrepIder;
-    private List<String> virkemiddelIder;
     private List<Varslingsadresse> varslingsadresser;
     private List<String> rettskilder;
     private List<String> tagger;
@@ -83,7 +82,6 @@ public class KravResponse implements KravId {
                 .dokumentasjon(copyOf(krav.getDokumentasjon()))
                 .implementasjoner(krav.getImplementasjoner())
                 .begrepIder(copyOf(krav.getBegrepIder()))
-                .virkemiddelIder(copyOf(krav.getVirkemiddelIder()))
                 .varslingsadresser(copyOf(krav.getVarslingsadresser()))
                 .rettskilder(copyOf(krav.getRettskilder()))
                 .tagger(copyOf(krav.getTagger()))

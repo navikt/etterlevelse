@@ -11,9 +11,6 @@ import java.util.UUID;
 
 public interface EtterlevelseDokumentasjonRepo extends JpaRepository<EtterlevelseDokumentasjon, UUID> {
 
-    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'virkemiddelId' in ?1", nativeQuery = true)
-    List<EtterlevelseDokumentasjon> findByVirkemiddelIds(List<String> ids);
-
     @Query(value = """
             select 
              krav_nummer as kravNummer, krav_versjon as kravVersjon

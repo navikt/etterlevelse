@@ -8,7 +8,6 @@ import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.virkemiddel.domain.Virkemiddel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class CodeUsage {
     private String shortName;
     private List<Krav> krav = new ArrayList<>();
     private List<EtterlevelseDokumentasjon> etterlevelseDokumentasjoner = new ArrayList<>();
-    private List<GenericStorage<Virkemiddel>> virkemidler = new ArrayList<>();
     private List<Codelist> codelist = new ArrayList<>();
 
 
@@ -39,7 +37,6 @@ public class CodeUsage {
     public boolean isInUse() {
         return !krav.isEmpty()
                 || !etterlevelseDokumentasjoner.isEmpty()
-                || !virkemidler.isEmpty()
                 || !codelist.isEmpty();
     }
 
@@ -47,7 +44,6 @@ public class CodeUsage {
         CodeUsageResponse response = new CodeUsageResponse(listName, code, shortName);
         response.setKrav(convert(krav, k -> k.convertToInstanceId()));
         response.setEtterlevelseDokumentasjoner(convert(etterlevelseDokumentasjoner, ed -> ed.convertToInstanceId()));
-        response.setVirkemidler(convert(virkemidler, v -> v.getDomainObjectData().convertToInstanceId()));
         response.setCodelist(convert(codelist, Codelist::toResponse));
         response.setInUse(isInUse());
         return response;

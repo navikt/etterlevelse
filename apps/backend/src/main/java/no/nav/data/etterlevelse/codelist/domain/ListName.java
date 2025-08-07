@@ -6,7 +6,6 @@ public enum ListName {
     UNDERAVDELING,
     LOV,
     TEMA,
-    VIRKEMIDDELTYPE,
     YTTERLIGERE_EGENSKAPER,
     PVO_VURDERING,
 }

@@ -61,7 +61,6 @@ public class Krav extends Auditable implements KravId {
         data.setDokumentasjon(copyOf(request.getDokumentasjon()));
         data.setImplementasjoner(request.getImplementasjoner());
         data.setBegrepIder(copyOf(request.getBegrepIder()));
-        data.setVirkemiddelIder(copyOf(request.getVirkemiddelIder()));
         data.setVarslingsadresser(copyOf(request.getVarslingsadresser()));
         data.setRettskilder(copyOf(request.getRettskilder()));
         data.setTagger(copyOf(request.getTagger()));
@@ -139,10 +138,6 @@ public class Krav extends Auditable implements KravId {
 
     public String getImplementasjoner() {
         return data.getImplementasjoner();
-    }
-
-    public List<String> getVirkemiddelIder() {
-        return data.getVirkemiddelIder();
     }
 
     public List<String> getRettskilder() {

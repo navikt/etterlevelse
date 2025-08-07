@@ -23,7 +23,6 @@ public class CodeUsageResponse {
 
     private List<InstanceId> krav = new ArrayList<>();
     private List<InstanceId> etterlevelseDokumentasjoner = new ArrayList<>();
-    private List<InstanceId> virkemidler = new ArrayList<>();
 
     private List<CodelistResponse> codelist = new ArrayList<>();
 

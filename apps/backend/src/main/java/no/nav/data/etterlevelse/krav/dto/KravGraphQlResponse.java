@@ -15,7 +15,6 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.varsel.dto.VarslingsadresseGraphQlResponse;
-import no.nav.data.etterlevelse.virkemiddel.dto.VirkemiddelResponse;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 
 import java.util.List;
@@ -33,7 +32,6 @@ public class KravGraphQlResponse extends KravResponse implements KravId {
     private List<EtterlevelseResponse> etterlevelser;
     private List<TilbakemeldingResponse> tilbakemeldinger;
     private List<BegrepResponse> begreper;
-    private List<VirkemiddelResponse>  virkemidler;
     private String prioriteringsId;
 
     public static KravGraphQlResponse buildFrom(Krav krav) {
@@ -51,7 +49,6 @@ public class KravGraphQlResponse extends KravResponse implements KravId {
                 .dokumentasjon(copyOf(krav.getDokumentasjon()))
                 .implementasjoner(krav.getImplementasjoner())
                 .begrepIder(copyOf(krav.getBegrepIder()))
-                .virkemiddelIder(copyOf(krav.getVirkemiddelIder()))
                 .varslingsadresser(copyOf(krav.getVarslingsadresser()))
                 .varslingsadresserQl(copyOf(convert(krav.getVarslingsadresser(), VarslingsadresseGraphQlResponse::buildFrom)))
                 .rettskilder(copyOf(krav.getRettskilder()))

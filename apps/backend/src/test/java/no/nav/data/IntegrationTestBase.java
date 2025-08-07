@@ -237,8 +237,6 @@ public abstract class IntegrationTestBase {
                 EtterlevelseDokumentasjonRequest.builder()
                         .title("test dokumentasjon")
                         .etterlevelseNummer(101) // Note: This will be overwritten
-                        .knyttetTilVirkemiddel(false)
-                        .virkemiddelId("")
                         .beskrivelse("")
                         .forGjenbruk(false)
                         .teams(List.of("TEST"))

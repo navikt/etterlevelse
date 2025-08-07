@@ -22,7 +22,6 @@ input KravFilter {
     nummer: Int
     etterlevelseDokumentasjonId: ID
     etterlevelseDokumentasjonIrrevantKrav: Boolean
-    virkemiddelId: String
     underavdeling: String
     lov: String
     tema: String
@@ -47,8 +46,6 @@ input EtterlevelseDokumentasjonFilter {
     mineEtterlevelseDokumentasjoner: Boolean
     behandlingId: String
     behandlerPersonopplysninger: Boolean
-    virkemiddelId: String
-    knyttetTilVirkemiddel: Boolean
     sok: String
 }
 
@@ -76,7 +73,6 @@ type Krav {
     varselMelding: String
     implementasjoner: String
     begrepIder: [String!]!
-    virkemiddelIder: [String!]!
     rettskilder: [String!]!
     tagger: [String!]!
     regelverk: [Regelverk!]!
@@ -93,7 +89,6 @@ type Krav {
     etterlevelser(onlyForEtterlevelseDokumentasjon: Boolean, etterlevelseDokumentasjonId: ID): [Etterlevelse!]!
     tilbakemeldinger: [Tilbakemelding!]!
     begreper: [Begrep!]!
-    virkemidler: [Virkemiddel!]!
     kravIdRelasjoner: [String!]!
     kravRelasjoner: [Krav!]!
     aktivertDato: DateTime
@@ -103,16 +98,6 @@ type Begrep {
     id: ID!
     navn: String!
     beskrivelse:String!
-}
-
-type Virkemiddel {
-    id: ID!
-    changeStamp: ChangeStamp!
-    version: Int!
-    navn: String!
-    virkemiddelType: Code!
-    regelverk: [Regelverk!]!
-
 }
 
 type Tilbakemelding {
@@ -272,8 +257,6 @@ type EtterlevelseDokumentasjon {
     behandlingIds: [String!]!
     behandlinger: [Behandling!]!
     behandlerPersonopplysninger: Boolean
-    knyttetTilVirkemiddel: Boolean
-    virkemiddelId: String
     irrelevansFor: [Code!]!
     prioritertKravNummer: [String!]!
     forGjenbruk: Boolean

@@ -128,16 +128,8 @@ public class EtterlevelseDokumentasjonGraphQlController {
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
     public EtterlevelseDokumentasjonStats stats(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjon) {
-        List<KravGraphQlResponse> krav;
-        List<KravGraphQlResponse> irrelevantKrav;
-
-        if (etterlevelseDokumentasjon.isKnyttetTilVirkemiddel() && (etterlevelseDokumentasjon.getVirkemiddelId() != null)) {
-            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId(), etterlevelseDokumentasjon.getVirkemiddelId()), KravGraphQlResponse::buildFrom);
-            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId(), etterlevelseDokumentasjon.getVirkemiddelId()), KravGraphQlResponse::buildFrom);
-        } else {
-            krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()), KravGraphQlResponse::buildFrom);
-            irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId()), KravGraphQlResponse::buildFrom);
-        }
+        List<KravGraphQlResponse> krav = convert(kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()), KravGraphQlResponse::buildFrom);
+        List<KravGraphQlResponse> irrelevantKrav = convert(kravService.findForEtterlevelseDokumentasjonIrrelevans(etterlevelseDokumentasjon.getId()), KravGraphQlResponse::buildFrom);
 
         var relevantKrav = krav.stream().filter(k -> k.getStatus() == KravStatus.AKTIV).toList();
 

@@ -82,8 +82,6 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 EtterlevelseDokumentasjonRequest.builder()
                         .title("test dokumentasjon")
                         .etterlevelseNummer(101)
-                        .knyttetTilVirkemiddel(false)
-                        .virkemiddelId("")
                         .beskrivelse("")
                         .forGjenbruk(false)
                         .teams(List.of(""))

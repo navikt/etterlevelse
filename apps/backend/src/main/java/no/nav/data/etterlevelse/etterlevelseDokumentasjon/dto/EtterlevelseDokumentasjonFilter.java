@@ -25,8 +25,6 @@ public class EtterlevelseDokumentasjonFilter {
 
     private String behandlingId;
     private Boolean behandlerPersonopplysninger;
-    private String virkemiddelId;
-    private Boolean knyttetTilVirkemiddel;
     private String sok;
 
     public boolean isEmpty() {
@@ -38,9 +36,7 @@ public class EtterlevelseDokumentasjonFilter {
                 && sistRedigert == null
                 && mineEtterlevelseDokumentasjoner == null
                 && behandlingId == null
-                && virkemiddelId == null
                 && behandlerPersonopplysninger == null
-                && knyttetTilVirkemiddel == null
                 ;
     }
 

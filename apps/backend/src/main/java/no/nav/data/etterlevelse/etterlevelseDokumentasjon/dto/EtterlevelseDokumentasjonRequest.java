@@ -37,8 +37,6 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private String gjenbrukBeskrivelse;
     private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
-    private String virkemiddelId;
-    private boolean knyttetTilVirkemiddel;
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
@@ -60,7 +58,6 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setBeskrivelse(trimToNull(beskrivelse));
         setGjenbrukBeskrivelse(trimToNull(gjenbrukBeskrivelse));
         setBehandlingIds(formatList(behandlingIds));
-        setVirkemiddelId(trimToNull(virkemiddelId));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
         setResources(formatList(resources));
@@ -89,13 +86,11 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setBeskrivelse(beskrivelse);
         eDokData.setGjenbrukBeskrivelse(gjenbrukBeskrivelse);
         eDokData.setTilgjengeligForGjenbruk(tilgjengeligForGjenbruk);
-        eDokData.setVirkemiddelId(virkemiddelId);
         eDokData.setIrrelevansFor(copyOf(irrelevansFor));
         eDokData.setTeams(copyOf(teams));
         eDokData.setResources(copyOf(resources));
         eDokData.setRisikoeiere(copyOf(risikoeiere));
         eDokData.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
-        eDokData.setKnyttetTilVirkemiddel(knyttetTilVirkemiddel);
         eDokData.setForGjenbruk(forGjenbruk);
         eDokData.setNomAvdelingId(nomAvdelingId);
         eDokData.setAvdelingNavn(avdelingNavn);
