@@ -70,7 +70,6 @@ public class WebSecurityConfig {
                     "/statistikk/**",
                     "/team/**",
                     "/begrep/**",
-                    "/etterlevelsearkiv/**",
                     "/documentrelation/**",
                     "/behandlingenslivslop/**",
                     "/pvotilbakemelding/**",
@@ -85,9 +84,7 @@ public class WebSecurityConfig {
                     "/audit/**",
                     "/settings/**",
                     "/codelist/**",
-                    "/export/codelist/**",
-                    "/etterlevelsearkiv/status/arkivert",
-                    "/etterlevelsearkiv/admin/update"
+                    "/export/codelist/**"
             );
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
@@ -103,7 +100,6 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsemetadata/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.WRITE.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvotilbakemelding/**").hasAnyRole(AppRole.ADMIN.name(), AppRole.PERSONVERNOMBUD.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/melding/**").hasAnyRole(AppRole.ADMIN.name()));
-            http.authorizeHttpRequests(auth -> auth.requestMatchers("/etterlevelsearkiv/**").hasAnyRole(AppRole.WRITE.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/behandlingenslivslop/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvkdokument/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvkdokument/pvo").hasAnyRole(AppRole.PERSONVERNOMBUD.name(), AppRole.ADMIN.name()));

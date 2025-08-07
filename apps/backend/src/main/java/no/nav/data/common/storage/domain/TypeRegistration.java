@@ -2,7 +2,6 @@ package no.nav.data.common.storage.domain;
 
 import no.nav.data.common.mail.MailTask;
 import no.nav.data.common.security.azure.support.MailLog;
-import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
@@ -23,7 +22,6 @@ public final class TypeRegistration {
     static {
         addDomainClass(KravPriorityList.class, true);
         addDomainClass(Melding.class, true);
-        addDomainClass(EtterlevelseArkiv.class, true);
 
         addDomainClass(KravImage.class, false);
         addDomainClass(MailTask.class, false);

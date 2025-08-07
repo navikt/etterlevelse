@@ -1,7 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
 import no.nav.data.IntegrationTestBase;
-import no.nav.data.etterlevelse.arkivering.domain.EtterlevelseArkiv;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -60,10 +59,6 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         etterlevelseService.save(Etterlevelse.builder().kravNummer(201).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId()).build());
         etterlevelseService.save(Etterlevelse.builder().kravNummer(200).kravVersjon(1).etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId()).build());
 
-        etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
-        etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId().toString()).build());
-        etterlevelseArkivStorageService.save(EtterlevelseArkiv.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjon_2.getId().toString()).build());
-
         createEtterlevelseMetadata(etterlevelseDokumentasjon_1.getId(), 200, 1);
         createEtterlevelseMetadata(etterlevelseDokumentasjon_1.getId(), 201, 1);
         createEtterlevelseMetadata(etterlevelseDokumentasjon_2.getId(), 200, 1);
@@ -73,7 +68,6 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         assertThat(etterlevelseDokumentasjonRepo.findAll().size()).isEqualTo(1); // Only etterlevelseDokumentasjon_2 should remain
         assertThat(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId()).size()).isEqualTo(0);
         assertThat(etterlevelseMetadataService.getByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon_1.getId()).size()).isEqualTo(0);
-        assertThat(etterlevelseArkivService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId().toString()).size()).isEqualTo(0);
     }
 
     @Test

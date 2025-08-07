@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.etterlevelse.arkivering.EtterlevelseArkivService;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
@@ -57,7 +56,6 @@ public class EtterlevelseDokumentasjonService {
     private final BehandlingService behandlingService;
     private final EtterlevelseMetadataService etterlevelseMetadataService;
     private final EtterlevelseService etterlevelseService;
-    private final EtterlevelseArkivService etterlevelseArkivService;
     private final TeamcatTeamClient teamcatTeamClient;
     private final TeamcatResourceClient teamcatResourceClient;
     private final DocumentRelationService documentRelationService;
@@ -177,9 +175,6 @@ public class EtterlevelseDokumentasjonService {
 
         log.info("deleting etterlevelse metadata connected to etterlevelse dokumentasjon with id={}", id);
         etterlevelseMetadataService.deleteByEtterlevelseDokumentasjonId(id);
-
-        log.info("deleting etterlevelse arkiv connected to etterlevelse dokumentasjon with id={}", id);
-        etterlevelseArkivService.deleteByEtterlevelseDokumentsjonId(id.toString());
 
         log.info("deleting etterlevelse connected to etterlevelse dokumentasjon with id={}", id);
         etterlevelseService.deleteByEtterlevelseDokumentasjonId(id);
