@@ -70,12 +70,7 @@ export const LoggedInHeader = () => {
   const kravPages: {
     label: string
     href: string
-  }[] = user.isKraveier()
-    ? [
-        { label: 'Forvalte og opprette krav', href: kravlisteUrl() },
-        //{ label: 'Forvalte og opprette virkemiddel', href: virkemiddellisteUrl }
-      ]
-    : []
+  }[] = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: kravlisteUrl() }] : []
   const adminPages: {
     label: string
     href: string

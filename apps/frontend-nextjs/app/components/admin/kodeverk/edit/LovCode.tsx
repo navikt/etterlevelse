@@ -5,7 +5,6 @@ import {
   ICodeListFormValues,
   ILovCodeData,
 } from '@/constants/kodeverk/kodeverkConstants'
-import { lovCodeRelevansToOptions } from '@/services/kodeverk/kodeverkService'
 import { Label, TextField } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 
@@ -66,18 +65,6 @@ export const LovCodeDataForm = () => (
                       <FormError fieldName='data.tema' />
                     ) : undefined
                   }
-                />
-              </div>
-            </div>
-
-            <div className='w-full mt-4'>
-              <Label>Relevant for</Label>
-              <div className='mt-1.5'>
-                <OptionList
-                  options={lovCodeRelevansToOptions()}
-                  value={data.relevantFor ? data.relevantFor : undefined}
-                  onChange={(val) => set({ relevantFor: val })}
-                  label='relevant for'
                 />
               </div>
             </div>

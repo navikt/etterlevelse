@@ -1,11 +1,9 @@
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '@/api/kodeverk/kodeverkApi'
 import {
   EListName,
-  ELovCodeRelevans,
   ICode,
   ICodeListFormValues,
   ICodeUsage,
-  ILovCodeData,
 } from '@/constants/kodeverk/kodeverkConstants'
 import { handleSort } from '@/util/handleTableSort'
 import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
@@ -100,12 +98,8 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
     if (selectedCode.data && (list === EListName.LOV || list === EListName.TEMA)) {
       initialValues.data = selectedCode.data
       if (list === EListName.LOV) {
-        const codeListData = selectedCode.data as ILovCodeData
         initialValues.data = {
           ...selectedCode.data,
-          relevantFor: codeListData.relevantFor
-            ? codeListData.relevantFor
-            : ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
         }
       }
     }

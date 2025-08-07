@@ -1,7 +1,6 @@
 import { getAllCodelists } from '@/api/kodeverk/kodeverkApi'
 import {
   EListName,
-  ELovCodeRelevans,
   IAllCodelists,
   ICode,
   ICodeListFormValues,
@@ -155,17 +154,9 @@ class CodelistService {
     })
   }
 
-  getParsedOptionsForLov(forVirkemiddel?: boolean): IGetParsedOptionsForLovProps[] {
+  getParsedOptionsForLov(): IGetParsedOptionsForLovProps[] {
     const lovList = this.getCodes(EListName.LOV)
-    let filteredLovList = []
-
-    if (forVirkemiddel) {
-      filteredLovList = filterLovCodeListForRelevans(lovList, ELovCodeRelevans.VIRKEMIDDEL)
-    } else {
-      filteredLovList = filterLovCodeListForRelevans(lovList, ELovCodeRelevans.KRAV)
-    }
-
-    return filteredLovList.map((code: TLovCode) => {
+    return lovList.map((code: TLovCode) => {
       return { value: code.code, label: code.shortName, description: code.description }
     })
   }
@@ -232,47 +223,5 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
     tema: lovCodeListDataCheck('temaCheck'),
   }),
 })
-
-export const lovCodeRelevansToText = (lovCodeRelevans: string) => {
-  switch (lovCodeRelevans) {
-    case ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL.toString():
-      return 'Krav og virkemiddel'
-    case ELovCodeRelevans.KRAV.toString():
-      return 'Krav'
-    case ELovCodeRelevans.VIRKEMIDDEL.toString():
-      return 'Virkemiddel'
-  }
-}
-
-interface ILovCodeRelevansToOptionsProps {
-  value: string
-  label: string | undefined
-}
-
-export const lovCodeRelevansToOptions = (): ILovCodeRelevansToOptionsProps[] => {
-  return Object.keys(ELovCodeRelevans).map((key: string) => {
-    return { value: key, label: lovCodeRelevansToText(key) }
-  })
-}
-
-export const filterLovCodeListForRelevans = (
-  codeList: TLovCode[],
-  relevantFor: ELovCodeRelevans
-): TLovCode[] => {
-  return codeList.filter((code: TLovCode) => {
-    if (code.data) {
-      //for old data
-      if (!code.data.relevantFor) {
-        return true
-      } else if (
-        code.data.relevantFor === ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL ||
-        code.data.relevantFor === relevantFor
-      ) {
-        return true
-      }
-    }
-    return false
-  })
-}
 
 export const codelist = new CodelistService()

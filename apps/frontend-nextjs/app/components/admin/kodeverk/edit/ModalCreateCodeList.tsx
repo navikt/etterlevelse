@@ -2,7 +2,6 @@ import { MarkdownInfo } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/ModalSchema'
 import {
   EListName,
-  ELovCodeRelevans,
   ICodeListFormValues,
   ILovCodeData,
 } from '@/constants/kodeverk/kodeverkConstants'
@@ -43,7 +42,6 @@ const ModalCreateCodeList = ({
           lovId: '',
           underavdeling: '',
           tema: '',
-          relevantFor: ELovCodeRelevans.KRAV_OG_VIRKEMIDDEL,
         } as ILovCodeData
       }
     }

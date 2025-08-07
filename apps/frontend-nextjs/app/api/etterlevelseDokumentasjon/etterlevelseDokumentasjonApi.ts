@@ -3,11 +3,9 @@ import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IVirkemiddel } from '@/constants/virkemiddel/virkemiddelConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { getVirkemiddel } from '../virkemiddel/virkemiddelApi'
 
 const getEtterlevelseDokumentasjon = async (id: string) => {
   return (
@@ -43,22 +41,14 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    let virkmiddel: any = {}
-
     setIsLoading(true)
     if (etterlevelseDokumentasjonId && !isCreateNew) {
       ;(async () => {
         await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(
           async (etterlevelseDokumentasjon) => {
-            if (etterlevelseDokumentasjon.virkemiddelId) {
-              await getVirkemiddel(etterlevelseDokumentasjon.virkemiddelId).then(
-                (virkemiddelResponse: IVirkemiddel) => (virkmiddel = virkemiddelResponse)
-              )
-            }
             setData(
               etterlevelseDokumentasjonMapToFormVal({
                 ...etterlevelseDokumentasjon,
-                virkemiddel: virkmiddel,
               })
             )
             setIsLoading(false)
@@ -106,9 +96,6 @@ const etterlevelseDokumentasjonMapToFormVal = (
   risikoeiereData: etterlevelseDokumentasjon.risikoeiereData || [],
   hasCurrentUserAccess: etterlevelseDokumentasjon.hasCurrentUserAccess || false,
   behandlinger: etterlevelseDokumentasjon.behandlinger || [],
-  virkemiddelId: etterlevelseDokumentasjon.virkemiddelId || '',
-  // knyttetTilVirkemiddel: etterlevelseDokumentasjon.knyttetTilVirkemiddel !== undefined ? etterlevelseDokumentasjon.knyttetTilVirkemiddel : false,
-  knyttetTilVirkemiddel: false,
   varslingsadresser: etterlevelseDokumentasjon.varslingsadresser || [],
   forGjenbruk: etterlevelseDokumentasjon.forGjenbruk || false,
   risikovurderinger: etterlevelseDokumentasjon.risikovurderinger || [],

@@ -6,15 +6,8 @@ export enum EListName {
   RELEVANS = 'RELEVANS',
   LOV = 'LOV',
   TEMA = 'TEMA',
-  VIRKEMIDDELTYPE = 'VIRKEMIDDELTYPE',
   YTTERLIGERE_EGENSKAPER = 'YTTERLIGERE_EGENSKAPER',
   PVO_VURDERING = 'PVO_VURDERING',
-}
-
-export enum ELovCodeRelevans {
-  KRAV_OG_VIRKEMIDDEL = 'KRAV_OG_VIRKEMIDDEL',
-  KRAV = 'KRAV',
-  VIRKEMIDDEL = 'VIRKEMIDDEL',
 }
 
 export interface ICode {
@@ -32,7 +25,6 @@ export interface ILovCodeData {
   lovId?: string
   underavdeling?: string
   tema?: string
-  relevantFor?: ELovCodeRelevans
 }
 
 export interface IAllCodelists {

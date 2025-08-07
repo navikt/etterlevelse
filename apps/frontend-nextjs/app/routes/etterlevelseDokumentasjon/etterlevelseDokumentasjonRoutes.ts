@@ -1,5 +1,3 @@
-export const virkemiddellisteUrl: string = '/virkemiddelliste'
-
 export const dokumentasjonUrl = '/dokumentasjon'
 
 export const etterlevelseDokumentasjonIdUrl = (etterlevelseDokumentasjonId?: string): string =>

@@ -7,7 +7,6 @@ import {
   IVarslingsadresse,
   TVarslingsadresseQL,
 } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { IVirkemiddel } from '../virkemiddel/virkemiddelConstants'
 import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 
 export interface IEtterlevelseDokumentasjon {
@@ -19,7 +18,6 @@ export interface IEtterlevelseDokumentasjon {
   tilgjengeligForGjenbruk: boolean
   gjenbrukBeskrivelse: string
   behandlingIds: string[]
-  virkemiddelId: string
   irrelevansFor: ICode[]
   prioritertKravNummer: string[]
   etterlevelseNummer: number
@@ -34,8 +32,6 @@ export interface IEtterlevelseDokumentasjon {
   risikoeiereData?: ITeamResource[]
   behandlinger?: IBehandling[]
   behandlerPersonopplysninger: boolean
-  virkemiddel?: IVirkemiddel
-  knyttetTilVirkemiddel: boolean
   forGjenbruk: boolean
   varslingsadresser: IVarslingsadresse[]
   hasCurrentUserAccess: boolean

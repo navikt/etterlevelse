@@ -6,7 +6,6 @@ import {
   IVarslingsadresse,
   TVarslingsadresseQL,
 } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { IVirkemiddel } from '../virkemiddel/virkemiddelConstants'
 
 export enum EKravStatus {
   UTKAST = 'UTKAST',
@@ -29,7 +28,6 @@ export interface IKrav extends IDomainObject {
   varselMelding?: string
   prioriteringsId?: number
   begrepIder: string[]
-  virkemiddelIder: string[]
   varslingsadresser: IVarslingsadresse[]
   rettskilder: string[]
   tagger: string[]
@@ -58,7 +56,6 @@ export type TKravQL = TReplace<
     etterlevelser: TEtterlevelseQL[]
     varslingsadresserQl: TVarslingsadresseQL[]
     begreper: IBegrep[]
-    virkemidler: IVirkemiddel[]
     kravRelasjoner: IKrav[]
     prioriteringsId: number
   }
