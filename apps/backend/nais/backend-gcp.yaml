@@ -75,6 +75,7 @@ spec:
     inbound:
       rules:
         - application: etterlevelse-frontend
+        - application: etterlevelse-frontend-nextjs
         - application: etterlevelse-arkiv
           cluster: prod-legacy
           permissions:
