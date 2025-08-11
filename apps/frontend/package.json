@@ -51,7 +51,7 @@
     "tailwindcss": "4.1.11",
     "ts-prune": "0.10.3",
     "typescript": "5.9.2",
-    "yup": "1.6.1"
+    "yup": "1.7.0"
   },
   "scripts": {
     "start": "craco start",
@@ -120,7 +120,7 @@
     "eslint-plugin-react-hooks": "5.2.0",
     "http-proxy-middleware": "3.0.5",
     "husky": "9.1.7",
-    "lint-staged": "16.1.2",
+    "lint-staged": "16.1.5",
     "postcss": "8.5.6",
     "prettier": "3.6.2",
     "react-localization": "2.0.6",
