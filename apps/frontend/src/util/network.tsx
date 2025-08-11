@@ -1,4 +1,4 @@
-import { Button, Modal } from '@navikt/ds-react'
+import { Alert, Button, Modal } from '@navikt/ds-react'
 import axios from 'axios'
 import { useState } from 'react'
 
@@ -14,6 +14,20 @@ const init = (onErr: (e: any) => void) => {
       if (err?.response?.status !== 404) {
         console.error('axios error', err)
         onErr(err)
+        if (err?.response?.data?.message.includes('Kan ikke fjerne gjenbruk ')) {
+          onErr({
+            ...err,
+            message: 'Det er ikke mulig å fjerne gjenbruk',
+            response: {
+              ...err.response,
+              data: {
+                ...err.response.data,
+                message:
+                  'Dette dokumentet har allerede blitt gjenbrukt minst 1 gang. Det gjør at du ikke lenger kan fjerne mulighet for gjenbruk.',
+              },
+            },
+          })
+        }
       }
       return Promise.reject(err)
     }
@@ -38,6 +52,13 @@ export const useNetworkStatus = () => {
     >
       <Modal.Body>
         {error?.response?.data?.message ? error?.response?.data?.message : error?.toString()}
+
+        {error?.message?.includes('fjerne gjenbruk') && (
+          <Alert variant='info' inline className='my-5'>
+            Hvis du vil skjule gjenbruksmulighet for andre, kan du skru den av på Temaside under
+            &quot;Endre gjenbruk&quot;.
+          </Alert>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={clear}>Lukk</Button>
