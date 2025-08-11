@@ -2,7 +2,6 @@ import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { IPvkDokument } from '../../../constants'
 import { etterlevelsesDokumentasjonEditUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
 
@@ -33,7 +32,6 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   manglerBehandlingError,
   errorSummaryRef,
 }) => {
-  const navigate = useNavigate()
   return (
     <div>
       {(!_.isEmpty(errors) ||
@@ -51,11 +49,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         >
           {manglerBehandlingError && (
             <ErrorSummary.Item
-              onClick={() => {
-                navigate(
-                  `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#behandling`
-                )
-              }}
+              href={`etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#behandling`}
               className='max-w-[75ch]'
             >
               Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen (Redigér
@@ -104,11 +98,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
 
           {risikoeiereDataError && (
             <ErrorSummary.Item
-              onClick={() => {
-                navigate(
-                  `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#risikoeiereData`
-                )
-              }}
+              href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#risikoeiereData`}
               className='max-w-[75ch]'
             >
               Legg til risikoeier (Redigér dokumentegenskaper)
@@ -117,11 +107,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
 
           {avdelingError && (
             <ErrorSummary.Item
-              onClick={() => {
-                navigate(
-                  `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#avdeling`
-                )
-              }}
+              href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#avdeling`}
               className='max-w-[75ch]'
             >
               Legg til avdeling (Redigér dokumentegenskaper)
@@ -130,11 +116,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
 
           {medlemError && (
             <ErrorSummary.Item
-              onClick={() => {
-                navigate(
-                  `${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#teamsData`
-                )
-              }}
+              href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#teamsData`}
               className='max-w-[75ch]'
             >
               Legg til team eller personer (Redigér dokumentegenskaper)
