@@ -1,3 +1,3 @@
 ingresses:
-  - https://etterlevelse.intern.dev.nav.no
-  - https://etterlevelse.ansatt.dev.nav.no
+  - https://etterlevelse-nextjs.intern.dev.nav.no
+  - https://etterlevelse-nextjs.ansatt.dev.nav.no
