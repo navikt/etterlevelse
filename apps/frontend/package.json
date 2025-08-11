@@ -29,7 +29,7 @@
     "eslint-plugin-prettier": "5.5.3",
     "formik": "2.4.6",
     "graphql": "16.11.0",
-    "json-diff-kit": "1.0.32",
+    "json-diff-kit": "1.0.33",
     "lodash": "4.17.21",
     "markdown-draft-js": "2.4.0",
     "moment": "2.30.1",
