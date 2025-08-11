@@ -232,7 +232,7 @@ export const BehandlingensLivslopPage = () => {
                         <div>
                           <BehandlingensLivslopTextContent />
 
-                          <BodyShort className='mt-3'>
+                          <BodyShort className='mb-3 mt-8'>
                             Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
                             oversikt.
                           </BodyShort>
