@@ -1,7 +1,6 @@
-import { usePersonName } from '@/api/teamkatalogen/teamkatalogenApi';
-import { teamKatPersonLink } from '@/util/teamkatalog/utils';
+import { usePersonName } from '@/api/teamkatalogen/teamkatalogenApi'
+import { teamKatPersonLink } from '@/util/teamkatalog/utils'
 import { Link } from '@navikt/ds-react'
-
 
 export const PersonName = (props: { ident: string; link?: boolean; kraveier?: boolean }) => {
   const name = usePersonName()(props.ident)
