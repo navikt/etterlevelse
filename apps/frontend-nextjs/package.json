@@ -67,18 +67,10 @@
     "yup": "^1.6.1",
     "lodash": "^4.17.21",
     "react-json-view-lite": "2.4.1",
-    "@types/draft-js": "0.11.18",
-    "@types/markdown-draft-js": "2.2.7",
-    "@types/react-draft-wysiwyg": "1.13.8",
     "draft-js": "0.11.7",
     "markdown-draft-js": "2.4.0",
-    "react-draft-wysiwyg": "1.15.0",
     "json-diff-kit": "1.0.32",
-    "react-process-string": "1.2.0",
-    "@types/draft-js": "0.11.18",
-    "@types/markdown-draft-js": "2.2.7",
-    "@types/react-draft-wysiwyg": "1.13.8",
-    "react-draft-wysiwyg": "1.15.0"
+    "react-process-string": "1.2.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
