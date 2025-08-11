@@ -29,6 +29,64 @@ type TProps = {
   updateTitleUrlAndStep: (step: number) => void
 }
 
+export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Element | undefined => {
+  if (step === 0) {
+    if (
+      pvkDokument.stemmerPersonkategorier !== null ||
+      pvkDokument.personkategoriAntallBeskrivelse ||
+      pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
+      pvkDokument.lagringsBeskrivelsePersonopplysningene
+    ) {
+      let answered = 0
+
+      if (pvkDokument.stemmerPersonkategorier !== null) answered += 1
+      if (pvkDokument.personkategoriAntallBeskrivelse) answered += 1
+      if (pvkDokument.tilgangsBeskrivelsePersonopplysningene) answered += 1
+      if (pvkDokument.lagringsBeskrivelsePersonopplysningene) answered += 1
+
+      return (
+        <Tag variant={answered < 4 ? 'warning' : 'success'} size='xsmall'>
+          {answered} av 4 felt har innhold
+        </Tag>
+      )
+    } else {
+      return (
+        <Tag variant='neutral' size='xsmall'>
+          Ikke påbegynt
+        </Tag>
+      )
+    }
+  } else if (step === 1) {
+    if (
+      pvkDokument.harInvolvertRepresentant !== null ||
+      pvkDokument.representantInvolveringsBeskrivelse ||
+      pvkDokument.harDatabehandlerRepresentantInvolvering !== null ||
+      pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse
+    ) {
+      let answered = 0
+
+      if (pvkDokument.harInvolvertRepresentant !== null) answered += 1
+      if (pvkDokument.representantInvolveringsBeskrivelse) answered += 1
+      if (pvkDokument.harDatabehandlerRepresentantInvolvering !== null) answered += 1
+      if (pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse) answered += 1
+
+      return (
+        <Tag variant={answered < 4 ? 'warning' : 'success'} size='xsmall'>
+          {answered} av 4 felt har innhold
+        </Tag>
+      )
+    } else {
+      return (
+        <Tag variant='neutral' size='xsmall'>
+          Ikke påbegynt
+        </Tag>
+      )
+    }
+  } else {
+    return undefined
+  }
+}
+
 export const OversiktView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
@@ -39,64 +97,6 @@ export const OversiktView: FunctionComponent<TProps> = ({
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
-
-  const getFormStatus = (step: number): JSX.Element | undefined => {
-    if (step === 0) {
-      if (
-        pvkDokument.stemmerPersonkategorier !== null ||
-        pvkDokument.personkategoriAntallBeskrivelse ||
-        pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
-        pvkDokument.lagringsBeskrivelsePersonopplysningene
-      ) {
-        let answered = 0
-
-        if (pvkDokument.stemmerPersonkategorier !== null) answered += 1
-        if (pvkDokument.personkategoriAntallBeskrivelse) answered += 1
-        if (pvkDokument.tilgangsBeskrivelsePersonopplysningene) answered += 1
-        if (pvkDokument.lagringsBeskrivelsePersonopplysningene) answered += 1
-
-        return (
-          <Tag variant={answered < 4 ? 'warning' : 'success'} size='xsmall'>
-            {answered} av 4 felt har innhold
-          </Tag>
-        )
-      } else {
-        return (
-          <Tag variant='neutral' size='xsmall'>
-            Ikke påbegynt
-          </Tag>
-        )
-      }
-    } else if (step === 1) {
-      if (
-        pvkDokument.harInvolvertRepresentant !== null ||
-        pvkDokument.representantInvolveringsBeskrivelse ||
-        pvkDokument.harDatabehandlerRepresentantInvolvering !== null ||
-        pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse
-      ) {
-        let answered = 0
-
-        if (pvkDokument.harInvolvertRepresentant !== null) answered += 1
-        if (pvkDokument.representantInvolveringsBeskrivelse) answered += 1
-        if (pvkDokument.harDatabehandlerRepresentantInvolvering !== null) answered += 1
-        if (pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse) answered += 1
-
-        return (
-          <Tag variant={answered < 4 ? 'warning' : 'success'} size='xsmall'>
-            {answered} av 4 felt har innhold
-          </Tag>
-        )
-      } else {
-        return (
-          <Tag variant='neutral' size='xsmall'>
-            Ikke påbegynt
-          </Tag>
-        )
-      }
-    } else {
-      return undefined
-    }
-  }
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList: string = ''
@@ -339,7 +339,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
-                  status={getFormStatus(index)}
+                  status={getFormStatus(pvkDokument, index)}
                   customStatusTag={
                     index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
                   }
