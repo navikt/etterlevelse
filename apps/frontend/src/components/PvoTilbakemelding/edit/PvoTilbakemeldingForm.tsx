@@ -139,19 +139,6 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                     Lagre
                   </Button>
                 </div>
-
-                <div>
-                  <Button
-                    size='small'
-                    type='button'
-                    variant='secondary'
-                    onClick={async () => {
-                      await setFieldValue('bidragsVurdering', '')
-                    }}
-                  >
-                    Nullstill radio valgene
-                  </Button>
-                </div>
                 <div>
                   <Button
                     size='small'
@@ -216,6 +203,19 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                   </RadioGroup>
                 )}
               </Field>
+            </div>
+
+            <div className='my-2'>
+              <Button
+                size='small'
+                type='button'
+                variant='secondary'
+                onClick={async () => {
+                  await setFieldValue('bidragsVurdering', '')
+                }}
+              >
+                Nullstill radio valgene
+              </Button>
             </div>
 
             <div className='my-5'>
