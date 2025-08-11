@@ -151,7 +151,7 @@ export const EtterlevelseDokumentRelasjonAdminPage = () => {
                   <Table.Row key={documentRelation.id}>
                     <Table.HeaderCell scope='row'>{documentRelation.id}</Table.HeaderCell>
                     <Table.DataCell>
-                      <Link href={etterlevelseDokumentasjonIdUrl(documentRelation.toDocument)}>
+                      <Link href={etterlevelseDokumentasjonIdUrl(documentRelation.fromDocument)}>
                         {documentRelation.fromDocument}
                       </Link>
                     </Table.DataCell>
