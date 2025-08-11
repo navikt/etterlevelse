@@ -90,7 +90,8 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
           <div className='mt-5'>
             <Alert className='mt-3' variant='warning'>
-              Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
+              Før dere kan vurdere tiltakenes effekt, må dere legge inn tiltak under Identifisering
+              av risikoscenarioer og tiltak.
             </Alert>
           </div>
         )}
@@ -109,13 +110,6 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
                   formRef={formRef}
                 />
               </div>
-            )}
-
-            {risikoscenario.tiltakIds.length === 0 && (
-              <Alert className='mt-3' variant='warning'>
-                Før dere kan vurdere tiltakenes effekt, må dere legge inn tiltak under
-                Identifisering av risikoscenarioer og tiltak.
-              </Alert>
             )}
           </div>
         )}
