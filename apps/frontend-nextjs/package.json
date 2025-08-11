@@ -43,7 +43,7 @@
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
-    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "@navikt/aksel-icons": "^7.27.0",
     "@navikt/ds-css": "^7.27.0",
     "@navikt/ds-react": "^7.27.0",
