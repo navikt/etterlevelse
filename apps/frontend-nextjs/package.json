@@ -50,7 +50,7 @@
     "@navikt/ds-tailwind": "^7.27.0",
     "@tailwindcss/postcss": "^4.1.11",
     "amplitude-js": "^8.21.9",
-    "axios": "^1.10.0",
+    "axios": "^1.11.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "graphql": "^16.11.0",
