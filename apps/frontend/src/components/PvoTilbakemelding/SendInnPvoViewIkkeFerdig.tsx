@@ -57,6 +57,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
       await setFieldValue('vilFaPvkIRetur', false)
     } else if (value === 'OK_PVK') {
       await setFieldValue('pvoFolgeOppEndringer', true)
+      await setFieldValue('vilFaPvkIRetur', false)
     } else {
       await setFieldValue('pvoFolgeOppEndringer', true)
       await setFieldValue('vilFaPvkIRetur', true)
