@@ -26,6 +26,7 @@ import {
   ITiltak,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
+import { getFormStatus } from '../PvkDokument/OversiktView'
 import { FormSummaryPanel } from '../PvkDokument/common/FormSummaryPanel'
 import { ExternalLink } from '../common/RouteLink'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -308,6 +309,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
+                  status={getFormStatus(pvkDokument, index)}
                   customStatusTag={
                     index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
                   }
