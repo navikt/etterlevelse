@@ -98,6 +98,6 @@
     "prettier": "^3.6.2",
     "react-draft-wysiwyg": "^1.15.0",
     "react-select": "^5.10.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   }
 }
