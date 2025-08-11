@@ -8,7 +8,7 @@
 
 ### Login with Google Cloud with @nav.no user
 
-Do this in Google Chrome as it doesn't work in Firefox on Mac
+Do this in Google Chrome as it doesn't work in Firefox on Mac 
 
 `gcloud auth login`
 
