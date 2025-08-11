@@ -3,12 +3,12 @@ name: Frontend
 on:
   push:
     paths:
-      - ".github/workflows/etterlevelse-frontend.yml"
-      - "apps/frontend/**"
+      - ".github/workflows/etterlevelse-frontend-nextjs.yml"
+      - "apps/frontend-nextjs/**"
 
 defaults:
   run:
-    working-directory: apps/frontend
+    working-directory: apps/frontend-nextjs
 
 jobs:
   build:
@@ -24,6 +24,7 @@ jobs:
       telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up node
         uses: actions/setup-node@v4
         with:
@@ -61,8 +62,8 @@ jobs:
         with:
           team: teamdatajegerne
           push_image: true
-          image_suffix: frontend
-          docker_context: ./apps/frontend
+          image_suffix: frontend-nextjs
+          docker_context: ./apps/frontend-nextjs
 
   deploy-preprod:
     name: Frontend - deploy Dev GCP
@@ -78,28 +79,8 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          RESOURCE: apps/frontend/nais/frontend-gcp.yaml
-          VARS: apps/frontend/nais/frontend-dev-gcp-vars.yaml
-          ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend
-          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          TELEMETRY: ${{ needs.build.outputs.telemetry }}
-
-  deploy-prod:
-    name: Frontend - deploy Prod GCP
-    needs: build
-    if: github.ref == 'refs/heads/prod'
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-      actions: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: prod-gcp
-          RESOURCE: apps/frontend/nais/frontend-gcp.yaml
-          VARS: apps/frontend/nais/frontend-prod-gcp-vars.yaml
-          ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-frontend
+          RESOURCE: apps/frontend-nextjs/nais/frontend-gcp.yaml
+          VARS: apps/frontend-nextjs/nais/frontend-dev-gcp-vars.yaml
+          ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend-nextjs
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
