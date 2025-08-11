@@ -9,7 +9,7 @@ import { useAwait, useForceUpdate } from '@/util/hooks/customHooks/customHooks'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Loader, Select } from '@navikt/ds-react'
 import { useParams, useRouter } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, Suspense, useEffect, useState } from 'react'
 import ModalCreateCodeList from '../edit/ModalCreateCodeList'
 import CodeListTable from './CodelistStyledTable'
 
@@ -62,70 +62,72 @@ export const ListnameAdminViewPage = () => {
         },
       ]}
     >
-      <Heading size='medium' level='1'>
-        Administrering av {listname}
-      </Heading>
+      <Suspense>
+        <Heading size='medium' level='1'>
+          Administrering av {listname}
+        </Heading>
 
-      <div className='flex justify-between w-full'>
-        <Select
-          label='Velg kodeverk'
-          hideLabel
-          className='w-full max-w-xl'
-          value={selectedListname}
-          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-            setSelectedListname(event.target.value)
-          }
-        >
-          <option value=''>Velg kodeverk</option>
-          {codelist.makeValueLabelForAllCodeLists().map(
-            (
-              codeLabel: {
-                value: string
-                label: string
-              },
-              index: number
-            ) => {
-              return (
-                <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
-                  {codeLabel.label}
-                </option>
-              )
+        <div className='flex justify-between w-full'>
+          <Select
+            label='Velg kodeverk'
+            hideLabel
+            className='w-full max-w-xl'
+            value={selectedListname}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+              setSelectedListname(event.target.value)
             }
-          )}
-        </Select>
-
-        {listname && (
-          <Button
-            icon={<PlusIcon area-label='' aria-hidden />}
-            variant='tertiary'
-            onClick={() => setCreateCodeListModal(!createCodeListModal)}
           >
-            Opprett ny kode
-          </Button>
-        )}
-      </div>
+            <option value=''>Velg kodeverk</option>
+            {codelist.makeValueLabelForAllCodeLists().map(
+              (
+                codeLabel: {
+                  value: string
+                  label: string
+                },
+                index: number
+              ) => {
+                return (
+                  <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
+                    {codeLabel.label}
+                  </option>
+                )
+              }
+            )}
+          </Select>
 
-      {isLoading && <Loader size='large' />}
-
-      {!isLoading && currentCodelist && (
-        <div className='mt-4'>
-          <CodeListTable tableData={currentCodelist || []} refresh={update} />
+          {listname && (
+            <Button
+              icon={<PlusIcon area-label='' aria-hidden />}
+              variant='tertiary'
+              onClick={() => setCreateCodeListModal(!createCodeListModal)}
+            >
+              Opprett ny kode
+            </Button>
+          )}
         </div>
-      )}
 
-      {listname && createCodeListModal && (
-        <ModalCreateCodeList
-          title='Ny kode'
-          list={listname}
-          isOpen={createCodeListModal}
-          errorOnCreate={errorOnResponse}
-          onClose={() => {
-            setCreateCodeListModal(false)
-            setErrorOnResponse(null)
-          }}
-          submit={handleCreateCodelist}
-        />
-      )}
+        {isLoading && <Loader size='large' />}
+
+        {!isLoading && currentCodelist && (
+          <div className='mt-4'>
+            <CodeListTable tableData={currentCodelist || []} refresh={update} />
+          </div>
+        )}
+
+        {listname && createCodeListModal && (
+          <ModalCreateCodeList
+            title='Ny kode'
+            list={listname}
+            isOpen={createCodeListModal}
+            errorOnCreate={errorOnResponse}
+            onClose={() => {
+              setCreateCodeListModal(false)
+              setErrorOnResponse(null)
+            }}
+            submit={handleCreateCodelist}
+          />
+        )}
+      </Suspense>
     </PageLayout>
   )
 }
