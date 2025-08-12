@@ -12,7 +12,7 @@ import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction, Suspense, useEffect, useState } from 'react'
 import { KravHasExpired } from './kravHasExpired/kravHasExpired'
 import { KravHensikt } from './kravHensikt/kravHensikt'
 import { KravRightSidePanel } from './kravRightSidePanel/kravRightSidePanel'
@@ -70,15 +70,18 @@ export const KravMainContent: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     if (krav && kravTema) {
-      ampli().logEvent('sidevisning', {
-        side: 'Krav side',
-        sidetittel: `${kravNummerView({
-          kravNummer: krav?.kravNummer,
-          kravVersjon: krav?.kravVersjon,
-        })} ${krav.navn}`,
-        section: kravTema?.shortName.toString(),
-        ...userRoleEventProp,
-      })
+      const ampliInstance = ampli()
+      if (ampliInstance) {
+        ampliInstance.logEvent('sidevisning', {
+          side: 'Krav side',
+          sidetittel: `${kravNummerView({
+            kravNummer: krav?.kravNummer,
+            kravVersjon: krav?.kravVersjon,
+          })} ${krav.navn}`,
+          section: kravTema?.shortName.toString(),
+          ...userRoleEventProp,
+        })
+      }
     }
   }, [krav, kravTema])
 
@@ -87,7 +90,13 @@ export const KravMainContent: FunctionComponent<TProps> = ({
       <MainPanelLayout>
         <KravHasExpired krav={krav} alleKravVersjoner={alleKravVersjoner} />
         <KravHensikt krav={krav} />
-        <KravTabMeny krav={krav} kravLoading={kravLoading} alleKravVersjoner={alleKravVersjoner} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <KravTabMeny
+            krav={krav}
+            kravLoading={kravLoading}
+            alleKravVersjoner={alleKravVersjoner}
+          />
+        </Suspense>
       </MainPanelLayout>
       <KravRightSidePanel krav={krav} alleKravVersjoner={alleKravVersjoner} />
     </ContentLayout>

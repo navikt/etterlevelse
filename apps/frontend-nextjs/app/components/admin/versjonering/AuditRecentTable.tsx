@@ -19,7 +19,7 @@ import {
 } from '@navikt/ds-react'
 import * as _ from 'lodash'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { AuditActionIcon } from './common/AuditActionIcon'
 import { AuditButton } from './common/AuditButton'
@@ -58,13 +58,26 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
   const [, setIdInput, idInput] = useDebouncedState('', 400)
+  const [windowWidth, setWindowWidth] = useState<number>(1200)
 
   useEffect(() => {
-    ampli().logEvent('sidevisning', {
-      side: 'Varsel side for admin',
-      sidetittel: 'Log side for varslinger',
-      ...userRoleEventProp,
-    })
+    const ampliInstance = ampli()
+    if (ampliInstance) {
+      ampliInstance.logEvent('sidevisning', {
+        side: 'Varsel side for admin',
+        sidetittel: 'Log side for varslinger',
+        ...userRoleEventProp,
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowWidth(window.innerWidth)
+      const handleResize = () => setWindowWidth(window.innerWidth)
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   useEffect(() => {
@@ -157,7 +170,8 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
         </Table.Header>
         <Table.Body>
           {audits.content.map((audit: IAuditItem, index) => {
-            const length = window.innerWidth > 1000 ? (window.innerWidth > 1200 ? 40 : 30) : 20
+            // Use windowWidth from state instead of window.innerWidth directly
+            const length = windowWidth > 1000 ? (windowWidth > 1200 ? 40 : 30) : 20
             const rowNum = audits.pageNumber * audits.pageSize + index + 1
             return (
               <Table.Row key={audit.id}>
@@ -183,7 +197,9 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
                 </Table.DataCell>
                 <Table.DataCell>{audit.user}</Table.DataCell>
                 <Table.DataCell>
-                  <CodeView audit={audit} />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <CodeView audit={audit} />
+                  </Suspense>
                 </Table.DataCell>
               </Table.Row>
             )

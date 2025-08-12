@@ -21,11 +21,24 @@ export const KravTabMeny: FunctionComponent<TProps> = ({
   kravLoading,
   alleKravVersjoner,
 }) => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <KravTabMenyContent
+        krav={krav}
+        kravLoading={kravLoading}
+        alleKravVersjoner={alleKravVersjoner}
+      />
+    </Suspense>
+  )
+}
+
+const KravTabMenyContent: FunctionComponent<TProps> = ({
+  krav,
+  kravLoading,
+  alleKravVersjoner,
+}) => {
   const tilbakemeldingId = useQueryParam('tilbakemeldingId')
-
-  // todo split loading krav and subelements?
   const etterlevelserLoading: boolean = kravLoading
-
   const [tab, setTab] = useState<TSection>(
     tilbakemeldingId !== undefined && tilbakemeldingId !== '' ? 'tilbakemeldinger' : 'krav'
   )

@@ -7,7 +7,7 @@ import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstan
 import { ampli } from '@/services/amplitude/amplitudeService'
 import { Heading, Tabs } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { AuditRecentTable } from '../versjonering/AuditRecentTable'
 import EditMelding from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
@@ -18,7 +18,7 @@ type TSection =
   | EMeldingType.FORSIDE
   | EMeldingType.OM_ETTERLEVELSE
 
-export const VarselAdminPage = () => {
+export const VarselAdminPageContent = () => {
   return (
     <PageLayout pageTitle='Varslinger' currentPage='Varslinger'>
       <Heading className='mt-2' size='medium' level='1'>
@@ -54,10 +54,13 @@ const VarselTabs = () => {
     ;(async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
-        ampli().logEvent('sidevisning', {
-          side: 'Varsel side for admin',
-          sidetittel: 'Opprett varsel melding for ' + tab,
-        })
+        const ampliInstance = ampli()
+        if (ampliInstance) {
+          ampliInstance.logEvent('sidevisning', {
+            side: 'Varsel side for admin',
+            sidetittel: 'Opprett varsel melding for ' + tab,
+          })
+        }
         const response = await getMeldingByType(getMeldingType(tab))
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])
@@ -120,5 +123,11 @@ const VarselTabs = () => {
     </Tabs>
   )
 }
+
+const VarselAdminPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <VarselAdminPageContent />
+  </Suspense>
+)
 
 export default VarselAdminPage

@@ -20,7 +20,7 @@ import {
   Table,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, Suspense, useEffect, useState } from 'react'
 
 const kravStatus = (status: EKravStatus | string) => {
   if (!status) return ''
@@ -36,7 +36,7 @@ const kravStatus = (status: EKravStatus | string) => {
   }
 }
 
-const KravAdminPage = () => {
+const KravAdminPageContent = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -83,11 +83,14 @@ const KravAdminPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
-      ampli().logEvent('sidevisning', {
-        side: 'Krav admin side',
-        sidetittel: 'Administrere Krav',
-        ...userRoleEventProp,
-      })
+      const ampliInstance = ampli()
+      if (ampliInstance) {
+        ampliInstance.logEvent('sidevisning', {
+          side: 'Krav admin side',
+          sidetittel: 'Administrere Krav',
+          ...userRoleEventProp,
+        })
+      }
     })()
   }, [])
 
@@ -190,5 +193,11 @@ const KravAdminPage = () => {
     </PageLayout>
   )
 }
+
+const KravAdminPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <KravAdminPageContent />
+  </Suspense>
+)
 
 export default KravAdminPage

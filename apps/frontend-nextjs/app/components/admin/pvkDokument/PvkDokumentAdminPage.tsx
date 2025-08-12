@@ -23,10 +23,10 @@ import {
   Table,
   TextField,
 } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { UpdateMessage } from '../common/commonComponents'
 
-export const PvkDokumentAdminPage = () => {
+export const PvkDokumentAdminPageContent = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [deletePvkDokumentId, setDeletePvkDokumentId] = useState<string>('')
   const [reloadTable, setReloadTable] = useState(false)
@@ -40,11 +40,14 @@ export const PvkDokumentAdminPage = () => {
   useEffect(() => {
     ;(async () => {
       await loadData()
-      ampli().logEvent('sidevisning', {
-        side: 'Etterlevelse Pvk dokument admin side',
-        sidetittel: 'Administrere Pvk dokument',
-        ...userRoleEventProp,
-      })
+      const ampliInstance = ampli()
+      if (ampliInstance) {
+        ampliInstance.logEvent('sidevisning', {
+          side: 'Etterlevelse Pvk dokument admin side',
+          sidetittel: 'Administrere Pvk dokument',
+          ...userRoleEventProp,
+        })
+      }
     })()
   }, [])
 
@@ -172,5 +175,11 @@ export const PvkDokumentAdminPage = () => {
     </PageLayout>
   )
 }
+
+const PvkDokumentAdminPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <PvkDokumentAdminPageContent />
+  </Suspense>
+)
 
 export default PvkDokumentAdminPage
