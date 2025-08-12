@@ -6,12 +6,15 @@ export const StatusIOrganisasjonen = () => (
     <LinkPanel
       href='https://metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse'
       onClick={() => {
-        ampli().logEvent('navigere', {
-          kilde: 'forside-panel',
-          app: 'etterlevelse',
-          til: 'https://metabase.ansatt.nav.no/dashboard/117-dashboard-for-etterlevelse',
-          fra: '/',
-        })
+        const ampliInstance = ampli()
+        if (ampliInstance) {
+          ampliInstance.logEvent('navigere', {
+            kilde: 'forside-panel',
+            app: 'etterlevelse',
+            til: 'https://metabase.ansatt.nav.no/dashboard/117-dashboard-for-etterlevelse',
+            fra: '/',
+          })
+        }
       }}
     >
       <LinkPanel.Title>Status i organisasjonen</LinkPanel.Title>

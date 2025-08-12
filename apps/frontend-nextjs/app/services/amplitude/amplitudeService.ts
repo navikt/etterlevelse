@@ -3,6 +3,8 @@ import { env } from '@/util/env/env'
 import amplitude, { AmplitudeClient } from 'amplitude-js'
 
 export const ampli = () => {
+  if (typeof window === 'undefined') return null // SSR guard
+
   const ampliInstance: AmplitudeClient = amplitude.getInstance()
 
   const AmplitudeConfig = {
@@ -14,7 +16,7 @@ export const ampli = () => {
       city: false,
       ip_address: false,
     },
-    platform: window.location.href,
+    platform: typeof window !== 'undefined' ? window.location.href : 'unknown',
   }
 
   ampliInstance.init(env.amplitudeApiKey, undefined, AmplitudeConfig)

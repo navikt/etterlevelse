@@ -1,3 +1,5 @@
+'use client'
+
 import {
   createMelding,
   deleteMelding,
@@ -49,13 +51,17 @@ export const EditMelding = ({
       await updateMelding(melding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
-        window.location.reload()
+        if (typeof window !== 'undefined') {
+          window.location.reload()
+        }
       })
     } else {
       await createMelding(melding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
-        window.location.reload()
+        if (typeof window !== 'undefined') {
+          window.location.reload()
+        }
       })
     }
   }

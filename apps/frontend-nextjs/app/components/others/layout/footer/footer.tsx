@@ -34,7 +34,7 @@ export const Footer = () => {
   const [pageScroll, setPageScroll] = useState(0)
 
   useEffect(() => {
-    if (typeof window !== undefined) {
+    if (typeof window !== 'undefined') {
       setPageScroll(window.scrollY)
     }
   }, [])
@@ -65,7 +65,11 @@ export const Footer = () => {
             className='text-white'
             size='xsmall'
             icon={<ArrowUpIcon aria-label='' aria-hidden />}
-            onClick={() => window.scrollTo(0, 0)}
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.scrollTo(0, 0)
+              }
+            }}
             variant='tertiary-neutral'
           >
             Til toppen

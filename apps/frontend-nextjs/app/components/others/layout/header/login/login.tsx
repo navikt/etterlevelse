@@ -38,10 +38,12 @@ export const LoginHeaderButton = () => {
   const [fullUrl, setFullUrl] = useState<string>('')
 
   useEffect(() => {
-    if (typeof window !== undefined) {
+    if (typeof window !== 'undefined') {
       setFullUrl(window.location.href)
     }
   }, [])
+
+  if (!fullUrl) return null // Don't render on server
 
   return (
     <InternalHeader.Button

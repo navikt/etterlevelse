@@ -38,12 +38,15 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
                   as={Link}
                   href={page.href}
                   onClick={() => {
-                    ampli().logEvent('navigere', {
-                      kilde: 'header',
-                      app: 'etterlevelse',
-                      til: page.href,
-                      fra: pathname,
-                    })
+                    const ampliInstance = ampli()
+                    if (ampliInstance) {
+                      ampliInstance.logEvent('navigere', {
+                        kilde: 'header',
+                        app: 'etterlevelse',
+                        til: page.href,
+                        fra: pathname,
+                      })
+                    }
                   }}
                   underline={false}
                 >

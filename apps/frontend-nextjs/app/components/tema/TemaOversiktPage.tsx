@@ -13,7 +13,10 @@ import { PageLayout } from '../others/scaffold/scaffold'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
-    ampli().logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
+    const ampliInstance = ampli()
+    if (ampliInstance) {
+      ampliInstance.logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
+    }
   }, [])
   return (
     <PageLayout pageTitle='Forstå kravene' currentPage='Forstå kravene'>

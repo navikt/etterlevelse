@@ -25,11 +25,17 @@ const OmStotteTilEtterlevelse = () => {
     })()
   }, [])
 
-  ampli().logEvent('sidevisning', {
-    side: 'FAQ side',
-    sidetittel: 'Om Støtte til etterlevelse',
-    ...userRoleEventProp,
-  })
+  useEffect(() => {
+    const ampliInstance = ampli()
+    if (ampliInstance) {
+      ampliInstance.logEvent('sidevisning', {
+        side: 'FAQ side',
+        sidetittel: 'Om Støtte til etterlevelse',
+        ...userRoleEventProp,
+      })
+    }
+  }, [])
+
   /* eslint-disable jsx-a11y/media-has-caption */
   return (
     <PageLayout pageTitle='Om Støtte til etterlevelse' currentPage='Om Støtte til etterlevelse'>

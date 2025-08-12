@@ -7,12 +7,15 @@ export const ForstaKravene = () => (
     <LinkPanel
       href={temaUrl}
       onClick={() => {
-        ampli().logEvent('navigere', {
-          kilde: 'forside-panel',
-          app: 'etterlevelse',
-          til: temaUrl,
-          fra: '/',
-        })
+        const ampliInstance = ampli()
+        if (ampliInstance) {
+          ampliInstance.logEvent('navigere', {
+            kilde: 'forside-panel',
+            app: 'etterlevelse',
+            til: temaUrl,
+            fra: '/',
+          })
+        }
       }}
     >
       <LinkPanel.Title>Forstå kravene</LinkPanel.Title>
