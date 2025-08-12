@@ -36,5 +36,6 @@ export const urlForObject = (type: TNavigableItem | string, id: string) => {
   return ''
 }
 
-export const paramQueryUrl = (tabQuery: string, paramQuery: string): string =>
-  `${window.location.pathname}?tab=${tabQuery}${paramQuery}`
+// Pass pathname as an argument for SSR safety
+export const paramQueryUrl = (pathname: string, tabQuery: string, paramQuery: string): string =>
+  `${pathname}?tab=${tabQuery}${paramQuery}`
