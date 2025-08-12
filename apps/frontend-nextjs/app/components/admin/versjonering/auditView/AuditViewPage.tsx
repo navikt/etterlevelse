@@ -7,7 +7,7 @@ import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
 import { useRefs } from '@/util/hooks/customHooks/customHooks'
 import { Box, Heading, Label, Loader } from '@navikt/ds-react'
 import { useParams, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AuditItemList from './AuditItemList'
 import AuditOversiktView from './AuditOversiktView'
 
@@ -59,32 +59,30 @@ export const AuditViewPage = () => {
         },
       ]}
     >
-      <Suspense>
-        <Heading size='medium' level='1'>
-          Versjonering
-        </Heading>
+      <Heading size='medium' level='1'>
+        Versjonering
+      </Heading>
 
-        {isLoading && <Loader size={'large'} className='flex justify-self-center' />}
+      {isLoading && <Loader size={'large'} className='flex justify-self-center' />}
 
-        {!isLoading && (
-          <Box background='surface-default' padding='4'>
-            {logNotFound && <Label>Audit ikke funnet</Label>}
+      {!isLoading && (
+        <Box background='surface-default' padding='4'>
+          {logNotFound && <Label>Audit ikke funnet</Label>}
 
-            {!logNotFound && auditLog && newestAudit && (
-              <div>
-                <AuditOversiktView
-                  auditLog={auditLog}
-                  newestAudit={newestAudit}
-                  openAll={openAll}
-                  setOpenAll={setOpenAll}
-                />
+          {!logNotFound && auditLog && newestAudit && (
+            <div>
+              <AuditOversiktView
+                auditLog={auditLog}
+                newestAudit={newestAudit}
+                openAll={openAll}
+                setOpenAll={setOpenAll}
+              />
 
-                <AuditItemList auditLog={auditLog} openAll={openAll} refs={refs} />
-              </div>
-            )}
-          </Box>
-        )}
-      </Suspense>
+              <AuditItemList auditLog={auditLog} openAll={openAll} refs={refs} />
+            </div>
+          )}
+        </Box>
+      )}
     </PageLayout>
   )
 }
