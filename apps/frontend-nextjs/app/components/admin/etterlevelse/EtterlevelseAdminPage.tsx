@@ -66,4 +66,5 @@ export const UpdateMessage = ({ message }: { message?: string }) => {
     </div>
   )
 }
+
 export default EtterlevelseAdminPage
