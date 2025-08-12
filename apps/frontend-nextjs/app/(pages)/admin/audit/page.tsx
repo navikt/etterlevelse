@@ -1,5 +1,10 @@
 import VersjoneringAdminPage from '@/components/admin/versjonering/VersjoneringAdminPage'
+import { Suspense } from 'react'
 
-const Page = () => <VersjoneringAdminPage />
+const Page = () => (
+  <Suspense>
+    <VersjoneringAdminPage />
+  </Suspense>
+)
 
 export default Page
