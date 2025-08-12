@@ -25,7 +25,7 @@ type TProps = {
   noLoginButton?: boolean
 }
 
-const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
+const HeaderContent: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
   useAwaitUser()
@@ -129,5 +129,11 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
     </div>
   )
 }
+
+const Header: FunctionComponent<TProps> = (props) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <HeaderContent {...props} />
+  </Suspense>
+)
 
 export default Header

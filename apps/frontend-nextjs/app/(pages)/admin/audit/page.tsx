@@ -2,7 +2,7 @@ import VersjoneringAdminPage from '@/components/admin/versjonering/VersjoneringA
 import { Suspense } from 'react'
 
 const Page = () => (
-  <Suspense>
+  <Suspense fallback={<div>Loading...</div>}>
     <VersjoneringAdminPage />
   </Suspense>
 )

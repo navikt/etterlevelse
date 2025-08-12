@@ -7,9 +7,9 @@ import { IMailLog } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
-export const MailLogAdminPage = () => {
+const MailLogAdminPageContent = () => {
   const [log, setLog] = useState<IPageResponse<IMailLog>>({
     content: [],
     numberOfElements: 0,
@@ -89,3 +89,11 @@ export const MailLogAdminPage = () => {
     </PageLayout>
   )
 }
+
+const MailLogAdminPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <MailLogAdminPageContent />
+  </Suspense>
+)
+
+export default MailLogAdminPage

@@ -2,7 +2,7 @@ import AuditViewPage from '@/components/admin/versjonering/auditView/AuditViewPa
 import { Suspense } from 'react'
 
 const Page = () => (
-  <Suspense>
+  <Suspense fallback={<div>Loading...</div>}>
     <AuditViewPage />
   </Suspense>
 )

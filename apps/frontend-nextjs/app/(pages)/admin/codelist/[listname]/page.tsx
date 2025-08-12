@@ -2,7 +2,7 @@ import ListnameAdminViewPage from '@/components/admin/kodeverk/listnameView/List
 import { Suspense } from 'react'
 
 const Page = () => (
-  <Suspense>
+  <Suspense fallback={<div>Loading...</div>}>
     <ListnameAdminViewPage />
   </Suspense>
 )
