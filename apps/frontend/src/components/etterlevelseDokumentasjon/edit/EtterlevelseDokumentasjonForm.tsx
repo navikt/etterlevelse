@@ -620,7 +620,7 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
   )
 }
 
-const getMembersFromEtterlevelseDokumentasjon = (
+export const getMembersFromEtterlevelseDokumentasjon = (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ): string[] => {
   const members: string[] = []

@@ -1,6 +1,7 @@
-import { Button, Radio, RadioGroup } from '@navikt/ds-react'
+import { Button, ErrorSummary, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent, useEffect, useState } from 'react'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
@@ -21,7 +22,8 @@ import {
   TOption,
 } from '../../../constants'
 import { ampli } from '../../../services/Amplitude'
-import { ScrollToFieldError } from '../../../util/formikUtils'
+import { user } from '../../../services/User'
+import { ROSEdit } from '../../PvkDokument/ROSEdit'
 import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Error, FormError } from '../../common/ModalSchema'
@@ -30,6 +32,7 @@ import { RenderTagList } from '../../common/TagList'
 import { DropdownIndicator } from '../../krav/Edit/KravBegreperEdit'
 import { noOptionMessage, selectOverrides } from '../../search/util'
 import { VarslingsadresserEdit } from '../../varslingsadresse/VarslingsadresserEdit'
+import { getMembersFromEtterlevelseDokumentasjon } from './EtterlevelseDokumentasjonForm'
 import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokumentasjonSchema'
 
 type TProps = {
@@ -42,14 +45,32 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
   isInheritingFrom,
 }) => {
   const [alleAvdelingOptions, setAlleAvdelingOptions] = useState<TOption[]>([])
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
   const navigate: NavigateFunction = useNavigate()
+  const formRef: RefObject<any> = useRef(undefined)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   const submit = async (
     etterlevelseDokumentasjonWithRelation: IEtterlevelseDokumentasjonWithRelation
   ): Promise<void> => {
+    const mutatedEtterlevelsesDokumentasjon = etterlevelseDokumentasjonWithRelation
+    const members = getMembersFromEtterlevelseDokumentasjon(etterlevelseDokumentasjon)
+
+    //Add document creator as member if user is not included in members list
+    if (mutatedEtterlevelsesDokumentasjon.resourcesData && !members.includes(user.getIdent())) {
+      mutatedEtterlevelsesDokumentasjon.resourcesData.push({
+        navIdent: user.getIdent(),
+        givenName: user.getIdent(),
+        familyName: user.getIdent(),
+        fullName: user.getIdent(),
+        email: user.getIdent(),
+        resourceType: user.getIdent(),
+      })
+    }
+
     await createEtterlevelseDokumentasjonWithRelataion(
       etterlevelseDokumentasjon.id,
-      etterlevelseDokumentasjonWithRelation
+      mutatedEtterlevelsesDokumentasjon
     ).then((response: IEtterlevelseDokumentasjon) =>
       navigate(etterlevelseDokumentasjonIdUrl(response.id))
     )
@@ -61,6 +82,12 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
     })()
   }, [])
 
+  useEffect(() => {
+    if (!_.isEmpty(formRef.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
+
   return (
     <Formik
       initialValues={etterlevelseDokumentasjonWithRelationMapToFormVal({
@@ -70,6 +97,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
         behandlingIds: etterlevelseDokumentasjon.behandlingIds,
         behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger,
       })}
+      innerRef={formRef}
       onSubmit={submit}
       validationSchema={etterlevelseDokumentasjonWithRelationSchema()}
       validateOnChange={false}
@@ -167,7 +195,13 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             </FieldWrapper>
           )}
 
-          <div id='teamsData' className='flex flex-col lg:flex-row gap-5'>
+          <ROSEdit />
+
+          <Heading level='2' size='small' spacing>
+            Legg til minst et team og/eller en person
+          </Heading>
+
+          <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldArray name='teamsData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className='flex-1'>
@@ -204,6 +238,9 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                 </div>
               )}
             </FieldArray>
+            <div className='flex-1' />
+          </div>
+          <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldArray name='resourcesData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className='flex-1'>
@@ -232,50 +269,113 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                       }}
                       styles={selectOverrides}
                     />
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.resourcesData.map(
+                        (resource: ITeamResource) => resource.fullName
+                      )}
+                      onRemove={fieldArrayRenderProps.remove}
+                    />
                   </div>
-                  <RenderTagList
-                    list={fieldArrayRenderProps.form.values.resourcesData.map(
-                      (resource: ITeamResource) => resource.fullName
-                    )}
-                    onRemove={fieldArrayRenderProps.remove}
-                  />
                 </div>
               )}
             </FieldArray>
+            <div className='flex-1' />
           </div>
 
           {errors.teamsData && <Error message={errors.teamsData as string} />}
-          <FieldWrapper>
-            <Field name='nomAvdelingId'>
-              {(fieldProps: FieldProps) => (
-                <div>
-                  <LabelWithDescription
-                    label='Avdeling'
-                    description='Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier.'
-                  />
-                  <OptionList
-                    label='Avdeling'
-                    options={alleAvdelingOptions}
-                    value={fieldProps.field.value}
-                    onChange={async (value: any) => {
-                      await fieldProps.form.setFieldValue('nomAvdelingId', value)
-                      await fieldProps.form.setFieldValue(
-                        'avdelingNavn',
-                        alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0].label
-                      )
-                    }}
-                  />
-                </div>
-              )}
-            </Field>
-          </FieldWrapper>
 
-          <div id='varslingsadresser' className='mt-3'>
+          <div id='varslingsadresser' className='mt-5'>
             <VarslingsadresserEdit fieldName='varslingsadresser' />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
+          <div id='avdeling' className='flex flex-col lg:flex-row gap-5'>
+            <FieldWrapper>
+              <Field name='nomAvdelingId'>
+                {(fieldProps: FieldProps) => (
+                  <div>
+                    <LabelWithDescription
+                      label='Avdeling'
+                      description='Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier.'
+                    />
+                    <OptionList
+                      label='Avdeling'
+                      options={alleAvdelingOptions}
+                      value={fieldProps.field.value}
+                      onChange={async (value: any) => {
+                        await fieldProps.form.setFieldValue('nomAvdelingId', value)
+                        await fieldProps.form.setFieldValue(
+                          'avdelingNavn',
+                          alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
+                            .label
+                        )
+                      }}
+                    />
+                  </div>
+                )}
+              </Field>
+            </FieldWrapper>
+            <div className='flex-1' />
+          </div>
+
+          <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
+            <FieldArray name='risikoeiereData'>
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='flex-1'>
+                  <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
+                  <div className='w-full'>
+                    <AsyncSelect
+                      aria-label='Søk etter risikoeier'
+                      placeholder=''
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => {
+                        return noOptionMessage(inputValue)
+                      }}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={searchResourceByNameOptions}
+                      onChange={(value: any) => {
+                        if (
+                          value &&
+                          fieldArrayRenderProps.form.values.risikoeiereData.filter(
+                            (team: ITeamResource) => team.navIdent === value.navIdent
+                          ).length === 0
+                        ) {
+                          fieldArrayRenderProps.push(value)
+                        }
+                      }}
+                      styles={selectOverrides}
+                    />
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                        (resource: ITeamResource) => resource.fullName
+                      )}
+                      onRemove={fieldArrayRenderProps.remove}
+                    />
+                  </div>
+                </div>
+              )}
+            </FieldArray>
+            <div className='flex-1' />
+          </div>
+
+          {!_.isEmpty(errors) && (
+            <ErrorSummary
+              ref={errorSummaryRef}
+              heading='Du må rette disse feilene før du kan fortsette'
+            >
+              {Object.entries(errors)
+                .filter(([, error]) => error)
+                .map(([key, error]) => (
+                  <ErrorSummary.Item href={`#${key}`} key={key}>
+                    {error as string}
+                  </ErrorSummary.Item>
+                ))}
+            </ErrorSummary>
+          )}
+
+          <div className='button_container flex flex-col mt-40 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
             <div className='flex flex-row-reverse'>
               <Button
                 type='button'
@@ -283,7 +383,9 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                   ampli.logEvent('knapp trykket', {
                     tekst: 'gjenbruk etterlevelsesdokument',
                   })
+                  errorSummaryRef.current?.focus()
                   submitForm()
+                  setSubmitClick(!submitClick)
                 }}
                 className='ml-2.5'
               >
@@ -303,7 +405,6 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
               </Button>
             </div>
           </div>
-          <ScrollToFieldError />
         </Form>
       )}
     </Formik>
