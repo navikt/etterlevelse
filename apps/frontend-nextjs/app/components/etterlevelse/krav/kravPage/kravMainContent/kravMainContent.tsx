@@ -87,6 +87,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({
       <MainPanelLayout>
         <KravHasExpired krav={krav} alleKravVersjoner={alleKravVersjoner} />
         <KravHensikt krav={krav} />
+
         <KravTabMeny krav={krav} kravLoading={kravLoading} alleKravVersjoner={alleKravVersjoner} />
       </MainPanelLayout>
       <KravRightSidePanel krav={krav} alleKravVersjoner={alleKravVersjoner} />

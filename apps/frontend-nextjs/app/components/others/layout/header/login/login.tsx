@@ -38,7 +38,7 @@ export const LoginHeaderButton = () => {
   const [fullUrl, setFullUrl] = useState<string>('')
 
   useEffect(() => {
-    if (typeof window !== undefined) {
+    if (typeof window !== 'undefined') {
       setFullUrl(window.location.href)
     }
   }, [])

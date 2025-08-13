@@ -35,6 +35,3 @@ export const urlForObject = (type: TNavigableItem | string, id: string) => {
   console.warn("couldn't find object type" + type)
   return ''
 }
-
-export const paramQueryUrl = (tabQuery: string, paramQuery: string): string =>
-  `${window.location.pathname}?tab=${tabQuery}${paramQuery}`

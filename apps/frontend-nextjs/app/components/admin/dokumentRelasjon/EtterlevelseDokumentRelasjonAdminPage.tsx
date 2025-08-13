@@ -66,11 +66,14 @@ export const EtterlevelseDokumentRelasjonAdminPage = () => {
         documentRelationMapToFormVal(documentRelation)
       )
       setTableContent(mappedDocumentRelation)
-      ampli().logEvent('sidevisning', {
-        side: 'Etterlevelse dokument relasjon admin side',
-        sidetittel: 'Administrere dokument relasjon',
-        ...userRoleEventProp,
-      })
+      const ampliInstance = ampli()
+      if (ampliInstance) {
+        ampliInstance.logEvent('sidevisning', {
+          side: 'Etterlevelse dokument relasjon admin side',
+          sidetittel: 'Administrere dokument relasjon',
+          ...userRoleEventProp,
+        })
+      }
     })()
   }, [])
 

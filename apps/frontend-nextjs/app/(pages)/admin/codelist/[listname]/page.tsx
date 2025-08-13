@@ -1,10 +1,5 @@
 import ListnameAdminViewPage from '@/components/admin/kodeverk/listnameView/ListnameAdminViewPage'
-import { Suspense } from 'react'
 
-const Page = () => (
-  <Suspense>
-    <ListnameAdminViewPage />
-  </Suspense>
-)
+const Page = () => <ListnameAdminViewPage />
 
 export default Page

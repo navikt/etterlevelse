@@ -14,7 +14,7 @@ export const ampli = () => {
       city: false,
       ip_address: false,
     },
-    platform: window.location.href,
+    platform: typeof window !== 'undefined' ? window.location.href : 'unknown',
   }
 
   ampliInstance.init(env.amplitudeApiKey, undefined, AmplitudeConfig)

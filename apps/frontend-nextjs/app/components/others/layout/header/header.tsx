@@ -13,7 +13,7 @@ import { useAwait, useAwaitUser, useQueryParam } from '@/util/hooks/customHooks/
 import { InternalHeader, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, Suspense, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { informationIcon, warningAlert } from '../../images/images'
 import { LoggedInHeader, LoginHeaderButton } from './login/login'
 import MainSearch from './mainSearch/mainSearch'
@@ -119,9 +119,8 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
                   }
                 />
               </div>
-              <Suspense>
-                <Markdown source={systemVarsel.melding} />
-              </Suspense>
+
+              <Markdown source={systemVarsel.melding} />
             </div>
           </div>
         </div>

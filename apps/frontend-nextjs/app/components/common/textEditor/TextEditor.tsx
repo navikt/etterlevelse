@@ -1,3 +1,5 @@
+'use client'
+
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
 import {
@@ -131,43 +133,45 @@ export const TextEditor = (props: TTextEditorProps) => {
   }
 
   useEffect(() => {
-    //--------ADD nessesary roles to toolbar options and editor------------
-    const editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
+    if (typeof window !== 'undefined') {
+      //--------ADD nessesary roles to toolbar options and editor------------
+      const editorToolbar = document.getElementsByClassName('rdw-editor-toolbar')
 
-    for (let i = 0; i < editorToolbar.length; i++) {
-      editorToolbar[i].setAttribute('role', 'toolbar')
+      for (let i = 0; i < editorToolbar.length; i++) {
+        editorToolbar[i].setAttribute('role', 'toolbar')
+      }
+
+      const editorTextArea = document.getElementsByClassName('rdw-editor-wrapper')
+
+      for (let i = 0; i < editorTextArea.length; i++) {
+        editorTextArea[i].setAttribute('aria-label', '')
+      }
+
+      const toolbarOptionWrapper = document.getElementsByClassName('rdw-option-wrapper')
+
+      for (let i = 0; i < toolbarOptionWrapper.length; i++) {
+        toolbarOptionWrapper[i].setAttribute('role', 'option')
+      }
+
+      const toolbarInlineWrapper = document.getElementsByClassName('rdw-inline-wrapper')
+
+      for (let i = 0; i < toolbarInlineWrapper.length; i++) {
+        toolbarInlineWrapper[i].setAttribute('role', 'listbox')
+      }
+
+      const toolbarListWrapper = document.getElementsByClassName('rdw-list-wrapper')
+
+      for (let i = 0; i < toolbarListWrapper.length; i++) {
+        toolbarListWrapper[i].setAttribute('role', 'listbox')
+      }
+
+      const toolbarLinkWrapper = document.getElementsByClassName('rdw-link-wrapper')
+
+      for (let i = 0; i < toolbarLinkWrapper.length; i++) {
+        toolbarLinkWrapper[i].setAttribute('role', 'listbox')
+      }
+      //--------------------------
     }
-
-    const editorTextArea = document.getElementsByClassName('rdw-editor-wrapper')
-
-    for (let i = 0; i < editorTextArea.length; i++) {
-      editorTextArea[i].setAttribute('aria-label', '')
-    }
-
-    const toolbarOptionWrapper = document.getElementsByClassName('rdw-option-wrapper')
-
-    for (let i = 0; i < toolbarOptionWrapper.length; i++) {
-      toolbarOptionWrapper[i].setAttribute('role', 'option')
-    }
-
-    const toolbarInlineWrapper = document.getElementsByClassName('rdw-inline-wrapper')
-
-    for (let i = 0; i < toolbarInlineWrapper.length; i++) {
-      toolbarInlineWrapper[i].setAttribute('role', 'listbox')
-    }
-
-    const toolbarListWrapper = document.getElementsByClassName('rdw-list-wrapper')
-
-    for (let i = 0; i < toolbarListWrapper.length; i++) {
-      toolbarListWrapper[i].setAttribute('role', 'listbox')
-    }
-
-    const toolbarLinkWrapper = document.getElementsByClassName('rdw-link-wrapper')
-
-    for (let i = 0; i < toolbarLinkWrapper.length; i++) {
-      toolbarLinkWrapper[i].setAttribute('role', 'listbox')
-    }
-    //--------------------------
   }, [])
 
   const hasError = errors && name && errors[name]

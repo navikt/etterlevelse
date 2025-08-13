@@ -27,12 +27,13 @@ const Main: FunctionComponent<TProps> = ({ children }) => {
               <meta charSet='utf-8' />
               <title>Etterlevelse</title>
             </Helmet>
-
-            <div className='flex flex-col w-full items-center min-h-screen bg-white'>
-              <Header />
-              <Suspense>{children}</Suspense>
-              <Footer />
-            </div>
+            <Suspense fallback={<div>Loading...</div>}>
+              <div className='flex flex-col w-full items-center min-h-screen bg-white'>
+                <Header />
+                {children}
+                <Footer />
+              </div>
+            </Suspense>
           </ApolloProvider>
         </HelmetProvider>
       </body>

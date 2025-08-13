@@ -9,7 +9,7 @@ import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 
-export const MailLogAdminPage = () => {
+const MailLogAdminPage = () => {
   const [log, setLog] = useState<IPageResponse<IMailLog>>({
     content: [],
     numberOfElements: 0,
@@ -89,3 +89,5 @@ export const MailLogAdminPage = () => {
     </PageLayout>
   )
 }
+
+export default MailLogAdminPage

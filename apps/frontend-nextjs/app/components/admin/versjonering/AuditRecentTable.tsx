@@ -1,3 +1,5 @@
+'use client'
+
 import { getAudits, getAuditsByTableId } from '@/api/audit/auditApi'
 import { EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
