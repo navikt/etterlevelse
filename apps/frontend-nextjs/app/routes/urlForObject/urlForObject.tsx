@@ -35,7 +35,3 @@ export const urlForObject = (type: TNavigableItem | string, id: string) => {
   console.warn("couldn't find object type" + type)
   return ''
 }
-
-// Pass pathname as an argument for SSR safety
-export const paramQueryUrl = (pathname: string, tabQuery: string, paramQuery: string): string =>
-  `${pathname}?tab=${tabQuery}${paramQuery}`

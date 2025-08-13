@@ -1,3 +1,5 @@
+'use client'
+
 import { getAudits, getAuditsByTableId } from '@/api/audit/auditApi'
 import { EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -58,26 +60,13 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
   const [, setIdInput, idInput] = useDebouncedState('', 400)
-  const [windowWidth, setWindowWidth] = useState<number>(1200)
 
   useEffect(() => {
-    const ampliInstance = ampli()
-    if (ampliInstance) {
-      ampliInstance.logEvent('sidevisning', {
-        side: 'Varsel side for admin',
-        sidetittel: 'Log side for varslinger',
-        ...userRoleEventProp,
-      })
-    }
-  }, [])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setWindowWidth(window.innerWidth)
-      const handleResize = () => setWindowWidth(window.innerWidth)
-      window.addEventListener('resize', handleResize)
-      return () => window.removeEventListener('resize', handleResize)
-    }
+    ampli().logEvent('sidevisning', {
+      side: 'Varsel side for admin',
+      sidetittel: 'Log side for varslinger',
+      ...userRoleEventProp,
+    })
   }, [])
 
   useEffect(() => {
@@ -170,8 +159,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
         </Table.Header>
         <Table.Body>
           {audits.content.map((audit: IAuditItem, index) => {
-            // Use windowWidth from state instead of window.innerWidth directly
-            const length = windowWidth > 1000 ? (windowWidth > 1200 ? 40 : 30) : 20
+            const length = window.innerWidth > 1000 ? (window.innerWidth > 1200 ? 40 : 30) : 20
             const rowNum = audits.pageNumber * audits.pageSize + index + 1
             return (
               <Table.Row key={audit.id}>

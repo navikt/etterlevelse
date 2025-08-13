@@ -66,9 +66,7 @@ export const Footer = () => {
             size='xsmall'
             icon={<ArrowUpIcon aria-label='' aria-hidden />}
             onClick={() => {
-              if (typeof window !== 'undefined') {
-                window.scrollTo(0, 0)
-              }
+              window.scrollTo(0, 0)
             }}
             variant='tertiary-neutral'
           >

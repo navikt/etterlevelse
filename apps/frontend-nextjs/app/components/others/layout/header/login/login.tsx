@@ -43,8 +43,6 @@ export const LoginHeaderButton = () => {
     }
   }, [])
 
-  if (!fullUrl) return null // Don't render on server
-
   return (
     <InternalHeader.Button
       as={Link}

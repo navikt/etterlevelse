@@ -1,7 +1,7 @@
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
-import Head from 'next/head'
 import { FunctionComponent, ReactNode } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 type TProps = {
   children: ReactNode
@@ -30,10 +30,10 @@ export const PageLayout: FunctionComponent<TProps> = ({
         <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
       )}
       {pageTitle && (
-        <Head>
+        <Helmet>
           <meta charSet='utf-8' />
           <title>{pageTitle}</title>
-        </Head>
+        </Helmet>
       )}
 
       {children}

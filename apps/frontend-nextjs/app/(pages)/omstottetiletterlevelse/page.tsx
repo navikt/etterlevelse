@@ -26,14 +26,11 @@ const OmStotteTilEtterlevelse = () => {
   }, [])
 
   useEffect(() => {
-    const ampliInstance = ampli()
-    if (ampliInstance) {
-      ampliInstance.logEvent('sidevisning', {
-        side: 'FAQ side',
-        sidetittel: 'Om Støtte til etterlevelse',
-        ...userRoleEventProp,
-      })
-    }
+    ampli().logEvent('sidevisning', {
+      side: 'FAQ side',
+      sidetittel: 'Om Støtte til etterlevelse',
+      ...userRoleEventProp,
+    })
   }, [])
 
   /* eslint-disable jsx-a11y/media-has-caption */

@@ -54,13 +54,10 @@ const VarselTabs = () => {
     ;(async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
-        const ampliInstance = ampli()
-        if (ampliInstance) {
-          ampliInstance.logEvent('sidevisning', {
-            side: 'Varsel side for admin',
-            sidetittel: 'Opprett varsel melding for ' + tab,
-          })
-        }
+        ampli().logEvent('sidevisning', {
+          side: 'Varsel side for admin',
+          sidetittel: 'Opprett varsel melding for ' + tab,
+        })
         const response = await getMeldingByType(getMeldingType(tab))
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])

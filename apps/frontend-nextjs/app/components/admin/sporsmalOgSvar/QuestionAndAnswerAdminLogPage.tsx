@@ -79,13 +79,10 @@ export const QuestionAndAnswerAdminLogPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
-      const ampliInstance = ampli()
-      if (ampliInstance) {
-        ampliInstance.logEvent('sidevisning', {
-          side: 'Log side for spørsmål og svar',
-          sidetittel: 'Spørsmål og svar',
-        })
-      }
+      ampli().logEvent('sidevisning', {
+        side: 'Log side for spørsmål og svar',
+        sidetittel: 'Spørsmål og svar',
+      })
     })()
   }, [])
 

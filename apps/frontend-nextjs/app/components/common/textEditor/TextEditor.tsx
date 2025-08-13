@@ -10,8 +10,8 @@ import { ettlevColors } from '@/util/theme/theme'
 import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
-import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
+import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import { FormError } from '../modalSchema/ModalSchema'
 import './customStyle.css'
@@ -44,9 +44,6 @@ export const TextEditor = (props: TTextEditorProps) => {
   } = props
   const [isFocused, setIsFocused] = useState(false)
   const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
-  const Editor = dynamic(() => import('react-draft-wysiwyg').then((mod) => mod.Editor), {
-    ssr: false,
-  })
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
     return draftToMarkdown(data, {

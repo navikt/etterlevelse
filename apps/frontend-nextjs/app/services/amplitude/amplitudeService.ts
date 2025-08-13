@@ -3,8 +3,6 @@ import { env } from '@/util/env/env'
 import amplitude, { AmplitudeClient } from 'amplitude-js'
 
 export const ampli = () => {
-  if (typeof window === 'undefined') return null // SSR guard
-
   const ampliInstance: AmplitudeClient = amplitude.getInstance()
 
   const AmplitudeConfig = {

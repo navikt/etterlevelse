@@ -84,14 +84,11 @@ const TemaView: FunctionComponent<TTemaViewProps> = (props) => {
   const [kravList, setKravList] = useState<IKrav[]>([])
 
   useEffect(() => {
-    const ampliInstance = ampli()
-    if (ampliInstance) {
-      ampliInstance.logEvent('sidevisning', {
-        side: 'Tema side',
-        sidetittel: tema.shortName,
-        ...userRoleEventProp,
-      })
-    }
+    ampli().logEvent('sidevisning', {
+      side: 'Tema side',
+      sidetittel: tema.shortName,
+      ...userRoleEventProp,
+    })
   }, [])
 
   useEffect(() => {

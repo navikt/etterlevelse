@@ -51,17 +51,13 @@ export const EditMelding = ({
       await updateMelding(melding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
-        if (typeof window !== 'undefined') {
-          window.location.reload()
-        }
+        window.location.reload()
       })
     } else {
       await createMelding(melding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
-        if (typeof window !== 'undefined') {
-          window.location.reload()
-        }
+        window.location.reload()
       })
     }
   }
