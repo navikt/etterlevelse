@@ -5,6 +5,22 @@ export const translateUnderlineAndHighlight = (draftData: RawDraftContentState) 
   translateHighlightToDraft(draftData)
 }
 
+export const joinDraftDataWithDraftWithHightligthsAndUnderline = (
+  mainDraft: RawDraftContentState,
+  draftWithHighlithAndUnderline: RawDraftContentState
+) => {
+  draftWithHighlithAndUnderline.blocks.forEach((block, index) => {
+    block.inlineStyleRanges.forEach((range) => {
+      if (range.style.includes('bgcolor')) {
+        mainDraft.blocks[index].inlineStyleRanges.push(range)
+      }
+      if (range.style === 'UNDERLINE') {
+        mainDraft.blocks[index].inlineStyleRanges.push(range)
+      }
+    })
+  })
+}
+
 const highlightTagRegex: RegExp = /<span style='background-color: rgb(.*?)'>(.*?)<\/span>/g
 const underlineTagRegex: RegExp = /<ins>(.*?)<\/ins>/g
 

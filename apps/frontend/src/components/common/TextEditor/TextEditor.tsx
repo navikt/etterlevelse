@@ -9,7 +9,10 @@ import { ettlevColors } from '../../../util/theme'
 import { FormError } from '../ModalSchema'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '../Style'
 import './customStyle.css'
-import { translateUnderlineAndHighlight } from './utils'
+import {
+  joinDraftDataWithDraftWithHightligthsAndUnderline,
+  translateUnderlineAndHighlight,
+} from './utils'
 
 type TTextEditorProps = {
   initialValue: string
@@ -106,8 +109,8 @@ export const TextEditor = (props: TTextEditorProps) => {
     })
   }
 
-  const CustomMarkdownToDraft = (data: string) => {
-    const draftData = markdownToDraft(data, {
+  const markdownToDraftWithPresets = (data: string) =>
+    markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -123,7 +126,17 @@ export const TextEditor = (props: TTextEditorProps) => {
       preserveNewlines: true,
     })
 
-    translateUnderlineAndHighlight(draftData)
+  const CustomMarkdownToDraft = (data: string) => {
+    const rawData = data
+    const noUnderlineAndHighlightData = rawData
+      .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
+      .replaceAll('</span>', '')
+      .replaceAll('<ins>', '')
+      .replaceAll('</ins>', '')
+    const draftData = markdownToDraftWithPresets(noUnderlineAndHighlightData)
+    const drafDataWithUnderlineAndHighligth = markdownToDraftWithPresets(rawData)
+    translateUnderlineAndHighlight(drafDataWithUnderlineAndHighligth)
+    joinDraftDataWithDraftWithHightligthsAndUnderline(draftData, drafDataWithUnderlineAndHighligth)
     return draftData
   }
 
