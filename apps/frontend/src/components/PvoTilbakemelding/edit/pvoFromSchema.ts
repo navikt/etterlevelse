@@ -54,7 +54,7 @@ export const sendInnCheck = () => {
       test: function (stringField) {
         const { parent } = this
         if (
-          parent.behovForForhandskonsultasjon === false &&
+          parent.behovForForhandskonsultasjon === true &&
           parent.status === EPvoTilbakemeldingStatus.FERDIG
         ) {
           if (stringField === undefined || stringField === '') {

@@ -63,25 +63,27 @@ export const RelasjonsOversikt = () => {
           <Heading level='1' size='medium'>
             Dokumenter som gjenbruker E{etterlevelseNummer.toString()} {title}
           </Heading>
-          <Table zebraStripes>
-            <Table.Header>
-              <Table.HeaderCell>Dokumentnavn</Table.HeaderCell>
-            </Table.Header>
-            <Table.Body>
-              {dokumentRelasjonBarn?.map((dokument, index) => (
-                <Table.Row key={index + dokument.toDocumentWithData.etterlevelseNummer}>
-                  <Table.DataCell>
-                    <Link href={etterlevelseDokumentasjonIdUrl(dokument.toDocumentWithData.id)}>
-                      {'E' +
-                        dokument.toDocumentWithData.etterlevelseNummer.toString() +
-                        ' ' +
-                        dokument.toDocumentWithData.title}
-                    </Link>
-                  </Table.DataCell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
+          {dokumentRelasjonBarn && (
+            <Table zebraStripes>
+              <Table.Header>
+                <Table.HeaderCell>Dokumentnavn</Table.HeaderCell>
+              </Table.Header>
+              <Table.Body>
+                {dokumentRelasjonBarn.map((dokument, index) => (
+                  <Table.Row key={index + dokument.toDocumentWithData.etterlevelseNummer}>
+                    <Table.DataCell>
+                      <Link href={etterlevelseDokumentasjonIdUrl(dokument.toDocumentWithData.id)}>
+                        {'E' +
+                          dokument.toDocumentWithData.etterlevelseNummer.toString() +
+                          ' ' +
+                          dokument.toDocumentWithData.title}
+                      </Link>
+                    </Table.DataCell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          )}
         </div>
       </div>
     </PageLayout>

@@ -4,6 +4,7 @@ import { EPvoTilbakemeldingStatus } from '../../../constants'
 
 type TProps = {
   status?: EPvoTilbakemeldingStatus
+  etterlystReturn?: boolean
 }
 
 export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
@@ -31,17 +32,34 @@ export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
   }
 }
 
-export const PvoStatusView: FunctionComponent<TProps> = ({ status }) => {
+export const PvoStatusView: FunctionComponent<TProps> = ({ status, etterlystReturn }) => {
   const getStatusDisplay = (variant: any) => (
-    <Tag variant={variant} className='h-fit'>
-      <div className={'flex items-center'}>
-        <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
-      </div>
-    </Tag>
+    <div className='flex gap-2'>
+      {etterlystReturn && (
+        <Tag variant='warning' className='h-fit'>
+          <div className={'flex items-center'}>
+            <Detail className='whitespace-nowrap'>Etterlyst retur</Detail>
+          </div>
+        </Tag>
+      )}
+      <Tag variant={variant} className='h-fit'>
+        <div className={'flex items-center'}>
+          <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
+        </div>
+      </Tag>
+    </div>
   )
 
   switch (status) {
+    case EPvoTilbakemeldingStatus.IKKE_PABEGYNT:
+      return getStatusDisplay('neutral')
     case EPvoTilbakemeldingStatus.UNDERARBEID:
+      return getStatusDisplay('info')
+    case EPvoTilbakemeldingStatus.SNART_FERDIG:
+      return getStatusDisplay('info')
+    case EPvoTilbakemeldingStatus.AVVENTER:
+      return getStatusDisplay('warning')
+    case EPvoTilbakemeldingStatus.TRENGER_REVURDERING:
       return getStatusDisplay('warning')
     case EPvoTilbakemeldingStatus.FERDIG:
       return getStatusDisplay('success')

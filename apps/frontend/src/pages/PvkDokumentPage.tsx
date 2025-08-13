@@ -113,9 +113,18 @@ export const PvkDokumentPage = () => {
         }
       })
 
-      const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code').map(
-        (personkategori) => personkategori.shortName
-      )
+      const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code')
+        .map((personkategori) => personkategori.shortName)
+        .sort((a, b) => {
+          if (a === 'Annet') {
+            return 1
+          }
+          if (b === 'Annet') {
+            return 1
+          } else {
+            return 0
+          }
+        })
 
       const uniqDatabehandlere: string[] = uniqBy(alleDatabehandlerIds, 'id').map(
         (databehandler) => databehandler.navn
