@@ -25,7 +25,7 @@
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>24.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-        <microsoft-graph.version>6.29.0</microsoft-graph.version>
+        <microsoft-graph.version>6.50.0</microsoft-graph.version>
         <msal4j.version>1.19.1</msal4j.version>
         <flyway-database-postgresql.version>10.16.0</flyway-database-postgresql.version>
 
