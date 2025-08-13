@@ -7,11 +7,11 @@ import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
 import { useRefs } from '@/util/hooks/customHooks/customHooks'
 import { Box, Heading, Label, Loader } from '@navikt/ds-react'
 import { useParams, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AuditItemList from './AuditItemList'
 import AuditOversiktView from './AuditOversiktView'
 
-export const AuditViewPageContent = () => {
+export const AuditViewPage = () => {
   const params = useParams()
   const searchParams = useSearchParams()
   const auditId = searchParams.get('auditId')
@@ -86,11 +86,5 @@ export const AuditViewPageContent = () => {
     </PageLayout>
   )
 }
-
-const AuditViewPage = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <AuditViewPageContent />
-  </Suspense>
-)
 
 export default AuditViewPage

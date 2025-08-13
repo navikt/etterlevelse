@@ -12,7 +12,7 @@ import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
-import { Dispatch, FunctionComponent, SetStateAction, Suspense, useEffect, useState } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
 import { KravHasExpired } from './kravHasExpired/kravHasExpired'
 import { KravHensikt } from './kravHensikt/kravHensikt'
 import { KravRightSidePanel } from './kravRightSidePanel/kravRightSidePanel'
@@ -90,13 +90,8 @@ export const KravMainContent: FunctionComponent<TProps> = ({
       <MainPanelLayout>
         <KravHasExpired krav={krav} alleKravVersjoner={alleKravVersjoner} />
         <KravHensikt krav={krav} />
-        <Suspense fallback={<div>Loading...</div>}>
-          <KravTabMeny
-            krav={krav}
-            kravLoading={kravLoading}
-            alleKravVersjoner={alleKravVersjoner}
-          />
-        </Suspense>
+
+        <KravTabMeny krav={krav} kravLoading={kravLoading} alleKravVersjoner={alleKravVersjoner} />
       </MainPanelLayout>
       <KravRightSidePanel krav={krav} alleKravVersjoner={alleKravVersjoner} />
     </ContentLayout>

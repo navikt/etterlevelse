@@ -7,7 +7,7 @@ import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstan
 import { ampli } from '@/services/amplitude/amplitudeService'
 import { Heading, Tabs } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AuditRecentTable } from '../versjonering/AuditRecentTable'
 import EditMelding from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
@@ -18,7 +18,7 @@ type TSection =
   | EMeldingType.FORSIDE
   | EMeldingType.OM_ETTERLEVELSE
 
-export const VarselAdminPageContent = () => {
+export const VarselAdminPage = () => {
   return (
     <PageLayout pageTitle='Varslinger' currentPage='Varslinger'>
       <Heading className='mt-2' size='medium' level='1'>
@@ -123,11 +123,5 @@ const VarselTabs = () => {
     </Tabs>
   )
 }
-
-const VarselAdminPage = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <VarselAdminPageContent />
-  </Suspense>
-)
 
 export default VarselAdminPage

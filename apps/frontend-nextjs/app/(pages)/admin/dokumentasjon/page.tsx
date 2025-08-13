@@ -1,10 +1,5 @@
 import EtterlevelseDokumentasjonAdminPage from '@/components/admin/etterlevelseDokumentasjon/EtterlevelseDokumentasjonAdminPage'
-import { Suspense } from 'react'
 
-const Page = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <EtterlevelseDokumentasjonAdminPage />
-  </Suspense>
-)
+const Page = () => <EtterlevelseDokumentasjonAdminPage />
 
 export default Page

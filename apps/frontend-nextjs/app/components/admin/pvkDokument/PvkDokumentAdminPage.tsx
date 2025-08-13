@@ -23,10 +23,10 @@ import {
   Table,
   TextField,
 } from '@navikt/ds-react'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UpdateMessage } from '../common/commonComponents'
 
-export const PvkDokumentAdminPageContent = () => {
+export const PvkDokumentAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [deletePvkDokumentId, setDeletePvkDokumentId] = useState<string>('')
   const [reloadTable, setReloadTable] = useState(false)
@@ -175,11 +175,5 @@ export const PvkDokumentAdminPageContent = () => {
     </PageLayout>
   )
 }
-
-const PvkDokumentAdminPage = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <PvkDokumentAdminPageContent />
-  </Suspense>
-)
 
 export default PvkDokumentAdminPage

@@ -20,7 +20,7 @@ import {
   Table,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { ChangeEvent, Suspense, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 const kravStatus = (status: EKravStatus | string) => {
   if (!status) return ''
@@ -36,7 +36,7 @@ const kravStatus = (status: EKravStatus | string) => {
   }
 }
 
-const KravAdminPageContent = () => {
+const KravAdminPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -193,11 +193,5 @@ const KravAdminPageContent = () => {
     </PageLayout>
   )
 }
-
-const KravAdminPage = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <KravAdminPageContent />
-  </Suspense>
-)
 
 export default KravAdminPage

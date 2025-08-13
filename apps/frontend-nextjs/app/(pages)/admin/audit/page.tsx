@@ -1,10 +1,5 @@
 import VersjoneringAdminPage from '@/components/admin/versjonering/VersjoneringAdminPage'
-import { Suspense } from 'react'
 
-const Page = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <VersjoneringAdminPage />
-  </Suspense>
-)
+const Page = () => <VersjoneringAdminPage />
 
 export default Page

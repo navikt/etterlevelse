@@ -5,7 +5,7 @@ import { KravTilbakemeldinger } from '@/components/etterlevelse/krav/kravPage/kr
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Tabs } from '@navikt/ds-react'
-import { FunctionComponent, Suspense, useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { KravView } from './kravView/kravView'
 
 type TSection = 'krav' | 'etterlevelser' | 'tilbakemeldinger'
@@ -22,13 +22,11 @@ export const KravTabMeny: FunctionComponent<TProps> = ({
   alleKravVersjoner,
 }) => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <KravTabMenyContent
-        krav={krav}
-        kravLoading={kravLoading}
-        alleKravVersjoner={alleKravVersjoner}
-      />
-    </Suspense>
+    <KravTabMenyContent
+      krav={krav}
+      kravLoading={kravLoading}
+      alleKravVersjoner={alleKravVersjoner}
+    />
   )
 }
 
@@ -58,9 +56,7 @@ const KravTabMenyContent: FunctionComponent<TProps> = ({
           <KravEtterlevelser loading={etterlevelserLoading} krav={krav} />
         </Tabs.Panel>
         <Tabs.Panel value='tilbakemeldinger'>
-          <Suspense>
-            <KravTilbakemeldinger krav={krav} alleKravVersjoner={alleKravVersjoner} />
-          </Suspense>
+          <KravTilbakemeldinger krav={krav} alleKravVersjoner={alleKravVersjoner} />
         </Tabs.Panel>
       </Tabs>
     </div>

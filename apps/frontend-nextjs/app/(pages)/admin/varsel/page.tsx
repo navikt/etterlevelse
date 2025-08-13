@@ -1,10 +1,5 @@
 import VarselAdminPage from '@/components/admin/varslinger/VarselAdminPage'
-import { Suspense } from 'react'
 
-const Page = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <VarselAdminPage />
-  </Suspense>
-)
+const Page = () => <VarselAdminPage />
 
 export default Page

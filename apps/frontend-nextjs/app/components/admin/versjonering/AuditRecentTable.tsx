@@ -19,7 +19,7 @@ import {
 } from '@navikt/ds-react'
 import * as _ from 'lodash'
 import moment from 'moment'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
 import { AuditActionIcon } from './common/AuditActionIcon'
 import { AuditButton } from './common/AuditButton'
@@ -197,9 +197,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
                 </Table.DataCell>
                 <Table.DataCell>{audit.user}</Table.DataCell>
                 <Table.DataCell>
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <CodeView audit={audit} />
-                  </Suspense>
+                  <CodeView audit={audit} />
                 </Table.DataCell>
               </Table.Row>
             )

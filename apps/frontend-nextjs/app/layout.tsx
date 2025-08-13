@@ -1,7 +1,7 @@
 'use client'
 
 import { ApolloProvider } from '@apollo/client'
-import { FunctionComponent, ReactNode } from 'react'
+import { FunctionComponent, ReactNode, Suspense } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { apolloClient } from './api/apolloClient/apolloClient'
 import { Footer } from './components/others/layout/footer/footer'
@@ -27,12 +27,13 @@ const Main: FunctionComponent<TProps> = ({ children }) => {
               <meta charSet='utf-8' />
               <title>Etterlevelse</title>
             </Helmet>
-
-            <div className='flex flex-col w-full items-center min-h-screen bg-white'>
-              <Header />
-              {children}
-              <Footer />
-            </div>
+            <Suspense fallback={<div>Loading...</div>}>
+              <div className='flex flex-col w-full items-center min-h-screen bg-white'>
+                <Header />
+                {children}
+                <Footer />
+              </div>
+            </Suspense>
           </ApolloProvider>
         </HelmetProvider>
       </body>
