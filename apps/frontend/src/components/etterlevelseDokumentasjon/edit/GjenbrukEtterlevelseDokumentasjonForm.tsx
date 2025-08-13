@@ -67,7 +67,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
     }
 
     await createEtterlevelseDokumentasjonWithRelataion(
-      mutatedEtterlevelsesDokumentasjon.id,
+      etterlevelseDokumentasjon.id,
       mutatedEtterlevelsesDokumentasjon
     ).then((response: IEtterlevelseDokumentasjon) =>
       navigate(etterlevelseDokumentasjonIdUrl(response.id))
