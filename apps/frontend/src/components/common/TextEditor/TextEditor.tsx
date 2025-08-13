@@ -137,12 +137,6 @@ export const TextEditor = (props: TTextEditorProps) => {
     const drafDataWithUnderlineAndHighligth = markdownToDraftWithPresets(rawData)
     translateUnderlineAndHighlight(drafDataWithUnderlineAndHighligth)
     joinDraftDataWithDraftWithHightligthsAndUnderline(draftData, drafDataWithUnderlineAndHighligth)
-
-    console.debug('raw')
-    console.debug(drafDataWithUnderlineAndHighligth)
-    console.debug('clean')
-    console.debug(draftData)
-
     return draftData
   }
 
