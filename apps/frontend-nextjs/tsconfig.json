@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -24,15 +28,21 @@
       }
     ],
     "paths": {
-      "@/*": ["./app/*"]
+      "@/*": [
+        "./app/*"
+      ]
     }
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/types/**/*.tsx"
-, "app/api/begrep"  ],
-  "exclude": ["node_modules"]
+    ".next/types/**/*.tsx",
+    "app/api/begrep",
+    "next-env.d.ts",
+    "build/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
