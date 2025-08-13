@@ -1,7 +1,7 @@
 import { Button, ErrorSummary, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
-import { FunctionComponent, useEffect, useRef, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import AsyncSelect from 'react-select/async'
 import { behandlingName, searchBehandlingOptions } from '../../../api/BehandlingApi'
@@ -45,7 +45,9 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
   isInheritingFrom,
 }) => {
   const [alleAvdelingOptions, setAlleAvdelingOptions] = useState<TOption[]>([])
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
   const navigate: NavigateFunction = useNavigate()
+  const formRef: RefObject<any> = useRef(undefined)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
   const submit = async (
@@ -80,6 +82,12 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
     })()
   }, [])
 
+  useEffect(() => {
+    if (!_.isEmpty(formRef.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
+
   return (
     <Formik
       initialValues={etterlevelseDokumentasjonWithRelationMapToFormVal({
@@ -89,6 +97,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
         behandlingIds: etterlevelseDokumentasjon.behandlingIds,
         behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger,
       })}
+      innerRef={formRef}
       onSubmit={submit}
       validationSchema={etterlevelseDokumentasjonWithRelationSchema()}
       validateOnChange={false}
@@ -374,7 +383,9 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                   ampli.logEvent('knapp trykket', {
                     tekst: 'gjenbruk etterlevelsesdokument',
                   })
+                  errorSummaryRef.current?.focus()
                   submitForm()
+                  setSubmitClick(!submitClick)
                 }}
                 className='ml-2.5'
               >
