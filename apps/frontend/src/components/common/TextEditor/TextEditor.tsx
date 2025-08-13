@@ -233,7 +233,7 @@ export const TextEditor = (props: TTextEditorProps) => {
                 : ['inline', 'blockType', 'list', 'link', 'history'],
             blockType: {},
             inline: {
-              options: ['bold', 'italic', 'underline'],
+              options: commentField ? ['bold', 'italic', 'underline'] : ['bold', 'italic'],
             },
             // old toolbar
             // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
