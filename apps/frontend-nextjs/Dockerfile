@@ -1,8 +1,32 @@
-FROM nginxinc/nginx-unprivileged
+# Stage 1: Build Next.js app
+FROM node:20-alpine AS builder
 
-ENV NGINX_ENVSUBST_OUTPUT_DIR /tmp
+WORKDIR /app
 
-COPY nginx-conf-overwrite.conf /etc/nginx/conf.d/default.conf
+COPY . .
 
-COPY build /usr/share/nginx/html
-COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+RUN yarn install
+RUN yarn build
+
+# Stage 2: Production Node.js server
+FROM node:20-alpine AS server
+
+WORKDIR /app
+
+COPY --from=builder /app ./
+
+EXPOSE 3000
+
+CMD ["yarn", "start"]
+
+# Stage 3: Nginx reverse proxy
+FROM nginx:alpine AS nginx
+
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose Nginx port
+EXPOSE 8080
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
