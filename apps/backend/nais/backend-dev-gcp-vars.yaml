@@ -5,7 +5,7 @@ replies:
   - https://etterlevelse-api.intern.dev.nav.no/oauth2/callback
   - https://etterlevelse.ansatt.dev.nav.no/oauth2/callback
   - https://etterlevelse.intern.dev.nav.no/oauth2/callback
-  - https://etterlevelse-nextjs.intern.dev.nav.no/callback
+  - https://etterlevelse-nextjs.intern.dev.nav.no/oauth2/callback
   - http://localhost:8080/oauth2/callback
   - http://localhost:3000/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.dev.nav.no
