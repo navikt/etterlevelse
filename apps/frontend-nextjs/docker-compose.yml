@@ -1,0 +1,16 @@
+version: '3'
+services:
+  node:
+    build:
+      context: .
+      target: server
+    ports:
+      - "3000:3000"
+  nginx:
+    build:
+      context: .
+      target: nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - node
