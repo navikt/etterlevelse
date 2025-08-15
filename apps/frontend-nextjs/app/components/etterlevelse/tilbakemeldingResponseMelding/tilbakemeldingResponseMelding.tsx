@@ -1,6 +1,6 @@
 import PersonNavn from '@/components/common/personNavn/personNavn'
 import { Portrait } from '@/components/common/portrait/portrait'
-import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
+import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   ETilbakemeldingRolle,
   ITilbakemelding,
