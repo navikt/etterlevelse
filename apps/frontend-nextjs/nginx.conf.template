@@ -17,7 +17,9 @@ server {
   }
 
   location / {
-    proxy_pass http://node.default.svc.cluster.local:3000;
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
   }
 
   location /api {
