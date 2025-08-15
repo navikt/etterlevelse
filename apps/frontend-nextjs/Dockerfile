@@ -23,7 +23,7 @@ CMD ["yarn", "start"]
 FROM nginx:alpine AS nginx
 
 # Copy custom nginx config
-COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY nginx.conf.template /etc/nginx/nginx.conf
 
 # Expose Nginx port
 EXPOSE 8080
