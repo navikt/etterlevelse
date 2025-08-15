@@ -19,6 +19,8 @@ import { Params } from 'next/dist/server/request/params'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { KravFormFields } from '../edit/kravFormFields/kravFormFields'
+import { KravStandardButtons } from '../edit/kravStandardButtons/kravStandardButtons'
 
 export const KravNyVersjonPage = () => {
   const router: AppRouterInstance = useRouter()
@@ -112,7 +114,15 @@ export const KravNyVersjonPage = () => {
                         revurdere sin besvarelse.
                       </Alert>
                     </div>
-                    KRAVFORMFIELDS!
+
+                    <KravFormFields
+                      mode='edit'
+                      kravVersjon={values.kravVersjon}
+                      errors={errors}
+                      varselMeldingActive={varselMeldingActive}
+                      setVarselMeldingActive={setVarselMeldingActive}
+                    />
+
                     <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
                       {errors.status && (
                         <div className='mb-3'>
@@ -120,7 +130,24 @@ export const KravNyVersjonPage = () => {
                         </div>
                       )}
 
-                      <ContentLayout>KravStandardButtons</ContentLayout>
+                      <ContentLayout>
+                        <KravStandardButtons
+                          submitCancelButton={() => {
+                            router.push(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1))
+                          }}
+                          submitSaveButton={() => {
+                            values.status = EKravStatus.UTKAST
+                            submitForm()
+                          }}
+                          createMode
+                          kravStatus={values.status}
+                          submitAktivButton={() => {
+                            values.status = EKravStatus.AKTIV
+                            submitForm()
+                          }}
+                          isSubmitting={isSubmitting}
+                        />
+                      </ContentLayout>
                     </div>
                     <div>
                       <TextAreaField
