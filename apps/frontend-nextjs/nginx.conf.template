@@ -17,16 +17,13 @@ server {
   }
 
   location / {
-    root   /usr/share/nginx/html;
-    index  index.html index.htm;
-    try_files $uri $uri/ /index.html;
+    proxy_pass http://node:3000;
   }
 
   location /api {
     location /api/internal {
       return 403 'Forbidden';
     }
-
     rewrite /api/(.*)   /$1   break;
     proxy_pass http://etterlevelse-backend;
   }
