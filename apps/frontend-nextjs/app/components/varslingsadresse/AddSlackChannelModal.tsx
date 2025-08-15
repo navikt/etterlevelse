@@ -6,19 +6,18 @@ import {
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Button, Modal } from '@navikt/ds-react'
-import { useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
-import { DropdownIndicator } from '../krav/edit/KravBegreperEdit'
+import { DropdownIndicator } from '../etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 
-interface IProps {
+type TProps = {
   isOpen: boolean
   close: () => void
   doAdd: (v: IVarslingsadresse) => void
 }
 
-export const AddSlackChannelModal = (props: IProps) => {
-  const { isOpen, close, doAdd } = props
+export const AddSlackChannelModal: FunctionComponent<TProps> = ({ isOpen, close, doAdd }) => {
   const [val, setVal] = useState<{ type: EAdresseType; adresse: string }>({
     type: EAdresseType.SLACK,
     adresse: '',

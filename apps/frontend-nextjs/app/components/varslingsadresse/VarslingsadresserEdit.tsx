@@ -19,14 +19,14 @@ import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { EnvelopeClosedIcon, HashtagIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
 import { Alert, Button, Loader, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
-import { FieldWrapper } from '../common/inputs'
+import { FieldWrapper } from '../common/fieldWrapper/fieldWrapper'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Error } from '../common/modalSchema/ModalSchema'
-import { RenderTagList } from '../common/taglist/TagList'
-import { DropdownIndicator } from '../krav/edit/KravBegreperEdit'
+import { RenderTagList } from '../common/renderTagList/renderTagList'
+import { DropdownIndicator } from '../etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '../others/layout/content/content'
 import { AddEmailModal } from './AddEmailModal'
 import { AddSlackChannelModal } from './AddSlackChannelModal'
@@ -56,9 +56,9 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
             varslingsadresser = (fieldArrayRenderProps.form.values as TKravQL).varslingsadresserQl
           }
 
-          const push = (v: TVarslingsadresseQL) => {
-            if (!varslingsadresser.find((v2) => v2.adresse === v.adresse))
-              fieldArrayRenderProps.push(v)
+          const push = (varsling: TVarslingsadresseQL) => {
+            if (!varslingsadresser.find((varsling2) => varsling2.adresse === varsling.adresse))
+              fieldArrayRenderProps.push(varsling)
           }
           return (
             <div>
@@ -137,12 +137,14 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
   )
 }
 
-export const VarslingsadresserTagList = ({
-  varslingsadresser,
-  remove,
-}: {
+type TVarslingsadresserTagListProps = {
   varslingsadresser: IVarslingsadresse[]
   remove: (i: number) => void
+}
+
+export const VarslingsadresserTagList: FunctionComponent<TVarslingsadresserTagListProps> = ({
+  varslingsadresser,
+  remove,
 }) => {
   const [slackChannels, setSlackChannels] = useState<ISlackChannel[]>([])
   const [slackUsers, setSlackUsers] = useState<ISlackUser[]>([])
@@ -151,16 +153,19 @@ export const VarslingsadresserTagList = ({
     ;(async () => {
       const loadedChannels: ISlackChannel[] = []
       const loadedUsers: ISlackUser[] = []
-      const channels = await Promise.all(
+      const channels: ISlackChannel[] = await Promise.all(
         varslingsadresser
           .filter((varslingaddresse) => varslingaddresse.type === EAdresseType.SLACK)
           .filter(
-            (varslingaddresse) => !slackChannels.find((sc) => sc.id === varslingaddresse.adresse)
+            (varslingaddresse: IVarslingsadresse) =>
+              !slackChannels.find(
+                (slackChannel: ISlackChannel) => slackChannel.id === varslingaddresse.adresse
+              )
           )
-          .filter((varslingaddresse) => {
-            const vas = varslingaddresse as TVarslingsadresseQL
-            if (vas.slackChannel) {
-              loadedChannels.push(vas.slackChannel)
+          .filter((varslingaddresse: IVarslingsadresse) => {
+            const varsling = varslingaddresse as TVarslingsadresseQL
+            if (varsling.slackChannel) {
+              loadedChannels.push(varsling.slackChannel)
               return false
             }
             return true
@@ -168,19 +173,25 @@ export const VarslingsadresserTagList = ({
           .map((slackChannel) => getSlackChannelById(slackChannel.adresse))
       )
 
-      const users = await Promise.all(
+      const users: ISlackUser[] = await Promise.all(
         varslingsadresser
-          .filter((varslingaddresse) => varslingaddresse.type === EAdresseType.SLACK_USER)
-          .filter((varslingaddresse) => !slackUsers.find((u) => u.id === varslingaddresse.adresse))
+          .filter(
+            (varslingaddresse: IVarslingsadresse) =>
+              varslingaddresse.type === EAdresseType.SLACK_USER
+          )
+          .filter(
+            (varslingaddresse: IVarslingsadresse) =>
+              !slackUsers.find((user: ISlackUser) => user.id === varslingaddresse.adresse)
+          )
           .filter((varslingaddresse) => {
-            const vas = varslingaddresse as TVarslingsadresseQL
-            if (vas.slackUser) {
-              loadedUsers.push(vas.slackUser)
+            const varsling: TVarslingsadresseQL = varslingaddresse as TVarslingsadresseQL
+            if (varsling.slackUser) {
+              loadedUsers.push(varsling.slackUser)
               return false
             }
             return true
           })
-          .map((slackChannel) => getSlackUserById(slackChannel.adresse))
+          .map((slackChannel: IVarslingsadresse) => getSlackUserById(slackChannel.adresse))
       )
 
       setSlackChannels([...slackChannels, ...channels, ...loadedChannels])
@@ -190,12 +201,16 @@ export const VarslingsadresserTagList = ({
 
   return (
     <RenderTagList
-      list={varslingsadresser.map((varslingaddresse) => {
+      list={varslingsadresser.map((varslingaddresse: IVarslingsadresse) => {
         if (varslingaddresse.type === EAdresseType.SLACK) {
-          const channel = slackChannels.find((c) => c.id === varslingaddresse.adresse)
+          const channel: ISlackChannel | undefined = slackChannels.find(
+            (slackChannel) => slackChannel.id === varslingaddresse.adresse
+          )
           return channel ? slackChannelView(channel) : `Slack: ${varslingaddresse.adresse}`
         } else if (varslingaddresse.type === EAdresseType.SLACK_USER) {
-          const user = slackUsers.find((u) => u.id === varslingaddresse.adresse)
+          const user: ISlackUser | undefined = slackUsers.find(
+            (user) => user.id === varslingaddresse.adresse
+          )
           return user ? `Slack: ${user.name}` : `Slack: ${varslingaddresse.adresse}`
         }
         return 'Epost: ' + varslingaddresse.adresse
@@ -211,30 +226,31 @@ type TAddVarslingsadresseProps = {
   close?: () => void
 }
 
-export const SlackChannelSearch = ({ add, close }: TAddVarslingsadresseProps) => {
-  return (
-    <AsyncSelect
-      aria-label='Søk etter slack-kanal'
-      placeholder='Søk etter slack-kanal'
-      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-      controlShouldRenderValue={false}
-      loadingMessage={() => 'Søker...'}
-      isClearable={false}
-      components={{ DropdownIndicator }}
-      loadOptions={useSlackChannelSearch}
-      onChange={(slackKanal) => {
-        const channel = slackKanal as ISlackChannel
-        if (channel) add({ type: EAdresseType.SLACK, adresse: channel.id })
-        if (close) {
-          close()
-        }
-      }}
-      styles={selectOverrides}
-    />
-  )
-}
+export const SlackChannelSearch: FunctionComponent<TAddVarslingsadresseProps> = ({
+  add,
+  close,
+}) => (
+  <AsyncSelect
+    aria-label='Søk etter slack-kanal'
+    placeholder='Søk etter slack-kanal'
+    noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+    controlShouldRenderValue={false}
+    loadingMessage={() => 'Søker...'}
+    isClearable={false}
+    components={{ DropdownIndicator }}
+    loadOptions={useSlackChannelSearch}
+    onChange={(slackKanal) => {
+      const channel = slackKanal as ISlackChannel
+      if (channel) add({ type: EAdresseType.SLACK, adresse: channel.id })
+      if (close) {
+        close()
+      }
+    }}
+    styles={selectOverrides}
+  />
+)
 
-export const SlackUserSearch = ({ add, close }: TAddVarslingsadresseProps) => {
+export const SlackUserSearch: FunctionComponent<TAddVarslingsadresseProps> = ({ add, close }) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
 

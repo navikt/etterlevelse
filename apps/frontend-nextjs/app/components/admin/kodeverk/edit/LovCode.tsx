@@ -1,5 +1,5 @@
 import { OptionList } from '@/components/common/inputs'
-import { FormError } from '@/components/common/modalSchema/ModalSchema'
+import { FormError } from '@/components/common/modalSchema/formError/formError'
 import {
   EListName,
   ICodeListFormValues,

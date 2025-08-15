@@ -10,7 +10,7 @@ import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-reac
 import { useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
-import { DropdownIndicator } from '../krav/edit/KravBegreperEdit'
+import { DropdownIndicator } from '../etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '../others/layout/content/content'
 
 interface IProps {

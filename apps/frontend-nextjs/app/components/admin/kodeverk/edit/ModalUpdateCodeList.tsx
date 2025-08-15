@@ -1,5 +1,5 @@
 import { MarkdownInfo } from '@/components/common/markdown/markdown'
-import { FormError } from '@/components/common/modalSchema/ModalSchema'
+import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { EListName, ICodeListFormValues } from '@/constants/kodeverk/kodeverkConstants'
 import { codeListSchema } from '@/services/kodeverk/kodeverkService'
 import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'

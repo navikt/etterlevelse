@@ -2,7 +2,7 @@ import { MeldingKnapper } from '@/components/etterlevelse/edit/meldingKnapper/me
 import EndretInfo from '@/components/etterlevelse/tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
 import TilbakemeldingResponseMelding from '@/components/etterlevelse/tilbakemeldingResponseMelding/tilbakemeldingResponseMelding'
 import TilbakemeldingSvar from '@/components/etterlevelse/tilbakemeldingSvar/tilbakemeldingSvar'
-import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
+import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,

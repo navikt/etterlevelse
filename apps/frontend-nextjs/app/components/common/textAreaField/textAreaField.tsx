@@ -35,22 +35,20 @@ interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   commentField?: boolean
 }
 
-export const TextAreaField = (props: IPropsTextAreaField) => {
-  const {
-    height,
-    marginBottom,
-    label,
-    name,
-    markdown,
-    caption,
-    noPlaceholder,
-    placeholder,
-    maxCharacter,
-    rows,
-    setIsFormDirty,
-    commentField,
-  } = props
-
+export const TextAreaField = ({
+  height,
+  marginBottom,
+  label,
+  name,
+  markdown,
+  caption,
+  noPlaceholder,
+  placeholder,
+  maxCharacter,
+  rows,
+  setIsFormDirty,
+  commentField,
+}: IPropsTextAreaField) => {
   const [mode, setMode] = useState('edit')
 
   return (
