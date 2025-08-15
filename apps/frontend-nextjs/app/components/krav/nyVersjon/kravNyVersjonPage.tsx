@@ -2,6 +2,7 @@
 
 import { GetKravData } from '@/api/krav/edit/kravEditApi'
 import { createKrav, kravMapToFormVal } from '@/api/krav/kravApi'
+import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
@@ -89,42 +90,49 @@ export const KravNyVersjonPage = () => {
               validateOnChange={false}
               validateOnBlur={false}
             >
-              <Form>
-                <div>
+              {({ values, errors, isSubmitting, submitForm }) => (
+                <Form>
                   <div>
-                    <Heading level='1' size='medium'>
-                      Ny versjon
-                    </Heading>
-                    <Heading
-                      level='2'
-                      size='small'
-                    >{`K${krav?.kravNummer}.${krav?.kravVersjon} ${krav?.navn}`}</Heading>
-                    <Alert variant='warning'>
-                      <Heading spacing size='small' level='3'>
-                        Sikker på at du vil opprette en ny versjon?
+                    <div>
+                      <Heading level='1' size='medium'>
+                        Ny versjon
                       </Heading>
-                      Ny versjon av kravet skal opprettes når det er{' '}
-                      <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
-                      <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
-                      mindre justeringer, endre i det aktive kravet, og da slipper teamene å
-                      revurdere sin besvarelse.
-                    </Alert>
+                      <Heading
+                        level='2'
+                        size='small'
+                      >{`K${krav?.kravNummer}.${krav?.kravVersjon} ${krav?.navn}`}</Heading>
+                      <Alert variant='warning'>
+                        <Heading spacing size='small' level='3'>
+                          Sikker på at du vil opprette en ny versjon?
+                        </Heading>
+                        Ny versjon av kravet skal opprettes når det er{' '}
+                        <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
+                        <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
+                        mindre justeringer, endre i det aktive kravet, og da slipper teamene å
+                        revurdere sin besvarelse.
+                      </Alert>
+                    </div>
+                    KRAVFORMFIELDS!
+                    <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
+                      {errors.status && (
+                        <div className='mb-3'>
+                          <FormError fieldName='status' />
+                        </div>
+                      )}
+
+                      <ContentLayout>KravStandardButtons</ContentLayout>
+                    </div>
+                    <div>
+                      <TextAreaField
+                        label='Notater (Kun synlig for kraveier)'
+                        name='notat'
+                        height='15.625rem'
+                        markdown
+                      />
+                    </div>
                   </div>
-                  KRAVFORMFIELDS!
-                  <div>
-                    <div>ERROR</div>
-                    <ContentLayout>KravStandardButtons</ContentLayout>
-                  </div>
-                  <div>
-                    <TextAreaField
-                      label='Notater (Kun synlig for kraveier)'
-                      name='notat'
-                      height='15.625rem'
-                      markdown
-                    />
-                  </div>
-                </div>
-              </Form>
+                </Form>
+              )}
             </Formik>
           </div>
         </PageLayout>
