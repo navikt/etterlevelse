@@ -13,8 +13,8 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
-  if (params.id) {
-    return { id: params.id }
+  if (params.kravId) {
+    return { id: params.kravId }
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),
@@ -28,17 +28,20 @@ export const KravPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [kravTema, setKravTema] = useState<TTemaCode>()
+
   const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }, TKravId>(
     getKravWithEtterlevelseQuery,
     {
       variables: getQueryVariableFromParams(params),
-      skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+      skip: (!params.kravId || params.kravId === 'ny') && !params.kravNummer,
       fetchPolicy: 'no-cache',
     }
   )
+
   useEffect(() => {
     if (kravQuery?.kravById) setKrav(kravQuery.kravById)
   }, [kravQuery])
+
   return (
     <PageLayout
       key={`K${krav?.kravNummer}/${krav?.kravVersjon}`}
@@ -64,4 +67,5 @@ export const KravPage = () => {
     </PageLayout>
   )
 }
+
 export default KravPage
