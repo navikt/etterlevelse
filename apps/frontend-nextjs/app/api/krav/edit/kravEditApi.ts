@@ -8,7 +8,7 @@ export const GetKravData = (
 ): IKravDataProps | undefined => {
   const filter = {
     variables: getQueryVariableFromParams(params),
-    skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+    skip: (!params.kravId || params.kravId === 'ny') && !params.kravNummer,
     fetchPolicy: 'no-cache' as WatchQueryFetchPolicy,
   }
 
@@ -38,8 +38,8 @@ type TPropsGetQueryVariableFromParams = IPropsID | IPropsKravNummerVersjon | und
 function getQueryVariableFromParams(
   params: Readonly<Partial<TKravIdParams>>
 ): TPropsGetQueryVariableFromParams {
-  if (params.id) {
-    return { id: params.id }
+  if (params.kravId) {
+    return { id: params.kravId }
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),
