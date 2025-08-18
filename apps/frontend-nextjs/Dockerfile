@@ -9,7 +9,5 @@ COPY build /usr/share/nginx/html
 
 COPY build/static /usr/share/nginx/html/_next/static
 COPY public /usr/share/nginx/html/public
-COPY build/standalone /usr/share/nginx/html
-
 
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
