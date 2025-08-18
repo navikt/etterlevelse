@@ -1,4 +1,4 @@
-import { Error, FormError } from '@/components/common/modalSchema/ModalSchema'
+import { Error } from '@/components/common/modalSchema/ModalSchema'
 import { TOption, TOr } from '@/constants/commonConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { codelist } from '@/services/kodeverk/kodeverkService'
@@ -31,10 +31,6 @@ type TLabelName = IName & ILabel
 
 interface IMarginBottom {
   marginBottom?: boolean
-}
-
-interface IID {
-  id?: string
 }
 
 interface ITooltip {
