@@ -1,6 +1,6 @@
 import { createNewTilbakemelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
-import { TextAreaField } from '@/components/common/inputs'
 import { Markdown } from '@/components/common/markdown/markdown'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
   AddEmail,
   SlackChannelSearch,
