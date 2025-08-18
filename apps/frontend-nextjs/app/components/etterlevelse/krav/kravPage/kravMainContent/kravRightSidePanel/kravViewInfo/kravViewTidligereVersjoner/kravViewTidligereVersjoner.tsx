@@ -23,7 +23,7 @@ export const KravViewTidligereVersjoner: FunctionComponent<IProps> = ({
             <div key={`${kravRelasjon.kravStatus}_${index}`}>
               {kravRelasjon.kravVersjon &&
                 parseInt(kravRelasjon.kravVersjon.toString()) < krav.kravVersjon && (
-                  <BodyShort key={`kravVersjon_list_${index}`} className={'break-words'}>
+                  <BodyShort key={`kravVersjon_list_${index}`} className='break-words'>
                     <ExternalLink
                       href={`${kravUrl}/${kravRelasjon.kravNummer}/${kravRelasjon.kravVersjon}`}
                     >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>
