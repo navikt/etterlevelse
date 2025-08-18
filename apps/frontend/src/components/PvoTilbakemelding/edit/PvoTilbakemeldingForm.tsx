@@ -214,7 +214,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                   await setFieldValue('bidragsVurdering', '')
                 }}
               >
-                Nullstill radio valgene
+                Nullstill valg
               </Button>
             </div>
 
