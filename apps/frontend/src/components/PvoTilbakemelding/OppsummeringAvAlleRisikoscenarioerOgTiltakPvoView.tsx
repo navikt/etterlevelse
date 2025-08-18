@@ -248,164 +248,166 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
   return (
     <div className='w-full'>
       <ContentLayout>
-        <div className='pt-6 w-[816px]'>
-          <div>
-            <Heading level='1' size='medium' className='mb-5'>
-              Risikobildet etter tiltak
-            </Heading>
+        <div className='flex gap-8 w-1/2'>
+          <div className='w-full'>
+            <div>
+              <Heading level='1' size='medium' className='mb-5'>
+                Risikobildet etter tiltak
+              </Heading>
 
-            <BodyLong className='mt-5'>
-              Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er
-              gjennomført.
-            </BodyLong>
-          </div>
-          <div>
-            <div className='w-full mt-5'>
-              <div className='pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8'>
-                {isLoading && (
-                  <div className='flex w-full justify-center'>
-                    <Loader size={'large'} />
-                  </div>
-                )}
-                {!isLoading && (
-                  <div className='w-full'>
-                    <Tabs
-                      value={tabQuery ? tabQuery : tabValues.risikoscenarioer}
-                      onChange={onTabChange}
-                      fill
-                    >
-                      <Tabs.List>
-                        <Tabs.Tab
-                          value={tabValues.risikoscenarioer}
-                          label={`Vis risikoscenarioer (${risikoscenarioList.length})`}
-                        />
-                        <Tabs.Tab
-                          value={tabValues.tiltak}
-                          label={`Vis tiltak (${tiltakList.length})`}
-                        />
-                      </Tabs.List>
-                      <Tabs.Panel value={tabValues.risikoscenarioer} className='w-full'>
-                        <ToggleGroup
-                          className='mt-10'
-                          value={filterQuery ? filterQuery : 'alle'}
-                          onChange={onFilterChange}
-                          fill
-                        >
-                          <ToggleGroup.Item
-                            value={filterValues.alleRisikoscenarioer}
-                            label={`Alle risikoscenarioer (${risikoscenarioList.length})`}
+              <BodyLong className='mt-5'>
+                Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er
+                gjennomført.
+              </BodyLong>
+            </div>
+            <div>
+              <div className='mt-5'>
+                <div className='pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8'>
+                  {isLoading && (
+                    <div className='flex w-full justify-center'>
+                      <Loader size={'large'} />
+                    </div>
+                  )}
+                  {!isLoading && (
+                    <div className='w-full'>
+                      <Tabs
+                        value={tabQuery ? tabQuery : tabValues.risikoscenarioer}
+                        onChange={onTabChange}
+                        fill
+                      >
+                        <Tabs.List>
+                          <Tabs.Tab
+                            value={tabValues.risikoscenarioer}
+                            label={`Vis risikoscenarioer (${risikoscenarioList.length})`}
                           />
-                          <ToggleGroup.Item
-                            value={filterValues.effektIkkeVurdert}
-                            label={`Effekt ikke vurdert (${antallEffektIkkeVurdert})`}
+                          <Tabs.Tab
+                            value={tabValues.tiltak}
+                            label={`Vis tiltak (${tiltakList.length})`}
                           />
-                          <ToggleGroup.Item
-                            value={filterValues.hoyRisiko}
-                            label={`Høy risiko (${antallHoyRisiko})`}
-                          />
-                          <ToggleGroup.Item
-                            value={filterValues.tiltakIkkeAktuelt}
-                            label={`Tiltak ikke aktuelt (${antallTiltakIkkeAktuelt})`}
-                          />
-                        </ToggleGroup>
-                        {risikoscenarioList.length === 0 && (
-                          <div className='my-5'>
-                            <Alert variant='info'>
-                              <Heading spacing size='small' level='3'>
-                                Dere har foreløpig ingen risikoscenarioer
-                              </Heading>
-                              Risikoscenarioer legges inn under{' '}
-                              <ExternalLink
-                                href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}?tab=pvk`}
-                              >
-                                PVK-relaterte krav
-                              </ExternalLink>{' '}
-                              eller eventuelt under{' '}
-                              <ExternalLink
-                                href={pvkDokumentasjonStepUrl(
-                                  etterlevelseDokumentasjonId,
-                                  pvkDokument.id,
-                                  5
-                                )}
-                              >
-                                øvrige risikoscenarioer
-                              </ExternalLink>
-                            </Alert>
-                          </div>
-                        )}
-
-                        {risikoscenarioList.length !== 0 &&
-                          filteredRisikoscenarioList.length === 0 &&
-                          visTomListeBeskrivelse(filterQuery)}
-
-                        {risikoscenarioList.length !== 0 &&
-                          filteredRisikoscenarioList.length !== 0 && (
-                            <div className='my-5'>
-                              <OppsumeringAccordianListReadOnlyView
-                                risikoscenarioList={filteredRisikoscenarioList}
-                                allRisikoscenarioList={risikoscenarioList}
-                                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                                tiltakList={tiltakList}
-                              />
-                            </div>
-                          )}
-                      </Tabs.Panel>
-                      <Tabs.Panel value={tabValues.tiltak} className='w-full'>
-                        {tiltakList.length === 0 && (
-                          <div className='my-5'>
-                            <Alert variant='info'>Foreløpig er ingen tiltak satt</Alert>
-                          </div>
-                        )}
-
-                        {tiltakList.length !== 0 && (
+                        </Tabs.List>
+                        <Tabs.Panel value={tabValues.risikoscenarioer} className='w-full'>
                           <ToggleGroup
                             className='mt-10'
-                            value={tiltakFilter}
-                            onChange={onTiltakFilterChange}
+                            value={filterQuery ? filterQuery : 'alle'}
+                            onChange={onFilterChange}
                             fill
                           >
                             <ToggleGroup.Item
-                              value={tiltakFilterValues.alleTiltak}
-                              label={`Alle tiltak (${tiltakList.length})`}
+                              value={filterValues.alleRisikoscenarioer}
+                              label={`Alle risikoscenarioer (${risikoscenarioList.length})`}
                             />
                             <ToggleGroup.Item
-                              value={tiltakFilterValues.utenAnsvarlig}
-                              label={`Uten tiltaksansvarlig (${antallUtenTiltakAnsvarlig})`}
+                              value={filterValues.effektIkkeVurdert}
+                              label={`Effekt ikke vurdert (${antallEffektIkkeVurdert})`}
                             />
                             <ToggleGroup.Item
-                              value={tiltakFilterValues.utenFrist}
-                              label={`Uten frist (${antallUtenFrist})`}
+                              value={filterValues.hoyRisiko}
+                              label={`Høy risiko (${antallHoyRisiko})`}
+                            />
+                            <ToggleGroup.Item
+                              value={filterValues.tiltakIkkeAktuelt}
+                              label={`Tiltak ikke aktuelt (${antallTiltakIkkeAktuelt})`}
                             />
                           </ToggleGroup>
-                        )}
+                          {risikoscenarioList.length === 0 && (
+                            <div className='my-5'>
+                              <Alert variant='info'>
+                                <Heading spacing size='small' level='3'>
+                                  Dere har foreløpig ingen risikoscenarioer
+                                </Heading>
+                                Risikoscenarioer legges inn under{' '}
+                                <ExternalLink
+                                  href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}?tab=pvk`}
+                                >
+                                  PVK-relaterte krav
+                                </ExternalLink>{' '}
+                                eller eventuelt under{' '}
+                                <ExternalLink
+                                  href={pvkDokumentasjonStepUrl(
+                                    etterlevelseDokumentasjonId,
+                                    pvkDokument.id,
+                                    5
+                                  )}
+                                >
+                                  øvrige risikoscenarioer
+                                </ExternalLink>
+                              </Alert>
+                            </div>
+                          )}
 
-                        {filteredTiltakList.length !== 0 && (
-                          <TiltakAccordionListReadOnly
-                            tiltakList={filteredTiltakList}
-                            risikoscenarioList={risikoscenarioList}
-                          />
-                        )}
+                          {risikoscenarioList.length !== 0 &&
+                            filteredRisikoscenarioList.length === 0 &&
+                            visTomListeBeskrivelse(filterQuery)}
 
-                        {filteredTiltakList.length === 0 &&
-                          visTomTiltakListeBeskrivelse(tiltakFilter)}
-                      </Tabs.Panel>
-                    </Tabs>
-                  </div>
-                )}
+                          {risikoscenarioList.length !== 0 &&
+                            filteredRisikoscenarioList.length !== 0 && (
+                              <div className='my-5'>
+                                <OppsumeringAccordianListReadOnlyView
+                                  risikoscenarioList={filteredRisikoscenarioList}
+                                  allRisikoscenarioList={risikoscenarioList}
+                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                  tiltakList={tiltakList}
+                                />
+                              </div>
+                            )}
+                        </Tabs.Panel>
+                        <Tabs.Panel value={tabValues.tiltak} className='w-full'>
+                          {tiltakList.length === 0 && (
+                            <div className='my-5'>
+                              <Alert variant='info'>Foreløpig er ingen tiltak satt</Alert>
+                            </div>
+                          )}
+
+                          {tiltakList.length !== 0 && (
+                            <ToggleGroup
+                              className='mt-10'
+                              value={tiltakFilter}
+                              onChange={onTiltakFilterChange}
+                              fill
+                            >
+                              <ToggleGroup.Item
+                                value={tiltakFilterValues.alleTiltak}
+                                label={`Alle tiltak (${tiltakList.length})`}
+                              />
+                              <ToggleGroup.Item
+                                value={tiltakFilterValues.utenAnsvarlig}
+                                label={`Uten tiltaksansvarlig (${antallUtenTiltakAnsvarlig})`}
+                              />
+                              <ToggleGroup.Item
+                                value={tiltakFilterValues.utenFrist}
+                                label={`Uten frist (${antallUtenFrist})`}
+                              />
+                            </ToggleGroup>
+                          )}
+
+                          {filteredTiltakList.length !== 0 && (
+                            <TiltakAccordionListReadOnly
+                              tiltakList={filteredTiltakList}
+                              risikoscenarioList={risikoscenarioList}
+                            />
+                          )}
+
+                          {filteredTiltakList.length === 0 &&
+                            visTomTiltakListeBeskrivelse(tiltakFilter)}
+                        </Tabs.Panel>
+                      </Tabs>
+                    </div>
+                  )}
+                </div>
+
+                <AccordianAlertModal
+                  isOpen={isUnsaved}
+                  setIsOpen={setIsUnsaved}
+                  navigateUrl={navigateUrl}
+                  formRef={formRef}
+                  reloadOnSubmit={true}
+                />
               </div>
-
-              <AccordianAlertModal
-                isOpen={isUnsaved}
-                setIsOpen={setIsUnsaved}
-                navigateUrl={navigateUrl}
-                formRef={formRef}
-                reloadOnSubmit={true}
-              />
             </div>
           </div>
         </div>
 
-        <div>
+        <div className='w-1/2'>
           {/* PVO sidepanel */}
           <PvoSidePanelWrapper>
             {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
