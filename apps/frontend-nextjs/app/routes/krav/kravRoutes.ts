@@ -1,3 +1,5 @@
+import { kravlisteUrl } from './kraveier/kraveierRoutes'
+
 export const kravUrl: string = '/krav'
 
 export const kravlisteOpprettUrl = () => `${kravlisteUrl()}/opprett`
@@ -21,16 +23,6 @@ export const kravPathUrl = (currentPath: string, nextKravPath: string): string =
   `${currentPath}${kravUrl}${nextKravPath}`
 
 export const kravRelevanteUrl = (tema: string): string => `/${tema}/RELEVANTE_KRAV`
-
-export const kravlisteUrl = (tabQuery?: string): string => {
-  const url: string = `${kravUrl}liste`
-
-  if (tabQuery) {
-    return `${url}/${tabQuery}`
-  }
-
-  return url
-}
 
 export const kravTemaFilterUrl = (tema: string, filter: string): string => `${tema}/${filter}`
 
