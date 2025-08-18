@@ -1,7 +1,7 @@
 'use client'
 
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
-import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/style'
+import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
 import {
   editorTranslations,
   translateUnderlineAndHighlight,
