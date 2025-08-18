@@ -95,7 +95,7 @@ export const KravNyVersjonPage = () => {
               {({ values, errors, isSubmitting, submitForm }) => (
                 <Form>
                   <div>
-                    <div>
+                    <div className='w-full'>
                       <Heading level='1' size='medium'>
                         Ny versjon
                       </Heading>
@@ -149,7 +149,7 @@ export const KravNyVersjonPage = () => {
                         />
                       </ContentLayout>
                     </div>
-                    <div>
+                    <div className='py-12'>
                       <TextAreaField
                         label='Notater (Kun synlig for kraveier)'
                         name='notat'

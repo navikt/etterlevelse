@@ -20,7 +20,7 @@ export const KravViewTidligereVersjoner: FunctionComponent<IProps> = ({
       <LabelWrapper>
         <LabelAboveContent title='Tidligere versjoner' header>
           {alleKravVersjoner.map((kravRelasjon: IKravVersjon, index: number) => (
-            <>
+            <div key={`${kravRelasjon.kravStatus}_${index}`}>
               {kravRelasjon.kravVersjon &&
                 parseInt(kravRelasjon.kravVersjon.toString()) < krav.kravVersjon && (
                   <BodyShort key={`kravVersjon_list_${index}`} className={'break-words'}>
@@ -29,7 +29,7 @@ export const KravViewTidligereVersjoner: FunctionComponent<IProps> = ({
                     >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>
                   </BodyShort>
                 )}
-            </>
+            </div>
           ))}
           {krav.versjonEndringer && (
             <div className='my-8'>
