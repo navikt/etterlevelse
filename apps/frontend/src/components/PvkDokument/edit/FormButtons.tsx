@@ -30,7 +30,7 @@ export const FormButtons: FunctionComponent<TProps> = ({
 
           {activeStep !== 8 && (
             <Button
-              icon={activeStep !== 7 && <ChevronRightIcon aria-hidden />}
+              icon={activeStep !== 8 && <ChevronRightIcon aria-hidden />}
               iconPosition='right'
               type='button'
               variant={'tertiary'}
