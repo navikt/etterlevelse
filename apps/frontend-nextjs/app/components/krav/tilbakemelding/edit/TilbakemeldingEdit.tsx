@@ -34,7 +34,7 @@ export const TilbakemeldingEdit = ({
   return (
     <div className='items-end'>
       <Textarea
-        label='Rediger melding'
+        label='Redigér melding'
         hideLabel
         minRows={15}
         onChange={(e) => setResponse((e.target as HTMLTextAreaElement).value)}
