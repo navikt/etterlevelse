@@ -33,6 +33,7 @@ export const StepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens livsløp',
   'Behandlingens art og omfang',
+  'Tilhørende dokumentasjon',
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
@@ -245,7 +246,8 @@ export const PvkDokumentPage = () => {
                       formRef={formRef}
                     />
                   )}
-                  {activeStep === 4 && (
+                  {activeStep === 4 && <div>test</div>}
+                  {activeStep === 5 && (
                     <InvolveringAvEksterneView
                       personkategorier={personkategorier}
                       databehandlere={databehandlere}
@@ -259,7 +261,7 @@ export const PvkDokumentPage = () => {
                       formRef={formRef}
                     />
                   )}
-                  {activeStep === 5 && (
+                  {activeStep === 6 && (
                     <IdentifiseringAvRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       pvkDokument={pvkDokument}
@@ -269,7 +271,7 @@ export const PvkDokumentPage = () => {
                       formRef={formRef}
                     />
                   )}
-                  {activeStep === 6 && (
+                  {activeStep === 7 && (
                     <OppsummeringAvAlleRisikoscenarioerOgTiltak
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       pvkDokument={pvkDokument}
@@ -280,7 +282,7 @@ export const PvkDokumentPage = () => {
                       formRef={formRef}
                     />
                   )}
-                  {activeStep === 7 && (
+                  {activeStep === 8 && (
                     <SendInnView
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
