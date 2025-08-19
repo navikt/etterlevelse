@@ -1,5 +1,6 @@
-import { Alert, BodyLong, BodyShort, Heading, Link, List, Loader } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, Heading, Link, List, Loader } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { behandlingName } from '../../api/BehandlingApi'
 import {
   EEtterlevelseStatus,
@@ -14,6 +15,7 @@ import { getPollyBaseUrl } from '../behandling/utils/pollyUrlUtils'
 import { ExternalLink } from '../common/RouteLink'
 import { behandlingskatalogenProcessUrl } from '../common/RouteLinkBehandlingskatalogen'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonPvkTabUrl } from '../common/RouteLinkPvk'
 import { ContentLayout } from '../layout/layout'
 import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import FormButtons from './edit/FormButtons'
@@ -45,6 +47,7 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
 }) => {
   const [antallPvkKrav, setAntallPvkKrav] = useState<number>(0)
   const [antallFerdigPvkKrav, setAntallFerdigPvkKrav] = useState<number>(0)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!isPvkKravLoading && pvkKrav && pvkKrav.krav) {
@@ -135,6 +138,18 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
                   Dere må fullføre dokumentering av personvernkrav før dere kan sende inn PVK.
                 </Alert>
               )}
+
+              <Button
+                variant='secondary'
+                type='button'
+                className='my-5'
+                onClick={() => {
+                  if (etterlevelseDokumentasjon)
+                    navigate(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjon.id))
+                }}
+              >
+                Gå til PVK-relaterte krav
+              </Button>
             </div>
           </div>
         </div>

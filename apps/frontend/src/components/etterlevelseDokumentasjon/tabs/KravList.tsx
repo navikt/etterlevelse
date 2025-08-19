@@ -69,7 +69,7 @@ export const KravList = (props: IProps) => {
   useEffect(() => {
     if (defaultOpen) {
       setOpenAccordions(temaListe.map(() => true))
-      navigate(etterlevelseDokumentasjonAlleUrl(params.id))
+      navigate(etterlevelseDokumentasjonAlleUrl(params.id) + '?tab=pvk')
     }
   }, [defaultOpen])
 
