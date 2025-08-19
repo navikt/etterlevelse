@@ -25,6 +25,7 @@ import {
   IExternalCode,
   IPvoTilbakemelding,
 } from '../constants'
+import { useKravFilter } from '../query/KravQuery'
 import { CodelistService } from '../services/Codelist'
 import { user } from '../services/User'
 import { isInLimitedAccess } from '../util/config'
@@ -66,6 +67,16 @@ export const PvkDokumentPage = () => {
   const [selectedStep, setSelectedStep] = useState<number>(1)
   const navigate: NavigateFunction = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
+  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
+    {
+      gjeldendeKrav: true,
+      tagger: ['Personvernkonsekvensvurdering'],
+      etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id,
+    },
+    { skip: !etterlevelseDokumentasjon },
+    true
+  )
+
   const [codelistUtils] = CodelistService()
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
@@ -255,6 +266,8 @@ export const PvkDokumentPage = () => {
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
                       formRef={formRef}
+                      pvkKrav={pvkKrav}
+                      isPvkKravLoading={isPvkKravLoading}
                     />
                   )}
                   {activeStep === 5 && (
@@ -305,6 +318,8 @@ export const PvkDokumentPage = () => {
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
                       codelistUtils={codelistUtils}
+                      pvkKrav={pvkKrav}
+                      isPvkKravLoading={isPvkKravLoading}
                     />
                   )}
                 </div>

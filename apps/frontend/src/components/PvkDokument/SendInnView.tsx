@@ -27,8 +27,8 @@ import {
   ITiltak,
   TEtterlevelseDokumentasjonQL,
   TEtterlevelseQL,
+  TKravQL,
 } from '../../constants'
-import { useKravFilter } from '../../query/KravQuery'
 import { EListName, ICode, ICodelistProps } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -62,6 +62,12 @@ type TProps = {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   codelistUtils: ICodelistProps
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
+  isPvkKravLoading: boolean
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
@@ -76,6 +82,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   setActiveStep,
   setSelectedStep,
   codelistUtils,
+  pvkKrav,
+  isPvkKravLoading,
   pvoTilbakemelding,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
@@ -97,16 +105,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
-
-  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
-    {
-      gjeldendeKrav: true,
-      tagger: ['Personvernkonsekvensvurdering'],
-      etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
-    },
-    { skip: !etterlevelseDokumentasjon },
-    true
-  )
 
   const underarbeidCheck: boolean =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||

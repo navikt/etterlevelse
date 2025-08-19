@@ -1,10 +1,14 @@
-import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
-import { FunctionComponent, RefObject } from 'react'
+import { Alert, BodyLong, BodyShort, Heading, Link, List, Loader } from '@navikt/ds-react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { behandlingName } from '../../api/BehandlingApi'
 import {
+  EEtterlevelseStatus,
   EPvoTilbakemeldingStatus,
+  IPageResponse,
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
+  TEtterlevelseQL,
+  TKravQL,
 } from '../../constants'
 import { getPollyBaseUrl } from '../behandling/utils/pollyUrlUtils'
 import { ExternalLink } from '../common/RouteLink'
@@ -20,6 +24,12 @@ type TProps = {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
+  isPvkKravLoading: boolean
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
@@ -29,8 +39,31 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
   setActiveStep,
   setSelectedStep,
   formRef,
+  pvkKrav,
+  isPvkKravLoading,
   pvoTilbakemelding,
 }) => {
+  const [antallPvkKrav, setAntallPvkKrav] = useState<number>(0)
+  const [antallFerdigPvkKrav, setAntallFerdigPvkKrav] = useState<number>(0)
+
+  useEffect(() => {
+    if (!isPvkKravLoading && pvkKrav && pvkKrav.krav) {
+      setAntallPvkKrav(pvkKrav.krav.totalElements)
+
+      const pvkEtterlevelser: TEtterlevelseQL[] = []
+
+      pvkKrav.krav.content.forEach((krav) => {
+        pvkEtterlevelser.push(...krav.etterlevelser)
+      })
+
+      setAntallFerdigPvkKrav(
+        pvkEtterlevelser.filter(
+          (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+        ).length
+      )
+    }
+  }, [isPvkKravLoading])
+
   return (
     <div className='w-full'>
       <ContentLayout>
@@ -87,11 +120,21 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
                 alle personvernkrav. Så langt har dere:
               </BodyLong>
 
-              <List as='ul'>
-                <List.Item>
-                  {1} av {2} krav er ferdig utfylt.
-                </List.Item>
-              </List>
+              {!isPvkKravLoading && (
+                <List as='ul'>
+                  <List.Item>
+                    {antallFerdigPvkKrav} av {antallPvkKrav} krav er ferdig utfylt.
+                  </List.Item>
+                </List>
+              )}
+
+              {isPvkKravLoading && <Loader />}
+
+              {antallFerdigPvkKrav !== antallPvkKrav && (
+                <Alert variant='warning'>
+                  Dere må fullføre dokumentering av personvernkrav før dere kan sende inn PVK.
+                </Alert>
+              )}
             </div>
           </div>
         </div>
