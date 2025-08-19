@@ -91,7 +91,7 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                 <RisikoscenarioView
                   risikoscenario={risikoscenario}
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                  stepUrl='6'
+                  stepUrl='7'
                   markdownCopyLinkButton={!noMarkdownCopyLinkButton}
                 />
                 <div className='mt-12'>

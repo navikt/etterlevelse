@@ -81,7 +81,7 @@ export const PvkDokumentPage = () => {
         pvkDokument?.etterlevelseDokumentId,
         pvkDokument?.id,
         step,
-        step === 6 ? risikoscenarioFilterAlleUrl() : ''
+        step === 7 ? risikoscenarioFilterAlleUrl() : ''
       )
     )
   }
