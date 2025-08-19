@@ -8,6 +8,22 @@ export const translateUnderlineAndHighlight = (draftData: RawDraftContentState) 
   translateHighlightToDraft(draftData)
 }
 
+export const joinDraftDataWithDraftWithHightligthsAndUnderline = (
+  mainDraft: RawDraftContentState,
+  draftWithHighlithAndUnderline: RawDraftContentState
+) => {
+  draftWithHighlithAndUnderline.blocks.forEach((block, index) => {
+    block.inlineStyleRanges.forEach((range) => {
+      if (range.style.includes('bgcolor')) {
+        mainDraft.blocks[index].inlineStyleRanges.push(range)
+      }
+      if (range.style === 'UNDERLINE') {
+        mainDraft.blocks[index].inlineStyleRanges.push(range)
+      }
+    })
+  })
+}
+
 export const translateUnderlineToDraft = (draftData: RawDraftContentState) => {
   draftData.blocks.map((data: RawDraftContentBlock) => {
     const newStyles: RawDraftInlineStyleRange[] = []

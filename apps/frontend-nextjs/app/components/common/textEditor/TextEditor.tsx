@@ -4,6 +4,7 @@ import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
 import {
   editorTranslations,
+  joinDraftDataWithDraftWithHightligthsAndUnderline,
   translateUnderlineAndHighlight,
 } from '@/util/textEditor/textEditorUtil'
 import { ettlevColors } from '@/util/theme/theme'
@@ -110,8 +111,8 @@ export const TextEditor = ({
     })
   }
 
-  const CustomMarkdownToDraft = (data: string) => {
-    const draftData = markdownToDraft(data, {
+  const markdownToDraftWithPresets = (data: string) =>
+    markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -127,7 +128,17 @@ export const TextEditor = ({
       preserveNewlines: true,
     })
 
-    translateUnderlineAndHighlight(draftData)
+  const CustomMarkdownToDraft = (data: string) => {
+    const rawData = data
+    const noUnderlineAndHighlightData = rawData
+      .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
+      .replaceAll('</span>', '')
+      .replaceAll('<ins>', '')
+      .replaceAll('</ins>', '')
+    const draftData = markdownToDraftWithPresets(noUnderlineAndHighlightData)
+    const drafDataWithUnderlineAndHighligth = markdownToDraftWithPresets(rawData)
+    translateUnderlineAndHighlight(drafDataWithUnderlineAndHighligth)
+    joinDraftDataWithDraftWithHightligthsAndUnderline(draftData, drafDataWithUnderlineAndHighligth)
     return draftData
   }
 
