@@ -40,6 +40,11 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
               <Heading level='1' size='medium' className='mb-5'>
                 Tilhørende dokumentasjon
               </Heading>
+
+              <Heading level='2' size='small' className='mb-3'>
+                Behandlinger i Behandlingskatalogen
+              </Heading>
+
               <BodyLong>
                 Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
               </BodyLong>
@@ -72,6 +77,21 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
                   Redigér dokumentegenskaper (åpner i en ny fane).
                 </Link>
               </BodyShort>
+
+              <Heading level='2' size='small' className='mb-3 mt-5'>
+                PVK-relaterte etterlevelseskrav
+              </Heading>
+
+              <BodyLong>
+                Personvernkonsekvensvurdering forutsetter at dere har dokumentert etterlevelse ved
+                alle personvernkrav. Så langt har dere:
+              </BodyLong>
+
+              <List as='ul'>
+                <List.Item>
+                  {1} av {2} krav er ferdig utfylt.
+                </List.Item>
+              </List>
             </div>
           </div>
         </div>
