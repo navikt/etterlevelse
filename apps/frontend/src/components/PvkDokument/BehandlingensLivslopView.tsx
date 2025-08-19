@@ -28,7 +28,6 @@ import {
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
-import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import BehandlingensLivslopReadOnlyContent from '../behandlingensLivlop/BehandlingensLivslopReadonlyContent'
 import BehandlingensLivsLopSidePanel from '../behandlingensLivlop/BehandlingensLivslopSidePanel'
@@ -38,6 +37,7 @@ import behandlingensLivslopSchema from '../behandlingensLivlop/behandlingensLivs
 import { TextAreaField } from '../common/Inputs'
 import { ContentLayout } from '../layout/layout'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
 
@@ -276,12 +276,12 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           {/* Sidepanel */}
           {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <div>
-              <PvoSidePanelWrapper>
+              <PvkSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
                   tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
                   sentDate={pvoTilbakemelding.sendtDato}
                 />
-              </PvoSidePanelWrapper>
+              </PvkSidePanelWrapper>
             </div>
           )}
 

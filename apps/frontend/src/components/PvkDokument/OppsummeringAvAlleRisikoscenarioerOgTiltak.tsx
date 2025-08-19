@@ -12,7 +12,6 @@ import {
   IRisikoscenario,
   ITiltak,
 } from '../../constants'
-import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { ExternalLink, paramQueryUrl } from '../common/RouteLink'
 import { etterlevelseDokumentasjonIdUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -26,6 +25,7 @@ import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/Op
 import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import TiltakAccordionListReadOnly from '../tiltak/TiltakAccordionListReadOnly'
+import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
 
@@ -458,12 +458,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           {/* sidepanel */}
 
           {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-            <PvoSidePanelWrapper>
+            <PvkSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
                 tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
                 sentDate={pvoTilbakemelding.sendtDato}
               />
-            </PvoSidePanelWrapper>
+            </PvkSidePanelWrapper>
           )}
         </div>
       </div>
