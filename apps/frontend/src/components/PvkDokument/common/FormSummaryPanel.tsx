@@ -55,7 +55,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
     <FormSummary.Value>
       {status && !customStatusTag && status}
       {customStatusTag && customStatusTag}
-      {step === 4 && (
+      {step === 5 && (
         <Tag
           variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
           size='xsmall'
@@ -63,7 +63,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
           {pvkDokumentStatusToText(pvkDokumentStatus)}
         </Tag>
       )}
-      {!pvoView && step === 4 && (
+      {!pvoView && step === 5 && (
         <BodyShort>
           Her får dere oversikt over alle deres svar.{' '}
           {pvkDokumentStatus === EPvkDokumentStatus.UNDERARBEID &&

@@ -56,7 +56,7 @@ export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Elem
         </Tag>
       )
     }
-  } else if (step === 1) {
+  } else if (step === 2) {
     if (
       pvkDokument.harInvolvertRepresentant !== null ||
       pvkDokument.representantInvolveringsBeskrivelse ||
@@ -117,7 +117,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
   }
 
   const getRisikoscenarioStatus = (step: number): JSX.Element => {
-    if (step === 2) {
+    if (step === 3) {
       const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
       const kravSenario = allRisikoscenario.filter(
         (risiko: IRisikoscenario) => !risiko.generelScenario
@@ -327,7 +327,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
 
             {StepTitle.slice(2).map((title: string, index: number) => {
               let panelHref: string = window.location.pathname.slice(0, -1) + (index + 3)
-              if (index + 3 === 6) {
+              if (index + 3 === 7) {
                 panelHref += risikoscenarioFilterAlleUrl()
               }
 
@@ -341,7 +341,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
                   pvkDokumentStatus={pvkDokument.status}
                   status={getFormStatus(pvkDokument, index)}
                   customStatusTag={
-                    index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
+                    index === 3 || index === 4 ? getRisikoscenarioStatus(index) : undefined
                   }
                 />
               )
