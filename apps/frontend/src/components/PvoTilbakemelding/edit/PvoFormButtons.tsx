@@ -41,10 +41,10 @@ export const PvoFormButtons: FunctionComponent<TProps> = ({
               }}
             >
               {activeStep === 1 && 'Fortsett til Behandlingens Livsløp'}
-              {activeStep === 2 && 'Fortsett til Art og omfang'}
+              {activeStep === 2 && 'Fortsett til Behandlingens art og omfang'}
               {activeStep === 3 && 'Fortsett til Tilhørende dokumentasjon'}
               {activeStep === 4 && 'Fortsett til Involvering av eksterne'}
-              {activeStep === 5 && 'Fortsett til Identifisering av risikoscenarioer'}
+              {activeStep === 5 && 'Fortsett til Identifisering av risikoscenarioer og tiltak'}
               {activeStep === 6 && 'Fortsett til Risikobildet etter tiltak'}
               {activeStep === 7 && 'Fortsett til Send tilbakemelding'}
               {activeStep === 8 && 'Send til Etterlever'}
@@ -66,12 +66,12 @@ export const PvoFormButtons: FunctionComponent<TProps> = ({
             }}
           >
             {activeStep === 1 && 'Tilbake til PVO oversikt side'}
-            {activeStep === 2 && 'Tilbake til Oversikt'}
+            {activeStep === 2 && 'Tilbake til Oversikt og status'}
             {activeStep === 3 && 'Tilbake til Behandlingens livsløp'}
-            {activeStep === 4 && 'Tilbake til Art og omfang'}
+            {activeStep === 4 && 'Tilbake til Behandlingens art og omfang'}
             {activeStep === 5 && 'Tilbake til Tilhørende dokumentasjon'}
             {activeStep === 6 && 'Tilbake til Involvering av eksterne'}
-            {activeStep === 7 && 'Tilbake til Identifisering av risikoscenarioer'}
+            {activeStep === 7 && 'Tilbake til Identifisering av risikoscenarioer og tiltak'}
             {activeStep === 8 && 'Tilbake til Risikobildet etter tiltak'}
           </Button>
         </div>
