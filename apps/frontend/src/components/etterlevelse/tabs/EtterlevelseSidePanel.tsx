@@ -150,7 +150,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
                   Notat
                 </Label>
                 <Button variant='secondary' size='xsmall' onClick={() => setIsNotatModalOpen(true)}>
-                  Rediger
+                  Redigér
                 </Button>
               </div>
 

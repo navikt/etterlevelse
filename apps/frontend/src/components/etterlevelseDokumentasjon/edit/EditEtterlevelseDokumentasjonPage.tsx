@@ -23,8 +23,8 @@ export const EditEtterlevelseDokumentasjonPage = () => {
       )}
       {!isLoading && etterlevelseDokumentasjon && (
         <PageLayout
-          pageTitle='Rediger etterlevelsesdokumentet'
-          currentPage='Rediger etterlevelsesdokumentet'
+          pageTitle='Redigér etterlevelsesdokumentet'
+          currentPage='Redigér etterlevelsesdokumentet'
           breadcrumbPaths={[
             {
               href: etterlevelseDokumentasjonerUrl(),
@@ -38,7 +38,7 @@ export const EditEtterlevelseDokumentasjonPage = () => {
         >
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <EtterlevelseDokumentasjonForm
-              title='Rediger etterlevelsesdokumentet'
+              title='Redigér etterlevelsesdokumentet'
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               isEditButton
             />
