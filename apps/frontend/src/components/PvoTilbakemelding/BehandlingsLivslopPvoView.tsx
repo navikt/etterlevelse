@@ -67,30 +67,32 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
       {!isLoading && (
         <div className='w-full'>
           <ContentLayout>
-            <BehandlingensLivslopReadOnlyContent
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              behandlingensLivslop={behandlingensLivslop}
-            />
-
-            {/* PVO sidepanel */}
-            <div>
-              <PvoSidePanelWrapper>
-                {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-                  <PvoTilbakemeldingReadOnly
-                    tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
-                    sentDate={pvoTilbakemelding.sendtDato}
-                    forPvo={true}
-                  />
-                )}
-                {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-                  <PvoTilbakemeldingForm
-                    pvkDokumentId={pvkDokument.id}
-                    fieldName='behandlingenslivslop'
-                    initialValue={pvoTilbakemelding.behandlingenslivslop}
-                    formRef={formRef}
-                  />
-                )}
-              </PvoSidePanelWrapper>
+            <div className='flex gap-8'>
+              <div className='w-1/2'>
+                <BehandlingensLivslopReadOnlyContent
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  behandlingensLivslop={behandlingensLivslop}
+                />
+              </div>
+              <div className='w-1/2'>
+                <PvoSidePanelWrapper>
+                  {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+                    <PvoTilbakemeldingReadOnly
+                      tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
+                      sentDate={pvoTilbakemelding.sendtDato}
+                      forPvo={true}
+                    />
+                  )}
+                  {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                    <PvoTilbakemeldingForm
+                      pvkDokumentId={pvkDokument.id}
+                      fieldName='behandlingenslivslop'
+                      initialValue={pvoTilbakemelding.behandlingenslivslop}
+                      formRef={formRef}
+                    />
+                  )}
+                </PvoSidePanelWrapper>
+              </div>
             </div>
           </ContentLayout>
           <PvoFormButtons
