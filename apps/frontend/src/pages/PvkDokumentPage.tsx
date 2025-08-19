@@ -13,6 +13,7 @@ import InvolveringAvEksterneView from '../components/PvkDokument/InvolveringAvEk
 import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
+import TilhørendeDokumentasjon from '../components/PvkDokument/TilhørendeDokumentasjon'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonStepUrl } from '../components/common/RouteLinkPvk'
@@ -246,7 +247,16 @@ export const PvkDokumentPage = () => {
                       formRef={formRef}
                     />
                   )}
-                  {activeStep === 4 && <div>test</div>}
+                  {activeStep === 4 && (
+                    <TilhørendeDokumentasjon
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      activeStep={activeStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
+                      formRef={formRef}
+                    />
+                  )}
                   {activeStep === 5 && (
                     <InvolveringAvEksterneView
                       personkategorier={personkategorier}
