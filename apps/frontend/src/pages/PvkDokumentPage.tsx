@@ -13,7 +13,7 @@ import InvolveringAvEksterneView from '../components/PvkDokument/InvolveringAvEk
 import OppsummeringAvAlleRisikoscenarioerOgTiltak from '../components/PvkDokument/OppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from '../components/PvkDokument/OversiktView'
 import SendInnView from '../components/PvkDokument/SendInnView'
-import TilhørendeDokumentasjon from '../components/PvkDokument/TilhørendeDokumentasjon'
+import TilhorendeDokumentasjon from '../components/PvkDokument/TilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumentasjonStepUrl } from '../components/common/RouteLinkPvk'
@@ -259,7 +259,7 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 4 && (
-                    <TilhørendeDokumentasjon
+                    <TilhorendeDokumentasjon
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
