@@ -52,7 +52,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
     )}
 
     <div>
-      <Label>Vurdéring av etterleverens svar.</Label>
+      <Label>Vurdering av etterleverens svar.</Label>
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
         {tilbakemeldingsinnhold &&
