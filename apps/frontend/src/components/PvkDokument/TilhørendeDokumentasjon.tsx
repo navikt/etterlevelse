@@ -155,46 +155,63 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
                 Risiko- og sårbarhetsvurdering (ROS)
               </Heading>
 
-              <BodyLong>Dere har koblet følgende dokumenter på dette dokumentet:</BodyLong>
+              <BodyLong className='inline-block mb-5'>
+                Dersom dere har gjennomført en eller flere risikovurderinger, skal disse legges ved
+                etterlevelsesdokumentasjonen.
+              </BodyLong>
 
               {etterlevelseDokumentasjon.risikovurderinger &&
-                etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
-                  <List>
-                    {etterlevelseDokumentasjon.risikovurderinger.map((ros: string) => {
-                      const rosReg: RegExp = /\[(.+)]\((.+)\)/i
-                      const rosParts: RegExpMatchArray | null = ros.match(rosReg)
-                      if (rosParts)
+                etterlevelseDokumentasjon.risikovurderinger.length !== 0 && (
+                  <div>
+                    <BodyLong>Dere har koblet følgende dokumenter på dette dokumentet:</BodyLong>
+
+                    <List>
+                      {etterlevelseDokumentasjon.risikovurderinger.map((ros: string) => {
+                        const rosReg: RegExp = /\[(.+)]\((.+)\)/i
+                        const rosParts: RegExpMatchArray | null = ros.match(rosReg)
+                        if (rosParts)
+                          return (
+                            <List.Item key={ros}>
+                              <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                            </List.Item>
+                          )
                         return (
-                          <List.Item key={ros}>
-                            <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
-                          </List.Item>
+                          <span className='flex' key={ros}>
+                            {ros}
+                          </span>
                         )
-                      return (
-                        <span className='flex' key={ros}>
-                          {ros}
-                        </span>
-                      )
-                    })}
-                  </List>
+                      })}
+                    </List>
+
+                    <BodyLong>
+                      Dere kan redigere hvilke risikovurderinger og dokumenter som gjelder i{' '}
+                      <Link
+                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label='redigere etterlevelsesdokumentasjon'
+                      >
+                        Redigér dokumentegenskaper (åpner i en ny fane).
+                      </Link>
+                    </BodyLong>
+                  </div>
                 )}
 
               {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
-                <BodyShort className='my-5'>Det er ikke koblet noen dokumenter.</BodyShort>
+                <Alert variant='info' className='my-5'>
+                  <BodyLong>
+                    Dere har ikke lagt ved noen tilhørende dokumenter. Dette kan dere gjøre under{' '}
+                    <Link
+                      href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='redigere etterlevelsesdokumentasjon'
+                    >
+                      Redigér dokumentegenskaper (åpner i en ny fane).
+                    </Link>
+                  </BodyLong>
+                </Alert>
               )}
-
-              <BodyShort className='inline-block mb-5'>
-                Dersom dere har gjennomført en eller flere risikovurderinger, skal disse legges ved
-                etterlevelsesdokumentasjonen. Dere kan redigere hvilke risikovurderinger og
-                dokumenter som gjelder i{' '}
-                <Link
-                  href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='redigere etterlevelsesdokumentasjon'
-                >
-                  Redigér dokumentegenskaper (åpner i en ny fane).
-                </Link>
-              </BodyShort>
             </div>
           </div>
         </div>
