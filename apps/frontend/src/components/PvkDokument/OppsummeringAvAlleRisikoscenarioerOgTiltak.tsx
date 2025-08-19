@@ -247,10 +247,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     }
   }
 
+  const isPvoTilbakemeldingFerdig =
+    pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG
+
   return (
     <div className='w-full'>
-      <div className={`flex w-full ${pvoTilbakemelding ? '' : 'justify-center'}`}>
-        <div className={`pt-6 ${pvoTilbakemelding ? 'w-[816px]' : 'min-w-[900px]'}`}>
+      <div className={`flex w-full ${isPvoTilbakemeldingFerdig ? '' : 'justify-center'}`}>
+        <div className={`pt-6 ${isPvoTilbakemeldingFerdig ? 'w-[816px]' : 'min-w-[900px]'}`}>
           <div>
             <Heading level='1' size='medium' className='mb-5'>
               Risikobildet etter tiltak
@@ -456,8 +459,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         </div>
         <div>
           {/* sidepanel */}
-
-          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+          {isPvoTilbakemeldingFerdig && (
             <PvkSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
                 tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
