@@ -150,6 +150,51 @@ export const TilhørendeDokumentasjon: FunctionComponent<TProps> = ({
               >
                 Gå til PVK-relaterte krav
               </Button>
+
+              <Heading level='2' size='small' className='mb-3 mt-5'>
+                Risiko- og sårbarhetsvurdering (ROS)
+              </Heading>
+
+              <BodyLong>Dere har koblet følgende dokumenter på dette dokumentet:</BodyLong>
+
+              {etterlevelseDokumentasjon.risikovurderinger &&
+                etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
+                  <List>
+                    {etterlevelseDokumentasjon.risikovurderinger.map((ros: string) => {
+                      const rosReg: RegExp = /\[(.+)]\((.+)\)/i
+                      const rosParts: RegExpMatchArray | null = ros.match(rosReg)
+                      if (rosParts)
+                        return (
+                          <List.Item key={ros}>
+                            <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                          </List.Item>
+                        )
+                      return (
+                        <span className='flex' key={ros}>
+                          {ros}
+                        </span>
+                      )
+                    })}
+                  </List>
+                )}
+
+              {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
+                <BodyShort className='my-5'>Det er ikke koblet noen dokumenter.</BodyShort>
+              )}
+
+              <BodyShort className='inline-block mb-5'>
+                Dersom dere har gjennomført en eller flere risikovurderinger, skal disse legges ved
+                etterlevelsesdokumentasjonen. Dere kan redigere hvilke risikovurderinger og
+                dokumenter som gjelder i{' '}
+                <Link
+                  href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label='redigere etterlevelsesdokumentasjon'
+                >
+                  Redigér dokumentegenskaper (åpner i en ny fane).
+                </Link>
+              </BodyShort>
             </div>
           </div>
         </div>
