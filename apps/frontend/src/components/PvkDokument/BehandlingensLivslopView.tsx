@@ -285,19 +285,20 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             </div>
           )}
 
-          {!pvoTilbakemelding ||
-            (pvoTilbakemelding && pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-              // Don't remove this div. Sticky will not work without it.
-              <div>
-                <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
-                  <div className='overflow-auto h-[90vh]'>
-                    <BehandlingensLivsLopSidePanel
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    />
-                  </div>
+          {(!pvoTilbakemelding ||
+            (pvoTilbakemelding &&
+              pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) && (
+            // Don't remove this div. Sticky will not work without it.
+            <div>
+              <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
+                <div className='overflow-auto h-[90vh]'>
+                  <BehandlingensLivsLopSidePanel
+                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  />
                 </div>
               </div>
-            ))}
+            </div>
+          )}
           {/* Slutt på sidepanel innhold*/}
         </ContentLayout>
       )}
