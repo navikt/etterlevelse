@@ -10,6 +10,7 @@ type TFormSummaryPanelProps = {
   pvkDokumentStatus: EPvkDokumentStatus
   status?: ReactNode
   customStatusTag?: ReactNode
+  pvoView?: boolean
 }
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
@@ -43,6 +44,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
   customStatusTag,
   pvkDokumentStatus,
   step,
+  pvoView,
 }) => (
   <FormSummary.Answer key={title}>
     <FormSummary.Value>
@@ -61,7 +63,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
           {pvkDokumentStatusToText(pvkDokumentStatus)}
         </Tag>
       )}
-      {step === 4 && (
+      {!pvoView && step === 4 && (
         <BodyShort>
           Her får dere oversikt over alle deres svar.{' '}
           {pvkDokumentStatus === EPvkDokumentStatus.UNDERARBEID &&

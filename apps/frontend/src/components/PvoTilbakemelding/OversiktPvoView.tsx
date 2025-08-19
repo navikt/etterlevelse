@@ -313,6 +313,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                   customStatusTag={
                     index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
                   }
+                  pvoView
                 />
               )
             })}
