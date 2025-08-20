@@ -1,6 +1,6 @@
-import { BodyLong, BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
-import { Field, FieldProps, Form, Formik } from 'formik'
+import { Form, Formik } from 'formik'
 import moment from 'moment'
 import { FunctionComponent, RefObject, useState } from 'react'
 import { getPvkDokument } from '../../../api/PvkDokumentApi'
@@ -19,7 +19,7 @@ import {
 import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
 import AlertPvoModal from '../common/AlertPvoModal'
-import { EBidragVerdier } from './PvoTilbakemeldingForm'
+import TilbakemeldingField from './tilhorendeDokumentasjon/TilbakemeldingField'
 
 type TProps = {
   pvkDokumentId: string
@@ -154,149 +154,29 @@ export const TilhorendeDokumentasjonForm: FunctionComponent<TProps> = ({
             </div>
 
             <div>
-              <Heading level='3' size='xsmall' className='my-5'>
-                Behandlinger i Behandlingskatalogen
-              </Heading>
+              <TilbakemeldingField
+                heading='Behandlinger i Behandlingskatalogen'
+                radioFieldName='behandlingskatalogDokumentasjonTilstrekkelig'
+                radioFieldLabel='Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.'
+                textAreaFieldName='behandlingskatalogDokumentasjonTilbakemelding'
+                setFieldValue={setFieldValue}
+              />
 
-              <Field name='behandlingskatalogDokumentasjonTilstrekkelig'>
-                {(fieldProps: FieldProps) => (
-                  <RadioGroup
-                    legend='Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.'
-                    value={fieldProps.field.value}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue(
-                        'behandlingskatalogDokumentasjonTilstrekkelig',
-                        value
-                      )
-                    }}
-                  >
-                    <Radio value={EBidragVerdier.TILSTREKKELIG}>Ja, tilstrekkelig </Radio>
-                    <Radio value={EBidragVerdier.TILSTREKKELIG_FORBEHOLDT}>
-                      Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som
-                      beskrives i fritekst under
-                    </Radio>
-                    <Radio value={EBidragVerdier.UTILSTREKKELIG}>
-                      Utilstrekkelig, beskrives nærmere under
-                    </Radio>
-                  </RadioGroup>
-                )}
-              </Field>
-              <div className='my-2'>
-                <Button
-                  size='small'
-                  type='button'
-                  variant='secondary'
-                  onClick={async () => {
-                    await setFieldValue('behandlingskatalogDokumentasjonTilstrekkelig', '')
-                  }}
-                >
-                  Nullstill valg
-                </Button>
-              </div>
+              <TilbakemeldingField
+                heading='PVK-relaterte etterlevelseskrav'
+                radioFieldName='kravDokumentasjonTilstrekkelig'
+                radioFieldLabel='Vurdér om kravdokumentasjon er tilstrekkelig.'
+                textAreaFieldName='kravDokumentasjonTilbakemelding'
+                setFieldValue={setFieldValue}
+              />
 
-              <div className='my-5'>
-                <TextAreaField
-                  noPlaceholder
-                  markdown
-                  height='15.625rem'
-                  name='behandlingskatalogDokumentasjonTilbakemelding'
-                  label='Skriv tilbakemelding til etterleveren'
-                />
-              </div>
-
-              <Heading level='3' size='xsmall' className='my-5'>
-                PVK-relaterte etterlevelseskrav
-              </Heading>
-
-              <Field name='kravDokumentasjonTilstrekkelig'>
-                {(fieldProps: FieldProps) => (
-                  <RadioGroup
-                    legend='Vurdér om kravdokumentasjon er tilstrekkelig.'
-                    value={fieldProps.field.value}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('kravDokumentasjonTilstrekkelig', value)
-                    }}
-                  >
-                    <Radio value={EBidragVerdier.TILSTREKKELIG}>Ja, tilstrekkelig </Radio>
-                    <Radio value={EBidragVerdier.TILSTREKKELIG_FORBEHOLDT}>
-                      Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som
-                      beskrives i fritekst under
-                    </Radio>
-                    <Radio value={EBidragVerdier.UTILSTREKKELIG}>
-                      Utilstrekkelig, beskrives nærmere under
-                    </Radio>
-                  </RadioGroup>
-                )}
-              </Field>
-              <div className='my-2'>
-                <Button
-                  size='small'
-                  type='button'
-                  variant='secondary'
-                  onClick={async () => {
-                    await setFieldValue('kravDokumentasjonTilstrekkelig', '')
-                  }}
-                >
-                  Nullstill valg
-                </Button>
-              </div>
-
-              <div className='my-5'>
-                <TextAreaField
-                  noPlaceholder
-                  markdown
-                  height='15.625rem'
-                  name='kravDokumentasjonTilbakemelding'
-                  label='Skriv tilbakemelding til etterleveren'
-                />
-              </div>
-
-              <Heading level='3' size='xsmall' className='my-5'>
-                Risiko- og sårbarhetsvurdering (ROS)
-              </Heading>
-
-              <Field name='risikovurderingTilstrekkelig'>
-                {(fieldProps: FieldProps) => (
-                  <RadioGroup
-                    legend='Vurdér om risikovurderingen(e) er tilstrekkelig.'
-                    value={fieldProps.field.value}
-                    onChange={(value) => {
-                      fieldProps.form.setFieldValue('risikovurderingTilstrekkelig', value)
-                    }}
-                  >
-                    <Radio value={EBidragVerdier.TILSTREKKELIG}>Ja, tilstrekkelig </Radio>
-                    <Radio value={EBidragVerdier.TILSTREKKELIG_FORBEHOLDT}>
-                      Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som
-                      beskrives i fritekst under
-                    </Radio>
-                    <Radio value={EBidragVerdier.UTILSTREKKELIG}>
-                      Utilstrekkelig, beskrives nærmere under
-                    </Radio>
-                  </RadioGroup>
-                )}
-              </Field>
-              <div className='my-2'>
-                <Button
-                  size='small'
-                  type='button'
-                  variant='secondary'
-                  onClick={async () => {
-                    await setFieldValue('risikovurderingTilstrekkelig', '')
-                  }}
-                >
-                  Nullstill valg
-                </Button>
-              </div>
-
-              <div className='my-5'>
-                <TextAreaField
-                  noPlaceholder
-                  markdown
-                  height='15.625rem'
-                  name='risikovurderingTilbakemelding'
-                  label='Skriv tilbakemelding til etterleveren'
-                />
-              </div>
+              <TilbakemeldingField
+                heading='Risiko- og sårbarhetsvurdering (ROS)'
+                radioFieldName='risikovurderingTilstrekkelig'
+                radioFieldLabel='Vurdér om risikovurderingen(e) er tilstrekkelig.'
+                textAreaFieldName='risikovurderingTilbakemelding'
+                setFieldValue={setFieldValue}
+              />
             </div>
           </Form>
         )}
