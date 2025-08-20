@@ -1,9 +1,12 @@
+import { kravMapToFormVal } from '@/api/krav/kravApi'
 import { IKravDataProps } from '@/api/krav/kravEdit/kravEditApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { TKravQL } from '@/constants/krav/kravConstants'
+import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { kravEditValidation } from '@/test/validation/kravEditValidation'
 import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { Loader } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { Form, Formik } from 'formik'
+import { FunctionComponent, useState } from 'react'
 
 type TProps = {
   krav: TKravQL | undefined
@@ -11,7 +14,14 @@ type TProps = {
 }
 
 export const KravEdit: FunctionComponent<TProps> = ({ krav, kravData }) => {
+  const [isEditingUtgaattKrav, setIsEditingUtgaattKrav] = useState<boolean>(false)
+  const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
+    { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
+  ])
+
   const kravLoading: boolean | undefined = kravData?.kravLoading
+
+  const submit = async (krav: TKravQL): Promise<void> => {}
 
   return (
     <PageLayout
@@ -26,7 +36,19 @@ export const KravEdit: FunctionComponent<TProps> = ({ krav, kravData }) => {
         </div>
       )}
 
-      {!kravLoading && <div>FOM</div>}
+      {!kravLoading && (
+        <div>
+          <Formik
+            initialValues={kravMapToFormVal(krav as TKravQL)}
+            onSubmit={submit}
+            validationSchema={kravEditValidation({ alleKravVersjoner, isEditingUtgaattKrav })}
+            validateOnChange={false}
+            validateOnBlur={false}
+          >
+            <Form></Form>
+          </Formik>
+        </div>
+      )}
     </PageLayout>
   )
 }
