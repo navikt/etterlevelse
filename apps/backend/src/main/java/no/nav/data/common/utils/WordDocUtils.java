@@ -55,7 +55,7 @@ public class WordDocUtils {
             TocExtension.create(),
             SimTocExtension.create()
     ))
-            .set(DocxRenderer.SUPPRESS_HTML, false)
+            .set(DocxRenderer.SUPPRESS_HTML, true)
             // the following two are needed to allow doc relative and site relative address resolution
             .set(DocxRenderer.DOC_RELATIVE_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like 'images/...' or './' or '../'
             .set(DocxRenderer.DOC_ROOT_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like: '/...'
