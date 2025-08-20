@@ -29,7 +29,7 @@ export const KravEditPage = () => {
         pageTitle='Rediger krav'
         currentPage='Rediger krav'
         breadcrumbPaths={[kravBreadCrumbPath]}
-        key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
+        key={`K${krav?.kravNummer}${krav?.kravVersjon}`}
       >
         <Box padding='4' background='surface-warning-subtle'>
           Det er ikke lov å redigere på et utgått krav.
