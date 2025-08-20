@@ -88,7 +88,7 @@ export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> 
                     <RisikoscenarioView
                       risikoscenario={risikoscenario}
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                      stepUrl='5'
+                      stepUrl='6'
                       markdownCopyLinkButton={true}
                     />
                     <div className='mt-12'>

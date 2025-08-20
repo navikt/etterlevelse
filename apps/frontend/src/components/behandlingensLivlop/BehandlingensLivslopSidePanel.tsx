@@ -65,7 +65,7 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
       )}
 
     {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
-      <BodyShort className='my-5'>Ingen dokument er valgt.</BodyShort>
+      <BodyShort className='my-5'>Det er ikke koblet noen dokumenter.</BodyShort>
     )}
 
     <BodyShort className='inline-block mb-5'>

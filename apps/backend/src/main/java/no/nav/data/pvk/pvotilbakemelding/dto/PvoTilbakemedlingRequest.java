@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
-import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
+import no.nav.data.pvk.pvotilbakemelding.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static org.apache.commons.lang3.StringUtils.trim;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -31,6 +29,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
 
     private Tilbakemeldingsinnhold behandlingenslivslop;
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
+    private TilhorendeDokumentasjonTilbakemelding tilhorendeDokumentasjon;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;
@@ -58,6 +57,11 @@ public class PvoTilbakemedlingRequest implements RequestElement {
 
         getBehandlingensArtOgOmfang().setTilbakemeldingTilEtterlevere(trimToNull(behandlingensArtOgOmfang.getTilbakemeldingTilEtterlevere()));
         getBehandlingensArtOgOmfang().setInternDiskusjon(trimToNull(behandlingensArtOgOmfang.getInternDiskusjon()));
+
+        getTilhorendeDokumentasjon().setInternDiskusjon(trimToNull(tilhorendeDokumentasjon.getInternDiskusjon()));
+        getTilhorendeDokumentasjon().setBehandlingskatalogDokumentasjonTilbakemelding(trimToNull(tilhorendeDokumentasjon.getBehandlingskatalogDokumentasjonTilbakemelding()));
+        getTilhorendeDokumentasjon().setKravDokumentasjonTilbakemelding(trimToNull(tilhorendeDokumentasjon.getKravDokumentasjonTilbakemelding()));
+        getTilhorendeDokumentasjon().setRisikovurderingTilbakemelding(trimToNull(tilhorendeDokumentasjon.getRisikovurderingTilbakemelding()));
 
         getInnvolveringAvEksterne().setTilbakemeldingTilEtterlevere(trimToNull(innvolveringAvEksterne.getTilbakemeldingTilEtterlevere()));
         getInnvolveringAvEksterne().setInternDiskusjon(trimToNull(innvolveringAvEksterne.getInternDiskusjon()));
@@ -88,6 +92,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
         var pvoTilbakemeldingData = PvoTilbakemeldingData.builder()
                 .behandlingenslivslop(behandlingenslivslop)
                 .behandlingensArtOgOmfang(behandlingensArtOgOmfang)
+                .tilhorendeDokumentasjon(tilhorendeDokumentasjon)
                 .innvolveringAvEksterne(innvolveringAvEksterne)
                 .risikoscenarioEtterTiltakk(risikoscenarioEtterTiltakk)
                 .merknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier)
@@ -125,6 +130,7 @@ public class PvoTilbakemedlingRequest implements RequestElement {
 
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingenslivslop(behandlingenslivslop);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setBehandlingensArtOgOmfang(behandlingensArtOgOmfang);
+        pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setTilhorendeDokumentasjon(tilhorendeDokumentasjon);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setInnvolveringAvEksterne(innvolveringAvEksterne);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setRisikoscenarioEtterTiltakk(risikoscenarioEtterTiltakk);
         pvoTilbakemeldingToMerge.getPvoTilbakemeldingData().setMerknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier);

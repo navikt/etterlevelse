@@ -49,6 +49,7 @@ const StepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens livsløp',
   'Behandlingens art og omfang',
+  'Tilhørende dokumentasjon',
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
@@ -87,7 +88,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   }
 
   const getRisikoscenarioStatus = (step: number) => {
-    if (step === 2) {
+    if (step === 3) {
       const generelSenario = allRisikoscenario.filter(
         (risiko: IRisikoscenario) => risiko.generelScenario
       )
@@ -297,7 +298,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
             {StepTitle.slice(2).map((title: string, index: number) => {
               let panelHref: string = window.location.pathname.slice(0, -1) + (index + 3)
 
-              if (index + 3 === 6) {
+              if (index + 3 === 7) {
                 panelHref += risikoscenarioFilterAlleUrl()
               }
 
@@ -311,7 +312,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                   pvkDokumentStatus={pvkDokument.status}
                   status={getFormStatus(pvkDokument, index)}
                   customStatusTag={
-                    index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
+                    index === 3 || index === 4 ? getRisikoscenarioStatus(index) : undefined
                   }
                   pvoView
                 />

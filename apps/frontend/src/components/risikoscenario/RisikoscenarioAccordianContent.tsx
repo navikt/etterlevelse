@@ -116,7 +116,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         risikoscenario={activeRisikoscenario}
         noCopyButton={false}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        stepUrl='5'
+        stepUrl='6'
       />
 
       <div>

@@ -62,7 +62,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
       <RisikoscenarioView
         risikoscenario={activeRisikoscenario}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        stepUrl='6'
+        stepUrl='7'
       />
 
       <div className='mt-5 flex gap-2 items-center'>
