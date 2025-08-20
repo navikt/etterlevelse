@@ -58,15 +58,15 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
                   </FormSummary.Label>
                   <FormSummary.Value>
                     {(() => {
-                      const v = fieldProp.form.values.harInvolvertRepresentant
+                      const value = fieldProp.form.values.harInvolvertRepresentant
                       if (
                         !fieldProp.form.errors.harInvolvertRepresentant &&
-                        (v === undefined || v === null)
+                        (value === undefined || value === null)
                       ) {
                         return 'Ikke besvart'
                       }
-                      if (v === true) return 'Ja'
-                      if (v === false) return 'Nei'
+                      if (value === true) return 'Ja'
+                      if (value === false) return 'Nei'
                       return ''
                     })()}
                     {fieldProp.form.errors.harInvolvertRepresentant && (
@@ -127,15 +127,15 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
                   </FormSummary.Label>
                   <FormSummary.Value>
                     {(() => {
-                      const v = fieldProp.form.values.harDatabehandlerRepresentantInvolvering
+                      const value = fieldProp.form.values.harDatabehandlerRepresentantInvolvering
                       if (
                         !fieldProp.form.errors.harDatabehandlerRepresentantInvolvering &&
-                        (v === undefined || v === null)
+                        (value === undefined || value === null)
                       ) {
                         return 'Ikke besvart'
                       }
-                      if (v === true) return 'Ja'
-                      if (v === false) return 'Nei'
+                      if (value === true) return 'Ja'
+                      if (value === false) return 'Nei'
                       return ''
                     })()}
                     {fieldProp.form.errors.harDatabehandlerRepresentantInvolvering && (
