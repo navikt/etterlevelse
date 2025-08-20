@@ -53,7 +53,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
           </div>
           <div className='w-1/2'>
             <PvoSidePanelWrapper>
-              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                 <TilhorendeDokumentasjonForm
                   pvkDokumentId={pvkDokumentId}
                   initialValue={pvoTilbakemelding.tilhorendeDokumentasjon}
@@ -61,7 +61,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
                 />
               )}
 
-              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                 <TilhorendeDokumentasjonTilbakemeldingReadOnly
                   tilbakemeldingsinnhold={pvoTilbakemelding.tilhorendeDokumentasjon}
                   sentDate={pvoTilbakemelding.sendtDato}
