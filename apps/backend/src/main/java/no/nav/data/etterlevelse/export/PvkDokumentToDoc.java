@@ -8,6 +8,8 @@ import no.nav.data.common.utils.ZipUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -238,7 +240,7 @@ public class PvkDokumentToDoc {
 
         doc.addLabel("Skriftlig beskrivelse");
         if (behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse() != null && !behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse().isBlank()) {
-            doc.addText(behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse());
+            doc.addMarkdownText(behandlingensLivslop.getBehandlingensLivslopData().getBeskrivelse());
         } else {
             doc.addText("Ingen skriftlig beskrivelse.");
         }
@@ -289,19 +291,41 @@ public class PvkDokumentToDoc {
 
             doc.newLine();
 
-            doc.addLabel("Beskjed fra personvernombudet til etterlever:");
+            doc.addLabel("Tilbakemelding til etterlever:");
             doc.newLine();
-            doc.addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere());
+            doc.addLabel("Beskjed til etterlever");
             doc.newLine();
-            doc.addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon());
-            doc.newLine();
-            doc.addLabel("Er det noe annet dere ønsker å formidle til etterlever?");
             if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
                 doc.addText("Ingen merknad.");
             } else {
                 doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
             }
+            doc.newLine();
+            doc.addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere());
+            doc.newLine();
+            doc.addLabel("Beskriv anbefalingen nærmere:");
+            if (pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse().isEmpty()) {
+                doc.addText("Ingen merknad.");
+            } else {
+                doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse());
+            }
+            doc.newLine();
+            doc.addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon());
+            doc.newLine();
+            doc.addLabel("Beskriv anbefalingen nærmere:");
+            if (pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse().isEmpty()) {
+                doc.addText("Ingen merknad.");
+            } else {
+                doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse());
+            }
+            doc.newLine();
 
+            doc.addLabel("Personvernombudets vurdering");
+            doc.addText(CodelistService.getCodelist(ListName.PVO_VURDERING, pvoTilbakemelding.getPvoTilbakemeldingData().getPvoVurdering()).getDescription());
+            doc.newLine();
+            doc.addBooleanDataText("PVO vil følge opp endringer dere gjør.", pvoTilbakemelding.getPvoTilbakemeldingData().getPvoFolgeOppEndringer());
+            doc.newLine();
+            doc.addBooleanDataText("PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.", pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur());
             doc.newLine();
 
             doc.addLabel("Kommentar fra etterlever til risikoeier:");
