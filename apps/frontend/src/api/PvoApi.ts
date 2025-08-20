@@ -134,6 +134,18 @@ export const mapPvoTilbakemeldingToFormValue = (
       internDiskusjon: '',
       tilbakemeldingTilEtterlevere: '',
     },
+    tilhorendeDokumentasjon: pvoTilbakemelding.tilhorendeDokumentasjon || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      internDiskusjon: '',
+      behandlingskatalogDokumentasjonTilstrekkelig: '',
+      behandlingskatalogDokumentasjonTilbakemelding: '',
+      kravDokumentasjonTilstrekkelig: '',
+      kravDokumentasjonTilbakemelding: '',
+      risikovurderingTilstrekkelig: '',
+      risikovurderingTilbakemelding: '',
+    },
+
     innvolveringAvEksterne: pvoTilbakemelding.innvolveringAvEksterne || {
       sistRedigertAv: '',
       sistRedigertDato: '',
