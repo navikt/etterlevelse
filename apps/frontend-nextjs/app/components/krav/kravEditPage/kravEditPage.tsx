@@ -28,7 +28,8 @@ export const KravEditPage = () => {
       {krav && krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
         <KravEditUtgattKrav krav={krav} />
       )}
-      {(krav && krav.status !== EKravStatus.UTGAATT) || (user.isAdmin() && <KravEdit />)}
+      {(krav && krav.status !== EKravStatus.UTGAATT) ||
+        (user.isAdmin() && <KravEdit krav={krav} kravData={kravData} />)}
     </>
   )
 }
