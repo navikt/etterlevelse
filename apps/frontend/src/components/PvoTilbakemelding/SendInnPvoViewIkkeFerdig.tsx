@@ -222,7 +222,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 await setFieldValue('vilFaPvkIRetur', false)
               }}
             >
-              Nullstill radio valgene
+              Nullstill valg
             </Button>
           </div>
         </div>

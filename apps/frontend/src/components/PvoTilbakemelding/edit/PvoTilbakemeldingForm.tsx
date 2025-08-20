@@ -169,7 +169,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 markdown
                 height='15.625rem'
                 name='internDiskusjon'
-                label='Skriv eventuelt intern PVO-notater her'
+                label='Skriv eventuelt interne PVO-notater her'
                 caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
                 commentField={true}
               />
@@ -214,7 +214,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                   await setFieldValue('bidragsVurdering', '')
                 }}
               >
-                Nullstill radio valgene
+                Nullstill valg
               </Button>
             </div>
 

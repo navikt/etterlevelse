@@ -1,4 +1,4 @@
-import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
+import { ContentLayout } from '@/components/others/layout/content/content'
 import { Heading, Skeleton } from '@navikt/ds-react'
 import * as _ from 'lodash'
 

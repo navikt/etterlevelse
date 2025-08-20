@@ -32,7 +32,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
         {tilbakemeldingsinnhold &&
           tilbakemeldingsinnhold.internDiskusjon &&
           tilbakemeldingsinnhold.internDiskusjon.length !== 0 && (
-            <Markdown source={tilbakemeldingsinnhold.internDiskusjon} />
+            <Markdown source={tilbakemeldingsinnhold.internDiskusjon} escapeHtml={false} />
           )}
         <BodyLong>
           {(!tilbakemeldingsinnhold ||
@@ -52,7 +52,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
     )}
 
     <div>
-      <Label>Vurdéring av etterleverens svar.</Label>
+      <Label>Vurdering av etterleverens svar.</Label>
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
         {tilbakemeldingsinnhold &&

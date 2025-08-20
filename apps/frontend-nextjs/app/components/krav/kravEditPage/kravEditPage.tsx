@@ -1,6 +1,7 @@
 'use client'
 
-import { GetKravData, IKravDataProps, TKravById } from '@/api/krav/kravEdit/kravEditApi'
+import { GetKravData } from '@/api/krav/edit/kravEditApi'
+import { IKravDataProps, TKravById } from '@/constants/krav/edit/kravEditConstant'
 import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { user } from '@/services/user/userService'
 import { useParams } from 'next/navigation'

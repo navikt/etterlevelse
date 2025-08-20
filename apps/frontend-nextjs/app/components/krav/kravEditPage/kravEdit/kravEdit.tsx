@@ -1,6 +1,6 @@
 import { kravMapToFormVal } from '@/api/krav/kravApi'
-import { IKravDataProps } from '@/api/krav/kravEdit/kravEditApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { IKravDataProps } from '@/constants/krav/edit/kravEditConstant'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { kravEditValidation } from '@/test/validation/kravEditValidation'
 import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'

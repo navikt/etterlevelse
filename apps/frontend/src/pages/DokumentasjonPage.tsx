@@ -374,7 +374,7 @@ export const DokumentasjonPage = () => {
                                 EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
                                 EPvkDokumentStatus.TRENGER_GODKJENNING,
                               ].includes(pvkDokument.status) &&
-                              'Les PVO-tilbakemelding'}
+                              'Les tilbakemelding fra PVO'}
                             {!pvkDokumentNotStarted &&
                               pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
                               'Revurdér PVK'}

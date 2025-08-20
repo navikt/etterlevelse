@@ -30,30 +30,33 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
 }) => (
   <div className='w-full'>
     <ContentLayout>
-      <InvolveringAvEksterneReadOnlyContent
-        personkategorier={personkategorier}
-        databehandlere={databehandlere}
-        pvkDokument={pvkDokument}
-      />
-      {/* PVO sidepanel */}
-      <div>
-        <PvoSidePanelWrapper>
-          {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-            <PvoTilbakemeldingReadOnly
-              tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
-              sentDate={pvoTilbakemelding.sendtDato}
-              forPvo={true}
-            />
-          )}
-          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-            <PvoTilbakemeldingForm
-              pvkDokumentId={pvkDokument.id}
-              fieldName='innvolveringAvEksterne'
-              initialValue={pvoTilbakemelding.innvolveringAvEksterne}
-              formRef={formRef}
-            />
-          )}
-        </PvoSidePanelWrapper>
+      <div className='flex gap-8'>
+        <div className='w-1/2'>
+          <InvolveringAvEksterneReadOnlyContent
+            personkategorier={personkategorier}
+            databehandlere={databehandlere}
+            pvkDokument={pvkDokument}
+          />
+        </div>
+        <div className='w-1/2'>
+          <PvoSidePanelWrapper>
+            {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+              <PvoTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
+                sentDate={pvoTilbakemelding.sendtDato}
+                forPvo={true}
+              />
+            )}
+            {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+              <PvoTilbakemeldingForm
+                pvkDokumentId={pvkDokument.id}
+                fieldName='innvolveringAvEksterne'
+                initialValue={pvoTilbakemelding.innvolveringAvEksterne}
+                formRef={formRef}
+              />
+            )}
+          </PvoSidePanelWrapper>
+        </div>
       </div>
     </ContentLayout>
     <PvoFormButtons

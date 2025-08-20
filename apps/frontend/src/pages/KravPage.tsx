@@ -283,7 +283,7 @@ export const KravPage = () => {
                           navigate(kravRedigeringIdUrl(krav.id))
                         }}
                       >
-                        Rediger krav
+                        Redigér krav
                       </Button>
                     )}
 

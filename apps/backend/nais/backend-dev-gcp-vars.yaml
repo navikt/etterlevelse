@@ -4,6 +4,7 @@ replies:
   - https://etterlevelse-api.intern.dev.nav.no/oauth2/callback
   - https://etterlevelse.ansatt.dev.nav.no/oauth2/callback
   - https://etterlevelse.intern.dev.nav.no/oauth2/callback
+  - https://etterlevelse-nextjs.intern.dev.nav.no/oauth2/callback
   - http://localhost:8080/oauth2/callback
   - http://localhost:3000/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.dev.nav.no
@@ -11,7 +12,7 @@ p360_ingress: nav-test.public360online.com
 cluster_location: dev-gcp
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
-    value: https://etterlevelse.ansatt.dev.nav.no,https://etterlevelse.intern.dev.nav.no,https://etterlevelse-api.intern.dev.nav.no,http://localhost:3000
+    value: https://etterlevelse.ansatt.dev.nav.no,https://etterlevelse.intern.dev.nav.no,https://etterlevelse-nextjs.intern.dev.nav.no,https://etterlevelse-api.intern.dev.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.intern.dev.nav.no
   - name: CLIENT_TEAMCAT_FRONTEND_URL

@@ -13,11 +13,11 @@ import {
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
-import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
 import { ContentLayout } from '../layout/layout'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
 import ArtOgOmfangReadOnlyContent from './readOnly/ArtOgOmfangReadOnlyContent'
@@ -310,12 +310,12 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
 
         {/* sidepanel */}
         {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvoSidePanelWrapper>
+          <PvkSidePanelWrapper>
             <PvoTilbakemeldingReadOnly
               tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
               sentDate={pvoTilbakemelding.sendtDato}
             />
-          </PvoSidePanelWrapper>
+          </PvkSidePanelWrapper>
         )}
       </ContentLayout>
       <FormButtons

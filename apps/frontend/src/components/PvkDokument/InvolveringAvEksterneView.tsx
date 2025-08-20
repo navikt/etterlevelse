@@ -13,12 +13,12 @@ import {
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
-import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
 import { ExternalLink } from '../common/RouteLink'
 import { ContentLayout } from '../layout/layout'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
 import InvolveringAvEksterneReadOnlyContent from './readOnly/InvolveringAvEksterneReadOnlyContent'
@@ -382,12 +382,12 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
         {/* sidepanel */}
 
         {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvoSidePanelWrapper>
+          <PvkSidePanelWrapper>
             <PvoTilbakemeldingReadOnly
               tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
               sentDate={pvoTilbakemelding.sendtDato}
             />
-          </PvoSidePanelWrapper>
+          </PvkSidePanelWrapper>
         )}
       </ContentLayout>
       <FormButtons

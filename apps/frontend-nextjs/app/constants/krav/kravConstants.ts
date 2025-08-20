@@ -14,7 +14,7 @@ export enum EKravStatus {
 }
 
 export interface IKrav extends IDomainObject {
-  id: string
+  kravId: string
   kravNummer: number
   kravVersjon: number
   navn: string
@@ -67,8 +67,8 @@ export interface IKravVersjon {
   kravStatus: string
 }
 
-export type TKravIdParams = TOr<{ id?: string }, { kravNummer: string; kravVersjon: string }>
-export type TKravId = TOr<{ id?: string }, { kravNummer: number; kravVersjon: number }>
+export type TKravIdParams = TOr<{ kravId?: string }, { kravNummer: string; kravVersjon: string }>
+export type TKravId = TOr<{ kravId?: string }, { kravNummer: number; kravVersjon: number }>
 
 export type TKravViewInfoProps = {
   krav: TKravQL

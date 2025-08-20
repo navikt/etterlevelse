@@ -36,7 +36,7 @@ export const TilbakemeldingEdit: FunctionComponent<TProps> = ({
   return (
     <div className='items-end'>
       <Textarea
-        label='Rediger melding'
+        label='Redigér melding'
         hideLabel
         minRows={15}
         onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>

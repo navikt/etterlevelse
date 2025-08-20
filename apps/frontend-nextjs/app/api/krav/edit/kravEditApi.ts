@@ -1,27 +1,14 @@
+import { IKravDataProps } from '@/constants/krav/edit/kravEditConstant'
 import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
-import { ApolloQueryResult, WatchQueryFetchPolicy, useQuery } from '@apollo/client'
-
-export type TKravById = {
-  kravById: TKravQL
-}
-
-export interface IKravDataProps {
-  kravQuery: TKravById
-  kravLoading: boolean
-  reloadKrav: Promise<
-    ApolloQueryResult<{
-      kravById: TKravQL
-    }>
-  >
-}
+import { WatchQueryFetchPolicy, useQuery } from '@apollo/client'
 
 export const GetKravData = (
   params: Readonly<Partial<TKravIdParams>>
 ): IKravDataProps | undefined => {
   const filter = {
     variables: getQueryVariableFromParams(params),
-    skip: (!params.id || params.id === 'ny') && !params.kravNummer,
+    skip: (!params.kravId || params.kravId === 'ny') && !params.kravNummer,
     fetchPolicy: 'no-cache' as WatchQueryFetchPolicy,
   }
 
@@ -38,7 +25,7 @@ export const GetKravData = (
 }
 
 interface IPropsID {
-  id: string
+  kravId: string
 }
 
 interface IPropsKravNummerVersjon {
@@ -51,8 +38,8 @@ type TPropsGetQueryVariableFromParams = IPropsID | IPropsKravNummerVersjon | und
 function getQueryVariableFromParams(
   params: Readonly<Partial<TKravIdParams>>
 ): TPropsGetQueryVariableFromParams {
-  if (params.id) {
-    return { id: params.id }
+  if (params.kravId) {
+    return { kravId: params.kravId }
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),

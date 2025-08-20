@@ -28,7 +28,6 @@ import {
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
-import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import BehandlingensLivslopReadOnlyContent from '../behandlingensLivlop/BehandlingensLivslopReadonlyContent'
 import BehandlingensLivsLopSidePanel from '../behandlingensLivlop/BehandlingensLivslopSidePanel'
@@ -38,6 +37,7 @@ import behandlingensLivslopSchema from '../behandlingensLivlop/behandlingensLivs
 import { TextAreaField } from '../common/Inputs'
 import { ContentLayout } from '../layout/layout'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
 
@@ -276,28 +276,29 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           {/* Sidepanel */}
           {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <div>
-              <PvoSidePanelWrapper>
+              <PvkSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
                   tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
                   sentDate={pvoTilbakemelding.sendtDato}
                 />
-              </PvoSidePanelWrapper>
+              </PvkSidePanelWrapper>
             </div>
           )}
 
-          {!pvoTilbakemelding ||
-            (pvoTilbakemelding && pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-              // Don't remove this div. Sticky will not work without it.
-              <div>
-                <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
-                  <div className='overflow-auto h-[90vh]'>
-                    <BehandlingensLivsLopSidePanel
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    />
-                  </div>
+          {(!pvoTilbakemelding ||
+            (pvoTilbakemelding &&
+              pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) && (
+            // Don't remove this div. Sticky will not work without it.
+            <div>
+              <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
+                <div className='overflow-auto h-[90vh]'>
+                  <BehandlingensLivsLopSidePanel
+                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  />
                 </div>
               </div>
-            ))}
+            </div>
+          )}
           {/* Slutt på sidepanel innhold*/}
         </ContentLayout>
       )}

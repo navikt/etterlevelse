@@ -124,8 +124,8 @@ export const KravEditPage = () => {
     <>
       {krav && krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
         <PageLayout
-          pageTitle='Rediger krav'
-          currentPage='Rediger krav'
+          pageTitle='Redigér krav'
+          currentPage='Redigér krav'
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
         >
@@ -149,8 +149,8 @@ export const KravEditPage = () => {
 
       {krav && (krav.status !== EKravStatus.UTGAATT || user.isAdmin()) && (
         <PageLayout
-          pageTitle='Rediger krav'
-          currentPage='Rediger krav'
+          pageTitle='Redigér krav'
+          currentPage='Redigér krav'
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={'K' + krav?.kravNummer + '/' + krav?.kravVersjon}
         >
@@ -174,7 +174,7 @@ export const KravEditPage = () => {
                     <div>
                       <div className='w-full'>
                         <Heading level='1' size='medium'>
-                          Rediger krav
+                          Redigér krav
                         </Heading>
                         <Heading level='2' size='small'>
                           {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}{' '}
