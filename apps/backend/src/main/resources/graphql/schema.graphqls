@@ -286,6 +286,7 @@ type PvoTilbakemelding {
     etterlevelseDokumentasjonData: EtterlevelseDokumentasjon
     behandlingenslivslop: Tilbakemeldingsinnhold!
     behandlingensArtOgOmfang: Tilbakemeldingsinnhold!
+    tilhorendeDokumentasjon: TilhorendeDokumentasjonTilbakemelding!
     innvolveringAvEksterne: Tilbakemeldingsinnhold!
     risikoscenarioEtterTiltakk: Tilbakemeldingsinnhold!
     merknadTilEtterleverEllerRisikoeier: String
@@ -308,6 +309,18 @@ type Tilbakemeldingsinnhold {
     bidragsVurdering: String
     internDiskusjon: String
     tilbakemeldingTilEtterlevere: String
+}
+
+type TilhorendeDokumentasjonTilbakemelding {
+    sistRedigertAv: String
+    sistRedigertDato: DateTime
+    internDiskusjon: String
+    behandlingskatalogDokumentasjonTilstrekkelig: String
+    behandlingskatalogDokumentasjonTilbakemelding: String
+    kravDokumentasjonTilstrekkelig: String
+    kravDokumentasjonTilbakemelding: String
+    risikovurderingTilstrekkelig: String
+    risikovurderingTilbakemelding: String
 }
 
 enum PvoTilbakemeldingStatus {

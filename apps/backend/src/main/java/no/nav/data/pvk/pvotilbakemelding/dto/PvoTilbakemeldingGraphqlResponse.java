@@ -36,6 +36,7 @@ public class PvoTilbakemeldingGraphqlResponse extends PvoTilbakemeldingResponse 
                 .sendtDato(pvoTilbakemeldingData.getSendtDato())
                 .behandlingenslivslop(pvoTilbakemeldingData.getBehandlingenslivslop())
                 .behandlingensArtOgOmfang(pvoTilbakemeldingData.getBehandlingensArtOgOmfang())
+                .tilhorendeDokumentasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon())
                 .innvolveringAvEksterne(pvoTilbakemeldingData.getInnvolveringAvEksterne())
                 .risikoscenarioEtterTiltakk(pvoTilbakemeldingData.getRisikoscenarioEtterTiltakk())
                 .ansvarlig(pvoTilbakemelding.getPvoTilbakemeldingData().getAnsvarlig())
