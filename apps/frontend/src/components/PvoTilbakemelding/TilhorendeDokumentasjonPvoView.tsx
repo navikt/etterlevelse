@@ -9,6 +9,7 @@ import {
 import { TilhorendeDokumentasjonContent } from '../PvkDokument/readOnly/TilhorendeDokumentasjonContent'
 import { ContentLayout } from '../layout/layout'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
+import TilhorendeDokumentasjonTilbakemeldingReadOnly from './common/TilhorendeDokumentasjonTilbakemeldingReadOnly'
 import PvoFormButtons from './edit/PvoFormButtons'
 import TilhorendeDokumentasjonForm from './edit/TilhorendeDokumentasjonForm'
 
@@ -52,11 +53,19 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
           </div>
           <div className='w-1/2'>
             <PvoSidePanelWrapper>
-              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                 <TilhorendeDokumentasjonForm
                   pvkDokumentId={pvkDokumentId}
                   initialValue={pvoTilbakemelding.tilhorendeDokumentasjon}
                   formRef={formRef}
+                />
+              )}
+
+              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                <TilhorendeDokumentasjonTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={pvoTilbakemelding.tilhorendeDokumentasjon}
+                  sentDate={pvoTilbakemelding.sendtDato}
+                  forPvo={true}
                 />
               )}
             </PvoSidePanelWrapper>
