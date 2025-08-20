@@ -57,11 +57,18 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
                     Har dere involvert en representant for de registrerte?
                   </FormSummary.Label>
                   <FormSummary.Value>
-                    {!fieldProp.form.errors.harInvolvertRepresentant &&
-                      (fieldProp.form.values.harInvolvertRepresentant === undefined ||
-                        fieldProp.form.values.harInvolvertRepresentant === null) &&
-                      'Ikke besvart'}
-                    {fieldProp.form.values.harInvolvertRepresentant ? 'Ja' : 'Nei'}
+                    {(() => {
+                      const v = fieldProp.form.values.harInvolvertRepresentant
+                      if (
+                        !fieldProp.form.errors.harInvolvertRepresentant &&
+                        (v === undefined || v === null)
+                      ) {
+                        return 'Ikke besvart'
+                      }
+                      if (v === true) return 'Ja'
+                      if (v === false) return 'Nei'
+                      return ''
+                    })()}
                     {fieldProp.form.errors.harInvolvertRepresentant && (
                       <FormAlert>
                         {fieldProp.form.errors.harInvolvertRepresentant as string}
@@ -119,12 +126,18 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
                     Har dere involvert en representant for databehandlere?
                   </FormSummary.Label>
                   <FormSummary.Value>
-                    {!fieldProp.form.errors.harDatabehandlerRepresentantInvolvering &&
-                      (fieldProp.form.values.harDatabehandlerRepresentantInvolvering ===
-                        undefined ||
-                        fieldProp.form.values.harDatabehandlerRepresentantInvolvering === null) &&
-                      'Ikke besvart'}
-                    {fieldProp.form.values.harDatabehandlerRepresentantInvolvering ? 'Ja' : 'Nei'}
+                    {(() => {
+                      const v = fieldProp.form.values.harDatabehandlerRepresentantInvolvering
+                      if (
+                        !fieldProp.form.errors.harDatabehandlerRepresentantInvolvering &&
+                        (v === undefined || v === null)
+                      ) {
+                        return 'Ikke besvart'
+                      }
+                      if (v === true) return 'Ja'
+                      if (v === false) return 'Nei'
+                      return ''
+                    })()}
                     {fieldProp.form.errors.harDatabehandlerRepresentantInvolvering && (
                       <FormAlert>
                         {fieldProp.form.errors.harDatabehandlerRepresentantInvolvering as string}
