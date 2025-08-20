@@ -203,6 +203,100 @@ export const TilhorendeDokumentasjonForm: FunctionComponent<TProps> = ({
                   label='Skriv tilbakemelding til etterleveren'
                 />
               </div>
+
+              <Heading level='3' size='xsmall' className='my-5'>
+                PVK-relaterte etterlevelseskrav
+              </Heading>
+
+              <Field name='kravDokumentasjonTilstrekkelig'>
+                {(fieldProps: FieldProps) => (
+                  <RadioGroup
+                    legend='Vurdér om kravdokumentasjon er tilstrekkelig.'
+                    value={fieldProps.field.value}
+                    onChange={(value) => {
+                      fieldProps.form.setFieldValue('kravDokumentasjonTilstrekkelig', value)
+                    }}
+                  >
+                    <Radio value={EBidragVerdier.TILSTREKKELIG}>Ja, tilstrekkelig </Radio>
+                    <Radio value={EBidragVerdier.TILSTREKKELIG_FORBEHOLDT}>
+                      Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som
+                      beskrives i fritekst under
+                    </Radio>
+                    <Radio value={EBidragVerdier.UTILSTREKKELIG}>
+                      Utilstrekkelig, beskrives nærmere under
+                    </Radio>
+                  </RadioGroup>
+                )}
+              </Field>
+              <div className='my-2'>
+                <Button
+                  size='small'
+                  type='button'
+                  variant='secondary'
+                  onClick={async () => {
+                    await setFieldValue('kravDokumentasjonTilstrekkelig', '')
+                  }}
+                >
+                  Nullstill valg
+                </Button>
+              </div>
+
+              <div className='my-5'>
+                <TextAreaField
+                  noPlaceholder
+                  markdown
+                  height='15.625rem'
+                  name='kravDokumentasjonTilbakemelding'
+                  label='Skriv tilbakemelding til etterleveren'
+                />
+              </div>
+
+              <Heading level='3' size='xsmall' className='my-5'>
+                Risiko- og sårbarhetsvurdering (ROS)
+              </Heading>
+
+              <Field name='risikovurderingTilstrekkelig'>
+                {(fieldProps: FieldProps) => (
+                  <RadioGroup
+                    legend='Vurdér om risikovurderingen(e) er tilstrekkelig.'
+                    value={fieldProps.field.value}
+                    onChange={(value) => {
+                      fieldProps.form.setFieldValue('risikovurderingTilstrekkelig', value)
+                    }}
+                  >
+                    <Radio value={EBidragVerdier.TILSTREKKELIG}>Ja, tilstrekkelig </Radio>
+                    <Radio value={EBidragVerdier.TILSTREKKELIG_FORBEHOLDT}>
+                      Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som
+                      beskrives i fritekst under
+                    </Radio>
+                    <Radio value={EBidragVerdier.UTILSTREKKELIG}>
+                      Utilstrekkelig, beskrives nærmere under
+                    </Radio>
+                  </RadioGroup>
+                )}
+              </Field>
+              <div className='my-2'>
+                <Button
+                  size='small'
+                  type='button'
+                  variant='secondary'
+                  onClick={async () => {
+                    await setFieldValue('risikovurderingTilstrekkelig', '')
+                  }}
+                >
+                  Nullstill valg
+                </Button>
+              </div>
+
+              <div className='my-5'>
+                <TextAreaField
+                  noPlaceholder
+                  markdown
+                  height='15.625rem'
+                  name='risikovurderingTilbakemelding'
+                  label='Skriv tilbakemelding til etterleveren'
+                />
+              </div>
             </div>
           </Form>
         )}
