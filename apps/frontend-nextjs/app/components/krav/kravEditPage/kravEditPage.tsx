@@ -5,6 +5,7 @@ import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { user } from '@/services/user/userService'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { KravEdit } from './kravEdit/kravEdit'
 import { KravEditUtgattKrav } from './kravEditUtgattKrav/kravEditUtgattKrav'
 
 export const KravEditPage = () => {
@@ -27,6 +28,7 @@ export const KravEditPage = () => {
       {krav && krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
         <KravEditUtgattKrav krav={krav} />
       )}
+      {(krav && krav.status !== EKravStatus.UTGAATT) || (user.isAdmin() && <KravEdit />)}
     </>
   )
 }
