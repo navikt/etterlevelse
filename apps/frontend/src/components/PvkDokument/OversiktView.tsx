@@ -4,6 +4,7 @@ import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/Behan
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EEtterlevelseStatus,
   ERisikoscenarioType,
   IBehandlingensLivslop,
   IPageResponse,
@@ -13,6 +14,8 @@ import {
   ITeamResource,
   ITiltak,
   TEtterlevelseDokumentasjonQL,
+  TEtterlevelseQL,
+  TKravQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -27,6 +30,11 @@ type TProps = {
   activeStep: number
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
 }
 
 export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Element | undefined => {
@@ -93,6 +101,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
   activeStep,
   setSelectedStep,
   updateTitleUrlAndStep,
+  pvkKrav,
 }) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -212,6 +221,57 @@ export const OversiktView: FunctionComponent<TProps> = ({
           )}
         </div>
       )
+    }
+  }
+
+  const getTilhorendeDokumentasjonStatusTags = () => {
+    const antallBehandlinger = etterlevelseDokumentasjon.behandlinger?.length || 0
+    const totalPvkKrav = pvkKrav?.krav.totalElements || 0
+    const antallRisikovuderinger = etterlevelseDokumentasjon.risikovurderinger?.length || 0
+
+    const pvkEtterlevelser: TEtterlevelseQL[] = []
+
+    pvkKrav?.krav.content.forEach((krav) => {
+      pvkEtterlevelser.push(...krav.etterlevelser)
+    })
+
+    const antallFerdigPvkKrav = pvkEtterlevelser.filter(
+      (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+    ).length
+
+    return (
+      <div className='gap-2 flex pt-1'>
+        <Tag variant={antallBehandlinger > 0 ? 'success' : 'neutral'} size='xsmall'>
+          {antallBehandlinger} behandling{antallBehandlinger !== 1 ? 'er' : ''}
+        </Tag>
+
+        <Tag
+          variant={
+            antallFerdigPvkKrav === totalPvkKrav
+              ? 'success'
+              : antallFerdigPvkKrav === 0
+                ? 'neutral'
+                : 'warning'
+          }
+          size='xsmall'
+        >
+          {antallFerdigPvkKrav} av {totalPvkKrav} krav ferdigstilt
+        </Tag>
+
+        <Tag variant={antallRisikovuderinger > 0 ? 'success' : 'neutral'}>
+          {antallRisikovuderinger} risikovurdering{antallRisikovuderinger !== 1 ? 'er' : ''}
+        </Tag>
+      </div>
+    )
+  }
+
+  const getCustomStatusTags = (index: number) => {
+    if (index === 1) {
+      return getTilhorendeDokumentasjonStatusTags()
+    } else if (index === 3 || index === 4) {
+      return getRisikoscenarioStatus(index)
+    } else {
+      return undefined
     }
   }
 
@@ -340,9 +400,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
                   status={getFormStatus(pvkDokument, index)}
-                  customStatusTag={
-                    index === 3 || index === 4 ? getRisikoscenarioStatus(index) : undefined
-                  }
+                  customStatusTag={getCustomStatusTags(index)}
                 />
               )
             })}

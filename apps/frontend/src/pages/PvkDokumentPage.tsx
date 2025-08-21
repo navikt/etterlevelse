@@ -232,6 +232,7 @@ export const PvkDokumentPage = () => {
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
+                      pvkKrav={pvkKrav}
                     />
                   )}
                   {activeStep === 2 && (
