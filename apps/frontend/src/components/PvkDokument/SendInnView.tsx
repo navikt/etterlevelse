@@ -50,6 +50,7 @@ import BehandlingensLivslopSummary from './formSummary/BehandlingensLivslopSumma
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioEtterTitak from './formSummary/RisikoscenarioEtterTiltakSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
+import TilhorendeDokumentasjonSummary from './formSummary/TilhorendeDokumentasjonSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -423,6 +424,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 <ArtOgOmFangSummary
                   personkategorier={personkategorier}
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
+                />
+
+                <TilhorendeDokumentasjonSummary
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  pvkKrav={pvkKrav}
                 />
 
                 <InvolveringSummary
