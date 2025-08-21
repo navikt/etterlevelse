@@ -21,7 +21,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
   customStepNumber,
 }) => {
   const currentPath: string = window.location.pathname
-  const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
+  const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 7}`
 
   return (
     <FormSummary className='my-3'>
