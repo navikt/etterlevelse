@@ -19,7 +19,7 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
 }) => {
   const [antallFerdigVurdert, setAntallFerdigVurdert] = useState<number>(0)
   const currentPath: string = window.location.pathname
-  const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
+  const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 7}`
 
   useEffect(() => {
     if (alleRisikoscenario.length !== 0) {

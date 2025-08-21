@@ -428,7 +428,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 <InvolveringSummary
                   databehandlere={databehandlere}
                   personkategorier={personkategorier}
-                  updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
 
                 <RisikoscenarioSummary
