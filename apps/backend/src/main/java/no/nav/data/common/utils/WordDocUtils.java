@@ -15,9 +15,7 @@ import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
@@ -475,10 +473,14 @@ public class WordDocUtils {
 
         addHeading3("Behandlinger i Behandlingskatalogen");
         addLabel("Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.");
-        addText(vurderingsBidragToText(tilbakemelding.getBehandlingskatalogDokumentasjonTilstrekkelig()));
+        if(tilbakemelding != null) {
+            addText(vurderingsBidragToText(tilbakemelding.getBehandlingskatalogDokumentasjonTilstrekkelig()));
+        } else {
+            addText("Ingen vurdering");
+        }
         newLine();
         addLabel("Tilbakemelding");
-        if (tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding() != null && !tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding().isBlank()) {
+        if (tilbakemelding != null && tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding() != null && !tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding().isBlank()) {
             addMarkdownText(tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding());
         } else {
             addText("Ingen tilbakemelding");
@@ -487,10 +489,15 @@ public class WordDocUtils {
 
         addHeading3("PVK-relaterte etterlevelseskrav");
         addLabel("Vurdering om kravdokumentasjon er tilstrekkelig.");
-        addText(vurderingsBidragToText(tilbakemelding.getKravDokumentasjonTilstrekkelig()));
+        if(tilbakemelding != null) {
+            addText(vurderingsBidragToText(tilbakemelding.getKravDokumentasjonTilstrekkelig()));
+
+        } else {
+            addText("Ingen vurdering");
+        }
         newLine();
         addLabel("Tilbakemelding");
-        if (tilbakemelding.getKravDokumentasjonTilbakemelding() != null && !tilbakemelding.getKravDokumentasjonTilbakemelding().isBlank()) {
+        if (tilbakemelding != null && tilbakemelding.getKravDokumentasjonTilbakemelding() != null && !tilbakemelding.getKravDokumentasjonTilbakemelding().isBlank()) {
             addMarkdownText(tilbakemelding.getKravDokumentasjonTilbakemelding());
         } else {
             addText("Ingen tilbakemelding");
@@ -499,10 +506,14 @@ public class WordDocUtils {
 
         addHeading3("Risiko- og sårbarhetsvurdering (ROS)");
         addLabel("Vurdering om risikovurderingen(e) er tilstrekkelig.");
-        addText(vurderingsBidragToText(tilbakemelding.getRisikovurderingTilstrekkelig()));
+        if(tilbakemelding != null) {
+            addText(vurderingsBidragToText(tilbakemelding.getRisikovurderingTilstrekkelig()));
+        } else {
+            addText("Ingen vurdering");
+        }
         newLine();
         addLabel("Tilbakemelding");
-        if (tilbakemelding.getRisikovurderingTilbakemelding() != null && !tilbakemelding.getRisikovurderingTilbakemelding().isBlank()) {
+        if (tilbakemelding != null && tilbakemelding.getRisikovurderingTilbakemelding() != null && !tilbakemelding.getRisikovurderingTilbakemelding().isBlank()) {
             addMarkdownText(tilbakemelding.getRisikovurderingTilbakemelding());
         } else {
             addText("Ingen tilbakemelding");
@@ -664,7 +675,7 @@ public class WordDocUtils {
             case "TILSTREKKELIG_FORBEHOLDT" ->
                     "Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under";
             case "UTILSTREKELIG" -> "Utilstrekkelig, beskrives nærmere under";
-            default -> "Ingen  vurdert";
+            default -> "Ingen vurdering";
         };
     }
 
