@@ -215,6 +215,28 @@ export const OversiktView: FunctionComponent<TProps> = ({
     }
   }
 
+  const getTilhorendeDokumentasjonStatusTags = () => {
+    const antallBehandlinger = etterlevelseDokumentasjon.behandlinger?.length || 0
+
+    return (
+      <div className='gap-2 flex pt-1'>
+        <Tag variant={antallBehandlinger > 0 ? 'success' : 'neutral'} size='xsmall'>
+          {antallBehandlinger} behandling{antallBehandlinger !== 1 ? 'er' : ''}
+        </Tag>
+      </div>
+    )
+  }
+
+  const getCustomStatusTags = (index: number) => {
+    if (index === 1) {
+      return getTilhorendeDokumentasjonStatusTags()
+    } else if (index === 3 || index === 4) {
+      return getRisikoscenarioStatus(index)
+    } else {
+      return undefined
+    }
+  }
+
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
@@ -241,16 +263,6 @@ export const OversiktView: FunctionComponent<TProps> = ({
       })
     })()
   }, [])
-
-  const getCustomStatusTags = (index: number) => {
-    if (index === 1) {
-      return 'TEEST'
-    } else if (index === 3 || index === 4) {
-      return getRisikoscenarioStatus(index)
-    } else {
-      return undefined
-    }
-  }
 
   return (
     <div className='flex justify-center'>
