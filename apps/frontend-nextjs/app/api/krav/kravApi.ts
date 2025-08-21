@@ -70,7 +70,7 @@ export const createKrav = async (krav: TKravQL) => {
 
 export const updateKrav = async (krav: TKravQL) => {
   const domainToObject = kravToKravDomainObject(krav)
-  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.kravId}`, domainToObject)).data
+  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, domainToObject)).data
 }
 
 function kravToKravDomainObject(krav: TKravQL): IKrav {
@@ -81,7 +81,7 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
     relevansFor: krav.relevansFor.map((relevans) => relevans.code),
     regelverk: krav.regelverk.map((regelverk) => ({ ...regelverk, lov: regelverk.lov.code })),
     begrepIder: krav.begreper.map((begrep) => begrep.id),
-    kravIdRelasjoner: krav.kravRelasjoner.map((kravRelasjon) => kravRelasjon.kravId),
+    kravIdRelasjoner: krav.kravRelasjoner.map((kravRelasjon) => kravRelasjon.id),
     varslingsadresser: krav.varslingsadresserQl.map((varslingsadresse) => {
       return {
         adresse: varslingsadresse.adresse,
@@ -114,7 +114,7 @@ export const useSearchKrav = async (searchParams: string) => {
           if (kravRes && kravRes.status === EKravStatus.AKTIV) {
             return [
               {
-                value: kravRes.kravId,
+                value: kravRes.id,
                 label: 'K' + kravRes.kravNummer + '.' + kravRes.kravVersjon + ' ' + kravRes.navn,
                 ...kravRes,
               },
@@ -126,7 +126,7 @@ export const useSearchKrav = async (searchParams: string) => {
             .filter((krav) => krav.status === EKravStatus.AKTIV)
             .map((krav) => {
               return {
-                value: krav.kravId,
+                value: krav.id,
                 label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
                 ...krav,
               }
@@ -139,7 +139,7 @@ export const useSearchKrav = async (searchParams: string) => {
         .filter((krav) => krav.status === EKravStatus.AKTIV)
         .map((krav) => {
           return {
-            value: krav.kravId,
+            value: krav.id,
             label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
             ...krav,
           }
@@ -150,7 +150,7 @@ export const useSearchKrav = async (searchParams: string) => {
 }
 
 export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
-  kravId: krav.kravId || '',
+  id: krav.id || '',
   navn: krav.navn || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,
@@ -246,10 +246,10 @@ export const kravMainHeaderSearch = async (searchParam: string): Promise<TSearch
         url: string
       }[] = [
         {
-          value: searchResult[0].kravId,
+          value: searchResult[0].id,
           label: kravName(searchResult[0]),
           tag: EObjectType.Krav,
-          url: `krav/${searchResult[0].kravId}`,
+          url: `krav/${searchResult[0].id}`,
         },
       ]
       add(mappedResult)
