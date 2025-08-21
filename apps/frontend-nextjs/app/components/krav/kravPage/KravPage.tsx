@@ -13,8 +13,8 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
-  if (params.kravId) {
-    return { id: params.kravId }
+  if (params.kravNummer && !params.kravVersjon) {
+    return { id: params.kravNummer }
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),
