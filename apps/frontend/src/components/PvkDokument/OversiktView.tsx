@@ -242,6 +242,16 @@ export const OversiktView: FunctionComponent<TProps> = ({
     })()
   }, [])
 
+  const getCustomStatusTags = (index: number) => {
+    if (index === 1) {
+      return 'TEEST'
+    } else if (index === 3 || index === 4) {
+      return getRisikoscenarioStatus(index)
+    } else {
+      return undefined
+    }
+  }
+
   return (
     <div className='flex justify-center'>
       <div>
@@ -340,9 +350,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
                   status={getFormStatus(pvkDokument, index)}
-                  customStatusTag={
-                    index === 3 || index === 4 ? getRisikoscenarioStatus(index) : undefined
-                  }
+                  customStatusTag={getCustomStatusTags(index)}
                 />
               )
             })}
