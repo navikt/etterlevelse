@@ -238,6 +238,7 @@ export const PvoTilbakemeldingPage = () => {
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                         pvoTilbakemelding={pvoTilbakemelding}
                         formRef={formRef}
+                        pvkKrav={pvkKrav}
                       />
                     )}
                     {activeStep === 2 && (

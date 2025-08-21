@@ -25,8 +25,9 @@ import {
   ITeamResource,
   ITiltak,
   TEtterlevelseDokumentasjonQL,
+  TKravQL,
 } from '../../constants'
-import { getFormStatus } from '../PvkDokument/OversiktView'
+import { getFormStatus, getTilhorendeDokumentasjonStatusTags } from '../PvkDokument/OversiktView'
 import { FormSummaryPanel } from '../PvkDokument/common/FormSummaryPanel'
 import { ExternalLink } from '../common/RouteLink'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -43,6 +44,11 @@ type TProps = {
   updateTitleUrlAndStep: (step: number) => void
   pvoTilbakemelding: IPvoTilbakemelding
   formRef: RefObject<any>
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
 }
 
 const StepTitle: string[] = [
@@ -64,6 +70,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   updateTitleUrlAndStep,
   pvoTilbakemelding,
   formRef,
+  pvkKrav,
 }) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -139,6 +146,16 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
         </Tag>
       </div>
     )
+  }
+
+  const getCustomStatusTags = (index: number) => {
+    if (index === 1) {
+      return getTilhorendeDokumentasjonStatusTags(etterlevelseDokumentasjon, pvkKrav)
+    } else if (index === 3 || index === 4) {
+      return getRisikoscenarioStatus(index)
+    } else {
+      return undefined
+    }
   }
 
   useEffect(() => {
@@ -311,9 +328,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
                   status={getFormStatus(pvkDokument, index)}
-                  customStatusTag={
-                    index === 3 || index === 4 ? getRisikoscenarioStatus(index) : undefined
-                  }
+                  customStatusTag={getCustomStatusTags(index)}
                   pvoView
                 />
               )
