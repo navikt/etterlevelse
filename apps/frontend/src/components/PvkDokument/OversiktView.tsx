@@ -227,6 +227,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
   const getTilhorendeDokumentasjonStatusTags = () => {
     const antallBehandlinger = etterlevelseDokumentasjon.behandlinger?.length || 0
     const totalPvkKrav = pvkKrav?.krav.totalElements || 0
+    const antallRisikovuderinger = etterlevelseDokumentasjon.risikovurderinger?.length || 0
 
     const pvkEtterlevelser: TEtterlevelseQL[] = []
 
@@ -255,6 +256,10 @@ export const OversiktView: FunctionComponent<TProps> = ({
           size='xsmall'
         >
           {antallFerdigPvkKrav} av {totalPvkKrav} krav ferdigstilt
+        </Tag>
+
+        <Tag variant={antallRisikovuderinger > 0 ? 'success' : 'neutral'}>
+          {antallRisikovuderinger} risikovurdering{antallRisikovuderinger !== 1 ? 'er' : ''}
         </Tag>
       </div>
     )
