@@ -95,6 +95,54 @@ export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Elem
   }
 }
 
+export const getTilhorendeDokumentasjonStatusTags = (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
+) => {
+  const antallBehandlinger = etterlevelseDokumentasjon.behandlinger?.length || 0
+  const totalPvkKrav = pvkKrav?.krav.totalElements || 0
+  const antallRisikovuderinger = etterlevelseDokumentasjon.risikovurderinger?.length || 0
+
+  const pvkEtterlevelser: TEtterlevelseQL[] = []
+
+  pvkKrav?.krav.content.forEach((krav) => {
+    pvkEtterlevelser.push(...krav.etterlevelser)
+  })
+
+  const antallFerdigPvkKrav = pvkEtterlevelser.filter(
+    (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+  ).length
+
+  return (
+    <div className='gap-2 flex pt-1'>
+      <Tag variant={antallBehandlinger > 0 ? 'success' : 'neutral'} size='xsmall'>
+        {antallBehandlinger} behandling{antallBehandlinger !== 1 ? 'er' : ''}
+      </Tag>
+
+      <Tag
+        variant={
+          antallFerdigPvkKrav === totalPvkKrav
+            ? 'success'
+            : antallFerdigPvkKrav === 0
+              ? 'neutral'
+              : 'warning'
+        }
+        size='xsmall'
+      >
+        {antallFerdigPvkKrav} av {totalPvkKrav} krav ferdigstilt
+      </Tag>
+
+      <Tag variant={antallRisikovuderinger > 0 ? 'success' : 'neutral'} size='xsmall'>
+        {antallRisikovuderinger} dokument{antallRisikovuderinger !== 1 ? 'er' : ''}
+      </Tag>
+    </div>
+  )
+}
+
 export const OversiktView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
@@ -224,50 +272,9 @@ export const OversiktView: FunctionComponent<TProps> = ({
     }
   }
 
-  const getTilhorendeDokumentasjonStatusTags = () => {
-    const antallBehandlinger = etterlevelseDokumentasjon.behandlinger?.length || 0
-    const totalPvkKrav = pvkKrav?.krav.totalElements || 0
-    const antallRisikovuderinger = etterlevelseDokumentasjon.risikovurderinger?.length || 0
-
-    const pvkEtterlevelser: TEtterlevelseQL[] = []
-
-    pvkKrav?.krav.content.forEach((krav) => {
-      pvkEtterlevelser.push(...krav.etterlevelser)
-    })
-
-    const antallFerdigPvkKrav = pvkEtterlevelser.filter(
-      (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
-    ).length
-
-    return (
-      <div className='gap-2 flex pt-1'>
-        <Tag variant={antallBehandlinger > 0 ? 'success' : 'neutral'} size='xsmall'>
-          {antallBehandlinger} behandling{antallBehandlinger !== 1 ? 'er' : ''}
-        </Tag>
-
-        <Tag
-          variant={
-            antallFerdigPvkKrav === totalPvkKrav
-              ? 'success'
-              : antallFerdigPvkKrav === 0
-                ? 'neutral'
-                : 'warning'
-          }
-          size='xsmall'
-        >
-          {antallFerdigPvkKrav} av {totalPvkKrav} krav ferdigstilt
-        </Tag>
-
-        <Tag variant={antallRisikovuderinger > 0 ? 'success' : 'neutral'} size='xsmall'>
-          {antallRisikovuderinger} dokument{antallRisikovuderinger !== 1 ? 'er' : ''}
-        </Tag>
-      </div>
-    )
-  }
-
   const getCustomStatusTags = (index: number) => {
     if (index === 1) {
-      return getTilhorendeDokumentasjonStatusTags()
+      return getTilhorendeDokumentasjonStatusTags(etterlevelseDokumentasjon, pvkKrav)
     } else if (index === 3 || index === 4) {
       return getRisikoscenarioStatus(index)
     } else {
