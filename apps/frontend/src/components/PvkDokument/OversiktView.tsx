@@ -258,8 +258,8 @@ export const OversiktView: FunctionComponent<TProps> = ({
           {antallFerdigPvkKrav} av {totalPvkKrav} krav ferdigstilt
         </Tag>
 
-        <Tag variant={antallRisikovuderinger > 0 ? 'success' : 'neutral'}>
-          {antallRisikovuderinger} risikovurdering{antallRisikovuderinger !== 1 ? 'er' : ''}
+        <Tag variant={antallRisikovuderinger > 0 ? 'success' : 'neutral'} size='xsmall'>
+          {antallRisikovuderinger} dokument{antallRisikovuderinger !== 1 ? 'er' : ''}
         </Tag>
       </div>
     )
