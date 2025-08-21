@@ -452,7 +452,7 @@ public class WordDocUtils {
         //krav
         addHeading3("PVK-relaterte etterlevelseskrav");
         addText("Personvernkonsekvensvurdering forutsetter at dere har dokumentert etterlevelse ved alle personvernkrav. Så langt har dere:");
-        addMarkdownText("- " + 0 + " av " + antallPvkKrav + " krav er ferdig utfylt.");
+        addMarkdownText("- " + antallFerdigPvkKrav + " av " + antallPvkKrav + " krav er ferdig utfylt.");
         newLine();
 
         //ROS
@@ -490,8 +490,8 @@ public class WordDocUtils {
         addText(vurderingsBidragToText(tilbakemelding.getKravDokumentasjonTilstrekkelig()));
         newLine();
         addLabel("Tilbakemelding");
-        if (tilbakemelding.getRisikovurderingTilbakemelding() != null && !tilbakemelding.getRisikovurderingTilbakemelding().isBlank()) {
-            addMarkdownText(tilbakemelding.getRisikovurderingTilbakemelding());
+        if (tilbakemelding.getKravDokumentasjonTilbakemelding() != null && !tilbakemelding.getKravDokumentasjonTilbakemelding().isBlank()) {
+            addMarkdownText(tilbakemelding.getKravDokumentasjonTilbakemelding());
         } else {
             addText("Ingen tilbakemelding");
         }
