@@ -6,6 +6,7 @@ import {
   TEtterlevelseDokumentasjonQL,
   TKravQL,
 } from '../../constants'
+import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../PvoTilbakemelding/common/TilhorendeDokumentasjonTilbakemeldingReadOnly'
 import { ContentLayout } from '../layout/layout'
 import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import FormButtons from './edit/FormButtons'
@@ -47,7 +48,12 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
 
         {/* sidepanel */}
         {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvkSidePanelWrapper>test Tilhørende Dokumentasjon</PvkSidePanelWrapper>
+          <PvkSidePanelWrapper>
+            <TilhorendeDokumentasjonTilbakemeldingReadOnly
+              tilbakemeldingsinnhold={pvoTilbakemelding.tilhorendeDokumentasjon}
+              sentDate={pvoTilbakemelding.sendtDato}
+            />
+          </PvkSidePanelWrapper>
         )}
       </ContentLayout>
       <FormButtons

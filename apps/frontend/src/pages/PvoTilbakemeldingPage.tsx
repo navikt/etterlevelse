@@ -266,6 +266,7 @@ export const PvoTilbakemeldingPage = () => {
                     {activeStep === 4 && (
                       <TilhorendeDokumentasjonPvoView
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        pvkDokumentId={pvkDokument.id}
                         pvoTilbakemelding={pvoTilbakemelding}
                         activeStep={activeStep}
                         setActiveStep={updateTitleUrlAndStep}

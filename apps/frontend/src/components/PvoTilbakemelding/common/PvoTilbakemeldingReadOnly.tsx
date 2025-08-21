@@ -4,7 +4,7 @@ import { FunctionComponent } from 'react'
 import { ITilbakemeldingsinnhold } from '../../../constants'
 import { Markdown } from '../../common/Markdown'
 
-enum EBidragVerdier {
+export enum EBidragVerdier {
   TILSTREKKELIG = 'TILSTREKELIG',
   TILSTREKKELIG_FORBEHOLDT = 'TILSTREKKELIG_FORBEHOLDT',
   UTILSTREKKELIG = 'UTILSTREKELIG',
@@ -14,6 +14,17 @@ type TProps = {
   tilbakemeldingsinnhold: ITilbakemeldingsinnhold
   sentDate: string
   forPvo?: boolean
+}
+
+export const bidragsVerdierToText = (bidragsVerdi: EBidragVerdier) => {
+  switch (bidragsVerdi) {
+    case EBidragVerdier.TILSTREKKELIG:
+      return 'Ja, tilstrekkelig'
+    case EBidragVerdier.TILSTREKKELIG_FORBEHOLDT:
+      return 'Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under'
+    case EBidragVerdier.UTILSTREKKELIG:
+      return 'Utilstrekkelig, beskrives nærmere under'
+  }
 }
 
 export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
@@ -56,14 +67,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
         {tilbakemeldingsinnhold &&
-          tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG &&
-          'Ja, tilstrekkelig'}
-        {tilbakemeldingsinnhold &&
-          tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.TILSTREKKELIG_FORBEHOLDT &&
-          'Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under'}
-        {tilbakemeldingsinnhold &&
-          tilbakemeldingsinnhold.bidragsVurdering === EBidragVerdier.UTILSTREKKELIG &&
-          'Utilstrekkelig, beskrives nærmere under'}
+          bidragsVerdierToText(tilbakemeldingsinnhold.bidragsVurdering as EBidragVerdier)}
       </BodyLong>
     </div>
 
