@@ -27,7 +27,8 @@ type TTextEditorProps = {
   width?: string
   maxWidth?: string
   setIsFormDirty?: (v: boolean) => void
-  commentField?: boolean
+  withHighlight?: boolean
+  withUnderline?: boolean
 }
 
 export const TextEditor = ({
@@ -40,7 +41,8 @@ export const TextEditor = ({
   width,
   maxWidth,
   setIsFormDirty,
-  commentField,
+  withHighlight,
+  withUnderline,
 }: TTextEditorProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
@@ -232,14 +234,12 @@ export const TextEditor = ({
           toolbar={{
             options: simple
               ? ['inline', 'list', 'link']
-              : commentField
+              : withHighlight
                 ? ['inline', 'blockType', 'list', 'link', 'history', 'colorPicker']
                 : ['inline', 'blockType', 'list', 'link', 'history'],
             blockType: {},
             inline: {
-              options: commentField
-                ? ['bold', 'italic', 'underline', 'strikethrough']
-                : ['bold', 'italic'],
+              options: withUnderline ? ['bold', 'italic', 'underline'] : ['bold', 'italic'],
             },
             // old toolbar
             // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },
