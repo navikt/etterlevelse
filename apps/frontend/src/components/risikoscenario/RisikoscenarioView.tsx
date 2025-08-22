@@ -98,7 +98,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
 
       {(!risikoscenario.sannsynlighetsNivaaBegrunnelse ||
         risikoscenario.sannsynlighetsNivaa === 0) && (
-        <Alert className='mt-5' variant='warning'>
+        <Alert inline className='mt-5' variant='warning'>
           {risikoscenario.sannsynlighetsNivaa === 0 &&
             !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
             'Dere må gjøre sannsynlighetsvurdering'}
@@ -125,7 +125,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
-        <Alert className='mt-5' variant='warning'>
+        <Alert inline className='mt-5' variant='warning'>
           {risikoscenario.konsekvensNivaa === 0 &&
             !risikoscenario.konsekvensNivaaBegrunnelse &&
             'Dere må gjøre konsekvensvurdering'}
