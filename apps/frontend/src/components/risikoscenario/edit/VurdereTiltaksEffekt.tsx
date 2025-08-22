@@ -102,7 +102,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
             <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
             {revurdertEffektCheck && (
-              <Alert className='mt-3' variant='warning'>
+              <Alert inline className='mt-3' variant='warning'>
                 Dere må vurdere tiltakenes effekt
               </Alert>
             )}
