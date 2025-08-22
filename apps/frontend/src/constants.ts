@@ -510,6 +510,7 @@ export interface IPvkDokument {
   sendtTilPvoAv: string
 
   godkjentAvRisikoeierDato: string
+  godkjentAvRisikoeier: string
 }
 
 export interface IPvkDokumentListItem {
