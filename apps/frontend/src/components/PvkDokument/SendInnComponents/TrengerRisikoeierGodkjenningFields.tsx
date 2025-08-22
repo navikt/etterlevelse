@@ -1,6 +1,6 @@
-import { Button, Loader, TextField } from '@navikt/ds-react'
+import { Button, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useState } from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 import { arkiver } from '../../../api/P360Api'
 import {
   EPvkDokumentStatus,
