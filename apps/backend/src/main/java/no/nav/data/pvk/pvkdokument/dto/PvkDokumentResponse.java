@@ -49,6 +49,8 @@ public class PvkDokumentResponse {
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
 
+    private LocalDateTime godkjentAvRisikoeierDato;
+
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
                 .id(pvkDokument.getId())
@@ -77,6 +79,7 @@ public class PvkDokumentResponse {
                 .merknadFraRisikoeier(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier())
                 .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
                 .sendtTilPvoAv(pvkDokument.getPvkDokumentData().getSendtTilPvoAv())
+                .godkjentAvRisikoeierDato(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeierDato())
                 .build();
     }
 

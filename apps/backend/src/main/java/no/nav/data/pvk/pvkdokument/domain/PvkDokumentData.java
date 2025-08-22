@@ -37,6 +37,8 @@ public class PvkDokumentData {
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
 
+    private LocalDateTime godkjentAvRisikoeierDato;
+
     public List<CodelistResponse> ytterligereEgenskaperAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.YTTERLIGERE_EGENSKAPER, ytterligereEgenskaper);
     }
