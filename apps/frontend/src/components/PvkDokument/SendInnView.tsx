@@ -106,6 +106,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
+  const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
 
   const underarbeidCheck: boolean =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
@@ -130,7 +131,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
         } else {
           const updatedPvkDokument: IPvkDokument = {
             ...response,
-            status: submitedValues.status,
+            status:
+              response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
+                ? response.status
+                : submitedValues.status,
             sendtTilPvoDato: [
               EPvkDokumentStatus.SENDT_TIL_PVO,
               EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
@@ -150,6 +154,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
             setPvkDokument(savedResponse)
+            setAngretAvRisikoeier(false)
           })
         }
       })
@@ -582,6 +587,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
                       pvoVurderingList={pvoVurderingList}
+                      setAngretAvRisikoeier={setAngretAvRisikoeier}
                       errorSummaryComponent={
                         <SendInnErrorSummary
                           errors={errors}
