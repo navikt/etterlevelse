@@ -150,6 +150,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
             merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
+            godkjentAvRisikoeier: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
+              submitedValues.status
+            )
+              ? submitedValues.godkjentAvRisikoeier
+              : response.godkjentAvRisikoeier,
+            godkjentAvRisikoeierDato: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
+              submitedValues.status
+            )
+              ? submitedValues.godkjentAvRisikoeierDato
+              : response.godkjentAvRisikoeierDato,
           }
 
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
