@@ -47,9 +47,6 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   const isRisikoeierCheck: boolean =
     etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) || user.isAdmin()
 
-  const [risikoeier, setRisikoeier] = useState<string>('')
-  const [dato, setDato] = useState<string>('')
-
   return (
     <div>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
@@ -115,36 +112,6 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
       <div className='w-full flex justify-end items-center'>
         <ExportPvkModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
       </div>
-
-      {user.isAdmin() && (
-        <div>
-          <TextField
-            label='Risikoeier'
-            placeholder='risikoeier'
-            onChange={(e) => setRisikoeier(e.target.value)}
-            className='w-full mr-3'
-          />
-
-          <TextField
-            label='Dato'
-            placeholder='dato'
-            onChange={(e) => setDato(e.target.value)}
-            className='w-full mr-3'
-          />
-
-          <Button
-            type='button'
-            onClick={async () => {
-              await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-              await setFieldValue('godkjentAvRisikoeierDato', new Date(dato))
-              await setFieldValue('godkjentAvRisikoeier', risikoeier)
-              await submitForm()
-            }}
-          >
-            Akseptér restrisiko ADMIN TEMP FEATURE
-          </Button>
-        </div>
-      )}
     </div>
   )
 }
