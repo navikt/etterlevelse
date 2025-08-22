@@ -51,6 +51,7 @@ public class PvkDokumentRequest implements RequestElement {
     private String sendtTilPvoAv;
 
     private LocalDateTime godkjentAvRisikoeierDato;
+    private String godkjentAvRisikoeier;
 
     private Boolean update;
 
@@ -99,6 +100,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .sendtTilPvoDato(sendtTilPvoDato)
                 .sendtTilPvoAv(sendtTilPvoAv)
                 .godkjentAvRisikoeierDato(godkjentAvRisikoeierDato)
+                .godkjentAvRisikoeier(godkjentAvRisikoeier)
                 .build();
 
         return PvkDokument.builder()
@@ -129,5 +131,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
         pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoAv(sendtTilPvoAv);
         pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeierDato(godkjentAvRisikoeierDato);
+        pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeier(godkjentAvRisikoeier);
     }
 }
