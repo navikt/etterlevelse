@@ -508,6 +508,8 @@ export interface IPvkDokument {
 
   sendtTilPvoDato: string
   sendtTilPvoAv: string
+
+  godkjentAvRisikoeierDato: string
 }
 
 export interface IPvkDokumentListItem {
