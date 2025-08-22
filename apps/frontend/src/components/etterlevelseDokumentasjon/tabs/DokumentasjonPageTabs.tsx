@@ -66,6 +66,24 @@ export const DokumentasjonPageTabs = (props: IProps) => {
     }
   }, [morDocumentRelation, pvkDokument])
 
+  const scrollToPvKTab = () => {
+    if (tabQuery === 'pvk') {
+      console.debug('TRIGGER')
+      const pvkTab = document.getElementById('pvk-tab')
+      if (pvkTab) {
+        pvkTab.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        })
+      }
+    }
+  }
+
+  useEffect(() => {
+    scrollToPvKTab()
+  }, [])
+
   return (
     <div>
       <Tabs
@@ -80,7 +98,7 @@ export const DokumentasjonPageTabs = (props: IProps) => {
           <Tabs.Tab value='alleKrav' label='Alle Krav' />
           <Tabs.Tab value='prioritertKravliste' label='Prioritert kravliste' />
           {pvkDokument && pvkDokument.skalUtforePvk && (
-            <Tabs.Tab value='pvkRelaterteKrav' label='PVK-relaterte krav' />
+            <Tabs.Tab value='pvkRelaterteKrav' label='PVK-relaterte krav' id='pvk-tab' />
           )}
         </Tabs.List>
         <Tabs.Panel value='alleKrav'>
