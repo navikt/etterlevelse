@@ -49,6 +49,9 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
     risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
     risikoscenario.konsekvensNivaaEtterTiltak === null
 
+  const ikkeFerdigVurdert =
+    revurdertEffektCheck || risikoscenario.nivaaBegrunnelseEtterTiltak === ''
+
   const ikkeFerdigBeskrevet: boolean =
     risikoscenario.konsekvensNivaa === 0 ||
     risikoscenario.sannsynlighetsNivaa === 0 ||
@@ -120,7 +123,16 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                     text={getKonsekvenssnivaaText(risikoscenario.konsekvensNivaaEtterTiltak)}
                   />
                 </div>
-                <BodyLong className='mt-3'>{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
+
+                {risikoscenario.nivaaBegrunnelseEtterTiltak !== '' && (
+                  <BodyLong className='mt-3'>{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
+                )}
+
+                {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
+                  <Alert variant='warning' inline className='mt-3'>
+                    Dere må begrunne denne vurderingen av tiltakenes effekt.
+                  </Alert>
+                )}
               </div>
             )}
           </div>
@@ -146,7 +158,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
           <Button
             className='mt-3'
             type='button'
-            variant={revurdertEffektCheck ? 'primary' : 'tertiary'}
+            variant={ikkeFerdigVurdert ? 'primary' : 'tertiary'}
             onClick={async () => {
               await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
                 if (isReadOnlyPvkStatus(response.status)) {
@@ -156,7 +168,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                 }
               })
             }}
-            icon={revurdertEffektCheck ? undefined : <PencilIcon aria-hidden title='' />}
+            icon={ikkeFerdigVurdert ? undefined : <PencilIcon aria-hidden title='' />}
           >
             {revurdertEffektCheck ? 'Vurdér tiltakenes effekt' : 'Redigér tiltakenes effekt'}
           </Button>
