@@ -123,7 +123,8 @@ interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   maxCharacter?: number
   rows?: number
   setIsFormDirty?: (v: boolean) => void
-  commentField?: boolean
+  withHighlight?: boolean
+  withUnderline?: boolean
 }
 
 export const TextAreaField = (props: IPropsTextAreaField) => {
@@ -139,7 +140,8 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
     maxCharacter,
     rows,
     setIsFormDirty,
-    commentField,
+    withHighlight,
+    withUnderline,
   } = props
 
   const [mode, setMode] = useState('edit')
@@ -165,7 +167,8 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                     errors={fieldProps.form.errors}
                     name={name}
                     setIsFormDirty={setIsFormDirty}
-                    commentField={commentField}
+                    withHighlight={withHighlight}
+                    withUnderline={withUnderline}
                   />
                 )}
 
