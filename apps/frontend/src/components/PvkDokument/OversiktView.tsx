@@ -179,7 +179,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
       const kravSenario = allRisikoscenario.filter(
         (risiko: IRisikoscenario) => !risiko.generelScenario
       )
-      if (generelSenario.length === 0) {
+      if (generelSenario.length === 0 && kravSenario.length === 0 && allTiltak.length === 0) {
         return (
           <Tag variant='neutral' size='xsmall'>
             Ikke påbegynt
@@ -188,21 +188,15 @@ export const OversiktView: FunctionComponent<TProps> = ({
       } else {
         return (
           <div className='gap-2 flex pt-1'>
-            {kravSenario.length > 0 && (
-              <Tag variant='success' size='xsmall'>
-                {kravSenario.length} kravspesifikke risikoscenario
-              </Tag>
-            )}
-            {generelSenario.length > 0 && (
-              <Tag variant='success' size='xsmall'>
-                {generelSenario.length} øvrige risikoscenario
-              </Tag>
-            )}
-            {allTiltak.length > 0 && (
-              <Tag variant='success' size='xsmall'>
-                {allTiltak.length} tiltak
-              </Tag>
-            )}
+            <Tag variant={kravSenario.length === 0 ? 'neutral' : 'success'} size='xsmall'>
+              {kravSenario.length} kravspesifikke risikoscenario
+            </Tag>
+            <Tag variant={generelSenario.length === 0 ? 'neutral' : 'success'} size='xsmall'>
+              {generelSenario.length} øvrige risikoscenario
+            </Tag>
+            <Tag variant={allTiltak.length === 0 ? 'neutral' : 'success'} size='xsmall'>
+              {allTiltak.length} tiltak
+            </Tag>
           </div>
         )
       }
