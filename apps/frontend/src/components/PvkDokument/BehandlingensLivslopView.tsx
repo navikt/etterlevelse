@@ -37,6 +37,7 @@ import behandlingensLivslopSchema from '../behandlingensLivlop/behandlingensLivs
 import { TextAreaField } from '../common/Inputs'
 import { ContentLayout } from '../layout/layout'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import InfoChangesMadeAfterApproval from './common/InfoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
@@ -220,6 +221,11 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                           </Alert>
                         </div>
                       )}
+
+                      <InfoChangesMadeAfterApproval
+                        pvkDokument={pvkDokument}
+                        behandlingensLivslop={behandlingensLivslop}
+                      />
 
                       {!isSubmitting && (
                         <div className='flex gap-2 mt-5 lg:flex-row flex-col'>

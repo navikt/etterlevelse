@@ -43,6 +43,7 @@ import VurdertAvPvoFields from './SendInnComponents/VurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from './SendInnComponents/VurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
+import InfoChangesMadeAfterApproval from './common/InfoChangesMadeAfterApproval'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -615,6 +616,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       }
                     />
                   )}
+
+                <InfoChangesMadeAfterApproval
+                  pvkDokument={pvkDokument}
+                  alleRisikoscenario={alleRisikoscenario}
+                  alleTiltak={alleTiltak}
+                />
 
                 {!isLoading && (
                   <FormButtons

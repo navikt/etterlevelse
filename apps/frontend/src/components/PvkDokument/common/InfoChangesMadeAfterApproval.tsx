@@ -16,6 +16,8 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   behandlingensLivslop,
 }) => {
   const [isChangesMade, setIsChangesMade] = useState<boolean>(false)
+  const [approvedDate, setApprovedDate] = useState<string>('')
+  const [approvedTime, setApprovedTime] = useState<string>('')
 
   useEffect(() => {
     if (
@@ -27,6 +29,7 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
 
       if (
         behandlingensLivslop &&
+        behandlingensLivslop.changeStamp &&
         behandlingensLivslop.changeStamp.lastModifiedDate > lastModifiedDate
       ) {
         lastModifiedDate = behandlingensLivslop.changeStamp.lastModifiedDate
@@ -54,6 +57,11 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
 
       if (lastModifiedDate > pvkDokument.godkjentAvRisikoeierDato) {
         setIsChangesMade(true)
+        const godkjentDatoOgTid = pvkDokument.godkjentAvRisikoeierDato.split('T')
+        const dato = godkjentDatoOgTid[0].split('-')
+        const tid = godkjentDatoOgTid[1].split(':')
+        setApprovedDate(dato[2] + '-' + dato[1] + '-' + dato[0])
+        setApprovedTime(tid[0] + ':' + tid[1])
       }
     }
   }, [pvkDokument])
@@ -61,9 +69,9 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   return (
     <>
       {isChangesMade && (
-        <Alert variant='info'>
+        <Alert variant='info' className='mt-5'>
           Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
-          {pvkDokument.godkjentAvRisikoeierDato}
+          {approvedDate} kl{approvedTime}
         </Alert>
       )}
     </>

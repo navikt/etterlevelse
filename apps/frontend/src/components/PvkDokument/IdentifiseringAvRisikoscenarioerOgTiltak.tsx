@@ -13,6 +13,7 @@ import RisikoscenarioAccordianList from '../risikoscenario/RisikoscenarioAccordi
 import CreateRisikoscenarioModal from '../risikoscenario/edit/CreateRisikoscenarioModal'
 import RisikoscenarioAccordianListReadOnlyView from '../risikoscenario/readOnly/RisikoscenarioAccordianListReadOnlyView'
 import { IdentifiseringAvRisikoscenarioerOgTiltakContent } from './common/IdentifiseringAvRisikoscenarioerOgTiltakContent'
+import InfoChangesMadeAfterApproval from './common/InfoChangesMadeAfterApproval'
 import FormButtons from './edit/FormButtons'
 
 type TProps = {
@@ -110,6 +111,12 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
               />
             </div>
           )}
+
+        <InfoChangesMadeAfterApproval
+          pvkDokument={pvkDokument}
+          alleRisikoscenario={allRisikoscenarioList}
+          alleTiltak={tiltakList}
+        />
 
         <FormButtons
           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
