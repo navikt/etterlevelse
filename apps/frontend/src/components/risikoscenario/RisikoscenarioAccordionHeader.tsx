@@ -30,9 +30,7 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
       <div className='flex gap-2 mt-1'>
         {risikoscenario.ingenTiltak && <Tag variant='neutral'>Tiltak ikke aktuelt</Tag>}
 
-        {!ferdigBeskrevet && ferdigVurdert && (
-          <Tag variant='alt1'>Risikoscenarioet er mangelfullt</Tag>
-        )}
+        {!ferdigBeskrevet && <Tag variant='alt1'>Risikoscenarioet er mangelfullt</Tag>}
 
         {ferdigBeskrevet && ferdigVurdert && <Tag variant='alt3'>Ferdig vurdert </Tag>}
 

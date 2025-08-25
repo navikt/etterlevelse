@@ -146,7 +146,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
           />
         )}
 
-        {mangelfulScenario && (
+        {mangelfulScenario && ikkeFerdigVurdert && (
           <div className='my-5'>
             <Alert variant='info'>
               Det er ikke mulig å vurdere tiltakets effekt når scenario er mangelfullt.
@@ -154,7 +154,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
           </div>
         )}
 
-        {!isFormActive && !mangelfulScenario && (
+        {!isFormActive && (!mangelfulScenario || !ikkeFerdigVurdert) && (
           <Button
             className='mt-3'
             type='button'
