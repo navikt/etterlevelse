@@ -1,17 +1,19 @@
 import { Alert } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
-import { IPvkDokument, IRisikoscenario, ITiltak } from '../../../constants'
+import { IBehandlingensLivslop, IPvkDokument, IRisikoscenario, ITiltak } from '../../../constants'
 
 type TProps = {
   pvkDokument: IPvkDokument
   alleRisikoscenario?: IRisikoscenario[]
   alleTiltak?: ITiltak[]
+  behandlingensLivslop?: IBehandlingensLivslop
 }
 
 export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   pvkDokument,
   alleRisikoscenario,
   alleTiltak,
+  behandlingensLivslop,
 }) => {
   const [isChangesMade, setIsChangesMade] = useState<boolean>(false)
 
@@ -23,9 +25,16 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
     ) {
       let lastModifiedDate = pvkDokument.changeStamp.lastModifiedDate
 
+      if (
+        behandlingensLivslop &&
+        behandlingensLivslop.changeStamp.lastModifiedDate > lastModifiedDate
+      ) {
+        lastModifiedDate = behandlingensLivslop.changeStamp.lastModifiedDate
+      }
+
       if (alleRisikoscenario && alleRisikoscenario.length !== 0) {
         const sortedRisikoscenario = alleRisikoscenario.sort((a, b) =>
-          a.changeStamp.lastModifiedDate.localeCompare(b.changeStamp.lastModifiedDate)
+          b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
         )
 
         if (sortedRisikoscenario[0].changeStamp.lastModifiedDate > lastModifiedDate) {
@@ -35,7 +44,7 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
 
       if (alleTiltak && alleTiltak.length !== 0) {
         const sortedTitlak = alleTiltak.sort((a, b) =>
-          a.changeStamp.lastModifiedDate.localeCompare(b.changeStamp.lastModifiedDate)
+          b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
         )
 
         if (sortedTitlak[0].changeStamp.lastModifiedDate > lastModifiedDate) {
