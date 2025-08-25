@@ -36,7 +36,6 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
           risikoscenarioMedTiltak.filter(
             (risiko: IRisikoscenario) =>
               risiko.tiltakIds.length !== 0 &&
-              risikoscenarioFieldCheck(risiko) &&
               risiko.sannsynlighetsNivaaEtterTiltak !== 0 &&
               risiko.konsekvensNivaaEtterTiltak !== 0 &&
               risiko.nivaaBegrunnelseEtterTiltak !== ''
