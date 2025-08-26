@@ -126,7 +126,7 @@ export const useTilbakemeldinger = (
   const replace = (newTilbakemelding: ITilbakemelding) => {
     setData(
       data.map((tilbakemelding: ITilbakemelding) =>
-        tilbakemelding.id === newTilbakemelding.id ? newTilbakemelding : tilbakemelding
+        tilbakemelding.kravId === newTilbakemelding.kravId ? newTilbakemelding : tilbakemelding
       )
     )
   }
@@ -134,7 +134,7 @@ export const useTilbakemeldinger = (
     if (fjernTilbakemelding.meldinger.length) {
       setData(
         data.map((tilbakemelding: ITilbakemelding) => {
-          if (tilbakemelding.id === fjernTilbakemelding.id) {
+          if (tilbakemelding.kravId === fjernTilbakemelding.kravId) {
             return fjernTilbakemelding
           } else {
             return tilbakemelding
@@ -144,7 +144,7 @@ export const useTilbakemeldinger = (
     } else {
       setData(
         data.filter(
-          (tilbakemelding: ITilbakemelding) => tilbakemelding.id !== fjernTilbakemelding.id
+          (tilbakemelding: ITilbakemelding) => tilbakemelding.kravId !== fjernTilbakemelding.kravId
         )
       )
     }

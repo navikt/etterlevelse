@@ -50,7 +50,7 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
   }
 
   const refs: TRefs<HTMLDivElement> = useRefs<HTMLDivElement>(
-    tilbakemeldinger.map((tilbakemelding: ITilbakemelding) => tilbakemelding.id)
+    tilbakemeldinger.map((tilbakemelding: ITilbakemelding) => tilbakemelding.kravId)
   )
 
   useEffect(() => {
@@ -63,12 +63,12 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
     <div className='flex flex-col'>
       <Accordion>
         {tilbakemeldinger.slice(0, count).map((tilbakemelding: ITilbakemelding) => {
-          const focused = focusNr === tilbakemelding.id
+          const focused = focusNr === tilbakemelding.kravId
           const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(tilbakemelding)
 
           return (
-            <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>
-              <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.id)}>
+            <Accordion.Item key={tilbakemelding.kravId} open={tilbakemelding.kravId === focusNr}>
+              <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.kravId)}>
                 <div className='w-full p-2 flex'>
                   <div>
                     {tilbakemelding.endretKrav && (

@@ -123,7 +123,7 @@ export const ViewEtterlevelse: FunctionComponent<TProps> = ({
               suksesskriterium
             )
             return (
-              <div key={suksesskriterium.id} className='mb-5'>
+              <div key={suksesskriterium.kravId} className='mb-5'>
                 <Box className='bg-white' padding='4'>
                   <div className='flex justify-center mt-8 mb-4'>
                     <div className='flex flex-1'>

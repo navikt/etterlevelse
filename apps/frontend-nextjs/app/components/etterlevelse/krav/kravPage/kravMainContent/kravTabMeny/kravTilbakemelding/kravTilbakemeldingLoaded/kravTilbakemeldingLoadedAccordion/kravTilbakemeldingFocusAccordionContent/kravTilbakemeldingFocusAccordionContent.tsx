@@ -38,7 +38,7 @@ export const KravTilbakemeldingFocusAccordionContent: FunctionComponent<TProps> 
         <MeldingKnapper
           marginLeft
           melding={tilbakemelding.meldinger[0]}
-          tilbakemeldingId={tilbakemelding.id}
+          tilbakemeldingId={tilbakemelding.kravId}
           oppdater={replace}
           remove={remove}
         />

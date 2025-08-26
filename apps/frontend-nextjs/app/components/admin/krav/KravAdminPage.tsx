@@ -129,7 +129,7 @@ const KravAdminPage = () => {
             </Table.Header>
             <Table.Body>
               {sortedData.map((krav: IKrav) => (
-                <Table.Row key={krav.id}>
+                <Table.Row key={krav.kravId}>
                   <Table.HeaderCell className='w-[6%] text-end' scope='row'>
                     {krav.kravNummer}.{krav.kravVersjon}
                   </Table.HeaderCell>

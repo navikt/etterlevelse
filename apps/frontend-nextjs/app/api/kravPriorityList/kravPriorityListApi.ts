@@ -16,7 +16,7 @@ export const getKravPriorityListByTemaCode = async (temaCode: string) => {
 export const kravPrioritingMapToFormValue = (
   kravprioritylist: Partial<IKravPriorityList>
 ): IKravPriorityList => ({
-  id: kravprioritylist.id || '',
+  kravId: kravprioritylist.kravId || '',
   temaId: kravprioritylist.temaId || '',
   priorityList: kravprioritylist.priorityList || [],
   changeStamp: kravprioritylist.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },

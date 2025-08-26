@@ -62,7 +62,7 @@ export const KravNyVersjonPage = () => {
     if (kravQuery?.kravById)
       setKrav({
         ...kravQuery.kravById,
-        id: '',
+        kravId: '',
         kravVersjon: kravQuery.kravById.kravVersjon + 1,
         nyKravVersjon: true,
         status: EKravStatus.UTKAST,

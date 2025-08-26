@@ -62,10 +62,10 @@ const TilbakemeldingSvar = ({
 
   const submit = () => {
     if (response) {
-      setFokusNummer(tilbakemelding.id)
+      setFokusNummer(tilbakemelding.kravId)
 
       const request: ITilbakemeldingNewMeldingRequest = {
-        tilbakemeldingId: tilbakemelding.id,
+        tilbakemeldingId: tilbakemelding.kravId,
         rolle: replyRole,
         melding: response,
         status: tilbakeMeldingStatus,
@@ -167,7 +167,7 @@ const TilbakemeldingSvar = ({
                 className='ml-2.5'
                 onClick={() =>
                   tilbakemeldingSlettMelding({
-                    tilbakemeldingId: tilbakemelding.id,
+                    tilbakemeldingId: tilbakemelding.kravId,
                     meldingNr: 1,
                   }).then((tilbakemelding: ITilbakemelding) => {
                     remove({ ...tilbakemelding, meldinger: [] })
@@ -224,7 +224,7 @@ const TilbakemeldingSvar = ({
                     onClick={() => {
                       setIsUpdatingStatus(true)
                       updateTilbakemeldingStatusOgEndretKrav({
-                        tilbakemeldingId: tilbakemelding.id,
+                        tilbakemeldingId: tilbakemelding.kravId,
                         status: tilbakeMeldingStatus,
                         endretKrav: isEndretKrav,
                       })

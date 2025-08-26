@@ -14,7 +14,7 @@ export enum EKravStatus {
 }
 
 export interface IKrav extends IDomainObject {
-  id: string
+  kravId: string
   kravNummer: number
   kravVersjon: number
   navn: string
@@ -44,7 +44,7 @@ export interface IKrav extends IDomainObject {
 }
 
 export interface ISuksesskriterie {
-  id: number
+  kravId: number
   navn: string
   beskrivelse?: string
   behovForBegrunnelse: boolean

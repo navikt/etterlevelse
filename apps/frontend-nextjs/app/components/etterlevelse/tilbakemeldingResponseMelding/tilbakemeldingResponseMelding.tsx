@@ -44,7 +44,7 @@ const TilbakemeldingResponseMelding: FunctionComponent<TProps> = (props) => {
         {sisteMelding && (
           <MeldingKnapper
             melding={melding}
-            tilbakemeldingId={tilbakemelding.id}
+            tilbakemeldingId={tilbakemelding.kravId}
             oppdater={oppdater}
             remove={remove}
           />

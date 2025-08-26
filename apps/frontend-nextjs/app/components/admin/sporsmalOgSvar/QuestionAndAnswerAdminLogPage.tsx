@@ -173,7 +173,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
               </Table.Header>
               <Table.Body>
                 {sortedData.map((message: TKravMessage) => (
-                  <Table.Row key={message.id}>
+                  <Table.Row key={message.kravId}>
                     <Table.HeaderCell className='w-[6%]' scope='row'>
                       {' '}
                       K{message.kravNummer}.{message.kravVersjon}
@@ -184,7 +184,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
                         href={kravNummerVersjonUrl(
                           message.kravNummer,
                           message.kravVersjon,
-                          message.id
+                          message.kravId
                         )}
                       >
                         {message.kravNavn}

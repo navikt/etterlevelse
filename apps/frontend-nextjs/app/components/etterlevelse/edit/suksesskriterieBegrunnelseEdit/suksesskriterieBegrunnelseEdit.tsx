@@ -7,12 +7,12 @@ export const getSuksesskriterieBegrunnelse = (
 ): ISuksesskriterieBegrunnelse => {
   const suksesskriterieBegrunnelse = suksesskriterieBegrunnelser.find(
     (item: ISuksesskriterieBegrunnelse) => {
-      return item.suksesskriterieId === suksessKriterie.id
+      return item.suksesskriterieId === suksessKriterie.kravId
     }
   )
   if (!suksesskriterieBegrunnelse) {
     return {
-      suksesskriterieId: suksessKriterie.id,
+      suksesskriterieId: suksessKriterie.kravId,
       begrunnelse: '',
       behovForBegrunnelse: suksessKriterie.behovForBegrunnelse,
       suksesskriterieStatus: undefined,

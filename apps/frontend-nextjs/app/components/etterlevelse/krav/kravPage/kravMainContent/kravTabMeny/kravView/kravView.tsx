@@ -12,7 +12,7 @@ export const KravView: FunctionComponent<TProps> = ({ krav }) => (
     <div className='w-full'>
       {krav.suksesskriterier.map((suksesskriterium: ISuksesskriterie, index: number) => (
         <SuksesskriterieCard
-          key={suksesskriterium.id}
+          key={suksesskriterium.kravId}
           suksesskriterie={suksesskriterium}
           number={index + 1}
           totalt={krav.suksesskriterier.length}

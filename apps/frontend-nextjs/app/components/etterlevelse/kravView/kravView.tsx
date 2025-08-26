@@ -165,7 +165,7 @@ const KravRelasjonView = ({ kravRelasjon }: { kravRelasjon: Partial<IKrav> }) =>
   <div className='max-w-2xl'>
     <BodyShort className='break-words'>
       <ExternalLink
-        href={`${kravUrl}/${kravRelasjon.id}`}
+        href={`${kravUrl}/${kravRelasjon.kravId}`}
       >{`K${kravRelasjon.kravNummer}.${kravRelasjon.kravVersjon}`}</ExternalLink>{' '}
       - {kravRelasjon.navn}
     </BodyShort>

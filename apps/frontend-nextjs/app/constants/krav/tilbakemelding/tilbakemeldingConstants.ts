@@ -28,7 +28,7 @@ export interface ITilbakemeldingMelding {
 }
 
 export interface ITilbakemelding {
-  id: string
+  kravId: string
   kravNummer: number
   kravVersjon: number
   type: ETilbakemeldingType

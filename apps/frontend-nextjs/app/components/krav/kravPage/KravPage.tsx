@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react'
 
 const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
   if (params.kravId) {
-    return { id: params.kravId }
+    return { kravId: params.kravId }
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),

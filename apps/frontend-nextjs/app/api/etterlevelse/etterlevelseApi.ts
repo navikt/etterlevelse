@@ -4,10 +4,9 @@ import {
   ESuksesskriterieStatus,
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { IKrav, ISuksesskriterie, TKravId } from '@/constants/krav/kravConstants'
+import { IKrav, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
 
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
@@ -60,27 +59,6 @@ function etterlevelseToEtterlevelseDto(etterlevelse: IEtterlevelse) {
   return dto
 }
 
-export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: TKravId) => {
-  const isCreateNew = id === 'ny'
-  const [data, setData] = useState<IEtterlevelse | undefined>(
-    isCreateNew
-      ? mapEtterlevelseToFormValue({
-          behandlingId,
-          kravVersjon: kravId?.kravVersjon,
-          kravNummer: kravId?.kravNummer,
-        })
-      : undefined
-  )
-
-  useEffect(() => {
-    if (id && !isCreateNew) {
-      getEtterlevelse(id).then(setData)
-    }
-  }, [id])
-
-  return [data, setData] as [IEtterlevelse | undefined, (k: IEtterlevelse) => void]
-}
-
 export const mapEtterlevelseToFormValue = (
   etterlevelse: Partial<IEtterlevelse>,
   krav?: IKrav
@@ -91,7 +69,7 @@ export const mapEtterlevelseToFormValue = (
     if (suksesskriterieBegrunnelser.length) {
       krav.suksesskriterier.forEach((suksesskriterium: ISuksesskriterie) => {
         suksesskriterieBegrunnelser.map((suksesskriteriumBegrunnelse) => {
-          if (suksesskriteriumBegrunnelse.suksesskriterieId === suksesskriterium.id) {
+          if (suksesskriteriumBegrunnelse.suksesskriterieId === suksesskriterium.kravId) {
             suksesskriteriumBegrunnelse.behovForBegrunnelse = suksesskriterium.behovForBegrunnelse
           }
           return suksesskriteriumBegrunnelse
@@ -100,7 +78,7 @@ export const mapEtterlevelseToFormValue = (
     } else {
       krav.suksesskriterier.forEach((suksesskriterium: ISuksesskriterie) => {
         suksesskriterieBegrunnelser.push({
-          suksesskriterieId: suksesskriterium.id,
+          suksesskriterieId: suksesskriterium.kravId,
           behovForBegrunnelse: suksesskriterium.behovForBegrunnelse,
           begrunnelse: '',
           suksesskriterieStatus: ESuksesskriterieStatus.UNDER_ARBEID,
