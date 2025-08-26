@@ -18,7 +18,7 @@ export const GetKravData = (
   )
 
   if (data && data.kravById) {
-    return { kravQuery: data, kravLoading: loading, reloadKrav: refetch() }
+    return { kravQuery: data, kravLoading: loading, reloadKrav: refetch }
   } else {
     return undefined
   }

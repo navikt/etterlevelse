@@ -1,7 +1,7 @@
 import { IDomainObject } from '@/constants/commonConstants'
 
 export interface IKravPriorityList extends IDomainObject {
-  kravId: string
+  id: string
   temaId: string
   priorityList: number[]
 }

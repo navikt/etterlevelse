@@ -38,7 +38,7 @@ export const KravSuksesskriterierEdit: FunctionComponent<TKravSuksesskriterieEdi
 )
 
 const nextId = (suksesskriterier: ISuksesskriterie[]): number => {
-  const max = _.max(suksesskriterier.map((suksesskriterium) => suksesskriterium.kravId)) || 0
+  const max = _.max(suksesskriterier.map((suksesskriterium) => suksesskriterium.id)) || 0
   return max + 1
 }
 
@@ -82,7 +82,7 @@ const KriterieList = ({
     <div className='flex flex-col'>
       {suksesskriterier.map((suksesskriterium, index) => (
         <Kriterie
-          key={suksesskriterium.kravId}
+          key={`${suksesskriterium.id}${index}`}
           suksesskriterium={suksesskriterium}
           index={index}
           arrayLength={suksesskriterier.length}
@@ -151,7 +151,7 @@ const Kriterie = ({
 
   useEffect(() => {
     update({
-      kravId: suksesskriterium.kravId,
+      id: suksesskriterium.id,
       navn,
       beskrivelse,
       behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,

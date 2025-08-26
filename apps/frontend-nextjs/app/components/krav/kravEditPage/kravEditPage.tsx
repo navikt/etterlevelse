@@ -8,16 +8,18 @@ import { IKravDataProps, TKravById } from '@/constants/krav/edit/kravEditConstan
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { user } from '@/services/user/userService'
 import { Alert } from '@navikt/ds-react'
+import { Params } from 'next/dist/server/request/params'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { KravEdit } from './kravEdit/kravEdit'
 import { KravEditUtgattKrav } from './kravEditUtgattKrav/kravEditUtgattKrav'
 
 export const KravEditPage = () => {
-  const params = useParams()
-
+  const params: Params = useParams()
   const kravData: IKravDataProps | undefined = GetKravData(params)
+
   const kravQuery: TKravById | undefined = kravData?.kravQuery
+  const kravLoading: boolean | undefined = kravData?.kravLoading
 
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
@@ -53,7 +55,7 @@ export const KravEditPage = () => {
   }, [krav])
 
   useEffect(() => {
-    if (kravQuery?.kravById) {
+    if (!kravLoading && kravQuery?.kravById) {
       setKrav(kravQuery.kravById)
       setLoading(false)
 

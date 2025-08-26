@@ -77,7 +77,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
   useEffect(() => {
     ;(async () => {
       const kraver: IKrav[] = await getAllKrav()
-      const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
+      const mappedKraver: TKravQL[] = kraver.map((krav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
       ampli().logEvent('sidevisning', {
         side: 'Log side for spørsmål og svar',
@@ -173,7 +173,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
               </Table.Header>
               <Table.Body>
                 {sortedData.map((message: TKravMessage) => (
-                  <Table.Row key={message.kravId}>
+                  <Table.Row key={message.id}>
                     <Table.HeaderCell className='w-[6%]' scope='row'>
                       {' '}
                       K{message.kravNummer}.{message.kravVersjon}
@@ -184,7 +184,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
                         href={kravNummerVersjonUrl(
                           message.kravNummer,
                           message.kravVersjon,
-                          message.kravId
+                          message.id
                         )}
                       >
                         {message.kravNavn}

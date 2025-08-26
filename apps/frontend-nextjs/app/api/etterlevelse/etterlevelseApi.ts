@@ -69,7 +69,7 @@ export const mapEtterlevelseToFormValue = (
     if (suksesskriterieBegrunnelser.length) {
       krav.suksesskriterier.forEach((suksesskriterium: ISuksesskriterie) => {
         suksesskriterieBegrunnelser.map((suksesskriteriumBegrunnelse) => {
-          if (suksesskriteriumBegrunnelse.suksesskriterieId === suksesskriterium.kravId) {
+          if (suksesskriteriumBegrunnelse.suksesskriterieId === suksesskriterium.id) {
             suksesskriteriumBegrunnelse.behovForBegrunnelse = suksesskriterium.behovForBegrunnelse
           }
           return suksesskriteriumBegrunnelse
@@ -78,7 +78,7 @@ export const mapEtterlevelseToFormValue = (
     } else {
       krav.suksesskriterier.forEach((suksesskriterium: ISuksesskriterie) => {
         suksesskriterieBegrunnelser.push({
-          suksesskriterieId: suksesskriterium.kravId,
+          suksesskriterieId: suksesskriterium.id,
           behovForBegrunnelse: suksesskriterium.behovForBegrunnelse,
           begrunnelse: '',
           suksesskriterieStatus: ESuksesskriterieStatus.UNDER_ARBEID,

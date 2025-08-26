@@ -46,7 +46,7 @@ const searchKravByNumber = async (number: string) => {
   ).data.content
 }
 
-const getKravByKravNumberAndVersion = async (
+export const getKravByKravNumberAndVersion = async (
   kravNummer: number | string,
   kravVersjon: number | string
 ): Promise<IKrav | undefined> => {
@@ -71,9 +71,9 @@ export const createKrav = async (krav: TKravQL) => {
   return (await axios.post<IKrav>(`${env.backendBaseUrl}/krav`, domainToObject)).data
 }
 
-export const updateKrav = async (krav: TKravQL) => {
-  const domainToObject = kravToKravDomainObject(krav)
-  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.kravId}`, domainToObject)).data
+export const updateKrav = async (krav: TKravQL): Promise<IKrav> => {
+  const domainToObject: IKrav = kravToKravDomainObject(krav)
+  return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, domainToObject)).data
 }
 
 function kravToKravDomainObject(krav: TKravQL): IKrav {
@@ -87,7 +87,7 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
       lov: regelverk.lov.code,
     })),
     begrepIder: krav.begreper.map((begrep: IBegrep) => begrep.id),
-    kravIdRelasjoner: krav.kravRelasjoner.map((kravRelasjon: IKrav) => kravRelasjon.kravId),
+    idRelasjoner: krav.kravRelasjoner.map((kravRelasjon: IKrav) => kravRelasjon.id),
     varslingsadresser: krav.varslingsadresserQl.map((varslingsadresse: TVarslingsadresseQL) => {
       return {
         adresse: varslingsadresse.adresse,
@@ -120,7 +120,7 @@ export const useSearchKrav = async (searchParams: string) => {
           if (kravRes && kravRes.status === EKravStatus.AKTIV) {
             return [
               {
-                value: kravRes.kravId,
+                value: kravRes.id,
                 label: `K${kravRes.kravNummer}.${kravRes.kravVersjon} ${kravRes.navn}`,
                 ...kravRes,
               },
@@ -132,7 +132,7 @@ export const useSearchKrav = async (searchParams: string) => {
             .filter((krav: IKrav) => krav.status === EKravStatus.AKTIV)
             .map((krav: IKrav) => {
               return {
-                value: krav.kravId,
+                value: krav.id,
                 label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
                 ...krav,
               }
@@ -145,7 +145,7 @@ export const useSearchKrav = async (searchParams: string) => {
         .filter((krav: IKrav) => krav.status === EKravStatus.AKTIV)
         .map((krav: IKrav) => {
           return {
-            value: krav.kravId,
+            value: krav.id,
             label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
             ...krav,
           }
@@ -156,7 +156,7 @@ export const useSearchKrav = async (searchParams: string) => {
 }
 
 export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
-  kravId: krav.kravId || '',
+  id: krav.id || '',
   navn: krav.navn || '',
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,
@@ -181,7 +181,7 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
   relevansFor: krav.relevansFor || [],
   status: krav.status || EKravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [
-    { kravId: 0, navn: '', beskrivelse: '', behovForBegrunnelse: true },
+    { id: 0, navn: '', beskrivelse: '', behovForBegrunnelse: true },
   ],
   nyKravVersjon: krav.nyKravVersjon || false,
   tema:
@@ -192,10 +192,10 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
       krav.regelverk[0].lov.data.tema) ||
     '',
   kravRelasjoner: krav.kravRelasjoner || [],
+  kravIdRelasjoner: [],
   // not used
   begrepIder: [],
   etterlevelser: [],
-  kravIdRelasjoner: [],
   aktivertDato: krav.aktivertDato || '',
   prioriteringsId: 0,
 })
@@ -252,10 +252,10 @@ export const kravMainHeaderSearch = async (searchParam: string): Promise<TSearch
         url: string
       }[] = [
         {
-          value: searchResult[0].kravId,
+          value: searchResult[0].id,
           label: kravName(searchResult[0]),
           tag: EObjectType.Krav,
-          url: `krav/${searchResult[0].kravId}`,
+          url: `krav/${searchResult[0].id}`,
         },
       ]
       add(mappedResult)

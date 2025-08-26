@@ -22,7 +22,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
 
   return (
     <div className='mt-8'>
-      {krav.kravId &&
+      {krav.id &&
         ((user.isKraveier() && !hasKravExpired(alleKravVersjoner, krav)) || user.isAdmin()) && (
           <div>
             <div className='flex flex-1'>
@@ -32,7 +32,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
                   size='small'
                   variant='primary'
                   onClick={() => {
-                    router.push(kravRedigeringIdUrl(krav.kravId))
+                    router.push(kravRedigeringIdUrl(krav.id))
                   }}
                 >
                   Redigér krav
@@ -45,7 +45,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
                   className='ml-4'
                   size='small'
                   onClick={() => {
-                    router.push(kravNyVersjonIdUrl(krav.kravId))
+                    router.push(kravNyVersjonIdUrl(krav.id))
                   }}
                   variant='secondary'
                 >
@@ -59,7 +59,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
                 <KravSlettKnapp
                   buttonLabel='Slett krav'
                   buttonSize='small'
-                  fun={() => deleteKrav(krav.kravId)}
+                  fun={() => deleteKrav(krav.id)}
                   redirect={kravlisteUrl()}
                 />
               </div>

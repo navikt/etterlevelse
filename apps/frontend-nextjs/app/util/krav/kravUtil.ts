@@ -5,10 +5,10 @@ import { kravNummerView } from '../kravNummerView/kravNummerView'
 export const kravName = (krav: IKrav): string => `${kravNummerView(krav)} ${krav.navn}`
 
 export const kravMap = (krav: IKrav) => ({
-  value: krav.kravId,
+  value: krav.id,
   label: kravName(krav),
   tag: EObjectType.Krav as string,
-  url: `krav/${krav.kravId}`,
+  url: `krav/${krav.id}`,
 })
 
 export const sortKravListeByPriority = <T extends IKrav>(kraver: T[]) => {

@@ -72,9 +72,7 @@ export const Tilbakemeldinger = ({
   const pathname = usePathname()
   const router = useRouter()
 
-  const refs = useRefs<HTMLDivElement>(
-    tilbakemeldinger.map((tilbakemelding) => tilbakemelding.kravId)
-  )
+  const refs = useRefs<HTMLDivElement>(tilbakemeldinger.map((tilbakemelding) => tilbakemelding.id))
   useEffect(() => {
     if (!loading && focusNr) {
       setTimeout(() => refs[focusNr]?.current?.scrollIntoView(), 100)
@@ -94,14 +92,11 @@ export const Tilbakemeldinger = ({
         <div className='flex flex-col'>
           <Accordion>
             {tilbakemeldinger.slice(0, count).map((tilbakemelding) => {
-              const focused = focusNr === tilbakemelding.kravId
+              const focused = focusNr === tilbakemelding.id
               const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(tilbakemelding)
               return (
-                <Accordion.Item
-                  key={tilbakemelding.kravId}
-                  open={tilbakemelding.kravId === focusNr}
-                >
-                  <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.kravId)}>
+                <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>
+                  <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.id)}>
                     <div className='w-full p-2 flex'>
                       <div>
                         {tilbakemelding.endretKrav && (
@@ -154,7 +149,7 @@ export const Tilbakemeldinger = ({
                         <MeldingKnapper
                           marginLeft
                           melding={tilbakemelding.meldinger[0]}
-                          tilbakemeldingId={tilbakemelding.kravId}
+                          tilbakemeldingId={tilbakemelding.id}
                           oppdater={replace}
                           remove={remove}
                         />
@@ -328,10 +323,10 @@ const TilbakemeldingSvar = ({
 
   const submit = () => {
     if (response) {
-      setFocusNummer(tilbakemelding.kravId)
+      setFocusNummer(tilbakemelding.id)
 
       const req: ITilbakemeldingNewMeldingRequest = {
-        tilbakemeldingId: tilbakemelding.kravId,
+        tilbakemeldingId: tilbakemelding.id,
         rolle: replyRole,
         melding: response,
         status: tilbakeMeldingStatus,
@@ -425,7 +420,7 @@ const TilbakemeldingSvar = ({
                 className='ml-2.5'
                 onClick={() =>
                   tilbakemeldingslettMelding({
-                    tilbakemeldingId: tilbakemelding.kravId,
+                    tilbakemeldingId: tilbakemelding.id,
                     meldingNr: 1,
                   }).then((t) => {
                     remove({ ...t, meldinger: [] })
@@ -482,7 +477,7 @@ const TilbakemeldingSvar = ({
                     onClick={() => {
                       setIsUpdatingStatus(true)
                       updateTilbakemeldingStatusOgEndretKrav({
-                        tilbakemeldingId: tilbakemelding.kravId,
+                        tilbakemeldingId: tilbakemelding.id,
                         status: tilbakeMeldingStatus,
                         endretKrav: isEndretKrav,
                       })

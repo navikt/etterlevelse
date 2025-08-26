@@ -107,7 +107,7 @@ export const TilbakemeldingNyModal = ({ open, close, krav }: TNyTilbakemeldingMo
                       {krav.suksesskriterier.map(
                         (suksesskriterium: ISuksesskriterie, index: number) => {
                           return (
-                            <Accordion.Item key={suksesskriterium.kravId}>
+                            <Accordion.Item key={suksesskriterium.id}>
                               <Accordion.Header>
                                 <div>
                                   <BodyShort>
