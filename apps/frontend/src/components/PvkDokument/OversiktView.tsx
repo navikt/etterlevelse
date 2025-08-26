@@ -4,6 +4,7 @@ import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../../api/Behan
 import { getRisikoscenarioByPvkDokumentId } from '../../api/RisikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '../../api/TiltakApi'
 import {
+  EEtterlevelseStatus,
   ERisikoscenarioType,
   IBehandlingensLivslop,
   IPageResponse,
@@ -13,6 +14,8 @@ import {
   ITeamResource,
   ITiltak,
   TEtterlevelseDokumentasjonQL,
+  TEtterlevelseQL,
+  TKravQL,
 } from '../../constants'
 import { StepTitle } from '../../pages/PvkDokumentPage'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -27,6 +30,11 @@ type TProps = {
   activeStep: number
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
 }
 
 export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Element | undefined => {
@@ -56,7 +64,7 @@ export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Elem
         </Tag>
       )
     }
-  } else if (step === 1) {
+  } else if (step === 2) {
     if (
       pvkDokument.harInvolvertRepresentant !== null ||
       pvkDokument.representantInvolveringsBeskrivelse ||
@@ -87,12 +95,61 @@ export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Elem
   }
 }
 
+export const getTilhorendeDokumentasjonStatusTags = (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
+) => {
+  const antallBehandlinger = etterlevelseDokumentasjon.behandlinger?.length || 0
+  const totalPvkKrav = pvkKrav?.krav.totalElements || 0
+  const antallRisikovuderinger = etterlevelseDokumentasjon.risikovurderinger?.length || 0
+
+  const pvkEtterlevelser: TEtterlevelseQL[] = []
+
+  pvkKrav?.krav.content.forEach((krav) => {
+    pvkEtterlevelser.push(...krav.etterlevelser)
+  })
+
+  const antallFerdigPvkKrav = pvkEtterlevelser.filter(
+    (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+  ).length
+
+  return (
+    <div className='gap-2 flex pt-1'>
+      <Tag variant={antallBehandlinger > 0 ? 'success' : 'neutral'} size='xsmall'>
+        {antallBehandlinger} behandling{antallBehandlinger !== 1 ? 'er' : ''}
+      </Tag>
+
+      <Tag
+        variant={
+          antallFerdigPvkKrav === totalPvkKrav
+            ? 'success'
+            : antallFerdigPvkKrav === 0
+              ? 'neutral'
+              : 'warning'
+        }
+        size='xsmall'
+      >
+        {antallFerdigPvkKrav} av {totalPvkKrav} krav ferdigstilt
+      </Tag>
+
+      <Tag variant={antallRisikovuderinger > 0 ? 'success' : 'neutral'} size='xsmall'>
+        {antallRisikovuderinger} dokument{antallRisikovuderinger !== 1 ? 'er' : ''}
+      </Tag>
+    </div>
+  )
+}
+
 export const OversiktView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   activeStep,
   setSelectedStep,
   updateTitleUrlAndStep,
+  pvkKrav,
 }) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -117,12 +174,12 @@ export const OversiktView: FunctionComponent<TProps> = ({
   }
 
   const getRisikoscenarioStatus = (step: number): JSX.Element => {
-    if (step === 2) {
+    if (step === 3) {
       const generelSenario = allRisikoscenario.filter((risiko) => risiko.generelScenario)
       const kravSenario = allRisikoscenario.filter(
         (risiko: IRisikoscenario) => !risiko.generelScenario
       )
-      if (generelSenario.length === 0) {
+      if (generelSenario.length === 0 && kravSenario.length === 0 && allTiltak.length === 0) {
         return (
           <Tag variant='neutral' size='xsmall'>
             Ikke påbegynt
@@ -131,21 +188,15 @@ export const OversiktView: FunctionComponent<TProps> = ({
       } else {
         return (
           <div className='gap-2 flex pt-1'>
-            {kravSenario.length > 0 && (
-              <Tag variant='success' size='xsmall'>
-                {kravSenario.length} kravspesifikke risikoscenario
-              </Tag>
-            )}
-            {generelSenario.length > 0 && (
-              <Tag variant='success' size='xsmall'>
-                {generelSenario.length} øvrige risikoscenario
-              </Tag>
-            )}
-            {allTiltak.length > 0 && (
-              <Tag variant='success' size='xsmall'>
-                {allTiltak.length} tiltak
-              </Tag>
-            )}
+            <Tag variant={kravSenario.length === 0 ? 'neutral' : 'success'} size='xsmall'>
+              {kravSenario.length} kravspesifikke risikoscenario
+            </Tag>
+            <Tag variant={generelSenario.length === 0 ? 'neutral' : 'success'} size='xsmall'>
+              {generelSenario.length} øvrige risikoscenario
+            </Tag>
+            <Tag variant={allTiltak.length === 0 ? 'neutral' : 'success'} size='xsmall'>
+              {allTiltak.length} tiltak
+            </Tag>
           </div>
         )
       }
@@ -212,6 +263,16 @@ export const OversiktView: FunctionComponent<TProps> = ({
           )}
         </div>
       )
+    }
+  }
+
+  const getCustomStatusTags = (index: number) => {
+    if (index === 1) {
+      return getTilhorendeDokumentasjonStatusTags(etterlevelseDokumentasjon, pvkKrav)
+    } else if (index === 3 || index === 4) {
+      return getRisikoscenarioStatus(index)
+    } else {
+      return undefined
     }
   }
 
@@ -327,7 +388,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
 
             {StepTitle.slice(2).map((title: string, index: number) => {
               let panelHref: string = window.location.pathname.slice(0, -1) + (index + 3)
-              if (index + 3 === 6) {
+              if (index + 3 === 7) {
                 panelHref += risikoscenarioFilterAlleUrl()
               }
 
@@ -340,9 +401,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
                   status={getFormStatus(pvkDokument, index)}
-                  customStatusTag={
-                    index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
-                  }
+                  customStatusTag={getCustomStatusTags(index)}
                 />
               )
             })}

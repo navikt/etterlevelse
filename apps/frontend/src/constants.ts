@@ -508,6 +508,9 @@ export interface IPvkDokument {
 
   sendtTilPvoDato: string
   sendtTilPvoAv: string
+
+  godkjentAvRisikoeierDato: string
+  godkjentAvRisikoeier: string
 }
 
 export interface IPvkDokumentListItem {
@@ -598,6 +601,7 @@ export interface IPvoTilbakemelding extends IDomainObject {
   status: EPvoTilbakemeldingStatus
   behandlingenslivslop: ITilbakemeldingsinnhold
   behandlingensArtOgOmfang: ITilbakemeldingsinnhold
+  tilhorendeDokumentasjon: ITilhorendeDokumentasjonTilbakemelding
   innvolveringAvEksterne: ITilbakemeldingsinnhold
   risikoscenarioEtterTiltakk: ITilbakemeldingsinnhold
   merknadTilEtterleverEllerRisikoeier: string
@@ -626,6 +630,18 @@ export interface ITilbakemeldingsinnhold {
   bidragsVurdering: string
   internDiskusjon: string
   tilbakemeldingTilEtterlevere: string
+}
+
+export interface ITilhorendeDokumentasjonTilbakemelding {
+  sistRedigertAv: string
+  sistRedigertDato: string
+  internDiskusjon: string
+  behandlingskatalogDokumentasjonTilstrekkelig: string
+  behandlingskatalogDokumentasjonTilbakemelding: string
+  kravDokumentasjonTilstrekkelig: string
+  kravDokumentasjonTilbakemelding: string
+  risikovurderingTilstrekkelig: string
+  risikovurderingTilbakemelding: string
 }
 
 export interface IOrgEnhet {

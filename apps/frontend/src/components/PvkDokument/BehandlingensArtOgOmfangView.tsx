@@ -17,6 +17,7 @@ import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemel
 import { BoolField, TextAreaField } from '../common/Inputs'
 import { ContentLayout } from '../layout/layout'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import InfoChangesMadeAfterApproval from './common/InfoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
@@ -182,6 +183,8 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                           </Alert>
                         </div>
                       )}
+
+                      <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />
 
                       <div className='mt-5 flex gap-2'>
                         <Button

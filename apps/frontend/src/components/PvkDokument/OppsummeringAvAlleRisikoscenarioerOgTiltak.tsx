@@ -25,6 +25,7 @@ import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/Op
 import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
 import TiltakAccordionListReadOnly from '../tiltak/TiltakAccordionListReadOnly'
+import InfoChangesMadeAfterApproval from './common/InfoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
@@ -469,6 +470,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           )}
         </div>
       </div>
+
+      <InfoChangesMadeAfterApproval
+        pvkDokument={pvkDokument}
+        alleRisikoscenario={risikoscenarioList}
+        alleTiltak={tiltakList}
+      />
+
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
         activeStep={activeStep}

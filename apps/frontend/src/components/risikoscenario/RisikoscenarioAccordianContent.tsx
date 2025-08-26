@@ -116,7 +116,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         risikoscenario={activeRisikoscenario}
         noCopyButton={false}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        stepUrl='5'
+        stepUrl='6'
       />
 
       <div>
@@ -152,7 +152,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             {risikoscenario.tiltakIds.length === 0 &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive && (
-                <Alert className='mt-5 mb-9' variant='warning'>
+                <Alert inline className='mt-5 mb-9' variant='warning'>
                   Dere har ikke lagt inn tiltak
                 </Alert>
               )}

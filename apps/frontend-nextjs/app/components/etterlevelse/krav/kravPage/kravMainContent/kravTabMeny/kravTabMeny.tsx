@@ -20,15 +20,9 @@ export const KravTabMeny: FunctionComponent<TProps> = ({
   krav,
   kravLoading,
   alleKravVersjoner,
-}) => {
-  return (
-    <KravTabMenyContent
-      krav={krav}
-      kravLoading={kravLoading}
-      alleKravVersjoner={alleKravVersjoner}
-    />
-  )
-}
+}) => (
+  <KravTabMenyContent krav={krav} kravLoading={kravLoading} alleKravVersjoner={alleKravVersjoner} />
+)
 
 const KravTabMenyContent: FunctionComponent<TProps> = ({
   krav,

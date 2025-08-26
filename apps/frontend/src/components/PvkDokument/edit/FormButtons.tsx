@@ -28,14 +28,14 @@ export const FormButtons: FunctionComponent<TProps> = ({
         <div className='flex w-full flex-row-reverse justify-evenly gap-2 items-end'>
           {customButtons}
 
-          {activeStep !== 7 && (
+          {activeStep !== 8 && (
             <Button
-              icon={activeStep !== 7 && <ChevronRightIcon aria-hidden />}
+              icon={activeStep !== 8 && <ChevronRightIcon aria-hidden />}
               iconPosition='right'
               type='button'
               variant={'tertiary'}
               onClick={() => {
-                if (activeStep !== 7) {
+                if (activeStep !== 8) {
                   window.scrollTo(0, 0)
                   setActiveStep(activeStep + 1)
                   setSelectedStep(activeStep + 1)
@@ -43,12 +43,13 @@ export const FormButtons: FunctionComponent<TProps> = ({
               }}
             >
               {activeStep === 1 && 'Fortsett til Behandlingens Livsløp'}
-              {activeStep === 2 && 'Fortsett til Art og omfang'}
-              {activeStep === 3 && 'Fortsett til Involvering av eksterne'}
-              {activeStep === 4 && 'Fortsett til Identifisering av risikoscenarioer'}
-              {activeStep === 5 && 'Fortsett til Oppsummering av alle risikoscenarioer og tiltak'}
-              {activeStep === 6 && 'Fortsett til Les og send inn'}
-              {activeStep === 7 && 'Send til PVO'}
+              {activeStep === 2 && 'Fortsett til Behandlingens art og omfang'}
+              {activeStep === 3 && 'Fortsett til Tilhørende dokumentasjon'}
+              {activeStep === 4 && 'Fortsett til Involvering av eksterne'}
+              {activeStep === 5 && 'Fortsett til Identifisering av risikoscenarioer og tiltak'}
+              {activeStep === 6 && 'Fortsett til Risikobildet etter tiltak'}
+              {activeStep === 7 && 'Fortsett til Les og send inn'}
+              {activeStep === 8 && 'Send til PVO'}
             </Button>
           )}
 
@@ -67,12 +68,13 @@ export const FormButtons: FunctionComponent<TProps> = ({
             }}
           >
             {activeStep === 1 && 'Tilbake til Temaoversikt'}
-            {activeStep === 2 && 'Tilbake til Oversikt'}
+            {activeStep === 2 && 'Tilbake til Oversikt og status'}
             {activeStep === 3 && 'Tilbake til Behandlingens livsløp'}
-            {activeStep === 4 && 'Tilbake til Art og omfang'}
-            {activeStep === 5 && 'Tilbake til Involvering av eksterne'}
-            {activeStep === 6 && 'Tilbake til Identifisering av risikoscenarioer'}
-            {activeStep === 7 && 'Tilbake til Risikobildet etter tiltak'}
+            {activeStep === 4 && 'Tilbake til Behandlingens art og omfang'}
+            {activeStep === 5 && 'Tilbake til Tilhørende dokumentasjon'}
+            {activeStep === 6 && 'Tilbake til Involvering av eksterne'}
+            {activeStep === 7 && 'Tilbake til Identifisering av risikoscenarioer og tiltak'}
+            {activeStep === 8 && 'Tilbake til Risikobildet etter tiltak'}
           </Button>
         </div>
       </div>

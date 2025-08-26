@@ -13,6 +13,7 @@ import java.util.List;
 public class PvoTilbakemeldingData {
     private Tilbakemeldingsinnhold behandlingenslivslop;
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
+    private TilhorendeDokumentasjonTilbakemelding tilhorendeDokumentasjon;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;

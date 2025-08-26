@@ -25,8 +25,9 @@ import {
   ITeamResource,
   ITiltak,
   TEtterlevelseDokumentasjonQL,
+  TKravQL,
 } from '../../constants'
-import { getFormStatus } from '../PvkDokument/OversiktView'
+import { getFormStatus, getTilhorendeDokumentasjonStatusTags } from '../PvkDokument/OversiktView'
 import { FormSummaryPanel } from '../PvkDokument/common/FormSummaryPanel'
 import { ExternalLink } from '../common/RouteLink'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -43,12 +44,18 @@ type TProps = {
   updateTitleUrlAndStep: (step: number) => void
   pvoTilbakemelding: IPvoTilbakemelding
   formRef: RefObject<any>
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
 }
 
 const StepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens livsløp',
   'Behandlingens art og omfang',
+  'Tilhørende dokumentasjon',
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
@@ -63,6 +70,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   updateTitleUrlAndStep,
   pvoTilbakemelding,
   formRef,
+  pvkKrav,
 }) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -87,7 +95,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   }
 
   const getRisikoscenarioStatus = (step: number) => {
-    if (step === 2) {
+    if (step === 3) {
       const generelSenario = allRisikoscenario.filter(
         (risiko: IRisikoscenario) => risiko.generelScenario
       )
@@ -138,6 +146,16 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
         </Tag>
       </div>
     )
+  }
+
+  const getCustomStatusTags = (index: number) => {
+    if (index === 1) {
+      return getTilhorendeDokumentasjonStatusTags(etterlevelseDokumentasjon, pvkKrav)
+    } else if (index === 3 || index === 4) {
+      return getRisikoscenarioStatus(index)
+    } else {
+      return undefined
+    }
   }
 
   useEffect(() => {
@@ -297,7 +315,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
             {StepTitle.slice(2).map((title: string, index: number) => {
               let panelHref: string = window.location.pathname.slice(0, -1) + (index + 3)
 
-              if (index + 3 === 6) {
+              if (index + 3 === 7) {
                 panelHref += risikoscenarioFilterAlleUrl()
               }
 
@@ -310,9 +328,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
                   status={getFormStatus(pvkDokument, index)}
-                  customStatusTag={
-                    index === 2 || index === 3 ? getRisikoscenarioStatus(index) : undefined
-                  }
+                  customStatusTag={getCustomStatusTags(index)}
                   pvoView
                 />
               )

@@ -377,7 +377,7 @@ export const DokumentasjonPage = () => {
                               'Les tilbakemelding fra PVO'}
                             {!pvkDokumentNotStarted &&
                               pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-                              'Revurdér PVK'}
+                              'Les godkjent PVK'}
                           </Button>
                         )}
 

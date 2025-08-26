@@ -27,8 +27,8 @@ import {
   ITiltak,
   TEtterlevelseDokumentasjonQL,
   TEtterlevelseQL,
+  TKravQL,
 } from '../../constants'
-import { useKravFilter } from '../../query/KravQuery'
 import { EListName, ICode, ICodelistProps } from '../../services/Codelist'
 import { user } from '../../services/User'
 import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
@@ -43,6 +43,7 @@ import VurdertAvPvoFields from './SendInnComponents/VurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from './SendInnComponents/VurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
 import { pvkDokumentStatusToText } from './common/FormSummaryPanel'
+import InfoChangesMadeAfterApproval from './common/InfoChangesMadeAfterApproval'
 import FormButtons from './edit/FormButtons'
 import pvkDocumentSchema from './edit/pvkDocumentSchema'
 import ArtOgOmFangSummary from './formSummary/ArtOgOmfangSummary'
@@ -50,6 +51,7 @@ import BehandlingensLivslopSummary from './formSummary/BehandlingensLivslopSumma
 import InvolveringSummary from './formSummary/InvolveringSummary'
 import RisikoscenarioEtterTitak from './formSummary/RisikoscenarioEtterTiltakSummary'
 import RisikoscenarioSummary from './formSummary/RisikoscenarioSummary'
+import TilhorendeDokumentasjonSummary from './formSummary/TilhorendeDokumentasjonSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -62,6 +64,12 @@ type TProps = {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   codelistUtils: ICodelistProps
+  pvkKrav:
+    | {
+        krav: IPageResponse<TKravQL>
+      }
+    | undefined
+  isPvkKravLoading: boolean
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
@@ -76,6 +84,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   setActiveStep,
   setSelectedStep,
   codelistUtils,
+  pvkKrav,
+  isPvkKravLoading,
   pvoTilbakemelding,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
@@ -97,16 +107,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
-
-  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
-    {
-      gjeldendeKrav: true,
-      tagger: ['Personvernkonsekvensvurdering'],
-      etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
-    },
-    { skip: !etterlevelseDokumentasjon },
-    true
-  )
+  const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
 
   const underarbeidCheck: boolean =
     pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
@@ -131,7 +132,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
         } else {
           const updatedPvkDokument: IPvkDokument = {
             ...response,
-            status: submitedValues.status,
+            status:
+              response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
+                ? response.status
+                : submitedValues.status,
             sendtTilPvoDato: [
               EPvkDokumentStatus.SENDT_TIL_PVO,
               EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
@@ -147,10 +151,21 @@ export const SendInnView: FunctionComponent<TProps> = ({
             merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
+            godkjentAvRisikoeier: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
+              submitedValues.status
+            )
+              ? submitedValues.godkjentAvRisikoeier
+              : response.godkjentAvRisikoeier,
+            godkjentAvRisikoeierDato: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
+              submitedValues.status
+            )
+              ? submitedValues.godkjentAvRisikoeierDato
+              : response.godkjentAvRisikoeierDato,
           }
 
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
             setPvkDokument(savedResponse)
+            setAngretAvRisikoeier(false)
           })
         }
       })
@@ -427,10 +442,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
 
+                <TilhorendeDokumentasjonSummary
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  pvkKrav={pvkKrav}
+                />
+
                 <InvolveringSummary
                   databehandlere={databehandlere}
                   personkategorier={personkategorier}
-                  updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
 
                 <RisikoscenarioSummary
@@ -579,6 +598,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
                       pvoVurderingList={pvoVurderingList}
+                      setAngretAvRisikoeier={setAngretAvRisikoeier}
                       errorSummaryComponent={
                         <SendInnErrorSummary
                           errors={errors}
@@ -596,6 +616,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       }
                     />
                   )}
+
+                <InfoChangesMadeAfterApproval
+                  pvkDokument={pvkDokument}
+                  alleRisikoscenario={alleRisikoscenario}
+                  alleTiltak={alleTiltak}
+                />
 
                 {!isLoading && (
                   <FormButtons
