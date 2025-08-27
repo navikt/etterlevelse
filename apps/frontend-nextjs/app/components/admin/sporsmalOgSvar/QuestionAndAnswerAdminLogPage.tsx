@@ -77,7 +77,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
   useEffect(() => {
     ;(async () => {
       const kraver: IKrav[] = await getAllKrav()
-      const mappedKraver: TKravQL[] = kraver.map((krav) => kravMapToFormVal(krav))
+      const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
       ampli().logEvent('sidevisning', {
         side: 'Log side for spørsmål og svar',
