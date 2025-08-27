@@ -3,6 +3,7 @@ import { kravlisteOpprettUrl } from '@/routes/krav/kravRoutes'
 import { user } from '@/services/user/userService'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
+import { KravTabs } from './kravTabs/kravTabs'
 import { ListPageHeader } from './listPageHeader/listPageHeader'
 
 export const KravlistePage = () => (
@@ -21,6 +22,13 @@ export const KravlistePage = () => (
           </Button>
         )}
       </ListPageHeader>
+      <div className='flex justify-center w-full'>
+        <div className='w-full'>
+          <div className='pt-6'>
+            <KravTabs />
+          </div>
+        </div>
+      </div>
     </div>
   </PageLayout>
 )

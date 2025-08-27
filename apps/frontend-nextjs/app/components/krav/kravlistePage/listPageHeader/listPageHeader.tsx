@@ -1,9 +1,9 @@
 import { Heading } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 
 type TProps = {
   headingText: string
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 export const ListPageHeader: FunctionComponent<TProps> = ({ headingText, children }) => (
