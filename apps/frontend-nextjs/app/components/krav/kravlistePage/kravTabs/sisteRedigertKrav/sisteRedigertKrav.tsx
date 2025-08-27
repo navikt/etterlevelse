@@ -5,7 +5,8 @@ import { useKravFilter } from '@/query/krav/kravQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { Alert, Label, Loader } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { sortKrav } from '../sortKrav/sortKrav'
+import { sortKrav } from '../../sortKrav/sortKrav'
+import { KravPanels } from './kravPanels/KravPanels'
 
 export const SistRedigertKrav = () => {
   const [sorting] = useState('sist')
@@ -51,7 +52,7 @@ export const SistRedigertKrav = () => {
               </Label>
             </div>
           </div>
-          {/* <KravPanels kravene={sortedKravList} loading={loading} /> */}
+          <KravPanels kravene={sortedKravList} loading={loading} />
           {sortedKravList.length === 0 && (
             <div className={'w-full flex justify-center'}>Fant ingen krav</div>
           )}
