@@ -1,7 +1,10 @@
-import { IDomainObject, TOr, TReplace } from '@/constants/commonConstants'
+import { IChangeStamp, IDomainObject, TOr, TReplace } from '@/constants/commonConstants'
 import { ICode, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
 import { IBegrep } from '../behandlingskatalogen/behandlingskatalogConstants'
-import { TEtterlevelseQL } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import {
+  EEtterlevelseStatus,
+  TEtterlevelseQL,
+} from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
   IVarslingsadresse,
   TVarslingsadresseQL,
@@ -87,4 +90,23 @@ export type TKravFilters = {
   sistRedigert?: number
   pageNumber?: number
   pageSize?: number
+}
+
+export type TKravEtterlevelseData = {
+  kravNummer: number
+  kravVersjon: number
+  navn: string
+  status: EKravStatus
+  etterlevelseId?: string
+  etterleves: boolean
+  changeStamp: IChangeStamp
+  frist?: string
+  varselMelding?: string
+  prioriteringsId?: number
+  etterlevelseStatus?: EEtterlevelseStatus
+  suksesskriterier: ISuksesskriterie[]
+  gammelVersjon?: boolean
+  etterlevelseChangeStamp?: IChangeStamp
+  isIrrelevant?: boolean
+  aktivertDato: string
 }

@@ -6,6 +6,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { SistRedigertKrav } from './sisteRedigertKrav/sisteRedigertKrav'
+import { TemaList } from './temaList/temaList'
 
 type TSection = 'siste' | 'alle' | 'tema'
 
@@ -38,9 +39,10 @@ export const KravTabs = () => {
       <Tabs.Panel value='siste'>
         <SistRedigertKrav />
       </Tabs.Panel>
-      {/* <Tabs.Panel value='tema'>
+      <Tabs.Panel value='tema'>
         <TemaList />
       </Tabs.Panel>
+      {/* 
       <Tabs.Panel value='alle'>
         <AllKrav />
       </Tabs.Panel> */}
