@@ -1,8 +1,11 @@
 import { Alert, BodyLong, Button, Label } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { arkiver } from '../../api/P360Api'
 import { EPvoTilbakemeldingStatus, IPvkDokument, IPvoTilbakemelding } from '../../constants'
 import { ICode } from '../../services/Codelist'
+import { user } from '../../services/User'
+import { isDev } from '../../util/config'
 import { Markdown } from '../common/Markdown'
 import AlertPvoModal from './common/AlertPvoModal'
 import DataTextWrapper from './common/DataTextWrapper'
@@ -155,6 +158,19 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
               >
                 Angre tilbakemelding
               </Button>
+
+              {user.isAdmin() && (
+                <Button
+                  type='button'
+                  onClick={async () => {
+                    if (!isDev) {
+                      await arkiver(pvkDokument.etterlevelseDokumentId, true, true, false)
+                    }
+                  }}
+                >
+                  Arkivér i Public 360 (kun admin)
+                </Button>
+              )}
             </div>
           }
         />
