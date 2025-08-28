@@ -5,7 +5,7 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR /tmp
 
 COPY nginx-conf-overwrite.conf /etc/nginx/conf.d/default.conf
 
-COPY .next/server /usr/share/nginx/html/_next/server
+COPY .next /usr/share/nginx/html
 COPY public /usr/share/nginx/html/public
 
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template

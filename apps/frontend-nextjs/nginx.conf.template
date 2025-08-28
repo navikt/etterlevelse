@@ -8,11 +8,6 @@ server {
   proxy_set_header    X-Real-IP $remote_addr;
   proxy_redirect      off;
 
-   location /_next/server/ {
-        alias /usr/share/nginx/html/_next/server/;
-    }
-
-
   location /isAlive {
     return 200 'OK';
   }
