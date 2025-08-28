@@ -1,5 +1,5 @@
 import { ApolloQueryResult } from '@apollo/client'
-import { TKravQL } from '../kravConstants'
+import { TKravId, TKravQL } from '../kravConstants'
 
 export type TKravById = {
   kravById: TKravQL
@@ -8,7 +8,7 @@ export type TKravById = {
 export interface IKravDataProps {
   kravQuery: TKravById
   kravLoading: boolean
-  reloadKrav: Promise<
+  reloadKrav: (variables?: Partial<TKravId> | undefined) => Promise<
     ApolloQueryResult<{
       kravById: TKravQL
     }>

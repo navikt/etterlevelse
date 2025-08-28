@@ -8,7 +8,7 @@ import { user } from '@/services/user/userService'
 import { Checkbox, CheckboxGroup, ErrorSummary, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
-import { useEffect, useRef } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
 import { EditBegreper } from '../KravBegreperEdit'
 import { KravEditDokumentasjon } from '../kravEditDokumentasjon/kravEditDokumentasjon'
 import { KravEditMultiOptionField } from '../kravEditMultiOptionField/kravEditMultiOptionField'
@@ -17,7 +17,7 @@ import { RegelverkEdit } from '../regelverkEdit/regelverkEdit'
 import { KravEditRelasjoner } from '../relasjoner/kravEditRelasjoner'
 import { KravEditTags } from '../tags/kravEditTags'
 
-interface IProps {
+type TProps = {
   mode: 'create' | 'edit'
   kravVersjon: number
   errors: FormikErrors<TKravQL>
@@ -28,16 +28,15 @@ interface IProps {
 
 const maxInputWidth = '25rem'
 
-export const KravFormFields = (props: IProps) => {
-  const {
-    mode,
-    kravVersjon,
-    errors,
-    varselMeldingActive,
-    setVarselMeldingActive,
-    isEditingUtgaattKrav,
-  } = props
-  const errorSummaryRef = useRef<HTMLDivElement>(null)
+export const KravFormFields: FunctionComponent<TProps> = ({
+  mode,
+  kravVersjon,
+  errors,
+  varselMeldingActive,
+  setVarselMeldingActive,
+  isEditingUtgaattKrav,
+}) => {
+  const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!_.isEmpty(errors) && errorSummaryRef.current) {

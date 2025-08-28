@@ -18,14 +18,14 @@ export const GetKravData = (
   )
 
   if (data && data.kravById) {
-    return { kravQuery: data, kravLoading: loading, reloadKrav: refetch() }
+    return { kravQuery: data, kravLoading: loading, reloadKrav: refetch }
   } else {
     return undefined
   }
 }
 
 interface IPropsID {
-  id: string
+  kravId: string
 }
 
 interface IPropsKravNummerVersjon {
@@ -39,7 +39,7 @@ function getQueryVariableFromParams(
   params: Readonly<Partial<TKravIdParams>>
 ): TPropsGetQueryVariableFromParams {
   if (params.kravId) {
-    return { id: params.kravId }
+    return { kravId: params.kravId }
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),

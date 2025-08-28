@@ -1,7 +1,10 @@
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
+import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
+import { ICode, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { TSearchItem } from '@/constants/search/searchConstants'
+import { TVarslingsadresseQL } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { env } from '@/util/env/env'
 import { kravMap, kravName } from '@/util/krav/kravUtil'
 import axios from 'axios'
@@ -43,7 +46,7 @@ const searchKravByNumber = async (number: string) => {
   ).data.content
 }
 
-const getKravByKravNumberAndVersion = async (
+export const getKravByKravNumberAndVersion = async (
   kravNummer: number | string,
   kravVersjon: number | string
 ): Promise<IKrav | undefined> => {
@@ -68,8 +71,8 @@ export const createKrav = async (krav: TKravQL) => {
   return (await axios.post<IKrav>(`${env.backendBaseUrl}/krav`, domainToObject)).data
 }
 
-export const updateKrav = async (krav: TKravQL) => {
-  const domainToObject = kravToKravDomainObject(krav)
+export const updateKrav = async (krav: TKravQL): Promise<IKrav> => {
+  const domainToObject: IKrav = kravToKravDomainObject(krav)
   return (await axios.put<IKrav>(`${env.backendBaseUrl}/krav/${krav.id}`, domainToObject)).data
 }
 
@@ -78,11 +81,14 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
     ...krav,
     avdeling: krav.avdeling?.code,
     underavdeling: krav.underavdeling?.code,
-    relevansFor: krav.relevansFor.map((relevans) => relevans.code),
-    regelverk: krav.regelverk.map((regelverk) => ({ ...regelverk, lov: regelverk.lov.code })),
-    begrepIder: krav.begreper.map((begrep) => begrep.id),
-    kravIdRelasjoner: krav.kravRelasjoner.map((kravRelasjon) => kravRelasjon.id),
-    varslingsadresser: krav.varslingsadresserQl.map((varslingsadresse) => {
+    relevansFor: krav.relevansFor.map((relevans: ICode) => relevans.code),
+    regelverk: krav.regelverk.map((regelverk: IRegelverk) => ({
+      ...regelverk,
+      lov: regelverk.lov.code,
+    })),
+    begrepIder: krav.begreper.map((begrep: IBegrep) => begrep.id),
+    idRelasjoner: krav.kravRelasjoner.map((kravRelasjon: IKrav) => kravRelasjon.id),
+    varslingsadresser: krav.varslingsadresserQl.map((varslingsadresse: TVarslingsadresseQL) => {
       return {
         adresse: varslingsadresse.adresse,
         type: varslingsadresse.type,
@@ -99,7 +105,7 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
 export const useSearchKrav = async (searchParams: string) => {
   if (searchParams && searchParams.length > 2) {
     if (searchParams.toLowerCase().match(/k\d{1,3}/)) {
-      let kravNumber = searchParams
+      let kravNumber: string = searchParams
       if (kravNumber[0].toLowerCase() === 'k') {
         kravNumber = kravNumber.substring(1)
       }
@@ -115,32 +121,32 @@ export const useSearchKrav = async (searchParams: string) => {
             return [
               {
                 value: kravRes.id,
-                label: 'K' + kravRes.kravNummer + '.' + kravRes.kravVersjon + ' ' + kravRes.navn,
+                label: `K${kravRes.kravNummer}.${kravRes.kravVersjon} ${kravRes.navn}`,
                 ...kravRes,
               },
             ]
           }
         } else {
-          const kravRes = await searchKrav(kravNumber)
+          const kravRes: IKrav[] = await searchKrav(kravNumber)
           return kravRes
-            .filter((krav) => krav.status === EKravStatus.AKTIV)
-            .map((krav) => {
+            .filter((krav: IKrav) => krav.status === EKravStatus.AKTIV)
+            .map((krav: IKrav) => {
               return {
                 value: krav.id,
-                label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
+                label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
                 ...krav,
               }
             })
         }
       }
     } else {
-      const kravRes = await searchKrav(searchParams)
+      const kravRes: IKrav[] = await searchKrav(searchParams)
       return kravRes
-        .filter((krav) => krav.status === EKravStatus.AKTIV)
-        .map((krav) => {
+        .filter((krav: IKrav) => krav.status === EKravStatus.AKTIV)
+        .map((krav: IKrav) => {
           return {
             value: krav.id,
-            label: 'K' + krav.kravNummer + '.' + krav.kravVersjon + ' ' + krav.navn,
+            label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
             ...krav,
           }
         })
@@ -186,10 +192,10 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
       krav.regelverk[0].lov.data.tema) ||
     '',
   kravRelasjoner: krav.kravRelasjoner || [],
+  kravIdRelasjoner: [],
   // not used
   begrepIder: [],
   etterlevelser: [],
-  kravIdRelasjoner: [],
   aktivertDato: krav.aktivertDato || '',
   prioriteringsId: 0,
 })

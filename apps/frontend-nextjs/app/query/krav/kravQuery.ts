@@ -32,8 +32,8 @@ const getKravByLovCodeQuery = gql`
 `
 
 export const getKravWithEtterlevelseQuery = gql`
-  query getKravWithEtterlevelse($id: ID, $kravNummer: Int, $kravVersjon: Int) {
-    kravById(id: $id, nummer: $kravNummer, versjon: $kravVersjon) {
+  query getKravWithEtterlevelse($kravId: ID, $kravNummer: Int, $kravVersjon: Int) {
+    kravById(id: $kravId, nummer: $kravNummer, versjon: $kravVersjon) {
       id
       kravNummer
       kravVersjon
