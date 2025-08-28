@@ -43,6 +43,10 @@ jobs:
       - name: install
         run: yarn install
 
+      - name: use dev config
+        if: github.ref == 'refs/heads/master'
+        run: cp .env.dev .env
+
       - name: use prod config
         if: github.ref == 'refs/heads/prod'
         run: cp .env.prod .env
