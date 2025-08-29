@@ -274,7 +274,6 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
               <Button
                 type='button'
                 onClick={async () => {
-                  setSubmitClicked(!submitClicked)
                   await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                   setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                   await submitForm().then(async () => {
@@ -282,6 +281,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                       await arkiver(etterlevelseDokumentasjon.id, true, true, false)
                     }
                   })
+                  setSubmitClicked(!submitClicked)
                 }}
               >
                 Lagre, send tilbakemelding, og arkivér i Public 360
