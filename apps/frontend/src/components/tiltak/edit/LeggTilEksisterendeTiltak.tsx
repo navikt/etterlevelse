@@ -1,8 +1,10 @@
 import { Button, Chips, Select, VStack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { RefObject, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { addTiltakToRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../constants'
+import { risikoscenarioTiltakUrl } from '../../common/RouteLinkPvk'
 
 interface IProps {
   risikoscenario: IRisikoscenario
@@ -13,6 +15,7 @@ interface IProps {
 }
 
 export const LeggTilEksisterendeTiltak = (props: IProps) => {
+  const navigate = useNavigate()
   const { risikoscenario, tiltakList, setIsAddExisitingMode, customSubmit, formRef } = props
   const [selectedTiltak, setSelectedTiltak] = useState<string[]>([])
 
@@ -32,6 +35,7 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
 
   const submit = async (request: ITiltakRisikoscenarioRelasjon) => {
     await addTiltakToRisikoscenario(request).then(() => {
+      navigate(risikoscenarioTiltakUrl(request.risikoscenarioId, request.tiltakIds[0]))
       window.location.reload()
       setIsAddExisitingMode(false)
     })
