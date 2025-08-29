@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -48,6 +48,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   const [isAngreInnsending, setIsAngreInnsending] = useState<boolean>(false)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderlist] = useState<ICode[]>([])
+  const formRef: RefObject<any> = useRef(undefined)
 
   const submit = async (submittedValues: IPvoTilbakemelding): Promise<void> => {
     //backend vil oppdatere statusen til PVk dokument til 'SENDT_TIL_PVO', dersom statusen til PVO tilbakemelding = 'ikke påbegynt' eller 'avventer'
@@ -130,8 +131,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       onSubmit={submit}
       initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
       validationSchema={sendInnCheck}
+      innerRef={formRef}
     >
-      {({ submitForm, setFieldValue }) => (
+      {({ submitForm, setFieldValue, errors }) => (
         <Form>
           {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
             <SendInnPvoViewIkkeFerdig
@@ -146,6 +148,8 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               isAlertModalOpen={isAlertModalOpen}
               setIsAlertModalOpen={setIsAlertModalOpen}
               pvoVurderingList={pvoVurderingList}
+              errors={errors}
+              formRef={formRef}
             />
           )}
           {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
