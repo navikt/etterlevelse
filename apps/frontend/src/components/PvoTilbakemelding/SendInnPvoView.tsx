@@ -27,6 +27,7 @@ type TProps = {
   personkategorier: string[]
   databehandlere: string[]
   pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -37,6 +38,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
+  setPvoTilbakemelding,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -86,7 +88,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                 pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
                 vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
               }
-              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+              await updatePvoTilbakemelding(updatedValues).then((response: IPvoTilbakemelding) =>
+                setPvoTilbakemelding(response)
+              )
             }
           }
         })
@@ -108,7 +112,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
               vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
             })
-            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+            await createPvoTilbakemelding(createValue).then((response: IPvoTilbakemelding) =>
+              setPvoTilbakemelding(response)
+            )
           } else {
             console.debug(error)
           }
