@@ -28,12 +28,15 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 
       <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
 
-      <Alert variant='info' className='my-5'>
-        Ved å trekke innsending til personvernombudet vil PVK dokumentet miste plassen i sakskøen
+      <Alert variant='info' className='my-5' inline>
+        Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å trekke
+        PVO-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
+        vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende plass i
+        behandlingskøen.
       </Alert>
 
       {isLoading && (
-        <div className='flex justify-center items-center w-full'>
+        <div className='flex justify-center items-center w-full '>
           <Loader size='2xlarge' title='lagrer endringer' />
         </div>
       )}
@@ -41,6 +44,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
       <div className='mt-5 flex gap-2 items-center'>
         <Button
           type='button'
+          variant='secondary'
           onClick={async () => {
             if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
               await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
@@ -50,7 +54,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
             await submitForm()
           }}
         >
-          Trekk innsending til personvernombudet
+          Trekk innsending
         </Button>
       </div>
       <div className='w-full flex justify-end items-center'>
