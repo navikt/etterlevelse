@@ -84,7 +84,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
     if (!_.isEmpty(formRef?.current?.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
-  }, [submitClicked, formRef, errorSummaryRef])
+  }, [submitClicked])
 
   return (
     <div className='pt-6 flex justify-center'>

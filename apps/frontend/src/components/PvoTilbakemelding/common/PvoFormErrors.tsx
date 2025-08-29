@@ -19,7 +19,7 @@ export const PvoFormErrors: FunctionComponent<TProps> = ({ errors, errorSummaryR
   }
 
   return (
-    <div>
+    <>
       {!_.isEmpty(errors) && (
         <ErrorSummary
           ref={errorSummaryRef}
@@ -35,7 +35,7 @@ export const PvoFormErrors: FunctionComponent<TProps> = ({ errors, errorSummaryR
             ))}
         </ErrorSummary>
       )}
-    </div>
+    </>
   )
 }
 export default PvoFormErrors
