@@ -1,9 +1,10 @@
 'use client'
 
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
+import { kravStatus } from '@/components/etterlevelse/krav/kravComponents'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
+import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
@@ -21,20 +22,6 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { ChangeEvent, useEffect, useState } from 'react'
-
-const kravStatus = (status: EKravStatus | string) => {
-  if (!status) return ''
-  switch (status) {
-    case EKravStatus.UTKAST:
-      return 'Utkast'
-    case EKravStatus.AKTIV:
-      return 'Aktiv'
-    case EKravStatus.UTGAATT:
-      return 'Utgått'
-    default:
-      return status
-  }
-}
 
 const KravAdminPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])

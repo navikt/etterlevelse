@@ -1,8 +1,15 @@
-import { kravlisteUrl } from './kraveier/kraveierRoutes'
-
 export const kravUrl: string = '/krav'
+export const kravlisteUrl: string = `${kravUrl}liste`
 
-export const kravlisteOpprettUrl = () => `${kravlisteUrl()}/opprett`
+export const kravlisteQueryUrl = (tabQuery?: string): string => {
+  if (tabQuery) {
+    return `${kravlisteUrl}/${tabQuery}`
+  }
+
+  return kravlisteUrl
+}
+
+export const kravlisteOpprettUrl = () => `${kravlisteUrl}/opprett`
 export const kravRedigeringIdUrl = (kravId?: string): string => {
   const url: string = `${kravUrl}/redigering`
   if (kravId) {
