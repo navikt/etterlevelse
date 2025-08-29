@@ -82,7 +82,18 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
             </List>
           )}
           {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
-            <BodyLong>Ingen behandlinger knyttet til denne dokumentasjonen.</BodyLong>
+            <Alert variant='warning' id='behandling-error' className='my-5'>
+              Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere gjøre
+              under{' '}
+              <Link
+                href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#behandling`}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='redigere etterlevelsesdokumentasjon'
+              >
+                Redigér dokumentegenskaper (åpner i en ny fane)
+              </Link>
+            </Alert>
           )}
 
           <BodyShort className='inline-block mb-5 max-w-[75ch]'>
