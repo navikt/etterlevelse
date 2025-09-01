@@ -41,7 +41,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='mt-5 flex gap-2 items-center'>
+      <div className='ml-9 mt-5 flex gap-2 items-center'>
         <Button
           type='button'
           variant='secondary'
