@@ -84,11 +84,18 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
       })
+      setRisikoscenarioer(
+        risikoscenarioer.map((risikoscenario) => {
+          if (risikoscenario.id === activeRisikoscenario.id) {
+            return { ...risikoscenario, tiltakIds: [...risikoscenario.tiltakIds, response.id] }
+          } else {
+            return risikoscenario
+          }
+        })
+      )
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
-
       navigate(risikoscenarioTiltakUrl(activeRisikoscenario.id, response.id))
-      window.location.reload()
     })
   }
 
