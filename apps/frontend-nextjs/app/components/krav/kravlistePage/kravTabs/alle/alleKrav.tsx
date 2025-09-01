@@ -84,12 +84,12 @@ export const AllKrav = () => {
 
   return (
     <>
-      {loading && !kravene.numberOfElements && (
+      {loading && (
         <div className='justify-center flex flex-1 mt-10'>
           <Loader size='large' />
         </div>
       )}
-      {!loading && kravene.numberOfElements && (
+      {!loading && (
         <>
           {error && <Alert variant='error'>{JSON.stringify(error, null, 2)}</Alert>}
           {!error && (

@@ -7,6 +7,7 @@ import { IKrav } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { Button, Label, Loader, Modal } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { useState } from 'react'
 import { KravPriorityPanels } from '../kravPriorityPanels/kravPriorityPanels'
 
 export const EditPriorityModal = (props: {
@@ -19,7 +20,7 @@ export const EditPriorityModal = (props: {
   refresh: () => void
 }) => {
   const { isOpen, setIsOpen, kravListe, tema, temaCode, kravPriorityList, refresh } = props
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = useState(false)
 
   const submit = ({ krav }: { krav: IKrav[] }) => {
     setLoading(true)
