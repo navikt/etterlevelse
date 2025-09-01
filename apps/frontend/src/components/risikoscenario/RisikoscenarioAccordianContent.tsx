@@ -59,8 +59,16 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
+      setRisikoscenarioer(
+        risikoscenarioer.map((risikoscenario) => {
+          if (risikoscenario.id === activeRisikoscenario.id) {
+            return response
+          } else {
+            return risikoscenario
+          }
+        })
+      )
       setIsEditModalOpen(false)
-      window.location.reload()
     })
   }
 
@@ -74,7 +82,15 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
       updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
         setActiveRisikoscenario(response)
-        window.location.reload()
+        setRisikoscenarioer(
+          risikoscenarioer.map((risikoscenario) => {
+            if (risikoscenario.id === activeRisikoscenario.id) {
+              return response
+            } else {
+              return risikoscenario
+            }
+          })
+        )
       })
     })
   }
