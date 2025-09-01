@@ -2,8 +2,7 @@ import { getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '@/a
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { kravlisteUrl } from '@/routes/krav/kraveier/kraveierRoutes'
+import { kravNummerVersjonUrl, kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 import { user } from '@/services/user/userService'
 import { Button } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
@@ -40,7 +39,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             if (krav.kravNummer && krav.kravVersjon) {
               router.push(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon))
             } else {
-              router.push(kravlisteUrl())
+              router.push(kravlisteQueryUrl())
             }
           }}
           submitSaveButton={() => {

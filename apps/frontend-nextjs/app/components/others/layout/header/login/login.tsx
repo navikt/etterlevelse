@@ -11,7 +11,7 @@ import { adminPvkUrl } from '@/routes/admin/personvernkonsekvensvurdering/adminP
 import { adminVarselUrl } from '@/routes/admin/varsel/varselRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
-import { kravlisteUrl } from '@/routes/krav/kraveier/kraveierRoutes'
+import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 import { loginUrl } from '@/routes/login/loginRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { user } from '@/services/user/userService'
@@ -70,7 +70,7 @@ export const LoggedInHeader = () => {
   const kravPages: {
     label: string
     href: string
-  }[] = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: kravlisteUrl() }] : []
+  }[] = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: kravlisteQueryUrl() }] : []
   const adminPages: {
     label: string
     href: string

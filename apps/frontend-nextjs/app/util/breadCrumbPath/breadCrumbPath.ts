@@ -1,6 +1,6 @@
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
-import { kravlisteUrl } from '@/routes/krav/kraveier/kraveierRoutes'
+import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 
 export const temaBreadCrumbPath: IBreadCrumbPath = {
   pathName: 'Forstå kravene',
@@ -8,6 +8,6 @@ export const temaBreadCrumbPath: IBreadCrumbPath = {
 }
 
 export const kravBreadCrumbPath: IBreadCrumbPath = {
-  href: kravlisteUrl(),
+  href: kravlisteQueryUrl(),
   pathName: 'Forvalte og opprette krav',
 }
