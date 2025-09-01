@@ -90,6 +90,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
               {!isTiltakFormActive && (
                 <CreateRisikoscenarioModal
                   pvkDokument={pvkDokument}
+                  formRef={formRef}
                   onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
                     setRisikoscenarioList([...risikoscenarioList, risikoscenario])
                   }}
