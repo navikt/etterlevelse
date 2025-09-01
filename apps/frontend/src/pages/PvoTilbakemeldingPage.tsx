@@ -57,7 +57,8 @@ export const PvoTilbakemeldingPage = () => {
     useState<boolean>(false)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.id)
-  const [pvoTilbakemelding, , isPvoTilbakemeldingLoading] = usePvoTilbakemelding(params.id)
+  const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
+    usePvoTilbakemelding(params.id)
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
@@ -321,6 +322,7 @@ export const PvoTilbakemeldingPage = () => {
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
                         codelistUtils={codelistUtils}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                       />
                     )}
                   </div>

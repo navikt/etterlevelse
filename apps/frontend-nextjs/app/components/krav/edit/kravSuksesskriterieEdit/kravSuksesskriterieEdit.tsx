@@ -24,7 +24,7 @@ export const KravSuksesskriterierEdit: FunctionComponent<TKravSuksesskriterieEdi
   newKrav,
 }) => (
   <FieldWrapper>
-    <FieldArray name={'suksesskriterier'}>
+    <FieldArray name='suksesskriterier'>
       {(fieldArrayRenderProps: FieldArrayRenderProps) => (
         <KriterieList
           fieldArrayRenderProps={fieldArrayRenderProps}
@@ -82,7 +82,7 @@ const KriterieList = ({
     <div className='flex flex-col'>
       {suksesskriterier.map((suksesskriterium, index) => (
         <Kriterie
-          key={`${suksesskriterium.id}${index}`}
+          key={`${suksesskriterium.id}_${index}`}
           suksesskriterium={suksesskriterium}
           index={index}
           arrayLength={suksesskriterier.length}

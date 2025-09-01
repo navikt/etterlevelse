@@ -49,7 +49,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         >
           {manglerBehandlingError && (
             <ErrorSummary.Item
-              href={`etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#behandling`}
+              href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#behandling`}
               className='max-w-[75ch]'
             >
               Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen (Redigér

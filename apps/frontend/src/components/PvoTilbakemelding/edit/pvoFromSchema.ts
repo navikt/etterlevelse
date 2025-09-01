@@ -74,7 +74,7 @@ export const sendInnCheck = () => {
       test: function (stringField) {
         const { parent } = this
         if (parent.status === EPvoTilbakemeldingStatus.FERDIG) {
-          if (stringField === undefined || stringField === '') {
+          if (stringField === null || stringField === undefined || stringField === '') {
             return false
           } else {
             return true

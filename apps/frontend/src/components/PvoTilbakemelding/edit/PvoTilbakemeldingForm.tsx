@@ -226,7 +226,6 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 height='15.625rem'
                 name='tilbakemeldingTilEtterlevere'
                 label='Skriv tilbakemelding til etterleveren'
-                caption='Tilbakemeldingen blir ikke tilgjengelig for etterleveren før PVK-en sendes tilbake.'
                 withUnderline={true}
               />
             </div>

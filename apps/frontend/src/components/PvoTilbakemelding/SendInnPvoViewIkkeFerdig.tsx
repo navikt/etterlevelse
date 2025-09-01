@@ -1,6 +1,15 @@
 import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import _ from 'lodash'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { arkiver } from '../../api/P360Api'
 import {
   EPvoTilbakemeldingStatus,
@@ -13,6 +22,7 @@ import { isDev } from '../../util/config'
 import { FieldRadioLayout, IndentLayoutTextField } from '../common/IndentLayout'
 import { TextAreaField } from '../common/Inputs'
 import AlertPvoModal from './common/AlertPvoModal'
+import PvoFormErrors from './common/PvoFormErrors'
 import {
   BeskjedTilbakemeldingEtterlever,
   CopyButtonCommon,
@@ -36,6 +46,8 @@ type TProps = {
   isAlertModalOpen: boolean
   setIsAlertModalOpen: Dispatch<SetStateAction<boolean>>
   pvoVurderingList: ICode[]
+  errors: FormikErrors<IPvoTilbakemelding>
+  formRef: RefObject<any>
 }
 
 export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
@@ -50,7 +62,11 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   isAlertModalOpen,
   setIsAlertModalOpen,
   pvoVurderingList,
+  errors,
+  formRef,
 }) => {
+  const [submitClicked, setSubmitClicked] = useState<boolean>(false)
+  const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const updateCheckBoxOnRadioChange = async (value: string) => {
     if (value === 'BRA_PVK' || value === undefined) {
       await setFieldValue('pvoFolgeOppEndringer', false)
@@ -63,6 +79,12 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
       await setFieldValue('vilFaPvkIRetur', true)
     }
   }
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef?.current?.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClicked])
 
   return (
     <div className='pt-6 flex justify-center'>
@@ -83,6 +105,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
             <Field name='arbeidGarVidere'>
               {(fieldProps: FieldProps) => (
                 <RadioGroup
+                  id='arbeidGarVidere'
                   legend='Anbefales det at arbeidet går videre som planlagt?'
                   value={
                     fieldProps.field.value === null
@@ -116,6 +139,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
             <Field name='behovForForhandskonsultasjon'>
               {(fieldProps: FieldProps) => (
                 <RadioGroup
+                  id='behovForForhandskonsultasjon'
                   legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
                   value={
                     fieldProps.field.value === null
@@ -150,13 +174,16 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
             <Field name='pvoVurdering'>
               {(fieldProps: FieldProps) => (
                 <RadioGroup
+                  id='pvoVurdering'
                   legend='PVOs vurdering'
                   value={fieldProps.form.values.pvoVurdering}
                   onChange={(value) => {
                     fieldProps.form.setFieldValue('pvoVurdering', value)
                     updateCheckBoxOnRadioChange(value)
                   }}
-                  error={fieldProps.form.errors.pvoVurdering as string}
+                  error={
+                    fieldProps.form.errors.pvoVurdering ? 'Dere må oppgi en vurdering' : undefined
+                  }
                 >
                   {pvoVurderingList.map((vurdering, index) => (
                     <Radio key={vurdering.code + '_' + index} value={vurdering.code}>
@@ -229,6 +256,8 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
 
         <CopyButtonCommon />
 
+        <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />
+
         <PvoFormButtons
           activeStep={activeStep}
           setActiveStep={setActiveStep}
@@ -252,6 +281,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                       await arkiver(etterlevelseDokumentasjon.id, true, true, false)
                     }
                   })
+                  setSubmitClicked(!submitClicked)
                 }}
               >
                 Lagre, send tilbakemelding, og arkivér i Public 360
