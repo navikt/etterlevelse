@@ -28,7 +28,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 
       <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
 
-      <Alert variant='info' className='my-5' inline>
+      <Alert variant='info' className='ml-4 my-5' inline>
         Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å trekke
         PVO-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
         vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende plass i
@@ -41,7 +41,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='ml-9 mt-5 flex gap-2 items-center'>
+      <div className='ml-13 mt-5 flex gap-2 items-center'>
         <Button
           type='button'
           variant='secondary'
