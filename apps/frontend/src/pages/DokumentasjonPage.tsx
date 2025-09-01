@@ -233,6 +233,41 @@ export const DokumentasjonPage = () => {
     pvkDokument &&
     (pvkDokument.ytterligereEgenskaper.length !== 0 || pvkDokument.skalUtforePvk !== null)
 
+  const getPvkButtonText = (pvkDokument: IPvkDokument) => {
+    const updatedAfterApprovedOfRisikoeier =
+      pvkDokument.godkjentAvRisikoeierDato !== '' &&
+      pvkDokument.changeStamp.lastModifiedDate > pvkDokument.godkjentAvRisikoeierDato
+
+    if (pvkDokumentNotStarted) {
+      return 'Påbegynn PVK'
+    } else if (!pvkDokumentNotStarted && pvkDokument.status === EPvkDokumentStatus.UNDERARBEID) {
+      return 'Fullfør PVK'
+    } else if (!pvkDokumentNotStarted && isReadOnlyPvkStatus(pvkDokument.status)) {
+      return 'Les PVK'
+    } else if (
+      !pvkDokumentNotStarted &&
+      [
+        EPvkDokumentStatus.VURDERT_AV_PVO,
+        EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
+        EPvkDokumentStatus.TRENGER_GODKJENNING,
+      ].includes(pvkDokument.status)
+    ) {
+      return 'Les tilbakemelding fra PVO'
+    } else if (
+      !pvkDokumentNotStarted &&
+      pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+      !updatedAfterApprovedOfRisikoeier
+    ) {
+      return 'Les godkjent PVK'
+    } else if (
+      !pvkDokumentNotStarted &&
+      pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+      updatedAfterApprovedOfRisikoeier
+    ) {
+      return 'Oppdatér PVK'
+    }
+  }
+
   return (
     <PageLayout
       pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title}
@@ -361,23 +396,7 @@ export const DokumentasjonPage = () => {
                             variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
                             className='whitespace-nowrap'
                           >
-                            {pvkDokumentNotStarted && 'Påbegynn PVK'}
-                            {!pvkDokumentNotStarted &&
-                              pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
-                              'Fullfør PVK'}
-                            {!pvkDokumentNotStarted &&
-                              isReadOnlyPvkStatus(pvkDokument.status) &&
-                              'Les PVK'}
-                            {!pvkDokumentNotStarted &&
-                              [
-                                EPvkDokumentStatus.VURDERT_AV_PVO,
-                                EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
-                                EPvkDokumentStatus.TRENGER_GODKJENNING,
-                              ].includes(pvkDokument.status) &&
-                              'Les tilbakemelding fra PVO'}
-                            {!pvkDokumentNotStarted &&
-                              pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-                              'Les godkjent PVK'}
+                            {getPvkButtonText(pvkDokument)}
                           </Button>
                         )}
 
