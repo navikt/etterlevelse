@@ -3,9 +3,13 @@ import { Alert, Button } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
-import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
+import {
+  addTiltakToRisikoscenario,
+  getRisikoscenario,
+  updateRisikoscenario,
+} from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
-import { IRisikoscenario, ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../constants'
 import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { isReadOnlyPvkStatus } from '../PvkDokument/common/util'
 import { risikoscenarioTiltakUrl } from '../common/RouteLinkPvk'
@@ -117,6 +121,31 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     })
   }
 
+  const submitLeggTilEksisterendeTitltak = async (request: ITiltakRisikoscenarioRelasjon) => {
+    await addTiltakToRisikoscenario(request).then(() => {
+      navigate(risikoscenarioTiltakUrl(request.risikoscenarioId, request.tiltakIds[0]))
+
+      setActiveRisikoscenario({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
+      })
+      setRisikoscenarioer(
+        risikoscenarioer.map((risikoscenario) => {
+          if (risikoscenario.id === activeRisikoscenario.id) {
+            return {
+              ...risikoscenario,
+              tiltakIds: [...risikoscenario.tiltakIds, ...request.tiltakIds],
+            }
+          } else {
+            return risikoscenario
+          }
+        })
+      )
+
+      setIsAddExisitingMode(false)
+    })
+  }
+
   return (
     <div>
       <RisikoscenarioView
@@ -194,6 +223,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 tiltakList={tiltakList}
                 setIsAddExisitingMode={setIsAddExisitingMode}
                 formRef={formRef}
+                submit={submitLeggTilEksisterendeTitltak}
               />
             )}
 
