@@ -5,7 +5,7 @@ import { sortKravListeByPriority } from '@/util/krav/kravUtil'
 import { Button, List } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { EditPriorityModal } from './editPriorityModal/editPriorityModal'
-import { getKravTemaRowsWithLabel } from './getKravTemaRowsWithLabel/getKravTemaRowsWithLabel'
+import { KravTemaRowsWithLabel } from './kravTemaRowsWithLabel/kravTemaRowsWithLabel'
 
 interface IKravTemaListProps {
   activeKravList: IKrav[]
@@ -36,8 +36,8 @@ export const KravTemaList = (props: IKravTemaListProps) => {
   return (
     <div className='flex flex-col gap-2'>
       <List>
-        {getKravTemaRowsWithLabel(draftKrav, tema)}
-        {getKravTemaRowsWithLabel(activeKravSortedWithPriority, tema)}
+        <KravTemaRowsWithLabel kravListe={draftKrav} tema={tema} />
+        <KravTemaRowsWithLabel kravListe={activeKravSortedWithPriority} tema={tema} />
       </List>
       <div className={'w-full flex flex-row-reverse pt-5'}>
         <Button variant='secondary' size='medium' onClick={() => setIsEditPriorityModalOpen(true)}>

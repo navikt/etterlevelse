@@ -3,8 +3,14 @@ import { IKrav } from '@/constants/krav/kravConstants'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { BodyLong, BodyShort, Label, LinkPanel, List, Spacer } from '@navikt/ds-react'
 import moment from 'moment'
+import { FunctionComponent } from 'react'
 
-export const getKravTemaRowsWithLabel = (kravListe: IKrav[], tema: string) => (
+type TProps = {
+  kravListe: IKrav[]
+  tema: string
+}
+
+export const KravTemaRowsWithLabel: FunctionComponent<TProps> = ({ kravListe, tema }) => (
   <>
     {kravListe.map((krav: IKrav, index: number) => (
       <List.Item icon={<div />} key={`${krav.navn}_${krav.kravNummer}_${tema}_${index}`}>
