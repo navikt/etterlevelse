@@ -45,9 +45,9 @@ public class SlackService {
         }
     }
 
-    @Transactional
     // Returns true if there was a pending message to send, false otherwise.
-    private boolean sendOneMessage(int priority) {
+    @Transactional
+    boolean sendOneMessage(int priority) {
         SlackMelding sm = repo.getOneWithPriority(priority).orElse(null);
         if (sm == null) return false;
 
@@ -65,7 +65,7 @@ public class SlackService {
             return true;
         } catch (RuntimeException e) {
             log.error("Exception caught while trying to send slack message (may cause hickup/re-sending of message parts)", e);
-            throw new RuntimeException("Exception caught while trying to send slack message (may cause hickup/re-sending of message parts)");
+            throw new RuntimeException("Exception caught while trying to send slack message (may cause hickup/re-sending of message parts)" , e);
         }
     }
     
