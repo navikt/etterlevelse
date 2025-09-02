@@ -209,7 +209,7 @@ public class KravService {
         List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
 
         Codelist lov = CodelistService.getCodelist(ListName.LOV, krav.getRegelverk().get(0).getLov());
-        String temaId = lov.valueFromKeyData("tema");
+        String temaId = lov.getData().findValue("tema").textValue();
         Codelist tema = CodelistService.getCodelist(ListName.TEMA, temaId);
 
         relevanteDokumentasjon.forEach(e -> {
