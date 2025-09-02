@@ -121,11 +121,15 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
         ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) =>
           setDokumentRelasjon(response[0])
         )
-
-        await getAvdelingOptions().then(setAllAvdelingOptions)
       }
     })()
   }, [etterlevelseDokumentasjon])
+
+  useEffect(() => {
+    ;(async () => {
+      await getAvdelingOptions().then(setAllAvdelingOptions)
+    })()
+  }, [])
 
   useEffect(() => {
     if (!_.isEmpty(formRef.current.errors) && errorSummaryRef.current) {
