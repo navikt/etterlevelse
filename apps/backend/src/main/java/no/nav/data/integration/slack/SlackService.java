@@ -24,7 +24,7 @@ public class SlackService {
 
     // @Scheduled(cron = "0 55 12 * * *") // Happens every day at 12:55:00
     @SchedulerLock(name = "sendSlackEnGros")
-    @Scheduled(cron = "10 * * * * *") // Happens every minute (10 seconds past every minute)
+    @Scheduled(cron = "15 * * * * *") // Happens every minute (10 seconds past every minute)
     public void sendAll() {
         log.info("Sending all pending slack messages...");
         int sendCount = 0;
