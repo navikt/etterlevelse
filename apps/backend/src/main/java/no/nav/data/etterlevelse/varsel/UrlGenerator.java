@@ -25,4 +25,17 @@ public class UrlGenerator {
     public String etterlevelseDokumentasjonUrl(String etterlevelseDokumentasjonId) {
         return "%s/dokumentasjon/%s".formatted(baseUrl, etterlevelseDokumentasjonId);
     }
+
+    public String kravUrl(String kravId) {
+        return "%s/krav/%s".formatted(baseUrl, kravId);
+    }
+
+    public String temaUrl(String temaId) {
+        return "%s/tema/%s".formatted(baseUrl, temaId);
+    }
+
+    public String baseUrl() {
+        return baseUrl;
+    }
+
 }

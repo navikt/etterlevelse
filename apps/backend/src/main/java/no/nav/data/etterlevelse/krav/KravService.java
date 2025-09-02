@@ -11,6 +11,9 @@ import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.JsonUtils;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.Codelist;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
@@ -205,19 +208,30 @@ public class KravService {
     private void varsle(Krav krav, boolean isNewVersion) {
         List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
 
+        Codelist lov = CodelistService.getCodelist(ListName.LOV, krav.getRegelverk().get(0).getLov());
+        String temaId = lov.getFromKeyData("tema");
+        Codelist tema = CodelistService.getCodelist(ListName.TEMA, temaId);
+
         relevanteDokumentasjon.forEach(e -> {
             if (e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {
                 List<Varslingsadresse> recipients = e.getVarslingsadresser();
-                String etterlevelseId = "E%s %s".formatted(e.getEtterlevelseNummer(), e.getTitle());
+                String etterlevelseDokumentasjonTittel = "E%s %s".formatted(e.getEtterlevelseNummer(), e.getTitle());
+                String kravTittel = "K%s.%s: %s".formatted(krav.getKravNummer(), krav.getKravVersjon(), e.getTitle());
                 var varselBuilder = Varsel.builder();
                 if (isNewVersion) {
-                    varselBuilder.title("Det har kommet en ny versjon på krav K%d".formatted(krav.getKravNummer()));
+                    varselBuilder.title("Nytt versjon på etterlevelseskrav K%s.%s".formatted(krav.getKravNummer(), krav.getKravVersjon()));
                 }  else {
-                    varselBuilder.title("Det har kommet et nytt krav som er relevant for ditt Etterlevelses dokument. K%d.%d".formatted(krav.getKravNummer(), krav.getKravVersjon()));
+                    varselBuilder.title("Nytt etterlevelseskrav K%s.%s".formatted(krav.getKravNummer(), krav.getKravVersjon()));
                 }
 
-                varselBuilder.paragraph(new Varsel.Paragraph("Det har kommet nytt krav som gjelder for din Etterlevelses dokumentasjon, %s",
-                                url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()), etterlevelseId )));
+                varselBuilder.paragraph(
+                        new Varsel.Paragraph("%s \n Det har blitt lagt inn nytt krav i %s under tema %s. Kravet kan være relevant for ditt utfylte etterlevelsesdokument %s",
+                                url(urlGenerator.kravUrl(krav.getId().toString()), kravTittel),
+                                url(urlGenerator.baseUrl(), "Støtte til Etterlevelse"),
+                                url(urlGenerator.temaUrl(tema.getCode()), tema.getShortName()),
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()),etterlevelseDokumentasjonTittel)
+                        )
+                );
 
                 varselService.varsle(recipients, varselBuilder.build());
             }
