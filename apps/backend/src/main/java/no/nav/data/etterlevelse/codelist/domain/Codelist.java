@@ -67,7 +67,7 @@ public class Codelist extends Auditable {
 
     }
 
-    public String getFromKeyData(String dataKey){
+    public String valueFromKeyData(String dataKey){
         JsonNode value = data.findValue(dataKey);
         if(value != null && value.isTextual()){
             return value.asText();
