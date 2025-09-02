@@ -141,7 +141,7 @@ public class P360Service {
                     new HttpEntity<>(request, createHeadersWithAuth()),
                     P360Document.class);
             assert response.getBody() != null;
-            if(!response.getBody().getErrorMessage().isEmpty()) {
+            if(response.getBody().getErrorMessage() != null && !response.getBody().getErrorMessage().isEmpty()) {
                 throw new RestClientException(response.getBody().getErrorMessage());
             }
             return response.getBody();
