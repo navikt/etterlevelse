@@ -46,7 +46,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
               if (isReadOnlyPvkStatus(response.status)) {
                 setIsPvoAlertModal(true)
               } else {
-                if (formRef.current.dirty) {
+                if (formRef && formRef.current && formRef.current.dirty) {
                   setIsUnsavedModalOpen(true)
                 } else {
                   setIsEdit(true)
