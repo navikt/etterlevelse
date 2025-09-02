@@ -46,9 +46,9 @@ public class CodelistService implements InitializingBean {
     }
 
     public static Codelist getCodelistTemaFromLov(String lovId) {
-        CodelistResponse lov = getCodelistResponse(ListName.LOV, lovId);
-
-        return CodelistCache.getCodelist(ListName.TEMA, lov.getData().get());
+        Codelist lov = getCodelist(ListName.LOV, lovId);
+        String temaId = lov.getValueFromKeyData("tema");
+        return CodelistCache.getCodelist(ListName.TEMA, temaId);
     }
 
 

@@ -207,10 +207,7 @@ public class KravService {
 
     private void varsle(Krav krav, boolean isNewVersion) {
         List<EtterlevelseDokumentasjon> relevanteDokumentasjon = getDocumentForKrav(krav, isNewVersion);
-
-        Codelist lov = CodelistService.getCodelist(ListName.LOV, krav.getRegelverk().get(0).getLov());
-        String temaId = lov.getData().findValue("tema").textValue();
-        Codelist tema = CodelistService.getCodelist(ListName.TEMA, temaId);
+        Codelist tema = CodelistService.getCodelistTemaFromLov(krav.getRegelverk().get(0).getLov());
 
         relevanteDokumentasjon.forEach(e -> {
             if (e.getVarslingsadresser() != null && !e.getVarslingsadresser().isEmpty()) {

@@ -66,4 +66,13 @@ public class Codelist extends Auditable {
         private String code;
 
     }
+
+    public String getValueFromKeyData(String dataKey){
+        JsonNode value = data.findValue(dataKey);
+        if(value != null && value.isTextual()){
+            return value.asText();
+        } else {
+            return null;
+        }
+    }
 }
