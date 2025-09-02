@@ -50,6 +50,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   const [isAngreInnsending, setIsAngreInnsending] = useState<boolean>(false)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderlist] = useState<ICode[]>([])
+  const [sucessSubmit, setSuccessSubmit] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
 
   const submit = async (submittedValues: IPvoTilbakemelding): Promise<void> => {
@@ -88,9 +89,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                 pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
                 vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
               }
-              await updatePvoTilbakemelding(updatedValues).then((response: IPvoTilbakemelding) =>
+              await updatePvoTilbakemelding(updatedValues).then((response: IPvoTilbakemelding) => {
                 setPvoTilbakemelding(response)
-              )
+                setSuccessSubmit(true)
+              })
             }
           }
         })
@@ -112,9 +114,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
               vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
             })
-            await createPvoTilbakemelding(createValue).then((response: IPvoTilbakemelding) =>
+            await createPvoTilbakemelding(createValue).then((response: IPvoTilbakemelding) => {
               setPvoTilbakemelding(response)
-            )
+              setSuccessSubmit(true)
+            })
           } else {
             console.debug(error)
           }
@@ -156,6 +159,8 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               pvoVurderingList={pvoVurderingList}
               errors={errors}
               formRef={formRef}
+              sucessSubmit={sucessSubmit}
+              setSuccessSubmit={setSuccessSubmit}
             />
           )}
           {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
@@ -172,6 +177,8 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               setIsAlertModalOpen={setIsAlertModalOpen}
               pvoVurderingList={pvoVurderingList}
               setIsAngreInnsending={setIsAngreInnsending}
+              sucessSubmit={sucessSubmit}
+              setSuccessSubmit={setSuccessSubmit}
             />
           )}
         </Form>

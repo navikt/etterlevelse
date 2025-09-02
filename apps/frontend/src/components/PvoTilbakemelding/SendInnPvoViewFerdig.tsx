@@ -29,6 +29,8 @@ type TProps = {
   setIsAlertModalOpen: Dispatch<SetStateAction<boolean>>
   pvoVurderingList: ICode[]
   setIsAngreInnsending: (state: boolean) => void
+  sucessSubmit: boolean
+  setSuccessSubmit: (state: boolean) => void
 }
 
 export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
@@ -44,6 +46,8 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   setIsAlertModalOpen,
   pvoVurderingList,
   setIsAngreInnsending,
+  sucessSubmit,
+  setSuccessSubmit,
 }) => {
   const getPvoVurdering = () => {
     const vurderingen = pvoVurderingList.filter(
@@ -134,6 +138,12 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
         </div>
 
         <CopyButtonCommon />
+
+        {sucessSubmit && (
+          <Alert variant='success' closeButton onClose={() => setSuccessSubmit(false)}>
+            Lagring velykket
+          </Alert>
+        )}
 
         <Alert variant='success' className='my-5'>
           Tilbakemelding er sendt

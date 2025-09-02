@@ -1,4 +1,4 @@
-import { Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
+import { Alert, Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import _ from 'lodash'
 import {
@@ -48,6 +48,8 @@ type TProps = {
   pvoVurderingList: ICode[]
   errors: FormikErrors<IPvoTilbakemelding>
   formRef: RefObject<any>
+  sucessSubmit: boolean
+  setSuccessSubmit: (state: boolean) => void
 }
 
 export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
@@ -64,6 +66,8 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   pvoVurderingList,
   errors,
   formRef,
+  sucessSubmit,
+  setSuccessSubmit,
 }) => {
   const [submitClicked, setSubmitClicked] = useState<boolean>(false)
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
@@ -255,6 +259,12 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
         </div>
 
         <CopyButtonCommon />
+
+        {sucessSubmit && (
+          <Alert variant='success' closeButton onClose={() => setSuccessSubmit(false)}>
+            Lagring velykket
+          </Alert>
+        )}
 
         <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />
 
