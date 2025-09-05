@@ -216,14 +216,14 @@ public class KravService {
                 String kravTittel = "K%s.%s: %s".formatted(krav.getKravNummer(), krav.getKravVersjon(), e.getTitle());
                 var varselBuilder = Varsel.builder();
                 if (isNewVersion) {
-                    varselBuilder.title("Nytt versjon på etterlevelseskrav K%s.%s".formatted(krav.getKravNummer(), krav.getKravVersjon()));
+                    varselBuilder.title("Ny versjon på etterlevelseskrav %s ".formatted(kravTittel));
                 }  else {
-                    varselBuilder.title("Nytt etterlevelseskrav K%s.%s".formatted(krav.getKravNummer(), krav.getKravVersjon()));
+                    varselBuilder.title("Nytt etterlevelseskrav %s".formatted(kravTittel));
                 }
 
                 varselBuilder.paragraph(
                         new Varsel.Paragraph("%s \n Det har blitt lagt inn nytt krav i %s under tema %s. Kravet kan være relevant for ditt utfylte etterlevelsesdokument %s",
-                                url(urlGenerator.kravUrl(krav.getKravNummer().toString(), krav.getKravVersjon().toString()), kravTittel),
+                                url(urlGenerator.kravUrl(krav.getKravNummer().toString(), krav.getKravVersjon().toString()), "Lenke til kravet"),
                                 url(urlGenerator.baseUrl(), "Støtte til Etterlevelse"),
                                 url(urlGenerator.temaUrl(tema.getCode()), tema.getShortName()),
                                 url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()),etterlevelseDokumentasjonTittel)
