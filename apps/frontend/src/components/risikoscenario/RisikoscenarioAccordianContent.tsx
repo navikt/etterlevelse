@@ -299,7 +299,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
         {submitSuccess && (
           <Alert variant='success' onClose={() => setSubmitSuccess(false)} closeButton>
-            Lagring vellyket.
+            Lagring vellykket.
           </Alert>
         )}
       </div>
