@@ -20,6 +20,8 @@ public class EtterlevelseDokumentasjonData {
     private String gjenbrukBeskrivelse;
     @Builder.Default
     private boolean tilgjengeligForGjenbruk = false; // True if document is ready for re-use
+
+   //TODO mulig dette feltet skal fjernes
     @Builder.Default
     private boolean behandlerPersonopplysninger = true;
     @Builder.Default
