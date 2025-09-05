@@ -223,7 +223,7 @@ public class KravService {
 
                 varselBuilder.paragraph(
                         new Varsel.Paragraph("%s \n Det har blitt lagt inn nytt krav i %s under tema %s. Kravet kan være relevant for ditt utfylte etterlevelsesdokument %s",
-                                url(urlGenerator.kravUrl(krav.getId().toString()), kravTittel),
+                                url(urlGenerator.kravUrl(krav.getKravNummer().toString(), krav.getKravVersjon().toString()), kravTittel),
                                 url(urlGenerator.baseUrl(), "Støtte til Etterlevelse"),
                                 url(urlGenerator.temaUrl(tema.getCode()), tema.getShortName()),
                                 url(urlGenerator.etterlevelseDokumentasjonUrl(e.getId().toString()),etterlevelseDokumentasjonTittel)

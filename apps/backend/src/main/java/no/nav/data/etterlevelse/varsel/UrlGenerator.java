@@ -26,8 +26,8 @@ public class UrlGenerator {
         return "%s/dokumentasjon/%s".formatted(baseUrl, etterlevelseDokumentasjonId);
     }
 
-    public String kravUrl(String kravId) {
-        return "%s/krav/%s".formatted(baseUrl, kravId);
+    public String kravUrl(String kravnummer, String kravVersjon) {
+        return "%s/krav/%s/%s".formatted(baseUrl, kravnummer, kravVersjon);
     }
 
     public String temaUrl(String temaId) {
