@@ -29,8 +29,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
     EListName.RELEVANS
   )
 
-  const { behandlerPersonopplysninger, behandlingIds, behandlinger, teams, irrelevansFor } =
-    etterlevelseDokumentasjon
+  const { behandlingIds, behandlinger, teams, irrelevansFor } = etterlevelseDokumentasjon
 
   const getRelevans = (irrelevans: ICode[]) => {
     const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
@@ -105,13 +104,7 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
               </Heading>
 
               <div className='max-w-[75ch]'>
-                {behandlerPersonopplysninger && (
-                  <BehandlingList
-                    behandlingIds={behandlingIds}
-                    behandlerPersonopplysninger={behandlerPersonopplysninger}
-                    behandlinger={behandlinger}
-                  />
-                )}
+                <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
 
                 <div className='flex items-start gap-2 mb-2.5'>
                   <div className='mt-0.75'>

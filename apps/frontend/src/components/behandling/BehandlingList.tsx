@@ -6,19 +6,17 @@ import { getPollyBaseUrl } from './utils/pollyUrlUtils'
 
 interface IProps {
   behandlingIds: string[]
-  behandlerPersonopplysninger: boolean
   behandlinger?: IBehandling[]
 }
 
 export const BehandlingList = (props: IProps) => {
-  const { behandlingIds, behandlinger, behandlerPersonopplysninger } = props
+  const { behandlingIds, behandlinger } = props
 
   return (
     <div className='flex gap-2 mb-2.5'>
       <Label size='medium'>Behandlinger:</Label>
       <div>
         {behandlingIds?.length >= 1 &&
-          behandlerPersonopplysninger &&
           behandlingIds.map((behandlingId, index) => (
             <div key={'behandling_link_' + index}>
               {behandlinger && behandlinger[index].navn && (

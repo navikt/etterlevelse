@@ -44,7 +44,7 @@ import {
 import { user } from '../../../services/User'
 import { isDev } from '../../../util/config'
 import { ROSEdit } from '../../PvkDokument/ROSEdit'
-import { BoolField, FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
+import { FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
 import LabelWithTooltip, { LabelWithDescription } from '../../common/LabelWithTooltip'
 import { Markdown } from '../../common/Markdown'
 import { Error } from '../../common/ModalSchema'
@@ -274,50 +274,42 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
           <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
             Velg behandlinger
           </Heading>
-          <BoolField
-            label='Ønsker du å legge til eksisterende behandling(er) nå?'
-            name='behandlerPersonopplysninger'
-            tooltip='Hvis produktet/systemet behandler personopplysninger må du ha en behandling i Behandlingskatalogen. Det er mulig å legge til behandling senere.'
-          />
-
-          {values.behandlerPersonopplysninger && (
-            <FieldWrapper>
-              <FieldArray name='behandlinger'>
-                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className='my-3'>
-                    <LabelWithDescription
-                      label='Legg til behandlinger fra Behandlingskatalogen'
-                      description='Skriv minst 3 tegn for å søke'
-                    />
-                    <div className='w-full'>
-                      <AsyncSelect
-                        aria-label='Søk etter behandlinger'
-                        placeholder=''
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        loadOptions={searchBehandlingOptions}
-                        onChange={(value: any) => {
-                          if (value) {
-                            fieldArrayRenderProps.push(value)
-                          }
-                        }}
-                        styles={selectOverrides}
-                      />
-                    </div>
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.behandlinger.map(
-                        (behandling: IBehandling) => behandlingName(behandling)
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
+          <FieldWrapper>
+            <FieldArray name='behandlinger'>
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='my-3'>
+                  <LabelWithDescription
+                    label='Legg til behandlinger fra Behandlingskatalogen'
+                    description='Skriv minst 3 tegn for å søke'
+                  />
+                  <div className='w-full'>
+                    <AsyncSelect
+                      aria-label='Søk etter behandlinger'
+                      placeholder=''
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={searchBehandlingOptions}
+                      onChange={(value: any) => {
+                        if (value) {
+                          fieldArrayRenderProps.push(value)
+                        }
+                      }}
+                      styles={selectOverrides}
                     />
                   </div>
-                )}
-              </FieldArray>
-            </FieldWrapper>
-          )}
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.behandlinger.map(
+                      (behandling: IBehandling) => behandlingName(behandling)
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+          </FieldWrapper>
 
           <ROSEdit />
 
