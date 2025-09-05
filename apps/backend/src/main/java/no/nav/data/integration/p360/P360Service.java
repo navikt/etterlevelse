@@ -147,7 +147,7 @@ public class P360Service {
             return response.getBody();
         } catch (Exception e) {
             log.error("Unable to connect to P360, error: {} \n stack: {}", e.getMessage(), Arrays.toString(e.getStackTrace()));
-            errorVarsling("Feil ved oppretting av document i P360 for " + request.getTitle(), String.valueOf(e) + " stack trace: "  + Arrays.toString(e.getStackTrace()));
+            errorVarsling("Feil ved oppretting av document i P360 for " + request.getTitle(), e.getMessage());
             throw new RestClientException(e.getMessage());
         }
     }
