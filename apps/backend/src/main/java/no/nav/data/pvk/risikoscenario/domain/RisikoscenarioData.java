@@ -25,6 +25,8 @@ public class RisikoscenarioData {
     private boolean generelScenario;
     @Builder.Default
     private List<Integer> relevanteKravNummer = new ArrayList<>();
+    @Builder.Default
+    private boolean tiltakOppdatert = false;
 
     private Boolean ingenTiltak;
 

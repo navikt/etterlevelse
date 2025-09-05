@@ -95,7 +95,17 @@ public class RisikoscenarioService {
         for (UUID tiltakId : tiltakIds) {
             tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
         }
-        return get(risikoscenarioId);
+
+        Risikoscenario risikoscenario = get(risikoscenarioId);
+        risikoscenario.getRisikoscenarioData().setTiltakOppdatert(true);
+        return risikoscenarioRepo.save(risikoscenario);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Risikoscenario updateTiltakOppdatertField(UUID risikoscenarioId, boolean tiltakOppdatert) {
+        Risikoscenario risikoscenario = get(risikoscenarioId);
+        risikoscenario.getRisikoscenarioData().setTiltakOppdatert(tiltakOppdatert);
+        return risikoscenarioRepo.save(risikoscenario);
     }
 
     /**

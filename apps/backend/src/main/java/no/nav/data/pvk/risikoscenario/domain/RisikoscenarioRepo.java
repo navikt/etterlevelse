@@ -11,4 +11,6 @@ public interface RisikoscenarioRepo extends JpaRepository<Risikoscenario, UUID> 
 
     @Query(value = "select * from risikoscenario where pvk_dokument_id = ?1", nativeQuery = true)
     List<Risikoscenario> findByPvkDokumentId(UUID pvkDokumentId);
+
+
 }
