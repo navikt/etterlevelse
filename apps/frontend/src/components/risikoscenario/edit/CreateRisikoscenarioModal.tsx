@@ -13,11 +13,13 @@ type TProps = {
   pvkDokument: IPvkDokument
   onSubmitStateUpdate?: (risikoscenario: IRisikoscenario) => void
   formRef: RefObject<any>
+  setIsIngenTilgangFormDirty: (state: boolean) => void
 }
 
 export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
   pvkDokument,
   onSubmitStateUpdate,
+  setIsIngenTilgangFormDirty,
   formRef,
 }) => {
   const navigate: NavigateFunction = useNavigate()
@@ -104,6 +106,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
               variant='secondary'
               onClick={async () => {
                 formRef.current.resetForm(formRef.current.initialValues)
+                setIsIngenTilgangFormDirty(false)
                 setIsUnsavedModalOpen(false)
                 setIsEdit(true)
               }}

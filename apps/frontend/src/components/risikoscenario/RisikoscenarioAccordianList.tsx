@@ -15,6 +15,8 @@ type TProps = {
   setTiltakList: (state: ITiltak[]) => void
   etterlevelseDokumentasjonId: string
   setIsTiltakFormActive: (state: boolean) => void
+  isIngenTilgangFormDirty: boolean
+  setIsIngenTilgangFormDirty: (state: boolean) => void
   formRef: RefObject<any>
 }
 
@@ -26,6 +28,8 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   setTiltakList,
   setRisikoscenarioList,
   setIsTiltakFormActive,
+  isIngenTilgangFormDirty,
+  setIsIngenTilgangFormDirty,
   formRef,
 }) => {
   const navigate: NavigateFunction = useNavigate()
@@ -107,6 +111,8 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
                     setTiltakList={setTiltakList}
                     setRisikoscenarioer={setRisikoscenarioList}
                     setIsTiltakFormActive={setIsTiltakFormActive}
+                    isIngenTilgangFormDirty={isIngenTilgangFormDirty}
+                    setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
                     formRef={formRef}
                   />
                 )}

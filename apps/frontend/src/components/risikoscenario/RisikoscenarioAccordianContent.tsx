@@ -31,6 +31,8 @@ type TProps = {
   setTiltakList: (state: ITiltak[]) => void
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   setIsTiltakFormActive: (state: boolean) => void
+  isIngenTilgangFormDirty: boolean
+  setIsIngenTilgangFormDirty: (state: boolean) => void
   formRef: RefObject<any>
 }
 
@@ -43,6 +45,8 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   setTiltakList,
   setRisikoscenarioer,
   setIsTiltakFormActive,
+  isIngenTilgangFormDirty,
+  setIsIngenTilgangFormDirty,
   formRef,
 }) => {
   const navigate: NavigateFunction = useNavigate()
@@ -52,7 +56,6 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
-  const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
@@ -80,18 +83,20 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         ingenTiltak: submitedValues.ingenTiltak,
       }
 
-      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
-        setActiveRisikoscenario(response)
-        setRisikoscenarioer(
-          risikoscenarioer.map((risikoscenario) => {
-            if (risikoscenario.id === activeRisikoscenario.id) {
-              return response
-            } else {
-              return risikoscenario
-            }
-          })
-        )
-      })
+      updateRisikoscenario(updatedRisikoscenario)
+        .then((response: IRisikoscenario) => {
+          setActiveRisikoscenario(response)
+          setRisikoscenarioer(
+            risikoscenarioer.map((risikoscenario) => {
+              if (risikoscenario.id === activeRisikoscenario.id) {
+                return response
+              } else {
+                return risikoscenario
+              }
+            })
+          )
+        })
+        .finally(() => setIsIngenTilgangFormDirty(false))
     })
   }
 

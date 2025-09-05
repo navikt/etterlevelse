@@ -37,6 +37,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
+  const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
   useEffect(() => {
     if (pvkDokument) {
@@ -82,6 +83,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
                     setTiltakList={setTiltakList}
                     setRisikoscenarioList={setRisikoscenarioList}
                     setIsTiltakFormActive={setIsTiltakFormActive}
+                    isIngenTilgangFormDirty={isIngenTilgangFormDirty}
+                    setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
                     formRef={formRef}
                   />
                 </div>
@@ -94,6 +97,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
                   onSubmitStateUpdate={(risikoscenario: IRisikoscenario) => {
                     setRisikoscenarioList([...risikoscenarioList, risikoscenario])
                   }}
+                  setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
                 />
               )}
             </div>
