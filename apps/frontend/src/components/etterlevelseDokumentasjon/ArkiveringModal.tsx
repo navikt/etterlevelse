@@ -71,7 +71,7 @@ export const ArkiveringModal = ({
 
         {successMessageOpen && (
           <Alert variant='success' closeButton onClose={() => setSuccessMessageOpen(false)}>
-            Arkivéring vellyket
+            Arkivéring vellykket
           </Alert>
         )}
 

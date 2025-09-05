@@ -58,6 +58,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
 
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [submitSuccess, setSubmitSuccess] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
@@ -95,6 +96,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               }
             })
           )
+          setSubmitSuccess(true)
         })
         .finally(() => setIsIngenTilgangFormDirty(false))
     })
@@ -294,6 +296,12 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               />
             </div>
           )}
+
+        {submitSuccess && (
+          <Alert variant='success' onClose={() => setSubmitSuccess(false)} closeButton>
+            Lagring vellyket.
+          </Alert>
+        )}
       </div>
 
       {isEditModalOpen && (

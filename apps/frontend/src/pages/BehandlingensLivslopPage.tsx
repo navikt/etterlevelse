@@ -269,7 +269,7 @@ export const BehandlingensLivslopPage = () => {
                                 closeButton
                                 onClose={() => setSavedSuccessful(false)}
                               >
-                                Lagring vellyket
+                                Lagring vellykket
                               </Alert>
                             </div>
                           )}

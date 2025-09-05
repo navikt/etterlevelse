@@ -249,7 +249,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                             closeButton
                             onClose={() => setSavedSuccessful(false)}
                           >
-                            Lagring vellyket
+                            Lagring vellykket
                           </Alert>
                         </div>
                       )}

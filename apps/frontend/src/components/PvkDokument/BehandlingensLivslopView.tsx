@@ -217,7 +217,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                             closeButton
                             onClose={() => setSavedSuccessful(false)}
                           >
-                            Lagring vellyket
+                            Lagring vellykket
                           </Alert>
                         </div>
                       )}
