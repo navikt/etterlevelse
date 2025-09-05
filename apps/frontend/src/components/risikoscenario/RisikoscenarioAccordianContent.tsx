@@ -298,7 +298,12 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           )}
 
         {submitSuccess && (
-          <Alert variant='success' onClose={() => setSubmitSuccess(false)} closeButton>
+          <Alert
+            className='mt-3'
+            variant='success'
+            onClose={() => setSubmitSuccess(false)}
+            closeButton
+          >
             Lagring vellykket.
           </Alert>
         )}
