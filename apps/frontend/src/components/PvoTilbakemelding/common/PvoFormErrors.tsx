@@ -23,7 +23,7 @@ export const PvoFormErrors: FunctionComponent<TProps> = ({ errors, errorSummaryR
       {!_.isEmpty(errors) && (
         <ErrorSummary
           ref={errorSummaryRef}
-          heading='Du må rette disse feilene før du kan fortsette'
+          heading='Dere må rette disse feilene før du kan fortsette'
           className='my-5'
         >
           {Object.entries(errors)
