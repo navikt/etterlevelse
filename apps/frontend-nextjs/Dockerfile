@@ -21,8 +21,8 @@ CMD ["yarn", "start"]
 FROM nginx:alpine AS nginx
 
 # Copy custom nginx config
-COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY nginx-conf-overwrite.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 
 # Expose Nginx port
