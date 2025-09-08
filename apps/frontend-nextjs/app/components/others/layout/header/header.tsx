@@ -1,5 +1,6 @@
 'use client'
 
+import { logApi } from '@/api/log/logApi'
 import { getMeldingByType } from '@/api/melding/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import SkipToContent from '@/components/common/skipToContent/skipToContent'
@@ -8,7 +9,7 @@ import { EAlertType, IPageResponse } from '@/constants/commonConstants'
 import { loginUrl } from '@/routes/login/loginRoutes'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { user } from '@/services/user/userService'
-import { useAwait, useAwaitUser } from '@/util/hooks/customHooks/customHooks'
+import { useAwait, useAwaitUser, useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { InternalHeader, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -30,10 +31,10 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   useAwaitUser()
   useAwait(codelist.wait())
 
-  //const source = useQueryParam('source')
+  const source = useQueryParam('source')
   if (!sourceReported) {
     sourceReported = true
-    //logApi('info', 'pageload', `pageload from ${source}`)
+    logApi('info', 'pageload', `pageload from ${source}`)
   }
 
   useEffect(() => {
