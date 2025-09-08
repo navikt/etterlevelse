@@ -15,6 +15,8 @@ import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
@@ -36,6 +38,7 @@ import java.util.UUID;
 public class TiltakController {
 
     private final TiltakService service;
+    private final RisikoscenarioService risikoscenarioService;
     private final TeamcatResourceClient teamcatResourceClient;
     private final TeamcatTeamClient teamcatTeamClient;
 
@@ -88,6 +91,7 @@ public class TiltakController {
         try {
             Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
             TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
+            risikoscenarioService.updateTiltakOppdatertField(risikoscenarioId, true);
             addRisikoscenarioer(resp);
             addResourceData(resp);
             return new ResponseEntity<>(resp, HttpStatus.CREATED);
