@@ -10,9 +10,6 @@ metadata:
 spec:
   image: {{image}}
   port: 8080
-  env:
-    - name: PORT
-      value: "8080"
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
