@@ -9,7 +9,7 @@ metadata:
     team: teamdatajegerne
 spec:
   image: {{image}}
-  port: 8080
+  port: 3000
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}
