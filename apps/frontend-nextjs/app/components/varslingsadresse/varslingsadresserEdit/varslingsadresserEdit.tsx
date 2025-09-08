@@ -1,5 +1,5 @@
 import { Error } from '@/components/common/error/error'
-import { ContentLayout } from '@/components/others/layout/contentLayout/contentLayoutComponent'
+import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   EAdresseType,
   IVarslingsadresse,

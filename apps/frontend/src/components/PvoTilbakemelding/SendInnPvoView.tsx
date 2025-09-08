@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -27,6 +27,7 @@ type TProps = {
   personkategorier: string[]
   databehandlere: string[]
   pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -37,6 +38,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
+  setPvoTilbakemelding,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -48,6 +50,8 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   const [isAngreInnsending, setIsAngreInnsending] = useState<boolean>(false)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderlist] = useState<ICode[]>([])
+  const [sucessSubmit, setSuccessSubmit] = useState<boolean>(false)
+  const formRef: RefObject<any> = useRef(undefined)
 
   const submit = async (submittedValues: IPvoTilbakemelding): Promise<void> => {
     //backend vil oppdatere statusen til PVk dokument til 'SENDT_TIL_PVO', dersom statusen til PVO tilbakemelding = 'ikke påbegynt' eller 'avventer'
@@ -85,7 +89,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                 pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
                 vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
               }
-              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+              await updatePvoTilbakemelding(updatedValues).then((response: IPvoTilbakemelding) => {
+                setPvoTilbakemelding(response)
+                setSuccessSubmit(true)
+              })
             }
           }
         })
@@ -107,7 +114,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
               vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
             })
-            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+            await createPvoTilbakemelding(createValue).then((response: IPvoTilbakemelding) => {
+              setPvoTilbakemelding(response)
+              setSuccessSubmit(true)
+            })
           } else {
             console.debug(error)
           }
@@ -130,8 +140,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       onSubmit={submit}
       initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
       validationSchema={sendInnCheck}
+      innerRef={formRef}
     >
-      {({ submitForm, setFieldValue }) => (
+      {({ submitForm, setFieldValue, errors }) => (
         <Form>
           {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
             <SendInnPvoViewIkkeFerdig
@@ -146,6 +157,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               isAlertModalOpen={isAlertModalOpen}
               setIsAlertModalOpen={setIsAlertModalOpen}
               pvoVurderingList={pvoVurderingList}
+              errors={errors}
+              formRef={formRef}
+              sucessSubmit={sucessSubmit}
+              setSuccessSubmit={setSuccessSubmit}
             />
           )}
           {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
@@ -162,6 +177,8 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               setIsAlertModalOpen={setIsAlertModalOpen}
               pvoVurderingList={pvoVurderingList}
               setIsAngreInnsending={setIsAngreInnsending}
+              sucessSubmit={sucessSubmit}
+              setSuccessSubmit={setSuccessSubmit}
             />
           )}
         </Form>

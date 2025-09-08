@@ -5,21 +5,21 @@ export const borderColor = (color?: string) => ({
   borderBottomColor: color,
 })
 
-export const borderRadius = (r: string) => ({
-  borderBottomLeftRadius: r,
-  borderBottomRightRadius: r,
-  borderTopLeftRadius: r,
-  borderTopRightRadius: r,
+export const borderRadius = (radius: string) => ({
+  borderBottomLeftRadius: radius,
+  borderBottomRightRadius: radius,
+  borderTopLeftRadius: radius,
+  borderTopRightRadius: radius,
 })
-export const borderStyle = (r: any) => ({
-  borderBottomStyle: r,
-  borderTopStyle: r,
-  borderRightStyle: r,
-  borderLeftStyle: r,
+export const borderStyle = (style: any) => ({
+  borderBottomStyle: style,
+  borderTopStyle: style,
+  borderRightStyle: style,
+  borderLeftStyle: style,
 })
-export const borderWidth = (r: string) => ({
-  borderBottomWidth: r,
-  borderTopWidth: r,
-  borderRightWidth: r,
-  borderLeftWidth: r,
+export const borderWidth = (width: string) => ({
+  borderBottomWidth: width,
+  borderTopWidth: width,
+  borderRightWidth: width,
+  borderLeftWidth: width,
 })

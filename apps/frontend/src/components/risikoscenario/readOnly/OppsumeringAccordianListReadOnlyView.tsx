@@ -91,7 +91,7 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                 <RisikoscenarioView
                   risikoscenario={risikoscenario}
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                  stepUrl='6'
+                  stepUrl='7'
                   markdownCopyLinkButton={!noMarkdownCopyLinkButton}
                 />
                 <div className='mt-12'>
@@ -151,9 +151,18 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                             )}
                           />
                         </div>
-                        <BodyLong className='mt-3'>
-                          {risikoscenario.nivaaBegrunnelseEtterTiltak}
-                        </BodyLong>
+
+                        {risikoscenario.nivaaBegrunnelseEtterTiltak !== '' && (
+                          <BodyLong className='mt-3'>
+                            {risikoscenario.nivaaBegrunnelseEtterTiltak}
+                          </BodyLong>
+                        )}
+
+                        {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
+                          <Alert variant='warning' inline className='mt-3'>
+                            Dere må begrunne denne vurderingen av tiltakenes effekt.
+                          </Alert>
+                        )}
                       </div>
                     )}
                   </div>

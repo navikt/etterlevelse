@@ -1,10 +1,7 @@
 'use client'
 
 import { getKravByKravNummer } from '@/api/krav/kravApi'
-import {
-  ContentLayout,
-  MainPanelLayout,
-} from '@/components/others/layout/contentLayout/contentLayoutComponent'
+import { ContentLayout, MainPanelLayout } from '@/components/others/layout/content/content'
 import { IPageResponse } from '@/constants/commonConstants'
 import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'

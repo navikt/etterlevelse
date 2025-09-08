@@ -1,6 +1,10 @@
 import { deleteKrav } from '@/api/krav/kravApi'
 import { EKravStatus, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
-import { kravNyVersjonIdUrl, kravRedigeringIdUrl, kravlisteUrl } from '@/routes/krav/kravRoutes'
+import {
+  kravNyVersjonIdUrl,
+  kravRedigeringIdUrl,
+  kravlisteQueryUrl,
+} from '@/routes/krav/kravRoutes'
 import { user } from '@/services/user/userService'
 import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
 import { Button, Spacer } from '@navikt/ds-react'
@@ -34,7 +38,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
                     router.push(kravRedigeringIdUrl(krav.id))
                   }}
                 >
-                  Rediger krav
+                  Redigér krav
                 </Button>
               )}
 
@@ -59,7 +63,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
                   buttonLabel='Slett krav'
                   buttonSize='small'
                   fun={() => deleteKrav(krav.id)}
-                  redirect={kravlisteUrl()}
+                  redirect={kravlisteQueryUrl()}
                 />
               </div>
             )}

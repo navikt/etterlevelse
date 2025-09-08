@@ -34,7 +34,7 @@ public class RisikoscenarioRequest implements RequestElement {
     private String konsekvensNivaaBegrunnelse;
     private boolean generelScenario;
     // relevanteKravNummer blir manipulert i egne endepunkt, og er derfor ikke en del av request
-
+    private boolean tiltakOppdatert;
     private Boolean ingenTiltak;
 
     private Integer sannsynlighetsNivaaEtterTiltak;
@@ -69,6 +69,7 @@ public class RisikoscenarioRequest implements RequestElement {
                 .konsekvensNivaa(konsekvensNivaa)
                 .konsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse)
                 .generelScenario(generelScenario)
+                .tiltakOppdatert(tiltakOppdatert)
                 .ingenTiltak(ingenTiltak)
                 .sannsynlighetsNivaaEtterTiltak(sannsynlighetsNivaaEtterTiltak)
                 .konsekvensNivaaEtterTiltak(konsekvensNivaaEtterTiltak)
@@ -92,6 +93,7 @@ public class RisikoscenarioRequest implements RequestElement {
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaa(konsekvensNivaa);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaBegrunnelse(konsekvensNivaaBegrunnelse);
         risikoscenarioToMerge.getRisikoscenarioData().setGenerelScenario(generelScenario);
+        risikoscenarioToMerge.getRisikoscenarioData().setTiltakOppdatert(tiltakOppdatert);
         risikoscenarioToMerge.getRisikoscenarioData().setIngenTiltak(ingenTiltak);
         risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaaEtterTiltak(sannsynlighetsNivaaEtterTiltak);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaEtterTiltak(konsekvensNivaaEtterTiltak);

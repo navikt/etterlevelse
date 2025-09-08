@@ -22,6 +22,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
 }) => {
   const currentPath: string = window.location.pathname
   const risikoscenarioLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 6}`
+  const titlakLink = currentPath.slice(0, -1) + `${customStepNumber ? customStepNumber : 7}`
 
   return (
     <FormSummary className='my-3'>
@@ -48,7 +49,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                 <FormSummary.Label id='tiltak'>Tiltak</FormSummary.Label>
                 <FormSummary.Value>
                   Det er beskrevet totalt sett {alleTiltak.length} tiltak.{' '}
-                  <ExternalLink href={`${risikoscenarioLink}${tabTiltakQuery}`}>
+                  <ExternalLink href={`${titlakLink}${tabTiltakQuery}`}>
                     Se alle tiltak
                   </ExternalLink>
                   .

@@ -32,25 +32,25 @@ interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   maxCharacter?: number
   rows?: number
   setIsFormDirty?: (v: boolean) => void
-  commentField?: boolean
+  withHighlight?: boolean
+  withUnderline?: boolean
 }
 
-export const TextAreaField = (props: IPropsTextAreaField) => {
-  const {
-    height,
-    marginBottom,
-    label,
-    name,
-    markdown,
-    caption,
-    noPlaceholder,
-    placeholder,
-    maxCharacter,
-    rows,
-    setIsFormDirty,
-    commentField,
-  } = props
-
+export const TextAreaField = ({
+  height,
+  marginBottom,
+  label,
+  name,
+  markdown,
+  caption,
+  noPlaceholder,
+  placeholder,
+  maxCharacter,
+  rows,
+  setIsFormDirty,
+  withHighlight,
+  withUnderline,
+}: IPropsTextAreaField) => {
   const [mode, setMode] = useState('edit')
 
   return (
@@ -74,7 +74,8 @@ export const TextAreaField = (props: IPropsTextAreaField) => {
                     errors={fieldProps.form.errors}
                     name={name}
                     setIsFormDirty={setIsFormDirty}
-                    commentField={commentField}
+                    withHighlight={withHighlight}
+                    withUnderline={withUnderline}
                   />
                 )}
 

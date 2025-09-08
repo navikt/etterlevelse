@@ -13,12 +13,13 @@ import {
   IPvoTilbakemelding,
   TEtterlevelseDokumentasjonQL,
 } from '../../constants'
-import PvoSidePanelWrapper from '../PvoTilbakemelding/common/PvoSidePanelWrapper'
 import PvoTilbakemeldingReadOnly from '../PvoTilbakemelding/common/PvoTilbakemeldingReadOnly'
 import { BoolField, TextAreaField } from '../common/Inputs'
 import { ExternalLink } from '../common/RouteLink'
 import { ContentLayout } from '../layout/layout'
 import AlertPvoUnderarbeidModal from './common/AlertPvoUnderarbeidModal'
+import InfoChangesMadeAfterApproval from './common/InfoChangesMadeAfterApproval'
+import { PvkSidePanelWrapper } from './common/PvkSidePanelWrapper'
 import { isReadOnlyPvkStatus } from './common/util'
 import FormButtons from './edit/FormButtons'
 import InvolveringAvEksterneReadOnlyContent from './readOnly/InvolveringAvEksterneReadOnlyContent'
@@ -248,10 +249,12 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                             closeButton
                             onClose={() => setSavedSuccessful(false)}
                           >
-                            Lagring vellyket
+                            Lagring vellykket
                           </Alert>
                         </div>
                       )}
+
+                      <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />
 
                       <div className='flex gap-2 mt-5'>
                         <Button
@@ -382,12 +385,12 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
         {/* sidepanel */}
 
         {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvoSidePanelWrapper>
+          <PvkSidePanelWrapper>
             <PvoTilbakemeldingReadOnly
               tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
               sentDate={pvoTilbakemelding.sendtDato}
             />
-          </PvoSidePanelWrapper>
+          </PvkSidePanelWrapper>
         )}
       </ContentLayout>
       <FormButtons

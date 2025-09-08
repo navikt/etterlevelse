@@ -3,9 +3,13 @@ import { Alert, Button } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
-import { getRisikoscenario, updateRisikoscenario } from '../../api/RisikoscenarioApi'
+import {
+  addTiltakToRisikoscenario,
+  getRisikoscenario,
+  updateRisikoscenario,
+} from '../../api/RisikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '../../api/TiltakApi'
-import { IRisikoscenario, ITiltak } from '../../constants'
+import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../constants'
 import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { isReadOnlyPvkStatus } from '../PvkDokument/common/util'
 import { risikoscenarioTiltakUrl } from '../common/RouteLinkPvk'
@@ -27,6 +31,8 @@ type TProps = {
   setTiltakList: (state: ITiltak[]) => void
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   setIsTiltakFormActive: (state: boolean) => void
+  isIngenTilgangFormDirty: boolean
+  setIsIngenTilgangFormDirty: (state: boolean) => void
   formRef: RefObject<any>
 }
 
@@ -39,6 +45,8 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   setTiltakList,
   setRisikoscenarioer,
   setIsTiltakFormActive,
+  isIngenTilgangFormDirty,
+  setIsIngenTilgangFormDirty,
   formRef,
 }) => {
   const navigate: NavigateFunction = useNavigate()
@@ -48,15 +56,23 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
-  const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
 
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [submitSuccess, setSubmitSuccess] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
+      setRisikoscenarioer(
+        risikoscenarioer.map((risikoscenario) => {
+          if (risikoscenario.id === activeRisikoscenario.id) {
+            return response
+          } else {
+            return risikoscenario
+          }
+        })
+      )
       setIsEditModalOpen(false)
-      window.location.reload()
     })
   }
 
@@ -68,10 +84,21 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         ingenTiltak: submitedValues.ingenTiltak,
       }
 
-      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
-        setActiveRisikoscenario(response)
-        window.location.reload()
-      })
+      updateRisikoscenario(updatedRisikoscenario)
+        .then((response: IRisikoscenario) => {
+          setActiveRisikoscenario(response)
+          setRisikoscenarioer(
+            risikoscenarioer.map((risikoscenario) => {
+              if (risikoscenario.id === activeRisikoscenario.id) {
+                return response
+              } else {
+                return risikoscenario
+              }
+            })
+          )
+          setSubmitSuccess(true)
+        })
+        .finally(() => setIsIngenTilgangFormDirty(false))
     })
   }
 
@@ -84,11 +111,18 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, response.id],
       })
+      setRisikoscenarioer(
+        risikoscenarioer.map((risikoscenario) => {
+          if (risikoscenario.id === activeRisikoscenario.id) {
+            return { ...risikoscenario, tiltakIds: [...risikoscenario.tiltakIds, response.id] }
+          } else {
+            return risikoscenario
+          }
+        })
+      )
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
-
       navigate(risikoscenarioTiltakUrl(activeRisikoscenario.id, response.id))
-      window.location.reload()
     })
   }
 
@@ -110,13 +144,38 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     })
   }
 
+  const submitLeggTilEksisterendeTitltak = async (request: ITiltakRisikoscenarioRelasjon) => {
+    await addTiltakToRisikoscenario(request).then(() => {
+      navigate(risikoscenarioTiltakUrl(request.risikoscenarioId, request.tiltakIds[0]))
+
+      setActiveRisikoscenario({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
+      })
+      setRisikoscenarioer(
+        risikoscenarioer.map((risikoscenario) => {
+          if (risikoscenario.id === activeRisikoscenario.id) {
+            return {
+              ...risikoscenario,
+              tiltakIds: [...risikoscenario.tiltakIds, ...request.tiltakIds],
+            }
+          } else {
+            return risikoscenario
+          }
+        })
+      )
+
+      setIsAddExisitingMode(false)
+    })
+  }
+
   return (
     <div>
       <RisikoscenarioView
         risikoscenario={activeRisikoscenario}
         noCopyButton={false}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        stepUrl='5'
+        stepUrl='6'
       />
 
       <div>
@@ -152,7 +211,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             {risikoscenario.tiltakIds.length === 0 &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive && (
-                <Alert className='mt-5 mb-9' variant='warning'>
+                <Alert inline className='mt-5 mb-9' variant='warning'>
                   Dere har ikke lagt inn tiltak
                 </Alert>
               )}
@@ -187,6 +246,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 tiltakList={tiltakList}
                 setIsAddExisitingMode={setIsAddExisitingMode}
                 formRef={formRef}
+                submit={submitLeggTilEksisterendeTitltak}
               />
             )}
 
@@ -236,6 +296,17 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               />
             </div>
           )}
+
+        {submitSuccess && (
+          <Alert
+            className='mt-3'
+            variant='success'
+            onClose={() => setSubmitSuccess(false)}
+            closeButton
+          >
+            Lagring vellykket.
+          </Alert>
+        )}
       </div>
 
       {isEditModalOpen && (

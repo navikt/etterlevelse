@@ -28,27 +28,32 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
 }) => (
   <div className='w-full'>
     <ContentLayout>
-      <ArtOgOmfangReadOnlyContent pvkDokument={pvkDokument} personkategorier={personkategorier} />
-
-      {/* PVO sidepanel */}
-      <div>
-        <PvoSidePanelWrapper>
-          {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-            <PvoTilbakemeldingReadOnly
-              tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
-              sentDate={pvoTilbakemelding.sendtDato}
-              forPvo={true}
-            />
-          )}
-          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-            <PvoTilbakemeldingForm
-              pvkDokumentId={pvkDokument.id}
-              fieldName='behandlingensArtOgOmfang'
-              initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
-              formRef={formRef}
-            />
-          )}
-        </PvoSidePanelWrapper>
+      <div className='flex gap-8'>
+        <div className='w-1/2'>
+          <ArtOgOmfangReadOnlyContent
+            pvkDokument={pvkDokument}
+            personkategorier={personkategorier}
+          />
+        </div>
+        <div className='w-1/2'>
+          <PvoSidePanelWrapper>
+            {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+              <PvoTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
+                sentDate={pvoTilbakemelding.sendtDato}
+                forPvo={true}
+              />
+            )}
+            {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+              <PvoTilbakemeldingForm
+                pvkDokumentId={pvkDokument.id}
+                fieldName='behandlingensArtOgOmfang'
+                initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
+                formRef={formRef}
+              />
+            )}
+          </PvoSidePanelWrapper>
+        </div>
       </div>
     </ContentLayout>
     <PvoFormButtons

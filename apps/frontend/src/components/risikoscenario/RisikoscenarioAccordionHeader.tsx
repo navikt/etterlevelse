@@ -12,15 +12,17 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
   ref,
 }) => {
   const ferdigVurdert: boolean =
-    risikoscenario.konsekvensNivaa !== 0 &&
-    risikoscenario.sannsynlighetsNivaa !== 0 &&
-    risikoscenario.konsekvensNivaaBegrunnelse !== '' &&
-    risikoscenario.sannsynlighetsNivaaBegrunnelse !== '' &&
     risikoscenario.sannsynlighetsNivaaEtterTiltak !== 0 &&
     risikoscenario.konsekvensNivaaEtterTiltak !== 0 &&
     risikoscenario.nivaaBegrunnelseEtterTiltak !== '' &&
     !risikoscenario.ingenTiltak &&
     risikoscenario.tiltakIds.length > 0
+
+  const ferdigBeskrevet: boolean =
+    risikoscenario.konsekvensNivaa !== 0 &&
+    risikoscenario.sannsynlighetsNivaa !== 0 &&
+    risikoscenario.konsekvensNivaaBegrunnelse !== '' &&
+    risikoscenario.sannsynlighetsNivaaBegrunnelse !== ''
 
   return (
     <Accordion.Header ref={ref}>
@@ -28,9 +30,11 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
       <div className='flex gap-2 mt-1'>
         {risikoscenario.ingenTiltak && <Tag variant='neutral'>Tiltak ikke aktuelt</Tag>}
 
-        {ferdigVurdert && <Tag variant='alt3'>Ferdig vurdert </Tag>}
+        {!ferdigBeskrevet && <Tag variant='alt1'>Risikoscenarioet er mangelfullt</Tag>}
 
-        {!ferdigVurdert && !risikoscenario.ingenTiltak && (
+        {ferdigBeskrevet && ferdigVurdert && <Tag variant='alt3'>Ferdig vurdert </Tag>}
+
+        {ferdigBeskrevet && !ferdigVurdert && !risikoscenario.ingenTiltak && (
           <Tag variant='alt2'>Ikke ferdig vurdert</Tag>
         )}
 

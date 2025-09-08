@@ -20,7 +20,7 @@ import { user } from '../../../services/User'
 import { TextAreaField } from '../../common/Inputs'
 import AlertPvoModal from '../common/AlertPvoModal'
 
-enum EBidragVerdier {
+export enum EBidragVerdier {
   TILSTREKKELIG = 'TILSTREKELIG',
   TILSTREKKELIG_FORBEHOLDT = 'TILSTREKKELIG_FORBEHOLDT',
   UTILSTREKKELIG = 'UTILSTREKELIG',
@@ -169,9 +169,10 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 markdown
                 height='15.625rem'
                 name='internDiskusjon'
-                label='Skriv eventuelt intern PVO-notater her'
+                label='Skriv eventuelt interne PVO-notater her'
                 caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
-                commentField={true}
+                withHighlight={true}
+                withUnderline={true}
               />
             </div>
 
@@ -214,7 +215,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                   await setFieldValue('bidragsVurdering', '')
                 }}
               >
-                Nullstill radio valgene
+                Nullstill valg
               </Button>
             </div>
 
@@ -225,7 +226,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 height='15.625rem'
                 name='tilbakemeldingTilEtterlevere'
                 label='Skriv tilbakemelding til etterleveren'
-                caption='Tilbakemeldingen blir ikke tilgjengelig for etterleveren før PVK-en sendes tilbake.'
+                withUnderline={true}
               />
             </div>
           </Form>

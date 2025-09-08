@@ -10,6 +10,7 @@ type TFormSummaryPanelProps = {
   pvkDokumentStatus: EPvkDokumentStatus
   status?: ReactNode
   customStatusTag?: ReactNode
+  pvoView?: boolean
 }
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
@@ -21,7 +22,7 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
     case EPvkDokumentStatus.SENDT_TIL_PVO:
       return 'Sendt inn til Personvernombudet'
     case EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING:
-      return 'Sendt tilbake til Personvernombudet for revudering'
+      return 'Sendt tilbake til Personvernombudet for revurdering'
     case EPvkDokumentStatus.PVO_UNDERARBEID:
       return 'Personvernombudet har påbegynt vurderingen'
     case EPvkDokumentStatus.VURDERT_AV_PVO:
@@ -43,6 +44,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
   customStatusTag,
   pvkDokumentStatus,
   step,
+  pvoView,
 }) => (
   <FormSummary.Answer key={title}>
     <FormSummary.Value>
@@ -53,7 +55,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
     <FormSummary.Value>
       {status && !customStatusTag && status}
       {customStatusTag && customStatusTag}
-      {step === 4 && (
+      {step === 5 && (
         <Tag
           variant={pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID ? 'info' : 'warning'}
           size='xsmall'
@@ -61,7 +63,7 @@ export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
           {pvkDokumentStatusToText(pvkDokumentStatus)}
         </Tag>
       )}
-      {step === 4 && (
+      {!pvoView && step === 5 && (
         <BodyShort>
           Her får dere oversikt over alle deres svar.{' '}
           {pvkDokumentStatus === EPvkDokumentStatus.UNDERARBEID &&

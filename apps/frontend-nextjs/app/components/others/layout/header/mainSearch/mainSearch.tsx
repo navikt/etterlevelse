@@ -81,9 +81,10 @@ const MainSearch = () => {
   return (
     <div className='w-full'>
       <AsyncSelect
+        instanceId='main-search'
         aria-label='Søk etter krav, dokumentasjon eller behandling'
         placeholder='Søk etter krav, dokumentasjon eller behandling'
-        components={{ Option, DropdownIndicator }}
+        components={{ DropdownIndicator, Option }}
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}
         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}

@@ -141,13 +141,13 @@ public class P360Service {
                     new HttpEntity<>(request, createHeadersWithAuth()),
                     P360Document.class);
             assert response.getBody() != null;
-            if(!response.getBody().getErrorMessage().isEmpty()) {
+            if(response.getBody().getErrorMessage() != null && !response.getBody().getErrorMessage().isEmpty()) {
                 throw new RestClientException(response.getBody().getErrorMessage());
             }
             return response.getBody();
         } catch (Exception e) {
             log.error("Unable to connect to P360, error: {} \n stack: {}", e.getMessage(), Arrays.toString(e.getStackTrace()));
-            errorVarsling("Feil ved oppretting av document i P360 for " + request.getTitle(), String.valueOf(e) + " stack trace: "  + Arrays.toString(e.getStackTrace()));
+            errorVarsling("Feil ved oppretting av document i P360 for " + request.getTitle(), e.getMessage());
             throw new RestClientException(e.getMessage());
         }
     }
@@ -155,14 +155,15 @@ public class P360Service {
     private void errorVarsling (String title, String melding) {
         String channelToRecieve = securityProperties.isDev() ? env.getProperty("client.devmail.slack-channel-id") : env.getProperty("client.prodmail.slack-channel-id");
 
-        var varselBuilder = Varsel.builder();
-        varselBuilder.title(title);
-        varselBuilder.paragraph(new Varsel.Paragraph(melding));
+        var varselBuilder = Varsel.builder()
+                .title(title)
+                .paragraph(new Varsel.Paragraph(melding))
+                .build();
 
         varselService.varsle(List.of(Varslingsadresse.builder()
                 .type(AdresseType.SLACK)
                 .adresse(channelToRecieve)
-                .build()), varselBuilder.build());
+                .build()), varselBuilder);
     }
 
     public P360Document updateDocument(P360DocumentUpdateRequest request) {

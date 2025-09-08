@@ -57,17 +57,23 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
     })
   }
 
+  const ferdigBeskrevet: boolean =
+    risikoscenario.konsekvensNivaa !== 0 &&
+    risikoscenario.sannsynlighetsNivaa !== 0 &&
+    risikoscenario.konsekvensNivaaBegrunnelse !== '' &&
+    risikoscenario.sannsynlighetsNivaaBegrunnelse !== ''
+
   return (
     <div>
       <RisikoscenarioView
         risikoscenario={activeRisikoscenario}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        stepUrl='6'
+        stepUrl='7'
       />
 
       <div className='mt-5 flex gap-2 items-center'>
         <Button
-          variant='tertiary'
+          variant={ferdigBeskrevet ? 'tertiary' : 'primary'}
           type='button'
           icon={<PencilIcon aria-hidden />}
           onClick={async () => {

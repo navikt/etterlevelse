@@ -26,7 +26,7 @@ export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
     case EPvoTilbakemeldingStatus.UTGAAR:
       return 'Utgår'
     case EPvoTilbakemeldingStatus.TRENGER_REVURDERING:
-      return 'Trenger revudering'
+      return 'Trenger revurdering'
     default:
       return 'Ikke påbegynt'
   }

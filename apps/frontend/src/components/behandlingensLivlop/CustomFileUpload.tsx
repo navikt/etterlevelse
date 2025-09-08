@@ -1,4 +1,5 @@
 import {
+  Alert,
   FileObject,
   FileRejected,
   FileRejectionReason,
@@ -6,7 +7,7 @@ import {
   Heading,
   VStack,
 } from '@navikt/ds-react'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
 const MAX_FILES = 4
 const MAX_SIZE_MB = 5
@@ -25,9 +26,13 @@ interface IProps {
 }
 
 export const CustomFileUpload = (props: IProps) => {
+  const ref = useRef<HTMLInputElement>(null)
   const { initialValues, rejectedFiles, setRejectedFiles, setFilesToUpload } = props
   const [files, setFiles] = useState<FileObject[]>([])
   const acceptedFiles = files.filter((file) => !file.error)
+  const [fileUploadAlert, setFileUploadAlert] = useState<boolean>(false)
+  const [fileUploadError, setFileUploadError] = useState<boolean>(false)
+  const [fileDeleteAlert, setFileDeleteAlert] = useState<boolean>(false)
 
   useEffect(() => {
     if (initialValues && initialValues.length > 0) {
@@ -42,11 +47,15 @@ export const CustomFileUpload = (props: IProps) => {
 
   useEffect(() => {
     setRejectedFiles(files.filter((f): f is FileRejected => f.error))
+    if (files.filter((f): f is FileRejected => f.error).length !== 0) {
+      setFileUploadError(true)
+    }
   }, [files])
 
   const removeFile = (fileToRemove: FileObject) => {
     setFiles(files.filter((file) => file !== fileToRemove))
     setFilesToUpload(files.filter((file) => file !== fileToRemove).map((file) => file.file))
+    setFileDeleteAlert(true)
   }
 
   const getErrorMessage = (message: string): string => {
@@ -57,9 +66,16 @@ export const CustomFileUpload = (props: IProps) => {
     }
   }
 
+  useEffect(() => {
+    if (ref && ref.current) {
+      ref.current.focus()
+    }
+  }, [files])
+
   return (
     <VStack gap='6'>
       <FileUpload.Dropzone
+        ref={ref}
         label='Last opp behandlingens livsløp'
         description={`Følgende filformater er tillatt: PDF, PNG, JPG og JPEG. Du kan laste opp maks 4 filer. Filstørrelse pr. fil må være mindre enn ${MAX_SIZE_MB} MB.`}
         accept='.png,.jpeg,.pdf,.jpg'
@@ -75,13 +91,44 @@ export const CustomFileUpload = (props: IProps) => {
           return true
         }}
         onSelect={(newFiles: FileObject[]) => {
+          setFileUploadAlert(false)
           setFiles([...files, ...newFiles])
           setFilesToUpload([
             ...files.map((file) => file.file),
             ...newFiles.map((newFile) => newFile.file),
           ])
+          setFileUploadAlert(true)
         }}
       />
+
+      {fileUploadAlert && (
+        <Alert
+          role='status'
+          variant={fileUploadError ? 'error' : 'success'}
+          closeButton
+          onClose={() => {
+            setFileUploadAlert(false)
+            setFileUploadError(false)
+          }}
+        >
+          {fileUploadError
+            ? 'Filopplasting har feilet. Sjekk at du har riktig filformat og prøv igjen. Passende filformater er PNG, PDF, JPG eller JPG.'
+            : 'Filen din er lastet opp.'}
+        </Alert>
+      )}
+
+      {fileDeleteAlert && (
+        <Alert
+          role='status'
+          variant='success'
+          closeButton
+          onClose={() => {
+            setFileDeleteAlert(false)
+          }}
+        >
+          Filen din ble slettet.
+        </Alert>
+      )}
 
       {acceptedFiles.length > 0 && (
         <VStack gap='2'>

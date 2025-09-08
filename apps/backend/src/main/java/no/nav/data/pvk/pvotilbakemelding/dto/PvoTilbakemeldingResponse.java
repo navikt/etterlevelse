@@ -10,6 +10,7 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
+import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,7 @@ public class PvoTilbakemeldingResponse {
 
     private Tilbakemeldingsinnhold behandlingenslivslop;
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
+    private TilhorendeDokumentasjonTilbakemelding tilhorendeDokumentasjon;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
     private String merknadTilEtterleverEllerRisikoeier;
@@ -63,8 +65,10 @@ public class PvoTilbakemeldingResponse {
 
                 .behandlingenslivslop(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop())
                 .behandlingensArtOgOmfang(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang())
+                .tilhorendeDokumentasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon())
                 .innvolveringAvEksterne(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne())
                 .risikoscenarioEtterTiltakk(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk())
+
                 .merknadTilEtterleverEllerRisikoeier(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier())
                 .arbeidGarVidere(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere())
                 .arbeidGarVidereBegrunnelse(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse())

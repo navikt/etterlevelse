@@ -35,7 +35,7 @@ public class RisikoscenarioResponse {
     @Builder.Default
     private List<KravReference> relevanteKravNummer = new ArrayList<>();
     private List<UUID> tiltakIds; // denne blir ikke satt i buildFrom
-
+    private  boolean tiltakOppdatert;
     private Boolean ingenTiltak;
 
     private Integer sannsynlighetsNivaaEtterTiltak;
@@ -60,6 +60,7 @@ public class RisikoscenarioResponse {
                 .konsekvensNivaaBegrunnelse(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaBegrunnelse())
                 .generelScenario(risikoscenario.getRisikoscenarioData().isGenerelScenario())
                 .relevanteKravNummer(risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().stream().map(kravNummer -> KravReference.builder().kravNummer(kravNummer).build()).collect(Collectors.toList()))
+                .tiltakOppdatert(risikoscenario.getRisikoscenarioData().isTiltakOppdatert())
                 .ingenTiltak(risikoscenario.getRisikoscenarioData().getIngenTiltak())
                 .sannsynlighetsNivaaEtterTiltak(risikoscenario.getRisikoscenarioData().getSannsynlighetsNivaaEtterTiltak())
                 .konsekvensNivaaEtterTiltak(risikoscenario.getRisikoscenarioData().getKonsekvensNivaaEtterTiltak())

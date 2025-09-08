@@ -29,6 +29,7 @@ type TProps = {
   ) => Promise<void | FormikErrors<IPvkDokument>>
   submitForm: () => Promise<void>
   errorSummaryComponent: ReactNode
+  setAngretAvRisikoeier: (state: boolean) => void
   pvoVurderingList: ICode[]
 }
 
@@ -40,6 +41,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   setFieldValue,
   submitForm,
   errorSummaryComponent,
+  setAngretAvRisikoeier,
   pvoVurderingList,
 }) => {
   const isRisikoeierCheck: boolean =
@@ -70,6 +72,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
           <Button
             type='button'
             onClick={async () => {
+              setAngretAvRisikoeier(true)
               await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
               await submitForm()
             }}

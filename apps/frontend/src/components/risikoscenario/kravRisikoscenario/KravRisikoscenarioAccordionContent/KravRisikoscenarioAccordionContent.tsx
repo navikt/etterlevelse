@@ -242,7 +242,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 risikoscenario={activeRisikoscenario}
                 tiltakList={tiltakList}
                 setIsAddExisitingMode={setIsAddExisitingMode}
-                customSubmit={submitExistingTiltak}
+                submit={submitExistingTiltak}
                 formRef={formRef}
               />
             )}

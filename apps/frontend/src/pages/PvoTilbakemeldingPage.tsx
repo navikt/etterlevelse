@@ -13,6 +13,7 @@ import InvolveringAvEksternePvoView from '../components/PvoTilbakemelding/Involv
 import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from '../components/PvoTilbakemelding/OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 import OversiktPvoView from '../components/PvoTilbakemelding/OversiktPvoView'
 import SendInnPvoView from '../components/PvoTilbakemelding/SendInnPvoView'
+import TilhorendeDokumentasjonPvoView from '../components/PvoTilbakemelding/TilhorendeDokumentasjonPvoView'
 import CustomizedBreadcrumbs from '../components/common/CustomizedBreadcrumbs'
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '../components/common/RouteLinkPvk'
@@ -24,6 +25,7 @@ import {
   IEtterlevelseDokumentasjon,
   IExternalCode,
 } from '../constants'
+import { useKravFilter } from '../query/KravQuery'
 import { CodelistService } from '../services/Codelist'
 import { user } from '../services/User'
 
@@ -31,6 +33,7 @@ export const StepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens livsløp',
   'Behandlingens art og omfang',
+  'Tilhørende dokumentasjon',
   'Involvering av eksterne',
   'Identifisering av risikoscenarioer og tiltak',
   'Risikobildet etter tiltak',
@@ -54,13 +57,23 @@ export const PvoTilbakemeldingPage = () => {
     useState<boolean>(false)
   const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.id)
-  const [pvoTilbakemelding, , isPvoTilbakemeldingLoading] = usePvoTilbakemelding(params.id)
+  const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
+    usePvoTilbakemelding(params.id)
   const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
   )
   const [selectedStep, setSelectedStep] = useState<number>(1)
+  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
+    {
+      gjeldendeKrav: true,
+      tagger: ['Personvernkonsekvensvurdering'],
+      etterlevelseDokumentasjonId: etterlevelseDokumentasjon?.id,
+    },
+    { skip: !etterlevelseDokumentasjon },
+    true
+  )
   const navigate: NavigateFunction = useNavigate()
   const formRef: RefObject<any> = useRef(undefined)
   const [codelistUtils] = CodelistService()
@@ -226,6 +239,7 @@ export const PvoTilbakemeldingPage = () => {
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                         pvoTilbakemelding={pvoTilbakemelding}
                         formRef={formRef}
+                        pvkKrav={pvkKrav}
                       />
                     )}
                     {activeStep === 2 && (
@@ -250,7 +264,21 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
+
                     {activeStep === 4 && (
+                      <TilhorendeDokumentasjonPvoView
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        pvkDokumentId={pvkDokument.id}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        activeStep={activeStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                        setSelectedStep={setSelectedStep}
+                        formRef={formRef}
+                        pvkKrav={pvkKrav}
+                        isPvkKravLoading={isPvkKravLoading}
+                      />
+                    )}
+                    {activeStep === 5 && (
                       <InvolveringAvEksternePvoView
                         personkategorier={personkategorier}
                         databehandlere={databehandlere}
@@ -262,7 +290,7 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
-                    {activeStep === 5 && (
+                    {activeStep === 6 && (
                       <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
@@ -271,7 +299,7 @@ export const PvoTilbakemeldingPage = () => {
                         setActiveStep={updateTitleUrlAndStep}
                       />
                     )}
-                    {activeStep === 6 && (
+                    {activeStep === 7 && (
                       <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
@@ -282,7 +310,7 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
-                    {activeStep === 7 && (
+                    {activeStep === 8 && (
                       <SendInnPvoView
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         pvkDokument={pvkDokument}
@@ -294,6 +322,7 @@ export const PvoTilbakemeldingPage = () => {
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
                         codelistUtils={codelistUtils}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                       />
                     )}
                   </div>

@@ -4,6 +4,7 @@ import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
 import {
   editorTranslations,
+  joinDraftDataWithDraftWithHightligthsAndUnderline,
   translateUnderlineAndHighlight,
 } from '@/util/textEditor/textEditorUtil'
 import { ettlevColors } from '@/util/theme/theme'
@@ -13,7 +14,7 @@ import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { useEffect, useState } from 'react'
 import { Editor } from 'react-draft-wysiwyg'
 import '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
-import { FormError } from '../modalSchema/ModalSchema'
+import { FormError } from '../modalSchema/formError/formError'
 import './customStyle.css'
 
 type TTextEditorProps = {
@@ -26,22 +27,23 @@ type TTextEditorProps = {
   width?: string
   maxWidth?: string
   setIsFormDirty?: (v: boolean) => void
-  commentField?: boolean
+  withHighlight?: boolean
+  withUnderline?: boolean
 }
 
-export const TextEditor = (props: TTextEditorProps) => {
-  const {
-    initialValue,
-    setValue,
-    height,
-    errors,
-    name,
-    simple,
-    width,
-    maxWidth,
-    setIsFormDirty,
-    commentField,
-  } = props
+export const TextEditor = ({
+  initialValue,
+  setValue,
+  height,
+  errors,
+  name,
+  simple,
+  width,
+  maxWidth,
+  setIsFormDirty,
+  withHighlight,
+  withUnderline,
+}: TTextEditorProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
 
@@ -111,8 +113,8 @@ export const TextEditor = (props: TTextEditorProps) => {
     })
   }
 
-  const CustomMarkdownToDraft = (data: string) => {
-    const draftData = markdownToDraft(data, {
+  const markdownToDraftWithPresets = (data: string) =>
+    markdownToDraft(data, {
       blockEntities: {
         image: (item: any) => {
           return {
@@ -128,7 +130,17 @@ export const TextEditor = (props: TTextEditorProps) => {
       preserveNewlines: true,
     })
 
-    translateUnderlineAndHighlight(draftData)
+  const CustomMarkdownToDraft = (data: string) => {
+    const rawData = data
+    const noUnderlineAndHighlightData = rawData
+      .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
+      .replaceAll('</span>', '')
+      .replaceAll('<ins>', '')
+      .replaceAll('</ins>', '')
+    const draftData = markdownToDraftWithPresets(noUnderlineAndHighlightData)
+    const drafDataWithUnderlineAndHighligth = markdownToDraftWithPresets(rawData)
+    translateUnderlineAndHighlight(drafDataWithUnderlineAndHighligth)
+    joinDraftDataWithDraftWithHightligthsAndUnderline(draftData, drafDataWithUnderlineAndHighligth)
     return draftData
   }
 
@@ -222,14 +234,12 @@ export const TextEditor = (props: TTextEditorProps) => {
           toolbar={{
             options: simple
               ? ['inline', 'list', 'link']
-              : commentField
+              : withHighlight
                 ? ['inline', 'blockType', 'list', 'link', 'history', 'colorPicker']
                 : ['inline', 'blockType', 'list', 'link', 'history'],
             blockType: {},
             inline: {
-              options: commentField
-                ? ['bold', 'italic', 'underline', 'strikethrough']
-                : ['bold', 'italic'],
+              options: withUnderline ? ['bold', 'italic', 'underline'] : ['bold', 'italic'],
             },
             // old toolbar
             // inline: { options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'] },

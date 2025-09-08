@@ -3,8 +3,6 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY . .
-
 RUN yarn install
 RUN yarn build
 
@@ -28,5 +26,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Expose Nginx port
 EXPOSE 8080
 
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

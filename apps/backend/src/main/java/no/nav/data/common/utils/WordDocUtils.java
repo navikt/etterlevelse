@@ -15,6 +15,7 @@ import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
@@ -24,6 +25,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
+import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
 import org.apache.commons.lang3.BooleanUtils;
@@ -425,6 +427,99 @@ public class WordDocUtils {
         generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
     }
 
+    public void generateTilhorendeDokumentasjon(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, long antallPvkKrav, long antallFerdigPvkKrav,TilhorendeDokumentasjonTilbakemelding tilbakemelding) {
+        newLine();
+        var header2 = addHeading2("Tilhorende dokumentasjon");
+        addBookmark(header2, "pvk_tilhorende_dokumentasjon");
+        newLine();
+
+        //Behandling
+        addHeading3("Behandlinger i Behandlingskatalogen");
+        newLine();
+        addText("Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:");
+        newLine();
+        if(etterlevelseDokumentasjon.getBehandlinger().isEmpty()){
+            addMarkdownText("- Ingen behandlinger");
+        } else {
+            etterlevelseDokumentasjon.getBehandlinger().forEach(behandling -> {
+                addMarkdownText("- B" +  behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
+            });
+        }
+        newLine();
+
+        //krav
+        addHeading3("PVK-relaterte etterlevelseskrav");
+        addText("Personvernkonsekvensvurdering forutsetter at dere har dokumentert etterlevelse ved alle personvernkrav. Så langt har dere:");
+        addMarkdownText("- " + antallFerdigPvkKrav + " av " + antallPvkKrav + " krav er ferdig utfylt.");
+        newLine();
+
+        //ROS
+        addHeading3("Risiko- og sårbarhetsvurdering (ROS)");
+        addText("Dersom dere har gjennomført en eller flere risikovurderinger, skal disse legges ved etterlevelsesdokumentasjonen.");
+        newLine();
+        addText("Dere har koblet følgende dokumenter på dette dokumentet:");
+        if(etterlevelseDokumentasjon.getRisikovurderinger().isEmpty()){
+            addMarkdownText("- Ingen dokumenter");
+        } else {
+            etterlevelseDokumentasjon.getRisikovurderinger().forEach(risikovurdering -> {
+                addMarkdownText("- " + risikovurdering);
+            });
+        }
+        newLine();
+
+        //tilbakemelding
+        addHeading3("Tilbakemelding fra Personvernombudet");
+        newLine();
+
+        addHeading3("Behandlinger i Behandlingskatalogen");
+        addLabel("Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.");
+        if(tilbakemelding != null) {
+            addText(vurderingsBidragToText(tilbakemelding.getBehandlingskatalogDokumentasjonTilstrekkelig()));
+        } else {
+            addText("Ingen vurdering");
+        }
+        newLine();
+        addLabel("Tilbakemelding");
+        if (tilbakemelding != null && tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding() != null && !tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding().isBlank()) {
+            addMarkdownText(tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding());
+        } else {
+            addText("Ingen tilbakemelding");
+        }
+        newLine();
+
+        addHeading3("PVK-relaterte etterlevelseskrav");
+        addLabel("Vurdering om kravdokumentasjon er tilstrekkelig.");
+        if(tilbakemelding != null) {
+            addText(vurderingsBidragToText(tilbakemelding.getKravDokumentasjonTilstrekkelig()));
+
+        } else {
+            addText("Ingen vurdering");
+        }
+        newLine();
+        addLabel("Tilbakemelding");
+        if (tilbakemelding != null && tilbakemelding.getKravDokumentasjonTilbakemelding() != null && !tilbakemelding.getKravDokumentasjonTilbakemelding().isBlank()) {
+            addMarkdownText(tilbakemelding.getKravDokumentasjonTilbakemelding());
+        } else {
+            addText("Ingen tilbakemelding");
+        }
+        newLine();
+
+        addHeading3("Risiko- og sårbarhetsvurdering (ROS)");
+        addLabel("Vurdering om risikovurderingen(e) er tilstrekkelig.");
+        if(tilbakemelding != null) {
+            addText(vurderingsBidragToText(tilbakemelding.getRisikovurderingTilstrekkelig()));
+        } else {
+            addText("Ingen vurdering");
+        }
+        newLine();
+        addLabel("Tilbakemelding");
+        if (tilbakemelding != null && tilbakemelding.getRisikovurderingTilbakemelding() != null && !tilbakemelding.getRisikovurderingTilbakemelding().isBlank()) {
+            addMarkdownText(tilbakemelding.getRisikovurderingTilbakemelding());
+        } else {
+            addText("Ingen tilbakemelding");
+        }
+    }
+
     public void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
         newLine();
         var header2 = addHeading2("Innvolvering av eksterne");
@@ -580,7 +675,7 @@ public class WordDocUtils {
             case "TILSTREKKELIG_FORBEHOLDT" ->
                     "Tilstrekkelig, forbeholdt at etterleveren tar stilling til anbefalinger som beskrives i fritekst under";
             case "UTILSTREKELIG" -> "Utilstrekkelig, beskrives nærmere under";
-            default -> "Ingen  vurdert";
+            default -> "Ingen vurdering";
         };
     }
 

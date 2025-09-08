@@ -238,7 +238,7 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> removeTiltakFromRisikoscenarioById(@PathVariable UUID id, @PathVariable UUID tiltakId) {
         log.info("Remove Tiltak (id={}) from risikoscenario (id={})", tiltakId, id);
         if (risikoscenarioService.removeTiltak(id, tiltakId)) {
-            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenarioService.get(id));
+            RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenarioService.updateTiltakOppdatertField(id, true));
             setTiltakAndKravDataForRelevantKravList(response);
             return ResponseEntity.ok(response);
         } else {

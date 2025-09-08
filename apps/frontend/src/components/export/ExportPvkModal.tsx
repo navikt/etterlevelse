@@ -22,7 +22,7 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
         type='button'
         onClick={() => setIsExportModalOpen(true)}
       >
-        Eksporter dokumentet
+        Eksportér dokumentet
       </Button>
 
       <Modal
@@ -31,7 +31,7 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
         onClose={() => {
           setIsExportModalOpen(false)
         }}
-        header={{ heading: 'Eksporter personvernskonsekvensvurdering', closeButton: false }}
+        header={{ heading: 'Eksportér personvernskonsekvensvurdering', closeButton: false }}
       >
         <Modal.Body>
           {isLoading ? (
@@ -46,8 +46,8 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
                 value={onlyActiveKrav}
                 onChange={(value: boolean) => setOnlyActiveKrav(value)}
               >
-                <Radio value={false}>Eksporter alle krav versjoner</Radio>
-                <Radio value={true}>Eksporter kun gjeldende versjon krav</Radio>
+                <Radio value={false}>Eksportér alle krav versjoner</Radio>
+                <Radio value={true}>Eksportér kun gjeldende versjon krav</Radio>
               </RadioGroup>
               {errorMessage && (
                 <div className='w-full mt-4'>
@@ -88,7 +88,7 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
                     })()
                   }}
                 >
-                  Eksporter
+                  Eksportér
                 </Button>
               </div>
             </div>

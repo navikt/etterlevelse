@@ -1,3 +1,5 @@
+'use client'
+
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { FunctionComponent, ReactNode } from 'react'

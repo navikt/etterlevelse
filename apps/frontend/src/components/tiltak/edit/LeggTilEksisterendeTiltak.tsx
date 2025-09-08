@@ -1,19 +1,18 @@
 import { Button, Chips, Select, VStack } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { RefObject, useState } from 'react'
-import { addTiltakToRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../constants'
 
 interface IProps {
   risikoscenario: IRisikoscenario
   tiltakList: ITiltak[]
   setIsAddExisitingMode: (state: boolean) => void
-  customSubmit?: (request: ITiltakRisikoscenarioRelasjon) => void
+  submit: (request: ITiltakRisikoscenarioRelasjon) => void
   formRef?: RefObject<any>
 }
 
 export const LeggTilEksisterendeTiltak = (props: IProps) => {
-  const { risikoscenario, tiltakList, setIsAddExisitingMode, customSubmit, formRef } = props
+  const { risikoscenario, tiltakList, setIsAddExisitingMode, submit, formRef } = props
   const [selectedTiltak, setSelectedTiltak] = useState<string[]>([])
 
   const addTiltak = (tiltakId: string, fieldProps: FieldProps) => {
@@ -30,17 +29,10 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
     fieldProps.form.setFieldValue('tiltakIds', [...updatedTiltak])
   }
 
-  const submit = async (request: ITiltakRisikoscenarioRelasjon) => {
-    await addTiltakToRisikoscenario(request).then(() => {
-      window.location.reload()
-      setIsAddExisitingMode(false)
-    })
-  }
-
   return (
     <div className='mt-5'>
       <Formik
-        onSubmit={customSubmit ? customSubmit : submit}
+        onSubmit={submit}
         initialValues={
           { risikoscenarioId: risikoscenario.id, tiltakIds: [] } as ITiltakRisikoscenarioRelasjon
         }

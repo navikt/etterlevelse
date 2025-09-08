@@ -16,6 +16,7 @@ import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakData;
 import no.nav.data.pvk.tiltak.dto.RisikoscenarioTiltakRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
@@ -256,8 +257,10 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         // Test add Tiltak...
         resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertNotNull(resp.getBody());
+        assertThat(resp.getBody().isTiltakOppdatert()).isTrue();
         assertThat(risikoscenarioService.getTiltak(risikoscenario.getId())).containsOnly(tiltak.getId());
-        
+
         // Should get Bad Request if relation already exists...
         resp = restTemplate.exchange("/risikoscenario/update/addRelevanteTiltak", HttpMethod.PUT, new HttpEntity<>(relReq), RisikoscenarioResponse.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -282,6 +285,8 @@ public class RisikoscenarioIT extends IntegrationTestBase {
                 risikoscenario.getId().toString(), tiltak.getId().toString()
         );
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertNotNull(resp.getBody());
+        assertThat(resp.getBody().isTiltakOppdatert()).isTrue();
         assertThat(risikoscenarioService.getTiltak(risikoscenario.getId())).isEmpty();
     }
    

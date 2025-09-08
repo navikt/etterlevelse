@@ -45,6 +45,13 @@ public class CodelistService implements InitializingBean {
         return CodelistCache.getCodelist(listName, code);
     }
 
+    public static Codelist getCodelistTemaFromLov(String lovId) {
+        Codelist lov = getCodelist(ListName.LOV, lovId);
+        String temaId = lov.getValueFromKeyData("tema");
+        return CodelistCache.getCodelist(ListName.TEMA, temaId);
+    }
+
+
     public static CodelistResponse getCodelistResponse(ListName listName, String code) {
         if (code == null) {
             return null;
@@ -55,6 +62,7 @@ public class CodelistService implements InitializingBean {
         }
         return codelist.toResponse();
     }
+
 
     public static List<CodelistResponse> getCodelistResponseList(ListName listName) {
         return convert(CodelistCache.getCodelist(listName), Codelist::toResponse);
