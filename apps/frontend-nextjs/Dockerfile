@@ -18,7 +18,7 @@ EXPOSE 3000
 CMD ["yarn", "start"]
 
 # Stage 3: Nginx reverse proxy
-FROM nginx:alpine AS nginx
+FROM nginxinc/nginx-unprivileged AS nginx
 
 # Copy custom nginx config
 COPY nginx-conf-overwrite.conf /etc/nginx/conf.d/default.conf
