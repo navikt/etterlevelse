@@ -162,6 +162,7 @@ export const mapRisikoscenarioToFormValue = (
     konsekvensNivaaBegrunnelse: risikoscenario.konsekvensNivaaBegrunnelse || '',
     relevanteKravNummer: risikoscenario.relevanteKravNummer || [],
     generelScenario: risikoscenario.generelScenario || false,
+    tiltakOppdatert: risikoscenario.tiltakOppdatert || false,
     ingenTiltak: risikoscenario.ingenTiltak === undefined ? undefined : risikoscenario.ingenTiltak,
     sannsynlighetsNivaaEtterTiltak: risikoscenario.sannsynlighetsNivaaEtterTiltak || 0,
     konsekvensNivaaEtterTiltak: risikoscenario.konsekvensNivaaEtterTiltak || 0,

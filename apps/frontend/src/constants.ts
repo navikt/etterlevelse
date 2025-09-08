@@ -537,6 +537,7 @@ export interface IRisikoscenario {
   konsekvensNivaaBegrunnelse: string
   relevanteKravNummer: IKravReference[]
   generelScenario: boolean
+  tiltakOppdatert: boolean
   ingenTiltak?: boolean
   sannsynlighetsNivaaEtterTiltak: number
   konsekvensNivaaEtterTiltak: number
