@@ -120,7 +120,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
               type='button'
               variant='tertiary'
               onClick={() => {
-                setIsPvoAlertModal(false)
+                setIsUnsavedModalOpen(false)
               }}
             >
               Avbryt
