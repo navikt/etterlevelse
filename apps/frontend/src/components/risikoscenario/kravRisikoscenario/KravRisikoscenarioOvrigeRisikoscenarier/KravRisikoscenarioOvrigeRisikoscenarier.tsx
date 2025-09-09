@@ -23,8 +23,8 @@ export const KravRisikoscenarioOvrigeRisikoscenarier: FunctionComponent<TProps> 
         type='button'
         href={
           pvoLink && user.isPersonvernombud()
-            ? pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 5)
-            : pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 5)
+            ? pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 6)
+            : pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 6)
         }
       >
         Gå til PVK: Identifisering av risikoscenarier og tiltak

@@ -326,7 +326,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                   href={pvkDokumentasjonStepUrl(
                                     etterlevelseDokumentasjonId,
                                     pvkDokument.id,
-                                    5
+                                    6
                                   )}
                                 >
                                   øvrige risikoscenarioer

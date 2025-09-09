@@ -330,7 +330,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               href={pvkDokumentasjonStepUrl(
                                 etterlevelseDokumentasjonId,
                                 pvkDokument.id,
-                                5
+                                6
                               )}
                             >
                               øvrige risikoscenarioer
@@ -390,7 +390,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               href={pvkDokumentasjonStepUrl(
                                 etterlevelseDokumentasjonId,
                                 pvkDokument.id,
-                                5
+                                6
                               )}
                             >
                               øvrige risikoscenarioer
