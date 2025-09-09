@@ -10,6 +10,7 @@ interface IPropsPageLayout {
   noPadding?: boolean
   currentPage?: string
   breadcrumbPaths?: IBreadCrumbPath[]
+  breadcrumbOffset?: string
 }
 
 export const PageLayout = ({
