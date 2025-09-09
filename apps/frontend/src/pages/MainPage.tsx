@@ -192,9 +192,9 @@ const EtterlevelseDokumentasjonList = ({
       <Heading size='medium' level='2'>
         Mine sist dokumenterte
       </Heading>
-      <List className='mt-6 flex flex-col gap-2'>
-        {filteredEtterlevelsesDokumentasjoner.length !== 0 &&
-          filteredEtterlevelsesDokumentasjoner
+      {filteredEtterlevelsesDokumentasjoner.length !== 0 && (
+        <List className='mt-6 flex flex-col gap-2'>
+          {filteredEtterlevelsesDokumentasjoner
             .slice(0, 2)
             .map((etterlevelseDokumentasjon, index) => (
               <List.Item icon={<div />} key={etterlevelseDokumentasjon.title + '_' + index}>
@@ -211,14 +211,14 @@ const EtterlevelseDokumentasjonList = ({
                 />
               </List.Item>
             ))}
-
-        {filteredEtterlevelsesDokumentasjoner.length === 0 && (
-          <BodyLong>
-            Ingen etterlevelsesdokument som har blitt opprettet eller endret av deg de siste 6
-            månedene.
-          </BodyLong>
-        )}
-      </List>
+        </List>
+      )}
+      {filteredEtterlevelsesDokumentasjoner.length === 0 && (
+        <BodyLong>
+          Ingen etterlevelsesdokument som har blitt opprettet eller endret av deg de siste 6
+          månedene.
+        </BodyLong>
+      )}
     </div>
   )
 }
