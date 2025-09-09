@@ -6,6 +6,7 @@ import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../.
 interface IProps {
   risikoscenario: IRisikoscenario
   tiltakList: ITiltak[]
+  setTiltakList?: (state: ITiltak[]) => void
   setIsAddExisitingMode: (state: boolean) => void
   submit: (request: ITiltakRisikoscenarioRelasjon) => void
   formRef?: RefObject<any>

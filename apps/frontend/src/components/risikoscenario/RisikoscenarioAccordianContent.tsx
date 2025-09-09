@@ -169,6 +169,21 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         })
       )
 
+      request.tiltakIds.forEach((tiltakId) => {
+        setTiltakList(
+          tiltakList.map((tiltak) => {
+            if (tiltak.id === tiltakId) {
+              return {
+                ...tiltak,
+                risikoscenarioIds: [...tiltak.risikoscenarioIds, request.risikoscenarioId],
+              }
+            } else {
+              return tiltak
+            }
+          })
+        )
+      })
+
       setIsAddExisitingMode(false)
     })
   }
