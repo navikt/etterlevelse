@@ -122,49 +122,56 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           (risikoscenarioer: IPageResponse<IRisikoscenario>) => {
             setRisikoscenarioList(risikoscenarioer.content)
             setFilteredRisikosenarioList(risikoscenarioer.content)
-
-            setAntallTiltakIkkeAktuelt(
-              risikoscenarioer.content.filter(
-                (risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak
-              ).length
-            )
-
-            setAntallEffektIkkeVurdert(
-              risikoscenarioer.content.filter(
-                (risikoscenario: IRisikoscenario) =>
-                  !risikoscenario.ingenTiltak &&
-                  (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
-                    risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
-                    risikoscenario.nivaaBegrunnelseEtterTiltak === '')
-              ).length
-            )
-
-            setAntallHoyRisiko(
-              risikoscenarioer.content.filter(
-                (risikoscenario: IRisikoscenario) =>
-                  risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
-              ).length
-            )
           }
         )
 
         await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak: IPageResponse<ITiltak>) => {
           setTiltakList(tiltak.content)
           setFilteredTiltakList(tiltak.content)
-
-          setAntallUtenTiltakAnsvarlig(
-            tiltak.content.filter(
-              (tiltak: ITiltak) =>
-                !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
-            ).length
-          )
-          setAntallUtenFrist(tiltak.content.filter((tiltak: ITiltak) => !tiltak.frist).length)
         })
 
         setIsLoading(false)
       })()
     }
   }, [pvkDokument])
+
+  useEffect(() => {
+    if (risikoscenarioList.length !== 0) {
+      setAntallTiltakIkkeAktuelt(
+        risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
+          .length
+      )
+
+      setAntallEffektIkkeVurdert(
+        risikoscenarioList.filter(
+          (risikoscenario: IRisikoscenario) =>
+            !risikoscenario.ingenTiltak &&
+            (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
+              risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
+              risikoscenario.nivaaBegrunnelseEtterTiltak === '')
+        ).length
+      )
+
+      setAntallHoyRisiko(
+        risikoscenarioList.filter(
+          (risikoscenario: IRisikoscenario) =>
+            risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
+        ).length
+      )
+    }
+  }, [risikoscenarioList])
+
+  useEffect(() => {
+    if (tiltakList.length !== 0) {
+      setAntallUtenTiltakAnsvarlig(
+        tiltakList.filter(
+          (tiltak: ITiltak) =>
+            !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+        ).length
+      )
+      setAntallUtenFrist(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist).length)
+    }
+  }, [tiltakList])
 
   useEffect(() => {
     if (risikoscenarioList.length !== 0 && filterQuery) {
