@@ -42,6 +42,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
 }) => {
   const [isFormActive, setIsFormActive] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [lagringVellykket, setLagringVellykket] = useState<boolean>(false)
 
   const revurdertEffektCheck =
     risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
@@ -69,31 +70,34 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
         sannsynlighetsNivaaEtterTiltak: submitedValues.sannsynlighetsNivaaEtterTiltak,
         konsekvensNivaaEtterTiltak: submitedValues.konsekvensNivaaEtterTiltak,
         nivaaBegrunnelseEtterTiltak: submitedValues.nivaaBegrunnelseEtterTiltak,
+        tiltakOppdatert: false,
       }
 
-      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
-        setRisikoscenario(response)
-        setAllRisikoscenarioList(
-          allRisikoscenarioList.map((unfilteredRisikoscenario) => {
-            if (unfilteredRisikoscenario.id === response.id) {
-              return response
-            } else {
-              return unfilteredRisikoscenario
-            }
-          })
-        )
+      updateRisikoscenario(updatedRisikoscenario)
+        .then((response: IRisikoscenario) => {
+          setRisikoscenario(response)
+          setAllRisikoscenarioList(
+            allRisikoscenarioList.map((unfilteredRisikoscenario) => {
+              if (unfilteredRisikoscenario.id === response.id) {
+                return response
+              } else {
+                return unfilteredRisikoscenario
+              }
+            })
+          )
 
-        setRisikosenarioList(
-          risikoscenarioList.map((filteredRisikoscenario: IRisikoscenario) => {
-            if (filteredRisikoscenario.id === response.id) {
-              return response
-            } else {
-              return filteredRisikoscenario
-            }
-          })
-        )
-        setIsFormActive(false)
-      })
+          setRisikosenarioList(
+            risikoscenarioList.map((filteredRisikoscenario: IRisikoscenario) => {
+              if (filteredRisikoscenario.id === response.id) {
+                return response
+              } else {
+                return filteredRisikoscenario
+              }
+            })
+          )
+          setIsFormActive(false)
+        })
+        .finally(() => setLagringVellykket(true))
     })
   }
 
@@ -103,6 +107,14 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
         {!isFormActive && (
           <div className='mt-5'>
             <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
+
+            {!revurdertEffektCheck && risikoscenario.tiltakOppdatert && (
+              <Alert variant='warning' className='my-5'>
+                Fordi dere har gjort endringer i tiltak, må dere revurdere tiltakenes antatte
+                effekt. Dere kan enten redigere deres opprinnelige vurdering, eller bekrefte at den
+                fortsatt er aktuell.
+              </Alert>
+            )}
 
             {revurdertEffektCheck && (
               <Alert inline className='mt-3' variant='warning'>
@@ -155,25 +167,63 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
         )}
 
         {!isFormActive && (!mangelfulScenario || !ikkeFerdigVurdert) && (
-          <Button
-            className='mt-3'
-            type='button'
-            variant={ikkeFerdigVurdert ? 'primary' : 'tertiary'}
-            onClick={async () => {
-              await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-                if (isReadOnlyPvkStatus(response.status)) {
-                  setIsPvoAlertModalOpen(true)
-                } else {
-                  setIsFormActive(true)
-                }
-              })
-            }}
-            icon={ikkeFerdigVurdert ? undefined : <PencilIcon aria-hidden title='' />}
-          >
-            {revurdertEffektCheck ? 'Vurdér tiltakenes effekt' : 'Redigér tiltakenes effekt'}
-          </Button>
+          <div className='flex gap-2 mt-3'>
+            <Button
+              type='button'
+              variant={
+                ikkeFerdigVurdert || (!ikkeFerdigVurdert && risikoscenario.tiltakOppdatert)
+                  ? 'primary'
+                  : 'secondary'
+              }
+              onClick={async () => {
+                await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+                  if (isReadOnlyPvkStatus(response.status)) {
+                    setIsPvoAlertModalOpen(true)
+                  } else {
+                    setIsFormActive(true)
+                  }
+                })
+              }}
+              icon={ikkeFerdigVurdert ? undefined : <PencilIcon aria-hidden title='' />}
+            >
+              {revurdertEffektCheck
+                ? 'Vurdér tiltakenes effekt'
+                : !revurdertEffektCheck && risikoscenario.tiltakOppdatert
+                  ? 'Revurdér tiltakenes effekt'
+                  : 'Redigér tiltakenes effekt'}
+            </Button>
+
+            {!revurdertEffektCheck && risikoscenario.tiltakOppdatert && (
+              <Button
+                type='button'
+                variant='secondary'
+                onClick={async () => {
+                  await getPvkDokument(risikoscenario.pvkDokumentId).then(async (response) => {
+                    if (isReadOnlyPvkStatus(response.status)) {
+                      setIsPvoAlertModalOpen(true)
+                    } else {
+                      await submit(risikoscenario)
+                    }
+                  })
+                }}
+              >
+                Bekreft denne vurderingen
+              </Button>
+            )}
+          </div>
         )}
       </div>
+
+      {lagringVellykket && (
+        <Alert
+          variant='success'
+          className='my-5'
+          closeButton
+          onClose={() => setLagringVellykket(false)}
+        >
+          Lagring vellykket
+        </Alert>
+      )}
 
       {isFormActive && (
         <Formik
