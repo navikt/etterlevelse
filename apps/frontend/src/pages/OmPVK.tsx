@@ -1,4 +1,4 @@
-import { BodyLong, List, ReadMore } from '@navikt/ds-react'
+import { BodyLong, Heading, List, ReadMore } from '@navikt/ds-react'
 import { PageLayout } from '../components/scaffold/Page'
 import HvordanDokumentereRiskoscenario from '../resources/HvordanDokumentereRiskoscenario.png'
 import VisHvorJegFinnerDigitalPVK from '../resources/VisHvorJegFinnerDigitalPVK.png'
@@ -10,7 +10,9 @@ const OmPvk = () => {
       currentPage='Om digital PVK'
     >
       <div className='max-w-[75ch]'>
-        <h1 className='h1'>Ny Digital PVK (løsning for Personvernkonsekvensvurdering)</h1>
+        <Heading size='medium' level='1'>
+          Ny Digital PVK (løsning for Personvernkonsekvensvurdering)
+        </Heading>
         <BodyLong className='mt-6'>
           Fra september 2025 bruker dere den nye, digitale PVK-løsningen i stedet for den gamle
           Word-malen.{' '}
@@ -26,9 +28,9 @@ const OmPvk = () => {
             risikonivået.
           </BodyLong>
         </ReadMore>
-        <h2 className='mt-3 size="medium"'>
-          <b>Dette kan dere gjøre i Digital PVK</b>
-        </h2>
+        <Heading size='small' level='2' className='mt-3'>
+          Dette kan dere gjøre i Digital PVK
+        </Heading>
         <List className='mt-3'>
           <List.Item>Vurdere om dere har behov for å gjennomføre PVK.</List.Item>
           <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
@@ -85,9 +87,9 @@ const OmPvk = () => {
             aria-label=''
           />
         </ReadMore>
-        <h2 className='mt-3 size="medium"'>
-          <b>Beslutningsstøtte når dere vurderer behov for PVK</b>
-        </h2>
+        <Heading size='small' level='2' className='mt-3'>
+          Beslutningsstøtte når dere vurderer behov for PVK
+        </Heading>
         <BodyLong className='mt-3'>
           I ny løsning får dere dokumentere hvordan dere har kommet fram til beslutningen om
           gjennomføring av PVK. Dere må ta stilling til hvilke egenskaper som gjelder for
@@ -151,9 +153,9 @@ const OmPvk = () => {
             flere uker å gjennomføre. Husk å tillate nok tid.
           </BodyLong>
         </ReadMore>
-        <h2 className='mt-3 size="medium"'>
-          <b>Dokumentasjon av Behandlingens livsløp</b>
-        </h2>
+        <Heading level='2' size='small' className='mt-3'>
+          Dokumentasjon av Behandlingens livsløp
+        </Heading>
         <ReadMore header='Hva er Behandlingens livsløp?' className='mt-3'>
           <BodyLong>
             «Behandlingens livsløp» beskriver hvor og hvordan personopplysninger flyter når de
@@ -180,19 +182,19 @@ const OmPvk = () => {
           etterlevelseskrav innen personvern og arkiv og dokumentasjon, og i selve vurderingen av om
           det er nødvendig å gjennomføre PVK.
         </BodyLong>
-        <h2 className='mt-3 size="medium"'>
-          <b>Når skal vi begynne å bruke den nye løsningen?</b>
-        </h2>
-        <h3 className='mt-5 size="small"'>
-          <b>Hvis dere har en PVK som allerede er godkjent og arkivert</b>
-        </h3>
+        <Heading level='2' size='small' className='mt-3'>
+          Når skal vi begynne å bruke den nye løsningen?
+        </Heading>
+        <Heading level='3' size='xsmall' className='mt-5'>
+          Hvis dere har en PVK som allerede er godkjent og arkivert
+        </Heading>
         <BodyLong className='mt-3'>
           Godkjente, arkiverte PVK-er skal ikke inn i ny løsning, med mindre risikobildet er endret
           og det er behov for en revurdering.
         </BodyLong>
-        <h3 className='mt-5 size="small"'>
-          <b>Hvis dere skal gjøre endringer i en PVK</b>
-        </h3>
+        <Heading level='3' size='xsmall' className='mt-5'>
+          Hvis dere skal gjøre endringer i en PVK
+        </Heading>
         <BodyLong className='mt-3'>
           Oppdatering av deres nåværende PVK bør gjøres i den nye løsningen. Hvis endringer i
           hvordan dere behandler personopplysninger fører til endring i risikobildet, vil PVK-en
@@ -203,9 +205,9 @@ const OmPvk = () => {
           Det er dessverre ikke mulig å importere eksisterende PVK-er fra Word. Da må dere klippe og
           lime tidligere innhold i Word over i den nye løsningen og oppdatere med det som er nytt.
         </BodyLong>
-        <h3 className='mt-5 size="small"'>
-          <b>Hvis dere skal vurdere eller revurdere behov for PVK</b>
-        </h3>
+        <Heading level='3' size='xsmall' className='mt-5'>
+          Hvis dere skal vurdere eller revurdere behov for PVK
+        </Heading>
         <BodyLong className='mt-3'>
           I ny løsning får dere hjelp til å vurdere om dere skal gjennomføre en PVK.
           <br />
@@ -217,9 +219,9 @@ const OmPvk = () => {
             Dere har tidligere vurdert at PVK ikke er nødvendig, men skal vurdere behovet på nytt
           </List.Item>
         </List>
-        <h3 className='mt-5 size="small"'>
-          <b>Ta kontakt</b>
-        </h3>
+        <Heading level='3' size='xsmall' className='mt-5'>
+          Ta kontakt
+        </Heading>
         <BodyLong className='mt-3'>
           Hvis dere har juridiske spørsmål knyttet til personvern, ta kontakt med Juridisk avdeling:
           nav.juridisk.avdeling@nav.no.
