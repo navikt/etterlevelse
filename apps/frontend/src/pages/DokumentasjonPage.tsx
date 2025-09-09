@@ -41,7 +41,6 @@ import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDok
 import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
-import { isInLimitedAccess } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 const getVariantForBLLButton = (
@@ -356,9 +355,7 @@ export const DokumentasjonPage = () => {
                       )}
 
                       {/*WIP ikke klar til å vises i prod*/}
-                      {((isInLimitedAccess(user.getIdent()) &&
-                        etterlevelseDokumentasjon.hasCurrentUserAccess) ||
-                        user.isAdmin()) && (
+                      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                         <Button
                           onClick={() => {
                             navigate(
@@ -379,9 +376,7 @@ export const DokumentasjonPage = () => {
                       {/*WIP ikke klar til å vises i prod*/}
                       {pvkDokument &&
                         pvkDokument.skalUtforePvk &&
-                        ((isInLimitedAccess(user.getIdent()) &&
-                          etterlevelseDokumentasjon.hasCurrentUserAccess) ||
-                          user.isAdmin()) && (
+                        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                           <Button
                             onClick={() => {
                               navigate(
@@ -401,9 +396,7 @@ export const DokumentasjonPage = () => {
                         )}
 
                       {/*WIP ikke klar til å vises i prod*/}
-                      {((isInLimitedAccess(user.getIdent()) &&
-                        etterlevelseDokumentasjon.hasCurrentUserAccess) ||
-                        user.isAdmin()) && (
+                      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
                         <Button
                           onClick={() => {
                             navigate(

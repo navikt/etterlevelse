@@ -28,7 +28,6 @@ import {
 import { useKravFilter } from '../query/KravQuery'
 import { CodelistService } from '../services/Codelist'
 import { user } from '../services/User'
-import { isInLimitedAccess } from '../util/config'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const StepTitle: string[] = [
@@ -173,7 +172,6 @@ export const PvkDokumentPage = () => {
       )}
 
       {etterlevelseDokumentasjon &&
-        !isInLimitedAccess(user.getIdent()) &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
         !user.isAdmin() && (
           <div className='flex w-full justify-center mt-5'>
@@ -191,9 +189,7 @@ export const PvkDokumentPage = () => {
 
       {etterlevelseDokumentasjon &&
         pvkDokument &&
-        (etterlevelseDokumentasjon.hasCurrentUserAccess ||
-          isInLimitedAccess(user.getIdent()) ||
-          user.isAdmin()) && (
+        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <div className='w-full'>
             <div className='min-h-48 bg-[#8269A21F] flex flex-col w-full items-center'>
               <div className='w-full max-w-7xl'>
