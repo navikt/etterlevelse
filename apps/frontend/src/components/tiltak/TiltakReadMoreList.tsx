@@ -19,6 +19,8 @@ interface IProps {
   setTiltakList: (state: ITiltak[]) => void
   risikoscenarioList: IRisikoscenario[]
   setRisikoscenarioList: (state: IRisikoscenario[]) => void
+  risikoscenarioer: IRisikoscenario[]
+  setRisikoscenarioer: (state: IRisikoscenario[]) => void
   setIsEditTiltakFormActive: (state: boolean) => void
   isCreateTiltakFormActive: boolean
   isAddExistingMode: boolean
@@ -34,6 +36,8 @@ export const TiltakReadMoreList = (props: IProps) => {
     setTiltakList,
     risikoscenarioList,
     setRisikoscenarioList,
+    risikoscenarioer,
+    setRisikoscenarioer,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
     isAddExistingMode,
@@ -67,6 +71,8 @@ export const TiltakReadMoreList = (props: IProps) => {
                 setTiltakList={setTiltakList}
                 risikoscenarioList={risikoscenarioList}
                 setRisikoscenarioList={setRisikoscenarioList}
+                risikoscenarioer={risikoscenarioer}
+                setRisikoscenarioer={setRisikoscenarioer}
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
                 isAddExistingMode={isAddExistingMode}
@@ -97,6 +103,8 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     setTiltakList,
     risikoscenarioList,
     setRisikoscenarioList,
+    risikoscenarioer,
+    setRisikoscenarioer,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
     isAddExistingMode,
@@ -135,6 +143,15 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(
           async (risikoscenarioResponse) => {
             setRirikoscenario(risikoscenarioResponse)
+            setRisikoscenarioer(
+              risikoscenarioer.map((rs) => {
+                if (rs.id === risikoscenarioResponse.id) {
+                  return risikoscenarioResponse
+                } else {
+                  return rs
+                }
+              })
+            )
             setRisikoscenarioList(
               risikoscenarioList.map((rs) => {
                 if (rs.id === risikoscenarioResponse.id) {
@@ -156,6 +173,15 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(
           (risikoscenarioResponse) => {
             setRirikoscenario(risikoscenarioResponse)
+            setRisikoscenarioer(
+              risikoscenarioer.map((rs) => {
+                if (rs.id === risikoscenarioResponse.id) {
+                  return risikoscenarioResponse
+                } else {
+                  return rs
+                }
+              })
+            )
             setRisikoscenarioList(
               risikoscenarioList.map((rs) => {
                 if (rs.id === risikoscenarioResponse.id) {
