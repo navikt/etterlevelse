@@ -12,7 +12,7 @@ const OmPvk = () => {
       pageTitle='Ny Digital PVK (løsning for Personvernkonsekvensvurdering)'
       currentPage='Om digital PVK'
     >
-      <div className='flex gap-5 mt-10'>
+      <div className='flex gap-7 mt-10'>
         <div className='sticky top-4 h-full'>
           <div className='max-w-[274px]'>
             <Stepper
@@ -55,7 +55,7 @@ const OmPvk = () => {
               risikonivået.
             </BodyLong>
           </ReadMore>
-          <Heading size='small' level='2' className='mt-3' id='dette-kan-dere-gjore-i-digital-pvk'>
+          <Heading size='small' level='2' className='mt-7' id='dette-kan-dere-gjore-i-digital-pvk'>
             Dette kan dere gjøre i Digital PVK
           </Heading>
           <List className='mt-3'>
@@ -114,7 +114,7 @@ const OmPvk = () => {
               aria-label=''
             />
           </ReadMore>
-          <Heading size='small' level='2' className='mt-3' id='beslutningsstotte'>
+          <Heading size='small' level='2' className='mt-7' id='beslutningsstotte'>
             Beslutningsstøtte når dere vurderer behov for PVK
           </Heading>
           <BodyLong className='mt-3'>
@@ -180,7 +180,7 @@ const OmPvk = () => {
               flere uker å gjennomføre. Husk å tillate nok tid.
             </BodyLong>
           </ReadMore>
-          <Heading level='2' size='small' className='mt-3' id='behandlingens-livslop'>
+          <Heading level='2' size='small' className='mt-7' id='behandlingens-livslop'>
             Dokumentasjon av Behandlingens livsløp
           </Heading>
           <ReadMore header='Hva er Behandlingens livsløp?' className='mt-3'>
@@ -209,7 +209,7 @@ const OmPvk = () => {
             etterlevelseskrav innen personvern og arkiv og dokumentasjon, og i selve vurderingen av
             om det er nødvendig å gjennomføre PVK.
           </BodyLong>
-          <Heading level='2' size='small' className='mt-3' id='bruk-av-den-nye-losningen'>
+          <Heading level='2' size='small' className='mt-7' id='bruk-av-den-nye-losningen'>
             Når skal vi begynne å bruke den nye løsningen?
           </Heading>
           <Heading level='3' size='xsmall' className='mt-5'>
@@ -247,7 +247,7 @@ const OmPvk = () => {
               Dere har tidligere vurdert at PVK ikke er nødvendig, men skal vurdere behovet på nytt
             </List.Item>
           </List>
-          <Heading level='3' size='xsmall' className='mt-5' id='ta-kontakt'>
+          <Heading level='2' size='small' className='mt-7' id='ta-kontakt'>
             Ta kontakt
           </Heading>
           <BodyLong className='mt-3'>
