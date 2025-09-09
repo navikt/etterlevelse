@@ -60,7 +60,10 @@ const OmPvk = () => {
           </Heading>
           <List className='mt-3'>
             <List.Item>Vurdere om dere har behov for å gjennomføre PVK.</List.Item>
-            <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
+            <List.Item>
+              Dokumentere hvor og hvordan personopplysninger flyter når de behandles i deres
+              kontekst.
+            </List.Item>
             <List.Item>
               Fylle ut PVK-skjema steg for steg – men det er også lov å gå fram og tilbake mellom
               steg underveis.
