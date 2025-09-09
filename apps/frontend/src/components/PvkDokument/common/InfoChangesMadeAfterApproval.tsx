@@ -1,4 +1,5 @@
 import { Alert } from '@navikt/ds-react'
+import moment from 'moment'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { IBehandlingensLivslop, IPvkDokument, IRisikoscenario, ITiltak } from '../../../constants'
 
@@ -58,9 +59,8 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
       if (lastModifiedDate > pvkDokument.godkjentAvRisikoeierDato) {
         setIsChangesMade(true)
         const godkjentDatoOgTid = pvkDokument.godkjentAvRisikoeierDato.split('T')
-        const dato = godkjentDatoOgTid[0].split('-')
         const tid = godkjentDatoOgTid[1].split(':')
-        setApprovedDate(dato[2] + '-' + dato[1] + '-' + dato[0])
+        setApprovedDate(godkjentDatoOgTid[0])
         setApprovedTime(tid[0] + ':' + tid[1])
       }
     }
@@ -71,7 +71,9 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
       {isChangesMade && (
         <Alert variant='info' className='mt-5'>
           Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
-          {approvedDate} kl{approvedTime}
+          <strong>
+            {moment(approvedDate).format('LL')} kl. {approvedTime}
+          </strong>
         </Alert>
       )}
     </>
