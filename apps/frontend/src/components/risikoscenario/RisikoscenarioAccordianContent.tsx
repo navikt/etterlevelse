@@ -34,6 +34,7 @@ type TProps = {
   isIngenTilgangFormDirty: boolean
   setIsIngenTilgangFormDirty: (state: boolean) => void
   formRef: RefObject<any>
+  isCreateModalOpen: boolean
 }
 
 export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
@@ -48,6 +49,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   isIngenTilgangFormDirty,
   setIsIngenTilgangFormDirty,
   formRef,
+  isCreateModalOpen,
 }) => {
   const navigate: NavigateFunction = useNavigate()
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
@@ -283,7 +285,8 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           </div>
         )}
 
-        {!isCreateTiltakFormActive &&
+        {!isCreateModalOpen &&
+          !isCreateTiltakFormActive &&
           !isEditTiltakFormActive &&
           !isAddExistingMode &&
           activeRisikoscenario.tiltakIds.length === 0 && (

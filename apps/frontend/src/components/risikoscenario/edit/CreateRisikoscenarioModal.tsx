@@ -14,6 +14,8 @@ type TProps = {
   onSubmitStateUpdate?: (risikoscenario: IRisikoscenario) => void
   formRef: RefObject<any>
   setIsIngenTilgangFormDirty: (state: boolean) => void
+  isCreateModalOpen: boolean
+  setIsCreateModalOpen: (state: boolean) => void
 }
 
 export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
@@ -21,9 +23,10 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
   onSubmitStateUpdate,
   setIsIngenTilgangFormDirty,
   formRef,
+  isCreateModalOpen,
+  setIsCreateModalOpen,
 }) => {
   const navigate: NavigateFunction = useNavigate()
-  const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isPvoAlertModal, setIsPvoAlertModal] = useState<boolean>(false)
   const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
@@ -33,7 +36,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
       if (onSubmitStateUpdate) {
         onSubmitStateUpdate(response)
       }
-      setIsEdit(false)
+      setIsCreateModalOpen(false)
 
       navigate(risikoscenarioUrl(response.id))
     })
@@ -41,7 +44,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
 
   return (
     <div className='mt-5'>
-      {!isEdit && (
+      {!isCreateModalOpen && (
         <Button
           onClick={async () =>
             await getPvkDokument(pvkDokument.id).then((response) => {
@@ -51,7 +54,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
                 if (formRef && formRef.current && formRef.current.dirty) {
                   setIsUnsavedModalOpen(true)
                 } else {
-                  setIsEdit(true)
+                  setIsCreateModalOpen(true)
                 }
               }
             })
@@ -93,8 +96,8 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
               onClick={async () => {
                 setIsSavingChanges(true)
                 await formRef.current.submitForm()
-                formRef.current.resetForm(formRef.current.values)
-                setIsEdit(true)
+                await formRef.current.resetForm(formRef.current.values)
+                setIsCreateModalOpen(true)
                 setIsUnsavedModalOpen(false)
               }}
             >
@@ -108,7 +111,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
                 formRef.current.resetForm(formRef.current.initialValues)
                 setIsIngenTilgangFormDirty(false)
                 setIsUnsavedModalOpen(false)
-                setIsEdit(true)
+                setIsCreateModalOpen(true)
               }}
             >
               Fortsett uten å lagre
@@ -126,11 +129,11 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
         </Modal>
       )}
 
-      {isEdit && (
+      {isCreateModalOpen && (
         <RisikoscenarioModalForm
           headerText='Opprett nytt risikoscenario'
-          isOpen={isEdit}
-          setIsOpen={setIsEdit}
+          isOpen={isCreateModalOpen}
+          setIsOpen={setIsCreateModalOpen}
           submit={submit}
           initialValues={{
             pvkDokumentId: pvkDokument.id,

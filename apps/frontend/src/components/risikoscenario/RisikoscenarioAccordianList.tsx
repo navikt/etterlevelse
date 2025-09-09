@@ -18,6 +18,7 @@ type TProps = {
   isIngenTilgangFormDirty: boolean
   setIsIngenTilgangFormDirty: (state: boolean) => void
   formRef: RefObject<any>
+  isCreateModalOpen: boolean
 }
 
 export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
@@ -31,6 +32,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   isIngenTilgangFormDirty,
   setIsIngenTilgangFormDirty,
   formRef,
+  isCreateModalOpen,
 }) => {
   const navigate: NavigateFunction = useNavigate()
   const url: URL = new URL(window.location.href)
@@ -114,6 +116,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
                     isIngenTilgangFormDirty={isIngenTilgangFormDirty}
                     setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
                     formRef={formRef}
+                    isCreateModalOpen={isCreateModalOpen}
                   />
                 )}
               </Accordion.Content>
