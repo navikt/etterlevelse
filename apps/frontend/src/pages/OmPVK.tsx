@@ -9,7 +9,7 @@ const OmPvk = () => {
       pageTitle='Ny Digital PVK (løsning for Personvernkonsekvensvurdering)'
       currentPage='Om digital PVK'
     >
-      <div>
+      <div className='max-w-[75ch]'>
         <h1 className='h1'>Ny Digital PVK (løsning for Personvernkonsekvensvurdering)</h1>
         <BodyLong className='mt-6'>
           Fra september 2025 bruker dere den nye, digitale PVK-løsningen i stedet for den gamle
