@@ -67,6 +67,7 @@ import { KravTablePage } from './pages/KravTablePage'
 import { MainPage } from './pages/MainPage'
 import { MyEtterlevelseDokumentasjonerPage } from './pages/MyEtterlevelseDokumentasjonerPage'
 import NotFound from './pages/NotFound'
+import OmPvk from './pages/OmPVK'
 import PvkAdminPage from './pages/PvkAdminPage'
 import PvkBehovPage from './pages/PvkBehovPage'
 import PvkDokumentPage from './pages/PvkDokumentPage'
@@ -208,6 +209,8 @@ const AppRoutes = (): JSX.Element => {
         element={<PvkDokumentPage />}
         caseSensitive={true}
       />
+
+      <Route path='/om-pvk' element={<OmPvk />} caseSensitive={true} />
 
       <Route
         path={`${pvoUrl}/:tab`}
