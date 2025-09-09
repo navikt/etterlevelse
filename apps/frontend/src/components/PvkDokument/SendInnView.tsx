@@ -122,8 +122,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       !medlemError &&
       !avdelingError &&
       !risikoeiereDataError &&
-      //venter til krav K114 er satt til utgått
-      // pvkKravError === '' &&
+      pvkKravError === '' &&
       !manglerBehandlingError
     ) {
       await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
@@ -482,6 +481,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         behandlingensLivslopError={behandlingensLivslopError}
                         risikoscenarioError={risikoscenarioError}
                         tiltakError={tiltakError}
+                        pvkKravError={pvkKravError}
                         savnerVurderingError={savnerVurderingError}
                         manglerBehandlingError={manglerBehandlingError}
                         errorSummaryRef={errorSummaryRef}
@@ -524,6 +524,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           behandlingensLivslopError={behandlingensLivslopError}
                           risikoscenarioError={risikoscenarioError}
                           tiltakError={tiltakError}
+                          pvkKravError={pvkKravError}
                           savnerVurderingError={savnerVurderingError}
                           manglerBehandlingError={manglerBehandlingError}
                           errorSummaryRef={errorSummaryRef}
@@ -551,6 +552,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         behandlingensLivslopError={behandlingensLivslopError}
                         risikoscenarioError={risikoscenarioError}
                         tiltakError={tiltakError}
+                        pvkKravError={pvkKravError}
                         savnerVurderingError={savnerVurderingError}
                         manglerBehandlingError={manglerBehandlingError}
                         errorSummaryRef={errorSummaryRef}
@@ -580,6 +582,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           behandlingensLivslopError={behandlingensLivslopError}
                           risikoscenarioError={risikoscenarioError}
                           tiltakError={tiltakError}
+                          pvkKravError={pvkKravError}
                           savnerVurderingError={savnerVurderingError}
                           manglerBehandlingError={manglerBehandlingError}
                           errorSummaryRef={errorSummaryRef}
@@ -609,6 +612,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           behandlingensLivslopError={behandlingensLivslopError}
                           risikoscenarioError={risikoscenarioError}
                           tiltakError={tiltakError}
+                          pvkKravError={pvkKravError}
                           savnerVurderingError={savnerVurderingError}
                           manglerBehandlingError={manglerBehandlingError}
                           errorSummaryRef={errorSummaryRef}

@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { FunctionComponent, RefObject } from 'react'
 import { IPvkDokument } from '../../../constants'
 import { etterlevelsesDokumentasjonEditUrl } from '../../common/RouteLinkEtterlevelsesdokumentasjon'
+import { etterlevelseDokumentasjonPvkTabUrl } from '../../common/RouteLinkPvk'
 
 type TProps = {
   errors: FormikErrors<IPvkDokument>
@@ -15,6 +16,7 @@ type TProps = {
   manglerBehandlingError: boolean
   risikoscenarioError: string
   tiltakError: string
+  pvkKravError: string
   savnerVurderingError: string
   errorSummaryRef: RefObject<HTMLDivElement | null>
 }
@@ -28,6 +30,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   behandlingensLivslopError,
   risikoscenarioError,
   tiltakError,
+  pvkKravError,
   savnerVurderingError,
   manglerBehandlingError,
   errorSummaryRef,
@@ -35,7 +38,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   return (
     <div>
       {(!_.isEmpty(errors) ||
-        // pvkKravError !== '' ||
+        pvkKravError !== '' ||
         risikoeiereDataError ||
         avdelingError ||
         medlemError ||
@@ -57,14 +60,14 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
             </ErrorSummary.Item>
           )}
 
-          {/* {pvkKravError !== '' && (
-                           <ErrorSummary.Item
-                             href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjon.id)}
-                             className='max-w-[75ch]'
-                           >
-                             {pvkKravError}
-                           </ErrorSummary.Item>
-                         )} */}
+          {pvkKravError !== '' && (
+            <ErrorSummary.Item
+              href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId)}
+              className='max-w-[75ch]'
+            >
+              {pvkKravError}
+            </ErrorSummary.Item>
+          )}
 
           {behandlingensLivslopError && (
             <ErrorSummary.Item href='#behandlingensLivslop' className='max-w-[75ch]'>
