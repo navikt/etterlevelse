@@ -9,8 +9,9 @@ import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioA
 
 type TProps = {
   risikoscenarioList: IRisikoscenario[]
-  allRisikoscenarioList: IRisikoscenario[]
   setRisikoscenarioList: (state: IRisikoscenario[]) => void
+  allRisikoscenarioList: IRisikoscenario[]
+  setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   etterlevelseDokumentasjonId: string
@@ -24,6 +25,7 @@ type TProps = {
 export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
+  setAllRisikoscenarioList,
   tiltakList,
   etterlevelseDokumentasjonId,
   setTiltakList,
@@ -108,6 +110,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
                     risikoscenario={risikoscenario}
                     risikoscenarioer={risikoscenarioList}
                     allRisikoscenarioList={allRisikoscenarioList}
+                    setAllRisikoscenarioList={setAllRisikoscenarioList}
                     etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                     tiltakList={tiltakList}
                     setTiltakList={setTiltakList}

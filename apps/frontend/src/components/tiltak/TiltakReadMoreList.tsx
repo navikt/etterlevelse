@@ -14,9 +14,11 @@ import TiltakForm from './edit/TiltakForm'
 
 interface IProps {
   risikoscenario: IRisikoscenario
+  setRirikoscenario: (state: IRisikoscenario) => void
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   risikoscenarioList: IRisikoscenario[]
+  setRisikoscenarioList: (state: IRisikoscenario[]) => void
   setIsEditTiltakFormActive: (state: boolean) => void
   isCreateTiltakFormActive: boolean
   isAddExistingMode: boolean
@@ -27,9 +29,11 @@ interface IProps {
 export const TiltakReadMoreList = (props: IProps) => {
   const {
     risikoscenario,
+    setRirikoscenario,
     tiltakList,
     setTiltakList,
     risikoscenarioList,
+    setRisikoscenarioList,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
     isAddExistingMode,
@@ -57,10 +61,12 @@ export const TiltakReadMoreList = (props: IProps) => {
                 activeTiltak={activeTiltak}
                 setActiveTiltak={setActiveTiltak}
                 risikoscenario={risikoscenario}
+                setRirikoscenario={setRirikoscenario}
                 tiltak={tiltak}
                 tiltakList={tiltakList}
                 setTiltakList={setTiltakList}
                 risikoscenarioList={risikoscenarioList}
+                setRisikoscenarioList={setRisikoscenarioList}
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
                 isCreateTiltakFormActive={isCreateTiltakFormActive}
                 isAddExistingMode={isAddExistingMode}
@@ -85,10 +91,12 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     activeTiltak,
     setActiveTiltak,
     risikoscenario,
+    setRirikoscenario,
     tiltak,
     tiltakList,
     setTiltakList,
     risikoscenarioList,
+    setRisikoscenarioList,
     setIsEditTiltakFormActive,
     isCreateTiltakFormActive,
     isAddExistingMode,
@@ -125,18 +133,55 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         response.risikoscenarioIds[0] === risikoscenario.id
       ) {
         await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(
-          async () =>
+          async (risikoscenarioResponse) => {
+            setRirikoscenario(risikoscenarioResponse)
+            setRisikoscenarioList(
+              risikoscenarioList.map((rs) => {
+                if (rs.id === risikoscenarioResponse.id) {
+                  return risikoscenarioResponse
+                } else {
+                  return rs
+                }
+              })
+            )
+
             await deleteTiltak(tiltakId).then(() => {
+              setTiltakList(tiltakList.filter((tiltak) => tiltak.id !== tiltakId))
               setIsDeleteModalOpen(false)
               navigate(risikoscenarioUrl(risikoscenario.id))
-              window.location.reload()
             })
+          }
         )
       } else {
-        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(() => {
-          navigate(risikoscenarioUrl(risikoscenario.id))
-          window.location.reload()
-        })
+        await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(
+          (risikoscenarioResponse) => {
+            setRirikoscenario(risikoscenarioResponse)
+            setRisikoscenarioList(
+              risikoscenarioList.map((rs) => {
+                if (rs.id === risikoscenarioResponse.id) {
+                  return risikoscenarioResponse
+                } else {
+                  return rs
+                }
+              })
+            )
+            setTiltakList(
+              tiltakList.map((tiltak) => {
+                if (tiltak.id === tiltakId) {
+                  return {
+                    ...tiltak,
+                    risikoscenarioIds: tiltak.risikoscenarioIds.filter(
+                      (id) => id !== risikoscenario.id
+                    ),
+                  }
+                } else {
+                  return tiltak
+                }
+              })
+            )
+            navigate(risikoscenarioUrl(risikoscenario.id))
+          }
+        )
       }
     })
   }

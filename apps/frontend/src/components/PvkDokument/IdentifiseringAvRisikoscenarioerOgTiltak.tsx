@@ -79,6 +79,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
                   <RisikoscenarioAccordianList
                     risikoscenarioList={risikoscenarioList}
                     allRisikoscenarioList={allRisikoscenarioList}
+                    setAllRisikoscenarioList={setAllRisikoscenarioList}
                     tiltakList={tiltakList}
                     etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                     setTiltakList={setTiltakList}

@@ -30,6 +30,7 @@ type TProps = {
   risikoscenario: IRisikoscenario
   risikoscenarioer: IRisikoscenario[]
   alleRisikoscenarioer: IRisikoscenario[]
+  setAlleRisikoscenarioer: (state: IRisikoscenario[]) => void
   etterlevelseDokumentasjonId: string
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
@@ -47,6 +48,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   risikoscenario,
   risikoscenarioer,
   alleRisikoscenarioer,
+  setAlleRisikoscenarioer,
   risikoscenarioForKrav,
   etterlevelseDokumentasjonId,
   kravnummer,
@@ -215,7 +217,9 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             {risikoscenario.tiltakIds.length !== 0 && (
               <TiltakReadMoreList
                 risikoscenario={activeRisikoscenario}
+                setRirikoscenario={setActiveRisikoscenario}
                 risikoscenarioList={alleRisikoscenarioer}
+                setRisikoscenarioList={setAlleRisikoscenarioer}
                 tiltakList={tiltakList}
                 setTiltakList={setTiltakList}
                 setIsEditTiltakFormActive={setIsEditTiltakFormActive}
