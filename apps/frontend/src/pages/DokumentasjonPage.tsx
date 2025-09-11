@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Alert, BodyShort, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { hotjar } from 'react-hotjar'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../api/BehandlingensLivslopApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '../api/DocumentRelationApi'
@@ -151,10 +150,6 @@ export const DokumentasjonPage = () => {
 
     return [relevanteStatusListe, utgaattStatusListe]
   }
-
-  useEffect(() => {
-    hotjar.initialize({ id: 148751, sv: 6 })
-  }, [])
 
   useEffect(() => {
     const [relevanteStatusListe, utgaattStatusListe] = filterData(relevanteData)
