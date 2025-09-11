@@ -3,12 +3,13 @@ ingresses:
 replies:
   - https://etterlevelse.intern.nav.no/oauth2/callback
   - https://etterlevelse.ansatt.nav.no/oauth2/callback
+  - http://localhost:3000/oauth2/callback
 teamcat_ingress: teamkatalog-api.intern.nav.no
 p360_ingress: nav.public360online.com
 cluster_location: prod-gcp
 env:
   - name: ETTERLEV_SECURITY_REDIRECT_URIS
-    value: https://etterlevelse.ansatt.nav.no, https://etterlevelse.intern.nav.no
+    value: https://etterlevelse.ansatt.nav.no, https://etterlevelse.intern.nav.no,http://localhost:3000
   - name: CLIENT_TEAMCAT_URL
     value: https://teamkatalog-api.intern.nav.no
   - name: CLIENT_TEAMCAT_FRONTEND_URL
