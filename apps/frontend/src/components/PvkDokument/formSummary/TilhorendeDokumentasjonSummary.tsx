@@ -8,9 +8,12 @@ import {
   TEtterlevelseQL,
   TKravQL,
 } from '../../../constants'
+import FormAlert from './FormAlert'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  manglerBehandlingError: boolean
+  pvkKravError: string
   pvkKrav:
     | {
         krav: IPageResponse<TKravQL>
@@ -20,6 +23,8 @@ type TProps = {
 
 export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
+  manglerBehandlingError,
+  pvkKravError,
   pvkKrav,
 }) => {
   const [antallFerdigPvkKrav, setAntallFerdigPvkKrav] = useState<number>(0)
@@ -67,6 +72,12 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
                       etterlevelseDokumentasjon.behandlinger?.map((behandling) => (
                         <List.Item key={behandling.id}>{behandlingName(behandling)}</List.Item>
                       ))}
+
+                    {manglerBehandlingError && (
+                      <FormAlert>
+                        Dere må legge inn minst 1 behandling fra Behandlingskatalogen
+                      </FormAlert>
+                    )}
                   </List>
                 </FormSummary.Value>
               </FormSummary.Answer>
@@ -79,6 +90,12 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
                       {antallFerdigPvkKrav} av {pvkKrav?.krav.totalElements} krav ferdigstilt
                     </List.Item>
                   </List>
+
+                  {pvkKravError !== '' && (
+                    <FormAlert>
+                      Dere må ferdigstille dokumentasjon av alle PVK-relaterte etterlevelseskrav
+                    </FormAlert>
+                  )}
                 </FormSummary.Value>
               </FormSummary.Answer>
 
@@ -87,7 +104,7 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
                 <FormSummary.Value>
                   <List as='ul'>
                     {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
-                      <List.Item>Ingen behandlinger</List.Item>
+                      <List.Item>Ingen vedlegg</List.Item>
                     )}
 
                     {etterlevelseDokumentasjon.risikovurderinger?.length !== 0 &&

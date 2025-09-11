@@ -1,5 +1,5 @@
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, CopyButton, Heading, Link } from '@navikt/ds-react'
+import { Alert, BodyLong, CopyButton, Heading } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -31,7 +31,6 @@ import {
 } from '../../constants'
 import { EListName, ICode, ICodelistProps } from '../../services/Codelist'
 import { user } from '../../services/User'
-import { etterlevelsesDokumentasjonEditUrl } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { isRisikoUnderarbeidCheck } from '../risikoscenario/common/util'
 import GodkjentAvRisikoeierFields from './SendInnComponents/GodkjentAvRisikoeierFields'
 import PVOUnderArbeidFIelds from './SendInnComponents/PVOUnderArbeidFIelds'
@@ -415,21 +414,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   </Alert>
                 )}
 
-                {manglerBehandlingError && (
-                  <Alert variant='warning' id='behandling-error' className='mt-7 mb-4'>
-                    Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere
-                    gjøre under{' '}
-                    <Link
-                      href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#behandling`}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      aria-label='redigere etterlevelsesdokumentasjon'
-                    >
-                      Redigér dokumentegenskaper (åpner i en ny fane)
-                    </Link>
-                  </Alert>
-                )}
-
                 <BehandlingensLivslopSummary
                   behandlingensLivslop={behandlingensLivslop}
                   behandlingensLivslopError={behandlingensLivslopError}
@@ -443,6 +427,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
                 <TilhorendeDokumentasjonSummary
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  manglerBehandlingError={manglerBehandlingError}
+                  pvkKravError={pvkKravError}
                   pvkKrav={pvkKrav}
                 />
 
