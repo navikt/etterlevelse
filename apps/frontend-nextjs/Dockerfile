@@ -19,7 +19,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf.template /etc/nginx/conf.d/default.conf
 
 # Copy the static build output from the builder stage
-COPY --from=builder /.next /usr/share/nginx/html
+COPY --from=builder .next /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 8080
