@@ -1,28 +1,38 @@
+# Stage 1: Build the Next.js application
 FROM node:24.7.0-alpine AS builder
 
-WORKDIR /
+# Set the working directory inside the container
+WORKDIR /app
 
+# Copy package.json and package-lock.json (or yarn.lock)
 COPY package.json yarn.lock ./
+
+# Install dependencies
 RUN yarn install --frozen-lockfile
 
-COPY . ./
+# Copy the rest of the application code
+COPY . .
 
+# Build the Next.js application for production
 RUN yarn build
 
-# Stage 2: Serve the static application with Nginx
-FROM nginx:stable-alpine
+# Stage 2: Create a lightweight runtime image
+FROM node:24.7.0-alpine AS runner
 
-# Remove default Nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
+# Set the working directory
+WORKDIR /app
 
-# Copy custom Nginx configuration
-COPY nginx.conf.template /etc/nginx/conf.d/default.conf
+# Set environment variables for production
+ENV NODE_ENV production
 
-# Copy the static build output from the builder stage
-COPY --from=builder .next /usr/share/nginx/html
+# Copy only the necessary files from the builder stage
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
-# Expose port 80
-EXPOSE 8080
+# Expose the port Next.js runs on (default is 3000)
+EXPOSE 3000
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Next.js application
+CMD ["yarn", "start"]
