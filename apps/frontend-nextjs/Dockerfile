@@ -1,6 +1,6 @@
 FROM node:24.7.0-alpine AS builder
 
-WORKDIR /app
+WORKDIR /
 
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
