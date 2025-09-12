@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest): Promise<NextResponse<unknown>> {
   const backendUrl: URL = new URL(request.nextUrl)
-  backendUrl.host = 'localhost:8080'
+
+  if (process.env.NODE_ENV === 'production') {
+    backendUrl.host = 'etterlevelse-backend'
+  } else {
+    backendUrl.host = 'localhost:8080'
+  }
 
   if (backendUrl.pathname.includes('/api')) {
     backendUrl.pathname = backendUrl.pathname.replace('/api', '')
