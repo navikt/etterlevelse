@@ -1,7 +1,9 @@
+'use client'
+
 import { ampli } from '@/services/amplitude/amplitudeService'
 import { Dropdown, InternalHeader, Link } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 type TMenuItem = {
   label: ReactNode
@@ -13,6 +15,7 @@ type TMenuItem = {
 export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: ReactNode }) => {
   const pathname: string = usePathname()
   const { pages, title, icon } = props
+  const [dropDownClicked, setDropDownClick] = useState<string | undefined>('')
 
   const allPages: TMenuItem[] = pages.length
     ? pages
@@ -23,6 +26,17 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
           ...(currentValue as TMenuItem[]),
         ])
     : []
+
+  useEffect(() => {
+    if (dropDownClicked !== undefined) {
+      ampli().logEvent('navigere', {
+        kilde: 'header',
+        app: 'etterlevelse',
+        til: dropDownClicked,
+        fra: pathname,
+      })
+    }
+  }, [])
 
   return (
     <Dropdown>
@@ -38,12 +52,7 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
                   as={Link}
                   href={page.href}
                   onClick={() => {
-                    ampli().logEvent('navigere', {
-                      kilde: 'header',
-                      app: 'etterlevelse',
-                      til: page.href,
-                      fra: pathname,
-                    })
+                    setDropDownClick(page.href)
                   }}
                   underline={false}
                 >
