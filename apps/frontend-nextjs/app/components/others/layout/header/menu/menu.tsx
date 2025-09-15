@@ -39,7 +39,7 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
         })
       }
     }
-  }, [])
+  }, [dropDownClicked])
 
   return (
     <Dropdown>
