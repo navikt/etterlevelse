@@ -5,7 +5,6 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { IPageResponse } from '@/constants/commonConstants'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { user } from '@/services/user/userService'
 import { BodyLong, Detail, Heading } from '@navikt/ds-react'
 import moment from 'moment'
@@ -26,14 +25,14 @@ const OmStotteTilEtterlevelse = () => {
   }, [])
 
   useEffect(() => {
-    const ampliInstance = ampli()
-    if (ampliInstance) {
-      ampliInstance.logEvent('sidevisning', {
-        side: 'FAQ side',
-        sidetittel: 'Om Støtte til etterlevelse',
-        ...userRoleEventProp,
-      })
-    }
+    // const ampliInstance = ampli()
+    // if (ampliInstance) {
+    //   ampliInstance.logEvent('sidevisning', {
+    //     side: 'FAQ side',
+    //     sidetittel: 'Om Støtte til etterlevelse',
+    //     ...userRoleEventProp,
+    //   })
+    // }
   }, [])
 
   /* eslint-disable jsx-a11y/media-has-caption */

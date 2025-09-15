@@ -6,9 +6,7 @@ import { IPageResponse } from '@/constants/commonConstants'
 import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { codelist } from '@/services/kodeverk/kodeverkService'
-import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
 import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
 import { KravHasExpired } from './kravHasExpired/kravHasExpired'
 import { KravHensikt } from './kravHensikt/kravHensikt'
@@ -67,18 +65,18 @@ export const KravMainContent: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     if (krav && kravTema) {
-      const ampliInstance = ampli()
-      if (ampliInstance) {
-        ampliInstance.logEvent('sidevisning', {
-          side: 'Krav side',
-          sidetittel: `${kravNummerView({
-            kravNummer: krav?.kravNummer,
-            kravVersjon: krav?.kravVersjon,
-          })} ${krav.navn}`,
-          section: kravTema?.shortName.toString(),
-          ...userRoleEventProp,
-        })
-      }
+      // const ampliInstance = ampli()
+      // if (ampliInstance) {
+      //   ampliInstance.logEvent('sidevisning', {
+      //     side: 'Krav side',
+      //     sidetittel: `${kravNummerView({
+      //       kravNummer: krav?.kravNummer,
+      //       kravVersjon: krav?.kravVersjon,
+      //     })} ${krav.navn}`,
+      //     section: kravTema?.shortName.toString(),
+      //     ...userRoleEventProp,
+      //   })
+      // }
     }
   }, [krav, kravTema])
 

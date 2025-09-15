@@ -9,7 +9,6 @@ import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -40,14 +39,14 @@ export const PvkDokumentAdminPage = () => {
   useEffect(() => {
     ;(async () => {
       await loadData()
-      const ampliInstance = ampli()
-      if (ampliInstance) {
-        ampliInstance.logEvent('sidevisning', {
-          side: 'Etterlevelse Pvk dokument admin side',
-          sidetittel: 'Administrere Pvk dokument',
-          ...userRoleEventProp,
-        })
-      }
+      // const ampliInstance = ampli()
+      // if (ampliInstance) {
+      //   ampliInstance.logEvent('sidevisning', {
+      //     side: 'Etterlevelse Pvk dokument admin side',
+      //     sidetittel: 'Administrere Pvk dokument',
+      //     ...userRoleEventProp,
+      //   })
+      // }
     })()
   }, [])
 

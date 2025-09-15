@@ -7,7 +7,6 @@ import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
@@ -70,14 +69,14 @@ const KravAdminPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
-      const ampliInstance = ampli()
-      if (ampliInstance) {
-        ampliInstance.logEvent('sidevisning', {
-          side: 'Krav admin side',
-          sidetittel: 'Administrere Krav',
-          ...userRoleEventProp,
-        })
-      }
+      // const ampliInstance = ampli()
+      // if (ampliInstance) {
+      //   ampliInstance.logEvent('sidevisning', {
+      //     side: 'Krav admin side',
+      //     sidetittel: 'Administrere Krav',
+      //     ...userRoleEventProp,
+      //   })
+      // }
     })()
   }, [])
 

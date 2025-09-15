@@ -9,7 +9,6 @@ import {
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IDocumentRelation } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -66,14 +65,14 @@ export const EtterlevelseDokumentRelasjonAdminPage = () => {
         documentRelationMapToFormVal(documentRelation)
       )
       setTableContent(mappedDocumentRelation)
-      const ampliInstance = ampli()
-      if (ampliInstance) {
-        ampliInstance.logEvent('sidevisning', {
-          side: 'Etterlevelse dokument relasjon admin side',
-          sidetittel: 'Administrere dokument relasjon',
-          ...userRoleEventProp,
-        })
-      }
+      // const ampliInstance = ampli()
+      // if (ampliInstance) {
+      //   ampliInstance.logEvent('sidevisning', {
+      //     side: 'Etterlevelse dokument relasjon admin side',
+      //     sidetittel: 'Administrere dokument relasjon',
+      //     ...userRoleEventProp,
+      //   })
+      // }
     })()
   }, [])
 

@@ -1,8 +1,6 @@
 'use client'
 
-import { ampli } from '@/services/amplitude/amplitudeService'
 import { Dropdown, InternalHeader, Link } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
 
 type TMenuItem = {
@@ -13,7 +11,6 @@ type TMenuItem = {
 }
 
 export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: ReactNode }) => {
-  const pathname: string = usePathname()
   const { pages, title, icon } = props
 
   const allPages: TMenuItem[] = pages.length
@@ -40,15 +37,15 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
                   as={Link}
                   href={page.href}
                   onClick={() => {
-                    const ampliInstance = ampli()
-                    if (ampliInstance) {
-                      ampliInstance.logEvent('navigere', {
-                        kilde: 'header',
-                        app: 'etterlevelse',
-                        til: page.href,
-                        fra: pathname,
-                      })
-                    }
+                    // const ampliInstance = ampli()
+                    // if (ampliInstance) {
+                    //   ampliInstance.logEvent('navigere', {
+                    //     kilde: 'header',
+                    //     app: 'etterlevelse',
+                    //     til: page.href,
+                    //     fra: pathname,
+                    //   })
+                    // }
                   }}
                   underline={false}
                 >

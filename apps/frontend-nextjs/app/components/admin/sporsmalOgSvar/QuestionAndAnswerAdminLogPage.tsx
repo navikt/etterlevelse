@@ -14,7 +14,6 @@ import {
   ITilbakemelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { ampli } from '@/services/amplitude/amplitudeService'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
@@ -79,13 +78,13 @@ export const QuestionAndAnswerAdminLogPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
-      const ampliInstance = ampli()
-      if (ampliInstance) {
-        ampliInstance.logEvent('sidevisning', {
-          side: 'Log side for spørsmål og svar',
-          sidetittel: 'Spørsmål og svar',
-        })
-      }
+      // const ampliInstance = ampli()
+      // if (ampliInstance) {
+      //   ampliInstance.logEvent('sidevisning', {
+      //     side: 'Log side for spørsmål og svar',
+      //     sidetittel: 'Spørsmål og svar',
+      //   })
+      // }
     })()
   }, [])
 

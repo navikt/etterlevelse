@@ -4,7 +4,6 @@ import { getMeldingByType, mapMeldingToFormValue } from '@/api/melding/meldingAp
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
-import { ampli } from '@/services/amplitude/amplitudeService'
 import { Heading, Tabs } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -54,13 +53,13 @@ const VarselTabs = () => {
     ;(async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
-        const ampliInstance = ampli()
-        if (ampliInstance) {
-          ampliInstance.logEvent('sidevisning', {
-            side: 'Varsel side for admin',
-            sidetittel: 'Opprett varsel melding for ' + tab,
-          })
-        }
+        // const ampliInstance = ampli()
+        // if (ampliInstance) {
+        //   ampliInstance.logEvent('sidevisning', {
+        //     side: 'Varsel side for admin',
+        //     sidetittel: 'Opprett varsel melding for ' + tab,
+        //   })
+        // }
         const response = await getMeldingByType(getMeldingType(tab))
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])

@@ -12,7 +12,6 @@ import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorit
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { temaBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { sortKravListeByPriority } from '@/util/krav/kravUtil'
@@ -83,16 +82,16 @@ const TemaView: FunctionComponent<TTemaViewProps> = (props) => {
 
   const [kravList, setKravList] = useState<IKrav[]>([])
 
-  useEffect(() => {
-    const ampliInstance = ampli()
-    if (ampliInstance) {
-      ampliInstance.logEvent('sidevisning', {
-        side: 'Tema side',
-        sidetittel: tema.shortName,
-        ...userRoleEventProp,
-      })
-    }
-  }, [])
+  // useEffect(() => {
+  //   const ampliInstance = ampli()
+  //   if (ampliInstance) {
+  //     ampliInstance.logEvent('sidevisning', {
+  //       side: 'Tema side',
+  //       sidetittel: tema.shortName,
+  //       ...userRoleEventProp,
+  //     })
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (data && data.krav && data.krav.content && data.krav.content.length > 0) {

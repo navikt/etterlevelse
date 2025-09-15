@@ -5,19 +5,18 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { codelist } from '@/services/kodeverk/kodeverkService'
 import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 
 export const TemaOversiktPage = () => {
-  useEffect(() => {
-    const ampliInstance = ampli()
-    if (ampliInstance) {
-      ampliInstance.logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
-    }
-  }, [])
+  // useEffect(() => {
+  //   const ampliInstance = ampli()
+  //   if (ampliInstance) {
+  //     ampliInstance.logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
+  //   }
+  // }, [])
 
   return (
     <PageLayout pageTitle='Forstå kravene' currentPage='Forstå kravene'>

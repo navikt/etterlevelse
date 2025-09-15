@@ -3,7 +3,6 @@
 import { getAudits, getAuditsByTableId } from '@/api/audit/auditApi'
 import { EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
-import { ampli, userRoleEventProp } from '@/services/amplitude/amplitudeService'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import {
@@ -63,14 +62,14 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const [, setIdInput, idInput] = useDebouncedState('', 400)
 
   useEffect(() => {
-    const ampliInstance = ampli()
-    if (ampliInstance) {
-      ampliInstance.logEvent('sidevisning', {
-        side: 'Varsel side for admin',
-        sidetittel: 'Log side for varslinger',
-        ...userRoleEventProp,
-      })
-    }
+    // const ampliInstance = ampli()
+    // if (ampliInstance) {
+    //   ampliInstance.logEvent('sidevisning', {
+    //     side: 'Varsel side for admin',
+    //     sidetittel: 'Log side for varslinger',
+    //     ...userRoleEventProp,
+    //   })
+    // }
 
     if (typeof window !== 'undefined')
       if (window.innerWidth > 1000) {
