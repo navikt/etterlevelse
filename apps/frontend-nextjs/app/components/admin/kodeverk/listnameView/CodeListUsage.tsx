@@ -1,3 +1,5 @@
+'use client'
+
 import { replaceCodelistUsage } from '@/api/kodeverk/kodeverkApi'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
@@ -81,13 +83,9 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const { usage, refresh } = props
   useEffect(() => {
     setShowReplace(false)
-    setTimeout(
-      () =>
-        ref.current &&
-        typeof window !== 'undefined' &&
-        window.scrollTo({ top: ref.current.offsetTop }),
-      200
-    )
+    if (typeof window !== 'undefined') {
+      setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
+    }
   }, [usage])
 
   const replace = async () => {

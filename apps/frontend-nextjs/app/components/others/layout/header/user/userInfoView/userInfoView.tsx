@@ -1,3 +1,5 @@
+'use client'
+
 import { Portrait } from '@/components/common/portrait/portrait'
 import { user } from '@/services/user/userService'
 import { getUserRole } from '@/util/user/userUtil'

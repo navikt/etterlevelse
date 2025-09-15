@@ -1,3 +1,5 @@
+'use client'
+
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjonRoutes'
 
 export const personvernKonsekvensvurderingUrl = '/pvkdokument'

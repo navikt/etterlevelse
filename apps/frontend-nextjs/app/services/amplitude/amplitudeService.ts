@@ -1,3 +1,5 @@
+'use client'
+
 import { user } from '@/services/user/userService'
 import { env } from '@/util/env/env'
 import amplitude, { AmplitudeClient } from 'amplitude-js'
