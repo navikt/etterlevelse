@@ -35,13 +35,17 @@ export const EditOmEtterlevelse = ({
       await updateMelding(newMelding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
-        window.location.reload()
+        if (typeof window !== 'undefined') {
+          window.location.reload()
+        }
       })
     } else {
       await createMelding(newMelding).then((m) => {
         setMelding(m)
         setDisableEdit(false)
-        window.location.reload()
+        if (typeof window !== 'undefined') {
+          window.location.reload()
+        }
       })
     }
   }

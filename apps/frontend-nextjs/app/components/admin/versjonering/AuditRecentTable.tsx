@@ -159,7 +159,12 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
         </Table.Header>
         <Table.Body>
           {audits.content.map((audit: IAuditItem, index) => {
-            const length = window.innerWidth > 1000 ? (window.innerWidth > 1200 ? 40 : 30) : 20
+            const length =
+              typeof window !== 'undefined' && window.innerWidth > 1000
+                ? typeof window !== 'undefined' && window.innerWidth > 1200
+                  ? 40
+                  : 30
+                : 20
             const rowNum = audits.pageNumber * audits.pageSize + index + 1
             return (
               <Table.Row key={audit.id}>
