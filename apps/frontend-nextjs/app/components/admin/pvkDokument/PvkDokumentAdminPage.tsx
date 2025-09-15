@@ -40,11 +40,14 @@ export const PvkDokumentAdminPage = () => {
   useEffect(() => {
     ;(async () => {
       await loadData()
-      ampli().logEvent('sidevisning', {
-        side: 'Etterlevelse Pvk dokument admin side',
-        sidetittel: 'Administrere Pvk dokument',
-        ...userRoleEventProp,
-      })
+      const ampliInstance = ampli()
+      if (ampliInstance) {
+        ampliInstance.logEvent('sidevisning', {
+          side: 'Etterlevelse Pvk dokument admin side',
+          sidetittel: 'Administrere Pvk dokument',
+          ...userRoleEventProp,
+        })
+      }
     })()
   }, [])
 

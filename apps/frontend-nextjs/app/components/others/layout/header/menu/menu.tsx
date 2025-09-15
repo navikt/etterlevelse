@@ -29,12 +29,15 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
 
   useEffect(() => {
     if (dropDownClicked !== undefined) {
-      ampli().logEvent('navigere', {
-        kilde: 'header',
-        app: 'etterlevelse',
-        til: dropDownClicked,
-        fra: pathname,
-      })
+      const ampliInstance = ampli()
+      if (ampliInstance) {
+        ampliInstance.logEvent('navigere', {
+          kilde: 'header',
+          app: 'etterlevelse',
+          til: dropDownClicked,
+          fra: pathname,
+        })
+      }
     }
   }, [])
 

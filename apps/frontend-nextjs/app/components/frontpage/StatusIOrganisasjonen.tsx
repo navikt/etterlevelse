@@ -8,12 +8,15 @@ export const StatusIOrganisasjonen = () => {
   const [linkClicked, setLinkClicked] = useState<boolean>(true)
 
   useEffect(() => {
-    ampli().logEvent('navigere', {
-      kilde: 'forside-panel',
-      app: 'etterlevelse',
-      til: 'https://metabase.ansatt.nav.no/dashboard/117-dashboard-for-etterlevelse',
-      fra: '/',
-    })
+    const ampliInstance = ampli()
+    if (ampliInstance) {
+      ampliInstance.logEvent('navigere', {
+        kilde: 'forside-panel',
+        app: 'etterlevelse',
+        til: 'https://metabase.ansatt.nav.no/dashboard/117-dashboard-for-etterlevelse',
+        fra: '/',
+      })
+    }
   }, [linkClicked])
 
   return (

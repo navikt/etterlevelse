@@ -63,11 +63,14 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const [, setIdInput, idInput] = useDebouncedState('', 400)
 
   useEffect(() => {
-    ampli().logEvent('sidevisning', {
-      side: 'Varsel side for admin',
-      sidetittel: 'Log side for varslinger',
-      ...userRoleEventProp,
-    })
+    const ampliInstance = ampli()
+    if (ampliInstance) {
+      ampliInstance.logEvent('sidevisning', {
+        side: 'Varsel side for admin',
+        sidetittel: 'Log side for varslinger',
+        ...userRoleEventProp,
+      })
+    }
 
     if (typeof window !== 'undefined')
       if (window.innerWidth > 1000) {

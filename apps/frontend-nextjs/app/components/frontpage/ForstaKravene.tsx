@@ -9,12 +9,15 @@ export const ForstaKravene = () => {
   const [linkClicked, setLinkClicked] = useState<boolean>(true)
 
   useEffect(() => {
-    ampli().logEvent('navigere', {
-      kilde: 'forside-panel',
-      app: 'etterlevelse',
-      til: temaUrl,
-      fra: '/',
-    })
+    const ampliInstance = ampli()
+    if (ampliInstance) {
+      ampliInstance.logEvent('navigere', {
+        kilde: 'forside-panel',
+        app: 'etterlevelse',
+        til: temaUrl,
+        fra: '/',
+      })
+    }
   }, [linkClicked])
 
   return (

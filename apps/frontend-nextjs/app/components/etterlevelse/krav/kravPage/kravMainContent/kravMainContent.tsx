@@ -67,15 +67,18 @@ export const KravMainContent: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     if (krav && kravTema) {
-      ampli().logEvent('sidevisning', {
-        side: 'Krav side',
-        sidetittel: `${kravNummerView({
-          kravNummer: krav?.kravNummer,
-          kravVersjon: krav?.kravVersjon,
-        })} ${krav.navn}`,
-        section: kravTema?.shortName.toString(),
-        ...userRoleEventProp,
-      })
+      const ampliInstance = ampli()
+      if (ampliInstance) {
+        ampliInstance.logEvent('sidevisning', {
+          side: 'Krav side',
+          sidetittel: `${kravNummerView({
+            kravNummer: krav?.kravNummer,
+            kravVersjon: krav?.kravVersjon,
+          })} ${krav.navn}`,
+          section: kravTema?.shortName.toString(),
+          ...userRoleEventProp,
+        })
+      }
     }
   }, [krav, kravTema])
 
