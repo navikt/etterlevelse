@@ -57,6 +57,7 @@ const format = (id: string) => _.trim(id, '"')
 export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType }) => {
   const [audits, setAudits] = useState<IPageResponse<IAuditItem>>(emptyPage)
   const [limit, setLimit] = useState(20)
+  const [length, setLength] = useState(20)
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
   const [, setIdInput, idInput] = useDebouncedState('', 400)
@@ -67,6 +68,17 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
       sidetittel: 'Log side for varslinger',
       ...userRoleEventProp,
     })
+
+    if (typeof window !== 'undefined')
+      if (window.innerWidth > 1000) {
+        if (window.innerWidth > 1200) {
+          setLength(40)
+        } else {
+          setLength(30)
+        }
+      } else {
+        setLength(20)
+      }
   }, [])
 
   useEffect(() => {
@@ -159,12 +171,6 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
         </Table.Header>
         <Table.Body>
           {audits.content.map((audit: IAuditItem, index) => {
-            const length =
-              typeof window !== 'undefined' && window.innerWidth > 1000
-                ? typeof window !== 'undefined' && window.innerWidth > 1200
-                  ? 40
-                  : 30
-                : 20
             const rowNum = audits.pageNumber * audits.pageSize + index + 1
             return (
               <Table.Row key={audit.id}>
