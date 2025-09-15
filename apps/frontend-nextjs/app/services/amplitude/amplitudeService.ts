@@ -2,11 +2,13 @@
 
 import { user } from '@/services/user/userService'
 import { env } from '@/util/env/env'
-import amplitude, { AmplitudeClient } from 'amplitude-js'
+import { AmplitudeClient } from 'amplitude-js'
 
 export const ampli = () => {
   if (typeof window === 'undefined') return null
 
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const amplitude = require('amplitude-js')
   const ampliInstance: AmplitudeClient = amplitude.getInstance()
 
   const AmplitudeConfig = {
