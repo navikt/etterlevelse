@@ -6,12 +6,11 @@ import {
   mapMeldingToFormValue,
   updateMelding,
 } from '@/api/melding/meldingApi'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
 import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import React, { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 export const getAlertTypeText = (type: EAlertType) => {
   if (!type) return ''
@@ -29,10 +28,10 @@ export const EditMelding = ({
   melding,
   setMelding,
   isLoading,
-  maxChar,
+  //maxChar,
 }: {
   melding: IMelding | undefined
-  setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>
+  setMelding: Dispatch<SetStateAction<IMelding | undefined>>
   isLoading: boolean
   maxChar?: number
 }) => {
@@ -66,52 +65,48 @@ export const EditMelding = ({
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className='flex justify-center'>
-        <Loader size='large' />
-      </div>
-    )
-  }
-
   return (
     <div>
-      {melding && (
+      {isLoading && (
+        <div className='flex justify-center'>
+          <Loader size='large' />
+        </div>
+      )}
+
+      {!isLoading && melding && (
         <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
           {({ values, submitForm }: FormikProps<IMelding>) => (
-            <div>
+            <Form>
               <div className='mb-6'>
                 <Heading className='my-4' size='small' level='2'>
                   {melding.meldingType === EMeldingType.SYSTEM ? 'Systemmelding' : 'Forsidemelding'}
                 </Heading>
                 <Field name='alertType'>
                   {(fieldProps: FieldProps<string>) => (
-                    <Form>
-                      <RadioGroup
-                        className='mt-8'
-                        legend='Varseltype'
-                        disabled={disableEdit}
-                        value={meldingAlertType}
-                        onChange={(event) => {
-                          fieldProps.form.setFieldValue('alertType', event)
-                          setMeldingAlertType(event)
-                        }}
-                      >
-                        {Object.values(EAlertType).map((id) => {
-                          return (
-                            <Radio value={id} key={id}>
-                              <div className='hover:underline'>{getAlertTypeText(id)}</div>
-                            </Radio>
-                          )
-                        })}
-                      </RadioGroup>
-                    </Form>
+                    <RadioGroup
+                      className='mt-8'
+                      legend='Varseltype'
+                      disabled={disableEdit}
+                      value={meldingAlertType}
+                      onChange={(event) => {
+                        fieldProps.form.setFieldValue('alertType', event)
+                        setMeldingAlertType(event)
+                      }}
+                    >
+                      {Object.values(EAlertType).map((id) => {
+                        return (
+                          <Radio value={id} key={id}>
+                            <div className='hover:underline'>{getAlertTypeText(id)}</div>
+                          </Radio>
+                        )
+                      })}
+                    </RadioGroup>
                   )}
                 </Field>
               </div>
 
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
-              <TextAreaField
+              {/* <TextAreaField
                 maxCharacter={maxChar}
                 markdown
                 height='12.5rem'
@@ -120,7 +115,7 @@ export const EditMelding = ({
                 }
                 noPlaceholder
                 name='melding'
-              />
+              /> */}
               <div className='flex w-full mt-2.5'>
                 <Button
                   type='button'
@@ -162,7 +157,7 @@ export const EditMelding = ({
                   </Button>
                 </div>
               </div>
-            </div>
+            </Form>
           )}
         </Formik>
       )}

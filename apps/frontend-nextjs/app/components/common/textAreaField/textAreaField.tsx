@@ -1,3 +1,5 @@
+'use client'
+
 import { BodyShort, Label, Textarea, ToggleGroup } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { ChangeEvent, ReactNode, useState } from 'react'

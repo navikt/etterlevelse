@@ -6,18 +6,17 @@ import {
   mapMeldingToFormValue,
   updateMelding,
 } from '@/api/melding/meldingApi'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
 import { Button, Heading, Loader } from '@navikt/ds-react'
-import { Formik, FormikProps } from 'formik'
+import { Form, Formik, FormikProps } from 'formik'
 import React, { useState } from 'react'
 
 export const EditOmEtterlevelse = ({
   melding,
   setMelding,
   isLoading,
-  maxChar,
+  // maxChar,
 }: {
   melding: IMelding | undefined
   setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>
@@ -26,7 +25,7 @@ export const EditOmEtterlevelse = ({
 }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
 
-  const initialNumberOfRows = 1
+  //  const initialNumberOfRows = 1
 
   const submit = async (melding: IMelding) => {
     const newMelding = { ...melding, alertType: EAlertType.INFO }
@@ -50,26 +49,28 @@ export const EditOmEtterlevelse = ({
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className='flex justify-center'>
-        <Loader size='large' />
-      </div>
-    )
-  }
-
   return (
     <div>
-      {melding && (
-        <Formik onSubmit={submit} initialValues={mapMeldingToFormValue(melding)}>
+      {isLoading && (
+        <div className='flex justify-center'>
+          <Loader size='large' />
+        </div>
+      )}
+      {!isLoading && melding && (
+        <Formik
+          onSubmit={submit}
+          initialValues={mapMeldingToFormValue(melding)}
+          validateOnChange={false}
+          validateOnBlur={false}
+        >
           {({ values, submitForm }: FormikProps<IMelding>) => (
-            <div>
+            <Form>
               <Heading size='small' level='2' className='my-4'>
                 Om støtte til etterlevelse
               </Heading>
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
 
-              <TextAreaField
+              {/* <TextAreaField
                 maxCharacter={maxChar}
                 height='12.5rem'
                 label={'Innledende tekst'}
@@ -90,7 +91,7 @@ export const EditOmEtterlevelse = ({
                 label={'Innhold'}
                 noPlaceholder
                 name='secondaryMelding'
-              />
+              /> */}
 
               <div className='flex w-full mt-2.5'>
                 <Button
@@ -118,7 +119,7 @@ export const EditOmEtterlevelse = ({
                   </Button>
                 </div>
               </div>
-            </div>
+            </Form>
           )}
         </Formik>
       )}

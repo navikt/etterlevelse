@@ -1,3 +1,5 @@
+'use client'
+
 import { RawDraftContentBlock, RawDraftContentState, RawDraftInlineStyleRange } from 'draft-js'
 
 const highlightTagRegex: RegExp = /<span style='background-color: rgb(.*?)'>(.*?)<\/span>/g

@@ -1,5 +1,5 @@
-// const Page = () => <VarselAdminPage />
+import VarselAdminPage from '@/components/admin/varslinger/VarselAdminPage'
 
-const Page = () => <div>test</div>
+const Page = () => <VarselAdminPage />
 
 export default Page
