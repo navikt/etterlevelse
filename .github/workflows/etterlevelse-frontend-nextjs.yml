@@ -23,6 +23,13 @@ jobs:
       image: ${{ steps.docker-build-push.outputs.image }}
       telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
     steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24.x"
+          
       - name: use dev config
         if: github.ref == 'refs/heads/master'
         run: cp .env.dev .env
