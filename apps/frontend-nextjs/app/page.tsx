@@ -1,5 +1,3 @@
-'use client'
-
 import { Heading } from '@navikt/ds-react'
 import ForstaKravene from './components/frontpage/ForstaKravene'
 import StatusIOrganisasjonen from './components/frontpage/StatusIOrganisasjonen'
