@@ -23,26 +23,6 @@ jobs:
       image: ${{ steps.docker-build-push.outputs.image }}
       telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
     steps:
-      - uses: actions/checkout@v5
-
-      - name: Set up node
-        uses: actions/setup-node@v5
-        with:
-          node-version: "24.x"
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v4
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
-
-      - name: install
-        run: yarn install
-
       - name: use dev config
         if: github.ref == 'refs/heads/master'
         run: cp .env.dev .env
@@ -55,9 +35,6 @@ jobs:
         env:
           GITHUB_SHA: ${{ github.sha }}
         run: echo "REACT_APP_GIT_VERSION=${GITHUB_SHA}" >> .env
-
-      - name: Build
-        run: CI=false yarn run build
 
       - name: Build and push
         if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
