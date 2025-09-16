@@ -1,5 +1,3 @@
-import { KravEditPage } from '@/components/krav/kravEditPage/kravEditPage'
-
-const Page = () => <KravEditPage />
+const Page = () => <div>test</div>
 
 export default Page
