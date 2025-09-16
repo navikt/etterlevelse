@@ -17,20 +17,6 @@ type TSection =
   | EMeldingType.FORSIDE
   | EMeldingType.OM_ETTERLEVELSE
 
-export const VarselAdminPage = () => {
-  return (
-    <PageLayout pageTitle='Varslinger' currentPage='Varslinger'>
-      <Heading className='mt-2' size='medium' level='1'>
-        Varslinger
-      </Heading>
-
-      <div className='pt-6'>
-        <VarselTabs />
-      </div>
-    </PageLayout>
-  )
-}
-
 const getMeldingType = (tabName: string) => {
   switch (tabName) {
     case 'FORSIDE':
@@ -42,7 +28,7 @@ const getMeldingType = (tabName: string) => {
   }
 }
 
-const VarselTabs = () => {
+export const VarselAdminPage = () => {
   const params = useParams<{ tab?: TSection }>()
 
   const [tab, setTab] = useState<TSection>(params.tab || 'utsendtMelding')
@@ -72,54 +58,62 @@ const VarselTabs = () => {
   }, [tab])
 
   return (
-    <Tabs defaultValue='utsendtMelding'>
-      <Tabs.List>
-        <Tabs.Tab value='utsendtMelding' label='Utsendte meldinger' />
-        <Tabs.Tab
-          value={EMeldingType.SYSTEM}
-          label='Systemmelding'
-          onClick={() => {
-            setTab(EMeldingType.SYSTEM)
-          }}
-        />
-        <Tabs.Tab
-          value={EMeldingType.FORSIDE}
-          label='Informasjon på forsiden'
-          onClick={() => {
-            setTab(EMeldingType.FORSIDE)
-          }}
-        />
-        <Tabs.Tab
-          value={EMeldingType.OM_ETTERLEVELSE}
-          label='Om etterlevelse'
-          onClick={() => {
-            setTab(EMeldingType.OM_ETTERLEVELSE)
-          }}
-        />
-      </Tabs.List>
-      <Tabs.Panel value='utsendtMelding'>
-        <AuditRecentTable show={true} tableType={EObjectType.Melding} />
-      </Tabs.Panel>
-      <Tabs.Panel value={EMeldingType.SYSTEM}>
-        <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />
-      </Tabs.Panel>
-      <Tabs.Panel value={EMeldingType.FORSIDE}>
-        <EditMelding
-          melding={melding}
-          setMelding={setMelding}
-          isLoading={isLoading}
-          maxChar={500}
-        />
-      </Tabs.Panel>
-      <Tabs.Panel value={EMeldingType.OM_ETTERLEVELSE}>
-        <EditOmEtterlevelse
-          melding={melding}
-          setMelding={setMelding}
-          isLoading={isLoading}
-          maxChar={500}
-        />
-      </Tabs.Panel>
-    </Tabs>
+    <PageLayout pageTitle='Varslinger' currentPage='Varslinger'>
+      <Heading className='mt-2' size='medium' level='1'>
+        Varslinger
+      </Heading>
+
+      <div className='pt-6'>
+        <Tabs defaultValue='utsendtMelding'>
+          <Tabs.List>
+            <Tabs.Tab value='utsendtMelding' label='Utsendte meldinger' />
+            <Tabs.Tab
+              value={EMeldingType.SYSTEM}
+              label='Systemmelding'
+              onClick={() => {
+                setTab(EMeldingType.SYSTEM)
+              }}
+            />
+            <Tabs.Tab
+              value={EMeldingType.FORSIDE}
+              label='Informasjon på forsiden'
+              onClick={() => {
+                setTab(EMeldingType.FORSIDE)
+              }}
+            />
+            <Tabs.Tab
+              value={EMeldingType.OM_ETTERLEVELSE}
+              label='Om etterlevelse'
+              onClick={() => {
+                setTab(EMeldingType.OM_ETTERLEVELSE)
+              }}
+            />
+          </Tabs.List>
+          <Tabs.Panel value='utsendtMelding'>
+            <AuditRecentTable show={true} tableType={EObjectType.Melding} />
+          </Tabs.Panel>
+          <Tabs.Panel value={EMeldingType.SYSTEM}>
+            <EditMelding melding={melding} setMelding={setMelding} isLoading={isLoading} />
+          </Tabs.Panel>
+          <Tabs.Panel value={EMeldingType.FORSIDE}>
+            <EditMelding
+              melding={melding}
+              setMelding={setMelding}
+              isLoading={isLoading}
+              maxChar={500}
+            />
+          </Tabs.Panel>
+          <Tabs.Panel value={EMeldingType.OM_ETTERLEVELSE}>
+            <EditOmEtterlevelse
+              melding={melding}
+              setMelding={setMelding}
+              isLoading={isLoading}
+              maxChar={500}
+            />
+          </Tabs.Panel>
+        </Tabs>
+      </div>
+    </PageLayout>
   )
 }
 
