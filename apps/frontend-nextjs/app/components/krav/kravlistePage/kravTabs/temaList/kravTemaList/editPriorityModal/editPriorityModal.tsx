@@ -7,22 +7,31 @@ import { IKrav } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { Button, Label, Loader, Modal } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { useState } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction, useState } from 'react'
 import { KravPriorityPanels } from '../kravPriorityPanels/kravPriorityPanels'
 
-export const EditPriorityModal = (props: {
+type TProps = {
   isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setIsOpen: Dispatch<SetStateAction<boolean>>
   kravListe: IKrav[]
   tema: string
   temaCode: string
   kravPriorityList: IKravPriorityList
   refresh: () => void
+}
+
+export const EditPriorityModal: FunctionComponent<TProps> = ({
+  isOpen,
+  setIsOpen,
+  kravListe,
+  tema,
+  temaCode,
+  kravPriorityList,
+  refresh,
 }) => {
-  const { isOpen, setIsOpen, kravListe, tema, temaCode, kravPriorityList, refresh } = props
   const [loading, setLoading] = useState(false)
 
-  const submit = ({ krav }: { krav: IKrav[] }) => {
+  const submit = ({ krav }: { krav: IKrav[] }): void => {
     setLoading(true)
 
     if (kravPriorityList.id) {
@@ -30,7 +39,7 @@ export const EditPriorityModal = (props: {
         await updateKravPriorityList({
           id: kravPriorityList.id,
           temaId: temaCode,
-          priorityList: krav.map((krav) => krav.kravNummer),
+          priorityList: krav.map((krav: IKrav) => krav.kravNummer),
           changeStamp: kravPriorityList.changeStamp,
           version: kravPriorityList.version,
         }))()
@@ -39,13 +48,13 @@ export const EditPriorityModal = (props: {
           refresh()
           setIsOpen(false)
         })
-        .catch((error) => console.error(error))
+        .catch((error: any) => console.error(error))
     } else {
       ;(async () =>
         await createKravPriorityList({
           id: '',
           temaId: temaCode,
-          priorityList: krav.map((krav) => krav.kravNummer),
+          priorityList: krav.map((krav: IKrav) => krav.kravNummer),
           changeStamp: { lastModifiedDate: '', lastModifiedBy: '' },
           version: -1,
         }))()
@@ -58,7 +67,7 @@ export const EditPriorityModal = (props: {
     }
   }
 
-  const close = () => {
+  const close = (): void => {
     setIsOpen(false)
   }
 
