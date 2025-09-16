@@ -10,8 +10,6 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-EXPOSE 3000
-
 ENV NODE_ENV=production
 
 RUN npm run build
