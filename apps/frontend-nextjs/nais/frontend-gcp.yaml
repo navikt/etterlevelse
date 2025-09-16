@@ -25,16 +25,6 @@ spec:
     requests:
       cpu: 50m
       memory: 128Mi
-  liveness:
-    path: /isAlive
-    initialDelay: 5
-    periodSeconds: 5
-    failureThreshold: 30
-  readiness:
-    path: /isReady
-    initialDelay: 5
-    periodSeconds: 5
-    failureThreshold: 30
   accessPolicy:
     outbound:
       rules:
