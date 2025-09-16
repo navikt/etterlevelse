@@ -125,7 +125,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className='flex items-start gap-2 mb-2.5'>
-                  <Label size='medium'>Dokumentasjon:</Label>
+                  <div>
+                    <Label size='medium'>Dokumentasjon:</Label>
+                  </div>
                   <BodyLong size='medium'>
                     {etterlevelseDokumentasjon.risikovurderinger.length !== 0 &&
                       etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
@@ -149,7 +151,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className='flex items-start gap-2 mb-2.5'>
-                  <Label size='medium'>Saksnummer i Public 360:</Label>
+                  <div>
+                    <Label size='medium'>Saksnummer i Public 360:</Label>
+                  </div>
                   {etterlevelseDokumentasjon.p360CaseNumber !== '' && (
                     <Link
                       href={p360Url(etterlevelseDokumentasjon.p360Recno)}
@@ -166,7 +170,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className='flex items-start gap-2 mb-2.5'>
-                  <Label size='medium'>Avdeling:</Label>
+                  <div>
+                    <Label size='medium'>Avdeling:</Label>
+                  </div>
                   <BodyLong size='medium'>
                     {etterlevelseDokumentasjon.nomAvdelingId &&
                       etterlevelseDokumentasjon.avdelingNavn}
@@ -185,7 +191,9 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                 </div>
 
                 <div className='flex items-start gap-2'>
-                  <Label size='medium'>Varslingsadresser:</Label>
+                  <div>
+                    <Label size='medium'>Varslingsadresser:</Label>
+                  </div>
                   <div>
                     {etterlevelseDokumentasjon.varslingsadresser && (
                       <VarslingsadresserView
