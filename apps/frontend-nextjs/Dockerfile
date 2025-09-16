@@ -1,7 +1,7 @@
 # Stage 1: Build the Next.js application
 FROM node:24.8.0-alpine AS builder
 
-WORKDIR /app
+WORKDIR /usr/app
 
 COPY package.json yarn.lock .
 
