@@ -67,20 +67,21 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           <BodyLong>
             Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
           </BodyLong>
-          {etterlevelseDokumentasjon.behandlinger && (
-            <List as='ul'>
-              {etterlevelseDokumentasjon.behandlinger.map((behandling) => (
-                <List.Item key={behandling.id}>
-                  <ExternalLink
-                    className='text-medium'
-                    href={behandlingskatalogenProcessUrl(getPollyBaseUrl(), behandling.id)}
-                  >
-                    {behandlingName(behandling)}
-                  </ExternalLink>
-                </List.Item>
-              ))}
-            </List>
-          )}
+          {etterlevelseDokumentasjon.behandlinger &&
+            etterlevelseDokumentasjon.behandlinger.length !== 0 && (
+              <List as='ul'>
+                {etterlevelseDokumentasjon.behandlinger.map((behandling) => (
+                  <List.Item key={behandling.id}>
+                    <ExternalLink
+                      className='text-medium'
+                      href={behandlingskatalogenProcessUrl(getPollyBaseUrl(), behandling.id)}
+                    >
+                      {behandlingName(behandling)}
+                    </ExternalLink>
+                  </List.Item>
+                ))}
+              </List>
+            )}
           {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
             <Alert variant='warning' id='behandling-error' className='my-5'>
               Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere gjøre
@@ -96,17 +97,19 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
             </Alert>
           )}
 
-          <BodyShort className='inline-block mb-5 max-w-[75ch]'>
-            Dere kan redigere hvilke behandlinger som gjelder i{' '}
-            <Link
-              href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='redigere etterlevelsesdokumentasjon'
-            >
-              Redigér dokumentegenskaper (åpner i en ny fane).
-            </Link>
-          </BodyShort>
+          {etterlevelseDokumentasjon.behandlinger?.length !== 0 && (
+            <BodyShort className='inline-block mb-5 max-w-[75ch]'>
+              Dere kan redigere hvilke behandlinger som gjelder i{' '}
+              <Link
+                href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='redigere etterlevelsesdokumentasjon'
+              >
+                Redigér dokumentegenskaper (åpner i en ny fane).
+              </Link>
+            </BodyShort>
+          )}
 
           <Heading level='2' size='small' className='mb-3 mt-5'>
             PVK-relaterte etterlevelseskrav
