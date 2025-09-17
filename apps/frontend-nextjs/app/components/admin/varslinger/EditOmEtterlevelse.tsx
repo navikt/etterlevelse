@@ -10,18 +10,20 @@ import { EMeldingStatus, IMelding } from '@/constants/admin/message/messageConst
 import { EAlertType } from '@/constants/commonConstants'
 import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik, FormikProps } from 'formik'
-import React, { useState } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 
-export const EditOmEtterlevelse = ({
-  melding,
-  setMelding,
-  isLoading,
-  // maxChar,
-}: {
+type TProps = {
   melding: IMelding | undefined
   setMelding: React.Dispatch<React.SetStateAction<IMelding | undefined>>
   isLoading: boolean
   maxChar?: number
+}
+
+export const EditOmEtterlevelse: FunctionComponent<TProps> = ({
+  melding,
+  setMelding,
+  isLoading,
+  // maxChar,
 }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
 

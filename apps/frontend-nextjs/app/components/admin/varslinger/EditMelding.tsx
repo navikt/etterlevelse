@@ -10,7 +10,7 @@ import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/messag
 import { EAlertType } from '@/constants/commonConstants'
 import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
 
 export const getAlertTypeText = (type: EAlertType) => {
   if (!type) return ''
@@ -24,16 +24,18 @@ export const getAlertTypeText = (type: EAlertType) => {
   }
 }
 
-export const EditMelding = ({
-  melding,
-  setMelding,
-  isLoading,
-  //maxChar,
-}: {
+type TProps = {
   melding: IMelding | undefined
   setMelding: Dispatch<SetStateAction<IMelding | undefined>>
   isLoading: boolean
   maxChar?: number
+}
+
+export const EditMelding: FunctionComponent<TProps> = ({
+  melding,
+  setMelding,
+  isLoading,
+  //maxChar,
 }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(EAlertType.WARNING)
