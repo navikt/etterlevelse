@@ -6,6 +6,7 @@ import {
   mapMeldingToFormValue,
   updateMelding,
 } from '@/api/melding/meldingApi'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
 import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
@@ -35,7 +36,7 @@ export const EditMelding: FunctionComponent<TProps> = ({
   melding,
   setMelding,
   isLoading,
-  //maxChar,
+  maxChar,
 }) => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [meldingAlertType, setMeldingAlertType] = useState<string>(EAlertType.WARNING)
@@ -104,7 +105,7 @@ export const EditMelding: FunctionComponent<TProps> = ({
               </div>
 
               {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
-              {/* <TextAreaField
+              <TextAreaField
                 maxCharacter={maxChar}
                 markdown
                 height='12.5rem'
@@ -113,7 +114,7 @@ export const EditMelding: FunctionComponent<TProps> = ({
                 }
                 noPlaceholder
                 name='melding'
-              /> */}
+              />
               <div className='flex w-full mt-2.5'>
                 <Button
                   type='button'
