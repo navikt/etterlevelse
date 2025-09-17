@@ -60,6 +60,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
   const [urlToNavigate, setUrlToNavigate] = useState<string>('')
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [savedAlert, setSavedAlert] = useState<boolean>(false)
 
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     if (etterlevelseDokumentasjon) {
@@ -84,18 +85,20 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         if (isReadOnlyPvkStatus(pvkDokument.status)) {
           setIsPvoAlertModalOpen(true)
         } else {
-          await updatePvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
-            setPvkDokument(response)
-            navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
-            window.location.reload()
-          })
+          await updatePvkDokument(mutatedPvkDokument)
+            .then((response: IPvkDokument) => {
+              setPvkDokument(response)
+              navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+            })
+            .finally(() => setSavedAlert(true))
         }
       } else {
-        await createPvkDokument(mutatedPvkDokument).then((response: IPvkDokument) => {
-          setPvkDokument(response)
-          navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
-          window.location.reload()
-        })
+        await createPvkDokument(mutatedPvkDokument)
+          .then((response: IPvkDokument) => {
+            setPvkDokument(response)
+            navigate(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+          })
+          .finally(() => setSavedAlert(true))
       }
     }
   }
@@ -110,7 +113,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         innerRef={formRef}
       >
-        {({ setFieldValue, values, submitForm, dirty }) => (
+        {({ initialValues, setFieldValue, values, submitForm, dirty, resetForm }) => (
           <Form>
             <div id='ytterlige-egenskaper'>
               <FieldArray name='ytterligereEgenskaper'>
@@ -191,12 +194,24 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               />
             )}
 
+            {savedAlert && (
+              <Alert
+                className='mt-5'
+                variant='success'
+                closeButton
+                onClose={() => setSavedAlert(false)}
+              >
+                Lagring vellykket
+              </Alert>
+            )}
+
             <div className='flex items-center mt-5 gap-2'>
               <Button
                 type='button'
                 variant='primary'
-                onClick={() => {
-                  submitForm()
+                onClick={async () => {
+                  await submitForm()
+                  resetForm(values)
                 }}
               >
                 Lagre
@@ -206,7 +221,10 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='secondary'
                 onClick={() => {
-                  window.location.reload()
+                  resetForm(initialValues)
+                  setCheckedYtterligereEgenskaper(
+                    initialValues.ytterligereEgenskaper.map((egenskap) => egenskap.code)
+                  )
                 }}
               >
                 Forkast endringer
