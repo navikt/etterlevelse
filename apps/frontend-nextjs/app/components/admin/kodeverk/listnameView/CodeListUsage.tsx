@@ -83,9 +83,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const { usage, refresh } = props
   useEffect(() => {
     setShowReplace(false)
-    if (typeof window !== 'undefined') {
-      setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
-    }
+    setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
   }, [usage])
 
   const replace = async () => {

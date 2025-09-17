@@ -70,17 +70,15 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
     //     ...userRoleEventProp,
     //   })
     // }
-
-    if (typeof window !== 'undefined')
-      if (window.innerWidth > 1000) {
-        if (window.innerWidth > 1200) {
-          setLength(40)
-        } else {
-          setLength(30)
-        }
+    if (window.innerWidth > 1000) {
+      if (window.innerWidth > 1200) {
+        setLength(40)
       } else {
-        setLength(20)
+        setLength(30)
       }
+    } else {
+      setLength(20)
+    }
   }, [])
 
   useEffect(() => {
