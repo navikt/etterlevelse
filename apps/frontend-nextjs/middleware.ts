@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function middleware(request: NextRequest): Promise<NextResponse<unknown>> {
-  const backendUrl: URL = new URL(request.nextUrl)
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
-  if (process.env.NODE_ENV === 'production') {
-    backendUrl.host = 'etterlevelse-backend'
-  } else {
-    backendUrl.host = 'localhost:8080'
+  if (
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/oauth2') ||
+    pathname.startsWith('/logout')
+  ) {
+    const response = NextResponse.next()
+    response.headers.set('Nav-Consumer-Id', 'etterlevelsefront')
+    const forwardedFor = request.headers.get('x-forwarded-for') || ''
+    response.headers.set('X-Real-IP', forwardedFor.split(',')[0].trim())
+    return response
   }
-
-  if (backendUrl.pathname.includes('/api')) {
-    backendUrl.pathname = backendUrl.pathname.replace('/api', '')
-  }
-
-  const headers: Headers = request.headers
-  headers.set('Nav-Consumer-Id', 'behandlingskatalog-local')
-
-  return NextResponse.rewrite(backendUrl, { headers })
 }
 
 export const config: {
