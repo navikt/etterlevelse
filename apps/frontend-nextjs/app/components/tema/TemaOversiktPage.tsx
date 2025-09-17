@@ -32,6 +32,7 @@ export const TemaOversiktPage = () => {
 export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   const [num] = useState<{ [t: string]: number[] }>({})
   const [kravAntall, setKravAntall] = useState<number>(0)
+  const [temaListe, setTemaListe] = useState<TTemaCode[]>([])
 
   const updateNum = (tema: string, temaNum: number[]): void => {
     num[tema] = temaNum
@@ -46,11 +47,15 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
     )
   }
 
-  const temaListe: TTemaCode[] = codelist
-    .getCodes(EListName.TEMA)
-    .sort((a: TTemaCode, b: TTemaCode) =>
-      a.shortName.localeCompare(b.shortName, 'nb')
-    ) as TTemaCode[]
+  useEffect(() => {
+    setTemaListe(
+      codelist
+        .getCodes(EListName.TEMA)
+        .sort((a: TTemaCode, b: TTemaCode) =>
+          a.shortName.localeCompare(b.shortName, 'nb')
+        ) as TTemaCode[]
+    )
+  }, [])
 
   return (
     <div>
