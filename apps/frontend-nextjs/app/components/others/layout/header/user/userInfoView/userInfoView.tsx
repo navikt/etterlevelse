@@ -12,9 +12,7 @@ export const UserInfoView = () => {
   const [frontpage, setFrontpage] = useState<string>('')
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setFrontpage(window.location.href.substring(0, window.location.href.length - pathname.length))
-    }
+    setFrontpage(window.location.href.substring(0, window.location.href.length - pathname.length))
   }, [pathname])
 
   return (

@@ -40,7 +40,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   useEffect(() => {
     setTimeout(async () => {
       await user.wait()
-      if (!user.isLoggedIn() && typeof window !== 'undefined') {
+      if (!user.isLoggedIn()) {
         window.location.href = loginUrl(window.location.href, pathname)
       }
     }, 1000)

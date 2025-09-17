@@ -36,26 +36,22 @@ export const Footer = () => {
   const [pageScroll, setPageScroll] = useState(0)
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setPageScroll(window.scrollY)
-    }
+    setPageScroll(window.scrollY)
   }, [])
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const checkScrollTop = () => {
-        setPageScroll(window.scrollY)
-        if (!showButtonToTop && window.scrollY > 100) {
-          setShowButtonToTop(true)
-        } else if (showButtonToTop && window.scrollY <= 100) {
-          setShowButtonToTop(false)
-        }
+    const checkScrollTop = () => {
+      setPageScroll(window.scrollY)
+      if (!showButtonToTop && window.scrollY > 100) {
+        setShowButtonToTop(true)
+      } else if (showButtonToTop && window.scrollY <= 100) {
+        setShowButtonToTop(false)
       }
-
-      window.addEventListener('scroll', checkScrollTop)
-
-      return () => window.removeEventListener('scroll', checkScrollTop)
     }
+
+    window.addEventListener('scroll', checkScrollTop)
+
+    return () => window.removeEventListener('scroll', checkScrollTop)
   }, [pageScroll])
 
   return (
@@ -70,9 +66,7 @@ export const Footer = () => {
             size='xsmall'
             icon={<ArrowUpIcon aria-label='' aria-hidden />}
             onClick={() => {
-              if (typeof window !== 'undefined') {
-                window.scrollTo(0, 0)
-              }
+              window.scrollTo(0, 0)
             }}
             variant='tertiary-neutral'
           >
