@@ -1,11 +1,12 @@
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, Button } from '@navikt/ds-react'
+import { Alert, Button, Link } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useState } from 'react'
 import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import { updateRisikoscenario } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, ITiltak } from '../../../constants'
 import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { isReadOnlyPvkStatus } from '../../PvkDokument/common/util'
+import { pvkDokumentasjonStepUrl } from '../../common/RouteLinkPvk'
 import RisikoscenarioView from '../RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/KravRisikoscenarioHeaders'
 import RisikoscenarioModalForm from '../edit/RisikoscenarioModalForm'
@@ -96,8 +97,28 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
           <div className='mt-5'>
             <Alert className='mt-3' variant='warning'>
-              Før dere kan vurdere tiltakenes effekt, må dere legge inn tiltak under Identifisering
-              av risikoscenarioer og tiltak.
+              <span>
+                Før dere kan vurdere tiltakenes effekt, må dere{' '}
+                {!risikoscenario.generelScenario &&
+                  'legge inn tiltak under Identifisering av risikoscenarioer og tiltak.'}
+                {risikoscenario.generelScenario && (
+                  <Link
+                    href={pvkDokumentasjonStepUrl(
+                      etterlevelseDokumentasjonId,
+                      risikoscenario.pvkDokumentId,
+                      6,
+                      `?risikoscenario=${risikoscenario.id}`
+                    )}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label='redigere etterlevelsesdokumentasjon'
+                    className='inline'
+                  >
+                    legge inn tiltak under Identifisering av risikoscenarioer og tiltak. (åpner i en
+                    ny fane).
+                  </Link>
+                )}
+              </span>
             </Alert>
           </div>
         )}
