@@ -11,6 +11,10 @@
   width: 100%;
 }
 
+#main-page-text {
+  max-width: 100ch;
+}
+
 p {
   max-width: 75ch;
 }

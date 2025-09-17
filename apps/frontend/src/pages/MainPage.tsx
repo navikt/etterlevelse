@@ -214,7 +214,7 @@ const EtterlevelseDokumentasjonList = ({
         </List>
       )}
       {filteredEtterlevelsesDokumentasjoner.length === 0 && (
-        <BodyLong>
+        <BodyLong id='main-page-text'>
           Ingen etterlevelsesdokument som har blitt opprettet eller endret av deg de siste 6
           månedene.
         </BodyLong>
