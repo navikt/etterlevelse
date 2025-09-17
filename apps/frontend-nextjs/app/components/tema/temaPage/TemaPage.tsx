@@ -1,6 +1,7 @@
 'use client'
 
 import { getKravPriorityListByTemaCode } from '@/api/kravPriorityList/kravPriorityListApi'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { SkeletonPanel } from '@/components/common/loadingSkeleton/loadingSkeletonComponent'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -25,13 +26,23 @@ export const TemaPage = () => {
   const params = useParams()
   const temaCode = params.temaCode as string
   const [code, setCode] = useState<TTemaCode>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
+    setIsLoading(true)
     setCode(codelist.getCode(EListName.TEMA, temaCode) as TTemaCode)
+    setIsLoading(false)
   }, [])
 
-  if (!code) return <>`&apos;`invalid code`&apos;`</>
-  return <TemaView tema={code} />
+  console.debug(code)
+
+  return (
+    <div>
+      {isLoading && <CenteredLoader />}
+      {!isLoading && !code && <>`&apos;`invalid code`&apos;`</>}
+      {!isLoading && code && <TemaView tema={code} />}
+    </div>
+  )
 }
 
 const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => (
