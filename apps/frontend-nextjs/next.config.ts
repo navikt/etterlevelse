@@ -16,16 +16,16 @@ const nextConfig: NextConfig = {
       },
       // Proxy /login, /oauth2, /logout to backend
       {
-        source: '/login',
-        destination: `${backendUrl}/login`,
+        source: '/login/:path*',
+        destination: `${backendUrl}/login/:path*`,
       },
       {
-        source: '/oauth2',
-        destination: `${backendUrl}/oauth2`,
+        source: '/oauth2/:path*',
+        destination: `${backendUrl}/oauth2/:path*`,
       },
       {
-        source: '/logout',
-        destination: `${backendUrl}/logout`,
+        source: '/logout/:path*',
+        destination: `${backendUrl}/logout/:path*`,
       },
       // All other routes: handled by Next.js (static, SPA fallback)
     ]
