@@ -13,6 +13,7 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravReference;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
@@ -73,9 +74,7 @@ public class RisikoscenarioController {
         log.info("Get Risikoscenario by Pvk Document id={}", pvkDokumentId);
         List<Risikoscenario> risikoscenarioList = risikoscenarioService.getByPvkDokument(pvkDokumentId, scenarioType);
         List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
-
         risikoscenarioResponseList.forEach(this::setTiltakAndKravDataForRelevantKravList);
-
         return ResponseEntity.ok(new RestResponsePage<>(risikoscenarioResponseList));
     }
 
@@ -252,21 +251,25 @@ public class RisikoscenarioController {
         risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
 
         // Set KravData...
-        if (risikoscenario.getRelevanteKravNummer() != null && !risikoscenario.getRelevanteKravNummer().isEmpty()) {
             risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
                 List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
-                try {
-                    RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
-                    JsonNode lovData = regelverk.getLov().getData();
-                    kravShort.setTemaCode(lovData.get("tema").asText());
-                } catch (RuntimeException e) {
-                    // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
+                if (kravList.isEmpty()) {
+                    kravShort.setNavn("Utgatt krav");
+                } else {
+                    try {
+                        RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+                        JsonNode lovData = regelverk.getLov().getData();
+                        kravShort.setTemaCode(lovData.get("tema").asText());
+                    } catch (RuntimeException e) {
+                        // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
+                    }
+                    kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
+                    kravShort.setNavn(kravList.get(0).getNavn());
                 }
-                kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
-                kravShort.setNavn(kravList.get(0).getNavn());
             });
-        }
 
+            List<KravReference> filteredKravReference = risikoscenario.getRelevanteKravNummer().stream().filter(kravReference -> !Objects.equals(kravReference.getNavn(), "Utgatt krav")).toList();
+            risikoscenario.setRelevanteKravNummer(filteredKravReference);
     }
 
 }
