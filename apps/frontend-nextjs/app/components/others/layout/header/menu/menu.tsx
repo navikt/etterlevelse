@@ -1,7 +1,7 @@
 'use client'
 
 import { Dropdown, InternalHeader, Link } from '@navikt/ds-react'
-import { ReactNode } from 'react'
+import { FunctionComponent, ReactNode, useEffect, useState } from 'react'
 
 type TMenuItem = {
   label: ReactNode
@@ -12,16 +12,21 @@ type TMenuItem = {
 
 export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: ReactNode }) => {
   const { pages, title, icon } = props
+  const [allPages, setAllPages] = useState<TMenuItem[]>([])
 
-  const allPages: TMenuItem[] = pages.length
-    ? pages
+  useEffect(() => {
+    if (pages.length !== 0) {
+      const formatedPages = pages
         .filter((page) => page.length)
         .reduce((previousValue, currentValue) => [
           ...((previousValue as TMenuItem[]) || []),
           { label: <Dropdown.Menu.Divider /> },
           ...(currentValue as TMenuItem[]),
         ])
-    : []
+
+      setAllPages(formatedPages)
+    }
+  }, [])
 
   return (
     <Dropdown>
@@ -31,40 +36,53 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
       <Dropdown.Menu className='min-w-max h-auto'>
         <Dropdown.Menu.List>
           {allPages.map((page, index) => {
-            const item =
-              !!page.href && !page.disabled ? (
-                <Dropdown.Menu.List.Item
-                  as={Link}
-                  href={page.href}
-                  onClick={() => {
-                    // const ampliInstance = ampli()
-                    // if (ampliInstance) {
-                    //   ampliInstance.logEvent('navigere', {
-                    //     kilde: 'header',
-                    //     app: 'etterlevelse',
-                    //     til: page.href,
-                    //     fra: pathname,
-                    //   })
-                    // }
-                  }}
-                  underline={false}
-                >
-                  <div className='flex items-center'>
-                    {page.icon && <div className='mr-2'>{page.icon}</div>}
-                    {page.label}
-                  </div>
-                </Dropdown.Menu.List.Item>
-              ) : (
-                <Dropdown.Menu.GroupedList.Heading>{page.label}</Dropdown.Menu.GroupedList.Heading>
-              )
             return (
               <div key={index} className='my-1'>
-                {item}
+                <DropdownItem page={page} />
               </div>
             )
           })}
         </Dropdown.Menu.List>
       </Dropdown.Menu>
     </Dropdown>
+  )
+}
+
+type TDropdownItemProps = {
+  page: TMenuItem
+}
+
+const DropdownItem: FunctionComponent<TDropdownItemProps> = ({ page }) => {
+  const isNotGroupedList = !!page.href && !page.disabled
+
+  return (
+    <>
+      {isNotGroupedList && (
+        <Dropdown.Menu.List.Item
+          as={Link}
+          href={page.href}
+          onClick={() => {
+            // const ampliInstance = ampli()
+            // if (ampliInstance) {
+            //   ampliInstance.logEvent('navigere', {
+            //     kilde: 'header',
+            //     app: 'etterlevelse',
+            //     til: page.href,
+            //     fra: pathname,
+            //   })
+            // }
+          }}
+          underline={false}
+        >
+          <div className='flex items-center'>
+            {page.icon && <div className='mr-2'>{page.icon}</div>}
+            {page.label}
+          </div>
+        </Dropdown.Menu.List.Item>
+      )}
+      {!isNotGroupedList && (
+        <Dropdown.Menu.GroupedList.Heading>{page.label}</Dropdown.Menu.GroupedList.Heading>
+      )}
+    </>
   )
 }
