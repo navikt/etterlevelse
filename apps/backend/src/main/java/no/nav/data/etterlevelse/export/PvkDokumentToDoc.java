@@ -327,7 +327,7 @@ public class PvkDokumentToDoc {
             doc.addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere());
             doc.newLine();
             doc.addLabel("Beskriv anbefalingen nærmere:");
-            if (pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse().isEmpty()) {
+            if (pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse().isEmpty()) {
                 doc.addText("Ingen merknad.");
             } else {
                 doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse());
@@ -336,7 +336,7 @@ public class PvkDokumentToDoc {
             doc.addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon());
             doc.newLine();
             doc.addLabel("Beskriv anbefalingen nærmere:");
-            if (pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse().isEmpty()) {
+            if (pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse().isEmpty()) {
                 doc.addText("Ingen merknad.");
             } else {
                 doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse());
