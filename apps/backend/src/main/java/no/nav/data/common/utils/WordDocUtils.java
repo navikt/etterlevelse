@@ -24,6 +24,7 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
@@ -424,10 +425,13 @@ public class WordDocUtils {
         newLine();
         addDataText("Beskriv hvordan og hvor lenge personopplysningene skal lagres.", pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene());
         newLine();
-        generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
+
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
+        }
     }
 
-    public void generateTilhorendeDokumentasjon(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, long antallPvkKrav, long antallFerdigPvkKrav,TilhorendeDokumentasjonTilbakemelding tilbakemelding) {
+    public void generateTilhorendeDokumentasjon(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, long antallPvkKrav, long antallFerdigPvkKrav,PvoTilbakemelding pvoTilbakemelding) {
         newLine();
         var header2 = addHeading2("Tilhorende dokumentasjon");
         addBookmark(header2, "pvk_tilhorende_dokumentasjon");
@@ -471,52 +475,56 @@ public class WordDocUtils {
         addHeading3("Tilbakemelding fra Personvernombudet");
         newLine();
 
-        addHeading3("Behandlinger i Behandlingskatalogen");
-        addLabel("Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.");
-        if(tilbakemelding != null) {
-            addText(vurderingsBidragToText(tilbakemelding.getBehandlingskatalogDokumentasjonTilstrekkelig()));
-        } else {
-            addText("Ingen vurdering");
-        }
-        newLine();
-        addLabel("Tilbakemelding");
-        if (tilbakemelding != null && tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding() != null && !tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding().isBlank()) {
-            addMarkdownText(tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding());
-        } else {
-            addText("Ingen tilbakemelding");
-        }
-        newLine();
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            TilhorendeDokumentasjonTilbakemelding tilbakemelding = pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon();
 
-        addHeading3("PVK-relaterte etterlevelseskrav");
-        addLabel("Vurdering om kravdokumentasjon er tilstrekkelig.");
-        if(tilbakemelding != null) {
-            addText(vurderingsBidragToText(tilbakemelding.getKravDokumentasjonTilstrekkelig()));
+            addHeading3("Behandlinger i Behandlingskatalogen");
+            addLabel("Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.");
+            if (tilbakemelding != null) {
+                addText(vurderingsBidragToText(tilbakemelding.getBehandlingskatalogDokumentasjonTilstrekkelig()));
+            } else {
+                addText("Ingen vurdering");
+            }
+            newLine();
+            addLabel("Tilbakemelding");
+            if (tilbakemelding != null && tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding() != null && !tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding().isBlank()) {
+                addMarkdownText(tilbakemelding.getBehandlingskatalogDokumentasjonTilbakemelding());
+            } else {
+                addText("Ingen tilbakemelding");
+            }
+            newLine();
 
-        } else {
-            addText("Ingen vurdering");
-        }
-        newLine();
-        addLabel("Tilbakemelding");
-        if (tilbakemelding != null && tilbakemelding.getKravDokumentasjonTilbakemelding() != null && !tilbakemelding.getKravDokumentasjonTilbakemelding().isBlank()) {
-            addMarkdownText(tilbakemelding.getKravDokumentasjonTilbakemelding());
-        } else {
-            addText("Ingen tilbakemelding");
-        }
-        newLine();
+            addHeading3("PVK-relaterte etterlevelseskrav");
+            addLabel("Vurdering om kravdokumentasjon er tilstrekkelig.");
+            if (tilbakemelding != null) {
+                addText(vurderingsBidragToText(tilbakemelding.getKravDokumentasjonTilstrekkelig()));
 
-        addHeading3("Risiko- og sårbarhetsvurdering (ROS)");
-        addLabel("Vurdering om risikovurderingen(e) er tilstrekkelig.");
-        if(tilbakemelding != null) {
-            addText(vurderingsBidragToText(tilbakemelding.getRisikovurderingTilstrekkelig()));
-        } else {
-            addText("Ingen vurdering");
-        }
-        newLine();
-        addLabel("Tilbakemelding");
-        if (tilbakemelding != null && tilbakemelding.getRisikovurderingTilbakemelding() != null && !tilbakemelding.getRisikovurderingTilbakemelding().isBlank()) {
-            addMarkdownText(tilbakemelding.getRisikovurderingTilbakemelding());
-        } else {
-            addText("Ingen tilbakemelding");
+            } else {
+                addText("Ingen vurdering");
+            }
+            newLine();
+            addLabel("Tilbakemelding");
+            if (tilbakemelding != null && tilbakemelding.getKravDokumentasjonTilbakemelding() != null && !tilbakemelding.getKravDokumentasjonTilbakemelding().isBlank()) {
+                addMarkdownText(tilbakemelding.getKravDokumentasjonTilbakemelding());
+            } else {
+                addText("Ingen tilbakemelding");
+            }
+            newLine();
+
+            addHeading3("Risiko- og sårbarhetsvurdering (ROS)");
+            addLabel("Vurdering om risikovurderingen(e) er tilstrekkelig.");
+            if (tilbakemelding != null) {
+                addText(vurderingsBidragToText(tilbakemelding.getRisikovurderingTilstrekkelig()));
+            } else {
+                addText("Ingen vurdering");
+            }
+            newLine();
+            addLabel("Tilbakemelding");
+            if (tilbakemelding != null && tilbakemelding.getRisikovurderingTilbakemelding() != null && !tilbakemelding.getRisikovurderingTilbakemelding().isBlank()) {
+                addMarkdownText(tilbakemelding.getRisikovurderingTilbakemelding());
+            } else {
+                addText("Ingen tilbakemelding");
+            }
         }
     }
 
@@ -540,7 +548,9 @@ public class WordDocUtils {
         newLine();
         addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
         newLine();
-        generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
+        }
     }
 
     public void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding) {
@@ -608,7 +618,9 @@ public class WordDocUtils {
 
         });
         newLine();
-        generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
+        }
     }
 
     public void generateTiltak(RisikoscenarioResponse risikoscenario, List<TiltakResponse> tiltakList, List<RisikoscenarioResponse> risikoscenarioResponseList) {

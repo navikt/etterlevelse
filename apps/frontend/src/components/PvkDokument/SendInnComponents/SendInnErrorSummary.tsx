@@ -52,20 +52,22 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         >
           {manglerBehandlingError && (
             <ErrorSummary.Item
+              target='_blank'
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#behandling`}
               className='max-w-[75ch]'
             >
               Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen (Redigér
-              dokumentegenskaper)
+              dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
           {pvkKravError !== '' && (
             <ErrorSummary.Item
+              target='_blank'
               href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId)}
               className='max-w-[75ch]'
             >
-              {pvkKravError}
+              {pvkKravError} (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
@@ -101,28 +103,31 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
 
           {risikoeiereDataError && (
             <ErrorSummary.Item
+              target='_blank'
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#risikoeiereData`}
               className='max-w-[75ch]'
             >
-              Legg til risikoeier (Redigér dokumentegenskaper)
+              Legg til risikoeier (Redigér dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
           {avdelingError && (
             <ErrorSummary.Item
+              target='_blank'
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#avdeling`}
               className='max-w-[75ch]'
             >
-              Legg til avdeling (Redigér dokumentegenskaper)
+              Legg til avdeling (Redigér dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
           {medlemError && (
             <ErrorSummary.Item
+              target='_blank'
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#teamsData`}
               className='max-w-[75ch]'
             >
-              Legg til team eller personer (Redigér dokumentegenskaper)
+              Legg til team eller personer (Redigér dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
         </ErrorSummary>
