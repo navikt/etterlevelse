@@ -268,7 +268,10 @@ public class PvkDokumentToDoc {
             doc.addText("Ingen skriftlig beskrivelse.");
         }
         doc.newLine();
-        doc.generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
+
+        if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+            doc.generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
+        }
 
         doc.pageBreak();
 
@@ -297,7 +300,7 @@ public class PvkDokumentToDoc {
 
             doc.generateBehandlingensArtOgOmfang(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding);
             doc.newLine();
-            doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon());
+            doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding);
             doc.newLine();
             doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding);
             doc.newLine();
@@ -308,49 +311,52 @@ public class PvkDokumentToDoc {
             doc.newLine();
             doc.addLabel("Beskjed fra etterlever til personvernombudet:");
 
-            if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
-                doc.addText("Ingen merknad.");
-            } else {
-                doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
-            }
-            doc.newLine();
-            doc.addLabel("Tilbakemelding til etterlever:");
-            doc.newLine();
-            doc.addLabel("Beskjed til etterlever");
-            doc.newLine();
-            if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
-                doc.addText("Ingen merknad.");
-            } else {
-                doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
-            }
-            doc.newLine();
-            doc.addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere());
-            doc.newLine();
-            doc.addLabel("Beskriv anbefalingen nærmere:");
-            if (pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse().isEmpty()) {
-                doc.addText("Ingen merknad.");
-            } else {
-                doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse());
-            }
-            doc.newLine();
-            doc.addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon());
-            doc.newLine();
-            doc.addLabel("Beskriv anbefalingen nærmere:");
-            if (pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse().isEmpty()) {
-                doc.addText("Ingen merknad.");
-            } else {
-                doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse());
-            }
-            doc.newLine();
+            if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+                if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
+                    doc.addText("Ingen merknad.");
+                } else {
+                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
+                }
 
-            doc.addLabel("Personvernombudets vurdering");
-            doc.addText(CodelistService.getCodelist(ListName.PVO_VURDERING, pvoTilbakemelding.getPvoTilbakemeldingData().getPvoVurdering()).getDescription());
-            doc.newLine();
-            doc.addBooleanDataText("PVO vil følge opp endringer dere gjør.", pvoTilbakemelding.getPvoTilbakemeldingData().getPvoFolgeOppEndringer());
-            doc.newLine();
-            doc.addBooleanDataText("PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.", pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur());
-            doc.newLine();
+                doc.newLine();
+                doc.addLabel("Tilbakemelding til etterlever:");
+                doc.newLine();
+                doc.addLabel("Beskjed til etterlever");
+                doc.newLine();
+                if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
+                    doc.addText("Ingen merknad.");
+                } else {
+                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
+                }
+                doc.newLine();
+                doc.addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere());
+                doc.newLine();
+                doc.addLabel("Beskriv anbefalingen nærmere:");
+                if (pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse().isEmpty()) {
+                    doc.addText("Ingen merknad.");
+                } else {
+                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse());
+                }
+                doc.newLine();
+                doc.addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon());
+                doc.newLine();
+                doc.addLabel("Beskriv anbefalingen nærmere:");
+                if (pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse().isEmpty()) {
+                    doc.addText("Ingen merknad.");
+                } else {
+                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse());
+                }
+                doc.newLine();
 
+                doc.addLabel("Personvernombudets vurdering");
+                doc.addText(CodelistService.getCodelist(ListName.PVO_VURDERING, pvoTilbakemelding.getPvoTilbakemeldingData().getPvoVurdering()).getDescription());
+                doc.newLine();
+                doc.addBooleanDataText("PVO vil følge opp endringer dere gjør.", pvoTilbakemelding.getPvoTilbakemeldingData().getPvoFolgeOppEndringer());
+                doc.newLine();
+                doc.addBooleanDataText("PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.", pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur());
+            }
+
+            doc.newLine();
             doc.addLabel("Kommentar fra etterlever til risikoeier:");
             if (pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier() == null || pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier().isEmpty()) {
                 doc.addText("Ingen merknad.");
