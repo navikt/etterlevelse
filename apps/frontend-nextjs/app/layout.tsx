@@ -1,14 +1,19 @@
+import { codelist } from '@/services/kodeverk/kodeverkService'
 import { FunctionComponent, ReactNode, Suspense } from 'react'
 import DataProvider from './api/DataProvider'
 import { Footer } from './components/others/layout/footer/footer'
 import Header from './components/others/layout/header/header'
 import './globals.css'
+import { user } from './services/user/userService'
 
 type TProps = {
   children: ReactNode
 }
 
-const Main: FunctionComponent<TProps> = ({ children }) => {
+const Main: FunctionComponent<TProps> = async ({ children }) => {
+  await user.wait()
+  await codelist.wait()
+
   return (
     <html lang='no'>
       <body>

@@ -1,7 +1,5 @@
 'use client'
 
-import { codelist } from '@/services/kodeverk/kodeverkService'
-import { useAwait, useAwaitUser } from '@/util/hooks/customHooks/customHooks'
 import { ApolloProvider } from '@apollo/client'
 import { FunctionComponent, ReactNode } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
@@ -12,9 +10,6 @@ type TProps = {
 }
 
 export const DataProvider: FunctionComponent<TProps> = ({ children }) => {
-  useAwaitUser()
-  useAwait(codelist.wait())
-
   return (
     <HelmetProvider>
       <Helmet>
