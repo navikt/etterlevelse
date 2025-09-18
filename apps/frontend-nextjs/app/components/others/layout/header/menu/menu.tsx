@@ -10,8 +10,13 @@ type TMenuItem = {
   icon?: ReactNode
 }
 
-export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: ReactNode }) => {
-  const { pages, title, icon } = props
+type TMenuProps = {
+  pages: TMenuItem[][]
+  title: ReactNode
+  icon?: ReactNode
+}
+
+export const Menu: FunctionComponent<TMenuProps> = ({ pages, title, icon }) => {
   const [allPages, setAllPages] = useState<TMenuItem[]>([])
 
   useEffect(() => {
@@ -35,13 +40,11 @@ export const Menu = (props: { pages: TMenuItem[][]; title: ReactNode; icon?: Rea
       </InternalHeader.Button>
       <Dropdown.Menu className='min-w-max h-auto'>
         <Dropdown.Menu.List>
-          {allPages.map((page, index) => {
-            return (
-              <div key={index} className='my-1'>
-                <DropdownItem page={page} />
-              </div>
-            )
-          })}
+          {allPages.map((page, index) => (
+            <div key={index} className='my-1'>
+              <DropdownItem page={page} />
+            </div>
+          ))}
         </Dropdown.Menu.List>
       </Dropdown.Menu>
     </Dropdown>
@@ -54,7 +57,6 @@ type TDropdownItemProps = {
 
 const DropdownItem: FunctionComponent<TDropdownItemProps> = ({ page }) => {
   const isNotGroupedList = !!page.href && !page.disabled
-
   return (
     <>
       {isNotGroupedList && (
