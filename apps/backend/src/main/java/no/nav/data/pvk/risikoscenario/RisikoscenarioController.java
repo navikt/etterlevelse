@@ -252,18 +252,21 @@ public class RisikoscenarioController {
         risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
 
         // Set KravData...
-        risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
-            List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
-            try {
-                RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
-                JsonNode lovData = regelverk.getLov().getData();
-                kravShort.setTemaCode(lovData.get("tema").asText());
-            } catch (RuntimeException e) {
-                // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
-            }
-            kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
-            kravShort.setNavn(kravList.get(0).getNavn());
-        });
+        if (risikoscenario.getRelevanteKravNummer() != null && !risikoscenario.getRelevanteKravNummer().isEmpty()) {
+            risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
+                List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+                try {
+                    RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+                    JsonNode lovData = regelverk.getLov().getData();
+                    kravShort.setTemaCode(lovData.get("tema").asText());
+                } catch (RuntimeException e) {
+                    // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
+                }
+                kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
+                kravShort.setNavn(kravList.get(0).getNavn());
+            });
+        }
+
     }
 
 }
