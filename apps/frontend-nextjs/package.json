@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "@apollo/client": "3.13.9",
+    "@apollo/client": "^4.0.5",
     "@fontsource/source-sans-pro": "^5.2.5",
     "@fortawesome/fontawesome-svg-core": "^7.0.1",
     "@fortawesome/free-brands-svg-icons": "^7.0.1",
@@ -69,6 +69,7 @@
     "react-process-string": "1.2.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
+    "rxjs": "^7.8.2",
     "tailwindcss": "^4.1.13",
     "yup": "^1.7.0"
   },

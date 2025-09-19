@@ -8,7 +8,7 @@ import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
 import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
