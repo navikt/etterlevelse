@@ -1,8 +1,10 @@
 import { env } from '@/util/env/env'
-import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 
-export const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  uri: `${env.backendBaseUrl}/graphql`,
+export const apolloClient: ApolloClient = new ApolloClient({
+  link: new HttpLink({
+    uri: `${env.backendBaseUrl}/graphql`,
+  }),
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
