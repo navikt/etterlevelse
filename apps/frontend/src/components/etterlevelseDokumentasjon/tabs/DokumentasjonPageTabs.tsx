@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, Link, List, Tabs } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Link, List, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { getAllKravPriorityList } from '../../../api/KravPriorityListApi'
@@ -12,6 +12,7 @@ import {
   TKravQL,
 } from '../../../constants'
 import { TTemaCode } from '../../../services/Codelist'
+import { pvkDokumentasjonStepUrl } from '../../common/RouteLinkPvk'
 import ExportEtterlevelseModal from '../../export/ExportEtterlevelseModal'
 import { ArkiveringModal } from '../ArkiveringModal'
 import FocusList from './FocusList'
@@ -136,25 +137,37 @@ export const DokumentasjonPageTabs = (props: IProps) => {
               pvkDokument.status !== EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
               pvkDokument.status !== EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING &&
               pvkDokument.status !== EPvkDokumentStatus.PVO_UNDERARBEID && (
-                <Alert className='max-w-[75ch]' variant='info'>
+                <Alert variant='info' fullWidth>
                   <Heading spacing size='small' level='3'>
                     Personvernkonsekvensvurdering: slik gjør dere nå
                   </Heading>
+
+                  <BodyLong>
+                    Beskriv risikoscenarioer og tiltak som gjelder for deres kontekst. Disse kan
+                    beskrives:
+                  </BodyLong>
                   <List as='ul'>
+                    <List.Item>ved aktuelle etterlevelseskrav</List.Item>
                     <List.Item>
-                      Beskriv risikoscenarioer og tiltak ved siden av deres
-                      etterlevelsesdokumentasjon der dette er aktuelt.
-                    </List.Item>
-                    <List.Item>
-                      Husk at dere kan gjenbruke deres egne risikoscenarioer eller tiltak dersom
-                      disse gjelder flere steder.
-                    </List.Item>
-                    <List.Item>
-                      Øvrige risikoscenarioer og tiltak som ikke er tilknyttet spesifikke
-                      etterlevelseskrav beskriver dere på{' '}
-                      <Link href='demo'>PVK: Identifisering av risikoscenarier og tiltak.</Link>
+                      <Link
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label='redigere etterlevelsesdokumentasjon'
+                        href={pvkDokumentasjonStepUrl(
+                          etterlevelseDokumentasjon.id,
+                          pvkDokument.id,
+                          6
+                        )}
+                      >
+                        under “øvrige risikoscenarioer” (åpnes i ny fane)
+                      </Link>
                     </List.Item>
                   </List>
+                  <BodyLong>
+                    Dere kan gjenbruke deres egne risikoscenarioer eller tiltak der det er aktuelt
+                    ved å velge “Legg til et eksisterende risikoscenario” eller “Legg til et
+                    eksisterende tiltak”.
+                  </BodyLong>
                 </Alert>
               )}
 
