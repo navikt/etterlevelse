@@ -42,7 +42,7 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
 
     {sentDate && sentDate.length !== 0 && (
       <BodyShort size='medium' className='pb-5'>
-        Tilbakemeldings dato: {moment(sentDate).format('LL')}
+        Tilbakemeldingsdato: {moment(sentDate).format('LL')}
       </BodyShort>
     )}
 
