@@ -1,10 +1,11 @@
 import { IPageResponse } from '@/constants/commonConstants'
 import { TKravFilters, TKravQL } from '@/constants/krav/kravConstants'
-import { QueryHookOptions, gql, useQuery } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 
 export const useKravCounter = (
   variables: { lover: string[] },
-  options?: QueryHookOptions<any, { lover?: string[] }>
+  options?: useQuery.Options<any, { lover?: string[] }>
 ) => {
   let filter = {}
   if (options) {
@@ -16,7 +17,7 @@ export const useKravCounter = (
 
 export const useKravFilter = (
   variables: TKravFilters,
-  options?: QueryHookOptions<any, TKravFilters>,
+  options?: useQuery.Options<any, TKravFilters>,
   onlyForEtterlevelseDokumet?: boolean
 ) => {
   let filter = {}

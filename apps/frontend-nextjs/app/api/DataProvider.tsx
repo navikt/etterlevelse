@@ -1,6 +1,6 @@
 'use client'
 
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client/react'
 import { FunctionComponent, ReactNode } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { apolloClient } from './apolloClient/apolloClient'
