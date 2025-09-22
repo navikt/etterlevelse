@@ -1,8 +1,9 @@
 import { Detail, Tag } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
-import { EPvoTilbakemeldingStatus } from '../../../constants'
+import { EPvkDokumentStatus, EPvoTilbakemeldingStatus } from '../../../constants'
 
 type TProps = {
+  pvkDokumentStatus?: EPvkDokumentStatus
   status?: EPvoTilbakemeldingStatus
   etterlystReturn?: boolean
 }
@@ -32,7 +33,11 @@ export const pvoStatusToText = (status?: EPvoTilbakemeldingStatus) => {
   }
 }
 
-export const PvoStatusView: FunctionComponent<TProps> = ({ status, etterlystReturn }) => {
+export const PvoStatusView: FunctionComponent<TProps> = ({
+  pvkDokumentStatus,
+  status,
+  etterlystReturn,
+}) => {
   const getStatusDisplay = (variant: any) => (
     <div className='flex gap-2'>
       {etterlystReturn && (
@@ -42,11 +47,21 @@ export const PvoStatusView: FunctionComponent<TProps> = ({ status, etterlystRetu
           </div>
         </Tag>
       )}
-      <Tag variant={variant} className='h-fit'>
-        <div className={'flex items-center'}>
-          <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
-        </div>
-      </Tag>
+      {pvkDokumentStatus !== EPvkDokumentStatus.UNDERARBEID && (
+        <Tag variant={variant} className='h-fit'>
+          <div className={'flex items-center'}>
+            <Detail className='whitespace-nowrap'>{pvoStatusToText(status)}</Detail>
+          </div>
+        </Tag>
+      )}
+
+      {pvkDokumentStatus === EPvkDokumentStatus.UNDERARBEID && (
+        <Tag variant={variant} className='h-fit'>
+          <div className={'flex items-center'}>
+            <Detail className='whitespace-nowrap'>Trukket tilbake</Detail>
+          </div>
+        </Tag>
+      )}
     </div>
   )
 
