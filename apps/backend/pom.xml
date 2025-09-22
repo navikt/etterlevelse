@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>jwks-rsa</artifactId>
-            <version>0.22.1</version>
+            <version>0.23.0</version>
         </dependency>
         <!-- ZipFile -->
         <dependency>
@@ -136,6 +136,10 @@
                 <exclusion>
                     <groupId>com.azure</groupId>
                     <artifactId>azure-json</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.auth0</groupId>
+                    <artifactId>jwks-rsa</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
