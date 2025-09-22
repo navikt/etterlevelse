@@ -39,7 +39,7 @@
         <!-- Test -->
         <testcontainers.version>1.21.3</testcontainers.version>
         <wiremock.version>3.0.1</wiremock.version>
-        <docx4j.version>11.5.4</docx4j.version>
+        <docx4j.version>11.5.5</docx4j.version>
 
 
     </properties>
@@ -215,6 +215,10 @@
                 <exclusion>
                     <groupId>org.apache.pdfbox</groupId>
                     <artifactId>fontbox</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
