@@ -609,6 +609,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
                 <InfoChangesMadeAfterApproval
                   pvkDokument={pvkDokument}
+                  behandlingensLivslop={behandlingensLivslop}
                   alleRisikoscenario={alleRisikoscenario}
                   alleTiltak={alleTiltak}
                 />

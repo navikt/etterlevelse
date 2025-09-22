@@ -29,6 +29,7 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
       let lastModifiedDate = moment(pvkDokument.changeStamp.lastModifiedDate)
         .seconds(0)
         .milliseconds(0)
+
       if (
         behandlingensLivslop &&
         behandlingensLivslop.changeStamp &&
@@ -88,7 +89,7 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
         setApprovedTime(tid[0] + ':' + tid[1])
       }
     }
-  }, [pvkDokument])
+  }, [pvkDokument, behandlingensLivslop, alleRisikoscenario, alleTiltak])
 
   return (
     <>

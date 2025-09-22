@@ -574,9 +574,8 @@ export interface IKravReference {
   temaCode: string
 }
 
-export interface IBehandlingensLivslop {
+export interface IBehandlingensLivslop extends IDomainObject {
   id: string
-  changeStamp: IChangeStamp
   version: number
   etterlevelseDokumentasjonId: string
   beskrivelse: string

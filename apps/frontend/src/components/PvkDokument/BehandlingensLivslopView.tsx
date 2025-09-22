@@ -76,6 +76,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
         setIsLoading(true)
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
           .then((response: IBehandlingensLivslop) => {
+            console.debug(response)
             setBehandlingensLivslop(response)
           })
           .catch((error: AxiosError) => {
