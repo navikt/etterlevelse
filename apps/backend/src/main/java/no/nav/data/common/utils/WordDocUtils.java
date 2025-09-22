@@ -475,6 +475,10 @@ public class WordDocUtils {
         addHeading3("Tilbakemelding fra Personvernombudet");
         newLine();
 
+        generateTilbakemeldingForTilhorendeDokumentasjon(pvoTilbakemelding);
+    }
+
+    private void generateTilbakemeldingForTilhorendeDokumentasjon(PvoTilbakemelding pvoTilbakemelding) {
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
             TilhorendeDokumentasjonTilbakemelding tilbakemelding = pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon();
 
@@ -526,6 +530,7 @@ public class WordDocUtils {
                 addText("Ingen tilbakemelding");
             }
         }
+
     }
 
     public void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {

@@ -20,7 +20,7 @@
     "@types/markdown-draft-js": "2.2.7",
     "@types/react-draft-wysiwyg": "1.13.8",
     "amplitude-js": "8.21.9",
-    "axios": "1.11.0",
+    "axios": "1.12.0",
     "buffer": "6.0.3",
     "core-js": "3.45.1",
     "depcheck": "1.4.7",
