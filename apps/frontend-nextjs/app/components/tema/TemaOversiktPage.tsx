@@ -55,7 +55,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
           a.shortName.localeCompare(b.shortName, 'nb')
         ) as TTemaCode[]
     )
-  }, [])
+  }, [codelist.isLoaded()])
 
   return (
     <div>
