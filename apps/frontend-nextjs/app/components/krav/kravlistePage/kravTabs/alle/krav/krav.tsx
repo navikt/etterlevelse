@@ -4,12 +4,7 @@ import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstan
 import { EKravStatus, TKravFilters, TKravQL } from '@/constants/krav/kravConstants'
 import { EKravListFilter, ETab, TKravFilter } from '@/constants/krav/kravlist/kravlistConstants'
 import { codelist } from '@/services/kodeverk/kodeverkService'
-import {
-  ApolloQueryResult,
-  FetchMoreQueryOptions,
-  OperationVariables,
-  Unmasked,
-} from '@apollo/client'
+import { ApolloClient, ObservableQuery, OperationVariables } from '@apollo/client'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
 import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction } from 'react'
@@ -24,22 +19,15 @@ type TProps = {
     },
     TFetchVars extends OperationVariables = TKravFilters,
   >(
-    fetchMoreOptions: FetchMoreQueryOptions<TFetchVars, TFetchData> & {
-      updateQuery?:
-        | ((
-            previousQueryResult: {
-              krav: IPageResponse<TKravQL>
-            },
-            options: {
-              fetchMoreResult: Unmasked<TFetchData>
-              variables: TFetchVars
-            }
-          ) => {
-            krav: IPageResponse<TKravQL>
-          })
-        | undefined
-    }
-  ) => Promise<ApolloQueryResult<TFetchData>>
+    fetchMoreOptions: ObservableQuery.FetchMoreOptions<
+      {
+        krav: IPageResponse<TKravQL>
+      },
+      TKravFilters,
+      TFetchData,
+      TFetchVars
+    >
+  ) => Promise<ApolloClient.QueryResult<TFetchData>>
   data:
     | {
         krav: IPageResponse<TKravQL>
