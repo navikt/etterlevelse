@@ -2,7 +2,7 @@ import { PencilIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { getPvkDokument } from '../../../../api/PvkDokumentApi'
-import { IRisikoscenario } from '../../../../constants'
+import { IRisikoscenario, ITiltak } from '../../../../constants'
 import AlertPvoUnderarbeidModal from '../../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { isReadOnlyPvkStatus } from '../../../PvkDokument/common/util'
 import FjernRisikoscenarioFraKrav from '../../edit/FjernRisikoscenarioFraKrav'
@@ -15,6 +15,8 @@ type TProps = {
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
+  tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
 }
 
 export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
@@ -25,6 +27,8 @@ export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
   setRisikoscenarioer,
   risikoscenarioForKrav,
   setRisikoscenarioForKrav,
+  tiltakList,
+  setTiltakList,
 }) => {
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
@@ -57,6 +61,8 @@ export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
         setRisikoscenarioer={setRisikoscenarioer}
         risikoscenarioForKrav={risikoscenarioForKrav}
         setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+        tiltakList={tiltakList}
+        setTiltakList={setTiltakList}
       />
 
       {isPvoAlertModalOpen && (

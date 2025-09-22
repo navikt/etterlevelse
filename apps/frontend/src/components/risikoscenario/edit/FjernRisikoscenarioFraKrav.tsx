@@ -1,6 +1,6 @@
 import { TrashIcon } from '@navikt/aksel-icons'
-import { Button, Heading, List, Modal } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
+import { BodyLong, Button, List, Modal } from '@navikt/ds-react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import {
   deleteRisikoscenario,
@@ -20,6 +20,8 @@ type TProps = {
   setRisikoscenarioer: (state: IRisikoscenario[]) => void
   risikoscenarioForKrav: IRisikoscenario[]
   setRisikoscenarioForKrav: (state: IRisikoscenario[]) => void
+  tiltakList: ITiltak[]
+  setTiltakList: (state: ITiltak[]) => void
 }
 
 export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
@@ -29,9 +31,15 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
   setRisikoscenarioer,
   risikoscenarioForKrav,
   setRisikoscenarioForKrav,
+  tiltakList,
+  setTiltakList,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [connectedKravToRisikoscenario, setConnectedKravToRisikoscenario] = useState<
+    IKravReference[]
+  >([])
+  const [uniqueTiltak, setUniqueTiltak] = useState<ITiltak[]>([])
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
@@ -51,7 +59,9 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
           await getTiltak(tiltakId).then(async (tiltakResponse: ITiltak) => {
             await removeTiltakToRisikoscenario(risikoscenario.id, tiltakId).then(async () => {
               if (tiltakResponse.risikoscenarioIds.length === 1) {
-                await deleteTiltak(tiltakId)
+                await deleteTiltak(tiltakId).then(() => {
+                  setTiltakList(tiltakList.filter((tiltak) => tiltak.id !== tiltakId))
+                })
               }
             })
           })
@@ -81,6 +91,22 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
     })
   }
 
+  useEffect(() => {
+    if (risikoscenario) {
+      setConnectedKravToRisikoscenario(
+        risikoscenario.relevanteKravNummer.filter((krav) => krav.kravNummer !== kravnummer)
+      )
+
+      setUniqueTiltak(
+        tiltakList.filter(
+          (tiltak) =>
+            tiltak.risikoscenarioIds.length === 1 &&
+            tiltak.risikoscenarioIds.includes(risikoscenario.id)
+        )
+      )
+    }
+  }, [risikoscenario])
+
   return (
     <div>
       <Button
@@ -101,21 +127,61 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
           onClose={() => setIsOpen(false)}
         >
           <Modal.Body>
-            {risikoscenario.relevanteKravNummer.length > 0 && (
-              <List>
-                <Heading size='medium'>
+            {connectedKravToRisikoscenario.length !== 0 && (
+              <div>
+                <BodyLong>
                   Dette risikoscenarioet brukes også ved følgende etterlevelseskrav:
-                </Heading>
-                {risikoscenario.relevanteKravNummer.map((krav: IKravReference) => (
-                  <List.Item key={`${risikoscenario.id}_${krav.kravNummer}.${krav.kravVersjon}`}>
-                    K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
-                  </List.Item>
-                ))}
-              </List>
+                </BodyLong>
+
+                <List>
+                  {connectedKravToRisikoscenario.map((krav: IKravReference) => (
+                    <List.Item key={`${risikoscenario.id}_${krav.kravNummer}.${krav.kravVersjon}`}>
+                      K{krav.kravNummer}.{krav.kravVersjon} {krav.navn}
+                    </List.Item>
+                  ))}
+                </List>
+
+                <BodyLong>
+                  Ved å slette scenarioet her, vil dere bare fjerne koblingen. Scenarioet, samt
+                  tilhørende tiltak, vil fortsatt være tilknyttet de andre kravene. Scenarioet kan
+                  ved behov også slettes derfra.
+                </BodyLong>
+              </div>
             )}
-            Ved å slette scenarioet her, vil dere bare fjerne koblingen. Scenarioet, samt tilhørende
-            tiltak, vil fortsatt være tilknyttet de andre kravene. Scenarioet kan ved behov også
-            slettes derfra.
+
+            {connectedKravToRisikoscenario.length === 0 && uniqueTiltak.length !== 0 && (
+              <div>
+                <BodyLong className='mb-5'>
+                  Dette risikoscenarioet brukes ikke noe annet sted i dokumentasjonen deres.
+                </BodyLong>
+                <BodyLong>
+                  Følgende tiltak er unike for dette risikoscenarioet, og vil også slettes:
+                </BodyLong>
+                <List>
+                  {uniqueTiltak.map((tiltak, index) => (
+                    <List.Item key={index + '_' + tiltak.navn}>{tiltak.navn}</List.Item>
+                  ))}
+                </List>
+
+                <BodyLong>
+                  Hvis disse tiltakene er tenkt brukt ved andre scenarioer, koble tiltakene på de
+                  scenarioene først, og kom så tilbake og slette scenarioet.
+                </BodyLong>
+              </div>
+            )}
+
+            {connectedKravToRisikoscenario.length === 0 && uniqueTiltak.length === 0 && (
+              <div>
+                <BodyLong className='mb-5'>
+                  Risikoscenarioet slettes helt og blir ikke lenger tilgjengelig i
+                  PVK-dokumentasjonen deres.
+                </BodyLong>
+                <BodyLong>
+                  Hvis risikoscenarioet er tenkt brukt andre steder i samme PVK-dokumentasjon, lag
+                  den koblingen først, og kom så tilbake og slett scenarioet herfra.
+                </BodyLong>
+              </div>
+            )}
           </Modal.Body>
           <Modal.Footer>
             <Button type='button' onClick={() => submit()}>

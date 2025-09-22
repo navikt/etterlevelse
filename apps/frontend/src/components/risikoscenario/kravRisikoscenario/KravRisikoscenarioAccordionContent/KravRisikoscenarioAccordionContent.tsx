@@ -206,6 +206,8 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             setRisikoscenarioer={setRisikoscenarioer}
             risikoscenarioForKrav={risikoscenarioForKrav}
             setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+            tiltakList={tiltakList}
+            setTiltakList={setTiltakList}
           />
         )}
 
