@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
 
@@ -23,6 +24,9 @@ public class BehandlingensLivslopResponse {
     private String beskrivelse;
 
     private List<BehandlingensLivslopFil> filer;
+
+    private ChangeStampResponse changeStamp;
+    private Integer version;
     
     public static BehandlingensLivslopResponse buildFrom(BehandlingensLivslop bl) {
         return builder()
@@ -30,6 +34,8 @@ public class BehandlingensLivslopResponse {
                 .etterlevelseDokumentasjonId(bl.getEtterlevelseDokumentasjonId())
                 .beskrivelse(bl.getBehandlingensLivslopData().getBeskrivelse())
                 .filer(bl.getBehandlingensLivslopData().getFiler())
+                .changeStamp(bl.convertChangeStampResponse())
+                .version(bl.getVersion())
                 .build();
     }
     
