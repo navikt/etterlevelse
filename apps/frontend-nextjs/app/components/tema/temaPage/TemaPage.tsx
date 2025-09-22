@@ -34,12 +34,9 @@ export const TemaPage = () => {
     setIsLoading(false)
   }, [])
 
-  console.debug(code)
-
   return (
     <div>
       {isLoading && <CenteredLoader />}
-      {!isLoading && !code && <>`&apos;`invalid code`&apos;`</>}
       {!isLoading && code && <TemaView tema={code} />}
     </div>
   )

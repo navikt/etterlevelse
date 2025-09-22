@@ -48,6 +48,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   }
 
   useEffect(() => {
+    console.debug(codelist.lists)
     setTemaListe(
       codelist
         .getCodes(EListName.TEMA)
@@ -55,7 +56,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
           a.shortName.localeCompare(b.shortName, 'nb')
         ) as TTemaCode[]
     )
-  }, [codelist.isLoaded()])
+  }, [])
 
   return (
     <div>
