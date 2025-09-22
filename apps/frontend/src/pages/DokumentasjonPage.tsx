@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { Alert, BodyShort, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
+import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '../api/BehandlingensLivslopApi'
@@ -230,7 +231,10 @@ export const DokumentasjonPage = () => {
   const getPvkButtonText = (pvkDokument: IPvkDokument) => {
     const updatedAfterApprovedOfRisikoeier =
       pvkDokument.godkjentAvRisikoeierDato !== '' &&
-      pvkDokument.changeStamp.lastModifiedDate > pvkDokument.godkjentAvRisikoeierDato
+      moment(pvkDokument.changeStamp.lastModifiedDate)
+        .seconds(0)
+        .milliseconds(0)
+        .isAfter(moment(pvkDokument.godkjentAvRisikoeierDato).seconds(0).milliseconds(0))
 
     if (pvkDokumentNotStarted) {
       return 'Påbegynn PVK'

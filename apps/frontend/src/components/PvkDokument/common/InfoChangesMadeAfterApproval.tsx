@@ -26,14 +26,20 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
       pvkDokument.godkjentAvRisikoeierDato !== null &&
       pvkDokument.godkjentAvRisikoeierDato !== undefined
     ) {
-      let lastModifiedDate = pvkDokument.changeStamp.lastModifiedDate
-
+      let lastModifiedDate = moment(pvkDokument.changeStamp.lastModifiedDate)
+        .seconds(0)
+        .milliseconds(0)
       if (
         behandlingensLivslop &&
         behandlingensLivslop.changeStamp &&
-        behandlingensLivslop.changeStamp.lastModifiedDate > lastModifiedDate
+        moment(behandlingensLivslop.changeStamp.lastModifiedDate)
+          .seconds(0)
+          .milliseconds(0)
+          .isAfter(lastModifiedDate)
       ) {
-        lastModifiedDate = behandlingensLivslop.changeStamp.lastModifiedDate
+        lastModifiedDate = moment(behandlingensLivslop.changeStamp.lastModifiedDate)
+          .seconds(0)
+          .milliseconds(0)
       }
 
       if (alleRisikoscenario && alleRisikoscenario.length !== 0) {
@@ -41,8 +47,15 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
           b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
         )
 
-        if (sortedRisikoscenario[0].changeStamp.lastModifiedDate > lastModifiedDate) {
-          lastModifiedDate = sortedRisikoscenario[0].changeStamp.lastModifiedDate
+        if (
+          moment(sortedRisikoscenario[0].changeStamp.lastModifiedDate)
+            .seconds(0)
+            .milliseconds(0)
+            .isAfter(lastModifiedDate)
+        ) {
+          lastModifiedDate = moment(sortedRisikoscenario[0].changeStamp.lastModifiedDate)
+            .seconds(0)
+            .milliseconds(0)
         }
       }
 
@@ -51,12 +64,23 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
           b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
         )
 
-        if (sortedTitlak[0].changeStamp.lastModifiedDate > lastModifiedDate) {
-          lastModifiedDate = sortedTitlak[0].changeStamp.lastModifiedDate
+        if (
+          moment(sortedTitlak[0].changeStamp.lastModifiedDate)
+            .seconds(0)
+            .milliseconds(0)
+            .isAfter(lastModifiedDate)
+        ) {
+          lastModifiedDate = moment(sortedTitlak[0].changeStamp.lastModifiedDate)
+            .seconds(0)
+            .milliseconds(0)
         }
       }
 
-      if (lastModifiedDate > pvkDokument.godkjentAvRisikoeierDato) {
+      if (
+        lastModifiedDate.isAfter(
+          moment(pvkDokument.godkjentAvRisikoeierDato).seconds(0).milliseconds(0)
+        )
+      ) {
         setIsChangesMade(true)
         const godkjentDatoOgTid = pvkDokument.godkjentAvRisikoeierDato.split('T')
         const tid = godkjentDatoOgTid[1].split(':')

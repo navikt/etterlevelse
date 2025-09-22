@@ -98,7 +98,10 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             type='button'
             onClick={async () => {
               await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-              await setFieldValue('godkjentAvRisikoeierDato', new Date().toISOString())
+              await setFieldValue(
+                'godkjentAvRisikoeierDato',
+                new Date().toLocaleString('sv').replace(' ', 'T')
+              )
               await setFieldValue('godkjentAvRisikoeier', user.getIdent() + ' - ' + user.getName())
               await submitForm().then(async () => {
                 await arkiver(etterlevelseDokumentasjon.id, true, false, true)
