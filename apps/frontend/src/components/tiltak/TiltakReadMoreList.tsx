@@ -1,5 +1,5 @@
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, Modal, ReadMore } from '@navikt/ds-react'
+import { BodyLong, Button, List, Modal, ReadMore } from '@navikt/ds-react'
 import { RefObject, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getPvkDokument } from '../../api/PvkDokumentApi'
@@ -114,6 +114,9 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [risikoscenarioerConnectedToTiltak, setRisikoscenarioerConnectedToTiltak] = useState<
+    string[]
+  >([])
   const url = new URL(window.location.href)
   const tiltakId = url.searchParams.get('tiltak')
   const navigate = useNavigate()
@@ -222,6 +225,20 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     })
   }
 
+  useEffect(() => {
+    if (tiltak && tiltak.id === activeTiltak) {
+      console.debug('TRIGGER')
+      const risikoscenarioIds = tiltak.risikoscenarioIds.filter((id) => id !== risikoscenario.id)
+      const risikoscenarioNameList: string[] = []
+      risikoscenarioIds.forEach((id) => {
+        risikoscenarioNameList.push(
+          risikoscenarioList.filter((risikoscenario) => risikoscenario.id === id)[0].navn
+        )
+      })
+      setRisikoscenarioerConnectedToTiltak(risikoscenarioNameList)
+    }
+  }, [activeTiltak])
+
   return (
     <div key={risikoscenario.id + '_' + tiltak.id}>
       {!isEditMode && (
@@ -305,10 +322,38 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
       {isDeleteModalOpen && (
         <Modal
           open={isDeleteModalOpen}
-          header={{ heading: 'Slette tiltak fra risikoscenario' }}
+          header={{ heading: 'Vil dere slette dette tiltaket?' }}
           onClose={() => setIsDeleteModalOpen(false)}
         >
-          <Modal.Body>Er du sikker på at du vil slette tiltaket?</Modal.Body>
+          <Modal.Body>
+            {risikoscenarioerConnectedToTiltak.length === 0 && (
+              <div>
+                <BodyLong className='mb-5'>
+                  Tiltaket brukes ikke noe annet sted i dokumentasjonen deres. Ved sletting vil
+                  tiltaket ikke lenger være tilgjengelig i PVK-dokumentasjonen deres.
+                </BodyLong>
+                <BodyLong>
+                  Hvis tiltaket er tenkt brukt ved andre risikoscenarioer, koble tiltaket på de
+                  scenarioene først, og kom så tilbake og slette tiltaket herfra.
+                </BodyLong>
+              </div>
+            )}
+            {risikoscenarioerConnectedToTiltak.length !== 0 && (
+              <div>
+                <BodyLong>Dette tiltaket brukes også ved følgende risikoscenarioer:</BodyLong>
+                <List as='ul'>
+                  {risikoscenarioerConnectedToTiltak.map((risikoscenario, index) => (
+                    <List.Item key={index + '_' + risikoscenario}>{risikoscenario}</List.Item>
+                  ))}
+                </List>
+                <BodyLong>
+                  Ved å slette tiltaket her, vil dere bare fjerne koblingen. Tiltaket vil fortsatt
+                  være tilknyttet de andre risikoscenarioene. Tiltaket kan ved behov også slettes
+                  derfra.
+                </BodyLong>
+              </div>
+            )}
+          </Modal.Body>
           <Modal.Footer>
             <Button onClick={() => setIsDeleteModalOpen(false)} variant={'secondary'}>
               Avbryt
