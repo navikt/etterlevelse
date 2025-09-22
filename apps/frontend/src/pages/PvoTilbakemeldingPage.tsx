@@ -98,7 +98,7 @@ export const PvoTilbakemeldingPage = () => {
       pvkDokumenteringPvoTilbakemeldingUrl(
         params.id,
         step,
-        step === 6 ? risikoscenarioFilterAlleUrl() : ''
+        step === 7 ? risikoscenarioFilterAlleUrl() : ''
       )
     )
   }
