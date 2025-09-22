@@ -1,7 +1,13 @@
 import { Alert } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent, useEffect, useState } from 'react'
-import { IBehandlingensLivslop, IPvkDokument, IRisikoscenario, ITiltak } from '../../../constants'
+import {
+  EPvkDokumentStatus,
+  IBehandlingensLivslop,
+  IPvkDokument,
+  IRisikoscenario,
+  ITiltak,
+} from '../../../constants'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -78,6 +84,7 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
       }
 
       if (
+        pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
         lastModifiedDate.isAfter(
           moment(pvkDokument.godkjentAvRisikoeierDato).seconds(0).milliseconds(0)
         )
