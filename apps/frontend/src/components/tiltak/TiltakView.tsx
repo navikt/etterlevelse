@@ -49,23 +49,25 @@ export const TiltakView = (props: IProps) => {
         descriptionFalse='Det er ikke satt en frist for tiltaket'
       />
 
-      <div className='mt-3'>
-        <ReadOnlyFieldDescriptionOptional
-          label='Tiltaket er gjenbrukt ved følgende scenarioer:'
-          description='Tiltaket er ikke gjenbrukt ved andre risikoscenarioer'
-          isVisible={tiltak.risikoscenarioIds.length === 0}
-        />
+      {tiltak.risikoscenarioIds.length > 1 && (
+        <div className='mt-3'>
+          <ReadOnlyFieldDescriptionOptional
+            label='Tiltaket er gjenbrukt ved følgende scenarioer:'
+            description='Tiltaket er ikke gjenbrukt ved andre risikoscenarioer'
+            isVisible={tiltak.risikoscenarioIds.length === 1}
+          />
 
-        {tiltak.risikoscenarioIds.length !== 0 && risikoscenarioList && (
-          <List as='ul'>
-            {risikoscenarioList
-              .filter((risikoscenario) => tiltak.risikoscenarioIds.includes(risikoscenario.id))
-              .map((risikoscenario) => (
-                <List.Item key={risikoscenario.id}>{risikoscenario.navn}</List.Item>
-              ))}
-          </List>
-        )}
-      </div>
+          {tiltak.risikoscenarioIds.length > 1 && risikoscenarioList && (
+            <List as='ul'>
+              {risikoscenarioList
+                .filter((risikoscenario) => tiltak.risikoscenarioIds.includes(risikoscenario.id))
+                .map((risikoscenario) => (
+                  <List.Item key={risikoscenario.id}>{risikoscenario.navn}</List.Item>
+                ))}
+            </List>
+          )}
+        </div>
+      )}
     </div>
   )
 }
