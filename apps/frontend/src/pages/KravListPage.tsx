@@ -12,7 +12,6 @@ import { TemaList } from '../components/kravList/TemaList'
 import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, TKravQL } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
 
@@ -30,11 +29,11 @@ export const sortKrav = (kravene: TKravQL[]): TKravQL[] => {
 }
 
 export const KravListPage = () => {
-  ampli.logEvent('sidevisning', {
-    side: 'Kraveier side',
-    sidetittel: 'Forvalte og opprette krav',
-    ...userRoleEventProp,
-  })
+  // ampli.logEvent('sidevisning', {
+  //   side: 'Kraveier side',
+  //   sidetittel: 'Forvalte og opprette krav',
+  //   ...userRoleEventProp,
+  // })
 
   return (
     <PageLayout pageTitle='Forvalte og opprette krav' currentPage='Forvalte og opprette krav'>

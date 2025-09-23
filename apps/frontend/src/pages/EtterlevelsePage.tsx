@@ -9,7 +9,6 @@ import { kravUrl } from '../components/common/RouteLinkKrav'
 import { ViewEtterlevelse } from '../components/etterlevelse/ViewEtterlevelse'
 import { PageLayout } from '../components/scaffold/Page'
 import { IBreadCrumbPath, IEtterlevelse, IKrav } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { kravNumView } from './KravPage'
 import { temaBreadCrumbPath } from './util/BreadCrumbPath'
@@ -46,11 +45,11 @@ export const EtterlevelsePage = () => {
 
   useEffect(() => {
     if (etterlevelse) {
-      ampli.logEvent('sidevisning', {
-        side: 'Etterlevelse side',
-        sidetittel: getPageTitle(),
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Etterlevelse side',
+      //   sidetittel: getPageTitle(),
+      //   ...userRoleEventProp,
+      // })
 
       getKravByKravNumberAndVersion(etterlevelse?.kravNummer, etterlevelse?.kravVersjon).then(
         (response: IKrav | undefined) => {

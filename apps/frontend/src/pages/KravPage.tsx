@@ -34,7 +34,6 @@ import {
   TKravQL,
 } from '../constants'
 import { getKravWithEtterlevelseQuery } from '../query/KravQuery'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
 import { useLocationState, useQueryParam } from '../util/hooks/customHooks'
@@ -139,15 +138,15 @@ export const KravPage = () => {
 
   useEffect(() => {
     if (krav && kravTema) {
-      ampli.logEvent('sidevisning', {
-        side: 'Krav side',
-        sidetittel: `${kravNumView({
-          kravNummer: krav?.kravNummer,
-          kravVersjon: krav?.kravVersjon,
-        })} ${krav.navn}`,
-        section: kravTema?.shortName.toString(),
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Krav side',
+      //   sidetittel: `${kravNumView({
+      //     kravNummer: krav?.kravNummer,
+      //     kravVersjon: krav?.kravVersjon,
+      //   })} ${krav.navn}`,
+      //   section: kravTema?.shortName.toString(),
+      //   ...userRoleEventProp,
+      // })
     }
   }, [krav, kravTema])
 

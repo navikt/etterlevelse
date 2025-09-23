@@ -15,7 +15,6 @@ import {
   TKravQL,
 } from '../constants'
 import { getKravMedPrioriteringOgEtterlevelseQuery } from '../query/KravQuery'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 import { sortKravListeByPriority } from '../util/sort'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
@@ -107,13 +106,13 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   useEffect(() => {
     if (etterlevelseDokumentasjon && temaData && kravId) {
-      ampli.logEvent('sidevisning', {
-        side: 'Dokumentasjon side for etterlevelse',
-        sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
-        section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
-        temaKey: temaData.shortName.toString(),
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Dokumentasjon side for etterlevelse',
+      //   sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon.title.toString()}`,
+      //   section: `K${kravId.kravNummer}.${kravId.kravVersjon}`,
+      //   temaKey: temaData.shortName.toString(),
+      //   ...userRoleEventProp,
+      // })
     }
   }, [etterlevelseDokumentasjon])
 

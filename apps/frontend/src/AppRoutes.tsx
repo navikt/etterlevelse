@@ -78,7 +78,6 @@ import { RelasjonsOversikt } from './pages/RelasjonsOversikt'
 import { TemaPage } from './pages/TemaPage'
 import { TemaOversiktPage } from './pages/TemaoversiktPage'
 import { VarselPage } from './pages/VarselPage'
-import { ampli } from './services/Amplitude'
 import PrivateRoute from './util/PrivateRoute'
 
 const AppRoutes = (): JSX.Element => {
@@ -349,7 +348,7 @@ const RedirectToEtterlevelseDokumentasjonPage = () => {
   const { id, tema, filter, kravNummer, kravVersjon } = useParams()
   const navigate: NavigateFunction = useNavigate()
 
-  ampli.logEvent('besøk', { type: 'redirect til etterlevelse' })
+  //ampli.logEvent('besøk', { type: 'redirect til etterlevelse' })
 
   if (id) {
     searchEtterlevelsedokumentasjonByBehandlingId(id).then(

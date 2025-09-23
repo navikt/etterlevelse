@@ -11,7 +11,6 @@ import {
   IBreadCrumbPath,
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { dokumentasjonBreadCrumbPath, dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
 
 export const RelasjonsOversikt = () => {
@@ -23,13 +22,13 @@ export const RelasjonsOversikt = () => {
 
   useEffect(() => {
     if (etterlevelseDokumentasjon) {
-      ampli.logEvent('sidevisning', {
-        side: 'Etterlevelse Dokumentasjon Page',
-        sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${
-          etterlevelseDokumentasjon.title
-        }`,
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Etterlevelse Dokumentasjon Page',
+      //   sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${
+      //     etterlevelseDokumentasjon.title
+      //   }`,
+      //   ...userRoleEventProp,
+      // })
 
       getDocumentRelationByFromIdAndRelationTypeWithData(
         etterlevelseDokumentasjon.id,

@@ -20,7 +20,6 @@ import {
 import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
 import { PageLayout } from '../components/scaffold/Page'
 import { IDocumentRelation } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { handleSort } from '../util/handleTableSort'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 
@@ -64,11 +63,11 @@ export const DocumentRelationAdminPage = () => {
         documentRelationMapToFormVal(documentRelation)
       )
       setTableContent(mappedDocumentRelation)
-      ampli.logEvent('sidevisning', {
-        side: 'Etterlevelse dokument relasjon admin side',
-        sidetittel: 'Administrere dokument relasjon',
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Etterlevelse dokument relasjon admin side',
+      //   sidetittel: 'Administrere dokument relasjon',
+      //   ...userRoleEventProp,
+      // })
     })()
   }, [])
 

@@ -51,7 +51,6 @@ import {
   TKravQL,
 } from '../../constants'
 import { getKravWithEtterlevelseQuery } from '../../query/KravQuery'
-import { ampli, userRoleEventProp } from '../../services/Amplitude'
 import { user } from '../../services/User'
 import AlertPvoUnderarbeidModal from '../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { Markdown } from '../common/Markdown'
@@ -715,11 +714,11 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                   <Link
                     href={getNextKravUrl(nextKravToDocument)}
                     onClick={() => {
-                      ampli.logEvent('knapp klikket', {
-                        tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
-                        pagePath: location.pathname,
-                        ...userRoleEventProp,
-                      })
+                      // ampli.logEvent('knapp klikket', {
+                      //   tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
+                      //   pagePath: location.pathname,
+                      //   ...userRoleEventProp,
+                      // })
                     }}
                   >
                     <Button variant='secondary'>
@@ -744,11 +743,11 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                   )}
                   className='flex w-full'
                   onClick={() => {
-                    ampli.logEvent('knapp klikket', {
-                      tekst: 'Til temaoversikten',
-                      pagePath: location.pathname,
-                      ...userRoleEventProp,
-                    })
+                    // ampli.logEvent('knapp klikket', {
+                    //   tekst: 'Til temaoversikten',
+                    //   pagePath: location.pathname,
+                    //   ...userRoleEventProp,
+                    // })
                   }}
                 >
                   <Button className='flex w-full' variant='secondary'>

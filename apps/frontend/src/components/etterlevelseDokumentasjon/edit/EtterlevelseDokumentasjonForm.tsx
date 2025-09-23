@@ -34,7 +34,6 @@ import {
   TEtterlevelseDokumentasjonQL,
   TOption,
 } from '../../../constants'
-import { ampli } from '../../../services/Amplitude'
 import {
   CodelistService,
   EListName,
@@ -583,9 +582,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 type='button'
                 onClick={async () => {
                   if (!isEditButton) {
-                    ampli.logEvent('knapp trykket', {
-                      tekst: 'Opprett etterlevelsesdokument',
-                    })
+                    // ampli.logEvent('knapp trykket', {
+                    //   tekst: 'Opprett etterlevelsesdokument',
+                    // })
                   }
                   errorSummaryRef.current?.focus()
                   setValidateOnBlur(true)
@@ -600,9 +599,9 @@ export const EtterlevelseDokumentasjonForm = (props: TEditEtterlevelseDokumentas
                 type='button'
                 variant='secondary'
                 onClick={() => {
-                  ampli.logEvent('knapp trykket', {
-                    tekst: 'Avbryt opprett etterlevelsesdokument',
-                  })
+                  // ampli.logEvent('knapp trykket', {
+                  //   tekst: 'Avbryt opprett etterlevelsesdokument',
+                  // })
                   navigate(-1)
                 }}
               >

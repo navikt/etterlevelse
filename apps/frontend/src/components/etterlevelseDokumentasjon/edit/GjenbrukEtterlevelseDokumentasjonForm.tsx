@@ -21,7 +21,6 @@ import {
   TEtterlevelseDokumentasjonQL,
   TOption,
 } from '../../../constants'
-import { ampli } from '../../../services/Amplitude'
 import { user } from '../../../services/User'
 import { ROSEdit } from '../../PvkDokument/ROSEdit'
 import { FieldWrapper, OptionList, TextAreaField } from '../../common/Inputs'
@@ -372,9 +371,9 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
               <Button
                 type='button'
                 onClick={() => {
-                  ampli.logEvent('knapp trykket', {
-                    tekst: 'gjenbruk etterlevelsesdokument',
-                  })
+                  // ampli.logEvent('knapp trykket', {
+                  //   tekst: 'gjenbruk etterlevelsesdokument',
+                  // })
                   errorSummaryRef.current?.focus()
                   submitForm()
                   setSubmitClick(!submitClick)
@@ -387,9 +386,9 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                 type='button'
                 variant='secondary'
                 onClick={() => {
-                  ampli.logEvent('knapp trykket', {
-                    tekst: 'Avbryt gjenbruk etterlevelsesdokument',
-                  })
+                  // ampli.logEvent('knapp trykket', {
+                  //   tekst: 'Avbryt gjenbruk etterlevelsesdokument',
+                  // })
                   navigate(-1)
                 }}
               >

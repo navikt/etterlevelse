@@ -5,7 +5,6 @@ import { DokumentasjonTabs } from '../components/etterlevelseDokumentasjon/tabs/
 import { ListPageHeader } from '../components/scaffold/ListPageHeader'
 import { PageLayout } from '../components/scaffold/Page'
 import { ITeam } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 
 interface IDokumentasjonCount {
   dokumentasjonCount?: number
@@ -15,11 +14,11 @@ export type TCustomTeamObject = IDokumentasjonCount & ITeam
 
 export const MyEtterlevelseDokumentasjonerPage = () => {
   const navigate: NavigateFunction = useNavigate()
-  ampli.logEvent('sidevisning', {
-    side: 'Side for Dokumentasjoner',
-    sidetittel: 'Dokumentere etterlevelse',
-    ...userRoleEventProp,
-  })
+  // ampli.logEvent('sidevisning', {
+  //   side: 'Side for Dokumentasjoner',
+  //   sidetittel: 'Dokumentere etterlevelse',
+  //   ...userRoleEventProp,
+  // })
 
   return (
     <PageLayout pageTitle='Dokumentere etterlevelse' currentPage='Dokumentere etterlevelse'>

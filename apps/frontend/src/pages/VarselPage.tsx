@@ -8,7 +8,6 @@ import { PageLayout } from '../components/scaffold/Page'
 import EditMelding from '../components/varslinger/EditMelding'
 import EditOmEtterlevelse from '../components/varslinger/EditOmEtterlevelse'
 import { EMeldingType, IMelding } from '../constants'
-import { ampli } from '../services/Amplitude'
 
 type TSection =
   | 'utsendtMelding'
@@ -52,10 +51,10 @@ const VarselTabs = () => {
     ;(async () => {
       setLoading(true)
       if (tab !== 'utsendtMelding') {
-        ampli.logEvent('sidevisning', {
-          side: 'Varsel side for admin',
-          sidetittel: 'Opprett varsel melding for ' + tab,
-        })
+        // ampli.logEvent('sidevisning', {
+        //   side: 'Varsel side for admin',
+        //   sidetittel: 'Opprett varsel melding for ' + tab,
+        // })
         const response = await getMeldingByType(getMeldingType(tab))
         if (response.numberOfElements > 0) {
           setMelding(response.content[0])

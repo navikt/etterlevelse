@@ -2,13 +2,12 @@ import { Heading } from '@navikt/ds-react'
 import { useLocation } from 'react-router-dom'
 import { PageLayout } from '../components/scaffold/Page'
 import notFound from '../resources/notfound.svg'
-import { ampli } from '../services/Amplitude'
 import { intl } from '../util/intl/intl'
 
 const NotFound = () => {
   const location = useLocation()
 
-  ampli.logEvent('sidevisning', { side: 'NotFound', sidetittel: '404 not found' })
+  // ampli.logEvent('sidevisning', { side: 'NotFound', sidetittel: '404 not found' })
 
   return (
     <PageLayout pageTitle='404 not found'>

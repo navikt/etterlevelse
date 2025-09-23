@@ -21,7 +21,6 @@ import {
   ISuksesskriterie,
   ISuksesskriterieBegrunnelse,
 } from '../../../constants'
-// import { ampli } from '../../../services/Amplitude'
 import { useDebouncedState } from '../../../util/hooks/customHooks'
 import { FieldWrapper } from '../../common/Inputs'
 import { LabelWithDescription } from '../../common/LabelWithTooltip'

@@ -5,13 +5,17 @@ import { getMeldingByType, mapMeldingToFormValue } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import { PageLayout } from '../components/scaffold/Page'
 import { EMeldingType, IMelding } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 
 export const FAQ = () => {
   const [melding, setMelding] = useState<IMelding>()
 
   useEffect(() => {
+    // ampli.logEvent('sidevisning', {
+    //   side: 'FAQ side',
+    //   sidetittel: 'Om Støtte til etterlevelse',
+    //   ...userRoleEventProp,
+    // })
     ;(async () => {
       const response = await getMeldingByType(EMeldingType.OM_ETTERLEVELSE)
       if (response.numberOfElements > 0) {
@@ -22,11 +26,6 @@ export const FAQ = () => {
     })()
   }, [])
 
-  ampli.logEvent('sidevisning', {
-    side: 'FAQ side',
-    sidetittel: 'Om Støtte til etterlevelse',
-    ...userRoleEventProp,
-  })
   /* eslint-disable jsx-a11y/media-has-caption */
   return (
     <PageLayout pageTitle='Om Støtte til etterlevelse' currentPage='Om Støtte til etterlevelse'>

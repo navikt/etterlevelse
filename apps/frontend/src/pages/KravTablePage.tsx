@@ -15,7 +15,6 @@ import { temaUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjo
 import { kravNummerVersjonUrl } from '../components/common/RouteLinkKrav'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, TKravQL } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
 import { kravStatus } from './KravPage'
@@ -68,11 +67,11 @@ export const KravTablePage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent(mappedKraver)
-      ampli.logEvent('sidevisning', {
-        side: 'Krav admin side',
-        sidetittel: 'Administrere Krav',
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Krav admin side',
+      //   sidetittel: 'Administrere Krav',
+      //   ...userRoleEventProp,
+      // })
     })()
   }, [])
 

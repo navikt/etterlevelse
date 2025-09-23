@@ -4,12 +4,11 @@ import { temaUrl } from '../components/common/RouteLinkEtterlevelsesdokumentasjo
 import { PageLayout } from '../components/scaffold/Page'
 import { TKravQL } from '../constants'
 import { useKravCounter } from '../query/KravQuery'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TLovCode, TTemaCode } from '../services/Codelist'
 
 export const TemaOversiktPage = () => {
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
+    // ampli.logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
   }, [])
 
   return (

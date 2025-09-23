@@ -11,7 +11,6 @@ import { kravNummerVersjonUrl } from '../components/common/RouteLinkKrav'
 import { PageLayout } from '../components/scaffold/Page'
 import { IKrav, IKravPriorityList, TKravQL } from '../constants'
 import { useKravCounter } from '../query/KravQuery'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import {
   CodelistService,
   EListName,
@@ -85,11 +84,11 @@ const TemaView = ({ tema, codelistUtils }: ITemaViewProps) => {
   const [kravList, setKravList] = useState<IKrav[]>([])
 
   useEffect(() => {
-    ampli.logEvent('sidevisning', {
-      side: 'Tema side',
-      sidetittel: tema.shortName,
-      ...userRoleEventProp,
-    })
+    // ampli.logEvent('sidevisning', {
+    //   side: 'Tema side',
+    //   sidetittel: tema.shortName,
+    //   ...userRoleEventProp,
+    // })
   }, [])
 
   useEffect(() => {

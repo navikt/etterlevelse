@@ -20,7 +20,6 @@ import { etterlevelseDokumentasjonIdUrl } from '../components/common/RouteLinkEt
 import { pvkDokumentasjonPvkBehovUrl } from '../components/common/RouteLinkPvk'
 import { PageLayout } from '../components/scaffold/Page'
 import { IPvkDokument } from '../constants'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { handleSort } from '../util/handleTableSort'
 import { UpdateMessage } from './EtterlevelseAdminPage'
 
@@ -38,11 +37,11 @@ export const PvkAdminPage = () => {
   useEffect(() => {
     ;(async () => {
       await loadData()
-      ampli.logEvent('sidevisning', {
-        side: 'Etterlevelse Pvk dokument admin side',
-        sidetittel: 'Administrere Pvk dokument',
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Etterlevelse Pvk dokument admin side',
+      //   sidetittel: 'Administrere Pvk dokument',
+      //   ...userRoleEventProp,
+      // })
     })()
   }, [])
 

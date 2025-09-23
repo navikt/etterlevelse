@@ -17,7 +17,6 @@ import { JsonView } from 'react-json-view-lite'
 import { getAudits } from '../../../api/AuditApi'
 import { emptyPage } from '../../../api/util/EmptyPageConstant'
 import { IPageResponse } from '../../../constants'
-import { ampli, userRoleEventProp } from '../../../services/Amplitude'
 import { intl } from '../../../util/intl/intl'
 import { AuditButton } from './AuditButton'
 import { AuditActionIcon } from './AuditComponents'
@@ -52,13 +51,13 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
 
-  useEffect(() => {
-    ampli.logEvent('sidevisning', {
-      side: 'Varsel side for admin',
-      sidetittel: 'Log side for varslinger',
-      ...userRoleEventProp,
-    })
-  }, [])
+  // useEffect(() => {
+  //   ampli.logEvent('sidevisning', {
+  //     side: 'Varsel side for admin',
+  //     sidetittel: 'Log side for varslinger',
+  //     ...userRoleEventProp,
+  //   })
+  // }, [])
 
   useEffect(() => {
     ;(async () => {

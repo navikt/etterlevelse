@@ -38,7 +38,6 @@ import {
   TKravQL,
 } from '../constants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '../query/EtterlevelseDokumentasjonQuery'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { CodelistService, EListName, TTemaCode } from '../services/Codelist'
 import { user } from '../services/User'
 import { dokumentasjonerBreadCrumbPath } from './util/BreadCrumbPath'
@@ -161,13 +160,13 @@ export const DokumentasjonPage = () => {
   useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
     if (etterlevelseDokumentasjon) {
-      ampli.logEvent('sidevisning', {
-        side: 'Etterlevelse Dokumentasjon Page',
-        sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${
-          etterlevelseDokumentasjon.title
-        }`,
-        ...userRoleEventProp,
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Etterlevelse Dokumentasjon Page',
+      //   sidetittel: `E${etterlevelseDokumentasjon.etterlevelseNummer.toString()} ${
+      //     etterlevelseDokumentasjon.title
+      //   }`,
+      //   ...userRoleEventProp,
+      // })
       ;(async () => {
         setRelasjonLoading(true)
         await getDocumentRelationByToIdAndRelationTypeWithData(

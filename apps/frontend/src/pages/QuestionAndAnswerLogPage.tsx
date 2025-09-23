@@ -24,7 +24,6 @@ import {
   ITilbakemelding,
   TKravQL,
 } from '../constants'
-import { ampli } from '../services/Amplitude'
 import { CodelistService, EListName } from '../services/Codelist'
 import { handleSort } from '../util/handleTableSort'
 
@@ -85,10 +84,10 @@ export const QuestionAndAnswerLogPage = () => {
       const kraver: IKrav[] = await getAllKrav()
       const mappedKraver: TKravQL[] = kraver.map((krav: IKrav) => kravMapToFormVal(krav))
       setTableContent([...mappedKraver])
-      ampli.logEvent('sidevisning', {
-        side: 'Log side for spørsmål og svar',
-        sidetittel: 'Spørsmål og svar',
-      })
+      // ampli.logEvent('sidevisning', {
+      //   side: 'Log side for spørsmål og svar',
+      //   sidetittel: 'Spørsmål og svar',
+      // })
     })()
   }, [])
 

@@ -6,7 +6,6 @@ import { getMeldingByType } from '../api/MeldingApi'
 import { Markdown } from '../components/common/Markdown'
 import {
   etterlevelseDokumentasjonCreateUrl,
-  etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonerUrl,
   temaUrl,
 } from '../components/common/RouteLinkEtterlevelsesdokumentasjon'
@@ -21,7 +20,6 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '../constants'
 import { getEtterlevelseDokumentasjonListQuery } from '../query/EtterlevelseDokumentasjonQuery'
-import { ampli, userRoleEventProp } from '../services/Amplitude'
 import { user } from '../services/User'
 import { getNumberOfMonthsBetween } from '../util/checkAge'
 import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '../util/sortEtterlevelseDokumentasjonerByUsersLastModifiedDate'
@@ -40,7 +38,7 @@ export const MainPage = () => {
   })
 
   useEffect(() => {
-    ampli.logEvent('sidevisning', { side: 'Hovedside', ...userRoleEventProp })
+    // ampli.logEvent('sidevisning', { side: 'Hovedside', ...userRoleEventProp })
     ;(async () => {
       await getMeldingByType(EMeldingType.FORSIDE).then((r) => {
         if (r.numberOfElements > 0) {
@@ -110,9 +108,9 @@ export const MainPage = () => {
                   <Button
                     onClick={() => {
                       window.scrollTo(0, 0)
-                      ampli.logEvent('knapp klikket', {
-                        tekst: 'Nytt etterlevelsesdokument fra forsiden',
-                      })
+                      // ampli.logEvent('knapp klikket', {
+                      //   tekst: 'Nytt etterlevelsesdokument fra forsiden',
+                      // })
                       navigate(etterlevelseDokumentasjonCreateUrl)
                     }}
                     size='medium'
@@ -129,12 +127,12 @@ export const MainPage = () => {
                   className='underline hover:no-underline'
                   onClick={() => {
                     window.scrollTo(0, 0)
-                    ampli.logEvent('navigere', {
-                      app: 'etterlevelse',
-                      kilde: 'forside-panel',
-                      til: etterlevelseDokumentasjonerUrl(),
-                      fra: '/',
-                    })
+                    // ampli.logEvent('navigere', {
+                    //   app: 'etterlevelse',
+                    //   kilde: 'forside-panel',
+                    //   til: etterlevelseDokumentasjonerUrl(),
+                    //   fra: '/',
+                    // })
                     navigate(etterlevelseDokumentasjonerUrl())
                   }}
                 >
@@ -200,14 +198,14 @@ const EtterlevelseDokumentasjonList = ({
               <List.Item icon={<div />} key={etterlevelseDokumentasjon.title + '_' + index}>
                 <EtterlevelseDokumentasjonsPanel
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  onClick={() =>
-                    ampli.logEvent('navigere', {
-                      app: 'etterlevelse',
-                      kilde: 'forside-panel',
-                      til: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id),
-                      fra: '/',
-                    })
-                  }
+                  onClick={() => {
+                    // ampli.logEvent('navigere', {
+                    //   app: 'etterlevelse',
+                    //   kilde: 'forside-panel',
+                    //   til: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id),
+                    //   fra: '/',
+                    // })
+                  }}
                 />
               </List.Item>
             ))}
@@ -228,12 +226,12 @@ const ForstaKravene = () => (
     <LinkPanel
       href={temaUrl}
       onClick={() => {
-        ampli.logEvent('navigere', {
-          kilde: 'forside-panel',
-          app: 'etterlevelse',
-          til: temaUrl,
-          fra: '/',
-        })
+        // ampli.logEvent('navigere', {
+        //   kilde: 'forside-panel',
+        //   app: 'etterlevelse',
+        //   til: temaUrl,
+        //   fra: '/',
+        // })
       }}
     >
       <LinkPanel.Title>Forstå kravene</LinkPanel.Title>
@@ -250,12 +248,12 @@ const StatusIOrganisasjonen = () => (
     <LinkPanel
       href='https://metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse'
       onClick={() => {
-        ampli.logEvent('navigere', {
-          kilde: 'forside-panel',
-          app: 'etterlevelse',
-          til: 'https://metabase.ansatt.nav.no/dashboard/117-dashboard-for-etterlevelse',
-          fra: '/',
-        })
+        // ampli.logEvent('navigere', {
+        //   kilde: 'forside-panel',
+        //   app: 'etterlevelse',
+        //   til: 'https://metabase.ansatt.nav.no/dashboard/117-dashboard-for-etterlevelse',
+        //   fra: '/',
+        // })
       }}
     >
       <LinkPanel.Title>Status i organisasjonen</LinkPanel.Title>

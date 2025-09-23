@@ -14,7 +14,6 @@ import { Location, useLocation } from 'react-router-dom'
 import { writeLog } from '../api/LogApi'
 import { getMeldingByType } from '../api/MeldingApi'
 import { EAlertType, EMeldingStatus, EMeldingType, EPVO, IMelding } from '../constants'
-import { ampli } from '../services/Amplitude'
 import { user } from '../services/User'
 import { useQueryParam } from '../util/hooks/customHooks'
 import { intl } from '../util/intl/intl'
@@ -207,8 +206,6 @@ const Menu = (props: {
   icon?: React.ReactNode
   kind?: 'secondary' | 'tertiary'
 }) => {
-  const pathname = window.location.pathname
-
   const allPages = props.pages.length
     ? props.pages
         .filter((page) => page.length)
@@ -233,12 +230,12 @@ const Menu = (props: {
                   as={Link}
                   href={page.href}
                   onClick={() => {
-                    ampli.logEvent('navigere', {
-                      kilde: 'header',
-                      app: 'etterlevelse',
-                      til: page.href,
-                      fra: pathname,
-                    })
+                    // ampli.logEvent('navigere', {
+                    //   kilde: 'header',
+                    //   app: 'etterlevelse',
+                    //   til: page.href,
+                    //   fra: pathname,
+                    // })
                   }}
                   underline={false}
                 >
