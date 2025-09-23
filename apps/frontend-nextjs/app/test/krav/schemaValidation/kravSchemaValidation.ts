@@ -107,3 +107,12 @@ export const kravNewVersionValidation = () =>
     varslingsadresserQl: varslingsadresserCheck,
     versjonEndringer: versjonEndringCheck,
   })
+
+export const kravCreateValidation = () =>
+  yup.object({
+    navn: yup.string().required('Du må oppgi et navn til kravet'),
+    hensikt: hensiktCheck,
+    suksesskriterier: suksesskriterierCheck,
+    regelverk: regelverkCheck,
+    varslingsadresserQl: varslingsadresserCheck,
+  })
