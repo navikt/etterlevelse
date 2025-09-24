@@ -38,6 +38,13 @@ export const TiltakForm = (props: IProps) => {
     }
   }, [submitClick])
 
+  useEffect(() => {
+    const formHeader = document.getElementById('tiltakFormHeader')
+    if (formHeader) {
+      formHeader.scrollIntoView()
+    }
+  }, [])
+
   return (
     <Formik
       initialValues={mapTiltakToFormValue({
@@ -54,7 +61,7 @@ export const TiltakForm = (props: IProps) => {
         <Form>
           {title && (
             <div className='mb-5 border-t-2 mt-5'>
-              <Heading size='medium' className='mt-5'>
+              <Heading size='medium' className='mt-5' id='tiltakFormHeader'>
                 {title}
               </Heading>
             </div>
