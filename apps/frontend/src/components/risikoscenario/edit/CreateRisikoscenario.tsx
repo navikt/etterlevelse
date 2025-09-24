@@ -1,7 +1,9 @@
 import { Heading } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, RefObject, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, RefObject, SetStateAction, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { createRisikoscenarioKnyttetTilKrav } from '../../../api/RisikoscenarioApi'
 import { IRisikoscenario, TKravQL } from '../../../constants'
+import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
 import RisikoscenarioForm from './RisikoscenarioForm'
 
 type TProps = {
@@ -23,10 +25,13 @@ export const CreateRisikoscenario: FunctionComponent<TProps> = ({
   setActiveRisikoscenarioId,
   formRef,
 }) => {
+  const navigate = useNavigate()
+
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await createRisikoscenarioKnyttetTilKrav(krav.kravNummer, risikoscenario).then((response) => {
       setRisikoscenarioer([...risikoscenarioer, response])
       setActiveRisikoscenarioId(response.id)
+      navigate(risikoscenarioUrl(response.id))
 
       setTimeout(() => {
         const element = document.getElementById(response.id)
@@ -39,9 +44,16 @@ export const CreateRisikoscenario: FunctionComponent<TProps> = ({
     })
   }
 
+  useEffect(() => {
+    const risikoscenarioForm = document.getElementById('createRisikoscenarioForm')
+    if (risikoscenarioForm) {
+      risikoscenarioForm.scrollIntoView()
+    }
+  }, [])
+
   return (
     <div className='w-full'>
-      <Heading size='medium' level='2' className='mb-5'>
+      <Heading size='medium' level='2' className='mb-5' id='createRisikoscenarioForm'>
         Legg til nytt risikoscenario
       </Heading>
       <RisikoscenarioForm

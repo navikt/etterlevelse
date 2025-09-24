@@ -1,6 +1,7 @@
 import { TrashIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, List, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getPvkDokument } from '../../../api/PvkDokumentApi'
 import {
   deleteRisikoscenario,
@@ -40,6 +41,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
     IKravReference[]
   >([])
   const [uniqueTiltak, setUniqueTiltak] = useState<ITiltak[]>([])
+  const navigate = useNavigate()
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
@@ -76,6 +78,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
             )
             setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
             setRisikoscenarioer([...risikoscenarioer, deleteResponse])
+            navigate(window.location.pathname)
             setIsOpen(false)
           }
         )
@@ -85,6 +88,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
             (risikoscenario: IRisikoscenario) => risikoscenario.id !== deleteResponse.id
           )
           setRisikoscenarioForKrav([...updatedRisikoscenarioForKrav])
+          navigate(window.location.pathname)
           setIsOpen(false)
         })
       }
