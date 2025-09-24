@@ -16,6 +16,7 @@ import {
 import { IRisikoscenario, ITiltak, ITiltakRisikoscenarioRelasjon } from '../../../../constants'
 import AlertPvoUnderarbeidModal from '../../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { isReadOnlyPvkStatus } from '../../../PvkDokument/common/util'
+import { risikoscenarioTiltakUrl } from '../../../common/RouteLinkPvk'
 import { risikoscenarioIdQuery } from '../../../common/RouteLinkRisiko'
 import TiltakReadMoreList from '../../../tiltak/TiltakReadMoreList'
 import LeggTilEksisterendeTiltak from '../../../tiltak/edit/LeggTilEksisterendeTiltak'
@@ -135,6 +136,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         ...activeRisikoscenario,
         tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
       })
+      navigate(risikoscenarioTiltakUrl(activeRisikoscenario.id, request.tiltakIds[0]))
       setIsAddExisitingMode(false)
     })
   }

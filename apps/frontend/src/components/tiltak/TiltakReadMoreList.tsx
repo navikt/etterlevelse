@@ -227,7 +227,6 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
 
   useEffect(() => {
     if (tiltak && tiltak.id === activeTiltak) {
-      console.debug('TRIGGER')
       const risikoscenarioIds = tiltak.risikoscenarioIds.filter((id) => id !== risikoscenario.id)
       const risikoscenarioNameList: string[] = []
       risikoscenarioIds.forEach((id) => {
