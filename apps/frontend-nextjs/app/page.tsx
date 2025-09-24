@@ -1,6 +1,7 @@
 import { Heading } from '@navikt/ds-react'
 import ForstaKravene from './components/frontpage/ForstaKravene'
 import StatusIOrganisasjonen from './components/frontpage/StatusIOrganisasjonen'
+import { EtterlevelseDokumentasjon } from './components/frontpage/etterlevelseDokumentasjon/etterlevelseDokumentasjon'
 import { PageLayout } from './components/others/scaffold/scaffold'
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
             </Heading>
             <span className='flex justify-center'>Forstå og dokumentér</span>
           </div>
+          <EtterlevelseDokumentasjon />
         </div>
       </div>
       <div className='flex flex-col items-center w-full'>
