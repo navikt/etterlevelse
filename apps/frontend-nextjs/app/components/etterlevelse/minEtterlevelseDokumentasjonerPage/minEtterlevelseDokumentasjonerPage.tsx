@@ -6,6 +6,7 @@ import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumen
 import { Button } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
+import { DokumentasjonTabs } from './dokumentasjonTabs/dokumentasjonTabs'
 
 export const MinEtterlevelseDokumentasjonerPage = () => {
   const router: AppRouterInstance = useRouter()
@@ -28,7 +29,9 @@ export const MinEtterlevelseDokumentasjonerPage = () => {
 
         <div className='flex justify-center w-full'>
           <div className='w-full'>
-            <div className='pt-6'>{/* <DokumentasjonTabs /> */}</div>
+            <div className='pt-6'>
+              <DokumentasjonTabs />
+            </div>
           </div>
         </div>
       </div>
