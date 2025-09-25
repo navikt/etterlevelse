@@ -1,3 +1,5 @@
+'use client'
+
 import {
   getSlackChannelById,
   getSlackUserByEmail,
@@ -14,12 +16,12 @@ import {
   IVarslingsadresse,
   TVarslingsadresseQL,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { EnvelopeClosedIcon, HashtagIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
 import { Alert, Button, Loader, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import * as yup from 'yup'
 import { FieldWrapper } from '../common/fieldWrapper/fieldWrapper'
@@ -253,6 +255,7 @@ export const SlackChannelSearch: FunctionComponent<TAddVarslingsadresseProps> = 
 export const SlackUserSearch: FunctionComponent<TAddVarslingsadresseProps> = ({ add, close }) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
+  const { getEmail } = useContext(UserContext)
 
   const addEmail = (email: string) => {
     getSlackUserByEmail(email)
@@ -296,7 +299,7 @@ export const SlackUserSearch: FunctionComponent<TAddVarslingsadresseProps> = ({ 
           />
         </div>
         <div className='flex justify-end ml-2.5'>
-          <Button type='button' onClick={() => addEmail(user.getEmail())}>
+          <Button type='button' onClick={() => addEmail(getEmail())}>
             Meg
           </Button>
         </div>
@@ -319,6 +322,7 @@ export const emailValidator = yup
 export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps) => {
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
+  const { getEmail } = useContext(UserContext)
 
   const add = (adresse?: string) => {
     const toAdd = adresse || val
@@ -337,6 +341,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
   }
 
   const onKey = (e: React.KeyboardEvent) => e.key === 'Enter' && add()
+
   return (
     <div className='flex flex-col'>
       <ContentLayout>
@@ -351,7 +356,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
           className={`w-full ${error ? 'border-2 rounded-md border-[#c30000]' : ''}`}
         />
         <div className='flex justify-between ml-2.5'>
-          <Button type='button' onClick={() => add(user.getEmail())}>
+          <Button type='button' onClick={() => add(getEmail())}>
             Meg
           </Button>
           <Button type='button' onClick={() => add} className='ml-2.5'>

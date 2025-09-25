@@ -1,10 +1,12 @@
+'use client'
+
 import {
   EAdresseType,
   TVarslingsadresseQL,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { Button, Label, Modal, Radio, RadioGroup, TextField } from '@navikt/ds-react'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Error } from '../common/modalSchema/ModalSchema'
 import { emailValidator } from './VarslingsadresserEdit'
 
@@ -17,7 +19,8 @@ interface IProps {
 
 export const AddEmailModal = (props: IProps) => {
   const { isOpen, close, doAdd, added } = props
-  const [val, setVal] = useState(user.getEmail())
+  const { getEmail } = useContext(UserContext)
+  const [val, setVal] = useState(getEmail())
   const [error, setError] = useState('')
   const [radioValue, setRadioValue] = useState('meg')
 
@@ -48,7 +51,7 @@ export const AddEmailModal = (props: IProps) => {
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {
-              setVal(user.getEmail())
+              setVal(getEmail())
             } else {
               setVal('')
             }
@@ -56,7 +59,7 @@ export const AddEmailModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio value='meg'>Meg ({user.getEmail()})</Radio>
+          <Radio value='meg'>Meg ({getEmail()})</Radio>
           <Radio value='epost' className='w-full'>
             Noen andre
           </Radio>

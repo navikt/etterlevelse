@@ -5,13 +5,14 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { IPageResponse } from '@/constants/commonConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { BodyLong, Detail, Heading } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 const OmStotteTilEtterlevelse = () => {
   const [melding, setMelding] = useState<IMelding>()
+  const { isAdmin } = useContext(UserContext)
 
   useEffect(() => {
     ;(async () => {
@@ -61,7 +62,7 @@ const OmStotteTilEtterlevelse = () => {
             <Markdown source={melding?.secondaryMelding} />
 
             <div className='mt-20'>
-              {user.isAdmin() && melding && (
+              {isAdmin() && melding && (
                 <Detail>
                   Sist endret: {moment(melding.changeStamp.lastModifiedDate).format('LL')} av{' '}
                   {melding.changeStamp.lastModifiedBy.split('-')[1]}

@@ -6,16 +6,17 @@ import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoade
 import { IPageResponse } from '@/constants/commonConstants'
 import { IKravDataProps, TKravById } from '@/constants/krav/edit/kravEditConstant'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { Alert } from '@navikt/ds-react'
 import { Params } from 'next/dist/server/request/params'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { KravEdit } from './kravEdit/kravEdit'
 import { KravEditUtgattKrav } from './kravEditUtgattKrav/kravEditUtgattKrav'
 
 export const KravEditPage = () => {
   const params: Params = useParams()
+  const { isAdmin } = useContext(UserContext)
   const kravData: IKravDataProps | undefined = GetKravData(params)
 
   const kravQuery: TKravById | undefined = kravData?.kravQuery
@@ -75,10 +76,10 @@ export const KravEditPage = () => {
           )}
           {krav && (
             <>
-              {krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
+              {krav.status === EKravStatus.UTGAATT && !isAdmin() && (
                 <KravEditUtgattKrav krav={krav} />
               )}
-              {(krav.status !== EKravStatus.UTGAATT || user.isAdmin()) && (
+              {(krav.status !== EKravStatus.UTGAATT || isAdmin()) && (
                 <KravEdit
                   krav={krav}
                   alleKravVersjoner={alleKravVersjoner}

@@ -1,14 +1,16 @@
+'use client'
+
 import { Error } from '@/components/common/error/error'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   EAdresseType,
   IVarslingsadresse,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { emailValidator } from '@/util/teamkatalog/utils'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, TextField } from '@navikt/ds-react'
-import { ChangeEvent, KeyboardEvent, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useContext, useState } from 'react'
 
 type TProps = {
   add: (varslingsadresse: IVarslingsadresse) => void
@@ -19,6 +21,7 @@ type TProps = {
 export const AddEmail = ({ added, add: doAdd, close }: TProps) => {
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
+  const { getEmail } = useContext(UserContext)
 
   const add = (adresse?: string) => {
     const toAdd = adresse || val
@@ -53,7 +56,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TProps) => {
           className={`w-full ${error ? 'border-2 rounded-md border-[#c30000]' : ''}`}
         />
         <div className='flex justify-between ml-2.5'>
-          <Button type='button' onClick={() => add(user.getEmail())}>
+          <Button type='button' onClick={() => add(getEmail())}>
             Meg
           </Button>
           <Button type='button' onClick={() => add} className='ml-2.5'>

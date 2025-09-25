@@ -1,3 +1,5 @@
+'use client'
+
 import {
   tilbakemeldingNewMelding,
   tilbakemeldingSlettMelding,
@@ -9,7 +11,7 @@ import {
   ITilbakemelding,
   ITilbakemeldingNewMeldingRequest,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import {
   getParsedOptionsforTilbakeMelding,
   getTilbakeMeldingStatusToOption,
@@ -29,7 +31,7 @@ import {
   Textarea,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { getMelderInfo } from '../getMelderInfo/getMelderInfo'
 
 type TTilbakemeldingSvarProps = {
@@ -48,9 +50,8 @@ const TilbakemeldingSvar = ({
   remove,
   replace,
 }: TTilbakemeldingSvarProps) => {
-  const melderInfo = getMelderInfo(tilbakemelding)
+  const { getIdent, isKraveier, isAdmin } = useContext(UserContext)
   const [response, setResponse] = useState('')
-  const [replyRole] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
@@ -59,6 +60,8 @@ const TilbakemeldingSvar = ({
   )
   const [isEndretKrav, setIsEndretKrav] = useState<boolean>(tilbakemelding.endretKrav || false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState<boolean>(false)
+  const melderInfo = getMelderInfo(tilbakemelding, getIdent(), isKraveier())
+  const [replyRole] = useState(melderInfo.rolle)
 
   const submit = () => {
     if (response) {
@@ -89,13 +92,13 @@ const TilbakemeldingSvar = ({
 
   return (
     <div className='w-full'>
-      {(melderInfo.kanSkrive || user.isKraveier()) && (
+      {(melderInfo.kanSkrive || isKraveier()) && (
         <Heading size='medium' className='mb-2 mt-8'>
           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
         </Heading>
       )}
 
-      {user.isKraveier() && (
+      {isKraveier() && (
         <div>
           <div className='w-fit mb-2'>
             <Checkbox value={isEndretKrav} onChange={() => setIsEndretKrav(!isEndretKrav)}>
@@ -130,7 +133,7 @@ const TilbakemeldingSvar = ({
         </div>
       )}
       <div className='flex w-full items-end justify-center'>
-        {(melderInfo.kanSkrive || user.isKraveier()) && (
+        {(melderInfo.kanSkrive || isKraveier()) && (
           <Textarea
             className='w-full'
             label='Ny tilbakemelding'
@@ -182,7 +185,7 @@ const TilbakemeldingSvar = ({
         )}
       </div>
       <div className='flex mt-2 w-full'>
-        {user.isAdmin() && (
+        {isAdmin() && (
           <Button
             icon={<TrashIcon aria-label='' aria-hidden />}
             variant='secondary'
@@ -209,9 +212,9 @@ const TilbakemeldingSvar = ({
           </div>
         )}
 
-        {(melderInfo.kanSkrive || user.isKraveier()) && (
+        {(melderInfo.kanSkrive || isKraveier()) && (
           <div className='flex flex-1 justify-end'>
-            {user.isKraveier() && (
+            {isKraveier() && (
               <div>
                 {isUpdatingStatus ? (
                   <div className='self-center ml-2.5'>
@@ -242,7 +245,7 @@ const TilbakemeldingSvar = ({
             )}
             <Button className='ml-2.5' disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
-              {user.isKraveier() ? ' og oppdater status' : ''}
+              {isKraveier() ? ' og oppdater status' : ''}
             </Button>
           </div>
         )}

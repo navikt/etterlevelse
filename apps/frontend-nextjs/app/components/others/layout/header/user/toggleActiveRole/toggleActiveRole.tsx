@@ -1,12 +1,14 @@
-import { EGroup, user } from '@/services/user/userService'
+import { EGroup, UserContext } from '@/provider/user/userProvider'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Button, Switch } from '@navikt/ds-react'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 export const ToggleActiveRole = () => {
   const [viewRoller, setViewRoller] = useState(true)
+  const { getAvailableGroups, updateCurrentGroups, toggleGroup, getGroups, hasGroup } =
+    useContext(UserContext)
   const isAdmin: boolean =
-    user.getAvailableGroups().filter((role) => role.group === 'ADMIN').length !== 0
+    getAvailableGroups().filter((role) => role.group === 'ADMIN').length !== 0
 
   useEffect(() => {
     if (isAdmin) {
@@ -14,16 +16,16 @@ export const ToggleActiveRole = () => {
       if (roles) {
         const parsedRoles = JSON.parse(roles)
         if (parsedRoles.length !== 0) {
-          user.updateCurrentGroups(parsedRoles)
+          updateCurrentGroups(parsedRoles)
         }
       }
     }
   }, [])
 
   const onRoleChange = (group: EGroup, isChecked: boolean): void => {
-    user.toggleGroup(group, isChecked)
+    toggleGroup(group, isChecked)
     if (isAdmin) {
-      sessionStorage.setItem('activeRoles', JSON.stringify(user.getGroups()))
+      sessionStorage.setItem('activeRoles', JSON.stringify(getGroups()))
     }
   }
 
@@ -44,11 +46,11 @@ export const ToggleActiveRole = () => {
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
-        {user.getAvailableGroups().map((availableGroup: { name: string; group: EGroup }) => (
+        {getAvailableGroups().map((availableGroup: { name: string; group: EGroup }) => (
           <Switch
             size='small'
             key={availableGroup.group}
-            checked={user.hasGroup(availableGroup.group)}
+            checked={hasGroup(availableGroup.group)}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               onRoleChange(availableGroup.group, (event.target as HTMLInputElement).checked)
             }

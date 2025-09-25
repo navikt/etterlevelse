@@ -1,14 +1,16 @@
+'use client'
+
 import { tilbakemeldingSlettMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import PersonNavn from '@/components/common/personNavn/personNavn'
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import moment from 'moment'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 import { TilbakemeldingEdit } from '../../tilbakemeldingEdit/tilbakemeldingEdit'
 
 type TProps = {
@@ -24,7 +26,9 @@ export const MeldingKnapper: FunctionComponent<TProps> = (props) => {
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
-  if ((!user.isAdmin() && melding.fraIdent !== user.getIdent()) || !user.canWrite()) return null
+
+  const { isAdmin, getIdent, canWrite } = useContext(UserContext)
+  if ((!isAdmin() && melding.fraIdent !== getIdent()) || !canWrite()) return null
 
   return (
     <div>

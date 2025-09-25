@@ -1,13 +1,15 @@
+'use client'
+
 import { getKravByKravNumberAndVersion, kravMapToFormVal, updateKrav } from '@/api/krav/kravApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl, kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
-import { user } from '@/services/user/userService'
 import { Button } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 import { KravStandardButtons } from '../../edit/kravStandardButtons/kravStandardButtons'
 import { KravEditStatusModal } from '../kravEditStatusModal/kravEditStatusModal'
 
@@ -27,6 +29,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
   initialValues,
 }) => {
   const router: AppRouterInstance = useRouter()
+  const { isAdmin } = useContext(UserContext)
 
   const [utgaattKravMessage, setUtgaattKravMessage] = useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
@@ -70,7 +73,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             </div>
           )}
 
-          {user.isAdmin() && krav.status === EKravStatus.UTGAATT && (
+          {isAdmin() && krav.status === EKravStatus.UTGAATT && (
             <div className='mr-2'>
               <Button
                 variant='secondary'
@@ -83,7 +86,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             </div>
           )}
 
-          {user.isAdmin() && krav.status !== EKravStatus.UTKAST && (
+          {isAdmin() && krav.status !== EKravStatus.UTKAST && (
             <div className='mr-2'>
               <Button
                 variant='secondary'

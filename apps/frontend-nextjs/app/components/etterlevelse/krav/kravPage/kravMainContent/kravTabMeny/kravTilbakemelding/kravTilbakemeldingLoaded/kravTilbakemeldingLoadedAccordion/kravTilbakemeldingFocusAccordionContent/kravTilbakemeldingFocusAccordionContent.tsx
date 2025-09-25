@@ -1,3 +1,5 @@
+'use client'
+
 import { MeldingKnapper } from '@/components/etterlevelse/edit/meldingKnapper/meldingKnapper'
 import EndretInfo from '@/components/etterlevelse/tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
 import TilbakemeldingResponseMelding from '@/components/etterlevelse/tilbakemeldingResponseMelding/tilbakemeldingResponseMelding'
@@ -7,9 +9,9 @@ import {
   ITilbakemelding,
   ITilbakemeldingMelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { BodyLong } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
   tilbakemelding: ITilbakemelding
@@ -27,52 +29,55 @@ export const KravTilbakemeldingFocusAccordionContent: FunctionComponent<TProps> 
   melderOrKraveier,
   setFocusNr,
   ubesvartOgKraveier,
-}) => (
-  <>
-    <ContentLayout>
-      <BodyLong>{tilbakemelding.meldinger[0].innhold}</BodyLong>
-    </ContentLayout>
+}) => {
+  const { canWrite } = useContext(UserContext)
+  return (
+    <>
+      <ContentLayout>
+        <BodyLong>{tilbakemelding.meldinger[0].innhold}</BodyLong>
+      </ContentLayout>
 
-    <div className='flex w-full items-center mt-4'>
-      {tilbakemelding.meldinger.length === 1 && (
-        <MeldingKnapper
-          marginLeft
-          melding={tilbakemelding.meldinger[0]}
-          tilbakemeldingId={tilbakemelding.id}
-          oppdater={replace}
+      <div className='flex w-full items-center mt-4'>
+        {tilbakemelding.meldinger.length === 1 && (
+          <MeldingKnapper
+            marginLeft
+            melding={tilbakemelding.meldinger[0]}
+            tilbakemeldingId={tilbakemelding.id}
+            oppdater={replace}
+            remove={remove}
+          />
+        )}
+        <EndretInfo melding={tilbakemelding.meldinger[0]} />
+      </div>
+
+      {/* meldingsliste */}
+      <div className='flex flex-col mt-4'>
+        {tilbakemelding.meldinger.slice(1).map((melding: ITilbakemeldingMelding) => (
+          <TilbakemeldingResponseMelding
+            key={melding.meldingNr}
+            melding={melding}
+            tilbakemelding={tilbakemelding}
+            oppdater={replace}
+            remove={remove}
+          />
+        ))}
+      </div>
+
+      {/* knapprad bunn */}
+      {melderOrKraveier && canWrite() && (
+        <TilbakemeldingSvar
+          tilbakemelding={tilbakemelding}
+          setFokusNummer={setFocusNr}
+          ubesvartOgKraveier={ubesvartOgKraveier}
+          close={(tilbakemelding: ITilbakemelding) => {
+            if (tilbakemelding) {
+              replace(tilbakemelding)
+            }
+          }}
           remove={remove}
+          replace={replace}
         />
       )}
-      <EndretInfo melding={tilbakemelding.meldinger[0]} />
-    </div>
-
-    {/* meldingsliste */}
-    <div className='flex flex-col mt-4'>
-      {tilbakemelding.meldinger.slice(1).map((melding: ITilbakemeldingMelding) => (
-        <TilbakemeldingResponseMelding
-          key={melding.meldingNr}
-          melding={melding}
-          tilbakemelding={tilbakemelding}
-          oppdater={replace}
-          remove={remove}
-        />
-      ))}
-    </div>
-
-    {/* knapprad bunn */}
-    {melderOrKraveier && user.canWrite() && (
-      <TilbakemeldingSvar
-        tilbakemelding={tilbakemelding}
-        setFokusNummer={setFocusNr}
-        ubesvartOgKraveier={ubesvartOgKraveier}
-        close={(tilbakemelding: ITilbakemelding) => {
-          if (tilbakemelding) {
-            replace(tilbakemelding)
-          }
-        }}
-        remove={remove}
-        replace={replace}
-      />
-    )}
-  </>
-)
+    </>
+  )
+}

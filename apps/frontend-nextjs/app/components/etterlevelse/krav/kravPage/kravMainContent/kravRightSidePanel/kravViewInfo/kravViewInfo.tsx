@@ -1,8 +1,10 @@
+'use client'
+
 import { IKravVersjon, TKravViewInfoProps } from '@/constants/krav/kravConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext } from 'react'
 import { KravViewAnsvarlig } from './kravViewAnsvarlig/kravViewAnsvarlig'
 import { KravViewBegreper } from './kravViewBegreper/kravViewBegreper'
 import { KravViewDokumentasjon } from './kravViewDokumentasjon/kravViewDokumentasjon'
@@ -21,33 +23,37 @@ export const KravViewInfo: FunctionComponent<IProps> = ({
   krav,
   alleKravVersjoner,
   noLastModifiedDate,
-}) => (
-  <div>
-    <KravViewDokumentasjon krav={krav} />
+}) => {
+  const { isAdmin, isKraveier } = useContext(UserContext)
 
-    <KravViewBegreper krav={krav} />
+  return (
+    <div>
+      <KravViewDokumentasjon krav={krav} />
 
-    <KravViewRelasjonerTilAndreKrav krav={krav} />
+      <KravViewBegreper krav={krav} />
 
-    <KravViewErRelevantFor krav={krav} />
+      <KravViewRelasjonerTilAndreKrav krav={krav} />
 
-    <KravViewTidligereVersjoner alleKravVersjoner={alleKravVersjoner} krav={krav} />
+      <KravViewErRelevantFor krav={krav} />
 
-    <KravViewRegelverk krav={krav} />
+      <KravViewTidligereVersjoner alleKravVersjoner={alleKravVersjoner} krav={krav} />
 
-    <KravViewAnsvarlig krav={krav} />
+      <KravViewRegelverk krav={krav} />
 
-    <KravViewVarslingsadresser krav={krav} />
+      <KravViewAnsvarlig krav={krav} />
 
-    {!noLastModifiedDate && (
-      <div>
-        <BodyShort size='small'>
-          Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
-          {user.isAdmin() || user.isKraveier()
-            ? `av ${krav.changeStamp.lastModifiedBy.split(' - ')[1]}`
-            : ''}
-        </BodyShort>
-      </div>
-    )}
-  </div>
-)
+      <KravViewVarslingsadresser krav={krav} />
+
+      {!noLastModifiedDate && (
+        <div>
+          <BodyShort size='small'>
+            Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
+            {isAdmin() || isKraveier()
+              ? `av ${krav.changeStamp.lastModifiedBy.split(' - ')[1]}`
+              : ''}
+          </BodyShort>
+        </div>
+      )}
+    </div>
+  )
+}

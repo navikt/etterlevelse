@@ -5,7 +5,7 @@ import {
   ICodeListFormValues,
   ILovCodeData,
 } from '@/constants/kodeverk/kodeverkConstants'
-import { codeListSchema } from '@/services/kodeverk/kodeverkService'
+import { codeListSchema } from '@/provider/kodeverk/kodeverkService'
 import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { LovCodeDataForm } from './LovCode'

@@ -6,13 +6,12 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import SkipToContent from '@/components/common/skipToContent/skipToContent'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'
-import { loginUrl } from '@/routes/login/loginRoutes'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { InternalHeader, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { informationIcon, warningAlert } from '../../images/images'
 import { LoggedInHeader, LoginHeaderButton } from './login/login'
 import MainSearch from './mainSearch/mainSearch'
@@ -27,6 +26,7 @@ type TProps = {
 const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
+  const { wait, isLoggedIn } = useContext(UserContext)
 
   const source = useQueryParam('source')
   if (!sourceReported) {
@@ -36,10 +36,12 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
 
   useEffect(() => {
     setTimeout(async () => {
-      await user.wait()
-      if (!user.isLoggedIn()) {
-        window.location.href = loginUrl(window.location.href, pathname)
-      }
+      await wait().then(() => {
+        console.debug(isLoggedIn())
+      })
+      //     if (!isLoggedIn()) {
+      //       window.location.href = loginUrl(window.location.href, pathname)
+      //     }
     }, 1000)
   }, [])
 
@@ -72,8 +74,8 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
             <Spacer />
             {!noLoginButton && (
               <div className='flex'>
-                {!user.isLoggedIn() && <LoginHeaderButton />}
-                {user.isLoggedIn() && <LoggedInHeader />}
+                {!isLoggedIn() && <LoginHeaderButton />}
+                {isLoggedIn() && <LoggedInHeader />}
               </div>
             )}
           </div>

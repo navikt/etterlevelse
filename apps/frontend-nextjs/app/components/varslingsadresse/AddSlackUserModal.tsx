@@ -1,13 +1,15 @@
+'use client'
+
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import {
   EAdresseType,
   IVarslingsadresse,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
 import { DropdownIndicator } from '../etterlevelse/edit/dropdownIndicator/dropdownIndicator'
@@ -21,7 +23,8 @@ interface IProps {
 
 export const AddSlackUserModal = (props: IProps) => {
   const { isOpen, close, doAdd } = props
-  const [val, setVal] = useState<string>(user.getEmail())
+  const { getEmail, getName } = useContext(UserContext)
+  const [val, setVal] = useState<string>(getEmail())
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
   const [radioValue, setRadioValue] = useState('meg')
@@ -54,7 +57,7 @@ export const AddSlackUserModal = (props: IProps) => {
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {
-              setVal(user.getEmail())
+              setVal(getEmail())
             } else {
               setVal('')
             }
@@ -62,7 +65,7 @@ export const AddSlackUserModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio value='meg'>Meg ({user.getName()})</Radio>
+          <Radio value='meg'>Meg ({getName()})</Radio>
           <Radio value='slack' className='w-full'>
             Noen andre
           </Radio>
