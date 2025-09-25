@@ -1,3 +1,4 @@
+import { MineSistDokumenterte } from '@/components/frontpage/MineSistDokumenterte'
 import { Heading } from '@navikt/ds-react'
 import ForstaKravene from './components/frontpage/ForstaKravene'
 import StatusIOrganisasjonen from './components/frontpage/StatusIOrganisasjonen'
@@ -14,6 +15,7 @@ export default function Home() {
             </Heading>
             <span className='flex justify-center'>Forstå og dokumentér</span>
           </div>
+          <MineSistDokumenterte />
         </div>
       </div>
       <div className='flex flex-col items-center w-full'>
