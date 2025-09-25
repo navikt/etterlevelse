@@ -53,6 +53,16 @@ export type TEtterlevelseDokumentasjonQL = TReplace<
   }
 >
 
+export type TVariables = {
+  pageNumber?: number
+  pageSize?: number
+  sistRedigert?: number
+  mineEtterlevelseDokumentasjoner?: boolean
+  sok?: string
+  teams?: string[]
+  behandlingId?: string
+}
+
 export interface IEtterlevelseDokumentasjonStats {
   relevantKrav: TKravQL[]
   irrelevantKrav: TKravQL[]
