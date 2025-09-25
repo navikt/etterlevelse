@@ -25,7 +25,6 @@ interface IUserContext {
   getError: () => string
   isLoaded: () => boolean
   getUserRoleText: () => string
-  wait: () => Promise<any>
 }
 
 export const UserContext = createContext<IUserContext>({
@@ -46,7 +45,6 @@ export const UserContext = createContext<IUserContext>({
   getError: () => '',
   isLoaded: () => false,
   getUserRoleText: () => 'Gjest',
-  wait: async () => {},
 })
 
 const nameFor = (group: EGroup) => {
@@ -187,10 +185,6 @@ export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
     else return 'Gjest'
   }
 
-  const wait = async (): Promise<any> => {
-    return await fetchUserInfo()
-  }
-
   useEffect(() => {
     ;(async () => {
       await fetchUserInfo()
@@ -217,7 +211,6 @@ export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
         isLoaded,
         hasGroup,
         getUserRoleText,
-        wait,
       }}
     >
       {children}
