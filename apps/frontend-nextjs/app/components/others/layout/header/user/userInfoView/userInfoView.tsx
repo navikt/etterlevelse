@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react'
 
 export const UserInfoView = () => {
   const pathname: string = usePathname()
-  const { getIdent, getName, getUserRoleText } = useContext(UserContext)
+  const { getIdent, getName, getUserRoleText, isAdmin } = useContext(UserContext)
   const [frontpage, setFrontpage] = useState<string>('')
 
   useEffect(() => {
@@ -22,9 +22,11 @@ export const UserInfoView = () => {
         <Label>{getName()}</Label>
         <Label size='small'>{getUserRoleText()}</Label>
       </div>
-      <div className='flex self-end ml-6'>
-        <Link href={`/logout?redirect_uri=${frontpage}${pathname}`}>Logg ut</Link>
-      </div>
+      {isAdmin() && (
+        <div className='flex self-end ml-6'>
+          <Link href={`/logout?redirect_uri=${frontpage}${pathname}`}>Logg ut</Link>
+        </div>
+      )}
     </div>
   )
 }

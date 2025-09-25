@@ -2,7 +2,9 @@
 
 import { getUserInfo } from '@/api/user/userApi'
 import { IUserInfo } from '@/constants/user/userConstants'
+import { loginUrl } from '@/routes/login/loginRoutes'
 import { AxiosResponse } from 'axios'
+import { usePathname } from 'next/navigation'
 import { FunctionComponent, ReactNode, createContext, useEffect, useState } from 'react'
 
 interface IUserContext {
@@ -67,6 +69,7 @@ type TProps = {
 }
 
 export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
+  const pathname: string = usePathname()
   const [loaded, setLoaded] = useState<boolean>(false)
   const [userInfo, setUserInfo] = useState<IUserInfo>({ loggedIn: false, groups: [] })
   const [currentGroups, setCurrentGroups] = useState<EGroup[]>([EGroup.READ])
@@ -78,9 +81,12 @@ export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
         response.data.groups.indexOf(EGroup.ADMIN) >= 0
           ? (Object.keys(EGroup) as EGroup[])
           : response.data.groups
-
-      setUserInfo({ ...response.data, groups })
-      setCurrentGroups(groups)
+      if (response.data.loggedIn) {
+        setUserInfo({ ...response.data, groups })
+        setCurrentGroups(groups)
+      } else {
+        window.location.href = loginUrl(window.location.href, pathname)
+      }
     } else {
       setError(response.data)
     }
@@ -95,7 +101,7 @@ export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
         }
       })
       .catch((error) => {
-        error = error.message
+        setError(error.message)
         console.debug({ error })
         setLoaded(true)
       })

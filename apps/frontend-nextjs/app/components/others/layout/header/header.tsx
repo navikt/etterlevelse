@@ -26,24 +26,13 @@ type TProps = {
 const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
-  const { wait, isLoggedIn } = useContext(UserContext)
+  const { isLoggedIn } = useContext(UserContext)
 
   const source = useQueryParam('source')
   if (!sourceReported) {
     sourceReported = true
     logApi('info', 'pageload', `pageload from ${source}`)
   }
-
-  useEffect(() => {
-    setTimeout(async () => {
-      await wait().then(() => {
-        console.debug(isLoggedIn())
-      })
-      //     if (!isLoggedIn()) {
-      //       window.location.href = loginUrl(window.location.href, pathname)
-      //     }
-    }, 1000)
-  }, [])
 
   useEffect(() => {
     ;(async () => {
