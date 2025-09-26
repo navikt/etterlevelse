@@ -14,7 +14,7 @@ interface IUserContext {
   getName: () => string
   getFirstNameThenLastName: () => string
   getAvailableGroups: () => { name: string; group: EGroup }[]
-  toggleGroup: (group: EGroup, active: boolean) => void
+  toggleGroup: (group: EGroup, active: boolean) => EGroup[]
   updateCurrentGroups: (groups: EGroup[]) => void
   hasGroup: (group: string) => boolean
   getGroups: () => string[]
@@ -34,7 +34,7 @@ export const UserContext = createContext<IUserContext>({
   getName: () => '',
   getFirstNameThenLastName: () => '',
   getAvailableGroups: () => [],
-  toggleGroup: () => {},
+  toggleGroup: () => [],
   updateCurrentGroups: () => {},
   hasGroup: () => false,
   getGroups: () => [],
@@ -136,8 +136,10 @@ export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
   const toggleGroup = (group: EGroup, active: boolean) => {
     if (active && !hasGroup(group) && userInfo.groups.indexOf(group) >= 0) {
       setCurrentGroups([...currentGroups, group])
+      return [...currentGroups, group]
     } else {
       setCurrentGroups(currentGroups.filter((currentGroup) => currentGroup !== group))
+      return currentGroups.filter((currentGroup) => currentGroup !== group)
     }
   }
 

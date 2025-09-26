@@ -22,9 +22,9 @@ export const ToggleActiveRole = () => {
   }, [])
 
   const onRoleChange = (group: EGroup, isChecked: boolean): void => {
-    user.toggleGroup(group, isChecked)
+    const currentGroup = user.toggleGroup(group, isChecked)
     if (isAdmin) {
-      sessionStorage.setItem('activeRoles', JSON.stringify(user.getGroups()))
+      sessionStorage.setItem('activeRoles', JSON.stringify(currentGroup))
     }
   }
 
