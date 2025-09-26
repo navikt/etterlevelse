@@ -1,8 +1,10 @@
+'use client'
+
+import { UserContext } from '@/provider/user/userProvider'
 import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
-import { user } from '@/services/user/userService'
 import { ClockDashedIcon } from '@navikt/aksel-icons'
 import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext } from 'react'
 
 interface IAuditButtonProps extends ButtonProps {
   id: string
@@ -14,7 +16,7 @@ interface IAuditButtonProps extends ButtonProps {
 
 export const AuditButton: FunctionComponent<IAuditButtonProps> = (props) => {
   const { id, auditId, marginLeft, marginRight, children, ...restProps } = props
-
+  const user = useContext(UserContext)
   return (
     <>
       {user.isAdmin() && (

@@ -3,7 +3,7 @@
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { getTilbakemeldingForKrav } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
-import { getMelderInfo } from '@/components/krav/tilbakemelding/Tilbakemelding'
+import { getMelderInfo } from '@/components/etterlevelse/getMelderInfo/getMelderInfo'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { TSporsmaalOgSvarKrav } from '@/constants/admin/kravTilbakemelding/kravTilbakemelding'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -13,8 +13,9 @@ import {
   ETilbakemeldingMeldingStatus,
   ITilbakemelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
+import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { codelist } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
@@ -28,7 +29,7 @@ import {
   Table,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 type TKravMessage = ITilbakemelding & TSporsmaalOgSvarKrav
 
@@ -36,6 +37,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [kravMessages, setKravMessages] = useState<TKravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
+  const user = useContext(UserContext)
 
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -119,7 +121,11 @@ export const QuestionAndAnswerAdminLogPage = () => {
               krav.kravNummer === tilbakemelding.kravNummer &&
               krav.kravVersjon === tilbakemelding.kravVersjon
           )[0].tema
-          const { status, sistMelding } = getMelderInfo(tilbakemelding)
+          const { status, sistMelding } = getMelderInfo(
+            tilbakemelding,
+            user.getIdent(),
+            user.isKraveier()
+          )
           kravMessages.push({
             ...tilbakemelding,
             kravNavn: kravNavn,

@@ -1,16 +1,18 @@
+'use client'
+
 import { deleteKrav } from '@/api/krav/kravApi'
 import { EKravStatus, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import {
   kravNyVersjonIdUrl,
   kravRedigeringIdUrl,
   kravlisteQueryUrl,
 } from '@/routes/krav/kravRoutes'
-import { user } from '@/services/user/userService'
 import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
 import { Button, Spacer } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext } from 'react'
 import { KravSlettKnapp } from './kravSlettKnapp/kravSlettKnapp'
 
 type TProps = {
@@ -20,6 +22,7 @@ type TProps = {
 
 export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav }) => {
   const router: AppRouterInstance = useRouter()
+  const user = useContext(UserContext)
 
   const slettKravButtonShouldOnlyBeVisibleOnUtkast: boolean = krav.status === EKravStatus.UTKAST
 

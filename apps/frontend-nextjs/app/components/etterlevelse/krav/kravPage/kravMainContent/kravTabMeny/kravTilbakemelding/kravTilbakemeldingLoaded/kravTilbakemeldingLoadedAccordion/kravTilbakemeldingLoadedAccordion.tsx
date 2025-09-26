@@ -1,3 +1,5 @@
+'use client'
+
 import { Portrait } from '@/components/common/portrait/portrait'
 import StatusTag from '@/components/common/statusTag/statusTagComponent'
 import { getMelderInfo } from '@/components/etterlevelse/getMelderInfo/getMelderInfo'
@@ -5,6 +7,7 @@ import { ShowWarningMessage } from '@/components/etterlevelse/kravCard/KravCard'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { TRefs, useRefs } from '@/util/hooks/customHooks/customHooks'
 import { tilbakemeldingStatusToText } from '@/util/tilbakemelding/tilbakemeldingUtils'
@@ -13,7 +16,7 @@ import { Accordion, BodyShort, Button, Spacer } from '@navikt/ds-react'
 import _ from 'lodash'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { usePathname, useRouter } from 'next/navigation'
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, FunctionComponent, SetStateAction, useContext, useEffect, useState } from 'react'
 import { KravTilbakemeldingBruker } from './kravTilbakemeldingBruker/kravTilbakemeldingBruker'
 import { KravTilbakemeldingFocusAccordionContent } from './kravTilbakemeldingFocusAccordionContent/kravTilbakemeldingFocusAccordionContent'
 
@@ -40,6 +43,7 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
 }) => {
   const router: AppRouterInstance = useRouter()
   const pathname: string = usePathname()
+  const user = useContext(UserContext)
 
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
 
@@ -64,7 +68,11 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
       <Accordion>
         {tilbakemeldinger.slice(0, count).map((tilbakemelding: ITilbakemelding) => {
           const focused = focusNr === tilbakemelding.id
-          const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(tilbakemelding)
+          const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(
+            tilbakemelding,
+            user.getIdent(),
+            user.isKraveier()
+          )
 
           return (
             <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>

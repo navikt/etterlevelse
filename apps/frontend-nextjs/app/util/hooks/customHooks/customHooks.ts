@@ -1,6 +1,5 @@
 'use client'
 
-import { user } from '@/services/user/userService'
 import { useSearchParams } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
 
@@ -31,13 +30,6 @@ export function useDebouncedState<T>(
 export function useForceUpdate() {
   const [val, setVal] = useState(0)
   return () => setVal(val + 1)
-}
-
-export let updateUser: () => void
-
-export function useAwaitUser() {
-  useAwait(user.wait())
-  updateUser = useForceUpdate()
 }
 
 export function useAwait<T>(promise: Promise<T>, setLoading?: Dispatch<SetStateAction<boolean>>) {

@@ -1,14 +1,16 @@
+'use client'
+
 import { InputField } from '@/components/common/inputs'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { Checkbox, CheckboxGroup, ErrorSummary, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
-import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useRef } from 'react'
 import { EditBegreper } from '../KravBegreperEdit'
 import { KravEditDokumentasjon } from '../kravEditDokumentasjon/kravEditDokumentasjon'
 import { KravEditMultiOptionField } from '../kravEditMultiOptionField/kravEditMultiOptionField'
@@ -36,6 +38,7 @@ export const KravFormFields: FunctionComponent<TProps> = ({
   setVarselMeldingActive,
   isEditingUtgaattKrav,
 }) => {
+  const user = useContext(UserContext)
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
 
   useEffect(() => {

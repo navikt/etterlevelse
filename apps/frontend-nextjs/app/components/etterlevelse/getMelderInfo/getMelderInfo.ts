@@ -3,7 +3,6 @@ import {
   ETilbakemeldingRolle,
   ITilbakemelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { user } from '@/services/user/userService'
 
 const getStatus = (tilbakemelding: ITilbakemelding) => {
   let status = ETilbakemeldingMeldingStatus.UBESVART
@@ -22,16 +21,20 @@ const getStatus = (tilbakemelding: ITilbakemelding) => {
   return status
 }
 
-export const getMelderInfo = (tilbakemelding: ITilbakemelding) => {
+export const getMelderInfo = (
+  tilbakemelding: ITilbakemelding,
+  userIdent: string,
+  isKraveier: boolean
+) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
   const status = getStatus(tilbakemelding)
-  const melder = user.getIdent() === tilbakemelding.melderIdent
+  const melder = userIdent === tilbakemelding.melderIdent
   const rolle =
-    tilbakemelding?.melderIdent === user.getIdent()
+    tilbakemelding?.melderIdent === userIdent
       ? ETilbakemeldingRolle.MELDER
       : ETilbakemeldingRolle.KRAVEIER
-  const melderOrKraveier = melder || user.isKraveier()
-  const ubesvartOgKraveier = status === ETilbakemeldingMeldingStatus.UBESVART && user.isKraveier()
+  const melderOrKraveier = melder || isKraveier
+  const ubesvartOgKraveier = status === ETilbakemeldingMeldingStatus.UBESVART && isKraveier
   const kanSkrive =
     (status === ETilbakemeldingMeldingStatus.UBESVART && rolle === ETilbakemeldingRolle.KRAVEIER) ||
     (status !== ETilbakemeldingMeldingStatus.UBESVART && rolle === ETilbakemeldingRolle.MELDER)

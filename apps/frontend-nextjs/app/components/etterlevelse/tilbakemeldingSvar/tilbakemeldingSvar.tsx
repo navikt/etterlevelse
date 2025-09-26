@@ -1,3 +1,5 @@
+'use client'
+
 import {
   tilbakemeldingNewMelding,
   tilbakemeldingSlettMelding,
@@ -9,7 +11,7 @@ import {
   ITilbakemelding,
   ITilbakemeldingNewMeldingRequest,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import {
   getParsedOptionsforTilbakeMelding,
   getTilbakeMeldingStatusToOption,
@@ -29,7 +31,7 @@ import {
   Textarea,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { getMelderInfo } from '../getMelderInfo/getMelderInfo'
 
 type TTilbakemeldingSvarProps = {
@@ -48,9 +50,8 @@ const TilbakemeldingSvar = ({
   remove,
   replace,
 }: TTilbakemeldingSvarProps) => {
-  const melderInfo = getMelderInfo(tilbakemelding)
+  const user = useContext(UserContext)
   const [response, setResponse] = useState('')
-  const [replyRole] = useState(melderInfo.rolle)
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
@@ -59,6 +60,8 @@ const TilbakemeldingSvar = ({
   )
   const [isEndretKrav, setIsEndretKrav] = useState<boolean>(tilbakemelding.endretKrav || false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState<boolean>(false)
+  const melderInfo = getMelderInfo(tilbakemelding, user.getIdent(), user.isKraveier())
+  const [replyRole] = useState(melderInfo.rolle)
 
   const submit = () => {
     if (response) {

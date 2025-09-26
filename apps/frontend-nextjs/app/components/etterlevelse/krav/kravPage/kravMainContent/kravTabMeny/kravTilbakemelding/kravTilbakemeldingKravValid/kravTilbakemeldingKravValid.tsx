@@ -1,11 +1,13 @@
+'use client'
+
 import { TilbakemeldingNyModal } from '@/components/etterlevelse/tilbakemeldingNyModal/tilbakemeldingNyModal'
 import { LoginButton } from '@/components/others/layout/header/login/login'
 import { IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 
 type TProps = {
   krav: IKrav
@@ -19,7 +21,7 @@ export const KravTilbakemeldingKravValid: FunctionComponent<TProps> = ({
   add,
 }) => {
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
-
+  const user = useContext(UserContext)
   const getKravExpired: boolean = hasKravExpired(alleKravVersjoner, krav as TKravQL | undefined)
 
   return (

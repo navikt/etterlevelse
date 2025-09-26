@@ -5,9 +5,9 @@ import { kravStatus } from '@/components/etterlevelse/krav/kravComponents'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
+import { codelist } from '@/provider/kodeverk/kodeverkService'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { codelist } from '@/services/kodeverk/kodeverkService'
 import { handleSort } from '@/util/handleTableSort'
 import {
   BodyShort,
