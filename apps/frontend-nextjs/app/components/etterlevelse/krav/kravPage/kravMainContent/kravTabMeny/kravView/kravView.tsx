@@ -10,7 +10,7 @@ import { SuksesskriterieCard } from '../../../../../suksesskriterieCard/suksessk
 type TProps = { krav: TKravQL }
 
 export const KravView: FunctionComponent<TProps> = ({ krav }) => {
-  const { isAdmin, isKraveier } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   return (
     <div>
@@ -27,7 +27,9 @@ export const KravView: FunctionComponent<TProps> = ({ krav }) => {
 
         <BodyShort size='small' className='mt-6'>
           Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
-          {isAdmin() || isKraveier() ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1] : ''}
+          {user.isAdmin() || user.isKraveier()
+            ? 'av ' + krav.changeStamp.lastModifiedBy.split(' - ')[1]
+            : ''}
         </BodyShort>
       </div>
     </div>

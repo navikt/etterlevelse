@@ -19,8 +19,8 @@ interface IProps {
 
 export const AddEmailModal = (props: IProps) => {
   const { isOpen, close, doAdd, added } = props
-  const { getEmail } = useContext(UserContext)
-  const [val, setVal] = useState(getEmail())
+  const user = useContext(UserContext)
+  const [val, setVal] = useState(user.getEmail())
   const [error, setError] = useState('')
   const [radioValue, setRadioValue] = useState('meg')
 
@@ -51,7 +51,7 @@ export const AddEmailModal = (props: IProps) => {
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {
-              setVal(getEmail())
+              setVal(user.getEmail())
             } else {
               setVal('')
             }
@@ -59,7 +59,7 @@ export const AddEmailModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio value='meg'>Meg ({getEmail()})</Radio>
+          <Radio value='meg'>Meg ({user.getEmail()})</Radio>
           <Radio value='epost' className='w-full'>
             Noen andre
           </Radio>

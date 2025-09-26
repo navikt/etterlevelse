@@ -255,7 +255,7 @@ export const SlackChannelSearch: FunctionComponent<TAddVarslingsadresseProps> = 
 export const SlackUserSearch: FunctionComponent<TAddVarslingsadresseProps> = ({ add, close }) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
-  const { getEmail } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const addEmail = (email: string) => {
     getSlackUserByEmail(email)
@@ -299,7 +299,7 @@ export const SlackUserSearch: FunctionComponent<TAddVarslingsadresseProps> = ({ 
           />
         </div>
         <div className='flex justify-end ml-2.5'>
-          <Button type='button' onClick={() => addEmail(getEmail())}>
+          <Button type='button' onClick={() => addEmail(user.getEmail())}>
             Meg
           </Button>
         </div>
@@ -322,7 +322,7 @@ export const emailValidator = yup
 export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps) => {
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
-  const { getEmail } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const add = (adresse?: string) => {
     const toAdd = adresse || val
@@ -356,7 +356,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TAddVarslingsadresseProps
           className={`w-full ${error ? 'border-2 rounded-md border-[#c30000]' : ''}`}
         />
         <div className='flex justify-between ml-2.5'>
-          <Button type='button' onClick={() => add(getEmail())}>
+          <Button type='button' onClick={() => add(user.getEmail())}>
             Meg
           </Button>
           <Button type='button' onClick={() => add} className='ml-2.5'>

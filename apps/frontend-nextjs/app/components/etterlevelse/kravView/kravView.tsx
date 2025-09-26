@@ -35,7 +35,7 @@ export const AllInfo: FunctionComponent<TAllInfoProps> = ({
   noLastModifiedDate,
   header,
 }) => {
-  const { isAdmin, isKraveier } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   return (
     <div>
@@ -150,7 +150,7 @@ export const AllInfo: FunctionComponent<TAllInfoProps> = ({
         <div>
           <BodyShort size='small'>
             Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
-            {isAdmin() || isKraveier()
+            {user.isAdmin() || user.isKraveier()
               ? `av ${krav.changeStamp.lastModifiedBy.split(' - ')[1]}`
               : ''}
           </BodyShort>

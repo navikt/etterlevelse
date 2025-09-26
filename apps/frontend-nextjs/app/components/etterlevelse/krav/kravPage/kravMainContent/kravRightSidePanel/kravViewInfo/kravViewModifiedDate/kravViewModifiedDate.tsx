@@ -12,14 +12,14 @@ type TProps = {
 }
 
 export const KravViewModifiedDate: FunctionComponent<TProps> = ({ krav, noLastModifiedDate }) => {
-  const { isAdmin, isKraveier } = useContext(UserContext)
+  const user = useContext(UserContext)
   return (
     <>
       {!noLastModifiedDate && (
         <div>
           <BodyShort size='small'>
             Sist endret: {moment(krav.changeStamp.lastModifiedDate).format('LL')}{' '}
-            {isAdmin() || isKraveier()
+            {user.isAdmin() || user.isKraveier()
               ? `av ${krav.changeStamp.lastModifiedBy.split(' - ')[1]}`
               : ''}
           </BodyShort>

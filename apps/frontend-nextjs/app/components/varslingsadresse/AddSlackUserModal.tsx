@@ -23,8 +23,8 @@ interface IProps {
 
 export const AddSlackUserModal = (props: IProps) => {
   const { isOpen, close, doAdd } = props
-  const { getEmail, getName } = useContext(UserContext)
-  const [val, setVal] = useState<string>(getEmail())
+  const user = useContext(UserContext)
+  const [val, setVal] = useState<string>(user.getEmail())
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
   const [radioValue, setRadioValue] = useState('meg')
@@ -57,7 +57,7 @@ export const AddSlackUserModal = (props: IProps) => {
           value={radioValue}
           onChange={(val) => {
             if (val === 'meg') {
-              setVal(getEmail())
+              setVal(user.getEmail())
             } else {
               setVal('')
             }
@@ -65,7 +65,7 @@ export const AddSlackUserModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio value='meg'>Meg ({getName()})</Radio>
+          <Radio value='meg'>Meg ({user.getName()})</Radio>
           <Radio value='slack' className='w-full'>
             Noen andre
           </Radio>

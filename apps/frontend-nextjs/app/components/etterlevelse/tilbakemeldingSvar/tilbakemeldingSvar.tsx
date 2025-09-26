@@ -50,7 +50,7 @@ const TilbakemeldingSvar = ({
   remove,
   replace,
 }: TTilbakemeldingSvarProps) => {
-  const { getIdent, isKraveier, isAdmin } = useContext(UserContext)
+  const user = useContext(UserContext)
   const [response, setResponse] = useState('')
   const [error, setError] = useState()
   const [loading, setLoading] = useState(false)
@@ -60,7 +60,7 @@ const TilbakemeldingSvar = ({
   )
   const [isEndretKrav, setIsEndretKrav] = useState<boolean>(tilbakemelding.endretKrav || false)
   const [isUpdatingStatus, setIsUpdatingStatus] = useState<boolean>(false)
-  const melderInfo = getMelderInfo(tilbakemelding, getIdent(), isKraveier())
+  const melderInfo = getMelderInfo(tilbakemelding, user.getIdent(), user.isKraveier())
   const [replyRole] = useState(melderInfo.rolle)
 
   const submit = () => {
@@ -92,13 +92,13 @@ const TilbakemeldingSvar = ({
 
   return (
     <div className='w-full'>
-      {(melderInfo.kanSkrive || isKraveier()) && (
+      {(melderInfo.kanSkrive || user.isKraveier()) && (
         <Heading size='medium' className='mb-2 mt-8'>
           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
         </Heading>
       )}
 
-      {isKraveier() && (
+      {user.isKraveier() && (
         <div>
           <div className='w-fit mb-2'>
             <Checkbox value={isEndretKrav} onChange={() => setIsEndretKrav(!isEndretKrav)}>
@@ -133,7 +133,7 @@ const TilbakemeldingSvar = ({
         </div>
       )}
       <div className='flex w-full items-end justify-center'>
-        {(melderInfo.kanSkrive || isKraveier()) && (
+        {(melderInfo.kanSkrive || user.isKraveier()) && (
           <Textarea
             className='w-full'
             label='Ny tilbakemelding'
@@ -185,7 +185,7 @@ const TilbakemeldingSvar = ({
         )}
       </div>
       <div className='flex mt-2 w-full'>
-        {isAdmin() && (
+        {user.isAdmin() && (
           <Button
             icon={<TrashIcon aria-label='' aria-hidden />}
             variant='secondary'
@@ -212,9 +212,9 @@ const TilbakemeldingSvar = ({
           </div>
         )}
 
-        {(melderInfo.kanSkrive || isKraveier()) && (
+        {(melderInfo.kanSkrive || user.isKraveier()) && (
           <div className='flex flex-1 justify-end'>
-            {isKraveier() && (
+            {user.isKraveier() && (
               <div>
                 {isUpdatingStatus ? (
                   <div className='self-center ml-2.5'>
@@ -245,7 +245,7 @@ const TilbakemeldingSvar = ({
             )}
             <Button className='ml-2.5' disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
-              {isKraveier() ? ' og oppdater status' : ''}
+              {user.isKraveier() ? ' og oppdater status' : ''}
             </Button>
           </div>
         )}

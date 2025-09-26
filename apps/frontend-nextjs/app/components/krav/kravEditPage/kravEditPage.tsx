@@ -16,7 +16,7 @@ import { KravEditUtgattKrav } from './kravEditUtgattKrav/kravEditUtgattKrav'
 
 export const KravEditPage = () => {
   const params: Params = useParams()
-  const { isAdmin } = useContext(UserContext)
+  const user = useContext(UserContext)
   const kravData: IKravDataProps | undefined = GetKravData(params)
 
   const kravQuery: TKravById | undefined = kravData?.kravQuery
@@ -76,10 +76,10 @@ export const KravEditPage = () => {
           )}
           {krav && (
             <>
-              {krav.status === EKravStatus.UTGAATT && !isAdmin() && (
+              {krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
                 <KravEditUtgattKrav krav={krav} />
               )}
-              {(krav.status !== EKravStatus.UTGAATT || isAdmin()) && (
+              {(krav.status !== EKravStatus.UTGAATT || user.isAdmin()) && (
                 <KravEdit
                   krav={krav}
                   alleKravVersjoner={alleKravVersjoner}

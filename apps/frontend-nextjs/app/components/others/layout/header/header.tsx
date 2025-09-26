@@ -26,7 +26,7 @@ type TProps = {
 const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
-  const { isLoggedIn } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const source = useQueryParam('source')
   if (!sourceReported) {
@@ -63,8 +63,8 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
             <Spacer />
             {!noLoginButton && (
               <div className='flex'>
-                {!isLoggedIn() && <LoginHeaderButton />}
-                {isLoggedIn() && <LoggedInHeader />}
+                {!user.isLoggedIn() && <LoginHeaderButton />}
+                {user.isLoggedIn() && <LoggedInHeader />}
               </div>
             )}
           </div>

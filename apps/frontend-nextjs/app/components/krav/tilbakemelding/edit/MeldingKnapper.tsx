@@ -21,11 +21,11 @@ export const MeldingKnapper = (props: {
   marginLeft?: boolean
 }) => {
   const { melding, tilbakemeldingId, oppdater, remove } = props
-  const { isAdmin, getIdent, canWrite } = useContext(UserContext)
+  const user = useContext(UserContext)
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
-  if ((!isAdmin() && melding.fraIdent !== getIdent()) || !canWrite()) return null
+  if ((!user.isAdmin() && melding.fraIdent !== user.getIdent()) || !user.canWrite()) return null
 
   return (
     <div>

@@ -30,7 +30,7 @@ export const KravTilbakemeldingFocusAccordionContent: FunctionComponent<TProps> 
   setFocusNr,
   ubesvartOgKraveier,
 }) => {
-  const { canWrite } = useContext(UserContext)
+  const user = useContext(UserContext)
   return (
     <>
       <ContentLayout>
@@ -64,7 +64,7 @@ export const KravTilbakemeldingFocusAccordionContent: FunctionComponent<TProps> 
       </div>
 
       {/* knapprad bunn */}
-      {melderOrKraveier && canWrite() && (
+      {melderOrKraveier && user.canWrite() && (
         <TilbakemeldingSvar
           tilbakemelding={tilbakemelding}
           setFokusNummer={setFocusNr}

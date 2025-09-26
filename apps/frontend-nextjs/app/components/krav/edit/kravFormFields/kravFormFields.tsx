@@ -38,7 +38,7 @@ export const KravFormFields: FunctionComponent<TProps> = ({
   setVarselMeldingActive,
   isEditingUtgaattKrav,
 }) => {
-  const { isAdmin } = useContext(UserContext)
+  const user = useContext(UserContext)
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export const KravFormFields: FunctionComponent<TProps> = ({
             <KravEditRelasjoner />
           </div>
 
-          {isAdmin() && (
+          {user.isAdmin() && (
             <div className='w-full mb-20 max-w-md'>
               <KravEditTags />
             </div>

@@ -24,7 +24,7 @@ type TProps = {
 export const SlackUserSearch: FunctionComponent<TProps> = ({ add, close }) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
-  const { getEmail } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const addEmail = (email: string): void => {
     getSlackUserByEmail(email)
@@ -68,7 +68,7 @@ export const SlackUserSearch: FunctionComponent<TProps> = ({ add, close }) => {
           />
         </div>
         <div className='flex justify-end ml-2.5'>
-          <Button type='button' onClick={() => addEmail(getEmail())}>
+          <Button type='button' onClick={() => addEmail(user.getEmail())}>
             Meg
           </Button>
         </div>

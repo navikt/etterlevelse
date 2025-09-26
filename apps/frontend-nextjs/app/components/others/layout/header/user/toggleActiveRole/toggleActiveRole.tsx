@@ -5,10 +5,9 @@ import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 export const ToggleActiveRole = () => {
   const [viewRoller, setViewRoller] = useState(true)
-  const { getAvailableGroups, updateCurrentGroups, toggleGroup, getGroups, hasGroup } =
-    useContext(UserContext)
+  const user = useContext(UserContext)
   const isAdmin: boolean =
-    getAvailableGroups().filter((role) => role.group === 'ADMIN').length !== 0
+    user.getAvailableGroups().filter((role) => role.group === 'ADMIN').length !== 0
 
   useEffect(() => {
     if (isAdmin) {
@@ -16,16 +15,16 @@ export const ToggleActiveRole = () => {
       if (roles) {
         const parsedRoles = JSON.parse(roles)
         if (parsedRoles.length !== 0) {
-          updateCurrentGroups(parsedRoles)
+          user.updateCurrentGroups(parsedRoles)
         }
       }
     }
   }, [])
 
   const onRoleChange = (group: EGroup, isChecked: boolean): void => {
-    toggleGroup(group, isChecked)
+    user.toggleGroup(group, isChecked)
     if (isAdmin) {
-      sessionStorage.setItem('activeRoles', JSON.stringify(getGroups()))
+      sessionStorage.setItem('activeRoles', JSON.stringify(user.getGroups()))
     }
   }
 
@@ -46,11 +45,11 @@ export const ToggleActiveRole = () => {
         Endre aktive roller
       </Button>
       <div className={`mt-2 ${viewRoller ? 'block' : 'hidden'}`}>
-        {getAvailableGroups().map((availableGroup: { name: string; group: EGroup }) => (
+        {user.getAvailableGroups().map((availableGroup: { name: string; group: EGroup }) => (
           <Switch
             size='small'
             key={availableGroup.group}
-            checked={hasGroup(availableGroup.group)}
+            checked={user.hasGroup(availableGroup.group)}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               onRoleChange(availableGroup.group, (event.target as HTMLInputElement).checked)
             }

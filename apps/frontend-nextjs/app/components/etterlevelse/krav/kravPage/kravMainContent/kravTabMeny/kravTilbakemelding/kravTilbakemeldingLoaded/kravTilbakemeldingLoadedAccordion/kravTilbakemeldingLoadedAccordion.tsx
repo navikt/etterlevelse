@@ -43,7 +43,7 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
 }) => {
   const router: AppRouterInstance = useRouter()
   const pathname: string = usePathname()
-  const { getIdent, isKraveier } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
 
@@ -70,8 +70,8 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
           const focused = focusNr === tilbakemelding.id
           const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(
             tilbakemelding,
-            getIdent(),
-            isKraveier()
+            user.getIdent(),
+            user.isKraveier()
           )
 
           return (

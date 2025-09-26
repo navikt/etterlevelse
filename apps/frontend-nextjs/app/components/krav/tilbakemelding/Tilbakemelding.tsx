@@ -68,7 +68,7 @@ export const Tilbakemeldinger = ({
     krav.kravNummer,
     krav.kravVersjon
   )
-  const { canWrite, isLoggedIn, getIdent, isKraveier } = useContext(UserContext)
+  const user = useContext(UserContext)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
@@ -98,8 +98,8 @@ export const Tilbakemeldinger = ({
               const focused = focusNr === tilbakemelding.id
               const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(
                 tilbakemelding,
-                getIdent(),
-                isKraveier()
+                user.getIdent(),
+                user.isKraveier()
               )
               return (
                 <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>
@@ -181,7 +181,7 @@ export const Tilbakemeldinger = ({
                     )}
 
                     {/* knapprad bunn */}
-                    {melderOrKraveier && canWrite() && focused && (
+                    {melderOrKraveier && user.canWrite() && focused && (
                       <TilbakemeldingSvar
                         tilbakemelding={tilbakemelding}
                         setFocusNummer={setFocusNr}
@@ -231,7 +231,7 @@ export const Tilbakemeldinger = ({
             <Heading size='medium' level='1'>
               Spørsmål til kraveier
             </Heading>
-            {isLoggedIn() ? (
+            {user.isLoggedIn() ? (
               <BodyLong className='max-w-xl'>
                 Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan
                 kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne
@@ -244,10 +244,10 @@ export const Tilbakemeldinger = ({
               </BodyShort>
             )}
 
-            {canWrite() && (
+            {user.canWrite() && (
               <Button onClick={() => setAddTilbakemelding(true)}>Still et spørsmål</Button>
             )}
-            {!isLoggedIn() && <LoginButton />}
+            {!user.isLoggedIn() && <LoginButton />}
           </div>
 
           <NyTilbakemeldingModal

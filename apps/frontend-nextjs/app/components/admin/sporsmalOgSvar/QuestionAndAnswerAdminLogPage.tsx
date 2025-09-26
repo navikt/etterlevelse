@@ -37,7 +37,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [kravMessages, setKravMessages] = useState<TKravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)
-  const { getIdent, isKraveier } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -121,7 +121,11 @@ export const QuestionAndAnswerAdminLogPage = () => {
               krav.kravNummer === tilbakemelding.kravNummer &&
               krav.kravVersjon === tilbakemelding.kravVersjon
           )[0].tema
-          const { status, sistMelding } = getMelderInfo(tilbakemelding, getIdent(), isKraveier())
+          const { status, sistMelding } = getMelderInfo(
+            tilbakemelding,
+            user.getIdent(),
+            user.isKraveier()
+          )
           kravMessages.push({
             ...tilbakemelding,
             kravNavn: kravNavn,

@@ -10,13 +10,13 @@ import { KravTabs } from './kravTabs/kravTabs'
 import { ListPageHeader } from './listPageHeader/listPageHeader'
 
 export const KravlistePage = () => {
-  const { isKraveier } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   return (
     <PageLayout pageTitle='Forvalte og opprette krav' currentPage='Forvalte og opprette krav'>
       <div className='pb-52 w-full'>
         <ListPageHeader headingText='Forvalte og opprette krav'>
-          {isKraveier() && (
+          {user.isKraveier() && (
             <Button
               iconPosition='left'
               icon={<PlusIcon area-label='' aria-hidden />}

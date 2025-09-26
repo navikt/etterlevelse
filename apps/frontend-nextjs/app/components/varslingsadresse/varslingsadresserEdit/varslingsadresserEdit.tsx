@@ -21,7 +21,7 @@ type TProps = {
 export const AddEmail = ({ added, add: doAdd, close }: TProps) => {
   const [val, setVal] = useState('')
   const [error, setError] = useState('')
-  const { getEmail } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const add = (adresse?: string) => {
     const toAdd = adresse || val
@@ -56,7 +56,7 @@ export const AddEmail = ({ added, add: doAdd, close }: TProps) => {
           className={`w-full ${error ? 'border-2 rounded-md border-[#c30000]' : ''}`}
         />
         <div className='flex justify-between ml-2.5'>
-          <Button type='button' onClick={() => add(getEmail())}>
+          <Button type='button' onClick={() => add(user.getEmail())}>
             Meg
           </Button>
           <Button type='button' onClick={() => add} className='ml-2.5'>

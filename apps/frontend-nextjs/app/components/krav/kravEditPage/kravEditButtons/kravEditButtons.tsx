@@ -29,7 +29,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
   initialValues,
 }) => {
   const router: AppRouterInstance = useRouter()
-  const { isAdmin } = useContext(UserContext)
+  const user = useContext(UserContext)
 
   const [utgaattKravMessage, setUtgaattKravMessage] = useState<boolean>(false)
   const [aktivKravMessage, setAktivKravMessage] = useState<boolean>(false)
@@ -73,7 +73,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             </div>
           )}
 
-          {isAdmin() && krav.status === EKravStatus.UTGAATT && (
+          {user.isAdmin() && krav.status === EKravStatus.UTGAATT && (
             <div className='mr-2'>
               <Button
                 variant='secondary'
@@ -86,7 +86,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             </div>
           )}
 
-          {isAdmin() && krav.status !== EKravStatus.UTKAST && (
+          {user.isAdmin() && krav.status !== EKravStatus.UTKAST && (
             <div className='mr-2'>
               <Button
                 variant='secondary'

@@ -16,10 +16,10 @@ interface IAuditButtonProps extends ButtonProps {
 
 export const AuditButton: FunctionComponent<IAuditButtonProps> = (props) => {
   const { id, auditId, marginLeft, marginRight, children, ...restProps } = props
-  const { isAdmin } = useContext(UserContext)
+  const user = useContext(UserContext)
   return (
     <>
-      {isAdmin() && (
+      {user.isAdmin() && (
         <Link
           className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`}
           href={adminAuditUrl(id) + (auditId ? `?auditId=${auditId}` : '')}
@@ -35,7 +35,7 @@ export const AuditButton: FunctionComponent<IAuditButtonProps> = (props) => {
         </Link>
       )}
 
-      {!isAdmin() && null}
+      {!user.isAdmin() && null}
     </>
   )
 }

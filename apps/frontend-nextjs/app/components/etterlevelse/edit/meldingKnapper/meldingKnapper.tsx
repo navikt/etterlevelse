@@ -27,8 +27,8 @@ export const MeldingKnapper: FunctionComponent<TProps> = (props) => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
 
-  const { isAdmin, getIdent, canWrite } = useContext(UserContext)
-  if ((!isAdmin() && melding.fraIdent !== getIdent()) || !canWrite()) return null
+  const user = useContext(UserContext)
+  if ((!user.isAdmin() && melding.fraIdent !== user.getIdent()) || !user.canWrite()) return null
 
   return (
     <div>

@@ -168,8 +168,8 @@ export const useMyTeams = () => {
   const [productAreas] = useMyProductAreas()
   const [data, setData] = useState<ITeam[]>([])
   const [loading, setLoading] = useState(true)
-  const { getIdent } = useContext(UserContext)
-  const ident = getIdent()
+  const user = useContext(UserContext)
+  const ident = user.getIdent()
 
   useEffect(() => {
     if (ident) {
@@ -212,8 +212,8 @@ export const useMyTeams = () => {
 export const useMyProductAreas = () => {
   const [data, setData] = useState<IProductArea[]>([])
   const [loading, setLoading] = useState(true)
-  const { getIdent } = useContext(UserContext)
-  const ident = getIdent()
+  const user = useContext(UserContext)
+  const ident = user.getIdent()
 
   useEffect(() => {
     if (ident) {

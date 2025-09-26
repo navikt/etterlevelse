@@ -21,7 +21,7 @@ export const KravTilbakemeldingKravValid: FunctionComponent<TProps> = ({
   add,
 }) => {
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
-  const { isLoggedIn, canWrite } = useContext(UserContext)
+  const user = useContext(UserContext)
   const getKravExpired: boolean = hasKravExpired(alleKravVersjoner, krav as TKravQL | undefined)
 
   return (
@@ -32,24 +32,24 @@ export const KravTilbakemeldingKravValid: FunctionComponent<TProps> = ({
             <Heading size='medium' level='1'>
               Spørsmål til kraveier
             </Heading>
-            {isLoggedIn() && (
+            {user.isLoggedIn() && (
               <BodyLong className='max-w-xl'>
                 Her kan du stille kraveier et spørsmål dersom det er uklarheter vedrørende hvordan
                 kravet skal forstås. Spørsmål og svar fra kraveier blir synlig for alle på denne
                 siden.
               </BodyLong>
             )}
-            {!isLoggedIn() && (
+            {!user.isLoggedIn() && (
               <BodyShort>
                 Du må være innlogget for å stille kraveier et spørsmål, og for å se tidligere
                 spørsmål og svar.
               </BodyShort>
             )}
 
-            {canWrite() && (
+            {user.canWrite() && (
               <Button onClick={() => setAddTilbakemelding(true)}>Still et spørsmål</Button>
             )}
-            {!isLoggedIn() && <LoginButton />}
+            {!user.isLoggedIn() && <LoginButton />}
           </div>
 
           <TilbakemeldingNyModal

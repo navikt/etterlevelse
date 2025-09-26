@@ -56,11 +56,11 @@ export const LoginHeaderButton = () => {
 }
 
 export const LoggedInHeader = () => {
-  const { isPersonvernombud, isKraveier, isAdmin, getIdent } = useContext(UserContext)
+  const user = useContext(UserContext)
   const pvoPages: {
     label: EPVO
     href: string
-  }[] = isPersonvernombud()
+  }[] = user.isPersonvernombud()
     ? [
         {
           label: EPVO.overskrift,
@@ -71,11 +71,11 @@ export const LoggedInHeader = () => {
   const kravPages: {
     label: string
     href: string
-  }[] = isKraveier() ? [{ label: 'Forvalte og opprette krav', href: kravlisteQueryUrl() }] : []
+  }[] = user.isKraveier() ? [{ label: 'Forvalte og opprette krav', href: kravlisteQueryUrl() }] : []
   const adminPages: {
     label: string
     href: string
-  }[] = isAdmin()
+  }[] = user.isAdmin()
     ? [
         { label: 'Administrere krav', href: adminKravUrl },
         { label: 'Administrere dokumentasjon', href: adminDokumentasjonUrl },
@@ -101,7 +101,7 @@ export const LoggedInHeader = () => {
           adminPages,
           [{ label: <ToggleActiveRole /> }],
         ]}
-        title={getIdent()}
+        title={user.getIdent()}
         icon={<PersonIcon area-label='' aria-hidden />}
       />
 
