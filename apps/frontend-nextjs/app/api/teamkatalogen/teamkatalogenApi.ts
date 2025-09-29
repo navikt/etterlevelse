@@ -1,11 +1,13 @@
+'use client'
+
 import { IPageResponse } from '@/constants/commonConstants'
 import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import { IProductArea, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
 import { useForceUpdate } from '@/util/hooks/customHooks/customHooks'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 export const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
@@ -166,7 +168,7 @@ export const useMyTeams = () => {
   const [productAreas] = useMyProductAreas()
   const [data, setData] = useState<ITeam[]>([])
   const [loading, setLoading] = useState(true)
-
+  const user = useContext(UserContext)
   const ident = user.getIdent()
 
   useEffect(() => {
@@ -210,6 +212,7 @@ export const useMyTeams = () => {
 export const useMyProductAreas = () => {
   const [data, setData] = useState<IProductArea[]>([])
   const [loading, setLoading] = useState(true)
+  const user = useContext(UserContext)
   const ident = user.getIdent()
 
   useEffect(() => {

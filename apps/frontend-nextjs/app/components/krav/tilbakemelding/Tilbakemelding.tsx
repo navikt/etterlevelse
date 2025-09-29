@@ -1,3 +1,5 @@
+'use client'
+
 import {
   tilbakemeldingNewMelding,
   tilbakemeldingslettMelding,
@@ -8,6 +10,7 @@ import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
 import { PersonName } from '@/components/common/personName/PersonName'
 import { Portrait } from '@/components/common/portrait/portrait'
 import StatusView from '@/components/common/statusTag/StatusTag'
+import { getMelderInfo } from '@/components/etterlevelse/getMelderInfo/getMelderInfo'
 import { ShowWarningMessage } from '@/components/etterlevelse/kravCard/KravCard'
 import { mailboxPoppingIcon } from '@/components/others/images/images'
 import { ContentLayout } from '@/components/others/layout/content/content'
@@ -15,12 +18,11 @@ import { LoginButton } from '@/components/others/layout/header/login/login'
 import { IKrav } from '@/constants/krav/kravConstants'
 import {
   ETilbakemeldingMeldingStatus,
-  ETilbakemeldingRolle,
   ITilbakemelding,
   ITilbakemeldingNewMeldingRequest,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { user } from '@/services/user/userService'
 import { useQueryParam, useRefs } from '@/util/hooks/customHooks/customHooks'
 import { ettlevColors } from '@/util/theme/theme'
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
@@ -42,7 +44,7 @@ import {
 import * as _ from 'lodash'
 import moment from 'moment'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
@@ -66,6 +68,7 @@ export const Tilbakemeldinger = ({
     krav.kravNummer,
     krav.kravVersjon
   )
+  const user = useContext(UserContext)
   const [focusNr, setFocusNr] = useState<string | undefined>(useQueryParam('tilbakemeldingId'))
   const [addTilbakemelding, setAddTilbakemelding] = useState(false)
   const [count, setCount] = useState(DEFAULT_COUNT_SIZE)
@@ -93,7 +96,11 @@ export const Tilbakemeldinger = ({
           <Accordion>
             {tilbakemeldinger.slice(0, count).map((tilbakemelding) => {
               const focused = focusNr === tilbakemelding.id
-              const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(tilbakemelding)
+              const { status, ubesvartOgKraveier, melderOrKraveier } = getMelderInfo(
+                tilbakemelding,
+                user.getIdent(),
+                user.isKraveier()
+              )
               return (
                 <Accordion.Item key={tilbakemelding.id} open={tilbakemelding.id === focusNr}>
                   <Accordion.Header onClick={() => setFocus(focused ? '' : tilbakemelding.id)}>
@@ -259,39 +266,6 @@ export const Tilbakemeldinger = ({
   )
 }
 
-const getStatus = (tilbakemelding: ITilbakemelding) => {
-  let status = ETilbakemeldingMeldingStatus.UBESVART
-
-  if (tilbakemelding.status) {
-    status = tilbakemelding.status
-  } else {
-    if (
-      tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1].rolle ===
-      ETilbakemeldingRolle.KRAVEIER
-    ) {
-      status = ETilbakemeldingMeldingStatus.BESVART
-    }
-  }
-
-  return status
-}
-
-export const getMelderInfo = (tilbakemelding: ITilbakemelding) => {
-  const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
-  const status = getStatus(tilbakemelding)
-  const melder = user.getIdent() === tilbakemelding.melderIdent
-  const rolle =
-    tilbakemelding?.melderIdent === user.getIdent()
-      ? ETilbakemeldingRolle.MELDER
-      : ETilbakemeldingRolle.KRAVEIER
-  const melderOrKraveier = melder || user.isKraveier()
-  const ubesvartOgKraveier = status === ETilbakemeldingMeldingStatus.UBESVART && user.isKraveier()
-  const kanSkrive =
-    (status === ETilbakemeldingMeldingStatus.UBESVART && rolle === ETilbakemeldingRolle.KRAVEIER) ||
-    (status !== ETilbakemeldingMeldingStatus.UBESVART && rolle === ETilbakemeldingRolle.MELDER)
-  return { status, ubesvartOgKraveier, rolle, melder, melderOrKraveier, sistMelding, kanSkrive }
-}
-
 type TTilbakemeldingSvarProps = {
   tilbakemelding: ITilbakemelding
   setFocusNummer: (fn: string | undefined) => void
@@ -309,7 +283,8 @@ const TilbakemeldingSvar = ({
   remove,
   replace,
 }: TTilbakemeldingSvarProps) => {
-  const melderInfo = getMelderInfo(tilbakemelding)
+  const { getIdent, isKraveier, isAdmin } = useContext(UserContext)
+  const melderInfo = getMelderInfo(tilbakemelding, getIdent(), isKraveier())
   const [response, setResponse] = useState('')
   const [replyRole] = useState(melderInfo.rolle)
   const [error, setError] = useState()
@@ -350,13 +325,13 @@ const TilbakemeldingSvar = ({
 
   return (
     <div className='w-full'>
-      {(melderInfo.kanSkrive || user.isKraveier()) && (
+      {(melderInfo.kanSkrive || isKraveier()) && (
         <Heading size='medium' className='mb-2 mt-8'>
           {ubesvartOgKraveier ? 'Besvar' : 'Ny melding'}
         </Heading>
       )}
 
-      {user.isKraveier() && (
+      {isKraveier() && (
         <div>
           <div className='w-fit mb-2'>
             <Checkbox value={isEndretKrav} onChange={() => setIsEndretKrav(!isEndretKrav)}>
@@ -383,7 +358,7 @@ const TilbakemeldingSvar = ({
         </div>
       )}
       <div className='flex w-full items-end justify-center'>
-        {(melderInfo.kanSkrive || user.isKraveier()) && (
+        {(melderInfo.kanSkrive || isKraveier()) && (
           <Textarea
             className='w-full'
             label='Ny tilbakemelding'
@@ -435,7 +410,7 @@ const TilbakemeldingSvar = ({
         )}
       </div>
       <div className='flex mt-2 w-full'>
-        {user.isAdmin() && (
+        {isAdmin() && (
           <Button
             icon={<TrashIcon aria-label='' aria-hidden />}
             variant='secondary'
@@ -462,9 +437,9 @@ const TilbakemeldingSvar = ({
           </div>
         )}
 
-        {(melderInfo.kanSkrive || user.isKraveier()) && (
+        {(melderInfo.kanSkrive || isKraveier()) && (
           <div className='flex flex-1 justify-end'>
-            {user.isKraveier() && (
+            {isKraveier() && (
               <div>
                 {isUpdatingStatus ? (
                   <div className='self-center ml-2.5'>
@@ -495,7 +470,7 @@ const TilbakemeldingSvar = ({
             )}
             <Button className='ml-2.5' disabled={!response} onClick={submit}>
               {ubesvartOgKraveier ? 'Svar' : 'Send'}
-              {user.isKraveier() ? ' og oppdater status' : ''}
+              {isKraveier() ? ' og oppdater status' : ''}
             </Button>
           </div>
         )}

@@ -1,8 +1,8 @@
 'use client'
 
 import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { codelist } from '@/provider/kodeverk/kodeverkService'
 import { adminCodelist } from '@/routes/admin/adminRoutes'
-import { codelist } from '@/services/kodeverk/kodeverkService'
 import { Heading, Select } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useEffect, useState } from 'react'

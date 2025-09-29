@@ -1,7 +1,7 @@
 import { Error } from '@/components/common/modalSchema/ModalSchema'
 import { TOption, TOr } from '@/constants/commonConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { codelist } from '@/services/kodeverk/kodeverkService'
+import { codelist } from '@/provider/kodeverk/kodeverkService'
 import {
   Button,
   DatePicker,

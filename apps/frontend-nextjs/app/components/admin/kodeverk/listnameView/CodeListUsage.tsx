@@ -3,7 +3,7 @@
 import { replaceCodelistUsage } from '@/api/kodeverk/kodeverkApi'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
-import { IGetParsedOptionsProps, codelist } from '@/services/kodeverk/kodeverkService'
+import { IGetParsedOptionsProps, codelist } from '@/provider/kodeverk/kodeverkService'
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import { ChangeEvent, createRef, useEffect, useState } from 'react'
 import { ObjectLink } from '../../common/commonComponents'

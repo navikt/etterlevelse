@@ -1,3 +1,5 @@
+'use client'
+
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '@/components/others/layout/content/content'
@@ -7,10 +9,10 @@ import {
   EAdresseType,
   IVarslingsadresse,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Alert, Button, Loader } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 
 type TProps = {
@@ -22,6 +24,7 @@ type TProps = {
 export const SlackUserSearch: FunctionComponent<TProps> = ({ add, close }) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
+  const user = useContext(UserContext)
 
   const addEmail = (email: string): void => {
     getSlackUserByEmail(email)

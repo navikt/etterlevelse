@@ -1,10 +1,11 @@
-import { EGroup, user } from '@/services/user/userService'
+import { EGroup, UserContext } from '@/provider/user/userProvider'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Button, Switch } from '@navikt/ds-react'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 export const ToggleActiveRole = () => {
   const [viewRoller, setViewRoller] = useState(true)
+  const user = useContext(UserContext)
   const isAdmin: boolean =
     user.getAvailableGroups().filter((role) => role.group === 'ADMIN').length !== 0
 
@@ -21,9 +22,9 @@ export const ToggleActiveRole = () => {
   }, [])
 
   const onRoleChange = (group: EGroup, isChecked: boolean): void => {
-    user.toggleGroup(group, isChecked)
+    const currentGroup = user.toggleGroup(group, isChecked)
     if (isAdmin) {
-      sessionStorage.setItem('activeRoles', JSON.stringify(user.getGroups()))
+      sessionStorage.setItem('activeRoles', JSON.stringify(currentGroup))
     }
   }
 

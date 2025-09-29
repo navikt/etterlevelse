@@ -31,7 +31,7 @@ export const Menu: FunctionComponent<TMenuProps> = ({ pages, title, icon }) => {
 
       setAllPages(formatedPages)
     }
-  }, [])
+  }, [pages])
 
   return (
     <Dropdown>

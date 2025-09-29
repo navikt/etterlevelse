@@ -1,5 +1,5 @@
 import { EListName, IRegelverk, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
-import { codelist } from '@/services/kodeverk/kodeverkService'
+import { codelist } from '@/provider/kodeverk/kodeverkService'
 import { env } from '@/util/env/env'
 import { Link } from '@navikt/ds-react'
 import { FunctionComponent, ReactNode } from 'react'

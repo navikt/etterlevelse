@@ -1,14 +1,16 @@
+'use client'
+
 import { tilbakemeldingslettMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { user } from '@/services/user/userService'
+import { UserContext } from '@/provider/user/userProvider'
 import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import moment from 'moment'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
 
 export const MeldingKnapper = (props: {
@@ -19,6 +21,7 @@ export const MeldingKnapper = (props: {
   marginLeft?: boolean
 }) => {
   const { melding, tilbakemeldingId, oppdater, remove } = props
+  const user = useContext(UserContext)
   const meldingNr = melding.meldingNr
   const [deleteModal, setDeleteModal] = useState(false)
   const [editModal, setEditModal] = useState(false)

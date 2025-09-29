@@ -1,6 +1,7 @@
 'use client'
 
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
 import { adminDokumentrelasjonUrl } from '@/routes/admin/dokumentrelasjon/adminDokumentrelasjonRoutes'
 import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/adminEtterlevelseDokumentasjonRoutes'
@@ -16,7 +17,6 @@ import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 import { loginUrl } from '@/routes/login/loginRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
-import { user } from '@/services/user/userService'
 import {
   BarChartIcon,
   DocPencilIcon,
@@ -29,7 +29,7 @@ import {
 import { Button, InternalHeader, Link } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
 import { UserInfoView } from '../user/userInfoView/userInfoView'
@@ -56,6 +56,7 @@ export const LoginHeaderButton = () => {
 }
 
 export const LoggedInHeader = () => {
+  const user = useContext(UserContext)
   const pvoPages: {
     label: EPVO
     href: string

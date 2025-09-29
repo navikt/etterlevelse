@@ -1,7 +1,7 @@
 import { TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { codelist } from '@/provider/kodeverk/kodeverkService'
 import { urlForObject } from '@/routes/urlForObject/urlForObject'
-import { codelist } from '@/services/kodeverk/kodeverkService'
 import { BodyShort } from '@navikt/ds-react'
 import { Fragment, FunctionComponent, ReactNode } from 'react'
 import { ExternalLink } from '../externalLink/externalLink'
