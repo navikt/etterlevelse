@@ -33,7 +33,7 @@ export const TemaPage = () => {
     setIsLoading(true)
     setCode(codelist.utils.getCode(EListName.TEMA, temaCode) as TTemaCode)
     setIsLoading(false)
-  }, [])
+  }, [codelist.lists])
 
   return (
     <div>
@@ -43,7 +43,13 @@ export const TemaPage = () => {
   )
 }
 
-const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => {
+type TTemaMainHeaderProps = {
+  tema: TTemaCode
+  lover: TLovCode[]
+  noHeader?: boolean
+}
+
+const TemaMainHeader: FunctionComponent<TTemaMainHeaderProps> = ({ tema, lover, noHeader }) => {
   const codelist = useContext(CodelistContext)
   return (
     <div className='lg:grid lg:grid-flow-col lg:gap-2'>
@@ -72,7 +78,7 @@ const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolea
         </Heading>
         {lover.map((lov: TLovCode, index: number) => (
           <div key={lov.code + '_' + index} className='mb-1.5'>
-            <ExternalLink href={lovdataBase(lov.code)}>{lov.shortName}</ExternalLink>
+            <ExternalLink href={lovdataBase(lov.code, codelist)}>{lov.shortName}</ExternalLink>
           </div>
         ))}
       </div>
@@ -127,7 +133,7 @@ const TemaView: FunctionComponent<TTemaViewProps> = (props) => {
       breadcrumbPaths={[temaBreadCrumbPath]}
       currentPage={tema.shortName}
     >
-      {getTemaMainHeader(tema, lover)}
+      <TemaMainHeader tema={tema} lover={lover} />
       <div className='mt-6'>
         <Label>{loading ? '?' : data?.krav.numberOfElements || 0} krav</Label>
         {loading && <SkeletonPanel count={10} />}

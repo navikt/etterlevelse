@@ -116,7 +116,7 @@ type TProps = {
 }
 
 export const CodelistProvider: FunctionComponent<TProps> = ({ children }) => {
-  const [lists, setLists] = useState<IAllCodelists>({} as IAllCodelists)
+  const [lists, setLists] = useState<IAllCodelists>({ codelist: {} } as IAllCodelists)
   const [error, setError] = useState<string | undefined>(undefined)
 
   const fetchData = async (refresh?: boolean) => {
@@ -144,8 +144,9 @@ export const CodelistProvider: FunctionComponent<TProps> = ({ children }) => {
   // getCodes(list: EListName): ICode[]¨
 
   const getCodes = (list: EListName): TLovCode[] | TTemaCode[] | ICode[] => {
+    console.debug(lists)
     const newList: TLovCode[] | TTemaCode[] | ICode[] =
-      lists && lists.codelist[list]
+      lists && lists.codelist && lists.codelist[list]
         ? lists.codelist[list].sort((c1: ICode, c2: ICode) =>
             c1.shortName.localeCompare(c2.shortName, 'nb')
           )
