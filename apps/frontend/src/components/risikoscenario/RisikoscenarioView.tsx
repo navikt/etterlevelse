@@ -63,7 +63,11 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer' className='mt-5'>
+        <ReadMore
+          header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer'
+          className='mt-5'
+          defaultOpen={!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0}
+        >
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {

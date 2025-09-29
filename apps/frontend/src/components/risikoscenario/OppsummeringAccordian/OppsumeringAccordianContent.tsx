@@ -99,8 +99,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
             <Alert className='mt-3' variant='warning'>
               <span>
                 Før dere kan vurdere tiltakenes effekt, må dere{' '}
-                {!risikoscenario.generelScenario &&
-                  'legge inn tiltak under Identifisering av risikoscenarioer og tiltak.'}
+                {!risikoscenario.generelScenario && 'legge inn tiltak på kravsiden.'}
                 {risikoscenario.generelScenario && (
                   <Link
                     href={pvkDokumentasjonStepUrl(
