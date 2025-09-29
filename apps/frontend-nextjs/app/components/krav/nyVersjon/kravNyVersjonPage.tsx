@@ -9,7 +9,7 @@ import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { IKravDataProps, TKravById } from '@/constants/krav/edit/kravEditConstant'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { kravNewVersionValidation } from '@/test/krav/schemaValidation/kravSchemaValidation'
 import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -18,7 +18,7 @@ import { Form, Formik } from 'formik'
 import { Params } from 'next/dist/server/request/params'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { KravFormFields } from '../edit/kravFormFields/kravFormFields'
 import { KravStandardButtons } from '../edit/kravStandardButtons/kravStandardButtons'
 
@@ -33,13 +33,14 @@ export const KravNyVersjonPage = () => {
   const kravData: IKravDataProps | undefined = GetKravData(params)
   const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
+  const codelist = useContext(CodelistContext)
 
   const submit = async (krav: TKravQL): Promise<void> => {
-    const regelverk: TLovCode = codelist.getCode(
+    const regelverk: TLovCode = codelist.utils.getCode(
       EListName.LOV,
       krav.regelverk[0]?.lov.code
     ) as TLovCode
-    const underavdeling: ICode = codelist.getCode(
+    const underavdeling: ICode = codelist.utils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
     ) as ICode

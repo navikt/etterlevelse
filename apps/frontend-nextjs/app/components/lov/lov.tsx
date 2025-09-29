@@ -1,8 +1,15 @@
-import { EListName, IRegelverk, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+'use client'
+
+import {
+  EListName,
+  IAllCodelists,
+  IRegelverk,
+  TLovCode,
+} from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext, ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { env } from '@/util/env/env'
 import { Link } from '@navikt/ds-react'
-import { FunctionComponent, ReactNode } from 'react'
+import { FunctionComponent, ReactNode, useContext } from 'react'
 
 // unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -38,6 +45,7 @@ interface ILovViewProps {
 
 export const LovView: FunctionComponent<ILovViewProps> = (props) => {
   const { regelverk, openOnSamePage } = props
+  const codelist = useContext(CodelistContext)
 
   if (!regelverk) return null
 
@@ -45,10 +53,13 @@ export const LovView: FunctionComponent<ILovViewProps> = (props) => {
 
   const lovCode: string = lov?.code
 
-  const lovDisplay: string = lov && codelist.getShortname(EListName.LOV, lovCode)
+  const lovDisplay: string = lov && codelist.utils.getShortname(EListName.LOV, lovCode)
 
-  const descriptionText: string | ReactNode | undefined = codelist.valid(EListName.LOV, lovCode)
-    ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, openOnSamePage)
+  const descriptionText: string | ReactNode | undefined = codelist.utils.valid(
+    EListName.LOV,
+    lovCode
+  )
+    ? legalBasisLinkProcessor(lovCode, codelist, lovDisplay + ' ' + spesifisering, openOnSamePage)
     : spesifisering
 
   return <span>{descriptionText}</span>
@@ -56,10 +67,14 @@ export const LovView: FunctionComponent<ILovViewProps> = (props) => {
 
 const legalBasisLinkProcessor = (
   law: string,
+  codelist: {
+    utils: ICodelistProps
+    lists: IAllCodelists
+  },
   text?: string,
   openOnSamePage?: boolean
 ): string | ReactNode | undefined => {
-  if (!findLovId(law).match(/^[\d|D]+.*/)) {
+  if (!findLovId(law, codelist).match(/^[\d|D]+.*/)) {
     return text
   }
 
@@ -75,7 +90,7 @@ const legalBasisLinkProcessor = (
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/§${result[4]}${result[6]}`}
+          href={`${lovdataBase(law, codelist)}/§${result[4]}${result[6]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel='noopener noreferrer'
         >
@@ -89,7 +104,7 @@ const legalBasisLinkProcessor = (
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/KAPITTEL_${result[3]}${result[4]}`}
+          href={`${lovdataBase(law, codelist)}/KAPITTEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel='noopener noreferrer'
         >
@@ -103,7 +118,7 @@ const legalBasisLinkProcessor = (
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law)}/ARTIKKEL_${result[3]}${result[4]}`}
+          href={`${lovdataBase(law, codelist)}/ARTIKKEL_${result[3]}${result[4]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel='noopener noreferrer'
         >
@@ -115,16 +130,28 @@ const legalBasisLinkProcessor = (
   ])(text)
 }
 
-const findLovId = (nationalLaw: string): string => {
-  const lov: TLovCode = codelist.getCode(EListName.LOV, nationalLaw) as TLovCode
+const findLovId = (
+  nationalLaw: string,
+  codelist: {
+    utils: ICodelistProps
+    lists: IAllCodelists
+  }
+): string => {
+  const lov: TLovCode = codelist.utils.getCode(EListName.LOV, nationalLaw) as TLovCode
   return lov?.data?.lovId || lov?.description || ''
 }
 
-export const lovdataBase = (nationalLaw: string): string => {
-  const lovId: string = findLovId(nationalLaw)
-  if (codelist.isForskrift(nationalLaw)) {
+export const lovdataBase = (
+  nationalLaw: string,
+  codelist: {
+    utils: ICodelistProps
+    lists: IAllCodelists
+  }
+): string => {
+  const lovId: string = findLovId(nationalLaw, codelist)
+  if (codelist.utils.isForskrift(nationalLaw)) {
     return env.lovdataForskriftBaseUrl + lovId
-  } else if (codelist.isRundskriv(nationalLaw)) {
+  } else if (codelist.utils.isRundskriv(nationalLaw)) {
     return env.lovdataRundskrivBaseUrl + lovId
   } else {
     return env.lovdataLovBaseUrl + lovId

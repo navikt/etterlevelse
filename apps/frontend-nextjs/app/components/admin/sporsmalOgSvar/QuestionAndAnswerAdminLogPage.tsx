@@ -13,7 +13,7 @@ import {
   ETilbakemeldingMeldingStatus,
   ITilbakemelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { handleSort } from '@/util/handleTableSort'
@@ -42,6 +42,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
+  const codelist = useContext(CodelistContext)
 
   let sortedData: TKravMessage[] = kravMessages.sort((a: TKravMessage, b: TKravMessage) =>
     (b.tidForSporsmaal || '').localeCompare(a.tidForSporsmaal || '')
@@ -199,7 +200,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
                       </Link>
                     </Table.DataCell>
                     <Table.DataCell>
-                      {codelist.getCode(EListName.TEMA, message.tema)?.shortName}
+                      {codelist.utils.getCode(EListName.TEMA, message.tema)?.shortName}
                     </Table.DataCell>
                     <Table.DataCell>{message.melderNavn}</Table.DataCell>
                     <Table.DataCell>{moment(message.tidForSporsmaal).format('LLL')}</Table.DataCell>

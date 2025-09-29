@@ -1,12 +1,14 @@
+'use client'
+
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { TOr } from '@/constants/commonConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { ettlevColors } from '@/util/theme/theme'
 import { BodyShort } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { ReactNode } from 'react'
+import { ReactNode, useContext } from 'react'
 import Select, { CSSObjectWithLabel } from 'react-select'
 
 interface IKravEditMultiOptionFieldProps {
@@ -26,11 +28,12 @@ export const KravEditMultiOptionField = (
   props: IKravEditMultiOptionFieldProps & TKravEditMultiOptionFieldTypes
 ) => {
   const { label, name, caption, tooltip, marginBottom } = props
+  const codelist = useContext(CodelistContext)
   const options: {
     value: string
     label: string
     description: string
-  }[] = props.options || codelist.getParsedOptions(props.listName)
+  }[] = props.options || codelist.utils.getParsedOptions(props.listName)
 
   return (
     <FieldWrapper marginBottom={marginBottom}>
@@ -67,7 +70,7 @@ export const KravEditMultiOptionField = (
                                   description: string
                                 }
                               | undefined
-                          ) => codelist.getCode(props.listName, value?.value)
+                          ) => codelist.utils.getCode(props.listName, value?.value)
                         )
                       )
                     } else {

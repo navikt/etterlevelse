@@ -1,16 +1,19 @@
+'use client'
+
 import { getAllKrav } from '@/api/krav/kravApi'
 import { EListName, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { Accordion, BodyShort } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { KravPanelHeader } from './kravPanelHeader/kravPanelHeader'
 import { KravTemaList } from './kravTemaList/kravTemaList'
 
 export const TemaList = () => {
   const [allActiveKrav, setAllActiveKrav] = useState<IKrav[]>([])
   const [allDraftKrav, setAllDraftKrav] = useState<IKrav[]>([])
+  const codelist = useContext(CodelistContext)
 
   useEffect(() => {
     fetchKrav()
@@ -27,7 +30,7 @@ export const TemaList = () => {
 
   return (
     <Accordion>
-      {codelist.getCodes(EListName.TEMA).map((tema: TTemaCode) => {
+      {codelist.utils.getCodes(EListName.TEMA).map((tema: TTemaCode) => {
         const activeKraver: IKrav[] = allActiveKrav?.filter((krav: IKrav) => {
           return krav.regelverk
             .map((regelverk: IRegelverk) => regelverk.lov.data && regelverk.lov.data.tema)

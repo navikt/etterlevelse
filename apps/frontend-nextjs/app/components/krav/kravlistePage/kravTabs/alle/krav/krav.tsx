@@ -1,13 +1,15 @@
+'use client'
+
 import { kravStatus } from '@/components/etterlevelse/krav/kravComponents'
 import { IPageResponse, TOption } from '@/constants/commonConstants'
 import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, TKravFilters, TKravQL } from '@/constants/krav/kravConstants'
 import { EKravListFilter, ETab, TKravFilter } from '@/constants/krav/kravlist/kravlistConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { ApolloClient, ObservableQuery, OperationVariables } from '@apollo/client'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
-import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 import { KravPanels } from '../../sisteRedigertKrav/kravPanels/KravPanels'
 
 type TProps = {
@@ -51,8 +53,9 @@ export const Krav: FunctionComponent<TProps> = ({
   loading,
   gqlLoading,
 }) => {
-  const relevans = codelist.getCodes(EListName.RELEVANS) as ICode[]
-  const lover = codelist.getCodes(EListName.LOV) as TLovCode[]
+  const codelist = useContext(CodelistContext)
+  const relevans = codelist.utils.getCodes(EListName.RELEVANS) as ICode[]
+  const lover = codelist.utils.getCodes(EListName.LOV) as TLovCode[]
 
   const getLovOptions = (): any[] => {
     return getOptions(
