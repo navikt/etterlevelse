@@ -3,6 +3,7 @@ import { Footer } from './components/others/layout/footer/footer'
 import Header from './components/others/layout/header/header'
 import './globals.css'
 import DataProvider from './provider/DataProvider'
+import { CodelistProvider } from './provider/kodeverk/kodeverkProvider'
 import { UserProvider } from './provider/user/userProvider'
 
 type TProps = {
@@ -14,15 +15,17 @@ const Main: FunctionComponent<TProps> = async ({ children }) => {
     <html lang='no'>
       <body>
         <UserProvider>
-          <DataProvider>
-            <Suspense fallback={<div>Loading...</div>}>
-              <div className='flex flex-col w-full items-center min-h-screen bg-white'>
-                <Header />
-                {children}
-                <Footer />
-              </div>
-            </Suspense>
-          </DataProvider>
+          <CodelistProvider>
+            <DataProvider>
+              <Suspense fallback={<div>Loading...</div>}>
+                <div className='flex flex-col w-full items-center min-h-screen bg-white'>
+                  <Header />
+                  {children}
+                  <Footer />
+                </div>
+              </Suspense>
+            </DataProvider>
+          </CodelistProvider>
         </UserProvider>
       </body>
     </html>
