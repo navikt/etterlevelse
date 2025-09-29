@@ -5,15 +5,15 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonListQuery } from '@/query/etterlevelse/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { user } from '@/services/user/userService'
 import { useQuery } from '@apollo/client/react'
 import { Alert, Button, Heading, Skeleton } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { EtterlevelseDokumentasjonList } from './etterlevelseDokumentasjonslist/etterlevelseDokumentasjonslist'
 
 type TVariables = {
@@ -28,6 +28,7 @@ type TVariables = {
 
 export const EtterlevelseDokumentasjon = () => {
   const router: AppRouterInstance = useRouter()
+  const user = useContext(UserContext)
 
   const [forsideVarsel, setForsideVarsle] = useState<IMelding>()
 
