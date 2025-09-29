@@ -83,7 +83,33 @@ interface IMakeValueLabelForAllCodeListsProps {
   label: string
 }
 
-export const CodelistContext = createContext({})
+export const CodelistContext = createContext<{ utils: ICodelistProps; lists: IAllCodelists }>({
+  utils: {
+    fetchData: async () => {},
+    isLoaded: () => '',
+    getCodes: () => [],
+    getCode: () => {
+      return {} as ICode
+    },
+    valid: () => false,
+    getLovCodesForTema: () => [],
+    getShortnameForCode: () => '',
+    getShortnameForCodes: () => '',
+    getShortname: () => '',
+    getShortnames: () => [],
+    getDescription: () => '',
+    getParsedOptions: () => [],
+    getOptionsForCode: () => [],
+    getParsedOptionsForLov: () => [],
+    getParsedOptionsForList: () => [],
+    getParsedOptionsFilterOutSelected: () => [],
+    isForskrift: () => false,
+    isRundskriv: () => false,
+    makeValueLabelForAllCodeLists: () => [],
+    gjelderForLov: () => false,
+  },
+  lists: {} as IAllCodelists,
+})
 
 type TProps = {
   children: React.ReactNode
@@ -248,7 +274,37 @@ export const CodelistProvider: FunctionComponent<TProps> = ({ children }) => {
     ;(async () => await fetchData())()
   }, [])
 
-  return <CodelistContext.Provider value={{}}>{children}</CodelistContext.Provider>
+  return (
+    <CodelistContext.Provider
+      value={{
+        utils: {
+          fetchData,
+          isLoaded,
+          getCodes,
+          getCode,
+          valid,
+          getLovCodesForTema,
+          getShortnameForCode,
+          getShortnameForCodes,
+          getShortname,
+          getShortnames,
+          getDescription,
+          getParsedOptions,
+          getOptionsForCode,
+          getParsedOptionsForLov,
+          getParsedOptionsForList,
+          getParsedOptionsFilterOutSelected,
+          isForskrift,
+          isRundskriv,
+          makeValueLabelForAllCodeLists,
+          gjelderForLov,
+        },
+        lists: lists,
+      }}
+    >
+      {children}
+    </CodelistContext.Provider>
+  )
 }
 
 export interface IList {
