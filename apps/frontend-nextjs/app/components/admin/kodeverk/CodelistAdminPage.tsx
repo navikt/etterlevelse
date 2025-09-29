@@ -1,15 +1,16 @@
 'use client'
 
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { adminCodelist } from '@/routes/admin/adminRoutes'
 import { Heading, Select } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 const CodeListAdminPage = () => {
   const router = useRouter()
   const [listname, setListname] = useState('')
+  const codelist = useContext(CodelistContext)
 
   useEffect(() => {
     if (listname) {
@@ -34,7 +35,7 @@ const CodeListAdminPage = () => {
           onChange={(event: ChangeEvent<HTMLSelectElement>) => setListname(event.target.value)}
         >
           <option value=''>Velg kodeverk</option>
-          {codelist.makeValueLabelForAllCodeLists().map(
+          {codelist.utils.makeValueLabelForAllCodeLists().map(
             (
               codeLabel: {
                 value: string

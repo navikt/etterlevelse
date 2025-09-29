@@ -3,13 +3,13 @@
 import { createCodelist } from '@/api/kodeverk/kodeverkApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { ICode, ICodeListFormValues } from '@/constants/kodeverk/kodeverkConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { adminCodelist, adminUrl } from '@/routes/admin/adminRoutes'
-import { useAwait, useForceUpdate } from '@/util/hooks/customHooks/customHooks'
+import { useForceUpdate } from '@/util/hooks/customHooks/customHooks'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Loader, Select } from '@navikt/ds-react'
 import { useParams, useRouter } from 'next/navigation'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import ModalCreateCodeList from '../edit/ModalCreateCodeList'
 import CodeListTable from './CodelistStyledTable'
 
@@ -22,7 +22,7 @@ export const ListnameAdminViewPage = () => {
   const [createCodeListModal, setCreateCodeListModal] = useState(false)
   const [errorOnResponse, setErrorOnResponse] = useState(null)
   const forceUpdate = useForceUpdate()
-  useAwait(codelist.wait(), setIsLoading)
+  const codelist = useContext(CodelistContext)
 
   const lists = codelist.lists?.codelist
   const currentCodelist = lists && listname ? lists[listname] : undefined
@@ -37,7 +37,7 @@ export const ListnameAdminViewPage = () => {
     setIsLoading(true)
     try {
       await createCodelist({ ...values } as ICode)
-      await codelist.refreshCodeLists()
+      await codelist.utils.fetchData(true)
       setCreateCodeListModal(false)
     } catch (error: any) {
       setCreateCodeListModal(true)
@@ -47,7 +47,7 @@ export const ListnameAdminViewPage = () => {
   }
 
   const update = async () => {
-    await codelist.refreshCodeLists()
+    await codelist.utils.fetchData(true)
     forceUpdate()
   }
 
@@ -77,7 +77,7 @@ export const ListnameAdminViewPage = () => {
           }
         >
           <option value=''>Velg kodeverk</option>
-          {codelist.makeValueLabelForAllCodeLists().map(
+          {codelist.utils.makeValueLabelForAllCodeLists().map(
             (
               codeLabel: {
                 value: string

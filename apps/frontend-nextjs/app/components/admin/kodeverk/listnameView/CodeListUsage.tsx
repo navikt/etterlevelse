@@ -3,10 +3,10 @@
 import { replaceCodelistUsage } from '@/api/kodeverk/kodeverkApi'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
-import { IGetParsedOptionsProps, codelist } from '@/provider/kodeverk/kodeverkService'
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
-import { ChangeEvent, createRef, useEffect, useState } from 'react'
+import { ChangeEvent, createRef, useContext, useEffect, useState } from 'react'
 import { ObjectLink } from '../../common/commonComponents'
+import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props
@@ -80,6 +80,8 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [newValue, setNewValue] = useState<string>()
   const ref = createRef<HTMLDivElement>()
 
+  const codelist = useContext(CodelistContext)
+  
   const { usage, refresh } = props
   useEffect(() => {
     setShowReplace(false)
@@ -113,7 +115,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
             onChange={(event: ChangeEvent<HTMLSelectElement>) => setNewValue(event.target.value)}
           >
             <option value=''>Ny verdi</option>
-            {codelist
+            {codelist.utils
               .getParsedOptions(usage.listName)
               .map((code: IGetParsedOptionsProps, index: number) => (
                 <option key={index + '_' + code.label} value={code.value}>

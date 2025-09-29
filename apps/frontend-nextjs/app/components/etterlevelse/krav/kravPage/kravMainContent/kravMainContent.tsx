@@ -6,8 +6,8 @@ import { IPageResponse } from '@/constants/commonConstants'
 import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import { Dispatch, FunctionComponent, SetStateAction, useContext, useEffect, useState } from 'react'
 import { KravHasExpired } from './kravHasExpired/kravHasExpired'
 import { KravHensikt } from './kravHensikt/kravHensikt'
 import { KravRightSidePanel } from './kravRightSidePanel/kravRightSidePanel'
@@ -29,6 +29,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
+  const codelist = useContext(CodelistContext)
 
   useEffect(() => {
     if (krav) {
@@ -53,12 +54,14 @@ export const KravMainContent: FunctionComponent<TProps> = ({
           }
         }
       })
-      const lovData: TLovCode = codelist.getCode(
+      const lovData: TLovCode = codelist.utils.getCode(
         EListName.LOV,
         krav.regelverk[0]?.lov?.code
       ) as TLovCode
       if (lovData?.data) {
-        setKravTema(codelist.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined)
+        setKravTema(
+          codelist.utils.getCode(EListName.TEMA, lovData.data.tema) as TTemaCode | undefined
+        )
       }
     }
   }, [krav])

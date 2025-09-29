@@ -1,3 +1,5 @@
+'use client'
+
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Error } from '@/components/common/modalSchema/ModalSchema'
@@ -5,24 +7,24 @@ import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { LovView } from '@/components/lov/lov'
 import { EListName, IRegelverk, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { borderWidth } from '@/util/style/Style'
 import { ettlevColors } from '@/util/theme/theme'
 import { Button, Label, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useContext, useState } from 'react'
 import Select, { CSSObjectWithLabel, SingleValue } from 'react-select'
 
 export const RegelverkEdit = () => {
   const [lov, setLov] = useState({ value: '', label: '', description: '' })
   const [text, setText] = useState('')
   const [error, setError] = useState('')
-
+  const codelist = useContext(CodelistContext)
   const regelverkObject = (): {
     lov: TLovCode
     spesifisering: string
   } => ({
-    lov: codelist.getCode(EListName.LOV, lov.value as string) as TLovCode,
+    lov: codelist.utils.getCode(EListName.LOV, lov.value as string) as TLovCode,
     spesifisering: text,
   })
 
@@ -30,7 +32,7 @@ export const RegelverkEdit = () => {
     value: string
     label: string
     description: string
-  }[] = codelist.getParsedOptionsForLov()
+  }[] = codelist.utils.getParsedOptionsForLov()
 
   return (
     <FieldWrapper marginBottom id='regelverk'>

@@ -1,7 +1,9 @@
+'use client'
+
 import { Error } from '@/components/common/modalSchema/ModalSchema'
 import { TOption, TOr } from '@/constants/commonConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import {
   Button,
   DatePicker,
@@ -13,7 +15,7 @@ import {
   useDatepicker,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, ReactNode, useContext, useEffect, useRef, useState } from 'react'
 import { FieldWrapper } from './fieldWrapper/fieldWrapper'
 import LabelWithTooltip from './labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from './modalSchema/formError/formError'
@@ -308,7 +310,8 @@ type TPropsOptionList = IPropsOptionList & TOptionORListname
 
 export const OptionList = (props: TPropsOptionList) => {
   const { label, value, onChange, options, listName, error } = props
-  const optionsList: TOption[] = options || codelist.getParsedOptions(listName)
+  const codelist = useContext(CodelistContext)
+  const optionsList: TOption[] = options || codelist.utils.getParsedOptions(listName)
 
   return (
     <Select
@@ -320,7 +323,7 @@ export const OptionList = (props: TPropsOptionList) => {
       onChange={(event: ChangeEvent<HTMLSelectElement>) => {
         const val: string = event.target.value
         const toSet: string | ICode =
-          listName && val ? (codelist.getCode(listName, val) as ICode) : val
+          listName && val ? (codelist.utils.getCode(listName, val) as ICode) : val
         return onChange(toSet)
       }}
     >

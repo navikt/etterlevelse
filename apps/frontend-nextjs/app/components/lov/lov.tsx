@@ -1,8 +1,11 @@
+'use client'
+
 import { EListName, IRegelverk, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { codelist } from '@/provider/kodeverk/kodeverkService'
 import { env } from '@/util/env/env'
 import { Link } from '@navikt/ds-react'
-import { FunctionComponent, ReactNode } from 'react'
+import { FunctionComponent, ReactNode, useContext } from 'react'
 
 // unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -38,6 +41,7 @@ interface ILovViewProps {
 
 export const LovView: FunctionComponent<ILovViewProps> = (props) => {
   const { regelverk, openOnSamePage } = props
+  const codelist = useContext(CodelistContext)
 
   if (!regelverk) return null
 
@@ -45,9 +49,12 @@ export const LovView: FunctionComponent<ILovViewProps> = (props) => {
 
   const lovCode: string = lov?.code
 
-  const lovDisplay: string = lov && codelist.getShortname(EListName.LOV, lovCode)
+  const lovDisplay: string = lov && codelist.utils.getShortname(EListName.LOV, lovCode)
 
-  const descriptionText: string | ReactNode | undefined = codelist.valid(EListName.LOV, lovCode)
+  const descriptionText: string | ReactNode | undefined = codelist.utils.valid(
+    EListName.LOV,
+    lovCode
+  )
     ? legalBasisLinkProcessor(lovCode, lovDisplay + ' ' + spesifisering, openOnSamePage)
     : spesifisering
 

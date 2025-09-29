@@ -11,7 +11,7 @@ import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { temaBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -20,17 +20,18 @@ import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
 import { BodyShort, Detail, Heading, Label, LinkPanel, List } from '@navikt/ds-react'
 import _ from 'lodash'
 import { useParams } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 
 export const TemaPage = () => {
   const params = useParams()
   const temaCode = params.temaCode as string
   const [code, setCode] = useState<TTemaCode>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const codelist = useContext(CodelistContext)
 
   useEffect(() => {
     setIsLoading(true)
-    setCode(codelist.getCode(EListName.TEMA, temaCode) as TTemaCode)
+    setCode(codelist.utils.getCode(EListName.TEMA, temaCode) as TTemaCode)
     setIsLoading(false)
   }, [])
 
@@ -42,39 +43,42 @@ export const TemaPage = () => {
   )
 }
 
-const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => (
-  <div className='lg:grid lg:grid-flow-col lg:gap-2'>
-    <div>
-      {!noHeader && (
-        <Heading level='1' size='medium' spacing>
-          {tema.shortName}
-        </Heading>
-      )}
-      <Markdown source={tema.description} />
-    </div>
+const getTemaMainHeader = (tema: TTemaCode, lover: TLovCode[], noHeader?: boolean) => {
+  const codelist = useContext(CodelistContext)
+  return (
+    <div className='lg:grid lg:grid-flow-col lg:gap-2'>
+      <div>
+        {!noHeader && (
+          <Heading level='1' size='medium' spacing>
+            {tema.shortName}
+          </Heading>
+        )}
+        <Markdown source={tema.description} />
+      </div>
 
-    <div className='my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200'>
-      <Heading level='2' size='small' spacing>
-        Ansvarlig for lovtolkning
-      </Heading>
-      {_.uniq(lover.map((lov: TLovCode) => lov.data?.underavdeling)).map(
-        (code: string | undefined, index: number) => (
-          <BodyShort key={code + '_' + index} size='large' spacing>
-            {codelist.getCode(EListName.UNDERAVDELING, code)?.shortName}
-          </BodyShort>
-        )
-      )}
-      <Heading level='2' size='small' spacing>
-        Lovdata
-      </Heading>
-      {lover.map((lov: TLovCode, index: number) => (
-        <div key={lov.code + '_' + index} className='mb-1.5'>
-          <ExternalLink href={lovdataBase(lov.code)}>{lov.shortName}</ExternalLink>
-        </div>
-      ))}
+      <div className='my-8 lg:border-l-2 lg:pl-2 lg:border-gray-200'>
+        <Heading level='2' size='small' spacing>
+          Ansvarlig for lovtolkning
+        </Heading>
+        {_.uniq(lover.map((lov: TLovCode) => lov.data?.underavdeling)).map(
+          (code: string | undefined, index: number) => (
+            <BodyShort key={code + '_' + index} size='large' spacing>
+              {codelist.utils.getCode(EListName.UNDERAVDELING, code)?.shortName}
+            </BodyShort>
+          )
+        )}
+        <Heading level='2' size='small' spacing>
+          Lovdata
+        </Heading>
+        {lover.map((lov: TLovCode, index: number) => (
+          <div key={lov.code + '_' + index} className='mb-1.5'>
+            <ExternalLink href={lovdataBase(lov.code)}>{lov.shortName}</ExternalLink>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 type TTemaViewProps = {
   tema: TTemaCode
@@ -82,7 +86,8 @@ type TTemaViewProps = {
 
 const TemaView: FunctionComponent<TTemaViewProps> = (props) => {
   const { tema } = props
-  const lover: TLovCode[] = codelist.getLovCodesForTema(tema.code)
+  const codelist = useContext(CodelistContext)
+  const lover: TLovCode[] = codelist.utils.getLovCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: lover.map((lov) => lov.code) },
     { skip: !lover.length }

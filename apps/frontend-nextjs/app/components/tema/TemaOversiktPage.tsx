@@ -3,11 +3,11 @@
 import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 
 export const TemaOversiktPage = () => {
@@ -33,6 +33,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   const [num] = useState<{ [t: string]: number[] }>({})
   const [kravAntall, setKravAntall] = useState<number>(0)
   const [temaListe, setTemaListe] = useState<TTemaCode[]>([])
+  const codelist = useContext(CodelistContext)
 
   const updateNum = (tema: string, temaNum: number[]): void => {
     num[tema] = temaNum
@@ -50,7 +51,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   useEffect(() => {
     console.debug(codelist.lists)
     setTemaListe(
-      codelist
+      codelist.utils
         .getCodes(EListName.TEMA)
         .sort((a: TTemaCode, b: TTemaCode) =>
           a.shortName.localeCompare(b.shortName, 'nb')
@@ -86,7 +87,8 @@ interface ITemaPanelProps {
 }
 
 export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
-  const lover: TLovCode[] = codelist.getLovCodesForTema(tema.code)
+  const codelist = useContext(CodelistContext)
+  const lover: TLovCode[] = codelist.utils.getLovCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
     { lover: [...lover.map((lov: TLovCode) => lov.code)] },
     { skip: !lover.length }

@@ -6,7 +6,6 @@ import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
 import { kravNummerUrl, kravlisteUrl } from '@/routes/krav/kravRoutes'
 import { kravCreateValidation } from '@/test/krav/schemaValidation/kravSchemaValidation'
 import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -14,10 +13,11 @@ import { Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { KravFormFields } from '../edit/kravFormFields/kravFormFields'
 import { KravStandardButtons } from '../edit/kravStandardButtons/kravStandardButtons'
 import ErrorModal from '../kravEditPage/errorModal/errorModal'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 
 export const KravCreatePage = () => {
   const router: AppRouterInstance = useRouter()
@@ -26,14 +26,15 @@ export const KravCreatePage = () => {
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>([])
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
-
+  const codelist = useContext(CodelistContext)
+  
   const submit = (krav: TKravQL): void => {
     setLoading(true)
-    const regelverk: TLovCode = codelist.getCode(
+    const regelverk: TLovCode = codelist.utils.getCode(
       EListName.LOV,
       krav.regelverk[0]?.lov.code
     ) as TLovCode
-    const underavdeling: ICode = codelist.getCode(
+    const underavdeling: ICode = codelist.utils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
     ) as ICode

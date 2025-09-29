@@ -5,7 +5,7 @@ import { kravStatus } from '@/components/etterlevelse/krav/kravComponents'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { codelist } from '@/provider/kodeverk/kodeverkService'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { handleSort } from '@/util/handleTableSort'
@@ -20,13 +20,14 @@ import {
   Table,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 const KravAdminPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
+  const codelist = useContext(CodelistContext)
 
   let sortedData: IKrav[] = tableContent
 
@@ -39,8 +40,8 @@ const KravAdminPage = () => {
       case 'avdeling':
         return (a.underavdeling?.shortName || '').localeCompare(b.underavdeling?.shortName || '')
       case 'tema':
-        return (codelist.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
-          codelist.getCode(EListName.TEMA, b.tema)?.shortName || ''
+        return (codelist.utils.getCode(EListName.TEMA, a.tema)?.shortName || '').localeCompare(
+          codelist.utils.getCode(EListName.TEMA, b.tema)?.shortName || ''
         )
       case 'status':
         return (a.status || '').localeCompare(b.status || '')
@@ -134,7 +135,7 @@ const KravAdminPage = () => {
                     {' '}
                     {krav.tema && (
                       <Link href={`${temaUrl}/${krav.tema}`}>
-                        {codelist.getCode(EListName.TEMA, krav.tema)?.shortName}
+                        {codelist.utils.getCode(EListName.TEMA, krav.tema)?.shortName}
                       </Link>
                     )}
                   </Table.DataCell>
