@@ -7,7 +7,7 @@ export const etterlevelseDokumentasjonerUrl = (tab?: string): string => {
   const url: string = `${dokumentasjonUrl}er`
 
   if (tab) {
-    return `${url}/${tab}`
+    return `${url}?tab=${tab}`
   }
 
   return url
