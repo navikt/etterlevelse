@@ -71,6 +71,7 @@
     "remark-gfm": "^4.0.1",
     "rxjs": "^7.8.2",
     "tailwindcss": "^4.1.13",
+    "react-draft-wysiwyg-next": "1.17.2",
     "yup": "^1.7.1"
   },
   "devDependencies": {
@@ -97,7 +98,6 @@
     "lodash": "^4.17.21",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
-    "react-draft-wysiwyg": "^1.15.0",
     "react-select": "^5.10.2",
     "typescript": "^5.9.2"
   }
