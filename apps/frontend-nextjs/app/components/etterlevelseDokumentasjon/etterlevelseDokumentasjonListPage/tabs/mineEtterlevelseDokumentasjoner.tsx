@@ -1,9 +1,9 @@
 import { InfoBlock2 } from '@/components/common/infoBlock/infoBlock'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { env } from '@/util/env/env'
 import { ettlevColors } from '@/util/theme/theme'
 import { BodyShort, Heading } from '@navikt/ds-react'
 import Link from 'next/link'
-import { env } from 'process'
 import { FunctionComponent } from 'react'
 import { bamseIcon } from '../../image/image'
 import { TCustomTeamObject } from '../dokumentasjonTabs'
@@ -83,7 +83,14 @@ export const MineEtterlevelseDokumentasjoner: FunctionComponent<TProps> = ({
             backgroundColor={ettlevColors.grey25}
           >
             <div className='mt-4'>
-              <Link href={`${env.teamKatBaseUrl}`}>Teamkatalogen (åpner i en ny fane)</Link>
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label='Teamkatalogen'
+                href={`${env.teamKatBaseUrl}`}
+              >
+                Teamkatalogen (åpner i en ny fane)
+              </Link>
             </div>
           </InfoBlock2>
         </div>
