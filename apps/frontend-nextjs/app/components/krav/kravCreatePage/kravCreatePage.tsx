@@ -6,6 +6,7 @@ import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { kravNummerUrl, kravlisteUrl } from '@/routes/krav/kravRoutes'
 import { kravCreateValidation } from '@/test/krav/schemaValidation/kravSchemaValidation'
 import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -17,7 +18,6 @@ import { useContext, useState } from 'react'
 import { KravFormFields } from '../edit/kravFormFields/kravFormFields'
 import { KravStandardButtons } from '../edit/kravStandardButtons/kravStandardButtons'
 import ErrorModal from '../kravEditPage/errorModal/errorModal'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 
 export const KravCreatePage = () => {
   const router: AppRouterInstance = useRouter()
@@ -27,7 +27,7 @@ export const KravCreatePage = () => {
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
   const codelist = useContext(CodelistContext)
-  
+
   const submit = (krav: TKravQL): void => {
     setLoading(true)
     const regelverk: TLovCode = codelist.utils.getCode(

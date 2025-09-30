@@ -5,10 +5,10 @@ import {
   ICodeListFormValues,
   ILovCodeData,
 } from '@/constants/kodeverk/kodeverkConstants'
+import { codeListSchema } from '@/provider/kodeverk/kodeverkProvider'
 import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { LovCodeDataForm } from './LovCode'
-import { codeListSchema } from '@/provider/kodeverk/kodeverkProvider'
 
 type TModalCreateProps = {
   title: string

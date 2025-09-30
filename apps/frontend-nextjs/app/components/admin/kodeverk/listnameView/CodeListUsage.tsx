@@ -3,10 +3,10 @@
 import { replaceCodelistUsage } from '@/api/kodeverk/kodeverkApi'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
 import { ChangeEvent, createRef, useContext, useEffect, useState } from 'react'
 import { ObjectLink } from '../../common/commonComponents'
-import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
   const { usage } = props
@@ -81,7 +81,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const ref = createRef<HTMLDivElement>()
 
   const codelist = useContext(CodelistContext)
-  
+
   const { usage, refresh } = props
   useEffect(() => {
     setShowReplace(false)
