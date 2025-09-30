@@ -12,6 +12,6 @@ COPY . .
 
 ENV NODE_ENV=production
 
-RUN npm run build
+RUN yarn run build
 
-CMD npm run start
+CMD yarn run start
