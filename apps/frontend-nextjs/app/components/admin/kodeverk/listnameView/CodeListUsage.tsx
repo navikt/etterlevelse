@@ -9,14 +9,23 @@ import { ChangeEvent, createRef, useContext, useEffect, useState } from 'react'
 import { ObjectLink } from '../../common/commonComponents'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
+  const [rows, setRows] = useState<any>(0)
   const { usage } = props
   const krav = !!usage.krav.length
   const etterlevelseDokumentasjoner = !!usage.etterlevelseDokumentasjoner.length
   const codelist = !!usage.codelist.length
 
-  const rows = usage
-    ? Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length)
-    : -1
+  useEffect(() => {
+    setRows(
+      usage
+        ? Math.max(
+            usage.krav.length,
+            usage.etterlevelseDokumentasjoner.length,
+            usage.codelist.length
+          )
+        : -1
+    )
+  }, [])
 
   return (
     <Table>
