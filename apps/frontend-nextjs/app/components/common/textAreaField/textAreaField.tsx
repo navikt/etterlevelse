@@ -6,7 +6,7 @@ import { ChangeEvent, ReactNode, useState } from 'react'
 import { FieldWrapper } from '../fieldWrapper/fieldWrapper'
 import { Markdown } from '../markdown/markdown'
 import { FormError } from '../modalSchema/formError/formError'
-import { TextEditor } from '../textEditor/TextEditor'
+import TextEditor from '../textEditor/TextEditorClient'
 
 interface ILabel {
   label: string
@@ -53,7 +53,7 @@ export const TextAreaField = ({
   withHighlight,
   withUnderline,
 }: IPropsTextAreaField) => {
-  const [mode, setMode] = useState('edit')
+  const [mode, setMode] = useState<'edit' | 'view'>('edit')
 
   return (
     <FieldWrapper marginBottom={marginBottom} id={name}>
@@ -72,7 +72,13 @@ export const TextAreaField = ({
                   <TextEditor
                     height={height}
                     initialValue={fieldProps.field.value}
-                    setValue={(v: string) => fieldProps.form.setFieldValue(name, v)}
+                    setValue={(v: string) => {
+                      // Only update Formik if form is mounted
+                      if (fieldProps.form.isSubmitting !== undefined) {
+                        fieldProps.form.setFieldValue(name, v)
+                        if (setIsFormDirty) setIsFormDirty(true)
+                      }
+                    }}
                     errors={fieldProps.form.errors}
                     name={name}
                     setIsFormDirty={setIsFormDirty}
@@ -87,7 +93,11 @@ export const TextAreaField = ({
                   </div>
                 )}
                 <div className='flex flex-col items-end justify-end mt-[-1px]'>
-                  <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
+                  <ToggleGroup
+                    defaultValue='edit'
+                    onChange={(value) => setMode(value as 'edit' | 'view')}
+                    size='small'
+                  >
                     <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
                     <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
                   </ToggleGroup>
@@ -104,10 +114,8 @@ export const TextAreaField = ({
                 {...fieldProps.field}
                 placeholder={noPlaceholder ? '' : placeholder ? placeholder : label}
                 onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-                  if (setIsFormDirty) {
-                    setIsFormDirty(true)
-                  }
-                  fieldProps.field.onChange(event)
+                  fieldProps.form.setFieldValue(name, event.target.value)
+                  if (setIsFormDirty) setIsFormDirty(true)
                 }}
               />
             )}

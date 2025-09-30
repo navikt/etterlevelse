@@ -3,14 +3,14 @@ import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWith
 import { Markdown } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
-import TextEditor from '@/components/common/textEditor/TextEditor'
+import TextEditor from '@/components/common/textEditor/TextEditorClient'
 import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Box, Button, Radio, RadioGroup, TextField, ToggleGroup, Tooltip } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import _ from 'lodash'
-import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
+import { ChangeEvent, FunctionComponent, useEffect, useRef, useState } from 'react'
 
 type TKravSuksesskriterieEditProps = {
   setIsFormDirty?: (v: boolean) => void
@@ -128,7 +128,11 @@ const Kriterie = ({
   newVersion,
 }: IPropsKriterie) => {
   const debounceDelay = 500
+  const nummer = index + 1
   const [navn, setNavn, navnInput] = useDebouncedState(suksesskriterium.navn, debounceDelay)
+  const updateIndex = (newIndex: number) => {
+    fieldArrayRenderProps.move(index, newIndex)
+  }
   const [beskrivelse, setBeskrivelse] = useDebouncedState(
     suksesskriterium.beskrivelse || '',
     debounceDelay
@@ -141,15 +145,14 @@ const Kriterie = ({
 
   const [mode, setMode] = useState('edit')
 
-  const nummer = index + 1
-
-  const updateIndex = (newIndex: number) => {
-    const suksesskriterieToMove = fieldArrayRenderProps.form.values.suksesskriterier[index]
-    fieldArrayRenderProps.remove(index)
-    fieldArrayRenderProps.insert(newIndex, suksesskriterieToMove)
-  }
+  // Track initial mount to avoid calling update on first render
+  const isFirstRender = useRef(true)
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
     update({
       id: suksesskriterium.id,
       navn,
