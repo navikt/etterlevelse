@@ -3,7 +3,7 @@ import { filteredEtterlevelsesDokumentasjoner } from '@/util/filteredEtterlevels
 import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '@/util/sortEtterlevelseDokumentasjonerByUsersLastModifiedDate/sortEtterlevelseDokumentasjonerByUsersLastModifiedDateUtil'
 import { BodyLong, Heading, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
-import { EtterlevelseDokumentasjonsPanel } from './etterlevelseDokumentasjonsPanel/etterlevelseDokumentasjonsPanel'
+import { EtterlevelseDokumentasjonsPanel } from '../../../etterlevelseDokumentasjon/etterlevelseDokumentasjonListPage/panels/etterlevelseDokumentasjonsPanel'
 
 type TProps = {
   etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
