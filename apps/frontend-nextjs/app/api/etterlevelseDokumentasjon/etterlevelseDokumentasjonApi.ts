@@ -33,6 +33,30 @@ export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonI
   ).data
 }
 
+export const createEtterlevelseDokumentasjon = async (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+) => {
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  return (
+    await axios.post<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon`,
+      dto
+    )
+  ).data
+}
+
+export const updateEtterlevelseDokumentasjon = async (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+) => {
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  return (
+    await axios.put<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`,
+      dto
+    )
+  ).data
+}
+
 export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: string) => {
   const isCreateNew = etterlevelseDokumentasjonId === 'ny'
   const [data, setData] = useState<TEtterlevelseDokumentasjonQL | undefined>(
@@ -65,7 +89,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   ]
 }
 
-const etterlevelseDokumentasjonMapToFormVal = (
+export const etterlevelseDokumentasjonMapToFormVal = (
   etterlevelseDokumentasjon: Partial<TEtterlevelseDokumentasjonQL>
 ): TEtterlevelseDokumentasjonQL => ({
   id: etterlevelseDokumentasjon.id || '',
@@ -102,3 +126,30 @@ const etterlevelseDokumentasjonMapToFormVal = (
   p360Recno: etterlevelseDokumentasjon.p360Recno || 0,
   p360CaseNumber: etterlevelseDokumentasjon.p360CaseNumber || '',
 })
+
+export const etterlevelseDokumentasjonToDomainToObject = (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+): IEtterlevelseDokumentasjon => {
+  const domainToObject = {
+    ...etterlevelseDokumentasjon,
+    behandlingIds: etterlevelseDokumentasjon.behandlinger
+      ? etterlevelseDokumentasjon.behandlinger.map((behandling) => behandling.id)
+      : [],
+    irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((irrelevans) => irrelevans.code),
+    teams: etterlevelseDokumentasjon.teamsData
+      ? etterlevelseDokumentasjon.teamsData.map((team) => team.id)
+      : [],
+    resources: etterlevelseDokumentasjon.resourcesData
+      ? etterlevelseDokumentasjon.resourcesData.map((resource) => resource.navIdent)
+      : [],
+    risikoeiere: etterlevelseDokumentasjon.risikoeiereData
+      ? etterlevelseDokumentasjon.risikoeiereData.map((resource) => resource.navIdent)
+      : [],
+  } as any
+  delete domainToObject.changeStamp
+  delete domainToObject.version
+  delete domainToObject.teamsData
+  delete domainToObject.resourcesData
+  delete domainToObject.behandlinger
+  return domainToObject
+}
