@@ -1,26 +1,30 @@
 'use client'
 
-import { getBehandling, searchBehandlingOptions } from '@/api/behandlingskatalog/behandlingskatalogApi'
+import {
+  getBehandling,
+  searchBehandlingOptions,
+} from '@/api/behandlingskatalog/behandlingskatalogApi'
 import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '@/query/etterlevelse/etterlevelseDokumentasjonQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { useQuery } from '@apollo/client/react'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Label, Loader } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import AsyncSelect from 'react-select/async'
-import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
-import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '@/query/etterlevelse/etterlevelseDokumentasjonQuery'
 import { TVariables } from '../dokumentasjonTabs'
-import { useSearchParams } from 'next/navigation'
+import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
 
 export const BehandlingSok = () => {
   const pageSize = 20
-  const [searchParams, setSearchParams] = useSearchParams()
+  const searchParams = useSearchParams()
   const behandlingUUID = searchParams.get('behandlingId')
+  const router = useRouter()
   const [selectedBehandling, setSelectedBehandling] = useState<IBehandling>()
   const {
     data,
@@ -114,11 +118,7 @@ export const BehandlingSok = () => {
             if (value) {
               const behandlingData = value as IBehandling
               setSelectedBehandling(behandlingData)
-              searchParams.set(
-                'behandlingId',
-                behandlingData.id ? behandlingData.id.toString() : ''
-              )
-              setSearchParams(searchParams)
+              router.push(`?behandlingId=${behandlingData.id}`)
             }
           }}
           styles={selectOverrides}

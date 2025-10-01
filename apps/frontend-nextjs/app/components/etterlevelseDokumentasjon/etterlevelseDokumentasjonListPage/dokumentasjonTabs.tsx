@@ -11,10 +11,10 @@ import { useQuery } from '@apollo/client/react'
 import { Tabs } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import BehandlingSok from './tabs/BehandlingSok'
+import { AlleEtterlevelsesDokumentasjoner } from './tabs/alleEtterlevelsesDokumentasjoner'
+import BehandlingSok from './tabs/behandlingSok'
 import MineEtterlevelseDokumentasjoner from './tabs/mineEtterlevelseDokumentasjoner'
 import { SisteEtterlevelseDokumentasjoner } from './tabs/sisteEtterlevelseDokumentasjoner'
-import { AlleEtterlevelsesDokumentasjoner } from './tabs/AlleEtterlevelsesDokumentasjoner'
 
 enum ETab {
   MINE = 'mine',
