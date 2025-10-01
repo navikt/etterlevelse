@@ -11,7 +11,10 @@ import { useQuery } from '@apollo/client/react'
 import { Tabs } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import BehandlingSok from './tabs/BehandlingSok'
 import MineEtterlevelseDokumentasjoner from './tabs/mineEtterlevelseDokumentasjoner'
+import { SisteEtterlevelseDokumentasjoner } from './tabs/sisteEtterlevelseDokumentasjoner'
+import { AlleEtterlevelsesDokumentasjoner } from './tabs/AlleEtterlevelsesDokumentasjoner'
 
 enum ETab {
   MINE = 'mine',
@@ -129,9 +132,18 @@ export const DokumentasjonTabs = () => {
           loading={loading}
         />
       </Tabs.Panel>
-      <Tabs.Panel value={ETab.SISTE}>Siste</Tabs.Panel>
-      <Tabs.Panel value={ETab.ALLE}>Alle</Tabs.Panel>
-      <Tabs.Panel value={ETab.BEHANDLINGSOK}>Behandlingsøk</Tabs.Panel>
+      <Tabs.Panel value={ETab.SISTE}>
+        <SisteEtterlevelseDokumentasjoner
+          etterlevelseDokumentasjoner={etterlevelseDokumentasjoner.content}
+          loading={loading}
+        />
+      </Tabs.Panel>
+      <Tabs.Panel value={ETab.ALLE}>
+        <AlleEtterlevelsesDokumentasjoner />
+      </Tabs.Panel>
+      <Tabs.Panel value={ETab.BEHANDLINGSOK}>
+        <BehandlingSok />
+      </Tabs.Panel>
     </Tabs>
   )
 }
