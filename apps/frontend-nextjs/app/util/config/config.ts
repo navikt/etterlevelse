@@ -9,6 +9,3 @@ export const slackLink = (channelId: string) =>
 export const slackUserLink = (userId: string) => `slack://user?team=${navSlackTeamId}&id=${userId}`
 export const termUrl = (termId: string) =>
   `https://navno.sharepoint.com/sites/begreper/SitePages/Begrep.aspx?bid=${termId}`
-
-export const isDev: boolean =
-  window.location.origin.includes('.dev.') || window.location.origin.includes('localhost')
