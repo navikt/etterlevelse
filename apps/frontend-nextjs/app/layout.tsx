@@ -13,6 +13,9 @@ type TProps = {
 const Main: FunctionComponent<TProps> = async ({ children }) => {
   return (
     <html lang='no'>
+      <head>
+        <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
+      </head>
       <body>
         <UserProvider>
           <CodelistProvider>

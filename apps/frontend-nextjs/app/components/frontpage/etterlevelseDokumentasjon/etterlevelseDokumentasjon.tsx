@@ -6,7 +6,7 @@ import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/messag
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { getEtterlevelseDokumentasjonListQuery } from '@/query/etterlevelse/etterlevelseDokumentasjonQuery'
+import { getEtterlevelseDokumentasjonListQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { useQuery } from '@apollo/client/react'

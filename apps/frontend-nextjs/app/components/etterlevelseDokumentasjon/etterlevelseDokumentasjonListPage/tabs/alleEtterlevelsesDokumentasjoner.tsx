@@ -1,13 +1,15 @@
+'use client'
+
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { getEtterlevelseDokumentasjonListQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
+import { emptyPage } from '@/util/common/emptyPageUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { useQuery } from '@apollo/client/react'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { TVariables } from '../dokumentasjonTabs'
-import { getEtterlevelseDokumentasjonListQuery } from '@/query/etterlevelse/etterlevelseDokumentasjonQuery'
-import { emptyPage } from '@/util/common/emptyPageUtil'
 import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
 
 export const AlleEtterlevelsesDokumentasjoner = () => {

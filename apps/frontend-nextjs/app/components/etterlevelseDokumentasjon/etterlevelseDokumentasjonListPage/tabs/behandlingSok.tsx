@@ -8,7 +8,7 @@ import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndica
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '@/query/etterlevelse/etterlevelseDokumentasjonQuery'
+import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { useQuery } from '@apollo/client/react'
