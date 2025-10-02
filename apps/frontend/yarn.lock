@@ -2523,12 +2523,12 @@
   dependencies:
     undici-types "~7.13.0"
 
-"@types/node@24.2.1":
-  version "24.2.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.2.1.tgz#83e41543f0a518e006594bb394e2cd961de56727"
-  integrity sha512-DRh5K+ka5eJic8CjH7td8QpYEV6Zo10gfRkjHCO3weqZHWDtAaSTFtl4+VMqOJ4N5jcuhZ9/l+yy8rVgw7BQeQ==
+"@types/node@24.6.1":
+  version "24.6.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.6.1.tgz#29cd365beb4419b3b8271c7464f1a563446d7481"
+  integrity sha512-ljvjjs3DNXummeIaooB4cLBKg2U6SPI6Hjra/9rRIy7CpM0HpLtG9HptkMKAb4HYWy5S7HUvJEuWgr/y0U8SHw==
   dependencies:
-    undici-types "~7.10.0"
+    undici-types "~7.13.0"
 
 "@types/parse-json@^4.0.0":
   version "4.0.2"
@@ -10115,10 +10115,10 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-json-view-lite@2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/react-json-view-lite/-/react-json-view-lite-2.4.2.tgz#796ed6c650c29123d87b9484889445d1a8a88ede"
-  integrity sha512-m7uTsXDgPQp8R9bJO4HD/66+i218eyQPAb+7/dGQpwg8i4z2afTFqtHJPQFHvJfgDCjGQ1HSGlL3HtrZDa3Tdg==
+react-json-view-lite@2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-json-view-lite/-/react-json-view-lite-2.5.0.tgz#c7ff011c7cc80e9900abc7aa4916c6a5c6d6c1c6"
+  integrity sha512-tk7o7QG9oYyELWHL8xiMQ8x4WzjCzbWNyig3uexmkLb54r8jO0yH3WCWx8UZS0c49eSA4QUmG5caiRJ8fAn58g==
 
 react-localization@2.0.6:
   version "2.0.6"
@@ -11889,11 +11889,6 @@ underscore@1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.12.1.tgz#7bb8cc9b3d397e201cf8553336d262544ead829e"
   integrity sha512-hEQt0+ZLDVUMhebKxL4x1BTtDY7bavVofhZ9KZ4aI26X9SRaE+Y3m83XUL1UP2jn8ynjndwCCpEHdUG+9pP1Tw==
-
-undici-types@~7.10.0:
-  version "7.10.0"
-  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-7.10.0.tgz#4ac2e058ce56b462b056e629cc6a02393d3ff350"
-  integrity sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag==
 
 undici-types@~7.13.0:
   version "7.13.0"
