@@ -3,6 +3,10 @@ import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
+export const getBehandling = async (id: string) => {
+  return (await axios.get<IBehandling>(`${env.backendBaseUrl}/behandling/${id}`)).data
+}
+
 export const searchBehandling = async (name: string): Promise<IBehandling[]> => {
   return (
     await axios.get<IPageResponse<IBehandling>>(`${env.backendBaseUrl}/behandling/search/${name}`)
