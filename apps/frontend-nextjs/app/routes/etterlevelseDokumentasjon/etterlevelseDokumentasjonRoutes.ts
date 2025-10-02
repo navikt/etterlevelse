@@ -1,4 +1,5 @@
 export const dokumentasjonUrl = '/dokumentasjon'
+export const etterlevelseDokumentasjonGjenbrukUrl = `${dokumentasjonUrl}/gjenbruk`
 
 export const etterlevelseDokumentasjonIdUrl = (etterlevelseDokumentasjonId?: string): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}`
@@ -8,6 +9,22 @@ export const etterlevelseDokumentasjonerUrl = (tab?: string): string => {
 
   if (tab) {
     return `${url}?tab=${tab}`
+  }
+
+  return url
+}
+
+export const etterlevelseDokumentasjonGjenbrukIdUrl = (
+  etterlevelseDokumentasjonId: string
+): string => `${etterlevelseDokumentasjonGjenbrukUrl}/${etterlevelseDokumentasjonId}`
+
+export const etterlevelseDokumentasjonRelasjonUrl = (
+  etterlevelseDokumentasjonId?: string
+): string => {
+  const url: string = `${dokumentasjonUrl}/relasjon`
+
+  if (etterlevelseDokumentasjonId) {
+    return `${url}/${etterlevelseDokumentasjonId}`
   }
 
   return url

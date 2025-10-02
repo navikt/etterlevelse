@@ -1,4 +1,6 @@
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import { isDev } from '../config/config'
+import { env } from '../env/env'
 
 export const behandlingName = (behandling?: IBehandling): string => {
   let behandlingName = ''
@@ -16,4 +18,8 @@ export const behandlingName = (behandling?: IBehandling): string => {
   }
 
   return behandlingName
+}
+
+export const getPollyBaseUrl = () => {
+  return `${env.pollyBaseUrl}${isDev ? '.dev' : ''}.nav.no/`
 }
