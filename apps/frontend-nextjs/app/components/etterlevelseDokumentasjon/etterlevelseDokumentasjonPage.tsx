@@ -12,9 +12,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     id?: string
   }> = useParams<{ id?: string }>()
 
-  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
-    params.id
-  )
+  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
