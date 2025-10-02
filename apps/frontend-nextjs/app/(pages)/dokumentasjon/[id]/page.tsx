@@ -1,4 +1,4 @@
-import { EtterlevelseDokumentasjonPage } from "@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage";
+import { EtterlevelseDokumentasjonPage } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage'
 
 const Page = () => <EtterlevelseDokumentasjonPage />
 
