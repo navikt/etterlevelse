@@ -118,7 +118,7 @@ export const BehandlingSok = () => {
             if (value) {
               const behandlingData = value as IBehandling
               setSelectedBehandling(behandlingData)
-              router.push(`?behandlingId=${behandlingData.id}`)
+              router.push(`?tab='behandlingsok'&behandlingId=${behandlingData.id}`)
             }
           }}
           styles={selectOverrides}
