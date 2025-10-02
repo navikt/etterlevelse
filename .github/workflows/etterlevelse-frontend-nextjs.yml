@@ -39,8 +39,8 @@ jobs:
       - name: use prod config and prod favicon
         if: github.ref == 'refs/heads/prod'
         run: |
-          cp cp .env.prod .env
-          cp cp ./public/faviconProd.svg ./public/favicon.svg
+          cp .env.prod .env
+          cp ./public/faviconProd.svg ./public/favicon.svg
 
       - name: add version
         env:
