@@ -43,7 +43,7 @@ import {
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { behandlingName } from '@/util/behandling/behandlingUtil'
-import { isDev } from '@/util/config/config'
+import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import {
@@ -415,7 +415,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     />
                   </div>
 
-                  {isDev && (
+                  {env.isDev && (
                     <ReadMore header='Hva hvis jeg ikke finner person'>
                       <div className='flex gap-2 items-end my-2'>
                         <TextField
@@ -528,7 +528,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     />
                   </div>
 
-                  {isDev && (
+                  {env.isDev && (
                     <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
                       <div className='flex gap-2 items-end my-2'>
                         <TextField

@@ -2,6 +2,7 @@
 
 export const env = {
   backendBaseUrl: process.env.NEXT_PUBLIC_BACKEND_ENDPOINT || '/api',
+  isDev: process.env.NEXT_PUBLIC_CONTEXT === 'dev',
   amplitudeEndpoint: process.env.NEXT_PUBLIC_AMPLITUDE_ENDPOINT!,
   amplitudeApiKey: process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY!,
   teamKatBaseUrl: process.env.NEXT_PUBLIC_TEAMKAT_BASE_URL!,
