@@ -30,13 +30,15 @@ jobs:
         with:
           node-version: "24.x"
           
-      - name: use dev config
+      - name: use dev config and dev favicon
         if: github.ref == 'refs/heads/master'
         run: cp .env.dev .env
+        run: cp ./public/faviconDev.svg ./public/favicon.svg
 
-      - name: use prod config
+      - name: use prod config and prod favicon
         if: github.ref == 'refs/heads/prod'
         run: cp .env.prod .env
+        run: cp ./public/faviconProd.svg ./public/favicon.svg
 
       - name: add version
         env:
