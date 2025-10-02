@@ -12,9 +12,9 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { BodyShort, Heading, Link } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { LoadingSkeleton } from '../common/loadingSkeleton/loadingSkeletonComponent'
-import { ContentLayout } from '../others/layout/content/content'
-import { PageLayout } from '../others/scaffold/scaffold'
+import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
+import { ContentLayout } from '../../others/layout/content/content'
+import { PageLayout } from '../../others/scaffold/scaffold'
 import { GjenbrukAlert } from './alert/GjenbrukAlert'
 import EtterlevelseDokumentasjonExpansionCard from './expantionCard/etterlevelseDokumentasjonExpansionCard'
 
