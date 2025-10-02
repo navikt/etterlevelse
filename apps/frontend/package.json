@@ -49,7 +49,7 @@
     "tailwindcss": "4.1.13",
     "ts-prune": "0.10.3",
     "typescript": "5.9.3",
-    "yup": "1.6.1"
+    "yup": "1.7.1"
   },
   "scripts": {
     "start": "craco start",
