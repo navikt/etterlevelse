@@ -3,8 +3,8 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IMember, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { getNumberOfMonthsBetween } from '../checkAge/checkAgeUtil'
 import moment from 'moment'
+import { getNumberOfMonthsBetween } from '../checkAge/checkAgeUtil'
 
 export const etterlevelseDokumentasjonName = (
   etterlevelseDokumentasjon?: IEtterlevelseDokumentasjon
