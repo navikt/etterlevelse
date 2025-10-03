@@ -1,7 +1,7 @@
 import { LoadingSkeleton } from '@/components/common/loadingSkeleton/loadingSkeletonComponent'
 import StatusTag from '@/components/common/statusTag/statusTagComponent'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
+import { kravNummerView } from '@/util/krav/kravUtil'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
@@ -18,7 +18,11 @@ export const KravOverview: FunctionComponent<TProps> = ({ kravLoading, krav }) =
       <div className='flex w-full pb-8'>
         <div className='flex flex-col w-full'>
           <div className='w-full'>
-            <BodyShort>{krav && krav.kravNummer !== 0 ? kravNummerView(krav) : 'Ny'}</BodyShort>
+            <BodyShort>
+              {krav && krav.kravNummer !== 0
+                ? kravNummerView(krav.kravVersjon, krav.kravNummer)
+                : 'Ny'}
+            </BodyShort>
 
             <Heading className='mb-3' size='medium' level='1'>
               {krav?.navn ? krav.navn : 'Ny'}

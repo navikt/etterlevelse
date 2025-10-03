@@ -15,8 +15,7 @@ import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { temaBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { sortKravListeByPriority } from '@/util/krav/kravUtil'
-import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
+import { kravNummerView, sortKravListeByPriority } from '@/util/krav/kravUtil'
 import { BodyShort, Detail, Heading, Label, LinkPanel, List } from '@navikt/ds-react'
 import _ from 'lodash'
 import { useParams } from 'next/navigation'
@@ -145,7 +144,9 @@ const TemaView: FunctionComponent<TTemaViewProps> = (props) => {
                 key={krav.kravNummer + '.' + krav.kravVersjon + '_' + index}
               >
                 <LinkPanel href={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}>
-                  <Detail weight='semibold'>{kravNummerView(krav)}</Detail>
+                  <Detail weight='semibold'>
+                    {kravNummerView(krav.kravVersjon, krav.kravNummer)}
+                  </Detail>
                   <BodyShort>{krav.navn}</BodyShort>
                 </LinkPanel>
               </List.Item>

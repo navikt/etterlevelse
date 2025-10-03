@@ -1,8 +1,8 @@
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IKrav } from '@/constants/krav/kravConstants'
-import { kravNummerView } from '../kravNummerView/kravNummerView'
 
-export const kravName = (krav: IKrav): string => `${kravNummerView(krav)} ${krav.navn}`
+export const kravName = (krav: IKrav): string =>
+  `${kravNummerView(krav.kravVersjon, krav.kravNummer)} ${krav.navn}`
 
 export const kravMap = (krav: IKrav) => ({
   value: krav.id,
@@ -27,4 +27,8 @@ export const sortKravListeByPriority = <T extends IKrav>(kraver: T[]) => {
       return -1
     }
   })
+}
+
+export const kravNummerView = (kravVersjon: number, kravNummer: number): string => {
+  return `K${kravNummer}.${kravVersjon}`
 }

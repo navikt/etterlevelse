@@ -7,7 +7,7 @@ import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
-import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
+import { kravNummerView } from '@/util/krav/kravUtil'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -45,14 +45,14 @@ export const KravPage = () => {
   return (
     <PageLayout
       key={`K${krav?.kravNummer}/${krav?.kravVersjon}`}
-      pageTitle={`${kravNummerView({
-        kravNummer: krav?.kravNummer ? krav.kravNummer : 0,
-        kravVersjon: krav?.kravVersjon ? krav.kravVersjon : 0,
-      })} ${krav?.navn}`}
-      currentPage={kravNummerView({
-        kravNummer: krav?.kravNummer ? krav.kravNummer : 0,
-        kravVersjon: krav?.kravVersjon ? krav.kravVersjon : 0,
-      })}
+      pageTitle={`${kravNummerView(
+        krav?.kravVersjon ? krav.kravVersjon : 0,
+        krav?.kravNummer ? krav.kravNummer : 0
+      )} ${krav?.navn}`}
+      currentPage={kravNummerView(
+        krav?.kravVersjon ? krav.kravVersjon : 0,
+        krav?.kravNummer ? krav.kravNummer : 0
+      )}
       breadcrumbPaths={getBreadcrumbPaths(kravTema)}
     >
       <KravOverview kravLoading={kravLoading} krav={krav} />

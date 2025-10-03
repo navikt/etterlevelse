@@ -1,6 +1,6 @@
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IKrav } from '@/constants/krav/kravConstants'
-import { kravNummerView } from '@/util/kravNummerView/kravNummerView'
+import { kravNummerView } from '@/util/krav/kravUtil'
 import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { ViewEtterlevelse } from '../etterlevelseView/etterlevelseView'
@@ -25,7 +25,7 @@ export const EtterlevelseModal: FunctionComponent<TProps> = ({
     aria-label='Etterlevelse Modal'
   >
     <Modal.Header className='w-full'>
-      <BodyShort>{kravNummerView(kravData)}</BodyShort>
+      <BodyShort>{kravNummerView(kravData.kravVersjon, kravData.kravNummer)}</BodyShort>
       <Heading size='medium' level='1'>
         {kravData.navn}
       </Heading>
