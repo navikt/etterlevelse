@@ -1,5 +1,5 @@
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
-import { IKrav } from '@/constants/krav/kravConstants'
+import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 
 export const kravName = (krav: IKrav): string =>
   `${kravNummerView(krav.kravVersjon, krav.kravNummer)} ${krav.navn}`
@@ -31,4 +31,12 @@ export const sortKravListeByPriority = <T extends IKrav>(kraver: T[]) => {
 
 export const kravNummerView = (kravVersjon: number, kravNummer: number): string => {
   return `K${kravNummer}.${kravVersjon}`
+}
+
+export const hasKravExpired = (alleKravVersjoner: IKravVersjon[], krav?: TKravQL): boolean => {
+  if (krav?.status === EKravStatus.UTGAATT && alleKravVersjoner.length === 1) {
+    return true
+  } else {
+    return krav ? krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString()) : false
+  }
 }

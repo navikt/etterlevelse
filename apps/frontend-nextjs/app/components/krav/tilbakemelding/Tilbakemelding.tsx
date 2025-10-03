@@ -44,7 +44,7 @@ import {
 import * as _ from 'lodash'
 import moment from 'moment'
 import { usePathname, useRouter } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import ResponseMelding from './ResponseMelding'
 import EndretInfo from './edit/EndreInfo'
 import MeldingKnapper from './edit/MeldingKnapper'
@@ -57,13 +57,11 @@ import {
 
 const DEFAULT_COUNT_SIZE = 5
 
-export const Tilbakemeldinger = ({
-  krav,
-  hasKravExpired,
-}: {
+type TProps = {
   krav: IKrav
   hasKravExpired: boolean
-}) => {
+}
+export const Tilbakemeldinger: FunctionComponent<TProps> = ({ krav, hasKravExpired }) => {
   const [tilbakemeldinger, loading, add, replace, remove] = useTilbakemeldinger(
     krav.kravNummer,
     krav.kravVersjon

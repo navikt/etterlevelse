@@ -3,7 +3,7 @@
 import { TilbakemeldingNyModal } from '@/components/etterlevelse/tilbakemeldingNyModal/tilbakemeldingNyModal'
 import { IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
+import { hasKravExpired } from '@/util/krav/kravUtil'
 import { BodyLong, Button, Heading } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 

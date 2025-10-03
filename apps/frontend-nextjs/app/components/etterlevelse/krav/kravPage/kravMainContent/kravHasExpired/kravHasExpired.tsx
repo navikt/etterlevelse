@@ -1,6 +1,7 @@
 import { Markdown } from '@/components/common/markdown/markdown'
 import ExpiredAlert from '@/components/etterlevelse/expiredAlert/expiredAlertComponent'
 import { EKravStatus, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { hasKravExpired } from '@/util/krav/kravUtil'
 import { Heading } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
@@ -9,25 +10,9 @@ type TProps = {
   alleKravVersjoner: IKravVersjon[]
 }
 
-const hasKravExpired: FunctionComponent<TProps> = ({ krav, alleKravVersjoner }) => {
-  if (krav?.status === EKravStatus.UTGAATT && alleKravVersjoner.length === 1) {
-    return true
-  } else {
-    let kravExpired
-
-    if (krav) {
-      kravExpired = krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString())
-    } else {
-      kravExpired = false
-    }
-
-    return kravExpired
-  }
-}
-
 export const KravHasExpired: FunctionComponent<TProps> = ({ krav, alleKravVersjoner }) => (
   <>
-    {hasKravExpired({ krav, alleKravVersjoner }) && krav && (
+    {hasKravExpired(alleKravVersjoner, krav) && krav && (
       <ExpiredAlert
         alleKravVersjoner={alleKravVersjoner}
         statusName={krav.status}

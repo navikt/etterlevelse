@@ -8,7 +8,7 @@ import {
   kravRedigeringIdUrl,
   kravlisteQueryUrl,
 } from '@/routes/krav/kravRoutes'
-import { hasKravExpired } from '@/util/hasKravExpired/hasKravExpired'
+import { hasKravExpired } from '@/util/krav/kravUtil'
 import { Button, Spacer } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
