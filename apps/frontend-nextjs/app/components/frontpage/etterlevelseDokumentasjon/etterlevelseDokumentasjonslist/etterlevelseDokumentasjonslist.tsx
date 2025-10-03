@@ -1,5 +1,5 @@
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { filteredEtterlevelsesDokumentasjoner } from '@/util/filteredEtterlevelsesDokumentasjoner/filteredEtterlevelsesDokumentasjoner'
+import { filteredEtterlevelsesDokumentasjoner } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '@/util/sortEtterlevelseDokumentasjonerByUsersLastModifiedDate/sortEtterlevelseDokumentasjonerByUsersLastModifiedDateUtil'
 import { BodyLong, Heading, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
