@@ -19,7 +19,7 @@ import {
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { BodyShort, Heading, Link } from '@navikt/ds-react'
+import { BodyShort, Heading, Link, ReadMore } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
@@ -153,6 +153,19 @@ export const EtterlevelseDokumentasjonPage = () => {
               </ContentLayout>
             </div>
           </div>
+
+          <Heading level='2' size='medium' spacing className='mt-3'>
+            Temaoversikt
+          </Heading>
+
+          {morDokumentRelasjon && (
+            <ReadMore header='Slik bruker du disse vurderingene' className='my-5'>
+              Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
+              suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du
+              kan gjenbruke vurderingene. De øvrige suksesskriteriene må du ta stilling til. Noen av
+              disse inneholder veiledning til hvordan du skal svare ut spørsmålene.
+            </ReadMore>
+          )}
         </PageLayout>
       )}
     </>
