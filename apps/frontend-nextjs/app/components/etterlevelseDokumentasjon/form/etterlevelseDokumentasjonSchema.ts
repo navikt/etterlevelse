@@ -1,9 +1,11 @@
 import * as yup from 'yup'
 
-const titleCheck = yup.string().required('Etterlevelsesdokumentasjon trenger en tittel')
-const beskrivelseCheck = yup.string().required('Etterlevelsesdokumentasjon trenger en beskrivelse')
+export const titleCheck = yup.string().required('Etterlevelsesdokumentasjon trenger en tittel')
+export const beskrivelseCheck = yup
+  .string()
+  .required('Etterlevelsesdokumentasjon trenger en beskrivelse')
 
-const varslingsadresserCheck = yup.array().test({
+export const varslingsadresserCheck = yup.array().test({
   name: 'varslingsadresserCheck',
   message: 'Påkrevd minst 1 varslingsadresse',
   test: function (varslingsadresser) {
@@ -11,7 +13,7 @@ const varslingsadresserCheck = yup.array().test({
   },
 })
 
-const teamsDataCheck = yup.array().test({
+export const teamsDataCheck = yup.array().test({
   name: 'teamsDataCheck',
   message: 'Påkrevd minst 1 team eller 1 person',
   test: function (teamsData) {
@@ -23,7 +25,7 @@ const teamsDataCheck = yup.array().test({
   },
 })
 
-const resourcesDataCheck = yup.array().test({
+export const resourcesDataCheck = yup.array().test({
   name: 'resourcesDataCheck',
   message: 'Påkrevd minst 1 team eller 1 person',
   test: function (resourcesData) {

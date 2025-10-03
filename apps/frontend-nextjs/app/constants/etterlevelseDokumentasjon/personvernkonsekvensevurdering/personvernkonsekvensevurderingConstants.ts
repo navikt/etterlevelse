@@ -29,6 +29,9 @@ export interface IPvkDokument {
 
   sendtTilPvoDato: string
   sendtTilPvoAv: string
+
+  godkjentAvRisikoeierDato: string
+  godkjentAvRisikoeier: string
 }
 
 export interface IPvkDokumentListItem {

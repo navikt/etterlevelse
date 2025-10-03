@@ -3,22 +3,28 @@
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   ERelationType,
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { BodyShort, Heading, Link } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
 import { ContentLayout } from '../../others/layout/content/content'
 import { PageLayout } from '../../others/scaffold/scaffold'
 import { GjenbrukAlert } from './alert/GjenbrukAlert'
+import EtterlevelseDokumentasjonButtonGroup from './buttonGroup/etterlevelseDokumentasjonButtonGroup'
 import EtterlevelseDokumentasjonExpansionCard from './expantionCard/etterlevelseDokumentasjonExpansionCard'
 
 export const EtterlevelseDokumentasjonPage = () => {
+  const user = useContext(UserContext)
   const params: Readonly<{
     id?: string
   }> = useParams<{ id?: string }>()
@@ -27,7 +33,13 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const [relasjonLoading, setRelasjonLoading] = useState(false)
-  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
+  const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
+    params.id
+  )
+
+  const [pvkDokument] = useState<IPvkDokument>()
+  const [behandlingsLivslop] = useState<IBehandlingensLivslop>()
+  const [risikoscenarioList] = useState<IRisikoscenario[]>([])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
@@ -89,6 +101,22 @@ export const EtterlevelseDokumentasjonPage = () => {
                       relasjonLoading={relasjonLoading}
                     />
                   </div>
+                </div>
+
+                <div className='flex justify-end'>
+                  {etterlevelseDokumentasjon && (
+                    <div className='gap-4 ml-5 flex flex-col '>
+                      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                        <EtterlevelseDokumentasjonButtonGroup
+                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                          pvkDokument={pvkDokument}
+                          behandlingsLivslop={behandlingsLivslop}
+                          risikoscenarioList={risikoscenarioList}
+                        />
+                      )}
+                    </div>
+                  )}
                 </div>
               </ContentLayout>
             </div>

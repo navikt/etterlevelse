@@ -29,3 +29,13 @@ export const etterlevelseDokumentasjonRelasjonUrl = (
 
   return url
 }
+
+export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: string): string => {
+  const url: string = `${dokumentasjonUrl}/edit`
+
+  if (etterlevelseDokumentasjonId) {
+    return `${url}/${etterlevelseDokumentasjonId}`
+  }
+
+  return url
+}

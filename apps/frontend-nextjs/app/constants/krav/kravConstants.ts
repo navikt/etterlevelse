@@ -110,3 +110,10 @@ export type TKravEtterlevelseData = {
   isIrrelevant?: boolean
   aktivertDato: string
 }
+
+export interface IKravReference {
+  navn: string
+  kravNummer: number
+  kravVersjon: number
+  temaCode: string
+}

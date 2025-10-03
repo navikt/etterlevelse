@@ -7,7 +7,7 @@ import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-const getEtterlevelseDokumentasjon = async (id: string) => {
+export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (
     await axios.get<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/${id}`
