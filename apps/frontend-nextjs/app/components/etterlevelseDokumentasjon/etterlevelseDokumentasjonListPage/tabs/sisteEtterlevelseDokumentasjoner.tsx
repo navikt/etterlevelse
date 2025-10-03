@@ -1,5 +1,5 @@
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '@/util/sortEtterlevelseDokumentasjonerByUsersLastModifiedDate/sortEtterlevelseDokumentasjonerByUsersLastModifiedDateUtil'
+import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { BodyShort, Loader } from '@navikt/ds-react'
 import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
 

@@ -1,6 +1,8 @@
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { filteredEtterlevelsesDokumentasjoner } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '@/util/sortEtterlevelseDokumentasjonerByUsersLastModifiedDate/sortEtterlevelseDokumentasjonerByUsersLastModifiedDateUtil'
+import {
+  filteredEtterlevelsesDokumentasjoner,
+  sortEtterlevelseDokumentasjonerByUsersLastModifiedDate,
+} from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { BodyLong, Heading, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { EtterlevelseDokumentasjonsPanel } from '../../../etterlevelseDokumentasjon/etterlevelseDokumentasjonListPage/panels/etterlevelseDokumentasjonsPanel'
