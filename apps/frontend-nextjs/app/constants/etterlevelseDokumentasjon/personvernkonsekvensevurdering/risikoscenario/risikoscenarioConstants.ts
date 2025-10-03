@@ -21,3 +21,9 @@ export interface IRisikoscenario {
   nivaaBegrunnelseEtterTiltak: string
   tiltakIds: string[]
 }
+
+export enum ERisikoscenarioType {
+  ALL = 'ALL',
+  GENERAL = 'GENERAL',
+  KRAV = 'KRAV',
+}

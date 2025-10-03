@@ -1,7 +1,10 @@
 'use client'
 
+import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
+import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -9,7 +12,10 @@ import {
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import {
+  ERisikoscenarioType,
+  IRisikoscenario,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -37,9 +43,11 @@ export const EtterlevelseDokumentasjonPage = () => {
     params.id
   )
 
-  const [pvkDokument] = useState<IPvkDokument>()
-  const [behandlingsLivslop] = useState<IBehandlingensLivslop>()
-  const [risikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
+  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [, setKravRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [, setIsRisikoscenarioLoading] = useState<boolean>(false)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
@@ -56,6 +64,30 @@ export const EtterlevelseDokumentasjonPage = () => {
           if (response.length > 0) setMorDokumentRelasjon(response[0])
           setRelasjonLoading(false)
         })
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((pvkDokument: IPvkDokument) => {
+            if (pvkDokument) {
+              setPvkDokument(pvkDokument)
+              setIsRisikoscenarioLoading(true)
+              getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL)
+                .then((riskoscenario) => {
+                  setRisikoscenarioList(riskoscenario.content)
+                  setKravRisikoscenarioList(
+                    riskoscenario.content.filter(
+                      (r: IRisikoscenario) => r.generelScenario === false
+                    )
+                  )
+                })
+                .finally(() => setIsRisikoscenarioLoading(false))
+            }
+          })
+          .catch(() => undefined)
+
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response: IBehandlingensLivslop) => {
+            if (response) setBehandlingsLivslop(response)
+          })
+          .catch(() => undefined)
       })()
     }
   }, [etterlevelseDokumentasjon])
