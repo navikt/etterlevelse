@@ -5,20 +5,27 @@ import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokument
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
-import { IBreadCrumbPath } from '@/constants/commonConstants'
+import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   ERelationType,
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
+import { IEtterlevelseDokumentasjonStats } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { TKravQL } from '@/constants/krav/kravConstants'
+import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { CodelistContext, EListName } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
+import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
+import { filterEtterlevelseDokumentasjonStatsData } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
+import { useQuery } from '@apollo/client/react'
 import { BodyShort, Heading, Link, ReadMore } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
@@ -32,6 +39,8 @@ import EtterlevelseDokumentasjonExpansionCard from './expantionCard/etterlevelse
 
 export const EtterlevelseDokumentasjonPage = () => {
   const user = useContext(UserContext)
+  const codelist = useContext(CodelistContext)
+  const temaListe: TTemaCode[] = codelist.utils.getCodes(EListName.TEMA) as TTemaCode[]
   const params: Readonly<{
     id?: string
   }> = useParams<{ id?: string }>()
@@ -43,16 +52,40 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.id
   )
+  const variables: {
+    etterlevelseDokumentasjonId: string | undefined
+  } = { etterlevelseDokumentasjonId: params.id }
 
+  const {
+    data: relevanteData,
+    refetch: refetchRelevanteData,
+    loading,
+  } = useQuery<{
+    etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
+  }>(getEtterlevelseDokumentasjonStatsQuery, {
+    variables,
+    skip: !params.id,
+  })
+
+  const [relevanteStats, setRelevanteStats] = useState<TKravQL[]>([])
+  const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
-  const [, setKravRisikoscenarioList] = useState<IRisikoscenario[]>([])
-  const [, setIsRisikoscenarioLoading] = useState<boolean>(false)
+  const [kravRisikoscenarioList, setKravRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(false)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
   useEffect(() => {
+    const [relevanteStatusListe, utgaattStatusListe] =
+      filterEtterlevelseDokumentasjonStatsData(relevanteData)
+    setRelevanteStats(relevanteStatusListe)
+    setUtgaattStats(utgaattStatusListe)
+  }, [relevanteData])
+
+  useEffect(() => {
+    setTimeout(() => refetchRelevanteData(), 200)
     if (etterlevelseDokumentasjon) {
       setEtterlevelseNummer(etterlevelseDokumentasjon.etterlevelseNummer.toString())
       setTitle(etterlevelseDokumentasjon.title)
@@ -167,7 +200,18 @@ export const EtterlevelseDokumentasjonPage = () => {
               disse inneholder veiledning til hvordan du skal svare ut spørsmålene.
             </ReadMore>
           )}
-          <EtterlevelseDokumentasjonPageTabs />
+          <EtterlevelseDokumentasjonPageTabs
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+            temaListe={temaListe}
+            relevanteStats={relevanteStats}
+            utgaattStats={utgaattStats}
+            loading={loading}
+            morDocumentRelation={morDokumentRelasjon}
+            pvkDokument={pvkDokument}
+            risikoscenarioList={kravRisikoscenarioList}
+            isRisikoscenarioLoading={isRisikoscenarioLoading}
+          />
         </PageLayout>
       )}
     </>

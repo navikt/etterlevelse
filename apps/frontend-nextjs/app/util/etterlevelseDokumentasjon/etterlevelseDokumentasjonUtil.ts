@@ -1,7 +1,10 @@
+import { IPageResponse } from '@/constants/commonConstants'
 import {
   IEtterlevelseDokumentasjon,
+  IEtterlevelseDokumentasjonStats,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TKravQL } from '@/constants/krav/kravConstants'
 import { IMember, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import moment from 'moment'
 import { getNumberOfMonthsBetween } from '../checkAge/checkAgeUtil'
@@ -103,4 +106,35 @@ export const sortEtterlevelseDokumentasjonerByUsersLastModifiedDate = (
       )
     }
   })
+}
+
+export const filterEtterlevelseDokumentasjonStatsData = (
+  unfilteredData:
+    | {
+        etterlevelseDokumentasjon: IPageResponse<{
+          stats: IEtterlevelseDokumentasjonStats
+        }>
+      }
+    | undefined
+): TKravQL[][] => {
+  const relevanteStatusListe: TKravQL[] = []
+  const utgaattStatusListe: TKravQL[] = []
+
+  unfilteredData?.etterlevelseDokumentasjon.content.forEach(({ stats }) => {
+    relevanteStatusListe.push(...stats.relevantKrav)
+    utgaattStatusListe.push(...stats.utgaattKrav)
+  })
+
+  relevanteStatusListe.sort((a: TKravQL, b: TKravQL) => {
+    return a.kravNummer - b.kravNummer
+  })
+
+  utgaattStatusListe.sort((a: TKravQL, b: TKravQL) => {
+    if (a.kravNummer === b.kravNummer) {
+      return a.kravVersjon - b.kravVersjon
+    }
+    return a.kravNummer - b.kravNummer
+  })
+
+  return [relevanteStatusListe, utgaattStatusListe]
 }
