@@ -33,14 +33,14 @@ const EtterlevelseDokumentasjonMap = (props: IEtterlevelseDokumentasjon): TSearc
   value: props.id,
   label: etterlevelseDokumentasjonName(props),
   tag: 'Dokumentasjon',
-  url: `dokumentasjon/${props.id}`,
+  url: `/dokumentasjon/${props.id}`,
 })
 
 const behandlingMap = (props: IBehandling): TSearchItem => ({
   value: props.id,
   label: behandlingName(props),
   tag: EObjectType.Behandling,
-  url: `dokumentasjoner/behandlingsok?behandlingId=${props.id}`,
+  url: `/dokumentasjoner?tab=behandlingsok&behandlingId=${props.id}`,
 })
 
 const useMainSearch = async (

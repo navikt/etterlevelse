@@ -8,7 +8,7 @@ export const kravMap = (krav: IKrav) => ({
   value: krav.id,
   label: kravName(krav),
   tag: EObjectType.Krav as string,
-  url: `krav/${krav.id}`,
+  url: `/krav/${krav.id}`,
 })
 
 export const sortKravListeByPriority = <T extends IKrav>(kraver: T[]) => {

@@ -255,7 +255,7 @@ export const kravMainHeaderSearch = async (searchParam: string): Promise<TSearch
           value: searchResult[0].id,
           label: kravName(searchResult[0]),
           tag: EObjectType.Krav,
-          url: `krav/${searchResult[0].id}`,
+          url: `/krav/${searchResult[0].id}`,
         },
       ]
       add(mappedResult)
