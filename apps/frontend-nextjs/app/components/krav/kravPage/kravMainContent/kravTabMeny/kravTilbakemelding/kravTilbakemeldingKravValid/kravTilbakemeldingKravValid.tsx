@@ -1,6 +1,6 @@
 'use client'
 
-import { TilbakemeldingNyModal } from '@/components/etterlevelse/tilbakemeldingNyModal/tilbakemeldingNyModal'
+import { TilbakemeldingNyModal } from '@/components/krav/tilbakemelding/tilbakemeldingNyModal/tilbakemeldingNyModal'
 import { IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { hasKravExpired } from '@/util/krav/kravUtil'
