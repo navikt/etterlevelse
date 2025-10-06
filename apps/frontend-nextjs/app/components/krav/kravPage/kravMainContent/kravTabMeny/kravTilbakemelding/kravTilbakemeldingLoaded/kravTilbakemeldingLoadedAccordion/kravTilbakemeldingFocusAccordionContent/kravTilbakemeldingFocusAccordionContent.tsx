@@ -1,9 +1,9 @@
 'use client'
 
-import MeldingKnapper from '@/components/krav/tilbakemelding/edit/MeldingKnapper'
-import EndretInfo from '@/components/krav/tilbakemelding/tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
-import TilbakemeldingResponseMelding from '@/components/krav/tilbakemelding/tilbakemeldingResponseMelding/tilbakemeldingResponseMelding'
-import TilbakemeldingSvar from '@/components/krav/tilbakemelding/tilbakemeldingSvar/tilbakemeldingSvar'
+import MeldingKnapper from '@/components/krav/kravPage/tilbakemelding/edit/MeldingKnapper'
+import EndretInfo from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
+import TilbakemeldingResponseMelding from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingResponseMelding/tilbakemeldingResponseMelding'
+import TilbakemeldingSvar from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingSvar/tilbakemeldingSvar'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   ITilbakemelding,

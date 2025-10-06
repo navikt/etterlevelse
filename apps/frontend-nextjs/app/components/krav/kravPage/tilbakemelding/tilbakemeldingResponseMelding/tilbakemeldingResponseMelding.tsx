@@ -1,6 +1,6 @@
 import PersonNavn from '@/components/common/personNavn/personNavn'
 import { Portrait } from '@/components/common/portrait/portrait'
-import MeldingKnapper from '@/components/krav/tilbakemelding/edit/MeldingKnapper'
+import MeldingKnapper from '@/components/krav/kravPage/tilbakemelding/edit/MeldingKnapper'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   ETilbakemeldingRolle,

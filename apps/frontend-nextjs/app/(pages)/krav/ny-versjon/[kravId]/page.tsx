@@ -1,4 +1,4 @@
-import { KravNyVersjonPage } from '@/components/krav/nyVersjon/kravNyVersjonPage'
+import { KravNyVersjonPage } from '@/components/krav/edit/nyVersjon/kravNyVersjonPage'
 
 const Page = () => <KravNyVersjonPage />
 
