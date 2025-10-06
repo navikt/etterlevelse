@@ -11,8 +11,8 @@ import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
+import { DropdownIndicator } from '../common/dropdownIndicator/dropdownIndicator'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
-import { DropdownIndicator } from '../etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '../others/layout/content/content'
 
 interface IProps {

@@ -12,6 +12,7 @@ import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
 } from '@/api/teamkatalogen/teamkatalogenApi'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
 import LabelWithTooltip, {
@@ -21,7 +22,6 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { Error } from '@/components/common/modalSchema/ModalSchema'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { TOption } from '@/constants/commonConstants'

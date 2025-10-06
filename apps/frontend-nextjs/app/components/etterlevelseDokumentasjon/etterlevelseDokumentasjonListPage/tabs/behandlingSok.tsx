@@ -4,7 +4,7 @@ import {
   getBehandling,
   searchBehandlingOptions,
 } from '@/api/behandlingskatalog/behandlingskatalogApi'
-import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'

@@ -1,5 +1,5 @@
 import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
-import { DropdownIndicator } from '@/components/etterlevelse/edit/dropdownIndicator/dropdownIndicator'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import {
   EAdresseType,

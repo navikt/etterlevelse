@@ -8,8 +8,8 @@ import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Button, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import AsyncSelect from 'react-select/async'
+import { DropdownIndicator } from '../common/dropdownIndicator/dropdownIndicator'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
-import { DropdownIndicator } from '../etterlevelse/edit/dropdownIndicator/dropdownIndicator'
 
 type TProps = {
   isOpen: boolean
