@@ -3,7 +3,7 @@
 import { Portrait } from '@/components/common/portrait/portrait'
 import StatusTag from '@/components/common/statusTag/statusTagComponent'
 import { getMelderInfo } from '@/components/etterlevelse/getMelderInfo/getMelderInfo'
-import { ShowWarningMessage } from '@/components/etterlevelse/kravCard/KravCard'
+import { ShowWarningMessage } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/kravCard'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
