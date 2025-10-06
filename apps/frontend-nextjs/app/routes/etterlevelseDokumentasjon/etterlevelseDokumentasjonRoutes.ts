@@ -39,3 +39,11 @@ export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: 
 
   return url
 }
+
+export const etterlevelseDokumentasjonAlleOpenUrl = (
+  etterlevelseDokumentasjonId: string | undefined
+): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tema=all-open`
+
+export const etterlevelseDokumentasjonAlleClosedUrl = (
+  etterlevelseDokumentasjonId: string | undefined
+): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tema=all-closed`

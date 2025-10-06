@@ -11,6 +11,7 @@ import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
+import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -26,19 +27,19 @@ type TProps = {
 }
 
 export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
-  // etterlevelseDokumentasjon,
+  etterlevelseDokumentasjon,
   // setEtterlevelseDokumentasjon,
-  // temaListe,
-  // relevanteStats,
-  // utgaattStats,
-  // loading,
+  temaListe,
+  relevanteStats,
+  utgaattStats,
+  loading,
   morDocumentRelation,
   pvkDokument,
-  // risikoscenarioList,
-  // isRisikoscenarioLoading,
+  risikoscenarioList,
+  isRisikoscenarioLoading,
 }) => {
   // const [arkivModal, setArkivModal] = useState<boolean>(false)
-  const [, setAllKravPriority] = useState<IKravPriorityList[]>([])
+  const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
   const queryParams = useSearchParams()
   const tabQuery = queryParams.get('tab')
   const [tabValue, setTabValue] = useState('alleKrav')
@@ -76,7 +77,35 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
           <Tabs.Tab value='pvkRelaterteKrav' label='PVK-relaterte krav' />
         )}
       </Tabs.List>
-      <Tabs.Panel value='alleKrav'>test</Tabs.Panel>
+      <Tabs.Panel value='alleKrav'>
+        <div className='pt-4 flex flex-col gap-4'>
+          <EtterlevelseDokumentasjonKravListe
+            temaListe={temaListe}
+            relevanteStats={relevanteStats}
+            utgaattStats={utgaattStats}
+            allKravPriority={allKravPriority}
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            loading={loading}
+            risikoscenarioList={risikoscenarioList}
+            isRisikoscenarioLoading={isRisikoscenarioLoading}
+          />
+
+          {/* <div className='w-full flex justify-end items-center'>
+            <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
+            <div>
+              <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
+                Arkivér i Public 360
+              </Button>
+              <ArkiveringModal
+                arkivModal={arkivModal}
+                setArkivModal={setArkivModal}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+              />
+            </div>
+          </div> */}
+        </div>
+      </Tabs.Panel>
       <Tabs.Panel value='prioritertKravliste'>test</Tabs.Panel>
       <Tabs.Panel value='pvkRelaterteKrav'>test</Tabs.Panel>
     </Tabs>

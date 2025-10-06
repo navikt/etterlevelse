@@ -7,6 +7,7 @@ import {
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import _ from 'lodash'
+import moment from 'moment'
 
 export const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
@@ -136,5 +137,47 @@ export const etterlevelseTeamNavnId = (etterlevelse: TEtterlevelseQL): string =>
     return teamData
   } else {
     return 'Ingen team'
+  }
+}
+
+export const getEtterlevelseStatus = (status?: EEtterlevelseStatus, frist?: string) => {
+  switch (status) {
+    case EEtterlevelseStatus.UNDER_REDIGERING:
+      return 'Etterlevelse under arbeid'
+    case EEtterlevelseStatus.FERDIG:
+      return 'Etterlevelse under arbeid'
+    case EEtterlevelseStatus.IKKE_RELEVANT:
+      return 'Ikke relevant'
+    case EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
+      return 'Ferdig utfylt etterlevelse'
+    case EEtterlevelseStatus.FERDIG_DOKUMENTERT:
+      return 'Ferdig utfylt etterlevelse'
+    case EEtterlevelseStatus.OPPFYLLES_SENERE:
+      if (frist) {
+        return 'Utsatt til ' + moment(frist).format('LL')
+      } else {
+        return 'Utsatt'
+      }
+    default:
+      return ''
+  }
+}
+
+export const getStatusLabelColor = (status: EEtterlevelseStatus) => {
+  switch (status) {
+    case EEtterlevelseStatus.UNDER_REDIGERING:
+      return 'info'
+    case EEtterlevelseStatus.FERDIG:
+      return 'info'
+    case EEtterlevelseStatus.IKKE_RELEVANT:
+      return 'neutral'
+    case EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT:
+      return 'success'
+    case EEtterlevelseStatus.FERDIG_DOKUMENTERT:
+      return 'success'
+    case EEtterlevelseStatus.OPPFYLLES_SENERE:
+      return 'warning'
+    default:
+      return 'neutral'
   }
 }
