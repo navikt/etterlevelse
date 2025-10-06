@@ -1,8 +1,8 @@
 'use client'
 
 import { getBreadcrumbPaths } from '@/components/common/breadcrumbs/breadcrumbs'
-import { KravMainContent } from '@/components/etterlevelse/krav/kravPage/kravMainContent/kravMainContent'
-import { KravOverview } from '@/components/etterlevelse/krav/kravPage/kravOverview/kravOverview'
+import { KravMainContent } from '@/components/krav/kravPage/kravMainContent/kravMainContent'
+import { KravOverview } from '@/components/krav/kravPage/kravOverview/kravOverview'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'

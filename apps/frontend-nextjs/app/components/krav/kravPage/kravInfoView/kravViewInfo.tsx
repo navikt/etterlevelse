@@ -21,7 +21,7 @@ interface IProps extends TKravViewInfoProps {
   noLastModifiedDate?: boolean
 }
 
-export const KravViewInfo: FunctionComponent<IProps> = ({
+export const KravInfoView: FunctionComponent<IProps> = ({
   krav,
   alleKravVersjoner,
   noLastModifiedDate,

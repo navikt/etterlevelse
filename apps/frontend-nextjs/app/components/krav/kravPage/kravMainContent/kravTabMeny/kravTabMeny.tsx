@@ -1,7 +1,7 @@
 'use client'
 
-import { KravEtterlevelser } from '@/components/etterlevelse/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
-import { KravTilbakemeldinger } from '@/components/etterlevelse/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
+import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
+import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Tabs } from '@navikt/ds-react'

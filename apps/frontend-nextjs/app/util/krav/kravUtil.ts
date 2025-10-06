@@ -40,3 +40,17 @@ export const hasKravExpired = (alleKravVersjoner: IKravVersjon[], krav?: TKravQL
     return krav ? krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString()) : false
   }
 }
+
+export const kravStatus = (status: EKravStatus | string) => {
+  if (!status) return ''
+  switch (status) {
+    case EKravStatus.UTKAST:
+      return 'Utkast'
+    case EKravStatus.AKTIV:
+      return 'Aktiv'
+    case EKravStatus.UTGAATT:
+      return 'Utgått'
+    default:
+      return status
+  }
+}
