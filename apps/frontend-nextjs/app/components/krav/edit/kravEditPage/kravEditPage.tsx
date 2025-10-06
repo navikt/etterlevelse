@@ -11,8 +11,8 @@ import { Alert } from '@navikt/ds-react'
 import { Params } from 'next/dist/server/request/params'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
+import { EditUtgattKravAlert } from './EditUtgattKravAlert'
 import { KravEdit } from './kravEdit/kravEdit'
-import { KravEditUtgattKrav } from './kravEditUtgattKrav/kravEditUtgattKrav'
 
 export const KravEditPage = () => {
   const params: Params = useParams()
@@ -77,7 +77,7 @@ export const KravEditPage = () => {
           {krav && (
             <>
               {krav.status === EKravStatus.UTGAATT && !user.isAdmin() && (
-                <KravEditUtgattKrav krav={krav} />
+                <EditUtgattKravAlert krav={krav} />
               )}
               {(krav.status !== EKravStatus.UTGAATT || user.isAdmin()) && (
                 <KravEdit

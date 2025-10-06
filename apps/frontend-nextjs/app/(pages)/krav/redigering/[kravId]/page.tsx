@@ -1,4 +1,4 @@
-import { KravEditPage } from '@/components/krav/kravEditPage/kravEditPage'
+import { KravEditPage } from '@/components/krav/edit/kravEditPage/kravEditPage'
 
 const Page = () => <KravEditPage />
 

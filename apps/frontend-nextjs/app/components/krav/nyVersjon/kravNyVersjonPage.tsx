@@ -19,8 +19,8 @@ import { Params } from 'next/dist/server/request/params'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useParams, useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
-import { KravFormFields } from '../edit/kravFormFields/kravFormFields'
-import { KravStandardButtons } from '../edit/kravStandardButtons/kravStandardButtons'
+import { KravFormFields } from '../edit/form/kravFormFields/kravFormFields'
+import { KravStandardButtons } from '../edit/form/kravStandardButtons/kravStandardButtons'
 
 export const KravNyVersjonPage = () => {
   const router: AppRouterInstance = useRouter()

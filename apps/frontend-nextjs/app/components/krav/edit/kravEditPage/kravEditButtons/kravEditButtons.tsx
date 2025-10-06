@@ -10,7 +10,7 @@ import { Button } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext, useState } from 'react'
-import { KravStandardButtons } from '../../edit/kravStandardButtons/kravStandardButtons'
+import { KravStandardButtons } from '../../form/kravStandardButtons/kravStandardButtons'
 import { KravEditStatusModal } from '../kravEditStatusModal/kravEditStatusModal'
 
 type TProps = {

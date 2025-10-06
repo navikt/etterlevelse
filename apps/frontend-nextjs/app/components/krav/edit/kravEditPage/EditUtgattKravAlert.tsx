@@ -2,7 +2,7 @@ import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Box, Button } from '@navikt/ds-react'
+import { Alert, Button } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent } from 'react'
@@ -11,7 +11,7 @@ type TProps = {
   krav: TKravQL
 }
 
-export const KravEditUtgattKrav: FunctionComponent<TProps> = ({ krav }) => {
+export const EditUtgattKravAlert: FunctionComponent<TProps> = ({ krav }) => {
   const router: AppRouterInstance = useRouter()
 
   return (
@@ -21,9 +21,7 @@ export const KravEditUtgattKrav: FunctionComponent<TProps> = ({ krav }) => {
       breadcrumbPaths={[kravBreadCrumbPath]}
       key={`K${krav?.kravNummer}${krav?.kravVersjon}`}
     >
-      <Box padding='4' background='surface-warning-subtle'>
-        Det er ikke lov å redigere på et utgått krav.
-      </Box>
+      <Alert variant='error'>Det er ikke lov å redigere på et utgått krav.</Alert>
       <Button
         className='mt-4'
         variant='secondary'

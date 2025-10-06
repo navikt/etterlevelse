@@ -15,8 +15,8 @@ import { Form, Formik } from 'formik'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { useContext, useState } from 'react'
-import { KravFormFields } from '../edit/kravFormFields/kravFormFields'
-import { KravStandardButtons } from '../edit/kravStandardButtons/kravStandardButtons'
+import { KravFormFields } from '../form/kravFormFields/kravFormFields'
+import { KravStandardButtons } from '../form/kravStandardButtons/kravStandardButtons'
 import ErrorModal from '../kravEditPage/errorModal/errorModal'
 
 export const KravCreatePage = () => {
