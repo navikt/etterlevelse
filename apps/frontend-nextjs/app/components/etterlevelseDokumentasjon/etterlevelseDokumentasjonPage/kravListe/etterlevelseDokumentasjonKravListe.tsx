@@ -21,10 +21,10 @@ import {
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { BodyShort, Button, Label, Loader, Select, TextField } from '@navikt/ds-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { KravAccordionList } from './kravAccordionList'
 
-interface IProps {
+type TProps = {
   temaListe: TTemaCode[]
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
@@ -36,20 +36,19 @@ interface IProps {
   defaultOpen?: boolean
 }
 
-export const EtterlevelseDokumentasjonKravListe = (props: IProps) => {
+export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
+  temaListe,
+  loading,
+  relevanteStats,
+  utgaattStats,
+  allKravPriority,
+  etterlevelseDokumentasjon,
+  risikoscenarioList,
+  isRisikoscenarioLoading,
+  defaultOpen,
+}) => {
   const params = useParams<{ id?: string }>()
   const queryParams = useSearchParams()
-  const {
-    temaListe,
-    loading,
-    relevanteStats,
-    utgaattStats,
-    allKravPriority,
-    etterlevelseDokumentasjon,
-    risikoscenarioList,
-    isRisikoscenarioLoading,
-    defaultOpen,
-  } = props
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const [statusFilter, setStatusFilter] = useState<string>('ALLE')
   const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] = useState<string>('ALLE')
