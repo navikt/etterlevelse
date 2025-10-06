@@ -1,5 +1,6 @@
 import PersonNavn from '@/components/common/personNavn/personNavn'
 import { Portrait } from '@/components/common/portrait/portrait'
+import MeldingKnapper from '@/components/krav/tilbakemelding/edit/MeldingKnapper'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   ETilbakemeldingRolle,
@@ -9,7 +10,6 @@ import {
 import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
-import { MeldingKnapper } from '../edit/meldingKnapper/meldingKnapper'
 import EndretInfo from '../tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
 
 type TProps = {

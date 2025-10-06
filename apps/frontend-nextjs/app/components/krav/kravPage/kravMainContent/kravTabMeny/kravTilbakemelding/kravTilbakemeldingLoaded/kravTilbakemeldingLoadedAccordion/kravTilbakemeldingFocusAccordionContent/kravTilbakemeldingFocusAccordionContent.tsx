@@ -1,9 +1,9 @@
 'use client'
 
-import { MeldingKnapper } from '@/components/etterlevelse/edit/meldingKnapper/meldingKnapper'
 import EndretInfo from '@/components/etterlevelse/tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
 import TilbakemeldingResponseMelding from '@/components/etterlevelse/tilbakemeldingResponseMelding/tilbakemeldingResponseMelding'
 import TilbakemeldingSvar from '@/components/etterlevelse/tilbakemeldingSvar/tilbakemeldingSvar'
+import MeldingKnapper from '@/components/krav/tilbakemelding/edit/MeldingKnapper'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import {
   ITilbakemelding,

@@ -4,7 +4,7 @@ import {
   ISuksesskriterieBegrunnelse,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
+import { ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import _ from 'lodash'
 import moment from 'moment'
@@ -179,5 +179,29 @@ export const getStatusLabelColor = (status: EEtterlevelseStatus) => {
       return 'warning'
     default:
       return 'neutral'
+  }
+}
+
+export const getSuksesskriterieBegrunnelse = (
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[],
+  suksessKriterie: ISuksesskriterie
+): ISuksesskriterieBegrunnelse => {
+  const suksesskriterieBegrunnelse = suksesskriterieBegrunnelser.find(
+    (item: ISuksesskriterieBegrunnelse) => {
+      return item.suksesskriterieId === suksessKriterie.id
+    }
+  )
+  if (!suksesskriterieBegrunnelse) {
+    return {
+      suksesskriterieId: suksessKriterie.id,
+      begrunnelse: '',
+      behovForBegrunnelse: suksessKriterie.behovForBegrunnelse,
+      suksesskriterieStatus: undefined,
+      veiledning: false,
+      veiledningsTekst: '',
+      veiledningsTekst2: '',
+    }
+  } else {
+    return suksesskriterieBegrunnelse
   }
 }

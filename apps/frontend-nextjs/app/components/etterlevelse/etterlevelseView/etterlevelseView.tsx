@@ -8,11 +8,11 @@ import {
 import { IKrav } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import { getSuksesskriterieBegrunnelse } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { CheckmarkIcon } from '@navikt/aksel-icons'
 import { BodyShort, Box, Heading, Label, Link, Loader, ReadMore, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
-import { getSuksesskriterieBegrunnelse } from '../edit/suksesskriterieBegrunnelseEdit/suksesskriterieBegrunnelseEdit'
 
 type TProps = {
   etterlevelse: IEtterlevelse

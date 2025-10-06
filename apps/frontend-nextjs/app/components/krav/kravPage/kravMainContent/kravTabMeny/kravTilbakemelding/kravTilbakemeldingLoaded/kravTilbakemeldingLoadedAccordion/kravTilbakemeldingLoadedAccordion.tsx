@@ -2,7 +2,6 @@
 
 import { Portrait } from '@/components/common/portrait/portrait'
 import StatusTag from '@/components/common/statusTag/statusTagComponent'
-import { getMelderInfo } from '@/components/etterlevelse/getMelderInfo/getMelderInfo'
 import { ShowWarningMessage } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/kravCard'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { IKrav } from '@/constants/krav/kravConstants'
@@ -10,6 +9,7 @@ import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingC
 import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { TRefs, useRefs } from '@/util/hooks/customHooks/customHooks'
+import { getMelderInfo } from '@/util/krav/tilbakemelding/kravTilbakemeldingUtils'
 import { tilbakemeldingStatusToText } from '@/util/tilbakemelding/tilbakemeldingUtils'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Accordion, BodyShort, Button, Spacer } from '@navikt/ds-react'

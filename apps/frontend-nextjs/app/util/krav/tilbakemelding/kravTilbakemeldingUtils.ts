@@ -4,7 +4,7 @@ import {
   ITilbakemelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 
-const getStatus = (tilbakemelding: ITilbakemelding) => {
+const getTilbakemeldingStatus = (tilbakemelding: ITilbakemelding) => {
   let status = ETilbakemeldingMeldingStatus.UBESVART
 
   if (tilbakemelding.status) {
@@ -27,7 +27,7 @@ export const getMelderInfo = (
   isKraveier: boolean
 ) => {
   const sistMelding = tilbakemelding.meldinger[tilbakemelding.meldinger.length - 1]
-  const status = getStatus(tilbakemelding)
+  const status = getTilbakemeldingStatus(tilbakemelding)
   const melder = userIdent === tilbakemelding.melderIdent
   const rolle =
     tilbakemelding?.melderIdent === userIdent

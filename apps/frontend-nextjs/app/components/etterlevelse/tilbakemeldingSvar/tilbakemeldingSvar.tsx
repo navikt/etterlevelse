@@ -12,6 +12,7 @@ import {
   ITilbakemeldingNewMeldingRequest,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { getMelderInfo } from '@/util/krav/tilbakemelding/kravTilbakemeldingUtils'
 import {
   getParsedOptionsforTilbakeMelding,
   getTilbakeMeldingStatusToOption,
@@ -32,7 +33,6 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { useContext, useState } from 'react'
-import { getMelderInfo } from '../getMelderInfo/getMelderInfo'
 
 type TTilbakemeldingSvarProps = {
   tilbakemelding: ITilbakemelding

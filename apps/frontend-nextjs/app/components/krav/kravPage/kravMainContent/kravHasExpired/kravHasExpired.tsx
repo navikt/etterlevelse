@@ -1,5 +1,5 @@
 import { Markdown } from '@/components/common/markdown/markdown'
-import ExpiredAlert from '@/components/etterlevelse/expiredAlert/expiredAlertComponent'
+import ExpiredAlert from '@/components/krav/kravPage/expiredAlert/expiredAlertComponent'
 import { EKravStatus, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { hasKravExpired } from '@/util/krav/kravUtil'
 import { Heading } from '@navikt/ds-react'

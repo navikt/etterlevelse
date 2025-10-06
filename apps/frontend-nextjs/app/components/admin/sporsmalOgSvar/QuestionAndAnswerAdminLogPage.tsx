@@ -3,7 +3,6 @@
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { getTilbakemeldingForKrav } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
-import { getMelderInfo } from '@/components/etterlevelse/getMelderInfo/getMelderInfo'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { TSporsmaalOgSvarKrav } from '@/constants/admin/kravTilbakemelding/kravTilbakemelding'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -17,6 +16,7 @@ import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { handleSort } from '@/util/handleTableSort'
+import { getMelderInfo } from '@/util/krav/tilbakemelding/kravTilbakemeldingUtils'
 import {
   BodyShort,
   Heading,
