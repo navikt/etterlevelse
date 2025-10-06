@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react'
 
 const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
   if (params.kravNummer && !params.kravVersjon) {
-    return { id: params.kravNummer }
+    return { kravId: params.kravNummer }
   } else if (params.kravNummer && params.kravVersjon) {
     return {
       kravNummer: parseInt(params.kravNummer),
@@ -28,18 +28,19 @@ export const KravPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [kravTema, setKravTema] = useState<TTemaCode>()
-
   const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }, TKravId>(
     getKravWithEtterlevelseQuery,
     {
       variables: getQueryVariableFromParams(params),
-      skip: (!params.kravId || params.kravId === 'ny') && !params.kravNummer,
+      skip: !params.kravNummer || params.kravNummer === 'ny',
       fetchPolicy: 'no-cache',
     }
   )
 
   useEffect(() => {
-    if (kravQuery?.kravById) setKrav(kravQuery.kravById)
+    if (kravQuery?.kravById) {
+      setKrav(kravQuery.kravById)
+    }
   }, [kravQuery])
 
   return (
