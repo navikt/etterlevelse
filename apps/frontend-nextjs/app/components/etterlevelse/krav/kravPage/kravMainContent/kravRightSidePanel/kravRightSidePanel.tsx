@@ -1,4 +1,4 @@
-import { KravViewInfo } from '@/components/etterlevelse/krav/kravPage/kravMainContent/kravRightSidePanel/kravViewInfo/kravViewInfo'
+import { KravViewInfo } from '@/components/krav/kravPage/kravViewInfo/kravViewInfo'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { FunctionComponent } from 'react'
 import { KravKnapper } from './kravKnapper/kravKnapper'

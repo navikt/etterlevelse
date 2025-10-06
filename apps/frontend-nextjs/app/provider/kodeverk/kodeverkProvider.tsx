@@ -1,21 +1,11 @@
 'use client'
 
 import { getAllCodelists } from '@/api/kodeverk/kodeverkApi'
-import { IAllCodelists, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, IAllCodelists, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { AxiosResponse } from 'axios'
 import { FunctionComponent, createContext, useEffect, useState } from 'react'
 import * as yup from 'yup'
-
-export enum EListName {
-  AVDELING = 'AVDELING',
-  UNDERAVDELING = 'UNDERAVDELING',
-  RELEVANS = 'RELEVANS',
-  LOV = 'LOV',
-  TEMA = 'TEMA',
-  YTTERLIGERE_EGENSKAPER = 'YTTERLIGERE_EGENSKAPER',
-  PVO_VURDERING = 'PVO_VURDERING',
-}
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 

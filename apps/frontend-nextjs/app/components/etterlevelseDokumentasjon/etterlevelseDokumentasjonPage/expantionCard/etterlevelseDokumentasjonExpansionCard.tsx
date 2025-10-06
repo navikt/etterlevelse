@@ -6,12 +6,8 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { Teams } from '@/components/teamkatalog/teams'
 import { VarslingsadresserView } from '@/components/varslingsadresse/varslingsAddresseView'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import {
-  CodelistContext,
-  EListName,
-  IGetParsedOptionsProps,
-} from '@/provider/kodeverk/kodeverkProvider'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import {
   etterlevelseDokumentasjonGjenbrukIdUrl,
