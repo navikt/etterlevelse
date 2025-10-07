@@ -293,3 +293,46 @@ const getKravtableQuery = gql`
     }
   }
 `
+
+export const getKravMedPrioriteringOgEtterlevelseQuery = gql`
+  query getKravByFilter(
+    $etterlevelseDokumentasjonId: ID
+    $lover: [String!]
+    $tema: String!
+    $gjeldendeKrav: Boolean
+    $etterlevelseDokumentasjonIrrevantKrav: Boolean
+    $status: [String!]
+  ) {
+    krav(
+      filter: {
+        etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
+        lover: $lover
+        tema: $tema
+        gjeldendeKrav: $gjeldendeKrav
+        etterlevelseDokumentasjonIrrevantKrav: $etterlevelseDokumentasjonIrrevantKrav
+        status: $status
+      }
+    ) {
+      content {
+        navn
+        kravNummer
+        kravVersjon
+        status
+        prioriteringsId
+        etterlevelser(
+          onlyForEtterlevelseDokumentasjon: true
+          etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
+        ) {
+          id
+          etterleves
+          fristForFerdigstillelse
+          status
+          changeStamp {
+            lastModifiedBy
+            lastModifiedDate
+          }
+        }
+      }
+    }
+  }
+`

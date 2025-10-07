@@ -54,3 +54,8 @@ export const kravStatus = (status: EKravStatus | string) => {
       return status
   }
 }
+
+export const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({
+  kravNummer: it.kravNummer,
+  kravVersjon: it.kravVersjon,
+})
