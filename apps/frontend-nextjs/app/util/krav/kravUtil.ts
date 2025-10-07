@@ -1,5 +1,6 @@
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { kravPathUrl, kravUrl } from '@/routes/krav/kravRoutes'
 
 export const kravName = (krav: IKrav): string =>
   `${kravNummerView(krav.kravVersjon, krav.kravNummer)} ${krav.navn}`
@@ -59,3 +60,8 @@ export const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({
   kravNummer: it.kravNummer,
   kravVersjon: it.kravVersjon,
 })
+
+export const getNextKravUrl = (nextKravPath: string): string => {
+  const currentPath: string[] = location.pathname.split(kravUrl)
+  return kravPathUrl(currentPath[0], nextKravPath)
+}

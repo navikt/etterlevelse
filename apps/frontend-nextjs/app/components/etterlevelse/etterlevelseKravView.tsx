@@ -6,13 +6,9 @@ import {
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
 import { getKravByKravNummer } from '@/api/krav/kravApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
-import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { Markdown } from '@/components/common/markdown/markdown'
 import ExpiredAlert from '@/components/krav/kravPage/expiredAlert/expiredAlertComponent'
-import {
-  EEtterlevelseStatus,
-  IEtterlevelse,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -22,9 +18,6 @@ import {
 import { EKravStatus, IKrav, IKravVersjon, TKravId, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
-import { etterlevelseDokumentasjonTemaUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { kravPathUrl, kravUrl } from '@/routes/krav/kravRoutes'
-import { getEtterlevelseStatus } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { useQuery } from '@apollo/client/react'
 import {
   Alert,
@@ -33,7 +26,6 @@ import {
   Checkbox,
   CheckboxGroup,
   Heading,
-  Modal,
   ReadMore,
   Tabs,
   Tag,
@@ -41,7 +33,6 @@ import {
 } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import moment from 'moment'
-import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import {
   Dispatch,
@@ -52,6 +43,8 @@ import {
   useRef,
   useState,
 } from 'react'
+import ChangesSavedEttelevelseModal from './etterlevelseKravView/modal/changesSavedEttelevelseModal'
+import UnsavedEtterlevelseModal from './etterlevelseKravView/modal/unsavedEtterlevelseModal'
 
 type TProps = {
   temaName?: string
@@ -181,11 +174,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       setIsPvoUnderarbeidWarningActive(true)
     }
   }, [krav, pvkDokument])
-
-  const getNextKravUrl = (nextKravPath: string): string => {
-    const currentPath: string[] = location.pathname.split(kravUrl)
-    return kravPathUrl(currentPath[0], nextKravPath)
-  }
 
   /*  const activeAlertModalController = () => {
     if (isTabAlertActive) {
@@ -610,113 +598,30 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
             />
           )}*/}
 
-          <Modal
-            open={isTabAlertActive}
-            onClose={() => setIsTabAlertActive(false)}
-            header={{
-              heading: 'Vil du lagre endringene dine før du går videre?',
-              closeButton: false,
-            }}
-          >
-            <Modal.Body>
-              {isSavingChanges && <CenteredLoader />}
-              <br />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                type='button'
-                variant='primary'
-                onClick={async () => {
-                  setCurrentTab(selectedTab)
-                  setIsSavingChanges(true)
-                  etterlevelseFormRef.current?.submitForm()
-                }}
-              >
-                Lagre og fortsett
-              </Button>
+          {isTabAlertActive && (
+            <UnsavedEtterlevelseModal
+              isTabAlertActive={isTabAlertActive}
+              setIsTabAlertActive={setIsTabAlertActive}
+              isSavingChanges={isSavingChanges}
+              setIsSavingChanges={setIsSavingChanges}
+              selectedTab={selectedTab}
+              setCurrentTab={setCurrentTab}
+              etterlevelseFormRef={etterlevelseFormRef}
+            />
+          )}
 
-              <Button
-                type='button'
-                variant='secondary'
-                onClick={() => {
-                  setCurrentTab(selectedTab)
-                  setIsTabAlertActive(false)
-                }}
-              >
-                Fortsett uten å lagre
-              </Button>
-              <Button
-                type='button'
-                variant='tertiary'
-                onClick={() => {
-                  setIsTabAlertActive(false)
-                }}
-              >
-                Avbryt
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal
-            open={isNavigationModalOpen && !isTabAlertActive}
-            onClose={() => setIsNavigationModalOpen(false)}
-            header={{ heading: 'Endringene er lagret' }}
-          >
-            <Modal.Body>
-              <BodyShort>
-                Status er satt til: {getEtterlevelseStatus(statusText as EEtterlevelseStatus)}
-              </BodyShort>
-            </Modal.Body>
-            <Modal.Footer>
-              <div className='w-full flex flex-col gap-2'>
-                <BodyShort>Hvor ønsker du å gå?</BodyShort>
-                {hasNextKrav && (
-                  <Link
-                    href={getNextKravUrl(nextKravToDocument)}
-                    onClick={() => {
-                      // ampli.logEvent('knapp klikket', {
-                      //   tekst: 'Til nest krav som ikke er ferdig utfylt i dette temaet',
-                      //   pagePath: location.pathname,
-                      //   ...userRoleEventProp,
-                      // })
-                    }}
-                  >
-                    <Button variant='secondary'>
-                      Til neste krav som ikke er ferdig utfylt i dette temaet
-                    </Button>
-                  </Link>
-                )}
-                <Button
-                  onClick={() => {
-                    setIsNavigationModalOpen(false)
-                    window.location.reload()
-                  }}
-                  variant='secondary'
-                >
-                  Fortsett å redigere dokumentet
-                </Button>
-
-                <Link
-                  href={etterlevelseDokumentasjonTemaUrl(
-                    etterlevelseDokumentasjon?.id,
-                    params?.tema
-                  )}
-                  className='flex w-full'
-                  onClick={() => {
-                    // ampli.logEvent('knapp klikket', {
-                    //   tekst: 'Til temaoversikten',
-                    //   pagePath: location.pathname,
-                    //   ...userRoleEventProp,
-                    // })
-                  }}
-                >
-                  <Button className='flex w-full' variant='secondary'>
-                    Til temaoversikten
-                  </Button>
-                </Link>
-              </div>
-            </Modal.Footer>
-          </Modal>
+          {isNavigationModalOpen && !isTabAlertActive && (
+            <ChangesSavedEttelevelseModal
+              isNavigationModalOpen={isNavigationModalOpen}
+              isTabAlertActive={isTabAlertActive}
+              setIsNavigationModalOpen={setIsNavigationModalOpen}
+              statusText={statusText}
+              hasNextKrav={hasNextKrav}
+              nextKravToDocument={nextKravToDocument}
+              etterlevelseDokumentasjonId={etterlevelseDokumentasjon?.id}
+              temaCode={params.tema}
+            />
+          )}
         </div>
       )}
     </div>
