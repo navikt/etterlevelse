@@ -1,7 +1,7 @@
 import {
   createKravPriorityList,
   updateKravPriorityList,
-} from '@/api/krav/kravliste/kravPriorityList/kravPriorityList'
+} from '@/api/kravPriorityList/kravPriorityListApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'

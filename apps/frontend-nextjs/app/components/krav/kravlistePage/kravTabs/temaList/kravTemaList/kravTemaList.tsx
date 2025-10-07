@@ -1,4 +1,4 @@
-import { useKravPriorityList } from '@/api/krav/kravliste/kravPriorityList/kravPriorityList'
+import { useKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { sortKravListeByPriority } from '@/util/krav/kravUtil'
