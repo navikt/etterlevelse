@@ -75,12 +75,10 @@ export const EtterlevelsePage = () => {
     setKravId({ kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon) })
     ;(async () => {
       setLoadingEtterlevelseData(true)
-      if (params.kravNummer && params.kravVersjon) {
-        const krav = await getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon)
-        if (krav) {
-          setVarsleMelding(krav.varselMelding || '')
-        }
 
+      const krav = await getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon)
+      if (krav) {
+        setVarsleMelding(krav.varselMelding || '')
         if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
           const kravVersjon = parseInt(params.kravVersjon)
           const etterlevelser = await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
@@ -111,7 +109,7 @@ export const EtterlevelsePage = () => {
       }
       setLoadingEtterlevelseData(false)
     })()
-  }, [])
+  }, [etterlevelseDokumentasjon])
 
   useEffect(() => {
     if (data && !loading) {

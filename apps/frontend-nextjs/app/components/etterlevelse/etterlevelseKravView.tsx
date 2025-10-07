@@ -89,11 +89,11 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   > = useParams<{ tema?: string }>()
   // const etterlevelserLoading: boolean = loading
   const [krav, setKrav] = useState<TKravQL>()
-  const [nyereKrav, setNyereKrav] = React.useState<IKrav>()
-  const [, setDisableEdit] = React.useState<boolean>(false)
+  const [nyereKrav, setNyereKrav] = useState<IKrav>()
+  const [, setDisableEdit] = useState<boolean>(false)
   //const [, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
   const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef(undefined)
-  const [alleKravVersjoner, setAlleKravVersjoner] = React.useState<IKravVersjon[]>([
+  const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
   const [statusText] = useState<string>('')
