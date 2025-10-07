@@ -48,7 +48,7 @@
     "@navikt/ds-css": "^7.31.0",
     "@navikt/ds-react": "^7.31.0",
     "@navikt/ds-tailwind": "^7.31.0",
-    "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/postcss": "^4.1.14",
     "amplitude-js": "^8.21.9",
     "axios": "^1.12.2",
     "draft-js": "0.11.7",
@@ -70,7 +70,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "rxjs": "^7.8.2",
-    "tailwindcss": "^4.1.13",
+    "tailwindcss": "^4.1.14",
     "react-draft-wysiwyg-next": "1.17.2",
     "yup": "^1.7.1"
   },
