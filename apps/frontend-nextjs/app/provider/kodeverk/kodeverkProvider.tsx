@@ -1,8 +1,13 @@
 'use client'
 
 import { getAllCodelists } from '@/api/kodeverk/kodeverkApi'
-import { EListName, IAllCodelists, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
+import {
+  EListName,
+  IAllCodelists,
+  ICode,
+  TLovCode,
+  TTemaCode,
+} from '@/constants/kodeverk/kodeverkConstants'
 import { AxiosResponse } from 'axios'
 import { FunctionComponent, createContext, useEffect, useState } from 'react'
 import * as yup from 'yup'

@@ -1,8 +1,7 @@
 'use client'
 
-import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'

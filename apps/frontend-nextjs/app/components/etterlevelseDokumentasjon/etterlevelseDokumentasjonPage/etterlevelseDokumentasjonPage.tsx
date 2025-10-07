@@ -17,9 +17,8 @@ import {
   ERisikoscenarioType,
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { EListName } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'

@@ -1,5 +1,5 @@
 import { IBreadCrumbPath } from '@/constants/commonConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { temaBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 

@@ -2,9 +2,9 @@
 
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { getNumberOfDaysBetween } from '@/util/checkAge/checkAgeUtil'

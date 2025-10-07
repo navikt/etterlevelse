@@ -1,9 +1,8 @@
 'use client'
 
 import { getAllKrav } from '@/api/krav/kravApi'
-import { EListName, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, IRegelverk, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav } from '@/constants/krav/kravConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { Accordion, BodyShort } from '@navikt/ds-react'
 import { useContext, useEffect, useState } from 'react'

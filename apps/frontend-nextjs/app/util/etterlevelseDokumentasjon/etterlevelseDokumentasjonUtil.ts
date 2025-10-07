@@ -11,15 +11,10 @@ import {
   IEtterlevelseDokumentasjonStats,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IAllCodelists, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
+import { IAllCodelists, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
-import {
-  IMember,
-  ITeam,
-  ITeamResource,
-  TTemaCode,
-} from '@/constants/teamkatalogen/teamkatalogConstants'
+import { IMember, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import _ from 'lodash'
 import moment from 'moment'

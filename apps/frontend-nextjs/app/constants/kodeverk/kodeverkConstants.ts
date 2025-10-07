@@ -20,6 +20,7 @@ export interface ICode {
 }
 
 export type TLovCode = TReplace<ICode, { data?: ILovCodeData }>
+export type TTemaCode = TReplace<ICode, { data?: ITemaCodeData }>
 
 export interface ILovCodeData {
   lovId?: string

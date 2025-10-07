@@ -2,9 +2,9 @@
 
 import { CheckList } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/checkList'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { getKravForTema } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { Accordion, CheckboxGroup } from '@navikt/ds-react'

@@ -1,9 +1,8 @@
 'use client'
 
 import StatusView from '@/components/common/statusTag/StatusTag'
-import { EListName, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { kravUrl } from '@/routes/krav/kravRoutes'
 import { List, Skeleton } from '@navikt/ds-react'
