@@ -1,8 +1,6 @@
 import {
-  createEtterlevelseMetadata,
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
-  updateEtterlevelseMetadata,
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
 import { getKravByKravNummer } from '@/api/krav/kravApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
@@ -22,7 +20,6 @@ import { useQuery } from '@apollo/client/react'
 import {
   Alert,
   BodyShort,
-  Button,
   Checkbox,
   CheckboxGroup,
   Heading,
@@ -45,6 +42,7 @@ import {
 } from 'react'
 import ChangesSavedEttelevelseModal from './etterlevelseKravView/modal/changesSavedEttelevelseModal'
 import UnsavedEtterlevelseModal from './etterlevelseKravView/modal/unsavedEtterlevelseModal'
+import TildeltTil from './etterlevelseKravView/tildeltTil/tildeltTil'
 
 type TProps = {
   temaName?: string
@@ -64,24 +62,25 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   kravId,
   etterlevelse,
   //setEtterlevelse,
-  varsleMelding,
   etterlevelseDokumentasjon,
   // navigatePath,
   // tidligereEtterlevelser,
   nextKravToDocument,
 }) => {
-  const { data } = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
-    variables: kravId,
-    skip: !kravId.kravId && !kravId.kravNummer,
-    fetchPolicy: 'no-cache',
-  })
   const params: Readonly<
     Partial<{
       tema?: string
     }>
   > = useParams<{ tema?: string }>()
+  const { data } = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
+    variables: kravId,
+    skip: !kravId.kravId && !kravId.kravNummer,
+    fetchPolicy: 'no-cache',
+  })
+
   // const etterlevelserLoading: boolean = loading
   const [krav, setKrav] = useState<TKravQL>()
+  const [kravVarsleMelding, setKravVarsleMelding] = useState('')
   const [nyereKrav, setNyereKrav] = useState<IKrav>()
   const [, setDisableEdit] = useState<boolean>(false)
   //const [, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
@@ -162,6 +161,9 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   }, [])
 
   useEffect(() => {
+    if (krav) {
+      setKravVarsleMelding(krav.varselMelding || '')
+    }
     if (
       pvkDokument &&
       [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
@@ -336,10 +338,10 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 {krav.navn}
               </Heading>
 
-              {varsleMelding && (
+              {kravVarsleMelding && (
                 <div>
                   <Alert size='small' variant='info' className='w-fit'>
-                    {varsleMelding}
+                    {kravVarsleMelding}
                   </Alert>
                 </div>
               )}
@@ -359,54 +361,10 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                       <BodyShort>Opprettet {moment(krav.aktivertDato).format('LL')}</BodyShort>
                     )}
                   </div>
-                  <div className='flex items-center gap-2'>
-                    <BodyShort size='small'>
-                      {etterlevelseMetadata &&
-                      etterlevelseMetadata.tildeltMed &&
-                      etterlevelseMetadata.tildeltMed.length >= 1
-                        ? 'Tildelt ' + etterlevelseMetadata.tildeltMed[0]
-                        : 'Ikke tildelt'}
-                    </BodyShort>
-                    <Button
-                      variant='tertiary'
-                      size='small'
-                      onClick={() => {
-                        const ident = user.getName()
-                        if (
-                          etterlevelseMetadata.tildeltMed &&
-                          user.getName() === etterlevelseMetadata.tildeltMed[0] &&
-                          etterlevelseMetadata.id !== 'ny'
-                        ) {
-                          updateEtterlevelseMetadata({
-                            ...etterlevelseMetadata,
-                            tildeltMed: [],
-                          }).then((resp) => {
-                            setEtterlevelseMetadata(resp)
-                          })
-                        } else if (etterlevelseMetadata.id !== 'ny') {
-                          updateEtterlevelseMetadata({
-                            ...etterlevelseMetadata,
-                            tildeltMed: [ident],
-                          }).then((resp) => {
-                            setEtterlevelseMetadata(resp)
-                          })
-                        } else {
-                          createEtterlevelseMetadata({
-                            ...etterlevelseMetadata,
-                            id: '',
-                            tildeltMed: [ident],
-                          }).then((resp) => {
-                            setEtterlevelseMetadata(resp)
-                          })
-                        }
-                      }}
-                    >
-                      {etterlevelseMetadata.tildeltMed &&
-                      user.getName() === etterlevelseMetadata.tildeltMed[0]
-                        ? 'Fjern meg selv'
-                        : 'Tildel meg selv'}
-                    </Button>
-                  </div>
+                  <TildeltTil
+                    etterlevelseMetadata={etterlevelseMetadata}
+                    setEtterlevelseMetadata={setEtterlevelseMetadata}
+                  />
                 </div>
 
                 {krav.versjonEndringer && (

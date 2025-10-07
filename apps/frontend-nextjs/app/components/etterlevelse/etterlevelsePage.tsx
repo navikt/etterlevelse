@@ -5,7 +5,6 @@ import {
   mapEtterlevelseToFormValue,
 } from '@/api/etterlevelse/etterlevelseApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { getKravByKravNumberAndVersion } from '@/api/krav/kravApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { EtterlevelseKravView } from '@/components/etterlevelse/etterlevelseKravView'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
@@ -40,8 +39,6 @@ export const EtterlevelsePage = () => {
   ) as TTemaCode | undefined
   const lover: TLovCode[] = codelist.utils.getLovCodesForTema(params.tema)
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const [varsleMelding, setVarsleMelding] = useState('')
-
   const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
   const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = useState<IEtterlevelse[]>()
@@ -75,36 +72,31 @@ export const EtterlevelsePage = () => {
     setKravId({ kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon) })
     ;(async () => {
       setLoadingEtterlevelseData(true)
+      if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
+        const kravVersjon = parseInt(params.kravVersjon)
+        const etterlevelser = await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
+          etterlevelseDokumentasjon.id,
+          parseInt(params.kravNummer)
+        )
+        const etterlevelserList = etterlevelser.content.sort((a, b) =>
+          a.kravVersjon > b.kravVersjon ? -1 : 1
+        )
+        setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
 
-      const krav = await getKravByKravNumberAndVersion(params.kravNummer, params.kravVersjon)
-      if (krav) {
-        setVarsleMelding(krav.varselMelding || '')
-        if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
-          const kravVersjon = parseInt(params.kravVersjon)
-          const etterlevelser = await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
-            etterlevelseDokumentasjon.id,
-            parseInt(params.kravNummer)
-          )
-          const etterlevelserList = etterlevelser.content.sort((a, b) =>
-            a.kravVersjon > b.kravVersjon ? -1 : 1
-          )
-          setTidligereEtterlevelser(etterlevelserList.filter((e) => e.kravVersjon < kravVersjon))
-
-          if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
-            setEtterlevelse(
-              mapEtterlevelseToFormValue(
-                etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0]
-              )
+        if (etterlevelserList.filter((e) => e.kravVersjon === kravVersjon).length > 0) {
+          setEtterlevelse(
+            mapEtterlevelseToFormValue(
+              etterlevelserList.filter((e) => e.kravVersjon === kravVersjon)[0]
             )
-          } else {
-            setEtterlevelse(
-              mapEtterlevelseToFormValue({
-                etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
-                kravVersjon: kravVersjon,
-                kravNummer: parseInt(params.kravNummer),
-              })
-            )
-          }
+          )
+        } else {
+          setEtterlevelse(
+            mapEtterlevelseToFormValue({
+              etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
+              kravVersjon: kravVersjon,
+              kravNummer: parseInt(params.kravNummer),
+            })
+          )
         }
       }
       setLoadingEtterlevelseData(false)
@@ -153,7 +145,6 @@ export const EtterlevelsePage = () => {
               kravId={toKravId(etterlevelse)}
               etterlevelse={etterlevelse}
               setEtterlevelse={setEtterlevelse}
-              varsleMelding={varsleMelding}
               navigatePath={navigatePath}
             />
           )}
