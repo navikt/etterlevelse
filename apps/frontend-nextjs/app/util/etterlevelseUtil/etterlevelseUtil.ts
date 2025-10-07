@@ -1,6 +1,7 @@
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
+  IEtterlevelse,
   ISuksesskriterieBegrunnelse,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
@@ -204,4 +205,21 @@ export const getSuksesskriterieBegrunnelse = (
   } else {
     return suksesskriterieBegrunnelse
   }
+}
+
+export const syncEtterlevelseKriterieBegrunnelseWithKrav = (
+  etterlevelse: IEtterlevelse,
+  krav?: TKravQL
+) => {
+  const suksesskriterieBegrunnelse: ISuksesskriterieBegrunnelse[] = []
+
+  krav?.suksesskriterier.forEach((krav: ISuksesskriterie) => {
+    suksesskriterieBegrunnelse.push(
+      etterlevelse.suksesskriterieBegrunnelser.filter(
+        (begrunnelse: ISuksesskriterieBegrunnelse) => begrunnelse.suksesskriterieId === krav.id
+      )[0]
+    )
+  })
+
+  return suksesskriterieBegrunnelse
 }

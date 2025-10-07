@@ -15,6 +15,34 @@ export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndK
   ).data
 }
 
+export const createEtterlevelseMetadata = async (etterlevelseMetadata: IEtterlevelseMetadata) => {
+  const dto = etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata)
+  return (
+    await axios.post<IEtterlevelseMetadata>(`${env.backendBaseUrl}/etterlevelsemetadata`, dto)
+  ).data
+}
+
+export const updateEtterlevelseMetadata = async (etterlevelseMetadata: IEtterlevelseMetadata) => {
+  const dto = etterlevelseMetadataToEtterlevelseMetadataDto(etterlevelseMetadata)
+  return (
+    await axios.put<IEtterlevelseMetadata>(
+      `${env.backendBaseUrl}/etterlevelsemetadata/${etterlevelseMetadata.id}`,
+      dto
+    )
+  ).data
+}
+
+function etterlevelseMetadataToEtterlevelseMetadataDto(
+  etterlevelseMetadata: IEtterlevelseMetadata
+): IEtterlevelseMetadata {
+  const dto = {
+    ...etterlevelseMetadata,
+  } as any
+  delete dto.changeStamp
+  delete dto.version
+  return dto
+}
+
 export const mapEtterlevelseMetadataToFormValue = (
   etterlevelsemetaData: Partial<IEtterlevelseMetadata>
 ): IEtterlevelseMetadata => {
