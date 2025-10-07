@@ -17,17 +17,7 @@ import { EKravStatus, IKrav, IKravVersjon, TKravId, TKravQL } from '@/constants/
 import { UserContext } from '@/provider/user/userProvider'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
 import { useQuery } from '@apollo/client/react'
-import {
-  Alert,
-  BodyShort,
-  Checkbox,
-  CheckboxGroup,
-  Heading,
-  ReadMore,
-  Tabs,
-  Tag,
-  ToggleGroup,
-} from '@navikt/ds-react'
+import { Alert, BodyShort, Heading, ReadMore, Tag } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import moment from 'moment'
 import { useParams } from 'next/navigation'
@@ -41,7 +31,7 @@ import {
   useState,
 } from 'react'
 import ChangesSavedEttelevelseModal from './etterlevelseKravView/modal/changesSavedEttelevelseModal'
-import UnsavedEtterlevelseModal from './etterlevelseKravView/modal/unsavedEtterlevelseModal'
+import EtterlevelsePageTabs from './etterlevelseKravView/tabs/etterlevelsePageTabs'
 import TildeltTil from './etterlevelseKravView/tildeltTil/tildeltTil'
 
 type TProps = {
@@ -91,10 +81,9 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [statusText] = useState<string>('')
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const [hasNextKrav] = useState<boolean>(true)
-  const [currentTab, setCurrentTab] = useState<string>('dokumentasjon')
+
   const [isTabAlertActive, setIsTabAlertActive] = useState<boolean>(false)
-  const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
-  const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
+
   const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
   const [isPreview, setIsPreview] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
@@ -185,8 +174,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       setIsNavigationModalOpen(true)
     }
   }*/
-
-  const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
 
   /*  const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
@@ -398,142 +385,18 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 </Heading>
                 <Markdown source={krav.hensikt} />
               </div>
-              <Tabs
-                value={currentTab}
-                onChange={(tabValue) => {
-                  setSelectedTab(tabValue)
-                  if (etterlevelseFormRef.current?.dirty) {
-                    setIsTabAlertActive(true)
-                  } else {
-                    setCurrentTab(tabValue)
-                  }
-                }}
-              >
-                <Tabs.List>
-                  <Tabs.Tab
-                    value='dokumentasjon'
-                    label={
-                      <Heading level='2' size='small'>
-                        Dokumentasjon
-                      </Heading>
-                    }
-                  />
-                  <Tabs.Tab
-                    value='etterlevelser'
-                    label={
-                      <Heading level='2' size='small'>
-                        Hvordan har andre gjort det?
-                      </Heading>
-                    }
-                  />
-                  <Tabs.Tab
-                    value='tilbakemeldinger'
-                    label={
-                      <Heading level='2' size='small'>
-                        Spørsmål og svar
-                      </Heading>
-                    }
-                  />
-                </Tabs.List>
-                <Tabs.Panel value='dokumentasjon'>
-                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
-                    !isPvkTabActive &&
-                    !isPvoUnderarbeidWarningActive && (
-                      <ToggleGroup
-                        className='mt-6'
-                        defaultValue='OFF'
-                        value={isPreview ? 'ON' : 'OFF'}
-                        onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
-                      >
-                        <ToggleGroup.Item value='OFF' label='Redigeringsvisning' />
-                        <ToggleGroup.Item value='ON' label='Forhåndsvisning' />
-                      </ToggleGroup>
-                    )}
-
-                  {isPvoUnderarbeidWarningActive && (
-                    <Alert className='mt-6' variant='info'>
-                      Kan ikke redigeres når personvernombudet har påbegynt vurderingen
-                    </Alert>
-                  )}
-
-                  {isPvkTabActive && (
-                    <Alert className='mt-6' variant='info'>
-                      Kan ikke redigeres når PVK skjema er aktiv på sidepanelet
-                    </Alert>
-                  )}
-                  {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
-                    <div className='mt-2'>
-                      {!isPreview && (
-                        <CheckboxGroup
-                          legend='Legg til i Prioritert kravliste'
-                          hideLegend
-                          onChange={handleChange}
-                          value={isPrioritised ? ['check'] : []}
-                        >
-                          {
-                            <Checkbox
-                              value='check'
-                              description={
-                                (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
-                                  etterlevelseDokumentasjon?.forGjenbruk) ||
-                                  (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
-                                  'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
-                                ''
-                              }
-                            >
-                              Legg til dette kravet i Prioritert kravliste
-                            </Checkbox>
-                          }
-                        </CheckboxGroup>
-                      )}
-
-                      {/*                        <EtterlevelseEditFields
-                          isPreview={isPreview}
-                          kravFilter={kravFilter}
-                          krav={krav}
-                          etterlevelse={etterlevelse}
-                          submit={submit}
-                          formRef={etterlevelseFormRef}
-                          varsleMelding={varsleMelding}
-                          disableEdit={disableEdit}
-                          close={() => {
-                            setTimeout(
-                              () =>
-                                navigate(
-                                  etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)
-                                ),
-                              1
-                            )
-                          }}
-                          navigatePath={navigatePath}
-                          editedEtterlevelse={editedEtterlevelse}
-                          tidligereEtterlevelser={tidligereEtterlevelser}
-                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                        />*/}
-                    </div>
-                  )}
-                  {/*                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
-
-                   <EtterlevelseViewFields
-                      etterlevelse={etterlevelse}
-                      suksesskriterier={krav.suksesskriterier}
-                      tidligereEtterlevelser={tidligereEtterlevelser}
-                    />
-                  )}*/}
-                </Tabs.Panel>
-                <Tabs.Panel value='etterlevelser'>
-                  <div className='mt-2'>
-                    test
-                    {/*<Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />*/}
-                  </div>
-                </Tabs.Panel>
-                <Tabs.Panel value='tilbakemeldinger'>
-                  <div className='mt-2'>
-                    test
-                    {/*<Tilbakemeldinger krav={krav} hasKravExpired={false} />*/}
-                  </div>
-                </Tabs.Panel>
-              </Tabs>
+              <EtterlevelsePageTabs
+                isTabAlertActive={isTabAlertActive}
+                setIsTabAlertActive={setIsTabAlertActive}
+                isPvkTabActive={isPvkTabActive}
+                isPvoUnderarbeidWarningActive={isPvoUnderarbeidWarningActive}
+                isPreview={isPreview}
+                setIsPreview={setIsPreview}
+                isPrioritised={isPrioritised}
+                setIsPrioritised={setIsPrioritised}
+                etterlevelseFormRef={etterlevelseFormRef}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              />
             </div>
 
             {/*<EtterlevelseSidePanel*/}
@@ -555,18 +418,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               pvkDokumentId={pvkDokument.id}
             />
           )}*/}
-
-          {isTabAlertActive && (
-            <UnsavedEtterlevelseModal
-              isTabAlertActive={isTabAlertActive}
-              setIsTabAlertActive={setIsTabAlertActive}
-              isSavingChanges={isSavingChanges}
-              setIsSavingChanges={setIsSavingChanges}
-              selectedTab={selectedTab}
-              setCurrentTab={setCurrentTab}
-              etterlevelseFormRef={etterlevelseFormRef}
-            />
-          )}
 
           {isNavigationModalOpen && !isTabAlertActive && (
             <ChangesSavedEttelevelseModal
