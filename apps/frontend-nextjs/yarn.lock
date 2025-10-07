@@ -1529,38 +1529,43 @@
     "@emnapi/runtime" "^1.5.0"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@^7.30.1", "@navikt/aksel-icons@^7.31.0":
+"@navikt/aksel-icons@^7.31.0":
   version "7.31.0"
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.31.0.tgz#5d0ea15a5f0ba53bf9e0c38a0b45612235d6b332"
   integrity sha512-6rtyFhDDBOkyG815trxe9pnaJrvSnwLEpkJ7qh0qZm1B8g59a4bf2IJGVtKDPg9thVOrxNtA/H9G4N6n0v9Kkg==
 
-"@navikt/ds-css@^7.30.1":
-  version "7.31.0"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.31.0.tgz#78afbca44bf15ca55be50990b19693411994a579"
-  integrity sha512-7wA5Goihfxai/IkTuDIErUSye+/X5UUP2ixT/blipkDbN1Ny6u7PaujYuuGzRR7Glez3suaB4+ATYMxAXLJziw==
+"@navikt/aksel-icons@^7.32.0":
+  version "7.32.0"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.32.0.tgz#e69fa5b5f512060535f161f58b766597de5041c0"
+  integrity sha512-JKVu93z0Hl2kHm5CXUtP2Prnpn+KnYcDKRN5qlOLdY1FJXf5nh0V1XuB+eyulxgOTHIdkozi9wl+jbq1gSgl6g==
 
-"@navikt/ds-react@^7.30.1":
-  version "7.31.0"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.31.0.tgz#6a2825dae4e35d7f11a63e4ecbd3c0808ef5e308"
-  integrity sha512-soQmDwnTMYoFTsJggDgYKijtSQe0VuHNbksGRrjgb2+F1HZ2zwjDP/mLzg73Mwr3kkrz4nkwS9NTGhoHO+dt3w==
+"@navikt/ds-css@^7.31.0":
+  version "7.32.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.32.0.tgz#bae6a1142aa9c3ed04ab7cbd41a791bde31c30c2"
+  integrity sha512-7zLqIDcf5v4poyXhAqySM+CHM1DY91eIXTMPih5666qEuVMIXmnVeR3cy+WqgNdEOpIHljDQZr03XsvzeoIlLA==
+
+"@navikt/ds-react@^7.31.0":
+  version "7.32.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.32.0.tgz#9c1b5cdca270a19a3cb8dcfe041ddecd43e86a93"
+  integrity sha512-H6XcqxpEbXZSM3BCtrTI/LPGARzaqWjYFv5H9vHcq6B6WJtVUkVafa066HBPYhUJ2unRT/8RG20eMR5ErhF+JA==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.0.9"
-    "@navikt/aksel-icons" "^7.31.0"
-    "@navikt/ds-tokens" "^7.31.0"
+    "@navikt/aksel-icons" "^7.32.0"
+    "@navikt/ds-tokens" "^7.32.0"
     clsx "^2.1.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tailwind@^7.30.1":
-  version "7.31.0"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.31.0.tgz#1da57e8287c33c61d1d8c51d4aa0ad9e4d8db21b"
-  integrity sha512-9S5Ovm/4Z7MQOUqOPCaEXciPd1uN+nhuF7LYTMKCKbEeZDvUnXEbQmYkMcT3spLX2sos0gTVICKP0ymuuxzH5g==
+"@navikt/ds-tailwind@^7.31.0":
+  version "7.32.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.32.0.tgz#66338dc7ee2353d96a11db6c4303defcb4d20150"
+  integrity sha512-yLYQ2PYDZecuY6NKhq3OlAOO/hCRCinn2kth8uIC1aGYjW9rCT8tSOFDN5f7Sx0Ml+qC70i8LQdapzbqsnNLuQ==
 
-"@navikt/ds-tokens@^7.31.0":
-  version "7.31.0"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.31.0.tgz#c8ff6b4d9a463ddab2a357fd4dee135c26693322"
-  integrity sha512-cW7be0OyW9FIcIrgagIO0/YZoc3774iCqq9VYvx9cyIYT3CK6kSziCEyT/Kro3wEzyW+nJokTORgyx28zk3y9A==
+"@navikt/ds-tokens@^7.32.0":
+  version "7.32.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.32.0.tgz#c8aaf981800e4c51a16c985d9c5789007fcd788b"
+  integrity sha512-1Nkj2uodMcxDAm2gKxeLxqDSxpM7J9+NT8Z5bVDBuzKHxEHbPXt1Emmzw0c4QS+HTQ4YK76/H9n/cW3jhDJ40g==
 
 "@next/env@15.5.3":
   version "15.5.3"
