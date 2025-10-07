@@ -5,8 +5,8 @@ import {
   getEtterlevelseDokumentasjon,
   updateKravPriorityEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import EtterlevelseDokumentasjonKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/etterlevelseDokumentasjonKravListe'
-import { PrioriterteKravAccordionList } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/prioriterteKravAccordionList'
+import EtterlevelseDokumentasjonKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/kravListe/etterlevelseDokumentasjonKravListe'
+import { PrioriterteKravAccordionList } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioriterteKravAccordionList'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'

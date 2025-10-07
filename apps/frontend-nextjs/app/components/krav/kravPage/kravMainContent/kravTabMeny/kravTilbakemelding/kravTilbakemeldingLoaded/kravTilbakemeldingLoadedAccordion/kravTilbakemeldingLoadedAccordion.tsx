@@ -2,7 +2,7 @@
 
 import { Portrait } from '@/components/common/portrait/portrait'
 import StatusTag from '@/components/common/statusTag/statusTagComponent'
-import { ShowWarningMessage } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/kravCard'
+import { ShowWarningMessage } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/kravListe/kravCard'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'

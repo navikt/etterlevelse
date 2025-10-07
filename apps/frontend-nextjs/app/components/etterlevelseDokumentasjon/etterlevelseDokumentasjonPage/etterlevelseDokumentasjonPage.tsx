@@ -34,8 +34,8 @@ import { ContentLayout } from '../../others/layout/content/content'
 import { PageLayout } from '../../others/scaffold/scaffold'
 import { GjenbrukAlert } from './alert/GjenbrukAlert'
 import EtterlevelseDokumentasjonButtonGroup from './buttonGroup/etterlevelseDokumentasjonButtonGroup'
-import EtterlevelseDokumentasjonPageTabs from './etterlevelseDokumentasjonPageTabs'
 import EtterlevelseDokumentasjonExpansionCard from './expantionCard/etterlevelseDokumentasjonExpansionCard'
+import EtterlevelseDokumentasjonPageTabs from './tabs/etterlevelseDokumentasjonPageTabs'
 
 export const EtterlevelseDokumentasjonPage = () => {
   const user = useContext(UserContext)

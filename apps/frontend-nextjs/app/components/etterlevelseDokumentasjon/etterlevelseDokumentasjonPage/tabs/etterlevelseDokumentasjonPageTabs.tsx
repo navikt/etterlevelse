@@ -1,7 +1,7 @@
 'use client'
 
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
-import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/prioritertKravListe'
+import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -12,8 +12,8 @@ import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorit
 import { Button, Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
-import { ArkiveringModal } from './arkivering/arkiveringModal'
-import ExportEtterlevelseModal from './export/exportEtterlevelseModal'
+import { ArkiveringModal } from '../arkivering/arkiveringModal'
+import ExportEtterlevelseModal from '../export/exportEtterlevelseModal'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
 
 type TProps = {

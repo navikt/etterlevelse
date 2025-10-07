@@ -1,6 +1,6 @@
 'use client'
 
-import { CheckList } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/checkList'
+import { CheckList } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/checkList'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
