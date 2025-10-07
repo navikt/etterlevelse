@@ -15,6 +15,7 @@ import { FunctionComponent, useEffect, useState } from 'react'
 import { ArkiveringModal } from '../arkivering/arkiveringModal'
 import ExportEtterlevelseModal from '../export/exportEtterlevelseModal'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
+import PvkKravListeTab from './pvkKravListe/pvkKravListeTab'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -70,7 +71,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       value={tabQuery && tabQuery === 'pvk' ? 'pvkRelaterteKrav' : tabValue}
       onChange={(newValue) => {
         setTabValue(newValue)
-        router.push(pathname)
+        router.push(pathname, { scroll: false })
       }}
     >
       <Tabs.List>
@@ -124,7 +125,21 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
           />
         </div>
       </Tabs.Panel>
-      <Tabs.Panel value='pvkRelaterteKrav'>test</Tabs.Panel>
+      {pvkDokument && pvkDokument.skalUtforePvk && (
+        <Tabs.Panel value='pvkRelaterteKrav'>
+          <PvkKravListeTab
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            pvkDokument={pvkDokument}
+            temaListe={temaListe}
+            relevanteStats={relevanteStats}
+            utgaattStats={utgaattStats}
+            allKravPriority={allKravPriority}
+            loading={loading}
+            risikoscenarioList={risikoscenarioList}
+            isRisikoscenarioLoading={isRisikoscenarioLoading}
+          />
+        </Tabs.Panel>
+      )}
     </Tabs>
   )
 }

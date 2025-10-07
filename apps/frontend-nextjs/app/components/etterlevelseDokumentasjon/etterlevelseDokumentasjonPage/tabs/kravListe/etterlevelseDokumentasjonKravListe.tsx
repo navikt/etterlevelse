@@ -74,7 +74,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   useEffect(() => {
     if (defaultOpen) {
       setOpenAccordions(temaListe.map(() => true))
-      router.push(etterlevelseDokumentasjonAlleOpenUrl(params.id) + '&tab=pvk')
+      router.push(etterlevelseDokumentasjonAlleOpenUrl(params.id) + '&tab=pvk', { scroll: false })
     }
   }, [defaultOpen])
 
@@ -163,7 +163,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => true))
-              router.push(etterlevelseDokumentasjonAlleOpenUrl(params.id))
+              router.push(etterlevelseDokumentasjonAlleOpenUrl(params.id), { scroll: false })
             }}
           >
             Åpne alle tema
@@ -173,7 +173,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => false))
-              router.push(etterlevelseDokumentasjonAlleClosedUrl(params.id))
+              router.push(etterlevelseDokumentasjonAlleClosedUrl(params.id), { scroll: false })
             }}
           >
             Lukk alle tema
