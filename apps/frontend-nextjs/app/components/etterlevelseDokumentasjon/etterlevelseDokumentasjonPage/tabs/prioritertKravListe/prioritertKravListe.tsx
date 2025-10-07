@@ -80,9 +80,7 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
               relevanteStats={relevanteStats.filter(({ kravNummer }) =>
                 etterlevelseDokumentasjon.prioritertKravNummer.includes(kravNummer.toString())
               )}
-              utgaattStats={utgaattStats.filter(({ kravNummer }) =>
-                etterlevelseDokumentasjon.prioritertKravNummer.includes(kravNummer.toString())
-              )}
+              utgaattStats={[]}
               allKravPriority={allKravPriority}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               risikoscenarioList={risikoscenarioList}
