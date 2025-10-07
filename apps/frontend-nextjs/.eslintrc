@@ -5,7 +5,7 @@
     "node": true,
   },
   "extends": [
-    // "next",
+    "next",
     // "next/core-web-vitals",
     "eslint:recommended",
     "plugin:jsx-a11y/recommended",
@@ -67,5 +67,7 @@
       { "vars": "all", "args": "after-used", "ignoreRestSiblings": false },
     ],
     "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
+    "semi": ["warn", "never"],
+    "quotes": ["warn", "single"],
   },
 }
