@@ -1,6 +1,7 @@
 'use client'
 
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
+import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/kravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -108,7 +109,21 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
           </div>
         </div>
       </Tabs.Panel>
-      <Tabs.Panel value='prioritertKravliste'>test</Tabs.Panel>
+      <Tabs.Panel value='prioritertKravliste'>
+        <div className='pt-4 flex flex-col gap-4'>
+          <PrioritertKravListe
+            loading={loading}
+            allKravPriority={allKravPriority}
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+            relevanteStats={relevanteStats}
+            utgaattStats={utgaattStats}
+            temaListe={temaListe}
+            risikoscenarioList={risikoscenarioList}
+            isRisikoscenarioLoading={isRisikoscenarioLoading}
+          />
+        </div>
+      </Tabs.Panel>
       <Tabs.Panel value='pvkRelaterteKrav'>test</Tabs.Panel>
     </Tabs>
   )

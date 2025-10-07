@@ -25,6 +25,18 @@ export const searchEtterlevelsedokumentasjon = async (
   ).data.content
 }
 
+export const updateKravPriorityEtterlevelseDokumentasjon = async (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+) => {
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  return (
+    await axios.put<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/kravpriority/${etterlevelseDokumentasjon.id}`,
+      dto
+    )
+  ).data
+}
+
 export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
   return (
     await axios.delete<IEtterlevelseDokumentasjon>(
