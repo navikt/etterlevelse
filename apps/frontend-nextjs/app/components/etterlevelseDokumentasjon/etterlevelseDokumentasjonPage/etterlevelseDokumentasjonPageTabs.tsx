@@ -8,9 +8,11 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { TTemaCode } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { Tabs } from '@navikt/ds-react'
+import { Button, Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
+import { ArkiveringModal } from './arkivering/arkiveringModal'
+import ExportEtterlevelseModal from './export/exportEtterlevelseModal'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
 
 type TProps = {
@@ -28,7 +30,7 @@ type TProps = {
 
 export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  // setEtterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
   temaListe,
   relevanteStats,
   utgaattStats,
@@ -38,7 +40,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   risikoscenarioList,
   isRisikoscenarioLoading,
 }) => {
-  // const [arkivModal, setArkivModal] = useState<boolean>(false)
+  const [isArkivModalOpen, setIsArkivModalOpen] = useState<boolean>(false)
   const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
   const queryParams = useSearchParams()
   const tabQuery = queryParams.get('tab')
@@ -90,20 +92,20 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             isRisikoscenarioLoading={isRisikoscenarioLoading}
           />
 
-          {/* <div className='w-full flex justify-end items-center'>
+          <div className='w-full flex justify-end items-center'>
             <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
             <div>
-              <Button variant='tertiary' size='small' onClick={() => setArkivModal(true)}>
+              <Button variant='tertiary' size='small' onClick={() => setIsArkivModalOpen(true)}>
                 Arkivér i Public 360
               </Button>
               <ArkiveringModal
-                arkivModal={arkivModal}
-                setArkivModal={setArkivModal}
+                arkivModal={isArkivModalOpen}
+                setArkivModal={setIsArkivModalOpen}
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
               />
             </div>
-          </div> */}
+          </div>
         </div>
       </Tabs.Panel>
       <Tabs.Panel value='prioritertKravliste'>test</Tabs.Panel>
