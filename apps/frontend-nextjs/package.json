@@ -23,20 +23,7 @@
       "bash -c 'yarn run type-check'"
     ]
   },
-  "eslintConfig": {
-    "extends": "next",
-    "rules": {
-      "semi": [
-        "warn",
-        "never"
-      ],
-      "quotes": [
-        "warn",
-        "single"
-      ],
-      "react-hooks/exhaustive-deps": "off"
-    }
-  },
+ 
   "dependencies": {
     "@apollo/client": "^4.0.7",
     "@fontsource/source-sans-pro": "^5.2.5",
