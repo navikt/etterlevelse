@@ -1,6 +1,6 @@
 import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
 import EtterlevelseModal from '@/components/etterlevelse/etterlevelseModal/etterlevelseModal'
-import { EtterlevelseProduktOmrade } from '@/components/etterlevelse/etterlevelseProduktOmrade/etterlevelseProduktOmrade'
+import { EtterlevelseProduktOmrade } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/etterlevelseProduktOmrade/etterlevelseProduktOmrade'
 import { sadFolderIcon } from '@/components/others/images/images'
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
