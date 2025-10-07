@@ -9,18 +9,21 @@ import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { getKravForTema } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { Accordion, CheckboxGroup } from '@navikt/ds-react'
 import { FieldArrayRenderProps } from 'formik'
-import { useContext, useState } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 
-interface IProps {
+type TProps = {
   fieldArrayRenderProps: FieldArrayRenderProps
   temaListe: TTemaCode[]
   kravliste: TKravQL[]
-  utgattKravliste: TKravQL[]
   allKravPriority: IKravPriorityList[]
 }
 
-export const PrioriterteKravAccordionList = (props: IProps) => {
-  const { fieldArrayRenderProps, temaListe, kravliste, allKravPriority } = props
+export const PrioriterteKravAccordionList: FunctionComponent<TProps> = ({
+  fieldArrayRenderProps,
+  temaListe,
+  kravliste,
+  allKravPriority,
+}) => {
   const [focusList, setFocusList] = useState(
     fieldArrayRenderProps.form.values['prioritertKravNummer'] || []
   )

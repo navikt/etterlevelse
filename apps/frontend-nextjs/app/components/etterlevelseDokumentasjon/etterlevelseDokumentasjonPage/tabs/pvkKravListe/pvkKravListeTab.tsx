@@ -17,7 +17,6 @@ type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   temaListe: TTemaCode[]
   relevanteStats: TKravQL[]
-  utgaattStats: TKravQL[]
   allKravPriority: IKravPriorityList[]
   loading: boolean
   risikoscenarioList: IRisikoscenario[]
@@ -29,7 +28,6 @@ export const PvkKravListeTab: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   temaListe,
   relevanteStats,
-  utgaattStats,
   allKravPriority,
   loading,
   risikoscenarioList,
@@ -115,7 +113,6 @@ export const PvkKravListeTab: FunctionComponent<TProps> = ({
       <PvkRelatertKravListe
         temaListe={temaListe}
         relevanteStats={relevanteStats}
-        utgaattStats={utgaattStats}
         allKravPriority={allKravPriority}
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         loading={loading}

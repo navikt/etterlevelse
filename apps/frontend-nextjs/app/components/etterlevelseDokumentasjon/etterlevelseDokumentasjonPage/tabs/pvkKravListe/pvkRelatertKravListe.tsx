@@ -11,7 +11,6 @@ import EtterlevelseDokumentasjonKravListe from '../kravListe/etterlevelseDokumen
 type TProps = {
   temaListe: TTemaCode[]
   relevanteStats: TKravQL[]
-  utgaattStats: TKravQL[]
   allKravPriority: IKravPriorityList[]
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   loading: boolean
@@ -22,14 +21,12 @@ export const PvkRelatertKravListe: FunctionComponent<TProps> = ({
   temaListe,
   loading,
   relevanteStats,
-  utgaattStats,
   allKravPriority,
   etterlevelseDokumentasjon,
   risikoscenarioList,
   isRisikoscenarioLoading,
 }) => {
   const [pvkRelevanteStats, setPvkRelevanteStats] = useState<TKravQL[]>([])
-  const [pvkUtgaattStats, setPvkUtgaattStats] = useState<TKravQL[]>([])
 
   useEffect(() => {
     setPvkRelevanteStats(
@@ -40,21 +37,13 @@ export const PvkRelatertKravListe: FunctionComponent<TProps> = ({
           krav.tagger.includes('Personvernkonsekvensvurdering')
       )
     )
-    setPvkUtgaattStats(
-      utgaattStats.filter(
-        (krav) =>
-          krav.tagger &&
-          krav.tagger.length > 0 &&
-          krav.tagger.includes('Personvernkonsekvensvurdering')
-      )
-    )
-  }, [relevanteStats, utgaattStats])
+  }, [relevanteStats])
 
   return (
     <EtterlevelseDokumentasjonKravListe
       temaListe={temaListe}
       relevanteStats={pvkRelevanteStats}
-      utgaattStats={pvkUtgaattStats}
+      utgaattStats={[]}
       allKravPriority={allKravPriority}
       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
       loading={loading}

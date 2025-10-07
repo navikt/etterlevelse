@@ -23,7 +23,6 @@ type TProps = {
   setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
   allKravPriority: IKravPriorityList[]
   relevanteStats: TKravQL[]
-  utgaattStats: TKravQL[]
   temaListe: TTemaCode[]
   risikoscenarioList: IRisikoscenario[]
   isRisikoscenarioLoading: boolean
@@ -34,7 +33,6 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
   setEtterlevelseDokumentasjon,
   relevanteStats,
   temaListe,
-  utgaattStats,
   allKravPriority,
   loading,
   risikoscenarioList,
@@ -121,7 +119,6 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
                       allKravPriority={allKravPriority}
                       temaListe={temaListe}
                       kravliste={relevanteStats}
-                      utgattKravliste={utgaattStats}
                     />
                   )}
                 </FieldArray>
