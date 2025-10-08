@@ -14,18 +14,21 @@ import {
 import {
   EEtterlevelseStatus,
   IEtterlevelse,
+  ISuksesskriterieBegrunnelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '@navikt/ds-react'
-import { Form, Formik, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
+import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { etterlevelseSchema } from './etterlevelseSchema'
+import SuksesskriterieErrorFields from './suksesskriterieErrorFields'
+import { SuksesskriterierBegrunnelseEdit } from './suksesskriterierBegrunnelseEdit'
 
 type TEditProps = {
   krav: TKravQL
@@ -62,7 +65,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   const [isAvbrytModalOpen, setIsAvbryModalOpen] = useState<boolean>(false)
 
   const [morDokumentRelasjon, setMorDokumentRelasjon] = useState<IDocumentRelation>()
-  const [, setMorEtterlevelse] = useState<IEtterlevelse>()
+  const [morEtterlevelse, setMorEtterlevelse] = useState<IEtterlevelse>()
 
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
@@ -166,12 +169,12 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                       )}
                     </div>
 
-                    {/* <SuksesskriterierBegrunnelseEdit
+                    <SuksesskriterierBegrunnelseEdit
                       disableEdit={disableEdit}
                       suksesskriterie={krav.suksesskriterier}
                       forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
                       morEtterlevelse={morEtterlevelse}
-                    /> */}
+                    />
                   </div>
 
                   <div className='w-full border-t border-[#071a3636] pt-5'>
@@ -206,13 +209,13 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         heading='Du må rette disse feilene før du kan fortsette'
                         onClick={() => console.debug(errors)}
                       >
-                        {/* {errors.suksesskriterieBegrunnelser && (
-                        <SuksesskriterieErrorFields
-                          errors={
-                            errors.suksesskriterieBegrunnelser as FormikErrors<ISuksesskriterieBegrunnelse>[]
-                          }
-                        />
-                      )} */}
+                        {errors.suksesskriterieBegrunnelser && (
+                          <SuksesskriterieErrorFields
+                            errors={
+                              errors.suksesskriterieBegrunnelser as FormikErrors<ISuksesskriterieBegrunnelse>[]
+                            }
+                          />
+                        )}
 
                         {errors.fristForFerdigstillelse && (
                           <ErrorSummary.Item href={'#fristForFerdigstillelse'}>

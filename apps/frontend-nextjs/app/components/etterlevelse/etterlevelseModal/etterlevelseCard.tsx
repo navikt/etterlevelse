@@ -1,3 +1,5 @@
+'use client'
+
 import { getKravByKravNumberAndVersion } from '@/api/krav/kravApi'
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IKrav } from '@/constants/krav/kravConstants'
