@@ -6,6 +6,7 @@ import {
   updateEtterlevelse,
 } from '@/api/etterlevelse/etterlevelseApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
+import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
 import {
   EEtterlevelseStatus,
   IEtterlevelse,
@@ -73,7 +74,6 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
   const [currentTab, setCurrentTab] = useState<string>('dokumentasjon')
   const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
-
   const [statusText, setStatustext] = useState<string>('')
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const [hasNextKrav, setHasNextKrav] = useState<boolean>(true)
@@ -299,8 +299,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         </Tabs.Panel>
         <Tabs.Panel value='etterlevelser'>
           <div className='mt-2'>
-            test
-            {/*<Etterlevelser loading={etterlevelserLoading} krav={krav} modalVersion />*/}
+            <KravEtterlevelser loading={false} krav={krav} modalVersion />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='tilbakemeldinger'>
