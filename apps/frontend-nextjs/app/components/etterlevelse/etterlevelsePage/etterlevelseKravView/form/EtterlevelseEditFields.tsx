@@ -6,6 +6,7 @@ import {
   mapEtterlevelseToFormValue,
 } from '@/api/etterlevelse/etterlevelseApi'
 import { DateField } from '@/components/common/inputs'
+import { EtterlevelseCard } from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
 import {
   ERelationType,
   IDocumentRelation,
@@ -46,7 +47,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   formRef,
   disableEdit,
   editedEtterlevelse,
-  //tidligereEtterlevelser,
+  tidligereEtterlevelser,
   etterlevelseDokumentasjon,
   isPreview,
 }) => {
@@ -157,13 +158,13 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
                       </div>
                     )}
-                    {/* <div className='flex w-full items-center mb-4'>
+                    <div className='flex w-full items-center mb-4'>
                       {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
                         <div className='flex w-full justify-end'>
                           <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
                         </div>
                       )}
-                    </div> */}
+                    </div>
 
                     {/* <SuksesskriterierBegrunnelseEdit
                       disableEdit={disableEdit}
@@ -172,41 +173,40 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                       morEtterlevelse={morEtterlevelse}
                     /> */}
                   </div>
-                </Form>
 
-                <div className='w-full border-t border-[#071a3636] pt-5'>
-                  <div className='w-full flex flex-col min-w-fit mb-4'>
-                    <Checkbox
-                      checked={isOppfylesSenere}
-                      onChange={() => {
-                        setOppfylesSenere(!isOppfylesSenere)
-                      }}
-                      key={EEtterlevelseStatus.OPPFYLLES_SENERE}
-                    >
-                      Kravet skal etterleves senere
-                    </Checkbox>
+                  <div className='w-full border-t border-[#071a3636] pt-5'>
+                    <div className='w-full flex flex-col min-w-fit mb-4'>
+                      <Checkbox
+                        checked={isOppfylesSenere}
+                        onChange={() => {
+                          setOppfylesSenere(!isOppfylesSenere)
+                        }}
+                        key={EEtterlevelseStatus.OPPFYLLES_SENERE}
+                      >
+                        Kravet skal etterleves senere
+                      </Checkbox>
 
-                    {isOppfylesSenere && (
-                      <div className='w-full' id='fristForFerdigstillelse'>
-                        <div className='w-full max-w-[10.625rem]'>
-                          <DateField name='fristForFerdigstillelse' />
+                      {isOppfylesSenere && (
+                        <div className='w-full' id='fristForFerdigstillelse'>
+                          <div className='w-full max-w-[10.625rem]'>
+                            <DateField name='fristForFerdigstillelse' />
+                          </div>
+                          {errors.fristForFerdigstillelse && (
+                            <Alert variant='error' size='small'>
+                              {errors.fristForFerdigstillelse}
+                            </Alert>
+                          )}
                         </div>
-                        {errors.fristForFerdigstillelse && (
-                          <Alert variant='error' size='small'>
-                            {errors.fristForFerdigstillelse}
-                          </Alert>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
 
-                  {!_.isEmpty(errors) && (
-                    <ErrorSummary
-                      ref={errorSummaryRef}
-                      heading='Du må rette disse feilene før du kan fortsette'
-                      onClick={() => console.debug(errors)}
-                    >
-                      {/* {errors.suksesskriterieBegrunnelser && (
+                    {!_.isEmpty(errors) && (
+                      <ErrorSummary
+                        ref={errorSummaryRef}
+                        heading='Du må rette disse feilene før du kan fortsette'
+                        onClick={() => console.debug(errors)}
+                      >
+                        {/* {errors.suksesskriterieBegrunnelser && (
                         <SuksesskriterieErrorFields
                           errors={
                             errors.suksesskriterieBegrunnelser as FormikErrors<ISuksesskriterieBegrunnelse>[]
@@ -214,167 +214,172 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         />
                       )} */}
 
-                      {errors.fristForFerdigstillelse && (
-                        <ErrorSummary.Item href={'#fristForFerdigstillelse'}>
-                          {errors.fristForFerdigstillelse}
-                        </ErrorSummary.Item>
-                      )}
-                    </ErrorSummary>
-                  )}
+                        {errors.fristForFerdigstillelse && (
+                          <ErrorSummary.Item href={'#fristForFerdigstillelse'}>
+                            {errors.fristForFerdigstillelse}
+                          </ErrorSummary.Item>
+                        )}
+                      </ErrorSummary>
+                    )}
 
-                  <div className='w-full justify-end mt-5'>
-                    <div className='flex w-full pb-3 flex-row-reverse'>
-                      <Button
-                        disabled={disableEdit || isOppfylesSenere}
-                        type='button'
-                        onClick={async () => {
-                          setValidateOnBlur(true)
-                          values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
-                          values.suksesskriterieBegrunnelser.forEach((skb, index) => {
-                            if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
-                              setFieldError(
-                                `suksesskriterieBegrunnelser[${index}]`,
-                                'Du må fylle ut dokumentasjonen'
-                              )
-                            }
-                          })
-                          // ampli.logEvent('knapp klikket', {
-                          //   tekst: 'Sett krav til ferdig utfylt',
-                          //   pagePath: location.pathname,
-                          //   ...userRoleEventProp,
-                          // })
-                          await submitForm()
-                          setSubmitClick(!submitClick)
-                        }}
-                      >
-                        {/* Sett krav til ferdig utfylt og fortsett til neste krav */}
-                        Ferdig utfylt
-                      </Button>
-
-                      {krav.status === EKravStatus.UTGAATT && (
+                    <div className='w-full justify-end mt-5'>
+                      <div className='flex w-full pb-3 flex-row-reverse'>
                         <Button
-                          className='mr-6'
+                          disabled={disableEdit || isOppfylesSenere}
                           type='button'
-                          disabled={isSubmitting || disableEdit}
-                          onClick={() => {
-                            submitForm()
-                          }}
-                        >
-                          Lagre endringer
-                        </Button>
-                      )}
-
-                      <div className='flex flex-row-reverse'>
-                        <Button
-                          className='mr-6'
-                          type='button'
-                          variant='secondary'
-                          disabled={isSubmitting || disableEdit}
-                          onClick={() => {
-                            if (
-                              values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-                              !isOppfylesSenere
-                            ) {
-                              values.status = EEtterlevelseStatus.UNDER_REDIGERING
-                            } else if (isOppfylesSenere) {
-                              values.status = EEtterlevelseStatus.OPPFYLLES_SENERE
-                            }
+                          onClick={async () => {
+                            setValidateOnBlur(true)
+                            values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
+                            values.suksesskriterieBegrunnelser.forEach((skb, index) => {
+                              if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
+                                setFieldError(
+                                  `suksesskriterieBegrunnelser[${index}]`,
+                                  'Du må fylle ut dokumentasjonen'
+                                )
+                              }
+                            })
                             // ampli.logEvent('knapp klikket', {
-                            //   tekst: 'Lagre og fortsett',
+                            //   tekst: 'Sett krav til ferdig utfylt',
                             //   pagePath: location.pathname,
                             //   ...userRoleEventProp,
                             // })
-                            submitForm()
+                            await submitForm()
+                            setSubmitClick(!submitClick)
                           }}
                         >
-                          {/* Lagre og fortsett til neste krav */}
-                          Lagre og fortsett senere
+                          {/* Sett krav til ferdig utfylt og fortsett til neste krav */}
+                          Ferdig utfylt
                         </Button>
 
-                        <Button
-                          className='mr-6'
-                          disabled={krav.status === EKravStatus.UTGAATT ? false : disableEdit}
-                          type='button'
-                          variant='secondary'
-                          onClick={() => {
-                            if (!dirty) {
+                        {krav.status === EKravStatus.UTGAATT && (
+                          <Button
+                            className='mr-6'
+                            type='button'
+                            disabled={isSubmitting || disableEdit}
+                            onClick={() => {
+                              submitForm()
+                            }}
+                          >
+                            Lagre endringer
+                          </Button>
+                        )}
+
+                        {krav.status === EKravStatus.AKTIV && (
+                          <div className='flex flex-row-reverse'>
+                            <Button
+                              className='mr-6'
+                              type='button'
+                              variant='secondary'
+                              disabled={isSubmitting || disableEdit}
+                              onClick={() => {
+                                if (
+                                  values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                                  !isOppfylesSenere
+                                ) {
+                                  values.status = EEtterlevelseStatus.UNDER_REDIGERING
+                                } else if (isOppfylesSenere) {
+                                  values.status = EEtterlevelseStatus.OPPFYLLES_SENERE
+                                }
+                                // ampli.logEvent('knapp klikket', {
+                                //   tekst: 'Lagre og fortsett',
+                                //   pagePath: location.pathname,
+                                //   ...userRoleEventProp,
+                                // })
+                                submitForm()
+                              }}
+                            >
+                              {/* Lagre og fortsett til neste krav */}
+                              Lagre og fortsett senere
+                            </Button>
+
+                            <Button
+                              className='mr-6'
+                              disabled={disableEdit}
+                              type='button'
+                              variant='secondary'
+                              onClick={() => {
+                                if (!dirty) {
+                                  // ampli.logEvent('knapp klikket', {
+                                  //   tekst: 'Avbryt uten endring i etterlevelse',
+                                  //   pagePath: location.pathname,
+                                  //   ...userRoleEventProp,
+                                  // })
+                                  setTimeout(
+                                    () =>
+                                      router.push(
+                                        etterlevelseDokumentasjonIdUrl(
+                                          etterlevelseDokumentasjon?.id
+                                        )
+                                      ),
+                                    1
+                                  )
+                                } else {
+                                  setIsAvbryModalOpen(true)
+                                }
+
+                                // original logic for buttons, uncommet and use code above to test new logic.
+                                // close()
+                              }}
+                            >
+                              Avbryt
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+
+                      {etterlevelse.changeStamp.lastModifiedDate &&
+                        etterlevelse.changeStamp.lastModifiedBy && (
+                          <div className='pb-6 flex justify-end w-full'>
+                            <BodyShort>
+                              Sist utfylt:{' '}
+                              {moment(etterlevelse.changeStamp.lastModifiedDate).format('LL')} av{' '}
+                              {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
+                            </BodyShort>
+                          </div>
+                        )}
+
+                      <Modal
+                        onClose={() => setIsAvbryModalOpen(false)}
+                        header={{ heading: 'Avbryt dokumentering' }}
+                        open={isAvbrytModalOpen}
+                      >
+                        <Modal.Body>
+                          Er du sikker på at du vil avbryte dokumentering? Endringer du har gjort
+                          blir ikke lagret og du blir sendt til teamoversikten.
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            onClick={() => {
                               // ampli.logEvent('knapp klikket', {
-                              //   tekst: 'Avbryt uten endring i etterlevelse',
+                              //   context: 'Avbryt med endring i etterlevelse',
+                              //   tekst: 'Avbryt med endring i etterlevelse',
                               //   pagePath: location.pathname,
                               //   ...userRoleEventProp,
                               // })
-                              setTimeout(
-                                () =>
-                                  router.push(
-                                    etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)
-                                  ),
-                                1
-                              )
-                            } else {
-                              setIsAvbryModalOpen(true)
-                            }
-
-                            // original logic for buttons, uncommet and use code above to test new logic.
-                            // close()
-                          }}
-                        >
-                          {krav.status === EKravStatus.UTGAATT ? 'Lukk' : 'Avbryt'}
-                        </Button>
-                      </div>
+                              close()
+                            }}
+                            type='button'
+                          >
+                            Ja, jeg vil avbryte
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              // ampli.logEvent('knapp klikket', {
+                              //   tekst: 'Nei, jeg vil fortsette',
+                              //   pagePath: location.pathname,
+                              // })
+                              setIsAvbryModalOpen(false)
+                            }}
+                            type='button'
+                            variant='secondary'
+                          >
+                            Nei, jeg vil fortsette
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
                     </div>
-
-                    {etterlevelse.changeStamp.lastModifiedDate &&
-                      etterlevelse.changeStamp.lastModifiedBy && (
-                        <div className='pb-6 flex justify-end w-full'>
-                          <BodyShort>
-                            Sist utfylt:{' '}
-                            {moment(etterlevelse.changeStamp.lastModifiedDate).format('LL')} av{' '}
-                            {etterlevelse.changeStamp.lastModifiedBy.split('-')[1]}
-                          </BodyShort>
-                        </div>
-                      )}
-
-                    <Modal
-                      onClose={() => setIsAvbryModalOpen(false)}
-                      header={{ heading: 'Avbryt dokumentering' }}
-                      open={isAvbrytModalOpen}
-                    >
-                      <Modal.Body>
-                        Er du sikker på at du vil avbryte dokumentering? Endringer du har gjort blir
-                        ikke lagret og du blir sendt til teamoversikten.
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button
-                          onClick={() => {
-                            // ampli.logEvent('knapp klikket', {
-                            //   context: 'Avbryt med endring i etterlevelse',
-                            //   tekst: 'Avbryt med endring i etterlevelse',
-                            //   pagePath: location.pathname,
-                            //   ...userRoleEventProp,
-                            // })
-                            close()
-                          }}
-                          type='button'
-                        >
-                          Ja, jeg vil avbryte
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            // ampli.logEvent('knapp klikket', {
-                            //   tekst: 'Nei, jeg vil fortsette',
-                            //   pagePath: location.pathname,
-                            // })
-                            setIsAvbryModalOpen(false)
-                          }}
-                          type='button'
-                          variant='secondary'
-                        >
-                          Nei, jeg vil fortsette
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
                   </div>
-                </div>
+                </Form>
               </div>
             )}
             {/* {isPreview && (
