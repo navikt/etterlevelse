@@ -19,6 +19,7 @@ import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@nav
 import { FormikProps } from 'formik'
 import { useParams } from 'next/navigation'
 import { Dispatch, FunctionComponent, RefObject, SetStateAction, useContext, useState } from 'react'
+import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
 import { EtterlevelseEditFields } from '../form/EtterlevelseEditFields'
 import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'
 import UnsavedEtterlevelseModal from '../modal/unsavedEtterlevelseModal'
@@ -288,14 +289,13 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
               />
             </div>
           )}
-          {/*                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
-
-                   <EtterlevelseViewFields
-                      etterlevelse={etterlevelse}
-                      suksesskriterier={krav.suksesskriterier}
-                      tidligereEtterlevelser={tidligereEtterlevelser}
-                    />
-                  )}*/}
+          {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
+            <EtterlevelseViewFields
+              etterlevelse={etterlevelse}
+              suksesskriterier={krav.suksesskriterier}
+              tidligereEtterlevelser={tidligereEtterlevelser}
+            />
+          )}
         </Tabs.Panel>
         <Tabs.Panel value='etterlevelser'>
           <div className='mt-2'>
