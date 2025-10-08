@@ -14,7 +14,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
+import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@navikt/ds-react'
@@ -30,6 +30,7 @@ type TProps = {
   krav: TKravQL
   etterlevelse: IEtterlevelse
   setEtterlevelse: Dispatch<SetStateAction<IEtterlevelse | undefined>>
+  alleKravVersjoner: IKravVersjon[]
   tidligereEtterlevelser: IEtterlevelse[] | undefined
   disableEdit: boolean
   nextKravToDocument: string
@@ -51,6 +52,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   krav,
   etterlevelse,
   setEtterlevelse,
+  alleKravVersjoner,
   tidligereEtterlevelser,
   disableEdit,
   nextKravToDocument,
@@ -305,7 +307,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         </Tabs.Panel>
         <Tabs.Panel value='tilbakemeldinger'>
           <div className='mt-2'>
-            <KravTilbakemeldinger krav={krav} alleKravVersjoner={[]} />
+            <KravTilbakemeldinger krav={krav} alleKravVersjoner={alleKravVersjoner} />
           </div>
         </Tabs.Panel>
       </Tabs>

@@ -28,6 +28,8 @@ export const KravInfoView: FunctionComponent<IProps> = ({
 }) => {
   const user = useContext(UserContext)
 
+  console.debug(krav)
+
   return (
     <div>
       {krav.dokumentasjon.length > 0 && (

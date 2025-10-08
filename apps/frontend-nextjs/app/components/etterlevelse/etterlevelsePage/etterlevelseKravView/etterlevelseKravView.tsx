@@ -30,8 +30,9 @@ import {
   useRef,
   useState,
 } from 'react'
+import TildeltTil from '../etterlevelseMetadata/tildeltTil/tildeltTil'
+import EtterlevelseSidePanel from './sidepanel/etterlevelseSidePanel'
 import EtterlevelsePageTabs from './tabs/etterlevelsePageTabs'
-import TildeltTil from './tildeltTil/tildeltTil'
 
 type TProps = {
   temaName?: string
@@ -78,11 +79,9 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [isPreview, setIsPreview] = useState<boolean>(false)
 
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
-  const [isPvkTabActive] = useState<boolean>(false)
+  const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
 
   const [isPvoUnderarbeidWarningActive, setIsPvoUnderarbeidWarningActive] = useState<boolean>(false)
-
-  //const router = useRouter()
   const user = useContext(UserContext)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
@@ -269,6 +268,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 krav={krav}
                 etterlevelse={etterlevelse}
                 setEtterlevelse={setEtterlevelse}
+                alleKravVersjoner={alleKravVersjoner}
                 tidligereEtterlevelser={tidligereEtterlevelser}
                 disableEdit={disableEdit}
                 nextKravToDocument={nextKravToDocument}
@@ -287,16 +287,16 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               />
             </div>
 
-            {/*<EtterlevelseSidePanel*/}
-            {/*  krav={krav}*/}
-            {/*  pvkDokument={pvkDokument}*/}
-            {/*  etterlevelseMetadata={etterlevelseMetadata}*/}
-            {/*  setEtterlevelseMetadata={setEtterlevelseMetadata}*/}
-            {/*  alleKravVersjoner={alleKravVersjoner}*/}
-            {/*  setIsPreview={setIsPreview}*/}
-            {/*  setIsPvkTabActive={setIsPvkTabActive}*/}
-            {/*  etterlevelseDokumentasjon={etterlevelseDokumentasjon}*/}
-            {/*/>*/}
+            <EtterlevelseSidePanel
+              krav={krav}
+              pvkDokument={pvkDokument}
+              etterlevelseMetadata={etterlevelseMetadata}
+              setEtterlevelseMetadata={setEtterlevelseMetadata}
+              alleKravVersjoner={alleKravVersjoner}
+              setIsPreview={setIsPreview}
+              setIsPvkTabActive={setIsPvkTabActive}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            />
           </div>
 
           {/*{pvkDokument && isPvoAlertModalOpen && (
