@@ -115,9 +115,10 @@ export const EtterlevelsePage = () => {
             index > currentKravIndex &&
             (krav.etterlevelser.length === 0 ||
               (krav.etterlevelser.length > 0 &&
-                krav.etterlevelser[0].status !== EEtterlevelseStatus.FERDIG_DOKUMENTERT &&
-                krav.etterlevelser[0].status !==
-                  EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+                ![
+                  EEtterlevelseStatus.FERDIG_DOKUMENTERT,
+                  EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
+                ].includes(krav.etterlevelser[0].status)))
         )
         const nextKrav: TKravQL = kravPriorityList[nextKravIndex]
         if (nextKrav) {
