@@ -30,9 +30,9 @@ import {
   useRef,
   useState,
 } from 'react'
-import ChangesSavedEttelevelseModal from './etterlevelseKravView/modal/changesSavedEttelevelseModal'
-import EtterlevelsePageTabs from './etterlevelseKravView/tabs/etterlevelsePageTabs'
-import TildeltTil from './etterlevelseKravView/tildeltTil/tildeltTil'
+import ChangesSavedEttelevelseModal from './modal/changesSavedEttelevelseModal'
+import EtterlevelsePageTabs from './tabs/etterlevelsePageTabs'
+import TildeltTil from './tildeltTil/tildeltTil'
 
 type TProps = {
   temaName?: string

@@ -6,7 +6,7 @@ import {
 } from '@/api/etterlevelse/etterlevelseApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
-import { EtterlevelseKravView } from '@/components/etterlevelse/etterlevelseKravView'
+import { EtterlevelseKravView } from '@/components/etterlevelse/etterlevelsePage/etterlevelseKravView/etterlevelseKravView'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
@@ -22,7 +22,7 @@ import { sortKravListeByPriority, toKravId } from '@/util/krav/kravUtil'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
-import { PageLayout } from '../others/scaffold/scaffold'
+import { PageLayout } from '../../others/scaffold/scaffold'
 
 export const EtterlevelsePage = () => {
   const params = useParams<{
