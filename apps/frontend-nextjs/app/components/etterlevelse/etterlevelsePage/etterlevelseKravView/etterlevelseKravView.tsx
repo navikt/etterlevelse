@@ -266,6 +266,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               </div>
               <EtterlevelsePageTabs
                 krav={krav}
+                pvkDokument={pvkDokument}
                 etterlevelse={etterlevelse}
                 setEtterlevelse={setEtterlevelse}
                 alleKravVersjoner={alleKravVersjoner}
@@ -298,14 +299,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
           </div>
-
-          {/*{pvkDokument && isPvoAlertModalOpen && (
-            <AlertPvoUnderarbeidModal
-              isOpen={isPvoAlertModalOpen}
-              onClose={() => setIsPvoAlertModalOpen(false)}
-              pvkDokumentId={pvkDokument.id}
-            />
-          )}*/}
         </div>
       )}
     </div>

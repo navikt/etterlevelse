@@ -8,12 +8,16 @@ import {
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
 import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
+import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import {
   EEtterlevelseStatus,
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
@@ -46,10 +50,12 @@ type TProps = {
   setIsSavingChanges: (state: boolean) => void
   etterlevelseFormRef: RefObject<FormikProps<IEtterlevelse> | null | undefined>
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
+  pvkDokument?: IPvkDokument
 }
 
 export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   krav,
+  pvkDokument,
   etterlevelse,
   setEtterlevelse,
   alleKravVersjoner,
@@ -81,7 +87,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
   const [hasNextKrav, setHasNextKrav] = useState<boolean>(true)
   const [editedEtterlevelse, setEditedEtterlevelse] = useState<IEtterlevelse>()
-  const [, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
 
@@ -190,6 +196,15 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
           temaCode={params.tema}
         />
       )}
+
+      {pvkDokument && isPvoAlertModalOpen && (
+        <AlertPvoUnderarbeidModal
+          isOpen={isPvoAlertModalOpen}
+          onClose={() => setIsPvoAlertModalOpen(false)}
+          pvkDokumentId={pvkDokument.id}
+        />
+      )}
+
       <Tabs
         value={currentTab}
         onChange={(tabValue) => {
