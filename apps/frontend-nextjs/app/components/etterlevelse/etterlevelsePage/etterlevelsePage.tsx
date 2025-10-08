@@ -44,7 +44,6 @@ export const EtterlevelsePage = () => {
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = useState<IEtterlevelse[]>()
   const [nextKravToDocument, setNextKravToDocument] = useState<string>('')
   const [kravId, setKravId] = useState<TKravId | undefined>()
-  const [navigatePath] = useState<string>('')
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
     getKravMedPrioriteringOgEtterlevelseQuery,
@@ -146,7 +145,6 @@ export const EtterlevelsePage = () => {
               kravId={toKravId(etterlevelse)}
               etterlevelse={etterlevelse}
               setEtterlevelse={setEtterlevelse}
-              navigatePath={navigatePath}
             />
           )}
         </div>

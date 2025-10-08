@@ -1,14 +1,35 @@
 'use client'
 
-import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import {
+  createEtterlevelse,
+  getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
+  updateEtterlevelse,
+} from '@/api/etterlevelse/etterlevelseApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
+import {
+  EEtterlevelseStatus,
+  IEtterlevelse,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
+import { useParams } from 'next/navigation'
 import { Dispatch, FunctionComponent, RefObject, SetStateAction, useContext, useState } from 'react'
+import { EtterlevelseEditFields } from '../form/EtterlevelseEditFields'
+import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'
 import UnsavedEtterlevelseModal from '../modal/unsavedEtterlevelseModal'
 
 type TProps = {
+  krav: TKravQL
+  etterlevelse: IEtterlevelse
+  setEtterlevelse: Dispatch<SetStateAction<IEtterlevelse | undefined>>
+  tidligereEtterlevelser: IEtterlevelse[] | undefined
+  disableEdit: boolean
+  nextKravToDocument: string
   isTabAlertActive: boolean
   setIsTabAlertActive: (state: boolean) => void
   isPvkTabActive: boolean
@@ -17,11 +38,19 @@ type TProps = {
   setIsPreview: Dispatch<SetStateAction<boolean>>
   isPrioritised: boolean
   setIsPrioritised: Dispatch<SetStateAction<boolean>>
+  isSavingChanges: boolean
+  setIsSavingChanges: (state: boolean) => void
   etterlevelseFormRef: RefObject<FormikProps<IEtterlevelse> | null | undefined>
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
 
 export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
+  krav,
+  etterlevelse,
+  setEtterlevelse,
+  tidligereEtterlevelser,
+  disableEdit,
+  nextKravToDocument,
   isTabAlertActive,
   setIsTabAlertActive,
   isPvkTabActive,
@@ -30,15 +59,106 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   setIsPreview,
   isPrioritised,
   setIsPrioritised,
+  isSavingChanges,
+  setIsSavingChanges,
   etterlevelseFormRef,
   etterlevelseDokumentasjon,
 }) => {
+  const params: Readonly<
+    Partial<{
+      tema?: string
+    }>
+  > = useParams<{ tema?: string }>()
   const user = useContext(UserContext)
   const [currentTab, setCurrentTab] = useState<string>('dokumentasjon')
   const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
-  const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
+
+  const [statusText, setStatustext] = useState<string>('')
+  const [isNavigationModalOpen, setIsNavigationModalOpen] = useState<boolean>(false)
+  const [hasNextKrav, setHasNextKrav] = useState<boolean>(true)
+  const [editedEtterlevelse, setEditedEtterlevelse] = useState<IEtterlevelse>()
+  const [, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
+
+  const activeAlertModalController = () => {
+    if (isTabAlertActive) {
+      setIsSavingChanges(false)
+      setIsTabAlertActive(false)
+    } else {
+      setIsNavigationModalOpen(true)
+    }
+  }
+
+  const submit = async (etterlevelse: IEtterlevelse) => {
+    const mutatedEtterlevelse = {
+      ...etterlevelse,
+      fristForFerdigstillelse:
+        etterlevelse.status !== EEtterlevelseStatus.OPPFYLLES_SENERE
+          ? ''
+          : etterlevelse.fristForFerdigstillelse,
+      suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
+      prioritised: isPrioritised,
+    } as IEtterlevelse
+    setEditedEtterlevelse(mutatedEtterlevelse)
+
+    //double check if etterlevelse already exist before submitting
+    let existingEtterlevelseId = ''
+    if (etterlevelseDokumentasjon && krav) {
+      const etterlevelseList = (
+        await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
+          etterlevelseDokumentasjon.id,
+          krav.kravNummer
+        )
+      ).content.filter((e) => e.kravVersjon === krav.kravVersjon)
+      if (etterlevelseList.length) {
+        existingEtterlevelseId = etterlevelseList[0].id
+        mutatedEtterlevelse.id = etterlevelseList[0].id
+      }
+    }
+
+    await getPvkDokumentByEtterlevelseDokumentId(etterlevelse.etterlevelseDokumentasjonId).then(
+      async (response) => {
+        if (
+          response &&
+          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+            response.status
+          ) &&
+          krav?.tagger.includes('Personvernkonsekvensvurdering')
+        ) {
+          setIsPvoAlertModalOpen(true)
+        } else {
+          if (etterlevelse.id || existingEtterlevelseId) {
+            await updateEtterlevelse(mutatedEtterlevelse).then((res) => {
+              if (nextKravToDocument !== '') {
+                setStatustext(res.status)
+                setHasNextKrav(true)
+                activeAlertModalController()
+              } else {
+                setStatustext(res.status)
+                setHasNextKrav(false)
+                activeAlertModalController()
+                setEtterlevelse(res)
+              }
+            })
+          } else {
+            await createEtterlevelse(mutatedEtterlevelse).then((res) => {
+              if (nextKravToDocument !== '') {
+                setStatustext(res.status)
+                setHasNextKrav(true)
+                activeAlertModalController()
+              } else {
+                setStatustext(res.status)
+                setHasNextKrav(false)
+                activeAlertModalController()
+                setEtterlevelse(res)
+              }
+            })
+          }
+        }
+      }
+    )
+  }
 
   return (
     <>
@@ -51,6 +171,19 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
           selectedTab={selectedTab}
           setCurrentTab={setCurrentTab}
           etterlevelseFormRef={etterlevelseFormRef}
+        />
+      )}
+
+      {isNavigationModalOpen && !isTabAlertActive && (
+        <ChangesSavedEttelevelseModal
+          isNavigationModalOpen={isNavigationModalOpen}
+          isTabAlertActive={isTabAlertActive}
+          setIsNavigationModalOpen={setIsNavigationModalOpen}
+          statusText={statusText}
+          hasNextKrav={hasNextKrav}
+          nextKravToDocument={nextKravToDocument}
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjon?.id}
+          temaCode={params.tema}
         />
       )}
       <Tabs
@@ -142,29 +275,17 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                 </CheckboxGroup>
               )}
 
-              {/*                        <EtterlevelseEditFields
-                          isPreview={isPreview}
-                          kravFilter={kravFilter}
-                          krav={krav}
-                          etterlevelse={etterlevelse}
-                          submit={submit}
-                          formRef={etterlevelseFormRef}
-                          varsleMelding={varsleMelding}
-                          disableEdit={disableEdit}
-                          close={() => {
-                            setTimeout(
-                              () =>
-                                navigate(
-                                  etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)
-                                ),
-                              1
-                            )
-                          }}
-                          navigatePath={navigatePath}
-                          editedEtterlevelse={editedEtterlevelse}
-                          tidligereEtterlevelser={tidligereEtterlevelser}
-                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                        />*/}
+              <EtterlevelseEditFields
+                isPreview={isPreview}
+                krav={krav}
+                etterlevelse={etterlevelse}
+                submit={submit}
+                formRef={etterlevelseFormRef}
+                disableEdit={disableEdit}
+                editedEtterlevelse={editedEtterlevelse}
+                tidligereEtterlevelser={tidligereEtterlevelser}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              />
             </div>
           )}
           {/*                  {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
