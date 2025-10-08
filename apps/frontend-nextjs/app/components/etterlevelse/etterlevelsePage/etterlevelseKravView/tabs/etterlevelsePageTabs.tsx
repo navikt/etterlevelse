@@ -100,6 +100,19 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     }
   }
 
+  const handleStateChangeOnEtterlevelseResponse = (res: IEtterlevelse) => {
+    if (nextKravToDocument !== '') {
+      setStatustext(res.status)
+      setHasNextKrav(true)
+      activeAlertModalController()
+    } else {
+      setStatustext(res.status)
+      setHasNextKrav(false)
+      activeAlertModalController()
+      setEtterlevelse(res)
+    }
+  }
+
   const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -140,29 +153,11 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         } else {
           if (etterlevelse.id || existingEtterlevelseId) {
             await updateEtterlevelse(mutatedEtterlevelse).then((res) => {
-              if (nextKravToDocument !== '') {
-                setStatustext(res.status)
-                setHasNextKrav(true)
-                activeAlertModalController()
-              } else {
-                setStatustext(res.status)
-                setHasNextKrav(false)
-                activeAlertModalController()
-                setEtterlevelse(res)
-              }
+              handleStateChangeOnEtterlevelseResponse(res)
             })
           } else {
             await createEtterlevelse(mutatedEtterlevelse).then((res) => {
-              if (nextKravToDocument !== '') {
-                setStatustext(res.status)
-                setHasNextKrav(true)
-                activeAlertModalController()
-              } else {
-                setStatustext(res.status)
-                setHasNextKrav(false)
-                activeAlertModalController()
-                setEtterlevelse(res)
-              }
+              handleStateChangeOnEtterlevelseResponse(res)
             })
           }
         }
