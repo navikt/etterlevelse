@@ -47,3 +47,8 @@ export const etterlevelseDokumentasjonAlleOpenUrl = (
 export const etterlevelseDokumentasjonAlleClosedUrl = (
   etterlevelseDokumentasjonId: string | undefined
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tema=all-closed`
+
+export const etterlevelseDokumentasjonTemaUrl = (
+  etterlevelseDokumentasjonId: string | undefined,
+  tema: string | undefined
+): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tema=${tema}`

@@ -18,7 +18,6 @@ import {
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
@@ -67,8 +66,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     skip: !params.id,
   })
 
-  const [relevanteStats, setRelevanteStats] = useState<TKravQL[]>([])
-  const [utgaattStats, setUtgaattStats] = useState<TKravQL[]>([])
+  const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(relevanteData)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
@@ -76,13 +74,6 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(false)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
-
-  useEffect(() => {
-    const [relevanteStatusListe, utgaattStatusListe] =
-      filterEtterlevelseDokumentasjonStatsData(relevanteData)
-    setRelevanteStats(relevanteStatusListe)
-    setUtgaattStats(utgaattStatusListe)
-  }, [relevanteData])
 
   useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)

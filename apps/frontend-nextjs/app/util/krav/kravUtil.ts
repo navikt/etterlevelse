@@ -1,5 +1,6 @@
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { kravPathUrl, kravUrl } from '@/routes/krav/kravRoutes'
 
 export const kravName = (krav: IKrav): string =>
   `${kravNummerView(krav.kravVersjon, krav.kravNummer)} ${krav.navn}`
@@ -37,7 +38,15 @@ export const hasKravExpired = (alleKravVersjoner: IKravVersjon[], krav?: TKravQL
   if (krav?.status === EKravStatus.UTGAATT && alleKravVersjoner.length === 1) {
     return true
   } else {
-    return krav ? krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString()) : false
+    if (alleKravVersjoner.length === 0) {
+      if (krav && krav.status === EKravStatus.AKTIV) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return krav ? krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString()) : false
+    }
   }
 }
 
@@ -53,4 +62,14 @@ export const kravStatus = (status: EKravStatus | string) => {
     default:
       return status
   }
+}
+
+export const toKravId = (it: { kravVersjon: number; kravNummer: number }) => ({
+  kravNummer: it.kravNummer,
+  kravVersjon: it.kravVersjon,
+})
+
+export const getNextKravUrl = (nextKravPath: string): string => {
+  const currentPath: string[] = location.pathname.split(kravUrl)
+  return kravPathUrl(currentPath[0], nextKravPath)
 }

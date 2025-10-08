@@ -1,6 +1,7 @@
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
+  IEtterlevelse,
   ISuksesskriterieBegrunnelse,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
@@ -203,5 +204,34 @@ export const getSuksesskriterieBegrunnelse = (
     }
   } else {
     return suksesskriterieBegrunnelse
+  }
+}
+
+export const syncEtterlevelseKriterieBegrunnelseWithKrav = (
+  etterlevelse: IEtterlevelse,
+  krav?: TKravQL
+) => {
+  const suksesskriterieBegrunnelse: ISuksesskriterieBegrunnelse[] = []
+
+  krav?.suksesskriterier.forEach((krav: ISuksesskriterie) => {
+    suksesskriterieBegrunnelse.push(
+      etterlevelse.suksesskriterieBegrunnelser.filter(
+        (begrunnelse: ISuksesskriterieBegrunnelse) => begrunnelse.suksesskriterieId === krav.id
+      )[0]
+    )
+  })
+
+  return suksesskriterieBegrunnelse
+}
+
+export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskriterieStatus) => {
+  if (suksessKriterieStatus === ESuksesskriterieStatus.UNDER_ARBEID) {
+    return 'Hva er oppfylt og hva er under arbeid?'
+  } else if (suksessKriterieStatus === ESuksesskriterieStatus.OPPFYLT) {
+    return 'Hvordan oppfylles kriteriet?'
+  } else if (suksessKriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT) {
+    return 'Hvorfor er ikke kriteriet oppfylt?'
+  } else {
+    return 'Hvorfor er ikke kriteriet relevant?'
   }
 }

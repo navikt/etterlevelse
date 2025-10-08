@@ -1,3 +1,5 @@
+'use client'
+
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from '@navikt/ds-react'
