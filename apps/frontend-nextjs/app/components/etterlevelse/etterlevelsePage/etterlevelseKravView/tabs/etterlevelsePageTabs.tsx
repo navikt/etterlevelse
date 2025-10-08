@@ -7,6 +7,7 @@ import {
 } from '@/api/etterlevelse/etterlevelseApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
+import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
 import {
   EEtterlevelseStatus,
   IEtterlevelse,
@@ -304,8 +305,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         </Tabs.Panel>
         <Tabs.Panel value='tilbakemeldinger'>
           <div className='mt-2'>
-            test
-            {/*<Tilbakemeldinger krav={krav} hasKravExpired={false} />*/}
+            <KravTilbakemeldinger krav={krav} alleKravVersjoner={[]} />
           </div>
         </Tabs.Panel>
       </Tabs>

@@ -38,7 +38,13 @@ export const hasKravExpired = (alleKravVersjoner: IKravVersjon[], krav?: TKravQL
   if (krav?.status === EKravStatus.UTGAATT && alleKravVersjoner.length === 1) {
     return true
   } else {
-    return krav ? krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString()) : false
+    if (alleKravVersjoner.length === 0 && krav && krav.status === EKravStatus.AKTIV) {
+      return false
+    } else if (alleKravVersjoner.length === 0 && krav && krav.status === EKravStatus.UTGAATT) {
+      return true
+    } else {
+      return krav ? krav.kravVersjon < parseInt(alleKravVersjoner[0].kravVersjon.toString()) : false
+    }
   }
 }
 
