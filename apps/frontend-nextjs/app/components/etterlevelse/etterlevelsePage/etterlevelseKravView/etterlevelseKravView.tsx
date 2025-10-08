@@ -4,6 +4,7 @@ import {
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
 import { getKravByKravNummer } from '@/api/krav/kravApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { Markdown } from '@/components/common/markdown/markdown'
 import ExpiredAlert from '@/components/krav/kravPage/expiredAlert/expiredAlertComponent'
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
@@ -62,15 +63,17 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       tema?: string
     }>
   > = useParams<{ tema?: string }>()
-  const { data } = useQuery<{ kravById: TKravQL }, TKravId>(getKravWithEtterlevelseQuery, {
-    variables: kravId,
-    skip: !kravId.kravId && !kravId.kravNummer,
-    fetchPolicy: 'no-cache',
-  })
+  const { data, loading: kravLoading } = useQuery<{ kravById: TKravQL }, TKravId>(
+    getKravWithEtterlevelseQuery,
+    {
+      variables: kravId,
+      skip: !kravId.kravId && !kravId.kravNummer,
+      fetchPolicy: 'no-cache',
+    }
+  )
 
   // const etterlevelserLoading: boolean = loading
   const [krav, setKrav] = useState<TKravQL>()
-  const [kravVarsleMelding, setKravVarsleMelding] = useState('')
   const [nyereKrav, setNyereKrav] = useState<IKrav>()
   const [, setDisableEdit] = useState<boolean>(false)
   //const [, setEditedEtterlevelse] = React.useState<IEtterlevelse>()
@@ -150,9 +153,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   }, [])
 
   useEffect(() => {
-    if (krav) {
-      setKravVarsleMelding(krav.varselMelding || '')
-    }
     if (
       pvkDokument &&
       [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
@@ -314,7 +314,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
 
   return (
     <div>
-      {krav && (
+      {kravLoading && <CenteredLoader />}
+      {!kravLoading && krav && (
         <div className='flex flex-col gap-8'>
           <div>
             <BodyShort size='small' id='kravTitle'>
@@ -325,10 +326,10 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 {krav.navn}
               </Heading>
 
-              {kravVarsleMelding && (
+              {krav.varselMelding && (
                 <div>
                   <Alert size='small' variant='info' className='w-fit'>
-                    {kravVarsleMelding}
+                    {krav.varselMelding}
                   </Alert>
                 </div>
               )}
