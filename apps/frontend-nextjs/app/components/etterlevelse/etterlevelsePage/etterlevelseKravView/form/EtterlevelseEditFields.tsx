@@ -26,6 +26,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
 import { etterlevelseSchema } from './etterlevelseSchema'
 import SuksesskriterieErrorFields from './suksesskriterieErrorFields'
 import { SuksesskriterierBegrunnelseEdit } from './suksesskriterierBegrunnelseEdit'
@@ -385,13 +386,13 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                 </Form>
               </div>
             )}
-            {/* {isPreview && (
+            {isPreview && (
               <EtterlevelseViewFields
                 etterlevelse={values}
                 suksesskriterier={krav.suksesskriterier}
                 tidligereEtterlevelser={tidligereEtterlevelser}
               />
-            )} */}
+            )}
           </div>
         )}
       </Formik>
