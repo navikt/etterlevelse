@@ -10,10 +10,7 @@ import ExpiredAlert from '@/components/krav/kravPage/expiredAlert/expiredAlertCo
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkDokumentStatus,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravId, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
@@ -77,11 +74,9 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [isTabAlertActive, setIsTabAlertActive] = useState<boolean>(false)
   const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
   const [isPreview, setIsPreview] = useState<boolean>(false)
-
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
 
-  const [isPvoUnderarbeidWarningActive, setIsPvoUnderarbeidWarningActive] = useState<boolean>(false)
   const user = useContext(UserContext)
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
@@ -137,20 +132,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       setIsPrioritised(priorityCheck)
     }
   }, [])
-
-  useEffect(() => {
-    if (
-      pvkDokument &&
-      [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-        pvkDokument.status
-      ) &&
-      krav &&
-      krav.tagger.includes('Personvernkonsekvensvurdering')
-    ) {
-      setIsPreview(true)
-      setIsPvoUnderarbeidWarningActive(true)
-    }
-  }, [krav, pvkDokument])
 
   useEffect(() => {
     if (data?.kravById) {
@@ -276,7 +257,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 isTabAlertActive={isTabAlertActive}
                 setIsTabAlertActive={setIsTabAlertActive}
                 isPvkTabActive={isPvkTabActive}
-                isPvoUnderarbeidWarningActive={isPvoUnderarbeidWarningActive}
                 isPreview={isPreview}
                 setIsPreview={setIsPreview}
                 isPrioritised={isPrioritised}

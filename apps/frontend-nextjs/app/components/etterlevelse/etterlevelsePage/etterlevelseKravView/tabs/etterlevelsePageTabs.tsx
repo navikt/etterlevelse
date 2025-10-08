@@ -24,7 +24,15 @@ import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelse
 import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import { useParams } from 'next/navigation'
-import { Dispatch, FunctionComponent, RefObject, SetStateAction, useContext, useState } from 'react'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
 import { EtterlevelseEditFields } from '../form/EtterlevelseEditFields'
 import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'
@@ -41,7 +49,6 @@ type TProps = {
   isTabAlertActive: boolean
   setIsTabAlertActive: (state: boolean) => void
   isPvkTabActive: boolean
-  isPvoUnderarbeidWarningActive: boolean
   isPreview: boolean
   setIsPreview: Dispatch<SetStateAction<boolean>>
   isPrioritised: boolean
@@ -65,7 +72,6 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   isTabAlertActive,
   setIsTabAlertActive,
   isPvkTabActive,
-  isPvoUnderarbeidWarningActive,
   isPreview,
   setIsPreview,
   isPrioritised,
@@ -88,6 +94,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   const [hasNextKrav, setHasNextKrav] = useState<boolean>(true)
   const [editedEtterlevelse, setEditedEtterlevelse] = useState<IEtterlevelse>()
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [isPvoUnderarbeidWarningActive, setIsPvoUnderarbeidWarningActive] = useState<boolean>(false)
 
   const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
 
@@ -164,6 +171,20 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
       }
     )
   }
+
+  useEffect(() => {
+    if (
+      pvkDokument &&
+      [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+        pvkDokument.status
+      ) &&
+      krav &&
+      krav.tagger.includes('Personvernkonsekvensvurdering')
+    ) {
+      setIsPreview(true)
+      setIsPvoUnderarbeidWarningActive(true)
+    }
+  }, [krav, pvkDokument])
 
   return (
     <>
