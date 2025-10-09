@@ -5,7 +5,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Heading } from '@navikt/ds-react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Dispatch, FunctionComponent, RefObject, SetStateAction, useEffect } from 'react'
 import RisikoscenarioForm from '../form/risikoscenarioForm'
 

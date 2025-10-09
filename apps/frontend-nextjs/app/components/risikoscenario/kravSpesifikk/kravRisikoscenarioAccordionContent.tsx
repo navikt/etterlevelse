@@ -1,5 +1,6 @@
 'use client'
 
+import { updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
@@ -7,6 +8,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
 import RedigerRisikoscenarioButtons from '../edit/redigerRisikoscenarioButtons'
+import RisikoscenarioModalForm from '../form/risikoscenarioModalForm'
 
 type TProps = {
   risikoscenario: IRisikoscenario
@@ -42,8 +44,8 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   setIsTiltakFormActive,
   // formRef,
 }) => {
-  const [activeRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
-  const [, setIsEditModalOpen] = useState<boolean>(false)
+  const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   const [isCreateTiltakFormActive] = useState<boolean>(false)
   const [isAddExistingMode] = useState<boolean>(false)
 
@@ -52,25 +54,25 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   // const router = useRouter()
 
-  // const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
-  //   setRisikoscenarioForKrav(
-  //     risikoscenarioForKrav.map((risikoscenario: IRisikoscenario) => {
-  //       if (risikoscenario.id === updatedRisikoscenario.id) {
-  //         return { ...updatedRisikoscenario }
-  //       } else {
-  //         return risikoscenario
-  //       }
-  //     })
-  //   )
-  // }
+  const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
+    setRisikoscenarioForKrav(
+      risikoscenarioForKrav.map((risikoscenario: IRisikoscenario) => {
+        if (risikoscenario.id === updatedRisikoscenario.id) {
+          return { ...updatedRisikoscenario }
+        } else {
+          return risikoscenario
+        }
+      })
+    )
+  }
 
-  // const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-  //   await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
-  //     setActiveRisikoscenario(response)
-  //     updateRisikoscenarioList(response)
-  //     setIsEditModalOpen(false)
-  //   })
-  // }
+  const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
+    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
+      setActiveRisikoscenario(response)
+      updateRisikoscenarioList(response)
+      setIsEditModalOpen(false)
+    })
+  }
 
   // const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
   //   await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
@@ -291,7 +293,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           )} */}
       </div>
 
-      {/* {isEditModalOpen && (
+      {isEditModalOpen && (
         <RisikoscenarioModalForm
           headerText='Redigér øvrig risikoscenario'
           isOpen={isEditModalOpen}
@@ -299,7 +301,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           submit={submit}
           initialValues={activeRisikoscenario}
         />
-      )} */}
+      )}
 
       {isPvoAlertModalOpen && (
         <AlertPvoUnderarbeidModal
