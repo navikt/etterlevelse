@@ -15,10 +15,11 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import CreateRisikoscenario from '../edit/createRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/leggTilEksisterendeRisikoscenario'
+import { KravRisikoscenarioOvrigeRisikoscenarierLink } from './kravRisikoscenarioOvrigeRisikoscenarierLink'
 import { KravRisikoscenarioReadMore } from './kravRisikoscenarioReadMore'
 
 type TProps = {
@@ -46,8 +47,8 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const pathName = usePathname()
-  const url: URL = new URL(window.location.href)
-  const risikoscenarioId: string | null = url.searchParams.get('risikoscenario')
+  const queryParams = useSearchParams()
+  const risikoscenarioId: string | null = queryParams.get('risikoscenario')
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -257,10 +258,9 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
               </div>
             )}
 
-            {
-              !isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && 'WIP'
-              // <KravRisikoscenarioOvrigeRisikoscenarier pvkDokument={pvkDokument} />
-            }
+            {!isCreateMode && !isLeggTilEksisterendeMode && pvkDokument && (
+              <KravRisikoscenarioOvrigeRisikoscenarierLink pvkDokument={pvkDokument} />
+            )}
 
             {isPvoAlertModalOpen && (
               <AlertPvoUnderarbeidModal
