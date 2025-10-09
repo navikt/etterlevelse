@@ -41,19 +41,19 @@ export const EtterlevelseDokumentasjonPage = () => {
   const codelist = useContext(CodelistContext)
   const temaListe: TTemaCode[] = codelist.utils.getCodes(EListName.TEMA) as TTemaCode[]
   const params: Readonly<{
-    id?: string
-  }> = useParams<{ id?: string }>()
+    etterlevelseDokumentasjonId?: string
+  }> = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const [etterlevelseNummer, setEtterlevelseNummer] = useState<string>('')
   const [title, setTitle] = useState<string>('')
   const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const [relasjonLoading, setRelasjonLoading] = useState(false)
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
-    params.id
+    params.etterlevelseDokumentasjonId
   )
   const variables: {
     etterlevelseDokumentasjonId: string | undefined
-  } = { etterlevelseDokumentasjonId: params.id }
+  } = { etterlevelseDokumentasjonId: params.etterlevelseDokumentasjonId }
 
   const {
     data: relevanteData,
@@ -63,7 +63,7 @@ export const EtterlevelseDokumentasjonPage = () => {
     etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
   }>(getEtterlevelseDokumentasjonStatsQuery, {
     variables,
-    skip: !params.id,
+    skip: !params.etterlevelseDokumentasjonId,
   })
 
   const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(relevanteData)

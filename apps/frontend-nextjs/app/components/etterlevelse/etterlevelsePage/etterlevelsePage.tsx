@@ -26,7 +26,7 @@ import { PageLayout } from '../../others/scaffold/scaffold'
 
 export const EtterlevelsePage = () => {
   const params = useParams<{
-    id: string
+    etterlevelseDokumentasjonId: string
     tema: string
     kravNummer: string
     kravVersjon: string
@@ -38,7 +38,9 @@ export const EtterlevelsePage = () => {
     params.tema?.replace('i', '')
   ) as TTemaCode | undefined
   const lover: TLovCode[] = codelist.utils.getLovCodesForTema(params.tema)
-  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
+  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
+    params.etterlevelseDokumentasjonId
+  )
   const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
   const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = useState<IEtterlevelse[]>()
@@ -49,12 +51,12 @@ export const EtterlevelsePage = () => {
     getKravMedPrioriteringOgEtterlevelseQuery,
     {
       variables: {
-        etterlevelseDokumentasjonId: params.id,
+        etterlevelseDokumentasjonId: params.etterlevelseDokumentasjonId,
         lover: lover.map((lov: TLovCode) => lov.code),
         tema: params.tema,
         status: EKravStatus.AKTIV,
       },
-      skip: !params.tema || !params.id,
+      skip: !params.tema || !params.etterlevelseDokumentasjonId,
       fetchPolicy: 'no-cache',
     }
   )
