@@ -4,6 +4,7 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
 import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
 import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/kravRisikoscenarioer'
+import KravRisikoscenarioReadOnly from '@/components/risikoscenario/readOnly/KravRisikoscenarioReadOnly'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -143,9 +144,9 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {(!userHasAccess() || (pvkDokument && isReadOnlyPvkStatus(pvkDokument.status))) &&
-                  // <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
-                  'risikoscenario readonly'}
+                {(!userHasAccess() || (pvkDokument && isReadOnlyPvkStatus(pvkDokument.status))) && (
+                  <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
+                )}
               </div>
             </Tabs.Panel>
           )}
