@@ -14,9 +14,11 @@ import { useContext } from 'react'
 import EtterlevelseDokumentasjonForm from '../form/etterlevelseDokumentasjonForm'
 
 export const EditEtterlevelseDokumentasjonPage = () => {
-  const params = useParams<{ id?: string }>()
+  const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const user = useContext(UserContext)
-  const [etterlevelseDokumentasjon, , isLoading] = useEtterlevelseDokumentasjon(params.id)
+  const [etterlevelseDokumentasjon, , isLoading] = useEtterlevelseDokumentasjon(
+    params.etterlevelseDokumentasjonId
+  )
 
   return (
     <>
@@ -35,7 +37,7 @@ export const EditEtterlevelseDokumentasjonPage = () => {
               pathName: 'Dokumentere etterlevelse',
             },
             {
-              href: etterlevelseDokumentasjonIdUrl(params.id),
+              href: etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId),
               pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`,
             },
           ]}
