@@ -45,6 +45,16 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   // }
 
   useEffect(() => {
+    if (
+      pvkDokument &&
+      pvkDokument.skalUtforePvk &&
+      krav.tagger.includes('Personvernkonsekvensvurdering')
+    ) {
+      setActiveTab('pvkDokumentasjon')
+    }
+  }, [pvkDokument])
+
+  useEffect(() => {
     if (isPvkFormActive) {
       setIsPreview(true)
       setIsPvkTabActive(true)
