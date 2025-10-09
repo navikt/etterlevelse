@@ -13,7 +13,7 @@ import { isReadOnlyPvkStatus } from '../../PvkDokument/common/util'
 import { Markdown } from '../../common/Markdown'
 import EditNotatfelt from '../../etterlevelseMetadata/EditNotatfelt'
 import { AllInfo } from '../../krav/ViewKrav'
-import AccordianAlertModal from '../../risikoscenario/AccordianAlertModal'
+import { RisikoscenarioAccordianAlertModal } from '../../risikoscenario/AccordianAlertModal'
 import KravRisikoscenario from '../../risikoscenario/kravRisikoscenario/KravRisikoscenario'
 import KravRisikoscenarioReadOnly from '../../risikoscenario/kravRisikoscenario/Readonly/KravRisikoscenarioReadOnly'
 

@@ -20,7 +20,7 @@ import {
   pvkDokumentasjonTabFilterUrl,
 } from '../common/RouteLinkPvk'
 import { ContentLayout } from '../layout/layout'
-import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
+import { RisikoscenarioAccordianAlertModal } from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionListReadOnly from '../tiltak/TiltakAccordionListReadOnly'
 import PvoSidePanelWrapper from './common/PvoSidePanelWrapper'
