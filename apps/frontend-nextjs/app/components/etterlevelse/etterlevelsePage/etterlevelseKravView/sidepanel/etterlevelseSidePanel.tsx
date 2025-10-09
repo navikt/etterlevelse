@@ -2,6 +2,7 @@
 
 import { Markdown } from '@/components/common/markdown/markdown'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
+import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
 import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/kravRisikoscenarioer'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -46,8 +47,8 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
-  const [, setSelectedTab] = useState<string>('')
-  const [, setIsUnsaved] = useState<boolean>(false)
+  const [selectedTab, setSelectedTab] = useState<string>('')
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
 
@@ -176,14 +177,14 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
         </Tabs>
       </div>
 
-      {/* <AccordianAlertModal
+      <RisikoscenarioAccordianAlertModal
         isOpen={isUnsaved}
         setIsOpen={setIsUnsaved}
         formRef={formRef}
         customOnClick={() => {
           setActiveTab(selectedTab)
         }}
-      /> */}
+      />
     </div>
   )
 }
