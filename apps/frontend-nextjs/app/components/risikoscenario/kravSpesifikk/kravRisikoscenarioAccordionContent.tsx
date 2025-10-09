@@ -1,12 +1,22 @@
 'use client'
 
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import { getRisikoscenario, updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
+import {
+  addTiltakToRisikoscenario,
+  getRisikoscenario,
+  updateRisikoscenario,
+} from '@/api/risikoscenario/risikoscenarioApi'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { LeggTilEksisterendeTiltak } from '@/components/tiltak/edit/leggTilEksisterendeTiltak'
+import {
+  IRisikoscenario,
+  ITiltakRisikoscenarioRelasjon,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { risikoscenarioTiltakUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Button } from '@navikt/ds-react'
+import router from 'next/router'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
@@ -113,20 +123,20 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   //   })
   // }
 
-  // const submitExistingTiltak = async (request: ITiltakRisikoscenarioRelasjon): Promise<void> => {
-  //   await addTiltakToRisikoscenario(request).then(() => {
-  //     setActiveRisikoscenario({
-  //       ...activeRisikoscenario,
-  //       tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
-  //     })
-  //     updateRisikoscenarioList({
-  //       ...activeRisikoscenario,
-  //       tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
-  //     })
-  //     router.push(risikoscenarioTiltakUrl(activeRisikoscenario.id, request.tiltakIds[0]))
-  //     setIsAddExisitingMode(false)
-  //   })
-  // }
+  const submitExistingTiltak = async (request: ITiltakRisikoscenarioRelasjon): Promise<void> => {
+    await addTiltakToRisikoscenario(request).then(() => {
+      setActiveRisikoscenario({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
+      })
+      updateRisikoscenarioList({
+        ...activeRisikoscenario,
+        tiltakIds: [...activeRisikoscenario.tiltakIds, ...request.tiltakIds],
+      })
+      router.push(risikoscenarioTiltakUrl(activeRisikoscenario.id, request.tiltakIds[0]))
+      setIsAddExisitingMode(false)
+    })
+  }
 
   // const submitDeleteTiltak = async (tiltakId: string): Promise<void> => {
   //   await getTiltak(tiltakId).then(async (response: ITiltak) => {
@@ -235,6 +245,8 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               />
             )}
 
+             */}
+
             {isAddExistingMode && (
               <LeggTilEksisterendeTiltak
                 risikoscenario={activeRisikoscenario}
@@ -244,8 +256,6 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 formRef={formRef}
               />
             )}
-
-             */}
 
             {!isIngenTiltakFormDirty &&
               !isCreateTiltakFormActive &&
