@@ -1,6 +1,6 @@
 'use client'
 
-import { updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
+import { getRisikoscenario, updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
@@ -8,6 +8,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
 import RedigerRisikoscenarioButtons from '../edit/redigerRisikoscenarioButtons'
+import { IngenTiltakField } from '../form/field/ingenTiltakField'
 import RisikoscenarioModalForm from '../form/risikoscenarioModalForm'
 
 type TProps = {
@@ -42,7 +43,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   setTiltakList,
   isCreateMode,
   setIsTiltakFormActive,
-  // formRef,
+  formRef,
 }) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
@@ -50,7 +51,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isAddExistingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive] = useState<boolean>(false)
-  const [isIngenTiltakFormDirty] = useState<boolean>(false)
+  const [isIngenTiltakFormDirty, setIsIngenTilktakFormDirty] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   // const router = useRouter()
 
@@ -74,21 +75,21 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     })
   }
 
-  // const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
-  //   await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
-  //     const updatedRisikoscenario = {
-  //       ...submitedValues,
-  //       ...response,
-  //       ingenTiltak: submitedValues.ingenTiltak,
-  //     }
+  const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
+    await getRisikoscenario(risikoscenario.id).then((response: IRisikoscenario) => {
+      const updatedRisikoscenario = {
+        ...submitedValues,
+        ...response,
+        ingenTiltak: submitedValues.ingenTiltak,
+      }
 
-  //     updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
-  //       setActiveRisikoscenario(response)
-  //       updateRisikoscenarioList(response)
-  //       setIsIngenTilktakFormDirty(false)
-  //     })
-  //   })
-  // }
+      updateRisikoscenario(updatedRisikoscenario).then((response: IRisikoscenario) => {
+        setActiveRisikoscenario(response)
+        updateRisikoscenarioList(response)
+        setIsIngenTilktakFormDirty(false)
+      })
+    })
+  }
 
   // const submitCreateTiltak = async (submitedTiltakValues: ITiltak): Promise<void> => {
   //   await createTiltakAndRelasjonWithRisikoscenario(
@@ -277,6 +278,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               )}
           </div>
         )}
+           */}
         {!isCreateMode &&
           !isCreateTiltakFormActive &&
           !isEditTiltakFormActive &&
@@ -290,7 +292,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 setIsIngenTilgangFormDirty={setIsIngenTilktakFormDirty}
               />
             </div>
-          )} */}
+          )}
       </div>
 
       {isEditModalOpen && (
