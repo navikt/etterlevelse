@@ -1,3 +1,7 @@
-const Page = () => <div>BLL WIP</div>
+'use client'
+
+import BehandlingensLivslopPage from '@/components/behandlingensLivslop/behandlingensLivslopPage'
+
+const Page = () => <BehandlingensLivslopPage />
 
 export default Page
