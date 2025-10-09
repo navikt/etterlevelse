@@ -17,9 +17,9 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
-import KravRisikoscenarioAccordianAlertModal from '../common/kravRisikoscenarioAccordianAlertModal'
 import { KravRisikoscenarioOvrigeRisikoscenarierLink } from '../common/kravRisikoscenarioOvrigeRisikoscenarierLink'
 import { KravRisikoscenarioReadMore } from '../common/kravRisikoscenarioReadMore'
+import RisikoscenarioAccordianAlertModal from '../common/risikoscenarioAccordianAlertModal'
 import CreateRisikoscenario from '../edit/createRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/leggTilEksisterendeRisikoscenario'
 import { KravRisikoscenarioAccordionContent } from './kravRisikoscenarioAccordionContent'
@@ -271,7 +271,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
               />
             )}
 
-            <KravRisikoscenarioAccordianAlertModal
+            <RisikoscenarioAccordianAlertModal
               isOpen={isUnsaved}
               setIsOpen={setIsUnsaved}
               formRef={formRef}
