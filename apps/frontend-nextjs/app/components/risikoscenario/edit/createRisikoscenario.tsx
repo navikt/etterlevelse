@@ -1,3 +1,5 @@
+'use client'
+
 import { createRisikoscenarioKnyttetTilKrav } from '@/api/risikoscenario/risikoscenarioApi'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'

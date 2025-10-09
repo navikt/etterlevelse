@@ -1,3 +1,5 @@
+'use client'
+
 import { updateKravForRisikoscenarioer } from '@/api/risikoscenario/risikoscenarioApi'
 import {
   IKravRisikoscenarioRelasjon,

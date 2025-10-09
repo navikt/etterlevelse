@@ -17,10 +17,11 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { KravRisikoscenarioOvrigeRisikoscenarierLink } from '../common/kravRisikoscenarioOvrigeRisikoscenarierLink'
+import { KravRisikoscenarioReadMore } from '../common/kravRisikoscenarioReadMore'
 import CreateRisikoscenario from '../edit/createRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/leggTilEksisterendeRisikoscenario'
-import { KravRisikoscenarioOvrigeRisikoscenarierLink } from './kravRisikoscenarioOvrigeRisikoscenarierLink'
-import { KravRisikoscenarioReadMore } from './kravRisikoscenarioReadMore'
+import { KravRisikoscenarioAccordionContent } from './kravRisikoscenarioAccordionContent'
 
 type TProps = {
   krav: TKravQL
@@ -38,10 +39,10 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
   const [, setIsUnsaved] = useState<boolean>(false)
-  const [, setAlleRisikoscenarioer] = useState<IRisikoscenario[]>([])
+  const [alleRisikoscenarioer, setAlleRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
-  const [, setTiltakList] = useState<ITiltak[]>([])
+  const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
   const [, setSelectedRisikoscenarioId] = useState<string>('')
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
@@ -182,8 +183,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                         </Accordion.Header>
                         {expanded && (
                           <Accordion.Content>
-                            WIP
-                            {/* <KravRisikoscenarioAccordionContent
+                            <KravRisikoscenarioAccordionContent
                               risikoscenario={risikoscenario}
                               alleRisikoscenarioer={alleRisikoscenarioer}
                               setAlleRisikoscenarioer={setAlleRisikoscenarioer}
@@ -198,7 +198,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                               setTiltakList={setTiltakList}
                               setIsTiltakFormActive={setIsTiltakFormActive}
                               formRef={formRef}
-                            /> */}
+                            />
                           </Accordion.Content>
                         )}
                       </Accordion.Item>
