@@ -17,6 +17,7 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import CreateRisikoscenario from '../edit/createRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/leggTilEksisterendeRisikoscenario'
 import { KravRisikoscenarioReadMore } from './kravRisikoscenarioReadMore'
 
@@ -206,18 +207,17 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
               </div>
             )}
 
-            {
-              isCreateMode && 'WIP'
-              // <CreateRisikoscenario
-              //   krav={krav}
-              //   pvkDokumentId={pvkDokument.id}
-              //   risikoscenarioer={risikoscenarioForKrav}
-              //   setRisikoscenarioer={setRisikoscenarioForKrav}
-              //   setIsCreateMode={setIsCreateMode}
-              //   formRef={formRef}
-              //   setActiveRisikoscenarioId={setActiveRisikoscenarioId}
-              // />
-            }
+            {isCreateMode && (
+              <CreateRisikoscenario
+                krav={krav}
+                pvkDokumentId={pvkDokument.id}
+                risikoscenarioer={risikoscenarioForKrav}
+                setRisikoscenarioer={setRisikoscenarioForKrav}
+                setIsCreateMode={setIsCreateMode}
+                formRef={formRef}
+                setActiveRisikoscenarioId={setActiveRisikoscenarioId}
+              />
+            )}
 
             {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && (
               <div className='flex gap-2 mt-8 lg:flex-row flex-col'>
