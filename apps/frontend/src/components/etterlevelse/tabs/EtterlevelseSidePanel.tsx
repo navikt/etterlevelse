@@ -169,7 +169,7 @@ export const EtterlevelseSidePanel = (props: IProps) => {
         </Tabs>
       </div>
 
-      <AccordianAlertModal
+      <RisikoscenarioAccordianAlertModal
         isOpen={isUnsaved}
         setIsOpen={setIsUnsaved}
         formRef={formRef}

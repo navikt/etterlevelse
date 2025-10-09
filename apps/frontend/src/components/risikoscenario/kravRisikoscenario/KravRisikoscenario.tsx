@@ -15,7 +15,7 @@ import {
 import AlertPvoUnderarbeidModal from '../../PvkDokument/common/AlertPvoUnderarbeidModal'
 import { isReadOnlyPvkStatus } from '../../PvkDokument/common/util'
 import { risikoscenarioUrl } from '../../common/RouteLinkPvk'
-import AccordianAlertModal from '../AccordianAlertModal'
+import RisikoscenarioAccordianAlertModal from '../AccordianAlertModal'
 import CreateRisikoscenario from '../edit/CreateRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/LeggTilEksisterendeRisikoscenario'
 import KravRisikoscenarioAccordionContent from './KravRisikoscenarioAccordionContent/KravRisikoscenarioAccordionContent'
@@ -269,7 +269,7 @@ export const KravRisikoscenario: FunctionComponent<TProps> = ({
               />
             )}
 
-            <AccordianAlertModal
+            <RisikoscenarioAccordianAlertModal
               isOpen={isUnsaved}
               setIsOpen={setIsUnsaved}
               formRef={formRef}

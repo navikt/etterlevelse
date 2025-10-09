@@ -395,7 +395,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                   )}
                 </div>
 
-                <AccordianAlertModal
+                <RisikoscenarioAccordianAlertModal
                   isOpen={isUnsaved}
                   setIsOpen={setIsUnsaved}
                   navigateUrl={navigateUrl}

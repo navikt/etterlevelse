@@ -3,7 +3,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { IRisikoscenario, ITiltak } from '../../constants'
 import { risikoscenarioUrl } from '../common/RouteLinkPvk'
-import AccordianAlertModal from './AccordianAlertModal'
+import RisikoscenarioAccordianAlertModal from './AccordianAlertModal'
 import { RisikoscenarioAccordionContent } from './RisikoscenarioAccordianContent'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from './RisikoscenarioAccordionHeader'
 
@@ -128,7 +128,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
         })}
       </Accordion>
 
-      <AccordianAlertModal
+      <RisikoscenarioAccordianAlertModal
         isOpen={isUnsaved}
         setIsOpen={setIsUnsaved}
         navigateUrl={navigateUrl}

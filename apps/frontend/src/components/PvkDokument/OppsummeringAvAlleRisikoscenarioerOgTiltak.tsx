@@ -20,7 +20,7 @@ import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
 } from '../common/RouteLinkPvk'
-import AccordianAlertModal from '../risikoscenario/AccordianAlertModal'
+import RisikoscenarioAccordianAlertModal from '../risikoscenario/AccordianAlertModal'
 import OppsumeringAccordianList from '../risikoscenario/OppsummeringAccordian/OppsumeringAccordianList'
 import OppsumeringAccordianListReadOnlyView from '../risikoscenario/readOnly/OppsumeringAccordianListReadOnlyView'
 import TiltakAccordionList from '../tiltak/TiltakAccordionList'
@@ -456,7 +456,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
               )}
             </div>
 
-            <AccordianAlertModal
+            <RisikoscenarioAccordianAlertModal
               isOpen={isUnsaved}
               setIsOpen={setIsUnsaved}
               navigateUrl={navigateUrl}
