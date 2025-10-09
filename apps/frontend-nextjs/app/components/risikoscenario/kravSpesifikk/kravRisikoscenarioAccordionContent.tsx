@@ -1,9 +1,12 @@
 'use client'
 
+import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenario, updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { Button } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
@@ -47,8 +50,8 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 }) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
-  const [isCreateTiltakFormActive] = useState<boolean>(false)
-  const [isAddExistingMode] = useState<boolean>(false)
+  const [isCreateTiltakFormActive, setIsCreateTiltakFormActive] = useState<boolean>(false)
+  const [isAddExistingMode, setIsAddExisitingMode] = useState<boolean>(false)
 
   const [isEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTiltakFormDirty, setIsIngenTilktakFormDirty] = useState<boolean>(false)
@@ -154,15 +157,15 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   //   })
   // }
 
-  // const activateFormButton = async (runFunction: () => void) => {
-  //   await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
-  //     if (isReadOnlyPvkStatus(response.status)) {
-  //       setIsPvoAlertModalOpen(true)
-  //     } else {
-  //       runFunction()
-  //     }
-  //   })
-  // }
+  const activateFormButton = async (runFunction: () => void) => {
+    await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {
+      if (isReadOnlyPvkStatus(response.status)) {
+        setIsPvoAlertModalOpen(true)
+      } else {
+        runFunction()
+      }
+    })
+  }
 
   useEffect(() => {
     if (isCreateTiltakFormActive || isAddExistingMode || isEditTiltakFormActive) {
@@ -200,8 +203,9 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       <div className='mt-12'>
         <RisikoscenarioTiltakHeader />
 
-        {/* {!risikoscenario.ingenTiltak && (
+        {!risikoscenario.ingenTiltak && (
           <div>
+            {/*
             {risikoscenario.tiltakIds.length !== 0 && (
               <TiltakReadMoreList
                 risikoscenario={activeRisikoscenario}
@@ -241,6 +245,8 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               />
             )}
 
+             */}
+
             {!isIngenTiltakFormDirty &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive &&
@@ -278,7 +284,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               )}
           </div>
         )}
-           */}
+
         {!isCreateMode &&
           !isCreateTiltakFormActive &&
           !isEditTiltakFormActive &&
