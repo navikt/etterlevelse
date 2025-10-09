@@ -27,3 +27,13 @@ export enum ERisikoscenarioType {
   GENERAL = 'GENERAL',
   KRAV = 'KRAV',
 }
+
+export interface IKravRisikoscenarioRelasjon {
+  kravnummer: number
+  risikoscenarioIder: string[]
+}
+
+export interface ITiltakRisikoscenarioRelasjon {
+  risikoscenarioId: string
+  tiltakIds: string[]
+}

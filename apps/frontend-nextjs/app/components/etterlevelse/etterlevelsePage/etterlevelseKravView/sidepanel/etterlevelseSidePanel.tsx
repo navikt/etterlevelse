@@ -2,13 +2,24 @@
 
 import { Markdown } from '@/components/common/markdown/markdown'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
+import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/kravRisikoscenarioer'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { UserContext } from '@/provider/user/userProvider'
+import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import EditNotatfelt from '../../etterlevelseMetadata/editNotatfelt'
 
 type TProps = {
@@ -30,9 +41,9 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   alleKravVersjoner,
   setIsPreview,
   setIsPvkTabActive,
-  //etterlevelseDokumentasjon,
+  etterlevelseDokumentasjon,
 }) => {
-  //const user = useContext(UserContext)
+  const user = useContext(UserContext)
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
   const [, setSelectedTab] = useState<string>('')
@@ -40,9 +51,19 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
 
-  // const userHasAccess = () => {
-  //   return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
-  // }
+  const userHasAccess = () => {
+    return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
+  }
+
+  useEffect(() => {
+    if (
+      pvkDokument &&
+      pvkDokument.skalUtforePvk &&
+      krav.tagger.includes('Personvernkonsekvensvurdering')
+    ) {
+      setActiveTab('pvkDokumentasjon')
+    }
+  }, [pvkDokument])
 
   useEffect(() => {
     if (isPvkFormActive) {
@@ -109,6 +130,25 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
             </div>
           </Tabs.Panel>
 
+          {pvkDokument && pvkDokument.skalUtforePvk && (
+            <Tabs.Panel className='overflow-auto h-[90vh]' value='pvkDokumentasjon'>
+              <div className='mt-2 p-4 mb-52'>
+                {userHasAccess() && pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
+                  <KravRisikoscenarioer
+                    krav={krav}
+                    pvkDokument={pvkDokument}
+                    setIsPvkFormActive={setIsPvkFormActive}
+                    formRef={formRef}
+                  />
+                )}
+
+                {(!userHasAccess() || (pvkDokument && isReadOnlyPvkStatus(pvkDokument.status))) &&
+                  // <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
+                  'risikoscenario readonly'}
+              </div>
+            </Tabs.Panel>
+          )}
+
           <Tabs.Panel className='overflow-auto h-[90vh]' value='notat'>
             <div className='mt-2 p-4'>
               <div className='flex justify-between mb-2.5'>
@@ -135,6 +175,15 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
           </Tabs.Panel>
         </Tabs>
       </div>
+
+      {/* <AccordianAlertModal
+        isOpen={isUnsaved}
+        setIsOpen={setIsUnsaved}
+        formRef={formRef}
+        customOnClick={() => {
+          setActiveTab(selectedTab)
+        }}
+      /> */}
     </div>
   )
 }
