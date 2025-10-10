@@ -2,7 +2,7 @@
   "env": {
     "browser": true,
     "es2024": true,
-    "node": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended",
@@ -15,10 +15,10 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
-      "jsx": true,
+      "jsx": true
     },
     "ecmaVersion": "latest",
-    "sourceType": "module",
+    "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint", "jsx-a11y"],
   "rules": {
@@ -33,7 +33,7 @@
         "format": ["PascalCase"],
         "custom": {
           "regex": "^T[A-Z]",
-          "match": true,
+          "match": true
         },
       },
       {
@@ -41,17 +41,17 @@
         "format": ["PascalCase"],
         "custom": {
           "regex": "^I[A-Z]",
-          "match": true,
-        },
+          "match": true
+        }
       },
       {
         "selector": "enum",
         "format": ["PascalCase"],
         "custom": {
           "regex": "^E[A-Z]",
-          "match": true,
-        },
-      },
+          "match": true
+        }
+      }
     ],
     "react-hooks/exhaustive-deps": "off",
     "react/prop-types": "off",
@@ -65,5 +65,5 @@
       { "vars": "all", "args": "after-used", "ignoreRestSiblings": false },
     ],
     "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
-  },
+  }
 }
