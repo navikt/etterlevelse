@@ -12,9 +12,11 @@ import { UserContext } from '@/provider/user/userProvider'
 import {
   etterlevelseDokumentasjonGjenbrukIdUrl,
   etterlevelseDokumentasjonRelasjonUrl,
+  etterlevelsesDokumentasjonEditUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { p360Url } from '@/routes/p360/p360Routes'
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
+import { ettlevColors } from '@/util/theme/theme'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext } from 'react'
@@ -68,18 +70,11 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                   <Label size='medium'>Egenskaper:</Label>
                 </div>
 
-                {irrelevansFor.length === relevansCodeList.length && (
-                  <div className='flex items-center gap-1'>
-                    <ExclamationmarkTriangleFillIcon
-                      area-label=''
-                      aria-hidden
-                      className='text-2xl text-icon-warning'
-                    />
-                    <Label size='medium'>Ingen egenskaper er oppgitt</Label>
-                  </div>
-                )}
-
-                <RelevansView relevansCodeList={relevansCodeList} irrelevans={irrelevansFor} />
+                <RelevansView
+                  relevansCodeList={relevansCodeList}
+                  irrelevans={irrelevansFor}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                />
               </div>
 
               <div className='flex items-start gap-2 mb-2.5'>
@@ -211,9 +206,14 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 type TRelevansProps = {
   relevansCodeList: IGetParsedOptionsProps[]
   irrelevans: ICode[]
+  etterlevelseDokumentasjonId?: string
 }
 
-const RelevansView: FunctionComponent<TRelevansProps> = ({ relevansCodeList, irrelevans }) => {
+const RelevansView: FunctionComponent<TRelevansProps> = ({
+  relevansCodeList,
+  irrelevans,
+  etterlevelseDokumentasjonId,
+}) => {
   const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
   const ingenEgenskaper: boolean = irrelevans.length === relevansCodeList.length
 
@@ -229,10 +229,25 @@ const RelevansView: FunctionComponent<TRelevansProps> = ({ relevansCodeList, irr
   return (
     <div>
       {ingenEgenskaper && (
-        <BodyLong size='medium'>
-          For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved
-          dokumentasjonen.
-        </BodyLong>
+        <div className='flex gap-1'>
+          <div>
+            <InformationSquareFillIcon
+              area-label=''
+              aria-hidden
+              className='text-2xl text-icon-warning mt-1'
+              color={ettlevColors.green400}
+              //color='#236b7d'
+            />
+          </div>
+          <BodyLong size='medium' className='mt-0.75'>
+            Dere har ikke valgt hvilke egenskaper som gjelder for behandlingen. Hvis dere ønsker å
+            filtrere bort uaktuelle egenskaper og dermed redusere dokumentasjonsmengden, kan dette
+            gjøres på{' '}
+            <Link inlineText href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}>
+              Redigér dokumentegenskaper
+            </Link>
+          </BodyLong>
+        </div>
       )}
 
       {irrelevans && (
