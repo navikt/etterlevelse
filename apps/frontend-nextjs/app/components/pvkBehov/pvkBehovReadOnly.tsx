@@ -15,7 +15,7 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
   ytterligereEgenskaper,
 }) => (
   <>
-    <div id='ytterlige-egenskaper'>
+    <div id='ytterligere-egenskaper'>
       <Label>Øvrige egenskaper for behandlingene:</Label>
       <DataTextWrapper>
         <List>
