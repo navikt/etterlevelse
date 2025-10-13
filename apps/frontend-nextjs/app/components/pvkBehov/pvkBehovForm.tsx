@@ -121,7 +121,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       >
         {({ initialValues, setFieldValue, values, submitForm, dirty, resetForm }) => (
           <Form>
-            <div id='ytterlige-egenskaper'>
+            <div id='ytterligere-egenskaper'>
               <FieldArray name='ytterligereEgenskaper'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <CheckboxGroup
