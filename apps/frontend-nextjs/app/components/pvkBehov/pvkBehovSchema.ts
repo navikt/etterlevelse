@@ -12,11 +12,7 @@ export const pvkBehovSchema = () => {
           parent.skalUtforePvk !== null &&
           !parent.skalUtforePvk
         ) {
-          if (pvkVurderingsBegrunnelse === '' || pvkVurderingsBegrunnelse === undefined) {
-            return false
-          } else {
-            return true
-          }
+          return !(pvkVurderingsBegrunnelse === '' || pvkVurderingsBegrunnelse === undefined)
         } else {
           return true
         }
