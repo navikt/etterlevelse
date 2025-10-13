@@ -67,7 +67,7 @@ export const PvkBehovMetadata: FunctionComponent<TProps> = ({ etterlevelseDokume
 
       {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
         <BodyShort className='inline-block'>
-          Dere kan redigere hvilke behandinger og dokumenter som er tilknyttet i{' '}
+          Dere kan redigere hvilke behandlinger og dokumenter som er tilknyttet i{' '}
           <Link
             href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
             target='_blank'
