@@ -21,7 +21,7 @@
     "@types/react-draft-wysiwyg": "1.13.8",
     "axios": "1.12.2",
     "buffer": "6.0.3",
-    "core-js": "3.45.1",
+    "core-js": "3.46.0",
     "depcheck": "1.4.7",
     "draft-js": "0.11.7",
     "eslint-config-prettier": "10.1.8",
