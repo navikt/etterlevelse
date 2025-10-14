@@ -5,7 +5,7 @@ import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAb
 import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
-import TextEditor from '@/components/common/textEditor/TextEditor'
+import TextEditor from '@/components/common/textEditor/textEditorClient'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
