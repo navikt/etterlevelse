@@ -4,10 +4,6 @@ import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import PvkBehovForm from '@/components/pvkBehov/pvkBehovForm'
-import PvkBehovInfoContent from '@/components/pvkBehov/pvkBehovInfoContent'
-import PvkBehovMetadata from '@/components/pvkBehov/pvkBehovMetadata'
-import PvkBehovReadOnly from '@/components/pvkBehov/pvkBehovReadOnly'
 import {
   IBehandling,
   IExternalCode,
@@ -25,6 +21,10 @@ import { Heading } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
+import PvkBehovForm from './pvkBehovForm'
+import PvkBehovInfoContent from './pvkBehovInfoContent'
+import PvkBehovMetadata from './pvkBehovMetadata'
+import PvkBehovReadOnly from './pvkBehovReadOnly'
 
 export const PvkBehovPage = () => {
   const params: Readonly<
