@@ -20,5 +20,6 @@
   "requirePragma": false,
   "useTabs": false,
   "vueIndentScriptAndStyle": false,
-  "rangeStart": 0
+  "rangeStart": 0,
+  "endOfLine": "auto"
 }
