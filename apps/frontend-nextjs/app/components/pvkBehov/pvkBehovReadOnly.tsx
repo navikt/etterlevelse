@@ -1,9 +1,8 @@
-import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper';
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants';
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { Label, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react';
-
+import { FunctionComponent } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
