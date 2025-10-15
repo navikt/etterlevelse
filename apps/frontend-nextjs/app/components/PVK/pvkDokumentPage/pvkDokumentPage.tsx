@@ -24,6 +24,7 @@ import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import BehandlingensLivslopView from '../behandlingensLivslopView/behandlingensLivslopView'
 import OversiktView from '../oversiktView'
 
 export const StepTitle: string[] = [
