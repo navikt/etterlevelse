@@ -3,7 +3,7 @@ import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWith
 import { Markdown } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
-import TextEditor from '@/components/common/textEditor/textEditorClient'
+import TextEditor from '@/components/common/textEditor/TextEditor'
 import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
