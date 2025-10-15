@@ -94,7 +94,6 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
           await updatePvkDokument(mutatedPvkDokument)
             .then((response: IPvkDokument) => {
               setPvkDokument(response)
-              router.push(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
             })
             .finally(() => setSavedAlert(true))
         }
@@ -102,7 +101,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         await createPvkDokument(mutatedPvkDokument)
           .then((response: IPvkDokument) => {
             setPvkDokument(response)
-            router.push(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+            window.history.pushState(
+              { savedAlert: true },
+              '',
+              pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id)
+            )
           })
           .finally(() => setSavedAlert(true))
       }
@@ -119,7 +122,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         innerRef={formRef}
       >
-        {({ initialValues, setFieldValue, values, submitForm, dirty, resetForm }) => (
+        {({ initialValues, setFieldValue, values, submitForm, dirty }) => (
           <Form>
             <div id='ytterligere-egenskaper'>
               <FieldArray name='ytterligereEgenskaper'>
@@ -217,7 +220,6 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 variant='primary'
                 onClick={async () => {
                   await submitForm()
-                  resetForm(values)
                 }}
               >
                 Lagre
@@ -227,7 +229,6 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='secondary'
                 onClick={() => {
-                  resetForm(initialValues)
                   setCheckedYtterligereEgenskaper(
                     initialValues.ytterligereEgenskaper.map((egenskap) => egenskap.code)
                   )
