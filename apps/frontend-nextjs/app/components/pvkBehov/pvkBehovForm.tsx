@@ -1,3 +1,5 @@
+'use client'
+
 import {
   createPvkDokument,
   getPvkDokumentByEtterlevelseDokumentId,
@@ -102,7 +104,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
           .then((response: IPvkDokument) => {
             setPvkDokument(response)
             window.history.pushState(
-              { savedAlert: true },
+              { savedAlert: true, pvkDokument: response },
               '',
               pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id)
             )
@@ -122,7 +124,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         innerRef={formRef}
       >
-        {({ initialValues, setFieldValue, values, submitForm, dirty }) => (
+        {({ initialValues, setFieldValue, values, submitForm, dirty, resetForm }) => (
           <Form>
             <div id='ytterligere-egenskaper'>
               <FieldArray name='ytterligereEgenskaper'>
@@ -219,7 +221,9 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='primary'
                 onClick={async () => {
-                  await submitForm()
+                  await submitForm().then(() => {
+                    resetForm({ values })
+                  })
                 }}
               >
                 Lagre
@@ -229,6 +233,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='secondary'
                 onClick={() => {
+                  resetForm()
                   setCheckedYtterligereEgenskaper(
                     initialValues.ytterligereEgenskaper.map((egenskap) => egenskap.code)
                   )
