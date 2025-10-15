@@ -205,7 +205,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               />
             )}
 
-            {savedAlert && (
+            {savedAlert && !dirty && (
               <Alert
                 className='mt-5'
                 variant='success'
