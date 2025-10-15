@@ -23,9 +23,9 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
 }) => {
   const params: Readonly<
     Partial<{
-      id?: string
+      etterlevelseDokumentasjonId?: string
     }>
-  > = useParams<{ id?: string }>()
+  > = useParams<{ etterlevelseDokumentasjonId?: string }>()
 
   return (
     <div>
@@ -52,7 +52,7 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
                 const kravHref: string = risikoDokumentasjonTemaKravNummerVersjonUrl(
-                  params.id,
+                  params.etterlevelseDokumentasjonId,
                   relevantKrav.temaCode || 'PVK',
                   relevantKrav.kravNummer,
                   relevantKrav.kravVersjon
