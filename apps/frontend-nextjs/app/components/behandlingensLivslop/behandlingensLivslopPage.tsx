@@ -148,7 +148,10 @@ export const BehandlingensLivslopPage = () => {
         } else {
           await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
             setBehandlingesLivslop(response)
-            router.push(
+
+            window.history.pushState(
+              { savedAlert: true, pvkDokument: response },
+              '',
               `${dokumentasjonUrl}/${response.etterlevelseDokumentasjonId}/behandlingens-livslop/${response.id}`
             )
           })
@@ -231,7 +234,15 @@ export const BehandlingensLivslopPage = () => {
                     }}
                     innerRef={formRef}
                   >
-                    {({ submitForm, resetForm, values, initialValues, errors, isSubmitting }) => (
+                    {({
+                      submitForm,
+                      resetForm,
+                      values,
+                      initialValues,
+                      errors,
+                      isSubmitting,
+                      dirty,
+                    }) => (
                       <Form>
                         <div>
                           <BehandlingensLivslopTextContent />
@@ -266,7 +277,7 @@ export const BehandlingensLivslopPage = () => {
                             </ErrorSummary>
                           )}
 
-                          {savedSuccessful && (
+                          {savedSuccessful && !dirty && (
                             <div className='mt-5'>
                               <Alert
                                 variant='success'
