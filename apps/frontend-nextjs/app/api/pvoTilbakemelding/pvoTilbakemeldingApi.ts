@@ -1,7 +1,7 @@
 import { IPageResponse } from '@/constants/commonConstants'
 import { EPvoTilbakemeldingStatus, IPvoTilbakemelding } from '@/constants/pvo/pvoConstants'
+import { env } from '@/util/env/env'
 import axios from 'axios'
-import { env } from 'process'
 import { useEffect, useState } from 'react'
 
 export const getAllPvoTilbakemelding = async () => {
@@ -37,7 +37,7 @@ export const getPvoTilbakemelding = async (id: string): Promise<IPvoTilbakemeldi
 export const getPvoTilbakemeldingByPvkDokumentId = async (
   pvkDokumentId: string
 ): Promise<IPvoTilbakemelding> =>
-  pvo(
+  (
     await axios.get<IPvoTilbakemelding>(
       `${env.backendBaseUrl}/pvotilbakemelding/pvkdokument/${pvkDokumentId}`
     )

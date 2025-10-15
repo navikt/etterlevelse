@@ -2,7 +2,7 @@
 
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvo/pvoApi'
+import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
   IDataBehandler,
@@ -11,7 +11,6 @@ import {
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvo/pvoConstants'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
@@ -21,11 +20,11 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { Alert, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import Image from 'next/image'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import BehandlingensLivslopView from '../behandlingensLivslopView/behandlingensLivslopView'
-import OversiktView from '../oversiktView'
+import BehandlingensLivslopView from './stepperViews/behandlingensLivslopView'
+import OversiktView from './stepperViews/oversiktView'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
@@ -41,20 +40,21 @@ export const StepTitle: string[] = [
 export const PvkDokumentPage = () => {
   const params: Readonly<
     Partial<{
-      id?: string
-      pvkdokumentId?: string
-      steg?: string
+      etterlevelseDokumentasjonId?: string
+      pvkDokumentId?: string
     }>
-  > = useParams<{ id?: string }>()
-  const currentStep = params.steg || '1'
+  > = useParams<{ etterlevelseDokumentasjonId?: string }>()
+  const query = useSearchParams()
+  const currentStep = query.get('steg') || '1'
   const [currentPage, setCurrentPage] = useState<string>(
     currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
   )
-  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(params.id)
-  const [personkategorier, setPersonKategorier] = useState<string[]>([])
-  const [pvkDokument, setPvkDokument] = usePvkDokument(params.pvkdokumentId, params.id)
-
-  const [databehandlere, setDatabehandlere] = useState<string[]>([])
+  const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
+    params.etterlevelseDokumentasjonId
+  )
+  const [, setPersonKategorier] = useState<string[]>([])
+  const [pvkDokument] = usePvkDokument(params.pvkDokumentId, params.etterlevelseDokumentasjonId)
+  const [, setDatabehandlere] = useState<string[]>([])
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
@@ -64,7 +64,11 @@ export const PvkDokumentPage = () => {
   const router = useRouter()
   const user = useContext(UserContext)
   const formRef: RefObject<any> = useRef(undefined)
-  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
+  const {
+    data: pvkKrav,
+    // ,
+    // loading: isPvkKravLoading
+  } = useKravFilter(
     {
       gjeldendeKrav: true,
       tagger: ['Personvernkonsekvensvurdering'],
@@ -74,13 +78,13 @@ export const PvkDokumentPage = () => {
     true
   )
 
-  const codelist = useContext(CodelistContext)
+  //const codelist = useContext(CodelistContext)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
       pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
-      href: etterlevelseDokumentasjonIdUrl(params.id),
+      href: etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId),
     },
   ]
 
@@ -241,81 +245,87 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 3 && (
-                    <BehandlingensArtOgOmfangView
-                      personkategorier={personkategorier}
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvkDokument={pvkDokument}
-                      setPvkDokument={setPvkDokument}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      activeStep={activeStep}
-                      setActiveStep={updateTitleUrlAndStep}
-                      setSelectedStep={setSelectedStep}
-                      formRef={formRef}
-                    />
+                    <div>test 3</div>
+                    // <BehandlingensArtOgOmfangView
+                    //   personkategorier={personkategorier}
+                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    //   pvkDokument={pvkDokument}
+                    //   setPvkDokument={setPvkDokument}
+                    //   pvoTilbakemelding={pvoTilbakemelding}
+                    //   activeStep={activeStep}
+                    //   setActiveStep={updateTitleUrlAndStep}
+                    //   setSelectedStep={setSelectedStep}
+                    //   formRef={formRef}
+                    // />
                   )}
                   {activeStep === 4 && (
-                    <TilhorendeDokumentasjon
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      activeStep={activeStep}
-                      setActiveStep={updateTitleUrlAndStep}
-                      setSelectedStep={setSelectedStep}
-                      formRef={formRef}
-                      pvkKrav={pvkKrav}
-                      isPvkKravLoading={isPvkKravLoading}
-                    />
+                    <div>test 4</div>
+                    // <TilhorendeDokumentasjon
+                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    //   pvoTilbakemelding={pvoTilbakemelding}
+                    //   activeStep={activeStep}
+                    //   setActiveStep={updateTitleUrlAndStep}
+                    //   setSelectedStep={setSelectedStep}
+                    //   formRef={formRef}
+                    //   pvkKrav={pvkKrav}
+                    //   isPvkKravLoading={isPvkKravLoading}
+                    // />
                   )}
                   {activeStep === 5 && (
-                    <InvolveringAvEksterneView
-                      personkategorier={personkategorier}
-                      databehandlere={databehandlere}
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvkDokument={pvkDokument}
-                      setPvkDokument={setPvkDokument}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      activeStep={activeStep}
-                      setActiveStep={updateTitleUrlAndStep}
-                      setSelectedStep={setSelectedStep}
-                      formRef={formRef}
-                    />
+                    <div>test 5</div>
+                    // <InvolveringAvEksterneView
+                    //   personkategorier={personkategorier}
+                    //   databehandlere={databehandlere}
+                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    //   pvkDokument={pvkDokument}
+                    //   setPvkDokument={setPvkDokument}
+                    //   pvoTilbakemelding={pvoTilbakemelding}
+                    //   activeStep={activeStep}
+                    //   setActiveStep={updateTitleUrlAndStep}
+                    //   setSelectedStep={setSelectedStep}
+                    //   formRef={formRef}
+                    // />
                   )}
                   {activeStep === 6 && (
-                    <IdentifiseringAvRisikoscenarioerOgTiltak
-                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                      pvkDokument={pvkDokument}
-                      activeStep={activeStep}
-                      setSelectedStep={setSelectedStep}
-                      setActiveStep={updateTitleUrlAndStep}
-                      formRef={formRef}
-                    />
+                    <div>test 6</div>
+                    // <IdentifiseringAvRisikoscenarioerOgTiltak
+                    //   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                    //   pvkDokument={pvkDokument}
+                    //   activeStep={activeStep}
+                    //   setSelectedStep={setSelectedStep}
+                    //   setActiveStep={updateTitleUrlAndStep}
+                    //   formRef={formRef}
+                    // />
                   )}
                   {activeStep === 7 && (
-                    <OppsummeringAvAlleRisikoscenarioerOgTiltak
-                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                      pvkDokument={pvkDokument}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      activeStep={activeStep}
-                      setSelectedStep={setSelectedStep}
-                      setActiveStep={updateTitleUrlAndStep}
-                      formRef={formRef}
-                    />
+                    <div>test 7</div>
+                    // <OppsummeringAvAlleRisikoscenarioerOgTiltak
+                    //   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                    //   pvkDokument={pvkDokument}
+                    //   pvoTilbakemelding={pvoTilbakemelding}
+                    //   activeStep={activeStep}
+                    //   setSelectedStep={setSelectedStep}
+                    //   setActiveStep={updateTitleUrlAndStep}
+                    //   formRef={formRef}
+                    // />
                   )}
                   {activeStep === 8 && (
-                    <SendInnView
-                      pvkDokument={pvkDokument}
-                      setPvkDokument={setPvkDokument}
-                      personkategorier={personkategorier}
-                      databehandlere={databehandlere}
-                      updateTitleUrlAndStep={updateTitleUrlAndStep}
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      activeStep={activeStep}
-                      setSelectedStep={setSelectedStep}
-                      setActiveStep={updateTitleUrlAndStep}
-                      codelistUtils={codelist.utils}
-                      pvkKrav={pvkKrav}
-                      isPvkKravLoading={isPvkKravLoading}
-                    />
+                    <div>test 8</div>
+                    // <SendInnView
+                    //   pvkDokument={pvkDokument}
+                    //   setPvkDokument={setPvkDokument}
+                    //   personkategorier={personkategorier}
+                    //   databehandlere={databehandlere}
+                    //   updateTitleUrlAndStep={updateTitleUrlAndStep}
+                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    //   pvoTilbakemelding={pvoTilbakemelding}
+                    //   activeStep={activeStep}
+                    //   setSelectedStep={setSelectedStep}
+                    //   setActiveStep={updateTitleUrlAndStep}
+                    //   codelistUtils={codelist.utils}
+                    //   pvkKrav={pvkKrav}
+                    //   isPvkKravLoading={isPvkKravLoading}
+                    // />
                   )}
                 </div>
               </div>

@@ -39,9 +39,9 @@ import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
-import InfoChangesMadeAfterApproval from '../common/infoChangesMadeAfterApproval'
-import { PvkSidePanelWrapper } from '../common/pvkSidePanelWrapper'
-import FormButtons from '../edit/formButtons'
+import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
+import { PvkSidePanelWrapper } from '../../common/pvkSidePanelWrapper'
+import FormButtons from '../../edit/formButtons'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

@@ -18,16 +18,16 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { Alert, BodyShort, FormSummary, Heading, List, ReadMore, Tag } from '@navikt/ds-react'
-import Link from 'next/link'
-import { FunctionComponent, JSX, useEffect, useState } from 'react'
-import FormSummaryPanel from './common/formSummaryPanel'
-import FormButtons from './edit/formButtons'
-import { StepTitle } from './pvkDokumentPage/pvkDokumentPage'
 import {
   isRisikoUnderarbeidCheck,
   risikoscenarioFieldCheck,
-} from './risikoScenario.tsx/common/util'
+} from '@/util/risikoscenario/risikoscenarioUtils'
+import { Alert, BodyShort, FormSummary, Heading, List, ReadMore, Tag } from '@navikt/ds-react'
+import Link from 'next/link'
+import { FunctionComponent, JSX, useEffect, useState } from 'react'
+import FormSummaryPanel from '../../common/formSummaryPanel'
+import FormButtons from '../../edit/formButtons'
+import { StepTitle } from '../pvkDokumentPage'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
