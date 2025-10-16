@@ -1,3 +1,5 @@
+'use client'
+
 import {
   createPvkDokument,
   getPvkDokumentByEtterlevelseDokumentId,
@@ -94,7 +96,6 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
           await updatePvkDokument(mutatedPvkDokument)
             .then((response: IPvkDokument) => {
               setPvkDokument(response)
-              router.push(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
             })
             .finally(() => setSavedAlert(true))
         }
@@ -102,7 +103,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         await createPvkDokument(mutatedPvkDokument)
           .then((response: IPvkDokument) => {
             setPvkDokument(response)
-            router.push(pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id))
+            window.history.pushState(
+              { savedAlert: true, pvkDokument: response },
+              '',
+              pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id)
+            )
           })
           .finally(() => setSavedAlert(true))
       }
@@ -200,7 +205,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               />
             )}
 
-            {savedAlert && (
+            {savedAlert && !dirty && (
               <Alert
                 className='mt-5'
                 variant='success'
@@ -216,8 +221,9 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='primary'
                 onClick={async () => {
-                  await submitForm()
-                  resetForm(values)
+                  await submitForm().then(() => {
+                    resetForm({ values })
+                  })
                 }}
               >
                 Lagre
@@ -227,7 +233,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='secondary'
                 onClick={() => {
-                  resetForm(initialValues)
+                  resetForm()
                   setCheckedYtterligereEgenskaper(
                     initialValues.ytterligereEgenskaper.map((egenskap) => egenskap.code)
                   )

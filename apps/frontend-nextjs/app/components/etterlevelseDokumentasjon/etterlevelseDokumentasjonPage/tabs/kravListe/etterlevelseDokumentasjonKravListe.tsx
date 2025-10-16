@@ -47,7 +47,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   isRisikoscenarioLoading,
   defaultOpen,
 }) => {
-  const params = useParams<{ id?: string }>()
+  const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const queryParams = useSearchParams()
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
   const [statusFilter, setStatusFilter] = useState<string>('ALLE')
@@ -74,7 +74,10 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   useEffect(() => {
     if (defaultOpen) {
       setOpenAccordions(temaListe.map(() => true))
-      router.push(etterlevelseDokumentasjonAlleOpenUrl(params.id) + '&tab=pvk', { scroll: false })
+      router.push(
+        etterlevelseDokumentasjonAlleOpenUrl(params.etterlevelseDokumentasjonId) + '&tab=pvk',
+        { scroll: false }
+      )
     }
   }, [defaultOpen])
 
@@ -163,7 +166,10 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => true))
-              router.push(etterlevelseDokumentasjonAlleOpenUrl(params.id), { scroll: false })
+              router.push(
+                etterlevelseDokumentasjonAlleOpenUrl(params.etterlevelseDokumentasjonId),
+                { scroll: false }
+              )
             }}
           >
             Åpne alle tema
@@ -173,7 +179,10 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => false))
-              router.push(etterlevelseDokumentasjonAlleClosedUrl(params.id), { scroll: false })
+              router.push(
+                etterlevelseDokumentasjonAlleClosedUrl(params.etterlevelseDokumentasjonId),
+                { scroll: false }
+              )
             }}
           >
             Lukk alle tema

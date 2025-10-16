@@ -19,6 +19,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { KravRisikoscenarioOvrigeRisikoscenarierLink } from '../common/kravRisikoscenarioOvrigeRisikoscenarierLink'
 import { KravRisikoscenarioReadMore } from '../common/kravRisikoscenarioReadMore'
+import RisikoscenarioAccordianAlertModal from '../common/risikoscenarioAccordianAlertModal'
 import CreateRisikoscenario from '../edit/createRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/leggTilEksisterendeRisikoscenario'
 import { KravRisikoscenarioAccordionContent } from './kravRisikoscenarioAccordionContent'
@@ -38,13 +39,13 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
 }) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
-  const [, setIsUnsaved] = useState<boolean>(false)
+  const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [alleRisikoscenarioer, setAlleRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioer, setRisikoscenarioer] = useState<IRisikoscenario[]>([])
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [activeRisikoscenarioId, setActiveRisikoscenarioId] = useState<string>('')
-  const [, setSelectedRisikoscenarioId] = useState<string>('')
+  const [selectedRisikoscenarioId, setSelectedRisikoscenarioId] = useState<string>('')
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const pathName = usePathname()
@@ -270,7 +271,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
               />
             )}
 
-            {/* <AccordianAlertModal
+            <RisikoscenarioAccordianAlertModal
               isOpen={isUnsaved}
               setIsOpen={setIsUnsaved}
               formRef={formRef}
@@ -285,7 +286,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                   router.push(pathName)
                 }
               }}
-            /> */}
+            />
           </div>
         </div>
       )}
