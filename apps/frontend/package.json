@@ -10,7 +10,7 @@
     "@fortawesome/free-brands-svg-icons": "7.1.0",
     "@fortawesome/free-solid-svg-icons": "7.1.0",
     "@fortawesome/react-fontawesome": "3.1.0",
-    "@navikt/aksel-icons": "7.32.1",
+    "@navikt/aksel-icons": "7.32.2",
     "@navikt/ds-css": "7.32.2",
     "@navikt/ds-react": "7.32.2",
     "@navikt/ds-tailwind": "7.32.2",
