@@ -4,6 +4,7 @@ import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import BehandlingensArtOgOmfangView from '@/components/PVK/pvkDokumentPage/stepperViews/behandlingensArtOgOmfangView'
+import InvolveringAvEksterneView from '@/components/PVK/pvkDokumentPage/stepperViews/involveringAvEksterneView'
 import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
@@ -59,7 +60,7 @@ export const PvkDokumentPage = () => {
     params.pvkDokumentId,
     params.etterlevelseDokumentasjonId
   )
-  const [, setDatabehandlere] = useState<string[]>([])
+  const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
@@ -271,19 +272,18 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 5 && (
-                    <div>test 5</div>
-                    // <InvolveringAvEksterneView
-                    //   personkategorier={personkategorier}
-                    //   databehandlere={databehandlere}
-                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    //   pvkDokument={pvkDokument}
-                    //   setPvkDokument={setPvkDokument}
-                    //   pvoTilbakemelding={pvoTilbakemelding}
-                    //   activeStep={activeStep}
-                    //   setActiveStep={updateTitleUrlAndStep}
-                    //   setSelectedStep={setSelectedStep}
-                    //   formRef={formRef}
-                    // />
+                    <InvolveringAvEksterneView
+                      personkategorier={personkategorier}
+                      databehandlere={databehandlere}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      activeStep={activeStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
+                      formRef={formRef}
+                    />
                   )}
                   {activeStep === 6 && (
                     <div>test 6</div>
