@@ -1,15 +1,18 @@
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { TEtterlevelseDokumentasjonQL } from '../../constants'
 import { CodelistService, EListName, ICode, IGetParsedOptionsProps } from '../../services/Codelist'
 import { user } from '../../services/User'
+import { ettlevColors } from '../../util/theme'
 import { BehandlingList } from '../behandling/BehandlingList'
 import { Markdown } from '../common/Markdown'
 import { ExternalLink } from '../common/RouteLink'
 import {
   etterlevelseDokumentasjonGjenbrukIdUrl,
   etterlevelseDokumentasjonRelasjonUrl,
+  etterlevelsesDokumentasjonEditUrl,
 } from '../common/RouteLinkEtterlevelsesdokumentasjon'
 import { Teams } from '../common/TeamName'
 import { p360Url } from '../p360/LinkUrlUtils'
@@ -30,55 +33,6 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
   )
 
   const { behandlingIds, behandlinger, teams, irrelevansFor } = etterlevelseDokumentasjon
-
-  const getRelevans = (irrelevans: ICode[]) => {
-    const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
-    const ingenEgenskaper: boolean = irrelevans.length === relevansCodeList.length
-
-    const relevans: IGetParsedOptionsProps[] = relevansCodeList.filter(
-      (relevans: IGetParsedOptionsProps) => {
-        const hentIder: string[] = irrelevans.map((irrelevans: ICode) => irrelevans.code)
-        const isIdPresent: boolean = hentIder.includes(relevans.value)
-
-        return !isIdPresent
-      }
-    )
-
-    return (
-      <div>
-        {ingenEgenskaper && (
-          <BodyLong size='medium'>
-            For å filtrere bort krav som ikke er relevante, må dere oppgi egenskaper ved
-            dokumentasjonen.
-          </BodyLong>
-        )}
-
-        {irrelevans && (
-          <div className='flex flex-wrap gap-2'>
-            {relevans.map((relevans: IGetParsedOptionsProps, index: number) => (
-              <div key={relevans.value} className='flex items-center gap-1'>
-                <Tag variant={fargeForFemAlternativ[index]} size='medium'>
-                  <BodyLong size='medium'>{relevans.label}</BodyLong>
-                </Tag>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {!irrelevans && (
-          <div className='flex flex-wrap gap-2'>
-            {relevansCodeList.map((relevans: IGetParsedOptionsProps, index: number) => (
-              <div key={relevans.value} className='flex items-center gap-1'>
-                <Tag variant={fargeForFemAlternativ[index]} size='medium'>
-                  <BodyLong size='medium'>{relevans.label}</BodyLong>
-                </Tag>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    )
-  }
 
   return (
     <>
@@ -111,17 +65,11 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
                     <Label size='medium'>Egenskaper:</Label>
                   </div>
 
-                  {irrelevansFor.length === relevansCodeList.length && (
-                    <div className='flex items-center gap-1'>
-                      <ExclamationmarkTriangleFillIcon
-                        area-label=''
-                        aria-hidden
-                        className='text-2xl text-icon-warning'
-                      />
-                      <Label size='medium'>Ingen egenskaper er oppgitt</Label>
-                    </div>
-                  )}
-                  {getRelevans(irrelevansFor)}
+                  <RelevansView
+                    relevansCodeList={relevansCodeList}
+                    irrelevans={irrelevansFor}
+                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                  />
                 </div>
 
                 <div className='flex items-start gap-2 mb-2.5'>
@@ -249,5 +197,79 @@ export const EtterlevelseDokumentasjonExpansionCard = (props: IProps) => {
         )}
       </div>
     </>
+  )
+}
+
+type TRelevansProps = {
+  relevansCodeList: IGetParsedOptionsProps[]
+  irrelevans: ICode[]
+  etterlevelseDokumentasjonId?: string
+}
+
+const RelevansView: FunctionComponent<TRelevansProps> = ({
+  relevansCodeList,
+  irrelevans,
+  etterlevelseDokumentasjonId,
+}) => {
+  const fargeForFemAlternativ = ['alt1', 'alt2', 'alt3', 'alt1', 'alt2'] as const
+  const ingenEgenskaper: boolean = irrelevans.length === relevansCodeList.length
+
+  const relevans: IGetParsedOptionsProps[] = relevansCodeList.filter(
+    (relevans: IGetParsedOptionsProps) => {
+      const hentIder: string[] = irrelevans.map((irrelevans: ICode) => irrelevans.code)
+      const isIdPresent: boolean = hentIder.includes(relevans.value)
+
+      return !isIdPresent
+    }
+  )
+
+  return (
+    <div>
+      {ingenEgenskaper && (
+        <div className='flex gap-1'>
+          <div>
+            <InformationSquareFillIcon
+              area-label=''
+              aria-hidden
+              className='text-2xl text-icon-warning mt-1'
+              color={ettlevColors.green400}
+              //color='#236b7d'
+            />
+          </div>
+          <BodyLong size='medium' className='mt-0.75'>
+            Dere har ikke valgt hvilke egenskaper som gjelder for behandlingen. Hvis dere ønsker å
+            filtrere bort uaktuelle egenskaper og dermed redusere dokumentasjonsmengden, kan dette
+            gjøres på{' '}
+            <Link inlineText href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}>
+              Redigér dokumentegenskaper
+            </Link>
+          </BodyLong>
+        </div>
+      )}
+
+      {irrelevans && (
+        <div className='flex flex-wrap gap-2'>
+          {relevans.map((relevans: IGetParsedOptionsProps, index: number) => (
+            <div key={relevans.value} className='flex items-center gap-1'>
+              <Tag variant={fargeForFemAlternativ[index]} size='medium'>
+                <BodyLong size='medium'>{relevans.label}</BodyLong>
+              </Tag>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!irrelevans && (
+        <div className='flex flex-wrap gap-2'>
+          {relevansCodeList.map((relevans: IGetParsedOptionsProps, index: number) => (
+            <div key={relevans.value} className='flex items-center gap-1'>
+              <Tag variant={fargeForFemAlternativ[index]} size='medium'>
+                <BodyLong size='medium'>{relevans.label}</BodyLong>
+              </Tag>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
