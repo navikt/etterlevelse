@@ -134,7 +134,9 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       )
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
-      router.push(risikoscenarioTiltakUrl(activeRisikoscenario.id, response.id, steg))
+      router.push(risikoscenarioTiltakUrl(activeRisikoscenario.id, response.id, steg), {
+        scroll: false,
+      })
     })
   }
 
@@ -158,7 +160,9 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   const submitLeggTilEksisterendeTitltak = async (request: ITiltakRisikoscenarioRelasjon) => {
     await addTiltakToRisikoscenario(request).then(() => {
-      router.push(risikoscenarioTiltakUrl(request.risikoscenarioId, request.tiltakIds[0], steg))
+      router.push(risikoscenarioTiltakUrl(request.risikoscenarioId, request.tiltakIds[0], steg), {
+        scroll: false,
+      })
 
       setActiveRisikoscenario({
         ...activeRisikoscenario,
@@ -328,7 +332,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             </div>
           )}
 
-        {submitSuccess && (
+        {submitSuccess && !formRef.current.dirty && (
           <Alert
             className='mt-3'
             variant='success'
