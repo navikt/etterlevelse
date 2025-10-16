@@ -3,6 +3,7 @@
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
+import BehandlingensArtOgOmfangView from '@/components/PVK/pvkDokumentPage/stepperViews/behandlingensArtOgOmfangView'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
   IDataBehandler,
@@ -52,8 +53,11 @@ export const PvkDokumentPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
   )
-  const [, setPersonKategorier] = useState<string[]>([])
-  const [pvkDokument] = usePvkDokument(params.pvkDokumentId, params.etterlevelseDokumentasjonId)
+  const [personkategorier, setPersonKategorier] = useState<string[]>([])
+  const [pvkDokument, setPvkDokument] = usePvkDokument(
+    params.pvkDokumentId,
+    params.etterlevelseDokumentasjonId
+  )
   const [, setDatabehandlere] = useState<string[]>([])
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -245,18 +249,17 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 3 && (
-                    <div>test 3</div>
-                    // <BehandlingensArtOgOmfangView
-                    //   personkategorier={personkategorier}
-                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    //   pvkDokument={pvkDokument}
-                    //   setPvkDokument={setPvkDokument}
-                    //   pvoTilbakemelding={pvoTilbakemelding}
-                    //   activeStep={activeStep}
-                    //   setActiveStep={updateTitleUrlAndStep}
-                    //   setSelectedStep={setSelectedStep}
-                    //   formRef={formRef}
-                    // />
+                    <BehandlingensArtOgOmfangView
+                      personkategorier={personkategorier}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      activeStep={activeStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
+                      formRef={formRef}
+                    />
                   )}
                   {activeStep === 4 && (
                     <div>test 4</div>
