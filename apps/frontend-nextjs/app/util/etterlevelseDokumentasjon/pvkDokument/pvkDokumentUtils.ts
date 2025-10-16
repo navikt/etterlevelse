@@ -108,3 +108,26 @@ export const getPvkButtonText = (
     return 'Oppdatér PVK'
   }
 }
+
+export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
+  switch (status) {
+    case EPvkDokumentStatus.AKTIV:
+      return 'Under arbeid'
+    case EPvkDokumentStatus.UNDERARBEID:
+      return 'Under arbeid'
+    case EPvkDokumentStatus.SENDT_TIL_PVO:
+      return 'Sendt inn til Personvernombudet'
+    case EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING:
+      return 'Sendt tilbake til Personvernombudet for revurdering'
+    case EPvkDokumentStatus.PVO_UNDERARBEID:
+      return 'Personvernombudet har påbegynt vurderingen'
+    case EPvkDokumentStatus.VURDERT_AV_PVO:
+      return 'Vurdert av Personvernombudet'
+    case EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID:
+      return 'Vurdert av Personvernombudet, og dokumentet trenger mer arbeid'
+    case EPvkDokumentStatus.TRENGER_GODKJENNING:
+      return 'Sendt til Risikoeier for godkjenning'
+    case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
+      return 'Godkjent av Risikoeier'
+  }
+}

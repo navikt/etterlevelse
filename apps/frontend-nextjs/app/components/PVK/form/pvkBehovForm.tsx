@@ -10,7 +10,6 @@ import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
 import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
-import pvkBehovSchema from '@/components/pvkBehov/pvkBehovSchema'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -36,6 +35,7 @@ import {
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
+import { pvkBehovSchema } from './pvkBehovSchema'
 
 type TProps = {
   pvkDokument: IPvkDokument

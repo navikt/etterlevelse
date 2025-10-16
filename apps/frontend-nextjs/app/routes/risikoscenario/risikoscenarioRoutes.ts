@@ -2,7 +2,7 @@ import { dokumentasjonUrl } from '../etterlevelseDokumentasjon/etterlevelseDokum
 import { kravUrl } from '../krav/kravRoutes'
 
 export const tabTiltakQuery: string = '?tab=tiltak'
-const tabRisikoScenarioQuery: string = '?tab=risikoscenarioer'
+const tabRisikoScenarioQuery: string = '&tab=risikoscenarioer'
 const filterAlleQuery: string = 'filter=alle'
 
 export const risikoscenarioIdQuery = (risikoscenarioId: string, tiltakId?: string): string => {
