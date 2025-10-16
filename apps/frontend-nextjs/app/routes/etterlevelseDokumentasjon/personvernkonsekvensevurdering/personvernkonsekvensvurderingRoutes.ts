@@ -40,10 +40,9 @@ export const pvkDokumentasjonCopyUrl = (
   locationOrigin: string,
   etterlevelseDokumentasjonId: string,
   pvkDokumentId: string,
-  stepUrl: string,
   queryUrl: string
 ): string =>
-  `${locationOrigin}${dokumentasjonUrl}/${etterlevelseDokumentasjonId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}?steg=${stepUrl}&${queryUrl}`
+  `${locationOrigin}${dokumentasjonUrl}/${etterlevelseDokumentasjonId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}?&${queryUrl}`
 
 export const pvkDokumentasjonBehandlingsenLivslopUrl = (
   etterlevelseDokumentId: string,
@@ -56,11 +55,25 @@ export const pvkDokumentasjonPvkBehovUrl = (
   pvkId: string
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentId}/pvkbehov/${pvkId}`
 
-export const risikoscenarioUrl = (risikoId: string): string =>
-  `${window.location.pathname}&risikoscenario=${risikoId}`
+export const risikoscenarioUrl = (risikoId: string, steg?: string): string => {
+  if (steg !== undefined) {
+    return `${window.location.pathname}?steg=${steg}&risikoscenario=${risikoId}`
+  } else {
+    return `${window.location.pathname}?risikoscenario=${risikoId}`
+  }
+}
 
-export const risikoscenarioTiltakUrl = (activeRisikoscenarioId: string, tiltakId: string): string =>
-  `${window.location.pathname}&risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
+export const risikoscenarioTiltakUrl = (
+  steg: string,
+  activeRisikoscenarioId: string,
+  tiltakId: string
+): string => {
+  if (steg !== undefined) {
+    return `${window.location.pathname}?steg=${steg}&risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
+  } else {
+    return `${window.location.pathname}?srisikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
+  }
+}
 
 export const pvkDokumenteringPvoTilbakemeldingUrl = (
   pvkDokumentId: string | undefined,

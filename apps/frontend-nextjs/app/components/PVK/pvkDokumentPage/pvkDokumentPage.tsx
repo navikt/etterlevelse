@@ -5,7 +5,7 @@ import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import BehandlingensArtOgOmfangView from '@/components/PVK/pvkDokumentPage/stepperViews/behandlingensArtOgOmfangView'
 import InvolveringAvEksterneView from '@/components/PVK/pvkDokumentPage/stepperViews/involveringAvEksterneView'
-import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon'
+import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
   IDataBehandler,
@@ -27,6 +27,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensLivslopView from './stepperViews/behandlingensLivslopView'
+import { IdentifiseringAvRisikoscenarioerOgTiltak } from './stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltak'
 import OversiktView from './stepperViews/oversiktView'
 
 export const StepTitle: string[] = [
@@ -286,15 +287,14 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 6 && (
-                    <div>test 6</div>
-                    // <IdentifiseringAvRisikoscenarioerOgTiltak
-                    //   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    //   pvkDokument={pvkDokument}
-                    //   activeStep={activeStep}
-                    //   setSelectedStep={setSelectedStep}
-                    //   setActiveStep={updateTitleUrlAndStep}
-                    //   formRef={formRef}
-                    // />
+                    <IdentifiseringAvRisikoscenarioerOgTiltak
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvkDokument={pvkDokument}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
+                    />
                   )}
                   {activeStep === 7 && (
                     <div>test 7</div>
