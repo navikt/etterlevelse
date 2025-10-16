@@ -56,3 +56,7 @@ export enum EPvkDokumentStatus {
   GODKJENT_AV_RISIKOEIER = 'GODKJENT_AV_RISIKOEIER',
   AKTIV = 'AKTIV',
 }
+
+export enum EPVK {
+  behandlingAvPersonopplysninger = 'I Behandlingskatalogen står det at dere behandler personopplysninger om:',
+}
