@@ -4,6 +4,7 @@ import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import BehandlingensArtOgOmfangView from '@/components/PVK/pvkDokumentPage/stepperViews/behandlingensArtOgOmfangView'
+import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
   IDataBehandler,
@@ -68,11 +69,7 @@ export const PvkDokumentPage = () => {
   const router = useRouter()
   const user = useContext(UserContext)
   const formRef: RefObject<any> = useRef(undefined)
-  const {
-    data: pvkKrav,
-    // ,
-    // loading: isPvkKravLoading
-  } = useKravFilter(
+  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
     {
       gjeldendeKrav: true,
       tagger: ['Personvernkonsekvensvurdering'],
@@ -262,17 +259,16 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 4 && (
-                    <div>test 4</div>
-                    // <TilhorendeDokumentasjon
-                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    //   pvoTilbakemelding={pvoTilbakemelding}
-                    //   activeStep={activeStep}
-                    //   setActiveStep={updateTitleUrlAndStep}
-                    //   setSelectedStep={setSelectedStep}
-                    //   formRef={formRef}
-                    //   pvkKrav={pvkKrav}
-                    //   isPvkKravLoading={isPvkKravLoading}
-                    // />
+                    <TilhorendeDokumentasjon
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      activeStep={activeStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      setSelectedStep={setSelectedStep}
+                      formRef={formRef}
+                      pvkKrav={pvkKrav}
+                      isPvkKravLoading={isPvkKravLoading}
+                    />
                   )}
                   {activeStep === 5 && (
                     <div>test 5</div>
