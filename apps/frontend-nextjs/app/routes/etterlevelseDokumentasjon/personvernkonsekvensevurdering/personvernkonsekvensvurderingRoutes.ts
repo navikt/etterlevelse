@@ -40,10 +40,9 @@ export const pvkDokumentasjonCopyUrl = (
   locationOrigin: string,
   etterlevelseDokumentasjonId: string,
   pvkDokumentId: string,
-  stepUrl: string,
   queryUrl: string
 ): string =>
-  `${locationOrigin}${dokumentasjonUrl}/${etterlevelseDokumentasjonId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}?steg=${stepUrl}&${queryUrl}`
+  `${locationOrigin}${dokumentasjonUrl}/${etterlevelseDokumentasjonId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}?&${queryUrl}`
 
 export const pvkDokumentasjonBehandlingsenLivslopUrl = (
   etterlevelseDokumentId: string,

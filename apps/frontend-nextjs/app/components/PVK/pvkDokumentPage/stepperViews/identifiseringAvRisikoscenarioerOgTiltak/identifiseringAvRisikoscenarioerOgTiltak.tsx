@@ -2,7 +2,9 @@
 
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import CreateRisikoscenarioModal from '@/components/risikoscenario/edit/createRisikoscenarioModal'
 import RisikoscenarioAccordianList from '@/components/risikoscenario/generellScenario/risikoscenarioAccordianList'
+import { RisikoscenarioAccordianListReadOnlyView } from '@/components/risikoscenario/readOnly/risikoscenarioAccordianListReadOnlyView'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EPvkDokumentStatus,
@@ -38,9 +40,9 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
-  const [, setIsTiltakFormActive] = useState<boolean>(false)
+  const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
-  const [isCreateModalOpen] = useState<boolean>(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (pvkDokument) {
@@ -95,7 +97,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
                 </div>
               )}
 
-              {/* {!isTiltakFormActive && (
+              {!isTiltakFormActive && (
                 <CreateRisikoscenarioModal
                   pvkDokument={pvkDokument}
                   isCreateModalOpen={isCreateModalOpen}
@@ -106,11 +108,11 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
                   }}
                   setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
                 />
-              )} */}
+              )}
             </div>
           )}
 
-        {/* {pvkDokument &&
+        {pvkDokument &&
           [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
             pvkDokument.status
           ) && (
@@ -122,7 +124,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
                 tiltakList={tiltakList}
               />
             </div>
-          )} */}
+          )}
 
         <InfoChangesMadeAfterApproval
           pvkDokument={pvkDokument}

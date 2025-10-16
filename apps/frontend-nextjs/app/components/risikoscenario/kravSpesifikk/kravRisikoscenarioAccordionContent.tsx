@@ -200,7 +200,6 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         risikoscenario={activeRisikoscenario}
         noCopyButton={true}
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-        stepUrl='0'
       />
 
       {!isIngenTiltakFormDirty &&

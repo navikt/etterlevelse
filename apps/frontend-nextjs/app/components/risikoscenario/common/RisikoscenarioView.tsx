@@ -3,10 +3,7 @@
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'
-import {
-  pvkDokumentasjonCopyUrl,
-  pvkDokumentasjonStepUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { pvkDokumentasjonCopyUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import {
   getKonsekvenssnivaaText,
@@ -20,7 +17,6 @@ import RisikoscenarioTag from './risikoscenarioTag'
 type TProps = {
   risikoscenario: IRisikoscenario
   etterlevelseDokumentasjonId: string
-  stepUrl: string
   noCopyButton?: boolean
   markdownCopyLinkButton?: boolean
 }
@@ -28,7 +24,6 @@ type TProps = {
 export const RisikoscenarioView: FunctionComponent<TProps> = ({
   risikoscenario,
   etterlevelseDokumentasjonId,
-  stepUrl,
   noCopyButton,
   markdownCopyLinkButton,
 }) => {
@@ -44,7 +39,6 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
             window.location.origin,
             etterlevelseDokumentasjonId,
             risikoscenario.pvkDokumentId,
-            stepUrl,
             queryUrl
           )}
           text='Kopiér scenariolenke'
@@ -55,7 +49,12 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       {markdownCopyLinkButton && (
         <CopyButton
           variant='action'
-          copyText={`[${risikoscenario.navn}](${window.location.origin}${pvkDokumentasjonStepUrl(etterlevelseDokumentasjonId, risikoscenario.pvkDokumentId, stepUrl, `?${queryUrl}`)})`}
+          copyText={`[${risikoscenario.navn}](${pvkDokumentasjonCopyUrl(
+            window.location.origin,
+            etterlevelseDokumentasjonId,
+            risikoscenario.pvkDokumentId,
+            queryUrl
+          )})`}
           text='Kopiér scenario riktekstfelt lenke med titel'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
