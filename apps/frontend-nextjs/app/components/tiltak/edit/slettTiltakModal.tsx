@@ -6,7 +6,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { BodyLong, Button, List, Modal } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, SetStateAction } from 'react'
 
 type TProps = {
@@ -41,6 +41,8 @@ export const SlettTiltakModal: FunctionComponent<TProps> = ({
   customDelete,
 }) => {
   const router = useRouter()
+  const queryParams = useSearchParams()
+  const steg = queryParams.get('steg') || undefined
 
   const onDeleteSubmit = async (tiltakId: string) => {
     await getTiltak(tiltakId).then(async (response: ITiltak) => {
@@ -73,7 +75,7 @@ export const SlettTiltakModal: FunctionComponent<TProps> = ({
             await deleteTiltak(tiltakId).then(() => {
               setTiltakList(tiltakList.filter((tiltak) => tiltak.id !== tiltakId))
               setIsDeleteModalOpen(false)
-              router.push(risikoscenarioUrl(risikoscenario.id))
+              router.push(risikoscenarioUrl(risikoscenario.id, steg), { scroll: false })
             })
           }
         )
@@ -113,7 +115,7 @@ export const SlettTiltakModal: FunctionComponent<TProps> = ({
                 }
               })
             )
-            router.push(risikoscenarioUrl(risikoscenario.id))
+            router.push(risikoscenarioUrl(risikoscenario.id, steg), { scroll: false })
           }
         )
       }

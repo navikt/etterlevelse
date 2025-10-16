@@ -56,7 +56,7 @@ export const TiltakReadMoreList = (props: IProps) => {
     if (tiltakId) {
       setActiveTiltak(tiltakId)
     }
-  }, [])
+  }, [tiltakId])
 
   return (
     <div>
