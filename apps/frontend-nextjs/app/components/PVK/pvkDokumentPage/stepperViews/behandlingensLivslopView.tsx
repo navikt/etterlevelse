@@ -24,7 +24,10 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { EPvoTilbakemeldingStatus, IPvoTilbakemelding } from '@/constants/pvo/pvoConstants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import {
   Alert,

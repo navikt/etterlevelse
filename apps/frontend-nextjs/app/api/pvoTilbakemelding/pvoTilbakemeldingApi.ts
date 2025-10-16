@@ -1,5 +1,8 @@
 import { IPageResponse } from '@/constants/commonConstants'
-import { EPvoTilbakemeldingStatus, IPvoTilbakemelding } from '@/constants/pvo/pvoConstants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useState } from 'react'

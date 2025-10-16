@@ -1,5 +1,5 @@
 import { Markdown } from '@/components/common/markdown/markdown'
-import { ITilbakemeldingsinnhold } from '@/constants/pvo/pvoConstants'
+import { ITilbakemeldingsinnhold } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
