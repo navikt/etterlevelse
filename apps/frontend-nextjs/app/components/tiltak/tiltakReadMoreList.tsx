@@ -123,6 +123,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
   >([])
   const queryParams = useSearchParams()
   const tiltakId = queryParams.get('tiltak')
+  const steg = queryParams.get('steg') || undefined
   const router = useRouter()
 
   const submit = async (submitedValues: ITiltak) => {
@@ -174,10 +175,12 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           onOpenChange={(open) => {
             if (open) {
               setActiveTiltak(tiltak.id)
-              router.push(risikoscenarioTiltakUrl(risikoscenario.id, tiltak.id))
+              router.push(risikoscenarioTiltakUrl(risikoscenario.id, tiltak.id, steg), {
+                scroll: false,
+              })
             } else {
               setActiveTiltak('')
-              router.push(risikoscenarioUrl(risikoscenario.id))
+              router.push(risikoscenarioUrl(risikoscenario.id, steg), { scroll: false })
             }
           }}
           header={tiltak.navn}
