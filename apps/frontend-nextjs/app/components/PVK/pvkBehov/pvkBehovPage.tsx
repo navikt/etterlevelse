@@ -4,10 +4,6 @@ import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import PvkBehovForm from '@/components/pvkBehov/pvkBehovForm'
-import PvkBehovInfoContent from '@/components/pvkBehov/pvkBehovInfoContent'
-import PvkBehovMetadata from '@/components/pvkBehov/pvkBehovMetadata'
-import PvkBehovReadOnly from '@/components/pvkBehov/pvkBehovReadOnly'
 import {
   IBehandling,
   IExternalCode,
@@ -25,18 +21,22 @@ import { Heading } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
+import PvkBehovForm from '../form/pvkBehovForm'
+import PvkBehovInfoContent from './pvkBehovInfoContent'
+import PvkBehovMetadata from './pvkBehovMetadata'
+import PvkBehovReadOnly from './pvkBehovReadOnly'
 
 export const PvkBehovPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
-      pvkdokumentId?: string
+      pvkDokumentId?: string
     }>
-  > = useParams<{ id?: string; pvkdokumentId?: string }>()
+  > = useParams<{ id?: string; pvkDokumentId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
-  const [pvkdokument, setPvkDokument] = usePvkDokument(
-    params.pvkdokumentId,
+  const [pvkDokument, setPvkDokument] = usePvkDokument(
+    params.pvkDokumentId,
     params.etterlevelseDokumentasjonId
   )
   const [profilering, setProfilering] = useState<boolean | null>(false)
@@ -119,12 +119,12 @@ export const PvkBehovPage = () => {
   }, [etterlevelseDokumentasjon])
 
   useEffect(() => {
-    if (pvkdokument && pvkdokument.ytterligereEgenskaper.length > 0) {
+    if (pvkDokument && pvkDokument.ytterligereEgenskaper.length > 0) {
       setCheckedYtterligereEgenskaper(
-        pvkdokument.ytterligereEgenskaper.map((egenskap: ICode) => egenskap.code)
+        pvkDokument.ytterligereEgenskaper.map((egenskap: ICode) => egenskap.code)
       )
     }
-  }, [pvkdokument])
+  }, [pvkDokument])
 
   return (
     <PageLayout
@@ -137,7 +137,7 @@ export const PvkBehovPage = () => {
       </Heading>
       {isEtterlevelseDokumentasjonLoading && <CenteredLoader />}
 
-      {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && pvkdokument && (
+      {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && pvkDokument && (
         <ContentLayout>
           <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
             <PvkBehovInfoContent
@@ -149,9 +149,9 @@ export const PvkBehovPage = () => {
               behandlingensLivslop={behandlingensLivslop}
             />
             {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-              !isReadOnlyPvkStatus(pvkdokument.status) && (
+              !isReadOnlyPvkStatus(pvkDokument.status) && (
                 <PvkBehovForm
-                  pvkDokument={pvkdokument}
+                  pvkDokument={pvkDokument}
                   setPvkDokument={setPvkDokument}
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   profilering={profilering}
@@ -165,9 +165,9 @@ export const PvkBehovPage = () => {
 
             {!etterlevelseDokumentasjon.hasCurrentUserAccess &&
               !user.isAdmin() &&
-              isReadOnlyPvkStatus(pvkdokument.status) && (
+              isReadOnlyPvkStatus(pvkDokument.status) && (
                 <PvkBehovReadOnly
-                  pvkDokument={pvkdokument}
+                  pvkDokument={pvkDokument}
                   ytterligereEgenskaper={ytterligereEgenskaper}
                 />
               )}

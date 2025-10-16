@@ -13,10 +13,10 @@ export const pvkDokumentasjonStepUrl = (
   step: number | string,
   filter?: string
 ): string => {
-  const url: string = `${dokumentasjonUrl}/${etterlevelseDokumentId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}/${step}`
+  const url: string = `${dokumentasjonUrl}/${etterlevelseDokumentId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}?steg=${step}`
 
   if (filter) {
-    return `${url}/${filter}`
+    return `${url}${filter}`
   }
 
   return url
@@ -31,7 +31,7 @@ export const pvkDokumentasjonPvkTypeStepUrl = (
   const url: string = `${dokumentasjonUrl}/${etterlevelseDokumentId}/${pvkType}/${pvkDokumentId}`
 
   if (step) {
-    return `${url}/${step}`
+    return `${url}?steg=${step}`
   }
 
   return url
@@ -43,7 +43,7 @@ export const pvkDokumentasjonCopyUrl = (
   stepUrl: string,
   queryUrl: string
 ): string =>
-  `${locationOrigin}${dokumentasjonUrl}/${etterlevelseDokumentasjonId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}/${stepUrl}?${queryUrl}`
+  `${locationOrigin}${dokumentasjonUrl}/${etterlevelseDokumentasjonId}${personvernKonsekvensvurderingUrl}/${pvkDokumentId}?steg=${stepUrl}&${queryUrl}`
 
 export const pvkDokumentasjonBehandlingsenLivslopUrl = (
   etterlevelseDokumentId: string,
@@ -57,10 +57,10 @@ export const pvkDokumentasjonPvkBehovUrl = (
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentId}/pvkbehov/${pvkId}`
 
 export const risikoscenarioUrl = (risikoId: string): string =>
-  `${window.location.pathname}?risikoscenario=${risikoId}`
+  `${window.location.pathname}&risikoscenario=${risikoId}`
 
 export const risikoscenarioTiltakUrl = (activeRisikoscenarioId: string, tiltakId: string): string =>
-  `${window.location.pathname}?risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
+  `${window.location.pathname}&risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
 
 export const pvkDokumenteringPvoTilbakemeldingUrl = (
   pvkDokumentId: string | undefined,
@@ -81,7 +81,7 @@ export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
   filter: string | null,
   risikoscenarioId: string | null
 ): string => {
-  const url: string = `${window.location.pathname}?tab=${tabQuery}&filter=${filter}`
+  const url: string = `${window.location.pathname}&tab=${tabQuery}&filter=${filter}`
 
   if (risikoscenarioId) {
     return `${url}&risikoscenario=${risikoscenarioId}`
@@ -95,7 +95,7 @@ export const pvkDokumentasjonTabFilterUrl = (
   filter: string | null,
   risikoscenarioer: string
 ): string => {
-  const url: string = `${window.location.pathname}?tab=${tabQuery}`
+  const url: string = `${window.location.pathname}&tab=${tabQuery}`
 
   if (tabQuery === risikoscenarioer) {
     return `${url}&filter=${filter}`
