@@ -46,6 +46,7 @@ import _ from 'lodash'
 import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
 import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopSummary'
 import ArtOgOmFangSummary from '../../formSummary/artOgOmFangSummary'
+import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -421,12 +422,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
 
-                {/* <TilhorendeDokumentasjonSummary
+                <TilhorendeDokumentasjonSummary
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   manglerBehandlingError={manglerBehandlingError}
                   pvkKravError={pvkKravError}
                   pvkKrav={pvkKrav}
-                /> */}
+                />
 
                 {/* <InvolveringSummary
                   databehandlere={databehandlere}
