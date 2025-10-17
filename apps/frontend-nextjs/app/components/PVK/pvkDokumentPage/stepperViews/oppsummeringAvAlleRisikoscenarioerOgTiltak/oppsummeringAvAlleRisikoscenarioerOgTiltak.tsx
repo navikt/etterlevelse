@@ -251,7 +251,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         setFilteredTiltakList(
           tiltakList.filter(
             (tiltak: ITiltak) =>
-              !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+              !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
           )
         )
         break
