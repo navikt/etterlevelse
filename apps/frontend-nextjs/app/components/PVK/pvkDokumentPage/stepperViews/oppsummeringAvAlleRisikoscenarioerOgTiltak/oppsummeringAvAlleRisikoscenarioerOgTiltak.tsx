@@ -32,6 +32,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
+import OppsumeringAccordianListReadOnlyView from '../readOnlyViews/oppsumeringAccordianListReadOnlyView'
 import { OppsumeringAccordianList } from './oppsumeringAccordianList'
 
 type TProps = {
@@ -375,7 +376,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                 setIsUnsaved={setIsUnsaved}
                               />
                             )}
-                            {/* {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
+                            {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
                               <OppsumeringAccordianListReadOnlyView
                                 risikoscenarioList={filteredRisikoscenarioList}
                                 allRisikoscenarioList={risikoscenarioList}
@@ -383,7 +384,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                 tiltakList={tiltakList}
                                 noMarkdownCopyLinkButton
                               />
-                            )} */}
+                            )}
                           </div>
                         )}
                     </Tabs.Panel>
