@@ -28,7 +28,7 @@ import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensLivslopView from './stepperViews/behandlingensLivslopView'
 import { IdentifiseringAvRisikoscenarioerOgTiltak } from './stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltak'
-import OppsummeringAvAlleRisikoscenarioerOgTiltak from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltak'
+import OppsummeringAvAlleRisikoscenarioerOgTiltak from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltak/oppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from './stepperViews/oversiktView'
 
 export const StepTitle: string[] = [

@@ -5,6 +5,7 @@ import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/common/pvoTilbakemeldingReadOnly'
 import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
+import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -23,12 +24,13 @@ import {
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
-import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
-import { PvkSidePanelWrapper } from '../../common/pvkSidePanelWrapper'
-import FormButtons from '../../edit/formButtons'
+import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
+import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
+import FormButtons from '../../../edit/formButtons'
 
 type TProps = {
   etterlevelseDokumentasjonId: string
@@ -167,7 +169,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
       setAntallUtenTiltakAnsvarlig(
         tiltakList.filter(
           (tiltak: ITiltak) =>
-            !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+            !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
         ).length
       )
       setAntallUtenFrist(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist).length)
@@ -434,7 +436,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         </ToggleGroup>
                       )}
 
-                      {/* {pvkDokument &&
+                      {pvkDokument &&
                         !isReadOnlyPvkStatus(pvkDokument.status) &&
                         filteredTiltakList.length !== 0 && (
                           <TiltakAccordionList
@@ -444,6 +446,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                           />
                         )}
 
+                      {/*
                       {pvkDokument &&
                         isReadOnlyPvkStatus(pvkDokument.status) &&
                         filteredTiltakList.length !== 0 && (
