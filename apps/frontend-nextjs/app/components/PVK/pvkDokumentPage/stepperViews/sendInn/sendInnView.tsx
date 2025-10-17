@@ -45,6 +45,7 @@ import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
 import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopSummary'
+import ArtOgOmFangSummary from '../../formSummary/artOgOmFangSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -415,10 +416,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
 
-                {/* <ArtOgOmFangSummary
+                <ArtOgOmFangSummary
                   personkategorier={personkategorier}
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
-                /> */}
+                />
 
                 {/* <TilhorendeDokumentasjonSummary
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
