@@ -1,7 +1,7 @@
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { kravUrl } from '../krav/kravRoutes'
 
-export const tabTiltakQuery: string = '?tab=tiltak'
+export const tabTiltakQuery: string = '&tab=tiltak'
 const tabRisikoScenarioQuery: string = '&tab=risikoscenarioer'
 const filterAlleQuery: string = 'filter=alle'
 

@@ -48,6 +48,7 @@ import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopS
 import ArtOgOmFangSummary from '../../formSummary/artOgOmFangSummary'
 import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
 import InvolveringSummary from '../../formSummary/involveringSummary'
+import RisikoscenarioSummary from '../../formSummary/risikoscenarioSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -435,12 +436,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   personkategorier={personkategorier}
                 />
 
-                {/* <RisikoscenarioSummary
+                <RisikoscenarioSummary
                   alleRisikoscenario={alleRisikoscenario}
                   alleTiltak={alleTiltak}
                   risikoscenarioError={risikoscenarioError}
                   tiltakError={tiltakError}
-                /> */}
+                />
 
                 {/* <RisikoscenarioEtterTitak
                   alleRisikoscenario={alleRisikoscenario}
