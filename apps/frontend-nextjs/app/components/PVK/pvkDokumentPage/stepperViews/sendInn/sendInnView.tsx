@@ -49,6 +49,7 @@ import ArtOgOmFangSummary from '../../formSummary/artOgOmFangSummary'
 import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
 import InvolveringSummary from '../../formSummary/involveringSummary'
 import RisikoscenarioSummary from '../../formSummary/risikoscenarioSummary'
+import RisikoscenarioEtterTitak from '../../formSummary/risikoscenarioEtterTitak'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -443,10 +444,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   tiltakError={tiltakError}
                 />
 
-                {/* <RisikoscenarioEtterTitak
+                <RisikoscenarioEtterTitak
                   alleRisikoscenario={alleRisikoscenario}
                   savnerVurderingError={savnerVurderingError}
-                /> */}
+                />
 
                 {/* {underarbeidCheck && (
                   <UnderArbeidFields
