@@ -21,7 +21,7 @@ import {
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, Heading, Label, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { PVKFieldWrapper, TopBottomWrapper } from '../common/stylingLayout'
 
 type TProps = {
@@ -104,12 +104,26 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
     })
   }
 
+  useEffect(() => {
+    if (isFormActive) {
+      const vurderTiltakForm = document.getElementById('vurderTiltakForm')
+      if (vurderTiltakForm) {
+        vurderTiltakForm.scrollIntoView()
+      }
+    } else {
+      const vurderTiltakLabel = document.getElementById('vurderTiltakLabel')
+      if (vurderTiltakLabel) {
+        vurderTiltakLabel.scrollIntoView()
+      }
+    }
+  }, [isFormActive])
+
   return (
     <div>
       <div>
         {!isFormActive && (
           <div className='mt-5'>
-            <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
+            <Label id='vurderTiltakLabel'>Antatt risikonivå etter gjennomførte tiltak </Label>
 
             {!revurdertEffektCheck && risikoscenario.tiltakOppdatert && (
               <Alert variant='warning' className='my-5'>
@@ -237,7 +251,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
           {({ values, setFieldValue, submitForm }) => (
             <Form className='w-full border-t border-[#071a3636]'>
               <TopBottomWrapper>
-                <Heading size='medium' level='3'>
+                <Heading size='medium' level='3' id='vurderTiltakForm'>
                   Dokumentér antatt risikonivå etter gjennomførte tiltak
                 </Heading>
               </TopBottomWrapper>
