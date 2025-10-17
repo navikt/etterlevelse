@@ -28,6 +28,7 @@ import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensLivslopView from './stepperViews/behandlingensLivslopView'
 import { IdentifiseringAvRisikoscenarioerOgTiltak } from './stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltak'
+import OppsummeringAvAlleRisikoscenarioerOgTiltak from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from './stepperViews/oversiktView'
 
 export const StepTitle: string[] = [
@@ -297,16 +298,15 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 7 && (
-                    <div>test 7</div>
-                    // <OppsummeringAvAlleRisikoscenarioerOgTiltak
-                    //   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    //   pvkDokument={pvkDokument}
-                    //   pvoTilbakemelding={pvoTilbakemelding}
-                    //   activeStep={activeStep}
-                    //   setSelectedStep={setSelectedStep}
-                    //   setActiveStep={updateTitleUrlAndStep}
-                    //   formRef={formRef}
-                    // />
+                    <OppsummeringAvAlleRisikoscenarioerOgTiltak
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      formRef={formRef}
+                    />
                   )}
                   {activeStep === 8 && (
                     <div>test 8</div>

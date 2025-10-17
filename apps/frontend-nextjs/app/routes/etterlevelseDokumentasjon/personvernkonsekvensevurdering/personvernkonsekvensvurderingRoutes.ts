@@ -90,11 +90,12 @@ export const pvkDokumenteringPvoTilbakemeldingUrl = (
 }
 
 export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
+  steg: string | null,
   tabQuery: string | null,
   filter: string | null,
   risikoscenarioId: string | null
 ): string => {
-  const url: string = `${window.location.pathname}&tab=${tabQuery}&filter=${filter}`
+  const url: string = `${window.location.pathname}?steg=${steg}&tab=${tabQuery}&filter=${filter}`
 
   if (risikoscenarioId) {
     return `${url}&risikoscenario=${risikoscenarioId}`
@@ -104,13 +105,13 @@ export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
 }
 
 export const pvkDokumentasjonTabFilterUrl = (
+  steg: string | null,
   tabQuery: string | null,
-  filter: string | null,
-  risikoscenarioer: string
+  filter: string | null
 ): string => {
-  const url: string = `${window.location.pathname}&tab=${tabQuery}`
+  const url: string = `${window.location.pathname}?steg=${steg}&tab=${tabQuery}`
 
-  if (tabQuery === risikoscenarioer) {
+  if (filter) {
     return `${url}&filter=${filter}`
   }
 
