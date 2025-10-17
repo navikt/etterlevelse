@@ -32,6 +32,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
+import { OppsumeringAccordianList } from './oppsumeringAccordianList'
 
 type TProps = {
   etterlevelseDokumentasjonId: string
@@ -185,7 +186,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
   const onTabChange = (tab: string): void => {
     const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-    const paramQuery: string = tab === tabValues.risikoscenarioer ? '&filter=' + filter : ''
+    const paramQuery: string = tab === tabValues.risikoscenarioer ? filter : ''
     setNavigateUrl(pvkDokumentasjonTabFilterUrl(steg, tab, paramQuery))
 
     if (formRef.current?.dirty) {
@@ -360,8 +361,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
                           <div className='my-5'>
-                            test
-                            {/* {pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
+                            {pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
                               <OppsumeringAccordianList
                                 risikoscenarioList={filteredRisikoscenarioList}
                                 setRisikosenarioList={setFilteredRisikosenarioList}
@@ -374,7 +374,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                 isUnsaved={isUnsaved}
                                 setIsUnsaved={setIsUnsaved}
                               />
-                            )} */}
+                            )}
                             {/* {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
                               <OppsumeringAccordianListReadOnlyView
                                 risikoscenarioList={filteredRisikoscenarioList}
