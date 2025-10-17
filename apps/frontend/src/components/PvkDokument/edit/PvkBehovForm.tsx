@@ -210,8 +210,9 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='primary'
                 onClick={async () => {
-                  await submitForm()
-                  resetForm(values)
+                  await submitForm().then(() => {
+                    resetForm({ values })
+                  })
                 }}
               >
                 Lagre
