@@ -1,32 +1,50 @@
 'use client'
 
-import { getBehandlingensLivslopByEtterlevelseDokumentId, mapBehandlingensLivslopToFormValue } from "@/api/behandlingensLivslop/behandlingensLivslopApi"
-import { getPvkDokument, updatePvkDokument, mapPvkDokumentToFormValue } from "@/api/pvkDokument/pvkDokumentApi"
-import { getRisikoscenarioByPvkDokumentId } from "@/api/risikoscenario/risikoscenarioApi"
-import { getTiltakByPvkDokumentId } from "@/api/tiltak/tiltakApi"
-import InfoChangesMadeAfterApproval from "@/components/PVK/common/infoChangesMadeAfterApproval"
-import FormButtons from "@/components/PVK/edit/formButtons"
-import AlertPvoUnderarbeidModal from "@/components/pvoTilbakemelding/alertPvoUnderarbeidModal"
-import { IPageResponse } from "@/constants/commonConstants"
-import { IBehandlingensLivslop } from "@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants"
-import { TEtterlevelseQL, EEtterlevelseStatus } from "@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants"
-import { TEtterlevelseDokumentasjonQL } from "@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants"
-import { IPvkDokument, EPvkDokumentStatus } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants"
-import { IRisikoscenario, ERisikoscenarioType } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants"
-import { ITiltak } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants"
-import { ICode, EListName } from "@/constants/kodeverk/kodeverkConstants"
-import { TKravQL } from "@/constants/krav/kravConstants"
-import { IPvoTilbakemelding } from "@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants"
-import { ICodelistProps } from "@/provider/kodeverk/kodeverkProvider"
-import { UserContext } from "@/provider/user/userProvider"
-import { pvkDokumentStatusToText } from "@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils"
-import { isRisikoUnderarbeidCheck } from "@/util/risikoscenario/risikoscenarioUtils"
-import { FilesIcon } from "@navikt/aksel-icons"
-import { Heading, BodyLong, CopyButton, Alert } from "@navikt/ds-react"
-import { AxiosError } from "axios"
-import { Formik, validateYupSchema, yupToFormErrors, Form } from "formik"
-import _ from "lodash"
-import { FunctionComponent, RefObject, useRef, useState, useEffect, useContext } from "react"
+import {
+  getBehandlingensLivslopByEtterlevelseDokumentId,
+  mapBehandlingensLivslopToFormValue,
+} from '@/api/behandlingensLivslop/behandlingensLivslopApi'
+import {
+  getPvkDokument,
+  mapPvkDokumentToFormValue,
+  updatePvkDokument,
+} from '@/api/pvkDokument/pvkDokumentApi'
+import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
+import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
+import FormButtons from '@/components/PVK/edit/formButtons'
+import pvkDocumentSchema from '@/components/PVK/form/pvkDocumentSchema'
+import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
+import { IPageResponse } from '@/constants/commonConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import {
+  EEtterlevelseStatus,
+  TEtterlevelseQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  ERisikoscenarioType,
+  IRisikoscenario,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { TKravQL } from '@/constants/krav/kravConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
+import { UserContext } from '@/provider/user/userProvider'
+import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { isRisikoUnderarbeidCheck } from '@/util/risikoscenario/risikoscenarioUtils'
+import { FilesIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, CopyButton, Heading } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
+import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -397,36 +415,36 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
 
-                <ArtOgOmFangSummary
+                {/* <ArtOgOmFangSummary
                   personkategorier={personkategorier}
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
-                />
+                /> */}
 
-                <TilhorendeDokumentasjonSummary
+                {/* <TilhorendeDokumentasjonSummary
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   manglerBehandlingError={manglerBehandlingError}
                   pvkKravError={pvkKravError}
                   pvkKrav={pvkKrav}
-                />
+                /> */}
 
-                <InvolveringSummary
+                {/* <InvolveringSummary
                   databehandlere={databehandlere}
                   personkategorier={personkategorier}
-                />
+                /> */}
 
-                <RisikoscenarioSummary
+                {/* <RisikoscenarioSummary
                   alleRisikoscenario={alleRisikoscenario}
                   alleTiltak={alleTiltak}
                   risikoscenarioError={risikoscenarioError}
                   tiltakError={tiltakError}
-                />
+                /> */}
 
-                <RisikoscenarioEtterTitak
+                {/* <RisikoscenarioEtterTitak
                   alleRisikoscenario={alleRisikoscenario}
                   savnerVurderingError={savnerVurderingError}
-                />
+                /> */}
 
-                {underarbeidCheck && (
+                {/* {underarbeidCheck && (
                   <UnderArbeidFields
                     pvkDokument={pvkDokument}
                     isLoading={isLoading}
@@ -451,9 +469,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       />
                     }
                   />
-                )}
+                )} */}
 
-                {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
+                {/* {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
                   pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
                   <SendtTilPvoFields
                     pvkDokument={pvkDokument}
@@ -461,13 +479,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     setFieldValue={setFieldValue}
                     submitForm={submitForm}
                   />
-                )}
+                )} */}
 
-                {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
+                {/* {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
                   <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
-                )}
+                )} */}
 
-                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
+                {/* {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
                   pvoTilbakemelding && (
                     <VurdertAvPvoOgTrengerMerArbeidFields
                       pvkDokument={pvkDokument}
@@ -494,9 +512,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         />
                       }
                     />
-                  )}
+                  )} */}
 
-                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
+                {/* {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
                   <VurdertAvPvoFields
                     pvkDokument={pvkDokument}
                     pvoTilbakemelding={pvoTilbakemelding}
@@ -522,9 +540,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       />
                     }
                   />
-                )}
+                )} */}
 
-                {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
+                {/* {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
                   pvoTilbakemelding && (
                     <TrengerRisikoeierGodkjenningFields
                       pvkDokument={pvkDokument}
@@ -552,9 +570,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         />
                       }
                     />
-                  )}
+                  )} */}
 
-                {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                {/* {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
                   pvoTilbakemelding && (
                     <GodkjentAvRisikoeierFields
                       pvkDokument={pvkDokument}
@@ -582,7 +600,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         />
                       }
                     />
-                  )}
+                  )} */}
 
                 <InfoChangesMadeAfterApproval
                   pvkDokument={pvkDokument}
