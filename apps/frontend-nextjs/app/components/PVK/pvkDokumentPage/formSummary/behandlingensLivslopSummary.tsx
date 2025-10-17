@@ -21,7 +21,7 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
       <FormSummary.EditLink
         className='cursor-pointer'
         onClick={() => updateTitleUrlAndStep(2)}
-        href={window.location.pathname.slice(0, -1) + 2}
+        href={window.location.pathname + '?steg=' + 2}
       >
         Endre svar
       </FormSummary.EditLink>

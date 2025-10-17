@@ -1,9 +1,9 @@
-import { EPVK } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants"
-import { FormSummary, List, BodyShort } from "@navikt/ds-react"
-import { Field, FieldProps } from "formik"
-import { FunctionComponent } from "react"
-import { StepTitle } from "../pvkDokumentPage"
-import FormAlert from "./formAlert"
+import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { BodyShort, FormSummary, List } from '@navikt/ds-react'
+import { Field, FieldProps } from 'formik'
+import { FunctionComponent } from 'react'
+import { StepTitle } from '../pvkDokumentPage'
+import FormAlert from './formAlert'
 
 type TProps = {
   updateTitleUrlAndStep: (step: number) => void
@@ -27,7 +27,7 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
             className='cursor-pointer'
             onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 3)}
             href={
-              window.location.pathname.slice(0, -1) + `${customStepNumber ? customStepNumber : 3}`
+              window.location.pathname + '?steg=' + `${customStepNumber ? customStepNumber : 3}`
             }
           >
             {customLinktext ? customLinktext : 'Endre svar'}
