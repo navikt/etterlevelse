@@ -6,6 +6,7 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/common/pvoTilbakemeldingReadOnly'
 import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
 import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
+import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -446,7 +447,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                           />
                         )}
 
-                      {/*
                       {pvkDokument &&
                         isReadOnlyPvkStatus(pvkDokument.status) &&
                         filteredTiltakList.length !== 0 && (
@@ -454,7 +454,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             tiltakList={filteredTiltakList}
                             risikoscenarioList={risikoscenarioList}
                           />
-                        )} */}
+                        )}
 
                       {filteredTiltakList.length === 0 &&
                         visTomTiltakListeBeskrivelse(tiltakFilter)}
