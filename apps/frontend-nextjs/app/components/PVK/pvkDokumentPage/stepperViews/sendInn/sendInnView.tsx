@@ -47,6 +47,7 @@ import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState }
 import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopSummary'
 import ArtOgOmFangSummary from '../../formSummary/artOgOmFangSummary'
 import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
+import InvolveringSummary from '../../formSummary/involveringSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -429,10 +430,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   pvkKrav={pvkKrav}
                 />
 
-                {/* <InvolveringSummary
+                <InvolveringSummary
                   databehandlere={databehandlere}
                   personkategorier={personkategorier}
-                /> */}
+                />
 
                 {/* <RisikoscenarioSummary
                   alleRisikoscenario={alleRisikoscenario}
