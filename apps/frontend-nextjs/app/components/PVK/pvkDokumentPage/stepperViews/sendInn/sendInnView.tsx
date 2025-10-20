@@ -44,12 +44,14 @@ import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
-import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopSummary'
 import ArtOgOmFangSummary from '../../formSummary/artOgOmFangSummary'
-import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
+import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopSummary'
 import InvolveringSummary from '../../formSummary/involveringSummary'
-import RisikoscenarioSummary from '../../formSummary/risikoscenarioSummary'
 import RisikoscenarioEtterTitak from '../../formSummary/risikoscenarioEtterTitak'
+import RisikoscenarioSummary from '../../formSummary/risikoscenarioSummary'
+import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
+import UnderArbeidFields from './sendInnCoponents/readOnly/underArbeidFields'
+import SendInnErrorSummary from './sendInnCoponents/sendInnErrorSummary'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -449,7 +451,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   savnerVurderingError={savnerVurderingError}
                 />
 
-                {/* {underarbeidCheck && (
+                {underarbeidCheck && (
                   <UnderArbeidFields
                     pvkDokument={pvkDokument}
                     isLoading={isLoading}
@@ -474,7 +476,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       />
                     }
                   />
-                )} */}
+                )}
 
                 {/* {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
                   pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
