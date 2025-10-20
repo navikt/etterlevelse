@@ -24,6 +24,7 @@ import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensArtOgOmfangPvoView from './stepperViews/behandlingensArtOgOmfangPvoView'
 import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoView'
+import InvolveringAvEksternePvoView from './stepperViews/involveringAvEksternePvoView'
 import OversiktPvoView from './stepperViews/oversiktPvoView'
 import TilhorendeDokumentasjonPvoView from './stepperViews/tilhorendeDokumentasjonPvoView'
 
@@ -278,29 +279,27 @@ export const PvoTilbakemeldingPage = () => {
                         isPvkKravLoading={isPvkKravLoading}
                       />
                     )}
-                    {
-                      activeStep === 5 && 'InvolveringAvEksternePvoView'
-                      // <InvolveringAvEksternePvoView
-                      //   personkategorier={personkategorier}
-                      //   databehandlere={databehandlere}
-                      //   pvkDokument={pvkDokument}
-                      //   pvoTilbakemelding={pvoTilbakemelding}
-                      //   activeStep={activeStep}
-                      //   setSelectedStep={setSelectedStep}
-                      //   setActiveStep={updateTitleUrlAndStep}
-                      //   formRef={formRef}
-                      // />
-                    }
-                    {
-                      activeStep === 6 && 'IdentifiseringAvRisikoscenarioerOgTiltakPvoView'
-                      // <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
-                      //   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                      //   pvkDokument={pvkDokument}
-                      //   activeStep={activeStep}
-                      //   setSelectedStep={setSelectedStep}
-                      //   setActiveStep={updateTitleUrlAndStep}
-                      // />
-                    }
+                    {activeStep === 5 && (
+                      <InvolveringAvEksternePvoView
+                        personkategorier={personkategorier}
+                        databehandlere={databehandlere}
+                        pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                        formRef={formRef}
+                      />
+                    )}
+                    {activeStep === 6 && (
+                      <IdentifiseringAvRisikoscenarioerOgTiltakPvoView
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        pvkDokument={pvkDokument}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                      />
+                    )}
                     {
                       activeStep === 7 && 'OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
                       // <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
