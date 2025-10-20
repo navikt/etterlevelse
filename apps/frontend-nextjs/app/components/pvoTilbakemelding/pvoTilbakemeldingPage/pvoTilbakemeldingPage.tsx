@@ -24,10 +24,11 @@ import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensArtOgOmfangPvoView from './stepperViews/behandlingensArtOgOmfangPvoView'
 import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoView'
+import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from './stepperViews/identifiseringAvRisikoscenarioerOgTiltakPvoView'
 import InvolveringAvEksternePvoView from './stepperViews/involveringAvEksternePvoView'
+import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 import OversiktPvoView from './stepperViews/oversiktPvoView'
 import TilhorendeDokumentasjonPvoView from './stepperViews/tilhorendeDokumentasjonPvoView'
-import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from './stepperViews/identifiseringAvRisikoscenarioerOgTiltakPvoView'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
@@ -301,18 +302,17 @@ export const PvoTilbakemeldingPage = () => {
                         setActiveStep={updateTitleUrlAndStep}
                       />
                     )}
-                    {
-                      activeStep === 7 && 'OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
-                      // <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
-                      //   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                      //   pvkDokument={pvkDokument}
-                      //   pvoTilbakemelding={pvoTilbakemelding}
-                      //   activeStep={activeStep}
-                      //   setSelectedStep={setSelectedStep}
-                      //   setActiveStep={updateTitleUrlAndStep}
-                      //   formRef={formRef}
-                      // />
-                    }
+                    {activeStep === 7 && (
+                      <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                        formRef={formRef}
+                      />
+                    )}
                     {
                       activeStep === 8 && 'SendInnPvoView'
                       // <SendInnPvoView
