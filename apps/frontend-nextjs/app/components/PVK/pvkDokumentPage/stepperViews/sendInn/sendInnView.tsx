@@ -16,6 +16,7 @@ import FormButtons from '@/components/PVK/edit/formButtons'
 import pvkDocumentSchema from '@/components/PVK/form/pvkDocumentSchema'
 import PVOUnderArbeidFIelds from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/pvoUnderArbeidFIelds'
 import SendtTilPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/sendtTilPvoFields'
+import TrengerRisikoeierGodkjenningFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/trengerRisikoeierGodkjenningFields'
 import VurdertAvPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
@@ -553,7 +554,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {/* {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
+                {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
                   pvoTilbakemelding && (
                     <TrengerRisikoeierGodkjenningFields
                       pvkDokument={pvkDokument}
@@ -581,7 +582,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         />
                       }
                     />
-                  )} */}
+                  )}
 
                 {/* {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
                   pvoTilbakemelding && (
