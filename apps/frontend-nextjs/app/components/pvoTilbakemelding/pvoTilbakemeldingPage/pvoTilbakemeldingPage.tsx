@@ -23,6 +23,7 @@ import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import OversiktPvoView from './stepperViews/oversiktPvoView'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
@@ -227,19 +228,18 @@ export const PvoTilbakemeldingPage = () => {
               <div className='flex flex-col w-full items-center mt-5'>
                 <div className='w-full max-w-7xl'>
                   <div className='px-2 pb-6'>
-                    {
-                      activeStep === 1 && 'OversiktPvoView'
-                      // <OversiktPvoView
-                      //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      //   pvkDokument={pvkDokument}
-                      //   activeStep={activeStep}
-                      //   setSelectedStep={setSelectedStep}
-                      //   updateTitleUrlAndStep={updateTitleUrlAndStep}
-                      //   pvoTilbakemelding={pvoTilbakemelding}
-                      //   formRef={formRef}
-                      //   pvkKrav={pvkKrav}
-                      // />
-                    }
+                    {activeStep === 1 && (
+                      <OversiktPvoView
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        pvkDokument={pvkDokument}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        updateTitleUrlAndStep={updateTitleUrlAndStep}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        formRef={formRef}
+                        pvkKrav={pvkKrav}
+                      />
+                    )}
                     {
                       activeStep === 2 && 'BehandlingensLivslopPvoView'
                       // <BehandlingensLivslopPvoView
