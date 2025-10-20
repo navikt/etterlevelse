@@ -16,6 +16,7 @@ import FormButtons from '@/components/PVK/edit/formButtons'
 import pvkDocumentSchema from '@/components/PVK/form/pvkDocumentSchema'
 import PVOUnderArbeidFIelds from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/pvoUnderArbeidFIelds'
 import SendtTilPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/sendtTilPvoFields'
+import VurdertAvPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -524,7 +525,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     />
                   )}
 
-                {/* {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
+                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
                   <VurdertAvPvoFields
                     pvkDokument={pvkDokument}
                     pvoTilbakemelding={pvoTilbakemelding}
@@ -550,7 +551,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       />
                     }
                   />
-                )} */}
+                )}
 
                 {/* {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
                   pvoTilbakemelding && (
