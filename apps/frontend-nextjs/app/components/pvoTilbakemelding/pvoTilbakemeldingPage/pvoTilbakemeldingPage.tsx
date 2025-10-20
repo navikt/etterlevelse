@@ -10,7 +10,6 @@ import {
 } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
@@ -23,8 +22,10 @@ import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import BehandlingensArtOgOmfangPvoView from './stepperViews/behandlingensArtOgOmfangPvoView'
 import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoView'
 import OversiktPvoView from './stepperViews/oversiktPvoView'
+import TilhorendeDokumentasjonPvoView from './stepperViews/xilhorendeDokumentasjonPvoView'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
@@ -252,33 +253,31 @@ export const PvoTilbakemeldingPage = () => {
                         formRef={formRef}
                       />
                     )}
-                    {
-                      activeStep === 3 && 'BehandlingensArtOgOmfangPvoView'
-                      // <BehandlingensArtOgOmfangPvoView
-                      //   personkategorier={personkategorier}
-                      //   pvkDokument={pvkDokument}
-                      //   pvoTilbakemelding={pvoTilbakemelding}
-                      //   activeStep={activeStep}
-                      //   setSelectedStep={setSelectedStep}
-                      //   setActiveStep={updateTitleUrlAndStep}
-                      //   formRef={formRef}
-                      // />
-                    }
+                    {activeStep === 3 && (
+                      <BehandlingensArtOgOmfangPvoView
+                        personkategorier={personkategorier}
+                        pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                        formRef={formRef}
+                      />
+                    )}
 
-                    {
-                      activeStep === 4 && 'TilhorendeDokumentasjonPvoView'
-                      // <TilhorendeDokumentasjonPvoView
-                      //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      //   pvkDokumentId={pvkDokument.id}
-                      //   pvoTilbakemelding={pvoTilbakemelding}
-                      //   activeStep={activeStep}
-                      //   setActiveStep={updateTitleUrlAndStep}
-                      //   setSelectedStep={setSelectedStep}
-                      //   formRef={formRef}
-                      //   pvkKrav={pvkKrav}
-                      //   isPvkKravLoading={isPvkKravLoading}
-                      // />
-                    }
+                    {activeStep === 4 && (
+                      <TilhorendeDokumentasjonPvoView
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        pvkDokumentId={pvkDokument.id}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        activeStep={activeStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                        setSelectedStep={setSelectedStep}
+                        formRef={formRef}
+                        pvkKrav={pvkKrav}
+                        isPvkKravLoading={isPvkKravLoading}
+                      />
+                    )}
                     {
                       activeStep === 5 && 'InvolveringAvEksternePvoView'
                       // <InvolveringAvEksternePvoView

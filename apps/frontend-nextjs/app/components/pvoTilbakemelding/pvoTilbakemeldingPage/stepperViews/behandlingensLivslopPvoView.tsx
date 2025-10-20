@@ -69,7 +69,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
       {!isLoading && (
         <div className='w-full'>
           <ContentLayout>
-            <div className='flex gap-8'>
+            <div className='flex gap-8 w-full'>
               <div className='w-1/2'>
                 <BehandlingensLivslopReadOnlyContent
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
