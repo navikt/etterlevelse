@@ -43,7 +43,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
   return (
     <div className='w-full'>
       <ContentLayout>
-        <div className='flex gap-8'>
+        <div className='flex gap-8 w-full'>
           <div className='w-1/2'>
             <TilhorendeDokumentasjonContent
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
