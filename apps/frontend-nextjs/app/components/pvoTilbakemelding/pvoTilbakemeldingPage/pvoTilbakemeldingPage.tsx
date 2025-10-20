@@ -27,6 +27,7 @@ import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoV
 import InvolveringAvEksternePvoView from './stepperViews/involveringAvEksternePvoView'
 import OversiktPvoView from './stepperViews/oversiktPvoView'
 import TilhorendeDokumentasjonPvoView from './stepperViews/tilhorendeDokumentasjonPvoView'
+import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from './stepperViews/identifiseringAvRisikoscenarioerOgTiltakPvoView'
 
 export const StepTitle: string[] = [
   'Oversikt og status',

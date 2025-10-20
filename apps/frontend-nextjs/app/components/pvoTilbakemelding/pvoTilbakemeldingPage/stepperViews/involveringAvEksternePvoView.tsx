@@ -1,12 +1,15 @@
-import { ContentLayout } from "@/components/others/layout/content/content"
-import InvolveringAvEksterneReadOnlyContent from "@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/involveringAvEksterneReadOnlyContent"
-import { IPvkDokument } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants"
-import { IPvoTilbakemelding, EPvoTilbakemeldingStatus } from "@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants"
-import { RefObject, FunctionComponent } from "react"
-import PvoSidePanelWrapper from "../../common/pvoSidePanelWrapper"
-import PvoFormButtons from "../../form/pvoFormButtons"
-import PvoTilbakemeldingForm from "../../form/pvoTilbakemeldingForm"
-import PvoTilbakemeldingReadOnly from "../../readOnly/pvoTilbakemeldingReadOnly"
+import InvolveringAvEksterneReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/involveringAvEksterneReadOnlyContent'
+import { ContentLayout } from '@/components/others/layout/content/content'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { FunctionComponent, RefObject } from 'react'
+import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
+import PvoFormButtons from '../../form/pvoFormButtons'
+import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
+import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
   personkategorier: string[]
