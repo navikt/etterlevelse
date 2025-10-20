@@ -14,6 +14,7 @@ import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
 import FormButtons from '@/components/PVK/edit/formButtons'
 import pvkDocumentSchema from '@/components/PVK/form/pvkDocumentSchema'
+import SendtTilPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/sendtTilPvoFields'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
@@ -478,7 +479,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {/* {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
+                {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
                   pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
                   <SendtTilPvoFields
                     pvkDokument={pvkDokument}
@@ -486,7 +487,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     setFieldValue={setFieldValue}
                     submitForm={submitForm}
                   />
-                )} */}
+                )}
 
                 {/* {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
                   <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
