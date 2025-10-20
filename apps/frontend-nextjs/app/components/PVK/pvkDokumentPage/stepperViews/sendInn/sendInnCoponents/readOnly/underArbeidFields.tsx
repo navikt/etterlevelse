@@ -85,7 +85,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
         </Button>
       </div>
 
-      <div className='w-full flex justify-end items-center'>
+      <div className='mt-5 flex gap-2 items-center'>
         <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
       </div>
     </div>

@@ -1,7 +1,6 @@
 'use client'
 
 import { arkiver } from '@/api/p360/p360Api'
-import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
@@ -10,11 +9,12 @@ import {
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { Button, Loader } from '@navikt/ds-react'
+import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { Alert, Button, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 import BeskjedFraRisikoeierReadOnly from '../../readOnlyViews/beskjedFraRisikoeierReadOnly'
-import CopyAndStatusView from './copyAndStatusView'
+import CopyAndExportButtons from './copyAndExportButtons'
 import { BeskjedFraPvoReadOnly } from './readOnly/beskjedFraPvoReadOnly'
 import BeskjedTilPvoReadOnly from './readOnly/beskjedTilPvoReadOnly'
 import BeskjedTilRisikoeierReadOnly from './readOnly/beskjedTilRisikoeierReadOnly'
@@ -60,8 +60,6 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
       <BeskjedFraRisikoeierReadOnly merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier} />
 
-      <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
-
       {errorSummaryComponent}
 
       {isLoading && (
@@ -69,6 +67,12 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
           <Loader size='2xlarge' title='lagrer endringer' />
         </div>
       )}
+
+      <div className='max-w-[75ch]'>
+        <Alert variant='info' className='my-5 '>
+          Status: {pvkDokumentStatusToText(pvkDokument.status)}
+        </Alert>
+      </div>
 
       {isRisikoeierCheck && (
         <div className='mt-5 flex gap-2 items-center'>
@@ -96,9 +100,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='w-full flex justify-end items-center'>
-        <ExportPvkModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-      </div>
+      <CopyAndExportButtons etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
     </div>
   )
 }

@@ -1,8 +1,7 @@
 'use client'
 
 import { arkiver } from '@/api/p360/p360Api'
-import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
-import CopyAndStatusView from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndStatusView'
+import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedFraPvoReadOnly'
 import BeskjedTilPvoReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilPvoReadOnly'
@@ -17,7 +16,8 @@ import {
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { Button } from '@navikt/ds-react'
+import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { Alert, Button } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 
@@ -70,11 +70,15 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
         />
       </div>
 
-      <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
-
       {errorSummaryComponent}
 
       {isLoading && <CenteredLoader />}
+
+      <div className='max-w-[75ch]'>
+        <Alert variant='info' className='my-5 '>
+          Status: {pvkDokumentStatusToText(pvkDokument.status)}
+        </Alert>
+      </div>
 
       <div className='mt-5 flex gap-2 items-center'>
         <LagreOgFortsettSenereButton
@@ -112,9 +116,8 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           </Button>
         )}
       </div>
-      <div className='w-full flex justify-end items-center'>
-        <ExportPvkModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-      </div>
+
+      <CopyAndExportButtons etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
     </div>
   )
 }

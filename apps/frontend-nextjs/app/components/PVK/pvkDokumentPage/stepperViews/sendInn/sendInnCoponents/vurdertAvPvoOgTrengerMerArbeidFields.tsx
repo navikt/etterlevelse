@@ -1,5 +1,4 @@
-import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
-import CopyAndStatusView from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndStatusView'
+import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedFraPvoReadOnly'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
@@ -10,7 +9,8 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Button, Heading } from '@navikt/ds-react'
+import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 
@@ -68,8 +68,6 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
         />
       </div>
 
-      <CopyAndStatusView pvkDokumentStatus={pvkDokument.status} />
-
       {errorSummaryComponent}
 
       {isLoading && (
@@ -77,6 +75,12 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
           <CenteredLoader />
         </div>
       )}
+
+      <div className='max-w-[75ch]'>
+        <Alert variant='info' className='my-5 '>
+          Status: {pvkDokumentStatusToText(pvkDokument.status)}
+        </Alert>
+      </div>
 
       <div className='mt-5 flex gap-2 items-center'>
         <LagreOgFortsettSenereButton
@@ -106,9 +110,8 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
           Lagre og send tilbake til PVO
         </Button>
       </div>
-      <div className='w-full flex justify-end items-center mt-3'>
-        <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
-      </div>
+
+      <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
     </div>
   )
 }

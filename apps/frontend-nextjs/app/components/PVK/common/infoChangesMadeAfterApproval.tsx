@@ -103,12 +103,14 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   return (
     <>
       {isChangesMade && (
-        <Alert variant='info' className='mt-5'>
-          Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
-          <strong>
-            {moment(approvedDate).format('LL')} kl. {approvedTime}
-          </strong>
-        </Alert>
+        <div className='max-w-[75ch]'>
+          <Alert variant='info' className='mt-5'>
+            Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
+            <strong>
+              {moment(approvedDate).format('LL')} kl. {approvedTime}
+            </strong>
+          </Alert>
+        </div>
       )}
     </>
   )
