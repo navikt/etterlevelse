@@ -14,6 +14,7 @@ import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
 import FormButtons from '@/components/PVK/edit/formButtons'
 import pvkDocumentSchema from '@/components/PVK/form/pvkDocumentSchema'
+import PVOUnderArbeidFIelds from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/pvoUnderArbeidFIelds'
 import SendtTilPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/sendtTilPvoFields'
 import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -489,9 +490,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {/* {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
+                {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
                   <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
-                )} */}
+                )}
 
                 {/* {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
                   pvoTilbakemelding && (
