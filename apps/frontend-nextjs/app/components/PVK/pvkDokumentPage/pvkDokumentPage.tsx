@@ -14,6 +14,7 @@ import {
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
@@ -30,6 +31,7 @@ import BehandlingensLivslopView from './stepperViews/behandlingensLivslopView'
 import { IdentifiseringAvRisikoscenarioerOgTiltak } from './stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltak'
 import OppsummeringAvAlleRisikoscenarioerOgTiltak from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltak/oppsummeringAvAlleRisikoscenarioerOgTiltak'
 import OversiktView from './stepperViews/oversiktView'
+import { SendInnView } from './stepperViews/sendInn/sendInnView'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
@@ -82,7 +84,7 @@ export const PvkDokumentPage = () => {
     true
   )
 
-  //const codelist = useContext(CodelistContext)
+  const codelist = useContext(CodelistContext)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -309,22 +311,21 @@ export const PvkDokumentPage = () => {
                     />
                   )}
                   {activeStep === 8 && (
-                    <div>test 8</div>
-                    // <SendInnView
-                    //   pvkDokument={pvkDokument}
-                    //   setPvkDokument={setPvkDokument}
-                    //   personkategorier={personkategorier}
-                    //   databehandlere={databehandlere}
-                    //   updateTitleUrlAndStep={updateTitleUrlAndStep}
-                    //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                    //   pvoTilbakemelding={pvoTilbakemelding}
-                    //   activeStep={activeStep}
-                    //   setSelectedStep={setSelectedStep}
-                    //   setActiveStep={updateTitleUrlAndStep}
-                    //   codelistUtils={codelist.utils}
-                    //   pvkKrav={pvkKrav}
-                    //   isPvkKravLoading={isPvkKravLoading}
-                    // />
+                    <SendInnView
+                      pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
+                      personkategorier={personkategorier}
+                      databehandlere={databehandlere}
+                      updateTitleUrlAndStep={updateTitleUrlAndStep}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      activeStep={activeStep}
+                      setSelectedStep={setSelectedStep}
+                      setActiveStep={updateTitleUrlAndStep}
+                      codelistUtils={codelist.utils}
+                      pvkKrav={pvkKrav}
+                      isPvkKravLoading={isPvkKravLoading}
+                    />
                   )}
                 </div>
               </div>
