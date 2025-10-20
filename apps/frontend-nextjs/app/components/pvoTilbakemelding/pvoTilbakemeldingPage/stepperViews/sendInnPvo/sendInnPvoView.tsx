@@ -1,16 +1,27 @@
 'use client'
 
-import { getPvkDokument } from "@/api/pvkDokument/pvkDokumentApi"
-import { getPvoTilbakemeldingByPvkDokumentId, updatePvoTilbakemelding, mapPvoTilbakemeldingToFormValue, createPvoTilbakemelding } from "@/api/pvoTilbakemelding/pvoTilbakemeldingApi"
-import { sendInnCheck } from "@/components/pvoTilbakemelding/form/pvoSchema"
-import { IEtterlevelseDokumentasjon } from "@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants"
-import { IPvkDokument, EPvkDokumentStatus } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants"
-import { ICode, EListName } from "@/constants/kodeverk/kodeverkConstants"
-import { EPvoTilbakemeldingStatus, IPvoTilbakemelding } from "@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants"
-import { ICodelistProps } from "@/provider/kodeverk/kodeverkProvider"
-import { AxiosError } from "axios"
-import { Formik, Form } from "formik"
-import { FunctionComponent, useState, RefObject, useRef, useEffect } from "react"
+import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
+import {
+  createPvoTilbakemelding,
+  getPvoTilbakemeldingByPvkDokumentId,
+  mapPvoTilbakemeldingToFormValue,
+  updatePvoTilbakemelding,
+} from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
+import { sendInnCheck } from '@/components/pvoTilbakemelding/form/pvoSchema'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
+import { AxiosError } from 'axios'
+import { Form, Formik } from 'formik'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -135,7 +146,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       innerRef={formRef}
     >
       {/* // submitForm, setFieldValue, errors  */}
-      {({ }) => (
+      {({}) => (
         <Form>
           wip
           {/* {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
