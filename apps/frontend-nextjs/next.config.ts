@@ -30,6 +30,26 @@ const nextConfig: NextConfig = {
       // All other routes: handled by Next.js (static, SPA fallback)
     ]
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/dokumentasjon/:id/pvkdokument/:pvkid/:step',
+        destination: '/dokumentasjon/:id/pvkdokument/:pvkid?steg=:step',
+        permanent: true,
+      },
+      {
+        source: '/dokumentasjon/:id/:tema/:relevans/krav/:kravnummer/:kravversjon',
+        destination: '/dokumentasjon/:id/:tema/krav/:kravnummer/:kravversjon',
+        permanent: true,
+      },
+      {
+        source: '/pvkdokument/:pvkid/pvotilbakemelding/:step',
+        destination: '/pvkdokument/:pvkid/pvotilbakemelding?steg=:step',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig
