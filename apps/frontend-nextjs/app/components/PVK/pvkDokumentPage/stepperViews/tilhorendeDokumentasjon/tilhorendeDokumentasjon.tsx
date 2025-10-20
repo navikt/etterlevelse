@@ -2,7 +2,7 @@ import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper
 import FormButtons from '@/components/PVK/edit/formButtons'
 import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
-import TilhorendeDokumentasjonTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/common/tilhorendeDokumentasjonTilbakemeldingReadOnly'
+import TilhorendeDokumentasjonTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'

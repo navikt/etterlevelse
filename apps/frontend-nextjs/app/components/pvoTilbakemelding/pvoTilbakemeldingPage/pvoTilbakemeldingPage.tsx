@@ -23,6 +23,7 @@ import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoView'
 import OversiktPvoView from './stepperViews/oversiktPvoView'
 
 export const StepTitle: string[] = [
@@ -73,7 +74,7 @@ export const PvoTilbakemeldingPage = () => {
   const router = useRouter()
   const formRef: RefObject<any> = useRef(undefined)
   const user = useContext(UserContext)
-  const codelist = useContext(CodelistContext)
+  //const codelist = useContext(CodelistContext)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
@@ -240,18 +241,17 @@ export const PvoTilbakemeldingPage = () => {
                         pvkKrav={pvkKrav}
                       />
                     )}
-                    {
-                      activeStep === 2 && 'BehandlingensLivslopPvoView'
-                      // <BehandlingensLivslopPvoView
-                      //   pvoTilbakemelding={pvoTilbakemelding}
-                      //   pvkDokument={pvkDokument}
-                      //   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      //   activeStep={activeStep}
-                      //   setSelectedStep={setSelectedStep}
-                      //   setActiveStep={updateTitleUrlAndStep}
-                      //   formRef={formRef}
-                      // />
-                    }
+                    {activeStep === 2 && (
+                      <BehandlingensLivslopPvoView
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        pvkDokument={pvkDokument}
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        activeStep={activeStep}
+                        setSelectedStep={setSelectedStep}
+                        setActiveStep={updateTitleUrlAndStep}
+                        formRef={formRef}
+                      />
+                    )}
                     {
                       activeStep === 3 && 'BehandlingensArtOgOmfangPvoView'
                       // <BehandlingensArtOgOmfangPvoView

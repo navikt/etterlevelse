@@ -12,8 +12,8 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { BoolField } from '@/components/common/inputs'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/common/pvoTilbakemeldingReadOnly'
+import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVK,
