@@ -55,6 +55,7 @@ import InvolveringSummary from '../../formSummary/involveringSummary'
 import RisikoscenarioEtterTitak from '../../formSummary/risikoscenarioEtterTitak'
 import RisikoscenarioSummary from '../../formSummary/risikoscenarioSummary'
 import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
+import GodkjentAvRisikoeierFields from './sendInnCoponents/godkjentAvRisikoeierFields'
 import UnderArbeidFields from './sendInnCoponents/readOnly/underArbeidFields'
 import SendInnErrorSummary from './sendInnCoponents/sendInnErrorSummary'
 
@@ -584,7 +585,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     />
                   )}
 
-                {/* {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
                   pvoTilbakemelding && (
                     <GodkjentAvRisikoeierFields
                       pvkDokument={pvkDokument}
@@ -612,7 +613,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         />
                       }
                     />
-                  )} */}
+                  )}
 
                 <InfoChangesMadeAfterApproval
                   pvkDokument={pvkDokument}
