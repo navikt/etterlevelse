@@ -1,14 +1,17 @@
 'use client'
 
-import { IPageResponse } from "@/constants/commonConstants"
-import { TEtterlevelseQL, EEtterlevelseStatus } from "@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants"
-import { TEtterlevelseDokumentasjonQL } from "@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants"
-import { TKravQL } from "@/constants/krav/kravConstants"
-import { behandlingName } from "@/util/behandling/behandlingUtil"
-import { FormSummary, Link, List } from "@navikt/ds-react"
-import { FunctionComponent, useState, useEffect } from "react"
-import FormAlert from "./formAlert"
-import { usePathname } from "next/navigation"
+import { IPageResponse } from '@/constants/commonConstants'
+import {
+  EEtterlevelseStatus,
+  TEtterlevelseQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TKravQL } from '@/constants/krav/kravConstants'
+import { behandlingName } from '@/util/behandling/behandlingUtil'
+import { FormSummary, Link, List } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { FunctionComponent, useEffect, useState } from 'react'
+import FormAlert from './formAlert'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -50,10 +53,7 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
         <FormSummary.Heading level='2' id='behandlingensLivslop'>
           Tilhørende dokumentasjon
         </FormSummary.Heading>
-        <Link
-          className='cursor-pointer'
-          href={`${pathName}?steg=4`}
-        >
+        <Link className='cursor-pointer' href={`${pathName}?steg=4`}>
           Les detaljer
         </Link>
       </FormSummary.Header>
