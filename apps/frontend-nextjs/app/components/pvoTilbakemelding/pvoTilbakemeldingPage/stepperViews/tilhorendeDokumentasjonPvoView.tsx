@@ -10,7 +10,7 @@ import {
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoFormButtons from '../../form/pvoFormButtons'
-import TilhorendeDokumentasjonForm from '../../form/xilhorendeDokumentasjonPvoTilbakemeldingForm'
+import TilhorendeDokumentasjonPvoTilbakemeldingForm from '../../form/tilhorendeDokumentasjonPvoTilbakemeldingForm'
 import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../../readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
 
 type TProps = {
@@ -54,7 +54,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
           <div className='w-1/2'>
             <PvoSidePanelWrapper>
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-                <TilhorendeDokumentasjonForm
+                <TilhorendeDokumentasjonPvoTilbakemeldingForm
                   pvkDokumentId={pvkDokumentId}
                   initialValue={pvoTilbakemelding.tilhorendeDokumentasjon}
                   formRef={formRef}

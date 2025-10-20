@@ -22,10 +22,10 @@ import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import TilhorendeDokumentasjonPvoView from './stepperViews/tilhorendeDokumentasjonPvoView'
 import BehandlingensArtOgOmfangPvoView from './stepperViews/behandlingensArtOgOmfangPvoView'
 import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoView'
 import OversiktPvoView from './stepperViews/oversiktPvoView'
-import TilhorendeDokumentasjonPvoView from './stepperViews/xilhorendeDokumentasjonPvoView'
 
 export const StepTitle: string[] = [
   'Oversikt og status',
