@@ -80,7 +80,7 @@ export const pvkDokumenteringPvoTilbakemeldingUrl = (
   step: number,
   filter?: string
 ): string => {
-  const url: string = `${personvernKonsekvensvurderingUrl}/${pvkDokumentId}/pvotilbakemelding/${step}`
+  const url: string = `${personvernKonsekvensvurderingUrl}/${pvkDokumentId}/pvotilbakemelding?steg=${step}`
 
   if (filter) {
     return `${url}${filter}`
