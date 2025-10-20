@@ -1,7 +1,7 @@
 import { ListPageHeader } from '@/components/krav/kravlistePage/listPageHeader/listPageHeader'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
-import PvoTabs from './pvoTabs'
+import PvoTabs from './pvoTabs/pvoTabs'
 
 export const PvoOversiktPage = () => {
   return (

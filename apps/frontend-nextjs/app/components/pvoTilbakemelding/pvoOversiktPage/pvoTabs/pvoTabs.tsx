@@ -1,5 +1,7 @@
 'use client'
 
+import PvoSistRedigertView from '@/components/pvoTilbakemelding/pvoOversiktPage/pvoTabs/pvoSistRedigertView'
+import { PvoTilbakemeldingsList } from '@/components/pvoTilbakemelding/pvoOversiktPage/pvoTabs/pvoTilbakemeldingsList'
 import { pvoTabQueryUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { Tabs } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -33,12 +35,10 @@ const PvoTabs = () => {
         <Tabs.Tab value='alle' label='Alle PVKer' />
       </Tabs.List>
       <Tabs.Panel value='siste'>
-        PvoSistRedigertView
-        {/* <PvoSistRedigertView /> */}
+        <PvoSistRedigertView />
       </Tabs.Panel>
       <Tabs.Panel value='alle'>
-        PvoTilbakemeldingsList
-        {/* <PvoTilbakemeldingsList /> */}
+        <PvoTilbakemeldingsList />
       </Tabs.Panel>
     </Tabs>
   )

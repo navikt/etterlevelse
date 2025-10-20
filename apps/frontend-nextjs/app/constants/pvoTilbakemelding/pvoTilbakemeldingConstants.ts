@@ -1,3 +1,4 @@
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IDomainObject } from '../commonConstants'
 import { ITeamResource } from '../teamkatalogen/teamkatalogConstants'
 
@@ -52,4 +53,11 @@ export interface ITilhorendeDokumentasjonTilbakemelding {
   kravDokumentasjonTilbakemelding: string
   risikovurderingTilstrekkelig: string
   risikovurderingTilbakemelding: string
+}
+
+export type TPvoTilbakemeldingQL = IPvoTilbakemelding & {
+  pvkDokumentStatus: string
+  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjonData: TEtterlevelseDokumentasjonQL
+  sistEndretAvMeg: string
 }
