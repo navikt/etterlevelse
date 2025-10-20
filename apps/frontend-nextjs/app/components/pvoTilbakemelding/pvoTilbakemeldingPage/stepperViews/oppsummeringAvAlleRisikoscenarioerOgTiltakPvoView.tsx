@@ -176,12 +176,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
 
   const onTabChange = (tabQuery: string): void => {
     const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-    setNavigateUrl(pvkDokumentasjonTabFilterUrl(tabQuery, filter, tabValues.risikoscenarioer))
+    const paramQuery: string = tabQuery === tabValues.risikoscenarioer ? filter : ''
+
+    setNavigateUrl(pvkDokumentasjonTabFilterUrl(stegQuery, tabQuery, paramQuery))
 
     if (formRef.current?.dirty) {
       setIsUnsaved(true)
     } else {
-      router.push(pvkDokumentasjonTabFilterUrl(tabQuery, filter, tabValues.risikoscenarioer), {
+      router.push(pvkDokumentasjonTabFilterUrl(stegQuery, tabQuery, paramQuery), {
         scroll: false,
       })
     }
