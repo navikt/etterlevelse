@@ -1,5 +1,10 @@
 import MailLogAdminPage from '@/components/admin/sentEpostLog/MailLogAdminPage'
+import AuthCheckComponent from '@/components/common/authCheckComponent'
 
-const Page = () => <MailLogAdminPage />
+const Page = () => (
+  <AuthCheckComponent adminPage>
+    <MailLogAdminPage />
+  </AuthCheckComponent>
+)
 
 export default Page

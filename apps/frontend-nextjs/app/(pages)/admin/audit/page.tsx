@@ -1,5 +1,10 @@
 import VersjoneringAdminPage from '@/components/admin/versjonering/VersjoneringAdminPage'
+import AuthCheckComponent from '@/components/common/authCheckComponent'
 
-const Page = () => <VersjoneringAdminPage />
+const Page = () => (
+  <AuthCheckComponent adminPage>
+    <VersjoneringAdminPage />
+  </AuthCheckComponent>
+)
 
 export default Page

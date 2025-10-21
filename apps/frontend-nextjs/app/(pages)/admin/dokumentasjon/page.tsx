@@ -1,5 +1,10 @@
 import EtterlevelseDokumentasjonAdminPage from '@/components/admin/etterlevelseDokumentasjon/EtterlevelseDokumentasjonAdminPage'
+import AuthCheckComponent from '@/components/common/authCheckComponent'
 
-const Page = () => <EtterlevelseDokumentasjonAdminPage />
+const Page = () => (
+  <AuthCheckComponent adminPage>
+    <EtterlevelseDokumentasjonAdminPage />
+  </AuthCheckComponent>
+)
 
 export default Page
