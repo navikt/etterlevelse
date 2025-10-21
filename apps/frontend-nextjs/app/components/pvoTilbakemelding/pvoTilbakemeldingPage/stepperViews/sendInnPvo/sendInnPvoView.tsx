@@ -145,11 +145,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       validationSchema={sendInnCheck}
       innerRef={formRef}
     >
-      {/* // submitForm, setFieldValue, errors  */}
-      {({}) => (
+      {({ submitForm, setFieldValue, errors }) => (
         <Form>
-          wip
-          {/* {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+          {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
             <SendInnPvoViewIkkeFerdig
               submitForm={submitForm}
               setFieldValue={setFieldValue}
@@ -185,7 +183,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               sucessSubmit={sucessSubmit}
               setSuccessSubmit={setSuccessSubmit}
             />
-          )} */}
+          )}
         </Form>
       )}
     </Formik>
