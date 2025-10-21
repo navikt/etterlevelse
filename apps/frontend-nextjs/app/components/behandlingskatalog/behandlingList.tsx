@@ -14,7 +14,7 @@ export const BehandlingList = (props: IProps) => {
   return (
     <div className='flex gap-2 mb-2.5'>
       <div>
-        <Label size='medium'>Behandlinger:</Label>
+        <Label size='medium'>Behandlinger: lkjgsldks</Label>
       </div>
       <div>
         {behandlingIds?.length >= 1 &&
