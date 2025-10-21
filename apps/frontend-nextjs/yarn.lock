@@ -1531,17 +1531,17 @@
     "@emnapi/runtime" "^1.5.0"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@^7.32.1", "@navikt/aksel-icons@^7.32.3":
+"@navikt/aksel-icons@^7.32.3":
   version "7.32.3"
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.32.3.tgz#cae4a9d7f509452709ad48644ad5a915daf2a0ba"
   integrity sha512-l78szC7BHSp0pVv5qSZYZO0uQxltN1DyHODMjeqRBQUdctxA+5+WziGZiYohrSLQTgT3VJmy7btnq5A76smRhQ==
 
-"@navikt/ds-css@^7.32.1":
+"@navikt/ds-css@^7.32.3":
   version "7.32.3"
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.32.3.tgz#6be2189f2bb288fba3acc03425281b1aed86f4aa"
   integrity sha512-g2aGpLjD/l5y9nHao4iKrAZj+fEEjBQMTtZnjKDemGNxrvvOuVAOHq0AyBDbhZNOx5rFfYl3hGeC6hYLPdQzfw==
 
-"@navikt/ds-react@^7.32.1":
+"@navikt/ds-react@^7.32.3":
   version "7.32.3"
   resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.32.3.tgz#694174881def4ac7ac309b1e20fde480670fdfc6"
   integrity sha512-dYQJtpnYfDYUgHy3mxhIG3pSwFIyh2Kg9z6k9O84ua+bI31R94F/7uRaPUqPISBtsSw1ve8us4UUN/2LtWYsRg==
@@ -1554,7 +1554,7 @@
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tailwind@^7.32.1":
+"@navikt/ds-tailwind@^7.32.3":
   version "7.32.3"
   resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.32.3.tgz#dec8907913a219850d90238acdb6e39666dd7dea"
   integrity sha512-1vJG+pSb9YqHCqkY5uX5zntywAnjvH8XIaXdXM4b9IOLHGpa2UP0VOqQgw2bxUAKkECB7CU1oQWC6mtwihxB/A==
