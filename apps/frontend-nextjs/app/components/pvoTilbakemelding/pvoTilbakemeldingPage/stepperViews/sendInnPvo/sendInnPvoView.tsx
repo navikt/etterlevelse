@@ -22,6 +22,8 @@ import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import SendInnPvoViewFerdig from './sendInnPvoViewFerdig'
+import SendInnPvoViewIkkeFerdig from './sendInnPvoViewIkkeFerdig'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

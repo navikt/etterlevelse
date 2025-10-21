@@ -1,19 +1,36 @@
 'use client'
 
-import { arkiver } from "@/api/p360/p360Api"
-import { TextAreaField } from "@/components/common/textAreaField/textAreaField"
-import AlertPvoModal from "@/components/pvoTilbakemelding/common/alertPvoModal"
-import PvoFormButtons from "@/components/pvoTilbakemelding/form/pvoFormButtons"
-import { BeskjedFraEtterleverReadOnly } from "@/components/pvoTilbakemelding/readOnly/beskjedFraEtterleverReadOnly"
-import { IEtterlevelseDokumentasjon } from "@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants"
-import { IPvkDokument } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants"
-import { ICode } from "@/constants/kodeverk/kodeverkConstants"
-import { IPvoTilbakemelding, EPvoTilbakemeldingStatus } from "@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants"
-import { RadioGroup, Radio, CheckboxGroup, Checkbox, Button, Alert } from "@navikt/ds-react"
-import { FormikErrors, Field, FieldProps } from "formik"
-import _ from "lodash"
-import { SetStateAction, Dispatch, RefObject, FunctionComponent, useState, useRef, useEffect } from "react"
-
+import { arkiver } from '@/api/p360/p360Api'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
+import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
+import {
+  FieldRadioLayout,
+  IndentLayoutTextField,
+} from '@/components/pvoTilbakemelding/form/pvoFieldLayout'
+import PvoFormButtons from '@/components/pvoTilbakemelding/form/pvoFormButtons'
+import PvoFormErrors from '@/components/pvoTilbakemelding/form/pvoFormErrors'
+import { BeskjedFraEtterleverReadOnly } from '@/components/pvoTilbakemelding/readOnly/beskjedFraEtterleverReadOnly'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { ICode } from '@/constants/kodeverk/kodeverkConstants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { env } from '@/util/env/env'
+import { Alert, Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
+import { Field, FieldProps, FormikErrors } from 'formik'
+import _ from 'lodash'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -243,7 +260,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           </div>
         </div>
 
-        <CopyButtonCommon />
+        <CopyLinkPvoButton />
 
         {sucessSubmit && (
           <Alert variant='success' closeButton onClose={() => setSuccessSubmit(false)}>
@@ -260,11 +277,17 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           submitForm={submitForm}
           customButtons={
             <div className='mt-5 flex gap-2 items-center'>
-              <LagreFortsettSenereButton
-                setFieldValue={setFieldValue}
-                setSubmittedStatus={setSubmittedStatus}
-                submitForm={submitForm}
-              />
+              <Button
+                type='button'
+                variant='secondary'
+                onClick={async () => {
+                  await setFieldValue('status', EPvoTilbakemeldingStatus.UNDERARBEID)
+                  setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
+                  await submitForm()
+                }}
+              >
+                Lagre og fortsett senere
+              </Button>
 
               <Button
                 type='button'
@@ -272,7 +295,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                   setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                   await submitForm().then(async () => {
-                    if (!isDev) {
+                    if (!env.isDev) {
                       await arkiver(etterlevelseDokumentasjon.id, true, true, false)
                     }
                   })

@@ -1,5 +1,5 @@
-import { FilesIcon } from "@navikt/aksel-icons";
-import { CopyButton } from "@navikt/ds-react";
+import { FilesIcon } from '@navikt/aksel-icons'
+import { CopyButton } from '@navikt/ds-react'
 
 export const CopyLinkPvoButton = () => (
   <CopyButton

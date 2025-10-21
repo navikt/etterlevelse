@@ -1,18 +1,23 @@
-import { arkiver } from "@/api/p360/p360Api"
-import DataTextWrapper from "@/components/common/DataTextWrapper/DataTextWrapper"
-import { Markdown } from "@/components/common/markdown/markdown"
-import AlertPvoModal from "@/components/pvoTilbakemelding/common/alertPvoModal"
-import { CopyLinkPvoButton } from "@/components/pvoTilbakemelding/common/copyLinkPvoButton"
-import PvoFormButtons from "@/components/pvoTilbakemelding/form/pvoFormButtons"
-import { BeskjedFraEtterleverReadOnly } from "@/components/pvoTilbakemelding/readOnly/beskjedFraEtterleverReadOnly"
-import { IPvkDokument } from "@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants"
-import { ICode } from "@/constants/kodeverk/kodeverkConstants"
-import { IPvoTilbakemelding, EPvoTilbakemeldingStatus } from "@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants"
-import { Label, BodyLong, Alert, Button } from "@navikt/ds-react"
-import { FormikErrors } from "formik"
-import { SetStateAction, Dispatch, FunctionComponent } from "react"
+'use client'
 
-
+import { arkiver } from '@/api/p360/p360Api'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import { Markdown } from '@/components/common/markdown/markdown'
+import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
+import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
+import PvoFormButtons from '@/components/pvoTilbakemelding/form/pvoFormButtons'
+import { BeskjedFraEtterleverReadOnly } from '@/components/pvoTilbakemelding/readOnly/beskjedFraEtterleverReadOnly'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { ICode } from '@/constants/kodeverk/kodeverkConstants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
+import { env } from '@/util/env/env'
+import { Alert, BodyLong, Button, Label } from '@navikt/ds-react'
+import { FormikErrors } from 'formik'
+import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -51,6 +56,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   sucessSubmit,
   setSuccessSubmit,
 }) => {
+  const user = useContext(UserContext)
   const getPvoVurdering = () => {
     const vurderingen = pvoVurderingList.filter(
       (vurdering) => vurdering.code === pvoTilbakemelding.pvoVurdering
@@ -175,7 +181,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
                 <Button
                   type='button'
                   onClick={async () => {
-                    if (!isDev) {
+                    if (!env.isDev) {
                       await arkiver(pvkDokument.etterlevelseDokumentId, true, true, false)
                     }
                   }}
