@@ -10,6 +10,13 @@ type TProps = {
   upperRightField: string
   changeStamp: string
 }
+interface IPropsLayout2 {
+  id: string
+  url: string
+  title: string
+  status: JSX.Element
+  changeStamp: string
+}
 
 export const ListLayout: FunctionComponent<TProps> = ({
   id,
@@ -37,6 +44,23 @@ export const ListLayout: FunctionComponent<TProps> = ({
           </BodyShort>
           <BodyShort size='small'>{changeStamp}</BodyShort>
         </div>
+      </LinkPanel.Title>
+    </LinkPanel>
+  </List.Item>
+)
+
+export const ListLayout2 = ({ id, url, title, status, changeStamp }: IPropsLayout2) => (
+  <List.Item icon={<div />} className='mb-2' key={id}>
+    <LinkPanel href={url}>
+      <LinkPanel.Title className='flex items-center'>
+        <div className='max-w-[75ch] w-full'>
+          <BodyLong>
+            <Label>{title}</Label>
+          </BodyLong>
+          <BodyShort size='small'>{changeStamp}</BodyShort>
+        </div>
+        <Spacer />
+        <div className='mr-5'>{status}</div>
       </LinkPanel.Title>
     </LinkPanel>
   </List.Item>

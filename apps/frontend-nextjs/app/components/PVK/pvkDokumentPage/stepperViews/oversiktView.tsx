@@ -1,3 +1,5 @@
+'use client'
+
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
@@ -24,6 +26,7 @@ import {
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { Alert, BodyShort, FormSummary, Heading, List, ReadMore, Tag } from '@navikt/ds-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { FunctionComponent, JSX, useEffect, useState } from 'react'
 import FormSummaryPanel from '../../common/formSummaryPanel'
 import FormButtons from '../../edit/formButtons'
@@ -156,6 +159,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
   updateTitleUrlAndStep,
   pvkKrav,
 }) => {
+  const pathName = usePathname()
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
@@ -347,7 +351,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
               <FormSummary.Value>
                 <Link
                   onClick={() => updateTitleUrlAndStep(2)}
-                  href={window.location.pathname.slice(0, -1) + 2}
+                  href={`${pathName}?steg=2`}
                   className='cursor-pointer'
                 >
                   Behandlingens livsløp
@@ -392,7 +396,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
             </FormSummary.Answer>
 
             {StepTitle.slice(2).map((title: string, index: number) => {
-              let panelHref: string = window.location.pathname.slice(0, -1) + (index + 3)
+              let panelHref: string = `${pathName}?steg=${index + 3}`
               if (index + 3 === 7) {
                 panelHref += risikoscenarioFilterAlleUrl()
               }
