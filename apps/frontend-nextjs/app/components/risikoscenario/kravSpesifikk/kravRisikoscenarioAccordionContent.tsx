@@ -12,7 +12,7 @@ import {
   deleteTiltak,
   getTiltak,
 } from '@/api/tiltak/tiltakApi'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { LeggTilEksisterendeTiltak } from '@/components/tiltak/edit/leggTilEksisterendeTiltak'
 import TiltakForm from '@/components/tiltak/form/tiltakForm'
 import TiltakReadMoreList from '@/components/tiltak/tiltakReadMoreList'

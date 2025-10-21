@@ -3,7 +3,7 @@
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {

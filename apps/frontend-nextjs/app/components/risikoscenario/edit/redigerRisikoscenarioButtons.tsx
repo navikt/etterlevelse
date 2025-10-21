@@ -1,7 +1,7 @@
 'use client'
 
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'

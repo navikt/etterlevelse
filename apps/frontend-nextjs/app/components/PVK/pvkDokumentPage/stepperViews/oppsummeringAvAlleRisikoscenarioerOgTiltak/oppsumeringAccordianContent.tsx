@@ -3,7 +3,7 @@
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import VurdereTiltaksEffekt from '@/components/PVK/edit/vurdereTiltaksEffekt'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '@/components/risikoscenario/common/risikoscenarioTiltakHeader'
 import RisikoscenarioModalForm from '@/components/risikoscenario/form/risikoscenarioModalForm'

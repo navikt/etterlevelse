@@ -15,7 +15,7 @@ import behandlingensLivslopSchema from '@/components/behandlingensLivslop/form/b
 import BehandlingensLivsLopSidePanel from '@/components/behandlingensLivslop/sidePanel/BehandlingensLivsLopSidePanel'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { IBehandlingensLivslopRequest } from '@/constants/behandlingensLivslop/behandlingensLivslop'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'

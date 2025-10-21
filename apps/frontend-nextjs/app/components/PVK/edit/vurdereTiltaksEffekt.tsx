@@ -8,7 +8,7 @@ import {
 } from '@/api/risikoscenario/risikoscenarioApi'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import RisikoscenarioKonsekvensnivaaReadMore from '@/components/risikoscenario/common/risikoscenarioKonsekvensnivaaReadMore'
 import RisikoscenarioSannsynlighetReadMore from '@/components/risikoscenario/common/risikoscenarioSannsynlighetReadMore'
 import RisikoscenarioTag from '@/components/risikoscenario/common/risikoscenarioTag'

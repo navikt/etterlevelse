@@ -48,7 +48,7 @@ import {
   StickyFooterButtonLayout,
 } from '../others/layout/content/content'
 import { PageLayout } from '../others/scaffold/scaffold'
-import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import BehandlingensLivslopReadOnlyContent from './content/behandlingensLivslopReadOnlyContent'
 import BehandlingensLivslopTextContent from './content/behandlingensLivslopTextContent'
 import CustomFileUpload from './fileUpload/customFileUpload'

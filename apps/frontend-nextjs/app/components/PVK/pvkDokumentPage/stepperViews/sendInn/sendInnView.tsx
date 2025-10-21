@@ -19,7 +19,7 @@ import SendtTilPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sen
 import TrengerRisikoeierGodkjenningFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/trengerRisikoeierGodkjenningFields'
 import VurdertAvPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoOgTrengerMerArbeidFields'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {

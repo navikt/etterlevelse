@@ -8,7 +8,7 @@ import {
   removeTiltakToRisikoscenario,
 } from '@/api/risikoscenario/risikoscenarioApi'
 import { deleteTiltak, getTiltak } from '@/api/tiltak/tiltakApi'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'

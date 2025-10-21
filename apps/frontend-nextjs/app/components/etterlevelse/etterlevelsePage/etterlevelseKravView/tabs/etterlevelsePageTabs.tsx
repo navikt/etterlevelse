@@ -8,7 +8,7 @@ import {
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
 import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import {
   EEtterlevelseStatus,
   IEtterlevelse,
