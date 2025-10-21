@@ -13,7 +13,7 @@
     "@navikt/aksel-icons": "7.32.2",
     "@navikt/ds-css": "7.32.2",
     "@navikt/ds-react": "7.32.2",
-    "@navikt/ds-tailwind": "7.32.2",
+    "@navikt/ds-tailwind": "7.32.3",
     "@tailwindcss/postcss": "4.1.14",
     "@trivago/prettier-plugin-sort-imports": "5.2.2",
     "@types/draft-js": "0.11.18",
