@@ -19,7 +19,7 @@ import SendtTilPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sen
 import TrengerRisikoeierGodkjenningFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/trengerRisikoeierGodkjenningFields'
 import VurdertAvPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoOgTrengerMerArbeidFields'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -350,7 +350,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   return (
     <div>
       {isPvoAlertModalOpen && (
-        <AlertPvoUnderarbeidModal
+        <AlertPvoUnderArbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => {
             setIsPvoAlertModalOpen(false)

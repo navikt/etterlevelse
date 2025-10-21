@@ -10,7 +10,7 @@ import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
 import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
@@ -300,7 +300,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         )}
       </Formik>
 
-      <AlertPvoUnderarbeidModal
+      <AlertPvoUnderArbeidModal
         isOpen={isPvoAlertModalOpen}
         onClose={() => setIsPvoAlertModalOpen(false)}
         pvkDokumentId={pvkDokument.id}

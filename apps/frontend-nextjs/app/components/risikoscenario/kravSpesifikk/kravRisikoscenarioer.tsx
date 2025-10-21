@@ -3,7 +3,7 @@
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -264,7 +264,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
             )}
 
             {isPvoAlertModalOpen && (
-              <AlertPvoUnderarbeidModal
+              <AlertPvoUnderArbeidModal
                 isOpen={isPvoAlertModalOpen}
                 onClose={() => setIsPvoAlertModalOpen(false)}
                 pvkDokumentId={pvkDokument.id}

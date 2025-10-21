@@ -11,7 +11,7 @@ import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, ReadMore } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useEffect, useState } from 'react'
-import AlertPvoUnderarbeidModal from '../pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import TiltakView from './common/tiltakView'
 import SlettTiltakModal from './edit/slettTiltakModal'
 import TiltakForm from './form/tiltakForm'
@@ -240,7 +240,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
       </div>
 
       {isPvoAlertModalOpen && (
-        <AlertPvoUnderarbeidModal
+        <AlertPvoUnderArbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => setIsPvoAlertModalOpen(false)}
           pvkDokumentId={risikoscenario.pvkDokumentId}

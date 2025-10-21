@@ -1,7 +1,7 @@
 'use client'
 
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
@@ -69,7 +69,7 @@ export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
       />
 
       {isPvoAlertModalOpen && (
-        <AlertPvoUnderarbeidModal
+        <AlertPvoUnderArbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => setIsPvoAlertModalOpen(false)}
           pvkDokumentId={risikoscenario.pvkDokumentId}

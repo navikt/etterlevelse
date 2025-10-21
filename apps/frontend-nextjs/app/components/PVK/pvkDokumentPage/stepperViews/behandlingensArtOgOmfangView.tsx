@@ -12,7 +12,7 @@ import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepper
 import { BoolField } from '@/components/common/inputs'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -301,7 +301,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                 </Form>
               )}
             </Formik>
-            <AlertPvoUnderarbeidModal
+            <AlertPvoUnderArbeidModal
               isOpen={isPvoAlertModalOpen}
               onClose={() => setIsPvoAlertModalOpen(false)}
               pvkDokumentId={pvkDokument.id}

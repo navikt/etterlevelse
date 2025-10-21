@@ -8,7 +8,7 @@ import {
   removeTiltakToRisikoscenario,
 } from '@/api/risikoscenario/risikoscenarioApi'
 import { deleteTiltak, getTiltak } from '@/api/tiltak/tiltakApi'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'
@@ -204,7 +204,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
       )}
 
       {isPvoAlertModalOpen && (
-        <AlertPvoUnderarbeidModal
+        <AlertPvoUnderArbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => setIsPvoAlertModalOpen(false)}
           pvkDokumentId={risikoscenario.pvkDokumentId}

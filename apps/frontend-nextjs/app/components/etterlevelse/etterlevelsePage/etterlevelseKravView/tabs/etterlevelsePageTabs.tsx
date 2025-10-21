@@ -8,7 +8,7 @@ import {
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
 import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import {
   EEtterlevelseStatus,
   IEtterlevelse,
@@ -214,7 +214,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
       )}
 
       {pvkDokument && isPvoAlertModalOpen && (
-        <AlertPvoUnderarbeidModal
+        <AlertPvoUnderArbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => setIsPvoAlertModalOpen(false)}
           pvkDokumentId={pvkDokument.id}

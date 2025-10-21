@@ -48,7 +48,7 @@ import {
   StickyFooterButtonLayout,
 } from '../others/layout/content/content'
 import { PageLayout } from '../others/scaffold/scaffold'
-import AlertPvoUnderarbeidModal from '../pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import BehandlingensLivslopReadOnlyContent from './content/behandlingensLivslopReadOnlyContent'
 import BehandlingensLivslopTextContent from './content/behandlingensLivslopTextContent'
 import CustomFileUpload from './fileUpload/customFileUpload'
@@ -329,7 +329,7 @@ export const BehandlingensLivslopPage = () => {
                     )}
                   </Formik>
                   {pvkDokument && (
-                    <AlertPvoUnderarbeidModal
+                    <AlertPvoUnderArbeidModal
                       isOpen={isPvoAlertModalOpen}
                       onClose={() => {
                         setIsPvoAlertModalOpen(false)

@@ -3,7 +3,7 @@
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import VurdereTiltaksEffekt from '@/components/PVK/edit/vurdereTiltaksEffekt'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderxArbeidModal'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '@/components/risikoscenario/common/risikoscenarioTiltakHeader'
 import RisikoscenarioModalForm from '@/components/risikoscenario/form/risikoscenarioModalForm'
@@ -154,7 +154,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
       )}
 
       {isPvoAlertModalOpen && (
-        <AlertPvoUnderarbeidModal
+        <AlertPvoUnderArbeidModal
           isOpen={isPvoAlertModalOpen}
           onClose={() => setIsPvoAlertModalOpen(false)}
           pvkDokumentId={risikoscenario.pvkDokumentId}

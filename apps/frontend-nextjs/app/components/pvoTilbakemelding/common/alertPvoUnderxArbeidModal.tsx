@@ -12,7 +12,7 @@ type TProps = {
   pvkDokumentId: string
 }
 
-export const AlertPvoUnderarbeidModal: FunctionComponent<TProps> = ({
+export const AlertPvoUnderArbeidModal: FunctionComponent<TProps> = ({
   isOpen,
   onClose,
   pvkDokumentId,
@@ -63,4 +63,4 @@ export const AlertPvoUnderarbeidModal: FunctionComponent<TProps> = ({
   )
 }
 
-export default AlertPvoUnderarbeidModal
+export default AlertPvoUnderArbeidModal
