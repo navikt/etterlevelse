@@ -7,7 +7,7 @@ import {
   updateRisikoscenario,
 } from '@/api/risikoscenario/risikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '@/api/tiltak/tiltakApi'
-import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/alertPvoUnderarbeidModal'
+import AlertPvoUnderarbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderarbeidModal'
 import LeggTilEksisterendeTiltak from '@/components/tiltak/edit/leggTilEksisterendeTiltak'
 import TiltakForm from '@/components/tiltak/form/tiltakForm'
 import TiltakReadMoreList from '@/components/tiltak/tiltakReadMoreList'

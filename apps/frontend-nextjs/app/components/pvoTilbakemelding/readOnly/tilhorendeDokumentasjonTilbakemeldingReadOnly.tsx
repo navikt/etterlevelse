@@ -1,12 +1,9 @@
 import { Markdown } from '@/components/common/markdown/markdown'
-import {
-  EBidragVerdier,
-  bidragsVerdierToText,
-} from '@/components/pvoTilbakemelding/common/pvoTilbakemeldingReadOnly'
 import { ITilhorendeDokumentasjonTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
+import { EBidragVerdier, bidragsVerdierToText } from './pvoTilbakemeldingReadOnly'
 
 type TProps = {
   tilbakemeldingsinnhold: ITilhorendeDokumentasjonTilbakemelding

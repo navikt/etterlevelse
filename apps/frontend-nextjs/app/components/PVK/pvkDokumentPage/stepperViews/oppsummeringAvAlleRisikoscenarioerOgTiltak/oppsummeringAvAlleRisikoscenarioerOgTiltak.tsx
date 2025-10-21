@@ -3,7 +3,7 @@
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/common/pvoTilbakemeldingReadOnly'
+import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
 import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
 import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
