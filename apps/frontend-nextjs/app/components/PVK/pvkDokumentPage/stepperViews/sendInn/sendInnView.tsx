@@ -457,115 +457,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   savnerVurderingError={savnerVurderingError}
                 />
 
-                {underarbeidCheck && (
-                  <UnderArbeidFields
-                    pvkDokument={pvkDokument}
-                    isLoading={isLoading}
-                    setFieldValue={setFieldValue}
-                    submitForm={submitForm}
-                    initialStatus={initialValues.status}
-                    errorSummaryRef={errorSummaryRef}
-                    errorSummaryComponent={
-                      <SendInnErrorSummary
-                        errors={errors}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                        risikoeiereDataError={risikoeiereDataError}
-                        avdelingError={avdelingError}
-                        medlemError={medlemError}
-                        behandlingensLivslopError={behandlingensLivslopError}
-                        risikoscenarioError={risikoscenarioError}
-                        tiltakError={tiltakError}
-                        pvkKravError={pvkKravError}
-                        savnerVurderingError={savnerVurderingError}
-                        manglerBehandlingError={manglerBehandlingError}
-                        errorSummaryRef={errorSummaryRef}
-                      />
-                    }
-                  />
-                )}
-
-                {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
-                  pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
-                  <SendtTilPvoFields
-                    pvkDokument={pvkDokument}
-                    isLoading={isLoading}
-                    setFieldValue={setFieldValue}
-                    submitForm={submitForm}
-                  />
-                )}
-
-                {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
-                  <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
-                )}
-
-                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
-                  pvoTilbakemelding && (
-                    <VurdertAvPvoOgTrengerMerArbeidFields
+                <div className='flex justify-center'>
+                  {underarbeidCheck && (
+                    <UnderArbeidFields
                       pvkDokument={pvkDokument}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      setFieldValue={setFieldValue}
-                      submitForm={submitForm}
-                      initialStatus={initialValues.status}
-                      isLoading={isLoading}
-                      pvoVurderingList={pvoVurderingList}
-                      errorSummaryComponent={
-                        <SendInnErrorSummary
-                          errors={errors}
-                          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                          risikoeiereDataError={risikoeiereDataError}
-                          avdelingError={avdelingError}
-                          medlemError={medlemError}
-                          behandlingensLivslopError={behandlingensLivslopError}
-                          risikoscenarioError={risikoscenarioError}
-                          tiltakError={tiltakError}
-                          pvkKravError={pvkKravError}
-                          savnerVurderingError={savnerVurderingError}
-                          manglerBehandlingError={manglerBehandlingError}
-                          errorSummaryRef={errorSummaryRef}
-                        />
-                      }
-                    />
-                  )}
-
-                {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO && pvoTilbakemelding && (
-                  <VurdertAvPvoFields
-                    pvkDokument={pvkDokument}
-                    pvoTilbakemelding={pvoTilbakemelding}
-                    setFieldValue={setFieldValue}
-                    submitForm={submitForm}
-                    initialStatus={initialValues.status}
-                    isLoading={isLoading}
-                    pvoVurderingList={pvoVurderingList}
-                    errorSummaryComponent={
-                      <SendInnErrorSummary
-                        errors={errors}
-                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                        risikoeiereDataError={risikoeiereDataError}
-                        avdelingError={avdelingError}
-                        medlemError={medlemError}
-                        behandlingensLivslopError={behandlingensLivslopError}
-                        risikoscenarioError={risikoscenarioError}
-                        tiltakError={tiltakError}
-                        pvkKravError={pvkKravError}
-                        savnerVurderingError={savnerVurderingError}
-                        manglerBehandlingError={manglerBehandlingError}
-                        errorSummaryRef={errorSummaryRef}
-                      />
-                    }
-                  />
-                )}
-
-                {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
-                  pvoTilbakemelding && (
-                    <TrengerRisikoeierGodkjenningFields
-                      pvkDokument={pvkDokument}
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvoTilbakemelding={pvoTilbakemelding}
                       isLoading={isLoading}
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
                       initialStatus={initialValues.status}
-                      pvoVurderingList={pvoVurderingList}
+                      errorSummaryRef={errorSummaryRef}
                       errorSummaryComponent={
                         <SendInnErrorSummary
                           errors={errors}
@@ -585,42 +485,145 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     />
                   )}
 
-                {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-                  pvoTilbakemelding && (
-                    <GodkjentAvRisikoeierFields
+                  {(pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
+                    pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
+                    <SendtTilPvoFields
                       pvkDokument={pvkDokument}
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvoTilbakemelding={pvoTilbakemelding}
                       isLoading={isLoading}
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
-                      pvoVurderingList={pvoVurderingList}
-                      setAngretAvRisikoeier={setAngretAvRisikoeier}
-                      errorSummaryComponent={
-                        <SendInnErrorSummary
-                          errors={errors}
-                          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                          risikoeiereDataError={risikoeiereDataError}
-                          avdelingError={avdelingError}
-                          medlemError={medlemError}
-                          behandlingensLivslopError={behandlingensLivslopError}
-                          risikoscenarioError={risikoscenarioError}
-                          tiltakError={tiltakError}
-                          pvkKravError={pvkKravError}
-                          savnerVurderingError={savnerVurderingError}
-                          manglerBehandlingError={manglerBehandlingError}
-                          errorSummaryRef={errorSummaryRef}
-                        />
-                      }
                     />
                   )}
-                <div className='max-w-[75ch]'>
-                  <InfoChangesMadeAfterApproval
-                    pvkDokument={pvkDokument}
-                    behandlingensLivslop={behandlingensLivslop}
-                    alleRisikoscenario={alleRisikoscenario}
-                    alleTiltak={alleTiltak}
-                  />
+
+                  {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
+                    <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
+                  )}
+
+                  {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
+                    pvoTilbakemelding && (
+                      <VurdertAvPvoOgTrengerMerArbeidFields
+                        pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        setFieldValue={setFieldValue}
+                        submitForm={submitForm}
+                        initialStatus={initialValues.status}
+                        isLoading={isLoading}
+                        pvoVurderingList={pvoVurderingList}
+                        errorSummaryComponent={
+                          <SendInnErrorSummary
+                            errors={errors}
+                            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                            risikoeiereDataError={risikoeiereDataError}
+                            avdelingError={avdelingError}
+                            medlemError={medlemError}
+                            behandlingensLivslopError={behandlingensLivslopError}
+                            risikoscenarioError={risikoscenarioError}
+                            tiltakError={tiltakError}
+                            pvkKravError={pvkKravError}
+                            savnerVurderingError={savnerVurderingError}
+                            manglerBehandlingError={manglerBehandlingError}
+                            errorSummaryRef={errorSummaryRef}
+                          />
+                        }
+                      />
+                    )}
+
+                  {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO &&
+                    pvoTilbakemelding && (
+                      <VurdertAvPvoFields
+                        pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        setFieldValue={setFieldValue}
+                        submitForm={submitForm}
+                        initialStatus={initialValues.status}
+                        isLoading={isLoading}
+                        pvoVurderingList={pvoVurderingList}
+                        errorSummaryComponent={
+                          <SendInnErrorSummary
+                            errors={errors}
+                            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                            risikoeiereDataError={risikoeiereDataError}
+                            avdelingError={avdelingError}
+                            medlemError={medlemError}
+                            behandlingensLivslopError={behandlingensLivslopError}
+                            risikoscenarioError={risikoscenarioError}
+                            tiltakError={tiltakError}
+                            pvkKravError={pvkKravError}
+                            savnerVurderingError={savnerVurderingError}
+                            manglerBehandlingError={manglerBehandlingError}
+                            errorSummaryRef={errorSummaryRef}
+                          />
+                        }
+                      />
+                    )}
+
+                  {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
+                    pvoTilbakemelding && (
+                      <TrengerRisikoeierGodkjenningFields
+                        pvkDokument={pvkDokument}
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        isLoading={isLoading}
+                        setFieldValue={setFieldValue}
+                        submitForm={submitForm}
+                        initialStatus={initialValues.status}
+                        pvoVurderingList={pvoVurderingList}
+                        errorSummaryComponent={
+                          <SendInnErrorSummary
+                            errors={errors}
+                            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                            risikoeiereDataError={risikoeiereDataError}
+                            avdelingError={avdelingError}
+                            medlemError={medlemError}
+                            behandlingensLivslopError={behandlingensLivslopError}
+                            risikoscenarioError={risikoscenarioError}
+                            tiltakError={tiltakError}
+                            pvkKravError={pvkKravError}
+                            savnerVurderingError={savnerVurderingError}
+                            manglerBehandlingError={manglerBehandlingError}
+                            errorSummaryRef={errorSummaryRef}
+                          />
+                        }
+                      />
+                    )}
+
+                  {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                    pvoTilbakemelding && (
+                      <GodkjentAvRisikoeierFields
+                        pvkDokument={pvkDokument}
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        isLoading={isLoading}
+                        setFieldValue={setFieldValue}
+                        submitForm={submitForm}
+                        pvoVurderingList={pvoVurderingList}
+                        setAngretAvRisikoeier={setAngretAvRisikoeier}
+                        errorSummaryComponent={
+                          <SendInnErrorSummary
+                            errors={errors}
+                            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                            risikoeiereDataError={risikoeiereDataError}
+                            avdelingError={avdelingError}
+                            medlemError={medlemError}
+                            behandlingensLivslopError={behandlingensLivslopError}
+                            risikoscenarioError={risikoscenarioError}
+                            tiltakError={tiltakError}
+                            pvkKravError={pvkKravError}
+                            savnerVurderingError={savnerVurderingError}
+                            manglerBehandlingError={manglerBehandlingError}
+                            errorSummaryRef={errorSummaryRef}
+                          />
+                        }
+                      />
+                    )}
+                  <div className='max-w-[75ch]'>
+                    <InfoChangesMadeAfterApproval
+                      pvkDokument={pvkDokument}
+                      behandlingensLivslop={behandlingensLivslop}
+                      alleRisikoscenario={alleRisikoscenario}
+                      alleTiltak={alleTiltak}
+                    />
+                  </div>
                 </div>
 
                 {!isLoading && (
