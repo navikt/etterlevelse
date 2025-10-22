@@ -98,7 +98,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
               {({ submitForm, values, resetForm, setFieldValue, initialValues }) => (
                 <Form>
                   <div className='flex justify-center'>
-                    <div>
+                    <div className='max-w-[75ch]'>
                       <Heading level='1' size='medium' className='mb-5'>
                         Involvering av eksterne deltakere
                       </Heading>
@@ -163,7 +163,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         />
                       </div>
 
-                      <div className='mt-5 max-w-[75ch]'>
+                      <div className='mt-5'>
                         <TextAreaField
                           rows={3}
                           noPlaceholder
@@ -208,10 +208,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         databehandlere, kan det være til hjelp å se på behandlingens livsløp.
                       </BodyLong>
 
-                      <ReadMore
-                        className='mt-3 max-w-[75ch]'
-                        header='Trenger vi å involvere databehandlere?'
-                      >
+                      <ReadMore className='mt-3' header='Trenger vi å involvere databehandlere?'>
                         Dersom det skal benyttes en databehandler i hele eller deler av
                         behandlingen, skal dere som hovedregel inkludere en representant for
                         databehandler i vurderingen av personvernkonsekvenser (PVK).
@@ -233,7 +230,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         />
                       </div>
 
-                      <div className='mt-3 max-w-[75ch]'>
+                      <div className='mt-3'>
                         <TextAreaField
                           rows={3}
                           noPlaceholder
@@ -390,12 +387,14 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
         {/* sidepanel */}
 
         {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvkSidePanelWrapper>
-            <PvoTilbakemeldingReadOnly
-              tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
-              sentDate={pvoTilbakemelding.sendtDato}
-            />
-          </PvkSidePanelWrapper>
+          <div>
+            <PvkSidePanelWrapper>
+              <PvoTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
+                sentDate={pvoTilbakemelding.sendtDato}
+              />
+            </PvkSidePanelWrapper>
+          </div>
         )}
       </ContentLayout>
       <FormButtons

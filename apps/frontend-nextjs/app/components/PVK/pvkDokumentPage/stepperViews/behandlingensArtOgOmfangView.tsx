@@ -92,7 +92,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
               {({ submitForm, values, resetForm, setFieldValue, initialValues, dirty }) => (
                 <Form>
                   <div className='flex justify-center'>
-                    <div>
+                    <div className='max-w-[75ch]'>
                       <Heading level='1' size='medium' className='mb-5'>
                         Behandlingens art og omfang
                       </Heading>
@@ -116,7 +116,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         {(fieldProps: FieldProps) => (
                           <>
                             {fieldProps.form.values.stemmerPersonkategorier === false && (
-                              <div className='max-w-[75ch]'>
+                              <div>
                                 <Alert inline variant='warning' className='mt-5 mb-10'>
                                   Dere må oppdatere personkategori(er) i Behandlingskatalogen. Hvis
                                   dere ikke finner riktig personkategori(er), ta kontakt på{' '}
@@ -137,7 +137,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                       </Field>
 
                       <ReadMore
-                        className='mt-5 max-w-[75ch]'
+                        className='mt-5'
                         header='Hvordan kan vi komme med gode estimater på art og omfang?'
                       >
                         Art og omfang skal hjelpe oss å vurdere risiko. Det er ofte vanskelig å gi
@@ -150,7 +150,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         eventuelle underleverandører.
                       </ReadMore>
 
-                      <div className='mt-5 max-w-[75ch]'>
+                      <div className='mt-5'>
                         <TextAreaField
                           rows={3}
                           noPlaceholder
@@ -159,7 +159,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         />
                       </div>
 
-                      <div className='mt-5 max-w-[75ch]'>
+                      <div className='mt-5'>
                         <TextAreaField
                           rows={3}
                           noPlaceholder
@@ -168,7 +168,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                         />
                       </div>
 
-                      <div className='mt-5 max-w-[75ch]'>
+                      <div className='mt-5'>
                         <TextAreaField
                           rows={3}
                           noPlaceholder
@@ -318,12 +318,14 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
 
         {/* sidepanel */}
         {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvkSidePanelWrapper>
-            <PvoTilbakemeldingReadOnly
-              tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
-              sentDate={pvoTilbakemelding.sendtDato}
-            />
-          </PvkSidePanelWrapper>
+          <div>
+            <PvkSidePanelWrapper>
+              <PvoTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
+                sentDate={pvoTilbakemelding.sendtDato}
+              />
+            </PvkSidePanelWrapper>
+          </div>
         )}
       </ContentLayout>
       <FormButtons

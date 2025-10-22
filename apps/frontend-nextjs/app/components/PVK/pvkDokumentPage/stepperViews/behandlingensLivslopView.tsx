@@ -157,7 +157,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
       {!isLoading && behandlingensLivslop && (
         <ContentLayout>
           {pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
-            <div className='pt-6 pr-4 flex flex-col gap-4 col-span-8 w-full max-w-[849px]'>
+            <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
               <Formik
                 validateOnBlur={false}
                 validateOnChange={false}
@@ -178,7 +178,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               >
                 {({ submitForm, initialValues, errors, isSubmitting, resetForm, values }) => (
                   <Form>
-                    <div className='pr-6 flex flex-1 flex-col gap-4 col-span-8 w-full'>
+                    <div className='max-w-[75ch]'>
                       <Heading level='1' size='medium' className='mb-5'>
                         Behandlingens livsløp
                       </Heading>
@@ -254,17 +254,17 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                           <Loader size='large' />
                         </div>
                       )}
-                    </div>
 
-                    {pvoTilbakemelding && etterlevelseDokumentasjon && (
-                      <div className='mt-5'>
-                        <div className='pt-6 border-t border-[#071a3636]'>
-                          <BehandlingensLivsLopSidePanel
-                            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          />
+                      {pvoTilbakemelding && etterlevelseDokumentasjon && (
+                        <div className='mt-5'>
+                          <div className='pt-6 border-t border-[#071a3636]'>
+                            <BehandlingensLivsLopSidePanel
+                              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </Form>
                 )}
               </Formik>
@@ -285,31 +285,31 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           )}
 
           {/* Sidepanel */}
-          {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-            <div>
+          <div>
+            {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
               <PvkSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
                   tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
                   sentDate={pvoTilbakemelding.sendtDato}
                 />
               </PvkSidePanelWrapper>
-            </div>
-          )}
+            )}
 
-          {(!pvoTilbakemelding ||
-            (pvoTilbakemelding &&
-              pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) && (
-            // Don't remove this div. Sticky will not work without it.
-            <div>
-              <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
-                <div className='overflow-auto h-[90vh]'>
-                  <BehandlingensLivsLopSidePanel
-                    etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  />
+            {(!pvoTilbakemelding ||
+              (pvoTilbakemelding &&
+                pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) && (
+              // Don't remove this div. Sticky will not work without it.
+              <div>
+                <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
+                  <div className='overflow-auto h-[90vh]'>
+                    <BehandlingensLivsLopSidePanel
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
           {/* Slutt på sidepanel innhold*/}
         </ContentLayout>
       )}

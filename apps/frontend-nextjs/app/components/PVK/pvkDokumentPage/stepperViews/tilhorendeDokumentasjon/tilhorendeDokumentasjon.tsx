@@ -48,12 +48,14 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
 
         {/* sidepanel */}
         {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <PvkSidePanelWrapper>
-            <TilhorendeDokumentasjonTilbakemeldingReadOnly
-              tilbakemeldingsinnhold={pvoTilbakemelding.tilhorendeDokumentasjon}
-              sentDate={pvoTilbakemelding.sendtDato}
-            />
-          </PvkSidePanelWrapper>
+          <div>
+            <PvkSidePanelWrapper>
+              <TilhorendeDokumentasjonTilbakemeldingReadOnly
+                tilbakemeldingsinnhold={pvoTilbakemelding.tilhorendeDokumentasjon}
+                sentDate={pvoTilbakemelding.sendtDato}
+              />
+            </PvkSidePanelWrapper>
+          </div>
         )}
       </ContentLayout>
       <FormButtons

@@ -32,13 +32,13 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
   sentDate,
   forPvo,
 }) => (
-  <div>
+  <div className='w-full'>
     <Heading level='2' size='small' className='mb-5'>
       Tilbakemelding fra personvernombudet
     </Heading>
 
     {forPvo && (
-      <div>
+      <div className='w-full'>
         <Label>intern PVO-notater</Label>
         {tilbakemeldingsinnhold &&
           tilbakemeldingsinnhold.internDiskusjon &&
@@ -62,7 +62,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
       </BodyShort>
     )}
 
-    <div>
+    <div className='w-full'>
       <Label>Vurdering av etterleverens svar.</Label>
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
@@ -71,7 +71,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
       </BodyLong>
     </div>
 
-    <div className='my-5'>
+    <div className='my-5 w-full'>
       <Label>Tilbakemelding</Label>
       {tilbakemeldingsinnhold &&
         tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&

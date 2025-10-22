@@ -58,7 +58,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   return (
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
       <div className='flex justify-center'>
-        <div>
+        <div className='max-w-[75ch]'>
           <Heading level='1' size='medium' className='mb-5'>
             Tilhørende dokumentasjon
           </Heading>

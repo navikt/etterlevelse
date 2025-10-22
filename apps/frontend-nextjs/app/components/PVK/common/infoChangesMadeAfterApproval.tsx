@@ -103,7 +103,7 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   return (
     <>
       {isChangesMade && (
-        <div className='max-w-[75ch]'>
+        <div>
           <Alert variant='info' className='mt-5'>
             Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
             <strong>
