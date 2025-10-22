@@ -4,6 +4,7 @@ import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { usePvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
+import ForbiddenAlert from '@/components/common/forbiddenAlert'
 import {
   IDataBehandler,
   IExternalCode,
@@ -17,9 +18,8 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { Alert, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
+import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
-import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
@@ -183,17 +183,7 @@ export const PvoTilbakemeldingPage = () => {
       )}
 
       {etterlevelseDokumentasjon && !user.isAdmin() && !user.isPersonvernombud() && (
-        <div className='flex w-full justify-center mt-5'>
-          <div className='flex items-center flex-col gap-5'>
-            <Alert variant='warning'>Du har ikke tilgang til å redigere på PVK dokument.</Alert>
-
-            <Image
-              src='https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp'
-              alt='no no no'
-              width='400'
-            />
-          </div>
-        </div>
+        <ForbiddenAlert />
       )}
 
       {isPageLoading && <div></div>}

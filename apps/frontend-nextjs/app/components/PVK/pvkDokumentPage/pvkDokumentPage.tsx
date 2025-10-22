@@ -7,6 +7,7 @@ import BehandlingensArtOgOmfangView from '@/components/PVK/pvkDokumentPage/stepp
 import InvolveringAvEksterneView from '@/components/PVK/pvkDokumentPage/stepperViews/involveringAvEksterneView'
 import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
+import ForbiddenAlert from '@/components/common/forbiddenAlert'
 import {
   IDataBehandler,
   IExternalCode,
@@ -21,9 +22,8 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Alert, Button, Loader, Modal, Stepper } from '@navikt/ds-react'
+import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
-import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
@@ -181,19 +181,7 @@ export const PvkDokumentPage = () => {
 
       {etterlevelseDokumentasjon &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        !user.isAdmin() && (
-          <div className='flex w-full justify-center mt-5'>
-            <div className='flex items-center flex-col gap-5'>
-              <Alert variant='warning'>Du har ikke tilgang til å redigere på PVK dokument.</Alert>
-
-              <Image
-                src='https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp'
-                alt='no no no'
-                width='400'
-              />
-            </div>
-          </div>
-        )}
+        !user.isAdmin() && <ForbiddenAlert />}
 
       {etterlevelseDokumentasjon &&
         pvkDokument &&

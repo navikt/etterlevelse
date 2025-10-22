@@ -36,9 +36,9 @@ import {
 } from '@navikt/ds-react'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
-import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
+import ForbiddenAlert from '../common/forbiddenAlert'
 import { TextAreaField } from '../common/textAreaField/textAreaField'
 import UnsavedModalAlert from '../common/unsavedModalAlert/unsavedModalAlert'
 import {
@@ -192,19 +192,7 @@ export const BehandlingensLivslopPage = () => {
         etterlevelseDokumentasjon &&
         behandlingsLivslop &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        !user.isAdmin() && (
-          <div className='flex w-full justify-center mt-5'>
-            <div className='flex items-center flex-col gap-5'>
-              <Alert variant='warning'>Du har ikke tilgang til å redigere.</Alert>
-
-              <Image
-                src='https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXMyNngxa2djMXdhOXdhcXQwNG9hbWJ3czZ4MW42bDY3ZXVkNHd3eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zaCojXv2S01zy/giphy.webp'
-                alt='no no no'
-                width='400'
-              />
-            </div>
-          </div>
-        )}
+        !user.isAdmin() && <ForbiddenAlert />}
 
       {!isEtterlevelseDokumentasjonLoading &&
         etterlevelseDokumentasjon &&
