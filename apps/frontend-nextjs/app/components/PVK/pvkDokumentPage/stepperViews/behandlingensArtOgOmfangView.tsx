@@ -92,7 +92,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
               {({ submitForm, values, resetForm, setFieldValue, initialValues, dirty }) => (
                 <Form>
                   <div className='flex justify-center'>
-                    <div className='max-w-[75ch]'>
+                    <div className='max-w-[75ch] w-full'>
                       <Heading level='1' size='medium' className='mb-5'>
                         Behandlingens art og omfang
                       </Heading>

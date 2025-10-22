@@ -13,6 +13,7 @@ import BehandlingensLivslopTextContent from '@/components/behandlingensLivslop/c
 import CustomFileUpload from '@/components/behandlingensLivslop/fileUpload/customFileUpload'
 import behandlingensLivslopSchema from '@/components/behandlingensLivslop/form/behandlingensLivslopSchema'
 import BehandlingensLivsLopSidePanel from '@/components/behandlingensLivslop/sidePanel/BehandlingensLivsLopSidePanel'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
@@ -149,11 +150,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
 
   return (
     <div className='w-full'>
-      {isLoading && (
-        <div className='flex w-full justify-center items-center mt-5'>
-          <Loader size='3xlarge' className='flex justify-self-center' />
-        </div>
-      )}
+      {isLoading && <CenteredLoader />}
       {!isLoading && behandlingensLivslop && (
         <ContentLayout>
           {pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
@@ -178,92 +175,94 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               >
                 {({ submitForm, initialValues, errors, isSubmitting, resetForm, values }) => (
                   <Form>
-                    <div className='max-w-[75ch]'>
-                      <Heading level='1' size='medium' className='mb-5'>
-                        Behandlingens livsløp
-                      </Heading>
+                    <div className='flex justify-center'>
+                      <div className='max-w-[75ch] w-full'>
+                        <Heading level='1' size='medium' className='mb-5'>
+                          Behandlingens livsløp
+                        </Heading>
 
-                      <BehandlingensLivslopTextContent />
+                        <BehandlingensLivslopTextContent />
 
-                      <BodyShort className='mt-3'>
-                        Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
-                        oversikt.
-                      </BodyShort>
+                        <BodyShort className='mt-3'>
+                          Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
+                          oversikt.
+                        </BodyShort>
 
-                      <CustomFileUpload
-                        initialValues={initialValues.filer}
-                        rejectedFiles={rejectedFiles}
-                        setRejectedFiles={setRejectedFiles}
-                        setFilesToUpload={setFilesToUpload}
-                      />
-
-                      <div className='mt-3'>
-                        <TextAreaField
-                          markdown
-                          height='5.75rem'
-                          noPlaceholder
-                          label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
-                          name='beskrivelse'
+                        <CustomFileUpload
+                          initialValues={initialValues.filer}
+                          rejectedFiles={rejectedFiles}
+                          setRejectedFiles={setRejectedFiles}
+                          setFilesToUpload={setFilesToUpload}
                         />
-                      </div>
 
-                      {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                        <ErrorSummary className='mt-3' ref={errorSummaryRef}>
-                          <ErrorSummary.Item href={'#vedleggMedFeil'}>
-                            Vedlegg med feil
-                          </ErrorSummary.Item>
-                        </ErrorSummary>
-                      )}
-
-                      {savedSuccessful && (
-                        <div className='mt-5'>
-                          <Alert
-                            variant='success'
-                            closeButton
-                            onClose={() => setSavedSuccessful(false)}
-                          >
-                            Lagring vellykket
-                          </Alert>
+                        <div className='mt-3'>
+                          <TextAreaField
+                            markdown
+                            height='5.75rem'
+                            noPlaceholder
+                            label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
+                            name='beskrivelse'
+                          />
                         </div>
-                      )}
 
-                      <InfoChangesMadeAfterApproval
-                        pvkDokument={pvkDokument}
-                        behandlingensLivslop={behandlingensLivslop}
-                      />
+                        {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
+                          <ErrorSummary className='mt-3' ref={errorSummaryRef}>
+                            <ErrorSummary.Item href={'#vedleggMedFeil'}>
+                              Vedlegg med feil
+                            </ErrorSummary.Item>
+                          </ErrorSummary>
+                        )}
 
-                      {!isSubmitting && (
-                        <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
-                          <Button
-                            type='button'
-                            onClick={async () => {
-                              await submitForm().then(() => {
-                                resetForm({ values })
-                                setSavedSuccessful(true)
-                              })
-                              setSubmitClick(!submitClick)
-                            }}
-                          >
-                            Lagre
-                          </Button>
-                        </div>
-                      )}
-
-                      {isSubmitting && (
-                        <div className='flex mt-5 justify-center items-center'>
-                          <Loader size='large' />
-                        </div>
-                      )}
-
-                      {pvoTilbakemelding && etterlevelseDokumentasjon && (
-                        <div className='mt-5'>
-                          <div className='pt-6 border-t border-[#071a3636]'>
-                            <BehandlingensLivsLopSidePanel
-                              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                            />
+                        {savedSuccessful && (
+                          <div className='mt-5'>
+                            <Alert
+                              variant='success'
+                              closeButton
+                              onClose={() => setSavedSuccessful(false)}
+                            >
+                              Lagring vellykket
+                            </Alert>
                           </div>
-                        </div>
-                      )}
+                        )}
+
+                        <InfoChangesMadeAfterApproval
+                          pvkDokument={pvkDokument}
+                          behandlingensLivslop={behandlingensLivslop}
+                        />
+
+                        {!isSubmitting && (
+                          <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
+                            <Button
+                              type='button'
+                              onClick={async () => {
+                                await submitForm().then(() => {
+                                  resetForm({ values })
+                                  setSavedSuccessful(true)
+                                })
+                                setSubmitClick(!submitClick)
+                              }}
+                            >
+                              Lagre
+                            </Button>
+                          </div>
+                        )}
+
+                        {isSubmitting && (
+                          <div className='flex mt-5 justify-center items-center'>
+                            <Loader size='large' />
+                          </div>
+                        )}
+
+                        {pvoTilbakemelding && etterlevelseDokumentasjon && (
+                          <div className='mt-5'>
+                            <div className='pt-6 border-t border-[#071a3636]'>
+                              <BehandlingensLivsLopSidePanel
+                                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </Form>
                 )}
