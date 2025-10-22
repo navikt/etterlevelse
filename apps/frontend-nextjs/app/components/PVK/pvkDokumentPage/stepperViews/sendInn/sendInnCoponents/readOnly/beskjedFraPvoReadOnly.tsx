@@ -2,7 +2,7 @@ import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper
 import { Markdown } from '@/components/common/markdown/markdown'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Heading, Label } from '@navikt/ds-react'
+import { Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -79,20 +79,20 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
 
       <div className='mb-3'>
         <Label>Personvernombudets vurdering</Label>
-        <DataTextWrapper>{getPvoVurdering()}</DataTextWrapper>
-      </div>
-
-      <div className='mb-3'>
-        <Label>PVO vil følge opp endringer dere gjør.</Label>
         <DataTextWrapper>
-          {pvoTilbakemelding.pvoFolgeOppEndringer === true ? 'Ja' : 'Nei'}
-        </DataTextWrapper>
-      </div>
-
-      <div className='mb-3'>
-        <Label>PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.</Label>
-        <DataTextWrapper>
-          {pvoTilbakemelding.vilFaPvkIRetur === true ? 'Ja' : 'Nei'}
+          {getPvoVurdering()}
+          {(pvoTilbakemelding.pvoFolgeOppEndringer || pvoTilbakemelding.vilFaPvkIRetur) && (
+            <List>
+              {pvoTilbakemelding.pvoFolgeOppEndringer && (
+                <List.Item>PVO vil følge opp endringer dere gjør.</List.Item>
+              )}
+              {pvoTilbakemelding.vilFaPvkIRetur && (
+                <List.Item>
+                  PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
+                </List.Item>
+              )}
+            </List>
+          )}
         </DataTextWrapper>
       </div>
     </div>

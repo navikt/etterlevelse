@@ -15,7 +15,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
-import { Alert, BodyLong, Button, Label } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Label, List } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
@@ -127,20 +127,21 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
 
           <div className='mb-3'>
             <Label>Personvernombudets vurdering</Label>
-            <DataTextWrapper>{getPvoVurdering()}</DataTextWrapper>
-          </div>
-
-          <div className='mb-3'>
-            <Label>PVO vil følge opp endringer dere gjør.</Label>
             <DataTextWrapper>
-              {pvoTilbakemelding.pvoFolgeOppEndringer === true ? 'Ja' : 'Nei'}
-            </DataTextWrapper>
-          </div>
+              {getPvoVurdering()}
 
-          <div className='mb-3'>
-            <Label>PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.</Label>
-            <DataTextWrapper>
-              {pvoTilbakemelding.vilFaPvkIRetur === true ? 'Ja' : 'Nei'}
+              {(pvoTilbakemelding.pvoFolgeOppEndringer || pvoTilbakemelding.vilFaPvkIRetur) && (
+                <List>
+                  {pvoTilbakemelding.pvoFolgeOppEndringer && (
+                    <List.Item>PVO vil følge opp endringer dere gjør.</List.Item>
+                  )}
+                  {pvoTilbakemelding.vilFaPvkIRetur && (
+                    <List.Item>
+                      PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
+                    </List.Item>
+                  )}
+                </List>
+              )}
             </DataTextWrapper>
           </div>
         </div>
