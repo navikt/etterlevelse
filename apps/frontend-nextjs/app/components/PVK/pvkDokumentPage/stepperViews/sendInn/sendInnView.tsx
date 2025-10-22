@@ -614,13 +614,14 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       }
                     />
                   )}
-
-                <InfoChangesMadeAfterApproval
-                  pvkDokument={pvkDokument}
-                  behandlingensLivslop={behandlingensLivslop}
-                  alleRisikoscenario={alleRisikoscenario}
-                  alleTiltak={alleTiltak}
-                />
+                <div className='max-w-[75ch]'>
+                  <InfoChangesMadeAfterApproval
+                    pvkDokument={pvkDokument}
+                    behandlingensLivslop={behandlingensLivslop}
+                    alleRisikoscenario={alleRisikoscenario}
+                    alleTiltak={alleTiltak}
+                  />
+                </div>
 
                 {!isLoading && (
                   <FormButtons

@@ -486,12 +486,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           )}
         </div>
       </div>
-
-      <InfoChangesMadeAfterApproval
-        pvkDokument={pvkDokument}
-        alleRisikoscenario={risikoscenarioList}
-        alleTiltak={tiltakList}
-      />
+      <div className='max-w-[816px] mt-5'>
+        <InfoChangesMadeAfterApproval
+          pvkDokument={pvkDokument}
+          alleRisikoscenario={risikoscenarioList}
+          alleTiltak={tiltakList}
+        />
+      </div>
 
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
