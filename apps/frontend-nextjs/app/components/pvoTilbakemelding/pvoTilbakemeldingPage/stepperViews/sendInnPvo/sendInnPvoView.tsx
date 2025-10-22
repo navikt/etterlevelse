@@ -67,7 +67,13 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
 
     await getPvkDokument(pvkDokument.id).then((response) => (pvkStatus = response.status))
 
-    if (pvkStatus === EPvkDokumentStatus.UNDERARBEID) {
+    if (
+      [
+        EPvkDokumentStatus.UNDERARBEID,
+        EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER,
+        EPvkDokumentStatus.TRENGER_GODKJENNING,
+      ].includes(pvkStatus as EPvkDokumentStatus)
+    ) {
       setIsAlertModalOpen(true)
     } else {
       await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
