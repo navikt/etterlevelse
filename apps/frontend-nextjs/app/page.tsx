@@ -11,7 +11,7 @@ export default function Home() {
         <div className='max-w-7xl w-full px-2'>
           <div className='flex flex-col'>
             <Heading className='flex justify-center' size='large' level='1'>
-              Etterlevelse i Nav
+              Etterlevelse i Nav NEXT
             </Heading>
             <span className='flex justify-center'>Forstå og dokumentér</span>
           </div>
