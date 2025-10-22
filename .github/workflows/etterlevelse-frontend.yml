@@ -56,7 +56,7 @@ jobs:
               run: CI=false yarn run build
 
             - name: Build and push
-              if: github.ref == 'refs/heads/prod' || github.ref == 'refs/heads/master'
+              if: github.ref == 'refs/heads/prod'
               uses: nais/docker-build-push@v0
               id: docker-build-push
               with:
@@ -65,25 +65,25 @@ jobs:
                 image_suffix: frontend
                 docker_context: ./apps/frontend
 
-    deploy-preprod:
-        name: Frontend - deploy Dev GCP
-        needs: build
-        if: github.ref == 'refs/heads/master'
-        runs-on: ubuntu-latest
-        permissions:
-          id-token: write
-          contents: read
-          actions: read 
-        steps:
-            - uses: actions/checkout@v5
-            - uses: nais/deploy/actions/deploy@v2
-              env:
-                  CLUSTER: dev-gcp
-                  RESOURCE: apps/frontend/nais/frontend-gcp.yaml
-                  VARS: apps/frontend/nais/frontend-dev-gcp-vars.yaml
-                  ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend
-                  WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-                  TELEMETRY: ${{ needs.build.outputs.telemetry }}
+#    deploy-preprod:
+#        name: Frontend - deploy Dev GCP
+#        needs: build
+#        if: github.ref == 'refs/heads/master'
+#        runs-on: ubuntu-latest
+#        permissions:
+#          id-token: write
+#          contents: read
+#          actions: read 
+#        steps:
+#            - uses: actions/checkout@v5
+#            - uses: nais/deploy/actions/deploy@v2
+#              env:
+#                  CLUSTER: dev-gcp
+#                  RESOURCE: apps/frontend/nais/frontend-gcp.yaml
+#                  VARS: apps/frontend/nais/frontend-dev-gcp-vars.yaml
+#                  ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend
+#                  WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+#                  TELEMETRY: ${{ needs.build.outputs.telemetry }}
 
     deploy-prod:
         name: Frontend - deploy Prod GCP
