@@ -35,7 +35,7 @@ export const PvkBehovMetadata: FunctionComponent<TProps> = ({ etterlevelseDokume
           ))}
         </List>
       )}
-      {!etterlevelseDokumentasjon.behandlinger && (
+      {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
         <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
       )}
 
