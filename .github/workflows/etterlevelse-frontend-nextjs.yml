@@ -73,6 +73,6 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: apps/frontend-nextjs/nais/frontend-gcp.yaml
           VARS: apps/frontend-nextjs/nais/frontend-dev-gcp-vars.yaml
-          ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend-nextjs
+          ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
