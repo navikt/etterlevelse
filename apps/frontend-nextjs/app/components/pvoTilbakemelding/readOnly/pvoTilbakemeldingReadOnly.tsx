@@ -32,7 +32,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
   sentDate,
   forPvo,
 }) => (
-  <div className='w-full'>
+  <div className='w-[400px]'>
     <Heading level='2' size='small' className='mb-5'>
       Tilbakemelding fra personvernombudet
     </Heading>
