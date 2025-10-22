@@ -26,7 +26,7 @@ export const PvoTilbakemeldingsList = () => {
   const [statusFilter, setStatusFilter] = useState<string>('alle')
   const [ansvarligFilter, setAnsvarligFilter] = useState<string>('')
   const [ansvarligList, setAnsvarligList] = useState<IAnsvarligItem[]>([])
-  const [seachPvk, setSearchPvk] = useState<string>('')
+  const [searchPvk, setSearchPvk] = useState<string>('')
 
   const [filteredPvkDokument, setFilteredPvkDokuement] = useState<IPvkDokumentListItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -157,16 +157,16 @@ export const PvoTilbakemeldingsList = () => {
       )
     }
 
-    if (seachPvk !== '') {
+    if (searchPvk !== '') {
       filteredData = filteredData.filter((pvk: IPvkDokumentListItem) => {
-        const pvkName: string = `${pvk.etterlevelseNummer} ${pvk.title}`
+        const pvkName: string = `E${pvk.etterlevelseNummer} ${pvk.title}`
 
-        return pvkName.toLowerCase().includes(seachPvk.toLowerCase())
+        return pvkName.toLowerCase().includes(searchPvk.toLowerCase())
       })
     }
 
     setFilteredPvkDokuement(filteredData)
-  }, [statusFilter, ansvarligFilter, seachPvk])
+  }, [statusFilter, ansvarligFilter, searchPvk])
 
   return (
     <div>
