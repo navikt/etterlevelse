@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: etterlevelse-frontend-nextjs
+  name: etterlevelse-frontend
   namespace: teamdatajegerne
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: 100M
