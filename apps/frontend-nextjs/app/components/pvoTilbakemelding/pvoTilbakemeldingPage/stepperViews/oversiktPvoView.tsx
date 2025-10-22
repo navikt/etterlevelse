@@ -4,6 +4,7 @@ import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlin
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import FormSummaryPanel from '@/components/PVK/common/formSummaryPanel'
+import HvordanSkalViJobbeMedPvkReadMore from '@/components/PVK/common/hvordanSkalViJobbeMedPvkReadMore'
 import {
   getFormStatus,
   getTilhorendeDokumentasjonStatusTags,
@@ -27,17 +28,7 @@ import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConst
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import {
-  Alert,
-  BodyShort,
-  FormSummary,
-  Heading,
-  Label,
-  Link,
-  List,
-  ReadMore,
-  Tag,
-} from '@navikt/ds-react'
+import { Alert, BodyShort, FormSummary, Heading, Label, Link, List, Tag } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoFormButtons from '../../form/pvoFormButtons'
@@ -221,33 +212,11 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
           </div>
         )}
       </div>
-      <div>
+      <div className='max-w-[766px] w-full'>
         <Heading level='1' size='medium' className='mb-5'>
           Oversikt over PVK-prosessen
         </Heading>
-        <ReadMore className='mb-5 max-w-[766px]' header='Hvordan skal vi jobbe med PVK?'>
-          <BodyShort>
-            I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en
-            risikoanalyse. Prosessen inkluderer:
-          </BodyShort>
-          <List as='ol'>
-            <List.Item>
-              Dere beskriver behandlingen slik at det er enklere å identifisere risikoer.
-            </List.Item>
-            <List.Item>
-              Dere gjør risikoanalyse og setter tiltak og vurderer så tiltakenes effekt.
-            </List.Item>
-            <List.Item>Dere sender inn PVK til vurdering av Personvernombudet (PVO).</List.Item>
-            <List.Item>
-              Dere gjør eventuelle endringer, og sender til risikoeier for beslutning om
-              risikonivået er akseptabelt.
-            </List.Item>
-            <List.Item>
-              Hvis dere senere endrer hvordan dere behandler personopplysninger, skal dere vurdere
-              risikobildet på nytt.
-            </List.Item>
-          </List>
-        </ReadMore>
+        <HvordanSkalViJobbeMedPvkReadMore />
 
         <FormSummary className='my-3'>
           <FormSummary.Header>

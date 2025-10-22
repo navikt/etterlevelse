@@ -24,11 +24,12 @@ import {
   isRisikoUnderarbeidCheck,
   risikoscenarioFieldCheck,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { Alert, BodyShort, FormSummary, Heading, List, ReadMore, Tag } from '@navikt/ds-react'
+import { Alert, BodyShort, FormSummary, Heading, List, Tag } from '@navikt/ds-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent, JSX, useEffect, useState } from 'react'
 import FormSummaryPanel from '../../common/formSummaryPanel'
+import HvordanSkalViJobbeMedPvkReadMore from '../../common/hvordanSkalViJobbeMedPvkReadMore'
 import FormButtons from '../../edit/formButtons'
 import { StepTitle } from '../pvkDokumentPage'
 
@@ -314,33 +315,11 @@ export const OversiktView: FunctionComponent<TProps> = ({
 
   return (
     <div className='flex justify-center'>
-      <div>
+      <div className='max-w-[766px] w-full'>
         <Heading level='1' size='medium' className='mb-5'>
           Oversikt over PVK-prosessen
         </Heading>
-        <ReadMore className='mb-5 max-w-[766px]' header='Hvordan skal vi jobbe med PVK?'>
-          <BodyShort>
-            I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en
-            risikoanalyse. Prosessen inkluderer:
-          </BodyShort>
-          <List as='ol'>
-            <List.Item>
-              Dere beskriver behandlingen slik at det er enklere å identifisere risikoer.
-            </List.Item>
-            <List.Item>
-              Dere gjør risikoanalyse og setter tiltak og vurderer så tiltakenes effekt.
-            </List.Item>
-            <List.Item>Dere sender inn PVK til vurdering av Personvernombudet (PVO).</List.Item>
-            <List.Item>
-              Dere gjør eventuelle endringer, og sender til risikoeier for beslutning om
-              risikonivået er akseptabelt.
-            </List.Item>
-            <List.Item>
-              Hvis dere senere endrer hvordan dere behandler personopplysninger, skal dere vurdere
-              risikobildet på nytt.
-            </List.Item>
-          </List>
-        </ReadMore>
+        <HvordanSkalViJobbeMedPvkReadMore />
 
         <FormSummary className='my-3'>
           <FormSummary.Header>
