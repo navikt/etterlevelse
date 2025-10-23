@@ -11,6 +11,12 @@ export enum EObjectType {
   Melding = 'Melding',
   EtterlevelseArkiv = 'EtterlevelseArkiv',
   EtterlevelseMetadata = 'EtterlevelseMetadata',
+  ETTERLEVELSE_DOKUMENTASJON = 'ETTERLEVELSE_DOKUMENTASJON',
+  PVK_DOKUMENT = 'PVK_DOKUMENT',
+  PVO_TILBAKEMELDING = 'PVO_TILBAKEMELDING',
+  RISIKOSCENARIO = 'RISIKOSCENARIO',
+  BEHANDLINGENS_LIVSLOP = 'BEHANDLINGENS_LIVSLOP',
+  TILTAK = 'TILTAK',
 }
 
 export interface IAuditLog {
