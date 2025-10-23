@@ -19,6 +19,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.export.EtterlevelseDokumentasjonToDoc;
 import no.nav.data.integration.p360.domain.P360ArchiveDocument;
 import no.nav.data.integration.p360.dto.*;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class P360Controller {
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
     private final BehandlingensLivslopService behandlingensLivslopService;
+    private final PvkDokumentService pvkDokumentService;
 
     @Operation(summary = "Get all p360 archive document")
     @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})
@@ -57,6 +59,7 @@ public class P360Controller {
                                                                              @RequestParam(name = "risikoeier", required = false) boolean risikoeier) {
         log.info("Archiving etterlevelse dokumentasjon with id {}", etterlevelseDokumentasjonId);
         var eDok = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
+        var pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
         SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
@@ -87,7 +90,10 @@ public class P360Controller {
             }
 
             String documentTitle  = "";
-            if (pvoTilbakemelding) {
+            if (pvoTilbakemelding && pvkDokument.isPresent()) {
+                if (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() != null && pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() > 1) {
+                    documentTitle += (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". ");
+                }
                 documentTitle += "Tilbakemelding fra Personvernombudet for ";
             } else if (risikoeier) {
                 documentTitle += "Personvernkonsekvensvurdering for ";
