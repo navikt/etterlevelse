@@ -171,6 +171,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
     sendtTilPvoDato: pvkDokument.sendtTilPvoDato || '',
     sendtTilPvoAv: pvkDokument.sendtTilPvoAv || '',
+    antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,
     godkjentAvRisikoeierDato: pvkDokument.godkjentAvRisikoeierDato || '',
     godkjentAvRisikoeier: pvkDokument.godkjentAvRisikoeier || '',
   }

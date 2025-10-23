@@ -29,6 +29,7 @@ export interface IPvkDokument {
 
   sendtTilPvoDato: string
   sendtTilPvoAv: string
+  antallInnsendingTilPvo: number
 
   godkjentAvRisikoeierDato: string
   godkjentAvRisikoeier: string
@@ -54,7 +55,6 @@ export enum EPvkDokumentStatus {
   SENDT_TIL_PVO_FOR_REVURDERING = 'SENDT_TIL_PVO_FOR_REVURDERING',
   TRENGER_GODKJENNING = 'TRENGER_GODKJENNING',
   GODKJENT_AV_RISIKOEIER = 'GODKJENT_AV_RISIKOEIER',
-  AKTIV = 'AKTIV',
 }
 
 export enum EPVK {

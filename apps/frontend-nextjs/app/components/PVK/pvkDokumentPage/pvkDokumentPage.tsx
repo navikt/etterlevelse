@@ -158,9 +158,7 @@ export const PvkDokumentPage = () => {
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
-        if (
-          ![EPvkDokumentStatus.UNDERARBEID, EPvkDokumentStatus.AKTIV].includes(pvkDokument.status)
-        ) {
+        if (![EPvkDokumentStatus.UNDERARBEID].includes(pvkDokument.status)) {
           await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id).then(setPvoTilbakemelding)
         }
       }

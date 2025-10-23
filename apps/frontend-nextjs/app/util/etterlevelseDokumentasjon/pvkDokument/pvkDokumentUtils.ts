@@ -111,8 +111,6 @@ export const getPvkButtonText = (
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
   switch (status) {
-    case EPvkDokumentStatus.AKTIV:
-      return 'Under arbeid'
     case EPvkDokumentStatus.UNDERARBEID:
       return 'Under arbeid'
     case EPvkDokumentStatus.SENDT_TIL_PVO:

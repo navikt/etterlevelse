@@ -116,9 +116,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
   const user = useContext(UserContext)
 
-  const underarbeidCheck: boolean =
-    pvkDokument.status === EPvkDokumentStatus.UNDERARBEID ||
-    pvkDokument.status === EPvkDokumentStatus.AKTIV
+  const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
 
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (
