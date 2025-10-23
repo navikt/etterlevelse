@@ -15,6 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PvkDokumentData {
 
+    @Builder.Default
+    private Integer antallInnsendingTilPvo = 0;
     private List<String> ytterligereEgenskaper;
     private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;

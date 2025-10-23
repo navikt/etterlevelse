@@ -52,6 +52,7 @@ public class PvkDokumentRequest implements RequestElement {
 
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
+    private Integer antallInnsendingTilPvo;
 
     private Boolean update;
 
@@ -69,7 +70,7 @@ public class PvkDokumentRequest implements RequestElement {
         setMerknadTilRisikoeier(trimToNull(merknadTilRisikoeier));
         setMerknadFraRisikoeier(trimToNull(merknadFraRisikoeier));
 
-        if (status == null || status == PvkDokumentStatus.AKTIV) {
+        if (status == null) {
             status = PvkDokumentStatus.UNDERARBEID;
         }
     }
@@ -101,6 +102,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .sendtTilPvoAv(sendtTilPvoAv)
                 .godkjentAvRisikoeierDato(godkjentAvRisikoeierDato)
                 .godkjentAvRisikoeier(godkjentAvRisikoeier)
+                .antallInnsendingTilPvo(antallInnsendingTilPvo)
                 .build();
 
         return PvkDokument.builder()
@@ -132,5 +134,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoAv(sendtTilPvoAv);
         pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeierDato(godkjentAvRisikoeierDato);
         pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeier(godkjentAvRisikoeier);
+        pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
     }
 }

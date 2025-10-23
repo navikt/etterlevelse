@@ -301,6 +301,7 @@ type PvoTilbakemelding {
     pvoVurdering: String
     pvoFolgeOppEndringer: Boolean
     vilFaPvkIRetur: Boolean
+    antallInnsendingTilPvo: Int!
 }
 
 type Tilbakemeldingsinnhold {

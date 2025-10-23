@@ -48,6 +48,7 @@ public class PvkDokumentResponse {
 
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
+    private Integer antallInnsendingTilPvo;
 
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
@@ -82,6 +83,7 @@ public class PvkDokumentResponse {
                 .sendtTilPvoAv(pvkDokument.getPvkDokumentData().getSendtTilPvoAv())
                 .godkjentAvRisikoeierDato(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeierDato())
                 .godkjentAvRisikoeier(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeier())
+                .antallInnsendingTilPvo(pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())
                 .build();
     }
 

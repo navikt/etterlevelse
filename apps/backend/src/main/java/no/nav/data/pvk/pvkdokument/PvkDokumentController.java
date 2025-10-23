@@ -74,6 +74,7 @@ public class PvkDokumentController {
                                     .lastModifiedBy(pvkDokument.getLastModifiedBy())
                                     .lastModifiedDate(pvkDokument.getLastModifiedDate() == null ? LocalDateTime.now() : pvkDokument.getLastModifiedDate())
                                     .build())
+                            .antallInnsendingTilPvo(pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())
                             .build()
             );
         });
