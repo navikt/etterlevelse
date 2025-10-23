@@ -104,6 +104,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
           variant='tertiary'
           onClick={async () => {
             await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+            await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo + 1)
             await submitForm()
           }}
         >

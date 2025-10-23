@@ -165,6 +165,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
             )
               ? submitedValues.godkjentAvRisikoeierDato
               : response.godkjentAvRisikoeierDato,
+            antallInnsendingTilPvo: submitedValues.antallInnsendingTilPvo,
           }
 
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {

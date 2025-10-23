@@ -77,6 +77,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
           type='button'
           onClick={async () => {
             await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
+            await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo + 1)
             errorSummaryRef.current?.focus()
             await submitForm()
           }}
