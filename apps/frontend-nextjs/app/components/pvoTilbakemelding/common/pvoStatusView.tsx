@@ -44,7 +44,7 @@ export const PvoStatusView: FunctionComponent<TProps> = ({
   const getStatusDisplay = (variant: any) => (
     <div className='flex gap-2'>
       {antallInnsendingTilPvo > 1 && (
-        <Tag variant='warning' className='h-fit'>
+        <Tag className='bg-white h-fit' variant='neutral'>
           <div className={'flex items-center'}>
             <Detail className='whitespace-nowrap'>{antallInnsendingTilPvo}. innsending</Detail>
           </div>
