@@ -849,7 +849,7 @@ public class WordDocUtils {
 
     public String pvkDokumentStatusText(PvkDokumentStatus status) {
         return switch (status) {
-            case AKTIV, UNDERARBEID -> "Under arbeid";
+            case UNDERARBEID -> "Under arbeid";
             case SENDT_TIL_PVO -> "Sendt til personvernombudet";
             case VURDERT_AV_PVO_TRENGER_MER_ARBEID -> "Personverkonsekvensvurdering trenger mer arbeid";
             case SENDT_TIL_PVO_FOR_REVURDERING -> "Personverkonsekvensvurdering er sendt tilbake til personvernombudet for revurdering";
