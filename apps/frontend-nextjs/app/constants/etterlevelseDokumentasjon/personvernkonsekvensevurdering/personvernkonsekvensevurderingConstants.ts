@@ -44,6 +44,7 @@ export interface IPvkDokumentListItem {
   etterlevelseNummer: number
   sendtTilPvoDato: string
   sendtTilPvoAv: string
+  antallInnsendingTilPvo: number
 }
 
 export enum EPvkDokumentStatus {

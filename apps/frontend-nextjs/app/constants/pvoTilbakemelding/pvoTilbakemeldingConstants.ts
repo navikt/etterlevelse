@@ -60,4 +60,5 @@ export type TPvoTilbakemeldingQL = IPvoTilbakemelding & {
   etterlevelseDokumentasjonId: string
   etterlevelseDokumentasjonData: TEtterlevelseDokumentasjonQL
   sistEndretAvMeg: string
+  antallInnsendingTilPvo: number
 }

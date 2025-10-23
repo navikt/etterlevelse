@@ -31,6 +31,7 @@ export const getPvoTilbakemeldingListQuery = gql`
         changeStamp {
           createdDate
         }
+        antallInnsendingTilPvo
       }
     }
   }

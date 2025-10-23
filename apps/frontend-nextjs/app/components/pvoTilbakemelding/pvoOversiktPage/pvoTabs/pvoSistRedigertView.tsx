@@ -66,6 +66,7 @@ export const PvoSistRedigertView = () => {
                       pvkDokumentStatus={pvoTilbakemelding.pvkDokumentStatus as EPvkDokumentStatus}
                       status={pvoTilbakemelding.status}
                       etterlystReturn={pvoTilbakemelding.vilFaPvkIRetur}
+                      antallInnsendingTilPvo={pvoTilbakemelding.antallInnsendingTilPvo}
                     />
                   }
                   changeStamp={`

@@ -253,6 +253,7 @@ export const PvoTilbakemeldingsList = () => {
                         status={
                           pvoTilbakemelding.length !== 0 ? pvoTilbakemelding[0].status : undefined
                         }
+                        antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
                       />
                     }
                     changeStamp={changestamp}

@@ -4,6 +4,7 @@ import { Detail, Tag } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
+  antallInnsendingTilPvo: number
   pvkDokumentStatus?: EPvkDokumentStatus
   status?: EPvoTilbakemeldingStatus
   etterlystReturn?: boolean
@@ -38,9 +39,17 @@ export const PvoStatusView: FunctionComponent<TProps> = ({
   pvkDokumentStatus,
   status,
   etterlystReturn,
+  antallInnsendingTilPvo,
 }) => {
   const getStatusDisplay = (variant: any) => (
     <div className='flex gap-2'>
+      {antallInnsendingTilPvo > 1 && (
+        <Tag variant='warning' className='h-fit'>
+          <div className={'flex items-center'}>
+            <Detail className='whitespace-nowrap'>{antallInnsendingTilPvo}. innsending</Detail>
+          </div>
+        </Tag>
+      )}
       {etterlystReturn && (
         <Tag variant='warning' className='h-fit'>
           <div className={'flex items-center'}>
