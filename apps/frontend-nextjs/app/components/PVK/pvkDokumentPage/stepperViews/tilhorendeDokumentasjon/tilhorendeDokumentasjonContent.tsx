@@ -13,7 +13,7 @@ import { behandlingskatalogenProcessUrl } from '@/routes/behandlingskatalog/beha
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { Alert, BodyLong, BodyShort, Button, Heading, List } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, Heading, List, ReadMore } from '@navikt/ds-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
@@ -196,6 +196,15 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                 </BodyLong>
               </div>
             )}
+
+          <ReadMore header='Må vi dokumentere samme risikoscenarioer i PVK som vi gjør i ROS?'>
+            ROS skal identifisere risiko og sårbarhet knyttet til virksomheten og gjøres ofte på
+            systemnivå, mens PVK er risiko knyttet til personvern for den/de vi behandler
+            personopplysninger om. Overlapp vil da kunne skje når det gjelder risiko knyttet til
+            personopplysningssikkerhet. Det vil da holde å legge inn disse scenariene i ROS og så
+            legge inn lenke til ROS i eget felt for dette i etterlevelses-/PVK-dokumentasjonen. PVO
+            vil også se på ROS ved vurdering av PVK.
+          </ReadMore>
 
           {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
             <Alert variant='info' className='my-5'>
