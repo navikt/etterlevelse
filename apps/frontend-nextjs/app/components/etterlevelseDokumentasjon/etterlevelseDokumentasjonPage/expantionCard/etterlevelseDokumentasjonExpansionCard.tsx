@@ -17,7 +17,7 @@ import {
 import { p360Url } from '@/routes/p360/p360Routes'
 import { ettlevColors } from '@/util/theme/theme'
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext } from 'react'
 
@@ -143,6 +143,26 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 )}
               </div>
 
+              <div className='mb-2.5'>
+                {etterlevelseDokumentasjon.resourcesData &&
+                  etterlevelseDokumentasjon.resourcesData.length > 0 && (
+                    <div className='flex gap-2 items-start'>
+                      <Label size='medium'>Personer:</Label>
+                      {etterlevelseDokumentasjon.resourcesData.map((resource) => (
+                        <BodyShort key={resource.fullName}>{resource.fullName} </BodyShort>
+                      ))}
+                    </div>
+                  )}
+
+                {etterlevelseDokumentasjon.resourcesData &&
+                  etterlevelseDokumentasjon.resourcesData.length === 0 && (
+                    <div className='flex flex-wrap gap-2 items-center'>
+                      <Label size='medium'>Personer:</Label>
+                      <BodyLong size='medium'>Ikke angitt</BodyLong>
+                    </div>
+                  )}
+              </div>
+
               <div className='flex items-start gap-2'>
                 <div>
                   <Label size='medium'>Varslingsadresser:</Label>
@@ -160,7 +180,7 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
           {!(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <BodyLong>
               Trenger du tilgang til å redigere dette dokumentet? I så fall ta kontakt med de som er
-              nevnt under Team eller Varslingsadresser.
+              nevnt under Team, Personer eller Varslingsadresser.
             </BodyLong>
           )}
         </ReadMore>

@@ -197,7 +197,10 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
               </div>
             )}
 
-          <ReadMore header='Må vi dokumentere samme risikoscenarioer i PVK som vi gjør i ROS?'>
+          <ReadMore
+            className="mt'3"
+            header='Må vi dokumentere samme risikoscenarioer i PVK som vi gjør i ROS?'
+          >
             ROS skal identifisere risiko og sårbarhet knyttet til virksomheten og gjøres ofte på
             systemnivå, mens PVK er risiko knyttet til personvern for den/de vi behandler
             personopplysninger om. Overlapp vil da kunne skje når det gjelder risiko knyttet til
