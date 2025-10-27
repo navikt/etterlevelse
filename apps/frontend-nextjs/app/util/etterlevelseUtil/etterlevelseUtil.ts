@@ -9,6 +9,7 @@ import { ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import _ from 'lodash'
 import moment from 'moment'
+import { kravNummerView } from '../krav/kravUtil'
 
 export const etterlevelseFilter = [
   { label: 'Alle', id: 'ALLE' },
@@ -235,3 +236,6 @@ export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskrite
     return 'Hvorfor er ikke kriteriet relevant?'
   }
 }
+
+export const etterlevelseName = (etterlevelse: IEtterlevelse): string =>
+  `${kravNummerView(etterlevelse.kravNummer, etterlevelse.kravVersjon)}`

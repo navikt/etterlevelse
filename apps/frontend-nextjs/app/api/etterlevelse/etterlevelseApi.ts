@@ -1,12 +1,15 @@
+'use client'
+
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { IKrav, ISuksesskriterie } from '@/constants/krav/kravConstants'
+import { IKrav, ISuksesskriterie, TKravId } from '@/constants/krav/kravConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 export const getEtterlevelse = async (id: string) => {
   return (await axios.get<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
@@ -48,6 +51,27 @@ export const updateEtterlevelse = async (etterlevelse: IEtterlevelse) => {
   return (
     await axios.put<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${etterlevelse.id}`, dto)
   ).data
+}
+
+export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: TKravId) => {
+  const isCreateNew = id === 'ny'
+  const [data, setData] = useState<IEtterlevelse | undefined>(
+    isCreateNew
+      ? mapEtterlevelseToFormValue({
+          behandlingId,
+          kravVersjon: kravId?.kravVersjon,
+          kravNummer: kravId?.kravNummer,
+        })
+      : undefined
+  )
+
+  useEffect(() => {
+    if (id && !isCreateNew) {
+      getEtterlevelse(id).then(setData)
+    }
+  }, [id])
+
+  return [data, setData] as [IEtterlevelse | undefined, (k: IEtterlevelse) => void]
 }
 
 function etterlevelseToEtterlevelseDto(etterlevelse: IEtterlevelse) {
