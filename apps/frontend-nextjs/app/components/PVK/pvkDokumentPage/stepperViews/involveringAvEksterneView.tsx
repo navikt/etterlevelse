@@ -95,7 +95,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
               initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
               innerRef={formRef}
             >
-              {({ submitForm, values, resetForm, setFieldValue, initialValues }) => (
+              {({ submitForm, values, resetForm, setFieldValue, dirty, initialValues }) => (
                 <Form>
                   <div className='flex justify-center'>
                     <div className='max-w-[75ch]'>
@@ -244,7 +244,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                         />
                       </div>
 
-                      {savedSuccessful && (
+                      {savedSuccessful && !dirty && (
                         <div className='mt-5'>
                           <Alert
                             variant='success'

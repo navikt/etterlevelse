@@ -173,7 +173,15 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                 }}
                 innerRef={formRef}
               >
-                {({ submitForm, initialValues, errors, isSubmitting, resetForm, values }) => (
+                {({
+                  submitForm,
+                  initialValues,
+                  errors,
+                  isSubmitting,
+                  dirty,
+                  resetForm,
+                  values,
+                }) => (
                   <Form>
                     <div className='flex justify-center'>
                       <div className='max-w-[75ch] w-full'>
@@ -213,7 +221,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                           </ErrorSummary>
                         )}
 
-                        {savedSuccessful && (
+                        {savedSuccessful && !dirty && (
                           <div className='mt-5'>
                             <Alert
                               variant='success'
