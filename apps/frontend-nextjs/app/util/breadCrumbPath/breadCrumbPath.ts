@@ -17,3 +17,9 @@ export const dokumentasjonerBreadCrumbPath: IBreadCrumbPath = {
   pathName: 'Dokumentere etterlevelse',
   href: etterlevelseDokumentasjonerUrl(),
 }
+
+export const dokumentasjonBreadCrumbPath = (pathName: string, href: string): IBreadCrumbPath => {
+  const dokumentasjon: IBreadCrumbPath = { pathName: pathName, href: href }
+
+  return dokumentasjon
+}
