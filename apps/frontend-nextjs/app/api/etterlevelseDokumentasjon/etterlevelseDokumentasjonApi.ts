@@ -77,9 +77,9 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setIsLoading(true)
-    if (etterlevelseDokumentasjonId && !isCreateNew) {
-      ;(async () => {
+    ;(async () => {
+      setIsLoading(true)
+      if (etterlevelseDokumentasjonId && !isCreateNew) {
         await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(
           async (etterlevelseDokumentasjon) => {
             setData(
@@ -90,8 +90,8 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
             setIsLoading(false)
           }
         )
-      })()
-    }
+      }
+    })()
   }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [
