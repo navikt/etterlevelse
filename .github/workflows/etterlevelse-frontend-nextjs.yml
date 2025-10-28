@@ -76,3 +76,23 @@ jobs:
           ENVIRONMENT: dev-gcp:teamdatajegerne:etterlevelse-frontend
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
+
+  deploy-prod:
+    name: Frontend - deploy Prod GCP
+    needs: build
+    if: github.ref == 'refs/heads/prod'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: apps/frontend-nextjs/nais/frontend-gcp.yaml
+          VARS: apps/frontend-nextjs/nais/frontend-prod-gcp-vars.yaml
+          ENVIRONMENT: prod-gcp:teamdatajegerne:etterlevelse-frontend
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
