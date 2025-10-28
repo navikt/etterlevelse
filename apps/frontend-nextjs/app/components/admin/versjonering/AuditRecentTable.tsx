@@ -74,7 +74,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const length = getInitialLength()
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
-  const [, setIdInput, idInput] = useDebouncedState('', 400)
+  const [idInput, setIdInput] = useDebouncedState('', 400)
 
   useEffect(() => {
     ;(async () => {

@@ -132,7 +132,7 @@ const Kriterie = ({
   newVersion,
 }: IPropsKriterie) => {
   const debounceDelay = 500
-  const [navn, setNavn, navnInput] = useDebouncedState(suksesskriterium.navn, debounceDelay)
+  const [navn, setNavn] = useDebouncedState(suksesskriterium.navn, debounceDelay)
   const [beskrivelse, setBeskrivelse] = useDebouncedState(
     suksesskriterium.beskrivelse || '',
     debounceDelay
@@ -197,7 +197,7 @@ const Kriterie = ({
           <TextField
             label={`Suksesskriterium ${nummer}`}
             hideLabel
-            value={navnInput}
+            value={navn}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               setNavn((event.target as HTMLInputElement).value)
             }
