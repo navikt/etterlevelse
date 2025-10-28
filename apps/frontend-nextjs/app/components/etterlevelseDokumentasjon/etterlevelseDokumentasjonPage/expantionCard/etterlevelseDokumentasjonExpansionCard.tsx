@@ -149,12 +149,9 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                     <div className='flex gap-2 items-start'>
                       <Label size='medium'>Personer:</Label>
                       <div className='flex flex-wrap tri'>
-                        {etterlevelseDokumentasjon.resourcesData.map((resource, index, array) => (
-                          <BodyShort className='mr-2' key={resource.fullName}>
-                            {resource.fullName}
-                            {index < array.length - 1 && ','}
-                          </BodyShort>
-                        ))}
+                        <BodyShort size='medium'>
+                          {etterlevelseDokumentasjon.resourcesData.map(r => r.fullName).join(', ')}
+                        </BodyShort>
                       </div>
                     </div>
                   )}
