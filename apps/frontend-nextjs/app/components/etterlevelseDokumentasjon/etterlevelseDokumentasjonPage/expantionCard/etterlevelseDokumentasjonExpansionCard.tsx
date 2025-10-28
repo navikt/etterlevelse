@@ -168,24 +168,26 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                   )}
               </div>
 
-              <div className='flex items-start gap-2'>
-                <div>
-                  <Label size='medium'>Varslingsadresser:</Label>
+              {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                <div className='flex items-start gap-2'>
+                  <div>
+                    <Label size='medium'>Varslingsadresser:</Label>
+                  </div>
+                  <div>
+                    {etterlevelseDokumentasjon.varslingsadresser && (
+                      <VarslingsadresserView
+                        varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+                      />
+                    )}
+                  </div>
                 </div>
-                <div>
-                  {etterlevelseDokumentasjon.varslingsadresser && (
-                    <VarslingsadresserView
-                      varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
-                    />
-                  )}
-                </div>
-              </div>
+              )}
             </div>
           </div>
           {!(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <BodyLong>
               Trenger du tilgang til å redigere dette dokumentet? I så fall ta kontakt med de som er
-              nevnt under Team, Personer eller Varslingsadresser.
+              nevnt under Team eller Personer.
             </BodyLong>
           )}
         </ReadMore>
