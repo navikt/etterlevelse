@@ -149,6 +149,7 @@ public class PvkDokumentController {
 
     private void updatePvoTilbakemeldingStatus(PvkDokument pvkDokument) {
         log.info("Updating PVO tilbakemelding status with id = {}", pvkDokument.getId());
+        if (pvkDokument.getStatus()  != PvkDokumentStatus.UNDERARBEID && pvkDokument.getStatus() != PvkDokumentStatus.SENDT_TIL_PVO) {
         var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
 
         if (pvoTilbakmelding != null) {
@@ -162,5 +163,6 @@ public class PvkDokumentController {
         } else {
             throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
         }
+    }
     }
 }
