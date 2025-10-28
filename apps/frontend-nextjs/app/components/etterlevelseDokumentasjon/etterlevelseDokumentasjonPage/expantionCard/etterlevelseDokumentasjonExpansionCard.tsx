@@ -143,24 +143,50 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 )}
               </div>
 
-              <div className='flex items-start gap-2'>
-                <div>
-                  <Label size='medium'>Varslingsadresser:</Label>
-                </div>
-                <div>
-                  {etterlevelseDokumentasjon.varslingsadresser && (
-                    <VarslingsadresserView
-                      varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
-                    />
+              <div className='mb-2.5'>
+                {etterlevelseDokumentasjon.resourcesData &&
+                  etterlevelseDokumentasjon.resourcesData.length > 0 && (
+                    <div className='flex gap-2 items-start'>
+                      <Label size='medium'>Personer:</Label>
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {etterlevelseDokumentasjon.resourcesData
+                            .map((r) => r.fullName)
+                            .join(', ')}
+                        </BodyLong>
+                      </div>
+                    </div>
                   )}
-                </div>
+
+                {etterlevelseDokumentasjon.resourcesData &&
+                  etterlevelseDokumentasjon.resourcesData.length === 0 && (
+                    <div className='flex flex-wrap gap-2 items-center'>
+                      <Label size='medium'>Personer:</Label>
+                      <BodyLong size='medium'>Ikke angitt</BodyLong>
+                    </div>
+                  )}
               </div>
+
+              {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                <div className='flex items-start gap-2'>
+                  <div>
+                    <Label size='medium'>Varslingsadresser:</Label>
+                  </div>
+                  <div>
+                    {etterlevelseDokumentasjon.varslingsadresser && (
+                      <VarslingsadresserView
+                        varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           {!(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <BodyLong>
               Trenger du tilgang til å redigere dette dokumentet? I så fall ta kontakt med de som er
-              nevnt under Team eller Varslingsadresser.
+              nevnt under Team eller Personer.
             </BodyLong>
           )}
         </ReadMore>
