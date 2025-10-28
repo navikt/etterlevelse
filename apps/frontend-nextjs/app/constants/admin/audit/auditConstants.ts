@@ -2,21 +2,25 @@ import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 
 export enum EObjectType {
   Codelist = 'CODELIST',
-  Krav = 'Krav',
   KravPriorityList = 'KravPriorityList',
-  Etterlevelse = 'Etterlevelse',
-  Behandling = 'Behandling',
-  EtterlevelseDokumentasjon = 'EtterlevelseDokumentasjon',
-  BehandlingData = 'BehandlingData',
+  ETTERLEVELSE = 'ETTERLEVELSE',
+  KRAV = 'KRAV',
   Melding = 'Melding',
-  EtterlevelseArkiv = 'EtterlevelseArkiv',
-  EtterlevelseMetadata = 'EtterlevelseMetadata',
+  ETTERLEVELSE_METADATA = 'ETTERLEVELSE_METADATA',
   ETTERLEVELSE_DOKUMENTASJON = 'ETTERLEVELSE_DOKUMENTASJON',
   PVK_DOKUMENT = 'PVK_DOKUMENT',
   PVO_TILBAKEMELDING = 'PVO_TILBAKEMELDING',
-  RISIKOSCENARIO = 'RISIKOSCENARIO',
   BEHANDLINGENS_LIVSLOP = 'BEHANDLINGENS_LIVSLOP',
+  RISIKOSCENARIO = 'RISIKOSCENARIO',
   TILTAK = 'TILTAK',
+  P360_ARCHIVE_DOCUMENT = 'P360_ARCHIVE_DOCUMENT',
+  Krav = 'Krav',
+  Etterlevelse = 'Etterlevelse',
+  EtterlevelseMetadata = 'EtterlevelseMetadata',
+  Behandling = 'Behandling',
+  EtterlevelseDokumentasjon = 'EtterlevelseDokumentasjon',
+  BehandlingData = 'BehandlingData',
+  EtterlevelseArkiv = 'EtterlevelseArkiv',
 }
 
 export interface IAuditLog {

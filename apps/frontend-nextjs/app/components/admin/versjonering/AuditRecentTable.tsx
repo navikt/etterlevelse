@@ -3,6 +3,7 @@
 import { getAudits, getAuditsByTableId } from '@/api/audit/auditApi'
 import { EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
+import { objectTypeToOptions } from '@/util/auditUtils/auditUtils'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import {
@@ -53,33 +54,27 @@ const CodeView = ({ audit }: { audit: IAuditItem }) => {
 
 const format = (id: string) => _.trim(id, '"')
 
+const getInitialLength = () => {
+  if (typeof window !== 'undefined') {
+    if (window.innerWidth > 1000) {
+      if (window.innerWidth > 1200) {
+        return 40
+      } else {
+        return 30
+      }
+    } else {
+      return 20
+    }
+  }
+}
+
 export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType }) => {
   const [audits, setAudits] = useState<IPageResponse<IAuditItem>>(emptyPage)
   const [limit, setLimit] = useState(20)
-  const [length, setLength] = useState(20)
+  const length = getInitialLength()
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [page, setPage] = useState(1)
   const [, setIdInput, idInput] = useDebouncedState('', 400)
-
-  useEffect(() => {
-    // const ampliInstance = ampli()
-    // if (ampliInstance) {
-    //   ampliInstance.logEvent('sidevisning', {
-    //     side: 'Varsel side for admin',
-    //     sidetittel: 'Log side for varslinger',
-    //     ...userRoleEventProp,
-    //   })
-    // }
-    if (window.innerWidth > 1000) {
-      if (window.innerWidth > 1200) {
-        setLength(40)
-      } else {
-        setLength(30)
-      }
-    } else {
-      setLength(20)
-    }
-  }, [])
 
   useEffect(() => {
     ;(async () => {
@@ -104,17 +99,19 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   }
 
   useEffect(() => {
-    const nextPageNum = Math.ceil(audits.totalElements / limit)
-    if (audits.totalElements && nextPageNum < page) {
-      setPage(nextPageNum)
-    }
-  }, [limit, audits.totalElements])
+    ;(async () => {
+      const nextPageNum = Math.ceil(audits.totalElements / limit)
+      if (audits.totalElements && nextPageNum < page) {
+        setPage(nextPageNum)
+      }
+    })()
+  }, [limit, audits.totalElements, page])
 
   if (!props.show) {
     return null
   }
 
-  const tableOptions = Object.keys(EObjectType).map((ot) => ({ value: ot, label: ot }))
+  const tableOptions = Object.keys(EObjectType).map((ot) => objectTypeToOptions(ot as EObjectType))
 
   return (
     <div>
