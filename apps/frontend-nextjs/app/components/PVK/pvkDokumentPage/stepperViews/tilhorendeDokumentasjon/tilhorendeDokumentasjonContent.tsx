@@ -198,7 +198,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
             )}
 
           <ReadMore
-            className="mt'3"
+            className='mt-3'
             header='Må vi dokumentere samme risikoscenarioer i PVK som vi gjør i ROS?'
           >
             ROS skal identifisere risiko og sårbarhet knyttet til virksomheten og gjøres ofte på
