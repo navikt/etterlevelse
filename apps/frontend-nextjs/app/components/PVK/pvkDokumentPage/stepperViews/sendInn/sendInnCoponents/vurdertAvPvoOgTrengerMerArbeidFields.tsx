@@ -41,45 +41,49 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
 }) => {
   return (
     <div>
-      <div className='mt-5 mb-3'>
-        <TextAreaField
-          height='150px'
-          noPlaceholder
-          label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-          name='merknadTilPvoEllerRisikoeier'
-          markdown
-        />
-      </div>
-      <BeskjedFraPvoReadOnly
-        pvoTilbakemelding={pvoTilbakemelding}
-        pvoVurderingList={pvoVurderingList}
-      />
+      <div className='flex justify-center w-full'>
+        <div className='w-full max-w-[75ch]'>
+          <div className='mt-5 mb-3'>
+            <TextAreaField
+              height='150px'
+              noPlaceholder
+              label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
+              name='merknadTilPvoEllerRisikoeier'
+              markdown
+            />
+          </div>
+          <BeskjedFraPvoReadOnly
+            pvoTilbakemelding={pvoTilbakemelding}
+            pvoVurderingList={pvoVurderingList}
+          />
 
-      <div className='pt-9 mb-3 max-w-[75ch]'>
-        <Heading size='medium' level='2' className='mb-5'>
-          Arbeid med PVK etter tilbakemelding fra PVO
-        </Heading>
+          <div className='pt-9 mb-3'>
+            <Heading size='medium' level='2' className='mb-5'>
+              Arbeid med PVK etter tilbakemelding fra PVO
+            </Heading>
 
-        <TextAreaField
-          rows={3}
-          noPlaceholder
-          label='Oppsummér for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
-          name='merknadTilRisikoeier'
-        />
-      </div>
+            <TextAreaField
+              rows={3}
+              noPlaceholder
+              label='Oppsummér for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
+              name='merknadTilRisikoeier'
+            />
+          </div>
 
-      {errorSummaryComponent}
+          {errorSummaryComponent}
 
-      {isLoading && (
-        <div className='flex justify-center items-center w-full'>
-          <CenteredLoader />
+          {isLoading && (
+            <div className='flex justify-center items-center w-full'>
+              <CenteredLoader />
+            </div>
+          )}
+
+          <div>
+            <Alert variant='info' className='my-5 '>
+              Status: {pvkDokumentStatusToText(pvkDokument.status)}
+            </Alert>
+          </div>
         </div>
-      )}
-
-      <div className='max-w-[75ch]'>
-        <Alert variant='info' className='my-5 '>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
       </div>
 
       <div className='mt-5 flex gap-2 items-center'>

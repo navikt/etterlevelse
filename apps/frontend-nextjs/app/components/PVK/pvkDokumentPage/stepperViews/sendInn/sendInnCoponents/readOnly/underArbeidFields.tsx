@@ -33,7 +33,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
   errorSummaryRef,
 }) => {
   return (
-    <div>
+    <div className='w-full max-w-[75ch]'>
       <div className='mt-5 mb-3'>
         <TextAreaField
           height='150px'

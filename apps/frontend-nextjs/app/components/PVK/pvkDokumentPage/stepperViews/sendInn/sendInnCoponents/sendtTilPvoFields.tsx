@@ -27,7 +27,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   submitForm,
 }) => {
   return (
-    <div>
+    <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
 
       <Alert variant='info' className='ml-4 my-5' inline>
@@ -43,7 +43,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='max-w-[75ch]'>
+      <div>
         <Alert variant='info' className='my-5'>
           Status: {pvkDokumentStatusToText(pvkDokument.status)}
         </Alert>

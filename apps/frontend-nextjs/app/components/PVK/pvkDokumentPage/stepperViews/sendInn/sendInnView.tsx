@@ -459,7 +459,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 />
 
                 <div className='flex justify-center'>
-                  <div className='w-full max-w-[75ch]'>
+                  <div>
                     {underarbeidCheck && (
                       <UnderArbeidFields
                         pvkDokument={pvkDokument}
@@ -618,13 +618,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           }
                         />
                       )}
-                    <div className='max-w-[75ch]'>
-                      <InfoChangesMadeAfterApproval
-                        pvkDokument={pvkDokument}
-                        behandlingensLivslop={behandlingensLivslop}
-                        alleRisikoscenario={alleRisikoscenario}
-                        alleTiltak={alleTiltak}
-                      />
+                    <div className='flex justify-center w-full'>
+                      <div className='max-w-[75ch]'>
+                        <InfoChangesMadeAfterApproval
+                          pvkDokument={pvkDokument}
+                          behandlingensLivslop={behandlingensLivslop}
+                          alleRisikoscenario={alleRisikoscenario}
+                          alleTiltak={alleTiltak}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

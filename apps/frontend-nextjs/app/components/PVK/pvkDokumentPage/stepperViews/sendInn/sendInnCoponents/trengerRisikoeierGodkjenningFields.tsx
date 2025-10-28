@@ -52,7 +52,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
     etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) || user.isAdmin()
 
   return (
-    <div>
+    <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
       <BeskjedFraPvoReadOnly
         pvoTilbakemelding={pvoTilbakemelding}
@@ -60,7 +60,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
       />
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
 
-      <div className='mt-5 mb-3 max-w-[75ch]'>
+      <div className='mt-5 mb-3'>
         <TextAreaField
           height='150px'
           noPlaceholder
@@ -74,7 +74,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
 
       {isLoading && <CenteredLoader />}
 
-      <div className='max-w-[75ch]'>
+      <div>
         <Alert variant='info' className='my-5 '>
           Status: {pvkDokumentStatusToText(pvkDokument.status)}
         </Alert>

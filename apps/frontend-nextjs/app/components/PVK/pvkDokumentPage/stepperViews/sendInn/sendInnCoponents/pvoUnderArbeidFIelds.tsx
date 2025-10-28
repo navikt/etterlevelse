@@ -12,7 +12,7 @@ type TProps = {
 
 export const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, isLoading }) => {
   return (
-    <div>
+    <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
       {isLoading && (
         <div className='flex justify-center items-center w-full'>
@@ -20,7 +20,7 @@ export const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, i
         </div>
       )}
 
-      <div className='max-w-[75ch]'>
+      <div>
         <Alert variant='info' className='my-5'>
           Status: {pvkDokumentStatusToText(pvkDokument.status)}
         </Alert>

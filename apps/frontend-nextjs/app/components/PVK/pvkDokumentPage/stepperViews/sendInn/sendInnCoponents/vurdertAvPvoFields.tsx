@@ -40,14 +40,14 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   pvoVurderingList,
 }) => {
   return (
-    <div>
+    <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
       <BeskjedFraPvoReadOnly
         pvoTilbakemelding={pvoTilbakemelding}
         pvoVurderingList={pvoVurderingList}
       />
 
-      <div className='pt-9 mb-3 max-w-[75ch]'>
+      <div className='pt-9 mb-3'>
         <Heading size='medium' level='2' className='mb-5'>
           Arbeid med PVK etter tilbakemelding fra PVO
         </Heading>
@@ -69,7 +69,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='max-w-[75ch]'>
+      <div>
         <Alert variant='info' className='my-5 '>
           Status: {pvkDokumentStatusToText(pvkDokument.status)}
         </Alert>

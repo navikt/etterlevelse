@@ -51,7 +51,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
     etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) || user.isAdmin()
 
   return (
-    <div>
+    <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
       <BeskjedFraPvoReadOnly
         pvoTilbakemelding={pvoTilbakemelding}
@@ -68,7 +68,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='max-w-[75ch]'>
+      <div>
         <Alert variant='info' className='my-5 '>
           Status: {pvkDokumentStatusToText(pvkDokument.status)}
         </Alert>
