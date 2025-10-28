@@ -21,7 +21,7 @@ import {
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { FunctionComponent, RefObject, useMemo, useRef, useState } from 'react'
 import SendInnPvoViewFerdig from './sendInnPvoViewFerdig'
 import SendInnPvoViewIkkeFerdig from './sendInnPvoViewIkkeFerdig'
 
@@ -54,7 +54,11 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   )
   const [isAngreInnsending, setIsAngreInnsending] = useState<boolean>(false)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
-  const [pvoVurderingList, setPvoVurderlist] = useState<ICode[]>([])
+  const pvoVurderingList = useMemo(() => {
+    return codelistUtils
+      .getCodes(EListName.PVO_VURDERING)
+      .sort((a, b) => a.shortName.localeCompare(b.shortName)) as ICode[]
+  }, [codelistUtils])
   const [sucessSubmit, setSuccessSubmit] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
 
@@ -135,14 +139,6 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
         })
     }
   }
-
-  useEffect(() => {
-    setPvoVurderlist(
-      codelistUtils
-        .getCodes(EListName.PVO_VURDERING)
-        .sort((a, b) => a.shortName.localeCompare(b.shortName)) as ICode[]
-    )
-  }, [])
 
   return (
     <Formik
