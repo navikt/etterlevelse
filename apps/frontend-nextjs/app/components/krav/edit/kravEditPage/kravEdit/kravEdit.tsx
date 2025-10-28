@@ -90,7 +90,7 @@ export const KravEdit: FunctionComponent<TProps> = ({
           validateOnChange={false}
           validateOnBlur={false}
         >
-          {({ values, errors, isSubmitting, submitForm, initialValues }) => (
+          {({ values, errors, isSubmitting, submitForm, initialValues, setFieldValue }) => (
             <Form>
               <div>
                 <div className='w-full'>
@@ -112,6 +112,7 @@ export const KravEdit: FunctionComponent<TProps> = ({
                 <KravEditButtons
                   krav={krav}
                   values={values}
+                  setFieldValue={setFieldValue}
                   isSubmitting={isSubmitting}
                   submitForm={submitForm}
                   initialValues={initialValues}

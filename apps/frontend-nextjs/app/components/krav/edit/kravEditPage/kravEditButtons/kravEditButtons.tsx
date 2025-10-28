@@ -7,6 +7,7 @@ import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl, kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 import { Button } from '@navikt/ds-react'
+import { FormikErrors } from 'formik'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext, useState } from 'react'
@@ -17,6 +18,11 @@ type TProps = {
   krav: IKrav
   values: TKravQL
   isSubmitting: boolean
+  setFieldValue: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined
+  ) => Promise<void | FormikErrors<TKravQL>>
   submitForm: (() => Promise<void>) & (() => Promise<any>)
   initialValues: TKravQL
 }
@@ -25,6 +31,7 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
   krav,
   values,
   isSubmitting,
+  setFieldValue,
   submitForm,
   initialValues,
 }) => {
@@ -45,14 +52,14 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
               router.push(kravlisteQueryUrl())
             }
           }}
-          submitSaveButton={() => {
-            values.status = krav.status
-            submitForm()
+          submitSaveButton={async () => {
+            await setFieldValue('status', krav.status)
+            await submitForm()
           }}
           kravStatus={krav.status}
-          submitAktivButton={() => {
-            values.status = EKravStatus.AKTIV
-            submitForm()
+          submitAktivButton={async () => {
+            await setFieldValue('status', EKravStatus.AKTIV)
+            await submitForm()
           }}
           isSubmitting={isSubmitting}
         />
@@ -61,8 +68,8 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             <div className='mr-2'>
               <Button
                 variant='secondary'
-                onClick={() => {
-                  values.status = EKravStatus.UTGAATT
+                onClick={async () => {
+                  await setFieldValue('status', EKravStatus.UTGAATT)
                   setUtgaattKravMessage(true)
                 }}
                 disabled={isSubmitting}
@@ -90,9 +97,9 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             <div className='mr-2'>
               <Button
                 variant='secondary'
-                onClick={() => {
-                  values.status = EKravStatus.UTKAST
-                  submitForm()
+                onClick={async () => {
+                  await setFieldValue('status', EKravStatus.UTKAST)
+                  await submitForm()
                 }}
                 disabled={isSubmitting}
                 type='button'
@@ -106,8 +113,8 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
             status='utgått'
             open={utgaattKravMessage}
             brukerBeskjed='Denne handligen kan ikke reverseres'
-            setKravMessage={() => {
-              values.status = initialValues.status
+            setKravMessage={async () => {
+              await setFieldValue('status', initialValues.status)
               setUtgaattKravMessage(false)
             }}
             formComponent={
@@ -155,14 +162,14 @@ export const KravEditButtons: FunctionComponent<TProps> = ({
                       ...newVersionOfKrav,
                       status: EKravStatus.UTKAST,
                     }) as TKravQL
-                  ).then(() => {
-                    values.status = EKravStatus.AKTIV
-                    submitForm()
+                  ).then(async () => {
+                    await setFieldValue('status', EKravStatus.AKTIV)
+                    await submitForm()
                     setAktivKravMessage(false)
                   })
                 } else {
-                  values.status = EKravStatus.AKTIV
-                  submitForm()
+                  await setFieldValue('status', EKravStatus.AKTIV)
+                  await submitForm()
                   setAktivKravMessage(false)
                 }
               }}

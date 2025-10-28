@@ -33,7 +33,6 @@ interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   placeholder?: string
   maxCharacter?: number
   rows?: number
-  setIsFormDirty?: (v: boolean) => void
   withHighlight?: boolean
   withUnderline?: boolean
 }
@@ -49,7 +48,6 @@ export const TextAreaField = ({
   placeholder,
   maxCharacter,
   rows,
-  setIsFormDirty,
   withHighlight,
   withUnderline,
 }: IPropsTextAreaField) => {
@@ -75,7 +73,6 @@ export const TextAreaField = ({
                     setValue={(v: string) => fieldProps.form.setFieldValue(name, v)}
                     errors={fieldProps.form.errors}
                     name={name}
-                    setIsFormDirty={setIsFormDirty}
                     withHighlight={withHighlight}
                     withUnderline={withUnderline}
                   />
@@ -104,9 +101,6 @@ export const TextAreaField = ({
                 {...fieldProps.field}
                 placeholder={noPlaceholder ? '' : placeholder ? placeholder : label}
                 onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
-                  if (setIsFormDirty) {
-                    setIsFormDirty(true)
-                  }
                   fieldProps.field.onChange(event)
                 }}
               />

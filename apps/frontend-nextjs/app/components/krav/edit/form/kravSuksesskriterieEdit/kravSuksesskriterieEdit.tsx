@@ -13,13 +13,11 @@ import _ from 'lodash'
 import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
 
 type TKravSuksesskriterieEditProps = {
-  setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
   newKrav?: boolean
 }
 
 export const KravSuksesskriterierEdit: FunctionComponent<TKravSuksesskriterieEditProps> = ({
-  setIsFormDirty,
   newVersion,
   newKrav,
 }) => (
@@ -28,7 +26,6 @@ export const KravSuksesskriterierEdit: FunctionComponent<TKravSuksesskriterieEdi
       {(fieldArrayRenderProps: FieldArrayRenderProps) => (
         <KriterieList
           fieldArrayRenderProps={fieldArrayRenderProps}
-          setIsFormDirty={setIsFormDirty}
           newVersion={newVersion}
           newKrav={newKrav}
         />
@@ -44,7 +41,6 @@ const nextId = (suksesskriterier: ISuksesskriterie[]): number => {
 
 interface IPropsKriterieList {
   fieldArrayRenderProps: FieldArrayRenderProps
-  setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
   newKrav?: boolean
 }
@@ -78,12 +74,7 @@ const AddSuksessKriterieButton: FunctionComponent<TAddSuksessKriterieButtonProps
   </div>
 )
 
-const KriterieList = ({
-  fieldArrayRenderProps,
-  setIsFormDirty,
-  newVersion,
-  newKrav,
-}: IPropsKriterieList) => {
+const KriterieList = ({ fieldArrayRenderProps, newVersion, newKrav }: IPropsKriterieList) => {
   const suksesskriterier = fieldArrayRenderProps.form.values.suksesskriterier as ISuksesskriterie[]
 
   return (
@@ -99,7 +90,6 @@ const KriterieList = ({
             fieldArrayRenderProps.remove(index)
           }}
           fieldArrayRenderProps={fieldArrayRenderProps}
-          setIsFormDirty={setIsFormDirty}
           newVersion={newVersion}
         />
       ))}
@@ -129,7 +119,6 @@ interface IPropsKriterie {
   update: (suksesskriterium: ISuksesskriterie) => void
   remove: () => void
   fieldArrayRenderProps: FieldArrayRenderProps
-  setIsFormDirty?: (v: boolean) => void
   newVersion?: boolean
 }
 
@@ -140,7 +129,6 @@ const Kriterie = ({
   update,
   remove,
   fieldArrayRenderProps,
-  setIsFormDirty,
   newVersion,
 }: IPropsKriterie) => {
   const debounceDelay = 500
@@ -235,12 +223,7 @@ const Kriterie = ({
           </div>
 
           {mode === 'edit' && (
-            <TextEditor
-              initialValue={beskrivelse}
-              setValue={setBeskrivelse}
-              height='15.625rem'
-              setIsFormDirty={setIsFormDirty}
-            />
+            <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height='15.625rem' />
           )}
 
           {mode === 'view' && (

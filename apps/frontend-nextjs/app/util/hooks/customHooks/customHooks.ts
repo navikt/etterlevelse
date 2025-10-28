@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useState } from 'react'
+import { Dispatch, RefObject, SetStateAction, createRef, useEffect, useRef, useState } from 'react'
 
 export function useDebouncedState<T>(
   initialValue: T,
@@ -9,19 +9,29 @@ export function useDebouncedState<T>(
   passThrough?: (value: T) => void
 ): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
+  const mounted = useRef(true)
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
   useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
+
+  useEffect(() => {
     const handler: NodeJS.Timeout = setTimeout(() => {
-      setDebouncedValue(value)
-      if (passThrough) {
-        passThrough(value)
+      if (mounted.current) {
+        setDebouncedValue(value)
+        if (passThrough) {
+          passThrough(value)
+        }
       }
     }, delay)
     return () => {
       clearTimeout(handler)
     }
-  }, [value, delay])
+  }, [value, delay, passThrough])
 
   // value returned as actual non-debounced value to be used in inputfields etc
   return [debouncedValue, setValue, value]

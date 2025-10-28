@@ -11,11 +11,16 @@ import { ettlevColors } from '@/util/theme/theme'
 import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
-import { Editor } from 'react-draft-wysiwyg-next'
 import 'react-draft-wysiwyg-next/dist/react-draft-wysiwyg.css'
 import { FormError } from '../modalSchema/formError/formError'
 import './customStyle.css'
+
+const Editor = dynamic(
+  () => import('react-draft-wysiwyg-next').then((mod) => ({ default: mod.Editor })),
+  { ssr: false }
+)
 
 type TTextEditorProps = {
   initialValue: string
@@ -26,7 +31,6 @@ type TTextEditorProps = {
   simple?: boolean
   width?: string
   maxWidth?: string
-  setIsFormDirty?: (v: boolean) => void
   withHighlight?: boolean
   withUnderline?: boolean
 }
@@ -40,7 +44,6 @@ export const TextEditor = ({
   simple,
   width,
   maxWidth,
-  setIsFormDirty,
   withHighlight,
   withUnderline,
 }: TTextEditorProps) => {
@@ -214,9 +217,6 @@ export const TextEditor = ({
           }}
           onEditorStateChange={(data) => {
             setVal(CustomDraftToMarkdown(convertToRaw(data.getCurrentContent())))
-            if (setIsFormDirty) {
-              setIsFormDirty(true)
-            }
           }}
           initialContentState={CustomMarkdownToDraft(val)}
           localization={{
