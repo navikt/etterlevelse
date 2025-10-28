@@ -49,6 +49,35 @@ interface IPropsKriterieList {
   newKrav?: boolean
 }
 
+type TAddSuksessKriterieButtonProps = {
+  fieldArrayRenderProps: FieldArrayRenderProps
+  suksesskriterier: ISuksesskriterie[]
+}
+
+const AddSuksessKriterieButton: FunctionComponent<TAddSuksessKriterieButtonProps> = ({
+  suksesskriterier,
+  fieldArrayRenderProps,
+}) => (
+  <div className='my-4 ml-2.5 self-end'>
+    <Button
+      type='button'
+      icon={<PlusIcon aria-label='' aria-hidden />}
+      variant='secondary'
+      disabled={suksesskriterier.length >= 15}
+      onClick={() =>
+        fieldArrayRenderProps.push({
+          id: nextId(suksesskriterier),
+          navn: '',
+          beskrivelse: '',
+          behovForBegrunnelse: 'true',
+        })
+      }
+    >
+      Suksesskriterie
+    </Button>
+  </div>
+)
+
 const KriterieList = ({
   fieldArrayRenderProps,
   setIsFormDirty,
@@ -56,27 +85,6 @@ const KriterieList = ({
   newKrav,
 }: IPropsKriterieList) => {
   const suksesskriterier = fieldArrayRenderProps.form.values.suksesskriterier as ISuksesskriterie[]
-
-  const AddSuksessKriterieButton = () => (
-    <div className='my-4 ml-2.5 self-end'>
-      <Button
-        type='button'
-        icon={<PlusIcon aria-label='' aria-hidden />}
-        variant='secondary'
-        disabled={suksesskriterier.length >= 15}
-        onClick={() =>
-          fieldArrayRenderProps.push({
-            id: nextId(suksesskriterier),
-            navn: '',
-            beskrivelse: '',
-            behovForBegrunnelse: 'true',
-          })
-        }
-      >
-        Suksesskriterie
-      </Button>
-    </div>
-  )
 
   return (
     <div className='flex flex-col'>
@@ -96,11 +104,19 @@ const KriterieList = ({
         />
       ))}
 
-      {newKrav && <AddSuksessKriterieButton />}
+      {newKrav && (
+        <AddSuksessKriterieButton
+          suksesskriterier={suksesskriterier}
+          fieldArrayRenderProps={fieldArrayRenderProps}
+        />
+      )}
 
       {!newKrav &&
         (fieldArrayRenderProps.form.initialValues.status !== EKravStatus.AKTIV || newVersion) && (
-          <AddSuksessKriterieButton />
+          <AddSuksessKriterieButton
+            suksesskriterier={suksesskriterier}
+            fieldArrayRenderProps={fieldArrayRenderProps}
+          />
         )}
     </div>
   )
