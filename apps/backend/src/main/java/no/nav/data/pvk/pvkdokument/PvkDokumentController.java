@@ -149,15 +149,18 @@ public class PvkDokumentController {
 
     private void updatePvoTilbakemeldingStatus(PvkDokument pvkDokument) {
         log.info("Updating PVO tilbakemelding status with id = {}", pvkDokument.getId());
+        var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
 
-        if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-            var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
-            if (pvoTilbakmelding != null) {
+        if (pvoTilbakmelding != null) {
+            if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
                 pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.TRENGER_REVURDERING);
-                pvoTilbakemeldingService.save(pvoTilbakmelding,true);
-            } else {
-                throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
+                pvoTilbakemeldingService.save(pvoTilbakmelding, true);
+            } else if (pvoTilbakmelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING && pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
+                pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.FERDIG);
+                pvoTilbakemeldingService.save(pvoTilbakmelding, true);
             }
+        } else {
+            throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
         }
     }
 }

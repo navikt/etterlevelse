@@ -254,6 +254,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
         isRisikoUnderarbeidCheck(risiko)
       )
 
+      console.debug(ikkeFerdigBeskrevetScenario)
+
       if (ikkeFerdigBeskrevetScenario.length !== 0) {
         setRisikoscenarioError(
           `${ikkeFerdigBeskrevetScenario.length} risikoscenarioer er ikke ferdig beskrevet.`
