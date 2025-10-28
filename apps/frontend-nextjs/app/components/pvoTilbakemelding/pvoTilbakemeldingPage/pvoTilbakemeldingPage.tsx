@@ -21,7 +21,7 @@ import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscena
 import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { RefObject, useContext, useEffect, useRef, useState } from 'react'
+import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensArtOgOmfangPvoView from './stepperViews/behandlingensArtOgOmfangPvoView'
 import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoView'
@@ -58,11 +58,9 @@ export const PvoTilbakemeldingPage = () => {
     useState<IEtterlevelseDokumentasjon>()
   const [isEtterlevelseDokumentaasjonLoading, setIsEtterlevelseDokumentaasjonLoading] =
     useState<boolean>(false)
-  const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.pvkDokumentId)
   const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
     usePvoTilbakemelding(params.pvkDokumentId)
-  const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
@@ -81,6 +79,46 @@ export const PvoTilbakemeldingPage = () => {
   const formRef: RefObject<any> = useRef(undefined)
   const user = useContext(UserContext)
   const codelist = useContext(CodelistContext)
+
+  const readOnlyData: { databehandlere: string[]; personkategorier: string[] } = useMemo(() => {
+    if (
+      etterlevelseDokumentasjon &&
+      etterlevelseDokumentasjon.behandlinger &&
+      etterlevelseDokumentasjon.behandlinger.length > 0
+    ) {
+      const allePersonKategorier: IExternalCode[] = []
+      const alleDatabehandlerIds: IDataBehandler[] = []
+
+      etterlevelseDokumentasjon.behandlinger.map((behandling) => {
+        if (behandling.dataBehandlerList) {
+          alleDatabehandlerIds.push(...behandling.dataBehandlerList)
+        }
+
+        if (behandling.policies && behandling.policies.length !== 0) {
+          behandling.policies.map((policy) => {
+            allePersonKategorier.push(...policy.personKategorier)
+          })
+        }
+      })
+
+      const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code').map(
+        (personkategori) => personkategori.shortName
+      )
+
+      const uniqDatabehandlere: string[] = uniqBy(alleDatabehandlerIds, 'id').map(
+        (databehandler) => databehandler.navn
+      )
+      return {
+        databehandlere: uniqDatabehandlere,
+        personkategorier: uniqPersonkategorier,
+      }
+    } else {
+      return {
+        databehandlere: [],
+        personkategorier: [],
+      }
+    }
+  }, [etterlevelseDokumentasjon])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
@@ -117,40 +155,6 @@ export const PvoTilbakemeldingPage = () => {
       setCurrentPage(StepTitle[step - 1])
     }
   }
-
-  useEffect(() => {
-    if (
-      etterlevelseDokumentasjon &&
-      etterlevelseDokumentasjon.behandlinger &&
-      etterlevelseDokumentasjon.behandlinger.length > 0
-    ) {
-      const allePersonKategorier: IExternalCode[] = []
-      const alleDatabehandlerIds: IDataBehandler[] = []
-
-      etterlevelseDokumentasjon.behandlinger.map((behandling) => {
-        if (behandling.dataBehandlerList) {
-          alleDatabehandlerIds.push(...behandling.dataBehandlerList)
-        }
-
-        if (behandling.policies && behandling.policies.length !== 0) {
-          behandling.policies.map((policy) => {
-            allePersonKategorier.push(...policy.personKategorier)
-          })
-        }
-      })
-
-      const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code').map(
-        (personkategori) => personkategori.shortName
-      )
-
-      const uniqDatabehandlere: string[] = uniqBy(alleDatabehandlerIds, 'id').map(
-        (databehandler) => databehandler.navn
-      )
-
-      setDatabehandlere(uniqDatabehandlere)
-      setPersonKategorier(uniqPersonkategorier)
-    }
-  }, [etterlevelseDokumentasjon])
 
   useEffect(() => {
     ;(async () => {
@@ -250,7 +254,7 @@ export const PvoTilbakemeldingPage = () => {
                     )}
                     {activeStep === 3 && (
                       <BehandlingensArtOgOmfangPvoView
-                        personkategorier={personkategorier}
+                        personkategorier={readOnlyData.personkategorier}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
                         activeStep={activeStep}
@@ -275,8 +279,8 @@ export const PvoTilbakemeldingPage = () => {
                     )}
                     {activeStep === 5 && (
                       <InvolveringAvEksternePvoView
-                        personkategorier={personkategorier}
-                        databehandlere={databehandlere}
+                        personkategorier={readOnlyData.personkategorier}
+                        databehandlere={readOnlyData.databehandlere}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
                         activeStep={activeStep}
@@ -309,8 +313,8 @@ export const PvoTilbakemeldingPage = () => {
                       <SendInnPvoView
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         pvkDokument={pvkDokument}
-                        personkategorier={personkategorier}
-                        databehandlere={databehandlere}
+                        personkategorier={readOnlyData.personkategorier}
+                        databehandlere={readOnlyData.databehandlere}
                         pvoTilbakemelding={pvoTilbakemelding}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                         activeStep={activeStep}

@@ -67,7 +67,6 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
       activeStep={activeStep}
       setActiveStep={setActiveStep}
       setSelectedStep={setSelectedStep}
-      submitForm={formRef.current?.submitForm}
     />
   </div>
 )

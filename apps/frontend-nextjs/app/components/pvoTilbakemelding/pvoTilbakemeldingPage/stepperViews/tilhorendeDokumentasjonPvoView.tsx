@@ -76,7 +76,6 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
-        submitForm={formRef.current?.submitForm}
       />
     </div>
   )

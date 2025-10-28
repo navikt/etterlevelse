@@ -446,7 +446,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
-        submitForm={formRef.current?.submitForm}
       />
     </div>
   )
