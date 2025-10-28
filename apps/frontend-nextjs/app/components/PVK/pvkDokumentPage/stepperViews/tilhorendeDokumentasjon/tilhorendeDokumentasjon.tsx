@@ -10,14 +10,13 @@ import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent, RefObject } from 'react'
+import { FunctionComponent } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
-  formRef: RefObject<any>
   pvkKrav:
     | {
         krav: IPageResponse<TKravQL>
@@ -32,7 +31,6 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   activeStep,
   setActiveStep,
   setSelectedStep,
-  formRef,
   pvkKrav,
   isPvkKravLoading,
   pvoTilbakemelding,
@@ -63,7 +61,6 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
-        submitForm={formRef.current?.submitForm}
       />
     </div>
   )

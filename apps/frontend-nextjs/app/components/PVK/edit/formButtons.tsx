@@ -12,7 +12,6 @@ type TProps = {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   customButtons?: ReactNode
-  submitForm?: (() => Promise<void>) & (() => Promise<any>)
 }
 
 export const FormButtons: FunctionComponent<TProps> = ({

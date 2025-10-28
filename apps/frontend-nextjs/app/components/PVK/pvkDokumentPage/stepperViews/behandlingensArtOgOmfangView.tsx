@@ -333,7 +333,6 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
-        submitForm={formRef.current?.submitForm}
       />
     </div>
   )

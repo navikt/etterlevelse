@@ -81,7 +81,6 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
         setIsLoading(true)
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
           .then((response: IBehandlingensLivslop) => {
-            console.debug(response)
             setBehandlingensLivslop(response)
           })
           .catch((error: AxiosError) => {
@@ -325,7 +324,6 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}
-        submitForm={formRef.current?.submitForm}
       />
     </div>
   )

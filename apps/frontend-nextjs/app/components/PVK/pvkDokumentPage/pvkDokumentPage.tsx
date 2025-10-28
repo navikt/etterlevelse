@@ -260,7 +260,6 @@ export const PvkDokumentPage = () => {
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
-                      formRef={formRef}
                       pvkKrav={pvkKrav}
                       isPvkKravLoading={isPvkKravLoading}
                     />

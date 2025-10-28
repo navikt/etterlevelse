@@ -633,7 +633,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     activeStep={activeStep}
                     setActiveStep={setActiveStep}
                     setSelectedStep={setSelectedStep}
-                    submitForm={submitForm}
                     customButtons={
                       <div className='mt-5 flex gap-2 items-center'>
                         <div className='min-w-[446px]' />
