@@ -249,7 +249,7 @@ const Kriterie = ({
             </div>
           )}
         </div>
-        <div className='flex justify-end mt-[-1px]'>
+        <div className='flex justify-end -mt-px'>
           <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
             <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
             <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>

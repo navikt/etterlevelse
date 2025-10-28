@@ -65,7 +65,7 @@ export const TextAreaField = ({
                 <div className='flex w-full justify-between mb-1'>
                   <div>
                     <Label>{label}</Label>
-                    <BodyShort className='text-[var(--a-text-subtle)]'>{caption}</BodyShort>
+                    <BodyShort className='text-(--a-text-subtle)'>{caption}</BodyShort>
                   </div>
                 </div>
                 {mode === 'edit' && (
@@ -86,7 +86,7 @@ export const TextAreaField = ({
                     <Markdown source={fieldProps.field.value} escapeHtml={false} />
                   </div>
                 )}
-                <div className='flex flex-col items-end justify-end mt-[-1px]'>
+                <div className='flex flex-col items-end justify-end -mt-px'>
                   <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
                     <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
                     <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>

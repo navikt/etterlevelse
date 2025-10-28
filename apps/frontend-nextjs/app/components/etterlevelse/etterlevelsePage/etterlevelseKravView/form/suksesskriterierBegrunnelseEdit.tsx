@@ -304,7 +304,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                     <Markdown source={veiledningTekst} />
                   </Alert>
                 )}
-                <div className='flex-col flex items-end justify-end mt-[-1px]'>
+                <div className='flex-col flex items-end justify-end -mt-px'>
                   <ToggleGroup defaultValue='edit' onChange={setVeiledningsTekstMode} size='small'>
                     <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
                     <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
@@ -333,7 +333,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                     <Markdown source={veiledningTekst2} />
                   </Alert>
                 )}
-                <div className='flex-col flex items-end justify-end mt-[-1px]'>
+                <div className='flex-col flex items-end justify-end -mt-px'>
                   <ToggleGroup defaultValue='edit' onChange={setVeiledningsTekst2Mode} size='small'>
                     <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
                     <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
@@ -448,7 +448,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                 <Markdown source={begrunnelse} />
               </div>
             )}
-            <div className='flex justify-end mt-[-1px]'>
+            <div className='flex justify-end -mt-px'>
               <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
                 <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
                 <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
