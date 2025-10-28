@@ -25,7 +25,7 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { RefObject, useContext, useEffect, useRef, useState } from 'react'
+import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensLivslopView from './stepperViews/behandlingensLivslopView'
 import { IdentifiseringAvRisikoscenarioerOgTiltak } from './stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltak'
@@ -59,12 +59,10 @@ export const PvkDokumentPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
   )
-  const [personkategorier, setPersonKategorier] = useState<string[]>([])
   const [pvkDokument, setPvkDokument] = usePvkDokument(
     params.pvkDokumentId,
     params.etterlevelseDokumentasjonId
   )
-  const [databehandlere, setDatabehandlere] = useState<string[]>([])
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
@@ -83,39 +81,9 @@ export const PvkDokumentPage = () => {
     { skip: !etterlevelseDokumentasjon },
     true
   )
-
   const codelist = useContext(CodelistContext)
 
-  const breadcrumbPaths: IBreadCrumbPath[] = [
-    dokumentasjonerBreadCrumbPath,
-    {
-      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
-      href: etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId),
-    },
-  ]
-
-  const updateUrlOnStepChange = (step: number): void => {
-    router.push(
-      pvkDokumentasjonStepUrl(
-        pvkDokument?.etterlevelseDokumentId,
-        pvkDokument?.id,
-        step,
-        step === 7 ? risikoscenarioFilterAlleUrl() : ''
-      )
-    )
-  }
-
-  const updateTitleUrlAndStep = (step: number) => {
-    if (formRef.current?.dirty) {
-      setIsUnsaved(true)
-    } else {
-      setActiveStep(step)
-      updateUrlOnStepChange(step)
-      setCurrentPage(StepTitle[step - 1])
-    }
-  }
-
-  useEffect(() => {
+  const readOnlyData: { databehandlere: string[]; personkategorier: string[] } = useMemo(() => {
     if (
       etterlevelseDokumentasjon &&
       etterlevelseDokumentasjon.behandlinger &&
@@ -150,10 +118,46 @@ export const PvkDokumentPage = () => {
         (databehandler) => databehandler.navn
       )
 
-      setDatabehandlere(uniqDatabehandlere)
-      setPersonKategorier(uniqPersonkategorier)
+      return {
+        databehandlere: uniqDatabehandlere,
+        personkategorier: uniqPersonkategorier,
+      }
+    } else {
+      return {
+        databehandlere: [],
+        personkategorier: [],
+      }
     }
   }, [etterlevelseDokumentasjon])
+
+  const breadcrumbPaths: IBreadCrumbPath[] = [
+    dokumentasjonerBreadCrumbPath,
+    {
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
+      href: etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId),
+    },
+  ]
+
+  const updateUrlOnStepChange = (step: number): void => {
+    router.push(
+      pvkDokumentasjonStepUrl(
+        pvkDokument?.etterlevelseDokumentId,
+        pvkDokument?.id,
+        step,
+        step === 7 ? risikoscenarioFilterAlleUrl() : ''
+      )
+    )
+  }
+
+  const updateTitleUrlAndStep = (step: number) => {
+    if (formRef.current?.dirty) {
+      setIsUnsaved(true)
+    } else {
+      setActiveStep(step)
+      updateUrlOnStepChange(step)
+      setCurrentPage(StepTitle[step - 1])
+    }
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -238,7 +242,7 @@ export const PvkDokumentPage = () => {
                   )}
                   {activeStep === 3 && (
                     <BehandlingensArtOgOmfangView
-                      personkategorier={personkategorier}
+                      personkategorier={readOnlyData.personkategorier}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
@@ -263,8 +267,8 @@ export const PvkDokumentPage = () => {
                   )}
                   {activeStep === 5 && (
                     <InvolveringAvEksterneView
-                      personkategorier={personkategorier}
-                      databehandlere={databehandlere}
+                      personkategorier={readOnlyData.personkategorier}
+                      databehandlere={readOnlyData.databehandlere}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
@@ -300,8 +304,8 @@ export const PvkDokumentPage = () => {
                     <SendInnView
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
-                      personkategorier={personkategorier}
-                      databehandlere={databehandlere}
+                      personkategorier={readOnlyData.personkategorier}
+                      databehandlere={readOnlyData.databehandlere}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvoTilbakemelding={pvoTilbakemelding}
