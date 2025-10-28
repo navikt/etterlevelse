@@ -189,7 +189,7 @@ export const TextEditor = ({
   return (
     <div>
       <div
-        className='focus:border-[var(--a-deepblue-600)]'
+        className='focus:border-(--a-deepblue-600)'
         style={{
           backgroundColor: ettlevColors.white,
           ...borderColor(hasError ? ettlevColors.red500 : ettlevColors.textAreaBorder),
