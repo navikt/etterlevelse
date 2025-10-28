@@ -17,7 +17,7 @@ import {
 import { p360Url } from '@/routes/p360/p360Routes'
 import { ettlevColors } from '@/util/theme/theme'
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
+import { BodyLong, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext } from 'react'
 
@@ -149,9 +149,11 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                     <div className='flex gap-2 items-start'>
                       <Label size='medium'>Personer:</Label>
                       <div className='flex flex-wrap tri'>
-                        <BodyShort size='medium'>
-                          {etterlevelseDokumentasjon.resourcesData.map(r => r.fullName).join(', ')}
-                        </BodyShort>
+                        <BodyLong size='medium'>
+                          {etterlevelseDokumentasjon.resourcesData
+                            .map((r) => r.fullName)
+                            .join(', ')}
+                        </BodyLong>
                       </div>
                     </div>
                   )}
