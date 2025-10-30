@@ -108,6 +108,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
+  const [tiltakAnsvarligError, setTiltakAnsvarligError] = useState<string>('')
+  const [tiltakFristError, setTiltakFristError] = useState<string>('')
   const [pvkKravError, setPvkKravError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
@@ -124,6 +126,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
       risikoscenarioError === '' &&
       savnerVurderingError === '' &&
       tiltakError === '' &&
+      tiltakAnsvarligError === '' &&
+      tiltakFristError === '' &&
       !medlemError &&
       !avdelingError &&
       !risikoeiereDataError &&
@@ -269,16 +273,37 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const tiltakCheck = () => {
     if (alleTiltak.length) {
       const ikkeFerdigBeskrevetTiltak = alleTiltak.filter(
-        (tiltak) =>
-          tiltak.beskrivelse === '' ||
-          tiltak.navn === '' ||
-          (tiltak.ansvarlig.navIdent === '' && tiltak.ansvarligTeam.name === '')
+        (tiltak) => tiltak.beskrivelse === '' || tiltak.navn === ''
       )
       if (ikkeFerdigBeskrevetTiltak.length !== 0) {
         setTiltakError(`${ikkeFerdigBeskrevetTiltak.length} tiltak er ikke ferdig beskrevet`)
       }
     } else {
       setTiltakError('')
+    }
+  }
+
+  const tiltakAnsvarligCheck = () => {
+    if (alleTiltak.length) {
+      const manglerTiltaksansvarlig = alleTiltak.filter(
+        (tiltak) => tiltak.ansvarlig.navIdent === '' && tiltak.ansvarligTeam.name === null
+      )
+      if (manglerTiltaksansvarlig.length !== 0) {
+        setTiltakAnsvarligError(`${manglerTiltaksansvarlig.length} tiltak mangler tiltaksansvarlig`)
+      }
+    } else {
+      setTiltakAnsvarligError('')
+    }
+  }
+
+  const tiltakFristCheck = () => {
+    if (alleTiltak.length) {
+      const manglerTiltakFrist = alleTiltak.filter((tiltak) => tiltak.frist === null)
+      if (manglerTiltakFrist.length !== 0) {
+        setTiltakFristError(`${manglerTiltakFrist.length} tiltak mangler tiltaksfrist`)
+      }
+    } else {
+      setTiltakFristError('')
     }
   }
 
@@ -340,6 +365,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
         behandlingensLivslopError ||
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
+        tiltakAnsvarligError !== '' ||
+        tiltakFristError !== '' ||
         savnerVurderingError !== '' ||
         pvkKravError !== '') &&
       errorSummaryRef.current
@@ -386,6 +413,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   .length !== 0
               ) {
                 tiltakCheck()
+                tiltakAnsvarligCheck()
+                tiltakFristCheck()
                 savnerVurderingCheck()
               }
             }
@@ -478,6 +507,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             behandlingensLivslopError={behandlingensLivslopError}
                             risikoscenarioError={risikoscenarioError}
                             tiltakError={tiltakError}
+                            tiltakAnsvarligError={tiltakAnsvarligError}
+                            tiltakFristError={tiltakFristError}
                             pvkKravError={pvkKravError}
                             savnerVurderingError={savnerVurderingError}
                             manglerBehandlingError={manglerBehandlingError}
@@ -521,6 +552,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               behandlingensLivslopError={behandlingensLivslopError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
+                              tiltakAnsvarligError={tiltakAnsvarligError}
+                              tiltakFristError={tiltakFristError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -550,6 +583,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               behandlingensLivslopError={behandlingensLivslopError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
+                              tiltakAnsvarligError={tiltakAnsvarligError}
+                              tiltakFristError={tiltakFristError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -580,6 +615,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               behandlingensLivslopError={behandlingensLivslopError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
+                              tiltakAnsvarligError={tiltakAnsvarligError}
+                              tiltakFristError={tiltakFristError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -610,6 +647,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               behandlingensLivslopError={behandlingensLivslopError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
+                              tiltakAnsvarligError={tiltakAnsvarligError}
+                              tiltakFristError={tiltakFristError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
