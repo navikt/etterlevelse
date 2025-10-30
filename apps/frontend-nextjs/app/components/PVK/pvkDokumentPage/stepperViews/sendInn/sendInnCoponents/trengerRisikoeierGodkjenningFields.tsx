@@ -60,15 +60,17 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
       />
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
 
-      <div className='mt-5 mb-3'>
-        <TextAreaField
-          height='150px'
-          noPlaceholder
-          label='Kommentar til etterlever? (valgfritt)'
-          name='merknadFraRisikoeier'
-          markdown
-        />
-      </div>
+      {isRisikoeierCheck && (
+        <div className='mt-5 mb-3'>
+          <TextAreaField
+            height='150px'
+            noPlaceholder
+            label='Kommentar til etterlever? (valgfritt)'
+            name='merknadFraRisikoeier'
+            markdown
+          />
+        </div>
+      )}
 
       {errorSummaryComponent}
 
@@ -81,12 +83,13 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
       </div>
 
       <div className='mt-5 flex gap-2 items-center'>
-        <LagreOgFortsettSenereButton
-          setFieldValue={setFieldValue}
-          submitForm={submitForm}
-          initialStatus={initialStatus}
-        />
-
+        {isRisikoeierCheck && (
+          <LagreOgFortsettSenereButton
+            setFieldValue={setFieldValue}
+            submitForm={submitForm}
+            initialStatus={initialStatus}
+          />
+        )}
         <Button
           type='button'
           onClick={async () => {
@@ -97,7 +100,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           Angre sending til risikoeier
         </Button>
 
-        {isRisikoeierCheck && pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+        {isRisikoeierCheck && (
           <Button
             type='button'
             onClick={async () => {
