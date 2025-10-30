@@ -90,15 +90,18 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             initialStatus={initialStatus}
           />
         )}
-        <Button
-          type='button'
-          onClick={async () => {
-            await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
-            await submitForm()
-          }}
-        >
-          Angre sending til risikoeier
-        </Button>
+
+        {!isRisikoeierCheck && (
+          <Button
+            type='button'
+            onClick={async () => {
+              await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+              await submitForm()
+            }}
+          >
+            Angre sending til risikoeier
+          </Button>
+        )}
 
         {isRisikoeierCheck && (
           <Button
