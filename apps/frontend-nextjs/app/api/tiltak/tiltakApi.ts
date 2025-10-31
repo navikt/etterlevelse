@@ -85,5 +85,7 @@ export const mapTiltakToFormValue = (tiltak: Partial<ITiltak>): ITiltak => {
     frist: tiltak.frist || '',
     risikoscenarioIds: tiltak.risikoscenarioIds || [],
     ansvarligTeam: tiltak.ansvarligTeam || ({} as ITeam),
+    iverksatt: tiltak.iverksatt === undefined ? false : tiltak.iverksatt,
+    iverksattDato: tiltak.iverksattDato === undefined ? undefined : tiltak.iverksattDato,
   }
 }

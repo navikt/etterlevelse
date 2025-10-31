@@ -10,4 +10,6 @@ export interface ITiltak extends IDomainObject {
   frist: string
   risikoscenarioIds: string[]
   ansvarligTeam: ITeam
+  iverksatt: boolean
+  iverksattDato?: string
 }
