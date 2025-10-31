@@ -31,7 +31,7 @@ public class TiltakResponse {
     private TeamResponse ansvarligTeam;
     private LocalDate frist;
     private List<UUID> risikoscenarioIds; // Merk: Settes ikke i buildFrom
-    private Boolean iverksatt;
+    private boolean iverksatt;
     private LocalDate iverksattDato;
 
     private ChangeStampResponse changeStamp;
@@ -53,7 +53,7 @@ public class TiltakResponse {
                 .ansvarlig(Resource.builder().navIdent(td.getAnsvarlig()).build())
                 .ansvarligTeam(TeamResponse.builder().id(td.getAnsvarligTeam()).build())
                 .frist(td.getFrist())
-                .iverksatt(td.getIverksatt())
+                .iverksatt(td.isIverksatt())
                 .iverksattDato(td.getIverksattDato())
                 .build();
     }

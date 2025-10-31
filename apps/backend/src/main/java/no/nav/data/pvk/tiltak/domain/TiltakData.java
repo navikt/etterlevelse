@@ -20,6 +20,7 @@ public class TiltakData {
     private String ansvarlig;
     private LocalDate frist;
     private String ansvarligTeam;
-    private Boolean iverksatt;
+    @Builder.Default
+    private boolean iverksatt = false;
     private LocalDate iverksattDato;
 }

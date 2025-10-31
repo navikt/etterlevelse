@@ -101,7 +101,7 @@ public class TiltakIT extends IntegrationTestBase {
         respEnt = restTemplate.exchange("/tiltak/{id}", HttpMethod.PUT, new HttpEntity<>(request), TiltakResponse.class, request.getId());
         tiltak = tiltakService.get(tiltak.getId());
         assertThat(tiltak.getTiltakData().getNavn()).isEqualTo("BoinkBoink");
-        assertThat(tiltak.getTiltakData().getIverksatt()).isTrue();
+        assertThat(tiltak.getTiltakData().isIverksatt());
         assertThat(tiltak.getTiltakData().getIverksattDato()).isNotNull();
     }
 

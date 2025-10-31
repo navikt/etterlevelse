@@ -51,7 +51,7 @@ public class TiltakService {
 
     @Transactional
     public void updateIverksattDato(Tiltak tiltakToUpdate, TiltakRequest newTiltak) {
-        if ((tiltakToUpdate.getTiltakData().getIverksatt() == null || tiltakToUpdate.getTiltakData().getIverksatt().equals(false)) && newTiltak.getIverksatt() == true) {
+        if (!tiltakToUpdate.getTiltakData().isIverksatt() && newTiltak.isIverksatt()) {
             newTiltak.setIverksattDato(LocalDate.now());
         }
     }

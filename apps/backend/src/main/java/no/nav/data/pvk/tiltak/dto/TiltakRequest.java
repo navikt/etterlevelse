@@ -29,7 +29,7 @@ public class TiltakRequest implements RequestElement {
     private String ansvarlig;
     private LocalDate frist;
     private String ansvarligTeam;
-    private Boolean iverksatt;
+    private boolean iverksatt;
     private LocalDate iverksattDato;
     
     private Boolean update;
