@@ -114,7 +114,7 @@ public class TiltakController {
         if (tiltakToUpdate == null) {
             throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", id));
         }
-
+        service.updateIverksattDato(tiltakToUpdate, request);
         request.mergeInto(tiltakToUpdate);
         Tiltak tiltak = service.save(tiltakToUpdate, null, true);
         var response = TiltakResponse.buildFrom(tiltak);

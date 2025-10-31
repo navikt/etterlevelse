@@ -20,4 +20,6 @@ public class TiltakData {
     private String ansvarlig;
     private LocalDate frist;
     private String ansvarligTeam;
+    private Boolean iverksatt;
+    private LocalDate iverksattDato;
 }

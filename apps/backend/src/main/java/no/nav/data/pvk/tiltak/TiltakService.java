@@ -5,12 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
+import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +47,13 @@ public class TiltakService {
             addRisikoscenarioTiltakRelasjon(risikoscenarioId, tiltak.getId());
         }
         return tiltak;
+    }
+
+    @Transactional
+    public void updateIverksattDato(Tiltak tiltakToUpdate, TiltakRequest newTiltak) {
+        if (tiltakToUpdate.getTiltakData().getIverksatt() != true && newTiltak.getIverksatt() == true) {
+            newTiltak.setIverksattDato(LocalDate.now());
+        }
     }
 
     @Transactional
