@@ -1524,38 +1524,38 @@
     "@emnapi/runtime" "^1.5.0"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@7.32.3", "@navikt/aksel-icons@^7.32.3":
-  version "7.32.3"
-  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.32.3.tgz#cae4a9d7f509452709ad48644ad5a915daf2a0ba"
-  integrity sha512-l78szC7BHSp0pVv5qSZYZO0uQxltN1DyHODMjeqRBQUdctxA+5+WziGZiYohrSLQTgT3VJmy7btnq5A76smRhQ==
+"@navikt/aksel-icons@7.32.5", "@navikt/aksel-icons@^7.32.5":
+  version "7.32.5"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.32.5.tgz#0215e8e41e1d2f1381b237b8abc7c2a26aad575a"
+  integrity sha512-yTbja6F9JBNFAed5DTgwILQ9VDNNgNIODl7aHXeDgUU3LnwTHcHZMS4XCnSF7cKEqTN/xSW9jwwV4I1gKNpqyg==
 
-"@navikt/ds-css@7.32.3":
-  version "7.32.3"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.32.3.tgz#6be2189f2bb288fba3acc03425281b1aed86f4aa"
-  integrity sha512-g2aGpLjD/l5y9nHao4iKrAZj+fEEjBQMTtZnjKDemGNxrvvOuVAOHq0AyBDbhZNOx5rFfYl3hGeC6hYLPdQzfw==
+"@navikt/ds-css@7.32.5":
+  version "7.32.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.32.5.tgz#8439b27d26ecda87e81daf522c8bf0489785ea01"
+  integrity sha512-HhO3ORxApzOCRez/GU4wqNqfY8fl9Y09nVjN46UZRAc9z3yvjXFmNBb4apYxTm6YW6l+4G3MZKP6C8mHDiTqdA==
 
-"@navikt/ds-react@7.32.3":
-  version "7.32.3"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.32.3.tgz#694174881def4ac7ac309b1e20fde480670fdfc6"
-  integrity sha512-dYQJtpnYfDYUgHy3mxhIG3pSwFIyh2Kg9z6k9O84ua+bI31R94F/7uRaPUqPISBtsSw1ve8us4UUN/2LtWYsRg==
+"@navikt/ds-react@7.32.5":
+  version "7.32.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.32.5.tgz#0f8fea1a6a93a6355082b7ce51355c6e9e23614a"
+  integrity sha512-5s4/mTRxVNXSpXCvJFdLu0k6P5brq+a/yYaVSlFUa3l0C8akckxnfLnauWcdBNJkGm4MDbIltKSLhLYQYAiyiw==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.1.6"
-    "@navikt/aksel-icons" "^7.32.3"
-    "@navikt/ds-tokens" "^7.32.3"
+    "@navikt/aksel-icons" "^7.32.5"
+    "@navikt/ds-tokens" "^7.32.5"
     clsx "^2.1.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tailwind@7.32.3":
-  version "7.32.3"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.32.3.tgz#dec8907913a219850d90238acdb6e39666dd7dea"
-  integrity sha512-1vJG+pSb9YqHCqkY5uX5zntywAnjvH8XIaXdXM4b9IOLHGpa2UP0VOqQgw2bxUAKkECB7CU1oQWC6mtwihxB/A==
+"@navikt/ds-tailwind@7.32.5":
+  version "7.32.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.32.5.tgz#3960da95ecdf32acdbf7be10abeaa6234569a4a4"
+  integrity sha512-Y1Ov0HEGiOIaHRqzmAHwFUpwmGjdvlfX6pAclLLHUJscU95rhLohJJGkbngSzo0O2JZkNh61FF30FXjhsdkS4A==
 
-"@navikt/ds-tokens@^7.32.3":
-  version "7.32.3"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.32.3.tgz#ea5e5b87965331382c72b794f1c17166662d9620"
-  integrity sha512-sU8e33NfS70Rs75+IJfYLgMLMkMZt24Vy7P3OvyKTVZdiUA9bVY94zwbHY3KN85ImOGsmSDGen2y5hkAwv1EVA==
+"@navikt/ds-tokens@^7.32.5":
+  version "7.32.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.32.5.tgz#de05cbe9e3c3c55ff252735ebd0cc31074f0f9d2"
+  integrity sha512-dG/gP1iJARLeTK7frnLGziBZ0t2Wwu+YGLxbzZ21Nk/jpBlctIdn1MAn40sVygddWj6fOeT3X26DtiS4vLdwHA==
 
 "@next/env@15.5.4":
   version "15.5.4"
@@ -2443,10 +2443,10 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.11.0.tgz#16f74d6482e343ff263d4f4503829e9ee91a86b6"
   integrity sha512-ilYanEU8vxxBexpJd8cWM4ElSQq4QctCLKih0TSfjIfCQTeyH/6zVrmIJfLPrKTKJRbiG+cfnZbQIjAlJmF1jQ==
 
-axios@1.13.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.0.tgz#ead6f495f41f9c8869dcf7b0f24f5a4ab89707f0"
-  integrity sha512-zt40Pz4zcRXra9CVV31KeyofwiNvAbJ5B6YPz9pMJ+yOSLikvPT4Yi5LjfgjRa9CawVYBaD1JQzIVcIvBejKeA==
+axios@1.13.1:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.1.tgz#45b62dc8fe04e0e92274e08b98e910ba3d7963a7"
+  integrity sha512-hU4EGxxt+j7TQijx1oYdAjw4xuIp1wRQSsbMFwSthCWeBQur1eF+qJ5iQ5sN3Tw8YRzQNKb8jszgBdMDVqwJcw==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
