@@ -1811,10 +1811,10 @@
     "@emnapi/runtime" "^1.5.0"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@7.32.3", "@navikt/aksel-icons@^7.32.3":
-  version "7.32.3"
-  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.32.3.tgz#cae4a9d7f509452709ad48644ad5a915daf2a0ba"
-  integrity sha512-l78szC7BHSp0pVv5qSZYZO0uQxltN1DyHODMjeqRBQUdctxA+5+WziGZiYohrSLQTgT3VJmy7btnq5A76smRhQ==
+"@navikt/aksel-icons@7.32.5", "@navikt/aksel-icons@^7.32.3":
+  version "7.32.5"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.32.5.tgz#0215e8e41e1d2f1381b237b8abc7c2a26aad575a"
+  integrity sha512-yTbja6F9JBNFAed5DTgwILQ9VDNNgNIODl7aHXeDgUU3LnwTHcHZMS4XCnSF7cKEqTN/xSW9jwwV4I1gKNpqyg==
 
 "@navikt/ds-css@7.32.3":
   version "7.32.3"
