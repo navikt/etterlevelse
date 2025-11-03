@@ -16,7 +16,7 @@ export const TiltakView = (props: IProps) => {
   const { tiltak, risikoscenarioList } = props
 
   return (
-    <div>
+    <div className='mb-5'>
       <ReadOnlyField
         label='Tiltaksbeskrivelse:'
         description={tiltak.beskrivelse}
