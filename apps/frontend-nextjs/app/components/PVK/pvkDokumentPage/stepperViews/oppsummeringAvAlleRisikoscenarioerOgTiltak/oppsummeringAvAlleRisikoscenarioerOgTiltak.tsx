@@ -2,9 +2,9 @@
 
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
-import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
 import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
 import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -445,6 +445,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             tiltakList={filteredTiltakList}
                             risikoscenarioList={risikoscenarioList}
                             setTiltakList={setTiltakList}
+                            formRef={formRef}
                           />
                         )}
 
@@ -465,7 +466,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
               )}
             </div>
 
-            <RisikoscenarioAccordianAlertModal
+            <AccordianAlertModal
               isOpen={isUnsaved}
               setIsOpen={setIsUnsaved}
               navigateUrl={navigateUrl}

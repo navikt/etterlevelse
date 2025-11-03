@@ -1,6 +1,6 @@
 'use client'
 
-import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
+import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import RisikoscenarioAccordianHeader from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
@@ -126,7 +126,7 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
         })}
       </Accordion>
 
-      <RisikoscenarioAccordianAlertModal
+      <AccordianAlertModal
         isOpen={isUnsaved}
         setIsOpen={setIsUnsaved}
         navigateUrl={navigateUrl}

@@ -6,7 +6,7 @@ import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvern
 import { Accordion } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
-import RisikoscenarioAccordianAlertModal from '../common/risikoscenarioAccordianAlertModal'
+import AccordianAlertModal from '../../common/accordianAlertModal'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../common/risikoscenarioAccordionHeader'
 import RisikoscenarioAccordionContent from './risikoscenarioAccordionContent'
 
@@ -133,7 +133,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
         })}
       </Accordion>
 
-      <RisikoscenarioAccordianAlertModal
+      <AccordianAlertModal
         isOpen={isUnsaved}
         setIsOpen={setIsUnsaved}
         navigateUrl={navigateUrl}

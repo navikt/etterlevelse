@@ -1,8 +1,8 @@
 'use client'
 
+import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
-import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
 import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/kravRisikoscenarioer'
 import KravRisikoscenarioReadOnly from '@/components/risikoscenario/readOnly/KravRisikoscenarioReadOnly'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
@@ -178,7 +178,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
         </Tabs>
       </div>
 
-      <RisikoscenarioAccordianAlertModal
+      <AccordianAlertModal
         isOpen={isUnsaved}
         setIsOpen={setIsUnsaved}
         formRef={formRef}

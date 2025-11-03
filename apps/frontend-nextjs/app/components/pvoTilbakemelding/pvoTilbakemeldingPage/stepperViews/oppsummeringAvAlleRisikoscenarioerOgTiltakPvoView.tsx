@@ -3,9 +3,9 @@
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import OppsumeringAccordianListReadOnlyView from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/oppsumeringAccordianListReadOnlyView'
+import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { ContentLayout } from '@/components/others/layout/content/content'
-import RisikoscenarioAccordianAlertModal from '@/components/risikoscenario/common/risikoscenarioAccordianAlertModal'
 import TiltakAccordionListReadOnly from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -409,7 +409,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                   )}
                 </div>
 
-                <RisikoscenarioAccordianAlertModal
+                <AccordianAlertModal
                   isOpen={isUnsaved}
                   setIsOpen={setIsUnsaved}
                   navigateUrl={navigateUrl}
