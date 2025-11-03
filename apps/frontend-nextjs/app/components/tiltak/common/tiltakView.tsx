@@ -4,7 +4,7 @@ import ReadOnlyField, {
 } from '@/components/common/readOnlyFields'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { List } from '@navikt/ds-react'
+import { Alert, List } from '@navikt/ds-react'
 import moment from 'moment'
 
 interface IProps {
@@ -69,6 +69,13 @@ export const TiltakView = (props: IProps) => {
           )}
         </div>
       )}
+      <div className='mt-3 mb-5'>
+        {tiltak.iverksatt && (
+          <Alert variant='success' inline>
+            Tiltaket ble markert som iverksatt {moment(tiltak.iverksattDato).format('LL')}
+          </Alert>
+        )}
+      </div>
     </div>
   )
 }
