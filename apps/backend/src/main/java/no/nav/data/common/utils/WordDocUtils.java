@@ -647,6 +647,8 @@ public class WordDocUtils {
             newLine();
             addLabel("Tiltaksfrist:");
             addText( dateToString(tiltak.getFrist()));
+            addLabel("Iversatt:");
+            addText( dateToString(tiltak.getIverksattDato()));
             newLine();
             if (!gjenbruktScenarioIds.isEmpty()) {
                 addLabel("Tiltaket er gjenbrukt ved følgende scenarioer:");
@@ -680,7 +682,7 @@ public class WordDocUtils {
 
     public String dateToString(LocalDate date) {
         if (date == null) {
-            return "Det er ikke satt en frist for tiltaket";
+            return "Ikke angitt";
         } else {
             return DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).format(date);
         }
