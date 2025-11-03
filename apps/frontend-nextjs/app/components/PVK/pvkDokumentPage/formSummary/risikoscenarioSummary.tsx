@@ -55,7 +55,8 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
               <FormSummary.Answer>
                 <FormSummary.Label id='tiltak'>Tiltak</FormSummary.Label>
                 <FormSummary.Value>
-                  Det er beskrevet totalt sett {alleTiltak.length} tiltak.{' '}
+                  Det er beskrevet totalt sett {alleTiltak.length} tiltak, hvorav{' '}
+                  {alleTiltak.filter((tiltak) => tiltak.iverksatt).length} er iverksatt.{' '}
                   <ExternalLink href={`${tiltakLink}${tabTiltakQuery}`}>
                     Se alle tiltak
                   </ExternalLink>
