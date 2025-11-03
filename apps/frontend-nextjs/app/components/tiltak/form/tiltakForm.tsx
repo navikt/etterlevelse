@@ -14,7 +14,16 @@ import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { env } from '@/util/env/env'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { BodyLong, Button, ErrorSummary, Heading, ReadMore, TextField } from '@navikt/ds-react'
+import {
+  BodyLong,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  ErrorSummary,
+  Heading,
+  ReadMore,
+  TextField,
+} from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
@@ -203,6 +212,24 @@ export const TiltakForm = (props: IProps) => {
           <div className='mb-5'>
             <DateField label='Legg inn tiltaksfrist' name='frist' />
             <FormError fieldName='frist' akselStyling />
+          </div>
+
+          <div className='mb-5'>
+            <Field name='iverksatt'>
+              {(fieldProps: FieldProps) => (
+                <CheckboxGroup
+                  legend=''
+                  hideLegend
+                  value={fieldProps.field.value ? ['iverksatt'] : []}
+                  onChange={(value) => {
+                    const fieldValue: boolean = value.length > 0 ? true : false
+                    fieldProps.form.setFieldValue('iverksatt', fieldValue)
+                  }}
+                >
+                  <Checkbox value='iverksatt'>Markér tiltaket som iverksatt</Checkbox>
+                </CheckboxGroup>
+              )}
+            </Field>
           </div>
 
           {Object.values(errors).some(Boolean) && (
