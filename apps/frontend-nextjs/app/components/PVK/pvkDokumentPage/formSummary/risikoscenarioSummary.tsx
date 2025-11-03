@@ -4,6 +4,8 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
+  filterUtenAnsvarligQuery,
+  filterUtenFristQuery,
   risikoscenarioFilterAlleUrl,
   tabTiltakQuery,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
@@ -17,6 +19,8 @@ type TProps = {
   alleTiltak: ITiltak[]
   risikoscenarioError: string
   tiltakError: string
+  tiltakAnsvarligError: string
+  tiltakFristError: string
   customStepNumber?: number
 }
 
@@ -25,6 +29,8 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
   alleTiltak,
   risikoscenarioError,
   tiltakError,
+  tiltakAnsvarligError,
+  tiltakFristError,
   customStepNumber,
 }) => {
   const pathName = usePathname()
@@ -62,6 +68,24 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                   .
                   <br />
                   {tiltakError !== '' && <FormAlert>{tiltakError}</FormAlert>}
+                  {tiltakAnsvarligError !== '' && (
+                    <>
+                      <FormAlert>{tiltakAnsvarligError}</FormAlert>
+                      <ExternalLink
+                        href={`${tiltakLink}${tabTiltakQuery}${filterUtenAnsvarligQuery}`}
+                      >
+                        Se tiltak som mangler tiltaksansvarlig
+                      </ExternalLink>
+                    </>
+                  )}
+                  {tiltakFristError !== '' && (
+                    <>
+                      <FormAlert>{tiltakFristError}</FormAlert>
+                      <ExternalLink href={`${tiltakLink}${tabTiltakQuery}${filterUtenFristQuery}`}>
+                        Se tiltak som mangler tiltaksfrist
+                      </ExternalLink>
+                    </>
+                  )}
                 </FormSummary.Value>
               </FormSummary.Answer>
             </FormSummary.Answers>
