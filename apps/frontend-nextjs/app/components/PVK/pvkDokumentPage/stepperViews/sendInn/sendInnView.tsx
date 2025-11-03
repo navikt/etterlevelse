@@ -110,7 +110,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
   const [tiltakAnsvarligError, setTiltakAnsvarligError] = useState<string>('')
-  const [tiltakFristError, setTiltakFristError] = useState<string>('')
+  const [tiltakFristError, setTiltakFristError] = useState<string[]>([])
   const [pvkKravError, setPvkKravError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
@@ -128,7 +128,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       savnerVurderingError === '' &&
       tiltakError === '' &&
       tiltakAnsvarligError === '' &&
-      tiltakFristError === '' &&
+      tiltakFristError.length === 0 &&
       !medlemError &&
       !avdelingError &&
       !risikoeiereDataError &&
@@ -307,21 +307,27 @@ export const SendInnView: FunctionComponent<TProps> = ({
         if (tiltak.frist !== null && !tiltak.iverksatt) {
           if (moment(now).isAfter(moment(tiltak.frist))) {
             amountOfOverdueTiltak++
-          }        }
+          }
+        }
         if (tiltak.frist === null && !tiltak.iverksatt) {
           amountOfMissingTiltakFrist++
         }
       })
 
-      if (amountOfMissingTiltakFrist > 0 || amountOfOverdueTiltak > 0) {
-        let errorMessage = `${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist`
-        if (amountOfOverdueTiltak > 0) {
-          errorMessage += `, hvorav ${amountOfOverdueTiltak} har utløpt tiltaksfrist`
-        }
-        setTiltakFristError(errorMessage + '.')
+      const errorMessage: string[] = []
+      if (amountOfMissingTiltakFrist > 0) {
+        errorMessage.push(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
+      }
+
+      if (amountOfOverdueTiltak > 0) {
+        errorMessage.push(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
+      }
+
+      if (errorMessage.length !== 0) {
+        setTiltakFristError(errorMessage)
       }
     } else {
-      setTiltakFristError('')
+      setTiltakFristError([])
     }
   }
 
@@ -384,7 +390,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
         tiltakAnsvarligError !== '' ||
-        tiltakFristError !== '' ||
+        tiltakFristError.length !== 0 ||
         savnerVurderingError !== '' ||
         pvkKravError !== '') &&
       errorSummaryRef.current

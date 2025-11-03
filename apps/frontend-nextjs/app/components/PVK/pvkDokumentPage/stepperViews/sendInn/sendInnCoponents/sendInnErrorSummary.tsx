@@ -17,7 +17,7 @@ type TProps = {
   risikoscenarioError: string
   tiltakError: string
   tiltakAnsvarligError: string
-  tiltakFristError: string
+  tiltakFristError: string[]
   pvkKravError: string
   savnerVurderingError: string
   errorSummaryRef: RefObject<HTMLDivElement | null>
@@ -50,7 +50,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
         tiltakAnsvarligError !== '' ||
-        tiltakFristError !== '' ||
+        tiltakFristError.length !== 0 ||
         savnerVurderingError !== '') && (
         <ErrorSummary
           ref={errorSummaryRef}
@@ -106,11 +106,16 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               {tiltakAnsvarligError}
             </ErrorSummary.Item>
           )}
-          {tiltakFristError !== '' && (
-            <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
-              {tiltakFristError}
-            </ErrorSummary.Item>
-          )}
+          {tiltakFristError.length !== 0 &&
+            tiltakFristError.map((error, index) => (
+              <ErrorSummary.Item
+                href='#tiltak'
+                className='max-w-[75ch]'
+                key={`${index}_tiltakErrorSummary`}
+              >
+                {error}
+              </ErrorSummary.Item>
+            ))}
           {savnerVurderingError !== '' && (
             <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
               {savnerVurderingError}

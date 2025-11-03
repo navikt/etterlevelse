@@ -20,7 +20,7 @@ type TProps = {
   risikoscenarioError: string
   tiltakError: string
   tiltakAnsvarligError: string
-  tiltakFristError: string
+  tiltakFristError: string[]
   customStepNumber?: number
 }
 
@@ -77,11 +77,14 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                       >
                         Se tiltak som mangler tiltaksansvarlig
                       </ExternalLink>
+                      <br />
                     </>
                   )}
-                  {tiltakFristError !== '' && (
+                  {tiltakFristError.length !== 0 && (
                     <>
-                      <FormAlert>{tiltakFristError}</FormAlert>
+                      {tiltakFristError.forEach((error, index) => (
+                        <FormAlert key={`${index}_tiltakFristError`}>{error}</FormAlert>
+                      ))}
                       <ExternalLink href={`${tiltakLink}${tabTiltakQuery}${filterUtenFristQuery}`}>
                         Se tiltak som mangler tiltaksfrist
                       </ExternalLink>
