@@ -76,7 +76,10 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
       {tilbakemeldingsinnhold &&
         tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
         tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length !== 0 && (
-          <Markdown source={tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere} />
+          <Markdown
+            source={tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere}
+            escapeHtml={false}
+          />
         )}
       <BodyLong>
         {(!tilbakemeldingsinnhold ||

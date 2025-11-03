@@ -1,7 +1,8 @@
 'use client'
 
+import BodyLongWithLineBreak from '@/components/common/bodyLongWithLineBreak'
 import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { BodyShort, FormSummary, List } from '@navikt/ds-react'
+import { BodyLong, FormSummary, List } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent } from 'react'
@@ -79,13 +80,13 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
                     </FormSummary.Label>
                     <FormSummary.Value>
                       {fieldProp.form.values.representantInvolveringsBeskrivelse && (
-                        <BodyShort>
+                        <BodyLongWithLineBreak>
                           {fieldProp.form.values.representantInvolveringsBeskrivelse}
-                        </BodyShort>
+                        </BodyLongWithLineBreak>
                       )}
                       {!fieldProp.form.errors.representantInvolveringsBeskrivelse &&
                         !fieldProp.form.values.representantInvolveringsBeskrivelse && (
-                          <BodyShort>Ikke besvart</BodyShort>
+                          <BodyLong>Ikke besvart</BodyLong>
                         )}
                       {fieldProp.form.errors.representantInvolveringsBeskrivelse && (
                         <FormAlert>
@@ -137,13 +138,13 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
                     </FormSummary.Label>
                     <FormSummary.Value>
                       {fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse && (
-                        <BodyShort>
+                        <BodyLongWithLineBreak>
                           {fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse}
-                        </BodyShort>
+                        </BodyLongWithLineBreak>
                       )}
                       {!fieldProp.form.errors.dataBehandlerRepresentantInvolveringBeskrivelse &&
                         !fieldProp.form.values.dataBehandlerRepresentantInvolveringBeskrivelse && (
-                          <BodyShort>Ikke besvart</BodyShort>
+                          <BodyLong>Ikke besvart</BodyLong>
                         )}
                       {fieldProp.form.errors.dataBehandlerRepresentantInvolveringBeskrivelse && (
                         <FormAlert>

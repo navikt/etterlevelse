@@ -1,5 +1,6 @@
+import BodyLongWithLineBreak from '@/components/common/bodyLongWithLineBreak'
 import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { BodyShort, FormSummary, List } from '@navikt/ds-react'
+import { BodyLong, FormSummary, List } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { FunctionComponent } from 'react'
 import { StepTitle } from '../pvkDokumentPage'
@@ -80,11 +81,13 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
                   </FormSummary.Label>
                   <FormSummary.Value>
                     {fieldProp.form.values.personkategoriAntallBeskrivelse && (
-                      <BodyShort>{fieldProp.form.values.personkategoriAntallBeskrivelse}</BodyShort>
+                      <BodyLongWithLineBreak>
+                        {fieldProp.form.values.personkategoriAntallBeskrivelse}
+                      </BodyLongWithLineBreak>
                     )}
                     {!fieldProp.form.errors.personkategoriAntallBeskrivelse &&
                       !fieldProp.form.values.personkategoriAntallBeskrivelse && (
-                        <BodyShort>Ikke besvart</BodyShort>
+                        <BodyLong>Ikke besvart</BodyLong>
                       )}
                     {fieldProp.form.errors.personkategoriAntallBeskrivelse && (
                       <FormAlert>
@@ -106,13 +109,13 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
                   </FormSummary.Label>
                   <FormSummary.Value>
                     {fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene && (
-                      <BodyShort>
+                      <BodyLongWithLineBreak>
                         {fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene}
-                      </BodyShort>
+                      </BodyLongWithLineBreak>
                     )}
                     {!fieldProp.form.errors.tilgangsBeskrivelsePersonopplysningene &&
                       !fieldProp.form.values.tilgangsBeskrivelsePersonopplysningene && (
-                        <BodyShort>Ikke besvart</BodyShort>
+                        <BodyLong>Ikke besvart</BodyLong>
                       )}
                     {fieldProp.form.errors.tilgangsBeskrivelsePersonopplysningene && (
                       <FormAlert>
@@ -134,13 +137,13 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
                   </FormSummary.Label>
                   <FormSummary.Value>
                     {fieldProp.form.values.lagringsBeskrivelsePersonopplysningene && (
-                      <BodyShort>
+                      <BodyLongWithLineBreak>
                         {fieldProp.form.values.lagringsBeskrivelsePersonopplysningene}
-                      </BodyShort>
+                      </BodyLongWithLineBreak>
                     )}
                     {!fieldProp.form.errors.lagringsBeskrivelsePersonopplysningene &&
                       !fieldProp.form.values.lagringsBeskrivelsePersonopplysningene && (
-                        <BodyShort>Ikke besvart</BodyShort>
+                        <BodyLong>Ikke besvart</BodyLong>
                       )}
                     {fieldProp.form.errors.lagringsBeskrivelsePersonopplysningene && (
                       <FormAlert>

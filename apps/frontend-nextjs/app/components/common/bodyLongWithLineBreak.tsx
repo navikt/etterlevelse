@@ -7,7 +7,7 @@ type TProps = {
 
 export const BodyLongWithLineBreak: FunctionComponent<TProps> = ({ children, ...props }) => {
   return (
-    <BodyLong  {...props}>
+    <BodyLong {...props}>
       {children.split('\n').map((line: string, idx: number) => (
         <span key={idx}>
           {line}
