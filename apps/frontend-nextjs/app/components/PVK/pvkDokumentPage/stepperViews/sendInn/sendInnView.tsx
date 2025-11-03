@@ -480,6 +480,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   alleTiltak={alleTiltak}
                   risikoscenarioError={risikoscenarioError}
                   tiltakError={tiltakError}
+                  tiltakAnsvarligError={tiltakAnsvarligError}
+                  tiltakFristError={tiltakFristError}
                 />
 
                 <RisikoscenarioEtterTitak
