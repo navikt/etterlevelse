@@ -271,7 +271,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const tiltakCheck = () => {
-    if (alleTiltak.length) {
+    if (alleTiltak.length > 0) {
       const ikkeFerdigBeskrevetTiltak = alleTiltak.filter(
         (tiltak) => tiltak.beskrivelse === '' || tiltak.navn === ''
       )
@@ -284,7 +284,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const tiltakAnsvarligCheck = () => {
-    if (alleTiltak.length) {
+    if (alleTiltak.length > 0) {
       const manglerTiltaksansvarlig = alleTiltak.filter(
         (tiltak) => tiltak.ansvarlig.navIdent === '' && tiltak.ansvarligTeam.name === null
       )
@@ -297,7 +297,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const tiltakFristCheck = () => {
-    if (alleTiltak.length) {
+    if (alleTiltak.length > 0) {
       const manglerTiltakFrist = alleTiltak.filter((tiltak) => tiltak.frist === null)
       if (manglerTiltakFrist.length !== 0) {
         setTiltakFristError(`${manglerTiltakFrist.length} tiltak mangler tiltaksfrist`)
