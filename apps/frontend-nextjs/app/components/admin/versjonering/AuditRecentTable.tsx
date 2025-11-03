@@ -132,7 +132,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
           Siste endringer
         </Heading>
         {!props.tableType && (
-          <div className='w-72 flex justify-between items-center'>
+          <div className='w-98 flex justify-between items-center'>
             <Label className='mr-2'>Tabell:</Label>
             <Select
               label='Velg type for versjonering'
