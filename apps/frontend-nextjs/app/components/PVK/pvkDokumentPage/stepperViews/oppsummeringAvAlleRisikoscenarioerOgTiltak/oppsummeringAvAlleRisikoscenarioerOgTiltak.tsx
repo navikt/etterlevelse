@@ -23,6 +23,7 @@ import {
   etterlevelseDokumentasjonPvkTabUrl,
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterTiltakUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
@@ -104,6 +105,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   const steg: string | null = queryParams.get('steg')
   const tabQuery: string | null = queryParams.get('tab')
   const risikoscenarioId: string | null = queryParams.get('risikoscenario')
+  const tiltakId: string | null = queryParams.get('tiltak')
   const filterQuery: string | null = queryParams.get('filter')
 
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
@@ -119,6 +121,19 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   const [antallTiltakIkkeAktuelt, setAntallTiltakIkkeAktuelt] = useState<number>(0)
   const [antallUtenTiltakAnsvarlig, setAntallUtenTiltakAnsvarlig] = useState<number>(0)
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
+
+  useEffect(() => {
+    ;(async () => {
+      if (
+        filterQuery &&
+        tabQuery &&
+        tabQuery === tabValues.tiltak &&
+        filterQuery in tiltakFilterValues
+      ) {
+        setTiltakFilter(filterQuery)
+      }
+    })()
+  }, [tabQuery, filterQuery])
 
   useEffect(() => {
     if (pvkDokument) {
@@ -245,6 +260,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
   const onTiltakFilterChange = (filter: string): void => {
     setTiltakFilter(filter)
+    const tab: string = tabQuery ? tabQuery : tabValues.tiltak
+
     switch (filter) {
       case tiltakFilterValues.alleTiltak:
         setFilteredTiltakList(tiltakList)
@@ -260,6 +277,15 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
       case tiltakFilterValues.utenFrist:
         setFilteredTiltakList(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist))
         break
+    }
+
+    setNavigateUrl(pvkDokumentasjonTabFilterTiltakUrl(steg, tab, filter, tiltakId))
+    if (formRef.current?.dirty) {
+      setIsUnsaved(true)
+    } else {
+      router.push(pvkDokumentasjonTabFilterTiltakUrl(steg, tab, filter, tiltakId), {
+        scroll: false,
+      })
     }
   }
 

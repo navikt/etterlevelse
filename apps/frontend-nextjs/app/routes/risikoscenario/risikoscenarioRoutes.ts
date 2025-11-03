@@ -4,8 +4,6 @@ import { kravUrl } from '../krav/kravRoutes'
 export const tabTiltakQuery: string = '&tab=tiltak'
 const tabRisikoScenarioQuery: string = '&tab=risikoscenarioer'
 const filterAlleQuery: string = 'filter=alle'
-export const filterUtenAnsvarligQuery: string = '&filter=utenAnsvarlig'
-export const filterUtenFristQuery: string = '&filter=utenFrist'
 
 export const risikoscenarioIdQuery = (
   risikoscenarioId: string,

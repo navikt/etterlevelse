@@ -47,6 +47,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
   const queryParams = useSearchParams()
   const steg: string | null = queryParams.get('steg')
   const tiltakId: string | null = queryParams.get('tiltak')
+  const filter: string | null = queryParams.get('filter')
   const tabQuery: string | null = queryParams.get('tab')
   const accordionRef = useRef<HTMLButtonElement>(null)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -65,11 +66,11 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
 
   const handleAccordionChange = (tiltakId?: string): void => {
     if (tiltakId) {
-      setNavigateUrl(pvkDokumentasjonTabFilterTiltakUrl(steg, tabQuery, tiltakId))
+      setNavigateUrl(pvkDokumentasjonTabFilterTiltakUrl(steg, tabQuery, filter, tiltakId))
       if (formRef.current?.dirty) {
         setIsUnsaved(true)
       } else {
-        router.push(pvkDokumentasjonTabFilterTiltakUrl(steg, tabQuery, tiltakId), {
+        router.push(pvkDokumentasjonTabFilterTiltakUrl(steg, tabQuery, filter, tiltakId), {
           scroll: false,
         })
       }

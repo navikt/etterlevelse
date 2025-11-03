@@ -3,9 +3,8 @@
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { pvkDokumentasjonTabFilterTiltakUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import {
-  filterUtenAnsvarligQuery,
-  filterUtenFristQuery,
   risikoscenarioFilterAlleUrl,
   tabTiltakQuery,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
@@ -73,7 +72,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                     <>
                       <FormAlert>{tiltakAnsvarligError}</FormAlert>
                       <ExternalLink
-                        href={`${tiltakLink}${tabTiltakQuery}${filterUtenAnsvarligQuery}`}
+                        href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'utenAnsvarlig')}
                       >
                         Se tiltak som mangler tiltaksansvarlig
                       </ExternalLink>
@@ -85,7 +84,9 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                       {tiltakFristError.forEach((error, index) => (
                         <FormAlert key={`${index}_tiltakFristError`}>{error}</FormAlert>
                       ))}
-                      <ExternalLink href={`${tiltakLink}${tabTiltakQuery}${filterUtenFristQuery}`}>
+                      <ExternalLink
+                        href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'utenFrist')}
+                      >
                         Se tiltak som mangler tiltaksfrist
                       </ExternalLink>
                     </>

@@ -107,12 +107,17 @@ export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
 export const pvkDokumentasjonTabFilterTiltakUrl = (
   steg: string | null,
   tabQuery: string | null,
-  tiltakId: string | null
+  filter?: string | null,
+  tiltakId?: string | null
 ): string => {
-  const url: string = `${window.location.pathname}?steg=${steg}&tab=${tabQuery}`
+  let url: string = `${window.location.pathname}?steg=${steg}&tab=${tabQuery}`
+
+  if (filter) {
+    url += `&filter=${filter}`
+  }
 
   if (tiltakId) {
-    return `${url}&tiltak=${tiltakId}`
+    url += `&tiltak=${tiltakId}`
   }
   return url
 }
