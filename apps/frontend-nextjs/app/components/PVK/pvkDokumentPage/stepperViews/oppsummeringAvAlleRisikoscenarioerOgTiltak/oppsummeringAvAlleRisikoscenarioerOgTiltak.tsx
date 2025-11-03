@@ -442,9 +442,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         !isReadOnlyPvkStatus(pvkDokument.status) &&
                         filteredTiltakList.length !== 0 && (
                           <TiltakAccordionList
-                            tiltakList={filteredTiltakList}
-                            risikoscenarioList={risikoscenarioList}
+                            tiltakList={tiltakList}
                             setTiltakList={setTiltakList}
+                            filteredTiltakList={filteredTiltakList}
+                            setFilteredTiltakList={setFilteredTiltakList}
+                            risikoscenarioList={risikoscenarioList}
                             formRef={formRef}
                           />
                         )}

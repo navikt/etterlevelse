@@ -252,7 +252,9 @@ export const TiltakForm = (props: IProps) => {
               type='button'
               onClick={async () => {
                 setValidateOnBlur(true)
-                await submitForm()
+                await submitForm().then(() => {
+                  resetForm({ values })
+                })
                 setSubmitClick(!submitClick)
               }}
             >
@@ -262,7 +264,7 @@ export const TiltakForm = (props: IProps) => {
               type='button'
               variant='secondary'
               onClick={() => {
-                resetForm({ values })
+                resetForm()
                 close()
               }}
             >

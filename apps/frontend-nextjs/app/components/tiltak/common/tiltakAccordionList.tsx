@@ -14,10 +14,13 @@ import { PencilIcon } from '@navikt/aksel-icons'
 import { Accordion, Button, Modal, Tag } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import IverksattTiltakForm from '../form/iverksattTiltakForm'
 
 type TProps = {
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
+  filteredTiltakList: ITiltak[]
+  setFilteredTiltakList: (state: ITiltak[]) => void
   risikoscenarioList: IRisikoscenario[]
   formRef: RefObject<any>
 }
@@ -26,12 +29,17 @@ type TContentProps = {
   tiltak: ITiltak
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
+  filteredTiltakList: ITiltak[]
+  setFilteredTiltakList: (state: ITiltak[]) => void
   risikoscenarioList: IRisikoscenario[]
+  formRef: RefObject<any>
 }
 
 export const TiltakAccordionList: FunctionComponent<TProps> = ({
   tiltakList,
   setTiltakList,
+  filteredTiltakList,
+  setFilteredTiltakList,
   risikoscenarioList,
   formRef,
 }) => {
@@ -83,7 +91,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
   return (
     <div>
       <Accordion>
-        {tiltakList.map((tiltak, index) => {
+        {filteredTiltakList.map((tiltak, index) => {
           const expanded: boolean = tiltakId === tiltak.id
           return (
             <Accordion.Item
@@ -103,14 +111,19 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                   {!tiltak.frist && <Tag variant='alt2'>Tiltaksfrist savnes</Tag>}
                 </div>
               </Accordion.Header>
-              <Accordion.Content>
-                <TiltakAccordionContent
-                  tiltak={tiltak}
-                  risikoscenarioList={risikoscenarioList}
-                  tiltakList={tiltakList}
-                  setTiltakList={setTiltakList}
-                />
-              </Accordion.Content>
+              {expanded && (
+                <Accordion.Content>
+                  <TiltakAccordionContent
+                    tiltak={tiltak}
+                    risikoscenarioList={risikoscenarioList}
+                    tiltakList={tiltakList}
+                    filteredTiltakList={filteredTiltakList}
+                    setTiltakList={setTiltakList}
+                    setFilteredTiltakList={setFilteredTiltakList}
+                    formRef={formRef}
+                  />
+                </Accordion.Content>
+              )}
             </Accordion.Item>
           )
         })}
@@ -131,11 +144,25 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
   risikoscenarioList,
   tiltakList,
   setTiltakList,
+  filteredTiltakList,
+  setFilteredTiltakList,
+  formRef,
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const [iverksattFormDirty, setIverksattFormDirty] = useState<boolean>(false)
+
   const submit = async (submitedValues: ITiltak) => {
     await updateTiltak(submitedValues)
       .then((response) => {
+        setFilteredTiltakList(
+          filteredTiltakList.map((tiltak) => {
+            if (tiltak.id === response.id) {
+              return { ...response }
+            } else {
+              return tiltak
+            }
+          })
+        )
         setTiltakList(
           tiltakList.map((tiltak) => {
             if (tiltak.id === response.id) {
@@ -148,21 +175,34 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
       })
       .finally(() => {
         setIsEditModalOpen(false)
-        window.location.reload()
+        setIverksattFormDirty(false)
       })
   }
+
   return (
     <div>
       <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
-      <Button
-        type='button'
-        variant='tertiary'
-        size='small'
-        icon={<PencilIcon title='' aria-hidden />}
-        onClick={() => setIsEditModalOpen(true)}
-      >
-        Redigér tiltak
-      </Button>
+      {!iverksattFormDirty && (
+        <div className='mb-5'>
+          <Button
+            type='button'
+            variant='tertiary'
+            size='small'
+            icon={<PencilIcon title='' aria-hidden />}
+            onClick={() => setIsEditModalOpen(true)}
+          >
+            Redigér tiltak
+          </Button>
+        </div>
+      )}
+
+      <IverksattTiltakForm
+        tiltak={tiltak}
+        submit={submit}
+        setIverksattFormDirty={setIverksattFormDirty}
+        formRef={formRef}
+      />
+
       {isEditModalOpen && (
         <Modal
           open={isEditModalOpen}
@@ -174,6 +214,7 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
               initialValues={mapTiltakToFormValue(tiltak)}
               pvkDokumentId={tiltak.pvkDokumentId}
               submit={submit}
+              formRef={formRef}
               close={() => setIsEditModalOpen(false)}
             />
           </Modal.Body>
