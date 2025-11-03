@@ -48,6 +48,7 @@ import { Alert, BodyLong, CopyButton, Heading } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
+import moment from 'moment'
 import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
 import ArtOgOmFangSummary from '../../formSummary/artOgOmFangSummary'
 import BehandlingensLivslopSummary from '../../formSummary/behandlingensLivslopSummary'
@@ -298,9 +299,26 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
   const tiltakFristCheck = () => {
     if (alleTiltak.length > 0) {
-      const manglerTiltakFrist = alleTiltak.filter((tiltak) => tiltak.frist === null)
-      if (manglerTiltakFrist.length !== 0) {
-        setTiltakFristError(`${manglerTiltakFrist.length} tiltak mangler tiltaksfrist`)
+      const now = new Date()
+      let amountOfOverdueTiltak = 0
+      let amountOfMissingTiltakFrist = 0
+
+      alleTiltak.map((tiltak) => {
+        if (tiltak.frist !== null && !tiltak.iverksatt) {
+          if (moment(now).isAfter(moment(tiltak.frist))) {
+            amountOfOverdueTiltak++
+          }        }
+        if (tiltak.frist === null && !tiltak.iverksatt) {
+          amountOfMissingTiltakFrist++
+        }
+      })
+
+      if (amountOfMissingTiltakFrist > 0 || amountOfOverdueTiltak > 0) {
+        let errorMessage = `${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist`
+        if (amountOfOverdueTiltak > 0) {
+          errorMessage += `, hvorav ${amountOfOverdueTiltak} har utløpt tiltaksfrist`
+        }
+        setTiltakFristError(errorMessage + '.')
       }
     } else {
       setTiltakFristError('')
