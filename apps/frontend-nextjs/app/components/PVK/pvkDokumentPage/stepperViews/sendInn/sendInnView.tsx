@@ -287,7 +287,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const tiltakAnsvarligCheck = () => {
     if (alleTiltak.length > 0) {
       const manglerTiltaksansvarlig = alleTiltak.filter(
-        (tiltak) => tiltak.ansvarlig.navIdent === '' && tiltak.ansvarligTeam.name === null
+        (tiltak) =>
+          tiltak.ansvarlig.navIdent === '' &&
+          tiltak.ansvarligTeam.name === null &&
+          !tiltak.iverksatt
       )
       if (manglerTiltaksansvarlig.length !== 0) {
         setTiltakAnsvarligError(`${manglerTiltaksansvarlig.length} tiltak mangler tiltaksansvarlig`)
