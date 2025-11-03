@@ -1,13 +1,13 @@
 import { BodyLong } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, HTMLAttributes } from 'react'
 
 type TProps = {
   children: string
-}
+} & HTMLAttributes<HTMLDivElement>
 
-export const BodyLongWithLineBreak: FunctionComponent<TProps> = ({ children }) => {
+export const BodyLongWithLineBreak: FunctionComponent<TProps> = ({ children, ...props }) => {
   return (
-    <BodyLong>
+    <BodyLong  {...props}>
       {children.split('\n').map((line: string, idx: number) => (
         <span key={idx}>
           {line}
