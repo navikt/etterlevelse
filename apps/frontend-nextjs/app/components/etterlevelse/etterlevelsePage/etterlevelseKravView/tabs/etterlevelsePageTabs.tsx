@@ -22,6 +22,7 @@ import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
 import { useParams } from 'next/navigation'
 import {
@@ -178,8 +179,10 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
           await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
         }
       })
-      .catch(async () => {
-        await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
+      .catch(async (error: AxiosError) => {
+        if (error.status === 404) {
+          await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
+        }
       })
   }
 
