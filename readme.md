@@ -3,8 +3,7 @@
 [![Dependabot Updates](https://github.com/navikt/etterlevelse/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/dependabot/dependabot-updates)
 
 [![Backend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-backend.yml/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-backend.yml)
-[![Frontend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend.yml/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend.yml)
-[![Frontend-nextjs](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml/badge.svg)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml)
+[![Frontend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml/badge.svg)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml)
 
 url for løsningen:
 
