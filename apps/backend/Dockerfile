@@ -1,9 +1,9 @@
-FROM openjdk:18-slim AS builder
+FROM openjdk:23-ea-1-jdk-slim AS builder
 WORKDIR application
 COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM ghcr.io/navikt/baseimages/temurin:21
+FROM ghcr.io/navikt/baseimages/temurin:23
 
 ENV MAIN_CLASS=org.springframework.boot.loader.launch.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
