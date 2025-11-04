@@ -3,7 +3,7 @@ WORKDIR application
 COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM ghcr.io/navikt/baseimages/temurin:23
+FROM ghcr.io/navikt/baseimages/temurin:21
 
 ENV MAIN_CLASS=org.springframework.boot.loader.launch.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
