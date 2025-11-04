@@ -1,4 +1,4 @@
-FROM openjdk:18-slim as builder
+FROM openjdk:18-slim AS builder
 WORKDIR application
 COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
