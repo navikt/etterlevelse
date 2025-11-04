@@ -15,7 +15,7 @@
     <description>Etterlevelse</description>
 
     <properties>
-        <java.version>23</java.version>
+        <java.version>25</java.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>2.8.13</springdoc-openapi-starter-webmvc-ui.version>
         <hypersistence-utils-hibernate-63.version>3.11.0</hypersistence-utils-hibernate-63.version>

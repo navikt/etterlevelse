@@ -2,7 +2,7 @@
 
 #### Requirements
 
- * OpenJDK 23
+ * OpenJDK 25
  * Docker
  * Maven
 
