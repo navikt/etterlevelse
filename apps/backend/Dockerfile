@@ -1,4 +1,4 @@
-FROM openjdk:23-ea-1-jdk-slim AS builder
+FROM openjdk:25-ea-23-slim AS builder
 WORKDIR application
 COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
