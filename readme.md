@@ -9,7 +9,6 @@ url for løsningen:
 
 - prod: https://etterlevelse.ansatt.nav.no/
 - dev: https://etterlevelse.intern.dev.nav.no
-- dev: https://etterlevelse-nextjs.intern.dev.nav.no/
 
 Når du tar en `git clone` må du velge `https`. Hvis du velger `ssh`, så vil `nais` klage på at du har en `ssh`-nøkkel på maskinen din, som vil medføre at du mister tilgang til `nais` ved at `azure` innlogging sier at innlogging var vellykket, men allikevel har du ikke tilgang.
 
