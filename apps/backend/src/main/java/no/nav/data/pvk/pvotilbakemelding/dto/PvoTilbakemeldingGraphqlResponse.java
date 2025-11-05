@@ -36,7 +36,7 @@ public class PvoTilbakemeldingGraphqlResponse extends PvoTilbakemeldingResponse 
                 .version(pvoTilbakemelding.getVersion())
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(pvoTilbakemelding.getStatus())
-                .vurderinger(copyOf(pvoTilbakemeldingData.getVurderinger()))
+                .vurderinger(copyOf(convert(pvoTilbakemeldingData.getVurderinger(), VurderingResponse::buildFrom)))
                 .build();
     }
 }
