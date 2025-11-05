@@ -284,6 +284,7 @@ type PvoTilbakemelding {
     pvkDokumentStatus: String
     etterlevelseDokumentasjonId: ID!
     etterlevelseDokumentasjonData: EtterlevelseDokumentasjon
+    innsendingId: Int!
     behandlingenslivslop: Tilbakemeldingsinnhold!
     behandlingensArtOgOmfang: Tilbakemeldingsinnhold!
     tilhorendeDokumentasjon: TilhorendeDokumentasjonTilbakemelding!

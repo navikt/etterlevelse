@@ -188,7 +188,9 @@ public abstract class IntegrationTestBase {
                 .pvkDokumentId(pvkDokumentId)
                 .status(PvoTilbakemeldingStatus.UNDERARBEID)
                 .pvoTilbakemeldingData(
-                        PvoTilbakemeldingData.builder().build()
+                        PvoTilbakemeldingData.builder()
+                                .innsendingId(1)
+                                .build()
                 )
         .build();
     }
