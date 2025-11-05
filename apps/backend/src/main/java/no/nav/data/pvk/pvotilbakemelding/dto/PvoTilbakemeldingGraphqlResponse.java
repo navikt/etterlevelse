@@ -12,6 +12,10 @@ import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @SuperBuilder
@@ -32,21 +36,7 @@ public class PvoTilbakemeldingGraphqlResponse extends PvoTilbakemeldingResponse 
                 .version(pvoTilbakemelding.getVersion())
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(pvoTilbakemelding.getStatus())
-                .merknadTilEtterleverEllerRisikoeier(pvoTilbakemeldingData.getMerknadTilEtterleverEllerRisikoeier())
-                .sendtDato(pvoTilbakemeldingData.getSendtDato())
-                .behandlingenslivslop(pvoTilbakemeldingData.getBehandlingenslivslop())
-                .behandlingensArtOgOmfang(pvoTilbakemeldingData.getBehandlingensArtOgOmfang())
-                .tilhorendeDokumentasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon())
-                .innvolveringAvEksterne(pvoTilbakemeldingData.getInnvolveringAvEksterne())
-                .risikoscenarioEtterTiltakk(pvoTilbakemeldingData.getRisikoscenarioEtterTiltakk())
-                .ansvarlig(pvoTilbakemelding.getPvoTilbakemeldingData().getAnsvarlig())
-                .arbeidGarVidere(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere())
-                .arbeidGarVidereBegrunnelse(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse())
-                .behovForForhandskonsultasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon())
-                .behovForForhandskonsultasjonBegrunnelse(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse())
-                .pvoVurdering(pvoTilbakemelding.getPvoTilbakemeldingData().getPvoVurdering())
-                .pvoFolgeOppEndringer(pvoTilbakemelding.getPvoTilbakemeldingData().getPvoFolgeOppEndringer())
-                .vilFaPvkIRetur(pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur())
+                .vurderinger(copyOf(pvoTilbakemeldingData.getVurderinger()))
                 .build();
     }
 }

@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.integration.team.dto.Resource;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
-import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
-import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @SuperBuilder
@@ -30,24 +29,7 @@ public class PvoTilbakemeldingResponse {
     private String pvkDokumentId;
     private PvoTilbakemeldingStatus status;
 
-    private Tilbakemeldingsinnhold behandlingenslivslop;
-    private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
-    private TilhorendeDokumentasjonTilbakemelding tilhorendeDokumentasjon;
-    private Tilbakemeldingsinnhold innvolveringAvEksterne;
-    private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
-    private String merknadTilEtterleverEllerRisikoeier;
-    private LocalDateTime sendtDato;
-    private List<String> ansvarlig;
-    private List<Resource> ansvarligData;
-
-    private Boolean arbeidGarVidere;
-    private String arbeidGarVidereBegrunnelse;
-    private Boolean behovForForhandskonsultasjon;
-    private String behovForForhandskonsultasjonBegrunnelse;
-
-    private String pvoVurdering;
-    private Boolean pvoFolgeOppEndringer;
-    private Boolean vilFaPvkIRetur;
+    private List<Vurdering> vurderinger;
 
     public static PvoTilbakemeldingResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         return PvoTilbakemeldingResponse.builder()
@@ -60,23 +42,8 @@ public class PvoTilbakemeldingResponse {
                 .version(pvoTilbakemelding.getVersion())
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(pvoTilbakemelding.getStatus())
-                .sendtDato(pvoTilbakemelding.getPvoTilbakemeldingData().getSendtDato())
-                .ansvarlig(pvoTilbakemelding.getPvoTilbakemeldingData().getAnsvarlig())
 
-                .behandlingenslivslop(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop())
-                .behandlingensArtOgOmfang(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang())
-                .tilhorendeDokumentasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon())
-                .innvolveringAvEksterne(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne())
-                .risikoscenarioEtterTiltakk(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk())
-
-                .merknadTilEtterleverEllerRisikoeier(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier())
-                .arbeidGarVidere(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere())
-                .arbeidGarVidereBegrunnelse(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse())
-                .behovForForhandskonsultasjon(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon())
-                .behovForForhandskonsultasjonBegrunnelse(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse())
-                .pvoVurdering(pvoTilbakemelding.getPvoTilbakemeldingData().getPvoVurdering())
-                .pvoFolgeOppEndringer(pvoTilbakemelding.getPvoTilbakemeldingData().getPvoFolgeOppEndringer())
-                .vilFaPvkIRetur(pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur())
+                .vurderinger(copyOf(pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()))
                 .build();
     }
 }
