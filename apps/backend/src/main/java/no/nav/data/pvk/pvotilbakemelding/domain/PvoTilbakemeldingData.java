@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PvoTilbakemeldingData {
+    private int innsendingId;
     private Tilbakemeldingsinnhold behandlingenslivslop;
     private Tilbakemeldingsinnhold behandlingensArtOgOmfang;
     private TilhorendeDokumentasjonTilbakemelding tilhorendeDokumentasjon;
