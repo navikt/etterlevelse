@@ -24,10 +24,7 @@ import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
-import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
+import no.nav.data.pvk.pvotilbakemelding.domain.*;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
@@ -70,17 +67,20 @@ public class PvkDokumentToDoc {
                         .build());
     }
 
-    public PvoTilbakemelding getPvoTilbakemelding(UUID pvkDokumentId) {
+    public PvoTilbakemelding getPvoTilbakemelding(UUID pvkDokumentId, int innsendingId) {
         return pvoTilbakemeldingService.getByPvkDokumentId(pvkDokumentId)
                 .orElse(PvoTilbakemelding.builder()
                         .status(PvoTilbakemeldingStatus.UNDERARBEID)
                         .pvoTilbakemeldingData(PvoTilbakemeldingData.builder()
-                                .merknadTilEtterleverEllerRisikoeier("")
-                                .sendtDato(LocalDateTime.now())
-                                .behandlingenslivslop(buildEmptyTilbakemelding())
-                                .behandlingensArtOgOmfang(buildEmptyTilbakemelding())
-                                .innvolveringAvEksterne(buildEmptyTilbakemelding())
-                                .risikoscenarioEtterTiltakk(buildEmptyTilbakemelding())
+                                .vurderinger(List.of(Vurdering.builder()
+                                        .innsendingId(innsendingId)
+                                        .merknadTilEtterleverEllerRisikoeier("")
+                                        .sendtDato(LocalDateTime.now())
+                                        .behandlingenslivslop(buildEmptyTilbakemelding())
+                                        .behandlingensArtOgOmfang(buildEmptyTilbakemelding())
+                                        .innvolveringAvEksterne(buildEmptyTilbakemelding())
+                                        .risikoscenarioEtterTiltakk(buildEmptyTilbakemelding())
+                                        .build()))
                                 .build())
                         .build());
     }
@@ -158,8 +158,9 @@ public class PvkDokumentToDoc {
     public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
-        PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId());
-
+        PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId(), pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo());
+        Vurdering pvoVurdering = pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()
+                .stream().filter(vurdering -> vurdering.getInnsendingId() == pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo()).toList().getFirst();
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
@@ -270,7 +271,7 @@ public class PvkDokumentToDoc {
         doc.newLine();
 
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            doc.generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingenslivslop());
+            doc.generatePvoTilbakemelding(pvoVurdering.getBehandlingenslivslop());
         }
 
         doc.pageBreak();
@@ -312,10 +313,10 @@ public class PvkDokumentToDoc {
             doc.addLabel("Beskjed fra etterlever til personvernombudet:");
 
             if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-                if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
+                if (pvoVurdering.getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
                     doc.addText("Ingen merknad.");
                 } else {
-                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
+                    doc.addMarkdownText(pvoVurdering.getMerknadTilEtterleverEllerRisikoeier());
                 }
 
                 doc.newLine();
@@ -323,37 +324,37 @@ public class PvkDokumentToDoc {
                 doc.newLine();
                 doc.addLabel("Beskjed til etterlever");
                 doc.newLine();
-                if (pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
+                if (pvoVurdering.getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
                     doc.addText("Ingen merknad.");
                 } else {
-                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getMerknadTilEtterleverEllerRisikoeier());
+                    doc.addMarkdownText(pvoVurdering.getMerknadTilEtterleverEllerRisikoeier());
                 }
                 doc.newLine();
-                doc.addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidere());
+                doc.addBooleanDataText("Anbefales det at arbeidet går videre som planlagt?", pvoVurdering.getArbeidGarVidere());
                 doc.newLine();
                 doc.addLabel("Beskriv anbefalingen nærmere:");
-                if (pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse().isEmpty()) {
+                if (pvoVurdering.getArbeidGarVidereBegrunnelse() == null || pvoVurdering.getArbeidGarVidereBegrunnelse().isEmpty()) {
                     doc.addText("Ingen merknad.");
                 } else {
-                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getArbeidGarVidereBegrunnelse());
+                    doc.addMarkdownText(pvoVurdering.getArbeidGarVidereBegrunnelse());
                 }
                 doc.newLine();
-                doc.addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjon());
+                doc.addBooleanDataText("Er det behov for forhåndskonsultasjon med Datatilsynet?", pvoVurdering.getBehovForForhandskonsultasjon());
                 doc.newLine();
                 doc.addLabel("Beskriv anbefalingen nærmere:");
-                if (pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse() == null || pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse().isEmpty()) {
+                if (pvoVurdering.getBehovForForhandskonsultasjonBegrunnelse() == null || pvoVurdering.getBehovForForhandskonsultasjonBegrunnelse().isEmpty()) {
                     doc.addText("Ingen merknad.");
                 } else {
-                    doc.addMarkdownText(pvoTilbakemelding.getPvoTilbakemeldingData().getBehovForForhandskonsultasjonBegrunnelse());
+                    doc.addMarkdownText(pvoVurdering.getBehovForForhandskonsultasjonBegrunnelse());
                 }
                 doc.newLine();
 
                 doc.addLabel("Personvernombudets vurdering");
-                doc.addText(CodelistService.getCodelist(ListName.PVO_VURDERING, pvoTilbakemelding.getPvoTilbakemeldingData().getPvoVurdering()).getDescription());
+                doc.addText(CodelistService.getCodelist(ListName.PVO_VURDERING, pvoVurdering.getPvoVurdering()).getDescription());
                 doc.newLine();
-                doc.addBooleanDataText("PVO vil følge opp endringer dere gjør.", pvoTilbakemelding.getPvoTilbakemeldingData().getPvoFolgeOppEndringer());
+                doc.addBooleanDataText("PVO vil følge opp endringer dere gjør.", pvoVurdering.getPvoFolgeOppEndringer());
                 doc.newLine();
-                doc.addBooleanDataText("PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.", pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur());
+                doc.addBooleanDataText("PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.", pvoVurdering.getVilFaPvkIRetur());
             }
 
             doc.newLine();
