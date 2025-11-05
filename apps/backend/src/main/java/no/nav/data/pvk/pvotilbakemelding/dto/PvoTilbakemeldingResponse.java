@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
@@ -29,7 +30,7 @@ public class PvoTilbakemeldingResponse {
     private String pvkDokumentId;
     private PvoTilbakemeldingStatus status;
 
-    private List<Vurdering> vurderinger;
+    private List<VurderingResponse> vurderinger;
 
     public static PvoTilbakemeldingResponse buildFrom(PvoTilbakemelding pvoTilbakemelding) {
         return PvoTilbakemeldingResponse.builder()
@@ -43,7 +44,7 @@ public class PvoTilbakemeldingResponse {
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(pvoTilbakemelding.getStatus())
 
-                .vurderinger(copyOf(pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()))
+                .vurderinger(copyOf(convert(pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger(), VurderingResponse::buildFrom)))
                 .build();
     }
 }

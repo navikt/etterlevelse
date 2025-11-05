@@ -21,7 +21,6 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class VurderingRequest  implements Validated {
     private int innsendingId;
     private Tilbakemeldingsinnhold behandlingenslivslop;

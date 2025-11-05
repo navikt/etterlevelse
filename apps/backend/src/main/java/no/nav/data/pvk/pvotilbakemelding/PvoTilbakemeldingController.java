@@ -44,9 +44,10 @@ public class PvoTilbakemeldingController {
         Page<PvoTilbakemelding> page = pvoTilbakemeldingService.getAll(pageParameters);
         RestResponsePage<PvoTilbakemeldingResponse> response = new RestResponsePage<>(page).convert(PvoTilbakemeldingResponse::buildFrom);
         response.getContent().forEach(res -> {
-            res.setAnsvarligData(
-                    getResourceData(res.getAnsvarlig())
-            );
+            res.getVurderinger().forEach(vurdering -> {
+                vurdering.setAnsvarligData(
+                        getResourceData(vurdering.getAnsvarlig()));
+            });
         });
         return ResponseEntity.ok(response);
     }
@@ -57,9 +58,10 @@ public class PvoTilbakemeldingController {
     public ResponseEntity<PvoTilbakemeldingResponse> getById(@PathVariable UUID id) {
         log.info("Get PVO tilbakemelding id={}", id);
         PvoTilbakemeldingResponse response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemeldingService.get(id));
-        response.setAnsvarligData(
-                getResourceData(response.getAnsvarlig())
-        );
+        response.getVurderinger().forEach(vurdering -> {
+            vurdering.setAnsvarligData(
+                    getResourceData(vurdering.getAnsvarlig()));
+        });
         return ResponseEntity.ok(response);
     }
 
@@ -72,7 +74,10 @@ public class PvoTilbakemeldingController {
 
         if (pvoTilbakemelding.isPresent()) {
             PvoTilbakemeldingResponse response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding.get());
-            response.setAnsvarligData(getResourceData(response.getAnsvarlig()));
+            response.getVurderinger().forEach(vurdering -> {
+                vurdering.setAnsvarligData(
+                        getResourceData(vurdering.getAnsvarlig()));
+            });
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.notFound().build();
@@ -140,8 +145,10 @@ public class PvoTilbakemeldingController {
         );
 
         var pvkDokument = pvkDokumentService.get(pvoTilbakemelding.getPvkDokumentId());
+        var pvoVurdering = pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()
+                .stream().filter(vurdering -> vurdering.getInnsendingId() == pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo()).toList().getFirst();
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            if(pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur() != null && pvoTilbakemelding.getPvoTilbakemeldingData().getVilFaPvkIRetur()) {
+            if(pvoVurdering.getVilFaPvkIRetur() != null && pvoVurdering.getVilFaPvkIRetur()) {
                 pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID);
             } else {
                 pvkDokument.setStatus(PvkDokumentStatus.VURDERT_AV_PVO);
