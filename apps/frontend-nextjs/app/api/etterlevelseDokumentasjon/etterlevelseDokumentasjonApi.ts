@@ -1,4 +1,5 @@
 import { IPageResponse } from '@/constants/commonConstants'
+import { IEtterlevelseDokumentasjonWithRelation } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
@@ -64,6 +65,19 @@ export const updateEtterlevelseDokumentasjon = async (
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`,
+      dto
+    )
+  ).data
+}
+
+export const createEtterlevelseDokumentasjonWithRelataion = async (
+  fromDocumentId: string,
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjonWithRelation
+) => {
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  return (
+    await axios.post<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/relation/${fromDocumentId}`,
       dto
     )
   ).data
@@ -164,4 +178,16 @@ export const etterlevelseDokumentasjonToDomainToObject = (
   delete domainToObject.resourcesData
   delete domainToObject.behandlinger
   return domainToObject
+}
+
+export const etterlevelseDokumentasjonWithRelationMapToFormVal = (
+  etterlevelseDokumentasjon: Partial<IEtterlevelseDokumentasjonWithRelation>
+): IEtterlevelseDokumentasjonWithRelation => {
+  const etterlevelseDokumentasjonWithOutRelation =
+    etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)
+
+  return {
+    ...etterlevelseDokumentasjonWithOutRelation,
+    relationType: etterlevelseDokumentasjon.relationType,
+  }
 }
