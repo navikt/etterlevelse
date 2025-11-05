@@ -1,5 +1,5 @@
 # Builder stage
-FROM eclipse-temurin:23.0.2_7-jdk-ubi9-minimal AS builder
+FROM eclipse-temurin:24.0.2_12-jdk-ubi9-minimal AS builder
 WORKDIR /application
 COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
