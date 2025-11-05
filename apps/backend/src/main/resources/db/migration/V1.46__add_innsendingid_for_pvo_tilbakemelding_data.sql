@@ -1,5 +1,3 @@
-innsendingId
-
 UPDATE PVO_TILBAKEMELDING SET data = jsonb_set(
     data,
     '{innsendingId}',
