@@ -299,13 +299,13 @@ public class PvkDokumentToDoc {
 
             doc.newLine();
 
-            doc.generateBehandlingensArtOgOmfang(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding);
+            doc.generateBehandlingensArtOgOmfang(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
-            doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding);
+            doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
-            doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding);
+            doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
-            doc.generateRisikoscenarioOgTiltak(risikoscenarioList, tiltakList, pvoTilbakemelding);
+            doc.generateRisikoscenarioOgTiltak(risikoscenarioList, tiltakList, pvoTilbakemelding, pvoVurdering);
             doc.newLine();
 
             doc.addHeading2("Merknader ved oversending");
