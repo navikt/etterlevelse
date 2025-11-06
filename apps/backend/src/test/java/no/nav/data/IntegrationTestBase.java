@@ -38,10 +38,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
+import no.nav.data.pvk.pvotilbakemelding.domain.*;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
@@ -189,7 +186,9 @@ public abstract class IntegrationTestBase {
                 .status(PvoTilbakemeldingStatus.UNDERARBEID)
                 .pvoTilbakemeldingData(
                         PvoTilbakemeldingData.builder()
-                                .innsendingId(1)
+                                .vurderinger(List.of(Vurdering.builder()
+                                        .innsendingId(1)
+                                        .build()))
                                 .build()
                 )
         .build();
@@ -200,6 +199,7 @@ public abstract class IntegrationTestBase {
                 .status(PvkDokumentStatus.UNDERARBEID)
                 .pvkDokumentData(PvkDokumentData.builder()
                         .ytterligereEgenskaper(List.of())
+                        .antallInnsendingTilPvo(1)
                         .build()
                 )
                 .build();

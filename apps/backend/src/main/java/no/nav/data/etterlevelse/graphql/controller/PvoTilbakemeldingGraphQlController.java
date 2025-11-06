@@ -14,6 +14,7 @@ import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.Vurdering;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingFilter;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingGraphqlResponse;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -91,9 +92,9 @@ public class PvoTilbakemeldingGraphQlController {
         return sistEndretAudit(pvoTilbakemeldinger);
     }
 
-    @SchemaMapping(typeName = "PvoTilbakemelding")
-    public List<Resource> ansvarligData(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse) {
-        var resources = teamcatResourceClient.getResources(pvoTilbakemeldingGraphqlResponse.getAnsvarlig());
+    @SchemaMapping(typeName = "Vuredering", field = "ansvarligData")
+    public List<Resource> ansvarligData(Vurdering vurdering) {
+        var resources = teamcatResourceClient.getResources(vurdering.getAnsvarlig());
         return new ArrayList<>(resources.values());
     }
 
