@@ -93,6 +93,11 @@ public class PvoTilbakemeldingController {
         var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
         updatePvkDokumentStatus(pvoTilbakemelding);
         var response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding);
+        response.getVurderinger().forEach(vurdering -> {
+                vurdering.setAnsvarligData(
+                        getResourceData(vurdering.getAnsvarlig()));
+            });
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -117,8 +122,13 @@ public class PvoTilbakemeldingController {
 
         updatePvkDokumentStatus(pvoTilbakemelding);
 
+        var response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding);
+        response.getVurderinger().forEach(vurdering -> {
+            vurdering.setAnsvarligData(
+                    getResourceData(vurdering.getAnsvarlig()));
+        });
 
-        return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Delete PVO tilbakemelding")
