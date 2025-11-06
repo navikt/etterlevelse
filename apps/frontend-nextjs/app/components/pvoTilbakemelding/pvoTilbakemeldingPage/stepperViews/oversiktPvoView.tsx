@@ -23,14 +23,16 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
+import { mapNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { Alert, BodyShort, FormSummary, Heading, Label, Link, List, Tag } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import { PvoTilbakemeldingAnsvarligForm } from '../../form/pvoTilbakemeldingAnsvarligForm'
 
@@ -74,6 +76,16 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
+  const relevantVurdering: IVurdering = useMemo(() => {
+    const vurdering = pvoTilbakemelding.vurderinger.find(
+      (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+    )
+    if (vurdering) {
+      return vurdering
+    } else {
+      return mapNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+    }
+  }, [pvoTilbakemelding])
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
@@ -191,7 +203,8 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
         {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
           <PvoTilbakemeldingAnsvarligForm
             pvkDokumentId={pvkDokument.id}
-            initialValue={pvoTilbakemelding}
+            pvoTilbakemelding={pvoTilbakemelding}
+            initialValue={relevantVurdering}
             formRef={formRef}
           />
         )}
@@ -200,12 +213,12 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
           <div>
             <Label>Ansvarlig</Label>
             <List as='ul'>
-              {pvoTilbakemelding.ansvarlig.length === 0 && (
+              {relevantVurdering.ansvarlig.length === 0 && (
                 <List.Item>Ingen ansvarlig satt</List.Item>
               )}
-              {pvoTilbakemelding.ansvarligData &&
-                pvoTilbakemelding.ansvarligData.length !== 0 &&
-                pvoTilbakemelding.ansvarligData.map((data) => (
+              {relevantVurdering.ansvarligData &&
+                relevantVurdering.ansvarligData.length !== 0 &&
+                relevantVurdering.ansvarligData.map((data) => (
                   <List.Item key={data.navIdent}>{data.fullName}</List.Item>
                 ))}
             </List>

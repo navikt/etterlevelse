@@ -18,6 +18,7 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
+import { addNewVurderingToPvoTilbakemelding } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -164,9 +165,39 @@ export const PvoTilbakemeldingPage = () => {
           setEtterlevelseDokumentasjon(response)
           setIsEtterlevelseDokumentaasjonLoading(false)
         })
+
+        const relevantVurdering = pvoTilbakemelding.vurderinger.find(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+        )
+        if (!relevantVurdering) {
+          setPvoTilbakemelding(
+            addNewVurderingToPvoTilbakemelding(
+              pvoTilbakemelding,
+              pvkDokument.antallInnsendingTilPvo
+            )
+          )
+        }
       }
     })()
   }, [pvkDokument])
+
+  useEffect(() => {
+    ;(async () => {
+      if (pvkDokument && pvoTilbakemelding) {
+        const relevantVurdering = pvoTilbakemelding.vurderinger.find(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+        )
+        if (!relevantVurdering) {
+          setPvoTilbakemelding(
+            addNewVurderingToPvoTilbakemelding(
+              pvoTilbakemelding,
+              pvkDokument.antallInnsendingTilPvo
+            )
+          )
+        }
+      }
+    })()
+  }, [pvkDokument, pvoTilbakemelding])
 
   const isPageLoading =
     isEtterlevelseDokumentaasjonLoading || isPvkDokumentLoading || isPvoTilbakemeldingLoading

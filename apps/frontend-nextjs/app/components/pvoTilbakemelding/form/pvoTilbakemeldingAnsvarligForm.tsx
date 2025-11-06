@@ -15,39 +15,51 @@ import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/person
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
-import { Field, FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
 import { ChangeEvent, FunctionComponent, RefObject, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import AlertPvoModal from '../common/alertPvoModal'
 
 type TProps = {
   pvkDokumentId: string
-  initialValue: IPvoTilbakemelding
+  pvoTilbakemelding: IPvoTilbakemelding
+  initialValue: IVurdering
   formRef: RefObject<any>
 }
 
 export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
   pvkDokumentId,
+  pvoTilbakemelding,
   initialValue,
   formRef,
 }) => {
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+  const [selectedStatus, setSelectedStatus] = useState<EPvoTilbakemeldingStatus>(
+    pvoTilbakemelding.status
+  )
 
-  const submit = async (pvoTilbakemelding: IPvoTilbakemelding): Promise<void> => {
+  const submit = async (submitedVurderingValues: IVurdering): Promise<void> => {
     let pvkStatus = ''
 
     await getPvkDokument(pvkDokumentId).then((response) => {
       pvkStatus = response.status
     })
 
-    if (pvkStatus === EPvkDokumentStatus.UNDERARBEID) {
+    if (
+      ![
+        EPvkDokumentStatus.SENDT_TIL_PVO,
+        EPvkDokumentStatus.PVO_UNDERARBEID,
+        EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+      ].includes(pvkStatus as EPvkDokumentStatus)
+    ) {
       setIsAlertModalOpen(true)
     } else {
       await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
@@ -58,7 +70,16 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
             } else {
               const updatedValues: IPvoTilbakemelding = {
                 ...response,
-                ansvarligData: pvoTilbakemelding.ansvarligData,
+                vurderinger: response.vurderinger.map((vurdering) => {
+                  if (vurdering.innsendingId === submitedVurderingValues.innsendingId) {
+                    return {
+                      ...vurdering,
+                      ansvarligData: submitedVurderingValues.ansvarligData,
+                    }
+                  } else {
+                    return vurdering
+                  }
+                }),
                 status: pvoTilbakemelding.status,
               }
               await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
@@ -69,7 +90,12 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
           if (error.status === 404) {
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokumentId,
-              ansvarligData: pvoTilbakemelding.ansvarligData,
+              vurderinger: [
+                {
+                  ...submitedVurderingValues,
+                  ansvarligData: submitedVurderingValues.ansvarligData,
+                },
+              ],
               status: pvoTilbakemelding.status,
             })
             await createPvoTilbakemelding(createValue).then(() => window.location.reload())
@@ -84,13 +110,13 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
     <Formik
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={(values: IPvoTilbakemelding) => {
+      onSubmit={(values: IVurdering) => {
         submit(values)
       }}
       initialValues={initialValue}
       innerRef={formRef}
     >
-      {({ submitForm, setFieldValue, values }) => (
+      {({ submitForm }) => (
         <Form>
           <div className='flex flex-col gap-2'>
             <Heading level='2' size='medium'>
@@ -182,26 +208,20 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
             />
 
             <div id='status' className='mb-5'>
-              <Field name='status'>
-                {() => (
-                  <Select
-                    label='Velg status'
-                    value={values.status}
-                    onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-                      setFieldValue('status', event.target.value)
-                    }}
-                  >
-                    <option value={EPvoTilbakemeldingStatus.IKKE_PABEGYNT}>Ikke påbegynt</option>
-                    <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
-                    <option value={EPvoTilbakemeldingStatus.AVVENTER}>Aventer</option>
-                    <option value={EPvoTilbakemeldingStatus.SNART_FERDIG}>Snart Ferdig</option>
-                    <option value={EPvoTilbakemeldingStatus.TIL_KONTROL}>
-                      PVO øvrig beslutning
-                    </option>
-                    <option value={EPvoTilbakemeldingStatus.UTGAAR}>Utgår</option>
-                  </Select>
-                )}
-              </Field>
+              <Select
+                label='Velg status'
+                value={selectedStatus}
+                onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                  setSelectedStatus(event.target.value as EPvoTilbakemeldingStatus)
+                }}
+              >
+                <option value={EPvoTilbakemeldingStatus.IKKE_PABEGYNT}>Ikke påbegynt</option>
+                <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
+                <option value={EPvoTilbakemeldingStatus.AVVENTER}>Aventer</option>
+                <option value={EPvoTilbakemeldingStatus.SNART_FERDIG}>Snart Ferdig</option>
+                <option value={EPvoTilbakemeldingStatus.TIL_KONTROL}>PVO øvrig beslutning</option>
+                <option value={EPvoTilbakemeldingStatus.UTGAAR}>Utgår</option>
+              </Select>
             </div>
 
             <div className='flex gap-2'>
