@@ -15,6 +15,7 @@ import {
   ITilhorendeDokumentasjonTilbakemelding,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
@@ -25,12 +26,14 @@ import TilbakemeldingField from './tilbakemeldingField'
 
 type TProps = {
   pvkDokumentId: string
+  innsendingId: number
   initialValue: ITilhorendeDokumentasjonTilbakemelding
   formRef: RefObject<any>
 }
 
 export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TProps> = ({
   pvkDokumentId,
+  innsendingId,
   initialValue,
   formRef,
 }) => {
@@ -50,7 +53,13 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
 
     await getPvkDokument(pvkDokumentId).then((response) => (pvkStatus = response.status))
 
-    if (pvkStatus === EPvkDokumentStatus.UNDERARBEID) {
+    if (
+      ![
+        EPvkDokumentStatus.SENDT_TIL_PVO,
+        EPvkDokumentStatus.PVO_UNDERARBEID,
+        EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+      ].includes(pvkStatus as EPvkDokumentStatus)
+    ) {
       setIsAlertModalOpen(true)
     } else {
       await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
@@ -58,7 +67,16 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
           if (response) {
             const updatedValues: IPvoTilbakemelding = {
               ...response,
-              tilhorendeDokumentasjon: mutatedTilbakemeldingsInnhold,
+              vurderinger: response.vurderinger.map((vurdering) => {
+                if (vurdering.innsendingId === innsendingId) {
+                  return {
+                    ...vurdering,
+                    tilhorendeDokumentasjon: mutatedTilbakemeldingsInnhold,
+                  }
+                } else {
+                  return vurdering
+                }
+              }),
               status:
                 response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
                   ? EPvoTilbakemeldingStatus.UNDERARBEID
@@ -74,9 +92,15 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
         })
         .catch(async (error: AxiosError) => {
           if (error.status === 404) {
+            const newVurdering = createNewPvoVurderning(innsendingId)
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokumentId,
-              tilhorendeDokumentasjon: mutatedTilbakemeldingsInnhold,
+              vurderinger: [
+                {
+                  ...newVurdering,
+                  tilhorendeDokumentasjon: mutatedTilbakemeldingsInnhold,
+                },
+              ],
               status: EPvoTilbakemeldingStatus.UNDERARBEID,
             })
             await createPvoTilbakemelding(createValue).then(() => window.location.reload())

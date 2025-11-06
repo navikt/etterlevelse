@@ -4,6 +4,7 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
@@ -15,6 +16,7 @@ type TProps = {
   personkategorier: string[]
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -25,6 +27,7 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
   personkategorier,
   pvkDokument,
   pvoTilbakemelding,
+  relevantVurdering,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -43,16 +46,17 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
           <PvoSidePanelWrapper>
             {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.behandlingensArtOgOmfang}
-                sentDate={pvoTilbakemelding.sendtDato}
+                tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
+                sentDate={relevantVurdering.sendtDato}
                 forPvo={true}
               />
             )}
             {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingForm
                 pvkDokumentId={pvkDokument.id}
+                innsendingId={pvkDokument.antallInnsendingTilPvo}
                 fieldName='behandlingensArtOgOmfang'
-                initialValue={pvoTilbakemelding.behandlingensArtOgOmfang}
+                initialValue={relevantVurdering.behandlingensArtOgOmfang}
                 formRef={formRef}
               />
             )}

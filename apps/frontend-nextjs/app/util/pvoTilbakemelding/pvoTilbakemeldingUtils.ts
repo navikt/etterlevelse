@@ -4,11 +4,11 @@ export const addNewVurderingToPvoTilbakemelding = (
   pvoTilbakemelding: IPvoTilbakemelding,
   innsendingId: number
 ) => {
-  pvoTilbakemelding.vurderinger.push(mapNewPvoVurderning(innsendingId))
+  pvoTilbakemelding.vurderinger.push(createNewPvoVurderning(innsendingId))
   return pvoTilbakemelding
 }
 
-export const mapNewPvoVurderning = (newInnsendingId: number) => {
+export const createNewPvoVurderning = (newInnsendingId: number) => {
   return {
     innsendingId: newInnsendingId,
     merknadTilEtterleverEllerRisikoeier: '',

@@ -2,6 +2,7 @@ import { IPageResponse } from '@/constants/commonConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
@@ -105,6 +106,64 @@ const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakem
   return dto
 }
 
+export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurdering => {
+  return {
+    innsendingId: vurdering.innsendingId || 1,
+    merknadTilEtterleverEllerRisikoeier: vurdering.merknadTilEtterleverEllerRisikoeier || '',
+    sendtDato: vurdering.sendtDato || '',
+    ansvarlig: vurdering.ansvarlig || [],
+    ansvarligData: vurdering.ansvarligData || [],
+    arbeidGarVidere: vurdering.arbeidGarVidere,
+    behovForForhandskonsultasjon: vurdering.behovForForhandskonsultasjon,
+    arbeidGarVidereBegrunnelse: vurdering.arbeidGarVidereBegrunnelse || '',
+    behovForForhandskonsultasjonBegrunnelse:
+      vurdering.behovForForhandskonsultasjonBegrunnelse || '',
+    pvoVurdering: vurdering.pvoVurdering || '',
+    pvoFolgeOppEndringer: vurdering.pvoFolgeOppEndringer || false,
+    vilFaPvkIRetur: vurdering.vilFaPvkIRetur || false,
+    behandlingenslivslop: vurdering.behandlingenslivslop || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      bidragsVurdering: '',
+      internDiskusjon: '',
+      tilbakemeldingTilEtterlevere: '',
+    },
+    behandlingensArtOgOmfang: vurdering.behandlingensArtOgOmfang || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      bidragsVurdering: '',
+      internDiskusjon: '',
+      tilbakemeldingTilEtterlevere: '',
+    },
+    tilhorendeDokumentasjon: vurdering.tilhorendeDokumentasjon || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      internDiskusjon: '',
+      behandlingskatalogDokumentasjonTilstrekkelig: '',
+      behandlingskatalogDokumentasjonTilbakemelding: '',
+      kravDokumentasjonTilstrekkelig: '',
+      kravDokumentasjonTilbakemelding: '',
+      risikovurderingTilstrekkelig: '',
+      risikovurderingTilbakemelding: '',
+    },
+
+    innvolveringAvEksterne: vurdering.innvolveringAvEksterne || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      bidragsVurdering: '',
+      internDiskusjon: '',
+      tilbakemeldingTilEtterlevere: '',
+    },
+    risikoscenarioEtterTiltakk: vurdering.risikoscenarioEtterTiltakk || {
+      sistRedigertAv: '',
+      sistRedigertDato: '',
+      bidragsVurdering: '',
+      internDiskusjon: '',
+      tilbakemeldingTilEtterlevere: '',
+    },
+  }
+}
+
 export const mapPvoTilbakemeldingToFormValue = (
   pvoTilbakemelding: Partial<IPvoTilbakemelding>
 ): IPvoTilbakemelding => {
@@ -114,61 +173,8 @@ export const mapPvoTilbakemeldingToFormValue = (
     version: -1,
     pvkDokumentId: pvoTilbakemelding.pvkDokumentId || '',
     status: pvoTilbakemelding.status || EPvoTilbakemeldingStatus.IKKE_PABEGYNT,
-    vurderinger: pvoTilbakemelding.vurderinger || [
-      {
-        innsendingId: 1,
-        merknadTilEtterleverEllerRisikoeier: '',
-        sendtDato: '',
-        ansvarlig: [],
-        ansvarligData: [],
-        arbeidGarVidere: undefined,
-        behovForForhandskonsultasjon: undefined,
-        arbeidGarVidereBegrunnelse: '',
-        behovForForhandskonsultasjonBegrunnelse: '',
-        pvoVurdering: '',
-        pvoFolgeOppEndringer: false,
-        vilFaPvkIRetur: false,
-        behandlingenslivslop: {
-          sistRedigertAv: '',
-          sistRedigertDato: '',
-          bidragsVurdering: '',
-          internDiskusjon: '',
-          tilbakemeldingTilEtterlevere: '',
-        },
-        behandlingensArtOgOmfang: {
-          sistRedigertAv: '',
-          sistRedigertDato: '',
-          bidragsVurdering: '',
-          internDiskusjon: '',
-          tilbakemeldingTilEtterlevere: '',
-        },
-        tilhorendeDokumentasjon: {
-          sistRedigertAv: '',
-          sistRedigertDato: '',
-          internDiskusjon: '',
-          behandlingskatalogDokumentasjonTilstrekkelig: '',
-          behandlingskatalogDokumentasjonTilbakemelding: '',
-          kravDokumentasjonTilstrekkelig: '',
-          kravDokumentasjonTilbakemelding: '',
-          risikovurderingTilstrekkelig: '',
-          risikovurderingTilbakemelding: '',
-        },
-
-        innvolveringAvEksterne: {
-          sistRedigertAv: '',
-          sistRedigertDato: '',
-          bidragsVurdering: '',
-          internDiskusjon: '',
-          tilbakemeldingTilEtterlevere: '',
-        },
-        risikoscenarioEtterTiltakk: {
-          sistRedigertAv: '',
-          sistRedigertDato: '',
-          bidragsVurdering: '',
-          internDiskusjon: '',
-          tilbakemeldingTilEtterlevere: '',
-        },
-      },
-    ],
+    vurderinger: pvoTilbakemelding.vurderinger
+      ? pvoTilbakemelding.vurderinger.map(mapVurderingToFormValue)
+      : [mapVurderingToFormValue({})],
   }
 }

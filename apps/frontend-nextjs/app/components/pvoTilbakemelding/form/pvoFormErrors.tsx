@@ -1,11 +1,11 @@
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject } from 'react'
 
 type TProps = {
-  errors: FormikErrors<IPvoTilbakemelding>
+  errors: FormikErrors<IVurdering>
   errorSummaryRef: RefObject<HTMLDivElement | null>
 }
 

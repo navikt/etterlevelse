@@ -16,7 +16,7 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import {
   EPvoTilbakemeldingStatus,
-  IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import { Alert, Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
@@ -41,14 +41,14 @@ type TProps = {
     field: string,
     value: any,
     shouldValidate?: boolean
-  ) => Promise<void | FormikErrors<IPvoTilbakemelding>>
+  ) => Promise<void | FormikErrors<IVurdering>>
   setSubmittedStatus: (value: SetStateAction<EPvoTilbakemeldingStatus>) => void
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   isAlertModalOpen: boolean
   setIsAlertModalOpen: Dispatch<SetStateAction<boolean>>
   pvoVurderingList: ICode[]
-  errors: FormikErrors<IPvoTilbakemelding>
+  errors: FormikErrors<IVurdering>
   formRef: RefObject<any>
   sucessSubmit: boolean
   setSuccessSubmit: (state: boolean) => void

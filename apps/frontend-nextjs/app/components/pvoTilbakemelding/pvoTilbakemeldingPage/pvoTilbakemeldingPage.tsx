@@ -11,6 +11,7 @@ import {
 } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { useKravFilter } from '@/query/krav/kravQuery'
@@ -18,7 +19,10 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { addNewVurderingToPvoTilbakemelding } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
+import {
+  addNewVurderingToPvoTilbakemelding,
+  createNewPvoVurderning,
+} from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -120,6 +124,21 @@ export const PvoTilbakemeldingPage = () => {
       }
     }
   }, [etterlevelseDokumentasjon])
+
+  const relevantVurdering: IVurdering = useMemo(() => {
+    if (pvkDokument && pvoTilbakemelding) {
+      const vurdering = pvoTilbakemelding.vurderinger.find(
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+      )
+      if (vurdering) {
+        return vurdering
+      } else {
+        return createNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+      }
+    } else {
+      return createNewPvoVurderning(1)
+    }
+  }, [pvoTilbakemelding, pvkDokument])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
@@ -268,6 +287,7 @@ export const PvoTilbakemeldingPage = () => {
                         setSelectedStep={setSelectedStep}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        relevantVurdering={relevantVurdering}
                         formRef={formRef}
                         pvkKrav={pvkKrav}
                       />
@@ -275,6 +295,7 @@ export const PvoTilbakemeldingPage = () => {
                     {activeStep === 2 && (
                       <BehandlingensLivslopPvoView
                         pvoTilbakemelding={pvoTilbakemelding}
+                        relevantVurdering={relevantVurdering}
                         pvkDokument={pvkDokument}
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         activeStep={activeStep}
@@ -288,6 +309,7 @@ export const PvoTilbakemeldingPage = () => {
                         personkategorier={readOnlyData.personkategorier}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -298,8 +320,9 @@ export const PvoTilbakemeldingPage = () => {
                     {activeStep === 4 && (
                       <TilhorendeDokumentasjonPvoView
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                        pvkDokumentId={pvkDokument.id}
+                        pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
                         setActiveStep={updateTitleUrlAndStep}
                         setSelectedStep={setSelectedStep}
@@ -314,6 +337,7 @@ export const PvoTilbakemeldingPage = () => {
                         databehandlere={readOnlyData.databehandlere}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -334,6 +358,7 @@ export const PvoTilbakemeldingPage = () => {
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
                         setActiveStep={updateTitleUrlAndStep}
@@ -347,6 +372,7 @@ export const PvoTilbakemeldingPage = () => {
                         personkategorier={readOnlyData.personkategorier}
                         databehandlere={readOnlyData.databehandlere}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        relevantVurdering={relevantVurdering}
                         updateTitleUrlAndStep={updateTitleUrlAndStep}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}

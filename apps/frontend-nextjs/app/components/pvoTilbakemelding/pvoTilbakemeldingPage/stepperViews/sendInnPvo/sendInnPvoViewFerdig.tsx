@@ -12,6 +12,7 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
@@ -28,7 +29,7 @@ type TProps = {
     field: string,
     value: any,
     shouldValidate?: boolean
-  ) => Promise<void | FormikErrors<IPvoTilbakemelding>>
+  ) => Promise<void | FormikErrors<IVurdering>>
   setSubmittedStatus: (value: SetStateAction<EPvoTilbakemeldingStatus>) => void
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void

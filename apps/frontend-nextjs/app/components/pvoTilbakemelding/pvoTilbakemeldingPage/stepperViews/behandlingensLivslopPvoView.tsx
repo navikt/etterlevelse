@@ -14,9 +14,8 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { mapNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { Loader } from '@navikt/ds-react'
-import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
@@ -26,6 +25,7 @@ type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
   pvkDokument: IPvkDokument
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  relevantVurdering: IVurdering
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -36,6 +36,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   pvkDokument,
   etterlevelseDokumentasjon,
+  relevantVurdering,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -46,17 +47,6 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
   )
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const relevantVurdering: IVurdering = useMemo(() => {
-    const vurdering = pvoTilbakemelding.vurderinger.find(
-      (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
-    )
-    if (vurdering) {
-      return vurdering
-    } else {
-      return mapNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
-    }
-  }, [pvoTilbakemelding])
 
   useEffect(() => {
     ;(async () => {
@@ -101,6 +91,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                   {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                     <PvoTilbakemeldingForm
                       pvkDokumentId={pvkDokument.id}
+                      innsendingId={pvkDokument.antallInnsendingTilPvo}
                       fieldName='behandlingenslivslop'
                       initialValue={relevantVurdering.behandlingenslivslop}
                       formRef={formRef}

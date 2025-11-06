@@ -4,6 +4,7 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
@@ -16,6 +17,7 @@ type TProps = {
   databehandlere: string[]
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -27,6 +29,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
   databehandlere,
   pvkDokument,
   pvoTilbakemelding,
+  relevantVurdering,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -46,16 +49,17 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
           <PvoSidePanelWrapper>
             {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
-                sentDate={pvoTilbakemelding.sendtDato}
+                tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
+                sentDate={relevantVurdering.sendtDato}
                 forPvo={true}
               />
             )}
             {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingForm
                 pvkDokumentId={pvkDokument.id}
+                innsendingId={pvkDokument.antallInnsendingTilPvo}
                 fieldName='innvolveringAvEksterne'
-                initialValue={pvoTilbakemelding.innvolveringAvEksterne}
+                initialValue={relevantVurdering.innvolveringAvEksterne}
                 formRef={formRef}
               />
             )}

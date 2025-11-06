@@ -15,6 +15,7 @@ import {
   ITilbakemeldingsinnhold,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
@@ -116,26 +117,28 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
         })
         .catch(async (error: AxiosError) => {
           if (error.status === 404) {
+            const newVurdering = createNewPvoVurderning(innsendingId)
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokumentId,
               vurderinger: [
                 {
+                  ...newVurdering,
                   behandlingenslivslop:
                     fieldName === 'behandlingenslivslop'
                       ? mutatedTilbakemeldingsInnhold
-                      : '',
+                      : newVurdering.behandlingenslivslop,
                   behandlingensArtOgOmfang:
                     fieldName === 'behandlingensArtOgOmfang'
                       ? mutatedTilbakemeldingsInnhold
-                      : '',
+                      : newVurdering.behandlingensArtOgOmfang,
                   innvolveringAvEksterne:
                     fieldName === 'innvolveringAvEksterne'
                       ? mutatedTilbakemeldingsInnhold
-                      : '',
+                      : newVurdering.innvolveringAvEksterne,
                   risikoscenarioEtterTiltakk:
                     fieldName === 'risikoscenarioEtterTiltakk'
                       ? mutatedTilbakemeldingsInnhold
-                      : '',
+                      : newVurdering.risikoscenarioEtterTiltakk,
                 },
               ],
 

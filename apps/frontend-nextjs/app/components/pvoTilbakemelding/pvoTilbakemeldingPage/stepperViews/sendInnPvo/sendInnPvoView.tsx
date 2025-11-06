@@ -5,6 +5,7 @@ import {
   createPvoTilbakemelding,
   getPvoTilbakemeldingByPvkDokumentId,
   mapPvoTilbakemeldingToFormValue,
+  mapVurderingToFormValue,
   updatePvoTilbakemelding,
 } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { sendInnCheck } from '@/components/pvoTilbakemelding/form/pvoSchema'
@@ -17,8 +18,10 @@ import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
+import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useMemo, useRef, useState } from 'react'
@@ -33,6 +36,7 @@ type TProps = {
   databehandlere: string[]
   pvoTilbakemelding: IPvoTilbakemelding
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
+  relevantVurdering: IVurdering
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -44,6 +48,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   setPvoTilbakemelding,
+  relevantVurdering,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -62,7 +67,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   const [sucessSubmit, setSuccessSubmit] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
 
-  const submit = async (submittedValues: IPvoTilbakemelding): Promise<void> => {
+  const submit = async (submittedValues: IVurdering): Promise<void> => {
     //backend vil oppdatere statusen til PVk dokument til 'SENDT_TIL_PVO', dersom statusen til PVO tilbakemelding = 'ikke påbegynt' eller 'avventer'
     //backend vil oppdatere statusen til PVk dokument til 'VURDERT_AV_PVO', dersom statusen til PVO tilbakemelding = 'FERDIG', 'utgår'
     //backend vil oppdatere statusen til PVk dokument til 'PVO_UNDERARBEID', dersom statusen til PVO tilbakemelding = 'Påbegynt', 'snart ferdig' eller 'til kontroll'
@@ -89,20 +94,29 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               const updatedValues: IPvoTilbakemelding = {
                 ...response,
                 status: submittedStatus,
-                sendtDato:
-                  submittedStatus === EPvoTilbakemeldingStatus.FERDIG
-                    ? new Date().toISOString()
-                    : '',
-                merknadTilEtterleverEllerRisikoeier:
-                  submittedValues.merknadTilEtterleverEllerRisikoeier,
-                arbeidGarVidere: submittedValues.arbeidGarVidere,
-                arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
-                behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
-                behovForForhandskonsultasjonBegrunnelse:
-                  submittedValues.behovForForhandskonsultasjonBegrunnelse,
-                pvoVurdering: submittedValues.pvoVurdering,
-                pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
-                vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
+                vurderinger: response.vurderinger.map((vurdering) => {
+                  if (vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo) {
+                    return {
+                      ...vurdering,
+                      sendtDato:
+                        submittedStatus === EPvoTilbakemeldingStatus.FERDIG
+                          ? new Date().toISOString()
+                          : '',
+                      merknadTilEtterleverEllerRisikoeier:
+                        submittedValues.merknadTilEtterleverEllerRisikoeier,
+                      arbeidGarVidere: submittedValues.arbeidGarVidere,
+                      arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
+                      behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
+                      behovForForhandskonsultasjonBegrunnelse:
+                        submittedValues.behovForForhandskonsultasjonBegrunnelse,
+                      pvoVurdering: submittedValues.pvoVurdering,
+                      pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
+                      vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
+                    }
+                  } else {
+                    return vurdering
+                  }
+                }),
               }
               await updatePvoTilbakemelding(updatedValues).then((response: IPvoTilbakemelding) => {
                 setPvoTilbakemelding(response)
@@ -113,21 +127,29 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
         })
         .catch(async (error: AxiosError) => {
           if (error.status === 404) {
+            const newVurdering = createNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokument.id,
               status: submittedStatus,
-              sendtDato:
-                submittedStatus === EPvoTilbakemeldingStatus.FERDIG ? new Date().toISOString() : '',
-              merknadTilEtterleverEllerRisikoeier:
-                submittedValues.merknadTilEtterleverEllerRisikoeier,
-              arbeidGarVidere: submittedValues.arbeidGarVidere,
-              arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
-              behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
-              behovForForhandskonsultasjonBegrunnelse:
-                submittedValues.behovForForhandskonsultasjonBegrunnelse,
-              pvoVurdering: submittedValues.pvoVurdering,
-              pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
-              vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
+              vurderinger: [
+                {
+                  ...newVurdering,
+                  sendtDato:
+                    submittedStatus === EPvoTilbakemeldingStatus.FERDIG
+                      ? new Date().toISOString()
+                      : '',
+                  merknadTilEtterleverEllerRisikoeier:
+                    submittedValues.merknadTilEtterleverEllerRisikoeier,
+                  arbeidGarVidere: submittedValues.arbeidGarVidere,
+                  arbeidGarVidereBegrunnelse: submittedValues.arbeidGarVidereBegrunnelse,
+                  behovForForhandskonsultasjon: submittedValues.behovForForhandskonsultasjon,
+                  behovForForhandskonsultasjonBegrunnelse:
+                    submittedValues.behovForForhandskonsultasjonBegrunnelse,
+                  pvoVurdering: submittedValues.pvoVurdering,
+                  pvoFolgeOppEndringer: submittedValues.pvoFolgeOppEndringer,
+                  vilFaPvkIRetur: submittedValues.vilFaPvkIRetur,
+                },
+              ],
             })
             await createPvoTilbakemelding(createValue).then((response: IPvoTilbakemelding) => {
               setPvoTilbakemelding(response)
@@ -145,7 +167,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={submit}
-      initialValues={mapPvoTilbakemeldingToFormValue(pvoTilbakemelding)}
+      initialValues={mapVurderingToFormValue(relevantVurdering)}
       validationSchema={sendInnCheck}
       innerRef={formRef}
     >

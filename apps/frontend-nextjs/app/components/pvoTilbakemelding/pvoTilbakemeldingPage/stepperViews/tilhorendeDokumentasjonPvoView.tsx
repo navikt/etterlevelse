@@ -2,10 +2,12 @@ import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
@@ -15,7 +17,7 @@ import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../../readOnly/tilhor
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  pvkDokumentId: string
+  pvkDokument: IPvkDokument
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -27,11 +29,12 @@ type TProps = {
     | undefined
   isPvkKravLoading: boolean
   pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
 }
 
 export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  pvkDokumentId,
+  pvkDokument,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -39,6 +42,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
   pvkKrav,
   isPvkKravLoading,
   pvoTilbakemelding,
+  relevantVurdering,
 }) => {
   return (
     <div className='w-full'>
@@ -55,16 +59,17 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
             <PvoSidePanelWrapper>
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                 <TilhorendeDokumentasjonPvoTilbakemeldingForm
-                  pvkDokumentId={pvkDokumentId}
-                  initialValue={pvoTilbakemelding.tilhorendeDokumentasjon}
+                  pvkDokumentId={pvkDokument.id}
+                  innsendingId={pvkDokument.antallInnsendingTilPvo}
+                  initialValue={relevantVurdering.tilhorendeDokumentasjon}
                   formRef={formRef}
                 />
               )}
 
               {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                 <TilhorendeDokumentasjonTilbakemeldingReadOnly
-                  tilbakemeldingsinnhold={pvoTilbakemelding.tilhorendeDokumentasjon}
-                  sentDate={pvoTilbakemelding.sendtDato}
+                  tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
+                  sentDate={relevantVurdering.sendtDato}
                   forPvo={true}
                 />
               )}

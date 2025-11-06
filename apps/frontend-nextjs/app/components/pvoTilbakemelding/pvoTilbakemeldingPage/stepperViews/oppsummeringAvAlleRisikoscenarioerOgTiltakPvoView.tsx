@@ -17,6 +17,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
@@ -36,6 +37,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -91,6 +93,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
   etterlevelseDokumentasjonId,
   pvkDokument,
   pvoTilbakemelding,
+  relevantVurdering,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -426,16 +429,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
           <PvoSidePanelWrapper>
             {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
-                sentDate={pvoTilbakemelding.sendtDato}
+                tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
+                sentDate={relevantVurdering.sendtDato}
                 forPvo={true}
               />
             )}
             {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingForm
                 pvkDokumentId={pvkDokument.id}
+                innsendingId={pvkDokument.antallInnsendingTilPvo}
                 fieldName='risikoscenarioEtterTiltakk'
-                initialValue={pvoTilbakemelding.risikoscenarioEtterTiltakk}
+                initialValue={relevantVurdering.risikoscenarioEtterTiltakk}
                 formRef={formRef}
               />
             )}

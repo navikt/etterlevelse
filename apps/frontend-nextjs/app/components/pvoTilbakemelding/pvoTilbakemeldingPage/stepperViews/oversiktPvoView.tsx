@@ -29,10 +29,9 @@ import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConst
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { mapNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { Alert, BodyShort, FormSummary, Heading, Label, Link, List, Tag } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import { PvoTilbakemeldingAnsvarligForm } from '../../form/pvoTilbakemeldingAnsvarligForm'
 
@@ -43,6 +42,7 @@ type TProps = {
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
   pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   formRef: RefObject<any>
   pvkKrav:
     | {
@@ -69,6 +69,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   setSelectedStep,
   updateTitleUrlAndStep,
   pvoTilbakemelding,
+  relevantVurdering,
   formRef,
   pvkKrav,
 }) => {
@@ -76,16 +77,6 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
-  const relevantVurdering: IVurdering = useMemo(() => {
-    const vurdering = pvoTilbakemelding.vurderinger.find(
-      (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
-    )
-    if (vurdering) {
-      return vurdering
-    } else {
-      return mapNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
-    }
-  }, [pvoTilbakemelding])
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
