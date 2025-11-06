@@ -55,24 +55,33 @@ export const PvoSistRedigertView = () => {
           </div>
           <List className='mb-2.5 flex flex-col gap-2'>
             {sortedPvoTilbakemelding.length !== 0 &&
-              sortedPvoTilbakemelding.map((pvoTilbakemelding: TPvoTilbakemeldingQL) => (
-                <ListLayout2
-                  key={pvoTilbakemelding.id}
-                  id={pvoTilbakemelding.id}
-                  url={pvkDokumenteringPvoTilbakemeldingUrl(pvoTilbakemelding.pvkDokumentId, 1)}
-                  title={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer} ${pvoTilbakemelding.etterlevelseDokumentasjonData.title}`}
-                  status={
-                    <PvoStatusView
-                      pvkDokumentStatus={pvoTilbakemelding.pvkDokumentStatus as EPvkDokumentStatus}
-                      status={pvoTilbakemelding.status}
-                      etterlystReturn={pvoTilbakemelding.vilFaPvkIRetur}
-                      antallInnsendingTilPvo={pvoTilbakemelding.antallInnsendingTilPvo}
-                    />
-                  }
-                  changeStamp={`
+              sortedPvoTilbakemelding.map((pvoTilbakemelding: TPvoTilbakemeldingQL) => {
+                const sortedPvoVurderinger = pvoTilbakemelding.vurderinger.sort(
+                  (a, b) => b.innsendingId - a.innsendingId
+                )
+                const latestVurdering = sortedPvoVurderinger[0]
+
+                return (
+                  <ListLayout2
+                    key={pvoTilbakemelding.id}
+                    id={pvoTilbakemelding.id}
+                    url={pvkDokumenteringPvoTilbakemeldingUrl(pvoTilbakemelding.pvkDokumentId, 1)}
+                    title={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer} ${pvoTilbakemelding.etterlevelseDokumentasjonData.title}`}
+                    status={
+                      <PvoStatusView
+                        pvkDokumentStatus={
+                          pvoTilbakemelding.pvkDokumentStatus as EPvkDokumentStatus
+                        }
+                        status={pvoTilbakemelding.status}
+                        etterlystReturn={latestVurdering.vilFaPvkIRetur}
+                        antallInnsendingTilPvo={pvoTilbakemelding.antallInnsendingTilPvo}
+                      />
+                    }
+                    changeStamp={`
                     Sist endret av meg: ${moment(pvoTilbakemelding.sistEndretAvMeg).format('LL')}`}
-                />
-              ))}
+                  />
+                )
+              })}
           </List>
         </div>
       )}
