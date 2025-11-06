@@ -48,8 +48,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   pvoVurderingList,
 }) => {
   const user = useContext(UserContext)
-  const isRisikoeierCheck: boolean =
-    etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) || user.isAdmin()
+  const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   return (
     <div className='w-full max-w-[75ch]'>
@@ -60,7 +59,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
       />
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
 
-      {isRisikoeierCheck && (
+      {(isRisikoeierCheck || user.isAdmin()) && (
         <div className='mt-5 mb-3'>
           <TextAreaField
             height='150px'
@@ -83,7 +82,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
       </div>
 
       <div className='mt-5 flex gap-2 items-center'>
-        {isRisikoeierCheck && (
+        {(isRisikoeierCheck || user.isAdmin()) && (
           <LagreOgFortsettSenereButton
             setFieldValue={setFieldValue}
             submitForm={submitForm}
@@ -91,7 +90,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           />
         )}
 
-        {!isRisikoeierCheck && (
+        {(!isRisikoeierCheck || user.isAdmin()) && (
           <Button
             type='button'
             onClick={async () => {
@@ -103,7 +102,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           </Button>
         )}
 
-        {isRisikoeierCheck && (
+        {(isRisikoeierCheck || user.isAdmin()) && (
           <Button
             type='button'
             onClick={async () => {

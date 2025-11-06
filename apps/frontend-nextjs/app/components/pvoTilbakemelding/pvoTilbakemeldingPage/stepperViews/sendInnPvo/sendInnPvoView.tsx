@@ -195,10 +195,9 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
           {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
             <SendInnPvoViewFerdig
               submitForm={submitForm}
-              setFieldValue={setFieldValue}
               setSubmittedStatus={setSubmittedStatus}
               pvkDokument={pvkDokument}
-              pvoTilbakemelding={pvoTilbakemelding}
+              relevantVurdering={relevantVurdering}
               activeStep={activeStep}
               setSelectedStep={setSelectedStep}
               setActiveStep={setActiveStep}

@@ -11,25 +11,18 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import {
   EPvoTilbakemeldingStatus,
-  IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
 import { Alert, BodyLong, Button, Label, List } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
-  pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   activeStep: number
   submitForm: () => Promise<void>
-  setFieldValue: (
-    field: string,
-    value: any,
-    shouldValidate?: boolean
-  ) => Promise<void | FormikErrors<IVurdering>>
   setSubmittedStatus: (value: SetStateAction<EPvoTilbakemeldingStatus>) => void
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -43,10 +36,9 @@ type TProps = {
 
 export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   pvkDokument,
-  pvoTilbakemelding,
+  relevantVurdering,
   activeStep,
   submitForm,
-  setFieldValue,
   setSubmittedStatus,
   setActiveStep,
   setSelectedStep,
@@ -60,7 +52,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
   const getPvoVurdering = () => {
     const vurderingen = pvoVurderingList.filter(
-      (vurdering) => vurdering.code === pvoTilbakemelding.pvoVurdering
+      (vurdering) => vurdering.code === relevantVurdering.pvoVurdering
     )
     if (vurderingen.length === 0) {
       return ''
@@ -79,13 +71,13 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
             <div className='mb-3'>
               <Label>Beskjed til etterlever</Label>
               <DataTextWrapper>
-                {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier &&
-                  pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier.length !== 0 && (
-                    <Markdown source={pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier} />
+                {relevantVurdering.merknadTilEtterleverEllerRisikoeier &&
+                  relevantVurdering.merknadTilEtterleverEllerRisikoeier.length !== 0 && (
+                    <Markdown source={relevantVurdering.merknadTilEtterleverEllerRisikoeier} />
                   )}
                 <BodyLong>
-                  {(!pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier ||
-                    pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier.length === 0) &&
+                  {(!relevantVurdering.merknadTilEtterleverEllerRisikoeier ||
+                    relevantVurdering.merknadTilEtterleverEllerRisikoeier.length === 0) &&
                     'Ingen tilbakemelding til etterlever'}
                 </BodyLong>
               </DataTextWrapper>
@@ -94,9 +86,9 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
             <div className='mb-3'>
               <Label>Anbefales det at arbeidet går videre som planlagt?</Label>
               <DataTextWrapper>
-                {pvoTilbakemelding.arbeidGarVidere === null
+                {relevantVurdering.arbeidGarVidere === null
                   ? null
-                  : pvoTilbakemelding.arbeidGarVidere === true
+                  : relevantVurdering.arbeidGarVidere === true
                     ? 'Ja'
                     : 'Nei'}
               </DataTextWrapper>
@@ -105,16 +97,16 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
             <div className='mb-3'>
               <Label>Beskriv anbefalingen nærmere:</Label>
               <DataTextWrapper customEmptyMessage='Ingen beskrivelse'>
-                {pvoTilbakemelding.arbeidGarVidereBegrunnelse}
+                {relevantVurdering.arbeidGarVidereBegrunnelse}
               </DataTextWrapper>
             </div>
 
             <div className='mb-3'>
               <Label>Er det behov for forhåndskonsultasjon med Datatilsynet?</Label>
               <DataTextWrapper>
-                {pvoTilbakemelding.behovForForhandskonsultasjon === null
+                {relevantVurdering.behovForForhandskonsultasjon === null
                   ? null
-                  : pvoTilbakemelding.behovForForhandskonsultasjon === true
+                  : relevantVurdering.behovForForhandskonsultasjon === true
                     ? 'Ja'
                     : 'Nei'}
               </DataTextWrapper>
@@ -123,7 +115,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
             <div className='mb-3'>
               <Label>Beskriv anbefalingen nærmere:</Label>
               <DataTextWrapper customEmptyMessage='Ingen beskrivelse'>
-                {pvoTilbakemelding.behovForForhandskonsultasjonBegrunnelse}
+                {relevantVurdering.behovForForhandskonsultasjonBegrunnelse}
               </DataTextWrapper>
             </div>
 
@@ -132,12 +124,12 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
               <DataTextWrapper>
                 {getPvoVurdering()}
 
-                {(pvoTilbakemelding.pvoFolgeOppEndringer || pvoTilbakemelding.vilFaPvkIRetur) && (
+                {(relevantVurdering.pvoFolgeOppEndringer || relevantVurdering.vilFaPvkIRetur) && (
                   <List>
-                    {pvoTilbakemelding.pvoFolgeOppEndringer && (
+                    {relevantVurdering.pvoFolgeOppEndringer && (
                       <List.Item>PVO vil følge opp endringer dere gjør.</List.Item>
                     )}
-                    {pvoTilbakemelding.vilFaPvkIRetur && (
+                    {relevantVurdering.vilFaPvkIRetur && (
                       <List.Item>
                         PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
                       </List.Item>
@@ -172,7 +164,6 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
               type='button'
               variant='secondary'
               onClick={async () => {
-                await setFieldValue('status', EPvoTilbakemeldingStatus.UNDERARBEID)
                 setSubmittedStatus(EPvoTilbakemeldingStatus.UNDERARBEID)
                 setIsAngreInnsending(true)
                 await submitForm()
