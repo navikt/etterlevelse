@@ -94,9 +94,10 @@ const OmPvkPage = () => {
           </List>
           <BodyLong className='mt-3'>
             Digital PVK er ikke en selvstendig løsning, men er innebygd i Støtte til etterlevelse
-            for å ivareta sammenhengen med etterlevelsesdokumentasjon. Når dere først har
-            skrivetilgang til et bestemt etterlevelsesdokument, finner dere inngangen til
-            PVK-funksjonalitet øverst på temasiden.
+            for å ivareta sammenhengen med etterlevelsesdokumentasjon. Inngangen til PVK finner dere
+            øverst på temasiden i etterlevelsesdokumentet. Merk at dere må ha redigeringstilgang til
+            etterlevelsesdokumentet og ha huket av for at dere behandler personopplysninger under
+            dokumentegenskaper for å se inngangen til Digital PVK.
           </BodyLong>
           <ReadMore header='Vis meg hvor jeg finner Digital PVK' className='mt-3'>
             <Image

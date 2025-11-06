@@ -10,7 +10,9 @@ query getPvoTilbakemeldingMedEtterlevelseDokData($pvoTilbakemeldingId: ID) {
                 title
                 etterlevelseNummer
             }
-            merknadTilEtterleverEllerRisikoeier
+            vurderinger {
+                merknadTilEtterleverEllerRisikoeier
+            }
         }
     }
 }

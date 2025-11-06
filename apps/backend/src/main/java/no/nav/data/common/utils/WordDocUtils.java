@@ -23,10 +23,7 @@ import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
-import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
-import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.*;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
 import org.apache.commons.lang3.BooleanUtils;
@@ -410,7 +407,7 @@ public class WordDocUtils {
     }
 
     //PVK docu
-    public void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
+    public void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding, Vurdering pvoVudering ) {
         newLine();
         var header2 = addHeading2("Behandlingens art og omfang");
         addBookmark(header2, "pvk_art_og_omfang");
@@ -427,11 +424,11 @@ public class WordDocUtils {
         newLine();
 
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getBehandlingensArtOgOmfang());
+            generatePvoTilbakemelding(pvoVudering.getBehandlingensArtOgOmfang());
         }
     }
 
-    public void generateTilhorendeDokumentasjon(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, long antallPvkKrav, long antallFerdigPvkKrav,PvoTilbakemelding pvoTilbakemelding) {
+    public void generateTilhorendeDokumentasjon(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, long antallPvkKrav, long antallFerdigPvkKrav,PvoTilbakemelding pvoTilbakemelding, Vurdering pvoVudering) {
         newLine();
         var header2 = addHeading2("Tilhorende dokumentasjon");
         addBookmark(header2, "pvk_tilhorende_dokumentasjon");
@@ -475,12 +472,12 @@ public class WordDocUtils {
         addHeading3("Tilbakemelding fra Personvernombudet");
         newLine();
 
-        generateTilbakemeldingForTilhorendeDokumentasjon(pvoTilbakemelding);
+        generateTilbakemeldingForTilhorendeDokumentasjon(pvoTilbakemelding, pvoVudering);
     }
 
-    private void generateTilbakemeldingForTilhorendeDokumentasjon(PvoTilbakemelding pvoTilbakemelding) {
+    private void generateTilbakemeldingForTilhorendeDokumentasjon(PvoTilbakemelding pvoTilbakemelding, Vurdering pvoVudering) {
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            TilhorendeDokumentasjonTilbakemelding tilbakemelding = pvoTilbakemelding.getPvoTilbakemeldingData().getTilhorendeDokumentasjon();
+            TilhorendeDokumentasjonTilbakemelding tilbakemelding = pvoVudering.getTilhorendeDokumentasjon();
 
             addHeading3("Behandlinger i Behandlingskatalogen");
             addLabel("Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.");
@@ -533,7 +530,7 @@ public class WordDocUtils {
 
     }
 
-    public void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding) {
+    public void generateInnvolveringAvEksterne(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding, Vurdering pvoVudering) {
         newLine();
         var header2 = addHeading2("Innvolvering av eksterne");
         addBookmark(header2, "pvk_innvolvering_av_ekstern");
@@ -554,11 +551,11 @@ public class WordDocUtils {
         addDataText("Utdyp hvordan dere har involvert representant(er) for databehandler(e)", pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse());
         newLine();
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getInnvolveringAvEksterne());
+            generatePvoTilbakemelding(pvoVudering.getInnvolveringAvEksterne());
         }
     }
 
-    public void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding) {
+    public void generateRisikoscenarioOgTiltak(List<RisikoscenarioResponse> risikoscenarioList, List<TiltakResponse> tiltakList, PvoTilbakemelding pvoTilbakemelding, Vurdering pvoVudering) {
         newLine();
         var header2 = addHeading2("Risikoscenario, tiltak, og tiltakenes effekt");
         addBookmark(header2, "pvk_risikoscenario_og_tiltak");
@@ -624,7 +621,7 @@ public class WordDocUtils {
         });
         newLine();
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            generatePvoTilbakemelding(pvoTilbakemelding.getPvoTilbakemeldingData().getRisikoscenarioEtterTiltakk());
+            generatePvoTilbakemelding(pvoVudering.getRisikoscenarioEtterTiltakk());
         }
     }
 

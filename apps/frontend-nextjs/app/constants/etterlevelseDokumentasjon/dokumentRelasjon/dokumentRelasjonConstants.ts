@@ -1,5 +1,8 @@
 import { IChangeStamp } from '@/constants/commonConstants'
-import { IEtterlevelseDokumentasjon } from '../etterlevelseDokumentasjonConstants'
+import {
+  IEtterlevelseDokumentasjon,
+  TEtterlevelseDokumentasjonQL,
+} from '../etterlevelseDokumentasjonConstants'
 
 export enum ERelationType {
   ARVER = 'ARVER',
@@ -17,4 +20,8 @@ export interface IDocumentRelation {
 export interface IDocumentRelationWithEtterlevelseDokumetajson extends IDocumentRelation {
   fromDocumentWithData: IEtterlevelseDokumentasjon
   toDocumentWithData: IEtterlevelseDokumentasjon
+}
+
+export interface IEtterlevelseDokumentasjonWithRelation extends TEtterlevelseDokumentasjonQL {
+  relationType?: ERelationType
 }

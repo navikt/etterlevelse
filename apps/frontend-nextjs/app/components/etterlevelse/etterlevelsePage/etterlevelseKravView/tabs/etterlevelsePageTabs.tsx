@@ -22,6 +22,7 @@ import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
 import { useParams } from 'next/navigation'
 import {
@@ -120,6 +121,23 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     }
   }
 
+  const upsertEtterlevelse = async (
+    existingEtterlevelseId: string,
+    nyEtterlevelse: IEtterlevelse
+  ) => {
+    if (etterlevelse.id || existingEtterlevelseId) {
+      console.debug('UPDATE')
+      await updateEtterlevelse(nyEtterlevelse).then((res) => {
+        handleStateChangeOnEtterlevelseResponse(res)
+      })
+    } else {
+      console.debug('CREATE')
+      await createEtterlevelse(nyEtterlevelse).then((res) => {
+        handleStateChangeOnEtterlevelseResponse(res)
+      })
+    }
+  }
+
   const submit = async (etterlevelse: IEtterlevelse) => {
     const mutatedEtterlevelse = {
       ...etterlevelse,
@@ -147,8 +165,8 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
       }
     }
 
-    await getPvkDokumentByEtterlevelseDokumentId(etterlevelse.etterlevelseDokumentasjonId).then(
-      async (response) => {
+    await getPvkDokumentByEtterlevelseDokumentId(etterlevelse.etterlevelseDokumentasjonId)
+      .then(async (response) => {
         if (
           response &&
           [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
@@ -158,18 +176,14 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         ) {
           setIsPvoAlertModalOpen(true)
         } else {
-          if (etterlevelse.id || existingEtterlevelseId) {
-            await updateEtterlevelse(mutatedEtterlevelse).then((res) => {
-              handleStateChangeOnEtterlevelseResponse(res)
-            })
-          } else {
-            await createEtterlevelse(mutatedEtterlevelse).then((res) => {
-              handleStateChangeOnEtterlevelseResponse(res)
-            })
-          }
+          await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
         }
-      }
-    )
+      })
+      .catch(async (error: AxiosError) => {
+        if (error.status === 404) {
+          await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
+        }
+      })
   }
 
   useEffect(() => {

@@ -94,7 +94,7 @@ public class P360Controller {
                 if (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() != null && pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() > 1) {
                     documentTitle += (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". ");
                 }
-                documentTitle += "Tilbakemelding fra Personvernombudet for ";
+                documentTitle += pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". Tilbakemelding fra Personvernombudet for ";
             } else if (risikoeier) {
                 documentTitle += "Personvernkonsekvensvurdering for ";
             }

@@ -1,8 +1,10 @@
-FROM openjdk:18-slim as builder
-WORKDIR application
+# Builder stage
+FROM eclipse-temurin:23.0.2_7-jdk-ubi9-minimal AS builder
+WORKDIR /application
 COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
+# Runtime stage
 FROM ghcr.io/navikt/baseimages/temurin:21
 
 ENV MAIN_CLASS=org.springframework.boot.loader.launch.JarLauncher
@@ -10,10 +12,10 @@ ENV JAVA_OPTS="-Xmx850m \
                -Djava.security.egd=file:/dev/./urandom"
 COPY run-java.sh /
 
-COPY --from=builder application/dependencies/ ./
+COPY --from=builder /application/dependencies/ ./
 RUN true
-COPY --from=builder application/snapshot-dependencies/ ./
+COPY --from=builder /application/snapshot-dependencies/ ./
 RUN true
-COPY --from=builder application/spring-boot-loader/ ./
+COPY --from=builder /application/spring-boot-loader/ ./
 RUN true
-COPY --from=builder application/application/ ./
+COPY --from=builder /application/application/ ./

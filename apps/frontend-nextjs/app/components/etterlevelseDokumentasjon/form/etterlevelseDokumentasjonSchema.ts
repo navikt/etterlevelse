@@ -45,3 +45,14 @@ export const etterlevelseDokumentasjonSchema = () =>
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
   })
+
+export const etterlevelseDokumentasjonWithRelationSchema = () =>
+  yup.object({
+    title: titleCheck,
+    varslingsadresser: varslingsadresserCheck,
+    relationType: yup
+      .string()
+      .required('Du må velge hvordan du ønsker å gjenbruke dette dokumentet'),
+    teamsData: teamsDataCheck,
+    resourcesData: resourcesDataCheck,
+  })

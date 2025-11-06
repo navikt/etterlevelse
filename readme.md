@@ -3,14 +3,12 @@
 [![Dependabot Updates](https://github.com/navikt/etterlevelse/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/dependabot/dependabot-updates)
 
 [![Backend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-backend.yml/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-backend.yml)
-[![Frontend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend.yml/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend.yml)
-[![Frontend-nextjs](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml/badge.svg)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml)
+[![Frontend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml/badge.svg)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml)
 
 url for løsningen:
 
 - prod: https://etterlevelse.ansatt.nav.no/
 - dev: https://etterlevelse.intern.dev.nav.no
-- dev: https://etterlevelse-nextjs.intern.dev.nav.no/
 
 Når du tar en `git clone` må du velge `https`. Hvis du velger `ssh`, så vil `nais` klage på at du har en `ssh`-nøkkel på maskinen din, som vil medføre at du mister tilgang til `nais` ved at `azure` innlogging sier at innlogging var vellykket, men allikevel har du ikke tilgang.
 
