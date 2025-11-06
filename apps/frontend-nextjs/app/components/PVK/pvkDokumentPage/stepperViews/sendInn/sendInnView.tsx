@@ -38,7 +38,7 @@ import {
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
@@ -77,7 +77,7 @@ type TProps = {
       }
     | undefined
   isPvkKravLoading: boolean
-  pvoTilbakemelding?: IPvoTilbakemelding
+  relevantVurdering?: IVurdering
 }
 
 export const SendInnView: FunctionComponent<TProps> = ({
@@ -93,7 +93,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   codelistUtils,
   pvkKrav,
   isPvkKravLoading,
-  pvoTilbakemelding,
+  relevantVurdering,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
@@ -562,10 +562,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     )}
 
                     {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
-                      pvoTilbakemelding && (
+                      relevantVurdering && (
                         <VurdertAvPvoOgTrengerMerArbeidFields
                           pvkDokument={pvkDokument}
-                          pvoTilbakemelding={pvoTilbakemelding}
+                          relevantVurdering={relevantVurdering}
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}
                           initialStatus={initialValues.status}
@@ -593,10 +593,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO &&
-                      pvoTilbakemelding && (
+                      relevantVurdering && (
                         <VurdertAvPvoFields
                           pvkDokument={pvkDokument}
-                          pvoTilbakemelding={pvoTilbakemelding}
+                          relevantVurdering={relevantVurdering}
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}
                           initialStatus={initialValues.status}
@@ -624,11 +624,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
-                      pvoTilbakemelding && (
+                      relevantVurdering && (
                         <TrengerRisikoeierGodkjenningFields
                           pvkDokument={pvkDokument}
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          pvoTilbakemelding={pvoTilbakemelding}
+                          relevantVurdering={relevantVurdering}
                           isLoading={isLoading}
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}
@@ -656,11 +656,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-                      pvoTilbakemelding && (
+                      relevantVurdering && (
                         <GodkjentAvRisikoeierFields
                           pvkDokument={pvkDokument}
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          pvoTilbakemelding={pvoTilbakemelding}
+                          relevantVurdering={relevantVurdering}
                           isLoading={isLoading}
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}

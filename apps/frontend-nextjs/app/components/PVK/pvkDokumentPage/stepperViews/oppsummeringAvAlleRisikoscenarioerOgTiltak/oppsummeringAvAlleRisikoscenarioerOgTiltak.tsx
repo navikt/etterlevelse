@@ -17,6 +17,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
@@ -44,6 +45,7 @@ type TProps = {
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
   pvoTilbakemelding?: IPvoTilbakemelding
+  relevantVurdering?: IVurdering
 }
 
 export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
@@ -99,6 +101,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   setSelectedStep,
   formRef,
   pvoTilbakemelding,
+  relevantVurdering,
 }) => {
   const router = useRouter()
   const queryParams = useSearchParams()
@@ -505,11 +508,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         </div>
         <div>
           {/* sidepanel */}
-          {isPvoTilbakemeldingFerdig && (
+          {isPvoTilbakemeldingFerdig && relevantVurdering && (
             <PvkSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.risikoscenarioEtterTiltakk}
-                sentDate={pvoTilbakemelding.sendtDato}
+                tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
+                sentDate={relevantVurdering.sendtDato}
               />
             </PvkSidePanelWrapper>
           )}

@@ -14,7 +14,10 @@ import {
 } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import {
+  IPvoTilbakemelding,
+  IVurdering,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { useKravFilter } from '@/query/krav/kravQuery'
@@ -22,6 +25,7 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
+import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
@@ -129,6 +133,19 @@ export const PvkDokumentPage = () => {
       }
     }
   }, [etterlevelseDokumentasjon])
+
+  const relevantVurdering: IVurdering | undefined = useMemo(() => {
+    if (pvkDokument && pvoTilbakemelding) {
+      const vurdering = pvoTilbakemelding.vurderinger.find(
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+      )
+      if (vurdering) {
+        return vurdering
+      } else {
+        return createNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+      }
+    }
+  }, [pvoTilbakemelding, pvkDokument])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -238,6 +255,7 @@ export const PvkDokumentPage = () => {
                       setSelectedStep={setSelectedStep}
                       formRef={formRef}
                       pvoTilbakemelding={pvoTilbakemelding}
+                      relevantVurdering={relevantVurdering}
                     />
                   )}
                   {activeStep === 3 && (
@@ -247,6 +265,7 @@ export const PvkDokumentPage = () => {
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
+                      relevantVurdering={relevantVurdering}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
@@ -257,6 +276,7 @@ export const PvkDokumentPage = () => {
                     <TilhorendeDokumentasjon
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvoTilbakemelding={pvoTilbakemelding}
+                      relevantVurdering={relevantVurdering}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
@@ -272,6 +292,7 @@ export const PvkDokumentPage = () => {
                       pvkDokument={pvkDokument}
                       setPvkDokument={setPvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
+                      relevantVurdering={relevantVurdering}
                       activeStep={activeStep}
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
@@ -293,6 +314,7 @@ export const PvkDokumentPage = () => {
                       etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                       pvkDokument={pvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
+                      relevantVurdering={relevantVurdering}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}
@@ -307,7 +329,7 @@ export const PvkDokumentPage = () => {
                       databehandlere={readOnlyData.databehandlere}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      pvoTilbakemelding={pvoTilbakemelding}
+                      relevantVurdering={relevantVurdering}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}

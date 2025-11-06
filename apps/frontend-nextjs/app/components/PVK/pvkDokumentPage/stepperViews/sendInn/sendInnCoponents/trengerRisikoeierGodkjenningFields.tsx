@@ -14,7 +14,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button } from '@navikt/ds-react'
@@ -24,7 +24,7 @@ import { FunctionComponent, ReactNode, useContext } from 'react'
 type TProps = {
   pvkDokument: IPvkDokument
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   isLoading: boolean
   setFieldValue: (
     field: string,
@@ -39,7 +39,7 @@ type TProps = {
 export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
-  pvoTilbakemelding,
+  relevantVurdering,
   isLoading,
   setFieldValue,
   submitForm,
@@ -54,7 +54,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
     <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
       <BeskjedFraPvoReadOnly
-        pvoTilbakemelding={pvoTilbakemelding}
+        relevantVurdering={relevantVurdering}
         pvoVurderingList={pvoVurderingList}
       />
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />

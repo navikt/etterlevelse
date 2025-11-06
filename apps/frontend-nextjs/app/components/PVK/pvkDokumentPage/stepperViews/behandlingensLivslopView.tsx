@@ -28,6 +28,7 @@ import {
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import {
@@ -55,6 +56,7 @@ type TProps = {
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
   pvoTilbakemelding?: IPvoTilbakemelding
+  relevantVurdering?: IVurdering
 }
 
 export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
@@ -65,6 +67,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
   setSelectedStep,
   formRef,
   pvoTilbakemelding,
+  relevantVurdering,
 }) => {
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -292,14 +295,16 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
 
           {/* Sidepanel */}
           <div>
-            {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-              <PvkSidePanelWrapper>
-                <PvoTilbakemeldingReadOnly
-                  tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
-                  sentDate={pvoTilbakemelding.sendtDato}
-                />
-              </PvkSidePanelWrapper>
-            )}
+            {pvoTilbakemelding &&
+              pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+              relevantVurdering && (
+                <PvkSidePanelWrapper>
+                  <PvoTilbakemeldingReadOnly
+                    tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
+                    sentDate={relevantVurdering.sendtDato}
+                  />
+                </PvkSidePanelWrapper>
+              )}
 
             {(!pvoTilbakemelding ||
               (pvoTilbakemelding &&

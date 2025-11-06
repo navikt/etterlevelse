@@ -22,6 +22,7 @@ import {
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, BodyLong, Button, Heading, Label, List, Modal, ReadMore } from '@navikt/ds-react'
@@ -40,6 +41,7 @@ type TProps = {
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
   pvoTilbakemelding?: IPvoTilbakemelding
+  relevantVurdering?: IVurdering
 }
 
 export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
@@ -53,6 +55,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
   setSelectedStep,
   formRef,
   pvoTilbakemelding,
+  relevantVurdering,
 }) => {
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -386,16 +389,18 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
         )}
         {/* sidepanel */}
 
-        {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <div>
-            <PvkSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.innvolveringAvEksterne}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvkSidePanelWrapper>
-          </div>
-        )}
+        {pvoTilbakemelding &&
+          pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+          relevantVurdering && (
+            <div>
+              <PvkSidePanelWrapper>
+                <PvoTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
+                  sentDate={relevantVurdering.sendtDato}
+                />
+              </PvkSidePanelWrapper>
+            </div>
+          )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

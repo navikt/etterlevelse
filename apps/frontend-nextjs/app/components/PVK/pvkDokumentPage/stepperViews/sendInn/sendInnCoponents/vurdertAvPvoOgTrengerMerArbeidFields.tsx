@@ -8,7 +8,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
@@ -16,7 +16,7 @@ import { FunctionComponent, ReactNode } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
-  pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   setFieldValue: (
     field: string,
     value: any,
@@ -31,7 +31,7 @@ type TProps = {
 
 export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
   pvkDokument,
-  pvoTilbakemelding,
+  relevantVurdering,
   setFieldValue,
   submitForm,
   initialStatus,
@@ -53,7 +53,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
             />
           </div>
           <BeskjedFraPvoReadOnly
-            pvoTilbakemelding={pvoTilbakemelding}
+            relevantVurdering={relevantVurdering}
             pvoVurderingList={pvoVurderingList}
           />
 

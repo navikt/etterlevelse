@@ -1,22 +1,22 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
-  pvoTilbakemelding: IPvoTilbakemelding
+  relevantVurdering: IVurdering
   pvoVurderingList: ICode[]
 }
 
 export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
-  pvoTilbakemelding,
+  relevantVurdering,
   pvoVurderingList,
 }) => {
   const getPvoVurdering = () => {
     const vurderingen = pvoVurderingList.filter(
-      (vurdering) => vurdering.code === pvoTilbakemelding.pvoVurdering
+      (vurdering) => vurdering.code === relevantVurdering.pvoVurdering
     )
     if (vurderingen.length === 0) {
       return ''
@@ -33,8 +33,8 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
       <div className='mb-3'>
         <Label>Beskjed til etterlever</Label>
         <DataTextWrapper>
-          {pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier ? (
-            <Markdown source={pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier} />
+          {relevantVurdering.merknadTilEtterleverEllerRisikoeier ? (
+            <Markdown source={relevantVurdering.merknadTilEtterleverEllerRisikoeier} />
           ) : (
             'Ingen beskjed'
           )}
@@ -44,9 +44,9 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
       <div className='mb-3'>
         <Label>Anbefales det at arbeidet går videre som planlagt?</Label>
         <DataTextWrapper>
-          {pvoTilbakemelding.arbeidGarVidere === null
+          {relevantVurdering.arbeidGarVidere === null
             ? null
-            : pvoTilbakemelding.arbeidGarVidere === true
+            : relevantVurdering.arbeidGarVidere === true
               ? 'Ja'
               : 'Nei'}
         </DataTextWrapper>
@@ -55,16 +55,16 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
       <div className='mb-3'>
         <Label>Beskriv anbefalingen nærmere:</Label>
         <DataTextWrapper customEmptyMessage='Ingen beskrivelse'>
-          {pvoTilbakemelding.arbeidGarVidereBegrunnelse}
+          {relevantVurdering.arbeidGarVidereBegrunnelse}
         </DataTextWrapper>
       </div>
 
       <div className='mb-3'>
         <Label>Er det behov for forhåndskonsultasjon med Datatilsynet?</Label>
         <DataTextWrapper>
-          {pvoTilbakemelding.behovForForhandskonsultasjon === null
+          {relevantVurdering.behovForForhandskonsultasjon === null
             ? null
-            : pvoTilbakemelding.behovForForhandskonsultasjon === true
+            : relevantVurdering.behovForForhandskonsultasjon === true
               ? 'Ja'
               : 'Nei'}
         </DataTextWrapper>
@@ -73,7 +73,7 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
       <div className='mb-3'>
         <Label>Beskriv anbefalingen nærmere:</Label>
         <DataTextWrapper customEmptyMessage='Ingen beskrivelse'>
-          {pvoTilbakemelding.behovForForhandskonsultasjonBegrunnelse}
+          {relevantVurdering.behovForForhandskonsultasjonBegrunnelse}
         </DataTextWrapper>
       </div>
 
@@ -81,12 +81,12 @@ export const BeskjedFraPvoReadOnly: FunctionComponent<TProps> = ({
         <Label>Personvernombudets vurdering</Label>
         <DataTextWrapper>
           {getPvoVurdering()}
-          {(pvoTilbakemelding.pvoFolgeOppEndringer || pvoTilbakemelding.vilFaPvkIRetur) && (
+          {(relevantVurdering.pvoFolgeOppEndringer || relevantVurdering.vilFaPvkIRetur) && (
             <List>
-              {pvoTilbakemelding.pvoFolgeOppEndringer && (
+              {relevantVurdering.pvoFolgeOppEndringer && (
                 <List.Item>PVO vil følge opp endringer dere gjør.</List.Item>
               )}
-              {pvoTilbakemelding.vilFaPvkIRetur && (
+              {relevantVurdering.vilFaPvkIRetur && (
                 <List.Item>
                   PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
                 </List.Item>

@@ -9,6 +9,7 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent } from 'react'
 
@@ -24,6 +25,7 @@ type TProps = {
     | undefined
   isPvkKravLoading: boolean
   pvoTilbakemelding?: IPvoTilbakemelding
+  relevantVurdering?: IVurdering
 }
 
 export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
@@ -34,6 +36,7 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   pvkKrav,
   isPvkKravLoading,
   pvoTilbakemelding,
+  relevantVurdering,
 }) => {
   return (
     <div className='w-full'>
@@ -45,16 +48,18 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
         />
 
         {/* sidepanel */}
-        {pvoTilbakemelding && pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-          <div>
-            <PvkSidePanelWrapper>
-              <TilhorendeDokumentasjonTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={pvoTilbakemelding.tilhorendeDokumentasjon}
-                sentDate={pvoTilbakemelding.sendtDato}
-              />
-            </PvkSidePanelWrapper>
-          </div>
-        )}
+        {pvoTilbakemelding &&
+          pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+          relevantVurdering && (
+            <div>
+              <PvkSidePanelWrapper>
+                <TilhorendeDokumentasjonTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
+                  sentDate={relevantVurdering.sendtDato}
+                />
+              </PvkSidePanelWrapper>
+            </div>
+          )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
