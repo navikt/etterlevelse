@@ -12,9 +12,11 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { mapNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { Loader } from '@navikt/ds-react'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
@@ -44,6 +46,17 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
   )
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const relevantVurdering: IVurdering = useMemo(() => {
+    const vurdering = pvoTilbakemelding.vurderinger.find(
+      (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+    )
+    if (vurdering) {
+      return vurdering
+    } else {
+      return mapNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+    }
+  }, [pvoTilbakemelding])
 
   useEffect(() => {
     ;(async () => {
@@ -80,8 +93,8 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                 <PvoSidePanelWrapper>
                   {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                     <PvoTilbakemeldingReadOnly
-                      tilbakemeldingsinnhold={pvoTilbakemelding.behandlingenslivslop}
-                      sentDate={pvoTilbakemelding.sendtDato}
+                      tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
+                      sentDate={relevantVurdering.sendtDato}
                       forPvo={true}
                     />
                   )}
@@ -89,7 +102,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                     <PvoTilbakemeldingForm
                       pvkDokumentId={pvkDokument.id}
                       fieldName='behandlingenslivslop'
-                      initialValue={pvoTilbakemelding.behandlingenslivslop}
+                      initialValue={relevantVurdering.behandlingenslivslop}
                       formRef={formRef}
                     />
                   )}

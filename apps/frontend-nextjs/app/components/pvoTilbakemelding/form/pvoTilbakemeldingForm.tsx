@@ -30,6 +30,7 @@ export enum EBidragVerdier {
 
 type TProps = {
   pvkDokumentId: string
+  innsendingId: number
   fieldName:
     | 'behandlingenslivslop'
     | 'behandlingensArtOgOmfang'
@@ -42,6 +43,7 @@ type TProps = {
 export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
   fieldName,
   pvkDokumentId,
+  innsendingId,
   initialValue,
   formRef,
 }) => {
@@ -59,7 +61,13 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
 
     await getPvkDokument(pvkDokumentId).then((response) => (pvkStatus = response.status))
 
-    if (pvkStatus === EPvkDokumentStatus.UNDERARBEID) {
+    if (
+      ![
+        EPvkDokumentStatus.SENDT_TIL_PVO,
+        EPvkDokumentStatus.PVO_UNDERARBEID,
+        EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+      ].includes(pvkStatus as EPvkDokumentStatus)
+    ) {
       setIsAlertModalOpen(true)
     } else {
       await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
@@ -67,22 +75,32 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
           if (response) {
             const updatedValues: IPvoTilbakemelding = {
               ...response,
-              behandlingenslivslop:
-                fieldName === 'behandlingenslivslop'
-                  ? mutatedTilbakemeldingsInnhold
-                  : response.behandlingenslivslop,
-              behandlingensArtOgOmfang:
-                fieldName === 'behandlingensArtOgOmfang'
-                  ? mutatedTilbakemeldingsInnhold
-                  : response.behandlingensArtOgOmfang,
-              innvolveringAvEksterne:
-                fieldName === 'innvolveringAvEksterne'
-                  ? mutatedTilbakemeldingsInnhold
-                  : response.innvolveringAvEksterne,
-              risikoscenarioEtterTiltakk:
-                fieldName === 'risikoscenarioEtterTiltakk'
-                  ? mutatedTilbakemeldingsInnhold
-                  : response.risikoscenarioEtterTiltakk,
+              vurderinger: response.vurderinger.map((vurdering) => {
+                if (vurdering.innsendingId === innsendingId) {
+                  return {
+                    ...vurdering,
+                    behandlingenslivslop:
+                      fieldName === 'behandlingenslivslop'
+                        ? mutatedTilbakemeldingsInnhold
+                        : vurdering.behandlingenslivslop,
+                    behandlingensArtOgOmfang:
+                      fieldName === 'behandlingensArtOgOmfang'
+                        ? mutatedTilbakemeldingsInnhold
+                        : vurdering.behandlingensArtOgOmfang,
+                    innvolveringAvEksterne:
+                      fieldName === 'innvolveringAvEksterne'
+                        ? mutatedTilbakemeldingsInnhold
+                        : vurdering.innvolveringAvEksterne,
+                    risikoscenarioEtterTiltakk:
+                      fieldName === 'risikoscenarioEtterTiltakk'
+                        ? mutatedTilbakemeldingsInnhold
+                        : vurdering.risikoscenarioEtterTiltakk,
+                  }
+                } else {
+                  return vurdering
+                }
+              }),
+
               status:
                 response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
                   ? EPvoTilbakemeldingStatus.UNDERARBEID
@@ -100,18 +118,27 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
           if (error.status === 404) {
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokumentId,
-              behandlingenslivslop:
-                fieldName === 'behandlingenslivslop' ? mutatedTilbakemeldingsInnhold : undefined,
-              behandlingensArtOgOmfang:
-                fieldName === 'behandlingensArtOgOmfang'
-                  ? mutatedTilbakemeldingsInnhold
-                  : undefined,
-              innvolveringAvEksterne:
-                fieldName === 'innvolveringAvEksterne' ? mutatedTilbakemeldingsInnhold : undefined,
-              risikoscenarioEtterTiltakk:
-                fieldName === 'risikoscenarioEtterTiltakk'
-                  ? mutatedTilbakemeldingsInnhold
-                  : undefined,
+              vurderinger: [
+                {
+                  behandlingenslivslop:
+                    fieldName === 'behandlingenslivslop'
+                      ? mutatedTilbakemeldingsInnhold
+                      : '',
+                  behandlingensArtOgOmfang:
+                    fieldName === 'behandlingensArtOgOmfang'
+                      ? mutatedTilbakemeldingsInnhold
+                      : '',
+                  innvolveringAvEksterne:
+                    fieldName === 'innvolveringAvEksterne'
+                      ? mutatedTilbakemeldingsInnhold
+                      : '',
+                  risikoscenarioEtterTiltakk:
+                    fieldName === 'risikoscenarioEtterTiltakk'
+                      ? mutatedTilbakemeldingsInnhold
+                      : '',
+                },
+              ],
+
               status: EPvoTilbakemeldingStatus.UNDERARBEID,
             })
             await createPvoTilbakemelding(createValue).then(() => window.location.reload())
