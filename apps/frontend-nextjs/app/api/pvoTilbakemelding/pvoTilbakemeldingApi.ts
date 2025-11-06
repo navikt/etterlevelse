@@ -92,9 +92,12 @@ export const deletePvoTilbakemelding = async (id: string) => {
 const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakemelding) => {
   const dto = {
     ...pvoTilbakemelding,
-    ansvarlig: pvoTilbakemelding.ansvarligData
-      ? pvoTilbakemelding.ansvarligData.map((resource) => resource.navIdent)
-      : [],
+    vurderinger: pvoTilbakemelding.vurderinger.map((vurdering) => ({
+      ...vurdering,
+      ansvarlig: vurdering.ansvarligData
+        ? vurdering.ansvarligData.map((resource) => resource.navIdent)
+        : [],
+    })),
   } as any
   delete dto.ansvarligData
   delete dto.changeStamp
@@ -111,58 +114,61 @@ export const mapPvoTilbakemeldingToFormValue = (
     version: -1,
     pvkDokumentId: pvoTilbakemelding.pvkDokumentId || '',
     status: pvoTilbakemelding.status || EPvoTilbakemeldingStatus.IKKE_PABEGYNT,
-    merknadTilEtterleverEllerRisikoeier:
-      pvoTilbakemelding.merknadTilEtterleverEllerRisikoeier || '',
-    sendtDato: pvoTilbakemelding.sendtDato || '',
-    ansvarlig: pvoTilbakemelding.ansvarlig || [],
-    ansvarligData: pvoTilbakemelding.ansvarligData || [],
-    arbeidGarVidere: pvoTilbakemelding.arbeidGarVidere,
-    behovForForhandskonsultasjon: pvoTilbakemelding.behovForForhandskonsultasjon,
-    arbeidGarVidereBegrunnelse: pvoTilbakemelding.arbeidGarVidereBegrunnelse || '',
-    behovForForhandskonsultasjonBegrunnelse:
-      pvoTilbakemelding.behovForForhandskonsultasjonBegrunnelse || '',
-    pvoVurdering: pvoTilbakemelding.pvoVurdering || '',
-    pvoFolgeOppEndringer: pvoTilbakemelding.pvoFolgeOppEndringer || false,
-    vilFaPvkIRetur: pvoTilbakemelding.vilFaPvkIRetur || false,
-    behandlingenslivslop: pvoTilbakemelding.behandlingenslivslop || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
-    },
-    behandlingensArtOgOmfang: pvoTilbakemelding.behandlingensArtOgOmfang || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
-    },
-    tilhorendeDokumentasjon: pvoTilbakemelding.tilhorendeDokumentasjon || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      internDiskusjon: '',
-      behandlingskatalogDokumentasjonTilstrekkelig: '',
-      behandlingskatalogDokumentasjonTilbakemelding: '',
-      kravDokumentasjonTilstrekkelig: '',
-      kravDokumentasjonTilbakemelding: '',
-      risikovurderingTilstrekkelig: '',
-      risikovurderingTilbakemelding: '',
-    },
+    vurderinger: pvoTilbakemelding.vurderinger || [
+      {
+        innsendingId: 1,
+        merknadTilEtterleverEllerRisikoeier: '',
+        sendtDato: '',
+        ansvarlig: [],
+        ansvarligData: [],
+        arbeidGarVidere: undefined,
+        behovForForhandskonsultasjon: undefined,
+        arbeidGarVidereBegrunnelse: '',
+        behovForForhandskonsultasjonBegrunnelse: '',
+        pvoVurdering: '',
+        pvoFolgeOppEndringer: false,
+        vilFaPvkIRetur: false,
+        behandlingenslivslop: {
+          sistRedigertAv: '',
+          sistRedigertDato: '',
+          bidragsVurdering: '',
+          internDiskusjon: '',
+          tilbakemeldingTilEtterlevere: '',
+        },
+        behandlingensArtOgOmfang: {
+          sistRedigertAv: '',
+          sistRedigertDato: '',
+          bidragsVurdering: '',
+          internDiskusjon: '',
+          tilbakemeldingTilEtterlevere: '',
+        },
+        tilhorendeDokumentasjon: {
+          sistRedigertAv: '',
+          sistRedigertDato: '',
+          internDiskusjon: '',
+          behandlingskatalogDokumentasjonTilstrekkelig: '',
+          behandlingskatalogDokumentasjonTilbakemelding: '',
+          kravDokumentasjonTilstrekkelig: '',
+          kravDokumentasjonTilbakemelding: '',
+          risikovurderingTilstrekkelig: '',
+          risikovurderingTilbakemelding: '',
+        },
 
-    innvolveringAvEksterne: pvoTilbakemelding.innvolveringAvEksterne || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
-    },
-    risikoscenarioEtterTiltakk: pvoTilbakemelding.risikoscenarioEtterTiltakk || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
-    },
+        innvolveringAvEksterne: {
+          sistRedigertAv: '',
+          sistRedigertDato: '',
+          bidragsVurdering: '',
+          internDiskusjon: '',
+          tilbakemeldingTilEtterlevere: '',
+        },
+        risikoscenarioEtterTiltakk: {
+          sistRedigertAv: '',
+          sistRedigertDato: '',
+          bidragsVurdering: '',
+          internDiskusjon: '',
+          tilbakemeldingTilEtterlevere: '',
+        },
+      },
+    ],
   }
 }

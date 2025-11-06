@@ -46,13 +46,15 @@ export const PvoTilbakemeldingsList = () => {
         setAllPvoTilbakemelding(response)
         const list: IAnsvarligItem[] = []
         response.forEach((tilbakemelding: IPvoTilbakemelding) => {
-          if (tilbakemelding.ansvarligData && tilbakemelding.ansvarligData.length !== 0) {
-            list.push(
-              ...tilbakemelding.ansvarligData.map((data) => {
-                return { key: data.navIdent, value: data.fullName }
-              })
-            )
-          }
+          tilbakemelding.vurderinger.forEach((vurdering) => {
+            if (vurdering.ansvarligData && vurdering.ansvarligData.length !== 0) {
+              list.push(
+                ...vurdering.ansvarligData.map((data) => {
+                  return { key: data.navIdent, value: data.fullName }
+                })
+              )
+            }
+          })
         })
 
         setAnsvarligList(
@@ -73,16 +75,34 @@ export const PvoTilbakemeldingsList = () => {
         const pvoTilbakemelding: IPvoTilbakemelding[] = allPvoTilbakemelding.filter(
           (pvo: IPvoTilbakemelding) => pvo.pvkDokumentId === pvk.id
         )
-
-        return {
-          ...pvk,
-          dateToCompare:
-            pvoTilbakemelding.length !== 0 &&
-            pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
-              ? pvoTilbakemelding[0].sendtDato
-              : pvk.sendtTilPvoDato !== null && pvk.sendtTilPvoDato !== ''
-                ? pvk.sendtTilPvoDato
-                : pvk.changeStamp.lastModifiedDate,
+        if (
+          pvoTilbakemelding.length !== 0 &&
+          pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
+        ) {
+          const vurdering = pvoTilbakemelding[0].vurderinger.find(
+            (vurdering) => vurdering.innsendingId === pvk.antallInnsendingTilPvo
+          )
+          if (vurdering && vurdering.sendtDato) {
+            return {
+              ...pvk,
+              dateToCompare: vurdering.sendtDato,
+            }
+          } else if (pvk.sendtTilPvoDato !== null && pvk.sendtTilPvoDato !== '') {
+            return {
+              ...pvk,
+              dateToCompare: pvk.sendtTilPvoDato,
+            }
+          } else {
+            return {
+              ...pvk,
+              dateToCompare: pvk.changeStamp.lastModifiedDate,
+            }
+          }
+        } else {
+          return {
+            ...pvk,
+            dateToCompare: pvk.changeStamp.lastModifiedDate,
+          }
         }
       }),
     ]
@@ -146,10 +166,17 @@ export const PvoTilbakemeldingsList = () => {
     if (!['', 'alle'].includes(ansvarligFilter)) {
       filteredData = filteredData.filter((pvk: IPvkDokumentListItem) =>
         allPvoTilbakemelding
-          .filter(
-            (pvo: IPvoTilbakemelding) =>
-              pvo.ansvarlig && pvo.ansvarlig.length !== 0 && pvo.ansvarlig.includes(ansvarligFilter)
-          )
+          .filter((pvo: IPvoTilbakemelding) => {
+            const sortedPvoVurderinger = pvo.vurderinger.sort(
+              (a, b) => b.innsendingId - a.innsendingId
+            )
+            const latestVurdering = sortedPvoVurderinger[0]
+            return (
+              latestVurdering.ansvarlig &&
+              latestVurdering.ansvarlig.length !== 0 &&
+              latestVurdering.ansvarlig.includes(ansvarligFilter)
+            )
+          })
           .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
           .includes(pvk.id)
       )
@@ -165,6 +192,14 @@ export const PvoTilbakemeldingsList = () => {
 
     setFilteredPvkDokuement(filteredData)
   }, [statusFilter, ansvarligFilter, searchPvk])
+
+  const getLatestVurderingSendtDato = (pvoTilbakemelding: IPvoTilbakemelding) => {
+    const sortedVurderinger = pvoTilbakemelding.vurderinger.sort(
+      (a, b) => b.innsendingId - a.innsendingId
+    )
+    const latestVurdering = sortedVurderinger[0]
+    return latestVurdering.sendtDato
+  }
 
   return (
     <div>
@@ -233,7 +268,9 @@ export const PvoTilbakemeldingsList = () => {
                   pvoTilbakemelding.length !== 0 &&
                   pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
                 ) {
-                  changestamp = `Vurdering sendt: ${moment(pvoTilbakemelding[0].sendtDato).format('LL')}`
+                  changestamp = `Vurdering sendt: ${moment(
+                    getLatestVurderingSendtDato(pvoTilbakemelding[0])
+                  ).format('LL')}`
                 } else {
                   const date: string =
                     pvkDokument.sendtTilPvoDato !== '' && pvkDokument.sendtTilPvoDato !== null

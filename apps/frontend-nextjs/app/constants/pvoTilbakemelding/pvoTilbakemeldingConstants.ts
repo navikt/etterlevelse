@@ -6,6 +6,11 @@ export interface IPvoTilbakemelding extends IDomainObject {
   id: string
   pvkDokumentId: string
   status: EPvoTilbakemeldingStatus
+  vurderinger: IVurdering[]
+}
+
+export interface IVurdering {
+  innsendingId: number
   behandlingenslivslop: ITilbakemeldingsinnhold
   behandlingensArtOgOmfang: ITilbakemeldingsinnhold
   tilhorendeDokumentasjon: ITilhorendeDokumentasjonTilbakemelding
