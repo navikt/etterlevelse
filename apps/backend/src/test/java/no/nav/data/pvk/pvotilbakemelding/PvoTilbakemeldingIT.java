@@ -6,12 +6,14 @@ import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemedlingRequest;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingResponse;
+import no.nav.data.pvk.pvotilbakemelding.dto.VurderingRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,6 +55,7 @@ public class PvoTilbakemeldingIT  extends IntegrationTestBase {
         var request = PvoTilbakemedlingRequest.builder()
                 .pvkDokumentId(pvkDokumentId.toString())
                 .status(PvoTilbakemeldingStatus.UNDERARBEID)
+                .vurderinger(List.of(VurderingRequest.builder().innsendingId(1).build()))
                 .build();
         var resp = restTemplate.postForEntity("/pvotilbakemelding", request, PvoTilbakemeldingResponse.class);
         
@@ -70,7 +73,9 @@ public class PvoTilbakemeldingIT  extends IntegrationTestBase {
                 .id(pvoTilbakemelding.getId())
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(PvoTilbakemeldingStatus.FERDIG)
+                .vurderinger(List.of(VurderingRequest.builder().innsendingId(1).build()))
                 .build();
+
         var resp = restTemplate.exchange("/pvotilbakemelding/{id}", HttpMethod.PUT, new HttpEntity<>(request), PvoTilbakemeldingResponse.class, request.getId());
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);

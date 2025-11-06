@@ -11,10 +11,13 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
+import no.nav.data.pvk.pvotilbakemelding.domain.Vurdering;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingGraphqlResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class PvoTilbakemeldingGrahpIT extends GraphQLTestBase {
 
@@ -40,7 +43,10 @@ public class PvoTilbakemeldingGrahpIT extends GraphQLTestBase {
                 .pvkDokumentId(pvkDokument.getId())
                 .status(PvoTilbakemeldingStatus.UNDERARBEID)
                 .pvoTilbakemeldingData(PvoTilbakemeldingData.builder()
-                        .merknadTilEtterleverEllerRisikoeier("test melding til etterlever")
+                        .vurderinger(List.of(Vurdering.builder()
+                                        .innsendingId(1)
+                                .merknadTilEtterleverEllerRisikoeier("test melding til etterlever")
+                                .build()))
                         .build())
                 .build());
 

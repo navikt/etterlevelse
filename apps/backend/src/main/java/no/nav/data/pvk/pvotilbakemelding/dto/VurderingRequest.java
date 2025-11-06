@@ -17,8 +17,8 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
 @Builder
-@EqualsAndHashCode
 @FieldNameConstants
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class VurderingRequest  implements Validated {

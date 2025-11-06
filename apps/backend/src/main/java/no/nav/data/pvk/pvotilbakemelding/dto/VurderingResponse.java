@@ -1,8 +1,7 @@
 package no.nav.data.pvk.pvotilbakemelding.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
@@ -15,9 +14,11 @@ import java.util.List;
 import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
-@SuperBuilder
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@EqualsAndHashCode
+@AllArgsConstructor
+@JsonPropertyOrder({"innsendingId", "behandlingenslivslop", "behandlingensArtOgOmfang"})
 public class VurderingResponse  {
     private int innsendingId;
     private Tilbakemeldingsinnhold behandlingenslivslop;

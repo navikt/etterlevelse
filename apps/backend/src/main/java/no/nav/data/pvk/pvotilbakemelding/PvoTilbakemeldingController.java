@@ -92,8 +92,8 @@ public class PvoTilbakemeldingController {
         // kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
         var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
         updatePvkDokumentStatus(pvoTilbakemelding);
-
-        return new ResponseEntity<>(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding), HttpStatus.CREATED);
+        var response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update PVO tilbakemelding")
@@ -134,6 +134,7 @@ public class PvoTilbakemeldingController {
             return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
         }
     }
+
 
     private void updatePvkDokumentStatus(PvoTilbakemelding pvoTilbakemelding) {
         log.info("Updating PVK document status with id = {}, based on PVO tilbakemelding status = {}.", pvoTilbakemelding.getPvkDokumentId(), pvoTilbakemelding.getStatus());
