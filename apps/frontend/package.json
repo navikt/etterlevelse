@@ -45,7 +45,7 @@
     "react-select": "5.10.2",
     "rehype-raw": "7.0.0",
     "remark-gfm": "4.0.1",
-    "tailwindcss": "4.1.16",
+    "tailwindcss": "4.1.17",
     "ts-prune": "0.10.3",
     "typescript": "5.9.3",
     "yup": "1.7.1"
