@@ -26,7 +26,9 @@ export const getPvoTilbakemeldingListQuery = gql`
           title
           etterlevelseNummer
         }
-        sendtDato
+        vurderinger {
+          sendtDato
+        }
         sistEndretAvMeg
         changeStamp {
           createdDate
