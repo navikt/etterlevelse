@@ -26,6 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -89,11 +91,15 @@ public class TiltakController {
     public ResponseEntity<TiltakResponse> createTiltak(@PathVariable UUID risikoscenarioId, @RequestBody TiltakRequest request) {
         log.info("Create Tiltak");
         try {
+            if(request.isIverksatt()) {
+                request.setIverksattDato(LocalDate.now());
+            }
             Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
             TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
             risikoscenarioService.updateTiltakOppdatertField(risikoscenarioId, true);
             addRisikoscenarioer(resp);
             addResourceData(resp);
+            addTeamData(resp);
             return new ResponseEntity<>(resp, HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
             log.warn("DataIntegrityViolationException caught while inserting Tiltak-Risikoscenario relation");
