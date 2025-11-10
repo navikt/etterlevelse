@@ -70,7 +70,7 @@
     "rehype-raw": "7.0.0",
     "remark-gfm": "4.0.1",
     "rxjs": "7.8.2",
-    "tailwindcss": "4.1.16",
+    "tailwindcss": "4.1.17",
     "react-draft-wysiwyg-next": "1.17.2",
     "yup": "1.7.1"
   },
