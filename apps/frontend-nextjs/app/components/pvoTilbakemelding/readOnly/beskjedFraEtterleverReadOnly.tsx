@@ -3,11 +3,15 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { Heading, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
-type TBeskjedFraEtterleverReadOnlyProps = { pvkDokument: IPvkDokument }
+type TBeskjedFraEtterleverReadOnlyProps = {
+  pvkDokument: IPvkDokument
+  headingLevel?: '1' | '2' | '3' | '4' | '5' | '6'
+  headingSize?: 'small' | 'medium' | 'xlarge' | 'large' | 'xsmall'
+}
 
 export const BeskjedFraEtterleverReadOnly: FunctionComponent<
   TBeskjedFraEtterleverReadOnlyProps
-> = ({ pvkDokument }) => (
+> = ({ pvkDokument, headingLevel, headingSize }) => (
   <>
     <div className='my-5 max-w-[75ch]'>
       <Label>Beskjed fra etterlever</Label>
@@ -16,7 +20,11 @@ export const BeskjedFraEtterleverReadOnly: FunctionComponent<
       </DataTextWrapper>
     </div>
 
-    <Heading level='1' size='medium' className='mb-5'>
+    <Heading
+      level={headingLevel ? headingLevel : '1'}
+      size={headingSize ? headingSize : 'medium'}
+      className='mb-5'
+    >
       Tilbakemelding til etterlever
     </Heading>
   </>

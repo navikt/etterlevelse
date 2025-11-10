@@ -4,6 +4,7 @@ import { arkiver } from '@/api/p360/p360Api'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
 import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
+import SendInnTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/sendInnTilbakemeldingsHistorikk'
 import {
   FieldRadioLayout,
   IndentLayoutTextField,
@@ -16,6 +17,7 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import {
   EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
@@ -35,6 +37,7 @@ import {
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
+  pvoTilbakemelding: IPvoTilbakemelding
   activeStep: number
   submitForm: () => Promise<void>
   setFieldValue: (
@@ -56,6 +59,7 @@ type TProps = {
 
 export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
   pvkDokument,
+  pvoTilbakemelding,
   etterlevelseDokumentasjon,
   activeStep,
   submitForm,
@@ -270,6 +274,17 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           )}
 
           <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />
+
+          {pvoTilbakemelding.vurderinger.length > 1 && (
+            <div className='mt-10'>
+              <SendInnTilbakemeldingsHistorikk
+                pvkDokument={pvkDokument}
+                pvoVurderingList={pvoVurderingList}
+                pvoTilbakemelding={pvoTilbakemelding}
+                relevantVurderingsInnsendingId={pvkDokument.antallInnsendingTilPvo}
+              />
+            </div>
+          )}
         </div>
       </div>
 

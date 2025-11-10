@@ -9,17 +9,21 @@ type TProps = {
   tilbakemeldingsinnhold: ITilhorendeDokumentasjonTilbakemelding
   sentDate: string
   forPvo?: boolean
+  noHeader?: boolean
 }
 
 export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
   tilbakemeldingsinnhold,
   sentDate,
   forPvo,
+  noHeader,
 }) => (
   <div>
-    <Heading level='2' size='small' className='mb-5'>
-      Tilbakemelding fra personvernombudet
-    </Heading>
+    {!noHeader && (
+      <Heading level='2' size='small' className='mb-5'>
+        Tilbakemelding fra personvernombudet
+      </Heading>
+    )}
 
     {forPvo && (
       <div>
