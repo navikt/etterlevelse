@@ -27,6 +27,7 @@ export const getPvoTilbakemeldingListQuery = gql`
           etterlevelseNummer
         }
         vurderinger {
+          innsendingId
           sendtDato
         }
         sistEndretAvMeg

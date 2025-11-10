@@ -74,6 +74,12 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
       await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
         .then(async (response: IPvoTilbakemelding) => {
           if (response) {
+            if (
+              !response.vurderinger.find((vurdering) => vurdering.innsendingId === innsendingId)
+            ) {
+              response.vurderinger.push(createNewPvoVurderning(innsendingId))
+            }
+
             const updatedValues: IPvoTilbakemelding = {
               ...response,
               vurderinger: response.vurderinger.map((vurdering) => {
@@ -103,7 +109,8 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               }),
 
               status:
-                response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
+                response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT ||
+                response.status === EPvoTilbakemeldingStatus.TRENGER_REVURDERING
                   ? EPvoTilbakemeldingStatus.UNDERARBEID
                   : response.status,
             }

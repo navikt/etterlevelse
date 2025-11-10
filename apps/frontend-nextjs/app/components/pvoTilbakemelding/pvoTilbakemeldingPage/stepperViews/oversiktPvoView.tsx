@@ -193,7 +193,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
       <div className='px-6 py-9 rounded-lg max-w-[766px] w-full bg-[#E3EFF7] mb-18'>
         {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
           <PvoTilbakemeldingAnsvarligForm
-            pvkDokumentId={pvkDokument.id}
+            pvkDokument={pvkDokument}
             pvoTilbakemelding={pvoTilbakemelding}
             initialValue={relevantVurdering}
             formRef={formRef}
