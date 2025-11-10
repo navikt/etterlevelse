@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
@@ -92,13 +92,13 @@ const OmPvkPage = () => {
               sine tilbakemeldinger, og på nytt når risikoeier godkjenner.
             </List.Item>
           </List>
-          <BodyLong className='mt-3'>
+          <Alert variant='info' className='my-5'>
             Digital PVK er ikke en selvstendig løsning, men er innebygd i Støtte til etterlevelse
             for å ivareta sammenhengen med etterlevelsesdokumentasjon. Inngangen til PVK finner dere
             øverst på temasiden i etterlevelsesdokumentet. Merk at dere må ha redigeringstilgang til
             etterlevelsesdokumentet og ha huket av for at dere behandler personopplysninger under
             dokumentegenskaper for å se inngangen til Digital PVK.
-          </BodyLong>
+          </Alert>
           <ReadMore header='Vis meg hvor jeg finner Digital PVK' className='mt-3'>
             <Image
               className='mr-2.5'
