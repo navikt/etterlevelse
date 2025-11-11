@@ -329,7 +329,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         value={tabValues.risikoscenarioer}
                         label={
                           <span className='flex items-center gap-1'>
-                            {/* Show red dot if there are high risk scenarios or scenarios with effect not evaluated */}
                             {antallEffektIkkeVurdert > 0 && (
                               <span className='w-2 h-2 bg-red-500 rounded-full'></span>
                             )}
@@ -341,7 +340,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         value={tabValues.tiltak}
                         label={
                           <span className='flex items-center gap-1'>
-                            {/* Show red dot if there are tiltak without ansvarlig or frist */}
                             {(antallUtenTiltakAnsvarlig > 0 || antallUtenFrist > 0) && (
                               <span className='w-2 h-2 bg-red-500 rounded-full'></span>
                             )}
