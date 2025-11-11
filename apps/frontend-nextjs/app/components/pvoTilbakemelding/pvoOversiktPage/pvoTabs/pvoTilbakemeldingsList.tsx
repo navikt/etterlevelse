@@ -118,6 +118,7 @@ export const PvoTilbakemeldingsList = () => {
           title: data.title,
           etterlevelseNummer: data.etterlevelseNummer,
           sendtTilPvoDato: data.sendtTilPvoDato,
+          antallInnsendingTilPvo: data.antallInnsendingTilPvo,
           sendtTilPvoAv:
             data.sendtTilPvoAv === '' || data.sendtTilPvoAv === null
               ? ''
