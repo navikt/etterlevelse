@@ -222,7 +222,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                   await activeFormButton(() => setIsEditModalOpen(true))
                 }}
               >
-                Redigèr risikoscenario
+                Rediger risikoscenario
               </Button>
               <SlettOvrigRisikoscenario
                 risikoscenario={risikoscenario}
@@ -346,7 +346,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText='Redigér øvrig risikoscenario'
+          headerText='Rediger øvrig risikoscenario'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

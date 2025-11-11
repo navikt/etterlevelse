@@ -270,7 +270,7 @@ const RelevansView: FunctionComponent<TRelevansProps> = ({
             filtrere bort uaktuelle egenskaper og dermed redusere dokumentasjonsmengden, kan dette
             gjøres på{' '}
             <Link inlineText href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}>
-              Redigér dokumentegenskaper
+              Rediger dokumentegenskaper
             </Link>
           </BodyLong>
         </div>

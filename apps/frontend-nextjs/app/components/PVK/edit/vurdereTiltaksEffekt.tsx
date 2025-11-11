@@ -206,8 +206,8 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
               {revurdertEffektCheck
                 ? 'Vurdér tiltakenes effekt'
                 : !revurdertEffektCheck && risikoscenario.tiltakOppdatert
-                  ? 'Revurdér tiltakenes effekt'
-                  : 'Redigér tiltakenes effekt'}
+                  ? 'Revurder tiltakenes effekt'
+                  : 'Rediger tiltakenes effekt'}
             </Button>
 
             {!revurdertEffektCheck && risikoscenario.tiltakOppdatert && (

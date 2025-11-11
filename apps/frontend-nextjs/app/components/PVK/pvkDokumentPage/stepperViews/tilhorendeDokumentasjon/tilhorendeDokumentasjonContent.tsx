@@ -95,7 +95,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'
               >
-                Redigér dokumentegenskaper (åpner i en ny fane)
+                Rediger dokumentegenskaper (åpner i en ny fane)
               </Link>
             </Alert>
           )}
@@ -109,7 +109,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'
               >
-                Redigér dokumentegenskaper (åpner i en ny fane).
+                Rediger dokumentegenskaper (åpner i en ny fane).
               </Link>
             </BodyShort>
           )}
@@ -191,7 +191,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                     rel='noopener noreferrer'
                     aria-label='redigere etterlevelsesdokumentasjon'
                   >
-                    Redigér dokumentegenskaper (åpner i en ny fane).
+                    Rediger dokumentegenskaper (åpner i en ny fane).
                   </Link>
                 </BodyLong>
               </div>
@@ -219,7 +219,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                   rel='noopener noreferrer'
                   aria-label='redigere etterlevelsesdokumentasjon'
                 >
-                  Redigér dokumentegenskaper (åpner i en ny fane).
+                  Rediger dokumentegenskaper (åpner i en ny fane).
                 </Link>
               </BodyLong>
             </Alert>
