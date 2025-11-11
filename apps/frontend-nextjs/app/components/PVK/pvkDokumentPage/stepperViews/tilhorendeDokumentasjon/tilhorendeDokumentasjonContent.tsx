@@ -156,7 +156,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           </Heading>
 
           <BodyLong className='inline-block mb-5'>
-            Dersom dere har gjennomført en eller flere risikovurderinger, skal disse legges ved
+            Dersom dere har gjennomført en eller flere ROS, skal disse legges ved
             etterlevelsesdokumentasjonen.
           </BodyLong>
 
