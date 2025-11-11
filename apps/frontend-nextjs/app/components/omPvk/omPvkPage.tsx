@@ -103,7 +103,7 @@ const OmPvkPage = () => {
             <Image
               className='mr-2.5'
               src={VisHvorJegFinnerDigitalPVK}
-              alt='“Skjermbilde fra Støtte til etterlevelse som viser inngangen til Digital PVK. Lenkene står øverst i etterlevelsesdokumentet deres, like etter ‘Redigér dokumentegenskaper’. Her står det to lenker: Tegn behandlingens livsløp, og Vurdér behov for PVK.”'
+              alt='“Skjermbilde fra Støtte til etterlevelse som viser inngangen til Digital PVK. Lenkene står øverst i etterlevelsesdokumentet deres, like etter ‘Rediger dokumentegenskaper’. Her står det to lenker: Tegn behandlingens livsløp, og Vurdér behov for PVK.”'
               aria-hidden
               aria-label=''
             />

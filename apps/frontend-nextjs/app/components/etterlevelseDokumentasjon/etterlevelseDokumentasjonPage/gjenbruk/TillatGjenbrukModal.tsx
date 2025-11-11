@@ -62,7 +62,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
           onClose={() => setIsOpen(false)}
           header={{
             heading: etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-              ? 'Redigér gjenbruk av dette dokumentet'
+              ? 'Rediger gjenbruk av dette dokumentet'
               : 'Slå på gjenbruk av dette dokumentet',
             // icon: <FilesIcon title="header-ikon" />,
             closeButton: false,

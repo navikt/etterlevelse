@@ -192,7 +192,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
       <div>
         {isEditMode && (
           <TiltakForm
-            title='Redigér tiltak'
+            title='Rediger tiltak'
             initialValues={tiltak}
             pvkDokumentId={tiltak.pvkDokumentId}
             submit={submit}
@@ -221,7 +221,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                   })
                 }}
               >
-                Redigér tiltak
+                Rediger tiltak
               </Button>
 
               <Button

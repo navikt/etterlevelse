@@ -41,7 +41,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
                     router.push(kravRedigeringIdUrl(krav.id))
                   }}
                 >
-                  Redigér krav
+                  Rediger krav
                 </Button>
               )}
 

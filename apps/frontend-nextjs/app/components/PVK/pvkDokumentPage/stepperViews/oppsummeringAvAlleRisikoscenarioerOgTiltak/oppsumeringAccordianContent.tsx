@@ -83,7 +83,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
             await activeFormButton(() => setIsEditModalOpen(true))
           }}
         >
-          Redigèr risikoscenario
+          Rediger risikoscenario
         </Button>
       </div>
       <div className='mt-12'>
@@ -145,7 +145,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText='Redigér øvrig risikoscenario'
+          headerText='Rediger øvrig risikoscenario'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

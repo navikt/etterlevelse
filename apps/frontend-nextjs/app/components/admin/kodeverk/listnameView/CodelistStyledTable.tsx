@@ -154,14 +154,14 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
                       />
                     </Tooltip>
                     <AuditButton id={`${code.list}-${code.code}`} variant='tertiary' />
-                    <Tooltip content='Redigér'>
+                    <Tooltip content='Rediger'>
                       <Button
                         variant='tertiary'
                         onClick={() => {
                           setSelectedCode(code)
                           setShowEditModal(true)
                         }}
-                        icon={<DocPencilIcon title='Redigér' />}
+                        icon={<DocPencilIcon title='Rediger' />}
                       />
                     </Tooltip>
                     <Tooltip content='Slett'>
@@ -184,7 +184,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
 
       {showEditModal && selectedCode && (
         <UpdateCodeListModal
-          title='Redigér kode'
+          title='Rediger kode'
           initialValues={getInitailValues(selectedCode)}
           isOpen={showEditModal}
           onClose={() => {

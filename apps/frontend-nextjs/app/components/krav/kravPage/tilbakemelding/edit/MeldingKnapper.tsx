@@ -36,7 +36,7 @@ export const MeldingKnapper = (props: {
           icon={<DocPencilIcon aria-label='' aria-hidden />}
           onClick={() => setEditModal(true)}
         >
-          Redigér
+          Rediger
         </Button>
         <Button
           className='ml-2.5'
@@ -93,7 +93,7 @@ export const MeldingKnapper = (props: {
           open={editModal}
           onClose={() => setEditModal(false)}
           className='w-2/3'
-          header={{ heading: 'Redigér melding', closeButton: false }}
+          header={{ heading: 'Rediger melding', closeButton: false }}
         >
           <Modal.Body>
             <BodyShort className='flex'>

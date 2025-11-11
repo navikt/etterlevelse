@@ -49,7 +49,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         variant='tertiary'
         className='whitespace-nowrap'
       >
-        Redigér dokumentegenskaper
+        Rediger dokumentegenskaper
       </Button>
       {etterlevelseDokumentasjon.forGjenbruk && (
         <TillatGjenbrukModal

@@ -94,7 +94,7 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
               variant='secondary'
               onClick={() => setIsEditMode(true)}
             >
-              Redigér prioriterte krav
+              Rediger prioriterte krav
             </Button>
           )}
         </div>
