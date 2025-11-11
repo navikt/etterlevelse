@@ -34,7 +34,7 @@ import {
   Heading,
   Loader,
 } from '@navikt/ds-react'
-import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
+import { Form, Formik, FormikHelpers, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { useParams, useRouter } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
@@ -205,7 +205,14 @@ export const BehandlingensLivslopPage = () => {
                   <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    onSubmit={submit}
+                    onSubmit={async (
+                      values: IBehandlingensLivslopRequest,
+                      formikHelpers: FormikHelpers<IBehandlingensLivslopRequest>
+                    ) => {
+                      await submit(values).then(() => {
+                        formikHelpers.resetForm({ values })
+                      })
+                    }}
                     initialValues={mapBehandlingensLivslopRequestToFormValue(
                       behandlingsLivslop as IBehandlingensLivslop
                     )}
@@ -222,15 +229,7 @@ export const BehandlingensLivslopPage = () => {
                     }}
                     innerRef={formRef}
                   >
-                    {({
-                      submitForm,
-                      resetForm,
-                      values,
-                      initialValues,
-                      errors,
-                      isSubmitting,
-                      dirty,
-                    }) => (
+                    {({ submitForm, initialValues, errors, isSubmitting, dirty }) => (
                       <Form>
                         <div>
                           <BehandlingensLivslopTextContent />
@@ -284,10 +283,7 @@ export const BehandlingensLivslopPage = () => {
                               <Button
                                 type='button'
                                 onClick={async () => {
-                                  await submitForm().then(() => {
-                                    resetForm({ values })
-                                    setSavedSuccessful(true)
-                                  })
+                                  await submitForm()
                                 }}
                               >
                                 Lagre
@@ -297,9 +293,7 @@ export const BehandlingensLivslopPage = () => {
                                 type='button'
                                 variant='tertiary'
                                 onClick={() => {
-                                  router.push(
-                                    etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)
-                                  )
+                                  window.location.reload()
                                 }}
                               >
                                 Forkast endringer

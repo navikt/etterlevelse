@@ -94,7 +94,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                     return vurdering
                   }
                 }),
-                status: pvoTilbakemelding.status,
+                status: selectedStatus,
               }
               await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
             }

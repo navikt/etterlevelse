@@ -258,7 +258,7 @@ export const TiltakForm: FunctionComponent<TProps> = ({
               onClick={async () => {
                 errorSummaryRef.current?.focus()
                 setValidateOnBlur(true)
-                await submitForm().then(() => console.debug('TRIGGER'))
+                await submitForm()
                 setSubmitClick(!submitClick)
               }}
             >

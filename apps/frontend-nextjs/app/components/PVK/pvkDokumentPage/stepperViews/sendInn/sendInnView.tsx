@@ -634,6 +634,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           submitForm={submitForm}
                           initialStatus={initialValues.status}
                           pvoVurderingList={pvoVurderingList}
+                          errors={errors}
                           errorSummaryComponent={
                             <SendInnErrorSummary
                               errors={errors}

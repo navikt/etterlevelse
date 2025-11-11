@@ -312,8 +312,10 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 await setFieldValue('status', EPvoTilbakemeldingStatus.FERDIG)
                 setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                 await submitForm().then(async () => {
-                  if (!env.isDev) {
-                    await arkiver(etterlevelseDokumentasjon.id, true, true, false)
+                  if (_.isEmpty(formRef.current.errors)) {
+                    if (!env.isDev) {
+                      await arkiver(etterlevelseDokumentasjon.id, true, true, false)
+                    }
                   }
                 })
                 setSubmitClicked(!submitClicked)
