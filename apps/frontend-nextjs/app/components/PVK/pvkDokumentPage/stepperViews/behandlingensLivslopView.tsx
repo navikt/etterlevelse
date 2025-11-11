@@ -251,6 +251,16 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                             >
                               Lagre
                             </Button>
+
+                            <Button
+                              type='button'
+                              variant='tertiary'
+                              onClick={() => {
+                                window.location.reload()
+                              }}
+                            >
+                              Forkast textendringer
+                            </Button>
                           </div>
                         )}
 
