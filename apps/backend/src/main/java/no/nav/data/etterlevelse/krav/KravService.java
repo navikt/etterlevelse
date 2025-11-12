@@ -89,12 +89,27 @@ public class KravService {
 
     public List<Krav> search(String name) {
         List<Krav> byNameContaining = new ArrayList<>(repo.findByNavnContaining(name));
+
         if (StringUtils.isNumeric(name)) {
             byNameContaining.addAll(repo.findByKravNummer(Integer.parseInt(name)));
         }
+
+        if (name.matches("[kK]([0-9]*)")) {
+            var kravNummer = Integer.parseInt(name.substring(1));
+            byNameContaining.addAll(repo.findByKravNummer(kravNummer));
+        }
+
+        if (name.matches("[kK]([0-9]*).([0-9]*)")) {
+            var parts = name.substring(1).split("\\.");
+            var kravNummer = Integer.parseInt(parts[0]);
+            var kravVersjon = Integer.parseInt(parts[1]);
+            repo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon).ifPresent(byNameContaining::add);
+        }
+
         if (!isKravEier()) {
             byNameContaining.removeIf(k -> k.getStatus().erUtkast());
         }
+
         return byNameContaining;
     }
 
