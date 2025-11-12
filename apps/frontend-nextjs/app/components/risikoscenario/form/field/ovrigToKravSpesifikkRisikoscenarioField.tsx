@@ -1,4 +1,4 @@
-import { useSearchKrav } from '@/api/krav/kravApi'
+import { useSearchKravToOptionsPvk } from '@/api/krav/kravApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { IKravReference } from '@/constants/krav/kravConstants'
@@ -54,7 +54,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                   controlShouldRenderValue={false}
                   loadingMessage={() => 'Søker...'}
                   isClearable={false}
-                  loadOptions={useSearchKrav}
+                  loadOptions={useSearchKravToOptionsPvk}
                   onChange={(value: any) => {
                     if (value) {
                       fieldArrayRenderProps.push(value)
