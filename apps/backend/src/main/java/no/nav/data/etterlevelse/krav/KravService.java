@@ -99,14 +99,14 @@ public class KravService {
             byNameContaining.addAll(repo.findByKravNummer(kravNummer));
         }
 
-        if (name.matches("([0-9]+).([0-9]+)")) {
+        if (name.matches("([0-9]{3,}).([0-9]+)")) {
             var parts = name.split("\\.");
             var kravNummer = Integer.parseInt(parts[0]);
             var kravVersjon = Integer.parseInt(parts[1]);
             repo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon).ifPresent(byNameContaining::add);
         }
 
-        if (name.matches("[kK]([0-9]+).([0-9]+)")) {
+        if (name.matches("[kK]([0-9]{3,}).([0-9]+)")) {
             var parts = name.substring(1).split("\\.");
             var kravNummer = Integer.parseInt(parts[0]);
             var kravVersjon = Integer.parseInt(parts[1]);
