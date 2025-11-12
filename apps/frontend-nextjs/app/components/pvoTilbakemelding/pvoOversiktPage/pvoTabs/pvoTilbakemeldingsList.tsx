@@ -125,7 +125,6 @@ export const PvoTilbakemeldingsList = () => {
               : data.sendtTilPvoAv.split('-')[1],
         } as IPvkDokumentListItem
       })
-
     setAllPvkDocumentListItem(sortedPvk)
     setFilteredPvkDokuement(sortedPvk)
   }, [allPvoTilbakemelding])
