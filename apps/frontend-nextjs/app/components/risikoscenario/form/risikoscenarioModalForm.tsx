@@ -5,6 +5,7 @@ import { Button, ErrorSummary, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { OvrigToKravSpesifikkRisikoscenarioField } from './field/ovrigToKravSpesifikkRisikoscenarioField'
 import RisikoscenarioKonsekvensnivaaField from './field/risikoscenarioKonsekvensnivaaField'
 import RisikoscenarioSannsynlighetField from './field/risikoscenarioSannsynlighetField'
 import { risikoscenarioCreateValidation } from './risikoscenarioSchema'
@@ -52,7 +53,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
         initialValues={mapRisikoscenarioToFormValue(initialValues)}
         innerRef={formRef}
       >
-        {({ submitForm, errors }) => (
+        {({ submitForm, errors, values }) => (
           <Form>
             <Modal.Body>
               <>
@@ -79,11 +80,13 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
               <RisikoscenarioKonsekvensnivaaField />
 
               {mode === 'update' && initialValues.generelScenario && (
-                <div>feature øvrig til krav risikoscenario</div>
+                <OvrigToKravSpesifikkRisikoscenarioField
+                  generelScenarioFormValue={values.generelScenario}
+                />
               )}
 
               {mode === 'update' && !initialValues.generelScenario && (
-                <div>feature krav til øvrig risikoscenario</div>
+                <div className='my-5'>WIP feature krav til øvrig risikoscenario</div>
               )}
             </Modal.Body>
 
