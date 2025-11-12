@@ -81,7 +81,7 @@
     "@types/lodash": "4.17.20",
     "@types/markdown-draft-js": "2.2.7",
     "@types/node": "24.10.0",
-    "@types/react": "19.2.2",
+    "@types/react": "19.2.3",
     "@types/react-dom": "19.2.2",
     "@typescript-eslint/eslint-plugin": "8.46.4",
     "@typescript-eslint/parser": "8.46.4",
