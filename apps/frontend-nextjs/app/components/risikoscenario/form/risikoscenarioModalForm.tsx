@@ -11,6 +11,7 @@ import { risikoscenarioCreateValidation } from './risikoscenarioSchema'
 
 type TProps = {
   headerText: string
+  mode: 'create' | 'update'
   isOpen: boolean
   setIsOpen: (open: boolean) => void
   initialValues: Partial<IRisikoscenario>
@@ -20,6 +21,7 @@ type TProps = {
 export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
   headerText,
   isOpen,
+  mode,
   setIsOpen,
   submit,
   initialValues,
@@ -75,6 +77,14 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
               <RisikoscenarioSannsynlighetField />
 
               <RisikoscenarioKonsekvensnivaaField />
+
+              {mode === 'update' && initialValues.generelScenario && (
+                <div>feature øvrig til krav risikoscenario</div>
+              )}
+
+              {mode === 'update' && !initialValues.generelScenario && (
+                <div>feature krav til øvrig risikoscenario</div>
+              )}
             </Modal.Body>
 
             {!_.isEmpty(errors) && (
