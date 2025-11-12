@@ -90,26 +90,26 @@ public class KravService {
     public List<Krav> search(String name) {
         List<Krav> byNameContaining = new ArrayList<>(repo.findByNavnContaining(name));
 
-        if (name.matches("[kK]?([0-9]*)")) {
-            int kravNummer;
-            if(name.toLowerCase().startsWith("k")) {
-                kravNummer = Integer.parseInt(name.substring(1));
-            } else {
-                kravNummer = Integer.parseInt(name);
-            }
+        if (StringUtils.isNumeric(name)) {
+            byNameContaining.addAll(repo.findByKravNummer(Integer.parseInt(name)));
+        }
+
+        if (name.matches("[kK]([0-9]+)")) {
+            int kravNummer = Integer.parseInt(name.substring(1));
             byNameContaining.addAll(repo.findByKravNummer(kravNummer));
         }
 
-        if (name.matches("[kK]?([0-9]*).([0-9]*)")) {
-            List<String> parts;
-            if (name.toLowerCase().startsWith("k")) {
-                parts = List.of(name.substring(1).split("\\."));
-            } else {
-                parts = List.of(name.split("\\."));
-            }
+        if (name.matches("([0-9]+).([0-9]+)")) {
+            var parts = name.split("\\.");
+            var kravNummer = Integer.parseInt(parts[0]);
+            var kravVersjon = Integer.parseInt(parts[1]);
+            repo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon).ifPresent(byNameContaining::add);
+        }
 
-            var kravNummer = Integer.parseInt(parts.get(0));
-            var kravVersjon = Integer.parseInt(parts.get(1));
+        if (name.matches("[kK]([0-9]+).([0-9]+)")) {
+            var parts = name.substring(1).split("\\.");
+            var kravNummer = Integer.parseInt(parts[0]);
+            var kravVersjon = Integer.parseInt(parts[1]);
             repo.findByKravNummerAndKravVersjon(kravNummer, kravVersjon).ifPresent(byNameContaining::add);
         }
 
