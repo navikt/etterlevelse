@@ -79,14 +79,11 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
 
               <RisikoscenarioKonsekvensnivaaField />
 
-              {mode === 'update' && initialValues.generelScenario && (
+              {mode === 'update' && (
                 <OvrigToKravSpesifikkRisikoscenarioField
                   generelScenarioFormValue={values.generelScenario}
+                  relevanteKravNummerFormValue={values.relevanteKravNummer}
                 />
-              )}
-
-              {mode === 'update' && !initialValues.generelScenario && (
-                <div className='my-5'>WIP feature krav til øvrig risikoscenario</div>
               )}
             </Modal.Body>
 

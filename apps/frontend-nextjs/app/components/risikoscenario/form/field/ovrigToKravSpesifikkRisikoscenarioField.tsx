@@ -11,10 +11,12 @@ import AsyncSelect from 'react-select/async'
 
 type TProps = {
   generelScenarioFormValue: boolean
+  relevanteKravNummerFormValue: IKravReference[]
 }
 
 export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> = ({
   generelScenarioFormValue,
+  relevanteKravNummerFormValue,
 }) => (
   <div className='my-5'>
     <Field name='generelScenario'>
@@ -22,6 +24,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
         <CheckboxGroup
           legend='Koble dette risikoscenarioet til PVK-relatert(e) etterlevelseskrav'
           hideLegend
+          value={fieldProps.form.values.generelScenario ? [] : ['krav_spesifikk']}
           onChange={async (value: string[]) => {
             if (value.length !== 0) {
               await fieldProps.form.setFieldValue('generelScenario', false)
@@ -37,7 +40,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       )}
     </Field>
 
-    {!generelScenarioFormValue && (
+    {(!generelScenarioFormValue || relevanteKravNummerFormValue.length !== 0) && (
       <div className='mt-5'>
         <FieldArray name='relevanteKravNummer'>
           {(fieldArrayRenderProps: FieldArrayRenderProps) => (
