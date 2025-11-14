@@ -185,7 +185,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 className='mt-3 border-2 border-solid'
                 variant='action'
                 copyText='pvk@nav.no'
-                text='Kopiér PVO sin e-postadresse'
+                text='Kopier PVO sin e-postadresse'
                 activeText='E-postadressen er kopiert'
                 icon={<EnvelopeClosedIcon aria-hidden />}
               />

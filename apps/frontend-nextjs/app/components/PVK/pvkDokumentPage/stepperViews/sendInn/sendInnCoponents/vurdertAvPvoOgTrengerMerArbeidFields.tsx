@@ -65,7 +65,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
             <TextAreaField
               rows={3}
               noPlaceholder
-              label='Oppsummér for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
+              label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
               name='merknadTilRisikoeier'
             />
           </div>

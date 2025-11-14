@@ -13,7 +13,7 @@ export default function Home() {
             <Heading className='flex justify-center' size='large' level='1'>
               Etterlevelse i Nav
             </Heading>
-            <span className='flex justify-center'>Forstå og dokumentér</span>
+            <span className='flex justify-center'>Forstå og dokumenter</span>
           </div>
           <EtterlevelseDokumentasjon />
         </div>

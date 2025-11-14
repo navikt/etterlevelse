@@ -226,7 +226,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               <Field name='bidragsVurdering'>
                 {(fieldProps: FieldProps) => (
                   <RadioGroup
-                    legend='Vurdér om etterleverens bidrag er tilstrekkelig'
+                    legend='Vurder om etterleverens bidrag er tilstrekkelig'
                     value={fieldProps.field.value}
                     onChange={(value) => {
                       fieldProps.form.setFieldValue('bidragsVurdering', value)

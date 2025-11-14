@@ -122,7 +122,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
               })
             }}
           >
-            Akseptér restrisiko og arkivér i Public 360
+            Aksepter restrisiko og arkiver i Public 360
           </Button>
         )}
       </div>

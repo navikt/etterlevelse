@@ -352,7 +352,7 @@ export const BehandlingensLivslopPage = () => {
                         }
                       }}
                     >
-                      {pvkDokument ? 'PVK-Oversikt' : 'Vurdér behov for PVK'}
+                      {pvkDokument ? 'PVK-Oversikt' : 'Vurder behov for PVK'}
                     </Button>
                   </StickyFooterButtonLayout>
                 </div>

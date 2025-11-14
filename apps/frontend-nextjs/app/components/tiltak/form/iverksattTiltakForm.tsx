@@ -45,7 +45,7 @@ export const IverksattTiltakForm: FunctionComponent<TProps> = ({
                   }
                 }}
               >
-                <Checkbox value='iverksatt'>Markér tiltaket som iverksatt</Checkbox>
+                <Checkbox value='iverksatt'>Marker tiltaket som iverksatt</Checkbox>
               </CheckboxGroup>
             )}
           </Field>

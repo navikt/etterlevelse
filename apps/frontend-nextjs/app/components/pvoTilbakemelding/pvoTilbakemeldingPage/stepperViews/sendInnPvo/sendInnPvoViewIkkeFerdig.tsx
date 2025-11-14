@@ -321,7 +321,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 setSubmitClicked(!submitClicked)
               }}
             >
-              Lagre, send tilbakemelding, og arkivér i Public 360
+              Lagre, send tilbakemelding, og arkiver i Public 360
             </Button>
           </div>
         }

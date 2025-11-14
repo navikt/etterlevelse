@@ -231,7 +231,7 @@ export const TiltakForm: FunctionComponent<TProps> = ({
                     fieldProps.form.setFieldValue('iverksatt', fieldValue)
                   }}
                 >
-                  <Checkbox value='iverksatt'>Markér tiltaket som iverksatt</Checkbox>
+                  <Checkbox value='iverksatt'>Marker tiltaket som iverksatt</Checkbox>
                 </CheckboxGroup>
               )}
             </Field>

@@ -236,7 +236,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                     pvkDokument.id
                   )}
                 >
-                  Vurdér behov for PVK
+                  Vurder behov for PVK
                 </ExternalLink>
               </FormSummary.Value>
               <FormSummary.Value className='gap-2 flex'>

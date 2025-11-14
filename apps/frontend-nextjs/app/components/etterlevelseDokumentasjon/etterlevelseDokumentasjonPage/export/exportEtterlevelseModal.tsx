@@ -23,7 +23,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
   return (
     <div>
       <Button variant='tertiary' size='small' onClick={() => setIsExportModalOpen(true)}>
-        Eksportér til Word
+        Eksporter til Word
       </Button>
 
       <Modal
@@ -33,7 +33,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
           setValgtTema('')
           setIsExportModalOpen(false)
         }}
-        header={{ heading: 'Eksportér etterlevelse', closeButton: false }}
+        header={{ heading: 'Eksporter etterlevelse', closeButton: false }}
       >
         <Modal.Body>
           {isLoading ? (
@@ -66,8 +66,8 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                 value={onlyActiveKrav}
                 onChange={(value: boolean) => setOnlyActiveKrav(value)}
               >
-                <Radio value={false}>Eksportér alle krav versjoner</Radio>
-                <Radio value={true}>Eksportér kun gjeldende versjon krav</Radio>
+                <Radio value={false}>Eksporter alle krav versjoner</Radio>
+                <Radio value={true}>Eksporter kun gjeldende versjon krav</Radio>
               </RadioGroup>
               {errorMessage && (
                 <div className='w-full mt-4'>
@@ -125,7 +125,7 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
                     })()
                   }}
                 >
-                  Eksportér
+                  Eksporter
                 </Button>
               </div>
             </div>

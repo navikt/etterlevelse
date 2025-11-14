@@ -98,7 +98,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
         className='whitespace-nowrap'
       >
-        {isPvkDokumentVurdert(pvkDokument) ? 'Revurdér behov for PVK' : 'Vurdér behov for PVK'}
+        {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
       </Button>
     </>
   )

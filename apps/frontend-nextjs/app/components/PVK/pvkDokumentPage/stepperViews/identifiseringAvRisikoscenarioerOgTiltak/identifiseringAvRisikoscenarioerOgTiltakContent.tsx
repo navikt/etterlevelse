@@ -53,7 +53,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
             router.push(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId))
         }}
       >
-        Vurdér risikoscenarioer ved PVK-relaterte krav
+        Vurder risikoscenarioer ved PVK-relaterte krav
       </Button>
 
       <Heading level='2' size='small' className='mb-5 mt-10'>

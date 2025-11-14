@@ -101,7 +101,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
                   }
                 }}
               >
-                Arkivér i Public 360 (kun admin)
+                Arkiver i Public 360 (kun admin)
               </Button>
             )}
           </div>

@@ -204,7 +204,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
               icon={ikkeFerdigVurdert ? undefined : <PencilIcon aria-hidden title='' />}
             >
               {revurdertEffektCheck
-                ? 'Vurdér tiltakenes effekt'
+                ? 'Vurder tiltakenes effekt'
                 : !revurdertEffektCheck && risikoscenario.tiltakOppdatert
                   ? 'Revurder tiltakenes effekt'
                   : 'Rediger tiltakenes effekt'}
@@ -252,7 +252,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
             <Form className='w-full border-t border-[#071a3636]'>
               <TopBottomWrapper>
                 <Heading size='medium' level='3' id='vurderTiltakForm'>
-                  Dokumentér antatt risikonivå etter gjennomførte tiltak
+                  Dokumenter antatt risikonivå etter gjennomførte tiltak
                 </Heading>
               </TopBottomWrapper>
 
