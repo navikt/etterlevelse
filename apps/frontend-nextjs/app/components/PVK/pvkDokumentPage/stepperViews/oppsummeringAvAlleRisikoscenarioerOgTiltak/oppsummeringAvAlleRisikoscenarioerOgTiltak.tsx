@@ -313,7 +313,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
             <div className='pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8'>
               {isLoading && (
                 <div className='flex w-full justify-center'>
-                  <Loader size={'large'} />
+                  <Loader size='large' />
                 </div>
               )}
 
@@ -330,7 +330,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         label={
                           <span className='flex items-center gap-1'>
                             {antallEffektIkkeVurdert > 0 && (
-                              <span className='w-2 h-2 bg-red-500 rounded-full'></span>
+                              <span className='w-2 h-2 bg-red-500 rounded-full mr-1'></span>
                             )}
                             {`Vis risikoscenarioer (${risikoscenarioList.length})`}
                           </span>
@@ -341,7 +341,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         label={
                           <span className='flex items-center gap-1'>
                             {(antallUtenTiltakAnsvarlig > 0 || antallUtenFrist > 0) && (
-                              <span className='w-2 h-2 bg-red-500 rounded-full'></span>
+                              <span className='w-2 h-2 bg-red-500 rounded-full mr-1'></span>
                             )}
                             {`Vis tiltak (${tiltakList.length})`}
                           </span>
