@@ -296,7 +296,7 @@ export const BehandlingensLivslopPage = () => {
                                   window.location.reload()
                                 }}
                               >
-                                Forkast textendringer
+                                Forkast tekstendringer
                               </Button>
                             </div>
                           )}

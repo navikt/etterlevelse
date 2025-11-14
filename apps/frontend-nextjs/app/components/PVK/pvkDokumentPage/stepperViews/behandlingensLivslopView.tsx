@@ -259,7 +259,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                                 window.location.reload()
                               }}
                             >
-                              Forkast textendringer
+                              Forkast tekstendringer
                             </Button>
                           </div>
                         )}
