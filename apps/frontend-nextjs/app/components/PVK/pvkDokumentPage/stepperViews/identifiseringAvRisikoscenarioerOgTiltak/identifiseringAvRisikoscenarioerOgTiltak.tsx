@@ -116,7 +116,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
           [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
             pvkDokument.status
           ) && (
-            <div className='w-full'>
+            <div className='w-full my-5'>
               <RisikoscenarioAccordianListReadOnlyView
                 risikoscenarioList={risikoscenarioList}
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}

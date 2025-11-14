@@ -137,6 +137,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
       {isCreateModalOpen && (
         <RisikoscenarioModalForm
           headerText='Opprett nytt risikoscenario'
+          mode='create'
           isOpen={isCreateModalOpen}
           setIsOpen={setIsCreateModalOpen}
           submit={submit}

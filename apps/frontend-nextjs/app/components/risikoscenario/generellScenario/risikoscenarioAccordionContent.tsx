@@ -347,6 +347,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       {isEditModalOpen && (
         <RisikoscenarioModalForm
           headerText='Rediger øvrig risikoscenario'
+          mode='update'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

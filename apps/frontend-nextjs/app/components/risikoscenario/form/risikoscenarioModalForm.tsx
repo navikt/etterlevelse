@@ -5,12 +5,14 @@ import { Button, ErrorSummary, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { OvrigToKravSpesifikkRisikoscenarioField } from './field/ovrigToKravSpesifikkRisikoscenarioField'
 import RisikoscenarioKonsekvensnivaaField from './field/risikoscenarioKonsekvensnivaaField'
 import RisikoscenarioSannsynlighetField from './field/risikoscenarioSannsynlighetField'
 import { risikoscenarioCreateValidation } from './risikoscenarioSchema'
 
 type TProps = {
   headerText: string
+  mode: 'create' | 'update'
   isOpen: boolean
   setIsOpen: (open: boolean) => void
   initialValues: Partial<IRisikoscenario>
@@ -20,6 +22,7 @@ type TProps = {
 export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
   headerText,
   isOpen,
+  mode,
   setIsOpen,
   submit,
   initialValues,
@@ -50,7 +53,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
         initialValues={mapRisikoscenarioToFormValue(initialValues)}
         innerRef={formRef}
       >
-        {({ submitForm, errors }) => (
+        {({ submitForm, errors, values }) => (
           <Form>
             <Modal.Body>
               <>
@@ -75,6 +78,13 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
               <RisikoscenarioSannsynlighetField />
 
               <RisikoscenarioKonsekvensnivaaField />
+
+              {mode === 'update' && (
+                <OvrigToKravSpesifikkRisikoscenarioField
+                  generelScenarioFormValue={values.generelScenario}
+                  relevanteKravNummerFormValue={values.relevanteKravNummer}
+                />
+              )}
             </Modal.Body>
 
             {!_.isEmpty(errors) && (
