@@ -50,7 +50,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
               </Label>
               <div className='w-full'>
                 <AsyncSelect
-                  aria-label='Søk etter behandlinger'
+                  aria-label='Søk etter etterlevelseskrav'
                   placeholder=''
                   components={{ DropdownIndicator }}
                   noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
