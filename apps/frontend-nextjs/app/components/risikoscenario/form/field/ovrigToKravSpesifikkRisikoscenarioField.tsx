@@ -69,7 +69,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
               <RenderTagList
                 list={fieldArrayRenderProps.form.values.relevanteKravNummer.map(
                   (kravReference: IKravReference) =>
-                    `${kravNummerView(kravReference.kravNummer, kravReference.kravVersjon)} ${kravReference.navn}`
+                    `${kravNummerView(kravReference.kravVersjon, kravReference.kravNummer)} ${kravReference.navn}`
                 )}
                 onRemove={fieldArrayRenderProps.remove}
               />
@@ -87,7 +87,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
         <List>
           {relevanteKravNummerFormValue.map((relevanteKrav, index) => (
             <List.Item key={`${index}_${relevanteKrav.navn}`}>
-              {kravNummerView(relevanteKrav.kravNummer, relevanteKrav.kravVersjon)}{' '}
+              {kravNummerView(relevanteKrav.kravVersjon, relevanteKrav.kravNummer)}{' '}
               {relevanteKrav.navn}
             </List.Item>
           ))}
