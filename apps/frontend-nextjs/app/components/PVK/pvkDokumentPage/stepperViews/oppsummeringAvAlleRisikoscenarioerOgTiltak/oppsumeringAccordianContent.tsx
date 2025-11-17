@@ -44,7 +44,11 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
+    const mutatedRisikoscenario: IRisikoscenario = {
+      ...risikoscenario,
+      relevanteKravNummer: risikoscenario.generelScenario ? [] : risikoscenario.relevanteKravNummer,
+    }
+    await updateRisikoscenario(mutatedRisikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
       setIsEditModalOpen(false)
       window.location.reload()
@@ -146,6 +150,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
       {isEditModalOpen && (
         <RisikoscenarioModalForm
           headerText='Rediger øvrig risikoscenario'
+          mode='update'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

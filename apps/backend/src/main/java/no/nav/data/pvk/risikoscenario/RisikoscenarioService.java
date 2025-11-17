@@ -63,6 +63,7 @@ public class RisikoscenarioService {
         for (String id : risikoscenarioIder) {
             Risikoscenario risikoscenario = get(UUID.fromString(id));
             // Yes, risikoscenario may be null here. Not considered a problem that this will cause NPE → Internal Server Error.
+            risikoscenario.getRisikoscenarioData().setGenerelScenario(false);
             List<Integer> kravList = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
             if (!kravList.contains(kravnummer)) {
                 kravList.add(kravnummer);
