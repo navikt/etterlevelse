@@ -8,6 +8,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
+import TilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
 import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
@@ -62,6 +63,16 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
                 initialValue={relevantVurdering.innvolveringAvEksterne}
                 formRef={formRef}
               />
+            )}
+
+            {pvoTilbakemelding.vurderinger.length > 1 && (
+              <div className='mt-10'>
+                <TilbakemeldingsHistorikk
+                  pvoTilbakemelding={pvoTilbakemelding}
+                  fieldName='innvolveringAvEksterne'
+                  relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                />
+              </div>
             )}
           </PvoSidePanelWrapper>
         </div>

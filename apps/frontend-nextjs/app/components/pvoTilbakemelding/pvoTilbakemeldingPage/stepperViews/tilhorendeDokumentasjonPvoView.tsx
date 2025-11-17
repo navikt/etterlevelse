@@ -11,6 +11,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
+import TilhorendeTilbakemeldingdHistorikk from '../../common/tilhorendeTilbakemeldingdHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import TilhorendeDokumentasjonPvoTilbakemeldingForm from '../../form/tilhorendeDokumentasjonPvoTilbakemeldingForm'
 import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../../readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
@@ -72,6 +73,15 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
                   sentDate={relevantVurdering.sendtDato}
                   forPvo={true}
                 />
+              )}
+
+              {pvoTilbakemelding.vurderinger.length > 1 && (
+                <div className='mt-10'>
+                  <TilhorendeTilbakemeldingdHistorikk
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                  />
+                </div>
               )}
             </PvoSidePanelWrapper>
           </div>

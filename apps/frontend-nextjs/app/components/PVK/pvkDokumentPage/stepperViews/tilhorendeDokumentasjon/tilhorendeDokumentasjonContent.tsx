@@ -95,7 +95,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'
               >
-                Redigér dokumentegenskaper (åpner i en ny fane)
+                Rediger dokumentegenskaper (åpner i en ny fane)
               </Link>
             </Alert>
           )}
@@ -109,7 +109,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                 rel='noopener noreferrer'
                 aria-label='redigere etterlevelsesdokumentasjon'
               >
-                Redigér dokumentegenskaper (åpner i en ny fane).
+                Rediger dokumentegenskaper (åpner i en ny fane).
               </Link>
             </BodyShort>
           )}
@@ -156,7 +156,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           </Heading>
 
           <BodyLong className='inline-block mb-5'>
-            Dersom dere har gjennomført en eller flere risikovurderinger, skal disse legges ved
+            Dersom dere har gjennomført en eller flere ROS, skal disse legges ved
             etterlevelsesdokumentasjonen.
           </BodyLong>
 
@@ -191,7 +191,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                     rel='noopener noreferrer'
                     aria-label='redigere etterlevelsesdokumentasjon'
                   >
-                    Redigér dokumentegenskaper (åpner i en ny fane).
+                    Rediger dokumentegenskaper (åpner i en ny fane).
                   </Link>
                 </BodyLong>
               </div>
@@ -219,7 +219,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                   rel='noopener noreferrer'
                   aria-label='redigere etterlevelsesdokumentasjon'
                 >
-                  Redigér dokumentegenskaper (åpner i en ny fane).
+                  Rediger dokumentegenskaper (åpner i en ny fane).
                 </Link>
               </BodyLong>
             </Alert>

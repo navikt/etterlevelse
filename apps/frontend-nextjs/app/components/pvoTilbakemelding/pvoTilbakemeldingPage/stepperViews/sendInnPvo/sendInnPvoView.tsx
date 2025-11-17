@@ -179,6 +179,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               setFieldValue={setFieldValue}
               setSubmittedStatus={setSubmittedStatus}
               pvkDokument={pvkDokument}
+              pvoTilbakemelding={pvoTilbakemelding}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               activeStep={activeStep}
               setSelectedStep={setSelectedStep}

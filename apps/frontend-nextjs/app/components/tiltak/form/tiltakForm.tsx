@@ -26,11 +26,11 @@ import {
 } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
-import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { tiltakSchemaValidation } from './tiltakSchema'
 
-interface IProps {
+type TProps = {
   title?: string
   initialValues: ITiltak
   pvkDokumentId: string
@@ -39,10 +39,15 @@ interface IProps {
   formRef?: RefObject<any>
 }
 
-export const TiltakForm = (props: IProps) => {
-  const { title, initialValues, pvkDokumentId, submit, close, formRef } = props
+export const TiltakForm: FunctionComponent<TProps> = ({
+  title,
+  initialValues,
+  pvkDokumentId,
+  submit,
+  close,
+  formRef,
+}) => {
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
-
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
@@ -62,17 +67,17 @@ export const TiltakForm = (props: IProps) => {
 
   return (
     <Formik
+      validateOnBlur={validateOnBlur}
+      validateOnChange={false}
+      onSubmit={submit}
+      validationSchema={tiltakSchemaValidation()}
       initialValues={mapTiltakToFormValue({
         ...initialValues,
         pvkDokumentId: pvkDokumentId,
       })}
-      validateOnBlur={false}
-      validateOnChange={validateOnBlur}
-      validationSchema={tiltakSchemaValidation()}
-      onSubmit={submit}
       innerRef={formRef}
     >
-      {({ values, resetForm, submitForm, errors }) => (
+      {({ resetForm, submitForm, errors }) => (
         <Form>
           {title && (
             <div className='mb-5 border-t-2 mt-5'>
@@ -226,13 +231,13 @@ export const TiltakForm = (props: IProps) => {
                     fieldProps.form.setFieldValue('iverksatt', fieldValue)
                   }}
                 >
-                  <Checkbox value='iverksatt'>Markér tiltaket som iverksatt</Checkbox>
+                  <Checkbox value='iverksatt'>Marker tiltaket som iverksatt</Checkbox>
                 </CheckboxGroup>
               )}
             </Field>
           </div>
 
-          {Object.values(errors).some(Boolean) && (
+          {!_.isEmpty(errors) && (
             <ErrorSummary
               ref={errorSummaryRef}
               heading='Du må rette disse feilene før du kan fortsette'
@@ -251,10 +256,9 @@ export const TiltakForm = (props: IProps) => {
             <Button
               type='button'
               onClick={async () => {
+                errorSummaryRef.current?.focus()
                 setValidateOnBlur(true)
-                await submitForm().then(() => {
-                  resetForm({ values })
-                })
+                await submitForm()
                 setSubmitClick(!submitClick)
               }}
             >

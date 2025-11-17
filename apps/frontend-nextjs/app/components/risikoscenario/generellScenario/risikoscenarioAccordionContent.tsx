@@ -73,7 +73,11 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
+    const mutatedRisikoscenario: IRisikoscenario = {
+      ...risikoscenario,
+      relevanteKravNummer: risikoscenario.generelScenario ? [] : risikoscenario.relevanteKravNummer,
+    }
+    await updateRisikoscenario(mutatedRisikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
       setRisikoscenarioer(
         risikoscenarioer.map((risikoscenario) => {
@@ -222,7 +226,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                   await activeFormButton(() => setIsEditModalOpen(true))
                 }}
               >
-                Redigèr risikoscenario
+                Rediger risikoscenario
               </Button>
               <SlettOvrigRisikoscenario
                 risikoscenario={risikoscenario}
@@ -346,7 +350,8 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText='Redigér øvrig risikoscenario'
+          headerText='Rediger øvrig risikoscenario'
+          mode='update'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

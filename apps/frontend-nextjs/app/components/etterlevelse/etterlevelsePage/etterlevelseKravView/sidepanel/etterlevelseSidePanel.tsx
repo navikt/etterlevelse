@@ -159,7 +159,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                   Notat
                 </Label>
                 <Button variant='secondary' size='xsmall' onClick={() => setIsNotatModalOpen(true)}>
-                  Redigér
+                  Rediger
                 </Button>
               </div>
 

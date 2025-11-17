@@ -3,7 +3,8 @@ FROM node:24.8.0-alpine AS builder
 
 WORKDIR /usr/app
 
-COPY package.json yarn.lock .
+COPY package.json .
+COPY yarn.lock .
 
 # Install dependencies
 RUN yarn install --frozen-lockfile

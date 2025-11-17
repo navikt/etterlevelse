@@ -86,13 +86,13 @@ export const TiltakReadMoreContent: FunctionComponent<TContentProps> = ({
         icon={<PencilIcon title='' aria-hidden />}
         onClick={() => setIsEditModalOpen(true)}
       >
-        Redigér tiltak
+        Rediger tiltak
       </Button>
       {isEditModalOpen && (
         <Modal
           open={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          header={{ heading: 'Redigér tiltak' }}
+          header={{ heading: 'Rediger tiltak' }}
         >
           <Modal.Body>
             <TiltakForm

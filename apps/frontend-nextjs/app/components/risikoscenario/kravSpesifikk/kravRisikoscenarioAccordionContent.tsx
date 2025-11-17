@@ -92,7 +92,11 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   }
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
+    const mutatedRisikoscenario: IRisikoscenario = {
+      ...risikoscenario,
+      relevanteKravNummer: risikoscenario.generelScenario ? [] : risikoscenario.relevanteKravNummer,
+    }
+    await updateRisikoscenario(mutatedRisikoscenario).then((response: IRisikoscenario) => {
       setActiveRisikoscenario(response)
       updateRisikoscenarioList(response)
       setIsEditModalOpen(false)
@@ -320,7 +324,8 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText='Redigér øvrig risikoscenario'
+          headerText='Rediger øvrig risikoscenario'
+          mode='update'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

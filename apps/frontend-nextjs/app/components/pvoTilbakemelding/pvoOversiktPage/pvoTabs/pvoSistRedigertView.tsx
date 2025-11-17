@@ -56,10 +56,9 @@ export const PvoSistRedigertView = () => {
           <List className='mb-2.5 flex flex-col gap-2'>
             {sortedPvoTilbakemelding.length !== 0 &&
               sortedPvoTilbakemelding.map((pvoTilbakemelding: TPvoTilbakemeldingQL) => {
-                const sortedPvoVurderinger = pvoTilbakemelding.vurderinger.sort(
-                  (a, b) => b.innsendingId - a.innsendingId
-                )
-                const latestVurdering = sortedPvoVurderinger[0]
+                const latestVurdering = pvoTilbakemelding.vurderinger.reduce((prev, current) => {
+                  return prev.innsendingId > current.innsendingId ? prev : current
+                })
 
                 return (
                   <ListLayout2

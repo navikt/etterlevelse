@@ -54,7 +54,7 @@ export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
         onClick={async () => await activateFormButton(() => setIsEditModalOpen(true))}
         className='mb-2'
       >
-        Redigèr risikoscenario
+        Rediger risikoscenario
       </Button>
 
       <FjernRisikoscenarioFraKrav

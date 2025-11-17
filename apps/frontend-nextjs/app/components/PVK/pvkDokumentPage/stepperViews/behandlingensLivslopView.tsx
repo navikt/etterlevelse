@@ -41,7 +41,7 @@ import {
   Loader,
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
-import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
+import { Form, Formik, FormikHelpers, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
@@ -160,7 +160,15 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               <Formik
                 validateOnBlur={false}
                 validateOnChange={false}
-                onSubmit={submit}
+                onSubmit={async (
+                  values: IBehandlingensLivslopRequest,
+                  formikHelpers: FormikHelpers<IBehandlingensLivslopRequest>
+                ) => {
+                  await submit(values).then(() => {
+                    formikHelpers.resetForm({ values })
+                    setSavedSuccessful(true)
+                  })
+                }}
                 initialValues={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
                 validate={() => {
                   try {
@@ -175,15 +183,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                 }}
                 innerRef={formRef}
               >
-                {({
-                  submitForm,
-                  initialValues,
-                  errors,
-                  isSubmitting,
-                  dirty,
-                  resetForm,
-                  values,
-                }) => (
+                {({ submitForm, initialValues, errors, isSubmitting, dirty }) => (
                   <Form>
                     <div className='flex justify-center'>
                       <div className='max-w-[75ch] w-full'>
@@ -245,14 +245,21 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                             <Button
                               type='button'
                               onClick={async () => {
-                                await submitForm().then(() => {
-                                  resetForm({ values })
-                                  setSavedSuccessful(true)
-                                })
+                                await submitForm()
                                 setSubmitClick(!submitClick)
                               }}
                             >
                               Lagre
+                            </Button>
+
+                            <Button
+                              type='button'
+                              variant='tertiary'
+                              onClick={() => {
+                                window.location.reload()
+                              }}
+                            >
+                              Forkast tekstendringer
                             </Button>
                           </div>
                         )}

@@ -19,6 +19,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
+import _ from 'lodash'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 
 type TProps = {
@@ -35,6 +36,7 @@ type TProps = {
   initialStatus: EPvkDokumentStatus
   errorSummaryComponent: ReactNode
   pvoVurderingList: ICode[]
+  errors: FormikErrors<IPvkDokument>
 }
 export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   pvkDokument,
@@ -46,6 +48,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   initialStatus,
   errorSummaryComponent,
   pvoVurderingList,
+  errors,
 }) => {
   const user = useContext(UserContext)
   const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
@@ -113,11 +116,13 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
               )
               await setFieldValue('godkjentAvRisikoeier', user.getIdent() + ' - ' + user.getName())
               await submitForm().then(async () => {
-                await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+                if (_.isEmpty(errors)) {
+                  await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+                }
               })
             }}
           >
-            Akseptér restrisiko og arkivér i Public 360
+            Aksepter restrisiko og arkiver i Public 360
           </Button>
         )}
       </div>

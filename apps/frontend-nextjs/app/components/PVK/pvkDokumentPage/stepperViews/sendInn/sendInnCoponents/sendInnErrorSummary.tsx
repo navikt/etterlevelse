@@ -62,7 +62,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#behandling`}
               className='max-w-[75ch]'
             >
-              Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen (Redigér
+              Dere må koble minst 1 behandling til denne etterlevelsesdokumentasjonen (Rediger
               dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
@@ -128,7 +128,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#risikoeiereData`}
               className='max-w-[75ch]'
             >
-              Legg til risikoeier (Redigér dokumentegenskaper) (åpner i ny fane)
+              Legg til risikoeier (Rediger dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
@@ -138,7 +138,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#avdeling`}
               className='max-w-[75ch]'
             >
-              Legg til avdeling (Redigér dokumentegenskaper) (åpner i ny fane)
+              Legg til avdeling (Rediger dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
@@ -148,7 +148,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}#teamsData`}
               className='max-w-[75ch]'
             >
-              Legg til team eller personer (Redigér dokumentegenskaper) (åpner i ny fane)
+              Legg til team eller personer (Rediger dokumentegenskaper) (åpner i ny fane)
             </ErrorSummary.Item>
           )}
         </ErrorSummary>

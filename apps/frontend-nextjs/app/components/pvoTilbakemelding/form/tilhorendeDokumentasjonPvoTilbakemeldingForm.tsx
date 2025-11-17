@@ -65,6 +65,11 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
       await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
         .then(async (response: IPvoTilbakemelding) => {
           if (response) {
+            if (
+              !response.vurderinger.find((vurdering) => vurdering.innsendingId === innsendingId)
+            ) {
+              response.vurderinger.push(createNewPvoVurderning(innsendingId))
+            }
             const updatedValues: IPvoTilbakemelding = {
               ...response,
               vurderinger: response.vurderinger.map((vurdering) => {
@@ -78,7 +83,8 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                 }
               }),
               status:
-                response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
+                response.status === EPvoTilbakemeldingStatus.IKKE_PABEGYNT ||
+                response.status === EPvoTilbakemeldingStatus.TRENGER_REVURDERING
                   ? EPvoTilbakemeldingStatus.UNDERARBEID
                   : response.status,
             }
@@ -176,7 +182,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               </Heading>
 
               <BodyLong>
-                Vurdér om etterleverens bidrag er tilstrekkelig. Denne vurderingen blir ikke
+                Vurder om etterleverens bidrag er tilstrekkelig. Denne vurderingen blir ikke
                 tilgjengelig for etterleveren før dere har ferdigstilt selve vurderingen.
               </BodyLong>
             </div>
@@ -185,7 +191,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               <TilbakemeldingField
                 heading='Behandlinger i Behandlingskatalogen'
                 radioFieldName='behandlingskatalogDokumentasjonTilstrekkelig'
-                radioFieldLabel='Vurdér om dokumentasjon i Behandlingskatalogen er tilstrekkelig.'
+                radioFieldLabel='Vurder om dokumentasjon i Behandlingskatalogen er tilstrekkelig.'
                 textAreaFieldName='behandlingskatalogDokumentasjonTilbakemelding'
                 setFieldValue={setFieldValue}
               />
@@ -193,7 +199,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               <TilbakemeldingField
                 heading='PVK-relaterte etterlevelseskrav'
                 radioFieldName='kravDokumentasjonTilstrekkelig'
-                radioFieldLabel='Vurdér om kravdokumentasjon er tilstrekkelig.'
+                radioFieldLabel='Vurder om kravdokumentasjon er tilstrekkelig.'
                 textAreaFieldName='kravDokumentasjonTilbakemelding'
                 setFieldValue={setFieldValue}
               />
@@ -201,7 +207,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               <TilbakemeldingField
                 heading='Risiko- og sårbarhetsvurdering (ROS)'
                 radioFieldName='risikovurderingTilstrekkelig'
-                radioFieldLabel='Vurdér om risikovurderingen(e) er tilstrekkelig.'
+                radioFieldLabel='Vurder om risikovurderingen(e) er tilstrekkelig.'
                 textAreaFieldName='risikovurderingTilbakemelding'
                 setFieldValue={setFieldValue}
               />

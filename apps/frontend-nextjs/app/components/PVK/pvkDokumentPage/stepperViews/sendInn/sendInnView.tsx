@@ -469,7 +469,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 <CopyButton
                   variant='action'
                   copyText={window.location.href}
-                  text='Kopiér lenken til denne siden'
+                  text='Kopier lenken til denne siden'
                   activeText='Lenken er kopiert'
                   icon={<FilesIcon aria-hidden />}
                 />
@@ -634,6 +634,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           submitForm={submitForm}
                           initialStatus={initialValues.status}
                           pvoVurderingList={pvoVurderingList}
+                          errors={errors}
                           errorSummaryComponent={
                             <SendInnErrorSummary
                               errors={errors}

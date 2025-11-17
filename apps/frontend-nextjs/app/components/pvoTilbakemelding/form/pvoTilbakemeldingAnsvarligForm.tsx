@@ -11,7 +11,10 @@ import { searchResourceByNameOptions } from '@/api/teamkatalogen/teamkatalogenAp
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
-import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -19,6 +22,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
+import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
@@ -28,14 +32,14 @@ import AsyncSelect from 'react-select/async'
 import AlertPvoModal from '../common/alertPvoModal'
 
 type TProps = {
-  pvkDokumentId: string
+  pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
   initialValue: IVurdering
   formRef: RefObject<any>
 }
 
 export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
-  pvkDokumentId,
+  pvkDokument,
   pvoTilbakemelding,
   initialValue,
   formRef,
@@ -49,7 +53,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
   const submit = async (submitedVurderingValues: IVurdering): Promise<void> => {
     let pvkStatus = ''
 
-    await getPvkDokument(pvkDokumentId).then((response) => {
+    await getPvkDokument(pvkDokument.id).then((response) => {
       pvkStatus = response.status
     })
 
@@ -62,12 +66,22 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
     ) {
       setIsAlertModalOpen(true)
     } else {
-      await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
+      await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
         .then(async (response: IPvoTilbakemelding) => {
           if (response) {
             if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
               setIsAlertModalOpen(true)
             } else {
+              if (
+                !response.vurderinger.find(
+                  (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+                )
+              ) {
+                response.vurderinger.push(
+                  createNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+                )
+              }
+
               const updatedValues: IPvoTilbakemelding = {
                 ...response,
                 vurderinger: response.vurderinger.map((vurdering) => {
@@ -80,7 +94,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                     return vurdering
                   }
                 }),
-                status: pvoTilbakemelding.status,
+                status: selectedStatus,
               }
               await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
             }
@@ -88,11 +102,12 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
         })
         .catch(async (error: AxiosError) => {
           if (error.status === 404) {
+            const newVurdering = createNewPvoVurderning(1)
             const createValue = mapPvoTilbakemeldingToFormValue({
-              pvkDokumentId: pvkDokumentId,
+              pvkDokumentId: pvkDokument.id,
               vurderinger: [
                 {
-                  ...submitedVurderingValues,
+                  ...newVurdering,
                   ansvarligData: submitedVurderingValues.ansvarligData,
                 },
               ],
@@ -204,7 +219,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
             <AlertPvoModal
               isOpen={isAlertModalOpen}
               onClose={() => setIsAlertModalOpen(false)}
-              pvkDokumentId={pvkDokumentId}
+              pvkDokumentId={pvkDokument.id}
             />
 
             <div id='status' className='mb-5'>

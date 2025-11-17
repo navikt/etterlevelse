@@ -98,7 +98,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             <ExportEtterlevelseModal etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
             <div>
               <Button variant='tertiary' size='small' onClick={() => setIsArkivModalOpen(true)}>
-                Arkivér i Public 360
+                Arkiver i Public 360
               </Button>
               <ArkiveringModal
                 arkivModal={isArkivModalOpen}

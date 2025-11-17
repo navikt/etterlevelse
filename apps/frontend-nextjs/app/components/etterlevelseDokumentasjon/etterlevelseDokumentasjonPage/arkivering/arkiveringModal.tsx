@@ -30,7 +30,7 @@ export const ArkiveringModal = ({
       }}
       aria-label='Arkiverings modal'
       header={{
-        heading: 'Arkivér i Public 360',
+        heading: 'Arkiver i Public 360',
         closeButton: false,
       }}
     >
@@ -73,7 +73,7 @@ export const ArkiveringModal = ({
 
         {successMessageOpen && (
           <Alert variant='success' closeButton onClose={() => setSuccessMessageOpen(false)}>
-            Arkivéring vellykket
+            Arkivering vellykket
           </Alert>
         )}
 
@@ -107,7 +107,7 @@ export const ArkiveringModal = ({
                 .finally(() => setIsLoading(false))
             }}
           >
-            Arkivér
+            Arkiver
           </Button>
         </div>
       </Modal.Body>

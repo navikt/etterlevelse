@@ -74,8 +74,8 @@ export const KravNyVersjonPage = () => {
     <>
       {krav && (
         <PageLayout
-          pageTitle='Redigér krav'
-          currentPage='Redigér krav'
+          pageTitle='Rediger krav'
+          currentPage='Rediger krav'
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={`K${krav?.kravNummer}/${krav?.kravVersjon}`}
         >

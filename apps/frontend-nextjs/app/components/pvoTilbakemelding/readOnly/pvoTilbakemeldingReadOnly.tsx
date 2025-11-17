@@ -14,6 +14,7 @@ type TProps = {
   tilbakemeldingsinnhold: ITilbakemeldingsinnhold
   sentDate: string
   forPvo?: boolean
+  noHeader?: boolean
 }
 
 export const bidragsVerdierToText = (bidragsVerdi: EBidragVerdier) => {
@@ -31,11 +32,14 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
   tilbakemeldingsinnhold,
   sentDate,
   forPvo,
+  noHeader,
 }) => (
   <div>
-    <Heading level='2' size='small' className='mb-5'>
-      Tilbakemelding fra personvernombudet
-    </Heading>
+    {!noHeader && (
+      <Heading level='2' size='small' className='mb-5'>
+        Tilbakemelding fra personvernombudet
+      </Heading>
+    )}
 
     {forPvo && (
       <div className='w-full'>

@@ -95,7 +95,7 @@ export const KravEdit: FunctionComponent<TProps> = ({
               <div>
                 <div className='w-full'>
                   <Heading level='1' size='medium'>
-                    Redigér krav
+                    Rediger krav
                   </Heading>
                   <Heading level='2' size='small'>
                     {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}

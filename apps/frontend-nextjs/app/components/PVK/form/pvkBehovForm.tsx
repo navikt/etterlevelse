@@ -32,7 +32,15 @@ import {
   RadioGroup,
   ReadMore,
 } from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import {
+  Field,
+  FieldArray,
+  FieldArrayRenderProps,
+  FieldProps,
+  Form,
+  Formik,
+  FormikHelpers,
+} from 'formik'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
 import { pvkBehovSchema } from './pvkBehovSchema'
@@ -120,7 +128,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         validateOnChange={false}
         validateOnBlur={false}
         validationSchema={pvkBehovSchema}
-        onSubmit={submit}
+        onSubmit={async (values: IPvkDokument, formikHelpers: FormikHelpers<IPvkDokument>) => {
+          await submit(values).then(() => {
+            formikHelpers.resetForm({ values })
+          })
+        }}
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         innerRef={formRef}
       >
@@ -173,7 +185,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 className='mt-3 border-2 border-solid'
                 variant='action'
                 copyText='pvk@nav.no'
-                text='Kopiér PVO sin e-postadresse'
+                text='Kopier PVO sin e-postadresse'
                 activeText='E-postadressen er kopiert'
                 icon={<EnvelopeClosedIcon aria-hidden />}
               />
@@ -221,9 +233,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='primary'
                 onClick={async () => {
-                  await submitForm().then(() => {
-                    resetForm({ values })
-                  })
+                  await submitForm()
                 }}
               >
                 Lagre

@@ -1,12 +1,10 @@
 'use client'
 
 import { arkiver } from '@/api/p360/p360Api'
-import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
-import { Markdown } from '@/components/common/markdown/markdown'
 import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
 import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
 import PvoFormButtons from '@/components/pvoTilbakemelding/form/pvoFormButtons'
-import { BeskjedFraEtterleverReadOnly } from '@/components/pvoTilbakemelding/readOnly/beskjedFraEtterleverReadOnly'
+import { SendInnPvoReadOnly } from '@/components/pvoTilbakemelding/readOnly/sendInnPvoReadOnly'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import {
@@ -15,7 +13,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
-import { Alert, BodyLong, Button, Label, List } from '@navikt/ds-react'
+import { Alert, Button } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
@@ -50,95 +48,17 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   setSuccessSubmit,
 }) => {
   const user = useContext(UserContext)
-  const getPvoVurdering = () => {
-    const vurderingen = pvoVurderingList.filter(
-      (vurdering) => vurdering.code === relevantVurdering.pvoVurdering
-    )
-    if (vurderingen.length === 0) {
-      return ''
-    } else {
-      return vurderingen[0].description
-    }
-  }
 
   return (
     <div className='pt-6 w-full'>
       <div className='w-full flex justify-center'>
         <div className='max-w-[75ch]'>
-          <BeskjedFraEtterleverReadOnly pvkDokument={pvkDokument} />
-
-          <div className='mt-5 mb-3 max-w-[75ch]'>
-            <div className='mb-3'>
-              <Label>Beskjed til etterlever</Label>
-              <DataTextWrapper>
-                {relevantVurdering.merknadTilEtterleverEllerRisikoeier &&
-                  relevantVurdering.merknadTilEtterleverEllerRisikoeier.length !== 0 && (
-                    <Markdown source={relevantVurdering.merknadTilEtterleverEllerRisikoeier} />
-                  )}
-                <BodyLong>
-                  {(!relevantVurdering.merknadTilEtterleverEllerRisikoeier ||
-                    relevantVurdering.merknadTilEtterleverEllerRisikoeier.length === 0) &&
-                    'Ingen tilbakemelding til etterlever'}
-                </BodyLong>
-              </DataTextWrapper>
-            </div>
-
-            <div className='mb-3'>
-              <Label>Anbefales det at arbeidet går videre som planlagt?</Label>
-              <DataTextWrapper>
-                {relevantVurdering.arbeidGarVidere === null
-                  ? null
-                  : relevantVurdering.arbeidGarVidere === true
-                    ? 'Ja'
-                    : 'Nei'}
-              </DataTextWrapper>
-            </div>
-
-            <div className='mb-3'>
-              <Label>Beskriv anbefalingen nærmere:</Label>
-              <DataTextWrapper customEmptyMessage='Ingen beskrivelse'>
-                {relevantVurdering.arbeidGarVidereBegrunnelse}
-              </DataTextWrapper>
-            </div>
-
-            <div className='mb-3'>
-              <Label>Er det behov for forhåndskonsultasjon med Datatilsynet?</Label>
-              <DataTextWrapper>
-                {relevantVurdering.behovForForhandskonsultasjon === null
-                  ? null
-                  : relevantVurdering.behovForForhandskonsultasjon === true
-                    ? 'Ja'
-                    : 'Nei'}
-              </DataTextWrapper>
-            </div>
-
-            <div className='mb-3'>
-              <Label>Beskriv anbefalingen nærmere:</Label>
-              <DataTextWrapper customEmptyMessage='Ingen beskrivelse'>
-                {relevantVurdering.behovForForhandskonsultasjonBegrunnelse}
-              </DataTextWrapper>
-            </div>
-
-            <div className='mb-3'>
-              <Label>Personvernombudets vurdering</Label>
-              <DataTextWrapper>
-                {getPvoVurdering()}
-
-                {(relevantVurdering.pvoFolgeOppEndringer || relevantVurdering.vilFaPvkIRetur) && (
-                  <List>
-                    {relevantVurdering.pvoFolgeOppEndringer && (
-                      <List.Item>PVO vil følge opp endringer dere gjør.</List.Item>
-                    )}
-                    {relevantVurdering.vilFaPvkIRetur && (
-                      <List.Item>
-                        PVO vil få PVK i retur etter at dere har gjennomgått tilbakemeldinger.
-                      </List.Item>
-                    )}
-                  </List>
-                )}
-              </DataTextWrapper>
-            </div>
-          </div>
+          <SendInnPvoReadOnly
+            pvkDokument={pvkDokument}
+            relevantVurdering={relevantVurdering}
+            pvoVurderingList={pvoVurderingList}
+            headingLevel='2'
+          />
 
           <CopyLinkPvoButton />
 
@@ -181,7 +101,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
                   }
                 }}
               >
-                Arkivér i Public 360 (kun admin)
+                Arkiver i Public 360 (kun admin)
               </Button>
             )}
           </div>

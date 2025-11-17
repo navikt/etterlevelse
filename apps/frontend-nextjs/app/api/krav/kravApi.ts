@@ -104,53 +104,35 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
 
 export const useSearchKrav = async (searchParams: string) => {
   if (searchParams && searchParams.length > 2) {
-    if (searchParams.toLowerCase().match(/k\d{1,3}/)) {
-      let kravNumber: string = searchParams
-      if (kravNumber[0].toLowerCase() === 'k') {
-        kravNumber = kravNumber.substring(1)
-      }
-
-      if (searchParams.length > 3) {
-        if (Number.parseFloat(kravNumber) && Number.parseFloat(kravNumber) % 1 !== 0) {
-          const kravNummerMedVersjon = kravNumber.split('.')
-          const kravRes = await getKravByKravNumberAndVersion(
-            kravNummerMedVersjon[0],
-            kravNummerMedVersjon[1]
-          )
-          if (kravRes && kravRes.status === EKravStatus.AKTIV) {
-            return [
-              {
-                value: kravRes.id,
-                label: `K${kravRes.kravNummer}.${kravRes.kravVersjon} ${kravRes.navn}`,
-                ...kravRes,
-              },
-            ]
-          }
-        } else {
-          const kravRes: IKrav[] = await searchKrav(kravNumber)
-          return kravRes
-            .filter((krav: IKrav) => krav.status === EKravStatus.AKTIV)
-            .map((krav: IKrav) => {
-              return {
-                value: krav.id,
-                label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
-                ...krav,
-              }
-            })
+    const kravRes: IKrav[] = await searchKrav(searchParams)
+    return kravRes
+      .filter((krav: IKrav) => krav.status === EKravStatus.AKTIV)
+      .map((krav: IKrav) => {
+        return {
+          value: krav.id,
+          label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
+          ...krav,
         }
-      }
-    } else {
-      const kravRes: IKrav[] = await searchKrav(searchParams)
-      return kravRes
-        .filter((krav: IKrav) => krav.status === EKravStatus.AKTIV)
-        .map((krav: IKrav) => {
-          return {
-            value: krav.id,
-            label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
-            ...krav,
-          }
-        })
-    }
+      })
+  }
+  return []
+}
+
+export const useSearchKravToOptionsPvk = async (searchParams: string) => {
+  if (searchParams && searchParams.length > 2) {
+    const kravRes: IKrav[] = await searchKrav(searchParams)
+    return kravRes
+      .filter(
+        (krav: IKrav) =>
+          krav.status === EKravStatus.AKTIV && krav.tagger.includes('Personvernkonsekvensvurdering')
+      )
+      .map((krav: IKrav) => {
+        return {
+          value: krav.id,
+          label: `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`,
+          ...krav,
+        }
+      })
   }
   return []
 }

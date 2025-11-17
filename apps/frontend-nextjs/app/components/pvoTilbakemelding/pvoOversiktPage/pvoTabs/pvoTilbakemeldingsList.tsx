@@ -118,13 +118,13 @@ export const PvoTilbakemeldingsList = () => {
           title: data.title,
           etterlevelseNummer: data.etterlevelseNummer,
           sendtTilPvoDato: data.sendtTilPvoDato,
+          antallInnsendingTilPvo: data.antallInnsendingTilPvo,
           sendtTilPvoAv:
             data.sendtTilPvoAv === '' || data.sendtTilPvoAv === null
               ? ''
               : data.sendtTilPvoAv.split('-')[1],
         } as IPvkDokumentListItem
       })
-
     setAllPvkDocumentListItem(sortedPvk)
     setFilteredPvkDokuement(sortedPvk)
   }, [allPvoTilbakemelding])
@@ -208,7 +208,7 @@ export const PvoTilbakemeldingsList = () => {
         <div>
           <div id='pvo filter' className='flex items-end w-full gap-11 pb-5 pt-8 pl-7'>
             <Select
-              label='Filtrér status'
+              label='Filtrer status'
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
             >
@@ -223,7 +223,7 @@ export const PvoTilbakemeldingsList = () => {
             </Select>
 
             <Select
-              label='Filtrér ansvarlig'
+              label='Filtrer ansvarlig'
               value={ansvarligFilter}
               onChange={(event) => setAnsvarligFilter(event.target.value)}
             >
