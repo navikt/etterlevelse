@@ -80,15 +80,23 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const router = useRouter()
 
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
-    setRisikoscenarioForKrav(
-      risikoscenarioForKrav.map((risikoscenario: IRisikoscenario) => {
-        if (risikoscenario.id === updatedRisikoscenario.id) {
-          return { ...updatedRisikoscenario }
-        } else {
-          return risikoscenario
-        }
-      })
-    )
+    if (updatedRisikoscenario.generelScenario) {
+      setRisikoscenarioForKrav(
+        risikoscenarioForKrav.filter(
+          (risikoscenario) => risikoscenario.id !== updatedRisikoscenario.id
+        )
+      )
+    } else {
+      setRisikoscenarioForKrav(
+        risikoscenarioForKrav.map((risikoscenario: IRisikoscenario) => {
+          if (risikoscenario.id === updatedRisikoscenario.id) {
+            return { ...updatedRisikoscenario }
+          } else {
+            return risikoscenario
+          }
+        })
+      )
+    }
   }
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {

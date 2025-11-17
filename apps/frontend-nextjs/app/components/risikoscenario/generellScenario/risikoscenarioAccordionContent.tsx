@@ -78,16 +78,22 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       relevanteKravNummer: risikoscenario.generelScenario ? [] : risikoscenario.relevanteKravNummer,
     }
     await updateRisikoscenario(mutatedRisikoscenario).then((response: IRisikoscenario) => {
-      setActiveRisikoscenario(response)
-      setRisikoscenarioer(
-        risikoscenarioer.map((risikoscenario) => {
-          if (risikoscenario.id === activeRisikoscenario.id) {
-            return response
-          } else {
-            return risikoscenario
-          }
-        })
-      )
+      if (response.generelScenario) {
+        setActiveRisikoscenario(response)
+        setRisikoscenarioer(
+          risikoscenarioer.map((risikoscenario) => {
+            if (risikoscenario.id === activeRisikoscenario.id) {
+              return response
+            } else {
+              return risikoscenario
+            }
+          })
+        )
+      } else {
+        setRisikoscenarioer(
+          risikoscenarioer.filter((risikoscenario) => risikoscenario.id !== response.id)
+        )
+      }
       setIsEditModalOpen(false)
     })
   }
