@@ -73,11 +73,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    const mutatedRisikoscenario: IRisikoscenario = {
-      ...risikoscenario,
-      relevanteKravNummer: risikoscenario.generelScenario ? [] : risikoscenario.relevanteKravNummer,
-    }
-    await updateRisikoscenario(mutatedRisikoscenario).then((response: IRisikoscenario) => {
+    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
       if (response.generelScenario) {
         setActiveRisikoscenario(response)
         setRisikoscenarioer(
