@@ -99,11 +99,7 @@ export const getPvkButtonText = (
   } else if (
     !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
     isRisikoeier &&
-    [
-      EPvkDokumentStatus.VURDERT_AV_PVO,
-      EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
-      EPvkDokumentStatus.TRENGER_GODKJENNING,
-    ].includes(pvkDokument.status)
+    [EPvkDokumentStatus.TRENGER_GODKJENNING].includes(pvkDokument.status)
   ) {
     return 'Godkjenn PVK'
   } else if (
