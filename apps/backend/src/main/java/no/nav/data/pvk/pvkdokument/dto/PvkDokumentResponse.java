@@ -45,12 +45,9 @@ public class PvkDokumentResponse {
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
-    private String merknadTilPvoEllerRisikoeier;
     private String merknadTilRisikoeier;
     private String merknadFraRisikoeier;
 
-    private LocalDateTime sendtTilPvoDato;
-    private String sendtTilPvoAv;
     private Integer antallInnsendingTilPvo;
 
     private List<MeldingTilPvo> meldingerTilPvo;
@@ -81,11 +78,8 @@ public class PvkDokumentResponse {
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())
                 .dataBehandlerRepresentantInvolveringBeskrivelse(pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse())
-                .merknadTilPvoEllerRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier())
                 .merknadTilRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier())
                 .merknadFraRisikoeier(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier())
-                .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
-                .sendtTilPvoAv(pvkDokument.getPvkDokumentData().getSendtTilPvoAv())
                 .godkjentAvRisikoeierDato(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeierDato())
                 .godkjentAvRisikoeier(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeier())
                 .antallInnsendingTilPvo(pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())

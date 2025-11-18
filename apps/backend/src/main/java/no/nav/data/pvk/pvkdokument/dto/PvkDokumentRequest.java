@@ -46,12 +46,8 @@ public class PvkDokumentRequest implements RequestElement {
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
-    private String merknadTilPvoEllerRisikoeier;
     private String merknadTilRisikoeier;
     private String merknadFraRisikoeier;
-
-    private LocalDateTime sendtTilPvoDato;
-    private String sendtTilPvoAv;
 
     private List<MeldingTilPvoRequest> meldingerTilPvo;
 
@@ -71,7 +67,6 @@ public class PvkDokumentRequest implements RequestElement {
         setRepresentantInvolveringsBeskrivelse(trimToNull(representantInvolveringsBeskrivelse));
         setDataBehandlerRepresentantInvolveringBeskrivelse(trimToNull(dataBehandlerRepresentantInvolveringBeskrivelse));
 
-        setMerknadTilPvoEllerRisikoeier(trimToNull(merknadTilPvoEllerRisikoeier));
         setMerknadTilRisikoeier(trimToNull(merknadTilRisikoeier));
         setMerknadFraRisikoeier(trimToNull(merknadFraRisikoeier));
 
@@ -107,11 +102,8 @@ public class PvkDokumentRequest implements RequestElement {
                 .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
                 .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
-                .merknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier)
                 .merknadTilRisikoeier(merknadTilRisikoeier)
                 .merknadFraRisikoeier(merknadFraRisikoeier)
-                .sendtTilPvoDato(sendtTilPvoDato)
-                .sendtTilPvoAv(sendtTilPvoAv)
                 .godkjentAvRisikoeierDato(godkjentAvRisikoeierDato)
                 .godkjentAvRisikoeier(godkjentAvRisikoeier)
                 .antallInnsendingTilPvo(antallInnsendingTilPvo)
@@ -140,14 +132,10 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setHarDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering);
         pvkDokumentToMerge.getPvkDokumentData().setDataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse);
-        pvkDokumentToMerge.getPvkDokumentData().setMerknadTilPvoEllerRisikoeier(merknadTilPvoEllerRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setMerknadTilRisikoeier(merknadTilRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setMerknadFraRisikoeier(merknadFraRisikoeier);
-        pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
-        pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoAv(sendtTilPvoAv);
         pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeierDato(godkjentAvRisikoeierDato);
         pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeier(godkjentAvRisikoeier);
-        pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
         pvkDokumentToMerge.getPvkDokumentData().setAntallInnsendingTilPvo(antallInnsendingTilPvo);
         pvkDokumentToMerge.getPvkDokumentData().setMeldingerTilPvo(copyOf(convert(meldingerTilPvo, MeldingTilPvoRequest::convertToMeldingTilPvo)));
     }
