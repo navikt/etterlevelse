@@ -164,6 +164,8 @@ public class PvkDokumentToDoc {
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
+        var innsendingId = pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo();
+
         List<RisikoscenarioResponse> risikoscenarioList = getRisikoscenario(pvkDokument.getId().toString());
         List<TiltakResponse> tiltakList = getTiltak(pvkDokument.getId());
 
@@ -193,10 +195,13 @@ public class PvkDokumentToDoc {
         }
         doc.newLine();
         doc.addLabel("Sendt inn av:");
-        if (pvkDokument.getPvkDokumentData().getSendtTilPvoDato() == null) {
+        if (innsendingId == 0) {
             doc.addText("Ikke sendt til pvo");
         } else {
-            doc.addText(pvkDokument.getPvkDokumentData().getSendtTilPvoAv() + ", " +  doc.dateToString(pvkDokument.getPvkDokumentData().getSendtTilPvoDato().toLocalDate()));
+            var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
+                    .getMeldingerTilPvo().stream()
+                    .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
+            doc.addText(latestMeldingTilPvo.getSendtTilPvoAv() + ", " +  doc.dateToString(latestMeldingTilPvo.getSendtTilPvoDato().toLocalDate()));
         }
         doc.newLine();
         doc.addLabel("Vurdert av personvernombudet:");
@@ -311,8 +316,21 @@ public class PvkDokumentToDoc {
             doc.addHeading2("Merknader ved oversending");
             doc.newLine();
             doc.addLabel("Beskjed fra etterlever til personvernombudet:");
+            if (innsendingId == 0) {
+                doc.addText("Ingen merknad");
+            } else {
+                var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
+                        .getMeldingerTilPvo().stream()
+                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
+                if (latestMeldingTilPvo.getMerknadTilPvo().isEmpty()) {
+                    doc.addText("Ingen merknad.");
+                } else {
+                    doc.addMarkdownText(latestMeldingTilPvo.getMerknadTilPvo());
+                }
+            }
 
             if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
+                doc.addLabel("Beskjed til etterlever Fra personvernombudet:");
                 if (pvoVurdering.getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {
                     doc.addText("Ingen merknad.");
                 } else {
