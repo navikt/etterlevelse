@@ -148,7 +148,10 @@ public class PvoTilbakemeldingController {
 
     private void updatePvkDokumentStatus(PvoTilbakemelding pvoTilbakemelding) {
         log.info("Updating PVK document status with id = {}, based on PVO tilbakemelding status = {}.", pvoTilbakemelding.getPvkDokumentId(), pvoTilbakemelding.getStatus());
-        var ikkePabegyntStatus = List.of(PvoTilbakemeldingStatus.IKKE_PABEGYNT, PvoTilbakemeldingStatus.AVVENTER);
+        var ikkePabegyntStatus = List.of(
+                PvoTilbakemeldingStatus.IKKE_PABEGYNT,
+                PvoTilbakemeldingStatus.TRENGER_REVURDERING,
+                PvoTilbakemeldingStatus.AVVENTER);
         var underabeidStatus = List.of(
                 PvoTilbakemeldingStatus.UNDERARBEID,
                 PvoTilbakemeldingStatus.SNART_FERDIG,
