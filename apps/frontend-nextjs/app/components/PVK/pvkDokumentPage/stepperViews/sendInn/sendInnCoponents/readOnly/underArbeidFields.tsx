@@ -39,7 +39,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
           height='150px'
           noPlaceholder
           label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-          name='merknadTilPvoEllerRisikoeier'
+          name='merknadTilPvo'
           markdown
         />
 
@@ -49,7 +49,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
           lenge saken ligger hos Personvernombudet.
         </Alert>
 
-        {pvkDokument.sendtTilPvoDato !== null && (
+        {pvkDokument.meldingerTilPvo.length !== pvkDokument.antallInnsendingTilPvo && (
           <Alert variant='info' className='my-5'>
             Innsending trukket <br />
             Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir deretter

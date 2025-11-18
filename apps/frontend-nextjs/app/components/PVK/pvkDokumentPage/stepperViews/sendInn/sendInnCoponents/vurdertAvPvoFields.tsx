@@ -41,7 +41,13 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
 }) => {
   return (
     <div className='w-full max-w-[75ch]'>
-      <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
+      <BeskjedTilPvoReadOnly
+        meldingTilPvo={
+          pvkDokument.meldingerTilPvo.filter(
+            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+          )[0]
+        }
+      />
       <BeskjedFraPvoReadOnly
         relevantVurdering={relevantVurdering}
         pvoVurderingList={pvoVurderingList}

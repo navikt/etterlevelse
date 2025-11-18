@@ -8,25 +8,10 @@ import { Markdown } from '../markdown/markdown'
 import { FormError } from '../modalSchema/formError/formError'
 import TextEditor from '../textEditor/TextEditor'
 
-interface ILabel {
+interface IPropsTextAreaField {
   label: string
-}
-
-interface IName {
   name: string
-}
 
-interface IMarginBottom {
-  marginBottom?: boolean
-}
-
-interface ICaption {
-  caption?: ReactNode
-}
-
-type TLabelName = IName & ILabel
-
-interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   height?: string
   markdown?: boolean
   noPlaceholder?: boolean
@@ -35,6 +20,8 @@ interface IPropsTextAreaField extends TLabelName, IMarginBottom, ICaption {
   rows?: number
   withHighlight?: boolean
   withUnderline?: boolean
+  marginBottom?: boolean
+  caption?: ReactNode
 }
 
 export const TextAreaField = ({
