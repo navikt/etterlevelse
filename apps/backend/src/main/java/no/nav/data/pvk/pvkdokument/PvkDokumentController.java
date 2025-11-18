@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
@@ -23,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -61,21 +59,7 @@ public class PvkDokumentController {
         page.forEach(pvkDokument -> {
             var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
             pvkDokumentListItemResponses.add(
-                    PvkDokumentListItemResponse.builder()
-                            .id(pvkDokument.getId())
-                            .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
-                            .title(etterlevelseDokumentasjon.getTitle())
-                            .etterlevelseNummer(etterlevelseDokumentasjon.getEtterlevelseNummer())
-                            .status(pvkDokument.getStatus())
-                            .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
-                            .sendtTilPvoAv(pvkDokument.getPvkDokumentData().getSendtTilPvoAv())
-                            .changeStamp(ChangeStampResponse.builder()
-                                    .createdDate(pvkDokument.getCreatedDate() == null ? LocalDateTime.now() : pvkDokument.getCreatedDate())
-                                    .lastModifiedBy(pvkDokument.getLastModifiedBy())
-                                    .lastModifiedDate(pvkDokument.getLastModifiedDate() == null ? LocalDateTime.now() : pvkDokument.getLastModifiedDate())
-                                    .build())
-                            .antallInnsendingTilPvo(pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())
-                            .build()
+                    PvkDokumentListItemResponse.buildFrom(pvkDokument, etterlevelseDokumentasjon)
             );
         });
 
