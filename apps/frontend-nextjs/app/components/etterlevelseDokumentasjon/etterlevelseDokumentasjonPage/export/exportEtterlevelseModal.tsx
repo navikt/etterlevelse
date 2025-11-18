@@ -2,9 +2,9 @@
 
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
+import { env } from '@/util/env/env'
 import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { env } from 'process'
 import { ChangeEvent, useContext, useState } from 'react'
 
 type TExportEtterlevelseModalProps = {
