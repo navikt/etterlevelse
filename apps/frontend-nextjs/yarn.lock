@@ -1821,18 +1821,10 @@
   dependencies:
     "@types/ms" "*"
 
-"@types/draft-js@*":
-  version "0.11.18"
-  resolved "https://registry.yarnpkg.com/@types/draft-js/-/draft-js-0.11.18.tgz#f2cad2178987fdd444827a2f7809a653f82a70ad"
-  integrity sha512-lP6yJ+EKv5tcG1dflWgDKeezdwBa8wJ7KkiNrrHqXuXhl/VGes1SKjEfKHDZqOz19KQbrAhFvNhDPWwnQXYZGQ==
-  dependencies:
-    "@types/react" "*"
-    immutable "~3.7.4"
-
-"@types/draft-js@0.11.19":
-  version "0.11.19"
-  resolved "https://registry.yarnpkg.com/@types/draft-js/-/draft-js-0.11.19.tgz#fb2348b764681abd3623ab3e2e30bbe0deed4a22"
-  integrity sha512-GpFkb936wDNQ8LhVIX7Ftfh7JbBgiwnxpocAWci4crUVwPibTjTepejxpCdIaXPxyRfvC7yS25tzCP/m5c7ErA==
+"@types/draft-js@*", "@types/draft-js@0.11.20":
+  version "0.11.20"
+  resolved "https://registry.yarnpkg.com/@types/draft-js/-/draft-js-0.11.20.tgz#a6b8bc1be5eb237e65b7191ecab7ded71a65fbeb"
+  integrity sha512-bZHtHxXnCu4wlUXlDWrIlJSG2LJ6wcycSWoxcTCcGd0cVOm35p0vh87qpIPzGK2NALMMvJhQXdS330iYB3iGlw==
   dependencies:
     "@types/react" "*"
     immutable "~3.7.4"
@@ -1919,14 +1911,7 @@
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.12.tgz#b5d76568485b02a307238270bfe96cb51ee2a044"
   integrity sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==
 
-"@types/react@*":
-  version "19.2.2"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.2.tgz#ba123a75d4c2a51158697160a4ea2ff70aa6bf36"
-  integrity sha512-6mDvHUFSjyT2B2yeNx2nUgMxh9LtOWvkhIU3uePn2I2oyNymUAX1NIsdgviM4CH+JSrp2D2hsMvJOkxY+0wNRA==
-  dependencies:
-    csstype "^3.0.2"
-
-"@types/react@19.2.4":
+"@types/react@*", "@types/react@19.2.4":
   version "19.2.4"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.4.tgz#e38daaca05cf95459f5f797b1411bcf64c413dd2"
   integrity sha512-tBFxBp9Nfyy5rsmefN+WXc1JeW/j2BpBHFdLZbEVfs9wn3E3NRFxwV0pJg8M1qQAexFpvz73hJXFofV0ZAu92A==
