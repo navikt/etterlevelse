@@ -330,7 +330,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         label={
                           <span className='flex items-center gap-1'>
                             {antallEffektIkkeVurdert > 0 && (
-                              <span className='w-2 h-2 bg-red-500 rounded-full mr-1'></span>
+                              <span className='w-4 h-4 bg-red-400 rounded-full mr-1'></span>
                             )}
                             {`Vis risikoscenarioer (${risikoscenarioList.length})`}
                           </span>
@@ -341,7 +341,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         label={
                           <span className='flex items-center gap-1'>
                             {(antallUtenTiltakAnsvarlig > 0 || antallUtenFrist > 0) && (
-                              <span className='w-2 h-2 bg-red-500 rounded-full mr-1'></span>
+                              <span className='w-4 h-4 bg-red-400 rounded-full mr-1'></span>
                             )}
                             {`Vis tiltak (${tiltakList.length})`}
                           </span>
