@@ -168,18 +168,32 @@ export const SendInnView: FunctionComponent<TProps> = ({
               EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
             ].includes(submitedValues.status)
           ) {
-            const newMeldingTilPvo: IMeldingTilPvo = {
-              innsendingId: submitedValues.meldingerTilPvo[1].innsendingId,
-              sendtTilPvoDato: new Date().toISOString(),
-              sendtTilPvoAv: user.getIdent() + ' - ' + user.getName(),
-              merknadTilPvo: submitedValues.meldingerTilPvo[1].merknadTilPvo,
-            }
+            const relevantMeldingTilPvo = updatedPvkDokument.meldingerTilPvo.filter(
+              (melding) => melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo
+            )
 
-            updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
-              if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
-                meldingTilPvo = newMeldingTilPvo
+            if (relevantMeldingTilPvo.length === 0) {
+              const newMeldingTilPvo: IMeldingTilPvo = {
+                innsendingId: updatedPvkDokument.antallInnsendingTilPvo,
+                sendtTilPvoDato: new Date().toISOString(),
+                sendtTilPvoAv: user.getIdent() + ' - ' + user.getName(),
+                merknadTilPvo: submitedValues.meldingerTilPvo[1].merknadTilPvo,
               }
-            })
+              updatedPvkDokument.meldingerTilPvo.push(newMeldingTilPvo)
+            } else {
+              updatedPvkDokument.meldingerTilPvo.map((meldingTilPvo) => {
+                if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
+                  return {
+                    innsendingId: meldingTilPvo.innsendingId,
+                    sendtTilPvoDato: new Date().toISOString(),
+                    sendtTilPvoAv: user.getIdent() + ' - ' + user.getName(),
+                    merknadTilPvo: submitedValues.meldingerTilPvo[1].merknadTilPvo,
+                  }
+                } else {
+                  return meldingTilPvo
+                }
+              })
+            }
           }
 
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
