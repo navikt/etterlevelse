@@ -64,7 +64,8 @@ export const isPvkDokuemntNotStarted = (
 
 export const getPvkButtonText = (
   pvkDokument: IPvkDokument,
-  risikoscenarioList: IRisikoscenario[]
+  risikoscenarioList: IRisikoscenario[],
+  isRisikoeier: boolean
 ) => {
   const updatedAfterApprovedOfRisikoeier =
     pvkDokument.godkjentAvRisikoeierDato !== '' &&
@@ -87,6 +88,7 @@ export const getPvkButtonText = (
     return 'Les PVK'
   } else if (
     !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
+    !isRisikoeier &&
     [
       EPvkDokumentStatus.VURDERT_AV_PVO,
       EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
@@ -94,6 +96,12 @@ export const getPvkButtonText = (
     ].includes(pvkDokument.status)
   ) {
     return 'Les tilbakemelding fra PVO'
+  } else if (
+    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
+    isRisikoeier &&
+    [EPvkDokumentStatus.TRENGER_GODKJENNING].includes(pvkDokument.status)
+  ) {
+    return 'Godkjenn PVK'
   } else if (
     !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
     pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&

@@ -4,6 +4,7 @@ import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/beh
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
   pvkDokumentasjonBehandlingsenLivslopUrl,
@@ -19,7 +20,7 @@ import {
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Button } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext } from 'react'
 import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
 
 type TProps = {
@@ -38,6 +39,8 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
   pvkDokument,
 }) => {
   const router = useRouter()
+  const user = useContext(UserContext)
+  const isRisikoeier = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   return (
     <>
@@ -82,7 +85,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
           className='whitespace-nowrap'
         >
-          {getPvkButtonText(pvkDokument, risikoscenarioList)}
+          {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
         </Button>
       )}
       <Button
