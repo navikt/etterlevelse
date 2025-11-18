@@ -39,6 +39,8 @@ public class PvkDokumentData {
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
 
+    private List<MeldingTilPvo> meldingerTilPvo;
+
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
 

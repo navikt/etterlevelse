@@ -1,0 +1,17 @@
+package no.nav.data.pvk.pvkdokument.domain;
+
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+public class MeldingTilPvo {
+    private int innsendingId;
+    private String merknadTilPvo;
+    private LocalDateTime sendtTilPvoDato;
+    private String sendtTilPvoAv;
+}

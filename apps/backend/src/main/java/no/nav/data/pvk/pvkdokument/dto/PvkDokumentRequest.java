@@ -7,15 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
+import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemedlingRequest;
+import no.nav.data.pvk.pvotilbakemelding.dto.VurderingRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static no.nav.data.common.utils.StreamUtils.copyOf;
+import static no.nav.data.common.utils.StreamUtils.*;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -50,6 +53,8 @@ public class PvkDokumentRequest implements RequestElement {
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
 
+    private List<MeldingTilPvoRequest> meldingerTilPvo;
+
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
     private Integer antallInnsendingTilPvo;
@@ -70,6 +75,8 @@ public class PvkDokumentRequest implements RequestElement {
         setMerknadTilRisikoeier(trimToNull(merknadTilRisikoeier));
         setMerknadFraRisikoeier(trimToNull(merknadFraRisikoeier));
 
+        setMeldingerTilPvo(copyOf(meldingerTilPvo));
+
         if (status == null) {
             status = PvkDokumentStatus.UNDERARBEID;
         }
@@ -78,6 +85,11 @@ public class PvkDokumentRequest implements RequestElement {
     @Override
     public void validateFieldValues(Validator<?> validator) {
         validator.checkNull(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
+
+        if (duplicates(meldingerTilPvo, MeldingTilPvoRequest::getInnsendingId)) {
+            validator.addError(Fields.meldingerTilPvo, "DUPLICATE_MELDING_TIL_PVO", "Dukplikat på innsending id av 'meldinger til pvo'");
+        }
+
         validator.checkNull(Fields.status, status);
         validator.checkId(this);
     }
@@ -103,6 +115,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .godkjentAvRisikoeierDato(godkjentAvRisikoeierDato)
                 .godkjentAvRisikoeier(godkjentAvRisikoeier)
                 .antallInnsendingTilPvo(antallInnsendingTilPvo)
+                .meldingerTilPvo(copyOf(convert(meldingerTilPvo, MeldingTilPvoRequest::convertToMeldingTilPvo)))
                 .build();
 
         return PvkDokument.builder()
@@ -136,5 +149,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeier(godkjentAvRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setSendtTilPvoDato(sendtTilPvoDato);
         pvkDokumentToMerge.getPvkDokumentData().setAntallInnsendingTilPvo(antallInnsendingTilPvo);
+        pvkDokumentToMerge.getPvkDokumentData().setMeldingerTilPvo(copyOf(convert(meldingerTilPvo, MeldingTilPvoRequest::convertToMeldingTilPvo)));
     }
 }
