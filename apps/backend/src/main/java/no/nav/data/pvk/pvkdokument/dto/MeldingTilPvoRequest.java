@@ -9,7 +9,7 @@ import no.nav.data.pvk.pvotilbakemelding.dto.VurderingRequest;
 
 import java.time.LocalDateTime;
 
-import static net.logstash.logback.util.StringUtils.trimToNull;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
 @Builder
