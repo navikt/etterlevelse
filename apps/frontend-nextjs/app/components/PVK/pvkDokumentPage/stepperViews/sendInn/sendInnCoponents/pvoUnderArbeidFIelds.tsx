@@ -13,7 +13,13 @@ type TProps = {
 export const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, isLoading }) => {
   return (
     <div className='w-full max-w-[75ch]'>
-      <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
+      <BeskjedTilPvoReadOnly
+        meldingTilPvo={
+          pvkDokument.meldingerTilPvo.filter(
+            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+          )[0]
+        }
+      />
       {isLoading && (
         <div className='flex justify-center items-center w-full'>
           <Loader size='2xlarge' title='lagrer endringer' />

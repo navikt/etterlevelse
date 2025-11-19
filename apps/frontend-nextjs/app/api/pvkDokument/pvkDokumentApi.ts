@@ -1,6 +1,7 @@
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EPvkDokumentStatus,
+  IMeldingTilPvo,
   IPvkDokument,
   IPvkDokumentListItem,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -134,6 +135,17 @@ const pvkDokumentToPvkDokumentDto = (pvkDokument: IPvkDokument) => {
   return dto
 }
 
+export const mapMeldingTilPvoToFormValue = (
+  meldingTilPvo: Partial<IMeldingTilPvo>
+): IMeldingTilPvo => {
+  return {
+    innsendingId: meldingTilPvo.innsendingId || 1,
+    merknadTilPvo: meldingTilPvo.merknadTilPvo || '',
+    sendtTilPvoDato: meldingTilPvo.sendtTilPvoDato || '',
+    sendtTilPvoAv: meldingTilPvo.sendtTilPvoAv || '',
+  }
+}
+
 export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): IPvkDokument => {
   return {
     id: pvkDokument.id || '',
@@ -166,11 +178,12 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
         : pvkDokument.harDatabehandlerRepresentantInvolvering,
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
-    merknadTilPvoEllerRisikoeier: pvkDokument.merknadTilPvoEllerRisikoeier || '',
+
+    meldingerTilPvo: pvkDokument.meldingerTilPvo
+      ? pvkDokument.meldingerTilPvo.map(mapMeldingTilPvoToFormValue)
+      : [mapMeldingTilPvoToFormValue({})],
     merknadTilRisikoeier: pvkDokument.merknadTilRisikoeier || '',
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
-    sendtTilPvoDato: pvkDokument.sendtTilPvoDato || '',
-    sendtTilPvoAv: pvkDokument.sendtTilPvoAv || '',
     antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,
     godkjentAvRisikoeierDato: pvkDokument.godkjentAvRisikoeierDato || '',
     godkjentAvRisikoeier: pvkDokument.godkjentAvRisikoeier || '',

@@ -29,6 +29,7 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
+  IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -145,19 +146,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
                 ? response.status
                 : submitedValues.status,
-            sendtTilPvoDato: [
-              EPvkDokumentStatus.SENDT_TIL_PVO,
-              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
-            ].includes(submitedValues.status)
-              ? new Date().toISOString()
-              : response.sendtTilPvoDato,
-            sendtTilPvoAv: [
-              EPvkDokumentStatus.SENDT_TIL_PVO,
-              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
-            ].includes(submitedValues.status)
-              ? user.getIdent() + ' - ' + user.getName()
-              : response.sendtTilPvoAv,
-            merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
+            meldingerTilPvo: response.meldingerTilPvo || [],
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
             godkjentAvRisikoeier: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
@@ -171,6 +160,40 @@ export const SendInnView: FunctionComponent<TProps> = ({
               ? submitedValues.godkjentAvRisikoeierDato
               : response.godkjentAvRisikoeierDato,
             antallInnsendingTilPvo: submitedValues.antallInnsendingTilPvo,
+          }
+
+          if (
+            [
+              EPvkDokumentStatus.SENDT_TIL_PVO,
+              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+            ].includes(submitedValues.status)
+          ) {
+            const relevantMeldingTilPvo = updatedPvkDokument.meldingerTilPvo.filter(
+              (melding) => melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo
+            )
+
+            if (relevantMeldingTilPvo.length === 0) {
+              const newMeldingTilPvo: IMeldingTilPvo = {
+                innsendingId: updatedPvkDokument.antallInnsendingTilPvo,
+                sendtTilPvoDato: new Date().toISOString(),
+                sendtTilPvoAv: user.getIdent() + ' - ' + user.getName(),
+                merknadTilPvo: submitedValues.meldingerTilPvo[1].merknadTilPvo,
+              }
+              updatedPvkDokument.meldingerTilPvo.push(newMeldingTilPvo)
+            } else {
+              updatedPvkDokument.meldingerTilPvo.map((meldingTilPvo) => {
+                if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
+                  return {
+                    innsendingId: meldingTilPvo.innsendingId,
+                    sendtTilPvoDato: new Date().toISOString(),
+                    sendtTilPvoAv: user.getIdent() + ' - ' + user.getName(),
+                    merknadTilPvo: submitedValues.meldingerTilPvo[1].merknadTilPvo,
+                  }
+                } else {
+                  return meldingTilPvo
+                }
+              })
+            }
           }
 
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {

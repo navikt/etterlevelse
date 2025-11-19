@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 
 import java.time.LocalDateTime;
@@ -26,4 +28,27 @@ public class PvkDokumentListItemResponse {
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
     private Integer antallInnsendingTilPvo;
+
+    public static PvkDokumentListItemResponse buildFrom(PvkDokument pvkDokument, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
+        var innsendingId = pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo();
+        var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
+                .getMeldingerTilPvo().stream()
+                .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).findFirst().orElse(null);
+
+        return PvkDokumentListItemResponse.builder()
+                .id(pvkDokument.getId())
+                .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
+                .title(etterlevelseDokumentasjon.getTitle())
+                .etterlevelseNummer(etterlevelseDokumentasjon.getEtterlevelseNummer())
+                .status(pvkDokument.getStatus())
+                .sendtTilPvoDato(latestMeldingTilPvo != null ? latestMeldingTilPvo.getSendtTilPvoDato() : null)
+                .sendtTilPvoAv(latestMeldingTilPvo != null ? latestMeldingTilPvo.getSendtTilPvoAv() : "")
+                .changeStamp(ChangeStampResponse.builder()
+                        .createdDate(pvkDokument.getCreatedDate() == null ? LocalDateTime.now() : pvkDokument.getCreatedDate())
+                        .lastModifiedBy(pvkDokument.getLastModifiedBy())
+                        .lastModifiedDate(pvkDokument.getLastModifiedDate() == null ? LocalDateTime.now() : pvkDokument.getLastModifiedDate())
+                        .build())
+                .antallInnsendingTilPvo(pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())
+                .build();
+    }
 }

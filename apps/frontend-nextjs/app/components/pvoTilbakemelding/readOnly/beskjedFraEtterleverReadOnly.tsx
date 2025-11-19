@@ -1,22 +1,22 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IMeldingTilPvo } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Heading, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TBeskjedFraEtterleverReadOnlyProps = {
-  pvkDokument: IPvkDokument
+  meldingTilPvo: IMeldingTilPvo
   headingLevel?: '1' | '2' | '3' | '4' | '5' | '6'
   headingSize?: 'small' | 'medium' | 'xlarge' | 'large' | 'xsmall'
 }
 
 export const BeskjedFraEtterleverReadOnly: FunctionComponent<
   TBeskjedFraEtterleverReadOnlyProps
-> = ({ pvkDokument, headingLevel, headingSize }) => (
+> = ({ meldingTilPvo, headingLevel, headingSize }) => (
   <>
     <div className='my-5 max-w-[75ch]'>
       <Label>Beskjed fra etterlever</Label>
       <DataTextWrapper customEmptyMessage='Ingen beskjed'>
-        {pvkDokument.merknadTilPvoEllerRisikoeier}
+        {meldingTilPvo.merknadTilPvo}
       </DataTextWrapper>
     </div>
 

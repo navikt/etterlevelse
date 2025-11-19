@@ -1,6 +1,7 @@
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EPvkDokumentStatus,
+  IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -135,5 +136,22 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
       return 'Sendt til Risikoeier for godkjenning'
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
       return 'Godkjent av Risikoeier'
+  }
+}
+
+export const addNewMeldingTilPvo = (
+  pvkDokument: IPvkDokument,
+  innsendingId: number
+): IPvkDokument => {
+  pvkDokument.meldingerTilPvo.push(createNewMeldingTilPvo(innsendingId))
+  return pvkDokument
+}
+
+export const createNewMeldingTilPvo = (newInnsendingId: number): IMeldingTilPvo => {
+  return {
+    innsendingId: newInnsendingId,
+    merknadTilPvo: '',
+    sendtTilPvoAv: '',
+    sendtTilPvoDato: '',
   }
 }

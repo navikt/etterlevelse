@@ -5,6 +5,7 @@ import no.nav.data.TestConfig;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.graphql.GraphQLTestBase;
+import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -35,7 +36,10 @@ public class PvoTilbakemeldingGrahpIT extends GraphQLTestBase {
                 .etterlevelseDokumentId(eDok1.getId())
                 .status(PvkDokumentStatus.SENDT_TIL_PVO)
                 .pvkDokumentData(PvkDokumentData.builder()
-                        .merknadTilPvoEllerRisikoeier("test")
+                        .meldingerTilPvo(List.of(MeldingTilPvo.builder()
+                                        .innsendingId(1)
+                                        .merknadTilPvo("test")
+                                .build()))
                         .build())
                 .build());
 

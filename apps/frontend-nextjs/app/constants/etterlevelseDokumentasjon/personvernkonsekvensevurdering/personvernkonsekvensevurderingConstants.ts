@@ -23,16 +23,21 @@ export interface IPvkDokument {
   harDatabehandlerRepresentantInvolvering?: boolean
   dataBehandlerRepresentantInvolveringBeskrivelse: string
 
-  merknadTilPvoEllerRisikoeier: string
   merknadTilRisikoeier: string
   merknadFraRisikoeier: string
 
-  sendtTilPvoDato: string
-  sendtTilPvoAv: string
+  meldingerTilPvo: IMeldingTilPvo[]
   antallInnsendingTilPvo: number
 
   godkjentAvRisikoeierDato: string
   godkjentAvRisikoeier: string
+}
+
+export interface IMeldingTilPvo {
+  innsendingId: number
+  merknadTilPvo: string
+  sendtTilPvoDato: string
+  sendtTilPvoAv: string
 }
 
 export interface IPvkDokumentListItem {
