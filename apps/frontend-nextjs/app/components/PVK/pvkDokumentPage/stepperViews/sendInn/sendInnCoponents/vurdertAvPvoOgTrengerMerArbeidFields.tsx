@@ -1,3 +1,6 @@
+'use client'
+
+import { mapMeldingTilPvoToFormValue } from '@/api/pvkDokument/pvkDokumentApi'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedFraPvoReadOnly'
@@ -12,7 +15,7 @@ import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConst
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode } from 'react'
+import { FunctionComponent, ReactNode, useEffect } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -39,18 +42,44 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   errorSummaryComponent,
   pvoVurderingList,
 }) => {
+  const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
+    (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+  )
+
+  let relevantIndex = 0
+
+  useEffect(() => {
+    ;(async () => {
+      if (relevantMeldingTilPvo.length === 0) {
+        await setFieldValue('meldingerTilPvo', [
+          ...pvkDokument.meldingerTilPvo,
+          mapMeldingTilPvoToFormValue({
+            innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
+          }),
+        ])
+        relevantIndex = pvkDokument.meldingerTilPvo.length
+      } else {
+        relevantIndex = pvkDokument.meldingerTilPvo.findIndex(
+          (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+        )
+      }
+    })()
+  }, [])
+
+  console.debug('relevantIndex', relevantIndex)
+
   return (
     <div>
       <div className='flex justify-center w-full'>
         <div className='w-full max-w-[75ch]'>
           <div className='mt-5 mb-3'>
-            {/* <TextAreaField
+            <TextAreaField
               height='150px'
               noPlaceholder
               label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
               name='merknadTilPvo'
               markdown
-            /> */}
+            />
           </div>
           <BeskjedFraPvoReadOnly
             relevantVurdering={relevantVurdering}
