@@ -33,7 +33,7 @@ public class PvkDokumentListItemResponse {
         var innsendingId = pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo();
         var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
                 .getMeldingerTilPvo().stream()
-                .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
+                .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).findFirst().orElse(null);
 
         return PvkDokumentListItemResponse.builder()
                 .id(pvkDokument.getId())
@@ -41,8 +41,8 @@ public class PvkDokumentListItemResponse {
                 .title(etterlevelseDokumentasjon.getTitle())
                 .etterlevelseNummer(etterlevelseDokumentasjon.getEtterlevelseNummer())
                 .status(pvkDokument.getStatus())
-                .sendtTilPvoDato(latestMeldingTilPvo.getSendtTilPvoDato())
-                .sendtTilPvoAv(latestMeldingTilPvo.getSendtTilPvoAv())
+                .sendtTilPvoDato(latestMeldingTilPvo != null ? latestMeldingTilPvo.getSendtTilPvoDato() : null)
+                .sendtTilPvoAv(latestMeldingTilPvo != null ? latestMeldingTilPvo.getSendtTilPvoAv() : "")
                 .changeStamp(ChangeStampResponse.builder()
                         .createdDate(pvkDokument.getCreatedDate() == null ? LocalDateTime.now() : pvkDokument.getCreatedDate())
                         .lastModifiedBy(pvkDokument.getLastModifiedBy())
