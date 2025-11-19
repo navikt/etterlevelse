@@ -82,7 +82,7 @@ public class PvkDokumentRequest implements RequestElement {
         validator.checkNull(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
 
         if (duplicates(meldingerTilPvo, MeldingTilPvoRequest::getInnsendingId)) {
-            validator.addError(Fields.meldingerTilPvo, "DUPLICATE_MELDING_TIL_PVO", "Dukplikat på innsending id av 'meldinger til pvo'");
+            validator.addError(Fields.meldingerTilPvo, "DUPLICATE_MELDING_TIL_PVO", "Duplikat på innsending id av 'meldinger til pvo'");
         }
 
         validator.checkNull(Fields.status, status);
