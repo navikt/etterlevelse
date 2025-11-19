@@ -25,10 +25,7 @@ public class MeldingTilPvoRequest implements Validated {
 
     @Override
     public void format() {
-        setInnsendingId(innsendingId);
         setMerknadTilPvo(trimToNull(merknadTilPvo));
-        setSendtTilPvoDato(sendtTilPvoDato);
-        setSendtTilPvoAv(sendtTilPvoAv);
     }
 
     @Override
