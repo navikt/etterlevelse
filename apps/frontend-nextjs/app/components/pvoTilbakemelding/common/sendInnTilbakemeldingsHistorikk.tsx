@@ -26,7 +26,7 @@ export const SendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
       </Heading>
       <Accordion>
         {pvoTilbakemelding.vurderinger.map((vurdering) => {
-          if (vurdering.innsendingId !== relevantVurderingsInnsendingId) {
+          if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
             return (
               <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
                 <Accordion.Header>

@@ -275,7 +275,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
 
           <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />
 
-          {pvoTilbakemelding.vurderinger.length > 1 && (
+          {pvkDokument.antallInnsendingTilPvo > 1 && (
             <div className='mt-10'>
               <SendInnTilbakemeldingsHistorikk
                 pvkDokument={pvkDokument}
