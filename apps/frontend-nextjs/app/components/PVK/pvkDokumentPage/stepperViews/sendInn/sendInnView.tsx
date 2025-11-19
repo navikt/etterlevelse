@@ -146,7 +146,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
                 ? response.status
                 : submitedValues.status,
-            meldingerTilPvo: response.meldingerTilPvo || [],
+            meldingerTilPvo: submitedValues.meldingerTilPvo,
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
             godkjentAvRisikoeier: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
@@ -181,16 +181,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
               }
               updatedPvkDokument.meldingerTilPvo.push(newMeldingTilPvo)
             } else {
-              updatedPvkDokument.meldingerTilPvo.map((meldingTilPvo) => {
+              updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
                 if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
-                  return {
-                    innsendingId: meldingTilPvo.innsendingId,
-                    sendtTilPvoDato: new Date().toISOString(),
-                    sendtTilPvoAv: user.getIdent() + ' - ' + user.getName(),
-                    merknadTilPvo: submitedValues.meldingerTilPvo[1].merknadTilPvo,
-                  }
-                } else {
-                  return meldingTilPvo
+                  meldingTilPvo.sendtTilPvoAv = user.getIdent() + ' - ' + user.getName()
+                  meldingTilPvo.sendtTilPvoDato = new Date().toISOString()
                 }
               })
             }
@@ -230,7 +224,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const medlemErrorCheck = () => {
-    console.debug(etterlevelseDokumentasjon.teamsData)
     if (
       (etterlevelseDokumentasjon.teamsData === undefined ||
         etterlevelseDokumentasjon.teamsData?.length === 0) &&
@@ -281,8 +274,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
       const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko: IRisikoscenario) =>
         isRisikoUnderarbeidCheck(risiko)
       )
-
-      console.debug(ikkeFerdigBeskrevetScenario)
 
       if (ikkeFerdigBeskrevetScenario.length !== 0) {
         setRisikoscenarioError(
@@ -543,7 +534,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   <div>
                     {underarbeidCheck && (
                       <UnderArbeidFields
-                        pvkDokument={pvkDokument}
+                        pvkDokument={initialValues}
                         isLoading={isLoading}
                         setFieldValue={setFieldValue}
                         submitForm={submitForm}

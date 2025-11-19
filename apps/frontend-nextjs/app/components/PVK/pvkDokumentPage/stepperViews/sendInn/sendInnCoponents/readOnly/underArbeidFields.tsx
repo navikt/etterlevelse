@@ -2,6 +2,7 @@ import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
   EPvkDokumentStatus,
+  IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Alert, Button, Loader } from '@navikt/ds-react'
@@ -32,6 +33,13 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
   initialStatus,
   errorSummaryRef,
 }) => {
+  const relevantMeldingTilPvo: IMeldingTilPvo[] = pvkDokument.meldingerTilPvo.filter(
+    (melding) => melding.innsendingId === 1
+  )
+  const index = pvkDokument.meldingerTilPvo.findIndex(
+    (melding: IMeldingTilPvo) => melding.innsendingId === 1
+  )
+
   return (
     <div className='w-full max-w-[75ch]'>
       <div className='mt-5 mb-3'>
@@ -39,7 +47,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
           height='150px'
           noPlaceholder
           label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-          name='merknadTilPvo'
+          name={`meldingerTilPvo[${index}].merknadTilPvo`}
           markdown
         />
 
@@ -49,13 +57,14 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
           lenge saken ligger hos Personvernombudet.
         </Alert>
 
-        {pvkDokument.meldingerTilPvo.length !== pvkDokument.antallInnsendingTilPvo && (
-          <Alert variant='info' className='my-5'>
-            Innsending trukket <br />
-            Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir deretter
-            behandlet som en ny innsending
-          </Alert>
-        )}
+        {relevantMeldingTilPvo.length !== 0 &&
+          relevantMeldingTilPvo[0].sendtTilPvoDato !== null && (
+            <Alert variant='info' className='my-5'>
+              Innsending trukket <br />
+              Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
+              deretter behandlet som en ny innsending
+            </Alert>
+          )}
 
         {errorSummaryComponent}
 
