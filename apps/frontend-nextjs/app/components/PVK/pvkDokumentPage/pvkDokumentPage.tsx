@@ -329,6 +329,7 @@ export const PvkDokumentPage = () => {
                       databehandlere={readOnlyData.databehandlere}
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      pvoTilbakemelding={pvoTilbakemelding}
                       relevantVurdering={relevantVurdering}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}

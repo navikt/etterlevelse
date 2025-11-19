@@ -38,7 +38,10 @@ import {
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import {
+  IPvoTilbakemelding,
+  IVurdering,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
@@ -77,6 +80,7 @@ type TProps = {
       }
     | undefined
   isPvkKravLoading: boolean
+  pvoTilbakemelding?: IPvoTilbakemelding
   relevantVurdering?: IVurdering
 }
 
@@ -93,6 +97,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   codelistUtils,
   pvkKrav,
   isPvkKravLoading,
+  pvoTilbakemelding,
   relevantVurdering,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
@@ -556,6 +561,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
                       <SendtTilPvoFields
                         pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
                         isLoading={isLoading}
                         setFieldValue={setFieldValue}
                         submitForm={submitForm}

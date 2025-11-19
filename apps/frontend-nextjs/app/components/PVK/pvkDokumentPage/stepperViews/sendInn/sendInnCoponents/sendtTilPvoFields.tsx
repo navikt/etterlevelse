@@ -5,6 +5,7 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
@@ -19,9 +20,11 @@ type TProps = {
     shouldValidate?: boolean
   ) => Promise<void | FormikErrors<IPvkDokument>>
   submitForm: () => Promise<void>
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
+  pvoTilbakemelding,
   isLoading,
   setFieldValue,
   submitForm,
@@ -60,8 +63,20 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
           type='button'
           variant='secondary'
           onClick={async () => {
-            if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-              await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+            if (
+              pvoTilbakemelding &&
+              pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+            ) {
+              const previousVurdering = pvoTilbakemelding.vurderinger.filter(
+                (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+              )
+
+              if (previousVurdering[0].vilFaPvkIRetur) {
+                await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+              } else {
+                await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+              }
+
               await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo - 1)
             } else {
               await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
