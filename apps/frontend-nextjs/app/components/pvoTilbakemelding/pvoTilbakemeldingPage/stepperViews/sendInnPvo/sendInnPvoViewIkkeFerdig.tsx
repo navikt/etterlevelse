@@ -100,7 +100,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
     <div className='pt-6 w-full'>
       <div className='w-full flex justify-center'>
         <div className='max-w-[75ch]'>
-          <BeskjedFraEtterleverReadOnly meldingTilPvo={pvkDokument.meldingerTilPvo[0]} />
+          <BeskjedFraEtterleverReadOnly pvkDokument={pvkDokument} />
 
           <div>
             <FieldRadioLayout>

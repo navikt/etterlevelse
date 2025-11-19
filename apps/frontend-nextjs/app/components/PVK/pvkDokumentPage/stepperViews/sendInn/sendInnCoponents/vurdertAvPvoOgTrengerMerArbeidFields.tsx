@@ -13,9 +13,9 @@ import {
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading } from '@navikt/ds-react'
+import { Alert, Button } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useEffect } from 'react'
+import { FunctionComponent, ReactNode, useMemo } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -46,56 +46,38 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
   )
 
-  let relevantIndex = 0
-
-  useEffect(() => {
-    ;(async () => {
-      if (relevantMeldingTilPvo.length === 0) {
-        await setFieldValue('meldingerTilPvo', [
-          ...pvkDokument.meldingerTilPvo,
-          mapMeldingTilPvoToFormValue({
-            innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
-          }),
-        ])
-        relevantIndex = pvkDokument.meldingerTilPvo.length
-      } else {
-        relevantIndex = pvkDokument.meldingerTilPvo.findIndex(
-          (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
-        )
-      }
-    })()
+  const relevantIndex = useMemo(() => {
+    if (relevantMeldingTilPvo.length === 0) {
+      setFieldValue('meldingerTilPvo', [
+        ...pvkDokument.meldingerTilPvo,
+        mapMeldingTilPvoToFormValue({
+          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
+        }),
+      ])
+      return pvkDokument.meldingerTilPvo.length
+    } else {
+      return pvkDokument.meldingerTilPvo.findIndex(
+        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+      )
+    }
   }, [])
-
-  console.debug('relevantIndex', relevantIndex)
 
   return (
     <div>
       <div className='flex justify-center w-full'>
         <div className='w-full max-w-[75ch]'>
-          <div className='mt-5 mb-3'>
-            <TextAreaField
-              height='150px'
-              noPlaceholder
-              label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-              name='merknadTilPvo'
-              markdown
-            />
-          </div>
           <BeskjedFraPvoReadOnly
             relevantVurdering={relevantVurdering}
             pvoVurderingList={pvoVurderingList}
           />
 
-          <div className='pt-9 mb-3'>
-            <Heading size='medium' level='2' className='mb-5'>
-              Arbeid med PVK etter tilbakemelding fra PVO
-            </Heading>
-
+          <div className='mt-8 mb-3'>
             <TextAreaField
-              rows={3}
+              height='150px'
               noPlaceholder
-              label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
-              name='merknadTilRisikoeier'
+              label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
+              name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
+              markdown
             />
           </div>
 
@@ -124,17 +106,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
 
         <Button
           type='button'
-          onClick={async () => {
-            await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-            await submitForm()
-          }}
-        >
-          Lagre og send til godkjenning av risikoeier
-        </Button>
-
-        <Button
-          type='button'
-          variant='tertiary'
+          variant='primary'
           onClick={async () => {
             await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
             await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo + 1)
