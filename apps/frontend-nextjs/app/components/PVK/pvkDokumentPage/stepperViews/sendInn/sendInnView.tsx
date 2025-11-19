@@ -29,7 +29,6 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
-  IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -172,15 +171,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               (melding) => melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo
             )
 
-            if (relevantMeldingTilPvo.length === 0) {
-              const newMeldingTilPvo: IMeldingTilPvo = {
-                innsendingId: updatedPvkDokument.antallInnsendingTilPvo,
-                sendtTilPvoDato: new Date().toISOString(),
-                sendtTilPvoAv: user.getIdent() + ' - ' + user.getName(),
-                merknadTilPvo: submitedValues.meldingerTilPvo[1].merknadTilPvo,
-              }
-              updatedPvkDokument.meldingerTilPvo.push(newMeldingTilPvo)
-            } else {
+            if (relevantMeldingTilPvo.length !== 0) {
               updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
                 if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
                   meldingTilPvo.sendtTilPvoAv = user.getIdent() + ' - ' + user.getName()
