@@ -322,7 +322,7 @@ public class PvkDokumentToDoc {
                 var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
                         .getMeldingerTilPvo().stream()
                         .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
-                if (latestMeldingTilPvo.getMerknadTilPvo().isEmpty()) {
+                if (latestMeldingTilPvo.getMerknadTilPvo() == null || latestMeldingTilPvo.getMerknadTilPvo().isEmpty()) {
                     doc.addText("Ingen merknad.");
                 } else {
                     doc.addMarkdownText(latestMeldingTilPvo.getMerknadTilPvo());
