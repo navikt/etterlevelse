@@ -238,4 +238,4 @@ export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskrite
 }
 
 export const etterlevelseName = (etterlevelse: IEtterlevelse): string =>
-  `${kravNummerView(etterlevelse.kravNummer, etterlevelse.kravVersjon)}`
+  `${kravNummerView(etterlevelse.kravVersjon, etterlevelse.kravNummer)}`
