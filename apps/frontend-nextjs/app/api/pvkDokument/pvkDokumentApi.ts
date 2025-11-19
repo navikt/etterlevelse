@@ -179,9 +179,10 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
 
-    meldingerTilPvo: pvkDokument.meldingerTilPvo
-      ? pvkDokument.meldingerTilPvo.map(mapMeldingTilPvoToFormValue)
-      : [mapMeldingTilPvoToFormValue({})],
+    meldingerTilPvo:
+      pvkDokument.meldingerTilPvo && pvkDokument.meldingerTilPvo.length !== 0
+        ? pvkDokument.meldingerTilPvo.map(mapMeldingTilPvoToFormValue)
+        : [mapMeldingTilPvoToFormValue({})],
     merknadTilRisikoeier: pvkDokument.merknadTilRisikoeier || '',
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
     antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,
