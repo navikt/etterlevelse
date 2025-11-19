@@ -31,7 +31,7 @@ public class MeldingTilPvoRequest implements Validated {
     @Override
     public void validateFieldValues(Validator<?> validator) {
         if (innsendingId < 0) {
-            validator.addError(VurderingRequest.Fields.innsendingId, "NEGATIVE_INNSENDING_ID", "innsending id cannot be negative");
+            validator.addError(Fields.innsendingId, "NEGATIVE_INNSENDING_ID", "innsending id cannot be negative");
         }
     }
 
