@@ -11,9 +11,9 @@ import {
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
+import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo } from 'react'
+import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -40,6 +40,9 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   errorSummaryComponent,
   pvoVurderingList,
 }) => {
+  const [isSendTilPvoForRevurderingModalOpen, setIsSendTilPvoForRevurderingModalOpen] =
+    useState(false)
+
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
   )
@@ -59,8 +62,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
       )
     }
   }, [])
-
-  console.debug(relevantIndex)
 
   return (
     <div className='w-full max-w-[75ch]'>
@@ -105,6 +106,16 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
       </div>
 
       <div className='mt-5 flex gap-2 items-center'>
+        <Button
+          type='button'
+          variant='tertiary'
+          onClick={async () => {
+            setIsSendTilPvoForRevurderingModalOpen(true)
+          }}
+        >
+          Send til PVO for revurdering
+        </Button>
+
         <LagreOgFortsettSenereButton
           setFieldValue={setFieldValue}
           submitForm={submitForm}
@@ -118,11 +129,65 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
             await submitForm()
           }}
         >
-          Lagre og send til godkjenning av risikoeier
+          Lagre og send til risikoeier
         </Button>
       </div>
 
       <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
+
+      <Modal
+        header={{ heading: 'Vil dere sende til Personvernombudet for revurdering?' }}
+        open={isSendTilPvoForRevurderingModalOpen}
+        onClose={() => setIsSendTilPvoForRevurderingModalOpen(false)}
+      >
+        <Modal.Body>
+          <Alert variant='warning' inline className='mb-5'>
+            PVO har ikke bedt om å få deres PVK i retur. Men dersom risikobildet er endret siden
+            dere sendte inn til PVO sist, burde dere sende inn på nytt.
+          </Alert>
+          <div className='mt-8 mb-3'>
+            <TextAreaField
+              height='150px'
+              noPlaceholder
+              label='Forklar hvorfor dere ønsker å sende inn til ny vurdering'
+              name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
+              markdown
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type='button'
+            variant='primary'
+            onClick={async () => {
+              await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+              await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo + 1)
+              setIsSendTilPvoForRevurderingModalOpen(false)
+              await submitForm()
+            }}
+          >
+            Send til PVO for revurdering
+          </Button>
+
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={async () => {
+              await submitForm()
+            }}
+          >
+            Lagre og fortsett senere
+          </Button>
+
+          <Button
+            type='button'
+            variant='tertiary'
+            onClick={() => setIsSendTilPvoForRevurderingModalOpen(false)}
+          >
+            Avbryt
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }
