@@ -11,8 +11,6 @@ import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemedlingRequest;
-import no.nav.data.pvk.pvotilbakemelding.dto.VurderingRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
