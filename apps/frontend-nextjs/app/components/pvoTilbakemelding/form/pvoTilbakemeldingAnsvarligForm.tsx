@@ -21,13 +21,14 @@ import {
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Button, Heading, ReadMore, Select, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { ChangeEvent, FunctionComponent, RefObject, useState } from 'react'
+import { ChangeEvent, FunctionComponent, RefObject, useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import AlertPvoModal from '../common/alertPvoModal'
 
@@ -49,6 +50,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<EPvoTilbakemeldingStatus>(
     pvoTilbakemelding.status
   )
+  const user = useContext(UserContext)
 
   const submit = async (submitedVurderingValues: IVurdering): Promise<void> => {
     let pvkStatus = ''
@@ -94,7 +96,11 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                     return vurdering
                   }
                 }),
-                status: selectedStatus,
+                status:
+                  pvkDokument.antallInnsendingTilPvo > 1 &&
+                  selectedStatus === EPvoTilbakemeldingStatus.IKKE_PABEGYNT
+                    ? EPvoTilbakemeldingStatus.TRENGER_REVURDERING
+                    : selectedStatus,
               }
               await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
             }
@@ -236,6 +242,11 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                 <option value={EPvoTilbakemeldingStatus.SNART_FERDIG}>Snart Ferdig</option>
                 <option value={EPvoTilbakemeldingStatus.TIL_KONTROL}>PVO øvrig beslutning</option>
                 <option value={EPvoTilbakemeldingStatus.UTGAAR}>Utgår</option>
+                {user.isAdmin() && (
+                  <option value={EPvoTilbakemeldingStatus.TRENGER_REVURDERING}>
+                    Trenger redvurdering
+                  </option>
+                )}
               </Select>
             </div>
 

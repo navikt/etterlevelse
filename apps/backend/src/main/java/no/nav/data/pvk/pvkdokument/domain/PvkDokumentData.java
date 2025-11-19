@@ -32,12 +32,10 @@ public class PvkDokumentData {
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
-    private String merknadTilPvoEllerRisikoeier;
     private String merknadTilRisikoeier;
     private String merknadFraRisikoeier;
 
-    private LocalDateTime sendtTilPvoDato;
-    private String sendtTilPvoAv;
+    private List<MeldingTilPvo> meldingerTilPvo;
 
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;

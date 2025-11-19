@@ -148,6 +148,10 @@ public class RisikoscenarioController {
             throw new NotFoundException(String.format("Could not find risikoscenario to be updated with id = %s ", id));
         }
 
+        if (request.isGenerelScenario() && !risikoscenarioToUpdate.getRisikoscenarioData().isGenerelScenario()) {
+            risikoscenarioToUpdate.getRisikoscenarioData().setRelevanteKravNummer(List.of());
+        }
+
         request.mergeInto(risikoscenarioToUpdate);
         var risikoscenario = risikoscenarioService.save(risikoscenarioToUpdate, true);
         var response = RisikoscenarioResponse.buildFrom(risikoscenario);

@@ -1,6 +1,7 @@
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EPvkDokumentStatus,
+  IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -64,7 +65,8 @@ export const isPvkDokuemntNotStarted = (
 
 export const getPvkButtonText = (
   pvkDokument: IPvkDokument,
-  risikoscenarioList: IRisikoscenario[]
+  risikoscenarioList: IRisikoscenario[],
+  isRisikoeier: boolean
 ) => {
   const updatedAfterApprovedOfRisikoeier =
     pvkDokument.godkjentAvRisikoeierDato !== '' &&
@@ -87,6 +89,7 @@ export const getPvkButtonText = (
     return 'Les PVK'
   } else if (
     !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
+    !isRisikoeier &&
     [
       EPvkDokumentStatus.VURDERT_AV_PVO,
       EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
@@ -94,6 +97,12 @@ export const getPvkButtonText = (
     ].includes(pvkDokument.status)
   ) {
     return 'Les tilbakemelding fra PVO'
+  } else if (
+    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
+    isRisikoeier &&
+    [EPvkDokumentStatus.TRENGER_GODKJENNING].includes(pvkDokument.status)
+  ) {
+    return 'Godkjenn PVK'
   } else if (
     !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
     pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
@@ -127,5 +136,22 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
       return 'Sendt til Risikoeier for godkjenning'
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
       return 'Godkjent av Risikoeier'
+  }
+}
+
+export const addNewMeldingTilPvo = (
+  pvkDokument: IPvkDokument,
+  innsendingId: number
+): IPvkDokument => {
+  pvkDokument.meldingerTilPvo.push(createNewMeldingTilPvo(innsendingId))
+  return pvkDokument
+}
+
+export const createNewMeldingTilPvo = (newInnsendingId: number): IMeldingTilPvo => {
+  return {
+    innsendingId: newInnsendingId,
+    merknadTilPvo: '',
+    sendtTilPvoAv: '',
+    sendtTilPvoDato: '',
   }
 }

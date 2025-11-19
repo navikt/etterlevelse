@@ -75,10 +75,11 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
             setRisikoscenarioer(
               response.content.filter(
                 (risikoscenario: IRisikoscenario) =>
-                  !risikoscenario.generelScenario &&
-                  risikoscenario.relevanteKravNummer.filter(
-                    (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
-                  ).length === 0
+                  (!risikoscenario.generelScenario &&
+                    risikoscenario.relevanteKravNummer.filter(
+                      (relevantekrav) => relevantekrav.kravNummer === krav.kravNummer
+                    ).length === 0) ||
+                  risikoscenario.generelScenario
               )
             )
             setRisikoscenarioForKrav(

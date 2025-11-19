@@ -28,7 +28,13 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 }) => {
   return (
     <div className='w-full max-w-[75ch]'>
-      <BeskjedTilPvoReadOnly pvkDokument={pvkDokument} />
+      <BeskjedTilPvoReadOnly
+        meldingTilPvo={
+          pvkDokument.meldingerTilPvo.filter(
+            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+          )[0]
+        }
+      />
 
       <Alert variant='info' className='ml-4 my-5' inline>
         Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å trekke

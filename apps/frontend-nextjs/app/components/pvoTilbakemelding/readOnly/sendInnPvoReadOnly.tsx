@@ -35,7 +35,7 @@ export const SendInnPvoReadOnly: FunctionComponent<TProps> = ({
   return (
     <div>
       <BeskjedFraEtterleverReadOnly
-        pvkDokument={pvkDokument}
+        meldingTilPvo={pvkDokument.meldingerTilPvo[0]}
         headingLevel={headingLevel}
         headingSize={headingSize}
       />

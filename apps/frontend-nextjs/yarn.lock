@@ -1539,38 +1539,38 @@
     "@emnapi/runtime" "^1.5.0"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@7.33.2", "@navikt/aksel-icons@^7.33.2":
-  version "7.33.2"
-  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.33.2.tgz#e39a489773cb78aa2a0cb96ee89ba3793dc856de"
-  integrity sha512-yF676LoUCSVQoN9X03ONh0gi3svpTpWScpjmHqxxjBPDJf0okIBQKFztI6iGOrFIB/kVyI4M8Qy8EsBuop1KAA==
+"@navikt/aksel-icons@7.33.3", "@navikt/aksel-icons@^7.33.3":
+  version "7.33.3"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.33.3.tgz#702ea09e26d2ebae292821d211e14add76b83b54"
+  integrity sha512-+kyqREJpn5Mg0W81eTSxbxCoRm6uZaKm7s2x29WxrIynQ1iQsVa0hSo2UVcgcBYNjBEmgzCE+f0OzLRXQsqLyg==
 
-"@navikt/ds-css@7.33.2":
-  version "7.33.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.33.2.tgz#479e17163cea5c114de01a6b6801b321b8e94207"
-  integrity sha512-isd/GMpXLLrfEl1fLXVZmwxCQUa+tb7qY8V4zt+OqKVXxb9RkNvYONEAVmR7pFTklhPYafU4sJDt6mPfWBrhZw==
+"@navikt/ds-css@7.33.3":
+  version "7.33.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.33.3.tgz#e5f297f6394c3106fa5943593f33e9e237393fba"
+  integrity sha512-PtSF1nDbGtld19Pgyz0jcTK2S/zaCX5qc0myqY8PpJzfmKoUliJKWpyqRRQSY0iiMdz9kjTdvbH/3xoinFD/xA==
 
-"@navikt/ds-react@7.33.2":
-  version "7.33.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.33.2.tgz#0841c85fc1181a633edcd33fdff5f7a39f8685ec"
-  integrity sha512-RHVraNiRxn2zTDtbJSsWRGSVc6qQLhV0HiALcvU9vSSzrQ5AFXhdEEmCbWsl6Dy4/TjxJJYV/KhHX2ZH1ZMwjw==
+"@navikt/ds-react@7.33.3":
+  version "7.33.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.33.3.tgz#5603b60803373525d039260b17445cc4b56da72f"
+  integrity sha512-CI2IuhkEvQPWQ+orykgfiTkEzPm6Dxdyex09hBSsWRXo7GDIfSoMETwf1wm3hr7mtU+DHkHtALUGVDwpdLsu4w==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.1.6"
-    "@navikt/aksel-icons" "^7.33.2"
-    "@navikt/ds-tokens" "^7.33.2"
+    "@navikt/aksel-icons" "^7.33.3"
+    "@navikt/ds-tokens" "^7.33.3"
     clsx "^2.1.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tailwind@7.33.2":
-  version "7.33.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.33.2.tgz#5e6a99f99d17d9724c58cd2935b79a06c1a75605"
-  integrity sha512-K23rvGfMmzijR3k0LEKpV8SjlSCfApsIh+aJDtZX6xegpuBcttdSWYYcJALjVGxQ1IVchZtxWlwe2QqoAPtHhg==
+"@navikt/ds-tailwind@7.33.3":
+  version "7.33.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.33.3.tgz#2eea4ab187afc1af7cb3d983f3038618e68475ef"
+  integrity sha512-7dGhj0QG2Oj/qgQ/7RfRqqKQTqd8MAj+gufIuuouPuuD+MoJKGoUfuQxSx7bfk8IfldN+7G1eJIWfoYM1vRvtA==
 
-"@navikt/ds-tokens@^7.33.2":
-  version "7.33.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.33.2.tgz#8445fc29c01e33add96f1a9aa8bbcd07b750b6ce"
-  integrity sha512-8BdcWjTFV+FJr2BWAvBj/fLgh4tfWrGYwM4fWN2fCS4VQsTdG3dpP/xgBd5xcHK2DSfaBGEaebWi3jfvV/QOsg==
+"@navikt/ds-tokens@^7.33.3":
+  version "7.33.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.33.3.tgz#55763bf08f7a0574fef52981c43778079b82df7e"
+  integrity sha512-0Rwa0/FmefhaR45mrH0BYIzlExhyQYZHWbw9LCt46WK+pA+pTJWF5rcJ2CRX96kS5SRRci649nEXtG0Pn2BvZg==
 
 "@next/env@15.5.4":
   version "15.5.4"
@@ -1829,10 +1829,10 @@
     "@types/react" "*"
     immutable "~3.7.4"
 
-"@types/draft-js@0.11.19":
-  version "0.11.19"
-  resolved "https://registry.yarnpkg.com/@types/draft-js/-/draft-js-0.11.19.tgz#fb2348b764681abd3623ab3e2e30bbe0deed4a22"
-  integrity sha512-GpFkb936wDNQ8LhVIX7Ftfh7JbBgiwnxpocAWci4crUVwPibTjTepejxpCdIaXPxyRfvC7yS25tzCP/m5c7ErA==
+"@types/draft-js@0.11.20":
+  version "0.11.20"
+  resolved "https://registry.yarnpkg.com/@types/draft-js/-/draft-js-0.11.20.tgz#a6b8bc1be5eb237e65b7191ecab7ded71a65fbeb"
+  integrity sha512-bZHtHxXnCu4wlUXlDWrIlJSG2LJ6wcycSWoxcTCcGd0cVOm35p0vh87qpIPzGK2NALMMvJhQXdS330iYB3iGlw==
   dependencies:
     "@types/react" "*"
     immutable "~3.7.4"
@@ -1926,10 +1926,10 @@
   dependencies:
     csstype "^3.0.2"
 
-"@types/react@19.2.4":
-  version "19.2.4"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.4.tgz#e38daaca05cf95459f5f797b1411bcf64c413dd2"
-  integrity sha512-tBFxBp9Nfyy5rsmefN+WXc1JeW/j2BpBHFdLZbEVfs9wn3E3NRFxwV0pJg8M1qQAexFpvz73hJXFofV0ZAu92A==
+"@types/react@19.2.5":
+  version "19.2.5"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.5.tgz#bb75da5c52a956ba7d2623dffbba0fdadc3e4145"
+  integrity sha512-keKxkZMqnDicuvFoJbzrhbtdLSPhj/rZThDlKWCDbgXmUg0rEUFtRssDXKYmtXluZlIqiC5VqkCgRwzuyLHKHw==
   dependencies:
     csstype "^3.0.2"
 
@@ -4364,9 +4364,9 @@ jpeg-js@^0.4.4:
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
 js-yaml@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"
-  integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.1.tgz#854c292467705b699476e1a2decc0c8a3458806b"
+  integrity sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==
   dependencies:
     argparse "^2.0.1"
 

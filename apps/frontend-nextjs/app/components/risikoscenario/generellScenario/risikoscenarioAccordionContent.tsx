@@ -74,16 +74,22 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
     await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
-      setActiveRisikoscenario(response)
-      setRisikoscenarioer(
-        risikoscenarioer.map((risikoscenario) => {
-          if (risikoscenario.id === activeRisikoscenario.id) {
-            return response
-          } else {
-            return risikoscenario
-          }
-        })
-      )
+      if (response.generelScenario) {
+        setActiveRisikoscenario(response)
+        setRisikoscenarioer(
+          risikoscenarioer.map((risikoscenario) => {
+            if (risikoscenario.id === activeRisikoscenario.id) {
+              return response
+            } else {
+              return risikoscenario
+            }
+          })
+        )
+      } else {
+        setRisikoscenarioer(
+          risikoscenarioer.filter((risikoscenario) => risikoscenario.id !== response.id)
+        )
+      }
       setIsEditModalOpen(false)
     })
   }
@@ -347,6 +353,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       {isEditModalOpen && (
         <RisikoscenarioModalForm
           headerText='Rediger øvrig risikoscenario'
+          mode='update'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
           submit={submit}

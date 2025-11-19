@@ -21,6 +21,7 @@ type TProps = {
   risikoscenarioList: IRisikoscenario[]
   behandlingsLivslop?: IBehandlingensLivslop
   pvkDokument?: IPvkDokument
+  isRisikoeier: boolean
 }
 
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
@@ -28,6 +29,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   behandlingsLivslop,
   pvkDokument,
   risikoscenarioList,
+  isRisikoeier,
 }) => (
   <ActionMenu>
     <ActionMenu.Trigger>
@@ -53,7 +55,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Link href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)}>
             <ActionMenu.Item as='a'>
-              {getPvkButtonText(pvkDokument, risikoscenarioList)}
+              {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
             </ActionMenu.Item>
           </Link>
         )}

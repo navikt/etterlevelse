@@ -7,12 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
+import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @Builder
@@ -42,13 +45,12 @@ public class PvkDokumentResponse {
     private Boolean harDatabehandlerRepresentantInvolvering;
     private String dataBehandlerRepresentantInvolveringBeskrivelse;
 
-    private String merknadTilPvoEllerRisikoeier;
     private String merknadTilRisikoeier;
     private String merknadFraRisikoeier;
 
-    private LocalDateTime sendtTilPvoDato;
-    private String sendtTilPvoAv;
     private Integer antallInnsendingTilPvo;
+
+    private List<MeldingTilPvo> meldingerTilPvo;
 
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
@@ -76,14 +78,12 @@ public class PvkDokumentResponse {
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())
                 .dataBehandlerRepresentantInvolveringBeskrivelse(pvkDokument.getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse())
-                .merknadTilPvoEllerRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilPvoEllerRisikoeier())
                 .merknadTilRisikoeier(pvkDokument.getPvkDokumentData().getMerknadTilRisikoeier())
                 .merknadFraRisikoeier(pvkDokument.getPvkDokumentData().getMerknadFraRisikoeier())
-                .sendtTilPvoDato(pvkDokument.getPvkDokumentData().getSendtTilPvoDato())
-                .sendtTilPvoAv(pvkDokument.getPvkDokumentData().getSendtTilPvoAv())
                 .godkjentAvRisikoeierDato(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeierDato())
                 .godkjentAvRisikoeier(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeier())
                 .antallInnsendingTilPvo(pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())
+                .meldingerTilPvo(copyOf(pvkDokument.getPvkDokumentData().getMeldingerTilPvo()))
                 .build();
     }
 

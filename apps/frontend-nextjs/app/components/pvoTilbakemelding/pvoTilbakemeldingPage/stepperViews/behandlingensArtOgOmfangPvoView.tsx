@@ -62,7 +62,7 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
               />
             )}
 
-            {pvoTilbakemelding.vurderinger.length > 1 && (
+            {pvkDokument.antallInnsendingTilPvo > 1 && (
               <div className='mt-10'>
                 <TilbakemeldingsHistorikk
                   pvoTilbakemelding={pvoTilbakemelding}

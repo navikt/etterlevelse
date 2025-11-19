@@ -145,19 +145,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
                 ? response.status
                 : submitedValues.status,
-            sendtTilPvoDato: [
-              EPvkDokumentStatus.SENDT_TIL_PVO,
-              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
-            ].includes(submitedValues.status)
-              ? new Date().toISOString()
-              : response.sendtTilPvoDato,
-            sendtTilPvoAv: [
-              EPvkDokumentStatus.SENDT_TIL_PVO,
-              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
-            ].includes(submitedValues.status)
-              ? user.getIdent() + ' - ' + user.getName()
-              : response.sendtTilPvoAv,
-            merknadTilPvoEllerRisikoeier: submitedValues.merknadTilPvoEllerRisikoeier,
+            meldingerTilPvo: submitedValues.meldingerTilPvo,
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
             godkjentAvRisikoeier: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
@@ -171,6 +159,26 @@ export const SendInnView: FunctionComponent<TProps> = ({
               ? submitedValues.godkjentAvRisikoeierDato
               : response.godkjentAvRisikoeierDato,
             antallInnsendingTilPvo: submitedValues.antallInnsendingTilPvo,
+          }
+
+          if (
+            [
+              EPvkDokumentStatus.SENDT_TIL_PVO,
+              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+            ].includes(submitedValues.status)
+          ) {
+            const relevantMeldingTilPvo = updatedPvkDokument.meldingerTilPvo.filter(
+              (melding) => melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo
+            )
+
+            if (relevantMeldingTilPvo.length !== 0) {
+              updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
+                if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
+                  meldingTilPvo.sendtTilPvoAv = user.getIdent() + ' - ' + user.getName()
+                  meldingTilPvo.sendtTilPvoDato = new Date().toISOString()
+                }
+              })
+            }
           }
 
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
@@ -207,7 +215,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const medlemErrorCheck = () => {
-    console.debug(etterlevelseDokumentasjon.teamsData)
     if (
       (etterlevelseDokumentasjon.teamsData === undefined ||
         etterlevelseDokumentasjon.teamsData?.length === 0) &&
@@ -258,8 +265,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
       const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko: IRisikoscenario) =>
         isRisikoUnderarbeidCheck(risiko)
       )
-
-      console.debug(ikkeFerdigBeskrevetScenario)
 
       if (ikkeFerdigBeskrevetScenario.length !== 0) {
         setRisikoscenarioError(
@@ -520,7 +525,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   <div>
                     {underarbeidCheck && (
                       <UnderArbeidFields
-                        pvkDokument={pvkDokument}
+                        pvkDokument={initialValues}
                         isLoading={isLoading}
                         setFieldValue={setFieldValue}
                         submitForm={submitForm}

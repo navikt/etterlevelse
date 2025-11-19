@@ -100,7 +100,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
     <div className='pt-6 w-full'>
       <div className='w-full flex justify-center'>
         <div className='max-w-[75ch]'>
-          <BeskjedFraEtterleverReadOnly pvkDokument={pvkDokument} />
+          <BeskjedFraEtterleverReadOnly meldingTilPvo={pvkDokument.meldingerTilPvo[0]} />
 
           <div>
             <FieldRadioLayout>
@@ -275,7 +275,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
 
           <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />
 
-          {pvoTilbakemelding.vurderinger.length > 1 && (
+          {pvkDokument.antallInnsendingTilPvo > 1 && (
             <div className='mt-10'>
               <SendInnTilbakemeldingsHistorikk
                 pvkDokument={pvkDokument}

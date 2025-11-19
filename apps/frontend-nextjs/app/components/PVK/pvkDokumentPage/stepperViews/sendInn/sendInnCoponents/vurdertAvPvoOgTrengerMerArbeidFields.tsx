@@ -44,13 +44,13 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
       <div className='flex justify-center w-full'>
         <div className='w-full max-w-[75ch]'>
           <div className='mt-5 mb-3'>
-            <TextAreaField
+            {/* <TextAreaField
               height='150px'
               noPlaceholder
               label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-              name='merknadTilPvoEllerRisikoeier'
+              name='merknadTilPvo'
               markdown
-            />
+            /> */}
           </div>
           <BeskjedFraPvoReadOnly
             relevantVurdering={relevantVurdering}
