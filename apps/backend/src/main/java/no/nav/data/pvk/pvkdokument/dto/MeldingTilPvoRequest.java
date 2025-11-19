@@ -5,7 +5,6 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
-import no.nav.data.pvk.pvotilbakemelding.dto.VurderingRequest;
 
 import java.time.LocalDateTime;
 
