@@ -64,45 +64,49 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   }, [])
 
   return (
-    <div className='w-full max-w-[75ch]'>
-      <BeskjedTilPvoReadOnly
-        meldingTilPvo={
-          pvkDokument.meldingerTilPvo.filter(
-            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
-          )[0]
-        }
-      />
-      <BeskjedFraPvoReadOnly
-        relevantVurdering={relevantVurdering}
-        pvoVurderingList={pvoVurderingList}
-      />
+    <div className='w-full'>
+      <div className='w-full flex justify-center'>
+        <div className='w-full max-w-[75ch]'>
+          <BeskjedTilPvoReadOnly
+            meldingTilPvo={
+              pvkDokument.meldingerTilPvo.filter(
+                (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+              )[0]
+            }
+          />
+          <BeskjedFraPvoReadOnly
+            relevantVurdering={relevantVurdering}
+            pvoVurderingList={pvoVurderingList}
+          />
 
-      <div className='pt-9 mb-3'>
-        <Heading size='medium' level='2' className='mb-5'>
-          Arbeid med PVK etter tilbakemelding fra PVO
-        </Heading>
+          <div className='pt-9 mb-3'>
+            <Heading size='medium' level='2' className='mb-5'>
+              Arbeid med PVK etter tilbakemelding fra PVO
+            </Heading>
 
-        <TextAreaField
-          height='150px'
-          noPlaceholder
-          label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
-          name='merknadTilRisikoeier'
-          markdown
-        />
-      </div>
+            <TextAreaField
+              height='150px'
+              noPlaceholder
+              label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
+              name='merknadTilRisikoeier'
+              markdown
+            />
+          </div>
 
-      {errorSummaryComponent}
+          {errorSummaryComponent}
 
-      {isLoading && (
-        <div className='flex justify-center items-center w-full'>
-          <Loader size='2xlarge' title='lagrer endringer' />
+          {isLoading && (
+            <div className='flex justify-center items-center w-full'>
+              <Loader size='2xlarge' title='lagrer endringer' />
+            </div>
+          )}
+
+          <div>
+            <Alert variant='info' className='my-5 '>
+              Status: {pvkDokumentStatusToText(pvkDokument.status)}
+            </Alert>
+          </div>
         </div>
-      )}
-
-      <div>
-        <Alert variant='info' className='my-5 '>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
       </div>
 
       <div className='mt-5 flex gap-2 items-center'>
