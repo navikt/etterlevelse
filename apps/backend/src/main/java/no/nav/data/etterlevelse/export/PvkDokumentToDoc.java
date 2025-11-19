@@ -319,14 +319,14 @@ public class PvkDokumentToDoc {
             if (innsendingId == 0) {
                 doc.addText("Ingen merknad");
             } else {
-                var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
+                var latestMeldingTilPvoOpt = pvkDokument.getPvkDokumentData()
                         .getMeldingerTilPvo().stream()
-                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
-                if (latestMeldingTilPvo.getMerknadTilPvo().isEmpty()) {
+                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId)
+                        .findFirst();
+                if (latestMeldingTilPvoOpt.isEmpty() || latestMeldingTilPvoOpt.get().getMerknadTilPvo().isEmpty()) {
                     doc.addText("Ingen merknad.");
                 } else {
-                    doc.addMarkdownText(latestMeldingTilPvo.getMerknadTilPvo());
-                }
+                    doc.addMarkdownText(latestMeldingTilPvoOpt.get().getMerknadTilPvo());
             }
 
             if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {

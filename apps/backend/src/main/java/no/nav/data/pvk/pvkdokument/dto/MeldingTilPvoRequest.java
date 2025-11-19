@@ -9,7 +9,7 @@ import no.nav.data.pvk.pvotilbakemelding.dto.VurderingRequest;
 
 import java.time.LocalDateTime;
 
-import static net.logstash.logback.util.StringUtils.trimToNull;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
 @Builder
@@ -25,16 +25,13 @@ public class MeldingTilPvoRequest implements Validated {
 
     @Override
     public void format() {
-        setInnsendingId(innsendingId);
         setMerknadTilPvo(trimToNull(merknadTilPvo));
-        setSendtTilPvoDato(sendtTilPvoDato);
-        setSendtTilPvoAv(sendtTilPvoAv);
     }
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
         if (innsendingId < 0) {
-            validator.addError(VurderingRequest.Fields.innsendingId, "NEGATIVE_INNSENDING_ID", "innsending id cannot be negative");
+            validator.addError(Fields.innsendingId, "NEGATIVE_INNSENDING_ID", "innsending id cannot be negative");
         }
     }
 

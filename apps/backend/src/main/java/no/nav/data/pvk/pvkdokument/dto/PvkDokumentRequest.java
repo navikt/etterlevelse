@@ -11,8 +11,6 @@ import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemedlingRequest;
-import no.nav.data.pvk.pvotilbakemelding.dto.VurderingRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -82,7 +80,7 @@ public class PvkDokumentRequest implements RequestElement {
         validator.checkNull(Fields.etterlevelseDokumentId, etterlevelseDokumentId);
 
         if (duplicates(meldingerTilPvo, MeldingTilPvoRequest::getInnsendingId)) {
-            validator.addError(Fields.meldingerTilPvo, "DUPLICATE_MELDING_TIL_PVO", "Dukplikat på innsending id av 'meldinger til pvo'");
+            validator.addError(Fields.meldingerTilPvo, "DUPLICATE_MELDING_TIL_PVO", "Duplikat på innsending id av 'meldinger til pvo'");
         }
 
         validator.checkNull(Fields.status, status);
