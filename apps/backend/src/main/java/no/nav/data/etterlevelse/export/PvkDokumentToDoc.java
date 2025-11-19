@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @Service
@@ -170,18 +169,18 @@ public class PvkDokumentToDoc {
         List<TiltakResponse> tiltakList = getTiltak(pvkDokument.getId());
 
         List<Krav> pvkKrav = kravService.getByFilter(KravFilter.builder()
-                        .gjeldendeKrav(true)
-                        .tagger(List.of("Personvernkonsekvensvurdering"))
-                        .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId())
+                .gjeldendeKrav(true)
+                .tagger(List.of("Personvernkonsekvensvurdering"))
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId())
                 .build());
 
         List<Etterlevelse> antallFerdigPvkKrav = new ArrayList<>();
 
         pvkKrav.forEach(krav -> {
-           Optional<Etterlevelse> etterlevelse = etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(etterlevelseDokumentasjon.getId(), krav.getKravNummer(), krav.getKravVersjon());
-           if (etterlevelse.isPresent() && etterlevelse.get().getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT) {
-               antallFerdigPvkKrav.add(etterlevelse.get());
-           }
+            Optional<Etterlevelse> etterlevelse = etterlevelseService.getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(etterlevelseDokumentasjon.getId(), krav.getKravNummer(), krav.getKravVersjon());
+            if (etterlevelse.isPresent() && etterlevelse.get().getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT) {
+                antallFerdigPvkKrav.add(etterlevelse.get());
+            }
         });
 
         long currListId = doc.listId++;
@@ -201,12 +200,12 @@ public class PvkDokumentToDoc {
             var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
                     .getMeldingerTilPvo().stream()
                     .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
-            doc.addText(latestMeldingTilPvo.getSendtTilPvoAv() + ", " +  doc.dateToString(latestMeldingTilPvo.getSendtTilPvoDato().toLocalDate()));
+            doc.addText(latestMeldingTilPvo.getSendtTilPvoAv() + ", " + doc.dateToString(latestMeldingTilPvo.getSendtTilPvoDato().toLocalDate()));
         }
         doc.newLine();
         doc.addLabel("Vurdert av personvernombudet:");
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
-            doc.addText(pvoTilbakemelding.getLastModifiedBy().split(" - ")[1] + ", den " +  doc.dateToString(pvoTilbakemelding.getLastModifiedDate().toLocalDate()));
+            doc.addText(pvoTilbakemelding.getLastModifiedBy().split(" - ")[1] + ", den " + doc.dateToString(pvoTilbakemelding.getLastModifiedDate().toLocalDate()));
         } else {
             doc.addText("Ikke ferdig vurdert");
         }
@@ -327,6 +326,7 @@ public class PvkDokumentToDoc {
                     doc.addText("Ingen merknad.");
                 } else {
                     doc.addMarkdownText(latestMeldingTilPvoOpt.get().getMerknadTilPvo());
+                }
             }
 
             if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
