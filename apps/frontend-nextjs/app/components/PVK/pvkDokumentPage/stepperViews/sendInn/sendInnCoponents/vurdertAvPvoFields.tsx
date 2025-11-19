@@ -1,3 +1,4 @@
+import { mapMeldingTilPvoToFormValue } from '@/api/pvkDokument/pvkDokumentApi'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedFraPvoReadOnly'
@@ -12,7 +13,7 @@ import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConst
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode } from 'react'
+import { FunctionComponent, ReactNode, useMemo } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -39,6 +40,28 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   errorSummaryComponent,
   pvoVurderingList,
 }) => {
+  const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
+    (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+  )
+
+  const relevantIndex = useMemo(() => {
+    if (relevantMeldingTilPvo.length === 0) {
+      setFieldValue('meldingerTilPvo', [
+        ...pvkDokument.meldingerTilPvo,
+        mapMeldingTilPvoToFormValue({
+          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
+        }),
+      ])
+      return pvkDokument.meldingerTilPvo.length
+    } else {
+      return pvkDokument.meldingerTilPvo.findIndex(
+        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+      )
+    }
+  }, [])
+
+  console.debug(relevantIndex)
+
   return (
     <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly
