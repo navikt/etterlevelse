@@ -133,7 +133,7 @@ export const TextEditor = ({
     if (!data) {
       return markdownToDraftWithPresets('')
     }
-    const rawData = data ?? ''
+    const rawData = data
     const noUnderlineAndHighlightData = rawData
       .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
       .replaceAll('</span>', '')

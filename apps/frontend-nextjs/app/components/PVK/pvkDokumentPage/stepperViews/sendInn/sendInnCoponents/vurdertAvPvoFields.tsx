@@ -209,9 +209,9 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               if (merknadEmpty) return
               await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
               await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo + 1)
-              setIsSendTilPvoForRevurderingModalOpen(false)
               setAttemptedRevurderingSend(false)
               await submitForm()
+              setIsSendTilPvoForRevurderingModalOpen(false)
             }}
           >
             Send til PVO for revurdering
