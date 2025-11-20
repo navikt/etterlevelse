@@ -59,6 +59,7 @@ import InvolveringSummary from '../../formSummary/involveringSummary'
 import RisikoscenarioEtterTitak from '../../formSummary/risikoscenarioEtterTitak'
 import RisikoscenarioSummary from '../../formSummary/risikoscenarioSummary'
 import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
+import { SendInnLagringVellykketAlert } from './sendInnCoponents/SendInnLagringVellykketAlert'
 import GodkjentAvRisikoeierFields from './sendInnCoponents/godkjentAvRisikoeierFields'
 import UnderArbeidFields from './sendInnCoponents/readOnly/underArbeidFields'
 import SendInnErrorSummary from './sendInnCoponents/sendInnErrorSummary'
@@ -122,6 +123,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
   const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
+  const [savedSuccess, setSavedSuccess] = useState<boolean>(false)
   const user = useContext(UserContext)
 
   const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
@@ -189,6 +191,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
             setPvkDokument(savedResponse)
             setAngretAvRisikoeier(false)
+            setSavedSuccess(true)
           })
         }
       })
@@ -630,6 +633,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
+                          }
+                          savedAlert={
+                            <div>
+                              {savedSuccess && (
+                                <SendInnLagringVellykketAlert
+                                  setSavedSuccessful={setSavedSuccess}
+                                />
+                              )}
+                            </div>
                           }
                         />
                       )}
