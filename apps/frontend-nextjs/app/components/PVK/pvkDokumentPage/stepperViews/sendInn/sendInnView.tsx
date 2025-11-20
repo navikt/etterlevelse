@@ -557,6 +557,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             errorSummaryRef={errorSummaryRef}
                           />
                         }
+                        savedAlert={
+                          <div>
+                            {savedSuccess && (
+                              <SendInnLagringVellykketAlert setSavedSuccessful={setSavedSuccess} />
+                            )}
+                          </div>
+                        }
                       />
                     )}
 
@@ -602,6 +609,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
+                          }
+                          savedAlert={
+                            <div>
+                              {savedSuccess && (
+                                <SendInnLagringVellykketAlert
+                                  setSavedSuccessful={setSavedSuccess}
+                                />
+                              )}
+                            </div>
                           }
                         />
                       )}
@@ -675,6 +691,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
+                          }
+                          savedAlert={
+                            <div>
+                              {savedSuccess && (
+                                <SendInnLagringVellykketAlert
+                                  setSavedSuccessful={setSavedSuccess}
+                                />
+                              )}
+                            </div>
                           }
                         />
                       )}

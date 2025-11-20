@@ -18,7 +18,7 @@ import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConst
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
+import { Field, FieldProps, FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 
@@ -37,6 +37,7 @@ type TProps = {
   errorSummaryComponent: ReactNode
   pvoVurderingList: ICode[]
   errors: FormikErrors<IPvkDokument>
+  savedAlert: ReactNode
 }
 export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   pvkDokument,
@@ -49,92 +50,103 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   errorSummaryComponent,
   pvoVurderingList,
   errors,
+  savedAlert,
 }) => {
   const user = useContext(UserContext)
   const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   return (
-    <div className='w-full max-w-[75ch]'>
-      <BeskjedTilPvoReadOnly
-        meldingTilPvo={
-          pvkDokument.meldingerTilPvo.filter(
-            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
-          )[0]
-        }
-      />
-      <BeskjedFraPvoReadOnly
-        relevantVurdering={relevantVurdering}
-        pvoVurderingList={pvoVurderingList}
-      />
-      <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
-
-      {(isRisikoeierCheck || user.isAdmin()) && (
-        <div className='mt-5 mb-3'>
-          <TextAreaField
-            height='150px'
-            noPlaceholder
-            label='Kommentar til etterlever? (valgfritt)'
-            name='merknadFraRisikoeier'
-            markdown
+    <Field>
+      {(fieldProps: FieldProps) => (
+        <div className='w-full max-w-[75ch]'>
+          <BeskjedTilPvoReadOnly
+            meldingTilPvo={
+              pvkDokument.meldingerTilPvo.filter(
+                (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+              )[0]
+            }
           />
+          <BeskjedFraPvoReadOnly
+            relevantVurdering={relevantVurdering}
+            pvoVurderingList={pvoVurderingList}
+          />
+          <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
+
+          {(isRisikoeierCheck || user.isAdmin()) && (
+            <div className='mt-5 mb-3'>
+              <TextAreaField
+                height='150px'
+                noPlaceholder
+                label='Kommentar til etterlever? (valgfritt)'
+                name='merknadFraRisikoeier'
+                markdown
+              />
+            </div>
+          )}
+
+          {errorSummaryComponent}
+
+          {isLoading && <CenteredLoader />}
+
+          <div>
+            <Alert variant='info' className='my-5 '>
+              Status: {pvkDokumentStatusToText(pvkDokument.status)}
+            </Alert>
+          </div>
+
+          <div>{!fieldProps.form.dirty && savedAlert}</div>
+
+          <div className='mt-5 flex gap-2 items-center'>
+            {(isRisikoeierCheck || user.isAdmin()) && (
+              <LagreOgFortsettSenereButton
+                setFieldValue={setFieldValue}
+                submitForm={submitForm}
+                initialStatus={initialStatus}
+                resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
+              />
+            )}
+
+            {(!isRisikoeierCheck || user.isAdmin()) && (
+              <Button
+                type='button'
+                onClick={async () => {
+                  await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                  await submitForm()
+                }}
+              >
+                Angre sending til risikoeier
+              </Button>
+            )}
+
+            {(isRisikoeierCheck || user.isAdmin()) && (
+              <Button
+                type='button'
+                onClick={async () => {
+                  await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                  await setFieldValue(
+                    'godkjentAvRisikoeierDato',
+                    new Date().toLocaleString('sv').replace(' ', 'T')
+                  )
+                  await setFieldValue(
+                    'godkjentAvRisikoeier',
+                    user.getIdent() + ' - ' + user.getName()
+                  )
+                  await submitForm().then(async () => {
+                    if (_.isEmpty(errors)) {
+                      await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+                    }
+                  })
+                }}
+              >
+                Aksepter restrisiko og arkiver i Public 360
+              </Button>
+            )}
+          </div>
+
+          <CopyAndExportButtons etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
         </div>
       )}
-
-      {errorSummaryComponent}
-
-      {isLoading && <CenteredLoader />}
-
-      <div>
-        <Alert variant='info' className='my-5 '>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
-      </div>
-
-      <div className='mt-5 flex gap-2 items-center'>
-        {(isRisikoeierCheck || user.isAdmin()) && (
-          <LagreOgFortsettSenereButton
-            setFieldValue={setFieldValue}
-            submitForm={submitForm}
-            initialStatus={initialStatus}
-          />
-        )}
-
-        {(!isRisikoeierCheck || user.isAdmin()) && (
-          <Button
-            type='button'
-            onClick={async () => {
-              await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
-              await submitForm()
-            }}
-          >
-            Angre sending til risikoeier
-          </Button>
-        )}
-
-        {(isRisikoeierCheck || user.isAdmin()) && (
-          <Button
-            type='button'
-            onClick={async () => {
-              await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-              await setFieldValue(
-                'godkjentAvRisikoeierDato',
-                new Date().toLocaleString('sv').replace(' ', 'T')
-              )
-              await setFieldValue('godkjentAvRisikoeier', user.getIdent() + ' - ' + user.getName())
-              await submitForm().then(async () => {
-                if (_.isEmpty(errors)) {
-                  await arkiver(etterlevelseDokumentasjon.id, true, false, true)
-                }
-              })
-            }}
-          >
-            Aksepter restrisiko og arkiver i Public 360
-          </Button>
-        )}
-      </div>
-
-      <CopyAndExportButtons etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
-    </div>
+    </Field>
   )
 }
 export default TrengerRisikoeierGodkjenningFields
