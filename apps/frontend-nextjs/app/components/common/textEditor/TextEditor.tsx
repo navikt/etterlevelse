@@ -18,7 +18,7 @@ import { FormError } from '../modalSchema/formError/formError'
 import './customStyle.css'
 
 type TTextEditorProps = {
-  initialValue: string
+  initialValue: string | undefined
   setValue: (v: string) => void
   height?: string
   errors?: FormikErrors<any>
@@ -43,7 +43,8 @@ export const TextEditor = ({
   withUnderline,
 }: TTextEditorProps) => {
   const [isFocused, setIsFocused] = useState(false)
-  const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
+
+  const [val, setVal] = useDebouncedState(initialValue ?? '', 500, setValue)
 
   const CustomDraftToMarkdown = (data: RawDraftContentState) => {
     return draftToMarkdown(data, {
@@ -128,8 +129,11 @@ export const TextEditor = ({
       preserveNewlines: true,
     })
 
-  const CustomMarkdownToDraft = (data: string) => {
-    const rawData = data
+  const CustomMarkdownToDraft = (data: string | undefined) => {
+    if (!data) {
+      return markdownToDraftWithPresets('')
+    }
+    const rawData = data ?? ''
     const noUnderlineAndHighlightData = rawData
       .replaceAll(/<span style='background-color: rgb(.*?)'>/g, '')
       .replaceAll('</span>', '')
