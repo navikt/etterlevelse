@@ -181,7 +181,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                   if (fieldProps.form.values.meldingerTilPvo[relevantIndex].merknadTilPvo === '') {
                     fieldProps.form.setFieldError(
                       `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
-                      'test'
+                      'Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.'
                     )
                   } else {
                     await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
