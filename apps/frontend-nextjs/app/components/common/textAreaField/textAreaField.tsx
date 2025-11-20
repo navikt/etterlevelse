@@ -59,6 +59,7 @@ export const TextAreaField = ({
                     initialValue={fieldProps.field.value}
                     setValue={(v: string) => fieldProps.form.setFieldValue(name, v)}
                     errors={fieldProps.form.errors}
+                    getFieldMeta={fieldProps.form.getFieldMeta}
                     name={name}
                     withHighlight={withHighlight}
                     withUnderline={withUnderline}
