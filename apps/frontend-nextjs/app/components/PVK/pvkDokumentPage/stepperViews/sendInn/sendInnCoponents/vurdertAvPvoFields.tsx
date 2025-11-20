@@ -1,3 +1,5 @@
+'use client'
+
 import { mapMeldingTilPvoToFormValue } from '@/api/pvkDokument/pvkDokumentApi'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
@@ -13,7 +15,7 @@ import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConst
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
+import { FunctionComponent, ReactNode, useEffect, useMemo, useState } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -42,26 +44,38 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
 }) => {
   const [isSendTilPvoForRevurderingModalOpen, setIsSendTilPvoForRevurderingModalOpen] =
     useState(false)
+  const [savedSuccessful, setSavedSuccessful] = useState(false)
 
-  const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
-    (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+  useEffect(() => {
+    if (savedSuccessful) {
+      const t = setTimeout(() => setSavedSuccessful(false), 8000)
+      return () => clearTimeout(t)
+    }
+  }, [savedSuccessful])
+
+  const nextInnsendingId = pvkDokument.antallInnsendingTilPvo + 1
+
+  // Pure index lookup (no side effects)
+  const relevantIndex = useMemo(
+    () => pvkDokument.meldingerTilPvo.findIndex((m) => m.innsendingId === nextInnsendingId),
+    [pvkDokument.meldingerTilPvo, nextInnsendingId]
   )
 
-  const relevantIndex = useMemo(() => {
-    if (relevantMeldingTilPvo.length === 0) {
+  // Append new melding when missing
+  useEffect(() => {
+    if (relevantIndex === -1) {
       setFieldValue('meldingerTilPvo', [
         ...pvkDokument.meldingerTilPvo,
-        mapMeldingTilPvoToFormValue({
-          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
-        }),
+        mapMeldingTilPvoToFormValue({ innsendingId: nextInnsendingId }),
       ])
-      return pvkDokument.meldingerTilPvo.length
-    } else {
-      return pvkDokument.meldingerTilPvo.findIndex(
-        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
-      )
     }
-  }, [])
+  }, [relevantIndex, nextInnsendingId, pvkDokument.meldingerTilPvo, setFieldValue])
+
+  // Index to use for field binding (after first render addition)
+  const effectiveIndex = relevantIndex === -1 ? pvkDokument.meldingerTilPvo.length : relevantIndex
+
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
 
   return (
     <div className='w-full'>
@@ -83,14 +97,17 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
             <Heading size='medium' level='2' className='mb-5'>
               Arbeid med PVK etter tilbakemelding fra PVO
             </Heading>
-
-            <TextAreaField
-              height='150px'
-              noPlaceholder
-              label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
-              name='merknadTilRisikoeier'
-              markdown
-            />
+            <div className='mt-8 mb-3' suppressHydrationWarning>
+              {hydrated && (
+                <TextAreaField
+                  height='150px'
+                  noPlaceholder
+                  label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
+                  name='merknadTilRisikoeier'
+                  markdown
+                />
+              )}
+            </div>
           </div>
 
           {errorSummaryComponent}
@@ -108,6 +125,14 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
           </div>
         </div>
       </div>
+
+      {savedSuccessful && (
+        <div className='mt-5'>
+          <Alert variant='success' closeButton onClose={() => setSavedSuccessful(false)}>
+            Lagring vellykket
+          </Alert>
+        </div>
+      )}
 
       <div className='mt-5 flex gap-2 items-center'>
         <Button
@@ -145,6 +170,18 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
         onClose={() => setIsSendTilPvoForRevurderingModalOpen(false)}
       >
         <Modal.Body>
+          {savedSuccessful && (
+            <Alert
+              variant='success'
+              inline
+              className='mb-4'
+              closeButton
+              onClose={() => setSavedSuccessful(false)}
+            >
+              Lagring vellykket
+            </Alert>
+          )}
+
           <Alert variant='warning' inline className='mb-5'>
             PVO har ikke bedt om å få deres PVK i retur. Men dersom risikobildet er endret siden
             dere sendte inn til PVO sist, burde dere sende inn på nytt.
@@ -154,7 +191,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               height='150px'
               noPlaceholder
               label='Forklar hvorfor dere ønsker å sende inn til ny vurdering'
-              name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
+              name={`meldingerTilPvo[${effectiveIndex}].merknadTilPvo`}
               markdown
             />
           </div>
@@ -178,6 +215,8 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
             variant='secondary'
             onClick={async () => {
               await submitForm()
+              setSavedSuccessful(true)
+              setIsSendTilPvoForRevurderingModalOpen(false)
             }}
           >
             Lagre og fortsett senere
