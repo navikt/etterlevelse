@@ -46,13 +46,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
     useState(false)
   const [savedSuccessful, setSavedSuccessful] = useState(false)
 
-  useEffect(() => {
-    if (savedSuccessful) {
-      const t = setTimeout(() => setSavedSuccessful(false), 8000)
-      return () => clearTimeout(t)
-    }
-  }, [savedSuccessful])
-
   const nextInnsendingId = pvkDokument.antallInnsendingTilPvo + 1
 
   // Pure index lookup (no side effects)
@@ -123,16 +116,16 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               Status: {pvkDokumentStatusToText(pvkDokument.status)}
             </Alert>
           </div>
+
+          {savedSuccessful && (
+            <div className='mt-5'>
+              <Alert variant='success' closeButton onClose={() => setSavedSuccessful(false)}>
+                Lagring vellykket
+              </Alert>
+            </div>
+          )}
         </div>
       </div>
-
-      {savedSuccessful && (
-        <div className='mt-5'>
-          <Alert variant='success' closeButton onClose={() => setSavedSuccessful(false)}>
-            Lagring vellykket
-          </Alert>
-        </div>
-      )}
 
       <div className='mt-5 flex gap-2 items-center'>
         <Button
