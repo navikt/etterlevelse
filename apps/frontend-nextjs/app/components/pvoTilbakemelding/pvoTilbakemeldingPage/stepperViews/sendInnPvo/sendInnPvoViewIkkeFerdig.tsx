@@ -100,6 +100,17 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
     <div className='pt-6 w-full'>
       <div className='w-full flex justify-center'>
         <div className='max-w-[75ch]'>
+          {pvkDokument.antallInnsendingTilPvo > 1 && (
+            <div className='mt-5 mb-10'>
+              <SendInnTilbakemeldingsHistorikk
+                pvkDokument={pvkDokument}
+                pvoVurderingList={pvoVurderingList}
+                pvoTilbakemelding={pvoTilbakemelding}
+                relevantVurderingsInnsendingId={pvkDokument.antallInnsendingTilPvo}
+              />
+            </div>
+          )}
+
           <BeskjedFraEtterleverReadOnly pvkDokument={pvkDokument} />
 
           <div>
@@ -274,17 +285,6 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           )}
 
           <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />
-
-          {pvkDokument.antallInnsendingTilPvo > 1 && (
-            <div className='mt-10'>
-              <SendInnTilbakemeldingsHistorikk
-                pvkDokument={pvkDokument}
-                pvoVurderingList={pvoVurderingList}
-                pvoTilbakemelding={pvoTilbakemelding}
-                relevantVurderingsInnsendingId={pvkDokument.antallInnsendingTilPvo}
-              />
-            </div>
-          )}
         </div>
       </div>
 

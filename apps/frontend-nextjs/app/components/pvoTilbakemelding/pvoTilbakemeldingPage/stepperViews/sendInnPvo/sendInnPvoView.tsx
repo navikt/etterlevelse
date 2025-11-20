@@ -198,6 +198,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               submitForm={submitForm}
               setSubmittedStatus={setSubmittedStatus}
               pvkDokument={pvkDokument}
+              pvoTilbakemelding={pvoTilbakemelding}
               relevantVurdering={relevantVurdering}
               activeStep={activeStep}
               setSelectedStep={setSelectedStep}
