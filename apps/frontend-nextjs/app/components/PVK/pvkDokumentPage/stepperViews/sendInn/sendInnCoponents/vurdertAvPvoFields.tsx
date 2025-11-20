@@ -14,7 +14,7 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
+import { FormikErrors, useFormikContext } from 'formik'
 import { FunctionComponent, ReactNode, useEffect, useMemo, useState } from 'react'
 
 type TProps = {
@@ -45,6 +45,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   const [isSendTilPvoForRevurderingModalOpen, setIsSendTilPvoForRevurderingModalOpen] =
     useState(false)
   const [savedSuccessful, setSavedSuccessful] = useState(false)
+  const [attemptedRevurderingSend, setAttemptedRevurderingSend] = useState(false)
 
   const nextInnsendingId = pvkDokument.antallInnsendingTilPvo + 1
 
@@ -53,6 +54,11 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
     () => pvkDokument.meldingerTilPvo.findIndex((m) => m.innsendingId === nextInnsendingId),
     [pvkDokument.meldingerTilPvo, nextInnsendingId]
   )
+  const { values } = useFormikContext<IPvkDokument>()
+  // Index to use for field binding (after first render addition)
+  const effectiveIndex = relevantIndex === -1 ? pvkDokument.meldingerTilPvo.length : relevantIndex
+  const merknadTilPvoValue = values?.meldingerTilPvo?.[effectiveIndex]?.merknadTilPvo?.trim() ?? ''
+  const merknadEmpty = merknadTilPvoValue.length === 0
 
   // Append new melding when missing
   useEffect(() => {
@@ -63,9 +69,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
       ])
     }
   }, [relevantIndex, nextInnsendingId, pvkDokument.meldingerTilPvo, setFieldValue])
-
-  // Index to use for field binding (after first render addition)
-  const effectiveIndex = relevantIndex === -1 ? pvkDokument.meldingerTilPvo.length : relevantIndex
 
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => setHydrated(true), [])
@@ -160,7 +163,10 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
       <Modal
         header={{ heading: 'Vil dere sende til Personvernombudet for revurdering?' }}
         open={isSendTilPvoForRevurderingModalOpen}
-        onClose={() => setIsSendTilPvoForRevurderingModalOpen(false)}
+        onClose={() => {
+          setAttemptedRevurderingSend(false)
+          setIsSendTilPvoForRevurderingModalOpen(false)
+        }}
       >
         <Modal.Body>
           {savedSuccessful && (
@@ -187,6 +193,11 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               name={`meldingerTilPvo[${effectiveIndex}].merknadTilPvo`}
               markdown
             />
+            {attemptedRevurderingSend && merknadEmpty && (
+              <Alert variant='error' inline className='mt-3'>
+                Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
+              </Alert>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -194,9 +205,12 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
             type='button'
             variant='primary'
             onClick={async () => {
+              setAttemptedRevurderingSend(true)
+              if (merknadEmpty) return
               await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
               await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo + 1)
               setIsSendTilPvoForRevurderingModalOpen(false)
+              setAttemptedRevurderingSend(false)
               await submitForm()
             }}
           >
@@ -210,6 +224,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               await submitForm()
               setSavedSuccessful(true)
               setIsSendTilPvoForRevurderingModalOpen(false)
+              setAttemptedRevurderingSend(false)
             }}
           >
             Lagre og fortsett senere
@@ -218,7 +233,10 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
           <Button
             type='button'
             variant='tertiary'
-            onClick={() => setIsSendTilPvoForRevurderingModalOpen(false)}
+            onClick={() => {
+              setAttemptedRevurderingSend(false)
+              setIsSendTilPvoForRevurderingModalOpen(false)
+            }}
           >
             Avbryt
           </Button>
