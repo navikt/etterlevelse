@@ -42,7 +42,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   savedAlert,
   pvoVurderingList,
 }) => {
-  const [alertTextEmpty, setAlertTextEmpty] = useState<boolean>(false)
   const [isSendTilPvoForRevurderingModalOpen, setIsSendTilPvoForRevurderingModalOpen] =
     useState(false)
 
@@ -166,7 +165,8 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                   markdown
                 />
 
-                {alertTextEmpty && (
+                {fieldProps.form.getFieldMeta(`meldingerTilPvo[${relevantIndex}].merknadTilPvo`)
+                  .error && (
                   <Alert variant='error' inline className='mt-3'>
                     Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
                   </Alert>
@@ -179,21 +179,11 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                 variant='primary'
                 onClick={async () => {
                   if (fieldProps.form.values.meldingerTilPvo[relevantIndex].merknadTilPvo === '') {
-                    setAlertTextEmpty(true)
                     fieldProps.form.setFieldError(
                       `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
                       'test'
                     )
-
-                    console.debug(fieldProps.form.errors)
-
-                    const fieldMeta = fieldProps.form.getFieldMeta(
-                      `meldingerTilPvo[${relevantIndex}].merknadTilPvo`
-                    )
-
-                    console.debug(fieldMeta.error)
                   } else {
-                    setAlertTextEmpty(false)
                     await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
                     await setFieldValue(
                       'antallInnsendingTilPvo',
