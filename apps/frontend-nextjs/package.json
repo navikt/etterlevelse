@@ -46,7 +46,7 @@
     "@fortawesome/react-fontawesome": "3.1.0",
     "@navikt/aksel-icons": "7.33.4",
     "@navikt/ds-css": "7.33.4",
-    "@navikt/ds-react": "7.33.4",
+    "@navikt/ds-react": "7.33.5",
     "@navikt/ds-tailwind": "7.33.4",
     "@tailwindcss/postcss": "4.1.17",
     "amplitude-js": "8.21.9",

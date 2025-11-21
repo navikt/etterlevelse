@@ -1544,7 +1544,7 @@
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.33.4.tgz#7c39a67a20f1e006ea5c14b07093a0162147c38f"
   integrity sha512-q/mLGfPyeKbyIghanK9l7v9yYriTb6O9cfgtSy5pbjvYRV40eyNRjZlBUh1RHth3ad92vliX+qeW29cHLXLf1g==
 
-"@navikt/aksel-icons@^7.33.4":
+"@navikt/aksel-icons@^7.33.5":
   version "7.33.5"
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.33.5.tgz#918c3505112af3b273a10a64e45c487dc17ba8f1"
   integrity sha512-zdF3d8YIFYAHaUMN39ALeHwkTOESDOGsmzDEUscF/1jUxDAL8RA+N3L2iN9wX21efr/hXg9Z3BpbbRupAmmu3A==
@@ -1554,15 +1554,15 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.33.4.tgz#58abe298b8dfaa96db850ee41d0c6eb003e95503"
   integrity sha512-L0RL9nNjtIcsV5EVtZiwdPIKPFcR7YhF/7Nvrsyi4V3oiylfaeEO2/Wfh1I1oKOQ0Y8yZIyEyK5hNUiXgD8S2Q==
 
-"@navikt/ds-react@7.33.4":
-  version "7.33.4"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.33.4.tgz#7ce5a7b70cf3870bc73f1cf851c4ec3ba3b63683"
-  integrity sha512-S6myjbeFXSGMAHq5K2U0vHC5em26ihwPOTbIy+X/GaIB0PuwYSO3cEVRRUNIvDanzoFLmAzQ/T/idLf3shxpLA==
+"@navikt/ds-react@7.33.5":
+  version "7.33.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.33.5.tgz#79ed6e20360cfa7dbe4a590f3d917de43b2772bc"
+  integrity sha512-+vsxfg7uEsF89eYoAhj9MHZ76a8t2ZAxBTYfsLzCZx1S2KtXHfydX3FiRqDls3rPkn5vEWeUExlZPyJd/DevhQ==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.1.6"
-    "@navikt/aksel-icons" "^7.33.4"
-    "@navikt/ds-tokens" "^7.33.4"
+    "@navikt/aksel-icons" "^7.33.5"
+    "@navikt/ds-tokens" "^7.33.5"
     clsx "^2.1.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
@@ -1572,7 +1572,7 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.33.4.tgz#d0351273ff6a21d71b3682b17f0397ea199221c5"
   integrity sha512-pymAvkT8nhkCh3hP6sE7vm5KNEFufn4yD8NYBW9ZfbKMJqYbJkd5W1kxhdoOU0SqniJXKA4vOEPMj+o3oI2GMA==
 
-"@navikt/ds-tokens@^7.33.4":
+"@navikt/ds-tokens@^7.33.5":
   version "7.33.5"
   resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.33.5.tgz#1e884ee4bacca843915f496e0239403561675c9c"
   integrity sha512-FFGuqLmI4gyDj7vftmxnIF7P5JPWBn2MC8R1n43uCiYAzyDv/MuIM5C42MxIDW7zM4iPZhnS+Dmja+V8ONQAsA==
