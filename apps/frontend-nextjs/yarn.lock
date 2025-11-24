@@ -4390,10 +4390,10 @@ json-buffer@3.0.1:
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.1.tgz#9338802a30d3b6605fbe0613e094008ca8c05a13"
   integrity sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==
 
-json-diff-kit@1.0.33:
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/json-diff-kit/-/json-diff-kit-1.0.33.tgz#7fcb724b954c0f6d6803c64132040053916e62d7"
-  integrity sha512-XA+8rPS4YR3ca/U7BdrCscwBAcwzyW6bUOcGUHtRgUbtcWpjjbAjtc/yhI9wUqx2pNz9L9mY60YWbHSkAHBVXQ==
+json-diff-kit@1.0.34:
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/json-diff-kit/-/json-diff-kit-1.0.34.tgz#c8743d0f420398696aef03a5cd8aff9f2e73447d"
+  integrity sha512-LO58xp4AtD8Tw6sDDzYhCwZP0cPdEeQ2cf/adTQA9YFY9u7AEEYNtAoIBL4C7C6Tm3DL943IHF9DiCxg0OoCmA==
   dependencies:
     commander "^11.1.0"
     fast-myers-diff "^3.0.1"
