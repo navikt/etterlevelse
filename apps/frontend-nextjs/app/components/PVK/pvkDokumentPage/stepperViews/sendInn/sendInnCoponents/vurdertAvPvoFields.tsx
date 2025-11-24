@@ -6,6 +6,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { env } from '@/util/env/env'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
@@ -116,15 +117,18 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
           </div>
 
           <div className='mt-5 flex gap-2 items-center'>
-            <Button
-              type='button'
-              variant='tertiary'
-              onClick={async () => {
-                setIsSendTilPvoForRevurderingModalOpen(true)
-              }}
-            >
-              Send til PVO for revurdering
-            </Button>
+            {/* Remove check when ready for prod */}
+            {env.isDev && (
+              <Button
+                type='button'
+                variant='tertiary'
+                onClick={async () => {
+                  setIsSendTilPvoForRevurderingModalOpen(true)
+                }}
+              >
+                Send til PVO for revurdering
+              </Button>
+            )}
 
             <LagreOgFortsettSenereButton
               setFieldValue={setFieldValue}
