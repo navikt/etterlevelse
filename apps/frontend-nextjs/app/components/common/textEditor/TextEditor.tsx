@@ -100,6 +100,14 @@ export const TextEditor = ({
             return '</span>'
           },
         },
+                'bgcolor-rgb(196, 237, 205)': {
+          open: () => {
+            return `<span style='background-color: rgb(196, 237, 205)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
         UNDERLINE: {
           open: () => {
             return `<ins>`
@@ -250,6 +258,7 @@ export const TextEditor = ({
                 'rgb(235, 222, 252)',
                 'rgb(215, 215, 215)',
                 'rgb(255, 255, 255)',
+                'rgb(196, 237, 205)',
               ],
             },
             //image: { alt: { present: true, mandatory: true }, },
