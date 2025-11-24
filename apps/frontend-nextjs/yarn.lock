@@ -1562,10 +1562,10 @@
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tailwind@7.33.5":
-  version "7.33.5"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.33.5.tgz#25b993062758d6cee8cec7effe4eadb42af927a4"
-  integrity sha512-GSvO4VN7t9EKcqxXUfccRylRnv2s5DsVNPAoIFElxXuVDj9Da0mcbRm/ueEXl/jfC0YR1UrRAKdkX6K7Zzhz/A==
+"@navikt/ds-tailwind@7.34.0":
+  version "7.34.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.34.0.tgz#8ab755dd6f3809b1a5a34998057f78be21285dd4"
+  integrity sha512-KnyeqyySADI1C1d7/DjheIJmV4g82aOYkNn/iFjVSumj7ZdgreXD15D4/YqPSe4Rvpff62US7hIoehkwwNUojw==
 
 "@navikt/ds-tokens@^7.33.5":
   version "7.33.5"
