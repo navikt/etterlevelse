@@ -1539,40 +1539,35 @@
     "@emnapi/runtime" "^1.5.0"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@7.33.4":
-  version "7.33.4"
-  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.33.4.tgz#7c39a67a20f1e006ea5c14b07093a0162147c38f"
-  integrity sha512-q/mLGfPyeKbyIghanK9l7v9yYriTb6O9cfgtSy5pbjvYRV40eyNRjZlBUh1RHth3ad92vliX+qeW29cHLXLf1g==
-
-"@navikt/aksel-icons@^7.33.4":
+"@navikt/aksel-icons@7.33.5", "@navikt/aksel-icons@^7.33.5":
   version "7.33.5"
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.33.5.tgz#918c3505112af3b273a10a64e45c487dc17ba8f1"
   integrity sha512-zdF3d8YIFYAHaUMN39ALeHwkTOESDOGsmzDEUscF/1jUxDAL8RA+N3L2iN9wX21efr/hXg9Z3BpbbRupAmmu3A==
 
-"@navikt/ds-css@7.33.4":
-  version "7.33.4"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.33.4.tgz#58abe298b8dfaa96db850ee41d0c6eb003e95503"
-  integrity sha512-L0RL9nNjtIcsV5EVtZiwdPIKPFcR7YhF/7Nvrsyi4V3oiylfaeEO2/Wfh1I1oKOQ0Y8yZIyEyK5hNUiXgD8S2Q==
+"@navikt/ds-css@7.33.5":
+  version "7.33.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.33.5.tgz#405929c7c3c51040b19df3db575aadae84a89c1e"
+  integrity sha512-UlsS88LkeUKXyduXiZlFA8VioMA3MYO4kJCGP75WPsldjYR92dFy2/xgbGk/DhuGBrhWhXus41ucKcQ+n4WjCQ==
 
-"@navikt/ds-react@7.33.4":
-  version "7.33.4"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.33.4.tgz#7ce5a7b70cf3870bc73f1cf851c4ec3ba3b63683"
-  integrity sha512-S6myjbeFXSGMAHq5K2U0vHC5em26ihwPOTbIy+X/GaIB0PuwYSO3cEVRRUNIvDanzoFLmAzQ/T/idLf3shxpLA==
+"@navikt/ds-react@7.33.5":
+  version "7.33.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.33.5.tgz#79ed6e20360cfa7dbe4a590f3d917de43b2772bc"
+  integrity sha512-+vsxfg7uEsF89eYoAhj9MHZ76a8t2ZAxBTYfsLzCZx1S2KtXHfydX3FiRqDls3rPkn5vEWeUExlZPyJd/DevhQ==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.1.6"
-    "@navikt/aksel-icons" "^7.33.4"
-    "@navikt/ds-tokens" "^7.33.4"
+    "@navikt/aksel-icons" "^7.33.5"
+    "@navikt/ds-tokens" "^7.33.5"
     clsx "^2.1.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tailwind@7.33.4":
-  version "7.33.4"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.33.4.tgz#d0351273ff6a21d71b3682b17f0397ea199221c5"
-  integrity sha512-pymAvkT8nhkCh3hP6sE7vm5KNEFufn4yD8NYBW9ZfbKMJqYbJkd5W1kxhdoOU0SqniJXKA4vOEPMj+o3oI2GMA==
+"@navikt/ds-tailwind@7.33.5":
+  version "7.33.5"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.33.5.tgz#25b993062758d6cee8cec7effe4eadb42af927a4"
+  integrity sha512-GSvO4VN7t9EKcqxXUfccRylRnv2s5DsVNPAoIFElxXuVDj9Da0mcbRm/ueEXl/jfC0YR1UrRAKdkX6K7Zzhz/A==
 
-"@navikt/ds-tokens@^7.33.4":
+"@navikt/ds-tokens@^7.33.5":
   version "7.33.5"
   resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.33.5.tgz#1e884ee4bacca843915f496e0239403561675c9c"
   integrity sha512-FFGuqLmI4gyDj7vftmxnIF7P5JPWBn2MC8R1n43uCiYAzyDv/MuIM5C42MxIDW7zM4iPZhnS+Dmja+V8ONQAsA==
@@ -1878,10 +1873,10 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/lodash@4.17.20":
-  version "4.17.20"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.20.tgz#1ca77361d7363432d29f5e55950d9ec1e1c6ea93"
-  integrity sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==
+"@types/lodash@4.17.21":
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.21.tgz#b806831543d696b14f8112db600ea9d3a1df6ea4"
+  integrity sha512-FOvQ0YPD5NOfPgMzJihoT+Za5pdkDJWcbpuj1DjaKZIr/gxodQjY/uWEFlTNqW2ugXHUiL8lRQgw63dzKHZdeQ==
 
 "@types/markdown-draft-js@2.2.7":
   version "2.2.7"
@@ -4390,10 +4385,10 @@ json-buffer@3.0.1:
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.1.tgz#9338802a30d3b6605fbe0613e094008ca8c05a13"
   integrity sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==
 
-json-diff-kit@1.0.33:
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/json-diff-kit/-/json-diff-kit-1.0.33.tgz#7fcb724b954c0f6d6803c64132040053916e62d7"
-  integrity sha512-XA+8rPS4YR3ca/U7BdrCscwBAcwzyW6bUOcGUHtRgUbtcWpjjbAjtc/yhI9wUqx2pNz9L9mY60YWbHSkAHBVXQ==
+json-diff-kit@1.0.34:
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/json-diff-kit/-/json-diff-kit-1.0.34.tgz#c8743d0f420398696aef03a5cd8aff9f2e73447d"
+  integrity sha512-LO58xp4AtD8Tw6sDDzYhCwZP0cPdEeQ2cf/adTQA9YFY9u7AEEYNtAoIBL4C7C6Tm3DL943IHF9DiCxg0OoCmA==
   dependencies:
     commander "^11.1.0"
     fast-myers-diff "^3.0.1"

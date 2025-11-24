@@ -100,7 +100,7 @@ export const TextEditor = ({
             return '</span>'
           },
         },
-                'bgcolor-rgb(196, 237, 205)': {
+        'bgcolor-rgb(196, 237, 205)': {
           open: () => {
             return `<span style='background-color: rgb(196, 237, 205)'>`
           },
