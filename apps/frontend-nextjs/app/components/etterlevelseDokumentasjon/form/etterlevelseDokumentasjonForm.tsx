@@ -7,7 +7,7 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { getAvdelingOptions } from '@/api/nom/nomApi'
+import { getAvdelingOptions, getSeksjonOptionsByAvdelingId } from '@/api/nom/nomApi'
 import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
@@ -31,6 +31,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
   IEtterlevelseDokumentasjon,
+  INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
@@ -100,6 +101,12 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [alleAvdelingOptions, setAllAvdelingOptions] = useState<TOption[]>([])
+  const [selectedAvdeling, setSelectedAvdeling] = useState<string>(
+    etterlevelseDokumentasjon && etterlevelseDokumentasjon.nomAvdelingId
+      ? etterlevelseDokumentasjon.nomAvdelingId
+      : ''
+  )
+  const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -152,6 +159,14 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
       errorSummaryRef.current.focus()
     }
   }, [submitClick])
+
+  useEffect(() => {
+    ;(async () => {
+      if (selectedAvdeling !== '' && selectedAvdeling !== undefined) {
+        await getSeksjonOptionsByAvdelingId(selectedAvdeling).then(setSeksjonerByAvdeling)
+      }
+    })()
+  }, [selectedAvdeling])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL): Promise<void> => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
@@ -471,6 +486,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                       options={alleAvdelingOptions}
                       value={fieldProps.field.value}
                       onChange={async (value: any) => {
+                        setSelectedAvdeling(value)
                         await fieldProps.form.setFieldValue('nomAvdelingId', value)
                         await fieldProps.form.setFieldValue(
                           'avdelingNavn',
@@ -486,6 +502,46 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
             <div className='flex-1' />
           </div>
+
+          {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
+            <div id='seksjon' className='flex flex-col lg:flex-row gap-5'>
+              <FieldWrapper marginTop full>
+                <FieldArray name='seksjoner'>
+                  {(fieldProps: FieldArrayRenderProps) => (
+                    <div>
+                      <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
+                      <OptionList
+                        label='Seksjon'
+                        options={seksjonerByAvdeling}
+                        onChange={async (value: any) => {
+                          if (value) {
+                            const selectedSeksjon = seksjonerByAvdeling.filter(
+                              (seksjon) => seksjon.value === value
+                            )[0]
+                            await fieldProps.form.setFieldValue('seksjoner', [
+                              ...fieldProps.form.values.seksjoner,
+                              {
+                                nomSeksjonId: selectedSeksjon.value,
+                                nomSeksjonName: selectedSeksjon.label,
+                              },
+                            ])
+                          }
+                        }}
+                      />
+                      <RenderTagList
+                        list={fieldProps.form.values.seksjoner.map(
+                          (seksjon: INomSeksjon) => seksjon.nomSeksjonName
+                        )}
+                        onRemove={fieldProps.remove}
+                      />
+                    </div>
+                  )}
+                </FieldArray>
+              </FieldWrapper>
+
+              <div className='flex-1' />
+            </div>
+          )}
 
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
