@@ -13,7 +13,6 @@ import {
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
-import Link from 'next/link'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -42,34 +41,34 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <Link
+      {/* {behandlingsLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+      <ActionMenu.Item
+        as='a'
         href={pvkDokumentasjonBehandlingsenLivslopUrl(
           etterlevelseDokumentasjon.id,
           behandlingsLivslop ? behandlingsLivslop.id : 'ny'
         )}
       >
-        {/* {behandlingsLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
-        <ActionMenu.Item as='a'>Tegn behandlingens livsløp</ActionMenu.Item>
-      </Link>
+        Tegn behandlingens livsløp
+      </ActionMenu.Item>
       <ActionMenu.Group label=''>
         {pvkDokument && pvkDokument.skalUtforePvk && (
-          <Link href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)}>
-            <ActionMenu.Item as='a'>
-              {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
-            </ActionMenu.Item>
-          </Link>
+          <ActionMenu.Item
+            as='a'
+            href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)}
+          >
+            {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
+          </ActionMenu.Item>
         )}
-        <Link
+        <ActionMenu.Item
+          as='a'
           href={pvkDokumentasjonPvkBehovUrl(
             etterlevelseDokumentasjon.id,
             pvkDokument ? pvkDokument.id : 'ny'
           )}
-          passHref
         >
-          <ActionMenu.Item as='a'>
-            {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
-          </ActionMenu.Item>
-        </Link>
+          {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
+        </ActionMenu.Item>
       </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>

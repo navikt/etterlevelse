@@ -2,7 +2,6 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
-import Link from 'next/link'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -22,9 +21,12 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       <ActionMenu.Group label=''>
-        <Link href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)} passHref>
-          <ActionMenu.Item as='a'>Rediger dokumentegenskaper</ActionMenu.Item>
-        </Link>
+        <ActionMenu.Item
+          as='a'
+          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+        >
+          Rediger dokumentegenskaper
+        </ActionMenu.Item>
       </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
