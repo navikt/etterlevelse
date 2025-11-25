@@ -20,3 +20,23 @@ export const getAvdelingOptions = async () => {
   }
   return []
 }
+
+export const getSeksjonByAvdelingId = async (avdelingId: string) => {
+  return (await axios.get<IOrgEnhet[]>(`${env.backendBaseUrl}/nom/seksjon/avdeling/${avdelingId}`))
+    .data
+}
+
+export const getSeksjonOptionsByAvdelingId = async (avdelingId: string) => {
+  const seksjoner = await getSeksjonByAvdelingId(avdelingId)
+  if (seksjoner && seksjoner.length) {
+    return seksjoner
+      .map((seksjon) => {
+        return {
+          value: seksjon.id,
+          label: seksjon.navn,
+        }
+      })
+      .sort((a, b) => a.label.localeCompare(b.label))
+  }
+  return []
+}
