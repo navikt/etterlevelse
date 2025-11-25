@@ -26,6 +26,7 @@ export interface IEtterlevelseDokumentasjon {
   risikoeiere: string[]
   nomAvdelingId?: string
   avdelingNavn?: string
+  seksjoner: INomSeksjon[]
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]

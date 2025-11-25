@@ -141,6 +141,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   risikoeiere: etterlevelseDokumentasjon.risikoeiere || [],
   nomAvdelingId: etterlevelseDokumentasjon.nomAvdelingId || '',
   avdelingNavn: etterlevelseDokumentasjon.avdelingNavn || '',
+  seksjoner: etterlevelseDokumentasjon.seksjoner || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   resourcesData: etterlevelseDokumentasjon.resourcesData || [],
   risikoeiereData: etterlevelseDokumentasjon.risikoeiereData || [],
