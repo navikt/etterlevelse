@@ -69,6 +69,6 @@ export interface ILovStats {
 }
 
 export interface INomSeksjon {
-  nomSeksjontId: string
+  nomSeksjonId: string
   nomSeksjonName: string
 }

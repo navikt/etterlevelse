@@ -487,6 +487,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                       value={fieldProps.field.value}
                       onChange={async (value: any) => {
                         setSelectedAvdeling(value)
+
+                        if (value !== fieldProps.form.values.nomAvdelingId) {
+                          await fieldProps.form.setFieldValue('seksjoner', [])
+                        }
+
                         await fieldProps.form.setFieldValue('nomAvdelingId', value)
                         await fieldProps.form.setFieldValue(
                           'avdelingNavn',
@@ -518,13 +523,21 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                             const selectedSeksjon = seksjonerByAvdeling.filter(
                               (seksjon) => seksjon.value === value
                             )[0]
-                            await fieldProps.form.setFieldValue('seksjoner', [
-                              ...fieldProps.form.values.seksjoner,
-                              {
-                                nomSeksjonId: selectedSeksjon.value,
-                                nomSeksjonName: selectedSeksjon.label,
-                              },
-                            ])
+
+                            const ikkeFinnesAlleredeIListe =
+                              fieldProps.form.values.seksjoner.filter(
+                                (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
+                              ).length === 0
+
+                            if (ikkeFinnesAlleredeIListe) {
+                              await fieldProps.form.setFieldValue('seksjoner', [
+                                ...fieldProps.form.values.seksjoner,
+                                {
+                                  nomSeksjonId: selectedSeksjon.value,
+                                  nomSeksjonName: selectedSeksjon.label,
+                                },
+                              ])
+                            }
                           }
                         }}
                       />
