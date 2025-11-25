@@ -66,3 +66,8 @@ export interface ILovStats {
   irrelevantKrav: TKravQL[]
   utgaattKrav: TKravQL[]
 }
+
+export interface INomSeksjon {
+  nomSeksjontId: string
+  nomSeksjonName: string
+}
