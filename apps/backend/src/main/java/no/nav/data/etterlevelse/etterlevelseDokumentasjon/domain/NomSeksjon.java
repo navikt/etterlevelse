@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NomSeksjon {
-    private String nomSeksjontId;
+    private String nomSeksjonId;
     private String nomSeksjonName;
 }
