@@ -1,4 +1,4 @@
-query alleAvdelinger($id: String){
+query alleUnderOrganiseringer($id: String){
     orgEnhet(where: {id: $id}) {
         id
         navn

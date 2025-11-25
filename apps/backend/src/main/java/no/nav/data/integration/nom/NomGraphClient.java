@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.graphql.GraphQLRequest;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.security.TokenProvider;
@@ -42,7 +43,7 @@ public class NomGraphClient {
     private final TokenProvider tokenProvider;
     private final NomGraphQlProperties nomGraphQlProperties;
 
-    private static final String getAvdelingQuery = readCpFile("nom/graphql/queries/get_all_avdelinger.graphql");
+    private static final String getUnderOrganiseringerQuery = readCpFile("nom/graphql/queries/get_all_under_organiseringer.graphql");
     private static final String getByIdQuery = readCpFile("nom/graphql/queries/get_by_id.graphql");
     private static final String scopeTemplate = "api://%s-gcp.nom.nom-api/.default";
 
@@ -59,11 +60,11 @@ public class NomGraphClient {
 
     private Map<String, OrgEnhet> getAvdelingCache() {
         if (securityProperties.isDev()) {
-            var devAvdelinger = List.of(createDevAvdeling("avdeling_1"), createDevAvdeling("avdeling_2"));
+            var devAvdelinger = List.of(createDevOrganisering("avdeling_1"), createDevOrganisering("avdeling_2"));
             return safeStream(devAvdelinger)
                     .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
         } else {
-            var request = new GraphQLRequest(getAvdelingQuery, Map.of("id", "bu431e"));
+            var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", "bu431e"));
             var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
 
             assert res.getBody() != null;
@@ -79,6 +80,42 @@ public class NomGraphClient {
 
             return safeStream(alleAvdelinger)
                     .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
+        }
+    }
+
+    public List<OrgEnhet> getAllSeksjonForAvdeling(String avdelingId) {
+        var avdeling = getAvdelingById(avdelingId);
+        if (avdeling.isEmpty()) {
+            throw new ValidationException("Invalid avdeling id: " + avdelingId);
+        } else {
+            if (securityProperties.isDev()) {
+                return List.of(
+                        createDevOrganisering("seksjon_1"),
+                        createDevOrganisering("seksjon_2"),
+                        createDevOrganisering("seksjon_3"),
+                        createDevOrganisering("seksjon_4"),
+                        createDevOrganisering("seksjon_5"),
+                        createDevOrganisering("seksjon_6"),
+                        createDevOrganisering("seksjon_7"),
+                        createDevOrganisering("seksjon_8"),
+                        createDevOrganisering("seksjon_9")
+                );
+            } else {
+                var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", avdelingId));
+                var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
+
+                assert res.getBody() != null;
+                assert res.getBody().getData() != null;
+
+                var response = res.getBody().getData();
+
+                if (response.getOrgEnhet() == null) {
+                    return List.of();
+                }
+
+                return response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
+
+            }
         }
     }
 
@@ -127,7 +164,7 @@ public class NomGraphClient {
         return scopeTemplate.formatted(securityProperties.isDev() ? "dev" : "prod");
     }
 
-    private OrgEnhet createDevAvdeling(String id) {
+    private OrgEnhet createDevOrganisering(String id) {
         return OrgEnhet.builder().id(id).navn(id).build();
     }
 }
