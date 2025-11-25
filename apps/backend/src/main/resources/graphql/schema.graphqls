@@ -273,6 +273,12 @@ type EtterlevelseDokumentasjon {
     varslingsadresser: [Varslingsadresse!]!
     nomAvdelingId: String
     avdelingNavn: String
+    seksjoner: [NomSeksjon!]!
+}
+
+type NomSeksjon {
+    nomSeksjontId: String!
+    nomSeksjonName: String!
 }
 
 type PvoTilbakemelding {

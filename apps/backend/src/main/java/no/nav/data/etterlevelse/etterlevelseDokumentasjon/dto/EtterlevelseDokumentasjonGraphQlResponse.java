@@ -51,6 +51,7 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
                 .nomAvdelingId(eDokData.getNomAvdelingId())
                 .avdelingNavn(eDokData.getAvdelingNavn())
+                .seksjoner(eDokData.getSeksjoner() != null ? copyOf(eDokData.getSeksjoner()) : List.of())
                 .varslingsadresser(eDokData.getVarslingsadresser() != null ? copyOf(eDokData.getVarslingsadresser()): List.of())
                 .build();
     }
