@@ -85,6 +85,15 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
                 />
               </div>
 
+              {relevantMeldingTilPvo.length !== 0 &&
+                !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
+                  <Alert variant='info' className='my-5'>
+                    Innsending trukket <br />
+                    Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
+                    deretter behandlet som en ny innsending
+                  </Alert>
+                )}
+
               {errorSummaryComponent}
 
               {isLoading && (

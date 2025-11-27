@@ -62,7 +62,7 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
             </Alert>
 
             {relevantMeldingTilPvo.length !== 0 &&
-              relevantMeldingTilPvo[0].sendtTilPvoDato !== null && (
+              !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
                 <Alert variant='info' className='my-5'>
                   Innsending trukket <br />
                   Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
