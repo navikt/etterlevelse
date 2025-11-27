@@ -117,7 +117,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         </Button>
       </>
 
-      {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå */}
+      {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
       {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
       {env.isDev && (
         <PersonvernkonsekvensvurderingButton
