@@ -12,7 +12,6 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangRequest;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
-import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,6 @@ import java.util.UUID;
 @Tag(name = "Behadlingens art og omfang", description = "Behadlingens art og omfang for etterlevelsesdokumentasjon")
 public class BehandlingensArtOgOmfangController {
     private final BehandlingensArtOgOmfangService service;
-    private final PvoTilbakemeldingService pvoTilbakemeldingService;
 
     @Operation(summary = "Get Behadlingens art og omfang")
     @ApiResponse(description = "ok")
