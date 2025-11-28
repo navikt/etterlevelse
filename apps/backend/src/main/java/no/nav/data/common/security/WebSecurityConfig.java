@@ -56,6 +56,7 @@ public class WebSecurityConfig {
             );
 
             allowGetAndOptions(http,
+                    "/audit/log/**",
                     "/settings/**",
                     "/codelist/**",
                     "/krav/**",
@@ -81,7 +82,9 @@ public class WebSecurityConfig {
             );
 
             adminOnly(http,
-                    "/audit/**",
+                    "/audit",
+                    "/audit/tableid/**",
+                    "/audit/maillog/**",
                     "/settings/**",
                     "/codelist/**",
                     "/export/codelist/**"
