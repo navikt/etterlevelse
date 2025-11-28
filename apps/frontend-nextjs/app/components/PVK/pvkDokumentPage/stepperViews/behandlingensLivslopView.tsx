@@ -41,7 +41,7 @@ import {
   Loader,
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
-import { Form, Formik, FormikHelpers, validateYupSchema, yupToFormErrors } from 'formik'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
@@ -137,12 +137,20 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then(
             (response: IBehandlingensLivslop) => {
               setBehandlingensLivslop(response)
+              formRef.current.resetForm({
+                values: mapBehandlingensLivslopRequestToFormValue(response),
+              })
+              setSavedSuccessful(true)
             }
           )
         } else {
           await createBehandlingensLivslop(mutatedBehandlingensLivslop).then(
             (response: IBehandlingensLivslop) => {
               setBehandlingensLivslop(response)
+              formRef.current.resetForm({
+                values: mapBehandlingensLivslopRequestToFormValue(response),
+              })
+              setSavedSuccessful(true)
             }
           )
         }
@@ -160,14 +168,8 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               <Formik
                 validateOnBlur={false}
                 validateOnChange={false}
-                onSubmit={async (
-                  values: IBehandlingensLivslopRequest,
-                  formikHelpers: FormikHelpers<IBehandlingensLivslopRequest>
-                ) => {
-                  await submit(values).then(() => {
-                    formikHelpers.resetForm({ values })
-                    setSavedSuccessful(true)
-                  })
+                onSubmit={async (values: IBehandlingensLivslopRequest) => {
+                  await submit(values)
                 }}
                 initialValues={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
                 validate={() => {
