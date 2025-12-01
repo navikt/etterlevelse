@@ -87,8 +87,8 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setIsLoading(true)
     if (etterlevelseDokumentasjonId) {
+      setIsLoading(true)
       ;(async () => {
         await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
           async (artOfOmfang) => {
@@ -100,7 +100,6 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
         )
       })()
     }
-    setIsLoading(false)
   }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [
