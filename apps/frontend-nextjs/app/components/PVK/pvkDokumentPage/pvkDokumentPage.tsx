@@ -263,7 +263,6 @@ export const PvkDokumentPage = () => {
                       personkategorier={readOnlyData.personkategorier}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
-                      setPvkDokument={setPvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
                       relevantVurdering={relevantVurdering}
                       activeStep={activeStep}

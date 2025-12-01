@@ -1,4 +1,8 @@
+'use client'
+
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/artOgOmfangReadOnlyContent'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -33,54 +37,61 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
   setActiveStep,
   setSelectedStep,
   formRef,
-}) => (
-  <div className='w-full'>
-    <ContentLayout>
-      <div className='flex gap-8 w-full'>
-        <div className='w-1/2'>
-          <ArtOgOmfangReadOnlyContent
-            pvkDokument={pvkDokument}
-            personkategorier={personkategorier}
-          />
-        </div>
-        <div className='w-1/2'>
-          <PvoSidePanelWrapper>
-            {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
-              <PvoTilbakemeldingReadOnly
-                tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
-                sentDate={relevantVurdering.sendtDato}
-                forPvo={true}
-              />
-            )}
-            {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
-              <PvoTilbakemeldingForm
-                pvkDokumentId={pvkDokument.id}
-                innsendingId={pvkDokument.antallInnsendingTilPvo}
-                fieldName='behandlingensArtOgOmfang'
-                initialValue={relevantVurdering.behandlingensArtOgOmfang}
-                formRef={formRef}
-              />
-            )}
+}) => {
+  const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(pvkDokument.id)
 
-            {pvkDokument.antallInnsendingTilPvo > 1 && (
-              <div className='mt-10'>
-                <TilbakemeldingsHistorikk
-                  pvoTilbakemelding={pvoTilbakemelding}
-                  fieldName='behandlingensArtOgOmfang'
-                  relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
-                />
-              </div>
+  return (
+    <div className='w-full'>
+      <ContentLayout>
+        <div className='flex gap-8 w-full'>
+          <div className='w-1/2'>
+            {loading && <CenteredLoader />}
+            {!loading && (
+              <ArtOgOmfangReadOnlyContent
+                artOgOmfang={artOgOmfang}
+                personkategorier={personkategorier}
+              />
             )}
-          </PvoSidePanelWrapper>
+          </div>
+          <div className='w-1/2'>
+            <PvoSidePanelWrapper>
+              {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
+                <PvoTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
+                  sentDate={relevantVurdering.sendtDato}
+                  forPvo={true}
+                />
+              )}
+              {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
+                <PvoTilbakemeldingForm
+                  pvkDokumentId={pvkDokument.id}
+                  innsendingId={pvkDokument.antallInnsendingTilPvo}
+                  fieldName='behandlingensArtOgOmfang'
+                  initialValue={relevantVurdering.behandlingensArtOgOmfang}
+                  formRef={formRef}
+                />
+              )}
+
+              {pvkDokument.antallInnsendingTilPvo > 1 && (
+                <div className='mt-10'>
+                  <TilbakemeldingsHistorikk
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    fieldName='behandlingensArtOgOmfang'
+                    relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                  />
+                </div>
+              )}
+            </PvoSidePanelWrapper>
+          </div>
         </div>
-      </div>
-    </ContentLayout>
-    <PvoFormButtons
-      activeStep={activeStep}
-      setActiveStep={setActiveStep}
-      setSelectedStep={setSelectedStep}
-    />
-  </div>
-)
+      </ContentLayout>
+      <PvoFormButtons
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+        setSelectedStep={setSelectedStep}
+      />
+    </div>
+  )
+}
 
 export default BehandlingensArtOgOmfangPvoView

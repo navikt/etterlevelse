@@ -1,5 +1,6 @@
 'use client'
 
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
@@ -77,6 +78,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(pvkDokument.id)
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
@@ -307,7 +309,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
-                  status={getFormStatus(pvkDokument, index)}
+                  status={getFormStatus(pvkDokument, artOgOmfang, index)}
                   customStatusTag={getCustomStatusTags(index)}
                   pvoView
                 />
