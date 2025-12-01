@@ -52,6 +52,10 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         avdelingError ||
         medlemError ||
         behandlingensLivslopError ||
+        artOgOmfangError.stemmerPersonkategorier ||
+        artOgOmfangError.personkategoriAntallBeskrivelse ||
+        artOgOmfangError.tilgangsBeskrivelsePersonopplysningene ||
+        artOgOmfangError.lagringsBeskrivelsePersonopplysningene ||
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
         tiltakAnsvarligError !== '' ||
