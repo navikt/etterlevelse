@@ -80,29 +80,15 @@ export const deleteBehandlingensArtOgOmfang = async (
     )
   ).data
 
-export const useBehandlingensArtOgOmfang = (
-  artOfOmfangId?: string,
-  etterlevelseDokumentasjonId?: string
-) => {
-  const isCreateNew = artOfOmfangId === 'ny'
-  const [data, setData] = useState<IBehandlingensArtOgOmfang | undefined>(
-    isCreateNew ? mapBehandlingensArtOgOmfangToFormValue({}) : undefined
+export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string) => {
+  const [data, setData] = useState<IBehandlingensArtOgOmfang>(
+    mapBehandlingensArtOgOmfangToFormValue({})
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     setIsLoading(true)
-    if (artOfOmfangId && !isCreateNew) {
-      ;(async () => {
-        await getBehandlingensArtOgOmfang(artOfOmfangId).then(
-          async (artOfOmfang: IBehandlingensArtOgOmfang) => {
-            setData(artOfOmfang)
-            setIsLoading(false)
-          }
-        )
-      })()
-    } else if (etterlevelseDokumentasjonId && isCreateNew) {
-      //double check that behandlingens art og omfang doesnt not exist
+    if (etterlevelseDokumentasjonId) {
       ;(async () => {
         await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
           async (artOfOmfang) => {
@@ -114,10 +100,10 @@ export const useBehandlingensArtOgOmfang = (
         )
       })()
     }
-  }, [artOfOmfangId])
+  }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [
-    IBehandlingensArtOgOmfang | undefined,
+    IBehandlingensArtOgOmfang,
     (artOfOmfang: IBehandlingensArtOgOmfang) => void,
     boolean,
   ]
@@ -141,7 +127,7 @@ export const mapBehandlingensArtOgOmfangToFormValue = (
     id: artOgOmfang.id || '',
     changeStamp: artOgOmfang.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     version: -1,
-    etterlevelseDokumentId: artOgOmfang.etterlevelseDokumentId || '',
+    etterlevelseDokumentasjonId: artOgOmfang.etterlevelseDokumentasjonId || '',
     stemmerPersonkategorier:
       artOgOmfang.stemmerPersonkategorier === undefined
         ? undefined

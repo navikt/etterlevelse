@@ -4,7 +4,7 @@ export interface IBehandlingensArtOgOmfang {
   id: string
   changeStamp: IChangeStamp
   version: number
-  etterlevelseDokumentId: string
+  etterlevelseDokumentasjonId: string
 
   stemmerPersonkategorier?: boolean
   personkategoriAntallBeskrivelse: string
