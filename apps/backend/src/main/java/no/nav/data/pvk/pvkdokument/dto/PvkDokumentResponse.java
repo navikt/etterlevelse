@@ -34,10 +34,6 @@ public class PvkDokumentResponse {
     private List<CodelistResponse> ytterligereEgenskaper;
     private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
-    private Boolean stemmerPersonkategorier;
-    private String personkategoriAntallBeskrivelse;
-    private String tilgangsBeskrivelsePersonopplysningene;
-    private String lagringsBeskrivelsePersonopplysningene;
 
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
@@ -70,10 +66,6 @@ public class PvkDokumentResponse {
                 .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
                 .skalUtforePvk(pvkDokument.getPvkDokumentData().getSkalUtforePvk())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
-                .personkategoriAntallBeskrivelse(pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse())
-                .tilgangsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene())
-                .lagringsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene())
-                .stemmerPersonkategorier(pvkDokument.getPvkDokumentData().getStemmerPersonkategorier())
                 .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant())
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())

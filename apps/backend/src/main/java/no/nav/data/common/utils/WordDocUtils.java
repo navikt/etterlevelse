@@ -21,6 +21,7 @@ import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.*;
@@ -407,20 +408,20 @@ public class WordDocUtils {
     }
 
     //PVK docu
-    public void generateBehandlingensArtOgOmfang(PvkDokument pvkDokument, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding, Vurdering pvoVudering ) {
+    public void generateBehandlingensArtOgOmfang(BehandlingensArtOgOmfang artOgOmfang, List<Behandling> behandlingList, PvoTilbakemelding pvoTilbakemelding, Vurdering pvoVudering) {
         newLine();
         var header2 = addHeading2("Behandlingens art og omfang");
         addBookmark(header2, "pvk_art_og_omfang");
         newLine();
         addPersonkategoriList(behandlingList);
         newLine();
-        addBooleanDataText("Stemmer denne lista over personkategorier?", pvkDokument.getPvkDokumentData().getStemmerPersonkategorier());
+        addBooleanDataText("Stemmer denne lista over personkategorier?", artOgOmfang.getBehandlingensArtOgOmfangData().getStemmerPersonkategorier());
         newLine();
-        addDataText("For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.", pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse());
+        addDataText("For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.", artOgOmfang.getBehandlingensArtOgOmfangData().getPersonkategoriAntallBeskrivelse());
         newLine();
-        addDataText("Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.", pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene());
+        addDataText("Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.", artOgOmfang.getBehandlingensArtOgOmfangData().getTilgangsBeskrivelsePersonopplysningene());
         newLine();
-        addDataText("Beskriv hvordan og hvor lenge personopplysningene skal lagres.", pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene());
+        addDataText("Beskriv hvordan og hvor lenge personopplysningene skal lagres.", artOgOmfang.getBehandlingensArtOgOmfangData().getLagringsBeskrivelsePersonopplysningene());
         newLine();
 
         if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
