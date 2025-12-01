@@ -20,6 +20,8 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
+import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -48,6 +50,8 @@ public class PvkDokumentToDoc {
     private static final ObjectFactory pvkFactory = Context.getWmlObjectFactory();
 
     private final PvkDokumentService pvkDokumentService;
+    private final BehandlingensArtOgOmfangService behandlingensArtOgOmfangService;
+
     private final BehandlingensLivslopService behandlingensLivslopService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final RisikoscenarioService risikoscenarioService;
@@ -156,6 +160,7 @@ public class PvkDokumentToDoc {
 
     public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
+        BehandlingensArtOgOmfang behandlingensArtOgOmfang = behandlingensArtOgOmfangService.getByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId()).orElse(new BehandlingensArtOgOmfang());
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
         PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId(), pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo());
         Vurdering pvoVurdering = pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()
@@ -280,6 +285,9 @@ public class PvkDokumentToDoc {
 
         doc.pageBreak();
 
+        doc.generateBehandlingensArtOgOmfang(behandlingensArtOgOmfang, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
+        doc.pageBreak();
+
         //PVK dokument
         var pvkBehovHeading = doc.addHeading2("Bør vi gjøre en PVK?");
         doc.addBookmark(pvkBehovHeading, "pvk_behov");
@@ -300,10 +308,6 @@ public class PvkDokumentToDoc {
             doc.pageBreak();
         } else {
             doc.addText("Vi skal gjennomføre en PVK.");
-
-            doc.newLine();
-
-            doc.generateBehandlingensArtOgOmfang(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
             doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
