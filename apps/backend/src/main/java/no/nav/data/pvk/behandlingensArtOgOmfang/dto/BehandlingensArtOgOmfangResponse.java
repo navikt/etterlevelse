@@ -22,7 +22,7 @@ public class BehandlingensArtOgOmfangResponse {
     private ChangeStampResponse changeStamp;
     private Integer version;
 
-    private UUID etterlevelseDokumensjonId;
+    private UUID etterlevelseDokumentasjonId;
 
     private Boolean stemmerPersonkategorier;
     private String personkategoriAntallBeskrivelse;
@@ -39,7 +39,7 @@ public class BehandlingensArtOgOmfangResponse {
                         .lastModifiedDate(behandlingensArtOgOmfang.getLastModifiedDate() == null ? LocalDateTime.now() : behandlingensArtOgOmfang.getLastModifiedDate())
                         .build())
                 .version(behandlingensArtOgOmfang.getVersion())
-                .etterlevelseDokumensjonId(behandlingensArtOgOmfang.getEtterlevelseDokumensjonId())
+                .etterlevelseDokumentasjonId(behandlingensArtOgOmfang.getEtterlevelseDokumentasjonId())
 
                 .stemmerPersonkategorier(behandlingensArtOgOmfang.getBehandlingensArtOgOmfangData().getStemmerPersonkategorier())
                 .personkategoriAntallBeskrivelse(behandlingensArtOgOmfang.getBehandlingensArtOgOmfangData().getPersonkategoriAntallBeskrivelse())

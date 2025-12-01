@@ -35,9 +35,9 @@ public class BehandlingensArtOgOmfangService {
     @Transactional(propagation = Propagation.REQUIRED)
     public BehandlingensArtOgOmfang save(BehandlingensArtOgOmfang behandlingensArtOgOmfang, boolean isUpdate) {
         if (!isUpdate) {
-            var existingBehandlingensArtOgOmfang = getByEtterlevelseDokumentasjonId(behandlingensArtOgOmfang.getEtterlevelseDokumensjonId());
+            var existingBehandlingensArtOgOmfang = getByEtterlevelseDokumentasjonId(behandlingensArtOgOmfang.getEtterlevelseDokumentasjonId());
             if (existingBehandlingensArtOgOmfang.isPresent()) {
-                log.warn("Found existing behandlingens art og omfang when trying to create for etterlevelse dokumentation id: {}", behandlingensArtOgOmfang.getEtterlevelseDokumensjonId());
+                log.warn("Found existing behandlingens art og omfang when trying to create for etterlevelse dokumentation id: {}", behandlingensArtOgOmfang.getEtterlevelseDokumentasjonId());
                 behandlingensArtOgOmfang.setId(existingBehandlingensArtOgOmfang.get().getId());
             } else {
                 behandlingensArtOgOmfang.setId(UUID.randomUUID());

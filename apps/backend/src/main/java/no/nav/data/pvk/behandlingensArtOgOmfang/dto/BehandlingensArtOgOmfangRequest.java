@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class BehandlingensArtOgOmfangRequest implements RequestElement {
 
     private UUID id;
-    private UUID etterlevelseDokumensjonId;
+    private UUID etterlevelseDokumentasjonId;
 
     private Boolean stemmerPersonkategorier;
     private String personkategoriAntallBeskrivelse;
@@ -40,7 +40,7 @@ public class BehandlingensArtOgOmfangRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkNull(Fields.etterlevelseDokumensjonId, etterlevelseDokumensjonId);
+        validator.checkNull(Fields.etterlevelseDokumentasjonId, etterlevelseDokumentasjonId);
         validator.checkId(this);
     }
 
@@ -54,13 +54,13 @@ public class BehandlingensArtOgOmfangRequest implements RequestElement {
 
         return BehandlingensArtOgOmfang.builder()
                 .id(id)
-                .etterlevelseDokumensjonId(etterlevelseDokumensjonId)
+                .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
                 .behandlingensArtOgOmfangData(behandlingensArtOgOmfangData)
                 .build();
     }
 
     public void mergeInto(BehandlingensArtOgOmfang behandlingensArtOgOmfangToMerge) {
-        behandlingensArtOgOmfangToMerge.setEtterlevelseDokumensjonId(etterlevelseDokumensjonId);
+        behandlingensArtOgOmfangToMerge.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         behandlingensArtOgOmfangToMerge.getBehandlingensArtOgOmfangData().setPersonkategoriAntallBeskrivelse(personkategoriAntallBeskrivelse);
         behandlingensArtOgOmfangToMerge.getBehandlingensArtOgOmfangData().setTilgangsBeskrivelsePersonopplysningene(tilgangsBeskrivelsePersonopplysningene);
         behandlingensArtOgOmfangToMerge.getBehandlingensArtOgOmfangData().setLagringsBeskrivelsePersonopplysningene(lagringsBeskrivelsePersonopplysningene);

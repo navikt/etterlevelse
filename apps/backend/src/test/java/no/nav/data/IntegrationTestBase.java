@@ -220,7 +220,7 @@ public abstract class IntegrationTestBase {
     public BehandlingensArtOgOmfang createBehandlingensArtOgOmfang() {
         EtterlevelseDokumentasjon ettDok = createEtterlevelseDokumentasjon();
         BehandlingensArtOgOmfang artOgOmfang = buildBehandlingensArtOgOmfang();
-        artOgOmfang.setEtterlevelseDokumensjonId(ettDok.getId());
+        artOgOmfang.setEtterlevelseDokumentasjonId(ettDok.getId());
         return behandlingensArtOgOmfangRepo.save(artOgOmfang);
     }
 
