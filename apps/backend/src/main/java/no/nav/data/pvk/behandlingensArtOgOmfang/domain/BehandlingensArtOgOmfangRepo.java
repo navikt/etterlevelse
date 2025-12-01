@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface BehandlingensArtOgOmfangRepo extends JpaRepository<BehandlingensArtOgOmfang, UUID> {
 
-    Optional<BehandlingensArtOgOmfang> findByEtterlevelseDokumensjonId(UUID etterlevelseDokumentasjonId);
+    Optional<BehandlingensArtOgOmfang> findByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId);
 }

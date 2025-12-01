@@ -29,7 +29,7 @@ public class BehandlingensArtOgOmfangService {
     }
 
     public Optional<BehandlingensArtOgOmfang> getByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId) {
-        return repo.findByEtterlevelseDokumensjonId(etterlevelseDokumentasjonId);
+        return repo.findByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
