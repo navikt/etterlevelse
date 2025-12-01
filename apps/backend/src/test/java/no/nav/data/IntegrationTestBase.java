@@ -22,16 +22,11 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.KravService;
-import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.domain.KravData;
-import no.nav.data.etterlevelse.krav.domain.KravImage;
-import no.nav.data.etterlevelse.krav.domain.KravRepo;
-import no.nav.data.etterlevelse.krav.domain.KravStatus;
-import no.nav.data.etterlevelse.krav.domain.Regelverk;
-import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
+import no.nav.data.etterlevelse.krav.domain.*;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangRepo;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
@@ -138,6 +133,8 @@ public abstract class IntegrationTestBase {
     protected RisikoscenarioRepo risikoscenarioRepo;
     @Autowired
     protected TilbakemeldingRepo tilbakemeldingRepo;
+    @Autowired
+    protected BehandlingensArtOgOmfangRepo behandlingensArtOgOmfangRepo;
 
     @BeforeEach
     @Transactional
@@ -163,6 +160,7 @@ public abstract class IntegrationTestBase {
         pvoTilbakemeldingRepo.deleteAll();
         pvkDokumentRepo.deleteAll();
         dokumentRelasjonRepository.deleteAll();
+        behandlingensArtOgOmfangRepo.deleteAll();
         etterlevelseDokumentasjonRepo.deleteAll();
         kravRepo.deleteAll();
     }
