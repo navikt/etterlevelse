@@ -26,6 +26,7 @@ export interface IEtterlevelseDokumentasjon {
   risikoeiere: string[]
   nomAvdelingId?: string
   avdelingNavn?: string
+  seksjoner: INomSeksjon[]
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]
@@ -65,4 +66,9 @@ export interface ILovStats {
   relevantKrav: TKravQL[]
   irrelevantKrav: TKravQL[]
   utgaattKrav: TKravQL[]
+}
+
+export interface INomSeksjon {
+  nomSeksjonId: string
+  nomSeksjonName: string
 }

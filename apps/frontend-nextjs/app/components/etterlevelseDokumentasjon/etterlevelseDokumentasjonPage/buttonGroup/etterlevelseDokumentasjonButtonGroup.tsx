@@ -11,6 +11,7 @@ import {
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { env } from '@/util/env/env'
 import { getVariantForBLLButton } from '@/util/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopUtils'
 import {
   getPvkButtonText,
@@ -22,6 +23,8 @@ import { Button } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext } from 'react'
 import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
+import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
+import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurderingButton/personvernkonsekvensvurderingButton'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -40,69 +43,91 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
 }) => {
   const router = useRouter()
   const user = useContext(UserContext)
-  const isRisikoeier = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+  const isRisikoeier: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   return (
     <>
-      <Button
-        onClick={() => {
-          router.push(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
-        }}
-        size='small'
-        variant='tertiary'
-        className='whitespace-nowrap'
-      >
-        Rediger dokumentegenskaper
-      </Button>
       {etterlevelseDokumentasjon.forGjenbruk && (
         <TillatGjenbrukModal
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
         />
       )}
-      <Button
-        onClick={() => {
-          router.push(
-            pvkDokumentasjonBehandlingsenLivslopUrl(
-              etterlevelseDokumentasjon.id,
-              behandlingsLivslop ? behandlingsLivslop.id : 'ny'
-            )
-          )
-        }}
-        size='small'
-        variant={getVariantForBLLButton(behandlingsLivslop)}
-        className='whitespace-nowrap'
-      >
-        {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
-        Tegn behandlingens livsløp
-      </Button>
-      {pvkDokument && pvkDokument.skalUtforePvk && (
+
+      {/** satt knappene tilbake slik at vi kan prodsette ting */}
+      <>
         <Button
           onClick={() => {
-            router.push(pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1))
+            router.push(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
           }}
           size='small'
-          variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
+          variant='tertiary'
           className='whitespace-nowrap'
         >
-          {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
+          Rediger dokumentegenskaper
         </Button>
-      )}
-      <Button
-        onClick={() => {
-          router.push(
-            pvkDokumentasjonPvkBehovUrl(
-              etterlevelseDokumentasjon.id,
-              pvkDokument ? pvkDokument.id : 'ny'
+        {etterlevelseDokumentasjon.forGjenbruk && (
+          <TillatGjenbrukModal
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+          />
+        )}
+        <Button
+          onClick={() => {
+            router.push(
+              pvkDokumentasjonBehandlingsenLivslopUrl(
+                etterlevelseDokumentasjon.id,
+                behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+              )
             )
-          )
-        }}
-        size='small'
-        variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
-        className='whitespace-nowrap'
-      >
-        {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
-      </Button>
+          }}
+          size='small'
+          variant={getVariantForBLLButton(behandlingsLivslop)}
+          className='whitespace-nowrap'
+        >
+          {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+          Tegn behandlingens livsløp
+        </Button>
+        {pvkDokument && pvkDokument.skalUtforePvk && (
+          <Button
+            onClick={() => {
+              router.push(pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1))
+            }}
+            size='small'
+            variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
+            className='whitespace-nowrap'
+          >
+            {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
+          </Button>
+        )}
+        <Button
+          onClick={() => {
+            router.push(
+              pvkDokumentasjonPvkBehovUrl(
+                etterlevelseDokumentasjon.id,
+                pvkDokument ? pvkDokument.id : 'ny'
+              )
+            )
+          }}
+          size='small'
+          variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
+          className='whitespace-nowrap'
+        >
+          {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
+        </Button>
+      </>
+
+      {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
+      {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
+      {env.isDev && (
+        <PersonvernkonsekvensvurderingButton
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          risikoscenarioList={risikoscenarioList}
+          behandlingsLivslop={behandlingsLivslop}
+          pvkDokument={pvkDokument}
+          isRisikoeier={isRisikoeier}
+        />
+      )}
     </>
   )
 }

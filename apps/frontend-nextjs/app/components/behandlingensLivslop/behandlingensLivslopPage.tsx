@@ -34,7 +34,7 @@ import {
   Heading,
   Loader,
 } from '@navikt/ds-react'
-import { Form, Formik, FormikHelpers, validateYupSchema, yupToFormErrors } from 'formik'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import { useParams, useRouter } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
@@ -142,11 +142,15 @@ export const BehandlingensLivslopPage = () => {
         setIsPvoAlertModalOpen(true)
       } else {
         if (behandlingensLivslop.id || existingBehandlingsLivslopId) {
-          await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          await updateBehandlingensLivslop(mutatedBehandlingensLivslop).then(async (response) => {
             setBehandlingesLivslop(response)
+            await formRef.current.resetForm({
+              values: mapBehandlingensLivslopRequestToFormValue(response),
+            })
+            setSavedSuccessful(true)
           })
         } else {
-          await createBehandlingensLivslop(mutatedBehandlingensLivslop).then((response) => {
+          await createBehandlingensLivslop(mutatedBehandlingensLivslop).then(async (response) => {
             setBehandlingesLivslop(response)
 
             window.history.pushState(
@@ -154,6 +158,11 @@ export const BehandlingensLivslopPage = () => {
               '',
               `${dokumentasjonUrl}/${response.etterlevelseDokumentasjonId}/behandlingens-livslop/${response.id}`
             )
+
+            await formRef.current.resetForm({
+              values: mapBehandlingensLivslopRequestToFormValue(response),
+            })
+            setSavedSuccessful(true)
           })
         }
       }
@@ -205,13 +214,8 @@ export const BehandlingensLivslopPage = () => {
                   <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    onSubmit={async (
-                      values: IBehandlingensLivslopRequest,
-                      formikHelpers: FormikHelpers<IBehandlingensLivslopRequest>
-                    ) => {
-                      await submit(values).then(() => {
-                        formikHelpers.resetForm({ values })
-                      })
+                    onSubmit={async (values: IBehandlingensLivslopRequest) => {
+                      await submit(values)
                     }}
                     initialValues={mapBehandlingensLivslopRequestToFormValue(
                       behandlingsLivslop as IBehandlingensLivslop

@@ -1,18 +1,16 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
-import {
-  EPVK,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
-  pvkDokument: IPvkDokument
+  artOgOmfang: IBehandlingensArtOgOmfang
   personkategorier: string[]
 }
 
 export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
-  pvkDokument,
+  artOgOmfang,
   personkategorier,
 }) => {
   return (
@@ -35,9 +33,9 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
           <div className='pt-5 pb-3 max-w-[75ch]'>
             <Label>1. Stemmer denne lista over personkategorier?</Label>
             <DataTextWrapper>
-              {pvkDokument.stemmerPersonkategorier === null && 'Ikke besvart'}
-              {pvkDokument.stemmerPersonkategorier === true && 'Ja'}
-              {pvkDokument.stemmerPersonkategorier === false && 'Nei'}
+              {artOgOmfang.stemmerPersonkategorier === null && 'Ikke besvart'}
+              {artOgOmfang.stemmerPersonkategorier === true && 'Ja'}
+              {artOgOmfang.stemmerPersonkategorier === false && 'Nei'}
             </DataTextWrapper>
           </div>
 
@@ -46,7 +44,7 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
               2. For hver av personkategoriene over, beskriv hvor mange personer dere behandler
               personopplysninger om.
             </Label>
-            <DataTextWrapper>{pvkDokument.personkategoriAntallBeskrivelse}</DataTextWrapper>
+            <DataTextWrapper>{artOgOmfang.personkategoriAntallBeskrivelse}</DataTextWrapper>
           </div>
 
           <div className='pt-5 pb-3 max-w-[75ch]'>
@@ -54,12 +52,12 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
               3. Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av
               rollene, beskriv hvor mange som har tilgang.
             </Label>
-            <DataTextWrapper>{pvkDokument.tilgangsBeskrivelsePersonopplysningene}</DataTextWrapper>
+            <DataTextWrapper>{artOgOmfang.tilgangsBeskrivelsePersonopplysningene}</DataTextWrapper>
           </div>
 
           <div className='pt-5 pb-3 max-w-[75ch]'>
             <Label>4. Beskriv hvordan og hvor lenge personopplysningene skal lagres.</Label>
-            <DataTextWrapper>{pvkDokument.lagringsBeskrivelsePersonopplysningene}</DataTextWrapper>
+            <DataTextWrapper>{artOgOmfang.lagringsBeskrivelsePersonopplysningene}</DataTextWrapper>
           </div>
         </div>
       </div>

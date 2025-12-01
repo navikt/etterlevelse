@@ -44,9 +44,11 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   manglerBehandlingError,
   errorSummaryRef,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const { meldingerTilPvo, ...updateErrors } = errors
   return (
     <div>
-      {(!_.isEmpty(errors) ||
+      {(!_.isEmpty(updateErrors) ||
         pvkKravError !== '' ||
         risikoeiereDataError ||
         avdelingError ||
@@ -100,13 +102,15 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
             </ErrorSummary.Item>
           )}
 
-          {Object.entries(errors)
+          {Object.entries(updateErrors)
             .filter(([, error]) => error)
-            .map(([key, error]) => (
-              <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
-                {error as string}
-              </ErrorSummary.Item>
-            ))}
+            .map(([key, error]) => {
+              return (
+                <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
+                  {error as string}
+                </ErrorSummary.Item>
+              )
+            })}
           {risikoscenarioError !== '' && (
             <ErrorSummary.Item href='#risikoscenarioer' className='max-w-[75ch]'>
               {risikoscenarioError}

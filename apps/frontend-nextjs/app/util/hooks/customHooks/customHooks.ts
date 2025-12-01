@@ -7,9 +7,15 @@ export function useDebouncedState<T>(
   initialValue: T,
   delay: number,
   passThrough?: (value: T) => void
-): [T, Dispatch<SetStateAction<T>>] {
+): [T, Dispatch<SetStateAction<T>>, T] {
   const [value, setValue] = useState<T>(initialValue)
+  const [debouncedValue, setDebouncedValue] = useState<T>(initialValue)
   const mounted = useRef(true)
+  const passThroughRef = useRef(passThrough)
+
+  useEffect(() => {
+    passThroughRef.current = passThrough
+  }, [passThrough])
 
   useEffect(() => {
     mounted.current = true
@@ -21,19 +27,17 @@ export function useDebouncedState<T>(
   useEffect(() => {
     const handler: NodeJS.Timeout = setTimeout(() => {
       if (mounted.current) {
-        setValue(value)
-        if (passThrough) {
-          passThrough(value)
+        setDebouncedValue(value)
+        if (passThroughRef.current) {
+          passThroughRef.current(value)
         }
       }
     }, delay)
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay, passThrough])
+    return () => clearTimeout(handler)
+  }, [value, delay])
 
   // value returned as actual non-debounced value to be used in inputfields etc
-  return [value, setValue] as const
+  return [debouncedValue, setValue, value] as const
 }
 
 export function useForceUpdate() {

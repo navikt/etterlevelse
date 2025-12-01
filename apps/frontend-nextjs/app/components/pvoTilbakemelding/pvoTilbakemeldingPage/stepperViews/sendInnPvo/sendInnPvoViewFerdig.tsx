@@ -3,12 +3,14 @@
 import { arkiver } from '@/api/p360/p360Api'
 import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
 import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
+import SendInnTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/sendInnTilbakemeldingsHistorikk'
 import PvoFormButtons from '@/components/pvoTilbakemelding/form/pvoFormButtons'
 import { SendInnPvoReadOnly } from '@/components/pvoTilbakemelding/readOnly/sendInnPvoReadOnly'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import {
   EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
@@ -18,6 +20,7 @@ import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
+  pvoTilbakemelding: IPvoTilbakemelding
   relevantVurdering: IVurdering
   activeStep: number
   submitForm: () => Promise<void>
@@ -34,6 +37,7 @@ type TProps = {
 
 export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   pvkDokument,
+  pvoTilbakemelding,
   relevantVurdering,
   activeStep,
   submitForm,
@@ -53,6 +57,17 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
     <div className='pt-6 w-full'>
       <div className='w-full flex justify-center'>
         <div className='max-w-[75ch]'>
+          {pvkDokument.antallInnsendingTilPvo > 1 && (
+            <div className='mt-5 mb-10'>
+              <SendInnTilbakemeldingsHistorikk
+                pvkDokument={pvkDokument}
+                pvoVurderingList={pvoVurderingList}
+                pvoTilbakemelding={pvoTilbakemelding}
+                relevantVurderingsInnsendingId={pvkDokument.antallInnsendingTilPvo}
+              />
+            </div>
+          )}
+
           <SendInnPvoReadOnly
             pvkDokument={pvkDokument}
             relevantVurdering={relevantVurdering}

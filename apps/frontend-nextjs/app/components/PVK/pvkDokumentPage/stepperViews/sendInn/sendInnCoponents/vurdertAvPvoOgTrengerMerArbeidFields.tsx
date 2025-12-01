@@ -14,7 +14,7 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
+import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo } from 'react'
 
 type TProps = {
@@ -29,6 +29,7 @@ type TProps = {
   initialStatus: EPvkDokumentStatus
   isLoading: boolean
   errorSummaryComponent: ReactNode
+  savedAlert: ReactNode
   pvoVurderingList: ICode[]
 }
 
@@ -41,6 +42,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   isLoading,
   errorSummaryComponent,
   pvoVurderingList,
+  savedAlert,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
@@ -63,62 +65,81 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   }, [])
 
   return (
-    <div>
-      <div className='flex justify-center w-full'>
-        <div className='w-full max-w-[75ch]'>
-          <BeskjedFraPvoReadOnly
-            relevantVurdering={relevantVurdering}
-            pvoVurderingList={pvoVurderingList}
-          />
+    <Field>
+      {(fieldProps: FieldProps) => (
+        <div>
+          <div className='flex justify-center w-full'>
+            <div className='w-full max-w-[75ch]'>
+              <BeskjedFraPvoReadOnly
+                relevantVurdering={relevantVurdering}
+                pvoVurderingList={pvoVurderingList}
+              />
 
-          <div className='mt-8 mb-3'>
-            <TextAreaField
-              height='150px'
-              noPlaceholder
-              label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-              name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
-              markdown
-            />
-          </div>
+              <div className='mt-8 mb-3'>
+                <TextAreaField
+                  height='150px'
+                  noPlaceholder
+                  label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
+                  name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
+                  markdown
+                />
+              </div>
 
-          {errorSummaryComponent}
+              {relevantMeldingTilPvo.length !== 0 &&
+                !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
+                  <Alert variant='info' className='my-5'>
+                    Innsending trukket <br />
+                    Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
+                    deretter behandlet som en ny innsending
+                  </Alert>
+                )}
 
-          {isLoading && (
-            <div className='flex justify-center items-center w-full'>
-              <CenteredLoader />
+              {errorSummaryComponent}
+
+              {isLoading && (
+                <div className='flex justify-center items-center w-full'>
+                  <CenteredLoader />
+                </div>
+              )}
+
+              <div>
+                <Alert variant='info' className='my-5 '>
+                  Status: {pvkDokumentStatusToText(pvkDokument.status)}
+                </Alert>
+              </div>
+
+              <div>{!fieldProps.form.dirty && savedAlert}</div>
             </div>
-          )}
-
-          <div>
-            <Alert variant='info' className='my-5 '>
-              Status: {pvkDokumentStatusToText(pvkDokument.status)}
-            </Alert>
           </div>
+
+          <div className='mt-5 flex gap-2 items-center'>
+            <LagreOgFortsettSenereButton
+              setFieldValue={setFieldValue}
+              submitForm={submitForm}
+              initialStatus={initialStatus}
+              resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
+            />
+
+            <Button
+              type='button'
+              variant='primary'
+              onClick={async () => {
+                await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+                await setFieldValue(
+                  'antallInnsendingTilPvo',
+                  pvkDokument.antallInnsendingTilPvo + 1
+                )
+                await submitForm()
+              }}
+            >
+              Lagre og send tilbake til PVO
+            </Button>
+          </div>
+
+          <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
         </div>
-      </div>
-
-      <div className='mt-5 flex gap-2 items-center'>
-        <LagreOgFortsettSenereButton
-          setFieldValue={setFieldValue}
-          submitForm={submitForm}
-          initialStatus={initialStatus}
-        />
-
-        <Button
-          type='button'
-          variant='primary'
-          onClick={async () => {
-            await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
-            await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo + 1)
-            await submitForm()
-          }}
-        >
-          Lagre og send tilbake til PVO
-        </Button>
-      </div>
-
-      <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
-    </div>
+      )}
+    </Field>
   )
 }
 

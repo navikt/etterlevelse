@@ -1,22 +1,28 @@
 'use client'
 
 import {
-  getPvkDokument,
-  mapPvkDokumentToFormValue,
-  updatePvkDokument,
-} from '@/api/pvkDokument/pvkDokumentApi'
+  createBehandlingensArtOgOmfang,
+  getBehandlingensArtOgOmfangByEtterlevelseDokumentId,
+  mapBehandlingensArtOgOmfangToFormValue,
+  updateBehandlingensArtOgOmfang,
+  useBehandlingensArtOgOmfang,
+} from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
 import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/artOgOmfangReadOnlyContent'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { BoolField } from '@/components/common/inputs'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVK,
+  EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -33,7 +39,6 @@ type TProps = {
   personkategorier: string[]
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
-  setPvkDokument: (pvkDokument: IPvkDokument) => void
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -46,7 +51,6 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
   personkategorier,
   etterlevelseDokumentasjon,
   pvkDokument,
-  setPvkDokument,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -55,41 +59,81 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
   relevantVurdering,
 }) => {
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
+  const [artOgOmfang, setArtOgOmfang, loading] = useBehandlingensArtOgOmfang(
+    etterlevelseDokumentasjon.id
+  )
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
-  const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
-    await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
-      const updatedatePvkDokument = {
-        ...response,
-        stemmerPersonkategorier: pvkDokument.stemmerPersonkategorier,
-        personkategoriAntallBeskrivelse: pvkDokument.personkategoriAntallBeskrivelse,
-        tilgangsBeskrivelsePersonopplysningene: pvkDokument.tilgangsBeskrivelsePersonopplysningene,
-        lagringsBeskrivelsePersonopplysningene: pvkDokument.lagringsBeskrivelsePersonopplysningene,
+  const submit = async (submitedValues: IBehandlingensArtOgOmfang): Promise<void> => {
+    if (etterlevelseDokumentasjon) {
+      const mutatedArtOgOmfang = {
+        ...submitedValues,
+        etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
+      } as IBehandlingensArtOgOmfang
+
+      //double check if behandlingensArtOgOmfang already exist before submitting
+      let existingArtOgOmfangId: string = ''
+      const existingArtOgOmfang = await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(
+        etterlevelseDokumentasjon.id
+      ).catch(() => undefined)
+
+      if (existingArtOgOmfang) {
+        existingArtOgOmfangId = existingArtOgOmfang.id
+        mutatedArtOgOmfang.id = existingArtOgOmfang.id
       }
-      if (isReadOnlyPvkStatus(response.status)) {
+
+      let pvkStatus = ''
+      await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+        .then((response) => {
+          pvkStatus = response.status
+        })
+        .catch(() => undefined)
+
+      if (isReadOnlyPvkStatus(pvkStatus as EPvkDokumentStatus)) {
         setIsPvoAlertModalOpen(true)
       } else {
-        await updatePvkDokument(updatedatePvkDokument)
-          .then((response: IPvkDokument) => {
-            setPvkDokument(response)
-          })
-          .finally(() => setSavedSuccessful(true))
+        if (submitedValues.id || existingArtOgOmfangId) {
+          await updateBehandlingensArtOgOmfang(mutatedArtOgOmfang).then(
+            (response: IBehandlingensArtOgOmfang) => {
+              setArtOgOmfang(response)
+              formRef.current.resetForm({
+                values: mapBehandlingensArtOgOmfangToFormValue(response),
+              })
+              setSavedSuccessful(true)
+            }
+          )
+        } else {
+          await createBehandlingensArtOgOmfang(mutatedArtOgOmfang).then(
+            (response: IBehandlingensArtOgOmfang) => {
+              setArtOgOmfang(response)
+              formRef.current.resetForm({
+                values: mapBehandlingensArtOgOmfangToFormValue(response),
+              })
+              setSavedSuccessful(true)
+            }
+          )
+        }
       }
-    })
+    }
   }
 
   return (
     <div className='w-full'>
       <ContentLayout>
-        {pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
+        {loading && <CenteredLoader />}
+
+        {!loading && artOgOmfang && !isReadOnlyPvkStatus(pvkDokument.status) && (
           <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
             <Formik
               validateOnChange={false}
               validateOnBlur={false}
               onSubmit={submit}
-              initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+              initialValues={mapBehandlingensArtOgOmfangToFormValue(
+                artOgOmfang as IBehandlingensArtOgOmfang
+              )}
               innerRef={formRef}
             >
               {({ submitForm, values, resetForm, setFieldValue, initialValues, dirty }) => (
@@ -243,7 +287,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                                 await submitForm().then(() => {
                                   resetForm({
                                     values: {
-                                      ...pvkDokument,
+                                      ...artOgOmfang,
                                       stemmerPersonkategorier: undefined,
                                       personkategoriAntallBeskrivelse: '',
                                       tilgangsBeskrivelsePersonopplysningene: '',
@@ -312,9 +356,9 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
           </div>
         )}
 
-        {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
+        {!loading && artOgOmfang && isReadOnlyPvkStatus(pvkDokument.status) && (
           <ArtOgOmfangReadOnlyContent
-            pvkDokument={pvkDokument}
+            artOgOmfang={artOgOmfang}
             personkategorier={personkategorier}
           />
         )}

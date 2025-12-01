@@ -21,11 +21,6 @@ public class PvkDokumentData {
     private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
-    private Boolean stemmerPersonkategorier;
-    private String personkategoriAntallBeskrivelse;
-    private String tilgangsBeskrivelsePersonopplysningene;
-    private String lagringsBeskrivelsePersonopplysningene;
-
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
 

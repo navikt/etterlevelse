@@ -9,7 +9,7 @@ import {
 } from '@/util/textEditor/textEditorUtil'
 import { ettlevColors } from '@/util/theme/theme'
 import { RawDraftContentState, convertToRaw } from 'draft-js'
-import { FormikErrors } from 'formik'
+import { FieldMetaProps, FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { useEffect, useState } from 'react'
 import { Editor } from 'react-draft-wysiwyg-next'
@@ -22,6 +22,7 @@ type TTextEditorProps = {
   setValue: (v: string) => void
   height?: string
   errors?: FormikErrors<any>
+  getFieldMeta?: <Value>(name: string) => FieldMetaProps<Value>
   name?: string
   simple?: boolean
   width?: string
@@ -35,6 +36,7 @@ export const TextEditor = ({
   setValue,
   height,
   errors,
+  getFieldMeta,
   name,
   simple,
   width,
@@ -93,6 +95,14 @@ export const TextEditor = ({
         'bgcolor-rgb(215, 215, 215)': {
           open: () => {
             return `<span style='background-color: rgb(215, 215, 215)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        'bgcolor-rgb(196, 237, 205)': {
+          open: () => {
+            return `<span style='background-color: rgb(196, 237, 205)'>`
           },
           close: () => {
             return '</span>'
@@ -182,7 +192,7 @@ export const TextEditor = ({
     //--------------------------
   }, [])
 
-  const hasError = errors && name && errors[name]
+  const hasError = errors && name && getFieldMeta && getFieldMeta(name).error
 
   return (
     <div>
@@ -248,6 +258,7 @@ export const TextEditor = ({
                 'rgb(235, 222, 252)',
                 'rgb(215, 215, 215)',
                 'rgb(255, 255, 255)',
+                'rgb(196, 237, 205)',
               ],
             },
             //image: { alt: { present: true, mandatory: true }, },

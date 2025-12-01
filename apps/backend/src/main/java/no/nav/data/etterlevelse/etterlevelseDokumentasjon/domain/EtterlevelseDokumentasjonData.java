@@ -31,6 +31,7 @@ public class EtterlevelseDokumentasjonData {
     private List<String> risikoeiere;
     private String nomAvdelingId;
     private String avdelingNavn;
+    private List<NomSeksjon> seksjoner;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
     private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown

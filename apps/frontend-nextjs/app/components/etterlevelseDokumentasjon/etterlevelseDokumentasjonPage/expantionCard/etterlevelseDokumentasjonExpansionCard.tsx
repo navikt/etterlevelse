@@ -133,6 +133,24 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 </BodyLong>
               </div>
 
+              <div className='flex items-start gap-2 mb-2.5'>
+                <div>
+                  <Label size='medium'>Seksjon:</Label>
+                </div>
+                <BodyLong size='medium'>
+                  {etterlevelseDokumentasjon.seksjoner.length !== 0 && (
+                    <div className='flex flex-wrap tri'>
+                      <BodyLong size='medium'>
+                        {etterlevelseDokumentasjon.seksjoner
+                          .map((seksjon) => seksjon.nomSeksjonName)
+                          .join(', ')}
+                      </BodyLong>
+                    </div>
+                  )}
+                  {etterlevelseDokumentasjon.seksjoner.length === 0 && 'Ikke angitt'}
+                </BodyLong>
+              </div>
+
               <div className='mb-2.5'>
                 {teams.length > 0 && <Teams teams={teams} link />}
                 {teams.length === 0 && (

@@ -14,12 +14,14 @@ type TProps = {
   ) => Promise<void | FormikErrors<IPvkDokument>>
   submitForm: () => Promise<void>
   initialStatus: EPvkDokumentStatus
+  resetForm?: () => void
 }
 
 export const LagreOgFortsettSenereButton: FunctionComponent<TProps> = ({
   setFieldValue,
   submitForm,
   initialStatus,
+  resetForm,
 }) => {
   return (
     <Button
@@ -28,6 +30,7 @@ export const LagreOgFortsettSenereButton: FunctionComponent<TProps> = ({
       onClick={async () => {
         await setFieldValue('status', initialStatus)
         await submitForm()
+        if (resetForm) resetForm()
       }}
     >
       Lagre og fortsett senere

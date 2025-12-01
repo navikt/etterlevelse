@@ -37,7 +37,7 @@ export const CustomFileUpload = (props: IProps) => {
   const [fileDeleteAlert, setFileDeleteAlert] = useState<boolean>(false)
 
   useEffect(() => {
-    if (initialValues && initialValues.length > 0) {
+    if (initialValues) {
       const initialFiles: FileObject[] = []
       initialValues.forEach((initialFile) => {
         initialFiles.push({ file: initialFile, error: false })

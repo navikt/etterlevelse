@@ -11,6 +11,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -51,6 +52,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     private String nomAvdelingId;
     private String avdelingNavn;
+    private List<NomSeksjon> seksjoner;
+
     private List<Varslingsadresse> varslingsadresser;
     @Override
     public void format() {
@@ -94,6 +97,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setForGjenbruk(forGjenbruk);
         eDokData.setNomAvdelingId(nomAvdelingId);
         eDokData.setAvdelingNavn(avdelingNavn);
+        eDokData.setSeksjoner(copyOf(seksjoner));
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));
