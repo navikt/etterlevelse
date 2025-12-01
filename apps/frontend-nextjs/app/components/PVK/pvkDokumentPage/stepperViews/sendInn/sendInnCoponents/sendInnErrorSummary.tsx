@@ -1,3 +1,4 @@
+import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
@@ -12,6 +13,7 @@ type TProps = {
   risikoeiereDataError: boolean
   avdelingError: boolean
   medlemError: boolean
+  artOgOmfangError: IArtOgOmfangError
   behandlingensLivslopError: boolean
   manglerBehandlingError: boolean
   risikoscenarioError: string
@@ -30,6 +32,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   avdelingError,
   medlemError,
   behandlingensLivslopError,
+  artOgOmfangError,
   risikoscenarioError,
   tiltakError,
   tiltakAnsvarligError,
@@ -83,6 +86,31 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
             <ErrorSummary.Item href='#behandlingensLivslop' className='max-w-[75ch]'>
               Behandlingens livsløp må ha minimum 1 opplastet tegning, eller en skriftlig
               beskrivelse.
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.stemmerPersonkategorier && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må oppgi om lista over personkategorier stemmer.
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.personkategoriAntallBeskrivelse && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må beskrive hvor mange personer dere behandler personopplysninger om.
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.tilgangsBeskrivelsePersonopplysningene && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må beskrive hvilke roller som skal ha tilgang til personopplysningene, og pr.
+              rolle, hvor mange som skal ha tilgang til hva.
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.lagringsBeskrivelsePersonopplysningene && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må beskrive hvordan og hvor lenge personopplysningene skal lagres.
             </ErrorSummary.Item>
           )}
 
