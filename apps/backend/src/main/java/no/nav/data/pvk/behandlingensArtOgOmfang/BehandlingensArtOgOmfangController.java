@@ -53,7 +53,7 @@ public class BehandlingensArtOgOmfangController {
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
     public ResponseEntity<BehandlingensArtOgOmfangResponse> getBehandlingensArtOgOmfangResponseByEtterlevelseDokumentId(@PathVariable UUID etterlevelseDokumentId) {
         log.info("Get Behandlingens art og omfang by etterlevelseDokument id={}", etterlevelseDokumentId);
-        Optional<BehandlingensArtOgOmfang> behandlingensArtOgOmfang = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
+        Optional<BehandlingensArtOgOmfang> behandlingensArtOgOmfang = service.getByEtterlevelseDokumentasjonId(etterlevelseDokumentId);
 
         return behandlingensArtOgOmfang.map(data -> ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(data))).orElseGet(() -> ResponseEntity.notFound().build());
     }

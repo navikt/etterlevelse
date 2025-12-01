@@ -28,14 +28,14 @@ public class BehandlingensArtOgOmfangService {
         return repo.findAll(pageParameters.createPage());
     }
 
-    public Optional<BehandlingensArtOgOmfang> getByEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {
+    public Optional<BehandlingensArtOgOmfang> getByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId) {
         return repo.findByEtterlevelseDokumensjonId(etterlevelseDokumentasjonId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public BehandlingensArtOgOmfang save(BehandlingensArtOgOmfang behandlingensArtOgOmfang, boolean isUpdate) {
         if (!isUpdate) {
-            var existingBehandlingensArtOgOmfang = getByEtterlevelseDokumentasjon(behandlingensArtOgOmfang.getEtterlevelseDokumentId());
+            var existingBehandlingensArtOgOmfang = getByEtterlevelseDokumentasjonId(behandlingensArtOgOmfang.getEtterlevelseDokumentId());
             if (existingBehandlingensArtOgOmfang.isPresent()) {
                 log.warn("Found existing behandlingens art og omfang when trying to create for etterlevelse dokumentation id: {}", behandlingensArtOgOmfang.getEtterlevelseDokumentId());
                 behandlingensArtOgOmfang.setId(existingBehandlingensArtOgOmfang.get().getId());
