@@ -19,7 +19,8 @@ type TProps = {
   risikoscenarioError: string
   tiltakError: string
   tiltakAnsvarligError: string
-  tiltakFristError: string[]
+  tiltakFristError: string
+  tiltakFristUtgaattError: string
   customStepNumber?: number
 }
 
@@ -30,6 +31,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
   tiltakError,
   tiltakAnsvarligError,
   tiltakFristError,
+  tiltakFristUtgaattError,
   customStepNumber,
 }) => {
   const pathName = usePathname()
@@ -79,15 +81,23 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                       <br />
                     </>
                   )}
-                  {tiltakFristError.length !== 0 && (
+                  {tiltakFristError !== '' && (
                     <>
-                      {tiltakFristError.forEach((error, index) => (
-                        <FormAlert key={`${index}_tiltakFristError`}>{error}</FormAlert>
-                      ))}
+                      <FormAlert>{tiltakError}</FormAlert>
                       <ExternalLink
                         href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'utenFrist')}
                       >
-                        Se tiltak som mangler tiltaksfrist
+                        Se tiltak som mangler tiltaksfrist (åpner i ny fane)
+                      </ExternalLink>
+                    </>
+                  )}
+                  {tiltakFristUtgaattError !== '' && (
+                    <>
+                      <FormAlert>{tiltakFristUtgaattError}</FormAlert>
+                      <ExternalLink
+                        href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'alleTiltak')}
+                      >
+                        Se tiltak som har utgått tiltaksfrist (åpner i ny fane)
                       </ExternalLink>
                     </>
                   )}

@@ -29,6 +29,7 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
@@ -124,6 +125,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   const [antallTiltakIkkeAktuelt, setAntallTiltakIkkeAktuelt] = useState<number>(0)
   const [antallUtenTiltakAnsvarlig, setAntallUtenTiltakAnsvarlig] = useState<number>(0)
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
+  const [antallUtgaatteFrister, setAntallUtgaatteFrister] = useState<number>(0)
 
   useEffect(() => {
     ;(async () => {
@@ -187,6 +189,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
   useEffect(() => {
     if (tiltakList.length !== 0) {
+      const now = new Date()
       setAntallUtenTiltakAnsvarlig(
         tiltakList.filter(
           (tiltak: ITiltak) =>
@@ -194,6 +197,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         ).length
       )
       setAntallUtenFrist(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist).length)
+      setAntallUtgaatteFrister(
+        tiltakList.filter((tiltak: ITiltak) => moment(now).isAfter(moment(tiltak.frist))).length
+      )
     }
   }, [tiltakList])
 
@@ -340,7 +346,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         value={tabValues.tiltak}
                         label={
                           <span className='flex items-center gap-1'>
-                            {(antallUtenTiltakAnsvarlig > 0 || antallUtenFrist > 0) && (
+                            {(antallUtenTiltakAnsvarlig > 0 ||
+                              antallUtenFrist > 0 ||
+                              antallUtgaatteFrister > 0) && (
                               <span className='w-3 h-3 bg-red-400 rounded-full mr-1'></span>
                             )}
                             {`Vis tiltak (${tiltakList.length})`}
