@@ -24,56 +24,56 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/behadlingens-art-og-omfang")
-@Tag(name = "Behadlingens art og omfang", description = "Behadlingens art og omfang for etterlevelsesdokumentasjon")
+@RequestMapping("/behandlingens-art-og-omfang")
+@Tag(name = "Behandlingens art og omfang", description = "Behandlingens art og omfang for etterlevelsesdokumentasjon")
 public class BehandlingensArtOgOmfangController {
     private final BehandlingensArtOgOmfangService service;
 
-    @Operation(summary = "Get Behadlingens art og omfang")
+    @Operation(summary = "Get Behandlingens art og omfang")
     @ApiResponse(description = "ok")
     @GetMapping
     public ResponseEntity<RestResponsePage<BehandlingensArtOgOmfangResponse>> getAll(
             PageParameters pageParameters
     ) {
-        log.info("Get all Behadlingens art og omfang");
+        log.info("Get all Behandlingens art og omfang");
         Page<BehandlingensArtOgOmfang> page = service.getAll(pageParameters);
         return ResponseEntity.ok(new RestResponsePage<>(page).convert(BehandlingensArtOgOmfangResponse::buildFrom));
     }
 
-    @Operation(summary = "Get One Behadlingens art og omfang")
+    @Operation(summary = "Get One Behandlingens art og omfang")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
     public ResponseEntity<BehandlingensArtOgOmfangResponse> getById(@PathVariable UUID id) {
-        log.info("Get Behadlingens art og omfang id={}", id);
+        log.info("Get Behandlingens art og omfang id={}", id);
         return ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(service.get(id)));
     }
 
-    @Operation(summary = "Get Behadlingens art og omfang by etterlevelsedokument id")
+    @Operation(summary = "Get Behandlingens art og omfang by etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
     public ResponseEntity<BehandlingensArtOgOmfangResponse> getBehandlingensArtOgOmfangResponseByEtterlevelseDokumentId(@PathVariable UUID etterlevelseDokumentId) {
-        log.info("Get Behadlingens art og omfang by etterlevelseDokument id={}", etterlevelseDokumentId);
+        log.info("Get Behandlingens art og omfang by etterlevelseDokument id={}", etterlevelseDokumentId);
         Optional<BehandlingensArtOgOmfang> behandlingensArtOgOmfang = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
 
         return behandlingensArtOgOmfang.map(data -> ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(data))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Create Behadlingens art og omfang")
-    @ApiResponse(responseCode = "201", description = "Behadlingens art og omfang created")
+    @Operation(summary = "Create Behandlingens art og omfang")
+    @ApiResponse(responseCode = "201", description = "Behandlingens art og omfang created")
     @PostMapping
     public ResponseEntity<BehandlingensArtOgOmfangResponse> createBehandlingensArtOgOmfang(@RequestBody BehandlingensArtOgOmfangRequest request) {
-        log.info("Create Behadlingens art og omfang");
+        log.info("Create Behandlingens art og omfang");
 
         var behandlingensArtOgOmfang = service.save(request.convertToBehandlingensArtOgOmfang(), request.isUpdate());
 
         return new ResponseEntity<>(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update Behadlingens art og omfang")
-    @ApiResponse(description = "Behadlingens art og omfang updated")
+    @Operation(summary = "Update Behandlingens art og omfang")
+    @ApiResponse(description = "Behandlingens art og omfang updated")
     @PutMapping("/{id}")
     public ResponseEntity<BehandlingensArtOgOmfangResponse> updateBehandlingensArtOgOmfang(@PathVariable UUID id, @Valid @RequestBody BehandlingensArtOgOmfangRequest request) {
-        log.info("Update Behadlingens art og omfang id={}", id);
+        log.info("Update Behandlingens art og omfang id={}", id);
 
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
@@ -82,7 +82,7 @@ public class BehandlingensArtOgOmfangController {
         var behandlingensArtOgOmfangToUpdate = service.get(id);
 
         if (behandlingensArtOgOmfangToUpdate == null) {
-            throw new ValidationException(String.format("Could not find Behadlingens art og omfang to be updated with id = %s ", id));
+            throw new ValidationException(String.format("Could not find Behandlingens art og omfang to be updated with id = %s ", id));
         }
 
         request.mergeInto(behandlingensArtOgOmfangToUpdate);
@@ -90,15 +90,15 @@ public class BehandlingensArtOgOmfangController {
         return ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang));
     }
 
-    @Operation(summary = "Delete Behadlingens art og omfang")
-    @ApiResponse(description = "Behadlingens art og omfang deleted")
+    @Operation(summary = "Delete Behandlingens art og omfang")
+    @ApiResponse(description = "Behandlingens art og omfang deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<BehandlingensArtOgOmfangResponse> deleteBehandlingensArtOgOmfangById(@PathVariable UUID id) {
-        log.info("Delete Behadlingens art og omfang id={}", id);
+        log.info("Delete Behandlingens art og omfang id={}", id);
         var behandlingensArtOgOmfang = service.delete(id);
         if (behandlingensArtOgOmfang == null) {
-            log.warn("Could not delete Behadlingens art og omfang with id = {}: Non-existing og related to other resources", id);
-            throw new ValidationException("Could not delete Behadlingens art og omfang: Non-existing og related to other resources");
+            log.warn("Could not delete Behandlingens art og omfang with id = {}: Non-existing og related to other resources", id);
+            throw new ValidationException("Could not delete Behandlingens art og omfang: Non-existing og related to other resources");
         } else {
             return ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang));
         }

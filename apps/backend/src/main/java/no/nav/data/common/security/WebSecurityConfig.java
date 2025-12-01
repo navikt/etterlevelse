@@ -78,7 +78,8 @@ public class WebSecurityConfig {
                     "/risikoscenario/**",
                     "/tiltak/**",
                     "/p360/**",
-                    "/nom/**"
+                    "/nom/**",
+                    "/behandlingens-art-og-omfang/**"
             );
 
             adminOnly(http,
@@ -108,6 +109,8 @@ public class WebSecurityConfig {
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/pvkdokument/pvo").hasAnyRole(AppRole.PERSONVERNOMBUD.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/risikoscenario/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/tiltak/**").hasAnyRole(AppRole.WRITE.name(), AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
+            http.authorizeHttpRequests(auth -> auth.requestMatchers("/behandlingens-art-og-omfang/**").hasAnyRole(AppRole.WRITE.name(), AppRole.ADMIN.name()));
+
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/logout").authenticated());
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll());
