@@ -38,7 +38,9 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
   setSelectedStep,
   formRef,
 }) => {
-  const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(pvkDokument.id)
+  const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(pvkDokument.etterlevelseDokumentId)
+
+  console.debug(artOgOmfang)
 
   return (
     <div className='w-full'>

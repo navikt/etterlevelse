@@ -100,6 +100,7 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
         )
       })()
     }
+    setIsLoading(false)
   }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [

@@ -78,7 +78,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
-  const [artOgOmfang] = useBehandlingensArtOgOmfang(pvkDokument.id)
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
