@@ -26,7 +26,7 @@ public class BehandlingensArtOgOmfang extends Auditable {
     private UUID id = UUID.randomUUID();
 
     @Column(name = "ETTERLEVELSE_DOKUMENTASJON_ID", nullable = false)
-    private UUID etterlevelseDokumentId;
+    private UUID etterlevelseDokumensjonId;
 
     @Type(value = JsonBinaryType.class)
     @Column(name = "DATA", nullable = false)

@@ -30,7 +30,7 @@ public class BehandlingensArtOgOmfangIT extends IntegrationTestBase {
     void getBehandlingensArtOgOmfangByEtterlevelseDokumentasjonId() {
         BehandlingensArtOgOmfang artOgOmfang = createBehandlingensArtOgOmfang();
 
-        var resp = restTemplate.getForEntity("/behandlingens-art-og-omfang/etterlevelsedokument/{etterlevelseDokumentId}", BehandlingensArtOgOmfangResponse.class, artOgOmfang.getEtterlevelseDokumentId());
+        var resp = restTemplate.getForEntity("/behandlingens-art-og-omfang/etterlevelsedokument/{etterlevelseDokumentId}", BehandlingensArtOgOmfangResponse.class, artOgOmfang.getEtterlevelseDokumensjonId());
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         BehandlingensArtOgOmfangResponse artOgOmfangResponseResponse = resp.getBody();
@@ -42,7 +42,7 @@ public class BehandlingensArtOgOmfangIT extends IntegrationTestBase {
         UUID ettDokId = createEtterlevelseDokumentasjon().getId();
 
         BehandlingensArtOgOmfangRequest request = BehandlingensArtOgOmfangRequest.builder()
-                .etterlevelseDokumentId(ettDokId)
+                .etterlevelseDokumensjonId(ettDokId)
                 .stemmerPersonkategorier(true)
                 .personkategoriAntallBeskrivelse("Beskrivelse")
                 .build();
@@ -50,7 +50,7 @@ public class BehandlingensArtOgOmfangIT extends IntegrationTestBase {
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         BehandlingensArtOgOmfangResponse behandlingensArtOgOmfangResponse = resp.getBody();
-        assertThat(behandlingensArtOgOmfangResponse.getEtterlevelseDokumentId()).isEqualTo(request.getEtterlevelseDokumentId());
+        assertThat(behandlingensArtOgOmfangResponse.getEtterlevelseDokumensjonId()).isEqualTo(request.getEtterlevelseDokumensjonId());
         assertThat(behandlingensArtOgOmfangRepo.count()).isOne();
     }
 
@@ -60,14 +60,14 @@ public class BehandlingensArtOgOmfangIT extends IntegrationTestBase {
 
         var request = BehandlingensArtOgOmfangRequest.builder()
                 .id(artOgOmfang.getId())
-                .etterlevelseDokumentId(artOgOmfang.getEtterlevelseDokumentId())
+                .etterlevelseDokumensjonId(artOgOmfang.getEtterlevelseDokumensjonId())
                 .stemmerPersonkategorier(false)
                 .build();
         var resp = restTemplate.exchange("/behandlingens-art-og-omfang/{id}", HttpMethod.PUT, new HttpEntity<>(request), BehandlingensArtOgOmfangResponse.class, request.getId());
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         BehandlingensArtOgOmfangResponse artOgOmfangResponseResponse = resp.getBody();
-        assertThat(artOgOmfangResponseResponse.getEtterlevelseDokumentId()).isEqualTo(request.getEtterlevelseDokumentId());
+        assertThat(artOgOmfangResponseResponse.getEtterlevelseDokumensjonId()).isEqualTo(request.getEtterlevelseDokumensjonId());
         assertThat(artOgOmfangResponseResponse.getStemmerPersonkategorier()).isEqualTo(false);
         assertThat(behandlingensArtOgOmfangRepo.count()).isOne();
     }
