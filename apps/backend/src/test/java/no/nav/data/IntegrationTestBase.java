@@ -26,6 +26,8 @@ import no.nav.data.etterlevelse.krav.domain.*;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangData;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangRepo;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
@@ -201,6 +203,25 @@ public abstract class IntegrationTestBase {
                         .build()
                 )
                 .build();
+    }
+
+    public static BehandlingensArtOgOmfang buildBehandlingensArtOgOmfang() {
+        return BehandlingensArtOgOmfang.builder()
+                .behandlingensArtOgOmfangData(BehandlingensArtOgOmfangData.builder()
+                        .lagringsBeskrivelsePersonopplysningene("Beskrivelse")
+                        .personkategoriAntallBeskrivelse("AntallBeskrivelse")
+                        .stemmerPersonkategorier(true)
+                        .tilgangsBeskrivelsePersonopplysningene("TilgangsBeskrivelse")
+                        .build()
+                )
+                .build();
+    }
+
+    public BehandlingensArtOgOmfang createBehandlingensArtOgOmfang() {
+        EtterlevelseDokumentasjon ettDok = createEtterlevelseDokumentasjon();
+        BehandlingensArtOgOmfang artOgOmfang = buildBehandlingensArtOgOmfang();
+        artOgOmfang.setEtterlevelseDokumentId(ettDok.getId());
+        return behandlingensArtOgOmfangRepo.save(artOgOmfang);
     }
 
     public PvkDokument createPvkDokument() {
