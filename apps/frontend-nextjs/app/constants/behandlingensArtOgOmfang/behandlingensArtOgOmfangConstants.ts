@@ -11,3 +11,10 @@ export interface IBehandlingensArtOgOmfang {
   tilgangsBeskrivelsePersonopplysningene: string
   lagringsBeskrivelsePersonopplysningene: string
 }
+
+export interface IArtOgOmfangError {
+  stemmerPersonkategorier: boolean
+  personkategoriAntallBeskrivelse: boolean
+  tilgangsBeskrivelsePersonopplysningene: boolean
+  lagringsBeskrivelsePersonopplysningene: boolean
+}

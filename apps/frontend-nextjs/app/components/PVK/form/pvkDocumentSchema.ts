@@ -48,26 +48,6 @@ const boolCheck = (fieldName: string, errorMessage?: string) =>
 
 export const pvkDocumentSchema = () => {
   return yup.object({
-    stemmerPersonkategorier: boolCheck(
-      'stemmerPersonkategorier',
-      'Dere må oppgi om lista over personkategorier stemmer.'
-    ),
-
-    personkategoriAntallBeskrivelse: stringCheck(
-      'personkategoriAntallBeskrivelse',
-      'Dere må beskrive hvor mange personer dere behandler personopplysninger om.'
-    ),
-
-    tilgangsBeskrivelsePersonopplysningene: stringCheck(
-      'tilgangsBeskrivelsePersonopplysningene',
-      'Dere må beskrive hvilke roller som skal ha tilgang til personopplysningene, og pr. rolle, hvor mange som skal ha tilgang til hva.'
-    ),
-
-    lagringsBeskrivelsePersonopplysningene: stringCheck(
-      'lagringsBeskrivelsePersonopplysningene',
-      'Dere må beskrive hvordan og hvor lenge personopplysningene skal lagres.'
-    ),
-
     harInvolvertRepresentant: boolCheck(
       'harInvolvertRepresentant',
       'Dere må oppgi om dere har involvert en representant for de registrerte.'
