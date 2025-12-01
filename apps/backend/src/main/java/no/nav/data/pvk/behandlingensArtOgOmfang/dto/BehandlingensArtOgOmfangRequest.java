@@ -9,7 +9,6 @@ import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangData;
-import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 
 import java.util.UUID;
 
@@ -41,7 +40,7 @@ public class BehandlingensArtOgOmfangRequest implements RequestElement {
 
     @Override
     public void validateFieldValues(Validator<?> validator) {
-        validator.checkNull(PvkDokumentRequest.Fields.etterlevelseDokumentId, etterlevelseDokumensjonId);
+        validator.checkNull(Fields.etterlevelseDokumensjonId, etterlevelseDokumensjonId);
         validator.checkId(this);
     }
 
