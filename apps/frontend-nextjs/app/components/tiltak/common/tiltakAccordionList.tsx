@@ -12,7 +12,7 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Accordion, Button, Modal, Tag } from '@navikt/ds-react'
-import moment from 'moment/moment'
+import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import IverksattTiltakForm from '../form/iverksattTiltakForm'
