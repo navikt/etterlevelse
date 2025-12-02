@@ -17,7 +17,8 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading, Label, List, Modal, ReadMore } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, Button, Heading, Label, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import Link from 'next/link'
 import { FunctionComponent, RefObject, useState } from 'react'
@@ -247,8 +248,25 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 <Modal
                   open={isNullStilModalOpen}
                   onClose={() => setIsNullStilModalOpen(false)}
-                  header={{ heading: 'Er du sikker på at du vil nullstille svarene?' }}
+                  header={{
+                    heading: 'Er du sikker på at du vil nullstille svarene?',
+                    icon: <ExclamationmarkTriangleIcon />,
+                  }}
                 >
+                  <Modal.Body>
+                    <BodyLong>
+                      Når du nullstiller svar, vil alle felt på denne siden tommes og endringen
+                      lagres. Det vil ikke være mulig å gjenopprette svar du har lagret tidligere.
+                      Som alternativ er det mulig å velge:
+                    </BodyLong>
+                    <List as='ul'>
+                      <List.Item>
+                        Forkast endringer, som tilbakestiller svarene slik de så ut siste gang de
+                        ble lagret.
+                      </List.Item>
+                      <List.Item>Avbryt, og manuelt fjerne enkelte svar selv.</List.Item>
+                    </List>
+                  </Modal.Body>
                   <Modal.Footer>
                     <Button
                       type='button'
@@ -272,16 +290,26 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                         })
                       }}
                     >
-                      Ja, nullstill
+                      Nullstill svar
                     </Button>
                     <Button
                       type='button'
                       variant='secondary'
                       onClick={() => {
+                        resetForm()
                         setIsNullStilModalOpen(false)
                       }}
                     >
-                      Nei, avbryt
+                      Forkast ulagrede endringer
+                    </Button>
+                    <Button
+                      type='button'
+                      variant='tertiary'
+                      onClick={() => {
+                        setIsNullStilModalOpen(false)
+                      }}
+                    >
+                      Avbryt
                     </Button>
                   </Modal.Footer>
                 </Modal>
