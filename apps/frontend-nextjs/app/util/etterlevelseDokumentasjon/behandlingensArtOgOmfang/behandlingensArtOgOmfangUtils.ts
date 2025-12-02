@@ -6,9 +6,9 @@ export const getVariantForBAOButton = (
   const emptyData = [null, undefined, '']
   return (artOgOmfang.stemmerPersonkategorier !== undefined &&
     artOgOmfang.stemmerPersonkategorier !== null) ||
-    emptyData.includes(artOgOmfang.personkategoriAntallBeskrivelse) ||
-    emptyData.includes(artOgOmfang.lagringsBeskrivelsePersonopplysningene) ||
-    emptyData.includes(artOgOmfang.tilgangsBeskrivelsePersonopplysningene)
+    !emptyData.includes(artOgOmfang.personkategoriAntallBeskrivelse) ||
+    !emptyData.includes(artOgOmfang.lagringsBeskrivelsePersonopplysningene) ||
+    !emptyData.includes(artOgOmfang.tilgangsBeskrivelsePersonopplysningene)
     ? 'secondary'
     : 'primary'
 }

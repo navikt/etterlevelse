@@ -90,14 +90,13 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
     if (etterlevelseDokumentasjonId) {
       setIsLoading(true)
       ;(async () => {
-        await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
-          async (artOfOmfang) => {
+        await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+          .then(async (artOfOmfang) => {
             if (artOfOmfang) {
               setData(artOfOmfang)
             }
-            setIsLoading(false)
-          }
-        )
+          })
+          .finally(() => setIsLoading(false))
       })()
     }
   }, [etterlevelseDokumentasjonId])
