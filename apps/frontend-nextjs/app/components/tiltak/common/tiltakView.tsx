@@ -1,3 +1,5 @@
+'use client'
+
 import ReadOnlyField, {
   ReadOnlyFieldBool,
   ReadOnlyFieldDescriptionOptional,
@@ -6,6 +8,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { Alert, List } from '@navikt/ds-react'
 import moment from 'moment'
+import { useEffect, useState } from 'react'
 
 interface IProps {
   tiltak: ITiltak
@@ -14,6 +17,28 @@ interface IProps {
 
 export const TiltakView = (props: IProps) => {
   const { tiltak, risikoscenarioList } = props
+  const [ansvarligView, setAnsvarligView] = useState<string>('')
+
+  useEffect(() => {
+    ;(async () => {
+      let ansvarlige = ''
+      if (tiltak.ansvarligTeam && tiltak.ansvarligTeam.name) {
+        ansvarlige += tiltak.ansvarligTeam.name
+      }
+      if (
+        tiltak.ansvarlig &&
+        tiltak.ansvarlig.fullName &&
+        tiltak.ansvarligTeam &&
+        tiltak.ansvarligTeam.name
+      ) {
+        ansvarlige += ', '
+      }
+      if (tiltak.ansvarlig && tiltak.ansvarlig.fullName) {
+        ansvarlige += tiltak.ansvarlig.fullName
+      }
+      setAnsvarligView(ansvarlige)
+    })()
+  }, [tiltak])
 
   return (
     <div className='mb-5'>
@@ -24,21 +49,14 @@ export const TiltakView = (props: IProps) => {
       />
 
       <ReadOnlyFieldBool
-        label='Tiltaksansvarlig Team:'
-        description={tiltak.ansvarligTeam.name}
+        label='Tiltaksansvarlig:'
+        description={ansvarligView}
         className='flex gap-2'
         isFalse={
-          !tiltak.ansvarligTeam ||
-          (tiltak.ansvarligTeam && ['', null].includes(tiltak.ansvarligTeam.id))
+          (!tiltak.ansvarligTeam ||
+            (tiltak.ansvarligTeam && ['', null].includes(tiltak.ansvarligTeam.id))) &&
+          (!tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === ''))
         }
-        descriptionFalse='Det er ikke satt en ansvarlig team for tiltaket'
-      />
-
-      <ReadOnlyFieldBool
-        label='Tiltaksansvarlig:'
-        description={tiltak.ansvarlig.fullName}
-        className='flex mt-3 gap-2'
-        isFalse={!tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')}
         descriptionFalse='Det er ikke satt en ansvarlig for tiltaket'
       />
 
