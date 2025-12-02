@@ -44,6 +44,8 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   formRef,
 }) => {
+  const now = new Date()
+
   const router = useRouter()
   const queryParams = useSearchParams()
   const steg: string | null = queryParams.get('steg')
@@ -95,7 +97,6 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
       <Accordion>
         {filteredTiltakList.map((tiltak, index) => {
           const expanded: boolean = tiltakId === tiltak.id
-          const now = new Date()
           return (
             <Accordion.Item
               key={`${index}_${tiltak.navn}`}
