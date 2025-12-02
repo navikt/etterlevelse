@@ -83,7 +83,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                   )}
                   {tiltakFristError !== '' && (
                     <>
-                      <FormAlert>{tiltakError}</FormAlert>
+                      <FormAlert>{tiltakFristError}</FormAlert>
                       <ExternalLink
                         href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'utenFrist')}
                       >
