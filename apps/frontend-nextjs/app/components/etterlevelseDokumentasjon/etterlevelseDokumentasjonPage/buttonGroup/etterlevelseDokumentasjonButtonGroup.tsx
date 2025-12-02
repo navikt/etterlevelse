@@ -107,7 +107,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           variant={getVariantForBAOButton(artOgOmfang)}
           className='whitespace-nowrap'
         >
-          Behandlingens art og omfang
+          Beskriv art og omfang
         </Button>
 
         {pvkDokument && pvkDokument.skalUtforePvk && (
