@@ -1,5 +1,6 @@
 'use client'
 
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -7,11 +8,13 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { env } from '@/util/env/env'
+import { getVariantForBAOButton } from '@/util/etterlevelseDokumentasjon/behandlingensArtOgOmfang/behandlingensArtOgOmfangUtils'
 import { getVariantForBLLButton } from '@/util/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopUtils'
 import {
   getPvkButtonText,
@@ -30,6 +33,7 @@ type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
   risikoscenarioList: IRisikoscenario[]
+  artOgOmfang: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
   pvkDokument?: IPvkDokument
 }
@@ -38,6 +42,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   risikoscenarioList,
+  artOgOmfang,
   behandlingsLivslop,
   pvkDokument,
 }) => {
@@ -88,6 +93,23 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
           Tegn behandlingens livsløp
         </Button>
+
+        <Button
+          onClick={() => {
+            router.push(
+              pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+                etterlevelseDokumentasjon.id,
+                artOgOmfang.id ? artOgOmfang.id : 'ny'
+              )
+            )
+          }}
+          size='small'
+          variant={getVariantForBAOButton(artOgOmfang)}
+          className='whitespace-nowrap'
+        >
+          Behandlingens art og omfang
+        </Button>
+
         {pvkDokument && pvkDokument.skalUtforePvk && (
           <Button
             onClick={() => {
