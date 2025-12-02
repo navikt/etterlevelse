@@ -118,7 +118,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
   const [tiltakAnsvarligError, setTiltakAnsvarligError] = useState<string>('')
-  const [tiltakFristError, setTiltakFristError] = useState<string[]>([])
+  const [tiltakFristError, setTiltakFristError] = useState<string>('')
+  const [tiltakFristUtgaattError, setTiltakFristUtgaattError] = useState<string>('')
   const [pvkKravError, setPvkKravError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
@@ -148,7 +149,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
       savnerVurderingError === '' &&
       tiltakError === '' &&
       tiltakAnsvarligError === '' &&
-      tiltakFristError.length === 0 &&
+      tiltakFristError === '' &&
+      tiltakFristUtgaattError === '' &&
       !medlemError &&
       !avdelingError &&
       !risikoeiereDataError &&
@@ -383,20 +385,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
         }
       })
 
-      const errorMessage: string[] = []
       if (amountOfMissingTiltakFrist > 0) {
-        errorMessage.push(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
-      }
+        setTiltakFristError(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
+      } else setTiltakFristError('')
 
       if (amountOfOverdueTiltak > 0) {
-        errorMessage.push(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
-      }
-
-      if (errorMessage.length !== 0) {
-        setTiltakFristError(errorMessage)
-      }
+        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
+      } else setTiltakFristUtgaattError('')
     } else {
-      setTiltakFristError([])
+      setTiltakFristError('')
+      setTiltakFristUtgaattError('')
     }
   }
 
@@ -582,6 +580,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   tiltakError={tiltakError}
                   tiltakAnsvarligError={tiltakAnsvarligError}
                   tiltakFristError={tiltakFristError}
+                  tiltakFristUtgaattError={tiltakFristUtgaattError}
                 />
 
                 <RisikoscenarioEtterTitak
@@ -612,6 +611,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             tiltakError={tiltakError}
                             tiltakAnsvarligError={tiltakAnsvarligError}
                             tiltakFristError={tiltakFristError}
+                            tiltakFristUtgaattError={tiltakFristUtgaattError}
                             pvkKravError={pvkKravError}
                             savnerVurderingError={savnerVurderingError}
                             manglerBehandlingError={manglerBehandlingError}
@@ -666,6 +666,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -707,6 +708,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -750,6 +752,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -792,6 +795,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}

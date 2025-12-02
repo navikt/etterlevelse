@@ -1,7 +1,10 @@
 import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  etterlevelseDokumentasjonPvkTabUrl,
+  pvkDokumentasjonTabFilterTiltakUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
@@ -19,7 +22,8 @@ type TProps = {
   risikoscenarioError: string
   tiltakError: string
   tiltakAnsvarligError: string
-  tiltakFristError: string[]
+  tiltakFristError: string
+  tiltakFristUtgaattError: string
   pvkKravError: string
   savnerVurderingError: string
   errorSummaryRef: RefObject<HTMLDivElement | null>
@@ -37,6 +41,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   tiltakError,
   tiltakAnsvarligError,
   tiltakFristError,
+  tiltakFristUtgaattError,
   pvkKravError,
   savnerVurderingError,
   manglerBehandlingError,
@@ -93,6 +98,17 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
             </ErrorSummary.Item>
           )}
 
+          {tiltakFristUtgaattError && (
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'alleTiltak')}
+              className='max-w-[75ch]'
+            >
+              {tiltakFristUtgaattError}
+              (åpner i ny fane)
+            </ErrorSummary.Item>
+          )}
+
           {artOgOmfangError.stemmerPersonkategorier && (
             <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
               Dere må oppgi om lista over personkategorier stemmer.
@@ -142,16 +158,11 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               {tiltakAnsvarligError}
             </ErrorSummary.Item>
           )}
-          {tiltakFristError.length !== 0 &&
-            tiltakFristError.map((error, index) => (
-              <ErrorSummary.Item
-                href='#tiltak'
-                className='max-w-[75ch]'
-                key={`${index}_tiltakErrorSummary`}
-              >
-                {error}
-              </ErrorSummary.Item>
-            ))}
+          {tiltakFristError !== '' && (
+            <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
+              {tiltakFristError}
+            </ErrorSummary.Item>
+          )}
           {savnerVurderingError !== '' && (
             <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
               {savnerVurderingError}

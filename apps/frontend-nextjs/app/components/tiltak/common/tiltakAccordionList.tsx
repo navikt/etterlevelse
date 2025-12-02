@@ -12,6 +12,7 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Accordion, Button, Modal, Tag } from '@navikt/ds-react'
+import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import IverksattTiltakForm from '../form/iverksattTiltakForm'
@@ -43,6 +44,8 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   formRef,
 }) => {
+  const now = new Date()
+
   const router = useRouter()
   const queryParams = useSearchParams()
   const steg: string | null = queryParams.get('steg')
@@ -110,6 +113,9 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                     <Tag variant='alt2'>Tiltaksansvarlig savnes</Tag>
                   )}
                   {!tiltak.frist && <Tag variant='alt2'>Tiltaksfrist savnes</Tag>}
+                  {tiltak.frist && moment(now).isAfter(moment(tiltak.frist)) && (
+                    <Tag variant='warning'>Tiltaksfrist utgått</Tag>
+                  )}
                 </div>
               </Accordion.Header>
               {expanded && (
