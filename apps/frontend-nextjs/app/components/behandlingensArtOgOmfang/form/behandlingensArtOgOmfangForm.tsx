@@ -257,8 +257,9 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                     <BodyLong>
                       Når du nullstiller svar, vil alle felt på denne siden tommes og endringen
                       lagres. Det vil ikke være mulig å gjenopprette svar du har lagret tidligere.
-                      Som alternativ er det mulig å velge:
                     </BodyLong>
+
+                    <BodyLong className='mt-3'>Som alternativ er det mulig å velge:</BodyLong>
                     <List as='ul'>
                       <List.Item>
                         Forkast endringer, som tilbakestiller svarene slik de så ut siste gang de
@@ -319,8 +320,20 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 <Modal
                   open={isModalOpen}
                   onClose={() => setIsModalOpen(false)}
-                  header={{ heading: 'Er du sikker på at du vil forkaste endringene?' }}
+                  header={{
+                    heading: 'Er du sikker på at du vil forkaste endringene?',
+                    icon: <ExclamationmarkTriangleIcon />,
+                  }}
                 >
+                  <Modal.Body>
+                    <BodyLong>
+                      Når du forkaster endringer, vil alle svarene tilbakestilles slik de så ut
+                      siste gang de ble lagret.
+                    </BodyLong>
+                    <BodyLong className='mt-3'>
+                      Alternativt kan man velge Avbryt, og manuelt fjerne enkelte svar selv.
+                    </BodyLong>
+                  </Modal.Body>
                   <Modal.Footer>
                     <Button
                       type='button'
@@ -330,7 +343,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                         setIsModalOpen(false)
                       }}
                     >
-                      Ja
+                      Forkast ulagrede endringer
                     </Button>
                     <Button
                       type='button'
@@ -339,7 +352,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                         setIsModalOpen(false)
                       }}
                     >
-                      Nei
+                      Avbryt
                     </Button>
                   </Modal.Footer>
                 </Modal>
