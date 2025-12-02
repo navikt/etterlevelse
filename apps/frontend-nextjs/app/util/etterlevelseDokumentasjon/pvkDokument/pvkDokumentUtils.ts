@@ -53,12 +53,8 @@ export const isPvkDokuemntNotStarted = (
   pvkDokument?: IPvkDokument
 ) =>
   pvkDokument &&
-  pvkDokument.personkategoriAntallBeskrivelse === '' &&
-  pvkDokument.tilgangsBeskrivelsePersonopplysningene === '' &&
-  pvkDokument.lagringsBeskrivelsePersonopplysningene === '' &&
   pvkDokument.representantInvolveringsBeskrivelse === '' &&
   pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse === '' &&
-  pvkDokument.stemmerPersonkategorier === null &&
   pvkDokument.harInvolvertRepresentant === null &&
   pvkDokument.harDatabehandlerRepresentantInvolvering === null &&
   risikoscenarioList.length === 0

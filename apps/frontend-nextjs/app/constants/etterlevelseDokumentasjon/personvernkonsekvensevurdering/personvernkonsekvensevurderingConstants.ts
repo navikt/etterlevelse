@@ -12,11 +12,6 @@ export interface IPvkDokument {
   skalUtforePvk?: boolean
   pvkVurderingsBegrunnelse: string
 
-  stemmerPersonkategorier?: boolean
-  personkategoriAntallBeskrivelse: string
-  tilgangsBeskrivelsePersonopplysningene: string
-  lagringsBeskrivelsePersonopplysningene: string
-
   harInvolvertRepresentant?: boolean
   representantInvolveringsBeskrivelse: string
 

@@ -157,15 +157,6 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper || [],
     skalUtforePvk: pvkDokument.skalUtforePvk === undefined ? undefined : pvkDokument.skalUtforePvk,
     pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',
-    stemmerPersonkategorier:
-      pvkDokument.stemmerPersonkategorier === undefined
-        ? undefined
-        : pvkDokument.stemmerPersonkategorier,
-    personkategoriAntallBeskrivelse: pvkDokument.personkategoriAntallBeskrivelse || '',
-    tilgangsBeskrivelsePersonopplysningene:
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene || '',
-    lagringsBeskrivelsePersonopplysningene:
-      pvkDokument.lagringsBeskrivelsePersonopplysningene || '',
     harInvolvertRepresentant:
       pvkDokument.harInvolvertRepresentant === undefined
         ? undefined
