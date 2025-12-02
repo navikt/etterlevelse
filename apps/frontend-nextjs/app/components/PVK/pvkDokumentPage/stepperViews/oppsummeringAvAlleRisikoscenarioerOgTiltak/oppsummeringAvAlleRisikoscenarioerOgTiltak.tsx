@@ -198,7 +198,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
       )
       setAntallUtenFrist(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist).length)
       setAntallUtgaatteFrister(
-        tiltakList.filter((tiltak: ITiltak) => tiltak.frist && moment(now).isAfter(moment(tiltak.frist))).length
+        tiltakList.filter(
+          (tiltak: ITiltak) => tiltak.frist && moment(now).isAfter(moment(tiltak.frist))
+        ).length
       )
     }
   }, [tiltakList])
