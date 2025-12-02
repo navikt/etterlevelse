@@ -42,13 +42,15 @@ export const TiltakView = (props: IProps) => {
         descriptionFalse='Det er ikke satt en ansvarlig for tiltaket'
       />
 
-      <ReadOnlyFieldBool
-        label='Tiltaksfrist:'
-        description={moment(tiltak.frist).format('LL')}
-        className='mt-3 flex gap-2'
-        isFalse={!tiltak.frist}
-        descriptionFalse='Det er ikke satt en frist for tiltaket'
-      />
+      {!tiltak.iverksatt && (
+        <ReadOnlyFieldBool
+          label='Tiltaksfrist:'
+          description={moment(tiltak.frist).format('LL')}
+          className='mt-3 flex gap-2'
+          isFalse={!tiltak.frist}
+          descriptionFalse='Det er ikke satt en frist for tiltaket'
+        />
+      )}
 
       {tiltak.risikoscenarioIds.length > 1 && (
         <div className='mt-3'>

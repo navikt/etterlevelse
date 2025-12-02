@@ -112,10 +112,14 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                   {!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name && (
                     <Tag variant='alt2'>Tiltaksansvarlig savnes</Tag>
                   )}
-                  {!tiltak.frist && <Tag variant='alt2'>Tiltaksfrist savnes</Tag>}
-                  {tiltak.frist && moment(now).isAfter(moment(tiltak.frist)) && (
-                    <Tag variant='warning'>Tiltaksfrist utgått</Tag>
+                  {!tiltak.iverksatt && !tiltak.frist && (
+                    <Tag variant='alt2'>Tiltaksfrist savnes</Tag>
                   )}
+                  {!tiltak.iverksatt &&
+                    tiltak.frist &&
+                    moment(now).isAfter(moment(tiltak.frist)) && (
+                      <Tag variant='warning'>Tiltaksfrist utløpt</Tag>
+                    )}
                 </div>
               </Accordion.Header>
               {expanded && (

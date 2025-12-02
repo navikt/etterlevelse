@@ -196,10 +196,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
             !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
         ).length
       )
-      setAntallUtenFrist(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist).length)
+      setAntallUtenFrist(
+        tiltakList.filter((tiltak: ITiltak) => !tiltak.iverksatt && !tiltak.frist).length
+      )
       setAntallUtgaatteFrister(
         tiltakList.filter(
-          (tiltak: ITiltak) => tiltak.frist && moment(now).isAfter(moment(tiltak.frist))
+          (tiltak: ITiltak) =>
+            !tiltak.iverksatt && tiltak.frist && moment(now).isAfter(moment(tiltak.frist))
         ).length
       )
     }
