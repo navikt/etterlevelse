@@ -20,7 +20,6 @@ import {
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import {
@@ -30,12 +29,11 @@ import {
 import { Alert, BodyShort, FormSummary, Heading, List, Tag } from '@navikt/ds-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, JSX, useContext, useEffect, useState } from 'react'
+import { FunctionComponent, JSX, useEffect, useState } from 'react'
 import FormSummaryPanel from '../../common/formSummaryPanel'
 import HvordanSkalViJobbeMedPvkReadMore from '../../common/hvordanSkalViJobbeMedPvkReadMore'
 import FormButtons from '../../edit/formButtons'
 import { StepTitle } from '../pvkDokumentPage'
-import TempAdminOverwrite from './TempAdminOverwrite'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -168,7 +166,6 @@ export const OversiktView: FunctionComponent<TProps> = ({
   updateTitleUrlAndStep,
   pvkKrav,
 }) => {
-  const user = useContext(UserContext)
   const pathName = usePathname()
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [artOgOmfang] = useBehandlingensArtOgOmfang(pvkDokument.etterlevelseDokumentId)
@@ -330,8 +327,6 @@ export const OversiktView: FunctionComponent<TProps> = ({
           Oversikt over PVK-prosessen
         </Heading>
         <HvordanSkalViJobbeMedPvkReadMore />
-
-        {user.isAdmin() && <TempAdminOverwrite pvkDokument={pvkDokument} />}
 
         <FormSummary className='my-3'>
           <FormSummary.Header>
