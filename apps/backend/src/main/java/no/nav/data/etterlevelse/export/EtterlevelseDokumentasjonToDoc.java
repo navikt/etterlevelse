@@ -99,6 +99,15 @@ public class EtterlevelseDokumentasjonToDoc {
         } else {
             doc.addText("Ikke angitt");
         }
+
+        doc.addHeading3("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger() != null && !etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger().isEmpty()) {
+            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger().forEach(risikovurdering -> {
+                doc.addMarkdownText("- " + risikovurdering);
+            });
+        } else {
+            doc.addText("Ingen dokumenter lagt til");
+        }
     }
 
     private List<EtterlevelseMedKravData> getEtterlevelseByFilter(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover) {
