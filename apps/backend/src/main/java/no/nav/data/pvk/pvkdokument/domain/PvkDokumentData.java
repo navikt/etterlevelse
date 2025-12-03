@@ -1,5 +1,7 @@
 package no.nav.data.pvk.pvkdokument.domain;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
@@ -19,6 +21,9 @@ public class PvkDokumentData {
     private Integer antallInnsendingTilPvo = 0;
     private List<String> ytterligereEgenskaper;
     private Boolean skalUtforePvk;
+
+    @Enumerated(EnumType.STRING)
+    private PvkVurdering pvkVurdering;
     private String pvkVurderingsBegrunnelse;
 
     private Boolean harInvolvertRepresentant;

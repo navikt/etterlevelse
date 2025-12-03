@@ -10,6 +10,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +31,8 @@ public class PvkDokumentRequest implements RequestElement {
     private PvkDokumentStatus status;
 
     private List<String> ytterligereEgenskaper;
+
+    private PvkVurdering pvkVurdering;
     private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
@@ -82,6 +85,7 @@ public class PvkDokumentRequest implements RequestElement {
     public PvkDokument convertToPvkDokument() {
         var pkvDokumentData = PvkDokumentData.builder()
                 .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
+                .pvkVurdering(pvkVurdering)
                 .skalUtforePvk(skalUtforePvk)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
                 .harInvolvertRepresentant(harInvolvertRepresentant)
@@ -108,6 +112,7 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.setEtterlevelseDokumentId(etterlevelseDokumentId);
         pvkDokumentToMerge.setStatus(status);
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
+        pvkDokumentToMerge.getPvkDokumentData().setPvkVurdering(pvkVurdering);
         pvkDokumentToMerge.getPvkDokumentData().setSkalUtforePvk(skalUtforePvk);
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);
         pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
