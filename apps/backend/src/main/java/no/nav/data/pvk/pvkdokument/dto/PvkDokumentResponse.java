@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,7 +33,7 @@ public class PvkDokumentResponse {
     private PvkDokumentStatus status;
 
     private List<CodelistResponse> ytterligereEgenskaper;
-    private Boolean skalUtforePvk;
+    private PvkVurdering skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
     private Boolean harInvolvertRepresentant;

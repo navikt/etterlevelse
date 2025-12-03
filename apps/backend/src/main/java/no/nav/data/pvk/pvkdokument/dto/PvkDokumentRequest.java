@@ -10,6 +10,7 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +31,7 @@ public class PvkDokumentRequest implements RequestElement {
     private PvkDokumentStatus status;
 
     private List<String> ytterligereEgenskaper;
-    private Boolean skalUtforePvk;
+    private PvkVurdering skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
     private Boolean harInvolvertRepresentant;
