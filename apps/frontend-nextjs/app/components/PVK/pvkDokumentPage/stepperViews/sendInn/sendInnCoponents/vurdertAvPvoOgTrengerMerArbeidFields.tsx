@@ -15,7 +15,7 @@ import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConst
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo } from 'react'
+import { FunctionComponent, ReactNode, useEffect, useState } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -44,25 +44,30 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   pvoVurderingList,
   savedAlert,
 }) => {
+  const [relevantIndex, setRelevantIndex] = useState<number>(0)
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
   )
 
-  const relevantIndex = useMemo(() => {
-    if (relevantMeldingTilPvo.length === 0) {
-      setFieldValue('meldingerTilPvo', [
-        ...pvkDokument.meldingerTilPvo,
-        mapMeldingTilPvoToFormValue({
-          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
-        }),
-      ])
-      return pvkDokument.meldingerTilPvo.length
-    } else {
-      return pvkDokument.meldingerTilPvo.findIndex(
-        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
-      )
-    }
-  }, [])
+  useEffect(() => {
+    ;(async () => {
+      if (relevantMeldingTilPvo.length === 0) {
+        setFieldValue('meldingerTilPvo', [
+          ...pvkDokument.meldingerTilPvo,
+          mapMeldingTilPvoToFormValue({
+            innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
+          }),
+        ])
+        setRelevantIndex(pvkDokument.antallInnsendingTilPvo + 1)
+      } else {
+        setRelevantIndex(
+          pvkDokument.meldingerTilPvo.findIndex(
+            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+          )
+        )
+      }
+    })()
+  }, [pvkDokument])
 
   return (
     <Field>
