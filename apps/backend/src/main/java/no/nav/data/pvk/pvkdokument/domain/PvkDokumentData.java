@@ -18,7 +18,7 @@ public class PvkDokumentData {
     @Builder.Default
     private Integer antallInnsendingTilPvo = 0;
     private List<String> ytterligereEgenskaper;
-    private PvkVurdering skalUtforePvk;
+    private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
     private Boolean harInvolvertRepresentant;
