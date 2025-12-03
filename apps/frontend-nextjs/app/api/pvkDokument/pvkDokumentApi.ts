@@ -1,6 +1,7 @@
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IMeldingTilPvo,
   IPvkDokument,
   IPvkDokumentListItem,
@@ -155,7 +156,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     status: pvkDokument.status || EPvkDokumentStatus.UNDERARBEID,
     behandlingensLivslopBeskrivelse: pvkDokument.behandlingensLivslopBeskrivelse || '',
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper || [],
-    skalUtforePvk: pvkDokument.skalUtforePvk === undefined ? undefined : pvkDokument.skalUtforePvk,
+    pvkVurdering: pvkDokument.pvkVurdering || EPvkVurdering.UNDEFINED,
     pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',
     harInvolvertRepresentant:
       pvkDokument.harInvolvertRepresentant === undefined

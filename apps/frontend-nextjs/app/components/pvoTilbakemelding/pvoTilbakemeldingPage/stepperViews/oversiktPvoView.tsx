@@ -14,7 +14,10 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
   IRisikoscenario,
@@ -242,8 +245,10 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                 </ExternalLink>
               </FormSummary.Value>
               <FormSummary.Value className='gap-2 flex'>
-                {pvkDokument.skalUtforePvk && 'Vi skal gjennomføre PVK'}
-                {!pvkDokument.skalUtforePvk && 'Vi skal ikke gjennomføre PVK'}
+                {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+                  'Vi skal gjennomføre PVK'}
+                {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE &&
+                  'Vi skal ikke gjennomføre PVK'}
               </FormSummary.Value>
             </FormSummary.Answer>
 

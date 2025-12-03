@@ -12,7 +12,10 @@ import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModa
 import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
@@ -192,30 +195,33 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
             </ReadMore>
 
             <FieldWrapper marginBottom marginTop>
-              <Field name='skalUtforePvk'>
+              <Field name='pvkVurdering'>
                 {(fieldProps: FieldProps) => (
                   <RadioGroup
                     legend='Hvilken vurdering har dere kommet fram til?'
                     value={fieldProps.field.value}
                     onChange={(value) => {
-                      fieldProps.form.setFieldValue('skalUtforePvk', value)
+                      fieldProps.form.setFieldValue('pvkVurdering', value)
                     }}
                   >
-                    <Radio value={true}>Vi skal gjennomføre en PVK</Radio>
-                    <Radio value={false}>Vi skal ikke gjennomføre PVK</Radio>
+                    <Radio value={EPvkVurdering.SKAL_UTFORE}>Vi skal gjennomføre en PVK</Radio>
+                    <Radio value={EPvkVurdering.SKAL_IKKE_UTFORE}>
+                      Vi skal ikke gjennomføre PVK
+                    </Radio>
                   </RadioGroup>
                 )}
               </Field>
             </FieldWrapper>
 
-            {values.skalUtforePvk !== undefined && !values.skalUtforePvk && (
-              <TextAreaField
-                rows={5}
-                noPlaceholder
-                label='Begrunn vurderingen deres'
-                name='pvkVurderingsBegrunnelse'
-              />
-            )}
+            {values.pvkVurdering !== EPvkVurdering.UNDEFINED &&
+              values.pvkVurdering !== EPvkVurdering.SKAL_UTFORE && (
+                <TextAreaField
+                  rows={5}
+                  noPlaceholder
+                  label='Begrunn vurderingen deres'
+                  name='pvkVurderingsBegrunnelse'
+                />
+              )}
 
             {savedAlert && !dirty && (
               <Alert
@@ -256,7 +262,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='tertiary'
                 onClick={() => {
-                  setFieldValue('skalUtforePvk', null)
+                  setFieldValue('pvkVurdering', EPvkVurdering.UNDEFINED)
                   setFieldValue('pvkVurderingsBegrunnelse', '')
                   setFieldValue('ytterligereEgenskaper', [])
                   setCheckedYtterligereEgenskaper([])
@@ -283,28 +289,30 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               >
                 Gå til Temaoversikt
               </Button>
-              {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
-                <Button
-                  icon={<ChevronRightIcon aria-hidden />}
-                  iconPosition='right'
-                  type='button'
-                  variant={'tertiary'}
-                  onClick={() => {
-                    if (dirty) {
-                      setIsUnsavedModalOpen(true)
-                      setUrlToNavigate(
-                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                      )
-                    } else {
-                      router.push(
-                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                      )
-                    }
-                  }}
-                >
-                  Gå til PVK
-                </Button>
-              )}
+              {pvkDokument &&
+                pvkDokument.id &&
+                values.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+                  <Button
+                    icon={<ChevronRightIcon aria-hidden />}
+                    iconPosition='right'
+                    type='button'
+                    variant={'tertiary'}
+                    onClick={() => {
+                      if (dirty) {
+                        setIsUnsavedModalOpen(true)
+                        setUrlToNavigate(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      } else {
+                        router.push(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      }
+                    }}
+                  >
+                    Gå til PVK
+                  </Button>
+                )}
             </StickyFooterButtonLayout>
           </Form>
         )}

@@ -9,7 +9,7 @@ export interface IPvkDokument {
   status: EPvkDokumentStatus
   behandlingensLivslopBeskrivelse: string
   ytterligereEgenskaper: ICode[]
-  skalUtforePvk?: boolean
+  pvkVurdering?: EPvkVurdering
   pvkVurderingsBegrunnelse: string
 
   harInvolvertRepresentant?: boolean
@@ -56,6 +56,15 @@ export enum EPvkDokumentStatus {
   SENDT_TIL_PVO_FOR_REVURDERING = 'SENDT_TIL_PVO_FOR_REVURDERING',
   TRENGER_GODKJENNING = 'TRENGER_GODKJENNING',
   GODKJENT_AV_RISIKOEIER = 'GODKJENT_AV_RISIKOEIER',
+}
+
+export enum EPvkVurdering {
+  SKAL_IKKE_UTFORE = 'SKAL_IKKE_UTFORE',
+  SKAL_UTFORE = 'SKAL_UTFORE',
+  ALLEREDE_UTFORT = 'ALLEREDE_UTFORT',
+
+  //Brukes for å nullstille feltet på frontend
+  UNDEFINED = 'UNDEFINED',
 }
 
 export enum EPVK {

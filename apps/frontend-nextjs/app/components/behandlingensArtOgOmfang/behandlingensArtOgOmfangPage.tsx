@@ -5,7 +5,10 @@ import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { IExternalCode } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkTypeStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
@@ -125,13 +128,15 @@ export const BehandlingensArtOgOmfangPage = () => {
 
   const getPvkLink = (etterlevelseDokumentasjonId: string) => {
     const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
-      pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
+      pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE
+        ? 'pvkdokument'
+        : 'pvkbehov'
 
     return pvkDokumentasjonPvkTypeStepUrl(
       etterlevelseDokumentasjonId,
       pvkDokumentLink,
       pvkDokument ? pvkDokument.id : 'ny',
-      pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
+      pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE ? '1' : ''
     )
   }
 

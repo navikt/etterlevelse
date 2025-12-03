@@ -14,6 +14,7 @@ import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
@@ -171,13 +172,15 @@ export const BehandlingensLivslopPage = () => {
 
   const getPvkLink = (etterlevelseDokumentasjonId: string) => {
     const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
-      pvkDokument && pvkDokument.skalUtforePvk ? 'pvkdokument' : 'pvkbehov'
+      pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE
+        ? 'pvkdokument'
+        : 'pvkbehov'
 
     return pvkDokumentasjonPvkTypeStepUrl(
       etterlevelseDokumentasjonId,
       pvkDokumentLink,
       pvkDokument ? pvkDokument.id : 'ny',
-      pvkDokument && pvkDokument.skalUtforePvk ? '1' : ''
+      pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE ? '1' : ''
     )
   }
 

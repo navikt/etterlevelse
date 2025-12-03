@@ -1,6 +1,7 @@
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -27,7 +28,7 @@ export const getVariantForPVKButton = (
   pvkDokument: IPvkDokument | undefined,
   behandlingsLivslop: IBehandlingensLivslop | undefined
 ) => {
-  if (pvkDokument?.skalUtforePvk === false) return 'tertiary'
+  if (pvkDokument?.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'tertiary'
   if (
     (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
     behandlingsLivslop?.beskrivelse
@@ -46,7 +47,9 @@ export const isReadOnlyPvkStatus = (status: string) => {
 
 export const isPvkDokumentVurdert = (pvkDokument?: IPvkDokument) =>
   pvkDokument &&
-  (pvkDokument.ytterligereEgenskaper.length !== 0 || pvkDokument.skalUtforePvk !== null)
+  (pvkDokument.ytterligereEgenskaper.length !== 0 ||
+    pvkDokument.pvkVurdering !== null ||
+    pvkDokument.pvkVurdering !== EPvkVurdering.UNDEFINED)
 
 export const isPvkDokuemntNotStarted = (
   risikoscenarioList: IRisikoscenario[],
