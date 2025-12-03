@@ -10,7 +10,7 @@ import { env } from '@/util/env/env'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
+import { FunctionComponent, ReactNode, useEffect, useState } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
 import LagreOgFortsettSenereButton from './lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from './readOnly/beskjedFraPvoReadOnly'
@@ -49,22 +49,27 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
   )
+  const [relevantIndex, setRelevantIndex] = useState<number>(0)
 
-  const relevantIndex = useMemo(() => {
-    if (relevantMeldingTilPvo.length === 0) {
-      setFieldValue('meldingerTilPvo', [
-        ...pvkDokument.meldingerTilPvo,
-        mapMeldingTilPvoToFormValue({
-          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
-        }),
-      ])
-      return pvkDokument.meldingerTilPvo.length
-    } else {
-      return pvkDokument.meldingerTilPvo.findIndex(
-        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
-      )
-    }
-  }, [])
+  useEffect(() => {
+    ;(async () => {
+      if (relevantMeldingTilPvo.length === 0) {
+        setFieldValue('meldingerTilPvo', [
+          ...pvkDokument.meldingerTilPvo,
+          mapMeldingTilPvoToFormValue({
+            innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
+          }),
+        ])
+        setRelevantIndex(pvkDokument.antallInnsendingTilPvo + 1)
+      } else {
+        setRelevantIndex(
+          pvkDokument.meldingerTilPvo.findIndex(
+            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+          )
+        )
+      }
+    })()
+  }, [pvkDokument])
 
   return (
     <Field>
