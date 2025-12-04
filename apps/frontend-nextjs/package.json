@@ -47,7 +47,7 @@
     "@navikt/aksel-icons": "7.35.0",
     "@navikt/ds-css": "7.35.0",
     "@navikt/ds-react": "7.35.0",
-    "@navikt/ds-tailwind": "7.34.0",
+    "@navikt/ds-tailwind": "7.35.0",
     "@tailwindcss/postcss": "4.1.17",
     "amplitude-js": "8.21.9",
     "axios": "1.13.2",
