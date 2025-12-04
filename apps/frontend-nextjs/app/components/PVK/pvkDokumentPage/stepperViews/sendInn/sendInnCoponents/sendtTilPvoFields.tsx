@@ -7,7 +7,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button } from '@navikt/ds-react'
+import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent } from 'react'
 
@@ -31,6 +31,10 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 }) => {
   return (
     <div className='w-full max-w-[75ch]'>
+      <Heading size='medium' level='2' className='mb-5 mt-8'>
+        Send oppdatert PVK
+      </Heading>
+
       <BeskjedTilPvoReadOnly
         meldingTilPvo={
           pvkDokument.meldingerTilPvo.filter(
@@ -41,7 +45,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 
       <Alert variant='info' className='ml-4 my-5' inline>
         Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å trekke
-        PVO-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
+        PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
         vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende plass i
         behandlingskøen.
       </Alert>
