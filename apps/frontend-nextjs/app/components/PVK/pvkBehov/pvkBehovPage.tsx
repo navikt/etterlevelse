@@ -163,14 +163,13 @@ export const PvkBehovPage = () => {
                 />
               )}
 
-            {!etterlevelseDokumentasjon.hasCurrentUserAccess &&
-              !user.isAdmin() &&
-              isReadOnlyPvkStatus(pvkDokument.status) && (
+            {(!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin()) ||
+              (isReadOnlyPvkStatus(pvkDokument.status) && (
                 <PvkBehovReadOnly
                   pvkDokument={pvkDokument}
                   ytterligereEgenskaper={ytterligereEgenskaper}
                 />
-              )}
+              ))}
           </div>
 
           {etterlevelseDokumentasjon && (
