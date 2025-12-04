@@ -142,6 +142,7 @@ export const mapMeldingTilPvoToFormValue = (
   return {
     innsendingId: meldingTilPvo.innsendingId || 1,
     merknadTilPvo: meldingTilPvo.merknadTilPvo || '',
+    endringsNotat: meldingTilPvo.endringsNotat || '',
     sendtTilPvoDato: meldingTilPvo.sendtTilPvoDato || '',
     sendtTilPvoAv: meldingTilPvo.sendtTilPvoAv || '',
   }
@@ -177,6 +178,10 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     behandlingensLivslopBeskrivelse: pvkDokument.behandlingensLivslopBeskrivelse || '',
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper || [],
     pvkVurdering: pvkDokument.pvkVurdering || EPvkVurdering.UNDEFINED,
+    berOmNyVurderingFraPvo:
+      pvkDokument.berOmNyVurderingFraPvo === undefined
+        ? undefined
+        : pvkDokument.berOmNyVurderingFraPvo,
     pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',
     harInvolvertRepresentant:
       pvkDokument.harInvolvertRepresentant === undefined

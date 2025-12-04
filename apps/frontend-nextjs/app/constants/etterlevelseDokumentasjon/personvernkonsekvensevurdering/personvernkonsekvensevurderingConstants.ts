@@ -10,6 +10,7 @@ export interface IPvkDokument {
   behandlingensLivslopBeskrivelse: string
   ytterligereEgenskaper: ICode[]
   pvkVurdering?: EPvkVurdering
+  berOmNyVurderingFraPvo?: boolean
   pvkVurderingsBegrunnelse: string
 
   harInvolvertRepresentant?: boolean
@@ -31,6 +32,7 @@ export interface IPvkDokument {
 export interface IMeldingTilPvo {
   innsendingId: number
   merknadTilPvo: string
+  endringsNotat: string
   sendtTilPvoDato: string
   sendtTilPvoAv: string
 }

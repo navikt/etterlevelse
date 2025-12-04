@@ -150,6 +150,7 @@ export const createNewMeldingTilPvo = (newInnsendingId: number): IMeldingTilPvo 
   return {
     innsendingId: newInnsendingId,
     merknadTilPvo: '',
+    endringsNotat: '',
     sendtTilPvoAv: '',
     sendtTilPvoDato: '',
   }
