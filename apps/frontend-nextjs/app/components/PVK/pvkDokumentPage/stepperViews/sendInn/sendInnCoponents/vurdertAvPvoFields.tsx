@@ -12,14 +12,13 @@ import {
   Button,
   Heading,
   Loader,
-  Modal,
   Radio,
   RadioGroup,
   ReadMore,
   Stack,
 } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
+import { FunctionComponent, ReactNode, useMemo } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
 import LagreOgFortsettSenereButton from './lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from './readOnly/beskjedFraPvoReadOnly'
@@ -52,9 +51,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   savedAlert,
   pvoVurderingList,
 }) => {
-  const [isSendTilPvoForRevurderingModalOpen, setIsSendTilPvoForRevurderingModalOpen] =
-    useState(false)
-
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
   )
@@ -155,6 +151,92 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                     </div>
                   </div>
                 )}
+                {fieldProps.form.values.berOmNyVurderingFraPvo === true && (
+                  <div>
+                    <Heading size='small' level='3' className='mb-5 mt-8'>
+                      Send til PVO for ny vurdering
+                    </Heading>
+
+                    <div className='mt-8 mb-3'>
+                      <TextAreaField
+                        height='150px'
+                        noPlaceholder
+                        label='Forklar hvorfor dere ønsker å sende inn til ny vurdering'
+                        name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
+                        markdown
+                      />
+
+                      {fieldProps.form.getFieldMeta(
+                        `meldingerTilPvo[${relevantIndex}].merknadTilPvo`
+                      ).error && (
+                        <Alert variant='error' inline className='mt-3'>
+                          Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
+                        </Alert>
+                      )}
+                    </div>
+                    <div className='mt-8 mb-3'>
+                      <TextAreaField
+                        height='150px'
+                        noPlaceholder
+                        label='Oppsummer hvilke endringer som er gjort siden siste tilbakemelding fra PVO.'
+                        caption='PVO vil kunne se hvilket innhold som er endret siden sist, inkludert nye risikoscenarioer og tiltak.'
+                        name={`meldingerTilPvo[${relevantIndex}].endringsNotat`}
+                        markdown
+                      />
+
+                      {fieldProps.form.getFieldMeta(
+                        `meldingerTilPvo[${relevantIndex}].endringsNotat`
+                      ).error && (
+                        <Alert variant='error' inline className='mt-3'>
+                          Beskriv hvilke endringer som er gjort.
+                        </Alert>
+                      )}
+                      <Alert variant='info' inline className='my-8'>
+                        Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
+                        etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne
+                        redigeres. Dette innholdet forbli låst enn så lenge saken ligger hos
+                        Personvernombudet.
+                      </Alert>
+                      <div className='mt-5 flex justify-end gap-2 items-center'>
+                        <LagreOgFortsettSenereButton
+                          setFieldValue={setFieldValue}
+                          submitForm={submitForm}
+                          initialStatus={initialStatus}
+                          resetForm={() =>
+                            fieldProps.form.resetForm({ values: fieldProps.form.values })
+                          }
+                        />
+                        <Button
+                          type='button'
+                          variant='primary'
+                          onClick={async () => {
+                            if (
+                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
+                                .merknadTilPvo === ''
+                            ) {
+                              fieldProps.form.setFieldError(
+                                `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
+                                'Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.'
+                              )
+                            } else {
+                              await setFieldValue(
+                                'status',
+                                EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+                              )
+                              await setFieldValue(
+                                'antallInnsendingTilPvo',
+                                pvkDokument.antallInnsendingTilPvo + 1
+                              )
+                              await submitForm()
+                            }
+                          }}
+                        >
+                          Send til PVO for revurdering
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {relevantMeldingTilPvo.length !== 0 &&
@@ -179,79 +261,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
           </div>
 
           <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
-
-          <Modal
-            header={{ heading: 'Vil dere sende til Personvernombudet for revurdering?' }}
-            open={isSendTilPvoForRevurderingModalOpen}
-            onClose={() => setIsSendTilPvoForRevurderingModalOpen(false)}
-          >
-            <Modal.Body>
-              <Alert variant='warning' inline className='mb-5'>
-                PVO har ikke bedt om å få deres PVK i retur. Men dersom risikobildet er endret siden
-                dere sendte inn til PVO sist, burde dere sende inn på nytt.
-              </Alert>
-              <div className='mt-8 mb-3'>
-                <TextAreaField
-                  height='150px'
-                  noPlaceholder
-                  label='Forklar hvorfor dere ønsker å sende inn til ny vurdering'
-                  name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
-                  markdown
-                />
-
-                {fieldProps.form.getFieldMeta(`meldingerTilPvo[${relevantIndex}].merknadTilPvo`)
-                  .error && (
-                  <Alert variant='error' inline className='mt-3'>
-                    Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
-                  </Alert>
-                )}
-              </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                type='button'
-                variant='primary'
-                onClick={async () => {
-                  if (fieldProps.form.values.meldingerTilPvo[relevantIndex].merknadTilPvo === '') {
-                    fieldProps.form.setFieldError(
-                      `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
-                      'Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.'
-                    )
-                  } else {
-                    await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
-                    await setFieldValue(
-                      'antallInnsendingTilPvo',
-                      pvkDokument.antallInnsendingTilPvo + 1
-                    )
-                    setIsSendTilPvoForRevurderingModalOpen(false)
-                    await submitForm()
-                  }
-                }}
-              >
-                Send til PVO for revurdering
-              </Button>
-
-              <Button
-                type='button'
-                variant='secondary'
-                onClick={async () => {
-                  await submitForm()
-                  setIsSendTilPvoForRevurderingModalOpen(false)
-                  fieldProps.form.resetForm({ values: fieldProps.form.values })
-                }}
-              >
-                Lagre og fortsett senere
-              </Button>
-
-              <Button
-                type='button'
-                variant='tertiary'
-                onClick={() => setIsSendTilPvoForRevurderingModalOpen(false)}
-              >
-                Avbryt
-              </Button>
-            </Modal.Footer>
-          </Modal>
         </div>
       )}
     </Field>
