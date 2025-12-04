@@ -17,7 +17,7 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button } from '@navikt/ds-react'
+import { Alert, Button, Heading } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, ReactNode, useContext } from 'react'
@@ -66,21 +66,31 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
               )[0]
             }
           />
+
           <BeskjedFraPvoReadOnly
             relevantVurdering={relevantVurdering}
             pvoVurderingList={pvoVurderingList}
           />
+
+          <Heading size='medium' level='2' className='my-5'>
+            Send oppdatert PVK
+          </Heading>
           <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
 
           {(isRisikoeierCheck || user.isAdmin()) && (
-            <div className='mt-5 mb-3'>
-              <TextAreaField
-                height='150px'
-                noPlaceholder
-                label='Kommentar til etterlever? (valgfritt)'
-                name='merknadFraRisikoeier'
-                markdown
-              />
+            <div>
+              <Heading size='medium' level='2' className='my-5'>
+                Godkjenn og arkiver PVK
+              </Heading>
+              <div className='mt-5 mb-3'>
+                <TextAreaField
+                  height='150px'
+                  noPlaceholder
+                  label='Risikoeiers begrunnelse for godkjenning av restrisiko'
+                  name='merknadFraRisikoeier'
+                  markdown
+                />
+              </div>
             </div>
           )}
 
@@ -95,6 +105,15 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           </div>
 
           <div>{!fieldProps.form.dirty && savedAlert}</div>
+
+          {!isRisikoeierCheck && (
+            <Alert variant='info' inline className='my-5'>
+              Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å
+              trekke PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har
+              påbegynt vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende
+              plass i behandlingskøen.
+            </Alert>
+          )}
 
           <div className='mt-5 flex gap-2 items-center'>
             {(isRisikoeierCheck || user.isAdmin()) && (
