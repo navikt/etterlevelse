@@ -9,7 +9,7 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading, Loader, Modal } from '@navikt/ds-react'
+import { Alert, Button, Heading, Loader, Modal, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
@@ -78,19 +78,42 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                 relevantVurdering={relevantVurdering}
                 pvoVurderingList={pvoVurderingList}
               />
-
               <div className='pt-9 mb-3'>
                 <Heading size='medium' level='2' className='mb-5'>
-                  Arbeid med PVK etter tilbakemelding fra PVO
+                  Send oppdatert PVK
                 </Heading>
 
-                <TextAreaField
-                  height='150px'
-                  noPlaceholder
-                  label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
-                  name='merknadTilRisikoeier'
-                  markdown
-                />
+                <RadioGroup
+                  legend='Hvem skal dere sende PVK-en til?'
+                  onChange={async (value: boolean) => {
+                    await setFieldValue('berOmNyVurderingFraPvo', value)
+                  }}
+                >
+                  <Stack
+                    gap='space-0 space-24'
+                    direction={{ xs: 'column', sm: 'row' }}
+                    wrap={false}
+                  >
+                    <Radio value={false}>Risikoeier, til godkjenning</Radio>
+                    <Radio value={true}>PVO, til ny vurdering</Radio>
+                  </Stack>
+                </RadioGroup>
+
+                {fieldProps.form.values.berOmNyVurderingFraPvo === false && (
+                  <div>
+                    <Heading size='medium' level='2' className='mb-5'>
+                      Arbeid med PVK etter tilbakemelding fra PVO
+                    </Heading>
+
+                    <TextAreaField
+                      height='150px'
+                      noPlaceholder
+                      label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
+                      name='merknadTilRisikoeier'
+                      markdown
+                    />
+                  </div>
+                )}
               </div>
 
               {relevantMeldingTilPvo.length !== 0 &&
