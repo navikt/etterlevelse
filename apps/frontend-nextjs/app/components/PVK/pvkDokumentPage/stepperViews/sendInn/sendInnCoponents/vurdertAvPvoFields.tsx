@@ -1,28 +1,16 @@
 'use client'
 
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import {
-  EPvkDokumentStatus,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import {
-  Alert,
-  Button,
-  Heading,
-  Loader,
-  Radio,
-  RadioGroup,
-  ReadMore,
-  Stack,
-} from '@navikt/ds-react'
+import { Alert, Heading, Loader, Radio, RadioGroup, ReadMore, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
-import LagreOgFortsettSenereButton from './lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from './readOnly/beskjedFraPvoReadOnly'
 import BeskjedTilPvoReadOnly from './readOnly/beskjedTilPvoReadOnly'
+import SendTilPvo from './vurdertAvPvoComponents.tsx/SendTilPvo'
+import SendTilRisikoeier from './vurdertAvPvoComponents.tsx/SendTilRisikoeier'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -32,8 +20,6 @@ type TProps = {
     value: any,
     shouldValidate?: boolean
   ) => Promise<void | FormikErrors<IPvkDokument>>
-  submitForm: () => Promise<void>
-  initialStatus: EPvkDokumentStatus
   isLoading: boolean
   errorSummaryComponent: ReactNode
   savedAlert: ReactNode
@@ -44,8 +30,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
   relevantVurdering,
   setFieldValue,
-  submitForm,
-  initialStatus,
   isLoading,
   errorSummaryComponent,
   savedAlert,
@@ -92,6 +76,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                   onChange={async (value: boolean) => {
                     await setFieldValue('berOmNyVurderingFraPvo', value)
                   }}
+                  value={fieldProps.form.values.berOmNyVurderingFraPvo}
                 >
                   <Stack
                     gap='space-0 space-24'
@@ -109,148 +94,14 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                 </ReadMore>
 
                 {fieldProps.form.values.berOmNyVurderingFraPvo === false && (
-                  <div>
-                    <Heading size='small' level='3' className='mb-5 mt-8'>
-                      Send til risikoeier for godkjenning
-                    </Heading>
-
-                    <TextAreaField
-                      height='150px'
-                      noPlaceholder
-                      label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
-                      name='merknadTilRisikoeier'
-                      markdown
-                    />
-
-                    <Alert variant='info' inline className='my-8'>
-                      Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
-                      etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne
-                      redigeres. Dette innholdet forbli låst enn så lenge saken ligger hos
-                      Personvernombudet.
-                    </Alert>
-
-                    <div className='mt-5 flex justify-end gap-2 items-center'>
-                      <LagreOgFortsettSenereButton
-                        setFieldValue={setFieldValue}
-                        submitForm={submitForm}
-                        initialStatus={initialStatus}
-                        resetForm={() =>
-                          fieldProps.form.resetForm({ values: fieldProps.form.values })
-                        }
-                      />
-
-                      <Button
-                        type='button'
-                        onClick={async () => {
-                          await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-                          await submitForm()
-                        }}
-                      >
-                        Lagre og send til risikoeier
-                      </Button>
-                    </div>
-                  </div>
+                  <SendTilRisikoeier fieldProps={fieldProps} />
                 )}
                 {fieldProps.form.values.berOmNyVurderingFraPvo === true && (
-                  <div>
-                    <Heading size='small' level='3' className='mb-5 mt-8'>
-                      Send til PVO for ny vurdering
-                    </Heading>
-
-                    <div className='mt-8 mb-3'>
-                      <TextAreaField
-                        height='150px'
-                        noPlaceholder
-                        label='Forklar hvorfor dere ønsker å sende inn til ny vurdering'
-                        name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
-                        markdown
-                      />
-
-                      {fieldProps.form.getFieldMeta(
-                        `meldingerTilPvo[${relevantIndex}].merknadTilPvo`
-                      ).error && (
-                        <Alert variant='error' inline className='mt-3'>
-                          Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
-                        </Alert>
-                      )}
-                    </div>
-                    <div className='mt-8 mb-3'>
-                      <TextAreaField
-                        height='150px'
-                        noPlaceholder
-                        label='Oppsummer hvilke endringer som er gjort siden siste tilbakemelding fra PVO.'
-                        caption='PVO vil kunne se hvilket innhold som er endret siden sist, inkludert nye risikoscenarioer og tiltak.'
-                        name={`meldingerTilPvo[${relevantIndex}].endringsNotat`}
-                        markdown
-                      />
-
-                      {fieldProps.form.getFieldMeta(
-                        `meldingerTilPvo[${relevantIndex}].endringsNotat`
-                      ).error && (
-                        <Alert variant='error' inline className='mt-3'>
-                          Beskriv hvilke endringer som er gjort.
-                        </Alert>
-                      )}
-                      <Alert variant='info' inline className='my-8'>
-                        Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
-                        etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne
-                        redigeres. Dette innholdet forbli låst enn så lenge saken ligger hos
-                        Personvernombudet.
-                      </Alert>
-                      <div className='mt-5 flex justify-end gap-2 items-center'>
-                        <LagreOgFortsettSenereButton
-                          setFieldValue={setFieldValue}
-                          submitForm={submitForm}
-                          initialStatus={initialStatus}
-                          resetForm={() =>
-                            fieldProps.form.resetForm({ values: fieldProps.form.values })
-                          }
-                        />
-                        <Button
-                          type='button'
-                          variant='primary'
-                          onClick={async () => {
-                            if (
-                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
-                                .merknadTilPvo === ''
-                            ) {
-                              fieldProps.form.setFieldError(
-                                `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
-                                'Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.'
-                              )
-                            }
-
-                            if (
-                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
-                                .endringsNotat === ''
-                            ) {
-                              fieldProps.form.setFieldError(
-                                `meldingerTilPvo[${relevantIndex}].endringsNotat`,
-                                'Beskriv hvilke endringer som er gjort.'
-                              )
-                            } else if (
-                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
-                                .merknadTilPvo !== '' &&
-                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
-                                .endringsNotat !== ''
-                            ) {
-                              await setFieldValue(
-                                'status',
-                                EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
-                              )
-                              await setFieldValue(
-                                'antallInnsendingTilPvo',
-                                pvkDokument.antallInnsendingTilPvo + 1
-                              )
-                              await submitForm()
-                            }
-                          }}
-                        >
-                          Lagre og send til PVO
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
+                  <SendTilPvo
+                    relevantIndex={relevantIndex}
+                    pvkDokument={pvkDokument}
+                    fieldProps={fieldProps}
+                  />
                 )}
               </div>
 

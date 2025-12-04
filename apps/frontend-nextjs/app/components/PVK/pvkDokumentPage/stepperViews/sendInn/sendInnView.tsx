@@ -167,6 +167,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
                 ? response.status
                 : submitedValues.status,
+            berOmNyVurderingFraPvo: submitedValues.berOmNyVurderingFraPvo,
             meldingerTilPvo: submitedValues.meldingerTilPvo,
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
@@ -691,8 +692,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           pvkDokument={pvkDokument}
                           relevantVurdering={relevantVurdering}
                           setFieldValue={setFieldValue}
-                          submitForm={submitForm}
-                          initialStatus={initialValues.status}
                           isLoading={isLoading}
                           pvoVurderingList={pvoVurderingList}
                           errorSummaryComponent={
