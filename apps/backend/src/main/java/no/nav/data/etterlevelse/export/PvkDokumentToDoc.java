@@ -349,6 +349,21 @@ public class PvkDokumentToDoc {
                 }
             }
 
+            doc.addLabel("Endringer som er gjort siden siste tilbakemelding fra personvernombudet:");
+            if (innsendingId == 0) {
+                doc.addText("Ingen endrings notat");
+            } else {
+                var latestMeldingTilPvoOpt = pvkDokument.getPvkDokumentData()
+                        .getMeldingerTilPvo().stream()
+                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId)
+                        .findFirst();
+                if (latestMeldingTilPvoOpt.isEmpty() || latestMeldingTilPvoOpt.get().getMerknadTilPvo().isEmpty()) {
+                    doc.addText("Ingen endrings notat.");
+                } else {
+                    doc.addMarkdownText(latestMeldingTilPvoOpt.get().getEndringsNotat());
+                }
+            }
+
             if (pvoTilbakemelding.getStatus() == PvoTilbakemeldingStatus.FERDIG) {
                 doc.addLabel("Beskjed til etterlever Fra personvernombudet:");
                 if (pvoVurdering.getMerknadTilEtterleverEllerRisikoeier().isEmpty()) {

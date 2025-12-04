@@ -34,6 +34,7 @@ public class PvkDokumentRequest implements RequestElement {
 
     private PvkVurdering pvkVurdering;
     private String pvkVurderingsBegrunnelse;
+    private Boolean berOmNyVurderingFraPvo;
 
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
@@ -87,6 +88,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .pvkVurdering(pvkVurdering)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
                 .harInvolvertRepresentant(harInvolvertRepresentant)
+                .berOmNyVurderingFraPvo(berOmNyVurderingFraPvo)
                 .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
                 .dataBehandlerRepresentantInvolveringBeskrivelse(dataBehandlerRepresentantInvolveringBeskrivelse)
@@ -111,6 +113,7 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.setStatus(status);
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurdering(pvkVurdering);
+        pvkDokumentToMerge.getPvkDokumentData().setBerOmNyVurderingFraPvo(berOmNyVurderingFraPvo);
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);
         pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
         pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);

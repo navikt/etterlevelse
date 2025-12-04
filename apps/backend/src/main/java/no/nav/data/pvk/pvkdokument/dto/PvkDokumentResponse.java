@@ -36,6 +36,7 @@ public class PvkDokumentResponse {
 
     private PvkVurdering pvkVurdering;
     private String pvkVurderingsBegrunnelse;
+    private Boolean berOmNyVurderingFraPvo;
 
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
@@ -68,6 +69,8 @@ public class PvkDokumentResponse {
                 .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
                 .pvkVurdering(pvkDokument.getPvkDokumentData().getPvkVurdering())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
+                .berOmNyVurderingFraPvo(pvkDokument.getPvkDokumentData().getBerOmNyVurderingFraPvo())
+
                 .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant())
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())

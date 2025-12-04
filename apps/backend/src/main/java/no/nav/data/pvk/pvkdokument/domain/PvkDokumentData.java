@@ -24,6 +24,7 @@ public class PvkDokumentData {
     @Enumerated(EnumType.STRING)
     private PvkVurdering pvkVurdering;
     private String pvkVurderingsBegrunnelse;
+    private Boolean berOmNyVurderingFraPvo;
 
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
