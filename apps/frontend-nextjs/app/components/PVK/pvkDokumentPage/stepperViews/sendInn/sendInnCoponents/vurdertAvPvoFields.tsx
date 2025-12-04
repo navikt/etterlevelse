@@ -231,7 +231,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                             }
                           }}
                         >
-                          Send til PVO for revurdering
+                          Lagre og send til PVO
                         </Button>
                       </div>
                     </div>
