@@ -20,7 +20,6 @@ public class PvkDokumentData {
     @Builder.Default
     private Integer antallInnsendingTilPvo = 0;
     private List<String> ytterligereEgenskaper;
-    private Boolean skalUtforePvk;
 
     @Enumerated(EnumType.STRING)
     private PvkVurdering pvkVurdering;

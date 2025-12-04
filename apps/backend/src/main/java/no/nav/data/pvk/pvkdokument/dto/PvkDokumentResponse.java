@@ -35,7 +35,6 @@ public class PvkDokumentResponse {
     private List<CodelistResponse> ytterligereEgenskaper;
 
     private PvkVurdering pvkVurdering;
-    private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
     private Boolean harInvolvertRepresentant;
@@ -68,7 +67,6 @@ public class PvkDokumentResponse {
 
                 .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
                 .pvkVurdering(pvkDokument.getPvkDokumentData().getPvkVurdering())
-                .skalUtforePvk(pvkDokument.getPvkDokumentData().getSkalUtforePvk())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
                 .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant())
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())

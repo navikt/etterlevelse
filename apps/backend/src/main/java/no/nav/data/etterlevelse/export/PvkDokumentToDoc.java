@@ -25,6 +25,7 @@ import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.*;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
@@ -298,16 +299,15 @@ public class PvkDokumentToDoc {
         doc.newLine();
 
         doc.addLabel("Hvilken vurdering har dere kommet fram til?");
-        if (pvkDokument.getPvkDokumentData().getSkalUtforePvk() == null) {
+        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == null || pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.UNDEFINED) {
             doc.addText("Ingen vurdering");
-        } else if (!pvkDokument.getPvkDokumentData().getSkalUtforePvk()) {
+        } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_IKKE_UTFORE) {
             doc.addText("Vi skal ikke gjennomføre PVK.");
             doc.newLine();
             doc.addHeading4("Begrunnelse av vurderingen");
             doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
             doc.pageBreak();
-        }
-      /*  else if (pvkDokument.getPvkDokumentData().getSkalUtforePvk() == PvkVurdering.ALLEREDE_UTFORT) {
+        } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.ALLEREDE_UTFORT) {
             doc.addText("Vi har en PVK i Word som ikke trenger en ny vurdering.");
             doc.newLine();
             doc.addHeading4("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
@@ -322,8 +322,7 @@ public class PvkDokumentToDoc {
             doc.addHeading4("Begrunnelse av vurderingen");
             doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
             doc.pageBreak();
-        } */
-        else {
+        } else {
             doc.addText("Vi skal gjennomføre en PVK.");
             doc.newLine();
             doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding, pvoVurdering);

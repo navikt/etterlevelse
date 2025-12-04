@@ -33,7 +33,6 @@ public class PvkDokumentRequest implements RequestElement {
     private List<String> ytterligereEgenskaper;
 
     private PvkVurdering pvkVurdering;
-    private Boolean skalUtforePvk;
     private String pvkVurderingsBegrunnelse;
 
     private Boolean harInvolvertRepresentant;
@@ -86,7 +85,6 @@ public class PvkDokumentRequest implements RequestElement {
         var pkvDokumentData = PvkDokumentData.builder()
                 .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
                 .pvkVurdering(pvkVurdering)
-                .skalUtforePvk(skalUtforePvk)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
                 .harInvolvertRepresentant(harInvolvertRepresentant)
                 .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
@@ -113,7 +111,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.setStatus(status);
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurdering(pvkVurdering);
-        pvkDokumentToMerge.getPvkDokumentData().setSkalUtforePvk(skalUtforePvk);
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);
         pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
         pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);
