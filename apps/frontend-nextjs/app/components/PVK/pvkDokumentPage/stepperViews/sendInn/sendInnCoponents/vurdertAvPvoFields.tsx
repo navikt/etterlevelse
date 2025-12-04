@@ -7,9 +7,17 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { env } from '@/util/env/env'
-import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading, Loader, Modal, Radio, RadioGroup, Stack } from '@navikt/ds-react'
+import {
+  Alert,
+  Button,
+  Heading,
+  Loader,
+  Modal,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  Stack,
+} from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
@@ -99,10 +107,15 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                   </Stack>
                 </RadioGroup>
 
+                <ReadMore header='Når bør PVK sendes til PVO for ny vurdering?'>
+                  PVO har ikke bedt om å få deres PVK i retur. Men dersom risikobildet er endret
+                  siden dere sendte inn til PVO sist, burde dere sende til PVO for ny vurdering.
+                </ReadMore>
+
                 {fieldProps.form.values.berOmNyVurderingFraPvo === false && (
                   <div>
-                    <Heading size='medium' level='2' className='mb-5'>
-                      Arbeid med PVK etter tilbakemelding fra PVO
+                    <Heading size='small' level='3' className='mb-5 mt-8'>
+                      Send til risikoeier for godkjenning
                     </Heading>
 
                     <TextAreaField
@@ -112,6 +125,34 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                       name='merknadTilRisikoeier'
                       markdown
                     />
+
+                    <Alert variant='info' inline className='my-8'>
+                      Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
+                      etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne
+                      redigeres. Dette innholdet forbli låst enn så lenge saken ligger hos
+                      Personvernombudet.
+                    </Alert>
+
+                    <div className='mt-5 flex justify-end gap-2 items-center'>
+                      <LagreOgFortsettSenereButton
+                        setFieldValue={setFieldValue}
+                        submitForm={submitForm}
+                        initialStatus={initialStatus}
+                        resetForm={() =>
+                          fieldProps.form.resetForm({ values: fieldProps.form.values })
+                        }
+                      />
+
+                      <Button
+                        type='button'
+                        onClick={async () => {
+                          await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+                          await submitForm()
+                        }}
+                      >
+                        Lagre og send til risikoeier
+                      </Button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -133,46 +174,8 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                 </div>
               )}
 
-              <div>
-                <Alert variant='info' className='my-5 '>
-                  Status: {pvkDokumentStatusToText(pvkDokument.status)}
-                </Alert>
-              </div>
-
               <div>{!fieldProps.form.dirty && savedAlert}</div>
             </div>
-          </div>
-
-          <div className='mt-5 flex gap-2 items-center'>
-            {/* Remove check when ready for prod */}
-            {env.isDev && (
-              <Button
-                type='button'
-                variant='tertiary'
-                onClick={async () => {
-                  setIsSendTilPvoForRevurderingModalOpen(true)
-                }}
-              >
-                Send til PVO for revurdering
-              </Button>
-            )}
-
-            <LagreOgFortsettSenereButton
-              setFieldValue={setFieldValue}
-              submitForm={submitForm}
-              initialStatus={initialStatus}
-              resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
-            />
-
-            <Button
-              type='button'
-              onClick={async () => {
-                await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-                await submitForm()
-              }}
-            >
-              Lagre og send til risikoeier
-            </Button>
           </div>
 
           <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
