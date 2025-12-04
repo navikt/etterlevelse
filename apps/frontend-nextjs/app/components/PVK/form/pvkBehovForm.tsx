@@ -254,7 +254,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 )}
 
                 {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
-                  <Alert variant='info' className='mt-5'>
+                  <Alert variant='warning' className='mt-5'>
                     Dere må legge inn lenke til deres PVK i Public360 under{' '}
                     <Link
                       href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
