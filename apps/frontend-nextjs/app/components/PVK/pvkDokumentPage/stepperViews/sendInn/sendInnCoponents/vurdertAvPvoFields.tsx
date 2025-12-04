@@ -218,7 +218,22 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                                 `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
                                 'Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.'
                               )
-                            } else {
+                            }
+
+                            if (
+                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
+                                .endringsNotat === ''
+                            ) {
+                              fieldProps.form.setFieldError(
+                                `meldingerTilPvo[${relevantIndex}].endringsNotat`,
+                                'Beskriv hvilke endringer som er gjort.'
+                              )
+                            } else if (
+                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
+                                .merknadTilPvo !== '' &&
+                              fieldProps.form.values.meldingerTilPvo[relevantIndex]
+                                .endringsNotat !== ''
+                            ) {
                               await setFieldValue(
                                 'status',
                                 EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
