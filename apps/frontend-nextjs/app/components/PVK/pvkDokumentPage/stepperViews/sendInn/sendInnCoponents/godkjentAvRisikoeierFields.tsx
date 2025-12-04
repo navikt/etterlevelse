@@ -10,7 +10,7 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Loader } from '@navikt/ds-react'
+import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 import BeskjedFraRisikoeierReadOnly from '../../readOnlyViews/beskjedFraRisikoeierReadOnly'
@@ -63,6 +63,11 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
         relevantVurdering={relevantVurdering}
         pvoVurderingList={pvoVurderingList}
       />
+
+      <Heading size='medium' level='2' className='mb-5 mt-8'>
+        Send PVK til godkjenning av risikoeier
+      </Heading>
+
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
       <BeskjedFraRisikoeierReadOnly merknadFraRisikoeier={pvkDokument.merknadFraRisikoeier} />
 

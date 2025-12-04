@@ -72,7 +72,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             pvoVurderingList={pvoVurderingList}
           />
 
-          <Heading size='medium' level='2' className='my-5'>
+          <Heading size='medium' level='2' className='mb-5 mt-8'>
             Send oppdatert PVK
           </Heading>
           <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />

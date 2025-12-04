@@ -11,7 +11,7 @@ export const BeskjedTilRisikoeierReadOnly: FunctionComponent<TProps> = ({
   merknadTilRisikoeier,
 }) => {
   return (
-    <div className='mt-5 mb-3 max-w-[75ch]'>
+    <div className='mt-8 mb-5 max-w-[75ch]'>
       <div className='mt-5 mb-3'>
         <Label>Hvem skal dere sende PVK-en til?</Label>
         <DataTextWrapper>
