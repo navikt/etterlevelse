@@ -20,6 +20,7 @@ import LabelWithTooltip, {
 } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { Error } from '@/components/common/modalSchema/ModalSchema'
+import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
@@ -475,7 +476,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div id='avdeling' className='flex flex-col lg:flex-row gap-5'>
+          <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5'>
             <FieldWrapper marginTop full>
               <Field name='nomAvdelingId'>
                 {(fieldProps: FieldProps) => (
@@ -499,6 +500,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                             .label
                         )
                       }}
+                      error={
+                        fieldProps.form.errors && fieldProps.form.errors.nomAvdelingId ? (
+                          <FormError fieldName='nomAvdelingId' />
+                        ) : undefined
+                      }
                     />
                   </div>
                 )}

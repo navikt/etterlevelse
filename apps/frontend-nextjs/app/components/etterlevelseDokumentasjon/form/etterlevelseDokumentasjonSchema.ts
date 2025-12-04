@@ -44,6 +44,9 @@ export const etterlevelseDokumentasjonSchema = () =>
     varslingsadresser: varslingsadresserCheck,
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
+    nomAvdelingId: yup
+      .string()
+      .required('Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen'),
   })
 
 export const etterlevelseDokumentasjonWithRelationSchema = () =>
