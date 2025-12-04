@@ -308,7 +308,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div id='avdeling' className='flex flex-col lg:flex-row gap-5'>
+          <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5'>
             <FieldWrapper>
               <Field name='nomAvdelingId'>
                 {(fieldProps: FieldProps) => (
@@ -334,6 +334,11 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                             .label
                         )
                       }}
+                      error={
+                        fieldProps.form.errors && fieldProps.form.errors.nomAvdelingId ? (
+                          <FormError fieldName='nomAvdelingId' />
+                        ) : undefined
+                      }
                     />
                   </div>
                 )}
