@@ -1,4 +1,5 @@
-import { mapMeldingTilPvoToFormValue } from '@/api/pvkDokument/pvkDokumentApi'
+'use client'
+
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
   EPvkDokumentStatus,
@@ -52,12 +53,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
 
   const relevantIndex = useMemo(() => {
     if (relevantMeldingTilPvo.length === 0) {
-      setFieldValue('meldingerTilPvo', [
-        ...pvkDokument.meldingerTilPvo,
-        mapMeldingTilPvoToFormValue({
-          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
-        }),
-      ])
       return pvkDokument.meldingerTilPvo.length
     } else {
       return pvkDokument.meldingerTilPvo.findIndex(

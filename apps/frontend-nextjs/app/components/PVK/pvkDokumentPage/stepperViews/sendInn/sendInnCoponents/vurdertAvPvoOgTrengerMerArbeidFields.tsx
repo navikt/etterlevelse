@@ -1,6 +1,5 @@
 'use client'
 
-import { mapMeldingTilPvoToFormValue } from '@/api/pvkDokument/pvkDokumentApi'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import { BeskjedFraPvoReadOnly } from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedFraPvoReadOnly'
@@ -50,12 +49,6 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
 
   const relevantIndex = useMemo(() => {
     if (relevantMeldingTilPvo.length === 0) {
-      setFieldValue('meldingerTilPvo', [
-        ...pvkDokument.meldingerTilPvo,
-        mapMeldingTilPvoToFormValue({
-          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
-        }),
-      ])
       return pvkDokument.meldingerTilPvo.length
     } else {
       return pvkDokument.meldingerTilPvo.findIndex(

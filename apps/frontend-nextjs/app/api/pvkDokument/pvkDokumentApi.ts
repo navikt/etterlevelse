@@ -147,6 +147,26 @@ export const mapMeldingTilPvoToFormValue = (
   }
 }
 
+export const mapMeldingerTilPvoToFormValue = (
+  pvkDokument: Partial<IPvkDokument>
+): IMeldingTilPvo[] => {
+  const meldingerTilPvo: IMeldingTilPvo[] = []
+  if (pvkDokument.meldingerTilPvo && pvkDokument.meldingerTilPvo.length !== 0) {
+    pvkDokument.meldingerTilPvo.forEach((melding: IMeldingTilPvo) =>
+      meldingerTilPvo.push(mapMeldingTilPvoToFormValue(melding))
+    )
+
+    if (pvkDokument.antallInnsendingTilPvo === pvkDokument.meldingerTilPvo.length) {
+      meldingerTilPvo.push(
+        mapMeldingTilPvoToFormValue({ innsendingId: pvkDokument.antallInnsendingTilPvo + 1 })
+      )
+    }
+  } else {
+    meldingerTilPvo.push(mapMeldingTilPvoToFormValue({}))
+  }
+  return meldingerTilPvo
+}
+
 export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): IPvkDokument => {
   return {
     id: pvkDokument.id || '',
@@ -171,10 +191,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
 
-    meldingerTilPvo:
-      pvkDokument.meldingerTilPvo && pvkDokument.meldingerTilPvo.length !== 0
-        ? pvkDokument.meldingerTilPvo.map(mapMeldingTilPvoToFormValue)
-        : [mapMeldingTilPvoToFormValue({})],
+    meldingerTilPvo: mapMeldingerTilPvoToFormValue(pvkDokument),
     merknadTilRisikoeier: pvkDokument.merknadTilRisikoeier || '',
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
     antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,
