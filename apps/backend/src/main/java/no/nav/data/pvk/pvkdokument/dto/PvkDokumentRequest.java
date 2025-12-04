@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,12 +31,9 @@ public class PvkDokumentRequest implements RequestElement {
     private PvkDokumentStatus status;
 
     private List<String> ytterligereEgenskaper;
-    private Boolean skalUtforePvk;
+
+    private PvkVurdering pvkVurdering;
     private String pvkVurderingsBegrunnelse;
-    private Boolean stemmerPersonkategorier;
-    private String personkategoriAntallBeskrivelse;
-    private String tilgangsBeskrivelsePersonopplysningene;
-    private String lagringsBeskrivelsePersonopplysningene;
 
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
@@ -58,9 +55,6 @@ public class PvkDokumentRequest implements RequestElement {
     @Override
     public void format() {
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
-        setPersonkategoriAntallBeskrivelse(trimToNull(personkategoriAntallBeskrivelse));
-        setTilgangsBeskrivelsePersonopplysningene(trimToNull(tilgangsBeskrivelsePersonopplysningene));
-        setLagringsBeskrivelsePersonopplysningene(trimToNull(lagringsBeskrivelsePersonopplysningene));
 
         setRepresentantInvolveringsBeskrivelse(trimToNull(representantInvolveringsBeskrivelse));
         setDataBehandlerRepresentantInvolveringBeskrivelse(trimToNull(dataBehandlerRepresentantInvolveringBeskrivelse));
@@ -90,12 +84,8 @@ public class PvkDokumentRequest implements RequestElement {
     public PvkDokument convertToPvkDokument() {
         var pkvDokumentData = PvkDokumentData.builder()
                 .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
-                .skalUtforePvk(skalUtforePvk)
+                .pvkVurdering(pvkVurdering)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
-                .personkategoriAntallBeskrivelse(personkategoriAntallBeskrivelse)
-                .tilgangsBeskrivelsePersonopplysningene(tilgangsBeskrivelsePersonopplysningene)
-                .lagringsBeskrivelsePersonopplysningene(lagringsBeskrivelsePersonopplysningene)
-                .stemmerPersonkategorier(stemmerPersonkategorier)
                 .harInvolvertRepresentant(harInvolvertRepresentant)
                 .representantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse)
                 .harDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering)
@@ -120,12 +110,8 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.setEtterlevelseDokumentId(etterlevelseDokumentId);
         pvkDokumentToMerge.setStatus(status);
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
-        pvkDokumentToMerge.getPvkDokumentData().setSkalUtforePvk(skalUtforePvk);
+        pvkDokumentToMerge.getPvkDokumentData().setPvkVurdering(pvkVurdering);
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse);
-        pvkDokumentToMerge.getPvkDokumentData().setPersonkategoriAntallBeskrivelse(personkategoriAntallBeskrivelse);
-        pvkDokumentToMerge.getPvkDokumentData().setTilgangsBeskrivelsePersonopplysningene(tilgangsBeskrivelsePersonopplysningene);
-        pvkDokumentToMerge.getPvkDokumentData().setLagringsBeskrivelsePersonopplysningene(lagringsBeskrivelsePersonopplysningene);
-        pvkDokumentToMerge.getPvkDokumentData().setStemmerPersonkategorier(stemmerPersonkategorier);
         pvkDokumentToMerge.getPvkDokumentData().setHarInvolvertRepresentant(harInvolvertRepresentant);
         pvkDokumentToMerge.getPvkDokumentData().setRepresentantInvolveringsBeskrivelse(representantInvolveringsBeskrivelse);
         pvkDokumentToMerge.getPvkDokumentData().setHarDatabehandlerRepresentantInvolvering(harDatabehandlerRepresentantInvolvering);

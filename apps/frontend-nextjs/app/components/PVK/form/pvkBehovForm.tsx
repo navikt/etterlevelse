@@ -7,15 +7,22 @@ import {
   updatePvkDokument,
 } from '@/api/pvkDokument/pvkDokumentApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
+import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
 import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import {
+  etterlevelseDokumentasjonIdUrl,
+  etterlevelsesDokumentasjonEditUrl,
+} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
@@ -24,10 +31,12 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { ChevronLeftIcon, ChevronRightIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
 import {
   Alert,
+  BodyLong,
   Button,
   Checkbox,
   CheckboxGroup,
   CopyButton,
+  List,
   Radio,
   RadioGroup,
   ReadMore,
@@ -41,6 +50,7 @@ import {
   Formik,
   FormikHelpers,
 } from 'formik'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
 import { pvkBehovSchema } from './pvkBehovSchema'
@@ -192,30 +202,82 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
             </ReadMore>
 
             <FieldWrapper marginBottom marginTop>
-              <Field name='skalUtforePvk'>
+              <Field name='pvkVurdering'>
                 {(fieldProps: FieldProps) => (
                   <RadioGroup
                     legend='Hvilken vurdering har dere kommet fram til?'
                     value={fieldProps.field.value}
                     onChange={(value) => {
-                      fieldProps.form.setFieldValue('skalUtforePvk', value)
+                      fieldProps.form.setFieldValue('pvkVurdering', value)
                     }}
                   >
-                    <Radio value={true}>Vi skal gjennomføre en PVK</Radio>
-                    <Radio value={false}>Vi skal ikke gjennomføre PVK</Radio>
+                    <Radio value={EPvkVurdering.SKAL_UTFORE}>Vi skal gjennomføre en PVK</Radio>
+                    <Radio value={EPvkVurdering.SKAL_IKKE_UTFORE}>
+                      Vi skal ikke gjennomføre PVK
+                    </Radio>
+                    <Radio value={EPvkVurdering.ALLEREDE_UTFORT}>
+                      Vi har en PVK i Word som ikke trenger en ny vurdering
+                    </Radio>
                   </RadioGroup>
                 )}
               </Field>
             </FieldWrapper>
 
-            {values.skalUtforePvk !== undefined && !values.skalUtforePvk && (
-              <TextAreaField
-                rows={5}
-                noPlaceholder
-                label='Begrunn vurderingen deres'
-                name='pvkVurderingsBegrunnelse'
-              />
+            {values.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT && (
+              <div className='my-5'>
+                <BodyLong>Følgende dokumenter er lagt inn under Dokumentegenskaper:</BodyLong>
+                <List as='ul'>
+                  {etterlevelseDokumentasjon.risikovurderinger.length > 0 &&
+                    etterlevelseDokumentasjon.risikovurderinger.map((vurdering, index) => (
+                      <List.Item key={`${index}_vurdering`}>
+                        <Markdown source={vurdering} />
+                      </List.Item>
+                    ))}
+
+                  {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
+                    <List.Item>ingen dokumenter funnet</List.Item>
+                  )}
+                </List>
+
+                {etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
+                  <Alert variant='info' className='mt-5'>
+                    Dersom dokumentene over ikke inkluderer deres PVK, skal dere legge den inn på{' '}
+                    <Link
+                      href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='redigere etterlevelsesdokumentasjon'
+                    >
+                      Rediger dokumentegenskaper (åpner i en ny fane).
+                    </Link>
+                  </Alert>
+                )}
+
+                {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
+                  <Alert variant='info' className='mt-5'>
+                    Dere må legge inn lenke til deres PVK i Public360 under{' '}
+                    <Link
+                      href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='redigere etterlevelsesdokumentasjon'
+                    >
+                      Rediger dokumentegenskaper (åpner i en ny fane).
+                    </Link>
+                  </Alert>
+                )}
+              </div>
             )}
+
+            {values.pvkVurdering !== EPvkVurdering.UNDEFINED &&
+              values.pvkVurdering !== EPvkVurdering.SKAL_UTFORE && (
+                <TextAreaField
+                  rows={5}
+                  noPlaceholder
+                  label='Begrunn vurderingen deres'
+                  name='pvkVurderingsBegrunnelse'
+                />
+              )}
 
             {savedAlert && !dirty && (
               <Alert
@@ -256,7 +318,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 type='button'
                 variant='tertiary'
                 onClick={() => {
-                  setFieldValue('skalUtforePvk', null)
+                  setFieldValue('pvkVurdering', EPvkVurdering.UNDEFINED)
                   setFieldValue('pvkVurderingsBegrunnelse', '')
                   setFieldValue('ytterligereEgenskaper', [])
                   setCheckedYtterligereEgenskaper([])
@@ -283,28 +345,30 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               >
                 Gå til Temaoversikt
               </Button>
-              {pvkDokument && pvkDokument.id && values.skalUtforePvk && (
-                <Button
-                  icon={<ChevronRightIcon aria-hidden />}
-                  iconPosition='right'
-                  type='button'
-                  variant={'tertiary'}
-                  onClick={() => {
-                    if (dirty) {
-                      setIsUnsavedModalOpen(true)
-                      setUrlToNavigate(
-                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                      )
-                    } else {
-                      router.push(
-                        pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                      )
-                    }
-                  }}
-                >
-                  Gå til PVK
-                </Button>
-              )}
+              {pvkDokument &&
+                pvkDokument.id &&
+                values.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+                  <Button
+                    icon={<ChevronRightIcon aria-hidden />}
+                    iconPosition='right'
+                    type='button'
+                    variant={'tertiary'}
+                    onClick={() => {
+                      if (dirty) {
+                        setIsUnsavedModalOpen(true)
+                        setUrlToNavigate(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      } else {
+                        router.push(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      }
+                    }}
+                  >
+                    Gå til PVK
+                  </Button>
+                )}
             </StickyFooterButtonLayout>
           </Form>
         )}

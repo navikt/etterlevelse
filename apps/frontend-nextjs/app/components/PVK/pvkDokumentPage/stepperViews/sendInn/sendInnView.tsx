@@ -1,5 +1,6 @@
 'use client'
 
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopToFormValue,
@@ -20,6 +21,7 @@ import TrengerRisikoeierGodkjenningFields from '@/components/PVK/pvkDokumentPage
 import VurdertAvPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -116,7 +118,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
   const [tiltakAnsvarligError, setTiltakAnsvarligError] = useState<string>('')
-  const [tiltakFristError, setTiltakFristError] = useState<string[]>([])
+  const [tiltakFristError, setTiltakFristError] = useState<string>('')
+  const [tiltakFristUtgaattError, setTiltakFristUtgaattError] = useState<string>('')
   const [pvkKravError, setPvkKravError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
@@ -124,6 +127,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
   const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
   const [savedSuccess, setSavedSuccess] = useState<boolean>(false)
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
+  const [artOgOmfangError, setArtOgOmfangError] = useState<IArtOgOmfangError>({
+    stemmerPersonkategorier: false,
+    personkategoriAntallBeskrivelse: false,
+    tilgangsBeskrivelsePersonopplysningene: false,
+    lagringsBeskrivelsePersonopplysningene: false,
+  })
   const user = useContext(UserContext)
 
   const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
@@ -131,11 +141,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (
       !behandlingensLivslopError &&
+      !artOgOmfangError.stemmerPersonkategorier &&
+      !artOgOmfangError.lagringsBeskrivelsePersonopplysningene &&
+      !artOgOmfangError.tilgangsBeskrivelsePersonopplysningene &&
+      !artOgOmfangError.personkategoriAntallBeskrivelse &&
       risikoscenarioError === '' &&
       savnerVurderingError === '' &&
       tiltakError === '' &&
       tiltakAnsvarligError === '' &&
-      tiltakFristError.length === 0 &&
+      tiltakFristError === '' &&
+      tiltakFristUtgaattError === '' &&
       !medlemError &&
       !avdelingError &&
       !risikoeiereDataError &&
@@ -243,6 +258,46 @@ export const SendInnView: FunctionComponent<TProps> = ({
     }
   }
 
+  const artOgOmfangFieldCheck = () => {
+    let stemmerPersonkategorier = false
+    let personkategoriAntallBeskrivelse = false
+    let tilgangsBeskrivelsePersonopplysningene = false
+    let lagringsBeskrivelsePersonopplysningene = false
+
+    if (
+      artOgOmfang.stemmerPersonkategorier === undefined ||
+      artOgOmfang.stemmerPersonkategorier === null
+    ) {
+      stemmerPersonkategorier = true
+    }
+    if (
+      artOgOmfang.personkategoriAntallBeskrivelse === '' ||
+      artOgOmfang.personkategoriAntallBeskrivelse === undefined
+    ) {
+      personkategoriAntallBeskrivelse = true
+    }
+
+    if (
+      artOgOmfang.tilgangsBeskrivelsePersonopplysningene === '' ||
+      artOgOmfang.tilgangsBeskrivelsePersonopplysningene === undefined
+    ) {
+      tilgangsBeskrivelsePersonopplysningene = true
+    }
+    if (
+      artOgOmfang.lagringsBeskrivelsePersonopplysningene === '' ||
+      artOgOmfang.lagringsBeskrivelsePersonopplysningene === undefined
+    ) {
+      lagringsBeskrivelsePersonopplysningene = true
+    }
+
+    setArtOgOmfangError({
+      stemmerPersonkategorier,
+      personkategoriAntallBeskrivelse,
+      tilgangsBeskrivelsePersonopplysningene,
+      lagringsBeskrivelsePersonopplysningene,
+    })
+  }
+
   const pvkKravCheck = () => {
     if (!isPvkKravLoading) {
       const antallPvkKrav = pvkKrav?.krav.totalElements
@@ -330,20 +385,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
         }
       })
 
-      const errorMessage: string[] = []
       if (amountOfMissingTiltakFrist > 0) {
-        errorMessage.push(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
-      }
+        setTiltakFristError(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
+      } else setTiltakFristError('')
 
       if (amountOfOverdueTiltak > 0) {
-        errorMessage.push(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
-      }
-
-      if (errorMessage.length !== 0) {
-        setTiltakFristError(errorMessage)
-      }
+        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
+      } else setTiltakFristUtgaattError('')
     } else {
-      setTiltakFristError([])
+      setTiltakFristError('')
+      setTiltakFristUtgaattError('')
     }
   }
 
@@ -402,6 +453,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
   useEffect(() => {
     if (
       (!_.isEmpty(formRef?.current?.errors) ||
+        artOgOmfangError.stemmerPersonkategorier ||
+        artOgOmfangError.lagringsBeskrivelsePersonopplysningene ||
+        artOgOmfangError.tilgangsBeskrivelsePersonopplysningene ||
+        artOgOmfangError.personkategoriAntallBeskrivelse ||
         behandlingensLivslopError ||
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
@@ -446,6 +501,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               avdelingFieldCheck()
               medlemErrorCheck()
               behandlingensLivslopFieldCheck()
+              artOgOmfangFieldCheck()
               pvkKravCheck()
               risikoscenarioCheck()
               if (
@@ -499,6 +555,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 />
 
                 <ArtOgOmFangSummary
+                  artOgOmfang={artOgOmfang}
+                  artOgOmfangError={artOgOmfangError}
                   personkategorier={personkategorier}
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
@@ -522,6 +580,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   tiltakError={tiltakError}
                   tiltakAnsvarligError={tiltakAnsvarligError}
                   tiltakFristError={tiltakFristError}
+                  tiltakFristUtgaattError={tiltakFristUtgaattError}
                 />
 
                 <RisikoscenarioEtterTitak
@@ -547,10 +606,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             avdelingError={avdelingError}
                             medlemError={medlemError}
                             behandlingensLivslopError={behandlingensLivslopError}
+                            artOgOmfangError={artOgOmfangError}
                             risikoscenarioError={risikoscenarioError}
                             tiltakError={tiltakError}
                             tiltakAnsvarligError={tiltakAnsvarligError}
                             tiltakFristError={tiltakFristError}
+                            tiltakFristUtgaattError={tiltakFristUtgaattError}
                             pvkKravError={pvkKravError}
                             savnerVurderingError={savnerVurderingError}
                             manglerBehandlingError={manglerBehandlingError}
@@ -600,10 +661,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
+                              artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -640,10 +703,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
+                              artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -682,10 +747,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
+                              artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
@@ -722,11 +789,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               risikoeiereDataError={risikoeiereDataError}
                               avdelingError={avdelingError}
                               medlemError={medlemError}
+                              artOgOmfangError={artOgOmfangError}
                               behandlingensLivslopError={behandlingensLivslopError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}

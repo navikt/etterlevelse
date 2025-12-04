@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,12 +33,9 @@ public class PvkDokumentResponse {
     private PvkDokumentStatus status;
 
     private List<CodelistResponse> ytterligereEgenskaper;
-    private Boolean skalUtforePvk;
+
+    private PvkVurdering pvkVurdering;
     private String pvkVurderingsBegrunnelse;
-    private Boolean stemmerPersonkategorier;
-    private String personkategoriAntallBeskrivelse;
-    private String tilgangsBeskrivelsePersonopplysningene;
-    private String lagringsBeskrivelsePersonopplysningene;
 
     private Boolean harInvolvertRepresentant;
     private String representantInvolveringsBeskrivelse;
@@ -68,12 +66,8 @@ public class PvkDokumentResponse {
                 .status(pvkDokument.getStatus())
 
                 .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
-                .skalUtforePvk(pvkDokument.getPvkDokumentData().getSkalUtforePvk())
+                .pvkVurdering(pvkDokument.getPvkDokumentData().getPvkVurdering())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
-                .personkategoriAntallBeskrivelse(pvkDokument.getPvkDokumentData().getPersonkategoriAntallBeskrivelse())
-                .tilgangsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getTilgangsBeskrivelsePersonopplysningene())
-                .lagringsBeskrivelsePersonopplysningene(pvkDokument.getPvkDokumentData().getLagringsBeskrivelsePersonopplysningene())
-                .stemmerPersonkategorier(pvkDokument.getPvkDokumentData().getStemmerPersonkategorier())
                 .harInvolvertRepresentant(pvkDokument.getPvkDokumentData().getHarInvolvertRepresentant())
                 .representantInvolveringsBeskrivelse(pvkDokument.getPvkDokumentData().getRepresentantInvolveringsBeskrivelse())
                 .harDatabehandlerRepresentantInvolvering(pvkDokument.getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering())

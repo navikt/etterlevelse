@@ -1,5 +1,6 @@
 'use client'
 
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EPvkDokumentStatus,
@@ -16,6 +17,7 @@ type TProps = {
   alleRisikoscenario?: IRisikoscenario[]
   alleTiltak?: ITiltak[]
   behandlingensLivslop?: IBehandlingensLivslop
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
 }
 
 export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
@@ -23,6 +25,7 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   alleRisikoscenario,
   alleTiltak,
   behandlingensLivslop,
+  behandlingensArtOgOmfang,
 }) => {
   const [isChangesMade, setIsChangesMade] = useState<boolean>(false)
   const [approvedDate, setApprovedDate] = useState<string>('')
@@ -47,6 +50,19 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
           .isAfter(lastModifiedDate)
       ) {
         lastModifiedDate = moment(behandlingensLivslop.changeStamp.lastModifiedDate)
+          .seconds(0)
+          .milliseconds(0)
+      }
+
+      if (
+        behandlingensArtOgOmfang &&
+        behandlingensArtOgOmfang.changeStamp &&
+        moment(behandlingensArtOgOmfang.changeStamp.lastModifiedDate)
+          .seconds(0)
+          .milliseconds(0)
+          .isAfter(lastModifiedDate)
+      ) {
+        lastModifiedDate = moment(behandlingensArtOgOmfang.changeStamp.lastModifiedDate)
           .seconds(0)
           .milliseconds(0)
       }

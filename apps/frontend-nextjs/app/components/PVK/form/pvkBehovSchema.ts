@@ -1,3 +1,4 @@
+import { EPvkVurdering } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import * as yup from 'yup'
 
 export const pvkBehovSchema = () => {
@@ -8,9 +9,10 @@ export const pvkBehovSchema = () => {
       test: function (pvkVurderingsBegrunnelse) {
         const { parent } = this
         if (
-          parent.skalUtforePvk !== undefined &&
-          parent.skalUtforePvk !== null &&
-          !parent.skalUtforePvk
+          parent.pvkVurdering !== undefined &&
+          parent.pvkVurdering !== null &&
+          parent.pvkVurdering !== EPvkVurdering.UNDEFINED &&
+          parent.pvkVurdering !== EPvkVurdering.SKAL_IKKE_UTFORE
         ) {
           return !(pvkVurderingsBegrunnelse === '' || pvkVurderingsBegrunnelse === undefined)
         } else {
