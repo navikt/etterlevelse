@@ -65,7 +65,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
       />
 
       <Heading size='medium' level='2' className='mb-5 mt-8'>
-        Send PVK til godkjenning av risikoeier
+        Sendt PVK til godkjenning av risikoeier
       </Heading>
 
       <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
@@ -89,6 +89,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
         <div className='mt-5 flex gap-2 items-center'>
           <Button
             type='button'
+            variant='secondary'
             onClick={async () => {
               setAngretAvRisikoeier(true)
               await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)

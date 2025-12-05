@@ -134,7 +134,7 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
     case EPvkDokumentStatus.TRENGER_GODKJENNING:
       return 'Sendt til Risikoeier for godkjenning'
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
-      return 'Godkjent av Risikoeier'
+      return 'Godkjent av risikoeier og arkivert i Public360'
   }
 }
 

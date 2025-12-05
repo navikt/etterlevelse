@@ -32,7 +32,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   return (
     <div className='w-full max-w-[75ch]'>
       <Heading size='medium' level='2' className='mb-5 mt-8'>
-        Send oppdatert PVK
+        Sendt oppdatert PVK
       </Heading>
 
       <BeskjedTilPvoReadOnly
@@ -56,13 +56,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div>
-        <Alert variant='info' className='my-5'>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
-      </div>
-
-      <div className='mt-5 flex gap-2 items-center'>
+      <div className='mt-5 ml-12'>
         <Button
           type='button'
           variant='secondary'
@@ -91,6 +85,12 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         >
           Trekk innsending
         </Button>
+      </div>
+
+      <div>
+        <Alert variant='info' className='my-5'>
+          Status: {pvkDokumentStatusToText(pvkDokument.status)}
+        </Alert>
       </div>
 
       <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />

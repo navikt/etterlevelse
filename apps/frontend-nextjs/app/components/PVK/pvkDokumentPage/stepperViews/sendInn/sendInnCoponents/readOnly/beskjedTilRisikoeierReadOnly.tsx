@@ -20,7 +20,7 @@ export const BeskjedTilRisikoeierReadOnly: FunctionComponent<TProps> = ({
       </div>
 
       <Heading size='small' level='3' className='my-5'>
-        Send til Risikoeier for godkjenning
+        Sendt til Risikoeier for godkjenning
       </Heading>
       <div className='mt-5 mb-3'>
         <Label>

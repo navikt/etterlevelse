@@ -73,11 +73,11 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           />
 
           <Heading size='medium' level='2' className='mb-5 mt-8'>
-            Send oppdatert PVK
+            Sendt oppdatert PVK
           </Heading>
           <BeskjedTilRisikoeierReadOnly merknadTilRisikoeier={pvkDokument.merknadTilRisikoeier} />
 
-          {(isRisikoeierCheck || user.isAdmin()) && (
+          {isRisikoeierCheck && (
             <div>
               <Heading size='medium' level='2' className='my-5'>
                 Godkjenn og arkiver PVK
@@ -98,46 +98,46 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
 
           {isLoading && <CenteredLoader />}
 
-          <div>
-            <Alert variant='info' className='my-5 '>
-              Status: {pvkDokumentStatusToText(pvkDokument.status)}
-            </Alert>
-          </div>
-
           <div>{!fieldProps.form.dirty && savedAlert}</div>
 
           {!isRisikoeierCheck && (
-            <Alert variant='info' inline className='my-5'>
-              Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å
-              trekke PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har
-              påbegynt vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende
-              plass i behandlingskøen.
-            </Alert>
+            <div>
+              <Alert variant='info' inline className='my-5'>
+                Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å
+                trekke PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har
+                påbegynt vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende
+                plass i behandlingskøen.
+              </Alert>
+
+              <div className='mt-5 ml-8'>
+                <Button
+                  variant='secondary'
+                  type='button'
+                  onClick={async () => {
+                    await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                    await submitForm()
+                  }}
+                >
+                  Trekk innsending
+                </Button>
+              </div>
+              <div>
+                <Alert variant='info' className='my-5 '>
+                  Status: {pvkDokumentStatusToText(pvkDokument.status)}
+                </Alert>
+              </div>
+            </div>
           )}
 
-          <div className='mt-5 flex gap-2 items-center'>
-            {(isRisikoeierCheck || user.isAdmin()) && (
+          {isRisikoeierCheck && (
+            <div className='mt-5 flex gap-2 items-center'>
               <LagreOgFortsettSenereButton
                 setFieldValue={setFieldValue}
                 submitForm={submitForm}
                 initialStatus={initialStatus}
                 resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
               />
-            )}
 
-            {(!isRisikoeierCheck || user.isAdmin()) && (
-              <Button
-                type='button'
-                onClick={async () => {
-                  await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
-                  await submitForm()
-                }}
-              >
-                Angre sending til risikoeier
-              </Button>
-            )}
-
-            {(isRisikoeierCheck || user.isAdmin()) && (
               <Button
                 type='button'
                 onClick={async () => {
@@ -159,8 +159,8 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
               >
                 Aksepter restrisiko og arkiver i Public 360
               </Button>
-            )}
-          </div>
+            </div>
+          )}
 
           <CopyAndExportButtons etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id} />
         </div>

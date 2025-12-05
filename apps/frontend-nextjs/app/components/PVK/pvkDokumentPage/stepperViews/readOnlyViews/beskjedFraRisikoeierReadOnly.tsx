@@ -13,7 +13,7 @@ export const BeskjedFraRisikoeierReadOnly: FunctionComponent<TProps> = ({
   return (
     <div className='mt-8 mb-5 max-w-[75ch]'>
       <Heading size='medium' level='2' className='my-5'>
-        Godkjenn og arkiver PVK
+        Godkjent og arkivert PVK
       </Heading>
       <Label>Risikoeiers begrunnelse for godkjenning av restrisiko</Label>
       <DataTextWrapper>

@@ -21,7 +21,7 @@ export const BeskjedTilPvoReadOnly: FunctionComponent<TProps> = ({ meldingTilPvo
       </div>
 
       <Heading size='small' level='3' className='my-5'>
-        Send til PVK for {nyRunde}vurdering
+        Sendt PVK til {nyRunde}vurdering
       </Heading>
       <div className='mt-5 mb-3'>
         <Label>Forklar hvorfor dere ønsker å sende inn til {nyRunde}vurdering</Label>
