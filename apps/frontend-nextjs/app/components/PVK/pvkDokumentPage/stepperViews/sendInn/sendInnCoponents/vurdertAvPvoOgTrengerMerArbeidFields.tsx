@@ -2,7 +2,6 @@
 
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
-import { BeskjedFraPvoReadOnly } from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedFraPvoReadOnly'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
@@ -10,15 +9,16 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo } from 'react'
+import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 
 type TProps = {
   pvkDokument: IPvkDokument
-  relevantVurdering: IVurdering
+  pvoTilbakemelding: IPvoTilbakemelding
   setFieldValue: (
     field: string,
     value: any,
@@ -34,7 +34,7 @@ type TProps = {
 
 export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
   pvkDokument,
-  relevantVurdering,
+  pvoTilbakemelding,
   setFieldValue,
   submitForm,
   initialStatus,
@@ -63,9 +63,12 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
         <div>
           <div className='flex justify-center w-full'>
             <div className='w-full max-w-[75ch]'>
-              <BeskjedFraPvoReadOnly
-                relevantVurdering={relevantVurdering}
+              <TilbakemeldingsHistorikk
+                antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
+                meldingerTilPvo={pvkDokument.meldingerTilPvo}
+                vurderinger={pvoTilbakemelding.vurderinger}
                 pvoVurderingList={pvoVurderingList}
+                defaultFirstOpen
               />
 
               <div className='mt-8 mb-3'>

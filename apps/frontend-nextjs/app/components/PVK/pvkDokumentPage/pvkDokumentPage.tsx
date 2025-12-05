@@ -329,7 +329,6 @@ export const PvkDokumentPage = () => {
                       updateTitleUrlAndStep={updateTitleUrlAndStep}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvoTilbakemelding={pvoTilbakemelding}
-                      relevantVurdering={relevantVurdering}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
                       setActiveStep={updateTitleUrlAndStep}

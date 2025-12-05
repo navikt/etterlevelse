@@ -7,7 +7,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
@@ -15,13 +15,12 @@ import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 import BeskjedFraRisikoeierReadOnly from '../../readOnlyViews/beskjedFraRisikoeierReadOnly'
 import CopyAndExportButtons from './copyAndExportButtons'
-import { BeskjedFraPvoReadOnly } from './readOnly/beskjedFraPvoReadOnly'
-import BeskjedTilPvoReadOnly from './readOnly/beskjedTilPvoReadOnly'
+import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 import BeskjedTilRisikoeierReadOnly from './readOnly/beskjedTilRisikoeierReadOnly'
 
 type TProps = {
   pvkDokument: IPvkDokument
-  relevantVurdering: IVurdering
+  pvoTilbakemelding: IPvoTilbakemelding
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   isLoading: boolean
   setFieldValue: (
@@ -37,7 +36,7 @@ type TProps = {
 
 export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   pvkDokument,
-  relevantVurdering,
+  pvoTilbakemelding,
   etterlevelseDokumentasjon,
   isLoading,
   setFieldValue,
@@ -52,16 +51,12 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
 
   return (
     <div className='w-full max-w-[75ch]'>
-      <BeskjedTilPvoReadOnly
-        meldingTilPvo={
-          pvkDokument.meldingerTilPvo.filter(
-            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
-          )[0]
-        }
-      />
-      <BeskjedFraPvoReadOnly
-        relevantVurdering={relevantVurdering}
+      <TilbakemeldingsHistorikk
+        antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
+        meldingerTilPvo={pvkDokument.meldingerTilPvo}
+        vurderinger={pvoTilbakemelding.vurderinger}
         pvoVurderingList={pvoVurderingList}
+        defaultFirstOpen={!isRisikoeierCheck ? true : false}
       />
 
       <Heading size='medium' level='2' className='mb-5 mt-8'>

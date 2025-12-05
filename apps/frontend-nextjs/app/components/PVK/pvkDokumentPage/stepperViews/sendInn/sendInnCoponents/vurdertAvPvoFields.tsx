@@ -2,19 +2,18 @@
 
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Alert, Heading, Loader, Radio, RadioGroup, ReadMore, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
-import { BeskjedFraPvoReadOnly } from './readOnly/beskjedFraPvoReadOnly'
-import BeskjedTilPvoReadOnly from './readOnly/beskjedTilPvoReadOnly'
+import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 import SendTilPvo from './vurdertAvPvoComponents.tsx/SendTilPvo'
 import SendTilRisikoeier from './vurdertAvPvoComponents.tsx/SendTilRisikoeier'
 
 type TProps = {
   pvkDokument: IPvkDokument
-  relevantVurdering: IVurdering
+  pvoTilbakemelding: IPvoTilbakemelding
   setFieldValue: (
     field: string,
     value: any,
@@ -28,7 +27,7 @@ type TProps = {
 
 export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
-  relevantVurdering,
+  pvoTilbakemelding,
   setFieldValue,
   isLoading,
   errorSummaryComponent,
@@ -55,17 +54,14 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
         <div className='w-full'>
           <div className='w-full flex justify-center'>
             <div className='w-full max-w-[75ch]'>
-              <BeskjedTilPvoReadOnly
-                meldingTilPvo={
-                  pvkDokument.meldingerTilPvo.filter(
-                    (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
-                  )[0]
-                }
-              />
-              <BeskjedFraPvoReadOnly
-                relevantVurdering={relevantVurdering}
+              <TilbakemeldingsHistorikk
+                antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
+                meldingerTilPvo={pvkDokument.meldingerTilPvo}
+                vurderinger={pvoTilbakemelding.vurderinger}
                 pvoVurderingList={pvoVurderingList}
+                defaultFirstOpen
               />
+
               <div className='pt-9 mb-3'>
                 <Heading size='medium' level='2' className='mb-5'>
                   Send oppdatert PVK

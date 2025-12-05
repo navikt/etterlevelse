@@ -3,8 +3,6 @@
 import { arkiver } from '@/api/p360/p360Api'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
-import { BeskjedFraPvoReadOnly } from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedFraPvoReadOnly'
-import BeskjedTilPvoReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilPvoReadOnly'
 import BeskjedTilRisikoeierReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilRisikoeierReadOnly'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
@@ -14,18 +12,19 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, ReactNode, useContext } from 'react'
+import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 
 type TProps = {
   pvkDokument: IPvkDokument
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  relevantVurdering: IVurdering
+  pvoTilbakemelding: IPvoTilbakemelding
   isLoading: boolean
   setFieldValue: (
     field: string,
@@ -42,7 +41,7 @@ type TProps = {
 export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
-  relevantVurdering,
+  pvoTilbakemelding,
   isLoading,
   setFieldValue,
   submitForm,
@@ -59,17 +58,12 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
     <Field>
       {(fieldProps: FieldProps) => (
         <div className='w-full max-w-[75ch]'>
-          <BeskjedTilPvoReadOnly
-            meldingTilPvo={
-              pvkDokument.meldingerTilPvo.filter(
-                (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
-              )[0]
-            }
-          />
-
-          <BeskjedFraPvoReadOnly
-            relevantVurdering={relevantVurdering}
+          <TilbakemeldingsHistorikk
+            antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
+            meldingerTilPvo={pvkDokument.meldingerTilPvo}
+            vurderinger={pvoTilbakemelding.vurderinger}
             pvoVurderingList={pvoVurderingList}
+            defaultFirstOpen={!isRisikoeierCheck ? true : false}
           />
 
           <Heading size='medium' level='2' className='mb-5 mt-8'>
