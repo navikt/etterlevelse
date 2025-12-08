@@ -3,7 +3,7 @@
 import { Alert, BodyLong, Heading, List, Textarea } from '@navikt/ds-react'
 import { PageLayout } from '../others/scaffold/scaffold'
 
-export const RisikoeierGodkjenningPage = () => {
+export const SendTilRisikoeierGodkjenningPage = () => {
   return (
     <PageLayout
       pageTitle='Få etterlevelsen godkjent av risikoeier'
@@ -66,4 +66,4 @@ export const RisikoeierGodkjenningPage = () => {
   )
 }
 
-export default RisikoeierGodkjenningPage
+export default SendTilRisikoeierGodkjenningPage
