@@ -3,9 +3,9 @@
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Alert, Heading, Loader, Radio, RadioGroup, ReadMore, Stack } from '@navikt/ds-react'
+import { Alert, Button, Heading, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo } from 'react'
+import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 import SendTilPvo from './vurdertAvPvoComponents.tsx/SendTilPvo'
@@ -37,6 +37,8 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
   )
+
+  const [isNullstillModalOpen, setIsNullstillModalOpen] = useState<boolean>(false)
 
   const relevantIndex = useMemo(() => {
     if (relevantMeldingTilPvo.length === 0) {
@@ -73,21 +75,54 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                     await setFieldValue('berOmNyVurderingFraPvo', value)
                   }}
                   value={fieldProps.form.values.berOmNyVurderingFraPvo}
+                  description='PVO har ikke bedt om å få deres PVK i retur, og da skal dere i utgangspunktet sende til risikoeier for godkjenning. Men dersom risikobildet er endret siden dere sendte inn til PVO sist, burde dere sende til PVO for ny vurdering.'
                 >
-                  <Stack
-                    gap='space-0 space-24'
-                    direction={{ xs: 'column', sm: 'row' }}
-                    wrap={false}
-                  >
-                    <Radio value={false}>Risikoeier, til godkjenning</Radio>
-                    <Radio value={true}>PVO, til ny vurdering</Radio>
-                  </Stack>
+                  <Radio value={false}>Risikoeier, til godkjenning</Radio>
+                  <Radio value={true}>PVO, til ny vurdering</Radio>
                 </RadioGroup>
 
-                <ReadMore header='Når bør PVK sendes til PVO for ny vurdering?'>
-                  PVO har ikke bedt om å få deres PVK i retur. Men dersom risikobildet er endret
-                  siden dere sendte inn til PVO sist, burde dere sende til PVO for ny vurdering.
-                </ReadMore>
+                <div className='mb-2'>
+                  <Button
+                    size='small'
+                    type='button'
+                    variant='secondary'
+                    onClick={() => {
+                      setIsNullstillModalOpen(true)
+                    }}
+                  >
+                    Nullstill valg
+                  </Button>
+
+                  {isNullstillModalOpen && (
+                    <Modal
+                      header={{ heading: 'Er du sikker på at du vill nullstille valg?' }}
+                      open={isNullstillModalOpen}
+                      onClose={() => setIsNullstillModalOpen(false)}
+                    >
+                      <Modal.Footer>
+                        <Button
+                          type='button'
+                          variant='primary'
+                          onClick={async () => {
+                            await setFieldValue('berOmNyVurderingFraPvo', null)
+                            await fieldProps.form.submitForm().then(() => {
+                              setIsNullstillModalOpen(false)
+                            })
+                          }}
+                        >
+                          Nullstill valg
+                        </Button>
+                        <Button
+                          type='button'
+                          variant='secondary'
+                          onClick={() => setIsNullstillModalOpen(false)}
+                        >
+                          Avbryt
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  )}
+                </div>
 
                 {fieldProps.form.values.berOmNyVurderingFraPvo === false && (
                   <SendTilRisikoeier fieldProps={fieldProps} />
