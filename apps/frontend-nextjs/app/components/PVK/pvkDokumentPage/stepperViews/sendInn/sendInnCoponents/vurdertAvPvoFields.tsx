@@ -3,9 +3,9 @@
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Alert, Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
+import { Alert, Button, Heading, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo } from 'react'
+import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
 import CopyAndExportButtons from './copyAndExportButtons'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 import SendTilPvo from './vurdertAvPvoComponents.tsx/SendTilPvo'
@@ -37,6 +37,8 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
   )
+
+  const [isNullstillModalOpen, setIsNullstillModalOpen] = useState<boolean>(false)
 
   const relevantIndex = useMemo(() => {
     if (relevantMeldingTilPvo.length === 0) {
@@ -84,13 +86,42 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                     size='small'
                     type='button'
                     variant='secondary'
-                    onClick={async () => {
-                      await setFieldValue('berOmNyVurderingFraPvo', null)
-                      await fieldProps.form.submitForm()
+                    onClick={() => {
+                      setIsNullstillModalOpen(true)
                     }}
                   >
                     Nullstill valg
                   </Button>
+
+                  {isNullstillModalOpen && (
+                    <Modal
+                      header={{ heading: 'Er du sikker på at du vill nullstille valg?' }}
+                      open={isNullstillModalOpen}
+                      onClose={() => setIsNullstillModalOpen(false)}
+                    >
+                      <Modal.Footer>
+                        <Button
+                          type='button'
+                          variant='primary'
+                          onClick={async () => {
+                            await setFieldValue('berOmNyVurderingFraPvo', null)
+                            await fieldProps.form.submitForm().then(() => {
+                              setIsNullstillModalOpen(false)
+                            })
+                          }}
+                        >
+                          Nullstill valg
+                        </Button>
+                        <Button
+                          type='button'
+                          variant='secondary'
+                          onClick={() => setIsNullstillModalOpen(false)}
+                        >
+                          Avbryt
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  )}
                 </div>
 
                 {fieldProps.form.values.berOmNyVurderingFraPvo === false && (
