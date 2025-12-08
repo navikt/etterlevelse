@@ -13,7 +13,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Alert, BodyLong, Heading, List } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
@@ -43,8 +43,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
       const updatedEtterlevelseDokumentasjon = { ...response }
-      updatedEtterlevelseDokumentasjon.status =
-        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+      updatedEtterlevelseDokumentasjon.status = submitValues.status
       updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
         submitValues.meldingEtterlevelerTilRisikoeier
 
@@ -105,7 +104,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
             onSubmit={submit}
           >
-            {() => (
+            {({ submitForm, setFieldValue }) => (
               <Form>
                 <div className='mt-3'>
                   <TextAreaField
@@ -123,6 +122,34 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                     ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere kunne redigere
                     på nytt.
                   </Alert>
+                </div>
+
+                <div className='flex items-center mt-5 gap-2'>
+                  <Button
+                    type='button'
+                    variant='secondary'
+                    onClick={async () => {
+                      await setFieldValue('status', EEtterlevelseDokumentasjonStatus.UNDER_ARBEID)
+                      await submitForm()
+                    }}
+                  >
+                    Lagre og fortsett senere
+                  </Button>
+
+                  <Button
+                    type='button'
+                    variant='primary'
+                    onClick={async () => {
+                      await setFieldValue(
+                        'status',
+                        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                      )
+
+                      await submitForm()
+                    }}
+                  >
+                    Lagre og send til godkjenning
+                  </Button>
                 </div>
               </Form>
             )}
