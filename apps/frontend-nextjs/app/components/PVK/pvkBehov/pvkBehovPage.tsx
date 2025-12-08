@@ -32,7 +32,7 @@ export const PvkBehovPage = () => {
       etterlevelseDokumentasjonId?: string
       pvkDokumentId?: string
     }>
-  > = useParams<{ id?: string; pvkDokumentId?: string }>()
+  > = useParams<{ etterlevelseDokumentasjonId?: string; pvkDokumentId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
   const [pvkDokument, setPvkDokument] = usePvkDokument(
