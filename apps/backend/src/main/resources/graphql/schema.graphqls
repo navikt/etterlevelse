@@ -259,6 +259,9 @@ type EtterlevelseDokumentasjon {
     behandlerPersonopplysninger: Boolean
     irrelevansFor: [Code!]!
     prioritertKravNummer: [String!]!
+    status: EtterlevelseDokumentasjonStatus!
+    meldingEtterlevelerTilRisikoeier: String
+    meldingRisikoeierTilEtterleveler: String
     forGjenbruk: Boolean
     teams: [String!]!
     teamsData: [Team!]!
@@ -344,6 +347,12 @@ enum PvoTilbakemeldingStatus {
     TIL_KONTROL,
     UTGAAR,
     FERDIG,
+}
+
+enum EtterlevelseDokumentasjonStatus {
+    UNDER_ARBEID,
+    SENDT_TIL_GODKJENNING_TIL_RISIKOEIER,
+    GODKJENT_AV_RISIKOEIER,
 }
 
 type LovStats {

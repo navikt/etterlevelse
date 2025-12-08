@@ -10,6 +10,7 @@ import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -39,6 +40,12 @@ public class EtterlevelseDokumentasjonResponse {
     private String gjenbrukBeskrivelse;
     private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
+
+    private EtterlevelseDokumentasjonStatus status = EtterlevelseDokumentasjonStatus.UNDER_ARBEID;
+
+    private String meldingEtterlevelerTilRisikoeier;
+    private String meldingRisikoeierTilEtterleveler;
+
     @Singular("relevansForSingle")
     private List<CodelistResponse> irrelevansFor;
     private List<String> prioritertKravNummer;
@@ -73,6 +80,9 @@ public class EtterlevelseDokumentasjonResponse {
                 .etterlevelseNummer(eDokData.getEtterlevelseNummer())
                 .title(eDokData.getTitle())
                 .beskrivelse(eDokData.getBeskrivelse())
+                .status(eDokData.getStatus())
+                .meldingEtterlevelerTilRisikoeier(eDokData.getMeldingEtterlevelerTilRisikoeier())
+                .meldingRisikoeierTilEtterleveler(eDokData.getMeldingRisikoeierTilEtterleveler())
                 .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
                 .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
                 .behandlingIds(nullsafeCopyOf(eDokData.getBehandlingIds()))

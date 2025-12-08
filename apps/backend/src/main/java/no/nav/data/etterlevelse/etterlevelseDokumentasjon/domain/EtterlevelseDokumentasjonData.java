@@ -1,5 +1,7 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
@@ -18,6 +20,14 @@ public class EtterlevelseDokumentasjonData {
     private List<String> behandlingIds;
     private String beskrivelse;
     private String gjenbrukBeskrivelse;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private EtterlevelseDokumentasjonStatus status = EtterlevelseDokumentasjonStatus.UNDER_ARBEID;
+
+    private String meldingEtterlevelerTilRisikoeier;
+    private String meldingRisikoeierTilEtterleveler;
+
     @Builder.Default
     private boolean tilgjengeligForGjenbruk = false; // True if document is ready for re-use
 
