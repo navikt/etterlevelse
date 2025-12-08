@@ -13,10 +13,11 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Alert, BodyLong, Heading, List, Textarea } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
+import { TextAreaField } from '../common/textAreaField/textAreaField'
 import { PageLayout } from '../others/scaffold/scaffold'
 
 export const SendTilRisikoeierGodkjenningPage = () => {
@@ -107,10 +108,12 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             {() => (
               <Form>
                 <div className='mt-3'>
-                  <Textarea
-                    rows={3}
+                  <TextAreaField
+                    rows={5}
+                    noPlaceholder
                     label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
-                    name='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
+                    name='meldingEtterlevelerTilRisikoeier'
+                    markdown
                   />
                 </div>
 
