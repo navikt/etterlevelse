@@ -1,10 +1,20 @@
 'use client'
 
-import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import {
+  etterlevelseDokumentasjonMapToFormVal,
+  getEtterlevelseDokumentasjon,
+  updateEtterlevelseDokumentasjon,
+  useEtterlevelseDokumentasjon,
+} from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  IEtterlevelseDokumentasjon,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { Alert, BodyLong, Heading, List, Textarea } from '@navikt/ds-react'
+import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { PageLayout } from '../others/scaffold/scaffold'
@@ -15,8 +25,11 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       etterlevelseDokumentasjonId?: string
     }>
   > = useParams<{ etterlevelseDokumentasjonId?: string }>()
-  const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
-    useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
+  const [
+    etterlevelseDokumentasjon,
+    setEtterlevelseDokumentasjon,
+    isEtterlevelseDokumentasjonLoading,
+  ] = useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -25,6 +38,20 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
+
+  const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
+    await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
+      const updatedEtterlevelseDokumentasjon = { ...response }
+      updatedEtterlevelseDokumentasjon.status =
+        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+      updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
+        submitValues.meldingEtterlevelerTilRisikoeier
+
+      await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
+        setEtterlevelseDokumentasjon(resp)
+      })
+    })
+  }
 
   return (
     <PageLayout
@@ -71,20 +98,32 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Når risikoeier godkjenner, arkiveres etterlevelsen og godkjenningen i Public 360.
           </BodyLong>
 
-          <div className='mt-3'>
-            <Textarea
-              rows={3}
-              label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
-              name='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
-            />
-          </div>
+          <Formik
+            validateOnChange={false}
+            validateOnBlur={false}
+            initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
+            onSubmit={submit}
+          >
+            {() => (
+              <Form>
+                <div className='mt-3'>
+                  <Textarea
+                    rows={3}
+                    label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
+                    name='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
+                  />
+                </div>
 
-          <div className='mt-10'>
-            <Alert variant='info' inline>
-              Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen låses og ikke
-              kunne redigeres. Etter at risikoeier har godkjent, vil dere kunne redigere på nytt.
-            </Alert>
-          </div>
+                <div className='mt-10'>
+                  <Alert variant='info' inline>
+                    Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen låses og
+                    ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere kunne redigere
+                    på nytt.
+                  </Alert>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       )}
     </PageLayout>
