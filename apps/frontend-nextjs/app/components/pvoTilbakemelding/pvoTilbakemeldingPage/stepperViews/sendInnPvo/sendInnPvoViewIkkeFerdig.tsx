@@ -130,14 +130,19 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='arbeidGarVidere'
                     legend='Anbefales det at arbeidet går videre som planlagt?'
                     value={
-                      fieldProps.field.value === undefined
+                      fieldProps.field.value === undefined || fieldProps.field.value === null
                         ? undefined
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'
                     }
                     onChange={async (value) => {
-                      const boolValue = value === null ? null : value === 'Ja' ? true : false
+                      const boolValue =
+                        value === null || value === undefined
+                          ? undefined
+                          : value === 'Ja'
+                            ? true
+                            : false
                       await fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
                     }}
                     error={fieldProps.form.errors.arbeidGarVidere as string}
@@ -164,14 +169,19 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='behovForForhandskonsultasjon'
                     legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
                     value={
-                      fieldProps.field.value === undefined
+                      fieldProps.field.value === undefined || fieldProps.field.value === null
                         ? undefined
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'
                     }
                     onChange={async (value) => {
-                      const boolValue = value === null ? null : value === 'Ja' ? true : false
+                      const boolValue =
+                        value === null || value === undefined
+                          ? undefined
+                          : value === 'Ja'
+                            ? true
+                            : false
                       await fieldProps.form.setFieldValue('behovForForhandskonsultasjon', boolValue)
                     }}
                     error={fieldProps.form.errors.behovForForhandskonsultasjon as string}

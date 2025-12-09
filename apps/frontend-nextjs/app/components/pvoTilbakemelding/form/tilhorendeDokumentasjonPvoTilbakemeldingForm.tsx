@@ -96,7 +96,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               setIsAlertModalOpen(true)
             } else {
               await updatePvoTilbakemelding(updatedValues).then((response) => {
-                setPvoTilbakemelding(response)
+                setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
                 const relevantVurdering = response.vurderinger.filter(
                   (vurdering) => vurdering.innsendingId === innsendingId
                 )[0]
@@ -122,7 +122,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               status: EPvoTilbakemeldingStatus.UNDERARBEID,
             })
             await createPvoTilbakemelding(createValue).then((response) => {
-              setPvoTilbakemelding(response)
+              setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
               const relevantVurdering = response.vurderinger.filter(
                 (vurdering) => vurdering.innsendingId === innsendingId
               )[0]

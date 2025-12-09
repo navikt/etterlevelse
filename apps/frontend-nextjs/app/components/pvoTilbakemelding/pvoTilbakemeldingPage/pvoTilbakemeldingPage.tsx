@@ -125,8 +125,6 @@ export const PvoTilbakemeldingPage = () => {
 
   const relevantVurdering: IVurdering = useMemo(() => {
     if (!isPvoTilbakemeldingLoading && !isPvkDokumentLoading && pvkDokument && pvoTilbakemelding) {
-      console.debug(pvoTilbakemelding)
-
       return pvoTilbakemelding.vurderinger.filter(
         (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
       )[0]
