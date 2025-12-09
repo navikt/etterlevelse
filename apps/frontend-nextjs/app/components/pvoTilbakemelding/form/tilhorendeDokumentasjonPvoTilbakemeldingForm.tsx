@@ -25,6 +25,7 @@ import AlertPvoModal from '../common/alertPvoModal'
 import TilbakemeldingField from './tilbakemeldingField'
 
 type TProps = {
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   pvkDokumentId: string
   innsendingId: number
   initialValue: ITilhorendeDokumentasjonTilbakemelding
@@ -32,6 +33,7 @@ type TProps = {
 }
 
 export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+  setPvoTilbakemelding,
   pvkDokumentId,
   innsendingId,
   initialValue,
@@ -92,7 +94,15 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
             if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
               setIsAlertModalOpen(true)
             } else {
-              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+              await updatePvoTilbakemelding(updatedValues).then((response) => {
+                setPvoTilbakemelding(response)
+                const relevantVurdering = response.vurderinger.filter(
+                  (vurdering) => vurdering.innsendingId === innsendingId
+                )[0]
+                const newInitailValues = relevantVurdering.tilhorendeDokumentasjon
+
+                formRef.current.resetForm({ values: newInitailValues })
+              })
             }
           }
         })
@@ -109,7 +119,15 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               ],
               status: EPvoTilbakemeldingStatus.UNDERARBEID,
             })
-            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+            await createPvoTilbakemelding(createValue).then((response) => {
+              setPvoTilbakemelding(response)
+              const relevantVurdering = response.vurderinger.filter(
+                (vurdering) => vurdering.innsendingId === innsendingId
+              )[0]
+              const newInitailValues = relevantVurdering.tilhorendeDokumentasjon
+
+              formRef.current.resetForm({ values: newInitailValues })
+            })
           } else {
             console.debug(error)
           }

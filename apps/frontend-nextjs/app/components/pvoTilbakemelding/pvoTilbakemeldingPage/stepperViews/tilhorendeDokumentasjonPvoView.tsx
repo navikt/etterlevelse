@@ -30,6 +30,7 @@ type TProps = {
     | undefined
   isPvkKravLoading: boolean
   pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   relevantVurdering: IVurdering
 }
 
@@ -43,6 +44,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
   pvkKrav,
   isPvkKravLoading,
   pvoTilbakemelding,
+  setPvoTilbakemelding,
   relevantVurdering,
 }) => {
   return (
@@ -60,6 +62,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
             <PvoSidePanelWrapper>
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                 <TilhorendeDokumentasjonPvoTilbakemeldingForm
+                  setPvoTilbakemelding={setPvoTilbakemelding}
                   pvkDokumentId={pvkDokument.id}
                   innsendingId={pvkDokument.antallInnsendingTilPvo}
                   initialValue={relevantVurdering.tilhorendeDokumentasjon}

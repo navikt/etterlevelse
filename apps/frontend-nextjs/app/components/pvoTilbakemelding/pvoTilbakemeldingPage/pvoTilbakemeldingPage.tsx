@@ -324,6 +324,7 @@ export const PvoTilbakemeldingPage = () => {
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                         relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
                         setActiveStep={updateTitleUrlAndStep}
