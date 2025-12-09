@@ -12,11 +12,12 @@ export const pvkBehovSchema = () => {
           parent.pvkVurdering !== undefined &&
           parent.pvkVurdering !== null &&
           parent.pvkVurdering !== EPvkVurdering.UNDEFINED &&
-          parent.pvkVurdering !== EPvkVurdering.SKAL_IKKE_UTFORE
+          parent.pvkVurdering !== EPvkVurdering.SKAL_IKKE_UTFORE &&
+          parent.pvkVurdering !== EPvkVurdering.ALLEREDE_UTFORT
         ) {
-          return !(pvkVurderingsBegrunnelse === '' || pvkVurderingsBegrunnelse === undefined)
+          return pvkVurderingsBegrunnelse === '' || pvkVurderingsBegrunnelse === undefined
         } else {
-          return true
+          return false
         }
       },
     }),
