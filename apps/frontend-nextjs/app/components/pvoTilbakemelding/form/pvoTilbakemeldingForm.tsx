@@ -16,7 +16,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
@@ -52,6 +52,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
 }) => {
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+  const [saveSuccessful, setSaveSuccessful] = useState<boolean>(false)
 
   const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold): Promise<void> => {
     const mutatedTilbakemeldingsInnhold: ITilbakemeldingsinnhold = {
@@ -139,6 +140,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 }
 
                 formRef.current.resetForm({ values: newInitailValues })
+                setSaveSuccessful(true)
               })
             }
           }
@@ -191,6 +193,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               }
 
               formRef.current.resetForm({ values: newInitailValues })
+              setSaveSuccessful(true)
             })
           } else {
             console.debug(error)
@@ -232,6 +235,18 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                   </Button>
                 </div>
               </div>
+              {saveSuccessful && (
+                <div className='my-5'>
+                  <Alert
+                    size='small'
+                    variant='success'
+                    closeButton
+                    onClose={() => setSaveSuccessful(false)}
+                  >
+                    Lagring vellykket
+                  </Alert>
+                </div>
+              )}
             </div>
 
             <div>
