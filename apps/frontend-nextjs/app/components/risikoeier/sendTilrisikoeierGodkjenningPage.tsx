@@ -19,6 +19,7 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
+import { useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { TextAreaField } from '../common/textAreaField/textAreaField'
 import { PageLayout } from '../others/scaffold/scaffold'
@@ -42,6 +43,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
+
+  const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
 
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
@@ -147,6 +150,19 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                       </Alert>
                     </div>
 
+                    {saveSuccessfull && (
+                      <div className='my-5'>
+                        <Alert
+                          size='small'
+                          variant='success'
+                          closeButton
+                          onClose={() => setSaveSuccessfull(false)}
+                        >
+                          Lagring vellykket
+                        </Alert>
+                      </div>
+                    )}
+
                     <div className='flex items-center mt-5 gap-2'>
                       <Button
                         type='button'
@@ -157,6 +173,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                             EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
                           )
                           await submitForm()
+                          setSaveSuccessfull(true)
                         }}
                       >
                         Lagre og fortsett senere

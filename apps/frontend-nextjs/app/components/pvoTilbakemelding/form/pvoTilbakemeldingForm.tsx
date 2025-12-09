@@ -53,7 +53,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
 }) => {
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
-  const [saveSuccessful, setSaveSuccessful] = useState<boolean>(false)
+  const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
 
   const resetFormWithNewInitalValue = (relevantVurdering: IVurdering) => {
     if (fieldName === 'behandlingenslivslop') {
@@ -142,7 +142,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
 
                 formRef.current.resetForm({ values: newInitailValues })
-                setSaveSuccessful(true)
+                setSaveSuccessfull(true)
               })
             }
           }
@@ -184,7 +184,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
 
               formRef.current.resetForm({ values: newInitailValues })
-              setSaveSuccessful(true)
+              setSaveSuccessfull(true)
             })
           } else {
             console.debug(error)
@@ -226,13 +226,13 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                   </Button>
                 </div>
               </div>
-              {saveSuccessful && (
+              {saveSuccessfull && (
                 <div className='my-5'>
                   <Alert
                     size='small'
                     variant='success'
                     closeButton
-                    onClose={() => setSaveSuccessful(false)}
+                    onClose={() => setSaveSuccessfull(false)}
                   >
                     Lagring vellykket
                   </Alert>
