@@ -13,6 +13,7 @@ import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
   ITilbakemeldingsinnhold,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
@@ -53,6 +54,18 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [saveSuccessful, setSaveSuccessful] = useState<boolean>(false)
+
+  const resetFormWithNewInitalValue = (relevantVurdering: IVurdering) => {
+    if (fieldName === 'behandlingenslivslop') {
+      return relevantVurdering.behandlingenslivslop
+    } else if (fieldName === 'behandlingensArtOgOmfang') {
+      return relevantVurdering.behandlingensArtOgOmfang
+    } else if (fieldName === 'innvolveringAvEksterne') {
+      return relevantVurdering.innvolveringAvEksterne
+    } else if (fieldName === 'risikoscenarioEtterTiltakk') {
+      return relevantVurdering.risikoscenarioEtterTiltakk
+    }
+  }
 
   const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold): Promise<void> => {
     const mutatedTilbakemeldingsInnhold: ITilbakemeldingsinnhold = {
@@ -123,21 +136,10 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
             } else {
               await updatePvoTilbakemelding(updatedValues).then((response) => {
                 setPvoTilbakemelding(response)
-                let newInitailValues = {}
-
                 const relevantVurdering = response.vurderinger.filter(
                   (vurdering) => vurdering.innsendingId === innsendingId
                 )[0]
-
-                if (fieldName === 'behandlingenslivslop') {
-                  newInitailValues = relevantVurdering.behandlingenslivslop
-                } else if (fieldName === 'behandlingensArtOgOmfang') {
-                  newInitailValues = relevantVurdering.behandlingensArtOgOmfang
-                } else if (fieldName === 'innvolveringAvEksterne') {
-                  newInitailValues = relevantVurdering.innvolveringAvEksterne
-                } else if (fieldName === 'risikoscenarioEtterTiltakk') {
-                  newInitailValues = relevantVurdering.risikoscenarioEtterTiltakk
-                }
+                const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
 
                 formRef.current.resetForm({ values: newInitailValues })
                 setSaveSuccessful(true)
@@ -176,21 +178,10 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
             })
             await createPvoTilbakemelding(createValue).then((response) => {
               setPvoTilbakemelding(response)
-              let newInitailValues = {}
-
               const relevantVurdering = response.vurderinger.filter(
                 (vurdering) => vurdering.innsendingId === innsendingId
               )[0]
-
-              if (fieldName === 'behandlingenslivslop') {
-                newInitailValues = relevantVurdering.behandlingenslivslop
-              } else if (fieldName === 'behandlingensArtOgOmfang') {
-                newInitailValues = relevantVurdering.behandlingensArtOgOmfang
-              } else if (fieldName === 'innvolveringAvEksterne') {
-                newInitailValues = relevantVurdering.innvolveringAvEksterne
-              } else if (fieldName === 'risikoscenarioEtterTiltakk') {
-                newInitailValues = relevantVurdering.risikoscenarioEtterTiltakk
-              }
+              const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
 
               formRef.current.resetForm({ values: newInitailValues })
               setSaveSuccessful(true)
