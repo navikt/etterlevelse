@@ -130,8 +130,8 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='arbeidGarVidere'
                     legend='Anbefales det at arbeidet går videre som planlagt?'
                     value={
-                      fieldProps.field.value === null
-                        ? null
+                      fieldProps.field.value === undefined
+                        ? undefined
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'
@@ -164,8 +164,8 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='behovForForhandskonsultasjon'
                     legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
                     value={
-                      fieldProps.field.value === null
-                        ? null
+                      fieldProps.field.value === undefined
+                        ? undefined
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'

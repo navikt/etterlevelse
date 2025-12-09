@@ -127,8 +127,12 @@ export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurder
     sendtDato: vurdering.sendtDato || '',
     ansvarlig: vurdering.ansvarlig || [],
     ansvarligData: vurdering.ansvarligData || [],
-    arbeidGarVidere: vurdering.arbeidGarVidere,
-    behovForForhandskonsultasjon: vurdering.behovForForhandskonsultasjon,
+    arbeidGarVidere:
+      vurdering.arbeidGarVidere === undefined ? undefined : vurdering.arbeidGarVidere,
+    behovForForhandskonsultasjon:
+      vurdering.behovForForhandskonsultasjon === undefined
+        ? undefined
+        : vurdering.behovForForhandskonsultasjon,
     arbeidGarVidereBegrunnelse: vurdering.arbeidGarVidereBegrunnelse || '',
     behovForForhandskonsultasjonBegrunnelse:
       vurdering.behovForForhandskonsultasjonBegrunnelse || '',
