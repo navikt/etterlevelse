@@ -19,6 +19,7 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
+import { useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { TextAreaField } from '../common/textAreaField/textAreaField'
 import { PageLayout } from '../others/scaffold/scaffold'
@@ -42,6 +43,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
+
+  const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
 
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
@@ -73,6 +76,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Godkjenningshistorikk
           </Heading>
 
+          {/* legg til godkjenningshistorikk når det er på plass */}
+
           <Heading level='2' size='medium' className='mb-5'>
             Send til ny godkjenning
           </Heading>
@@ -100,7 +105,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Risikoeieren vil da godkjenne:
           </BodyLong>
 
-          <List as='ul'>
+          <List as='ul' className='max-w-[75ch]'>
             <List.Item>
               Dokumentasjon av alle etterlevelseskrav som er en del av etterlevelsesdokumentet på
               godkjenningstidspunktet. Dette gjelder også etterlevelseskrav som ikke er ferdigstilt.
@@ -127,9 +132,10 @@ export const SendTilRisikoeierGodkjenningPage = () => {
           >
             {({ submitForm, setFieldValue }) => (
               <Form>
-                <div className='mt-3'>
+                <div className='mt-3 max-w-[75ch]'>
                   <TextAreaField
                     rows={5}
+                    height='12.5rem'
                     noPlaceholder
                     label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
                     name='meldingEtterlevelerTilRisikoeier'
@@ -147,6 +153,19 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                       </Alert>
                     </div>
 
+                    {saveSuccessfull && (
+                      <div className='my-5'>
+                        <Alert
+                          size='small'
+                          variant='success'
+                          closeButton
+                          onClose={() => setSaveSuccessfull(false)}
+                        >
+                          Lagring vellykket
+                        </Alert>
+                      </div>
+                    )}
+
                     <div className='flex items-center mt-5 gap-2'>
                       <Button
                         type='button'
@@ -157,6 +176,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                             EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
                           )
                           await submitForm()
+                          setSaveSuccessfull(true)
                         }}
                       >
                         Lagre og fortsett senere
