@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
@@ -159,6 +160,47 @@ public class PvkDokumentToDoc {
         return zipUtils.zipOutputStream(zipFiles);
     }
 
+    public void generateBehovForPvkSection(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, PvkDokument pvkDokument, EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        doc.generateEgenskaperFraBehandlinger(etterlevelseDokumentasjonResponse.getBehandlinger());
+        doc.newLine();
+        doc.generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
+        doc.newLine();
+
+        doc.addLabel("Hvilken vurdering har dere kommet fram til?");
+        if (etterlevelseDokumentasjonResponse.getIrrelevansFor().stream().map(CodelistResponse::getCode).toList().contains("PERSONOPPLYSNINGER")) {
+            doc.addText("Etterlevelses dokumentasjonen er behandler ikke personopplysninger.");
+            doc.pageBreak();
+        } else {
+            if (pvkDokument.getPvkDokumentData().getPvkVurdering() == null || pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.UNDEFINED) {
+                doc.addText("Ingen vurdering");
+            } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_IKKE_UTFORE) {
+                doc.addText("Vi skal ikke gjennomføre PVK.");
+                doc.newLine();
+                doc.addHeading4("Begrunnelse av vurderingen");
+                doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
+                doc.pageBreak();
+            } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.ALLEREDE_UTFORT) {
+                doc.addText("Vi har en PVK i Word som ikke trenger en ny vurdering.");
+                doc.newLine();
+                doc.addHeading4("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
+                doc.newLine();
+                if (etterlevelseDokumentasjonResponse.getRisikovurderinger() != null && !etterlevelseDokumentasjonResponse.getRisikovurderinger().isEmpty()) {
+                    etterlevelseDokumentasjonResponse.getRisikovurderinger().forEach(risikovurdering -> {
+                        doc.addMarkdownText("- " + risikovurdering);
+                    });
+                } else {
+                    doc.addText("Ingen dokumenter lagt til");
+                }
+                doc.addHeading4("Begrunnelse av vurderingen");
+                doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
+                doc.pageBreak();
+            } else {
+                doc.addText("Vi skal gjennomføre en PVK.");
+                doc.newLine();
+            }
+        }
+    }
+
     public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
         BehandlingensArtOgOmfang behandlingensArtOgOmfang = behandlingensArtOgOmfangService.getByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId()).orElse(new BehandlingensArtOgOmfang());
@@ -293,38 +335,9 @@ public class PvkDokumentToDoc {
         var pvkBehovHeading = doc.addHeading2("Bør vi gjøre en PVK?");
         doc.addBookmark(pvkBehovHeading, "pvk_behov");
         doc.newLine();
-        doc.generateEgenskaperFraBehandlinger(etterlevelseDokumentasjonResponse.getBehandlinger());
-        doc.newLine();
-        doc.generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
-        doc.newLine();
 
-        doc.addLabel("Hvilken vurdering har dere kommet fram til?");
-        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == null || pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.UNDEFINED) {
-            doc.addText("Ingen vurdering");
-        } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_IKKE_UTFORE) {
-            doc.addText("Vi skal ikke gjennomføre PVK.");
-            doc.newLine();
-            doc.addHeading4("Begrunnelse av vurderingen");
-            doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
-            doc.pageBreak();
-        } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.ALLEREDE_UTFORT) {
-            doc.addText("Vi har en PVK i Word som ikke trenger en ny vurdering.");
-            doc.newLine();
-            doc.addHeading4("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
-            doc.newLine();
-            if (etterlevelseDokumentasjonResponse.getRisikovurderinger() != null && !etterlevelseDokumentasjonResponse.getRisikovurderinger().isEmpty()) {
-                etterlevelseDokumentasjonResponse.getRisikovurderinger().forEach(risikovurdering -> {
-                    doc.addMarkdownText("- " + risikovurdering);
-                });
-            } else {
-                doc.addText("Ingen dokumenter lagt til");
-            }
-            doc.addHeading4("Begrunnelse av vurderingen");
-            doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
-            doc.pageBreak();
-        } else {
-            doc.addText("Vi skal gjennomføre en PVK.");
-            doc.newLine();
+        generateBehovForPvkSection(doc, pvkDokument, etterlevelseDokumentasjonResponse);
+        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_UTFORE) {
             doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
             doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
