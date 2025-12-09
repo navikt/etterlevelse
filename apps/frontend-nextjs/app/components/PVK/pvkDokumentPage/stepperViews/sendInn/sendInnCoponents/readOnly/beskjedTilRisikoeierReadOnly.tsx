@@ -24,7 +24,7 @@ export const BeskjedTilRisikoeierReadOnly: FunctionComponent<TProps> = ({
       </Heading>
       <div className='mt-5 mb-3'>
         <Label>
-          Oppsummér for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemeldinger
+          Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemeldinger
         </Label>
         <DataTextWrapper>
           <BodyLong className='break-all'>

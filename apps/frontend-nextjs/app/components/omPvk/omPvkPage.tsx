@@ -207,7 +207,7 @@ const OmPvkPage = () => {
             </List>
           </ReadMore>
           <BodyLong className='mt-3'>
-            I den nye løsningen kan dere laste opp én eller flere tegninger av behandlingens livsløp
+            I den nye løsningen kan dere laste opp en eller flere tegninger av behandlingens livsløp
             og/eller lagre en skriftlig beskrivelse.
             <br />
             <br />

@@ -113,7 +113,7 @@ export const getPvkButtonText = (
     pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
     updatedAfterApprovedOfRisikoeier
   ) {
-    return 'Oppdatér PVK'
+    return 'Oppdater PVK'
   }
 }
 

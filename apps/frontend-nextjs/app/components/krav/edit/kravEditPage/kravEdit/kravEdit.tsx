@@ -66,7 +66,7 @@ export const KravEdit: FunctionComponent<TProps> = ({
       await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
     if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
       setErrorModalMessage(
-        'Du kan ikke sette dette kravet til «Utkast» fordi det er minst én etterlevelse som bruker kravet i sin dokumentasjon.'
+        'Du kan ikke sette dette kravet til «Utkast» fordi det er minst en etterlevelse som bruker kravet i sin dokumentasjon.'
       )
       setShowErrorModal(true)
     } else if (krav.id) {

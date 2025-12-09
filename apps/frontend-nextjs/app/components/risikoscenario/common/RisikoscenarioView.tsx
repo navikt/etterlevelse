@@ -41,7 +41,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
             risikoscenario.pvkDokumentId,
             queryUrl
           )}
-          text='Kopiér scenariolenke'
+          text='Kopier scenariolenke'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
         />
@@ -55,7 +55,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
             risikoscenario.pvkDokumentId,
             queryUrl
           )})`}
-          text='Kopiér scenario riktekstfelt lenke med titel'
+          text='Kopier scenario riktekstfelt lenke med titel'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
         />
