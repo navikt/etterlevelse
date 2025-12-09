@@ -76,6 +76,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Godkjenningshistorikk
           </Heading>
 
+          {/* legg til godkjenningshistorikk når det er på plass */}
+
           <Heading level='2' size='medium' className='mb-5'>
             Send til ny godkjenning
           </Heading>
@@ -103,7 +105,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Risikoeieren vil da godkjenne:
           </BodyLong>
 
-          <List as='ul'>
+          <List as='ul' className='max-w-[75ch]'>
             <List.Item>
               Dokumentasjon av alle etterlevelseskrav som er en del av etterlevelsesdokumentet på
               godkjenningstidspunktet. Dette gjelder også etterlevelseskrav som ikke er ferdigstilt.
@@ -130,9 +132,10 @@ export const SendTilRisikoeierGodkjenningPage = () => {
           >
             {({ submitForm, setFieldValue }) => (
               <Form>
-                <div className='mt-3'>
+                <div className='mt-3 max-w-[75ch]'>
                   <TextAreaField
                     rows={5}
+                    height='12.5rem'
                     noPlaceholder
                     label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
                     name='meldingEtterlevelerTilRisikoeier'
