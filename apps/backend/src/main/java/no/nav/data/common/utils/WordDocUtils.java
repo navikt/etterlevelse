@@ -755,7 +755,7 @@ public class WordDocUtils {
         addLabel("Øvrige egenskaper for behandlingene:");
         newLine();
         allYtterligeEgenskaper.forEach(egenskap -> {
-            if (pvkDokument.getPvkDokumentData().getYtterligereEgenskaper().contains(egenskap.getCode())) {
+            if (pvkDokument.getPvkDokumentData().getYtterligereEgenskaper() != null && pvkDokument.getPvkDokumentData().getYtterligereEgenskaper().contains(egenskap.getCode())) {
                 addMarkdownText("- **Det gjelder for** " + egenskap.getShortName().toLowerCase());
             } else {
                 addMarkdownText("- **Det gjelder ikke for** " + egenskap.getShortName().toLowerCase());
