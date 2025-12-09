@@ -38,6 +38,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   relevantVurdering: IVurdering
   activeStep: number
   setActiveStep: (step: number) => void
@@ -94,6 +95,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
   etterlevelseDokumentasjonId,
   pvkDokument,
   pvoTilbakemelding,
+  setPvoTilbakemelding,
   relevantVurdering,
   activeStep,
   setActiveStep,
@@ -437,6 +439,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
             )}
             {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingForm
+                setPvoTilbakemelding={setPvoTilbakemelding}
                 pvkDokumentId={pvkDokument.id}
                 innsendingId={pvkDokument.antallInnsendingTilPvo}
                 fieldName='risikoscenarioEtterTiltakk'

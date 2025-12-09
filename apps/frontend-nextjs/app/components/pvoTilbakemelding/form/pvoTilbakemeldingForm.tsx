@@ -30,6 +30,7 @@ export enum EBidragVerdier {
 }
 
 type TProps = {
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   pvkDokumentId: string
   innsendingId: number
   fieldName:
@@ -42,6 +43,7 @@ type TProps = {
 }
 
 export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+  setPvoTilbakemelding,
   fieldName,
   pvkDokumentId,
   innsendingId,
@@ -118,7 +120,26 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
             if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
               setIsAlertModalOpen(true)
             } else {
-              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+              await updatePvoTilbakemelding(updatedValues).then((response) => {
+                setPvoTilbakemelding(response)
+                let newInitailValues = {}
+
+                const relevantVurdering = response.vurderinger.filter(
+                  (vurdering) => vurdering.innsendingId === innsendingId
+                )[0]
+
+                if (fieldName === 'behandlingenslivslop') {
+                  newInitailValues = relevantVurdering.behandlingenslivslop
+                } else if (fieldName === 'behandlingensArtOgOmfang') {
+                  newInitailValues = relevantVurdering.behandlingensArtOgOmfang
+                } else if (fieldName === 'innvolveringAvEksterne') {
+                  newInitailValues = relevantVurdering.innvolveringAvEksterne
+                } else if (fieldName === 'risikoscenarioEtterTiltakk') {
+                  newInitailValues = relevantVurdering.risikoscenarioEtterTiltakk
+                }
+
+                formRef.current.resetForm({ values: newInitailValues })
+              })
             }
           }
         })
@@ -151,7 +172,26 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
 
               status: EPvoTilbakemeldingStatus.UNDERARBEID,
             })
-            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+            await createPvoTilbakemelding(createValue).then((response) => {
+              setPvoTilbakemelding(response)
+              let newInitailValues = {}
+
+              const relevantVurdering = response.vurderinger.filter(
+                (vurdering) => vurdering.innsendingId === innsendingId
+              )[0]
+
+              if (fieldName === 'behandlingenslivslop') {
+                newInitailValues = relevantVurdering.behandlingenslivslop
+              } else if (fieldName === 'behandlingensArtOgOmfang') {
+                newInitailValues = relevantVurdering.behandlingensArtOgOmfang
+              } else if (fieldName === 'innvolveringAvEksterne') {
+                newInitailValues = relevantVurdering.innvolveringAvEksterne
+              } else if (fieldName === 'risikoscenarioEtterTiltakk') {
+                newInitailValues = relevantVurdering.risikoscenarioEtterTiltakk
+              }
+
+              formRef.current.resetForm({ values: newInitailValues })
+            })
           } else {
             console.debug(error)
           }

@@ -295,6 +295,7 @@ export const PvoTilbakemeldingPage = () => {
                     {activeStep === 2 && (
                       <BehandlingensLivslopPvoView
                         pvoTilbakemelding={pvoTilbakemelding}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                         relevantVurdering={relevantVurdering}
                         pvkDokument={pvkDokument}
                         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -309,6 +310,7 @@ export const PvoTilbakemeldingPage = () => {
                         personkategorier={readOnlyData.personkategorier}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                         relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
@@ -337,6 +339,7 @@ export const PvoTilbakemeldingPage = () => {
                         databehandlere={readOnlyData.databehandlere}
                         pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                         relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
                         setSelectedStep={setSelectedStep}
@@ -357,6 +360,7 @@ export const PvoTilbakemeldingPage = () => {
                       <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
                         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         pvkDokument={pvkDokument}
+                        setPvoTilbakemelding={setPvoTilbakemelding}
                         pvoTilbakemelding={pvoTilbakemelding}
                         relevantVurdering={relevantVurdering}
                         activeStep={activeStep}
