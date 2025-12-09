@@ -168,7 +168,7 @@ public class PvkDokumentToDoc {
 
         doc.addLabel("Hvilken vurdering har dere kommet fram til?");
         if (etterlevelseDokumentasjonResponse.getIrrelevansFor().stream().map(CodelistResponse::getCode).toList().contains("PERSONOPPLYSNINGER")) {
-            doc.addText("Etterlevelses dokumentasjonen er behandler ikke personopplysninger.");
+            doc.addText("Dokumentasjonen behandler ikke personopplysninger.");
             doc.pageBreak();
         } else {
             if (pvkDokument.getPvkDokumentData().getPvkVurdering() == null || pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.UNDEFINED) {
