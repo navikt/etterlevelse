@@ -11,9 +11,12 @@ import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import {
+  etterlevelseDokumentasjonIdUrl,
+  etterlevelsesDokumentasjonEditUrl,
+} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Alert, BodyLong, Button, Heading, List } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
@@ -74,6 +77,24 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Send til ny godkjenning
           </Heading>
 
+          {etterlevelseDokumentasjon.risikoeiere.length === 0 && (
+            <Alert variant='warning' className='my-5'>
+              <Heading spacing size='small' level='3'>
+                Denne etterlevelsen har ikke en nevnt risikoeier
+              </Heading>
+              Risikoeier må legges til under{' '}
+              <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                href={`${etterlevelsesDokumentasjonEditUrl(params.etterlevelseDokumentasjonId)}#risikoeiereData`}
+                className='inline'
+              >
+                Rediger dokumentegenskaper.
+              </Link>{' '}
+              Dere kan ikke sende etterlevelsen til godkjenning uten en utnevnt risikoeier.
+            </Alert>
+          )}
+
           <BodyLong>
             Dere kan til enhver tid be risikoeier om å godkjenne etterlevelsesdokumentasjonen.
             Risikoeieren vil da godkjenne:
@@ -116,41 +137,48 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                   />
                 </div>
 
-                <div className='mt-10'>
-                  <Alert variant='info' inline>
-                    Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen låses og
-                    ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere kunne redigere
-                    på nytt.
-                  </Alert>
-                </div>
+                {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
+                  <div>
+                    <div className='my-10'>
+                      <Alert variant='info' inline>
+                        Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen
+                        låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere
+                        kunne redigere på nytt.
+                      </Alert>
+                    </div>
 
-                <div className='flex items-center mt-5 gap-2'>
-                  <Button
-                    type='button'
-                    variant='secondary'
-                    onClick={async () => {
-                      await setFieldValue('status', EEtterlevelseDokumentasjonStatus.UNDER_ARBEID)
-                      await submitForm()
-                    }}
-                  >
-                    Lagre og fortsett senere
-                  </Button>
+                    <div className='flex items-center mt-5 gap-2'>
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={async () => {
+                          await setFieldValue(
+                            'status',
+                            EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+                          )
+                          await submitForm()
+                        }}
+                      >
+                        Lagre og fortsett senere
+                      </Button>
 
-                  <Button
-                    type='button'
-                    variant='primary'
-                    onClick={async () => {
-                      await setFieldValue(
-                        'status',
-                        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                      )
+                      <Button
+                        type='button'
+                        variant='primary'
+                        onClick={async () => {
+                          await setFieldValue(
+                            'status',
+                            EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                          )
 
-                      await submitForm()
-                    }}
-                  >
-                    Lagre og send til godkjenning
-                  </Button>
-                </div>
+                          await submitForm()
+                        }}
+                      >
+                        Lagre og send til godkjenning
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </Form>
             )}
           </Formik>
