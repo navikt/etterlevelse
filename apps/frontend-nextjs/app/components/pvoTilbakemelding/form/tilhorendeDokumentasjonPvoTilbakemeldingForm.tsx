@@ -16,7 +16,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import moment from 'moment'
@@ -41,6 +41,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
 }) => {
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+  const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
 
   const submit = async (
     tilbakemeldingsInnhold: ITilhorendeDokumentasjonTilbakemelding
@@ -102,6 +103,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                 const newInitailValues = relevantVurdering.tilhorendeDokumentasjon
 
                 formRef.current.resetForm({ values: newInitailValues })
+                setSavedSuccessful(true)
               })
             }
           }
@@ -127,6 +129,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               const newInitailValues = relevantVurdering.tilhorendeDokumentasjon
 
               formRef.current.resetForm({ values: newInitailValues })
+              setSavedSuccessful(true)
             })
           } else {
             console.debug(error)
@@ -168,6 +171,18 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                   </Button>
                 </div>
               </div>
+              {savedSuccessful && (
+                <div className='my-5'>
+                  <Alert
+                    size='small'
+                    variant='success'
+                    closeButton
+                    onClose={() => setSavedSuccessful(false)}
+                  >
+                    Lagring vellykket
+                  </Alert>
+                </div>
+              )}
             </div>
 
             <div>
