@@ -87,7 +87,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                       <ExternalLink
                         href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'utenFrist')}
                       >
-                        Se tiltak som mangler tiltaksfrist (åpner i ny fane)
+                        Se tiltak som mangler tiltaksfrist
                       </ExternalLink>
                     </>
                   )}
@@ -97,7 +97,7 @@ export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
                       <ExternalLink
                         href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'alleTiltak')}
                       >
-                        Se tiltak som har utgått tiltaksfrist (åpner i ny fane)
+                        Se tiltak som har utgått tiltaksfrist
                       </ExternalLink>
                     </>
                   )}
