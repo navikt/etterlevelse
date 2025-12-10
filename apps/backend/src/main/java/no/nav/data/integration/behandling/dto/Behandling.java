@@ -9,6 +9,7 @@ import lombok.Singular;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.integration.team.dto.TeamResponse;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -39,4 +40,8 @@ public class Behandling {
 
     private Boolean automatiskBehandling;
     private Boolean profilering;
+
+    public List<PolicyResponse> getPolicies() {
+        return policies != null ? policies : Collections.emptyList();
+    }
 }
