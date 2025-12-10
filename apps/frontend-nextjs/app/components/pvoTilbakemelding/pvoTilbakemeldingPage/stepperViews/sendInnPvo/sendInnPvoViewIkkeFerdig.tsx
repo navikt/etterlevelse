@@ -123,6 +123,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 markdown
               />
             </FieldRadioLayout>
+
             <FieldRadioLayout>
               <Field name='arbeidGarVidere'>
                 {(fieldProps: FieldProps) => (
@@ -152,14 +153,17 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   </RadioGroup>
                 )}
               </Field>
-              <IndentLayoutTextField>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='Beskriv anbefalingen nærmere:'
-                  name='arbeidGarVidereBegrunnelse'
-                />
-              </IndentLayoutTextField>
+
+              <div className='mt-5'>
+                <IndentLayoutTextField>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Beskriv anbefalingen nærmere:'
+                    name='arbeidGarVidereBegrunnelse'
+                  />
+                </IndentLayoutTextField>
+              </div>
             </FieldRadioLayout>
 
             <FieldRadioLayout>
@@ -193,12 +197,14 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
               </Field>
 
               <IndentLayoutTextField>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='Beskriv anbefalingen nærmere:'
-                  name='behovForForhandskonsultasjonBegrunnelse'
-                />
+                <div className='mt-5'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Beskriv anbefalingen nærmere:'
+                    name='behovForForhandskonsultasjonBegrunnelse'
+                  />
+                </div>
               </IndentLayoutTextField>
             </FieldRadioLayout>
 
