@@ -2,6 +2,7 @@
 
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { pvkDokumentasjonTabFilterTiltakUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { risikoscenarioFieldCheck } from '@/util/risikoscenario/risikoscenarioUtils'
 import { FormSummary } from '@navikt/ds-react'
@@ -77,6 +78,17 @@ export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
                   .
                   <br />
                   {savnerVurderingError !== '' && <FormAlert>{savnerVurderingError}</FormAlert>}
+                  {savnerVurderingError !== '' && (
+                    <ExternalLink
+                      href={pvkDokumentasjonTabFilterTiltakUrl(
+                        '7',
+                        'risikoscenarioer',
+                        'ikke-vurdert'
+                      )}
+                    >
+                      Se risikoscenarioer som mangler vurdering av tiltakenes effekt.
+                    </ExternalLink>
+                  )}
                 </FormSummary.Value>
               </FormSummary.Answer>
             </FormSummary.Answers>
