@@ -40,8 +40,4 @@ public class Behandling {
 
     private Boolean automatiskBehandling;
     private Boolean profilering;
-
-    public List<PolicyResponse> getPolicies() {
-        return policies != null ? policies : Collections.emptyList();
-    }
 }
