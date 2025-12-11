@@ -80,7 +80,7 @@
     "@types/draft-js": "0.11.20",
     "@types/lodash": "4.17.21",
     "@types/markdown-draft-js": "2.2.7",
-    "@types/node": "24.10.2",
+    "@types/node": "25.0.0",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "8.49.0",
