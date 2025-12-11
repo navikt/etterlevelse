@@ -5,6 +5,8 @@ import jakarta.persistence.Enumerated;
 import lombok.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -17,7 +19,9 @@ public class EtterlevelseDokumentasjonData {
     private Integer etterlevelseNummer;
 
     private String title;
-    private List<String> behandlingIds;
+
+    @Builder.Default
+    private List<String> behandlingIds = new ArrayList<>();
     private String beskrivelse;
     private String gjenbrukBeskrivelse;
 
