@@ -131,12 +131,19 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='arbeidGarVidere'
                     legend='Anbefales det at arbeidet går videre som planlagt?'
                     value={
+                      fieldProps.field.value === true
+                        ? 'Ja'
+                        : fieldProps.field.value === false
+                          ? 'Nei'
+                          : null
+                    }
+                    key={`arbeidGarVidere-${
                       fieldProps.field.value === undefined || fieldProps.field.value === null
-                        ? undefined
+                        ? 'unset'
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'
-                    }
+                    }`}
                     onChange={async (value) => {
                       const boolValue =
                         value === null || value === undefined
@@ -153,6 +160,19 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   </RadioGroup>
                 )}
               </Field>
+
+              <div className='mb-8'>
+                <Button
+                  size='small'
+                  type='button'
+                  variant='secondary'
+                  onClick={async () => {
+                    await setFieldValue('arbeidGarVidere', undefined)
+                  }}
+                >
+                  Nullstill valg
+                </Button>
+              </div>
 
               <div className='mt-5'>
                 <IndentLayoutTextField>
@@ -173,12 +193,19 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='behovForForhandskonsultasjon'
                     legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
                     value={
+                      fieldProps.field.value === true
+                        ? 'Ja'
+                        : fieldProps.field.value === false
+                          ? 'Nei'
+                          : null
+                    }
+                    key={`behovForForhandskonsultasjon-${
                       fieldProps.field.value === undefined || fieldProps.field.value === null
-                        ? undefined
+                        ? 'unset'
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'
-                    }
+                    }`}
                     onChange={async (value) => {
                       const boolValue =
                         value === null || value === undefined
@@ -195,6 +222,19 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   </RadioGroup>
                 )}
               </Field>
+
+              <div className='mb-8'>
+                <Button
+                  size='small'
+                  type='button'
+                  variant='secondary'
+                  onClick={async () => {
+                    await setFieldValue('behovForForhandskonsultasjon', undefined)
+                  }}
+                >
+                  Nullstill valg
+                </Button>
+              </div>
 
               <IndentLayoutTextField>
                 <div className='mt-5'>
