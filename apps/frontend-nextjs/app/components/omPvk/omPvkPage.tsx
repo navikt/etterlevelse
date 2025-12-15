@@ -32,6 +32,9 @@ const OmPvkPage = () => {
               <Stepper.Step href='#behandlingens-livslop'>
                 Dokumentasjon av Behandlingens livsløp
               </Stepper.Step>
+              <Stepper.Step href='#behanlinges-art-og-omfang'>
+                Dokumentasjon av behandlingens art og omfang
+              </Stepper.Step>
               <Stepper.Step href='#bruk-av-den-nye-losningen'>
                 Når skal vi begynne å bruke den nye løsningen?
               </Stepper.Step>
@@ -62,11 +65,12 @@ const OmPvkPage = () => {
             Dette kan dere gjøre i Digital PVK
           </Heading>
           <List className='mt-3'>
-            <List.Item>Vurdere om dere har behov for å gjennomføre PVK.</List.Item>
             <List.Item>
               Dokumentere hvor og hvordan personopplysninger flyter når de behandles i deres
-              kontekst.
+              kontekst (behandlingens livsløp).
             </List.Item>
+            <List.Item>Beskrive behandlingens art og omfang.</List.Item>
+            <List.Item>Vurdere så om dere har behov for å gjennomføre PVK.</List.Item>
             <List.Item>
               Fylle ut PVK-skjema steg for steg – men det er også lov å gå fram og tilbake mellom
               steg underveis.
@@ -108,7 +112,6 @@ const OmPvkPage = () => {
               aria-label=''
             />
           </ReadMore>
-
           <ReadMore
             header='Vis meg hvordan jeg dokumenterer risikoscenarier side om side med etterlevelseskrav'
             className='mt-3'
@@ -216,44 +219,64 @@ const OmPvkPage = () => {
             etterlevelseskrav innen personvern og arkiv og dokumentasjon, og i selve vurderingen av
             om det er nødvendig å gjennomføre PVK.
           </BodyLong>
+
+          <Heading level='2' size='small' className='mt-7' id='behanlinges-art-og-omfang'>
+            Dokumentasjon av behandlingens art og omfang
+          </Heading>
+          <BodyLong className='mt-3'>Behandlingens art og omfang handler om:</BodyLong>
+          <List className='mt-3'>
+            <List.Item>Hvilke personkategorier vi behandler</List.Item>
+            <List.Item>Hvor mange personer vi behandler personopplysninger om</List.Item>
+            <List.Item>Hvilke roller som skal ha tilgang til personopplysningene</List.Item>
+            <List.Item>Hvordan og hvor lenge personopplysningene lagres</List.Item>
+          </List>
+          <BodyLong className='mt-3'>
+            Dokumentasjon av behandlingens art og omfang vil være til hjelp når dere svarer ut
+            etterlevelseskrav innen personvern og arkiv og dokumentasjon, og i selve vurderingen av
+            om det er nødvendig å gjennomføre PVK.
+          </BodyLong>
           <Heading level='2' size='small' className='mt-7' id='bruk-av-den-nye-losningen'>
             Når skal vi begynne å bruke den nye løsningen?
           </Heading>
           <Heading level='3' size='xsmall' className='mt-5'>
-            Hvis dere har en PVK som allerede er godkjent og arkivert
+            Dere skal vurdere eller revurdere behov for PVK
           </Heading>
           <BodyLong className='mt-3'>
-            Godkjente, arkiverte PVK-er skal ikke inn i ny løsning, med mindre risikobildet er
-            endret og det er behov for en revurdering.
+            I ny løsning får dere hjelp til å vurdere og dokumentere om dere skal gjennomføre en
+            PVK. Hvis dere tidligere har vurdert at det ikke er behov for PVK, kan dere revurdere i
+            ny løsning til enhver tid.
           </BodyLong>
           <Heading level='3' size='xsmall' className='mt-5'>
-            Hvis dere skal gjøre endringer i en PVK
+            Dere har en påbegynt PVK i Word som ikke ennå er sendt til PVO for vurdering
           </Heading>
           <BodyLong className='mt-3'>
-            Oppdatering av deres nåværende PVK bør gjøres i den nye løsningen. Hvis endringer i
-            hvordan dere behandler personopplysninger fører til endring i risikobildet, vil PVK-en
-            måtte sendes til en ny vurdering hos Personvernombudet (PVO), noe som også gjøres i ny
-            løsning.
-            <br />
-            <br />
-            Det er dessverre ikke mulig å importere eksisterende PVK-er fra Word. Da må dere klippe
-            og lime tidligere innhold i Word over i den nye løsningen og oppdatere med det som er
-            nytt.
+            Dere bør bruke den nye løsningen og legge over innhold fra Word.
           </BodyLong>
           <Heading level='3' size='xsmall' className='mt-5'>
-            Hvis dere skal vurdere eller revurdere behov for PVK
+            Dere har en PVK i Word som allerede er godkjent og arkivert
           </Heading>
           <BodyLong className='mt-3'>
-            I ny løsning får dere hjelp til å vurdere om dere skal gjennomføre en PVK.
-            <br />
-            Bruk den nye løsningen til å vurdere og dokumentere denne beslutningen, uansett om:
+            <b>Hvis ikke risikobildet er endret </b>, skal ikke deres godkjente, arkiverte PVK inn i
+            ny løsning. Men dere skal likevel registrere denne vurderingen under «Vurder behov for
+            PVK». Her velger dere «Vi har en PVK i Word som ikke trenger en ny vurdering».
           </BodyLong>
-          <List className='mt-3'>
-            <List.Item>Dere skal vurdere behov for PVK for første gang</List.Item>
-            <List.Item>
-              Dere har tidligere vurdert at PVK ikke er nødvendig, men skal vurdere behovet på nytt
-            </List.Item>
-          </List>
+          <BodyLong className='mt-3'>
+            <b>Hvis risikobildet er endret </b>, siden dere fikk godkjent og arkivert deres PVK, bør
+            dere bruke ny løsning til å dokumentere framover. Det er dessverre ikke mulig å
+            importere eksisterende PVK-er fra Word. Da må dere klippe og lime tidligere innhold i
+            Word over i den nye løsningen og oppdatere med det som er nytt. Dere kan også legge inn
+            lenker til tidligere PVK-er i Public360, slik at de blir lettere for Personvernombudet å
+            finne ved behov.
+          </BodyLong>
+          <Heading level='3' size='xsmall' className='mt-5'>
+            Dere skal gjøre endringer i en eksisterende digital PVK (ny løsning)
+          </Heading>
+          <BodyLong className='mt-3'>
+            Etter at dere har fått godkjent og arkivert digital PVK, er det mulig å oppdatere PVK-en
+            i ettertid. Her velger dere «Oppdater PVK» fra menyen i deres dokumentasjon. Så vurderer
+            dere om det er behov for en ny innsending til Personvernombudet, eller om risikoeier
+            skal godkjenne mindre endringer i PVK.
+          </BodyLong>
           <Heading level='2' size='small' className='mt-7' id='ta-kontakt'>
             Ta kontakt
           </Heading>
