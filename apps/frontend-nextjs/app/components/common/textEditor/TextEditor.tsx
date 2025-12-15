@@ -285,7 +285,7 @@ export const TextEditor = ({
                 // rosa = FFAFEB
                 'rgb(255, 175, 235)',
                 // oransje = FFC074
-                'rgb(255, 192, 116',
+                'rgb(255, 192, 116)',
                 // mørkelilla = C8CAFF
                 'rgb(200, 202, 255)',
                 // hvit for å kunne fjerne farge
