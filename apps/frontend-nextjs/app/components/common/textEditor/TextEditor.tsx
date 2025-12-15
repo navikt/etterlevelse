@@ -104,6 +104,15 @@ export const TextEditor = ({
             return '</span>'
           },
         },
+        // hvit for å kunne fjerne farge
+        'bgcolor-rgb(255, 255, 255)': {
+          open: () => {
+            return `<span style='background-color: rgb(255, 255, 255)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
         // oransje = FFC074
         'bgcolor-rgb(255, 192, 116)': {
           open: () => {
@@ -122,15 +131,7 @@ export const TextEditor = ({
             return '</span>'
           },
         },
-        // hvit for å kunne fjerne farge
-        'bgcolor-rgb(255, 255, 255)': {
-          open: () => {
-            return `<span style='background-color: rgb(255, 255, 255)'>`
-          },
-          close: () => {
-            return '</span>'
-          },
-        },
+
         UNDERLINE: {
           open: () => {
             return `<ins>`
@@ -284,12 +285,12 @@ export const TextEditor = ({
                 'rgb(157, 255, 59)',
                 // rosa = FFAFEB
                 'rgb(255, 175, 235)',
+                // hvit for å kunne fjerne farge
+                'rgb(255, 255, 255)',
                 // oransje = FFC074
                 'rgb(255, 192, 116)',
                 // mørkelilla = C8CAFF
                 'rgb(200, 202, 255)',
-                // hvit for å kunne fjerne farge
-                'rgb(255, 255, 255)',
               ],
             },
             //image: { alt: { present: true, mandatory: true }, },
