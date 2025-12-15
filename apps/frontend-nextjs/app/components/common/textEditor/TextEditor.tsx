@@ -122,6 +122,15 @@ export const TextEditor = ({
             return '</span>'
           },
         },
+        // hvit for å kunne fjerne farge
+        'bgcolor-rgb(255, 255, 255)': {
+          open: () => {
+            return `<span style='background-color: rgb(255, 255, 255)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
         UNDERLINE: {
           open: () => {
             return `<ins>`
@@ -274,7 +283,7 @@ export const TextEditor = ({
                 // grønn = 9DFF3B
                 'rgb(15, 222, 252)',
                 // rosa = FFAFEB
-                'rgb(255, 192, 116)',
+                'rgb(255, 175, 235)',
                 // oransje = FFC074
                 'rgb(255, 192, 116',
                 // mørkelilla = C8CAFF
