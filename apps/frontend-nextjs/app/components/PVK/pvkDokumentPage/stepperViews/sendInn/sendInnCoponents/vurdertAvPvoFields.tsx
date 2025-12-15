@@ -95,7 +95,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
 
                   {isNullstillModalOpen && (
                     <Modal
-                      header={{ heading: 'Er du sikker på at du vill nullstille valg?' }}
+                      header={{ heading: 'Er du sikker på at du vil nullstille valg?' }}
                       open={isNullstillModalOpen}
                       onClose={() => setIsNullstillModalOpen(false)}
                     >
