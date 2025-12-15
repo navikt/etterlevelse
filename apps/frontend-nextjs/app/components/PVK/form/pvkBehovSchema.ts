@@ -6,19 +6,17 @@ export const pvkBehovSchema = () => {
     pvkVurderingsBegrunnelse: yup.string().test({
       name: 'pvkVurderingsBegrunnelse',
       message: 'Dere må begrunne hvorfor dere ikke skal gjennomføre PVK',
-      test: function (pvkVurderingsBegrunnelse) {
-        const { parent } = this
+      test: function (value) {
+        const vurdering = (this as any)?.parent?.pvkVurdering
+        // Require non-empty validation for both "SKAL_IKKE_UTFORE" and "ALLEREDE_UTFORT"
         if (
-          parent.pvkVurdering !== undefined &&
-          parent.pvkVurdering !== null &&
-          parent.pvkVurdering !== EPvkVurdering.UNDEFINED &&
-          parent.pvkVurdering !== EPvkVurdering.SKAL_IKKE_UTFORE &&
-          parent.pvkVurdering !== EPvkVurdering.ALLEREDE_UTFORT
+          vurdering === EPvkVurdering.SKAL_IKKE_UTFORE ||
+          vurdering === EPvkVurdering.ALLEREDE_UTFORT
         ) {
-          return pvkVurderingsBegrunnelse === '' || pvkVurderingsBegrunnelse === undefined
-        } else {
-          return false
+          return typeof value === 'string' && value.trim().length > 0
         }
+        // Otherwise allow without validation
+        return true
       },
     }),
   })
