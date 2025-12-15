@@ -87,9 +87,9 @@ export const TextEditor = ({
           },
         },
         // grønn = 9DFF3B
-        'bgcolor-rgb(15, 222, 252)': {
+        'bgcolor-rgb(157, 255, 59)': {
           open: () => {
-            return `<span style='background-color: rgb(15, 222, 252)'>`
+            return `<span style='background-color: rgb(157, 255, 59)'>`
           },
           close: () => {
             return '</span>'
@@ -281,7 +281,7 @@ export const TextEditor = ({
                 // turkis = 7FF2FF
                 'rgb(127, 242, 255)',
                 // grønn = 9DFF3B
-                'rgb(15, 222, 252)',
+                'rgb(157, 255, 59)',
                 // rosa = FFAFEB
                 'rgb(255, 175, 235)',
                 // oransje = FFC074
