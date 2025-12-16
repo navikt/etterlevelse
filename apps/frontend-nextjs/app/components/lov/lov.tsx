@@ -80,8 +80,8 @@ const legalBasisLinkProcessor = (
 
   return processString([
     {
-      // Bare rettskilde chapter reference like 'KAPITTEL_1'
-      regex: /(.*)\s(KAPITTEL_\d+)\b/gi,
+      // Bare rettskilde chapter reference like 'KAPITTEL_1' or 'KAPITTEL_2-1'
+      regex: /(.*)\s(KAPITTEL_\d+(?:-\d+)?)\b/gi,
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
@@ -116,7 +116,7 @@ const legalBasisLinkProcessor = (
       // Supports: NLX3/eu/$id, optional /KAPITTEL_<n>, optional /a<n>
       // Also supports already full URLs starting with the configured base
       regex:
-        /(.*)\s*(?:https?:\/\/[^\s]*lovdata\.no\/pro\/)?#document\/([A-Z0-9]+\/[A-Za-z0-9]+\/[A-Za-z0-9]+)(?:\/(KAPITTEL_\d+|a\d+))?/i,
+        /(.*)\s*(?:https?:\/\/[^\s]*lovdata\.no\/pro\/)?#document\/([A-Z0-9]+\/[A-Za-z0-9]+\/[A-Za-z0-9]+)(?:\/(KAPITTEL_\d+(?:-\d+)?|a\d+))?/i,
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
@@ -151,7 +151,7 @@ const legalBasisLinkProcessor = (
       ),
     },
     {
-      regex: /(.*) kap(ittel)?\s*(\d+) ?([A-Za-z]?)( *\([0-9]*\))*/gi,
+      regex: /(.*) kap(ittel)?\s*(\d+(?:-\d+)?) ?([A-Za-z]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
