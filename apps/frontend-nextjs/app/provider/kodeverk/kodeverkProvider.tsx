@@ -376,7 +376,17 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
   list: yup.string().required(required),
   code: yup
     .string()
-    .matches(/^[A-Z_]+$/, 'Der er ikke tilatt med små bokstaver, mellomrom, æ, ø og å i code.')
+    .test({
+      name: 'codeFormat',
+      message: 'Der er ikke tilatt med små bokstaver, mellomrom, æ, ø og å i code.',
+      test: function (value) {
+        if (!value) return false
+        // Allow digits when prefix is RETTSKILDE_
+        const allowsDigits = value.startsWith(LOVDATA_RETTSKILDE_PREFIX)
+        const pattern = allowsDigits ? /^[A-Z0-9_]+$/ : /^[A-Z_]+$/
+        return pattern.test(value)
+      },
+    })
     .required(required),
   shortName: yup.string().required(required),
   description: yup.string().required(required),
