@@ -87,7 +87,7 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
       lov: regelverk.lov.code,
     })),
     begrepIder: krav.begreper.map((begrep: IBegrep) => begrep.id),
-    idRelasjoner: krav.kravRelasjoner.map((kravRelasjon: IKrav) => kravRelasjon.id),
+    kravIdRelasjoner: krav.kravRelasjoner.map((kravRelasjon: IKrav) => kravRelasjon.id),
     varslingsadresser: krav.varslingsadresserQl.map((varslingsadresse: TVarslingsadresseQL) => {
       return {
         adresse: varslingsadresse.adresse,
