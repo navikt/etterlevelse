@@ -74,11 +74,66 @@ const legalBasisLinkProcessor = (
   text?: string,
   openOnSamePage?: boolean
 ): string | ReactNode | undefined => {
-  if (!findLovId(law, codelist).match(/^[\d|D]+.*/)) {
-    return text
-  }
+  // if (!findLovId(law, codelist).match(/^[\d|D]+.*/)) {
+  //   return text
+  // }
 
   return processString([
+    {
+      // Bare rettskilde chapter reference like 'KAPITTEL_1'
+      regex: /(.*)\s(KAPITTEL_\d+)\b/gi,
+      fn: (key: string, result: string[]) => (
+        <Link
+          key={key}
+          href={
+            codelist.utils.isRettskilde(law)
+              ? `${lovdataBase(law, codelist)}/${result[2]}`
+              : `${lovdataBase(law, codelist)}/${result[2]}`
+          }
+          target={openOnSamePage ? '_self' : '_blank'}
+          rel='noopener noreferrer'
+        >
+          {result[1]} {result[2]} {openOnSamePage ? '' : ' (åpner i en ny fane)'}
+        </Link>
+      ),
+    },
+    {
+      // Bare rettskilde article reference like 'a1'
+      regex: /(.*)\s(a\d+)\b/gi,
+      fn: (key: string, result: string[]) => (
+        <Link
+          key={key}
+          href={
+            codelist.utils.isRettskilde(law)
+              ? `${lovdataBase(law, codelist)}/${result[2]}`
+              : `${lovdataBase(law, codelist)}/ARTIKKEL_${result[2].replace(/^a/, '')}`
+          }
+          target={openOnSamePage ? '_self' : '_blank'}
+          rel='noopener noreferrer'
+        >
+          {result[1]} {result[2]} {openOnSamePage ? '' : ' (åpner i en ny fane)'}
+        </Link>
+      ),
+    },
+    {
+      // Rettskilde direct links using base NEXT_PUBLIC_LOVDATA_RETTSKILDE_BASE_URL
+      // Supports: NLX3/eu/$id, optional /KAPITTEL_<n>, optional /a<n>
+      // Also supports already full URLs starting with the configured base
+      regex:
+        /(.*)\s*(?:https?:\/\/[^\s]*lovdata\.no\/pro\/)?#document\/([A-Z0-9]+\/[A-Za-z0-9]+\/[A-Za-z0-9]+)(?:\/(KAPITTEL_\d+|a\d+))?/i,
+      fn: (key: string, result: string[]) => (
+        <Link
+          key={key}
+          href={`${env.lovdataRettskildeBaseUrl.replace('%23', '#').replace(/\/#document.*/, '')}/#document/${result[2]}${result[3] ? '/' + result[3] : ''}`}
+          target={openOnSamePage ? '_self' : '_blank'}
+          rel='noopener noreferrer'
+        >
+          {result[1]} {result[2]}
+          {result[3] ? '/' + result[3] : ''}
+          {openOnSamePage ? '' : ' (åpner i en ny fane)'}
+        </Link>
+      ),
+    },
     {
       // Replace '§§ 10 og 4' > '§§ 10 og §§§ 4', so that our rewriter picks up the 2nd part
       regex: /(.*) §§\s*(\d+(-\d+)?)\s*og\s*(\d+(-\d+)?)/gi,
@@ -118,7 +173,7 @@ const legalBasisLinkProcessor = (
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${lovdataBase(law, codelist)}/ARTIKKEL_${result[3]}${result[4]}`}
+          href={`${lovdataBase(law, codelist)}${codelist.utils.isRettskilde(law) ? `/a${result[3]}${result[4]}` : `/ARTIKKEL_${result[3]}${result[4]}`}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel='noopener noreferrer'
         >
@@ -153,6 +208,9 @@ export const lovdataBase = (
     return env.lovdataForskriftBaseUrl + lovId
   } else if (codelist.utils.isRundskriv(nationalLaw)) {
     return env.lovdataRundskrivBaseUrl + lovId
+  } else if (codelist.utils.isRettskilde(nationalLaw)) {
+    const base = env.lovdataRettskildeBaseUrl.replace('%23', '#').replace(/\/#document.*/, '')
+    return `${base}/#document/${lovId}`
   } else {
     return env.lovdataLovBaseUrl + lovId
   }
