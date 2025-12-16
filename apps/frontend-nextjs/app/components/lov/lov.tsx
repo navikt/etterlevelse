@@ -78,6 +78,15 @@ const legalBasisLinkProcessor = (
   //   return text
   // }
 
+  const normalizeRettskildeBase = (base?: string) => {
+    if (!base) return ''
+    const cleaned = base
+      .replace('%23', '#')
+      .replace(/\/#document.*/, '')
+      .replace(/\/$/, '')
+    return cleaned
+  }
+
   return processString([
     {
       // Bare rettskilde chapter reference like 'KAPITTEL_1'
@@ -85,11 +94,7 @@ const legalBasisLinkProcessor = (
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={
-            codelist.utils.isRettskilde(law)
-              ? `${lovdataBase(law, codelist)}/${result[2]}`
-              : `${lovdataBase(law, codelist)}/${result[2]}`
-          }
+          href={`${lovdataBase(law, codelist)}/${result[2]}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel='noopener noreferrer'
         >
@@ -124,7 +129,7 @@ const legalBasisLinkProcessor = (
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${env.lovdataRettskildeBaseUrl.replace('%23', '#').replace(/\/#document.*/, '')}/#document/${result[2]}${result[3] ? '/' + result[3] : ''}`}
+          href={`${normalizeRettskildeBase(env.lovdataRettskildeBaseUrl)}/#document/${result[2]}${result[3] ? '/' + result[3] : ''}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel='noopener noreferrer'
         >
@@ -209,7 +214,10 @@ export const lovdataBase = (
   } else if (codelist.utils.isRundskriv(nationalLaw)) {
     return env.lovdataRundskrivBaseUrl + lovId
   } else if (codelist.utils.isRettskilde(nationalLaw)) {
-    const base = env.lovdataRettskildeBaseUrl.replace('%23', '#').replace(/\/#document.*/, '')
+    const base = (env.lovdataRettskildeBaseUrl || '')
+      .replace('%23', '#')
+      .replace(/\/#document.*/, '')
+      .replace(/\/$/, '')
     return `${base}/#document/${lovId}`
   } else {
     return env.lovdataLovBaseUrl + lovId
