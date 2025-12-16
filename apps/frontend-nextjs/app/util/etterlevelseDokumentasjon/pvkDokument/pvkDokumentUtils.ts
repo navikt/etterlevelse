@@ -46,10 +46,9 @@ export const isReadOnlyPvkStatus = (status: string) => {
 }
 
 export const isPvkDokumentVurdert = (pvkDokument?: IPvkDokument) =>
-  pvkDokument &&
+  !!pvkDokument &&
   (pvkDokument.ytterligereEgenskaper.length !== 0 ||
-    pvkDokument.pvkVurdering !== null ||
-    pvkDokument.pvkVurdering !== EPvkVurdering.UNDEFINED)
+    (pvkDokument.pvkVurdering != null && pvkDokument.pvkVurdering !== EPvkVurdering.UNDEFINED))
 
 export const isPvkDokuemntNotStarted = (
   risikoscenarioList: IRisikoscenario[],
