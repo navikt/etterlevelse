@@ -74,10 +74,6 @@ const legalBasisLinkProcessor = (
   text?: string,
   openOnSamePage?: boolean
 ): string | ReactNode | undefined => {
-  // if (!findLovId(law, codelist).match(/^[\d|D]+.*/)) {
-  //   return text
-  // }
-
   return processString([
     {
       // Bare rettskilde chapter reference like 'KAPITTEL_1' or 'KAPITTEL_2-1'
