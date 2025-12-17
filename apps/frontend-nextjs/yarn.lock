@@ -30,10 +30,10 @@
     "@amplitude/types" "^1.10.2"
     tslib "^2.0.0"
 
-"@apollo/client@4.0.10":
-  version "4.0.10"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-4.0.10.tgz#63e89945bd959b3a77a8978f884549a93e54ae17"
-  integrity sha512-xls/1tQq8GjAwn/Zo2LbbwHek7Qn+GrVc6qYgxDknB5xqpa9Lu5+Yt8duRWCUzEAUnf7vh2p61Uvx+C26N4l7g==
+"@apollo/client@4.0.11":
+  version "4.0.11"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-4.0.11.tgz#3d541abab84b63d63ba351fb8d57addcd29601d1"
+  integrity sha512-jyW5j3DEYnFlYA1Lk9Szd7O/od1DptnbZnj03DQXxuQb+Gnop0w/uQxVRKaU7bPhvVuBnlAtZYPOykArX+xWdg==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@wry/caches" "^1.0.0"
@@ -1219,10 +1219,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@eslint/js@9.39.1":
-  version "9.39.1"
-  resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.39.1.tgz#0dd59c3a9f40e3f1882975c321470969243e0164"
-  integrity sha512-S26Stp4zCy88tH94QbBv3XCuzRQiZ9yXofEILmglYTh/Ug/a9/umqvgFtYBAo3Lp0nsI/5/qH1CCrbdK3AP1Tw==
+"@eslint/js@9.39.2":
+  version "9.39.2"
+  resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.39.2.tgz#2d4b8ec4c3ea13c1b3748e0c97ecd766bdd80599"
+  integrity sha512-q1mjIoW1VX4IvSocvM/vbTiveKC4k9eLrajNEuSsmjymSDEbpGddtpfOoN7YGAqBK3NG+uqo8ia4PDTt8buCYA==
 
 "@eslint/object-schema@^2.1.7":
   version "2.1.7"
@@ -1536,38 +1536,38 @@
     "@emnapi/runtime" "^1.7.1"
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@7.35.2", "@navikt/aksel-icons@^7.35.2":
-  version "7.35.2"
-  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.35.2.tgz#1e52ed2d63c12681827ca06918824d23b7126ce9"
-  integrity sha512-0jI+QdY7zjQ9sOlNDnvMu7QFCMSLMZB8GVJnJFJoYDB5k+1zefmYnuOEvq51zHugbnUIyFYglkTXCuZiwX+Waw==
+"@navikt/aksel-icons@7.35.3", "@navikt/aksel-icons@^7.35.3":
+  version "7.35.3"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-7.35.3.tgz#9650240ffbf336bf8951dd88fcac4e01cb69f8d6"
+  integrity sha512-iUn0K+LYeowLs+pCGfFOdMHzOowWJzM62BcAetg/o7hYPHHklEBfuVlbRw44D1as8qisHhJ89TGCRc2/Qjk3Mg==
 
-"@navikt/ds-css@7.35.2":
-  version "7.35.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.35.2.tgz#b47c85445b0cbc28f2579ba96a6282e18ac183e7"
-  integrity sha512-JIYjT05GLLVPe45ewWvIUK2VPifPesxNl2Om5/aXuSGeNJUnFZ2EZ9a+/Q8BO5/w3QDh94toqIjQoLgG3Rsb3w==
+"@navikt/ds-css@7.35.3":
+  version "7.35.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-7.35.3.tgz#90067d2f9f97c441146a1cd83e99c40d42c848b5"
+  integrity sha512-IW6shJne0lwGTzbGxx/2m9Sw2WSiIiUVvC0bQssgZexFKmQ0Zbwca5t6hCK9eEyR7vOB4611s7Z2GxIwSH/RvA==
 
-"@navikt/ds-react@7.35.2":
-  version "7.35.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.35.2.tgz#3a323724b8457a84af31466446eee6f08dc81dca"
-  integrity sha512-xf/ZWr3kyR3YpE5K8ZsojD9X8LstiHmEOLD/Mr9igbUAimqnSrDa76FkrXYd4EpI70YvGHmArewTe7qG3B9b3g==
+"@navikt/ds-react@7.35.3":
+  version "7.35.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-7.35.3.tgz#a12f3a3a811d69b49da119b5611d91fa823d5391"
+  integrity sha512-VjV8+vZmi5d+2lW11u1njdlqAvMrs6FjIwncTB5q1uLrLsg83MlIGwPWE9P2yLWFojH9RUqDoBntEBwTe3p6QQ==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.1.6"
-    "@navikt/aksel-icons" "^7.35.2"
-    "@navikt/ds-tokens" "^7.35.2"
+    "@navikt/aksel-icons" "^7.35.3"
+    "@navikt/ds-tokens" "^7.35.3"
     clsx "^2.1.0"
     date-fns "^4.0.0"
     react-day-picker "9.7.0"
 
-"@navikt/ds-tailwind@7.35.2":
-  version "7.35.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.35.2.tgz#da103385ea12c010b294c5595fc43935b6624647"
-  integrity sha512-yiHuPxaVhGbKbQwx+M8+/HRc1rW0OZ4iwqjxzFatWYs+Cou3eTaW0NOdE7fZz0gLtC6gCUP9rfsJGV9IY2y61g==
+"@navikt/ds-tailwind@7.35.3":
+  version "7.35.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-7.35.3.tgz#4adba770fa7eda5e280ae5fc565ed0929149c566"
+  integrity sha512-rpLJEA6LYJhlPguBaI3VrCAIuVYgEiaQu1sb2WDqq25K0/HHSACz7XLfSkbKQ7HDjEDG1z3CcMGue4T5wRUd/A==
 
-"@navikt/ds-tokens@^7.35.2":
-  version "7.35.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.35.2.tgz#4e69069f8fcbaf48cdb380bdaffad92eeaf7e532"
-  integrity sha512-RNrGyyII13paXbzi0BlOqODudJqMylR4LxvbQvTGgpsFLJBMs76eZEwjEKqWahX5PRi0zoplwL3VdppCnzWmyw==
+"@navikt/ds-tokens@^7.35.3":
+  version "7.35.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-7.35.3.tgz#97110f86fe796f20259b6c72e03ae3d062223a3b"
+  integrity sha512-voZoYB8SvhepHYZpOuWQ/9dVDwUdu8CVxiG2NDpN6D7idnGawxcq/tD6wYw7mrk63WSITjIEiH3v5xYGXcPuJw==
 
 "@next/env@15.5.9":
   version "15.5.9"
@@ -3448,10 +3448,10 @@ eslint-visitor-keys@^4.2.1:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-4.2.1.tgz#4cfea60fe7dd0ad8e816e1ed026c1d5251b512c1"
   integrity sha512-Uhdk5sfqcee/9H/rCOJikYz67o0a2Tw2hGRPOG2Y1R2dg7brRe1uG0yaNQDHu+TO/uQPF/5eCapvYSmHUjt7JQ==
 
-eslint@9.39.1:
-  version "9.39.1"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-9.39.1.tgz#be8bf7c6de77dcc4252b5a8dcb31c2efff74a6e5"
-  integrity sha512-BhHmn2yNOFA9H9JmmIVKJmd288g9hrVRDkdoIgRCRuSySRUHH7r/DI6aAXW9T1WwUuY3DFgrcaqB+deURBLR5g==
+eslint@9.39.2:
+  version "9.39.2"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-9.39.2.tgz#cb60e6d16ab234c0f8369a3fe7cc87967faf4b6c"
+  integrity sha512-LEyamqS7W5HB3ujJyvi0HQK/dtVINZvd5mAAp9eT5S/ujByGjiZLCzPcHVzuXbpJDJF/cxwHlfceVUDZ2lnSTw==
   dependencies:
     "@eslint-community/eslint-utils" "^4.8.0"
     "@eslint-community/regexpp" "^4.12.1"
@@ -3459,7 +3459,7 @@ eslint@9.39.1:
     "@eslint/config-helpers" "^0.4.2"
     "@eslint/core" "^0.17.0"
     "@eslint/eslintrc" "^3.3.1"
-    "@eslint/js" "9.39.1"
+    "@eslint/js" "9.39.2"
     "@eslint/plugin-kit" "^0.4.1"
     "@humanfs/node" "^0.16.6"
     "@humanwhocodes/module-importer" "^1.0.1"
