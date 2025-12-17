@@ -47,29 +47,34 @@ export const KravEdit: FunctionComponent<TProps> = ({
     }
   }
 
-  const submit = async (krav: TKravQL): Promise<void> => {
+  const submit = async (formKrav: TKravQL): Promise<void> => {
     const regelverk: TLovCode = codelist.utils.getCode(
       EListName.LOV,
-      krav.regelverk[0]?.lov.code
+      formKrav.regelverk[0]?.lov.code
     ) as TLovCode
     const underavdeling: ICode = codelist.utils.getCode(
       EListName.UNDERAVDELING,
       regelverk?.data?.underavdeling
     ) as ICode
     const mutatedKrav: TKravQL = {
-      ...krav,
+      ...formKrav,
       underavdeling: underavdeling as ICode | undefined,
-      varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
+      varselMelding: varselMeldingActive ? formKrav.varselMelding : undefined,
     }
 
     const etterlevelser: IPageResponse<IEtterlevelse> =
-      await getEtterlevelserByKravNumberKravVersion(krav.kravNummer, krav.kravVersjon)
-    if (etterlevelser.totalElements > 0 && krav.status === EKravStatus.UTKAST) {
+      await getEtterlevelserByKravNumberKravVersion(formKrav.kravNummer, formKrav.kravVersjon)
+
+    // Only block when transitioning from non-UTKAST to UTKAST while there are etterlevelser
+    const isTransitionToUtkast =
+      krav.status !== EKravStatus.UTKAST && formKrav.status === EKravStatus.UTKAST
+
+    if (etterlevelser.totalElements > 0 && isTransitionToUtkast) {
       setErrorModalMessage(
         'Du kan ikke sette dette kravet til «Utkast» fordi det er minst en etterlevelse som bruker kravet i sin dokumentasjon.'
       )
       setShowErrorModal(true)
-    } else if (krav.id) {
+    } else if (formKrav.id) {
       close(await updateKrav(mutatedKrav))
       setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     }
