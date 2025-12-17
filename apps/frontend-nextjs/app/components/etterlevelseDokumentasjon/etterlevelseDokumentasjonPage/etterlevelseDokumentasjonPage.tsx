@@ -145,7 +145,6 @@ export const EtterlevelseDokumentasjonPage = () => {
                     E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
                     {morDokumentRelasjon.fromDocumentWithData.title}
                   </Link>
-                  .
                 </BodyShort>
               )}
 
