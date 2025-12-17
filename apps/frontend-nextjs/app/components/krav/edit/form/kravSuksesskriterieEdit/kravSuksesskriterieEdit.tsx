@@ -65,7 +65,7 @@ const AddSuksessKriterieButton: FunctionComponent<TAddSuksessKriterieButtonProps
           id: nextId(suksesskriterier),
           navn: '',
           beskrivelse: '',
-          behovForBegrunnelse: 'true',
+          behovForBegrunnelse: true,
         })
       }
     >
@@ -85,7 +85,6 @@ const KriterieList = ({ fieldArrayRenderProps, newVersion, newKrav }: IPropsKrit
           suksesskriterium={suksesskriterium}
           index={index}
           arrayLength={suksesskriterier.length}
-          update={(updated) => fieldArrayRenderProps.replace(index, updated)}
           remove={() => {
             fieldArrayRenderProps.remove(index)
           }}
@@ -116,7 +115,6 @@ interface IPropsKriterie {
   suksesskriterium: ISuksesskriterie
   index: number
   arrayLength: number
-  update: (suksesskriterium: ISuksesskriterie) => void
   remove: () => void
   fieldArrayRenderProps: FieldArrayRenderProps
   newVersion?: boolean
@@ -126,14 +124,15 @@ const Kriterie = ({
   suksesskriterium,
   index,
   arrayLength,
-  update,
   remove,
   fieldArrayRenderProps,
   newVersion,
 }: IPropsKriterie) => {
   const debounceDelay = 500
-  const [navn, setNavn] = useDebouncedState(suksesskriterium.navn, debounceDelay)
-  const [beskrivelse, setBeskrivelse] = useDebouncedState(
+  const [navnInput, setNavnInput] = useState(suksesskriterium.navn)
+  const [navnDebounced, setNavnDebounced] = useDebouncedState(suksesskriterium.navn, debounceDelay)
+  const [beskrivelseInput, setBeskrivelseInput] = useState(suksesskriterium.beskrivelse || '')
+  const [beskrivelseDebounced, setBeskrivelseDebounced] = useDebouncedState(
     suksesskriterium.beskrivelse || '',
     debounceDelay
   )
@@ -153,14 +152,26 @@ const Kriterie = ({
     fieldArrayRenderProps.insert(newIndex, suksesskriterieToMove)
   }
 
+  // Drive debounced states off the immediate input values
   useEffect(() => {
-    update({
-      id: suksesskriterium.id,
-      navn,
-      beskrivelse,
-      behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
-    })
-  }, [navn, beskrivelse, behovForBegrunnelse])
+    setNavnDebounced(navnInput)
+  }, [navnInput])
+
+  useEffect(() => {
+    setBeskrivelseDebounced(beskrivelseInput)
+  }, [beskrivelseInput])
+
+  // Debounce write-back to Formik to avoid heavy list re-renders
+  useEffect(() => {
+    fieldArrayRenderProps.form.setFieldValue(`suksesskriterier[${index}].navn`, navnDebounced)
+  }, [navnDebounced])
+
+  useEffect(() => {
+    fieldArrayRenderProps.form.setFieldValue(
+      `suksesskriterier[${index}].beskrivelse`,
+      beskrivelseDebounced
+    )
+  }, [beskrivelseDebounced])
 
   return (
     <Box padding='4' className='mb-4' background='surface-subtle' borderColor='border-on-inverted'>
@@ -197,9 +208,9 @@ const Kriterie = ({
           <TextField
             label={`Suksesskriterium ${nummer}`}
             hideLabel
-            value={navn}
+            value={navnInput}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setNavn((event.target as HTMLInputElement).value)
+              setNavnInput((event.target as HTMLInputElement).value)
             }
             placeholder='Navn'
             error={
@@ -223,12 +234,16 @@ const Kriterie = ({
           </div>
 
           {mode === 'edit' && (
-            <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height='15.625rem' />
+            <TextEditor
+              initialValue={beskrivelseInput}
+              setValue={setBeskrivelseInput}
+              height='15.625rem'
+            />
           )}
 
           {mode === 'view' && (
             <div className='p-8 border-border-subtle-hover border border-solid rounded-md bg-white'>
-              <Markdown source={beskrivelse} />
+              <Markdown source={beskrivelseInput} />
             </div>
           )}
         </div>
@@ -245,7 +260,7 @@ const Kriterie = ({
             value={behovForBegrunnelse}
             onChange={(value) => {
               fieldArrayRenderProps.form.setFieldValue(
-                'behovForBegrunnelse',
+                `suksesskriterier[${index}].behovForBegrunnelse`,
                 value === 'true' ? true : false
               )
               setBehovForBegrunnelse(value)
