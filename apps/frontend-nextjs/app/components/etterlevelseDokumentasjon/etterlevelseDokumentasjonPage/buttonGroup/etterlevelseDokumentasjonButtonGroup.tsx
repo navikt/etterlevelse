@@ -55,13 +55,6 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
 
   return (
     <>
-      {etterlevelseDokumentasjon.forGjenbruk && (
-        <TillatGjenbrukModal
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-        />
-      )}
-
       {/** satt knappene tilbake slik at vi kan prodsette ting */}
       <>
         <Button
