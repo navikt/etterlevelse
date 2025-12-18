@@ -1,6 +1,6 @@
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { env } from '@/util/env/env'
 import axios from 'axios'
-import { env } from 'process'
 
 export const arkiver = async (
   etterlevelseDokumentasjonId: string,
@@ -8,9 +8,7 @@ export const arkiver = async (
   pvoTilbakemelding: boolean,
   risikoeier: boolean
 ) => {
-  return (
-    await axios.post<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}&pvoTilbakemelding=${pvoTilbakemelding}&risikoeier=${risikoeier}`
-    )
-  ).data
+  const url = `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}&pvoTilbakemelding=${pvoTilbakemelding}&risikoeier=${risikoeier}`
+  const { data } = await axios.post<IEtterlevelseDokumentasjon>(url)
+  return data
 }
