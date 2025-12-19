@@ -65,7 +65,7 @@ export const getPvkButtonText = (
   pvkDokument: IPvkDokument,
   risikoscenarioList: IRisikoscenario[],
   isRisikoeier: boolean
-) => {
+): string => {
   const updatedAfterApprovedOfRisikoeier =
     pvkDokument.godkjentAvRisikoeierDato !== '' &&
     moment(pvkDokument.changeStamp.lastModifiedDate)
@@ -114,6 +114,9 @@ export const getPvkButtonText = (
   ) {
     return 'Oppdater PVK'
   }
+
+  // Fallback to a safe default to avoid rendering empty button text
+  return 'Les PVK'
 }
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {

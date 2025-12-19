@@ -14,8 +14,6 @@ const eslintConfig = [
     'next/core-web-vitals',
     'next/typescript',
     'plugin:jsx-a11y/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended'
   ),
@@ -52,10 +50,7 @@ const eslintConfig = [
           },
         },
       ],
-      'react-hooks/exhaustive-deps': 'off',
-      'react/prop-types': 'off',
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
+      // React plugin rules removed to avoid legacy plugin circular config issues in FlatCompat
       'no-console': ['warn', { allow: ['warn', 'error', 'debug'] }],
       // no-extra-semi is added because there are places where the ; is necessary
       'no-extra-semi': 'off',
