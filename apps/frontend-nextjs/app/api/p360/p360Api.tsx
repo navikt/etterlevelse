@@ -8,7 +8,9 @@ export const arkiver = async (
   pvoTilbakemelding: boolean,
   risikoeier: boolean
 ) => {
-  const url = `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}&pvoTilbakemelding=${pvoTilbakemelding}&risikoeier=${risikoeier}`
-  const { data } = await axios.post<IEtterlevelseDokumentasjon>(url)
-  return data
+  return (
+    await axios.post<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}&pvoTilbakemelding=${pvoTilbakemelding}&risikoeier=${risikoeier}`
+    )
+  ).data
 }
