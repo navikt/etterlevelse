@@ -39,7 +39,7 @@
         <!-- Test -->
         <testcontainers.version>2.0.2</testcontainers.version>
         <wiremock.version>3.0.1</wiremock.version>
-        <docx4j.version>11.5.6</docx4j.version>
+        <docx4j.version>11.5.5</docx4j.version>
 
 
     </properties>
@@ -81,13 +81,7 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.3.5</version>
-        </dependency>
-
-        <!-- Jwt parsing and verifying -->∫
+        <!-- Jwt parsing and verifying -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
@@ -211,10 +205,6 @@
             <artifactId>docx4j-JAXB-ReferenceImpl</artifactId>
             <version>${docx4j.version}</version>
             <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
                 <exclusion>
                     <groupId>org.checkerframework</groupId>
                     <artifactId>checker-qual</artifactId>
