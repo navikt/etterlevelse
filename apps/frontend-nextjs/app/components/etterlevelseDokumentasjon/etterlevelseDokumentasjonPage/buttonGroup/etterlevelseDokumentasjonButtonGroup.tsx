@@ -7,8 +7,12 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
 import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
+import { AdminMedAlleRollerPaEtterLevelseDokumentasjonButton } from './adminMedAlleRollerPa/adminMedAlleRollerPaEtterLevelseDokumentasjonButton'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
+import { EtterleverEtterlevelseDokumentasjonsButton } from './etterlever/etterleverEtterlevelseDokumentasjonsButton'
 import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurderingButton/personvernkonsekvensvurderingButton'
+import { PersonvernombudEtterlevelseDokumentasjonButton } from './personvernombud/personvernombudEtterlevelseDokumentasjonButton'
+import { RisikoeierEtterlevelseDokumentasjonButton } from './risikoeier/risikoeierEtterlevelseDokumentasjonButton'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -44,6 +48,10 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         pvkDokument={pvkDokument}
         isRisikoeier={isRisikoeier}
       />
+      <AdminMedAlleRollerPaEtterLevelseDokumentasjonButton />
+      <EtterleverEtterlevelseDokumentasjonsButton />
+      <PersonvernombudEtterlevelseDokumentasjonButton />
+      <RisikoeierEtterlevelseDokumentasjonButton />
     </>
   )
 }
