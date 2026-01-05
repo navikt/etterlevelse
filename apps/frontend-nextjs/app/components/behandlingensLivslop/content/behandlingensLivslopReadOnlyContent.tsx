@@ -48,9 +48,11 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
 
           <VStack gap='6' className='mt-5'>
             <VStack gap='2'>
-              <Heading level='3' size='xsmall'>
-                {`Behandlingens livsløp filer som er lastet opp. (${files.length})`}
-              </Heading>
+              <div className='mt-5'>
+                <Heading level='3' size='xsmall'>
+                  {`Behandlingens livsløp filer som er lastet opp. (${files.length})`}
+                </Heading>
+              </div>
               <VStack as='ul' gap='3'>
                 {files.length > 0 &&
                   files.map((file, index) => (

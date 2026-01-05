@@ -11,6 +11,8 @@ import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -37,6 +39,12 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private String gjenbrukBeskrivelse;
     private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
+
+    private EtterlevelseDokumentasjonStatus status = EtterlevelseDokumentasjonStatus.UNDER_ARBEID;
+
+    private String meldingEtterlevelerTilRisikoeier;
+    private String meldingRisikoeierTilEtterleveler;
+
     @Schema(description = "Codelist RELEVANS")
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
@@ -51,11 +59,15 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     private String nomAvdelingId;
     private String avdelingNavn;
+    private List<NomSeksjon> seksjoner;
+
     private List<Varslingsadresse> varslingsadresser;
     @Override
     public void format() {
         setTitle(trimToNull(title));
         setBeskrivelse(trimToNull(beskrivelse));
+        setMeldingRisikoeierTilEtterleveler(trimToNull(meldingRisikoeierTilEtterleveler));
+        setMeldingEtterlevelerTilRisikoeier(trimToNull(meldingEtterlevelerTilRisikoeier));
         setGjenbrukBeskrivelse(trimToNull(gjenbrukBeskrivelse));
         setBehandlingIds(formatList(behandlingIds));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
@@ -85,6 +97,9 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setBehandlingIds(copyOf(behandlingIds));
         eDokData.setBeskrivelse(beskrivelse);
         eDokData.setGjenbrukBeskrivelse(gjenbrukBeskrivelse);
+        eDokData.setStatus(status);
+        eDokData.setMeldingEtterlevelerTilRisikoeier(meldingEtterlevelerTilRisikoeier);
+        eDokData.setMeldingRisikoeierTilEtterleveler(meldingRisikoeierTilEtterleveler);
         eDokData.setTilgjengeligForGjenbruk(tilgjengeligForGjenbruk);
         eDokData.setIrrelevansFor(copyOf(irrelevansFor));
         eDokData.setTeams(copyOf(teams));
@@ -94,6 +109,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setForGjenbruk(forGjenbruk);
         eDokData.setNomAvdelingId(nomAvdelingId);
         eDokData.setAvdelingNavn(avdelingNavn);
+        eDokData.setSeksjoner(copyOf(seksjoner));
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));

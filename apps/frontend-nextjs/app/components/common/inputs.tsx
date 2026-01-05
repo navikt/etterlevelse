@@ -157,6 +157,9 @@ export const DateField = (props: IPropsDateField) => {
             {(fieldProps: FieldProps) => (
               <DatePicker
                 {...datepickerProps}
+                dropdownCaption
+                fromDate={new Date(new Date().getFullYear(), 0, 1)}
+                toDate={new Date(2100, 11, 31)}
                 open={open}
                 onOpenToggle={() => {
                   datePickerRef.current?.scrollIntoView({

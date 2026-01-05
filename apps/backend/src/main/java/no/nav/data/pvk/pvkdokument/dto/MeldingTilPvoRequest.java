@@ -19,6 +19,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class MeldingTilPvoRequest implements Validated {
     private int innsendingId;
     private String merknadTilPvo;
+    private String endringsNotat;
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
 
@@ -34,21 +35,23 @@ public class MeldingTilPvoRequest implements Validated {
         }
     }
 
-    public MeldingTilPvo convertToMeldingTilPvo() {
-        return MeldingTilPvo.builder()
-                .innsendingId(innsendingId)
-                .merknadTilPvo(merknadTilPvo)
-                .sendtTilPvoDato(sendtTilPvoDato)
-                .sendtTilPvoAv(sendtTilPvoAv)
-                .build();
-    }
-
     public static MeldingTilPvoRequest buildFrom(MeldingTilPvo melding) {
         return MeldingTilPvoRequest.builder()
                 .innsendingId(melding.getInnsendingId())
                 .merknadTilPvo(melding.getMerknadTilPvo())
+                .endringsNotat(melding.getEndringsNotat())
                 .sendtTilPvoDato(melding.getSendtTilPvoDato())
                 .sendtTilPvoAv(melding.getSendtTilPvoAv())
+                .build();
+    }
+
+    public MeldingTilPvo convertToMeldingTilPvo() {
+        return MeldingTilPvo.builder()
+                .innsendingId(innsendingId)
+                .merknadTilPvo(merknadTilPvo)
+                .endringsNotat(endringsNotat)
+                .sendtTilPvoDato(sendtTilPvoDato)
+                .sendtTilPvoAv(sendtTilPvoAv)
                 .build();
     }
 

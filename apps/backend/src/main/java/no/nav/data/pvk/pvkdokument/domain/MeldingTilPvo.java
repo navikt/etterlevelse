@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class MeldingTilPvo {
     private int innsendingId;
     private String merknadTilPvo;
+    private String endringsNotat;
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
 }

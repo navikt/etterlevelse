@@ -24,6 +24,7 @@ import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   pvkDokument: IPvkDokument
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   relevantVurdering: IVurdering
@@ -35,6 +36,7 @@ type TProps = {
 
 export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
+  setPvoTilbakemelding,
   pvkDokument,
   etterlevelseDokumentasjon,
   relevantVurdering,
@@ -91,6 +93,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                   )}
                   {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                     <PvoTilbakemeldingForm
+                      setPvoTilbakemelding={setPvoTilbakemelding}
                       pvkDokumentId={pvkDokument.id}
                       innsendingId={pvkDokument.antallInnsendingTilPvo}
                       fieldName='behandlingenslivslop'

@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
@@ -20,9 +21,12 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
+import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.*;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
@@ -48,6 +52,8 @@ public class PvkDokumentToDoc {
     private static final ObjectFactory pvkFactory = Context.getWmlObjectFactory();
 
     private final PvkDokumentService pvkDokumentService;
+    private final BehandlingensArtOgOmfangService behandlingensArtOgOmfangService;
+
     private final BehandlingensLivslopService behandlingensLivslopService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final RisikoscenarioService risikoscenarioService;
@@ -154,8 +160,50 @@ public class PvkDokumentToDoc {
         return zipUtils.zipOutputStream(zipFiles);
     }
 
+    public void generateBehovForPvkSection(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, PvkDokument pvkDokument, EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        doc.generateEgenskaperFraBehandlinger(etterlevelseDokumentasjonResponse.getBehandlinger());
+        doc.newLine();
+        doc.generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
+        doc.newLine();
+
+        doc.addLabel("Hvilken vurdering har dere kommet fram til?");
+        if (etterlevelseDokumentasjonResponse.getIrrelevansFor().stream().map(CodelistResponse::getCode).toList().contains("PERSONOPPLYSNINGER")) {
+            doc.addText("Dokumentasjonen behandler ikke personopplysninger.");
+            doc.pageBreak();
+        } else {
+            if (pvkDokument.getPvkDokumentData().getPvkVurdering() == null || pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.UNDEFINED) {
+                doc.addText("Ingen vurdering");
+            } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_IKKE_UTFORE) {
+                doc.addText("Vi skal ikke gjennomføre PVK.");
+                doc.newLine();
+                doc.addHeading4("Begrunnelse av vurderingen");
+                doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
+                doc.pageBreak();
+            } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.ALLEREDE_UTFORT) {
+                doc.addText("Vi har en PVK i Word som ikke trenger en ny vurdering.");
+                doc.newLine();
+                doc.addHeading4("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
+                doc.newLine();
+                if (etterlevelseDokumentasjonResponse.getRisikovurderinger() != null && !etterlevelseDokumentasjonResponse.getRisikovurderinger().isEmpty()) {
+                    etterlevelseDokumentasjonResponse.getRisikovurderinger().forEach(risikovurdering -> {
+                        doc.addMarkdownText("- " + risikovurdering);
+                    });
+                } else {
+                    doc.addText("Ingen dokumenter lagt til");
+                }
+                doc.addHeading4("Begrunnelse av vurderingen");
+                doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
+                doc.pageBreak();
+            } else {
+                doc.addText("Vi skal gjennomføre en PVK.");
+                doc.newLine();
+            }
+        }
+    }
+
     public void generateDocForP360(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
+        BehandlingensArtOgOmfang behandlingensArtOgOmfang = behandlingensArtOgOmfangService.getByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId()).orElse(new BehandlingensArtOgOmfang());
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
         PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId(), pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo());
         Vurdering pvoVurdering = pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()
@@ -280,31 +328,16 @@ public class PvkDokumentToDoc {
 
         doc.pageBreak();
 
+        doc.generateBehandlingensArtOgOmfang(behandlingensArtOgOmfang, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
+        doc.pageBreak();
+
         //PVK dokument
         var pvkBehovHeading = doc.addHeading2("Bør vi gjøre en PVK?");
         doc.addBookmark(pvkBehovHeading, "pvk_behov");
         doc.newLine();
-        doc.generateEgenskaperFraBehandlinger(etterlevelseDokumentasjonResponse.getBehandlinger());
-        doc.newLine();
-        doc.generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
-        doc.newLine();
 
-        doc.addLabel("Hvilken vurdering har dere kommet fram til?");
-        if (pvkDokument.getPvkDokumentData().getSkalUtforePvk() == null) {
-            doc.addText("Ingen vurdering");
-        } else if (!pvkDokument.getPvkDokumentData().getSkalUtforePvk()) {
-            doc.addText("Vi skal ikke gjennomføre PVK.");
-            doc.newLine();
-            doc.addHeading4("Begrunnelse av vurderingen");
-            doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
-            doc.pageBreak();
-        } else {
-            doc.addText("Vi skal gjennomføre en PVK.");
-
-            doc.newLine();
-
-            doc.generateBehandlingensArtOgOmfang(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
-            doc.newLine();
+        generateBehovForPvkSection(doc, pvkDokument, etterlevelseDokumentasjonResponse);
+        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_UTFORE) {
             doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
             doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
@@ -326,6 +359,21 @@ public class PvkDokumentToDoc {
                     doc.addText("Ingen merknad.");
                 } else {
                     doc.addMarkdownText(latestMeldingTilPvoOpt.get().getMerknadTilPvo());
+                }
+            }
+
+            doc.addLabel("Endringer som er gjort siden siste tilbakemelding fra personvernombudet:");
+            if (innsendingId == 0) {
+                doc.addText("Ingen endrings notat");
+            } else {
+                var latestMeldingTilPvoOpt = pvkDokument.getPvkDokumentData()
+                        .getMeldingerTilPvo().stream()
+                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId)
+                        .findFirst();
+                if (latestMeldingTilPvoOpt.isEmpty() || latestMeldingTilPvoOpt.get().getMerknadTilPvo().isEmpty()) {
+                    doc.addText("Ingen endrings notat.");
+                } else {
+                    doc.addMarkdownText(latestMeldingTilPvoOpt.get().getEndringsNotat());
                 }
             }
 

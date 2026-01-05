@@ -5,8 +5,9 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button } from '@navikt/ds-react'
+import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent } from 'react'
 
@@ -19,15 +20,21 @@ type TProps = {
     shouldValidate?: boolean
   ) => Promise<void | FormikErrors<IPvkDokument>>
   submitForm: () => Promise<void>
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
+  pvoTilbakemelding,
   isLoading,
   setFieldValue,
   submitForm,
 }) => {
   return (
     <div className='w-full max-w-[75ch]'>
+      <Heading size='medium' level='2' className='mb-5 mt-8'>
+        Sendt oppdatert PVK
+      </Heading>
+
       <BeskjedTilPvoReadOnly
         meldingTilPvo={
           pvkDokument.meldingerTilPvo.filter(
@@ -38,7 +45,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 
       <Alert variant='info' className='ml-4 my-5' inline>
         Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å trekke
-        PVO-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
+        PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
         vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende plass i
         behandlingskøen.
       </Alert>
@@ -49,19 +56,25 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div>
-        <Alert variant='info' className='my-5'>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
-      </div>
-
-      <div className='mt-5 flex gap-2 items-center'>
+      <div className='mt-5 ml-12'>
         <Button
           type='button'
           variant='secondary'
           onClick={async () => {
-            if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-              await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+            if (
+              pvoTilbakemelding &&
+              pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+            ) {
+              const previousVurdering = pvoTilbakemelding.vurderinger.filter(
+                (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+              )
+
+              if (previousVurdering[0].vilFaPvkIRetur) {
+                await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+              } else {
+                await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+              }
+
               await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo - 1)
             } else {
               await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
@@ -72,6 +85,12 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         >
           Trekk innsending
         </Button>
+      </div>
+
+      <div>
+        <Alert variant='info' className='my-5'>
+          Status: {pvkDokumentStatusToText(pvkDokument.status)}
+        </Alert>
       </div>
 
       <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />

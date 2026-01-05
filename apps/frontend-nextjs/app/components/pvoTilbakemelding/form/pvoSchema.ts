@@ -30,7 +30,7 @@ export const sendInnCheck = () => {
     ),
     arbeidGarVidereBegrunnelse: yup.string().test({
       name: 'arbeidGarVidereBegrunnelse',
-      message: 'Dere må beskriv anbefalingen nærmere',
+      message: 'Dere må beskrive anbefalingen nærmere',
       test: function (stringField) {
         const { parent } = this
         if (parent.status === EPvoTilbakemeldingStatus.FERDIG) {
@@ -50,7 +50,7 @@ export const sendInnCheck = () => {
     ),
     behovForForhandskonsultasjonBegrunnelse: yup.string().test({
       name: 'behovForForhandskonsultasjonBegrunnelse',
-      message: 'Dere må beskriv anbefalingen nærmere',
+      message: 'Dere må beskrive anbefalingen nærmere',
       test: function (stringField) {
         const { parent } = this
         if (

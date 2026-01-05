@@ -16,7 +16,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import moment from 'moment'
@@ -25,6 +25,7 @@ import AlertPvoModal from '../common/alertPvoModal'
 import TilbakemeldingField from './tilbakemeldingField'
 
 type TProps = {
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   pvkDokumentId: string
   innsendingId: number
   initialValue: ITilhorendeDokumentasjonTilbakemelding
@@ -32,6 +33,7 @@ type TProps = {
 }
 
 export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+  setPvoTilbakemelding,
   pvkDokumentId,
   innsendingId,
   initialValue,
@@ -39,6 +41,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
 }) => {
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+  const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
 
   const submit = async (
     tilbakemeldingsInnhold: ITilhorendeDokumentasjonTilbakemelding
@@ -92,7 +95,16 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
             if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
               setIsAlertModalOpen(true)
             } else {
-              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+              await updatePvoTilbakemelding(updatedValues).then((response) => {
+                setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
+                const relevantVurdering = response.vurderinger.filter(
+                  (vurdering) => vurdering.innsendingId === innsendingId
+                )[0]
+                const newInitailValues = relevantVurdering.tilhorendeDokumentasjon
+
+                formRef.current.resetForm({ values: newInitailValues })
+                setSavedSuccessful(true)
+              })
             }
           }
         })
@@ -109,7 +121,16 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               ],
               status: EPvoTilbakemeldingStatus.UNDERARBEID,
             })
-            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+            await createPvoTilbakemelding(createValue).then((response) => {
+              setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
+              const relevantVurdering = response.vurderinger.filter(
+                (vurdering) => vurdering.innsendingId === innsendingId
+              )[0]
+              const newInitailValues = relevantVurdering.tilhorendeDokumentasjon
+
+              formRef.current.resetForm({ values: newInitailValues })
+              setSavedSuccessful(true)
+            })
           } else {
             console.debug(error)
           }
@@ -150,6 +171,18 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                   </Button>
                 </div>
               </div>
+              {savedSuccessful && (
+                <div className='my-5'>
+                  <Alert
+                    size='small'
+                    variant='success'
+                    closeButton
+                    onClose={() => setSavedSuccessful(false)}
+                  >
+                    Lagring vellykket
+                  </Alert>
+                </div>
+              )}
             </div>
 
             <div>

@@ -100,7 +100,18 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
     <div className='pt-6 w-full'>
       <div className='w-full flex justify-center'>
         <div className='max-w-[75ch]'>
-          <BeskjedFraEtterleverReadOnly meldingTilPvo={pvkDokument.meldingerTilPvo[0]} />
+          {pvkDokument.antallInnsendingTilPvo > 1 && (
+            <div className='mt-5 mb-10'>
+              <SendInnTilbakemeldingsHistorikk
+                pvkDokument={pvkDokument}
+                pvoVurderingList={pvoVurderingList}
+                pvoTilbakemelding={pvoTilbakemelding}
+                relevantVurderingsInnsendingId={pvkDokument.antallInnsendingTilPvo}
+              />
+            </div>
+          )}
+
+          <BeskjedFraEtterleverReadOnly pvkDokument={pvkDokument} />
 
           <div>
             <FieldRadioLayout>
@@ -112,6 +123,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 markdown
               />
             </FieldRadioLayout>
+
             <FieldRadioLayout>
               <Field name='arbeidGarVidere'>
                 {(fieldProps: FieldProps) => (
@@ -119,14 +131,26 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='arbeidGarVidere'
                     legend='Anbefales det at arbeidet går videre som planlagt?'
                     value={
-                      fieldProps.field.value === null
-                        ? null
+                      fieldProps.field.value === true
+                        ? 'Ja'
+                        : fieldProps.field.value === false
+                          ? 'Nei'
+                          : null
+                    }
+                    key={`arbeidGarVidere-${
+                      fieldProps.field.value === undefined || fieldProps.field.value === null
+                        ? 'unset'
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'
-                    }
+                    }`}
                     onChange={async (value) => {
-                      const boolValue = value === null ? null : value === 'Ja' ? true : false
+                      const boolValue =
+                        value === null || value === undefined
+                          ? undefined
+                          : value === 'Ja'
+                            ? true
+                            : false
                       await fieldProps.form.setFieldValue('arbeidGarVidere', boolValue)
                     }}
                     error={fieldProps.form.errors.arbeidGarVidere as string}
@@ -136,14 +160,30 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                   </RadioGroup>
                 )}
               </Field>
-              <IndentLayoutTextField>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='Beskriv anbefalingen nærmere:'
-                  name='arbeidGarVidereBegrunnelse'
-                />
-              </IndentLayoutTextField>
+
+              <div className='mb-8'>
+                <Button
+                  size='small'
+                  type='button'
+                  variant='secondary'
+                  onClick={async () => {
+                    await setFieldValue('arbeidGarVidere', undefined)
+                  }}
+                >
+                  Nullstill valg
+                </Button>
+              </div>
+
+              <div className='mt-5'>
+                <IndentLayoutTextField>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Beskriv anbefalingen nærmere:'
+                    name='arbeidGarVidereBegrunnelse'
+                  />
+                </IndentLayoutTextField>
+              </div>
             </FieldRadioLayout>
 
             <FieldRadioLayout>
@@ -153,14 +193,26 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                     id='behovForForhandskonsultasjon'
                     legend='Er det behov for forhåndskonsultasjon med Datatilsynet?'
                     value={
-                      fieldProps.field.value === null
-                        ? null
+                      fieldProps.field.value === true
+                        ? 'Ja'
+                        : fieldProps.field.value === false
+                          ? 'Nei'
+                          : null
+                    }
+                    key={`behovForForhandskonsultasjon-${
+                      fieldProps.field.value === undefined || fieldProps.field.value === null
+                        ? 'unset'
                         : fieldProps.field.value === true
                           ? 'Ja'
                           : 'Nei'
-                    }
+                    }`}
                     onChange={async (value) => {
-                      const boolValue = value === null ? null : value === 'Ja' ? true : false
+                      const boolValue =
+                        value === null || value === undefined
+                          ? undefined
+                          : value === 'Ja'
+                            ? true
+                            : false
                       await fieldProps.form.setFieldValue('behovForForhandskonsultasjon', boolValue)
                     }}
                     error={fieldProps.form.errors.behovForForhandskonsultasjon as string}
@@ -171,13 +223,28 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 )}
               </Field>
 
+              <div className='mb-8'>
+                <Button
+                  size='small'
+                  type='button'
+                  variant='secondary'
+                  onClick={async () => {
+                    await setFieldValue('behovForForhandskonsultasjon', undefined)
+                  }}
+                >
+                  Nullstill valg
+                </Button>
+              </div>
+
               <IndentLayoutTextField>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='Beskriv anbefalingen nærmere:'
-                  name='behovForForhandskonsultasjonBegrunnelse'
-                />
+                <div className='mt-5'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='Beskriv anbefalingen nærmere:'
+                    name='behovForForhandskonsultasjonBegrunnelse'
+                  />
+                </div>
               </IndentLayoutTextField>
             </FieldRadioLayout>
 
@@ -274,17 +341,6 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           )}
 
           <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />
-
-          {pvkDokument.antallInnsendingTilPvo > 1 && (
-            <div className='mt-10'>
-              <SendInnTilbakemeldingsHistorikk
-                pvkDokument={pvkDokument}
-                pvoVurderingList={pvoVurderingList}
-                pvoTilbakemelding={pvoTilbakemelding}
-                relevantVurderingsInnsendingId={pvkDokument.antallInnsendingTilPvo}
-              />
-            </div>
-          )}
         </div>
       </div>
 

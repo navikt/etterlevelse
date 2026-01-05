@@ -4,7 +4,10 @@ import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListA
 import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
@@ -77,7 +80,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       <Tabs.List>
         <Tabs.Tab value='alleKrav' label='Alle Krav' />
         <Tabs.Tab value='prioritertKravliste' label='Prioritert kravliste' />
-        {pvkDokument && pvkDokument.skalUtforePvk && (
+        {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
           <Tabs.Tab value='pvkRelaterteKrav' label='PVK-relaterte krav' />
         )}
       </Tabs.List>
@@ -124,7 +127,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
           />
         </div>
       </Tabs.Panel>
-      {pvkDokument && pvkDokument.skalUtforePvk && (
+      {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
         <Tabs.Panel value='pvkRelaterteKrav'>
           <PvkKravListeTab
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}

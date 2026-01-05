@@ -35,9 +35,10 @@ export const SendInnPvoReadOnly: FunctionComponent<TProps> = ({
   return (
     <div>
       <BeskjedFraEtterleverReadOnly
-        meldingTilPvo={pvkDokument.meldingerTilPvo[0]}
+        pvkDokument={pvkDokument}
         headingLevel={headingLevel}
         headingSize={headingSize}
+        innsendingId={relevantVurdering.innsendingId}
       />
 
       <div className='mt-5 mb-3 max-w-[75ch]'>

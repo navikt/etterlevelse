@@ -1,5 +1,6 @@
 'use client'
 
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
@@ -13,7 +14,10 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
   IRisikoscenario,
@@ -77,6 +81,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList = ''
@@ -240,8 +245,10 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                 </ExternalLink>
               </FormSummary.Value>
               <FormSummary.Value className='gap-2 flex'>
-                {pvkDokument.skalUtforePvk && 'Vi skal gjennomføre PVK'}
-                {!pvkDokument.skalUtforePvk && 'Vi skal ikke gjennomføre PVK'}
+                {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+                  'Vi skal gjennomføre PVK'}
+                {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE &&
+                  'Vi skal ikke gjennomføre PVK'}
               </FormSummary.Value>
             </FormSummary.Answer>
 
@@ -307,7 +314,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
-                  status={getFormStatus(pvkDokument, index)}
+                  status={getFormStatus(pvkDokument, artOgOmfang, index)}
                   customStatusTag={getCustomStatusTags(index)}
                   pvoView
                 />

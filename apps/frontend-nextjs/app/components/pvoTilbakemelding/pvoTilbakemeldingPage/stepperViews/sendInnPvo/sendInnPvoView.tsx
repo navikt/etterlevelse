@@ -73,8 +73,13 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
     //backend vil oppdatere statusen til PVk dokument til 'PVO_UNDERARBEID', dersom statusen til PVO tilbakemelding = 'Påbegynt', 'snart ferdig' eller 'til kontroll'
 
     let pvkStatus = ''
+    let antallInnsendingTilPvo = 0
 
-    await getPvkDokument(pvkDokument.id).then((response) => (pvkStatus = response.status))
+    await getPvkDokument(pvkDokument.id).then((response) => {
+      pvkStatus = response.status
+
+      antallInnsendingTilPvo = response.antallInnsendingTilPvo
+    })
 
     if (
       [
@@ -91,6 +96,13 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
             if (response.status === EPvoTilbakemeldingStatus.FERDIG && !isAngreInnsending) {
               setIsAlertModalOpen(true)
             } else {
+              if (
+                !response.vurderinger.find(
+                  (vurdering) => vurdering.innsendingId === antallInnsendingTilPvo
+                )
+              ) {
+                response.vurderinger.push(createNewPvoVurderning(antallInnsendingTilPvo))
+              }
               const updatedValues: IPvoTilbakemelding = {
                 ...response,
                 status: submittedStatus,
@@ -198,6 +210,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               submitForm={submitForm}
               setSubmittedStatus={setSubmittedStatus}
               pvkDokument={pvkDokument}
+              pvoTilbakemelding={pvoTilbakemelding}
               relevantVurdering={relevantVurdering}
               activeStep={activeStep}
               setSelectedStep={setSelectedStep}

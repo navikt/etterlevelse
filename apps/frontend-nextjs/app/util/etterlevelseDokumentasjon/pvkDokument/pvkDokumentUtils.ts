@@ -1,6 +1,7 @@
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -27,7 +28,7 @@ export const getVariantForPVKButton = (
   pvkDokument: IPvkDokument | undefined,
   behandlingsLivslop: IBehandlingensLivslop | undefined
 ) => {
-  if (pvkDokument?.skalUtforePvk === false) return 'tertiary'
+  if (pvkDokument?.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'tertiary'
   if (
     (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
     behandlingsLivslop?.beskrivelse
@@ -45,20 +46,17 @@ export const isReadOnlyPvkStatus = (status: string) => {
 }
 
 export const isPvkDokumentVurdert = (pvkDokument?: IPvkDokument) =>
-  pvkDokument &&
-  (pvkDokument.ytterligereEgenskaper.length !== 0 || pvkDokument.skalUtforePvk !== null)
+  !!pvkDokument &&
+  (pvkDokument.ytterligereEgenskaper.length !== 0 ||
+    (pvkDokument.pvkVurdering != null && pvkDokument.pvkVurdering !== EPvkVurdering.UNDEFINED))
 
 export const isPvkDokuemntNotStarted = (
   risikoscenarioList: IRisikoscenario[],
   pvkDokument?: IPvkDokument
 ) =>
   pvkDokument &&
-  pvkDokument.personkategoriAntallBeskrivelse === '' &&
-  pvkDokument.tilgangsBeskrivelsePersonopplysningene === '' &&
-  pvkDokument.lagringsBeskrivelsePersonopplysningene === '' &&
   pvkDokument.representantInvolveringsBeskrivelse === '' &&
   pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse === '' &&
-  pvkDokument.stemmerPersonkategorier === null &&
   pvkDokument.harInvolvertRepresentant === null &&
   pvkDokument.harDatabehandlerRepresentantInvolvering === null &&
   risikoscenarioList.length === 0
@@ -67,7 +65,7 @@ export const getPvkButtonText = (
   pvkDokument: IPvkDokument,
   risikoscenarioList: IRisikoscenario[],
   isRisikoeier: boolean
-) => {
+): string => {
   const updatedAfterApprovedOfRisikoeier =
     pvkDokument.godkjentAvRisikoeierDato !== '' &&
     moment(pvkDokument.changeStamp.lastModifiedDate)
@@ -114,8 +112,11 @@ export const getPvkButtonText = (
     pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
     updatedAfterApprovedOfRisikoeier
   ) {
-    return 'Oppdatér PVK'
+    return 'Oppdater PVK'
   }
+
+  // Fallback to a safe default to avoid rendering empty button text
+  return 'Les PVK'
 }
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
@@ -135,7 +136,7 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
     case EPvkDokumentStatus.TRENGER_GODKJENNING:
       return 'Sendt til Risikoeier for godkjenning'
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
-      return 'Godkjent av Risikoeier'
+      return 'Godkjent av risikoeier og arkivert i Public360'
   }
 }
 
@@ -151,6 +152,7 @@ export const createNewMeldingTilPvo = (newInnsendingId: number): IMeldingTilPvo 
   return {
     innsendingId: newInnsendingId,
     merknadTilPvo: '',
+    endringsNotat: '',
     sendtTilPvoAv: '',
     sendtTilPvoDato: '',
   }

@@ -25,26 +25,28 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
         Tilbakemeldingshistorikk
       </Heading>
       <Accordion>
-        {pvoTilbakemelding.vurderinger.map((vurdering) => {
-          if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
-            return (
-              <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
-                <Accordion.Header>
-                  {vurdering.innsendingId}. tilbakemelding -{' '}
-                  {moment(vurdering.sendtDato).format('LL')}
-                </Accordion.Header>
-                <Accordion.Content>
-                  <PvoTilbakemeldingReadOnly
-                    tilbakemeldingsinnhold={vurdering[fieldName]}
-                    sentDate={vurdering.sendtDato}
-                    forPvo={true}
-                    noHeader={true}
-                  />
-                </Accordion.Content>
-              </Accordion.Item>
-            )
-          }
-        })}
+        {pvoTilbakemelding.vurderinger
+          .sort((a, b) => b.innsendingId - a.innsendingId)
+          .map((vurdering) => {
+            if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
+              return (
+                <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
+                  <Accordion.Header>
+                    {vurdering.innsendingId}. tilbakemelding -{' '}
+                    {moment(vurdering.sendtDato).format('LL')}
+                  </Accordion.Header>
+                  <Accordion.Content>
+                    <PvoTilbakemeldingReadOnly
+                      tilbakemeldingsinnhold={vurdering[fieldName]}
+                      sentDate={vurdering.sendtDato}
+                      forPvo={true}
+                      noHeader={true}
+                    />
+                  </Accordion.Content>
+                </Accordion.Item>
+              )
+            }
+          })}
       </Accordion>
     </div>
   )

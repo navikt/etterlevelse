@@ -1,5 +1,6 @@
 'use client'
 
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopToFormValue,
@@ -20,6 +21,7 @@ import TrengerRisikoeierGodkjenningFields from '@/components/PVK/pvkDokumentPage
 import VurdertAvPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoFields'
 import VurdertAvPvoOgTrengerMerArbeidFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/vurdertAvPvoOgTrengerMerArbeidFields'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -38,7 +40,7 @@ import {
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
@@ -56,6 +58,7 @@ import InvolveringSummary from '../../formSummary/involveringSummary'
 import RisikoscenarioEtterTitak from '../../formSummary/risikoscenarioEtterTitak'
 import RisikoscenarioSummary from '../../formSummary/risikoscenarioSummary'
 import TilhorendeDokumentasjonSummary from '../../formSummary/tilhorendeDokumentasjonSummary'
+import { SendInnLagringVellykketAlert } from './sendInnCoponents/SendInnLagringVellykketAlert'
 import GodkjentAvRisikoeierFields from './sendInnCoponents/godkjentAvRisikoeierFields'
 import UnderArbeidFields from './sendInnCoponents/readOnly/underArbeidFields'
 import SendInnErrorSummary from './sendInnCoponents/sendInnErrorSummary'
@@ -77,7 +80,7 @@ type TProps = {
       }
     | undefined
   isPvkKravLoading: boolean
-  relevantVurdering?: IVurdering
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 export const SendInnView: FunctionComponent<TProps> = ({
@@ -93,7 +96,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   codelistUtils,
   pvkKrav,
   isPvkKravLoading,
-  relevantVurdering,
+  pvoTilbakemelding,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
@@ -110,13 +113,22 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
   const [tiltakAnsvarligError, setTiltakAnsvarligError] = useState<string>('')
-  const [tiltakFristError, setTiltakFristError] = useState<string[]>([])
+  const [tiltakFristError, setTiltakFristError] = useState<string>('')
+  const [tiltakFristUtgaattError, setTiltakFristUtgaattError] = useState<string>('')
   const [pvkKravError, setPvkKravError] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
   const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
+  const [savedSuccess, setSavedSuccess] = useState<boolean>(false)
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
+  const [artOgOmfangError, setArtOgOmfangError] = useState<IArtOgOmfangError>({
+    stemmerPersonkategorier: false,
+    personkategoriAntallBeskrivelse: false,
+    tilgangsBeskrivelsePersonopplysningene: false,
+    lagringsBeskrivelsePersonopplysningene: false,
+  })
   const user = useContext(UserContext)
 
   const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
@@ -124,11 +136,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (
       !behandlingensLivslopError &&
+      !artOgOmfangError.stemmerPersonkategorier &&
+      !artOgOmfangError.lagringsBeskrivelsePersonopplysningene &&
+      !artOgOmfangError.tilgangsBeskrivelsePersonopplysningene &&
+      !artOgOmfangError.personkategoriAntallBeskrivelse &&
       risikoscenarioError === '' &&
       savnerVurderingError === '' &&
       tiltakError === '' &&
       tiltakAnsvarligError === '' &&
-      tiltakFristError.length === 0 &&
+      tiltakFristError === '' &&
+      tiltakFristUtgaattError === '' &&
       !medlemError &&
       !avdelingError &&
       !risikoeiereDataError &&
@@ -145,6 +162,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
                 ? response.status
                 : submitedValues.status,
+            berOmNyVurderingFraPvo: submitedValues.berOmNyVurderingFraPvo,
             meldingerTilPvo: submitedValues.meldingerTilPvo,
             merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
             merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
@@ -184,6 +202,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
             setPvkDokument(savedResponse)
             setAngretAvRisikoeier(false)
+            setSavedSuccess(true)
           })
         }
       })
@@ -233,6 +252,46 @@ export const SendInnView: FunctionComponent<TProps> = ({
     } else {
       setBehandlingensLivslopError(false)
     }
+  }
+
+  const artOgOmfangFieldCheck = () => {
+    let stemmerPersonkategorier = false
+    let personkategoriAntallBeskrivelse = false
+    let tilgangsBeskrivelsePersonopplysningene = false
+    let lagringsBeskrivelsePersonopplysningene = false
+
+    if (
+      artOgOmfang.stemmerPersonkategorier === undefined ||
+      artOgOmfang.stemmerPersonkategorier === null
+    ) {
+      stemmerPersonkategorier = true
+    }
+    if (
+      artOgOmfang.personkategoriAntallBeskrivelse === '' ||
+      artOgOmfang.personkategoriAntallBeskrivelse === undefined
+    ) {
+      personkategoriAntallBeskrivelse = true
+    }
+
+    if (
+      artOgOmfang.tilgangsBeskrivelsePersonopplysningene === '' ||
+      artOgOmfang.tilgangsBeskrivelsePersonopplysningene === undefined
+    ) {
+      tilgangsBeskrivelsePersonopplysningene = true
+    }
+    if (
+      artOgOmfang.lagringsBeskrivelsePersonopplysningene === '' ||
+      artOgOmfang.lagringsBeskrivelsePersonopplysningene === undefined
+    ) {
+      lagringsBeskrivelsePersonopplysningene = true
+    }
+
+    setArtOgOmfangError({
+      stemmerPersonkategorier,
+      personkategoriAntallBeskrivelse,
+      tilgangsBeskrivelsePersonopplysningene,
+      lagringsBeskrivelsePersonopplysningene,
+    })
   }
 
   const pvkKravCheck = () => {
@@ -322,20 +381,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
         }
       })
 
-      const errorMessage: string[] = []
       if (amountOfMissingTiltakFrist > 0) {
-        errorMessage.push(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
-      }
+        setTiltakFristError(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
+      } else setTiltakFristError('')
 
       if (amountOfOverdueTiltak > 0) {
-        errorMessage.push(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
-      }
-
-      if (errorMessage.length !== 0) {
-        setTiltakFristError(errorMessage)
-      }
+        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
+      } else setTiltakFristUtgaattError('')
     } else {
-      setTiltakFristError([])
+      setTiltakFristError('')
+      setTiltakFristUtgaattError('')
     }
   }
 
@@ -394,6 +449,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
   useEffect(() => {
     if (
       (!_.isEmpty(formRef?.current?.errors) ||
+        artOgOmfangError.stemmerPersonkategorier ||
+        artOgOmfangError.lagringsBeskrivelsePersonopplysningene ||
+        artOgOmfangError.tilgangsBeskrivelsePersonopplysningene ||
+        artOgOmfangError.personkategoriAntallBeskrivelse ||
         behandlingensLivslopError ||
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
@@ -438,6 +497,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               avdelingFieldCheck()
               medlemErrorCheck()
               behandlingensLivslopFieldCheck()
+              artOgOmfangFieldCheck()
               pvkKravCheck()
               risikoscenarioCheck()
               if (
@@ -491,6 +551,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 />
 
                 <ArtOgOmFangSummary
+                  artOgOmfang={artOgOmfang}
+                  artOgOmfangError={artOgOmfangError}
                   personkategorier={personkategorier}
                   updateTitleUrlAndStep={updateTitleUrlAndStep}
                 />
@@ -514,6 +576,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   tiltakError={tiltakError}
                   tiltakAnsvarligError={tiltakAnsvarligError}
                   tiltakFristError={tiltakFristError}
+                  tiltakFristUtgaattError={tiltakFristUtgaattError}
                 />
 
                 <RisikoscenarioEtterTitak
@@ -539,15 +602,24 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             avdelingError={avdelingError}
                             medlemError={medlemError}
                             behandlingensLivslopError={behandlingensLivslopError}
+                            artOgOmfangError={artOgOmfangError}
                             risikoscenarioError={risikoscenarioError}
                             tiltakError={tiltakError}
                             tiltakAnsvarligError={tiltakAnsvarligError}
                             tiltakFristError={tiltakFristError}
+                            tiltakFristUtgaattError={tiltakFristUtgaattError}
                             pvkKravError={pvkKravError}
                             savnerVurderingError={savnerVurderingError}
                             manglerBehandlingError={manglerBehandlingError}
                             errorSummaryRef={errorSummaryRef}
                           />
+                        }
+                        savedAlert={
+                          <div>
+                            {savedSuccess && (
+                              <SendInnLagringVellykketAlert setSavedSuccessful={setSavedSuccess} />
+                            )}
+                          </div>
                         }
                       />
                     )}
@@ -556,6 +628,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
                       <SendtTilPvoFields
                         pvkDokument={pvkDokument}
+                        pvoTilbakemelding={pvoTilbakemelding}
                         isLoading={isLoading}
                         setFieldValue={setFieldValue}
                         submitForm={submitForm}
@@ -567,10 +640,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     )}
 
                     {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
-                      relevantVurdering && (
+                      pvoTilbakemelding && (
                         <VurdertAvPvoOgTrengerMerArbeidFields
                           pvkDokument={pvkDokument}
-                          relevantVurdering={relevantVurdering}
+                          pvoTilbakemelding={pvoTilbakemelding}
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}
                           initialStatus={initialValues.status}
@@ -584,27 +657,36 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
+                              artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
+                          }
+                          savedAlert={
+                            <div>
+                              {savedSuccess && (
+                                <SendInnLagringVellykketAlert
+                                  setSavedSuccessful={setSavedSuccess}
+                                />
+                              )}
+                            </div>
                           }
                         />
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO &&
-                      relevantVurdering && (
+                      pvoTilbakemelding && (
                         <VurdertAvPvoFields
                           pvkDokument={pvkDokument}
-                          relevantVurdering={relevantVurdering}
+                          pvoTilbakemelding={pvoTilbakemelding}
                           setFieldValue={setFieldValue}
-                          submitForm={submitForm}
-                          initialStatus={initialValues.status}
                           isLoading={isLoading}
                           pvoVurderingList={pvoVurderingList}
                           errorSummaryComponent={
@@ -615,25 +697,36 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
+                              artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
                           }
+                          savedAlert={
+                            <div>
+                              {savedSuccess && (
+                                <SendInnLagringVellykketAlert
+                                  setSavedSuccessful={setSavedSuccess}
+                                />
+                              )}
+                            </div>
+                          }
                         />
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
-                      relevantVurdering && (
+                      pvoTilbakemelding && (
                         <TrengerRisikoeierGodkjenningFields
                           pvkDokument={pvkDokument}
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          relevantVurdering={relevantVurdering}
+                          pvoTilbakemelding={pvoTilbakemelding}
                           isLoading={isLoading}
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}
@@ -648,25 +741,36 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
+                              artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
                           }
+                          savedAlert={
+                            <div>
+                              {savedSuccess && (
+                                <SendInnLagringVellykketAlert
+                                  setSavedSuccessful={setSavedSuccess}
+                                />
+                              )}
+                            </div>
+                          }
                         />
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-                      relevantVurdering && (
+                      pvoTilbakemelding && (
                         <GodkjentAvRisikoeierFields
                           pvkDokument={pvkDokument}
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          relevantVurdering={relevantVurdering}
+                          pvoTilbakemelding={pvoTilbakemelding}
                           isLoading={isLoading}
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}
@@ -679,11 +783,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               risikoeiereDataError={risikoeiereDataError}
                               avdelingError={avdelingError}
                               medlemError={medlemError}
+                              artOgOmfangError={artOgOmfangError}
                               behandlingensLivslopError={behandlingensLivslopError}
                               risikoscenarioError={risikoscenarioError}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
+                              tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}

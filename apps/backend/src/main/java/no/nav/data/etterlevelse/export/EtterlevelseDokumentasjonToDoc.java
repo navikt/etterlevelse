@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.export.domain.EtterlevelseMedKravData;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -27,6 +28,8 @@ import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,7 @@ import java.util.*;
 public class EtterlevelseDokumentasjonToDoc {
     private static final ObjectFactory etterlevelseFactory = Context.getWmlObjectFactory();
 
+    private final PvkDokumentService pvkDokumentService;
     private final KravService kravService;
     private final BehandlingService behandlingService;
 
@@ -74,7 +78,6 @@ public class EtterlevelseDokumentasjonToDoc {
                 } catch (WebClientResponseException.NotFound e) {
                     doc.addText("Fant ikke behandling med ID: " + behandlingId);
                 }
-
             });
         }
 
@@ -98,6 +101,15 @@ public class EtterlevelseDokumentasjonToDoc {
             });
         } else {
             doc.addText("Ikke angitt");
+        }
+
+        doc.addHeading3("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger() != null && !etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger().isEmpty()) {
+            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger().forEach(risikovurdering -> {
+                doc.addMarkdownText("- " + risikovurdering);
+            });
+        } else {
+            doc.addText("Ingen dokumenter lagt til");
         }
     }
 
@@ -249,6 +261,22 @@ public class EtterlevelseDokumentasjonToDoc {
 
         if (withPvkDocument) {
             pvkDokumentToDoc.generateDocForP360(doc, etterlevelseDokumentasjon);
+        } else {
+            doc.addHeading1("Personvernkonsekvensvurdering");
+
+            doc.newLine();
+
+            doc.addHeading3("Personvernkonsekvensvurderingen inneholder:");
+            doc.addListItem("Bør vi gjøre en PVK?", doc.listId++, "pvk_behov");
+            doc.pageBreak();
+
+            var pvkBehovHeading = doc.addHeading2("Bør vi gjøre en PVK?");
+            doc.addBookmark(pvkBehovHeading, "pvk_behov");
+            doc.newLine();
+            PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
+            EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
+            etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
+            pvkDokumentToDoc.generateBehovForPvkSection(doc, pvkDokument, etterlevelseDokumentasjonResponse);
         }
 
 

@@ -9,7 +9,7 @@ import {
 } from '@/util/textEditor/textEditorUtil'
 import { ettlevColors } from '@/util/theme/theme'
 import { RawDraftContentState, convertToRaw } from 'draft-js'
-import { FormikErrors } from 'formik'
+import { FieldMetaProps, FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
 import { useEffect, useState } from 'react'
 import { Editor } from 'react-draft-wysiwyg-next'
@@ -22,6 +22,7 @@ type TTextEditorProps = {
   setValue: (v: string) => void
   height?: string
   errors?: FormikErrors<any>
+  getFieldMeta?: <Value>(name: string) => FieldMetaProps<Value>
   name?: string
   simple?: boolean
   width?: string
@@ -35,6 +36,7 @@ export const TextEditor = ({
   setValue,
   height,
   errors,
+  getFieldMeta,
   name,
   simple,
   width,
@@ -66,38 +68,70 @@ export const TextEditor = ({
             return '\n```'
           },
         },
-        'bgcolor-rgb(252, 221, 205)': {
+        // gul = FFF83B
+        'bgcolor-rgb(255, 248, 59)': {
           open: () => {
-            return `<span style='background-color: rgb(252, 221, 205)'>`
+            return `<span style='background-color: rgb(255, 248, 59)'>`
           },
           close: () => {
             return '</span>'
           },
         },
-        'bgcolor-rgb(255, 217, 230)': {
+        // turkis = 7FF2FF
+        'bgcolor-rgb(127, 242, 255)': {
           open: () => {
-            return `<span style='background-color: rgb(255, 217, 230)'>`
+            return `<span style='background-color: rgb(127, 242, 255)'>`
           },
           close: () => {
             return '</span>'
           },
         },
-        'bgcolor-rgb(235, 222, 252)': {
+        // grønn = 9DFF3B
+        'bgcolor-rgb(157, 255, 59)': {
           open: () => {
-            return `<span style='background-color: rgb(235, 222, 252)'>`
+            return `<span style='background-color: rgb(157, 255, 59)'>`
           },
           close: () => {
             return '</span>'
           },
         },
-        'bgcolor-rgb(215, 215, 215)': {
+        // rosa = FFAFEB
+        'bgcolor-rgb(255, 175, 235)': {
           open: () => {
-            return `<span style='background-color: rgb(215, 215, 215)'>`
+            return `<span style='background-color: rgb(255, 175, 235)'>`
           },
           close: () => {
             return '</span>'
           },
         },
+        // hvit for å kunne fjerne farge
+        'bgcolor-rgb(255, 255, 255)': {
+          open: () => {
+            return `<span style='background-color: rgb(255, 255, 255)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        // oransje = FFC074
+        'bgcolor-rgb(255, 192, 116)': {
+          open: () => {
+            return `<span style='background-color: rgb(255, 192, 116)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+        // mørkelilla = C8CAFF
+        'bgcolor-rgb(200, 202, 255)': {
+          open: () => {
+            return `<span style='background-color: rgb(200, 202, 255)'>`
+          },
+          close: () => {
+            return '</span>'
+          },
+        },
+
         UNDERLINE: {
           open: () => {
             return `<ins>`
@@ -182,7 +216,7 @@ export const TextEditor = ({
     //--------------------------
   }, [])
 
-  const hasError = errors && name && errors[name]
+  const hasError = errors && name && getFieldMeta && getFieldMeta(name).error
 
   return (
     <div>
@@ -243,11 +277,20 @@ export const TextEditor = ({
             },
             colorPicker: {
               colors: [
-                'rgb(252, 221, 205)',
-                'rgb(255, 217, 230)',
-                'rgb(235, 222, 252)',
-                'rgb(215, 215, 215)',
+                // gul = FFF83B
+                'rgb(255, 248, 59)',
+                // turkis = 7FF2FF
+                'rgb(127, 242, 255)',
+                // grønn = 9DFF3B
+                'rgb(157, 255, 59)',
+                // rosa = FFAFEB
+                'rgb(255, 175, 235)',
+                // hvit for å kunne fjerne farge
                 'rgb(255, 255, 255)',
+                // oransje = FFC074
+                'rgb(255, 192, 116)',
+                // mørkelilla = C8CAFF
+                'rgb(200, 202, 255)',
               ],
             },
             //image: { alt: { present: true, mandatory: true }, },

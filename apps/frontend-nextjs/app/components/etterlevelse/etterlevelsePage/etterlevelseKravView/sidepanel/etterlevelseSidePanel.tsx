@@ -7,7 +7,10 @@ import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/krav
 import KravRisikoscenarioReadOnly from '@/components/risikoscenario/readOnly/KravRisikoscenarioReadOnly'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
@@ -60,7 +63,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   useEffect(() => {
     if (
       pvkDokument &&
-      pvkDokument.skalUtforePvk &&
+      pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
       krav.tagger.includes('Personvernkonsekvensvurdering')
     ) {
       setActiveTab('pvkDokumentasjon')
@@ -105,7 +108,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
               }
             />
             {pvkDokument &&
-              pvkDokument.skalUtforePvk &&
+              pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
               krav.tagger.includes('Personvernkonsekvensvurdering') && (
                 <Tabs.Tab
                   className='whitespace-nowrap'
@@ -132,7 +135,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
             </div>
           </Tabs.Panel>
 
-          {pvkDokument && pvkDokument.skalUtforePvk && (
+          {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
             <Tabs.Panel className='overflow-auto h-[90vh]' value='pvkDokumentasjon'>
               <div className='mt-2 p-4 mb-52'>
                 {userHasAccess() && pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (

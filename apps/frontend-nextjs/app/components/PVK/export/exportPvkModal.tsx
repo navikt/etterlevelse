@@ -18,12 +18,7 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
 
   return (
     <div>
-      <Button
-        variant='tertiary'
-        size='small'
-        type='button'
-        onClick={() => setIsExportModalOpen(true)}
-      >
+      <Button variant='tertiary' type='button' onClick={() => setIsExportModalOpen(true)}>
         Eksporter dokumentet
       </Button>
 

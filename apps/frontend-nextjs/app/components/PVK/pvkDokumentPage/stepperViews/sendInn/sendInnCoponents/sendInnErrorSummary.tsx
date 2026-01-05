@@ -1,6 +1,10 @@
+import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  etterlevelseDokumentasjonPvkTabUrl,
+  pvkDokumentasjonTabFilterTiltakUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
@@ -12,12 +16,14 @@ type TProps = {
   risikoeiereDataError: boolean
   avdelingError: boolean
   medlemError: boolean
+  artOgOmfangError: IArtOgOmfangError
   behandlingensLivslopError: boolean
   manglerBehandlingError: boolean
   risikoscenarioError: string
   tiltakError: string
   tiltakAnsvarligError: string
-  tiltakFristError: string[]
+  tiltakFristError: string
+  tiltakFristUtgaattError: string
   pvkKravError: string
   savnerVurderingError: string
   errorSummaryRef: RefObject<HTMLDivElement | null>
@@ -30,23 +36,31 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   avdelingError,
   medlemError,
   behandlingensLivslopError,
+  artOgOmfangError,
   risikoscenarioError,
   tiltakError,
   tiltakAnsvarligError,
   tiltakFristError,
+  tiltakFristUtgaattError,
   pvkKravError,
   savnerVurderingError,
   manglerBehandlingError,
   errorSummaryRef,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const { meldingerTilPvo, ...updateErrors } = errors
   return (
     <div>
-      {(!_.isEmpty(errors) ||
+      {(!_.isEmpty(updateErrors) ||
         pvkKravError !== '' ||
         risikoeiereDataError ||
         avdelingError ||
         medlemError ||
         behandlingensLivslopError ||
+        artOgOmfangError.stemmerPersonkategorier ||
+        artOgOmfangError.personkategoriAntallBeskrivelse ||
+        artOgOmfangError.tilgangsBeskrivelsePersonopplysningene ||
+        artOgOmfangError.lagringsBeskrivelsePersonopplysningene ||
         risikoscenarioError !== '' ||
         tiltakError !== '' ||
         tiltakAnsvarligError !== '' ||
@@ -84,13 +98,51 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
             </ErrorSummary.Item>
           )}
 
-          {Object.entries(errors)
+          {tiltakFristUtgaattError && (
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'alleTiltak')}
+              className='max-w-[75ch]'
+            >
+              {tiltakFristUtgaattError}
+              (åpner i ny fane)
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.stemmerPersonkategorier && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må oppgi om lista over personkategorier stemmer.
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.personkategoriAntallBeskrivelse && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må beskrive hvor mange personer dere behandler personopplysninger om.
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.tilgangsBeskrivelsePersonopplysningene && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må beskrive hvilke roller som skal ha tilgang til personopplysningene, og pr.
+              rolle, hvor mange som skal ha tilgang til hva.
+            </ErrorSummary.Item>
+          )}
+
+          {artOgOmfangError.lagringsBeskrivelsePersonopplysningene && (
+            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+              Dere må beskrive hvordan og hvor lenge personopplysningene skal lagres.
+            </ErrorSummary.Item>
+          )}
+
+          {Object.entries(updateErrors)
             .filter(([, error]) => error)
-            .map(([key, error]) => (
-              <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
-                {error as string}
-              </ErrorSummary.Item>
-            ))}
+            .map(([key, error]) => {
+              return (
+                <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
+                  {error as string}
+                </ErrorSummary.Item>
+              )
+            })}
           {risikoscenarioError !== '' && (
             <ErrorSummary.Item href='#risikoscenarioer' className='max-w-[75ch]'>
               {risikoscenarioError}
@@ -106,16 +158,11 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               {tiltakAnsvarligError}
             </ErrorSummary.Item>
           )}
-          {tiltakFristError.length !== 0 &&
-            tiltakFristError.map((error, index) => (
-              <ErrorSummary.Item
-                href='#tiltak'
-                className='max-w-[75ch]'
-                key={`${index}_tiltakErrorSummary`}
-              >
-                {error}
-              </ErrorSummary.Item>
-            ))}
+          {tiltakFristError !== '' && (
+            <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
+              {tiltakFristError}
+            </ErrorSummary.Item>
+          )}
           {savnerVurderingError !== '' && (
             <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
               {savnerVurderingError}

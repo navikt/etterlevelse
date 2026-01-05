@@ -126,12 +126,10 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     nyEtterlevelse: IEtterlevelse
   ) => {
     if (etterlevelse.id || existingEtterlevelseId) {
-      console.debug('UPDATE')
       await updateEtterlevelse(nyEtterlevelse).then((res) => {
         handleStateChangeOnEtterlevelseResponse(res)
       })
     } else {
-      console.debug('CREATE')
       await createEtterlevelse(nyEtterlevelse).then((res) => {
         handleStateChangeOnEtterlevelseResponse(res)
       })

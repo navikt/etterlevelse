@@ -40,6 +40,9 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
                 .etterlevelseNummer(eDokData.getEtterlevelseNummer())
                 .title(eDokData.getTitle())
                 .beskrivelse(eDokData.getBeskrivelse())
+                .status(eDokData.getStatus())
+                .meldingEtterlevelerTilRisikoeier(eDokData.getMeldingEtterlevelerTilRisikoeier())
+                .meldingRisikoeierTilEtterleveler(eDokData.getMeldingRisikoeierTilEtterleveler())
                 .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
                 .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
                 .behandlingIds(eDokData.getBehandlingIds() != null ? copyOf(eDokData.getBehandlingIds()) : List.of())
@@ -51,6 +54,7 @@ public class EtterlevelseDokumentasjonGraphQlResponse extends EtterlevelseDokume
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
                 .nomAvdelingId(eDokData.getNomAvdelingId())
                 .avdelingNavn(eDokData.getAvdelingNavn())
+                .seksjoner(eDokData.getSeksjoner() != null ? copyOf(eDokData.getSeksjoner()) : List.of())
                 .varslingsadresser(eDokData.getVarslingsadresser() != null ? copyOf(eDokData.getVarslingsadresser()): List.of())
                 .build();
     }

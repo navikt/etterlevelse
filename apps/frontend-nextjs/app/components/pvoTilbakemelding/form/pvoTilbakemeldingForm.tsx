@@ -13,10 +13,11 @@ import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
   ITilbakemeldingsinnhold,
+  IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
@@ -30,6 +31,7 @@ export enum EBidragVerdier {
 }
 
 type TProps = {
+  setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
   pvkDokumentId: string
   innsendingId: number
   fieldName:
@@ -42,6 +44,7 @@ type TProps = {
 }
 
 export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+  setPvoTilbakemelding,
   fieldName,
   pvkDokumentId,
   innsendingId,
@@ -50,6 +53,19 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
 }) => {
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
+  const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
+
+  const resetFormWithNewInitalValue = (relevantVurdering: IVurdering) => {
+    if (fieldName === 'behandlingenslivslop') {
+      return relevantVurdering.behandlingenslivslop
+    } else if (fieldName === 'behandlingensArtOgOmfang') {
+      return relevantVurdering.behandlingensArtOgOmfang
+    } else if (fieldName === 'innvolveringAvEksterne') {
+      return relevantVurdering.innvolveringAvEksterne
+    } else if (fieldName === 'risikoscenarioEtterTiltakk') {
+      return relevantVurdering.risikoscenarioEtterTiltakk
+    }
+  }
 
   const submit = async (tilbakemeldingsInnhold: ITilbakemeldingsinnhold): Promise<void> => {
     const mutatedTilbakemeldingsInnhold: ITilbakemeldingsinnhold = {
@@ -118,7 +134,16 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
             if (response.status === EPvoTilbakemeldingStatus.FERDIG) {
               setIsAlertModalOpen(true)
             } else {
-              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+              await updatePvoTilbakemelding(updatedValues).then((response) => {
+                setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
+                const relevantVurdering = response.vurderinger.filter(
+                  (vurdering) => vurdering.innsendingId === innsendingId
+                )[0]
+                const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
+
+                formRef.current.resetForm({ values: newInitailValues })
+                setSaveSuccessfull(true)
+              })
             }
           }
         })
@@ -151,7 +176,16 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
 
               status: EPvoTilbakemeldingStatus.UNDERARBEID,
             })
-            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+            await createPvoTilbakemelding(createValue).then((response) => {
+              setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
+              const relevantVurdering = response.vurderinger.filter(
+                (vurdering) => vurdering.innsendingId === innsendingId
+              )[0]
+              const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
+
+              formRef.current.resetForm({ values: newInitailValues })
+              setSaveSuccessfull(true)
+            })
           } else {
             console.debug(error)
           }
@@ -192,6 +226,18 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                   </Button>
                 </div>
               </div>
+              {saveSuccessfull && (
+                <div className='my-5'>
+                  <Alert
+                    size='small'
+                    variant='success'
+                    closeButton
+                    onClose={() => setSaveSuccessfull(false)}
+                  >
+                    Lagring vellykket
+                  </Alert>
+                </div>
+              )}
             </div>
 
             <div>

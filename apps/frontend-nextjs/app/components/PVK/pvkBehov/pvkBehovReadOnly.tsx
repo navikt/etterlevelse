@@ -1,5 +1,8 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
@@ -38,13 +41,18 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
     <div className='my-5'>
       <Label>Hvilken vurdering har dere kommet fram til?</Label>
       <DataTextWrapper>
-        {pvkDokument.skalUtforePvk === undefined && 'Ingen vurdering'}
-        {pvkDokument.skalUtforePvk === true && 'Vi skal gjennomføre en PVK'}
-        {pvkDokument.skalUtforePvk === false && 'Vi skal ikke gjennomføre PVK'}
+        {(pvkDokument.pvkVurdering === undefined ||
+          pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED) &&
+          'Ingen vurdering'}
+        {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && 'Vi skal gjennomføre en PVK'}
+        {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE &&
+          'Vi skal ikke gjennomføre PVK'}
       </DataTextWrapper>
     </div>
 
-    {pvkDokument.skalUtforePvk !== undefined && !pvkDokument.skalUtforePvk && (
+    {(pvkDokument.pvkVurdering === undefined ||
+      pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED ||
+      pvkDokument.pvkVurdering !== EPvkVurdering.SKAL_UTFORE) && (
       <div>
         <Label>Begrunnelse av vurderingen</Label>
         <DataTextWrapper>{pvkDokument.pvkVurderingsBegrunnelse}</DataTextWrapper>

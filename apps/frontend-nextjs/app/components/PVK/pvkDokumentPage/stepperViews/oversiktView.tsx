@@ -1,8 +1,10 @@
 'use client'
 
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -46,20 +48,24 @@ type TProps = {
     | undefined
 }
 
-export const getFormStatus = (pvkDokument: IPvkDokument, step: number): JSX.Element | undefined => {
+export const getFormStatus = (
+  pvkDokument: IPvkDokument,
+  artOfOmfang: IBehandlingensArtOgOmfang,
+  step: number
+): JSX.Element | undefined => {
   if (step === 0) {
     if (
-      pvkDokument.stemmerPersonkategorier !== null ||
-      pvkDokument.personkategoriAntallBeskrivelse ||
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene ||
-      pvkDokument.lagringsBeskrivelsePersonopplysningene
+      artOfOmfang.stemmerPersonkategorier !== null ||
+      artOfOmfang.personkategoriAntallBeskrivelse ||
+      artOfOmfang.tilgangsBeskrivelsePersonopplysningene ||
+      artOfOmfang.lagringsBeskrivelsePersonopplysningene
     ) {
       let answered = 0
 
-      if (pvkDokument.stemmerPersonkategorier !== null) answered += 1
-      if (pvkDokument.personkategoriAntallBeskrivelse) answered += 1
-      if (pvkDokument.tilgangsBeskrivelsePersonopplysningene) answered += 1
-      if (pvkDokument.lagringsBeskrivelsePersonopplysningene) answered += 1
+      if (artOfOmfang.stemmerPersonkategorier !== null) answered += 1
+      if (artOfOmfang.personkategoriAntallBeskrivelse) answered += 1
+      if (artOfOmfang.tilgangsBeskrivelsePersonopplysningene) answered += 1
+      if (artOfOmfang.lagringsBeskrivelsePersonopplysningene) answered += 1
 
       return (
         <Tag variant={answered < 4 ? 'warning' : 'success'} size='xsmall'>
@@ -162,6 +168,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
 }) => {
   const pathName = usePathname()
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(pvkDokument.etterlevelseDokumentId)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
@@ -388,7 +395,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
                   href={panelHref}
                   step={index}
                   pvkDokumentStatus={pvkDokument.status}
-                  status={getFormStatus(pvkDokument, index)}
+                  status={getFormStatus(pvkDokument, artOgOmfang, index)}
                   customStatusTag={getCustomStatusTags(index)}
                 />
               )

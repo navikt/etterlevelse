@@ -1,5 +1,6 @@
 'use client'
 
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
@@ -68,6 +69,7 @@ export const EtterlevelseDokumentasjonPage = () => {
 
   const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(relevanteData)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(params.etterlevelseDokumentasjonId)
   const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [kravRisikoscenarioList, setKravRisikoscenarioList] = useState<IRisikoscenario[]>([])
@@ -143,7 +145,6 @@ export const EtterlevelseDokumentasjonPage = () => {
                     E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
                     {morDokumentRelasjon.fromDocumentWithData.title}
                   </Link>
-                  .
                 </BodyShort>
               )}
 
@@ -167,6 +168,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                         <EtterlevelseDokumentasjonButtonGroup
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                          artOgOmfang={artOgOmfang}
                           pvkDokument={pvkDokument}
                           behandlingsLivslop={behandlingsLivslop}
                           risikoscenarioList={risikoscenarioList}

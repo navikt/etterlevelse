@@ -25,27 +25,29 @@ export const SendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
         Tilbakemeldingshistorikk
       </Heading>
       <Accordion>
-        {pvoTilbakemelding.vurderinger.map((vurdering) => {
-          if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
-            return (
-              <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
-                <Accordion.Header>
-                  {vurdering.innsendingId}. tilbakemelding -{' '}
-                  {moment(vurdering.sendtDato).format('LL')}
-                </Accordion.Header>
-                <Accordion.Content>
-                  <SendInnPvoReadOnly
-                    pvkDokument={pvkDokument}
-                    relevantVurdering={vurdering}
-                    pvoVurderingList={pvoVurderingList}
-                    headingLevel='2'
-                    headingSize='small'
-                  />
-                </Accordion.Content>
-              </Accordion.Item>
-            )
-          }
-        })}
+        {pvoTilbakemelding.vurderinger
+          .sort((a, b) => b.innsendingId - a.innsendingId)
+          .map((vurdering) => {
+            if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
+              return (
+                <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
+                  <Accordion.Header>
+                    {vurdering.innsendingId}. tilbakemelding -{' '}
+                    {moment(vurdering.sendtDato).format('LL')}
+                  </Accordion.Header>
+                  <Accordion.Content>
+                    <SendInnPvoReadOnly
+                      pvkDokument={pvkDokument}
+                      relevantVurdering={vurdering}
+                      pvoVurderingList={pvoVurderingList}
+                      headingLevel='2'
+                      headingSize='small'
+                    />
+                  </Accordion.Content>
+                </Accordion.Item>
+              )
+            }
+          })}
       </Accordion>
     </div>
   )

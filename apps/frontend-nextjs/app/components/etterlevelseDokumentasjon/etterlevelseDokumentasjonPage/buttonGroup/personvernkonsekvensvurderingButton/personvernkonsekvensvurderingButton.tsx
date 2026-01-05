@@ -1,6 +1,9 @@
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import {
   pvkDokumentasjonBehandlingsenLivslopUrl,
@@ -52,7 +55,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         Tegn behandlingens livsløp
       </ActionMenu.Item>
       <ActionMenu.Group label=''>
-        {pvkDokument && pvkDokument.skalUtforePvk && (
+        {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
           <ActionMenu.Item
             as='a'
             href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)}

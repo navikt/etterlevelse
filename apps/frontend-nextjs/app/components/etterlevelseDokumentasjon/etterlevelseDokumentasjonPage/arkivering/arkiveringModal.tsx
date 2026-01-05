@@ -22,6 +22,7 @@ export const ArkiveringModal = ({
   const [onlyActiveKrav, setOnlyActiveKrav] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [successMessageOpen, setSuccessMessageOpen] = useState<boolean>(false)
+  const [errorMessageOpen, setErrorMessageOpen] = useState<string | null>(null)
   return (
     <Modal
       open={arkivModal}
@@ -77,6 +78,12 @@ export const ArkiveringModal = ({
           </Alert>
         )}
 
+        {errorMessageOpen && (
+          <Alert variant='error' closeButton onClose={() => setErrorMessageOpen(null)}>
+            {errorMessageOpen}
+          </Alert>
+        )}
+
         <div className='flex justify-end pt-4 mt-4'>
           <Button
             className='mr-2.5'
@@ -94,17 +101,27 @@ export const ArkiveringModal = ({
             variant='primary'
             disabled={isLoading}
             onClick={async () => {
-              setIsLoading(true)
-              await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false)
-                .then((response) => {
-                  setSuccessMessageOpen(true)
-                  setEtterlevelseDokumentasjon({
-                    ...etterlevelseDokumentasjon,
-                    p360CaseNumber: response.p360CaseNumber,
-                    p360Recno: response.p360Recno,
-                  })
+              try {
+                setErrorMessageOpen(null)
+                setIsLoading(true)
+                const response = await arkiver(
+                  etterlevelseDokumentasjon.id,
+                  onlyActiveKrav,
+                  false,
+                  false
+                )
+                setSuccessMessageOpen(true)
+                setEtterlevelseDokumentasjon({
+                  ...etterlevelseDokumentasjon,
+                  p360CaseNumber: response.p360CaseNumber,
+                  p360Recno: response.p360Recno,
                 })
-                .finally(() => setIsLoading(false))
+              } catch (e: any) {
+                const message = e?.response?.data?.message || e?.message || 'Arkivering feilet'
+                setErrorMessageOpen(message)
+              } finally {
+                setIsLoading(false)
+              }
             }}
           >
             Arkiver

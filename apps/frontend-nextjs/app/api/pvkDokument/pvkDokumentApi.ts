@@ -1,6 +1,7 @@
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IMeldingTilPvo,
   IPvkDokument,
   IPvkDokumentListItem,
@@ -141,9 +142,30 @@ export const mapMeldingTilPvoToFormValue = (
   return {
     innsendingId: meldingTilPvo.innsendingId || 1,
     merknadTilPvo: meldingTilPvo.merknadTilPvo || '',
+    endringsNotat: meldingTilPvo.endringsNotat || '',
     sendtTilPvoDato: meldingTilPvo.sendtTilPvoDato || '',
     sendtTilPvoAv: meldingTilPvo.sendtTilPvoAv || '',
   }
+}
+
+export const mapMeldingerTilPvoToFormValue = (
+  pvkDokument: Partial<IPvkDokument>
+): IMeldingTilPvo[] => {
+  const meldingerTilPvo: IMeldingTilPvo[] = []
+  if (pvkDokument.meldingerTilPvo && pvkDokument.meldingerTilPvo.length !== 0) {
+    pvkDokument.meldingerTilPvo.forEach((melding: IMeldingTilPvo) =>
+      meldingerTilPvo.push(mapMeldingTilPvoToFormValue(melding))
+    )
+
+    if (pvkDokument.antallInnsendingTilPvo === pvkDokument.meldingerTilPvo.length) {
+      meldingerTilPvo.push(
+        mapMeldingTilPvoToFormValue({ innsendingId: pvkDokument.antallInnsendingTilPvo + 1 })
+      )
+    }
+  } else {
+    meldingerTilPvo.push(mapMeldingTilPvoToFormValue({}))
+  }
+  return meldingerTilPvo
 }
 
 export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): IPvkDokument => {
@@ -155,17 +177,12 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     status: pvkDokument.status || EPvkDokumentStatus.UNDERARBEID,
     behandlingensLivslopBeskrivelse: pvkDokument.behandlingensLivslopBeskrivelse || '',
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper || [],
-    skalUtforePvk: pvkDokument.skalUtforePvk === undefined ? undefined : pvkDokument.skalUtforePvk,
-    pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',
-    stemmerPersonkategorier:
-      pvkDokument.stemmerPersonkategorier === undefined
+    pvkVurdering: pvkDokument.pvkVurdering || EPvkVurdering.UNDEFINED,
+    berOmNyVurderingFraPvo:
+      pvkDokument.berOmNyVurderingFraPvo === undefined
         ? undefined
-        : pvkDokument.stemmerPersonkategorier,
-    personkategoriAntallBeskrivelse: pvkDokument.personkategoriAntallBeskrivelse || '',
-    tilgangsBeskrivelsePersonopplysningene:
-      pvkDokument.tilgangsBeskrivelsePersonopplysningene || '',
-    lagringsBeskrivelsePersonopplysningene:
-      pvkDokument.lagringsBeskrivelsePersonopplysningene || '',
+        : pvkDokument.berOmNyVurderingFraPvo,
+    pvkVurderingsBegrunnelse: pvkDokument.pvkVurderingsBegrunnelse || '',
     harInvolvertRepresentant:
       pvkDokument.harInvolvertRepresentant === undefined
         ? undefined
@@ -179,9 +196,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
 
-    meldingerTilPvo: pvkDokument.meldingerTilPvo
-      ? pvkDokument.meldingerTilPvo.map(mapMeldingTilPvoToFormValue)
-      : [mapMeldingTilPvoToFormValue({})],
+    meldingerTilPvo: mapMeldingerTilPvoToFormValue(pvkDokument),
     merknadTilRisikoeier: pvkDokument.merknadTilRisikoeier || '',
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
     antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,

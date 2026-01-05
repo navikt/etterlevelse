@@ -16,6 +16,8 @@ const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
 
 const LOVDATA_RUNDSKRIV_PREFIX = 'RUNDSKRIV_'
 
+const LOVDATA_RETTSKILDE_PREFIX = 'RETTSKILDE_'
+
 export interface ICodelistProps {
   fetchData: (refresh?: boolean) => Promise<any>
   isLoaded: () => string | IAllCodelists | undefined
@@ -41,6 +43,7 @@ export interface ICodelistProps {
   ) => { value: string; label: string }[]
   isForskrift: (nationalLawCode?: string) => boolean | '' | undefined
   isRundskriv: (nationalLawCode?: string) => boolean | '' | undefined
+  isRettskilde: (nationalLawCode?: string) => boolean | '' | undefined
   makeValueLabelForAllCodeLists: () => { value: string; label: string }[]
   gjelderForLov: (tema: TTemaCode, lov: TLovCode) => boolean
 }
@@ -100,6 +103,7 @@ export const CodelistContext = createContext<{ utils: ICodelistProps; lists: IAl
     getParsedOptionsFilterOutSelected: () => [],
     isForskrift: () => false,
     isRundskriv: () => false,
+    isRettskilde: () => false,
     makeValueLabelForAllCodeLists: () => [],
     gjelderForLov: () => false,
   },
@@ -257,6 +261,10 @@ export const CodelistProvider: FunctionComponent<TProps> = ({ children }) => {
     return nationalLawCode && nationalLawCode.startsWith(LOVDATA_RUNDSKRIV_PREFIX)
   }
 
+  const isRettskilde = (nationalLawCode?: string): boolean | '' | undefined => {
+    return nationalLawCode && nationalLawCode.startsWith(LOVDATA_RETTSKILDE_PREFIX)
+  }
+
   const makeValueLabelForAllCodeLists = (): IMakeValueLabelForAllCodeListsProps[] => {
     return Object.keys(EListName).map((key: string) => ({ value: key, label: key }))
   }
@@ -291,6 +299,7 @@ export const CodelistProvider: FunctionComponent<TProps> = ({ children }) => {
           getParsedOptionsFilterOutSelected,
           isForskrift,
           isRundskriv,
+          isRettskilde,
           makeValueLabelForAllCodeLists,
           gjelderForLov,
         },
@@ -367,7 +376,17 @@ export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object(
   list: yup.string().required(required),
   code: yup
     .string()
-    .matches(/^[A-Z_]+$/, 'Der er ikke tilatt med små bokstaver, mellomrom, æ, ø og å i code.')
+    .test({
+      name: 'codeFormat',
+      message: 'Der er ikke tilatt med små bokstaver, mellomrom, æ, ø og å i code.',
+      test: function (value) {
+        if (!value) return false
+        // Allow digits when prefix is RETTSKILDE_
+        const allowsDigits = value.startsWith(LOVDATA_RETTSKILDE_PREFIX)
+        const pattern = allowsDigits ? /^[A-Z0-9_]+$/ : /^[A-Z_]+$/
+        return pattern.test(value)
+      },
+    })
     .required(required),
   shortName: yup.string().required(required),
   description: yup.string().required(required),

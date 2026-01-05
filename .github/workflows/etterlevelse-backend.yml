@@ -23,9 +23,9 @@ jobs:
         image: ${{ steps.docker-build-push.outputs.image }}
         telemetry: ${{ steps.docker-build-push.outputs.telemetry }}      
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -62,7 +62,7 @@ jobs:
       contents: read
       actions: read 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         
       - uses: nais/deploy/actions/deploy@v2
         env:
@@ -89,7 +89,7 @@ jobs:
       contents: read
       actions: read 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         
       - uses: nais/deploy/actions/deploy@v2
         env:

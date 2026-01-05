@@ -1,6 +1,7 @@
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjonWithRelation } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
+  EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -126,6 +127,11 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   version: -1,
   title: etterlevelseDokumentasjon.title || '',
   beskrivelse: etterlevelseDokumentasjon.beskrivelse || '',
+  status: etterlevelseDokumentasjon.status || EEtterlevelseDokumentasjonStatus.UNDER_ARBEID,
+  meldingEtterlevelerTilRisikoeier:
+    etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier || '',
+  meldingRisikoeierTilEtterleveler:
+    etterlevelseDokumentasjon.meldingRisikoeierTilEtterleveler || '',
   gjenbrukBeskrivelse: etterlevelseDokumentasjon.gjenbrukBeskrivelse || '',
   tilgjengeligForGjenbruk: etterlevelseDokumentasjon.tilgjengeligForGjenbruk || false,
   behandlingIds: etterlevelseDokumentasjon.behandlingIds || [],
@@ -141,6 +147,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   risikoeiere: etterlevelseDokumentasjon.risikoeiere || [],
   nomAvdelingId: etterlevelseDokumentasjon.nomAvdelingId || '',
   avdelingNavn: etterlevelseDokumentasjon.avdelingNavn || '',
+  seksjoner: etterlevelseDokumentasjon.seksjoner || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   resourcesData: etterlevelseDokumentasjon.resourcesData || [],
   risikoeiereData: etterlevelseDokumentasjon.risikoeiereData || [],

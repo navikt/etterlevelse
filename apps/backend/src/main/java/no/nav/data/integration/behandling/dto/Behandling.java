@@ -9,6 +9,7 @@ import lombok.Singular;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.integration.team.dto.TeamResponse;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data

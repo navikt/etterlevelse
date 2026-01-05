@@ -72,7 +72,7 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
                 <div>
                   {behandlingensLivslopError && (
                     <FormAlert>
-                      Behandlingens livsløp må få minst én opplastet tegning eller en skriftlig
+                      Behandlingens livsløp må få minst en opplastet tegning eller en skriftlig
                       beskrivelse
                     </FormAlert>
                   )}

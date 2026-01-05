@@ -26,6 +26,7 @@ import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +61,7 @@ public class EtterlevelseDokumentasjonService {
     private final TeamcatResourceClient teamcatResourceClient;
     private final DocumentRelationService documentRelationService;
     private final BehandlingensLivslopService behandlingensLivslopService;
+    private final BehandlingensArtOgOmfangService behandlingensArtOgOmfangService;
     private final PvkDokumentService pvkDokumentService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
 
@@ -186,6 +188,12 @@ public class EtterlevelseDokumentasjonService {
         if (pvkDokument.isPresent()) {
             log.info("deleting pvkDokument and all children connected to etterlevelse dokumentasjon with id={}", id);
             pvkDokumentService.deletePvkAndAllChildren(pvkDokument.get().getId());
+        }
+
+        var artOgOmfang = behandlingensArtOgOmfangService.getByEtterlevelseDokumentasjonId(id);
+        if (artOgOmfang.isPresent()) {
+            log.info("deleting behandlingens art og omfang connected to etterlevelse dokumentasjon with id={}", id);
+            behandlingensArtOgOmfangService.delete(artOgOmfang.get().getId());
         }
 
         return delete(id);

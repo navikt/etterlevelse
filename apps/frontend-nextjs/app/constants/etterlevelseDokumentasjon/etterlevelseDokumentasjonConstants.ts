@@ -15,6 +15,9 @@ export interface IEtterlevelseDokumentasjon {
   version: number
   title: string
   beskrivelse: string
+  status: EEtterlevelseDokumentasjonStatus
+  meldingEtterlevelerTilRisikoeier?: string
+  meldingRisikoeierTilEtterleveler?: string
   tilgjengeligForGjenbruk: boolean
   gjenbrukBeskrivelse: string
   behandlingIds: string[]
@@ -26,6 +29,7 @@ export interface IEtterlevelseDokumentasjon {
   risikoeiere: string[]
   nomAvdelingId?: string
   avdelingNavn?: string
+  seksjoner: INomSeksjon[]
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]
@@ -38,6 +42,12 @@ export interface IEtterlevelseDokumentasjon {
   risikovurderinger: string[]
   p360Recno: number
   p360CaseNumber: string
+}
+
+export enum EEtterlevelseDokumentasjonStatus {
+  UNDER_ARBEID = 'UNDER_ARBEID',
+  SENDT_TIL_GODKJENNING_TIL_RISIKOEIER = 'SENDT_TIL_GODKJENNING_TIL_RISIKOEIER',
+  GODKJENT_AV_RISIKOEIER = 'GODKJENT_AV_RISIKOEIER',
 }
 
 export type TEtterlevelseDokumentasjonQL = TReplace<
@@ -65,4 +75,9 @@ export interface ILovStats {
   relevantKrav: TKravQL[]
   irrelevantKrav: TKravQL[]
   utgaattKrav: TKravQL[]
+}
+
+export interface INomSeksjon {
+  nomSeksjonId: string
+  nomSeksjonName: string
 }

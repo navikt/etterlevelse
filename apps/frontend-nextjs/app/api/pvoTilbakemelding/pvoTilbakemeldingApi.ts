@@ -5,8 +5,10 @@ import {
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
+import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { getPvkDokument } from '../pvkDokument/pvkDokumentApi'
 
 export const getAllPvoTilbakemelding = async () => {
   const pageSize = 100
@@ -55,9 +57,21 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
     setIsLoading(true)
     if (pvkDokumentId) {
       ;(async () => {
-        await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId).then(async (pvoTilbakemelding) => {
-          setData(mapPvoTilbakemeldingToFormValue(pvoTilbakemelding))
-          setIsLoading(false)
+        await getPvkDokument(pvkDokumentId).then(async (pvkDokument) => {
+          const antallInnsending = pvkDokument.antallInnsendingTilPvo
+
+          await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId).then(
+            async (pvoTilbakemelding) => {
+              const formValuePvo = pvoTilbakemelding
+
+              if (antallInnsending > pvoTilbakemelding.vurderinger.length) {
+                formValuePvo.vurderinger.push(createNewPvoVurderning(antallInnsending))
+              }
+
+              setData(mapPvoTilbakemeldingToFormValue(formValuePvo))
+              setIsLoading(false)
+            }
+          )
         })
       })()
     }
@@ -113,8 +127,12 @@ export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurder
     sendtDato: vurdering.sendtDato || '',
     ansvarlig: vurdering.ansvarlig || [],
     ansvarligData: vurdering.ansvarligData || [],
-    arbeidGarVidere: vurdering.arbeidGarVidere,
-    behovForForhandskonsultasjon: vurdering.behovForForhandskonsultasjon,
+    arbeidGarVidere:
+      vurdering.arbeidGarVidere === undefined ? undefined : vurdering.arbeidGarVidere,
+    behovForForhandskonsultasjon:
+      vurdering.behovForForhandskonsultasjon === undefined
+        ? undefined
+        : vurdering.behovForForhandskonsultasjon,
     arbeidGarVidereBegrunnelse: vurdering.arbeidGarVidereBegrunnelse || '',
     behovForForhandskonsultasjonBegrunnelse:
       vurdering.behovForForhandskonsultasjonBegrunnelse || '',
