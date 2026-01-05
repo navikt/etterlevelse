@@ -37,7 +37,7 @@
         <jetbrains.annotation.version>26.0.2-1</jetbrains.annotation.version>
 
         <!-- Test -->
-        <testcontainers.version>1.21.3</testcontainers.version>
+        <testcontainers.version>2.0.2</testcontainers.version>
         <wiremock.version>3.0.1</wiremock.version>
         <docx4j.version>11.5.5</docx4j.version>
 
@@ -327,6 +327,7 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <version>1.21.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
