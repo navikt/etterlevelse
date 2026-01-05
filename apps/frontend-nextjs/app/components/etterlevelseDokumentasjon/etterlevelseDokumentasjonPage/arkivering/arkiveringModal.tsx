@@ -101,27 +101,22 @@ export const ArkiveringModal = ({
             variant='primary'
             disabled={isLoading}
             onClick={async () => {
-              try {
-                setErrorMessageOpen(null)
-                setIsLoading(true)
-                const response = await arkiver(
-                  etterlevelseDokumentasjon.id,
-                  onlyActiveKrav,
-                  false,
-                  false
-                )
-                setSuccessMessageOpen(true)
-                setEtterlevelseDokumentasjon({
-                  ...etterlevelseDokumentasjon,
-                  p360CaseNumber: response.p360CaseNumber,
-                  p360Recno: response.p360Recno,
+              setErrorMessageOpen(null)
+              setIsLoading(true)
+              await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false)
+                .then((response) => {
+                  setSuccessMessageOpen(true)
+                  setEtterlevelseDokumentasjon({
+                    ...etterlevelseDokumentasjon,
+                    p360CaseNumber: response.p360CaseNumber,
+                    p360Recno: response.p360Recno,
+                  })
                 })
-              } catch (e: any) {
-                const message = e?.response?.data?.message || e?.message || 'Arkivering feilet'
-                setErrorMessageOpen(message)
-              } finally {
-                setIsLoading(false)
-              }
+                .catch((e) => {
+                  const message = e?.response?.data?.message || e?.message || 'Arkivering feilet'
+                  setErrorMessageOpen(message)
+                })
+                .finally(() => setIsLoading(false))
             }}
           >
             Arkiver
