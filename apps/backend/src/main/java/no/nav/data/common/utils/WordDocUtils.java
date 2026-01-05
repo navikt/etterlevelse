@@ -772,7 +772,7 @@ public class WordDocUtils {
 
         behandlingList.forEach(behandling -> {
             if (behandling != null) {
-                if (behandling.getPolicies().isEmpty()) {
+                if (behandling.getPolicies() == null || behandling.getPolicies().isEmpty()) {
                     manglerOpplysningstyper.set(true);
                 } else {
                     alleOpplysningstyper.addAll(behandling.getPolicies());
