@@ -78,7 +78,6 @@ public class EtterlevelseDokumentasjonToDoc {
                 } catch (WebClientResponseException.NotFound e) {
                     doc.addText("Fant ikke behandling med ID: " + behandlingId);
                 }
-
             });
         }
 

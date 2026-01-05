@@ -771,14 +771,16 @@ public class WordDocUtils {
         AtomicBoolean manglerOpplysningstyper = new AtomicBoolean(false);
 
         behandlingList.forEach(behandling -> {
-            if (behandling.getPolicies().isEmpty()) {
-                manglerOpplysningstyper.set(true);
-            } else {
-                alleOpplysningstyper.addAll(behandling.getPolicies());
-            }
+            if (behandling != null) {
+                if (behandling.getPolicies().isEmpty()) {
+                    manglerOpplysningstyper.set(true);
+                } else {
+                    alleOpplysningstyper.addAll(behandling.getPolicies());
+                }
 
-            alleProfilering.add(behandling.getProfilering());
-            alleAutomatiskBehandling.add(behandling.getAutomatiskBehandling());
+                alleProfilering.add(behandling.getProfilering());
+                alleAutomatiskBehandling.add(behandling.getAutomatiskBehandling());
+            }
         });
 
         var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
