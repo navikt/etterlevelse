@@ -789,7 +789,7 @@ public class WordDocUtils {
         newLine();
         if (alleProfilering.contains(true)) {
             addMarkdownText("- **Det gjelder** profilering");
-        } else if (alleProfilering.stream().filter(value -> value.equals(false)).toList().size() == alleProfilering.size()) {
+        } else if (alleProfilering.stream().filter(value -> value != null && value.equals(false)).toList().size() == alleProfilering.size()) {
             addMarkdownText("- **Det gjelder ikke** profilering");
         } else if (alleProfilering.contains(null)) {
             addMarkdownText("- Mangler informasjon for å vite om profilering");
@@ -797,7 +797,7 @@ public class WordDocUtils {
 
         if (alleAutomatiskBehandling.contains(true)) {
             addMarkdownText("- **Det gjelder** automatisert behandling");
-        } else if (alleAutomatiskBehandling.stream().filter(value -> value.equals(false)).toList().size() == alleAutomatiskBehandling.size()) {
+        } else if (alleAutomatiskBehandling.stream().filter(value -> value != null && value.equals(false)).toList().size() == alleAutomatiskBehandling.size()) {
             addMarkdownText("- **Det gjelder ikke** automatisert behandling");
         } else if (alleAutomatiskBehandling.contains(null)) {
             addMarkdownText("- Mangler informasjon for å vite om automatisert behandling");
