@@ -345,22 +345,26 @@ export const BehandlingensLivslopPage = () => {
                     >
                       Gå til Temaoversikt
                     </Button>
-                    <Button
-                      icon={<ChevronRightIcon aria-hidden />}
-                      iconPosition='right'
-                      type='button'
-                      variant={'tertiary'}
-                      onClick={() => {
-                        if (formRef.current.dirty) {
-                          setIsUnsavedModalOpen(true)
-                          setUrlToNavigate(getPvkLink(etterlevelseDokumentasjon.id))
-                        } else {
-                          router.push(getPvkLink(etterlevelseDokumentasjon.id))
-                        }
-                      }}
-                    >
-                      {pvkDokument ? 'PVK-Oversikt' : 'Vurder behov for PVK'}
-                    </Button>
+                    {!etterlevelseDokumentasjon.irrelevansFor.some(
+                      (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
+                    ) && (
+                      <Button
+                        icon={<ChevronRightIcon aria-hidden />}
+                        iconPosition='right'
+                        type='button'
+                        variant={'tertiary'}
+                        onClick={() => {
+                          if (formRef.current.dirty) {
+                            setIsUnsavedModalOpen(true)
+                            setUrlToNavigate(getPvkLink(etterlevelseDokumentasjon.id))
+                          } else {
+                            router.push(getPvkLink(etterlevelseDokumentasjon.id))
+                          }
+                        }}
+                      >
+                        {pvkDokument ? 'PVK-Oversikt' : 'Vurder behov for PVK'}
+                      </Button>
+                    )}
                   </StickyFooterButtonLayout>
                 </div>
               )}

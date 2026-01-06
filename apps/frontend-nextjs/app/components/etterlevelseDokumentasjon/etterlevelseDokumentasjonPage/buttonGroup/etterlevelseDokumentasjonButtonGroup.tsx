@@ -118,21 +118,25 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
           </Button>
         )}
-        <Button
-          onClick={() => {
-            router.push(
-              pvkDokumentasjonPvkBehovUrl(
-                etterlevelseDokumentasjon.id,
-                pvkDokument ? pvkDokument.id : 'ny'
+        {!etterlevelseDokumentasjon.irrelevansFor.some(
+          (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
+        ) && (
+          <Button
+            onClick={() => {
+              router.push(
+                pvkDokumentasjonPvkBehovUrl(
+                  etterlevelseDokumentasjon.id,
+                  pvkDokument ? pvkDokument.id : 'ny'
+                )
               )
-            )
-          }}
-          size='small'
-          variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
-          className='whitespace-nowrap'
-        >
-          {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
-        </Button>
+            }}
+            size='small'
+            variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
+            className='whitespace-nowrap'
+          >
+            {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
+          </Button>
+        )}
       </>
 
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
