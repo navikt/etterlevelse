@@ -4,7 +4,7 @@ import { arkiver } from '@/api/p360/p360Api'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
 import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
-import SendInnTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/sendInnTilbakemeldingsHistorikk'
+import SendInnTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/sendInnTilbakemeldingsHistorikk'
 import {
   FieldRadioLayout,
   IndentLayoutTextField,

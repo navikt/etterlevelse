@@ -1,23 +1,23 @@
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Accordion, Heading } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
-import { SendInnPvoReadOnly } from '../readOnly/sendInnPvoReadOnly'
+import TilbakemeldingsHistorikkContent from './tilbakemeldingsHistorikkContent'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
+  fieldName:
+    | 'behandlingenslivslop'
+    | 'behandlingensArtOgOmfang'
+    | 'innvolveringAvEksterne'
+    | 'risikoscenarioEtterTiltakk'
   relevantVurderingsInnsendingId: number
-  pvkDokument: IPvkDokument
-  pvoVurderingList: ICode[]
 }
 
-export const SendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
+export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
+  fieldName,
   relevantVurderingsInnsendingId,
-  pvkDokument,
-  pvoVurderingList,
 }) => {
   return (
     <div>
@@ -36,12 +36,10 @@ export const SendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                     {moment(vurdering.sendtDato).format('LL')}
                   </Accordion.Header>
                   <Accordion.Content>
-                    <SendInnPvoReadOnly
-                      pvkDokument={pvkDokument}
-                      relevantVurdering={vurdering}
-                      pvoVurderingList={pvoVurderingList}
-                      headingLevel='2'
-                      headingSize='small'
+                    <TilbakemeldingsHistorikkContent
+                      tilbakemeldingsinnhold={vurdering[fieldName]}
+                      forPvo={true}
+                      noHeader={true}
                     />
                   </Accordion.Content>
                 </Accordion.Item>
@@ -53,4 +51,4 @@ export const SendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   )
 }
 
-export default SendInnTilbakemeldingsHistorikk
+export default TilbakemeldingsHistorikk

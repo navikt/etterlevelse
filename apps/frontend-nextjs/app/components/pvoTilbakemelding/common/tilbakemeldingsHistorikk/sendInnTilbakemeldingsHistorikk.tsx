@@ -1,23 +1,23 @@
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Accordion, Heading } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
-import PvoTilbakemeldingReadOnly from '../readOnly/pvoTilbakemeldingReadOnly'
+import { SendInnPvoReadOnly } from '../../readOnly/sendInnPvoReadOnly'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
-  fieldName:
-    | 'behandlingenslivslop'
-    | 'behandlingensArtOgOmfang'
-    | 'innvolveringAvEksterne'
-    | 'risikoscenarioEtterTiltakk'
   relevantVurderingsInnsendingId: number
+  pvkDokument: IPvkDokument
+  pvoVurderingList: ICode[]
 }
 
-export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
+export const SendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
-  fieldName,
   relevantVurderingsInnsendingId,
+  pvkDokument,
+  pvoVurderingList,
 }) => {
   return (
     <div>
@@ -36,11 +36,12 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                     {moment(vurdering.sendtDato).format('LL')}
                   </Accordion.Header>
                   <Accordion.Content>
-                    <PvoTilbakemeldingReadOnly
-                      tilbakemeldingsinnhold={vurdering[fieldName]}
-                      sentDate={vurdering.sendtDato}
-                      forPvo={true}
-                      noHeader={true}
+                    <SendInnPvoReadOnly
+                      pvkDokument={pvkDokument}
+                      relevantVurdering={vurdering}
+                      pvoVurderingList={pvoVurderingList}
+                      headingLevel='2'
+                      headingSize='small'
                     />
                   </Accordion.Content>
                 </Accordion.Item>
@@ -52,4 +53,4 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   )
 }
 
-export default TilbakemeldingsHistorikk
+export default SendInnTilbakemeldingsHistorikk
