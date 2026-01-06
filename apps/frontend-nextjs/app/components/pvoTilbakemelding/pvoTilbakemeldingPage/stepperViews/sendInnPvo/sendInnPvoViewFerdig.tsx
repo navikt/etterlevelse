@@ -3,7 +3,7 @@
 import { arkiver } from '@/api/p360/p360Api'
 import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
 import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
-import SendInnTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/sendInnTilbakemeldingsHistorikk'
+import PvoSendInnTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoSendInnTilbakemeldingsHistorikk'
 import PvoFormButtons from '@/components/pvoTilbakemelding/form/pvoFormButtons'
 import { SendInnPvoReadOnly } from '@/components/pvoTilbakemelding/readOnly/sendInnPvoReadOnly'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -59,7 +59,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
         <div className='max-w-[75ch]'>
           {pvkDokument.antallInnsendingTilPvo > 1 && (
             <div className='mt-5 mb-10'>
-              <SendInnTilbakemeldingsHistorikk
+              <PvoSendInnTilbakemeldingsHistorikk
                 pvkDokument={pvkDokument}
                 pvoVurderingList={pvoVurderingList}
                 pvoTilbakemelding={pvoTilbakemelding}

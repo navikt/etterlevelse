@@ -16,7 +16,7 @@ type TProps = {
   noHeader?: boolean
 }
 
-export const TilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
+export const PvoTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
   tilbakemeldingsinnhold,
   forPvo,
   noHeader,
@@ -80,4 +80,4 @@ export const TilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
   </div>
 )
 
-export default TilbakemeldingsHistorikkContent
+export default PvoTilbakemeldingsHistorikkContent

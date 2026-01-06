@@ -17,7 +17,7 @@ import {
 import { Loader } from '@navikt/ds-react'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
-import TilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/tilbakemeldingsHistorikk'
+import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
 import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
@@ -104,7 +104,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
 
                   {pvkDokument.antallInnsendingTilPvo > 1 && (
                     <div className='mt-10'>
-                      <TilbakemeldingsHistorikk
+                      <PvoTilbakemeldingsHistorikk
                         pvoTilbakemelding={pvoTilbakemelding}
                         fieldName='behandlingenslivslop'
                         relevantVurderingsInnsendingId={relevantVurdering.innsendingId}

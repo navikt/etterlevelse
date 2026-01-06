@@ -8,7 +8,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
-import TilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/tilbakemeldingsHistorikk'
+import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
 import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
@@ -70,7 +70,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
 
             {pvkDokument.antallInnsendingTilPvo > 1 && (
               <div className='mt-10'>
-                <TilbakemeldingsHistorikk
+                <PvoTilbakemeldingsHistorikk
                   pvoTilbakemelding={pvoTilbakemelding}
                   fieldName='innvolveringAvEksterne'
                   relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
