@@ -63,15 +63,19 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
             {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
           </ActionMenu.Item>
         )}
-        <ActionMenu.Item
-          as='a'
-          href={pvkDokumentasjonPvkBehovUrl(
-            etterlevelseDokumentasjon.id,
-            pvkDokument ? pvkDokument.id : 'ny'
-          )}
-        >
-          {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
-        </ActionMenu.Item>
+        {!etterlevelseDokumentasjon.irrelevansFor.some(
+          (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
+        ) && (
+          <ActionMenu.Item
+            as='a'
+            href={pvkDokumentasjonPvkBehovUrl(
+              etterlevelseDokumentasjon.id,
+              pvkDokument ? pvkDokument.id : 'ny'
+            )}
+          >
+            {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
+          </ActionMenu.Item>
+        )}
       </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
