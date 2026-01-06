@@ -122,6 +122,8 @@ const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakem
 export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurdering => {
   return {
     innsendingId: vurdering.innsendingId || 1,
+
+    internDiskusjon: vurdering.internDiskusjon || '',
     merknadTilEtterleverEllerRisikoeier: vurdering.merknadTilEtterleverEllerRisikoeier || '',
     sendtDato: vurdering.sendtDato || '',
     ansvarlig: vurdering.ansvarlig || [],
@@ -171,7 +173,7 @@ export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurder
         vurdering.tilhorendeDokumentasjon?.kravDokumentasjonTilstrekkelig || '',
       kravDokumentasjonTilbakemelding:
         vurdering.tilhorendeDokumentasjon?.kravDokumentasjonTilbakemelding || '',
-      KravInternDiskusjon: vurdering.tilhorendeDokumentasjon?.KravInternDiskusjon || '',
+      kravInternDiskusjon: vurdering.tilhorendeDokumentasjon?.kravInternDiskusjon || '',
 
       risikovurderingTilstrekkelig:
         vurdering.tilhorendeDokumentasjon?.risikovurderingTilstrekkelig || '',

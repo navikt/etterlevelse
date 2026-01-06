@@ -17,6 +17,8 @@ public class Vurdering {
     private TilhorendeDokumentasjonTilbakemelding tilhorendeDokumentasjon;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
+
+    private String internDiskusjon;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
     private List<String> ansvarlig;

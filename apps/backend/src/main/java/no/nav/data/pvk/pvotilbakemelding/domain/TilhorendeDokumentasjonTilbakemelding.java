@@ -20,7 +20,7 @@ public class TilhorendeDokumentasjonTilbakemelding {
 
     private String kravDokumentasjonTilstrekkelig;
     private String kravDokumentasjonTilbakemelding;
-    private String KravInternDiskusjon;
+    private String kravInternDiskusjon;
 
     private String risikovurderingTilstrekkelig;
     private String risikovurderingTilbakemelding;

@@ -300,6 +300,7 @@ type PvoTilbakemelding {
 
 type Vurdering {
     innsendingId: Int!
+    internDiskusjon: String
     behandlingenslivslop: Tilbakemeldingsinnhold!
     behandlingensArtOgOmfang: Tilbakemeldingsinnhold!
     tilhorendeDokumentasjon: TilhorendeDokumentasjonTilbakemelding!
@@ -332,10 +333,15 @@ type TilhorendeDokumentasjonTilbakemelding {
     internDiskusjon: String
     behandlingskatalogDokumentasjonTilstrekkelig: String
     behandlingskatalogDokumentasjonTilbakemelding: String
+    behandlingsInternDiskusjon: String
+
     kravDokumentasjonTilstrekkelig: String
     kravDokumentasjonTilbakemelding: String
+    kravInternDiskusjon: String
+
     risikovurderingTilstrekkelig: String
     risikovurderingTilbakemelding: String
+    risikovurderingInternDiskusjon: String
 }
 
 enum PvoTilbakemeldingStatus {

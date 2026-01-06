@@ -11,6 +11,7 @@ export const addNewVurderingToPvoTilbakemelding = (
 export const createNewPvoVurderning = (newInnsendingId: number) => {
   return {
     innsendingId: newInnsendingId,
+    internDiskusjon: '',
     merknadTilEtterleverEllerRisikoeier: '',
     sendtDato: '',
     ansvarlig: [],
@@ -46,7 +47,7 @@ export const createNewPvoVurderning = (newInnsendingId: number) => {
 
       kravDokumentasjonTilstrekkelig: '',
       kravDokumentasjonTilbakemelding: '',
-      KravInternDiskusjon: '',
+      kravInternDiskusjon: '',
 
       risikovurderingTilstrekkelig: '',
       risikovurderingTilbakemelding: '',

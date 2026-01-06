@@ -28,6 +28,8 @@ public class VurderingRequest  implements Validated {
     private TilhorendeDokumentasjonTilbakemelding tilhorendeDokumentasjon;
     private Tilbakemeldingsinnhold innvolveringAvEksterne;
     private Tilbakemeldingsinnhold risikoscenarioEtterTiltakk;
+
+    private String internDiskusjon;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
     private List<String> ansvarlig;
@@ -60,7 +62,10 @@ public class VurderingRequest  implements Validated {
 
         getRisikoscenarioEtterTiltakk().setTilbakemeldingTilEtterlevere(trimToNull(risikoscenarioEtterTiltakk.getTilbakemeldingTilEtterlevere()));
         getRisikoscenarioEtterTiltakk().setInternDiskusjon(trimToNull(risikoscenarioEtterTiltakk.getInternDiskusjon()));
+
+        setInternDiskusjon(trimToNull(internDiskusjon));
         setMerknadTilEtterleverEllerRisikoeier(trimToNull(merknadTilEtterleverEllerRisikoeier));
+
         setSendtDato(sendtDato);
         setAnsvarlig(copyOf(ansvarlig));
 
@@ -89,6 +94,8 @@ public class VurderingRequest  implements Validated {
                 .tilhorendeDokumentasjon(tilhorendeDokumentasjon)
                 .innvolveringAvEksterne(innvolveringAvEksterne)
                 .risikoscenarioEtterTiltakk(risikoscenarioEtterTiltakk)
+
+                .internDiskusjon(internDiskusjon)
                 .merknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier)
                 .sendtDato(sendtDato)
                 .ansvarlig(copyOf(ansvarlig))
@@ -111,6 +118,8 @@ public class VurderingRequest  implements Validated {
                 .tilhorendeDokumentasjon(vurdering.getTilhorendeDokumentasjon())
                 .innvolveringAvEksterne(vurdering.getInnvolveringAvEksterne())
                 .risikoscenarioEtterTiltakk(vurdering.getRisikoscenarioEtterTiltakk())
+
+                .internDiskusjon(vurdering.getInternDiskusjon())
                 .merknadTilEtterleverEllerRisikoeier(vurdering.getMerknadTilEtterleverEllerRisikoeier())
                 .sendtDato(vurdering.getSendtDato())
                 .ansvarlig(copyOf(vurdering.getAnsvarlig()))

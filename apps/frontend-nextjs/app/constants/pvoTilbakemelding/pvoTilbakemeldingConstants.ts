@@ -16,6 +16,8 @@ export interface IVurdering {
   tilhorendeDokumentasjon: ITilhorendeDokumentasjonTilbakemelding
   innvolveringAvEksterne: ITilbakemeldingsinnhold
   risikoscenarioEtterTiltakk: ITilbakemeldingsinnhold
+
+  internDiskusjon: string
   merknadTilEtterleverEllerRisikoeier: string
   sendtDato: string
   ansvarlig: string[]
@@ -59,7 +61,7 @@ export interface ITilhorendeDokumentasjonTilbakemelding {
 
   kravDokumentasjonTilstrekkelig: string
   kravDokumentasjonTilbakemelding: string
-  KravInternDiskusjon: string
+  kravInternDiskusjon: string
 
   risikovurderingTilstrekkelig: string
   risikovurderingTilbakemelding: string
