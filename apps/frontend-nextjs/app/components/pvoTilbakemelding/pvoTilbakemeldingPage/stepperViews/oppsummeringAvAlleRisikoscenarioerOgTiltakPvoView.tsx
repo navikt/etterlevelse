@@ -29,7 +29,7 @@ import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
-import TilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk'
+import TilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/tilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
 import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
