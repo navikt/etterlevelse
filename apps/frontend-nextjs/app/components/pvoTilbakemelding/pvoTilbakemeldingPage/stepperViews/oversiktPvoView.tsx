@@ -39,6 +39,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { InnsendingTag } from '../../common/pvoStatusTags'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import { PvoTilbakemeldingAnsvarligForm } from '../../form/pvoTilbakemeldingAnsvarligForm'
+import { InnsendingHistorikk } from './oversiktPvoComponents/InnsendingsHistorikk'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -325,6 +326,13 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
             })}
           </FormSummary.Answers>
         </FormSummary>
+
+        <div className='my-5'>
+          <InnsendingHistorikk
+            vurderinger={pvoTilbakemelding.vurderinger}
+            meldingerTilPvo={pvkDokument.meldingerTilPvo}
+          />
+        </div>
 
         <List className='w-full'>
           <Heading size='medium' className='mb-3'>
