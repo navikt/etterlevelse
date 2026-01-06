@@ -20,11 +20,15 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
         <List>
           {meldingerTilPvo.map((melding, index) => {
             const melderNavm = melding.sendtTilPvoAv.split(' - ')[1]
-            const vurdering = vurderinger.filter(
-              (vurdering) => vurdering.innsendingId === melding.innsendingId
-            )
 
             if (melding.sendtTilPvoDato) {
+              const vurdering = vurderinger.filter(
+                (vurdering) => vurdering.innsendingId === melding.innsendingId
+              )
+              const sendtAvPvo =
+                vurdering.length !== 0 && vurdering[0].sendtAv !== ''
+                  ? vurdering[0].sendtAv.split(' - ')[1]
+                  : 'Personvernombudet'
               return (
                 <>
                   <List.Item key={`${index}_innsending_${melding.innsendingId}`}>
@@ -34,7 +38,8 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
 
                   {vurdering.length !== 0 && (
                     <ListItem key={`${index}_innsending_${melding.innsendingId}_vurdering`}>
-                      {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')} sendt i retur av WIP
+                      {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')} tilbakemelding fra{' '}
+                      {sendtAvPvo}
                     </ListItem>
                   )}
                 </>
