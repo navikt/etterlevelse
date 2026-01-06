@@ -2,6 +2,7 @@ import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/person
 import { EPvoTilbakemeldingStatus } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Detail, Tag } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { InnsendingTag } from './pvoStatusTags'
 
 type TProps = {
   antallInnsendingTilPvo: number
@@ -44,11 +45,7 @@ export const PvoStatusView: FunctionComponent<TProps> = ({
   const getStatusDisplay = (variant: any) => (
     <div className='flex gap-2'>
       {antallInnsendingTilPvo > 1 && (
-        <Tag className='bg-white h-fit' variant='neutral'>
-          <div className={'flex items-center'}>
-            <Detail className='whitespace-nowrap'>{antallInnsendingTilPvo}. innsending</Detail>
-          </div>
-        </Tag>
+        <InnsendingTag antallInnsendingTilPvo={antallInnsendingTilPvo} />
       )}
       {etterlystReturn && (
         <Tag variant='warning' className='h-fit'>
