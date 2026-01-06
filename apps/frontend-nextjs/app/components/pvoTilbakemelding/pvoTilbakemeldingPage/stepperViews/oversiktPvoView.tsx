@@ -36,6 +36,7 @@ import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscena
 import { Alert, BodyShort, FormSummary, Heading, Label, Link, List, Tag } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { InnsendingTag } from '../../common/pvoStatusTags'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import { PvoTilbakemeldingAnsvarligForm } from '../../form/pvoTilbakemeldingAnsvarligForm'
 
@@ -229,7 +230,9 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
 
         <FormSummary className='my-3'>
           <FormSummary.Header>
-            <FormSummary.Heading level='2'>Status</FormSummary.Heading>
+            <FormSummary.Heading className='flex gap-2' level='2'>
+              Status <InnsendingTag antallInnsendingTilPvo={relevantVurdering.innsendingId} />
+            </FormSummary.Heading>
           </FormSummary.Header>
           <FormSummary.Answers>
             <FormSummary.Answer>
