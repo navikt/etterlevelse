@@ -11,11 +11,15 @@ import { ettlevColors } from '@/util/theme/theme'
 import { RawDraftContentState, convertToRaw } from 'draft-js'
 import { FieldMetaProps, FormikErrors } from 'formik'
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js'
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
-import { Editor } from 'react-draft-wysiwyg-next'
 import 'react-draft-wysiwyg-next/dist/react-draft-wysiwyg.css'
 import { FormError } from '../modalSchema/formError/formError'
 import './customStyle.css'
+
+const Editor = dynamic(() => import('react-draft-wysiwyg-next').then((mod) => mod.Editor), {
+  ssr: false,
+})
 
 type TTextEditorProps = {
   initialValue: string
