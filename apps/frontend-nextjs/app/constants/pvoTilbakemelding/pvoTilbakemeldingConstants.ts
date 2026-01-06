@@ -52,12 +52,18 @@ export interface ITilhorendeDokumentasjonTilbakemelding {
   sistRedigertAv: string
   sistRedigertDato: string
   internDiskusjon: string
+
   behandlingskatalogDokumentasjonTilstrekkelig: string
   behandlingskatalogDokumentasjonTilbakemelding: string
+  behandlingsInternDiskusjon: string
+
   kravDokumentasjonTilstrekkelig: string
   kravDokumentasjonTilbakemelding: string
+  KravInternDiskusjon: string
+
   risikovurderingTilstrekkelig: string
   risikovurderingTilbakemelding: string
+  risikovurderingInternDiskusjon: string
 }
 
 export type TPvoTilbakemeldingQL = IPvoTilbakemelding & {

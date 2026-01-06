@@ -16,10 +16,13 @@ public class TilhorendeDokumentasjonTilbakemelding {
 
     private String behandlingskatalogDokumentasjonTilstrekkelig;
     private String behandlingskatalogDokumentasjonTilbakemelding;
+    private String behandlingsInternDiskusjon;
 
     private String kravDokumentasjonTilstrekkelig;
     private String kravDokumentasjonTilbakemelding;
+    private String KravInternDiskusjon;
 
     private String risikovurderingTilstrekkelig;
     private String risikovurderingTilbakemelding;
+    private String risikovurderingInternDiskusjon;
 }

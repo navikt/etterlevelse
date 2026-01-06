@@ -42,10 +42,15 @@ export const createNewPvoVurderning = (newInnsendingId: number) => {
       internDiskusjon: '',
       behandlingskatalogDokumentasjonTilstrekkelig: '',
       behandlingskatalogDokumentasjonTilbakemelding: '',
+      behandlingsInternDiskusjon: '',
+
       kravDokumentasjonTilstrekkelig: '',
       kravDokumentasjonTilbakemelding: '',
+      KravInternDiskusjon: '',
+
       risikovurderingTilstrekkelig: '',
       risikovurderingTilbakemelding: '',
+      risikovurderingInternDiskusjon: '',
     },
 
     innvolveringAvEksterne: {

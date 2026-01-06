@@ -138,45 +138,64 @@ export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurder
     pvoVurdering: vurdering.pvoVurdering || '',
     pvoFolgeOppEndringer: vurdering.pvoFolgeOppEndringer || false,
     vilFaPvkIRetur: vurdering.vilFaPvkIRetur || false,
-    behandlingenslivslop: vurdering.behandlingenslivslop || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
+
+    behandlingenslivslop: {
+      sistRedigertAv: vurdering.behandlingenslivslop?.sistRedigertAv || '',
+      sistRedigertDato: vurdering.behandlingenslivslop?.sistRedigertDato || '',
+      bidragsVurdering: vurdering.behandlingenslivslop?.bidragsVurdering || '',
+      internDiskusjon: vurdering.behandlingenslivslop?.internDiskusjon || '',
+      tilbakemeldingTilEtterlevere:
+        vurdering.behandlingenslivslop?.tilbakemeldingTilEtterlevere || '',
     },
-    behandlingensArtOgOmfang: vurdering.behandlingensArtOgOmfang || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
+    behandlingensArtOgOmfang: {
+      sistRedigertAv: vurdering.behandlingensArtOgOmfang?.sistRedigertAv || '',
+      sistRedigertDato: vurdering.behandlingensArtOgOmfang?.sistRedigertDato || '',
+      bidragsVurdering: vurdering.behandlingensArtOgOmfang?.bidragsVurdering || '',
+      internDiskusjon: vurdering.behandlingensArtOgOmfang?.internDiskusjon || '',
+      tilbakemeldingTilEtterlevere:
+        vurdering.behandlingensArtOgOmfang?.tilbakemeldingTilEtterlevere || '',
     },
-    tilhorendeDokumentasjon: vurdering.tilhorendeDokumentasjon || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      internDiskusjon: '',
-      behandlingskatalogDokumentasjonTilstrekkelig: '',
-      behandlingskatalogDokumentasjonTilbakemelding: '',
-      kravDokumentasjonTilstrekkelig: '',
-      kravDokumentasjonTilbakemelding: '',
-      risikovurderingTilstrekkelig: '',
-      risikovurderingTilbakemelding: '',
+    tilhorendeDokumentasjon: {
+      sistRedigertAv: vurdering.tilhorendeDokumentasjon?.sistRedigertAv || '',
+      sistRedigertDato: vurdering.tilhorendeDokumentasjon?.sistRedigertDato || '',
+      internDiskusjon: vurdering.tilhorendeDokumentasjon?.internDiskusjon || '',
+
+      behandlingskatalogDokumentasjonTilstrekkelig:
+        vurdering.tilhorendeDokumentasjon?.behandlingskatalogDokumentasjonTilstrekkelig || '',
+      behandlingskatalogDokumentasjonTilbakemelding:
+        vurdering.tilhorendeDokumentasjon?.behandlingskatalogDokumentasjonTilbakemelding || '',
+      behandlingsInternDiskusjon:
+        vurdering.tilhorendeDokumentasjon?.behandlingsInternDiskusjon || '',
+
+      kravDokumentasjonTilstrekkelig:
+        vurdering.tilhorendeDokumentasjon?.kravDokumentasjonTilstrekkelig || '',
+      kravDokumentasjonTilbakemelding:
+        vurdering.tilhorendeDokumentasjon?.kravDokumentasjonTilbakemelding || '',
+      KravInternDiskusjon: vurdering.tilhorendeDokumentasjon?.KravInternDiskusjon || '',
+
+      risikovurderingTilstrekkelig:
+        vurdering.tilhorendeDokumentasjon?.risikovurderingTilstrekkelig || '',
+      risikovurderingTilbakemelding:
+        vurdering.tilhorendeDokumentasjon?.risikovurderingTilbakemelding || '',
+      risikovurderingInternDiskusjon:
+        vurdering.tilhorendeDokumentasjon?.risikovurderingInternDiskusjon || '',
     },
 
-    innvolveringAvEksterne: vurdering.innvolveringAvEksterne || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
+    innvolveringAvEksterne: {
+      sistRedigertAv: vurdering.innvolveringAvEksterne?.sistRedigertAv || '',
+      sistRedigertDato: vurdering.innvolveringAvEksterne?.sistRedigertDato || '',
+      bidragsVurdering: vurdering.innvolveringAvEksterne?.bidragsVurdering || '',
+      internDiskusjon: vurdering.innvolveringAvEksterne?.internDiskusjon || '',
+      tilbakemeldingTilEtterlevere:
+        vurdering.innvolveringAvEksterne?.tilbakemeldingTilEtterlevere || '',
     },
-    risikoscenarioEtterTiltakk: vurdering.risikoscenarioEtterTiltakk || {
-      sistRedigertAv: '',
-      sistRedigertDato: '',
-      bidragsVurdering: '',
-      internDiskusjon: '',
-      tilbakemeldingTilEtterlevere: '',
+    risikoscenarioEtterTiltakk: {
+      sistRedigertAv: vurdering.risikoscenarioEtterTiltakk?.sistRedigertAv || '',
+      sistRedigertDato: vurdering.risikoscenarioEtterTiltakk?.sistRedigertDato || '',
+      bidragsVurdering: vurdering.risikoscenarioEtterTiltakk?.bidragsVurdering || '',
+      internDiskusjon: vurdering.risikoscenarioEtterTiltakk?.internDiskusjon || '',
+      tilbakemeldingTilEtterlevere:
+        vurdering.risikoscenarioEtterTiltakk?.tilbakemeldingTilEtterlevere || '',
     },
   }
 }
