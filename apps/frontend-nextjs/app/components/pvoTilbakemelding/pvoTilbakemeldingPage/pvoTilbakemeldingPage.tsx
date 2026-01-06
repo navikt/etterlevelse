@@ -125,9 +125,13 @@ export const PvoTilbakemeldingPage = () => {
 
   const relevantVurdering: IVurdering = useMemo(() => {
     if (!isPvoTilbakemeldingLoading && !isPvkDokumentLoading && pvkDokument && pvoTilbakemelding) {
-      return pvoTilbakemelding.vurderinger.filter(
-        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
-      )[0]
+      if (pvkDokument.antallInnsendingTilPvo === 0) {
+        return pvoTilbakemelding.vurderinger.filter((vurdring) => vurdring.innsendingId === 1)[0]
+      } else {
+        return pvoTilbakemelding.vurderinger.filter(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+        )[0]
+      }
     } else {
       return createNewPvoVurderning(1)
     }

@@ -60,8 +60,8 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument) => {
           const antallInnsending = pvkDokument.antallInnsendingTilPvo
 
-          await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId).then(
-            async (pvoTilbakemelding) => {
+          await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
+            .then(async (pvoTilbakemelding) => {
               const formValuePvo = pvoTilbakemelding
 
               if (antallInnsending > pvoTilbakemelding.vurderinger.length) {
@@ -69,9 +69,8 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
               }
 
               setData(mapPvoTilbakemeldingToFormValue(formValuePvo))
-              setIsLoading(false)
-            }
-          )
+            })
+            .finally(() => setIsLoading(false))
         })
       })()
     }
