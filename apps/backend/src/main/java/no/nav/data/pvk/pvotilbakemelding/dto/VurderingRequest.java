@@ -32,6 +32,7 @@ public class VurderingRequest  implements Validated {
     private String internDiskusjon;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
+    private String sendtAv;
     private List<String> ansvarlig;
 
     private Boolean arbeidGarVidere;
@@ -66,6 +67,7 @@ public class VurderingRequest  implements Validated {
         setInternDiskusjon(trimToNull(internDiskusjon));
         setMerknadTilEtterleverEllerRisikoeier(trimToNull(merknadTilEtterleverEllerRisikoeier));
 
+        setSendtAv(sendtAv);
         setSendtDato(sendtDato);
         setAnsvarlig(copyOf(ansvarlig));
 
@@ -97,6 +99,8 @@ public class VurderingRequest  implements Validated {
 
                 .internDiskusjon(internDiskusjon)
                 .merknadTilEtterleverEllerRisikoeier(merknadTilEtterleverEllerRisikoeier)
+
+                .sendtAv(sendtAv)
                 .sendtDato(sendtDato)
                 .ansvarlig(copyOf(ansvarlig))
                 .arbeidGarVidere(arbeidGarVidere)
@@ -121,6 +125,8 @@ public class VurderingRequest  implements Validated {
 
                 .internDiskusjon(vurdering.getInternDiskusjon())
                 .merknadTilEtterleverEllerRisikoeier(vurdering.getMerknadTilEtterleverEllerRisikoeier())
+
+                .sendtAv(vurdering.getSendtAv())
                 .sendtDato(vurdering.getSendtDato())
                 .ansvarlig(copyOf(vurdering.getAnsvarlig()))
                 .arbeidGarVidere(vurdering.getArbeidGarVidere())

@@ -13,6 +13,7 @@ export const createNewPvoVurderning = (newInnsendingId: number) => {
     innsendingId: newInnsendingId,
     internDiskusjon: '',
     merknadTilEtterleverEllerRisikoeier: '',
+    sendtAv: '',
     sendtDato: '',
     ansvarlig: [],
     ansvarligData: [],

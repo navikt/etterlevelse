@@ -125,6 +125,7 @@ export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurder
 
     internDiskusjon: vurdering.internDiskusjon || '',
     merknadTilEtterleverEllerRisikoeier: vurdering.merknadTilEtterleverEllerRisikoeier || '',
+    sendtAv: vurdering.sendtAv || '',
     sendtDato: vurdering.sendtDato || '',
     ansvarlig: vurdering.ansvarlig || [],
     ansvarligData: vurdering.ansvarligData || [],

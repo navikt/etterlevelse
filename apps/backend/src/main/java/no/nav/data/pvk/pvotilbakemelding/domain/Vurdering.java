@@ -21,6 +21,7 @@ public class Vurdering {
     private String internDiskusjon;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
+    private String sendtAv;
     private List<String> ansvarlig;
 
     private Boolean arbeidGarVidere;

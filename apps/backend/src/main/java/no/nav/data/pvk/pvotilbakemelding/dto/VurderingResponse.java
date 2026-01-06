@@ -30,6 +30,7 @@ public class VurderingResponse  {
     private String internDiskusjon;
     private String merknadTilEtterleverEllerRisikoeier;
     private LocalDateTime sendtDato;
+    private String sendtAv;
     private List<String> ansvarlig;
     private List<Resource> ansvarligData;
 
@@ -53,6 +54,8 @@ public class VurderingResponse  {
 
                 .internDiskusjon(vurdering.getInternDiskusjon())
                 .merknadTilEtterleverEllerRisikoeier(vurdering.getMerknadTilEtterleverEllerRisikoeier())
+
+                .sendtAv(vurdering.getSendtAv())
                 .sendtDato(vurdering.getSendtDato())
                 .ansvarlig(copyOf(vurdering.getAnsvarlig()))
                 .arbeidGarVidere(vurdering.getArbeidGarVidere())

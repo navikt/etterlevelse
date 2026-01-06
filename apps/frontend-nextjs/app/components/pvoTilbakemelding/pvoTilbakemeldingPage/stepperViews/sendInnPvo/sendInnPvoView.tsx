@@ -21,10 +21,11 @@ import {
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
+import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useMemo, useRef, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useMemo, useRef, useState } from 'react'
 import SendInnPvoViewFerdig from './sendInnPvoViewFerdig'
 import SendInnPvoViewIkkeFerdig from './sendInnPvoViewIkkeFerdig'
 
@@ -54,6 +55,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   setSelectedStep,
   codelistUtils,
 }) => {
+  const user = useContext(UserContext)
   const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
     EPvoTilbakemeldingStatus.UNDERARBEID
   )
@@ -114,6 +116,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                         submittedStatus === EPvoTilbakemeldingStatus.FERDIG
                           ? new Date().toISOString()
                           : '',
+                      sendtAv:
+                        submittedStatus === EPvoTilbakemeldingStatus.FERDIG
+                          ? user.getIdent() + ' - ' + user.getName()
+                          : '',
                       merknadTilEtterleverEllerRisikoeier:
                         submittedValues.merknadTilEtterleverEllerRisikoeier,
                       arbeidGarVidere: submittedValues.arbeidGarVidere,
@@ -149,6 +155,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                   sendtDato:
                     submittedStatus === EPvoTilbakemeldingStatus.FERDIG
                       ? new Date().toISOString()
+                      : '',
+                  sendtAv:
+                    submittedStatus === EPvoTilbakemeldingStatus.FERDIG
+                      ? user.getIdent() + ' - ' + user.getName()
                       : '',
                   merknadTilEtterleverEllerRisikoeier:
                     submittedValues.merknadTilEtterleverEllerRisikoeier,

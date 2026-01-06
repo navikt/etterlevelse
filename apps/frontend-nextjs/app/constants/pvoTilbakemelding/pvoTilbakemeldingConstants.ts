@@ -19,6 +19,8 @@ export interface IVurdering {
 
   internDiskusjon: string
   merknadTilEtterleverEllerRisikoeier: string
+
+  sendtAv: string
   sendtDato: string
   ansvarlig: string[]
   ansvarligData?: ITeamResource[]
