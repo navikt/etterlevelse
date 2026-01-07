@@ -7,7 +7,6 @@ import {
   mapPvoTilbakemeldingToFormValue,
   updatePvoTilbakemelding,
 } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   EPvoTilbakemeldingStatus,
@@ -16,7 +15,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { Alert, BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react'
+import { Alert, BodyShort, Button } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import moment from 'moment'
@@ -194,54 +193,35 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
               )}
             </div>
 
-            <div className='my-5'>
-              <TextAreaField
-                noPlaceholder
-                markdown
-                height='15.625rem'
-                name='internDiskusjon'
-                label='Skriv eventuelt interne PVO-notater her'
-                caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
-                withHighlight={true}
-                withUnderline={true}
-              />
-            </div>
-
-            <div className='h-0.5  w-full border-2 my-7' />
-
-            <div>
-              <Heading level='2' size='small' className='mb-5'>
-                Gi tilbakemelding
-              </Heading>
-
-              <BodyLong>
-                Vurder om etterleverens bidrag er tilstrekkelig. Denne vurderingen blir ikke
-                tilgjengelig for etterleveren før dere har ferdigstilt selve vurderingen.
-              </BodyLong>
-            </div>
-
             <div>
               <TilbakemeldingField
                 heading='Behandlinger i Behandlingskatalogen'
                 radioFieldName='behandlingskatalogDokumentasjonTilstrekkelig'
                 radioFieldLabel='Vurder om dokumentasjon i Behandlingskatalogen er tilstrekkelig.'
                 textAreaFieldName='behandlingskatalogDokumentasjonTilbakemelding'
+                internDiskosjonFieldName='behandlingsInternDiskusjon'
                 setFieldValue={setFieldValue}
               />
+
+              <div className='h-0.5  w-full border-2 my-7' />
 
               <TilbakemeldingField
                 heading='PVK-relaterte etterlevelseskrav'
                 radioFieldName='kravDokumentasjonTilstrekkelig'
                 radioFieldLabel='Vurder om kravdokumentasjon er tilstrekkelig.'
                 textAreaFieldName='kravDokumentasjonTilbakemelding'
+                internDiskosjonFieldName='kravInternDiskusjon'
                 setFieldValue={setFieldValue}
               />
+
+              <div className='h-0.5  w-full border-2 my-7' />
 
               <TilbakemeldingField
                 heading='Risiko- og sårbarhetsvurdering (ROS)'
                 radioFieldName='risikovurderingTilstrekkelig'
                 radioFieldLabel='Vurder om risikovurderingen(e) er tilstrekkelig.'
                 textAreaFieldName='risikovurderingTilbakemelding'
+                internDiskosjonFieldName='risikovurderingInternDiskusjon'
                 setFieldValue={setFieldValue}
               />
             </div>

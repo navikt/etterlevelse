@@ -21,6 +21,10 @@ type TProps = {
     | 'behandlingskatalogDokumentasjonTilbakemelding'
     | 'kravDokumentasjonTilbakemelding'
     | 'risikovurderingTilbakemelding'
+  internDiskosjonFieldName:
+    | 'behandlingsInternDiskusjon'
+    | 'kravInternDiskusjon'
+    | 'risikovurderingInternDiskusjon'
 }
 
 export const TilbakemeldingField: FunctionComponent<TProps> = ({
@@ -29,17 +33,37 @@ export const TilbakemeldingField: FunctionComponent<TProps> = ({
   radioFieldName,
   radioFieldLabel,
   textAreaFieldName,
+  internDiskosjonFieldName,
 }) => {
   return (
     <div>
-      <Heading level='3' size='xsmall' className='my-5'>
+      <Heading level='2' size='small' className='my-5'>
         {heading}
+      </Heading>
+
+      <div className='my-5'>
+        <TextAreaField
+          noPlaceholder
+          markdown
+          height='15.625rem'
+          name={internDiskosjonFieldName}
+          label='Skriv eventuelt interne PVO-notater her'
+          caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
+          withHighlight={true}
+          withUnderline={true}
+        />
+      </div>
+
+      <Heading level='2' size='small' className='my-5'>
+        Gi tilbakemelding
       </Heading>
 
       <Field name={radioFieldName}>
         {(fieldProps: FieldProps) => (
           <RadioGroup
             legend={radioFieldLabel}
+            description='Denne vurderingen blir ikke tilgjengelig
+          for etterleveren før dere har ferdigstilt selve vurderingen.'
             value={fieldProps.field.value}
             onChange={(value) => {
               fieldProps.form.setFieldValue(radioFieldName, value)
