@@ -3,7 +3,7 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { BodyLong, Label, List } from '@navikt/ds-react'
+import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { BeskjedFraEtterleverReadOnly } from './beskjedFraEtterleverReadOnly'
 
@@ -36,10 +36,34 @@ export const SendInnPvoReadOnly: FunctionComponent<TProps> = ({
     <div>
       <BeskjedFraEtterleverReadOnly
         pvkDokument={pvkDokument}
-        headingLevel={headingLevel}
-        headingSize={headingSize}
         innsendingId={relevantVurdering.innsendingId}
       />
+
+      <Heading
+        level={headingLevel ? headingLevel : '1'}
+        size={headingSize ? headingSize : 'medium'}
+        className='mb-5'
+      >
+        PVOs interne diskusjon
+      </Heading>
+
+      <DataTextWrapper>
+        {relevantVurdering.internDiskusjon && relevantVurdering.internDiskusjon.length !== 0 && (
+          <Markdown source={relevantVurdering.internDiskusjon} />
+        )}
+        <BodyLong>
+          {(!relevantVurdering.internDiskusjon || relevantVurdering.internDiskusjon.length === 0) &&
+            'Ingen intern diskusjon'}
+        </BodyLong>
+      </DataTextWrapper>
+
+      <Heading
+        level={headingLevel ? headingLevel : '1'}
+        size={headingSize ? headingSize : 'medium'}
+        className='mb-5'
+      >
+        Tilbakemelding til etterlever
+      </Heading>
 
       <div className='mt-5 mb-3 max-w-[75ch]'>
         <div className='mb-3'>

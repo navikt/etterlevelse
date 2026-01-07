@@ -112,6 +112,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
                   if (vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo) {
                     return {
                       ...vurdering,
+                      internDiskusjon: submittedValues.internDiskusjon,
                       sendtDato:
                         submittedStatus === EPvoTilbakemeldingStatus.FERDIG
                           ? new Date().toISOString()
@@ -152,6 +153,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
               vurderinger: [
                 {
                   ...newVurdering,
+                  internDiskusjon: submittedValues.internDiskusjon,
                   sendtDato:
                     submittedStatus === EPvoTilbakemeldingStatus.FERDIG
                       ? new Date().toISOString()

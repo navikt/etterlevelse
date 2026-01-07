@@ -21,7 +21,15 @@ import {
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
-import { Alert, Button, Checkbox, CheckboxGroup, Radio, RadioGroup } from '@navikt/ds-react'
+import {
+  Alert,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  Heading,
+  Radio,
+  RadioGroup,
+} from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import _ from 'lodash'
 import {
@@ -112,6 +120,27 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           )}
 
           <BeskjedFraEtterleverReadOnly pvkDokument={pvkDokument} />
+
+          <Heading level='1' size='medium' className='mb-5'>
+            PVOs interne diskusjon
+          </Heading>
+
+          <FieldRadioLayout>
+            <TextAreaField
+              height='150px'
+              noPlaceholder
+              label='Skriv eventuelt interne PVO-notater her'
+              caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
+              name='internDiskusjon'
+              markdown
+              withHighlight
+              withUnderline
+            />
+          </FieldRadioLayout>
+
+          <Heading level='1' size='medium' className='mb-5'>
+            Tilbakemelding til etterlever
+          </Heading>
 
           <div>
             <FieldRadioLayout>
