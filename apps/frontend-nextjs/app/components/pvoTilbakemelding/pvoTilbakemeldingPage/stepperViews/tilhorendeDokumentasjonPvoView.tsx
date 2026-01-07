@@ -11,7 +11,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, RefObject } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
-import PvoTilhorendeTilbakemeldingdHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilhorendeTilbakemeldingdHistorikk'
+import PvoTilhorendeTilbakemeldingdHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilhorendeTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import TilhorendeDokumentasjonPvoTilbakemeldingForm from '../../form/tilhorendeDokumentasjonPvoTilbakemeldingForm'
 import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../../readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'

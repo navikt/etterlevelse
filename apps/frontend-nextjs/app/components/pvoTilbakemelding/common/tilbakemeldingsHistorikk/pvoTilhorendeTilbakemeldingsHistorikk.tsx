@@ -2,7 +2,7 @@ import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeld
 import { Accordion, Heading } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
-import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../../readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
+import PvoTilhorendeTilbakemeldingsHistorikkContent from './pvoTilhorendeTilbakemeldingsHistorikkContent'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
@@ -28,11 +28,9 @@ export const PvoTilhorendeTilbakemeldingdHistorikk: FunctionComponent<TProps> = 
                   {moment(vurdering.sendtDato).format('LL')}
                 </Accordion.Header>
                 <Accordion.Content>
-                  <TilhorendeDokumentasjonTilbakemeldingReadOnly
+                  <PvoTilhorendeTilbakemeldingsHistorikkContent
                     tilbakemeldingsinnhold={vurdering.tilhorendeDokumentasjon}
-                    sentDate={vurdering.sendtDato}
                     forPvo={true}
-                    noHeader={true}
                   />
                 </Accordion.Content>
               </Accordion.Item>
