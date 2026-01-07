@@ -37,7 +37,7 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
       </Heading>
 
       {forPvo && (
-        <div>
+        <div className='my-5'>
           <Label>intern PVO-notater</Label>
           {tilbakemeldingsinnhold &&
             tilbakemeldingsinnhold.behandlingsInternDiskusjon &&
@@ -53,8 +53,6 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
               tilbakemeldingsinnhold.behandlingsInternDiskusjon.length === 0) &&
               'Ingen intern diskusjon'}
           </BodyLong>
-
-          <div className='h-0.5  w-full border-2 my-7' />
         </div>
       )}
 
@@ -85,13 +83,15 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
       </div>
     </div>
 
+    <div className='h-0.5  w-full border-2 my-7' />
+
     <div>
       <Heading level='3' size='xsmall' className='my-5'>
         PVK-relaterte etterlevelseskrav
       </Heading>
 
       {forPvo && (
-        <div>
+        <div className='my-5'>
           <Label>intern PVO-notater</Label>
           {tilbakemeldingsinnhold &&
             tilbakemeldingsinnhold.kravInternDiskusjon &&
@@ -104,8 +104,6 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
               tilbakemeldingsinnhold.kravInternDiskusjon.length === 0) &&
               'Ingen intern diskusjon'}
           </BodyLong>
-
-          <div className='h-0.5  w-full border-2 my-7' />
         </div>
       )}
 
@@ -134,13 +132,15 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
       </div>
     </div>
 
+    <div className='h-0.5  w-full border-2 my-7' />
+
     <div>
       <Heading level='3' size='xsmall' className='my-5'>
         Risiko- og sårbarhetsvurdering (ROS)
       </Heading>
 
       {forPvo && (
-        <div>
+        <div className='my-5'>
           <Label>intern PVO-notater</Label>
           {tilbakemeldingsinnhold &&
             tilbakemeldingsinnhold.risikovurderingInternDiskusjon &&
@@ -156,8 +156,6 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
               tilbakemeldingsinnhold.risikovurderingInternDiskusjon.length === 0) &&
               'Ingen intern diskusjon'}
           </BodyLong>
-
-          <div className='h-0.5  w-full border-2 my-7' />
         </div>
       )}
 
