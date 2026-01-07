@@ -43,10 +43,10 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<
       )}
 
       <Heading level='5' size='xsmall' className='mt-7 mb-5'>
-        Gi tilbakemelding
+        Tilbakemelding til etterlever
       </Heading>
 
-      <Label>Vurdering om dokumentasjon i Behandlingskatalogen er tilstrekkelig.</Label>
+      <BodyLong>Vurdering om dokumentasjon i Behandlingskatalogen er tilstrekkelig.</BodyLong>
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
         {tilbakemeldingsinnhold &&
@@ -100,10 +100,10 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<
       )}
 
       <Heading level='5' size='xsmall' className='mt-7 mb-5'>
-        Gi tilbakemelding
+        Tilbakemelding til etterlever
       </Heading>
 
-      <Label>Vurdering om kravdokumentasjon er tilstrekkelig.</Label>
+      <BodyLong>Vurdering om kravdokumentasjon er tilstrekkelig.</BodyLong>
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
         {tilbakemeldingsinnhold &&
@@ -158,10 +158,10 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<
       )}
 
       <Heading level='5' size='xsmall' className='mt-7 mb-5'>
-        Gi tilbakemelding
+        Tilbakemelding til etterlever
       </Heading>
 
-      <Label>Vurdering om risikovurderingen(e) er tilstrekkelig.</Label>
+      <BodyLong>Vurdering om risikovurderingen(e) er tilstrekkelig.</BodyLong>
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
         {tilbakemeldingsinnhold &&
