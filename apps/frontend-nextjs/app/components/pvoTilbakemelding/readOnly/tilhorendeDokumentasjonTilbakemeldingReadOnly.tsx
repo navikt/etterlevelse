@@ -25,25 +25,6 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
       </Heading>
     )}
 
-    {forPvo && (
-      <div>
-        <Label>intern PVO-notater</Label>
-        {tilbakemeldingsinnhold &&
-          tilbakemeldingsinnhold.internDiskusjon &&
-          tilbakemeldingsinnhold.internDiskusjon.length !== 0 && (
-            <Markdown source={tilbakemeldingsinnhold.internDiskusjon} escapeHtml={false} />
-          )}
-        <BodyLong>
-          {(!tilbakemeldingsinnhold ||
-            !tilbakemeldingsinnhold.internDiskusjon ||
-            tilbakemeldingsinnhold.internDiskusjon.length === 0) &&
-            'Ingen intern diskusjon'}
-        </BodyLong>
-
-        <div className='h-0.5  w-full border-2 my-7' />
-      </div>
-    )}
-
     {sentDate && sentDate.length !== 0 && (
       <BodyShort size='medium' className='pb-5'>
         Tilbakemeldingsdato: {moment(sentDate).format('LL')}
@@ -54,6 +35,28 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
       <Heading level='3' size='xsmall' className='my-5'>
         Behandlinger i Behandlingskatalogen
       </Heading>
+
+      {forPvo && (
+        <div>
+          <Label>intern PVO-notater</Label>
+          {tilbakemeldingsinnhold &&
+            tilbakemeldingsinnhold.behandlingsInternDiskusjon &&
+            tilbakemeldingsinnhold.behandlingsInternDiskusjon.length !== 0 && (
+              <Markdown
+                source={tilbakemeldingsinnhold.behandlingsInternDiskusjon}
+                escapeHtml={false}
+              />
+            )}
+          <BodyLong>
+            {(!tilbakemeldingsinnhold ||
+              !tilbakemeldingsinnhold.behandlingsInternDiskusjon ||
+              tilbakemeldingsinnhold.behandlingsInternDiskusjon.length === 0) &&
+              'Ingen intern diskusjon'}
+          </BodyLong>
+
+          <div className='h-0.5  w-full border-2 my-7' />
+        </div>
+      )}
 
       <Label>Vurdering om dokumentasjon i Behandlingskatalogen er tilstrekkelig.</Label>
       <BodyLong>
@@ -87,6 +90,25 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
         PVK-relaterte etterlevelseskrav
       </Heading>
 
+      {forPvo && (
+        <div>
+          <Label>intern PVO-notater</Label>
+          {tilbakemeldingsinnhold &&
+            tilbakemeldingsinnhold.kravInternDiskusjon &&
+            tilbakemeldingsinnhold.kravInternDiskusjon.length !== 0 && (
+              <Markdown source={tilbakemeldingsinnhold.kravInternDiskusjon} escapeHtml={false} />
+            )}
+          <BodyLong>
+            {(!tilbakemeldingsinnhold ||
+              !tilbakemeldingsinnhold.kravInternDiskusjon ||
+              tilbakemeldingsinnhold.kravInternDiskusjon.length === 0) &&
+              'Ingen intern diskusjon'}
+          </BodyLong>
+
+          <div className='h-0.5  w-full border-2 my-7' />
+        </div>
+      )}
+
       <Label>Vurdering om kravdokumentasjon er tilstrekkelig.</Label>
       <BodyLong>
         {!tilbakemeldingsinnhold && 'Ikke vurdert'}
@@ -116,6 +138,28 @@ export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TP
       <Heading level='3' size='xsmall' className='my-5'>
         Risiko- og sårbarhetsvurdering (ROS)
       </Heading>
+
+      {forPvo && (
+        <div>
+          <Label>intern PVO-notater</Label>
+          {tilbakemeldingsinnhold &&
+            tilbakemeldingsinnhold.risikovurderingInternDiskusjon &&
+            tilbakemeldingsinnhold.risikovurderingInternDiskusjon.length !== 0 && (
+              <Markdown
+                source={tilbakemeldingsinnhold.risikovurderingInternDiskusjon}
+                escapeHtml={false}
+              />
+            )}
+          <BodyLong>
+            {(!tilbakemeldingsinnhold ||
+              !tilbakemeldingsinnhold.risikovurderingInternDiskusjon ||
+              tilbakemeldingsinnhold.risikovurderingInternDiskusjon.length === 0) &&
+              'Ingen intern diskusjon'}
+          </BodyLong>
+
+          <div className='h-0.5  w-full border-2 my-7' />
+        </div>
+      )}
 
       <Label>Vurdering om risikovurderingen(e) er tilstrekkelig.</Label>
       <BodyLong>
