@@ -32,14 +32,14 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
               return (
                 <>
                   <List.Item key={`${index}_innsending_${melding.innsendingId}`}>
-                    {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')} {melding.innsendingId}.
-                    innsending til Pvo av {melderNavm}
+                    {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}&nbsp;&nbsp;&nbsp;
+                    {melding.innsendingId}. innsending til PVO av {melderNavm}
                   </List.Item>
 
-                  {vurdering.length !== 0 && (
+                  {vurdering.length !== 0 && vurdering[0].sendtDato && (
                     <ListItem key={`${index}_innsending_${melding.innsendingId}_vurdering`}>
-                      {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')} tilbakemelding fra{' '}
-                      {sendtAvPvo}
+                      {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')}
+                      &nbsp;&nbsp;&nbsp;tilbakemelding fra {sendtAvPvo}
                     </ListItem>
                   )}
                 </>

@@ -30,7 +30,7 @@ export const PvoTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
 
     {forPvo && (
       <div className='w-full'>
-        <Heading level='2' size='small'>
+        <Heading level='4' size='small'>
           intern PVO-notater
         </Heading>
         {tilbakemeldingsinnhold &&
@@ -47,7 +47,7 @@ export const PvoTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
       </div>
     )}
 
-    <Heading level='2' size='small' className='mb-5 mt-7'>
+    <Heading level='4' size='small' className='mb-5 mt-7'>
       Gi tilbakemelding
     </Heading>
 
