@@ -2,14 +2,14 @@ import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeld
 import { Accordion, Heading } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
-import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
+import TilhorendeDokumentasjonTilbakemeldingReadOnly from '../../readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
   relevantVurderingsInnsendingId: number
 }
 
-export const TilhorendeTilbakemeldingdHistorikk: FunctionComponent<TProps> = ({
+export const PvoTilhorendeTilbakemeldingdHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   relevantVurderingsInnsendingId,
 }) => {
@@ -44,4 +44,4 @@ export const TilhorendeTilbakemeldingdHistorikk: FunctionComponent<TProps> = ({
   )
 }
 
-export default TilhorendeTilbakemeldingdHistorikk
+export default PvoTilhorendeTilbakemeldingdHistorikk
