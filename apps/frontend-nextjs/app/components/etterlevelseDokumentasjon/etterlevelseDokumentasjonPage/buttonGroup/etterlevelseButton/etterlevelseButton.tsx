@@ -3,6 +3,7 @@ import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokument
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import EtterleverKnapper from './roller/etterlever/etterleverKnapper'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -20,6 +21,8 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
+      {/* Roller --> Tilstand */}
+      <EtterleverKnapper etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
       <ActionMenu.Group label=''>
         <ActionMenu.Item
           as='a'
