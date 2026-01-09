@@ -17,6 +17,7 @@ import {
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import EtterleverPVKKnapper from './roller/etterlever/etterleverPVKKnapper'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -45,6 +46,13 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       {/* {behandlingsLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+      <EtterleverPVKKnapper
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingsLivslop={behandlingsLivslop}
+        pvkDokument={pvkDokument}
+        risikoscenarioList={risikoscenarioList}
+        isRisikoeier={isRisikoeier}
+      />
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonBehandlingsenLivslopUrl(
