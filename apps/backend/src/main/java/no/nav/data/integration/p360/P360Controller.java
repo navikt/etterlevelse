@@ -196,7 +196,7 @@ public class P360Controller {
                 .DocumentDate(formatter.format(date))
                 .Status("J")
                 .AccessGroup("Alle ansatte i Nav")
-                .ResponsiblePersonEmail(SecurityUtils.getCurrentEmail())
+                .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
                 .Files(List.of(P360File.builder()
                         .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())
                         .Format("docx")

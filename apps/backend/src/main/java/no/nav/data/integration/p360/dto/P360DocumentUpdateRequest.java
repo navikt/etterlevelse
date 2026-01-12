@@ -20,6 +20,6 @@ public class P360DocumentUpdateRequest {
     private String DocumentDate;
     private String Status;
     private String AccessGroup;
-    private String ResponsiblePersonEmail;
+    private String ResponsiblePersonIdNumber;
     private List<P360File> Files;
 }
