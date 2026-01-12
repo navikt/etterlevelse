@@ -137,6 +137,7 @@ public class P360Service {
 
     public P360Document createDocument(P360DocumentCreateRequest request) {
         try {
+            log.debug("Creating document in P360 with title: {}", request);
             var response = restTemplate.postForEntity(p360Properties.getDocumentUrl() + "/CreateDocument",
                     new HttpEntity<>(request, createHeadersWithAuth()),
                     P360Document.class);
