@@ -112,12 +112,8 @@ public class P360Controller {
             List<P360File> filer = new ArrayList<>();
             P360DocumentCreateRequest p360DocumentCreateRequest = P360DocumentCreateRequest.builder()
                     .CaseNumber(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber())
-                    .Archive("Saksdokument")
-                    .DefaultValueSet("Etterlevelse")
                     .Title(documentTitle)
                     .DocumentDate(formatter.format(date))
-                    .Status("J")
-                    .AccessGroup("Alle ansatte i Nav")
                     .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
                     .build();
 
@@ -190,12 +186,8 @@ public class P360Controller {
 
         P360Document document = p360Service.updateDocument(P360DocumentUpdateRequest.builder()
                 .DocumentNumber(request.getDocumentNumber())
-                .Archive("Saksdokument")
-                .DefaultValueSet("Etterlevelse")
                 .Title("E" + etterlevelsedokumentasjon.getEtterlevelseNummer() + " test dokument")
                 .DocumentDate(formatter.format(date))
-                .Status("J")
-                .AccessGroup("Alle ansatte i Nav")
                 .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
                 .Files(List.of(P360File.builder()
                         .Title(formatter.format(date) + "_Etterlevelse_E" + etterlevelsedokumentasjon.getEtterlevelseNummer())

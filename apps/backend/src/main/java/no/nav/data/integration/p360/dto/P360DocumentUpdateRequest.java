@@ -14,12 +14,17 @@ import java.util.List;
 public class P360DocumentUpdateRequest {
 
     private String DocumentNumber;
-    private String Archive;
-    private String DefaultValueSet;
+    @Builder.Default
+    private String Archive = "Saksdokument";
+
+    @Builder.Default
+    private String DefaultValueSet = "Etterlevelse";
     private String Title;
     private String DocumentDate;
-    private String Status;
-    private String AccessGroup;
+    @Builder.Default
+    private String Status = "J";
+    @Builder.Default
+    private String AccessGroup = "Alle ansatte i Nav";
     private String ResponsiblePersonIdNumber;
     private List<P360File> Files;
 }
