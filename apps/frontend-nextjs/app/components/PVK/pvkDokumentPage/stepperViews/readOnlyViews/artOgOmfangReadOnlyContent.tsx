@@ -1,17 +1,19 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Heading, Label, List } from '@navikt/ds-react'
+import { Alert, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
   artOgOmfang: IBehandlingensArtOgOmfang
   personkategorier: string[]
+  isChangesMadeSinceLastSubmission?: boolean
 }
 
 export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
   artOgOmfang,
   personkategorier,
+  isChangesMadeSinceLastSubmission,
 }) => {
   return (
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
@@ -20,6 +22,12 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
           <Heading level='1' size='medium' className='mb-5'>
             Behandlingens art og omfang
           </Heading>
+
+          {isChangesMadeSinceLastSubmission && (
+            <Alert variant='info' className='my-5'>
+              Innhold på denne siden er endret av etterlever siden siste innsending til PVO.
+            </Alert>
+          )}
 
           <List>
             <Label>{EPVK.behandlingAvPersonopplysninger}</Label>

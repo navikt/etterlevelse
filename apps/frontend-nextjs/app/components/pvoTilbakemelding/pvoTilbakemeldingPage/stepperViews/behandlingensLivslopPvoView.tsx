@@ -15,7 +15,8 @@ import {
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Loader } from '@navikt/ds-react'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import moment from 'moment'
+import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
@@ -51,6 +52,26 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  const isChangesMadeSinceLastSubmission = useMemo(() => {
+    if (pvkDokument.antallInnsendingTilPvo > 1) {
+      const previousSubmission = pvoTilbakemelding.vurderinger.find(
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+      )
+
+      if (
+        moment(behandlingensLivslop.changeStamp.lastModifiedDate).isAfter(
+          previousSubmission?.sendtDato
+        )
+      ) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  }, [behandlingensLivslop, pvkDokument, pvoTilbakemelding])
+
   useEffect(() => {
     ;(async () => {
       if (etterlevelseDokumentasjon.id) {
@@ -80,6 +101,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                 <BehandlingensLivslopReadOnlyContent
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   behandlingensLivslop={behandlingensLivslop}
+                  isChangesMadeSinceLastSubmission={isChangesMadeSinceLastSubmission}
                 />
               </div>
               <div className='w-1/2'>

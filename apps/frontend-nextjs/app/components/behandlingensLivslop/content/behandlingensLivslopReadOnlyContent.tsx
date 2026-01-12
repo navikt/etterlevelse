@@ -4,7 +4,7 @@ import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper
 import { Markdown } from '@/components/common/markdown/markdown'
 import { IBehandlingensLivslopRequest } from '@/constants/behandlingensLivslop/behandlingensLivslop'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
+import { Alert, BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
 import BehandlingensLivsLopSidePanel from '../sidePanel/BehandlingensLivsLopSidePanel'
 import BehandlingensLivslopTextContent from './behandlingensLivslopTextContent'
@@ -12,6 +12,7 @@ import BehandlingensLivslopTextContent from './behandlingensLivslopTextContent'
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   behandlingensLivslop: IBehandlingensLivslopRequest
+  isChangesMadeSinceLastSubmission?: boolean
   noSidePanelContent?: boolean
   noHeader?: boolean
 }
@@ -19,6 +20,7 @@ type TProps = {
 export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingensLivslop,
+  isChangesMadeSinceLastSubmission,
   noSidePanelContent,
   noHeader,
 }) => {
@@ -42,6 +44,12 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
             <Heading level='1' size='medium' className='mb-5'>
               Behandlingens livsløp
             </Heading>
+          )}
+
+          {isChangesMadeSinceLastSubmission && (
+            <Alert variant='info' className='my-5'>
+              Innhold på denne siden er endret av etterlever siden siste innsending til PVO.
+            </Alert>
           )}
 
           <BehandlingensLivslopTextContent />

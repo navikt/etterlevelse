@@ -10,7 +10,8 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent, RefObject } from 'react'
+import moment from 'moment'
+import { FunctionComponent, RefObject, useMemo } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
@@ -42,7 +43,21 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
 }) => {
   const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(pvkDokument.etterlevelseDokumentId)
 
-  console.debug(artOgOmfang)
+  const isChangesMadeSinceLastSubmission = useMemo(() => {
+    if (pvkDokument.antallInnsendingTilPvo > 1) {
+      const previousSubmission = pvoTilbakemelding.vurderinger.find(
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+      )
+
+      if (moment(artOgOmfang.changeStamp.lastModifiedDate).isAfter(previousSubmission?.sendtDato)) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  }, [artOgOmfang, pvkDokument, pvoTilbakemelding])
 
   return (
     <div className='w-full'>
@@ -54,6 +69,7 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
               <ArtOgOmfangReadOnlyContent
                 artOgOmfang={artOgOmfang}
                 personkategorier={personkategorier}
+                isChangesMadeSinceLastSubmission={isChangesMadeSinceLastSubmission}
               />
             )}
           </div>
