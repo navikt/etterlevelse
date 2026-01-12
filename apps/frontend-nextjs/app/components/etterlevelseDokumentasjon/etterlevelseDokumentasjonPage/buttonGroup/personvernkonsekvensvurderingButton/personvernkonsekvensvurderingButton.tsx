@@ -1,3 +1,4 @@
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -7,7 +8,9 @@ import EtterleverPVKKnapper from './roller/etterlever/etterleverPVKKnapper'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
   risikoscenarioList: IRisikoscenario[]
+  artOgOmfang: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
   pvkDokument?: IPvkDokument
   isRisikoeier: boolean
@@ -15,15 +18,22 @@ type TProps = {
 
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
+  risikoscenarioList,
+  artOgOmfang,
   behandlingsLivslop,
   pvkDokument,
-  risikoscenarioList,
   isRisikoeier,
 }) => (
   <>
+    {/* Roller */}
     <EtterleverPVKKnapper
       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+      setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
       risikoscenarioList={risikoscenarioList}
+      artOgOmfang={artOgOmfang}
+      behandlingsLivslop={behandlingsLivslop}
+      pvkDokument={pvkDokument}
       isRisikoeier={isRisikoeier}
     />
   </>

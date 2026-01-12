@@ -1,3 +1,4 @@
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
@@ -8,14 +9,19 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { pvkDokumentasjonBehandlingsenLivslopUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
   risikoscenarioList: IRisikoscenario[]
+  artOgOmfang: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
   pvkDokument?: IPvkDokument
   isRisikoeier: boolean
@@ -23,10 +29,12 @@ type TProps = {
 
 const EtterleverPVKKnapper: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  risikoscenarioList,
+  // setEtterlevelseDokumentasjon,
+  // risikoscenarioList,
+  artOgOmfang,
   behandlingsLivslop,
   pvkDokument,
-  isRisikoeier,
+  // isRisikoeier,
 }) => {
   const showBehandlingsLivslopReadOnlyButton =
     etterlevelseDokumentasjon.status ===
@@ -60,6 +68,15 @@ const EtterleverPVKKnapper: FunctionComponent<TProps> = ({
           {showBehandlingsLivslopReadOnlyButton
             ? 'Tegn behandlingens livsløp'
             : 'Se behandlingens livsløp'}
+        </ActionMenu.Item>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            artOgOmfang.id ? artOgOmfang.id : 'ny'
+          )}
+        >
+          Beskriv art og omfang
         </ActionMenu.Item>
       </ActionMenu.Content>
       {/* <EtterleverPVKKnapper

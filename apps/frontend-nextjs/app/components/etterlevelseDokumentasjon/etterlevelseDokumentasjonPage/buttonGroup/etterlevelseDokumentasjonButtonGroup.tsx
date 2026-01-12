@@ -3,12 +3,32 @@
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopUrl,
+  pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonStepUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { getVariantForBAOButton } from '@/util/etterlevelseDokumentasjon/behandlingensArtOgOmfang/behandlingensArtOgOmfangUtils'
+import { getVariantForBLLButton } from '@/util/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopUtils'
+import {
+  getPvkButtonText,
+  getVariantForPVKBehovButton,
+  getVariantForPVKButton,
+  isPvkDokumentVurdert,
+} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { Button } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { env } from 'node:process'
 import { FunctionComponent, useContext } from 'react'
+import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
 import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurderingButton/personvernkonsekvensvurderingButton'
 
@@ -37,12 +57,16 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
     <>
       <PersonvernkonsekvensvurderingButton
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
         risikoscenarioList={risikoscenarioList}
+        artOgOmfang={artOgOmfang}
+        behandlingsLivslop={behandlingsLivslop}
+        pvkDokument={pvkDokument}
         isRisikoeier={isRisikoeier}
       />
       {/** satt knappene tilbake slik at vi kan prodsette ting */}
 
-      {/* <>
+      <>
         <Button
           onClick={() => {
             router.push(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
@@ -72,7 +96,6 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           variant={getVariantForBLLButton(behandlingsLivslop)}
           className='whitespace-nowrap'
         >
-       
           Tegn behandlingens livsløp
         </Button>
 
@@ -123,14 +146,16 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
           </Button>
         )}
-      </> */}
+      </>
 
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
       {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
       {env.isDev && (
         <PersonvernkonsekvensvurderingButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
           risikoscenarioList={risikoscenarioList}
+          artOgOmfang={artOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
           pvkDokument={pvkDokument}
           isRisikoeier={isRisikoeier}
