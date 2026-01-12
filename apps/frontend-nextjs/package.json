@@ -63,7 +63,7 @@
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
     "@types/amplitude-js": "8.16.5",
     "@types/draft-js": "0.11.20",
-    "@types/lodash": "4.17.21",
+    "@types/lodash": "4.17.23",
     "@types/markdown-draft-js": "2.2.7",
     "@types/node": "25.0.3",
     "@types/react": "19.2.7",
