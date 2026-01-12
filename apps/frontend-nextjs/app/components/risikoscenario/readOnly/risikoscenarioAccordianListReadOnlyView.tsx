@@ -6,8 +6,10 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Accordion, Alert, BodyLong, ReadMore } from '@navikt/ds-react'
+import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useRef } from 'react'
+import NyttInnholdTag from '../common/NyttInnholdTag'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../common/risikoscenarioAccordionHeader'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
@@ -77,6 +79,14 @@ export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> 
         {risikoscenarioList.map((risikoscenario: IRisikoscenario, index: number) => {
           const expanded: boolean = risikoscenarioId === risikoscenario.id
 
+          const hasNewContent = tiltakList
+            .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+            .some(
+              (tiltak: ITiltak) =>
+                previousVurdering &&
+                moment(tiltak.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+            )
+
           return (
             <Accordion.Item
               id={risikoscenario.id}
@@ -90,6 +100,7 @@ export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> 
                 risikoscenario={risikoscenario}
                 ref={expanded ? accordionRef : undefined}
                 previousVurdering={previousVurdering}
+                hasNewContent={hasNewContent}
               />
               <Accordion.Content>
                 {expanded && (
@@ -109,18 +120,32 @@ export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> 
                             .filter((tiltak: ITiltak) =>
                               risikoscenario.tiltakIds.includes(tiltak.id)
                             )
-                            .map((tiltak: ITiltak, index: number) => (
-                              <ReadMore
-                                key={risikoscenario.id + '_' + tiltak.id + '_' + index}
-                                header={tiltak.navn}
-                                className='mb-3'
-                              >
-                                <TiltakView
-                                  tiltak={tiltak}
-                                  risikoscenarioList={allRisikoscenarioList}
-                                />
-                              </ReadMore>
-                            ))}
+                            .map((tiltak: ITiltak, index: number) => {
+                              const isChangesMade =
+                                (previousVurdering &&
+                                  moment(tiltak.changeStamp.lastModifiedDate).isAfter(
+                                    previousVurdering.sendtDato
+                                  )) ||
+                                false
+
+                              return (
+                                <ReadMore
+                                  key={risikoscenario.id + '_' + tiltak.id + '_' + index}
+                                  header={
+                                    <>
+                                      {tiltak.navn} &nbsp;&nbsp;{' '}
+                                      {isChangesMade && <NyttInnholdTag />}
+                                    </>
+                                  }
+                                  className='mb-3'
+                                >
+                                  <TiltakView
+                                    tiltak={tiltak}
+                                    risikoscenarioList={allRisikoscenarioList}
+                                  />
+                                </ReadMore>
+                              )
+                            })}
                         </div>
                       )}
 
