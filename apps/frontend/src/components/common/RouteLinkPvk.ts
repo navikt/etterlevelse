@@ -2,6 +2,8 @@ import { dokumentasjonUrl } from './RouteLinkEtterlevelsesdokumentasjon'
 
 export const pvkdokumentUrl: string = '/pvkdokument'
 
+// Removed: versions URL handled in Next.js app
+
 export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tab=pvk`
 

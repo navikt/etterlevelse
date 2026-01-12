@@ -5,6 +5,7 @@ import {
   IMeldingTilPvo,
   IPvkDokument,
   IPvkDokumentListItem,
+  IPvkDokumentVersionItem,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
@@ -71,6 +72,15 @@ export const getPvkDokumentByEtterlevelseDokumentId = async (etterlevelseDokumen
   (
     await axios.get<IPvkDokument>(
       `${env.backendBaseUrl}/pvkdokument/etterlevelsedokument/${etterlevelseDokumentId}`
+    )
+  ).data
+
+export const getPvkDokumentVersions = async (
+  pvkDokumentId: string
+): Promise<IPageResponse<IPvkDokumentVersionItem>> =>
+  (
+    await axios.get<IPageResponse<IPvkDokumentVersionItem>>(
+      `${env.backendBaseUrl}/pvkdokument/${pvkDokumentId}/versions`
     )
   ).data
 

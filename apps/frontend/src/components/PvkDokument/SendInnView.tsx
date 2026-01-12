@@ -161,8 +161,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
               : response.godkjentAvRisikoeierDato,
           }
 
-          updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
-            setPvkDokument(savedResponse)
+          updatePvkDokument(updatedPvkDokument).then(async (savedResponse: IPvkDokument) => {
+            const respAny = savedResponse as any
+            if (respAny && respAny.newPvkDokumentId) {
+              await getPvkDokument(respAny.newPvkDokumentId).then((newDoc: IPvkDokument) => {
+                setPvkDokument(newDoc)
+              })
+            } else {
+              setPvkDokument(savedResponse)
+            }
             setAngretAvRisikoeier(false)
           })
         }
@@ -297,6 +304,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     ;(async () => {
       if (pvkDokument) {
         setIsLoading(true)
+
         await getBehandlingensLivslopByEtterlevelseDokumentId(pvkDokument.etterlevelseDokumentId)
           .then((response: IBehandlingensLivslop) => {
             setBehandlingensLivslop(response)
@@ -393,9 +401,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
           <Form>
             <div className='flex justify-center'>
               <div>
-                <Heading level='1' size='medium' className='mb-5'>
-                  Les og send inn
-                </Heading>
+                <div className='flex items-center gap-4 mb-5'>
+                  <Heading level='1' size='medium'>
+                    Les og send inn
+                  </Heading>
+                </div>
                 <BodyLong>
                   Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
                   mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å

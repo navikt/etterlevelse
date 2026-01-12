@@ -7,6 +7,7 @@ import {
 } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import {
   getPvkDokument,
+  getPvkDokumentVersions,
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '@/api/pvkDokument/pvkDokumentApi'
@@ -43,6 +44,7 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
+import { pvkVersionsUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { isRisikoUnderarbeidCheck } from '@/util/risikoscenario/risikoscenarioUtils'
 import { FilesIcon } from '@navikt/aksel-icons'
@@ -122,6 +124,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
   const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
   const [savedSuccess, setSavedSuccess] = useState<boolean>(false)
+  const [currentPvkContentVersion, setCurrentPvkContentVersion] = useState<number | undefined>(
+    undefined
+  )
   const [artOgOmfang] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
   const [artOgOmfangError, setArtOgOmfangError] = useState<IArtOgOmfangError>({
     stemmerPersonkategorier: false,
@@ -132,6 +137,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
 
   const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
+  const hasEditedAfterCreation = !!(
+    pvkDokument?.changeStamp?.lastModifiedDate &&
+    pvkDokument.changeStamp.lastModifiedDate !== pvkDokument.changeStamp.createdDate
+  )
 
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (
@@ -418,6 +427,21 @@ export const SendInnView: FunctionComponent<TProps> = ({
     ;(async () => {
       if (pvkDokument) {
         setIsLoading(true)
+        // Compute current PVK content version: latest snapshot + 1, or 1 for first cycle
+        try {
+          const page = await getPvkDokumentVersions(pvkDokument.id)
+          const versions = page.content || []
+          if (versions.length > 0) {
+            const latest = Math.max(
+              ...versions.map((v: any) => (v.contentVersion !== undefined ? v.contentVersion : 1))
+            )
+            setCurrentPvkContentVersion(latest + 1)
+          } else {
+            setCurrentPvkContentVersion(1)
+          }
+        } catch (e) {
+          setCurrentPvkContentVersion(undefined)
+        }
         await getBehandlingensLivslopByEtterlevelseDokumentId(pvkDokument.etterlevelseDokumentId)
           .then((response: IBehandlingensLivslop) => {
             setBehandlingensLivslop(response)
@@ -523,9 +547,37 @@ export const SendInnView: FunctionComponent<TProps> = ({
           <Form>
             <div className='flex justify-center'>
               <div>
-                <Heading level='1' size='medium' className='mb-5'>
-                  Les og send inn
-                </Heading>
+                <div className='flex items-center gap-4 mb-5'>
+                  <Heading level='1' size='medium'>
+                    Les og send inn
+                  </Heading>
+                  {currentPvkContentVersion && (
+                    <span className='text-xs px-2 py-1 border rounded'>
+                      Versjon {currentPvkContentVersion}
+                    </span>
+                  )}
+                  <a href={pvkVersionsUrl(pvkDokument.id)} className='text-sm underline'>
+                    Se versjoner
+                  </a>
+                  {currentPvkContentVersion &&
+                    currentPvkContentVersion > 1 &&
+                    pvkDokument.status === EPvkDokumentStatus.UNDERARBEID &&
+                    hasEditedAfterCreation && (
+                      <button
+                        className='border rounded px-2 py-1 text-xs'
+                        onClick={() => {
+                          // Set status to require risk owner approval and submit
+                          ;(formRef.current as any)?.setFieldValue(
+                            'status',
+                            EPvkDokumentStatus.TRENGER_GODKJENNING
+                          )
+                          ;(formRef.current as any)?.submitForm()
+                        }}
+                      >
+                        Send ny risikovurdering til godkjenning
+                      </button>
+                    )}
+                </div>
                 <BodyLong>
                   Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
                   mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å

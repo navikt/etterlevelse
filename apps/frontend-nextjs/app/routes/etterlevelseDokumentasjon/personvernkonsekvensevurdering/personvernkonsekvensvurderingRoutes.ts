@@ -95,6 +95,9 @@ export const pvkDokumenteringPvoTilbakemeldingUrl = (
   return url
 }
 
+export const pvkVersionsUrl = (pvkDokumentId: string | undefined): string =>
+  `${personvernKonsekvensvurderingUrl}/${pvkDokumentId}/versions`
+
 export const pvkDokumentasjonTabFilterRisikoscenarioUrl = (
   steg: string | null,
   tabQuery: string | null,

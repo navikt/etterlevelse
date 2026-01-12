@@ -524,6 +524,16 @@ export interface IPvkDokumentListItem {
   sendtTilPvoAv: string
 }
 
+export interface IPvkDokumentVersionItem {
+  id: string
+  pvkDokumentId: string
+  etterlevelseDokumentId: string
+  status: EPvkDokumentStatus
+  changeStamp: IChangeStamp
+  data: any
+  contentVersion: number
+}
+
 export interface IRisikoscenario {
   id: string
   changeStamp: IChangeStamp

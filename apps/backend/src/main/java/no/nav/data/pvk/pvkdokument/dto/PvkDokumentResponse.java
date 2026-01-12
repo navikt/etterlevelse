@@ -1,6 +1,13 @@
 package no.nav.data.pvk.pvkdokument.dto;
 
+import static no.nav.data.common.utils.StreamUtils.copyOf;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +19,6 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import static no.nav.data.common.utils.StreamUtils.copyOf;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -28,6 +29,8 @@ public class PvkDokumentResponse {
     private UUID id;
     private ChangeStampResponse changeStamp;
     private Integer version;
+    // Optional: id of newly created PVK document when a new version is started
+    private UUID newPvkDokumentId;
 
     private UUID etterlevelseDokumentId;
     private PvkDokumentStatus status;

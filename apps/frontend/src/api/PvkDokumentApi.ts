@@ -119,6 +119,8 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
   ]
 }
 
+// Removed: versions endpoint is handled in Next.js app
+
 const pvkDokumentToPvkDokumentDto = (pvkDokument: IPvkDokument) => {
   const dto = {
     ...pvkDokument,

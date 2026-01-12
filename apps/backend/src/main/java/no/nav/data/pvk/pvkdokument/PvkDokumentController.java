@@ -1,5 +1,23 @@
 package no.nav.data.pvk.pvkdokument;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,12 +35,6 @@ import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,6 +46,7 @@ public class PvkDokumentController {
     private final PvkDokumentService pvkDokumentService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
+    private final no.nav.data.pvk.pvkdokument.domain.PvkDokumentVersionRepo pvkDokumentVersionRepo;
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")
@@ -84,6 +97,30 @@ public class PvkDokumentController {
         return pvkDokument.map(dokument -> ResponseEntity.ok(PvkDokumentResponse.buildFrom(dokument))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "List versions for PVK Document")
+    @ApiResponse(description = "ok")
+    @GetMapping("/{id}/versions")
+    public ResponseEntity<RestResponsePage<no.nav.data.pvk.pvkdokument.dto.PvkDokumentVersionResponse>> listVersionsForPvk(@PathVariable UUID id) {
+        log.info("List versions for PVK Document id={}", id);
+        var versions = pvkDokumentVersionRepo.findByPvkDokumentIdOrderByCreatedDateDesc(id)
+                .stream()
+                .map(no.nav.data.pvk.pvkdokument.dto.PvkDokumentVersionResponse::buildFrom)
+                .toList();
+        return ResponseEntity.ok(new RestResponsePage<>(versions));
+    }
+
+    @Operation(summary = "List versions for etterlevelse dokumentasjon")
+    @ApiResponse(description = "ok")
+    @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}/versions")
+    public ResponseEntity<RestResponsePage<no.nav.data.pvk.pvkdokument.dto.PvkDokumentVersionResponse>> listVersionsForEtterlevelseDok(@PathVariable UUID etterlevelseDokumentId) {
+        log.info("List versions for etterlevelse dokumentasjon id={}", etterlevelseDokumentId);
+        var versions = pvkDokumentVersionRepo.findByEtterlevelseDokumentIdOrderByCreatedDateDesc(etterlevelseDokumentId)
+                .stream()
+                .map(no.nav.data.pvk.pvkdokument.dto.PvkDokumentVersionResponse::buildFrom)
+                .toList();
+        return ResponseEntity.ok(new RestResponsePage<>(versions));
+    }
+
     @Operation(summary = "Create Pvk Document")
     @ApiResponse(responseCode = "201", description = "PvkDokument created")
     @PostMapping
@@ -114,7 +151,12 @@ public class PvkDokumentController {
         request.mergeInto(pvkDokumentToUpdate);
         var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
         updatePvoTilbakemeldingStatus(pvkDokument);
-        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+
+        // If approved, create a new version and include new PVK id in response
+        var maybeNew = pvkDokumentService.handleApprovalAndCreateNewVersion(pvkDokument);
+        var response = PvkDokumentResponse.buildFrom(pvkDokument);
+        maybeNew.ifPresent(newDoc -> response.setNewPvkDokumentId(newDoc.getId()));
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Delete Pvk Document")

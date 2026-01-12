@@ -49,6 +49,16 @@ export interface IPvkDokumentListItem {
   antallInnsendingTilPvo: number
 }
 
+export interface IPvkDokumentVersionItem {
+  id: string
+  pvkDokumentId: string
+  etterlevelseDokumentId: string
+  status: EPvkDokumentStatus
+  changeStamp: IChangeStamp
+  data: any
+  contentVersion?: number
+}
+
 export enum EPvkDokumentStatus {
   UNDERARBEID = 'UNDERARBEID',
   SENDT_TIL_PVO = 'SENDT_TIL_PVO',
