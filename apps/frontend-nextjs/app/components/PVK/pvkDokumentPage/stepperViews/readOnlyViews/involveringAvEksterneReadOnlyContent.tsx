@@ -3,19 +3,21 @@ import {
   EPVK,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
   personkategorier: string[]
   databehandlere: string[]
   pvkDokument: IPvkDokument
+  isChangesMadeSinceLastSubmission?: boolean
 }
 
 export const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = ({
   personkategorier,
   databehandlere,
   pvkDokument,
+  isChangesMadeSinceLastSubmission,
 }) => {
   return (
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
@@ -24,6 +26,12 @@ export const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = (
           <Heading level='1' size='medium' className='mb-5'>
             Involvering av eksterne deltakere
           </Heading>
+
+          {isChangesMadeSinceLastSubmission && (
+            <Alert variant='info' className='my-5'>
+              Innhold på denne siden er endret av etterlever siden siste innsending til PVO.
+            </Alert>
+          )}
 
           <Heading level='2' size='small' className='mb-3'>
             Representanter for de registrerte

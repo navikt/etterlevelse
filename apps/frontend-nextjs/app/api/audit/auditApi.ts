@@ -39,3 +39,8 @@ export const getMailLog = async (start: number, count: number) => {
     )
   ).data
 }
+
+export const getAuditByTableIdAndTimeStamp = async (tableId: string, timestamp: string) => {
+  return (await axios.get<IAuditItem[]>(`${env.backendBaseUrl}/audit/log/${tableId}/${timestamp}`))
+    .data
+}
