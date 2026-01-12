@@ -14,24 +14,22 @@ type TProps = {
   isRisikoeier: boolean
 }
 
-const BehandlingsLivsLopReadonly: FunctionComponent<TProps> = ({
+const BehandlingensLivsLopReadonly: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   //   risikoscenarioList,
   behandlingsLivslop,
   //   pvkDokument,
   //   isRisikoeier,
 }) => (
-  <>
-    <ActionMenu.Item
-      as='a'
-      href={pvkDokumentasjonBehandlingsenLivslopUrl(
-        etterlevelseDokumentasjon.id,
-        behandlingsLivslop ? behandlingsLivslop.id : 'ny'
-      )}
-    >
-      Se behandlingens livsløp
-    </ActionMenu.Item>
-  </>
+  <ActionMenu.Item
+    as='a'
+    href={pvkDokumentasjonBehandlingsenLivslopUrl(
+      etterlevelseDokumentasjon.id,
+      behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+    )}
+  >
+    Se behandlingens livsløp
+  </ActionMenu.Item>
 )
 
-export default BehandlingsLivsLopReadonly
+export default BehandlingensLivsLopReadonly
