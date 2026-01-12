@@ -1,7 +1,8 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Alert, Heading, Label, List } from '@navikt/ds-react'
+import { Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -23,11 +24,7 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
             Behandlingens art og omfang
           </Heading>
 
-          {isChangesMadeSinceLastSubmission && (
-            <Alert variant='info' className='my-5'>
-              Innhold på denne siden er endret av etterlever siden siste innsending til PVO.
-            </Alert>
-          )}
+          {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
 
           <List>
             <Label>{EPVK.behandlingAvPersonopplysninger}</Label>

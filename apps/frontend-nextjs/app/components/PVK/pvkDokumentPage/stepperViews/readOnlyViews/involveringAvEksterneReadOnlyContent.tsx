@@ -1,9 +1,10 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import {
   EPVK,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Alert, BodyLong, Heading, Label, List } from '@navikt/ds-react'
+import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -27,11 +28,7 @@ export const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = (
             Involvering av eksterne deltakere
           </Heading>
 
-          {isChangesMadeSinceLastSubmission && (
-            <Alert variant='info' className='my-5'>
-              Innhold på denne siden er endret av etterlever siden siste innsending til PVO.
-            </Alert>
-          )}
+          {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
 
           <Heading level='2' size='small' className='mb-3'>
             Representanter for de registrerte

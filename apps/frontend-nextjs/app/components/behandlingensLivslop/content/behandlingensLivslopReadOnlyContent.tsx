@@ -2,9 +2,10 @@
 
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import { IBehandlingensLivslopRequest } from '@/constants/behandlingensLivslop/behandlingensLivslop'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Alert, BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
+import { BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
 import BehandlingensLivsLopSidePanel from '../sidePanel/BehandlingensLivsLopSidePanel'
 import BehandlingensLivslopTextContent from './behandlingensLivslopTextContent'
@@ -46,11 +47,7 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
             </Heading>
           )}
 
-          {isChangesMadeSinceLastSubmission && (
-            <Alert variant='info' className='my-5'>
-              Innhold på denne siden er endret av etterlever siden siste innsending til PVO.
-            </Alert>
-          )}
+          {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
 
           <BehandlingensLivslopTextContent />
 

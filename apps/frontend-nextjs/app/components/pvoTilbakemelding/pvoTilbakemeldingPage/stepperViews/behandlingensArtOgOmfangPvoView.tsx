@@ -49,7 +49,10 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
         (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
       )
 
-      if (moment(artOgOmfang.changeStamp.lastModifiedDate).isAfter(previousSubmission?.sendtDato)) {
+      if (
+        previousSubmission &&
+        moment(artOgOmfang.changeStamp.lastModifiedDate).isAfter(previousSubmission.sendtDato)
+      ) {
         return true
       } else {
         return false

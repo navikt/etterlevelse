@@ -3,6 +3,7 @@
 import TiltakView from '@/components/tiltak/common/tiltakView'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Accordion, Alert, BodyLong, ReadMore } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -16,6 +17,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   allRisikoscenarioList: IRisikoscenario[]
   tiltakList: ITiltak[]
+  previousVurdering?: IVurdering
 }
 
 export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
@@ -23,6 +25,7 @@ export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> 
   allRisikoscenarioList,
   tiltakList,
   etterlevelseDokumentasjonId,
+  previousVurdering,
 }) => {
   const router = useRouter()
   const pathName = usePathname()
@@ -86,6 +89,7 @@ export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> 
               <IdentifiseringAvRisikoscenarioAccordianHeader
                 risikoscenario={risikoscenario}
                 ref={expanded ? accordionRef : undefined}
+                previousVurdering={previousVurdering}
               />
               <Accordion.Content>
                 {expanded && (

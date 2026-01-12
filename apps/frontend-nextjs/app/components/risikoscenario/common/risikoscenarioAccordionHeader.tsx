@@ -1,11 +1,15 @@
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Accordion, Tag } from '@navikt/ds-react'
+import moment from 'moment'
 import { FunctionComponent, RefObject } from 'react'
+import NyttInnholdTag from './NyttInnholdTag'
 
 type TProps = {
   risikoscenario: IRisikoscenario
   ref?: RefObject<HTMLButtonElement | null>
+  previousVurdering?: IVurdering
 }
 
 export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
@@ -57,6 +61,7 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
 export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
   risikoscenario,
   ref,
+  previousVurdering,
 }) => {
   const ikkeFerdigBeskrevet: boolean =
     risikoscenario.konsekvensNivaa === 0 ||
@@ -73,6 +78,10 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
           <Tag variant='alt1'>Savner tiltak</Tag>
         )}
+        {previousVurdering &&
+          moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(
+            previousVurdering?.sendtDato
+          ) && <NyttInnholdTag />}
       </div>
     </Accordion.Header>
   )

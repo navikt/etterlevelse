@@ -59,6 +59,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
       )
 
       if (
+        previousSubmission &&
         moment(behandlingensLivslop.changeStamp.lastModifiedDate).isAfter(
           previousSubmission?.sendtDato
         )

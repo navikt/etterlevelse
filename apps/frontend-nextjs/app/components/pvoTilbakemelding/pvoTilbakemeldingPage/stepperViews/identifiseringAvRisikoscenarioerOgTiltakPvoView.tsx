@@ -11,12 +11,14 @@ import {
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import PvoFormButtons from '../../form/pvoFormButtons'
 
 type TProps = {
   etterlevelseDokumentasjonId: string
   pvkDokument: IPvkDokument
+  pvoTilbakemelding: IPvoTilbakemelding
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
@@ -25,6 +27,7 @@ type TProps = {
 export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjonId,
   pvkDokument,
+  pvoTilbakemelding,
   activeStep,
   setActiveStep,
   setSelectedStep,
@@ -32,6 +35,15 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
+  const previousVurdering = useMemo(() => {
+    if (pvkDokument.antallInnsendingTilPvo > 1) {
+      return pvoTilbakemelding.vurderinger.find(
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+      )
+    } else {
+      return undefined
+    }
+  }, [pvkDokument, pvoTilbakemelding])
 
   useEffect(() => {
     if (pvkDokument) {
@@ -70,6 +82,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<
                 allRisikoscenarioList={allRisikoscenarioList}
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                 tiltakList={tiltakList}
+                previousVurdering={previousVurdering}
               />
             </div>
           )}
