@@ -642,6 +642,14 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             <div className='flex-1' />
           </div>
 
+          {env.isDev && user.isAdmin() && (
+            <>
+              <TextAreaField rows={2} noPlaceholder label='P360 recnummer' name='p360Recno' />
+
+              <TextAreaField rows={2} noPlaceholder label='P360 saknummer' name='p360CaseNumber' />
+            </>
+          )}
+
           {!dokumentRelasjon && (
             <div className='mt-5'>
               <CheckboxGroup
