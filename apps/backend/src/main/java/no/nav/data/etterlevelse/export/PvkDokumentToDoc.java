@@ -265,14 +265,14 @@ public class PvkDokumentToDoc {
             var nameListLength = risikoeierNameList.size();
 
             if (nameListLength > 1) {
-                for (int i = 1; i <= nameListLength; i++) {
-                    if (i == nameListLength - 1) {
-                        risikoeiere = risikoeiere.concat("og ");
+                for (int i = 0; i < nameListLength; i++) {
+                    if (i != nameListLength - 1 && i != 0) {
+                        risikoeiere = risikoeiere.concat(" og ");
                     }
                     risikoeiere = risikoeiere.concat(risikoeierNameList.get(i));
                 }
             } else {
-                risikoeiere = risikoeiere.concat(risikoeierNameList.get(0));
+                risikoeiere = risikoeiere.concat(risikoeierNameList.getFirst());
             }
 
 
