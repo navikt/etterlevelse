@@ -110,6 +110,7 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
                       risikoscenario={risikoscenario}
                       alleRisikoscenarioer={alleRisikoscenarioer}
                       tiltakList={tiltakList}
+                      previousVurdering={previousVurdering}
                     />
                   </Accordion.Content>
                 </Accordion.Item>
