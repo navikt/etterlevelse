@@ -9,6 +9,7 @@ import EtterlevelseDokumentasjonKravListe from '@/components/etterlevelseDokumen
 import { PrioriterteKravAccordionList } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioriterteKravAccordionList'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
@@ -26,6 +27,7 @@ type TProps = {
   relevanteStats: TKravQL[]
   temaListe: TTemaCode[]
   risikoscenarioList: IRisikoscenario[]
+  allTiltak: ITiltak[]
   isRisikoscenarioLoading: boolean
   previousVurdering?: IVurdering
 }
@@ -38,6 +40,7 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
   allKravPriority,
   loading,
   risikoscenarioList,
+  allTiltak,
   isRisikoscenarioLoading,
   previousVurdering,
 }) => {
@@ -85,6 +88,7 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
               allKravPriority={allKravPriority}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               risikoscenarioList={risikoscenarioList}
+              allTiltak={allTiltak}
               isRisikoscenarioLoading={isRisikoscenarioLoading}
               loading={loading}
               previousVurdering={previousVurdering}

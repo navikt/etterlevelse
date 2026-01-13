@@ -4,6 +4,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
@@ -21,6 +22,7 @@ type TProps = {
   allKravPriority: IKravPriorityList[]
   loading: boolean
   risikoscenarioList: IRisikoscenario[]
+  allTiltak: ITiltak[]
   isRisikoscenarioLoading: boolean
   previousVurdering?: IVurdering
 }
@@ -33,6 +35,7 @@ export const PvkKravListeTab: FunctionComponent<TProps> = ({
   allKravPriority,
   loading,
   risikoscenarioList,
+  allTiltak,
   isRisikoscenarioLoading,
   previousVurdering,
 }) => {
@@ -122,6 +125,7 @@ export const PvkKravListeTab: FunctionComponent<TProps> = ({
         risikoscenarioList={risikoscenarioList}
         isRisikoscenarioLoading={isRisikoscenarioLoading}
         previousVurdering={previousVurdering}
+        allTiltak={allTiltak}
       />
     </div>
   )

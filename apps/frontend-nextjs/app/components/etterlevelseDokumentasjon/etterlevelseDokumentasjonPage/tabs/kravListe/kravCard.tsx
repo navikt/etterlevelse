@@ -1,3 +1,5 @@
+'use effect'
+
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '@/api/etterlevelse/etterlevelseApi'
 import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
@@ -9,6 +11,7 @@ import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { EKravStatus, TKravEtterlevelseData } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
@@ -30,7 +33,7 @@ interface IProps {
   risikoscenarioList: IRisikoscenario[]
   noVarsling?: boolean
   temaCode?: string
-
+  allTiltak: ITiltak[]
   previousVurdering?: IVurdering
 }
 
@@ -41,6 +44,7 @@ export const KravCard = (props: IProps) => {
     temaCode,
     etterlevelseDokumentasjonId,
     risikoscenarioList,
+    allTiltak,
     previousVurdering,
   } = props
   const user = useContext(UserContext)
@@ -123,9 +127,23 @@ export const KravCard = (props: IProps) => {
         )
       ) {
         setNyttInnholdFlag(true)
+      } else if (allTiltak.length !== 0) {
+        const oppdatertTiltak: ITiltak[] = []
+        relevantRisikoscenarioForKravet.forEach((risikoscenario) => {
+          oppdatertTiltak.push(
+            ...allTiltak.filter(
+              (tiltak) =>
+                risikoscenario.tiltakIds.includes(tiltak.id) &&
+                moment(tiltak.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+            )
+          )
+        })
+
+        console.debug(oppdatertTiltak)
+        setNyttInnholdFlag(oppdatertTiltak.length > 0)
       }
     }
-  }, [previousVurdering, risikoscenarioList])
+  }, [previousVurdering, risikoscenarioList, allTiltak])
 
   return (
     <LinkPanel

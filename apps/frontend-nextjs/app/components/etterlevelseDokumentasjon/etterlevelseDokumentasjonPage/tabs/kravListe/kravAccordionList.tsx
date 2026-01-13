@@ -2,6 +2,7 @@
 
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
@@ -25,6 +26,7 @@ type TProps = {
   allKravPriority: IKravPriorityList[]
   isRisikoscenarioLoading: boolean
   risikoscenarioList: IRisikoscenario[]
+  allTiltak: ITiltak[]
   previousVurdering?: IVurdering
 }
 
@@ -38,6 +40,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
   allKravPriority,
   isRisikoscenarioLoading,
   risikoscenarioList,
+  allTiltak,
   previousVurdering,
 }) => {
   const codelist = useContext(CodelistContext)
@@ -118,6 +121,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                           <List.Item icon={<div />} key={`krav_${idx}`}>
                             <KravCard
                               risikoscenarioList={risikoscenarioList}
+                              allTiltak={allTiltak}
                               krav={krav}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                               temaCode={tema.code}

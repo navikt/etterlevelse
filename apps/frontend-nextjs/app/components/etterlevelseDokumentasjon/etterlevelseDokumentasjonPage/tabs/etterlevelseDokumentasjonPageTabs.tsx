@@ -2,6 +2,7 @@
 
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { usePvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
+import { getAllTiltak } from '@/api/tiltak/tiltakApi'
 import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -10,6 +11,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
@@ -54,6 +56,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   const router = useRouter()
   const pathname = usePathname()
   const [pvoTilbakemelding] = usePvoTilbakemelding(pvkDokument?.id)
+  const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
   const previousVurdering = useMemo(() => {
     if (!!pvoTilbakemelding && !!pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
@@ -72,6 +75,14 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       await getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
     })()
   }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      if (!!previousVurdering) {
+        await getAllTiltak().then(setAllTiltak)
+      }
+    })()
+  }, [previousVurdering])
 
   useEffect(() => {
     if (
@@ -108,6 +119,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             loading={loading}
             risikoscenarioList={risikoscenarioList}
+            allTiltak={allTiltak}
             isRisikoscenarioLoading={isRisikoscenarioLoading}
             previousVurdering={previousVurdering}
           />
@@ -138,6 +150,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             relevanteStats={relevanteStats}
             temaListe={temaListe}
             risikoscenarioList={risikoscenarioList}
+            allTiltak={allTiltak}
             isRisikoscenarioLoading={isRisikoscenarioLoading}
             previousVurdering={previousVurdering}
           />
@@ -153,6 +166,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             allKravPriority={allKravPriority}
             loading={loading}
             risikoscenarioList={risikoscenarioList}
+            allTiltak={allTiltak}
             isRisikoscenarioLoading={isRisikoscenarioLoading}
             previousVurdering={previousVurdering}
           />
