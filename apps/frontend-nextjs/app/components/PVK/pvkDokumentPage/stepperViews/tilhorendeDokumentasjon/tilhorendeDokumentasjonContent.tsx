@@ -2,6 +2,7 @@
 
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
@@ -26,12 +27,14 @@ type TProps = {
       }
     | undefined
   isPvkKravLoading: boolean
+  isChangesMadeSinceLastSubmission?: boolean
 }
 
 export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkKrav,
   isPvkKravLoading,
+  isChangesMadeSinceLastSubmission,
 }) => {
   const [antallPvkKrav, setAntallPvkKrav] = useState<number>(0)
   const [antallFerdigPvkKrav, setAntallFerdigPvkKrav] = useState<number>(0)
@@ -62,6 +65,8 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           <Heading level='1' size='medium' className='mb-5'>
             Tilhørende dokumentasjon
           </Heading>
+
+          {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
 
           <Heading level='2' size='small' className='mb-3'>
             Behandlinger i Behandlingskatalogen

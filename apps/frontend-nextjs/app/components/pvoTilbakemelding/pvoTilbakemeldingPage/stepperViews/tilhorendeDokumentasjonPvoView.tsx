@@ -1,7 +1,11 @@
+import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { IPageResponse } from '@/constants/commonConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  IEtterlevelseDokumentasjon,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import {
@@ -9,7 +13,7 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent, RefObject } from 'react'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilhorendeDokTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilhorendeDokTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
@@ -47,6 +51,49 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
   setPvoTilbakemelding,
   relevantVurdering,
 }) => {
+  const [isChangesMadeSinceLastSubmission, setIsChangesMadeSinceLastSubmission] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    ;(async () => {
+      if (pvkDokument.antallInnsendingTilPvo > 1) {
+        const previousSubmission = pvoTilbakemelding.vurderinger.find(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+        )
+        if (previousSubmission && previousSubmission.sendtDato) {
+          await getAuditByTableIdAndTimeStamp(
+            etterlevelseDokumentasjon.id,
+            previousSubmission?.sendtDato
+          ).then((previousEtterlevelseDokument) => {
+            if (previousEtterlevelseDokument.length !== 0) {
+              console.log(previousEtterlevelseDokument)
+              const previousData = (
+                previousEtterlevelseDokument[0].data as {
+                  etterlevelseDokumentasjonData?: IEtterlevelseDokumentasjon
+                }
+              )['etterlevelseDokumentasjonData']
+              if (
+                previousData &&
+                (previousData.behandlingIds !== etterlevelseDokumentasjon.behandlingIds ||
+                  previousData.risikovurderinger !== etterlevelseDokumentasjon.risikovurderinger)
+              ) {
+                setIsChangesMadeSinceLastSubmission(true)
+              } else {
+                setIsChangesMadeSinceLastSubmission(false)
+              }
+            } else {
+              setIsChangesMadeSinceLastSubmission(false)
+            }
+          })
+        } else {
+          setIsChangesMadeSinceLastSubmission(false)
+        }
+      } else {
+        setIsChangesMadeSinceLastSubmission(false)
+      }
+    })()
+  }, [etterlevelseDokumentasjon, pvkDokument, pvoTilbakemelding])
+
   return (
     <div className='w-full'>
       <ContentLayout>
@@ -56,6 +103,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               pvkKrav={pvkKrav}
               isPvkKravLoading={isPvkKravLoading}
+              isChangesMadeSinceLastSubmission={isChangesMadeSinceLastSubmission}
             />
           </div>
           <div className='w-1/2'>
