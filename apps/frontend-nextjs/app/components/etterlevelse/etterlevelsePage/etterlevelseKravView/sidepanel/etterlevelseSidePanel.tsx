@@ -162,8 +162,6 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                     pvkDokument={pvkDokument}
                     setIsPvkFormActive={setIsPvkFormActive}
                     formRef={formRef}
-                    previousVurdering={previousVurdering}
-                    isPvo={isPvo}
                   />
                 )}
 
