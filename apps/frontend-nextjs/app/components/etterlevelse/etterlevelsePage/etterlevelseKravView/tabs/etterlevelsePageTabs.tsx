@@ -296,46 +296,48 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
               Kan ikke redigeres når PVK skjema er aktiv på sidepanelet
             </Alert>
           )}
-          {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) && (
-            <div className='mt-2'>
-              {!isPreview && (
-                <CheckboxGroup
-                  legend='Legg til i Prioritert kravliste'
-                  hideLegend
-                  onChange={handleChange}
-                  value={isPrioritised ? ['check'] : []}
-                >
-                  {
-                    <Checkbox
-                      value='check'
-                      description={
-                        (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
-                          etterlevelseDokumentasjon?.forGjenbruk) ||
-                          (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
-                          'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
-                        ''
-                      }
-                    >
-                      Legg til dette kravet i Prioritert kravliste
-                    </Checkbox>
-                  }
-                </CheckboxGroup>
-              )}
+          {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
+            !isPvoUnderarbeidWarningActive && (
+              <div className='mt-2'>
+                {!isPreview && (
+                  <CheckboxGroup
+                    legend='Legg til i Prioritert kravliste'
+                    hideLegend
+                    onChange={handleChange}
+                    value={isPrioritised ? ['check'] : []}
+                  >
+                    {
+                      <Checkbox
+                        value='check'
+                        description={
+                          (((etterlevelseDokumentasjon?.hasCurrentUserAccess &&
+                            etterlevelseDokumentasjon?.forGjenbruk) ||
+                            (etterlevelseDokumentasjon?.forGjenbruk && user.isAdmin())) &&
+                            'De som gjenbruker etterlevelsesdokumentet ditt vil få fremhevet kravet når de foretar sin egen vurdering') ||
+                          ''
+                        }
+                      >
+                        Legg til dette kravet i Prioritert kravliste
+                      </Checkbox>
+                    }
+                  </CheckboxGroup>
+                )}
 
-              <EtterlevelseEditFields
-                isPreview={isPreview}
-                krav={krav}
-                etterlevelse={etterlevelse}
-                submit={submit}
-                formRef={etterlevelseFormRef}
-                disableEdit={disableEdit}
-                editedEtterlevelse={editedEtterlevelse}
-                tidligereEtterlevelser={tidligereEtterlevelser}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              />
-            </div>
-          )}
-          {!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin() && (
+                <EtterlevelseEditFields
+                  isPreview={isPreview}
+                  krav={krav}
+                  etterlevelse={etterlevelse}
+                  submit={submit}
+                  formRef={etterlevelseFormRef}
+                  disableEdit={disableEdit}
+                  editedEtterlevelse={editedEtterlevelse}
+                  tidligereEtterlevelser={tidligereEtterlevelser}
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                />
+              </div>
+            )}
+          {((!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin()) ||
+            isPvoUnderarbeidWarningActive) && (
             <EtterlevelseViewFields
               etterlevelse={etterlevelse}
               suksesskriterier={krav.suksesskriterier}
