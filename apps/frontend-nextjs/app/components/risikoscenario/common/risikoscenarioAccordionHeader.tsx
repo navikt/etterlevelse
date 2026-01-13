@@ -16,6 +16,7 @@ type TProps = {
 export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
   risikoscenario,
   ref,
+  hasNewContent,
 }) => {
   const ferdigVurdert: boolean =
     risikoscenario.sannsynlighetsNivaaEtterTiltak !== 0 &&
@@ -54,6 +55,8 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
             K{krav.kravNummer}.{krav.kravVersjon}
           </Tag>
         ))}
+
+        {hasNewContent && <NyttInnholdTag />}
       </div>
     </Accordion.Header>
   )

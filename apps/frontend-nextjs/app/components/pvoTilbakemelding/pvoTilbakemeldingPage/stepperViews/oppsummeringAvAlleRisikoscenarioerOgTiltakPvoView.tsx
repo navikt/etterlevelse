@@ -123,6 +123,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
   const [antallUtenTiltakAnsvarlig, setAntallUtenTiltakAnsvarlig] = useState<number>(0)
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
 
+  const previousVurdering: IVurdering | undefined =
+    pvkDokument.antallInnsendingTilPvo > 1
+      ? pvoTilbakemelding.vurderinger.find(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+        )
+      : undefined
+
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
@@ -367,6 +374,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                   allRisikoscenarioList={risikoscenarioList}
                                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                                   tiltakList={tiltakList}
+                                  previousVurdering={previousVurdering}
                                 />
                               </div>
                             )}
@@ -404,6 +412,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                             <TiltakAccordionListReadOnly
                               tiltakList={filteredTiltakList}
                               risikoscenarioList={risikoscenarioList}
+                              previousVurdering={previousVurdering}
                             />
                           )}
 
