@@ -1,9 +1,6 @@
 'use effect'
 
-import {
-  getEtterlevelse,
-  getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
-} from '@/api/etterlevelse/etterlevelseApi'
+import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '@/api/etterlevelse/etterlevelseApi'
 import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
@@ -144,13 +141,11 @@ export const KravCard = (props: IProps) => {
           })
           setNyttInnholdFlag(oppdatertTiltak.length > 0)
         } else if (krav.etterlevelseId !== undefined) {
-          await getEtterlevelse(krav.etterlevelseId).then(async (etterlevelse) => {
-            console.debug(etterlevelse.changeStamp.lastModifiedDate)
-            console.debug(previousVurdering.sendtDato, 'match')
-            setNyttInnholdFlag(
-              moment(etterlevelse.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+          setNyttInnholdFlag(
+            moment(krav.etterlevelseChangeStamp?.lastModifiedDate).isAfter(
+              previousVurdering.sendtDato
             )
-          })
+          )
         }
       }
     })()

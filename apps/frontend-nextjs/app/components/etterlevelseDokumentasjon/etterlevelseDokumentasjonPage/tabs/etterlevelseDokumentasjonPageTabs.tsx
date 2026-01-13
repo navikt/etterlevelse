@@ -2,7 +2,7 @@
 
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { usePvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
-import { getAllTiltak } from '@/api/tiltak/tiltakApi'
+import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -78,11 +78,13 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     ;(async () => {
-      if (!!previousVurdering) {
-        await getAllTiltak().then(setAllTiltak)
+      if (!!previousVurdering && !!pvkDokument) {
+        await getTiltakByPvkDokumentId(pvkDokument.id).then((pagedTiltak) =>
+          setAllTiltak(pagedTiltak.content)
+        )
       }
     })()
-  }, [previousVurdering])
+  }, [previousVurdering, pvkDokument])
 
   useEffect(() => {
     if (
