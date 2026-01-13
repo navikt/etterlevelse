@@ -12,12 +12,15 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
+import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import AccordianAlertModal from '../../common/accordianAlertModal'
+import NyttInnholdTag from '../common/NyttInnholdTag'
 import { KravRisikoscenarioOvrigeRisikoscenarierLink } from '../common/kravRisikoscenarioOvrigeRisikoscenarierLink'
 import { KravRisikoscenarioReadMore } from '../common/kravRisikoscenarioReadMore'
 import CreateRisikoscenario from '../edit/createRisikoscenario'
@@ -29,6 +32,8 @@ type TProps = {
   pvkDokument: IPvkDokument
   setIsPvkFormActive: (state: boolean) => void
   formRef: RefObject<any>
+  previousVurdering?: IVurdering
+  isPvo?: boolean
 }
 
 export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
@@ -36,6 +41,8 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   pvkDokument,
   setIsPvkFormActive,
   formRef,
+  previousVurdering,
+  isPvo,
 }) => {
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false)
   const [isLeggTilEksisterendeMode, setIsLeggTilEksisterendeMode] = useState<boolean>(false)
@@ -181,7 +188,23 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                         }}
                       >
                         <Accordion.Header id={risikoscenario.id}>
-                          {risikoscenario.navn}
+                          <div className='flex items-center gap-2'>
+                            {risikoscenario.navn}
+                            {isPvo &&
+                              !!previousVurdering?.sendtDato &&
+                              (moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(
+                                previousVurdering.sendtDato
+                              ) ||
+                                tiltakList
+                                  .filter((tiltak: ITiltak) =>
+                                    risikoscenario.tiltakIds.includes(tiltak.id)
+                                  )
+                                  .some((tiltak: ITiltak) =>
+                                    moment(tiltak.changeStamp.lastModifiedDate).isAfter(
+                                      previousVurdering.sendtDato
+                                    )
+                                  )) && <NyttInnholdTag />}
+                          </div>
                         </Accordion.Header>
                         {expanded && (
                           <Accordion.Content>

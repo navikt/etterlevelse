@@ -1,5 +1,6 @@
 'use client'
 
+import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
@@ -12,6 +13,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { FileTextIcon } from '@navikt/aksel-icons'
@@ -49,11 +51,13 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
 }) => {
   const user = useContext(UserContext)
+  const isPvo = user.isPersonvernombud()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
   const [selectedTab, setSelectedTab] = useState<string>('')
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
+  const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
   const formRef: RefObject<any> = useRef(undefined)
 
   const userHasAccess = () => {
@@ -69,6 +73,20 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
       setActiveTab('pvkDokumentasjon')
     }
   }, [pvkDokument])
+
+  useEffect(() => {
+    ;(async () => {
+      if (isPvo && pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
+        const pvoTilbakemelding = await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
+        const previous = pvoTilbakemelding.vurderinger.find(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+        )
+        if (!!previous) {
+          setPreviousVurdering(previous)
+        }
+      }
+    })()
+  }, [isPvo, pvkDokument])
 
   useEffect(() => {
     if (isPvkFormActive) {
@@ -144,11 +162,17 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                     pvkDokument={pvkDokument}
                     setIsPvkFormActive={setIsPvkFormActive}
                     formRef={formRef}
+                    previousVurdering={previousVurdering}
+                    isPvo={isPvo}
                   />
                 )}
 
                 {(!userHasAccess() || (pvkDokument && isReadOnlyPvkStatus(pvkDokument.status))) && (
-                  <KravRisikoscenarioReadOnly krav={krav} pvkDokument={pvkDokument} />
+                  <KravRisikoscenarioReadOnly
+                    krav={krav}
+                    pvkDokument={pvkDokument}
+                    previousVurdering={previousVurdering}
+                  />
                 )}
               </div>
             </Tabs.Panel>
@@ -173,7 +197,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                 setEtterlevelseMetadata={setEtterlevelseMetadata}
               />
 
-              <div className='break-words'>
+              <div className='wrap-break-word'>
                 <Markdown source={etterlevelseMetadata.notater} />
               </div>
             </div>
