@@ -4,6 +4,7 @@ import {
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
 import { getKravByKravNummer } from '@/api/krav/kravApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
+import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { Markdown } from '@/components/common/markdown/markdown'
 import ExpiredAlert from '@/components/krav/kravPage/expiredAlert/expiredAlertComponent'
@@ -12,6 +13,7 @@ import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/ett
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravId, TKravQL } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
 import { useQuery } from '@apollo/client/react'
@@ -76,6 +78,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [isPreview, setIsPreview] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
+  const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
 
   const user = useContext(UserContext)
 
@@ -171,6 +174,20 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
     }
   }, [nyereKrav])
 
+  useEffect(() => {
+    ;(async () => {
+      if (user.isPersonvernombud() && pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
+        const pvoTilbakemelding = await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
+        const previous = pvoTilbakemelding.vurderinger.find(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+        )
+        if (!!previous) {
+          setPreviousVurdering(previous)
+        }
+      }
+    })()
+  }, [user.isPersonvernombud(), pvkDokument])
+
   return (
     <div>
       {kravLoading && <CenteredLoader />}
@@ -265,6 +282,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 setIsSavingChanges={setIsSavingChanges}
                 etterlevelseFormRef={etterlevelseFormRef}
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                previousVurdering={previousVurdering}
               />
             </div>
 
@@ -277,6 +295,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               setIsPreview={setIsPreview}
               setIsPvkTabActive={setIsPvkTabActive}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              previousVurdering={previousVurdering}
             />
           </div>
         </div>

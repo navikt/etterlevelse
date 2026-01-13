@@ -1,6 +1,5 @@
 'use client'
 
-import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
@@ -38,6 +37,7 @@ type TProps = {
   setIsPreview: (state: boolean) => void
   setIsPvkTabActive: (state: boolean) => void
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
+  previousVurdering?: IVurdering
 }
 
 export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
@@ -49,15 +49,14 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   setIsPreview,
   setIsPvkTabActive,
   etterlevelseDokumentasjon,
+  previousVurdering,
 }) => {
   const user = useContext(UserContext)
-  const isPvo = user.isPersonvernombud()
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
   const [selectedTab, setSelectedTab] = useState<string>('')
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
-  const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
   const formRef: RefObject<any> = useRef(undefined)
 
   const userHasAccess = () => {
@@ -73,20 +72,6 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
       setActiveTab('pvkDokumentasjon')
     }
   }, [pvkDokument])
-
-  useEffect(() => {
-    ;(async () => {
-      if (isPvo && pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
-        const pvoTilbakemelding = await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
-        const previous = pvoTilbakemelding.vurderinger.find(
-          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
-        )
-        if (!!previous) {
-          setPreviousVurdering(previous)
-        }
-      }
-    })()
-  }, [isPvo, pvkDokument])
 
   useEffect(() => {
     if (isPvkFormActive) {

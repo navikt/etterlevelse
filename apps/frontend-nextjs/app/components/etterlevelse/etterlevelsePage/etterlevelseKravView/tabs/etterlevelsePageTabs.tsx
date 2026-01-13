@@ -19,6 +19,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@navikt/ds-react'
@@ -59,6 +60,7 @@ type TProps = {
   etterlevelseFormRef: RefObject<FormikProps<IEtterlevelse> | null | undefined>
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   pvkDokument?: IPvkDokument
+  previousVurdering?: IVurdering
 }
 
 export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
@@ -81,6 +83,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   setIsSavingChanges,
   etterlevelseFormRef,
   etterlevelseDokumentasjon,
+  previousVurdering,
 }) => {
   const params: Readonly<
     Partial<{
@@ -342,6 +345,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
               etterlevelse={etterlevelse}
               suksesskriterier={krav.suksesskriterier}
               tidligereEtterlevelser={tidligereEtterlevelser}
+              previousVurdering={previousVurdering}
             />
           )}
         </Tabs.Panel>

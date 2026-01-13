@@ -8,6 +8,7 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { ISuksesskriterie } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
@@ -22,6 +23,7 @@ type TProps = {
   suksesskriterier: ISuksesskriterie[]
   tidligereEtterlevelser?: IEtterlevelse[]
   isBortfiltrert?: boolean
+  previousVurdering?: IVurdering
 }
 
 export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
