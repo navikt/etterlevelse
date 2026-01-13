@@ -1,12 +1,14 @@
 'use client'
 
+import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
-import RisikoscenarioAccordianHeader from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
+import { IdentifiseringAvRisikoscenarioAccordianHeader } from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
 import RisikoscenarioTag from '@/components/risikoscenario/common/risikoscenarioTag'
 import { RisikoscenarioTiltakHeader } from '@/components/risikoscenario/common/risikoscenarioTiltakHeader'
 import TiltakView from '@/components/tiltak/common/tiltakView'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import {
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
@@ -16,6 +18,7 @@ import {
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { Accordion, Alert, BodyLong, Label, ReadMore } from '@navikt/ds-react'
+import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
 
@@ -25,6 +28,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
   tiltakList: ITiltak[]
   noMarkdownCopyLinkButton?: boolean
+  previousVurdering?: IVurdering
 }
 
 export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = ({
@@ -33,6 +37,7 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
   etterlevelseDokumentasjonId,
   tiltakList,
   noMarkdownCopyLinkButton,
+  previousVurdering,
 }) => {
   const router = useRouter()
   const queryParams = useSearchParams()
@@ -83,6 +88,16 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
             risikoscenario.sannsynlighetsNivaaEtterTiltak === null ||
             risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
             risikoscenario.konsekvensNivaaEtterTiltak === null
+          const hasNewContent =
+            !!previousVurdering &&
+            (moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(
+              previousVurdering.sendtDato
+            ) ||
+              tiltakList
+                .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
+                .some((tiltak: ITiltak) =>
+                  moment(tiltak.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+                ))
           return (
             <Accordion.Item
               id={risikoscenario.id}
@@ -92,9 +107,11 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                 handleAccordionChange(open ? risikoscenario.id : undefined)
               }}
             >
-              <RisikoscenarioAccordianHeader
+              <IdentifiseringAvRisikoscenarioAccordianHeader
                 risikoscenario={risikoscenario}
                 ref={expanded ? accordionRef : undefined}
+                previousVurdering={previousVurdering}
+                hasNewContent={hasNewContent}
               />
               <Accordion.Content>
                 <RisikoscenarioView
@@ -110,18 +127,29 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                     <div className='mt-5'>
                       {tiltakList
                         .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
-                        .map((tiltak: ITiltak, index: number) => (
-                          <ReadMore
-                            key={`${risikoscenario.id}_${tiltak.id}_${index}`}
-                            header={tiltak.navn}
-                            className='mb-3'
-                          >
-                            <TiltakView
-                              tiltak={tiltak}
-                              risikoscenarioList={allRisikoscenarioList}
-                            />
-                          </ReadMore>
-                        ))}
+                        .map((tiltak: ITiltak, index: number) => {
+                          const isChangesMade =
+                            !!previousVurdering &&
+                            moment(tiltak.changeStamp.lastModifiedDate).isAfter(
+                              previousVurdering.sendtDato
+                            )
+                          return (
+                            <ReadMore
+                              key={`${risikoscenario.id}_${tiltak.id}_${index}`}
+                              header={
+                                <>
+                                  {tiltak.navn} &nbsp;&nbsp; {isChangesMade && <NyttInnholdTag />}
+                                </>
+                              }
+                              className='mb-3'
+                            >
+                              <TiltakView
+                                tiltak={tiltak}
+                                risikoscenarioList={allRisikoscenarioList}
+                              />
+                            </ReadMore>
+                          )
+                        })}
                     </div>
                   )}
 

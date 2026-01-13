@@ -2,6 +2,7 @@
 
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
 import OppsumeringAccordianListReadOnlyView from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/oppsumeringAccordianListReadOnlyView'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
@@ -122,6 +123,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
   const [antallTiltakIkkeAktuelt, setAntallTiltakIkkeAktuelt] = useState<number>(0)
   const [antallUtenTiltakAnsvarlig, setAntallUtenTiltakAnsvarlig] = useState<number>(0)
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
+  const previousVurdering: IVurdering | undefined =
+    pvkDokument.antallInnsendingTilPvo > 1
+      ? pvoTilbakemelding.vurderinger.find(
+          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+        )
+      : undefined
 
   useEffect(() => {
     if (pvkDokument) {
@@ -279,6 +286,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                 Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er
                 gjennomført.
               </BodyLong>
+              {/* Alert on top for changes after PVK approval */}
+              <InfoChangesMadeAfterApproval
+                pvkDokument={pvkDokument}
+                alleRisikoscenario={risikoscenarioList}
+                alleTiltak={tiltakList}
+              />
             </div>
             <div>
               <div className='mt-5'>
@@ -367,6 +380,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                   allRisikoscenarioList={risikoscenarioList}
                                   etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                                   tiltakList={tiltakList}
+                                  previousVurdering={previousVurdering}
                                 />
                               </div>
                             )}
