@@ -5,6 +5,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { FunctionComponent, useEffect, useState } from 'react'
 import EtterlevelseDokumentasjonKravListe from '../kravListe/etterlevelseDokumentasjonKravListe'
 
@@ -16,6 +17,7 @@ type TProps = {
   loading: boolean
   risikoscenarioList: IRisikoscenario[]
   isRisikoscenarioLoading: boolean
+  previousVurdering?: IVurdering
 }
 export const PvkRelatertKravListe: FunctionComponent<TProps> = ({
   temaListe,
@@ -25,6 +27,7 @@ export const PvkRelatertKravListe: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   risikoscenarioList,
   isRisikoscenarioLoading,
+  previousVurdering,
 }) => {
   const [pvkRelevanteStats, setPvkRelevanteStats] = useState<TKravQL[]>([])
 
@@ -50,6 +53,7 @@ export const PvkRelatertKravListe: FunctionComponent<TProps> = ({
       risikoscenarioList={risikoscenarioList}
       isRisikoscenarioLoading={isRisikoscenarioLoading}
       defaultOpen={true}
+      previousVurdering={previousVurdering}
     />
   )
 }

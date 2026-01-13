@@ -12,6 +12,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { BodyShort, Button } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
@@ -26,6 +27,7 @@ type TProps = {
   temaListe: TTemaCode[]
   risikoscenarioList: IRisikoscenario[]
   isRisikoscenarioLoading: boolean
+  previousVurdering?: IVurdering
 }
 
 export const PrioritertKravListe: FunctionComponent<TProps> = ({
@@ -37,6 +39,7 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
   loading,
   risikoscenarioList,
   isRisikoscenarioLoading,
+  previousVurdering,
 }) => {
   const user = useContext(UserContext)
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
@@ -84,6 +87,7 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
               risikoscenarioList={risikoscenarioList}
               isRisikoscenarioLoading={isRisikoscenarioLoading}
               loading={loading}
+              previousVurdering={previousVurdering}
             />
           )}
 

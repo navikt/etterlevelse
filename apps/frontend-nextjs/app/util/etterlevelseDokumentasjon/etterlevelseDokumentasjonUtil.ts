@@ -298,6 +298,7 @@ export const filterKrav = (
       prioriteringsId: krav.prioriteringsId,
       changeStamp: krav.changeStamp,
       aktivertDato: krav.aktivertDato,
+      tagger: krav.tagger,
       ...mapEtterlevelseData(etterlevelse),
     }
   })

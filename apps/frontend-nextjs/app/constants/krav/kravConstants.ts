@@ -109,6 +109,7 @@ export type TKravEtterlevelseData = {
   etterlevelseChangeStamp?: IChangeStamp
   isIrrelevant?: boolean
   aktivertDato: string
+  tagger: string[]
 }
 
 export interface IKravReference {

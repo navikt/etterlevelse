@@ -9,6 +9,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import {
   etterlevelseDokumentasjonAlleClosedUrl,
   etterlevelseDokumentasjonAlleOpenUrl,
@@ -34,6 +35,7 @@ type TProps = {
   risikoscenarioList: IRisikoscenario[]
   isRisikoscenarioLoading: boolean
   defaultOpen?: boolean
+  previousVurdering?: IVurdering
 }
 
 export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
@@ -46,6 +48,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   risikoscenarioList,
   isRisikoscenarioLoading,
   defaultOpen,
+  previousVurdering,
 }) => {
   const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const queryParams = useSearchParams()
@@ -215,6 +218,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
           temaListe={temaListe}
           openAccordions={openAccordions}
           setOpenAccordions={setOpenAccordions}
+          previousVurdering={previousVurdering}
         />
       )}
 

@@ -5,6 +5,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { getNumberOfDaysBetween } from '@/util/checkAge/checkAgeUtil'
@@ -24,6 +25,7 @@ type TProps = {
   allKravPriority: IKravPriorityList[]
   isRisikoscenarioLoading: boolean
   risikoscenarioList: IRisikoscenario[]
+  previousVurdering?: IVurdering
 }
 
 export const KravAccordionList: FunctionComponent<TProps> = ({
@@ -36,6 +38,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
   allKravPriority,
   isRisikoscenarioLoading,
   risikoscenarioList,
+  previousVurdering,
 }) => {
   const codelist = useContext(CodelistContext)
   const toggleAccordion = (index: number) => {
@@ -118,6 +121,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                               krav={krav}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                               temaCode={tema.code}
+                              previousVurdering={previousVurdering}
                             />
                           </List.Item>
                         ))}

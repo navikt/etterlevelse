@@ -5,10 +5,13 @@ import {
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
 import StatusView from '@/components/common/statusTag/StatusTag'
 import { warningAlert } from '@/components/others/images/images'
+import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { EKravStatus, TKravEtterlevelseData } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { getNumberOfDaysBetween } from '@/util/checkAge/checkAgeUtil'
 import {
@@ -18,20 +21,29 @@ import {
 import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
 import moment from 'moment'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 interface IProps {
   krav: TKravEtterlevelseData
   noStatus?: boolean
   etterlevelseDokumentasjonId: string
+  risikoscenarioList: IRisikoscenario[]
   noVarsling?: boolean
   temaCode?: string
-  risikoscenarioList: IRisikoscenario[]
+
+  previousVurdering?: IVurdering
 }
 
 export const KravCard = (props: IProps) => {
-  const { noVarsling, krav, temaCode, etterlevelseDokumentasjonId, risikoscenarioList } = props
-
+  const {
+    noVarsling,
+    krav,
+    temaCode,
+    etterlevelseDokumentasjonId,
+    risikoscenarioList,
+    previousVurdering,
+  } = props
+  const user = useContext(UserContext)
   const isIngenEtterlevelse = krav.etterlevelseStatus === undefined
   const isOppfyllesSenereEtterlevelse =
     krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE
@@ -39,14 +51,21 @@ export const KravCard = (props: IProps) => {
 
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
   const [kravAge, setKravAge] = useState<number>(0)
+  const [nyttInnholdFlag, setNyttInnholdFlag] = useState<boolean>(false)
 
-  const kravMedRelevantRisikoscenario =
-    risikoscenarioList.filter(
-      (risikoscenario) =>
-        risikoscenario.relevanteKravNummer.filter(
-          (kravReference) => kravReference.kravNummer === krav.kravNummer
-        ).length > 0
-    ).length > 0
+  const relevantRisikoscenarioForKravet = risikoscenarioList.filter(
+    (risikoscenario) =>
+      risikoscenario.relevanteKravNummer.filter(
+        (kravReference) => kravReference.kravNummer === krav.kravNummer
+      ).length > 0
+  )
+
+  const isPvkKrav =
+    !!krav.tagger &&
+    krav.tagger.length !== 0 &&
+    krav.tagger.includes('Personvernkonsekvensvurdering')
+
+  const kravMedRelevantRisikoscenario = relevantRisikoscenarioForKravet.length > 0
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -95,6 +114,18 @@ export const KravCard = (props: IProps) => {
       }
     })()
   }, [])
+
+  useEffect(() => {
+    if (!!previousVurdering) {
+      if (
+        relevantRisikoscenarioForKravet.some((risikoscenario) =>
+          moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+        )
+      ) {
+        setNyttInnholdFlag(true)
+      }
+    }
+  }, [previousVurdering, risikoscenarioList])
 
   return (
     <LinkPanel
@@ -149,6 +180,8 @@ export const KravCard = (props: IProps) => {
         </div>
         {krav && (
           <div className='self-center flex gap-2'>
+            {user.isPersonvernombud() && nyttInnholdFlag && isPvkKrav && <NyttInnholdTag />}
+
             {kravMedRelevantRisikoscenario && (
               <StatusView status='Inneholder risikoscenario' variant='alt1' />
             )}

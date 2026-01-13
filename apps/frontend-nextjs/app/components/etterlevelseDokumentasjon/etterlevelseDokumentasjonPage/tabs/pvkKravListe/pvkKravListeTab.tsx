@@ -7,6 +7,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Alert, BodyLong, Heading, Link, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
@@ -21,6 +22,7 @@ type TProps = {
   loading: boolean
   risikoscenarioList: IRisikoscenario[]
   isRisikoscenarioLoading: boolean
+  previousVurdering?: IVurdering
 }
 
 export const PvkKravListeTab: FunctionComponent<TProps> = ({
@@ -32,6 +34,7 @@ export const PvkKravListeTab: FunctionComponent<TProps> = ({
   loading,
   risikoscenarioList,
   isRisikoscenarioLoading,
+  previousVurdering,
 }) => {
   return (
     <div className='pt-4 flex flex-col gap-4'>
@@ -118,6 +121,7 @@ export const PvkKravListeTab: FunctionComponent<TProps> = ({
         loading={loading}
         risikoscenarioList={risikoscenarioList}
         isRisikoscenarioLoading={isRisikoscenarioLoading}
+        previousVurdering={previousVurdering}
       />
     </div>
   )

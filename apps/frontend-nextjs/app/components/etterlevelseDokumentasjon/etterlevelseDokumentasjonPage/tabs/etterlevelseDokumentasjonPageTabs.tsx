@@ -1,6 +1,7 @@
 'use client'
 
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
+import { usePvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -14,7 +15,7 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { Button, Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { ArkiveringModal } from '../arkivering/arkiveringModal'
 import ExportEtterlevelseModal from '../export/exportEtterlevelseModal'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
@@ -52,6 +53,19 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   const [tabValue, setTabValue] = useState('alleKrav')
   const router = useRouter()
   const pathname = usePathname()
+  const [pvoTilbakemelding] = usePvoTilbakemelding(pvkDokument?.id)
+
+  const previousVurdering = useMemo(() => {
+    if (!!pvoTilbakemelding && !!pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
+      const previousVurdering = pvoTilbakemelding.vurderinger.find(
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+      )
+
+      return previousVurdering
+    } else {
+      return undefined
+    }
+  }, [pvoTilbakemelding, pvkDokument])
 
   useEffect(() => {
     ;(async () => {
@@ -95,6 +109,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             loading={loading}
             risikoscenarioList={risikoscenarioList}
             isRisikoscenarioLoading={isRisikoscenarioLoading}
+            previousVurdering={previousVurdering}
           />
 
           <div className='w-full flex justify-end items-center'>
@@ -124,6 +139,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             temaListe={temaListe}
             risikoscenarioList={risikoscenarioList}
             isRisikoscenarioLoading={isRisikoscenarioLoading}
+            previousVurdering={previousVurdering}
           />
         </div>
       </Tabs.Panel>
@@ -138,6 +154,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             loading={loading}
             risikoscenarioList={risikoscenarioList}
             isRisikoscenarioLoading={isRisikoscenarioLoading}
+            previousVurdering={previousVurdering}
           />
         </Tabs.Panel>
       )}
