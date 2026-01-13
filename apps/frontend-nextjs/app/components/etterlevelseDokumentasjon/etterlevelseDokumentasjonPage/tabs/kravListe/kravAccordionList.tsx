@@ -73,6 +73,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                 allKravPriority,
                 codelist,
               })
+
               const utfylteKrav = kravliste.filter(
                 (krav) =>
                   krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||

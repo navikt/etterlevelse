@@ -1,6 +1,9 @@
 'use effect'
 
-import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '@/api/etterlevelse/etterlevelseApi'
+import {
+  getEtterlevelse,
+  getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
+} from '@/api/etterlevelse/etterlevelseApi'
 import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
@@ -120,30 +123,38 @@ export const KravCard = (props: IProps) => {
   }, [])
 
   useEffect(() => {
-    if (!!previousVurdering) {
-      if (
-        relevantRisikoscenarioForKravet.some((risikoscenario) =>
-          moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
-        )
-      ) {
-        setNyttInnholdFlag(true)
-      } else if (allTiltak.length !== 0) {
-        const oppdatertTiltak: ITiltak[] = []
-        relevantRisikoscenarioForKravet.forEach((risikoscenario) => {
-          oppdatertTiltak.push(
-            ...allTiltak.filter(
-              (tiltak) =>
-                risikoscenario.tiltakIds.includes(tiltak.id) &&
-                moment(tiltak.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
-            )
+    ;(async () => {
+      if (!!previousVurdering) {
+        if (
+          relevantRisikoscenarioForKravet.some((risikoscenario) =>
+            moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
           )
-        })
-
-        console.debug(oppdatertTiltak)
-        setNyttInnholdFlag(oppdatertTiltak.length > 0)
+        ) {
+          setNyttInnholdFlag(true)
+        } else if (allTiltak.length !== 0) {
+          const oppdatertTiltak: ITiltak[] = []
+          relevantRisikoscenarioForKravet.forEach((risikoscenario) => {
+            oppdatertTiltak.push(
+              ...allTiltak.filter(
+                (tiltak) =>
+                  risikoscenario.tiltakIds.includes(tiltak.id) &&
+                  moment(tiltak.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+              )
+            )
+          })
+          setNyttInnholdFlag(oppdatertTiltak.length > 0)
+        } else if (krav.etterlevelseId !== undefined) {
+          await getEtterlevelse(krav.etterlevelseId).then(async (etterlevelse) => {
+            console.debug(etterlevelse.changeStamp.lastModifiedDate)
+            console.debug(previousVurdering.sendtDato, 'match')
+            setNyttInnholdFlag(
+              moment(etterlevelse.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+            )
+          })
+        }
       }
-    }
-  }, [previousVurdering, risikoscenarioList, allTiltak])
+    })()
+  }, [previousVurdering, risikoscenarioList, allTiltak, krav])
 
   return (
     <LinkPanel

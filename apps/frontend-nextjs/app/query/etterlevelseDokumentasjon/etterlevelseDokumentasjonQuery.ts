@@ -103,6 +103,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
             ) {
               status
+              id
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
               suksesskriterieBegrunnelser {
@@ -137,6 +138,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               onlyForEtterlevelseDokumentasjon: true
               etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
             ) {
+              id
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
@@ -171,6 +173,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               onlyForEtterlevelseDokumentasjon: true
               etterlevelseDokumentasjonId: $etterlevelseDokumentasjonId
             ) {
+              id
               behandlingId
               status
               etterlevelseDokumentasjonId

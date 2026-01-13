@@ -19,7 +19,6 @@ import {
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
-import _ from 'lodash'
 import moment from 'moment'
 import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import EtterlevelseCard from '../../etterlevelseModal/etterlevelseCard'
@@ -167,7 +166,12 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
         previousEtterlevelse.suksesskriterieBegrunnelser,
         suksesskriterie
       )
-      setChangesMade(!_.isEqual(suksesskriterieBegrunnelse, previousBegrunnelse))
+
+      setChangesMade(
+        suksesskriterieBegrunnelse.suksesskriterieStatus !==
+          previousBegrunnelse.suksesskriterieStatus ||
+          suksesskriterieBegrunnelse.begrunnelse !== previousBegrunnelse.begrunnelse
+      )
     }
   }, [previousEtterlevelse])
 
