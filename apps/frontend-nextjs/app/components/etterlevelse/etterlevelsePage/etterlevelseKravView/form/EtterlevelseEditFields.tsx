@@ -242,11 +242,6 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                                 )
                               }
                             })
-                            // ampli.logEvent('knapp klikket', {
-                            //   tekst: 'Sett krav til ferdig utfylt',
-                            //   pagePath: location.pathname,
-                            //   ...userRoleEventProp,
-                            // })
                             await submitForm()
                             setSubmitClick(!submitClick)
                           }}
@@ -284,11 +279,6 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                                 } else if (isOppfylesSenere) {
                                   values.status = EEtterlevelseStatus.OPPFYLLES_SENERE
                                 }
-                                // ampli.logEvent('knapp klikket', {
-                                //   tekst: 'Lagre og fortsett',
-                                //   pagePath: location.pathname,
-                                //   ...userRoleEventProp,
-                                // })
                                 submitForm()
                               }}
                             >
@@ -303,11 +293,6 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                               variant='secondary'
                               onClick={() => {
                                 if (!dirty) {
-                                  // ampli.logEvent('knapp klikket', {
-                                  //   tekst: 'Avbryt uten endring i etterlevelse',
-                                  //   pagePath: location.pathname,
-                                  //   ...userRoleEventProp,
-                                  // })
                                   setTimeout(
                                     () =>
                                       router.push(
@@ -354,12 +339,6 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         <Modal.Footer>
                           <Button
                             onClick={() => {
-                              // ampli.logEvent('knapp klikket', {
-                              //   context: 'Avbryt med endring i etterlevelse',
-                              //   tekst: 'Avbryt med endring i etterlevelse',
-                              //   pagePath: location.pathname,
-                              //   ...userRoleEventProp,
-                              // })
                               close()
                             }}
                             type='button'
@@ -368,10 +347,6 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           </Button>
                           <Button
                             onClick={() => {
-                              // ampli.logEvent('knapp klikket', {
-                              //   tekst: 'Nei, jeg vil fortsette',
-                              //   pagePath: location.pathname,
-                              // })
                               setIsAvbryModalOpen(false)
                             }}
                             type='button'
