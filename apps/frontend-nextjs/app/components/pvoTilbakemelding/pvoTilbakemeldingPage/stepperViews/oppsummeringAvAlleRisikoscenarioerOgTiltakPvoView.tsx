@@ -418,6 +418,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                             <TiltakAccordionListReadOnly
                               tiltakList={filteredTiltakList}
                               risikoscenarioList={risikoscenarioList}
+                              previousVurdering={previousVurdering}
                             />
                           )}
 
