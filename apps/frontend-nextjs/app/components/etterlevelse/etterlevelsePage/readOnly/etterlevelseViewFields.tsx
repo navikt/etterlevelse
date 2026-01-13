@@ -1,6 +1,10 @@
+'use client'
+
+import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { ContentLayout } from '@/components/others/layout/content/content'
+import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -9,13 +13,15 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
+import _ from 'lodash'
 import moment from 'moment'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import EtterlevelseCard from '../../etterlevelseModal/etterlevelseCard'
 
 type TProps = {
@@ -31,7 +37,27 @@ export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
   suksesskriterier,
   tidligereEtterlevelser,
   isBortfiltrert,
+  previousVurdering,
 }) => {
+  const user = useContext(UserContext)
+  const [previousEtterlevelse, setPreviousEtterlevelse] = useState<IEtterlevelse>()
+
+  useEffect(() => {
+    ;(async () => {
+      if (previousVurdering && user.isPersonvernombud() && !!etterlevelse) {
+        await getAuditByTableIdAndTimeStamp(etterlevelse.id, previousVurdering.sendtDato).then(
+          (audit) => {
+            if (audit.length !== 0) {
+              const previousData = (audit[0].data as { etterlevelseData: IEtterlevelse })
+                .etterlevelseData
+              setPreviousEtterlevelse(previousData)
+            }
+          }
+        )
+      }
+    })()
+  }, [previousVurdering, etterlevelse])
+
   return (
     <div>
       {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
@@ -61,6 +87,7 @@ export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
               suksesskriterie={suksesskriterium}
               index={index}
               suksesskriterieBegrunnelser={etterlevelse.suksesskriterieBegrunnelser}
+              previousEtterlevelse={previousEtterlevelse}
               totalSuksesskriterie={suksesskriterier.length}
               isBortfiltrert={isBortfiltrert}
             />
@@ -115,6 +142,7 @@ type TKriterieBegrunnelseProps = {
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   totalSuksesskriterie: number
   isBortfiltrert?: boolean
+  previousEtterlevelse?: IEtterlevelse
 }
 
 const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
@@ -123,11 +151,25 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
   suksesskriterieBegrunnelser,
   totalSuksesskriterie,
   isBortfiltrert,
+  previousEtterlevelse,
 }) => {
+  const user = useContext(UserContext)
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
     suksesskriterieBegrunnelser,
     suksesskriterie
   )
+
+  const [changesMade, setChangesMade] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (previousEtterlevelse) {
+      const previousBegrunnelse = getSuksesskriterieBegrunnelse(
+        previousEtterlevelse.suksesskriterieBegrunnelser,
+        suksesskriterie
+      )
+      setChangesMade(!_.isEqual(suksesskriterieBegrunnelse, previousBegrunnelse))
+    }
+  }, [previousEtterlevelse])
 
   return (
     <Box
@@ -154,7 +196,8 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
 
       <div className='flex flex-col gap-4 mb-4'>
         <Heading size='xsmall' level='3'>
-          {suksesskriterie.navn}
+          {suksesskriterie.navn} &nbsp;&nbsp;{' '}
+          {changesMade && user.isPersonvernombud() && <NyttInnholdTag />}
         </Heading>
 
         <ReadMore defaultOpen header='Utfyllende om kriteriet'>
