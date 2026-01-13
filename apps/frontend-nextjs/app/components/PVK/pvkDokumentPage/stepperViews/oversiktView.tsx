@@ -322,7 +322,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
 
   return (
     <div className='flex justify-center'>
-      <div className='max-w-[766px] w-full'>
+      <div className='max-w-191.5 w-full'>
         <Heading level='1' size='medium' className='mb-5'>
           Oversikt over PVK-prosessen
         </Heading>

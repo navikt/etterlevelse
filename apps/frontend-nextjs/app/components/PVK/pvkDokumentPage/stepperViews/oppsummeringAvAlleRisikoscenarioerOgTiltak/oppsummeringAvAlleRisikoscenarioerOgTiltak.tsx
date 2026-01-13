@@ -309,7 +309,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   return (
     <div className='w-full'>
       <div className={`flex w-full ${isPvoTilbakemeldingFerdig ? '' : 'justify-center'}`}>
-        <div className={`pt-6 ${isPvoTilbakemeldingFerdig ? 'w-[816px]' : 'min-w-[900px]'}`}>
+        <div className={`pt-6 ${isPvoTilbakemeldingFerdig ? 'w-204' : 'min-w-225'}`}>
           <div>
             <Heading level='1' size='medium' className='mb-5'>
               Risikobildet etter tiltak
@@ -545,7 +545,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           )}
         </div>
       </div>
-      <div className='max-w-[816px] mt-5'>
+      <div className='max-w-204 mt-5'>
         <InfoChangesMadeAfterApproval
           pvkDokument={pvkDokument}
           alleRisikoscenario={risikoscenarioList}
