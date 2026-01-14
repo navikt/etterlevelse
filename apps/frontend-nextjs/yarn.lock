@@ -30,10 +30,10 @@
     "@amplitude/types" "^1.10.2"
     tslib "^2.0.0"
 
-"@apollo/client@4.0.11":
-  version "4.0.11"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-4.0.11.tgz#3d541abab84b63d63ba351fb8d57addcd29601d1"
-  integrity sha512-jyW5j3DEYnFlYA1Lk9Szd7O/od1DptnbZnj03DQXxuQb+Gnop0w/uQxVRKaU7bPhvVuBnlAtZYPOykArX+xWdg==
+"@apollo/client@4.0.13":
+  version "4.0.13"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-4.0.13.tgz#e709bb9426fce2f1a333f4ecee76acce5a580036"
+  integrity sha512-ziUPddxVZ0dg+/l61rFymkPFesENVb3P/a8hKtN1XyawTcydeyRwooM4xBXpakKbt2gxwlm5dvrE1AWEcQlK3g==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@wry/caches" "^1.0.0"
