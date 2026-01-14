@@ -55,4 +55,10 @@ public class EtterlevelseDokumentasjonData {
     private Integer P360Recno;
     private String P360CaseNumber;
 
+    //versjonering
+    @Builder.Default
+    private Integer versjon = 1;
+    private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
+
+
 }
