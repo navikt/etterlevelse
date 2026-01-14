@@ -60,7 +60,14 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                   loadOptions={useSearchKravToOptionsPvk}
                   onChange={(value: any) => {
                     if (value) {
-                      fieldArrayRenderProps.push(value)
+                      const exists = fieldArrayRenderProps.form.values.relevanteKravNummer?.some(
+                        (krav: IKravReference) =>
+                          krav.kravNummer === value.kravNummer &&
+                          krav.kravVersjon === value.kravVersjon
+                      )
+                      if (!exists) {
+                        fieldArrayRenderProps.push(value)
+                      }
                     }
                   }}
                   styles={selectOverrides}
@@ -96,6 +103,15 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
           Fordi risikoscenarioet ikke er koblet til andre krav, vil det nå synes som “øvrig”
           scenario på Identifisering av risikoscenarioer og tiltak.
         </BodyLong>
+      </Alert>
+    )}
+
+    {!generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0 && (
+      <Alert variant='info' className='mt-5'>
+        Dere har valgt å koble dette risikoscenarioet til etterlevelseskrav. Når dere lagrer denne
+        endringen, vil risikoscenarioet forsvinne fra listen over “øvrige” krav. Scenarioet finner
+        dere på de kravsidene som dere velger her. Husk at det også er mulig å legge til aktuelle
+        risikoscenarioer fra selve kravsiden.
       </Alert>
     )}
 

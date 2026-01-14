@@ -135,6 +135,35 @@ export const removeTiltakToRisikoscenario = async (
     )
   ).data
 
+export const syncKravRelasjonerForRisikoscenario = async (
+  risikoscenarioId: string,
+  eksisterendeKravnummer: number[],
+  onskedeKravnummer: number[]
+): Promise<void> => {
+  const eksisterende = new Set((eksisterendeKravnummer || []).filter((n) => typeof n === 'number'))
+  const onskede = new Set((onskedeKravnummer || []).filter((n) => typeof n === 'number'))
+
+  const toRemove = [...eksisterende].filter((kravnummer) => !onskede.has(kravnummer))
+  const toAdd = [...onskede].filter((kravnummer) => !eksisterende.has(kravnummer))
+
+  if (toRemove.length > 0) {
+    await Promise.all(
+      toRemove.map((kravnummer) => fjernKravFraRisikoscenario(risikoscenarioId, kravnummer))
+    )
+  }
+
+  if (toAdd.length > 0) {
+    await Promise.all(
+      toAdd.map((kravnummer) =>
+        updateKravForRisikoscenarioer({
+          kravnummer,
+          risikoscenarioIder: [risikoscenarioId],
+        } as IKravRisikoscenarioRelasjon)
+      )
+    )
+  }
+}
+
 const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
   const dto = {
     ...risikoscenario,
