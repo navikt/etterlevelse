@@ -80,7 +80,16 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                   (kravReference: IKravReference) =>
                     `${kravNummerView(kravReference.kravVersjon, kravReference.kravNummer)} ${kravReference.navn}`
                 )}
-                onRemove={fieldArrayRenderProps.remove}
+                onRemove={async (removeIndex: number) => {
+                  const current = fieldArrayRenderProps.form.values.relevanteKravNummer || []
+                  const willBeEmpty = current.length === 1
+
+                  fieldArrayRenderProps.remove(removeIndex)
+
+                  if (willBeEmpty) {
+                    await fieldArrayRenderProps.form.setFieldValue('generelScenario', true)
+                  }
+                }}
               />
             </div>
           )}
