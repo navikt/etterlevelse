@@ -101,14 +101,17 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   }
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    const eksisterendeKravnummer = (activeRisikoscenario.relevanteKravNummer || []).map(
-      (krav) => krav.kravNummer
-    )
     const onskedeKravnummer = risikoscenario.generelScenario
       ? []
       : (risikoscenario.relevanteKravNummer || []).map((krav) => krav.kravNummer)
 
     const response = await updateRisikoscenario(risikoscenario)
+
+    // Backend can clear relevanteKravNummer as part of update when switching to generelScenario.
+    // Use the post-update state as the source of truth to avoid trying to remove relations twice.
+    const eksisterendeKravnummer = (response.relevanteKravNummer || []).map(
+      (krav) => krav.kravNummer
+    )
 
     await syncKravRelasjonerForRisikoscenario(
       response.id,

@@ -47,14 +47,16 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    const eksisterendeKravnummer = (activeRisikoscenario.relevanteKravNummer || []).map(
-      (krav) => krav.kravNummer
-    )
     const onskedeKravnummer = risikoscenario.generelScenario
       ? []
       : (risikoscenario.relevanteKravNummer || []).map((krav) => krav.kravNummer)
 
     const response = await updateRisikoscenario(risikoscenario)
+
+    // Backend may clear relevanteKravNummer during update when switching to generelScenario.
+    const eksisterendeKravnummer = (response.relevanteKravNummer || []).map(
+      (krav) => krav.kravNummer
+    )
     await syncKravRelasjonerForRisikoscenario(
       response.id,
       eksisterendeKravnummer,

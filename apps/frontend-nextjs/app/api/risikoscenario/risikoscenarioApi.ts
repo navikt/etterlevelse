@@ -147,20 +147,20 @@ export const syncKravRelasjonerForRisikoscenario = async (
   const toAdd = [...onskede].filter((kravnummer) => !eksisterende.has(kravnummer))
 
   if (toRemove.length > 0) {
-    await Promise.all(
-      toRemove.map((kravnummer) => fjernKravFraRisikoscenario(risikoscenarioId, kravnummer))
-    )
+    // Run sequentially to avoid backend write races when multiple updates hit the same entity.
+    for (const kravnummer of toRemove) {
+      await fjernKravFraRisikoscenario(risikoscenarioId, kravnummer)
+    }
   }
 
   if (toAdd.length > 0) {
-    await Promise.all(
-      toAdd.map((kravnummer) =>
-        updateKravForRisikoscenarioer({
-          kravnummer,
-          risikoscenarioIder: [risikoscenarioId],
-        } as IKravRisikoscenarioRelasjon)
-      )
-    )
+    // Run sequentially to avoid last-write-wins overwriting earlier additions.
+    for (const kravnummer of toAdd) {
+      await updateKravForRisikoscenarioer({
+        kravnummer,
+        risikoscenarioIder: [risikoscenarioId],
+      } as IKravRisikoscenarioRelasjon)
+    }
   }
 }
 
