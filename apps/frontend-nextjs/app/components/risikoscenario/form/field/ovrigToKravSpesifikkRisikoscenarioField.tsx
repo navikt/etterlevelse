@@ -12,11 +12,13 @@ import AsyncSelect from 'react-select/async'
 type TProps = {
   generelScenarioFormValue: boolean
   relevanteKravNummerFormValue: IKravReference[]
+  isOvrigScenario: boolean
 }
 
 export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> = ({
   generelScenarioFormValue,
   relevanteKravNummerFormValue,
+  isOvrigScenario,
 }) => (
   <div className='my-5'>
     <Field name='generelScenario'>
@@ -106,7 +108,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       </Alert>
     )}
 
-    {!generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0 && (
+    {isOvrigScenario && !generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0 && (
       <Alert variant='info' className='mt-5'>
         Dere har valgt å koble dette risikoscenarioet til etterlevelseskrav. Når dere lagrer denne
         endringen, vil risikoscenarioet forsvinne fra listen over “øvrige” krav. Scenarioet finner
