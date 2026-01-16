@@ -1,7 +1,10 @@
 'use client'
 
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import { updateRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
+import {
+  syncKravRelasjonerForRisikoscenario,
+  updateRisikoscenario,
+} from '@/api/risikoscenario/risikoscenarioApi'
 import VurdereTiltaksEffekt from '@/components/PVK/edit/vurdereTiltaksEffekt'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
@@ -44,11 +47,25 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
-      setActiveRisikoscenario(response)
-      setIsEditModalOpen(false)
-      window.location.reload()
-    })
+    const onskedeKravnummer = risikoscenario.generelScenario
+      ? []
+      : (risikoscenario.relevanteKravNummer || []).map((krav) => krav.kravNummer)
+
+    const response = await updateRisikoscenario(risikoscenario)
+
+    // Backend may clear relevanteKravNummer during update when switching to generelScenario.
+    const eksisterendeKravnummer = (response.relevanteKravNummer || []).map(
+      (krav) => krav.kravNummer
+    )
+    await syncKravRelasjonerForRisikoscenario(
+      response.id,
+      eksisterendeKravnummer,
+      onskedeKravnummer
+    )
+
+    setActiveRisikoscenario(response)
+    setIsEditModalOpen(false)
+    window.location.reload()
   }
 
   const activeFormButton = async (runFunction: () => void) => {

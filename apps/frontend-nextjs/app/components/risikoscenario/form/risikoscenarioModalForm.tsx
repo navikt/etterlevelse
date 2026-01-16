@@ -83,6 +83,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
                 <OvrigToKravSpesifikkRisikoscenarioField
                   generelScenarioFormValue={values.generelScenario}
                   relevanteKravNummerFormValue={values.relevanteKravNummer}
+                  isOvrigScenario={!!initialValues.generelScenario}
                 />
               )}
             </Modal.Body>

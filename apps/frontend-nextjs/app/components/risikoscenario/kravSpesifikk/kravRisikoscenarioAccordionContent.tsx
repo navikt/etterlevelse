@@ -5,6 +5,7 @@ import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
   removeTiltakToRisikoscenario,
+  syncKravRelasjonerForRisikoscenario,
   updateRisikoscenario,
 } from '@/api/risikoscenario/risikoscenarioApi'
 import {
@@ -100,11 +101,28 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   }
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
-      setActiveRisikoscenario(response)
-      updateRisikoscenarioList(response)
-      setIsEditModalOpen(false)
-    })
+    const onskedeKravnummer = risikoscenario.generelScenario
+      ? []
+      : (risikoscenario.relevanteKravNummer || []).map((krav) => krav.kravNummer)
+
+    const response = await updateRisikoscenario(risikoscenario)
+
+    // Backend can clear relevanteKravNummer as part of update when switching to generelScenario.
+    // Use the post-update state as the source of truth to avoid trying to remove relations twice.
+    const eksisterendeKravnummer = (response.relevanteKravNummer || []).map(
+      (krav) => krav.kravNummer
+    )
+
+    await syncKravRelasjonerForRisikoscenario(
+      response.id,
+      eksisterendeKravnummer,
+      onskedeKravnummer
+    )
+
+    const refreshed = await getRisikoscenario(response.id)
+    setActiveRisikoscenario(refreshed)
+    updateRisikoscenarioList(refreshed)
+    setIsEditModalOpen(false)
   }
 
   const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {
