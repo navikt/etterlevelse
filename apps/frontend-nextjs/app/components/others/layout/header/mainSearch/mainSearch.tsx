@@ -108,6 +108,8 @@ const MainSearch = () => {
               ':hover': { borderColor: 'var(--a-border-action)' },
               cursor: 'text',
             }) as CSSObjectWithLabel,
+          placeholder: (base: CSSObjectWithLabel) =>
+            ({ ...base, color: '#000', opacity: 1 }) as CSSObjectWithLabel,
           input: (base: CSSObjectWithLabel) =>
             ({ ...base, color: '#000', opacity: 1 }) as CSSObjectWithLabel,
           option: (base: CSSObjectWithLabel) =>
