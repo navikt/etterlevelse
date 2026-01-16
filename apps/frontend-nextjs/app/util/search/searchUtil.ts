@@ -17,13 +17,15 @@ export const selectOverrides = {
       cursor: 'text',
       height: '3rem',
       color: 'var(--a-text-default)',
-      border: '1px solid var(--a-border-subtle)',
+      borderColor: '#000',
+      borderWidth: '1px',
+      borderStyle: 'solid',
       borderRadius: 'var(--a-border-radius-medium)',
       ':focus-within': {
         boxShadow: 'var(--a-shadow-focus)',
         outline: 'none',
       },
-      ':focus': { borderColor: 'var(--a-border-action)' },
-      ':hover': { borderColor: 'var(--a-border-action)' },
+      ':focus': { borderColor: '#000' },
+      ':hover': { borderColor: '#000' },
     }) as CSSObjectWithLabel,
 }
