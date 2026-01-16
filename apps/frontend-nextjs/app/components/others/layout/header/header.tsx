@@ -50,9 +50,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
         <SkipToContent />
         <InternalHeader className='w-full justify-center items-center'>
           <div className='max-w-7xl flex w-full'>
-            <InternalHeader.Title href='/' style={{ color: 'white' }}>
-              Støtte til etterlevelse
-            </InternalHeader.Title>
+            <InternalHeader.Title href='/'>Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!noSearchBar && (
               <div
@@ -64,7 +62,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
             )}
             <Spacer />
             {!noLoginButton && (
-              <div className='flex text-white'>
+              <div className='flex'>
                 {!user.isLoggedIn() && <LoginHeaderButton />}
                 {user.isLoggedIn() && <LoggedInHeader />}
               </div>

@@ -44,12 +44,7 @@ export const LoginHeaderButton = () => {
   }, [])
 
   return (
-    <InternalHeader.Button
-      as={Link}
-      href={loginUrl(fullUrl, pathname)}
-      className='text-white'
-      underline={false}
-    >
+    <InternalHeader.Button as={Link} href={loginUrl(fullUrl, pathname)} underline={false}>
       Logg inn
     </InternalHeader.Button>
   )
@@ -92,7 +87,7 @@ export const LoggedInHeader = () => {
     : []
 
   return (
-    <div className='flex items-center justify-center text-white'>
+    <div className='flex items-center justify-center'>
       <Menu
         pages={[
           [{ label: <UserInfoView /> }],
@@ -152,12 +147,7 @@ export const LoginButton = () => {
   const pathname: string = usePathname()
 
   return (
-    <Button
-      as={Link}
-      href={loginUrl(router.toString(), pathname)}
-      className='text-white'
-      underline={false}
-    >
+    <Button as={Link} href={loginUrl(router.toString(), pathname)} underline={false}>
       Logg inn
     </Button>
   )
