@@ -92,7 +92,7 @@ export const LoggedInHeader = () => {
     : []
 
   return (
-    <div className='flex items-center justify-center'>
+    <div className='flex items-center justify-center text-white'>
       <Menu
         pages={[
           [{ label: <UserInfoView /> }],
