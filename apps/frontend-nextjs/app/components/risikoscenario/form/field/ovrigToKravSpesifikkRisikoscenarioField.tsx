@@ -6,7 +6,7 @@ import { kravNummerView } from '@/util/krav/kravUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { Alert, BodyLong, Checkbox, CheckboxGroup, Label, List } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 
 type TProps = {
@@ -21,9 +21,68 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
   isOvrigScenario,
 }) => {
   const [removedAllAlert, setRemovedAllAlert] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottomOfModal = () => {
+    if (typeof window === 'undefined') return
+    const rootEl = rootRef.current
+    if (!rootEl) return
+
+    const dialog = rootEl.closest('[role="dialog"]') as HTMLElement | null
+    const scrollEl =
+      (dialog?.querySelector('.navds-modal__body') as HTMLElement | null) ||
+      (dialog?.querySelector('.navds-modal__content') as HTMLElement | null) ||
+      dialog
+
+    const target =
+      (scrollEl as any) || (document.scrollingElement as any) || (document.documentElement as any)
+    if (!target) return
+    const top = target.scrollHeight ?? document.body.scrollHeight
+    if (typeof target.scrollTo === 'function') {
+      target.scrollTo({ top, behavior: 'smooth' })
+    } else {
+      target.scrollTop = top
+    }
+  }
+
+  const scrollSaveButtonIntoView = () => {
+    if (typeof window === 'undefined') return
+    const rootEl = rootRef.current
+    if (!rootEl) return
+
+    const dialog = rootEl.closest('[role="dialog"]') as HTMLElement | null
+    const searchScope: HTMLElement | Document = dialog ?? document
+
+    const buttons = Array.from(searchScope.querySelectorAll('button')) as HTMLElement[]
+    const saveButton =
+      buttons.find((btn) =>
+        (btn.textContent || '').trim().toLowerCase().includes('lagre risikoscenario')
+      ) ||
+      buttons.find((btn) => (btn.textContent || '').trim().toLowerCase().includes('lagre')) ||
+      (searchScope.querySelector('button[type="submit"]') as HTMLElement | null) ||
+      (searchScope.querySelector('[data-testid*="lagre" i]') as HTMLElement | null) ||
+      (searchScope.querySelector('[data-testid*="save" i]') as HTMLElement | null)
+
+    if (saveButton) {
+      saveButton.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    } else {
+      // Fallback to bottom of modal if specific button isn't found
+      scrollToBottomOfModal()
+    }
+  }
+
+  useEffect(() => {
+    // When checkbox reflects checked state (generelScenario is false), keep save button visible
+    if (!generelScenarioFormValue) {
+      // Immediate attempt
+      scrollSaveButtonIntoView()
+      // Delay to ensure layout/render has settled (search field, tags etc.)
+      setTimeout(() => scrollSaveButtonIntoView(), 0)
+    }
+  }, [generelScenarioFormValue])
 
   return (
-    <div className='my-5'>
+    <div ref={rootRef} className='my-5'>
       <Field name='generelScenario'>
         {(fieldProps: FieldProps) => (
           <CheckboxGroup
@@ -34,6 +93,9 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
               if (value.length !== 0) {
                 await fieldProps.form.setFieldValue('generelScenario', false)
                 setRemovedAllAlert(false)
+                // Ensure the save button is visible when checked
+                scrollSaveButtonIntoView()
+                setTimeout(() => scrollSaveButtonIntoView(), 0)
               } else {
                 await fieldProps.form.setFieldValue('generelScenario', true)
               }
@@ -78,6 +140,10 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                     loadingMessage={() => 'Søker...'}
                     isClearable={false}
                     loadOptions={useSearchKravToOptionsPvk}
+                    onMenuOpen={() => {
+                      // When opening the dropdown, nudge the modal so the save button is visible
+                      scrollSaveButtonIntoView()
+                    }}
                     onChange={(value: any) => {
                       if (value) {
                         const exists = fieldArrayRenderProps.form.values.relevanteKravNummer?.some(
@@ -88,6 +154,9 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                         if (!exists) {
                           fieldArrayRenderProps.push(value)
                         }
+                        // Ensure save button is visible after selecting a krav
+                        scrollSaveButtonIntoView()
+                        setTimeout(() => scrollSaveButtonIntoView(), 0)
                       }
                     }}
                     styles={selectOverrides}
