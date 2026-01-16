@@ -645,11 +645,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
           {env.isDev && user.isAdmin() && (
             <>
               <div className='mt-5'>
-                <TextAreaField rows={2} noPlaceholder label='P360 recnummer' name='p360Recno' />
+                <TextAreaField rows={1} noPlaceholder label='P360 recnummer' name='p360Recno' />
 
                 <div className='mt-5'></div>
                 <TextAreaField
-                  rows={2}
+                  rows={1}
                   noPlaceholder
                   label='P360 saknummer'
                   name='p360CaseNumber'
