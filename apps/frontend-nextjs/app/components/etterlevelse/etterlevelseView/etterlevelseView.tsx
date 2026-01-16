@@ -124,7 +124,7 @@ export const ViewEtterlevelse: FunctionComponent<TProps> = ({
             )
             return (
               <div key={suksesskriterium.id} className='mb-5'>
-                <Box className='bg-white' padding='4'>
+                <Box className='bg-white' padding='space-4'>
                   <div className='flex justify-center mt-8 mb-4'>
                     <div className='flex flex-1'>
                       <BodyShort size='small'>

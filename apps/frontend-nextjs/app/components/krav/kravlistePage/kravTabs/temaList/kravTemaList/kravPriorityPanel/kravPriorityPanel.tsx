@@ -27,7 +27,7 @@ export const KravPriorityPanel: FunctionComponent<TProps> = ({
 
   return (
     <div className='border-t border-icon-subtle'>
-      <Box className='w-full flex' padding='2'>
+      <Box className='w-full flex' padding='space-2'>
         <div className='w-8 flex justify-center items-center border-r border-icon-subtle mr-1'>
           <BodyShort>{index + 1}.</BodyShort>
         </div>

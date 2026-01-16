@@ -48,7 +48,7 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
               </RadioGroup>
               {errorMessage && (
                 <div className='w-full mt-4'>
-                  <Box className='mb-2.5' padding='4' background='surface-warning-subtle'>
+                  <Box className='mb-2.5' padding='space-4' background='warning-soft'>
                     <div className='flex justify-center'>
                       <BodyShort>{errorMessage}</BodyShort>
                     </div>

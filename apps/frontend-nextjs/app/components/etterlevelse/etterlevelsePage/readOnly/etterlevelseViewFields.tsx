@@ -178,10 +178,10 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
   return (
     <Box
       className='mb-4'
-      borderColor='border-alt-1'
-      padding='8'
+      borderColor='neutral-subtle'
+      padding='space-8'
       borderWidth='3'
-      borderRadius='medium'
+      borderRadius='8'
     >
       <div className='flex w-full lg:flex-row flex-col mb-2.5'>
         <BodyShort className='min-w-fit'>

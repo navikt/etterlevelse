@@ -66,7 +66,7 @@ export const AuditViewPage = () => {
       {isLoading && <Loader size={'large'} className='flex justify-self-center' />}
 
       {!isLoading && (
-        <Box background='surface-default' padding='4'>
+        <Box background='default' padding='space-4'>
           {logNotFound && <Label>Audit ikke funnet</Label>}
 
           {!logNotFound && auditLog && newestAudit && (

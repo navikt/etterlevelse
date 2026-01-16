@@ -73,7 +73,7 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
 
             <Field>
               {(fieldProps: FieldProps) => (
-                <VStack gap='10' className='mt-3'>
+                <VStack gap='space-12' className='mt-3'>
                   <Chips>
                     {selectedTiltak.map((selectedTiltak) => {
                       const data = tiltakList.filter((tiltak) => tiltak.id === selectedTiltak)
