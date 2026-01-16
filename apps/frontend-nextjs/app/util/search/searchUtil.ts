@@ -26,4 +26,14 @@ export const selectOverrides = {
       ':focus': { borderColor: 'var(--a-border-action)' },
       ':hover': { borderColor: 'var(--a-border-action)' },
     }) as CSSObjectWithLabel,
+  // input: (base: CSSObjectWithLabel) =>
+  //   ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
+  // option: (base: CSSObjectWithLabel) =>
+  //   ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
+  // menu: (base: CSSObjectWithLabel) =>
+  //   ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
+  // menuList: (base: CSSObjectWithLabel) =>
+  //   ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
+  // singleValue: (base: CSSObjectWithLabel) =>
+  //   ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
 }

@@ -18,7 +18,7 @@ import AsyncSelect from 'react-select/async'
 const Option = (properties: OptionProps<TSearchItem>) => (
   <components.Option {...properties}>
     <div className='flex justify-between'>
-      <BodyShort className='text-icon-on-warning'>{properties.data.label}</BodyShort>
+      <BodyShort style={{ color: 'var(--a-text-default)' }}>{properties.data.label}</BodyShort>
     </div>
   </components.Option>
 )
@@ -97,20 +97,24 @@ const MainSearch = () => {
             ({
               ...base,
               boxShadow: 'none',
-              color: 'var(--a-gray-900)',
-              border: '1px solid var(--a-gray-500)',
+              color: 'var(--a-text-default)',
+              border: '1px solid var(--a-border-subtle)',
               borderRadius: 'var(--a-border-radius-medium)',
               ':focus-within': {
                 boxShadow: 'var(--a-shadow-focus)',
                 outline: 'none',
               },
-              ':focus': { borderColor: 'var(--a-deepblue-600)' },
+              ':focus': { borderColor: 'var(--a-border-action)' },
               ':hover': { borderColor: 'var(--a-border-action)' },
               cursor: 'text',
-              div: { div: { color: 'var(--a-text-default)' } },
             }) as CSSObjectWithLabel,
+          input: (base: CSSObjectWithLabel) =>
+            ({ ...base, color: '#000', opacity: 1 }) as CSSObjectWithLabel,
           option: (base: CSSObjectWithLabel) =>
-            ({ ...base, color: 'var(--a-text-default)' }) as CSSObjectWithLabel,
+            ({ ...base, color: '#000', opacity: 1, fontWeight: 500 }) as CSSObjectWithLabel,
+          menu: (base: CSSObjectWithLabel) => ({ ...base, color: '#000' }) as CSSObjectWithLabel,
+          menuList: (base: CSSObjectWithLabel) =>
+            ({ ...base, color: '#000' }) as CSSObjectWithLabel,
           groupHeading: (base: CSSObjectWithLabel) =>
             ({
               ...base,
