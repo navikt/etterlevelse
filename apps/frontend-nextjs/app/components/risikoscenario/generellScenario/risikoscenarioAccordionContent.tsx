@@ -81,7 +81,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     const prevKravRefs = activeRisikoscenario.relevanteKravNummer || []
     const prevKravnummer = prevKravRefs.map((k) => k.kravNummer)
 
-    // NOTE: updateRisikoscenario intentionally strips relevanteKravNummer from the DTO.
+    // NOTE: updateRisikoscenario intentionally strips relevanteKravNummer from the DTO(Data Transfer Object).
     // So we must sync krav relations separately.
     const desiredKravRefs = risikoscenario.relevanteKravNummer || []
     const desiredKravnummer = desiredKravRefs.map((k) => k.kravNummer)
