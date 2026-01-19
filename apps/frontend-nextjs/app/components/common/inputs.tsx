@@ -113,7 +113,7 @@ export const BoolField = (props: IPropsBoolField) => {
               error={fieldProps.form.errors[name] && <FormError fieldName={name} />}
             >
               <Stack
-                gap='0 6'
+                gap='space-0 space-6'
                 direction={{ xs: horizontal ? 'column' : 'row', sm: horizontal ? 'row' : 'column' }}
                 wrap={false}
               >

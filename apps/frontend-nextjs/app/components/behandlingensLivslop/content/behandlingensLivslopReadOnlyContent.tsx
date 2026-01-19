@@ -51,14 +51,14 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
 
           <BehandlingensLivslopTextContent />
 
-          <VStack gap='6' className='mt-5'>
-            <VStack gap='2'>
+          <VStack gap='space-6' className='mt-5'>
+            <VStack gap='space-2'>
               <div className='mt-5'>
                 <Heading level='3' size='xsmall'>
                   {`Behandlingens livsløp filer som er lastet opp. (${files.length})`}
                 </Heading>
               </div>
-              <VStack as='ul' gap='3'>
+              <VStack as='ul' gap='space-4'>
                 {files.length > 0 &&
                   files.map((file, index) => (
                     <FileUpload.Item as='li' key={file.file.name + '_' + index} file={file.file} />

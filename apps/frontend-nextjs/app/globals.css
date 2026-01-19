@@ -7,6 +7,13 @@
   width: 100%;
 }
 
+/* ds-react v8 renames navds-* classes to aksel-* at runtime */
+.aksel-link-panel__content {
+  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .navds-accordion__header-content {
   width: 100%;
 }

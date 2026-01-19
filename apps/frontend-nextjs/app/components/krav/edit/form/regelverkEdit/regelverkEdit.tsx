@@ -130,9 +130,15 @@ export const RegelverkEdit = () => {
               </div>
 
               <RenderTagList
-                list={fieldArrayRenderProps.form.values.regelverk.map((regelverk: IRegelverk) => (
-                  <LovView regelverk={regelverk} key={regelverk.lov.code} />
-                ))}
+                list={fieldArrayRenderProps.form.values.regelverk.map((regelverk: IRegelverk) => {
+                  const lovCode = regelverk?.lov?.code
+                  const lovDisplay = lovCode
+                    ? codelist.utils.getShortname(EListName.LOV, lovCode)
+                    : ''
+                  const isValid = lovCode ? codelist.utils.valid(EListName.LOV, lovCode) : false
+                  const spesifisering = regelverk?.spesifisering || ''
+                  return isValid ? `${lovDisplay} ${spesifisering}` : spesifisering
+                })}
                 onRemove={fieldArrayRenderProps.remove}
               />
             </div>

@@ -91,7 +91,7 @@ export const TilbakemeldingNyModal = ({ open, close, krav }: TNyTilbakemeldingMo
             <Form>
               <Modal.Body>
                 {showNotification && (
-                  <Box className='mb-9' padding='8'>
+                  <Box className='mb-9' padding='space-8'>
                     <div className='flex items-center'>
                       <FontAwesomeIcon icon={faThumbsUp} size='lg' />
                       <Heading size='large'>Spørsmålet er sendt til kraveier!</Heading>

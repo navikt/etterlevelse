@@ -90,7 +90,7 @@ export const NyTilbakemeldingModal = ({ open, close, krav }: TNyTilbakemeldingMo
             <Form>
               <Modal.Body>
                 {showNotification ? (
-                  <Box className='mb-9' padding='8'>
+                  <Box className='mb-9' padding='space-8'>
                     <div className='flex items-center'>
                       <ThumbUpIcon
                         title='thumb up icon'

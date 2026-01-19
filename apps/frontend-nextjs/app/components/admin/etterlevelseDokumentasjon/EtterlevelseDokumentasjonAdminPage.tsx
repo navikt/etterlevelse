@@ -20,7 +20,7 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
       </Heading>
 
       <div className='mt-5 w-full'>
-        <Box className='mb-2.5' padding='4' background='surface-warning-subtle'>
+        <Box className='mb-2.5' padding='space-4' background='warning-soft'>
           OBS! Når et etterlevelses dokument blir slettet vil alle dataene( etterlevelser,
           etterlevelses metadataer, og etterlevelse arkiv) koblet til den også bli slettet.
         </Box>

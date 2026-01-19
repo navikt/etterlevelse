@@ -163,7 +163,7 @@ const Kriterie = ({
   }, [navn, beskrivelse, behovForBegrunnelse])
 
   return (
-    <Box padding='4' className='mb-4' background='surface-subtle' borderColor='border-on-inverted'>
+    <Box padding='space-4' className='mb-4' background='neutral-soft' borderColor='neutral-strong'>
       <div className='relative pt-1'>
         <div className='flex items-center absolute right-0 top-0'>
           {(fieldArrayRenderProps.form.initialValues.status !== EKravStatus.AKTIV ||

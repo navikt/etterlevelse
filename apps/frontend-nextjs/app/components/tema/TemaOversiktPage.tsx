@@ -10,13 +10,6 @@ import { useContext, useEffect, useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 
 export const TemaOversiktPage = () => {
-  // useEffect(() => {
-  //   const ampliInstance = ampli()
-  //   if (ampliInstance) {
-  //     ampliInstance.logEvent('sidevisning', { side: 'Tema side', ...userRoleEventProp })
-  //   }
-  // }, [])
-
   return (
     <PageLayout pageTitle='Forstå kravene' currentPage='Forstå kravene'>
       <div className='w-full flex justify-center items-center flex-col'>

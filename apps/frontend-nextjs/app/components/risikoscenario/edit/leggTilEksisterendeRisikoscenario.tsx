@@ -108,7 +108,7 @@ export const LeggTilEksisterendeRisikoscenario: FunctionComponent<TProps> = ({
 
             <Field>
               {(fieldProps: FieldProps) => (
-                <VStack gap='10' className='mt-3'>
+                <VStack gap='space-12' className='mt-3'>
                   <Chips>
                     {selectedRisikoscenarier.map((selectedRisikoscenario: string) => {
                       const data: IRisikoscenario[] = risikoscenarioer.filter(

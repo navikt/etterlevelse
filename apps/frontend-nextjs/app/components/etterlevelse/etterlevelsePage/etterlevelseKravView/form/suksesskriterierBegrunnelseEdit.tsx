@@ -220,12 +220,12 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
       status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
     ) {
       if (!begrunnelse && suksesskriterie.behovForBegrunnelse) {
-        return 'border-danger'
+        return 'danger-strong'
       } else {
-        return 'border-alt-1'
+        return 'neutral-subtle'
       }
     } else {
-      return 'border-alt-1'
+      return 'neutral-subtle'
     }
   }
 
@@ -233,9 +233,9 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
     <Box
       className='mb-4'
       borderColor={getBorderColor()}
-      padding='8'
+      padding='space-8'
       borderWidth='3'
-      borderRadius='medium'
+      borderRadius='8'
     >
       <BodyShort>
         Suksesskriterium {index + 1} av {totalSuksesskriterie}

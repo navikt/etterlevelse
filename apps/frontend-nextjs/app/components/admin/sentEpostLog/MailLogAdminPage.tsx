@@ -50,9 +50,9 @@ const MailLogAdminPage = () => {
             <Box
               className='px-2'
               borderWidth='2'
-              borderColor='border-subtle'
-              borderRadius='large'
-              background='surface-default'
+              borderColor='neutral-subtle'
+              borderRadius='12'
+              background='default'
             >
               <Markdown source={html} escapeHtml={false} />
             </Box>

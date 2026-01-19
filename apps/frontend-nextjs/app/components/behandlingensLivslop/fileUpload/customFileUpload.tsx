@@ -75,7 +75,7 @@ export const CustomFileUpload = (props: IProps) => {
   }, [files])
 
   return (
-    <VStack gap='6'>
+    <VStack gap='space-6'>
       <FileUpload.Dropzone
         ref={ref}
         label='Last opp behandlingens livsløp'
@@ -133,11 +133,11 @@ export const CustomFileUpload = (props: IProps) => {
       )}
 
       {acceptedFiles.length > 0 && (
-        <VStack gap='2'>
+        <VStack gap='space-2'>
           <Heading level='3' size='xsmall'>
             {`Vedlegg (${acceptedFiles.length})`}
           </Heading>
-          <VStack as='ul' gap='3'>
+          <VStack as='ul' gap='space-4'>
             {acceptedFiles.map((file, index) => (
               <FileUpload.Item
                 as='li'
@@ -155,11 +155,11 @@ export const CustomFileUpload = (props: IProps) => {
         </VStack>
       )}
       {rejectedFiles.length > 0 && (
-        <VStack gap='2'>
+        <VStack gap='space-2'>
           <Heading level='3' size='xsmall' id='vedleggMedFeil'>
             Vedlegg med feil
           </Heading>
-          <VStack as='ul' gap='3'>
+          <VStack as='ul' gap='space-4'>
             {rejectedFiles.map((rejected, index) => (
               <FileUpload.Item
                 as='li'
