@@ -139,6 +139,11 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                     controlShouldRenderValue={false}
                     loadingMessage={() => 'Søker...'}
                     isClearable={false}
+                    menuShouldBlockScroll={false}
+                    captureMenuScroll={false}
+                    menuPosition='fixed'
+                    menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+                    menuShouldScrollIntoView={false}
                     loadOptions={useSearchKravToOptionsPvk}
                     onMenuOpen={() => {
                       // When opening the dropdown, nudge the modal so the save button is visible
