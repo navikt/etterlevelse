@@ -73,38 +73,47 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
           />
         )}
-        <Button
-          onClick={() => {
-            router.push(
-              pvkDokumentasjonBehandlingsenLivslopUrl(
-                etterlevelseDokumentasjon.id,
-                behandlingsLivslop ? behandlingsLivslop.id : 'ny'
-              )
-            )
-          }}
-          size='small'
-          variant={getVariantForBLLButton(behandlingsLivslop)}
-          className='whitespace-nowrap'
-        >
-          {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
-          Tegn behandlingens livsløp
-        </Button>
 
-        <Button
-          onClick={() => {
-            router.push(
-              pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-                etterlevelseDokumentasjon.id,
-                artOgOmfang.id ? artOgOmfang.id : 'ny'
+        {!etterlevelseDokumentasjon.irrelevansFor.some(
+          (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
+        ) && (
+          <Button
+            onClick={() => {
+              router.push(
+                pvkDokumentasjonBehandlingsenLivslopUrl(
+                  etterlevelseDokumentasjon.id,
+                  behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+                )
               )
-            )
-          }}
-          size='small'
-          variant={getVariantForBAOButton(artOgOmfang)}
-          className='whitespace-nowrap'
-        >
-          Beskriv art og omfang
-        </Button>
+            }}
+            size='small'
+            variant={getVariantForBLLButton(behandlingsLivslop)}
+            className='whitespace-nowrap'
+          >
+            {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
+            Tegn behandlingens livsløp
+          </Button>
+        )}
+
+        {!etterlevelseDokumentasjon.irrelevansFor.some(
+          (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
+        ) && (
+          <Button
+            onClick={() => {
+              router.push(
+                pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+                  etterlevelseDokumentasjon.id,
+                  artOgOmfang.id ? artOgOmfang.id : 'ny'
+                )
+              )
+            }}
+            size='small'
+            variant={getVariantForBAOButton(artOgOmfang)}
+            className='whitespace-nowrap'
+          >
+            Beskriv art og omfang
+          </Button>
+        )}
 
         {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
           <Button
