@@ -137,7 +137,7 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 <div>
                   <Label size='medium'>Seksjon:</Label>
                 </div>
-                <BodyLong size='medium'>
+                <BodyLong as='div' size='medium'>
                   {etterlevelseDokumentasjon.seksjoner.length !== 0 && (
                     <div className='flex flex-wrap tri'>
                       <BodyLong size='medium'>
