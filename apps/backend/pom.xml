@@ -25,9 +25,11 @@
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>24.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-        <microsoft-graph.version>6.29.0</microsoft-graph.version>
+        <microsoft-graph.version>6.54.0</microsoft-graph.version>
+        <microsoft-kiota.version>1.8.10</microsoft-kiota.version>
         <msal4j.version>1.23.1</msal4j.version>
         <flyway-database-postgresql.version>10.16.0</flyway-database-postgresql.version>
+        <azure-core.version>1.56.0</azure-core.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.28.0</commons-compress.version>
@@ -376,6 +378,51 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
+            <!-- Force Kiota convergence (microsoft-graph pulls different Kiota versions transitively) -->
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-abstractions</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-serialization-json</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-serialization-form</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-serialization-multipart</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-serialization-text</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-authentication-azure</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.kiota</groupId>
+                <artifactId>microsoft-kiota-http-okHttp</artifactId>
+                <version>${microsoft-kiota.version}</version>
+            </dependency>
+
+            <!-- Align Azure SDK versions pulled by graph-core vs kiota-authentication-azure -->
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-core</artifactId>
+                <version>${azure-core.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>msal4j</artifactId>
