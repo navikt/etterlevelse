@@ -4,6 +4,7 @@ import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   addTiltakToRisikoscenario,
   getRisikoscenario,
+  syncKravRelasjonerForRisikoscenario,
   updateRisikoscenario,
 } from '@/api/risikoscenario/risikoscenarioApi'
 import { createTiltakAndRelasjonWithRisikoscenario } from '@/api/tiltak/tiltakApi'
@@ -16,6 +17,7 @@ import {
   ITiltakRisikoscenarioRelasjon,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { IKravReference } from '@/constants/krav/kravConstants'
 import { risikoscenarioTiltakUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { PencilIcon } from '@navikt/aksel-icons'
@@ -42,6 +44,7 @@ type TProps = {
   setIsIngenTilgangFormDirty: (state: boolean) => void
   formRef: RefObject<any>
   isCreateModalOpen: boolean
+  onMovedToKrav?: (payload: { risikoscenarioName: string; kravRefs: IKravReference[] }) => void
 }
 
 export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
@@ -58,6 +61,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   setIsIngenTilgangFormDirty,
   formRef,
   isCreateModalOpen,
+  onMovedToKrav,
 }) => {
   const router = useRouter()
   const queryParams = useSearchParams()
@@ -73,25 +77,53 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [submitSuccess, setSubmitSuccess] = useState<boolean>(false)
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
-    await updateRisikoscenario(risikoscenario).then((response: IRisikoscenario) => {
-      if (response.generelScenario) {
-        setActiveRisikoscenario(response)
-        setRisikoscenarioer(
-          risikoscenarioer.map((risikoscenario) => {
-            if (risikoscenario.id === activeRisikoscenario.id) {
-              return response
-            } else {
-              return risikoscenario
-            }
-          })
-        )
-      } else {
-        setRisikoscenarioer(
-          risikoscenarioer.filter((risikoscenario) => risikoscenario.id !== response.id)
-        )
+    const prevWasGenerell = activeRisikoscenario.generelScenario
+    const prevKravRefs = activeRisikoscenario.relevanteKravNummer || []
+    const prevKravnummer = prevKravRefs.map((k) => k.kravNummer)
+
+    // NOTE: updateRisikoscenario intentionally strips relevanteKravNummer from the DTO(Data Transfer Object).
+    // So we must sync krav relations separately.
+    const desiredKravRefs = risikoscenario.relevanteKravNummer || []
+    const desiredKravnummer = desiredKravRefs.map((k) => k.kravNummer)
+
+    const response = await updateRisikoscenario(risikoscenario)
+    await syncKravRelasjonerForRisikoscenario(response.id, prevKravnummer, desiredKravnummer)
+    const hydrated = await getRisikoscenario(response.id)
+
+    // If editing links this scenario to krav, it disappears from the "generelle" list.
+    // Store a one-shot success message so the list view can show where it went.
+    if (
+      prevWasGenerell &&
+      !hydrated.generelScenario &&
+      prevKravRefs.length === 0 &&
+      (hydrated.relevanteKravNummer || []).length > 0
+    ) {
+      const storageKey = `pvk:moved-risikoscenario:${etterlevelseDokumentasjonId}`
+      const payload: { risikoscenarioName: string; kravRefs: IKravReference[] } = {
+        risikoscenarioName: hydrated.navn || 'Risikoscenario',
+        kravRefs: hydrated.relevanteKravNummer || [],
       }
-      setIsEditModalOpen(false)
-    })
+      window.sessionStorage.setItem(storageKey, JSON.stringify(payload))
+      onMovedToKrav?.(payload)
+    }
+
+    setActiveRisikoscenario(hydrated)
+
+    if (hydrated.generelScenario) {
+      setRisikoscenarioer(
+        risikoscenarioer.map((item) => {
+          if (item.id === hydrated.id) {
+            return hydrated
+          } else {
+            return item
+          }
+        })
+      )
+    } else {
+      setRisikoscenarioer(risikoscenarioer.filter((item) => item.id !== hydrated.id))
+    }
+
+    setIsEditModalOpen(false)
   }
 
   const submitIngenTiltak = async (submitedValues: IRisikoscenario): Promise<void> => {

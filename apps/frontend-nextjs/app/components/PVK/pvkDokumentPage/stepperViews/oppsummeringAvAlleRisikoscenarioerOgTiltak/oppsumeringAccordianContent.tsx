@@ -53,7 +53,6 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
 
     const response = await updateRisikoscenario(risikoscenario)
 
-    // Backend may clear relevanteKravNummer during update when switching to generelScenario.
     const eksisterendeKravnummer = (response.relevanteKravNummer || []).map(
       (krav) => krav.kravNummer
     )
