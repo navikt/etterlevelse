@@ -1,9 +1,12 @@
 'use client'
 
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { IKravReference } from '@/constants/krav/kravConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Accordion } from '@navikt/ds-react'
+import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
+import { Accordion, List, LocalAlert } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import AccordianAlertModal from '../../common/accordianAlertModal'
@@ -48,6 +51,36 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
 
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
+  const [movedRisikoscenarioAlert, setMovedRisikoscenarioAlert] = useState<{
+    risikoscenarioName: string
+    kravRefs: IKravReference[]
+  } | null>(null)
+
+  const handleMovedToKrav = (payload: {
+    risikoscenarioName: string
+    kravRefs: IKravReference[]
+  }) => {
+    setMovedRisikoscenarioAlert(payload)
+  }
+
+  useEffect(() => {
+    // One-shot success message set by the edit flow when a scenario is moved out of this list.
+    const storageKey = `pvk:moved-risikoscenario:${etterlevelseDokumentasjonId}`
+    const raw = window.sessionStorage.getItem(storageKey)
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as {
+          risikoscenarioName: string
+          kravRefs: IKravReference[]
+        }
+        if (parsed?.kravRefs?.length) {
+          setMovedRisikoscenarioAlert(parsed)
+        }
+      } finally {
+        window.sessionStorage.removeItem(storageKey)
+      }
+    }
+  }, [etterlevelseDokumentasjonId])
 
   useEffect(() => {
     if (risikoscenarioId) {
@@ -125,6 +158,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
                     setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
                     formRef={formRef}
                     isCreateModalOpen={isCreateModalOpen}
+                    onMovedToKrav={handleMovedToKrav}
                   />
                 )}
               </Accordion.Content>
@@ -139,6 +173,43 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
         navigateUrl={navigateUrl}
         formRef={formRef}
       />
+
+      {movedRisikoscenarioAlert && movedRisikoscenarioAlert.kravRefs.length > 0 && (
+        <LocalAlert status='success' className='mt-5'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>
+              {movedRisikoscenarioAlert.risikoscenarioName} er flyttet til følgende
+              etterlevelseskrav:
+            </LocalAlert.Title>
+            <LocalAlert.CloseButton onClick={() => setMovedRisikoscenarioAlert(null)} />
+          </LocalAlert.Header>
+          <LocalAlert.Content>
+            <List as='ul'>
+              {movedRisikoscenarioAlert.kravRefs.map(
+                (relevantKrav: IKravReference, index: number) => {
+                  const kravHref: string = risikoDokumentasjonTemaKravNummerVersjonUrl(
+                    etterlevelseDokumentasjonId,
+                    relevantKrav.temaCode || 'PVK',
+                    relevantKrav.kravNummer,
+                    relevantKrav.kravVersjon
+                  )
+
+                  return (
+                    <List.Item
+                      className='max-w-[75ch]'
+                      key={`${relevantKrav.kravNummer}_${relevantKrav.kravVersjon}_${index}`}
+                    >
+                      <ExternalLink href={kravHref}>
+                        K{relevantKrav.kravNummer}.{relevantKrav.kravVersjon} {relevantKrav.navn}
+                      </ExternalLink>
+                    </List.Item>
+                  )
+                }
+              )}
+            </List>
+          </LocalAlert.Content>
+        </LocalAlert>
+      )}
     </div>
   )
 }
