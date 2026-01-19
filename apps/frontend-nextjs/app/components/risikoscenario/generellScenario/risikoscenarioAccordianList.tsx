@@ -64,7 +64,7 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   }
 
   useEffect(() => {
-    // One-shot success message set by the edit flow when a scenario is moved out of this list.
+    // One-shot success message set by the edit flow when a ovrig scenario is connected to a pvk related krav and moved out of this list.
     const storageKey = `pvk:moved-risikoscenario:${etterlevelseDokumentasjonId}`
     const raw = window.sessionStorage.getItem(storageKey)
     if (raw) {
