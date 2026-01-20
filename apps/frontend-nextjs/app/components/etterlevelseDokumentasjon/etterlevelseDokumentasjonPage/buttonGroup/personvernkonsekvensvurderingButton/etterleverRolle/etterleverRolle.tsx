@@ -1,7 +1,14 @@
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
+import { EPVKTilstandStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
-import { VariantOne } from '../common/common'
+import {
+  EtterleverVariantFive,
+  EtterleverVariantFour,
+  EtterleverVariantOne,
+  EtterleverVariantSeven,
+  EtterleverVariantSix,
+  EtterleverVariantThree,
+  EtterleverVariantTwo,
+} from '../commonPVK/commonPVK'
 
 // type TProps = {
 //   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -11,6 +18,8 @@ import { VariantOne } from '../common/common'
 //   isRisikoeier: boolean
 // }
 
+const test: string = EPVKTilstandStatus.PVK_SENDT_TIL_PVO_TELLES_SOM_UNDERARBEID
+
 const EtterleverRolle: FunctionComponent = (
   {
     //   etterlevelseDokumentasjon,
@@ -19,198 +28,33 @@ const EtterleverRolle: FunctionComponent = (
     //   risikoscenarioList,
     //   isRisikoeier,
   }
-) => (
-  <>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv art og omfang
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Vurder behov for PVK
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv art og omfang
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Revurder behov for PVK
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv art og omfang
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Påbegynn PVK
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Revurder behov for PVK
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Group label=''>
-          <ActionMenu.Item as='a' href=''>
-            Beskriv art og omfang
-          </ActionMenu.Item>
-          <ActionMenu.Item as='a' href=''>
-            Fullfør PVK
-          </ActionMenu.Item>
-        </ActionMenu.Group>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          See behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Group label=''>
-          <ActionMenu.Item as='a' href=''>
-            Se art og omfang (read-only)
-          </ActionMenu.Item>
-          <ActionMenu.Item as='a' href=''>
-            Les PVK (read-only)
-          </ActionMenu.Item>
-        </ActionMenu.Group>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se art og omfang (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Les PVOs tilbakemelding
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <VariantOne />
-    <VariantOne />
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv art og omfang
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only, godkjent versjon) og Oppdater PVK (åpner neste versjon)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Revurder behov for PVK
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv art og omfang
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Fullfør PVK
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <VariantOne />
-  </>
-)
+) => {
+  switch (test) {
+    case EPVKTilstandStatus.IKKE_VURDERT_BEHOV_FOR_PVK:
+      return <EtterleverVariantOne />
+    case EPVKTilstandStatus.SKAL_IKKE_GJORE_PVK:
+      return <EtterleverVariantTwo />
+    case EPVKTilstandStatus.SKAL_GJORE_PVK_MEN_IKKE_PABEGYNT:
+      return <EtterleverVariantThree />
+    case EPVKTilstandStatus.PVK_UNDER_ARBEID_FOR_FORSTE_GANG_FOR_INNSENDING:
+      return <EtterleverVariantFour />
+    case EPVKTilstandStatus.PVK_SENDT_TIL_PVO_TELLES_SOM_UNDERARBEID:
+      return <EtterleverVariantFour />
+    case EPVKTilstandStatus.PVO_HAR_GITT_TILBAKEMELDING_ETTERLEVER_KAN_REDIGERE_TELLES_SOM_UNDER_ARBEID:
+      return <EtterleverVariantSix />
+    case EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_TILBAKE_TIL_PVO_TELLES_SOM_UNDER_ARBEID:
+      return <EtterleverVariantFive />
+    case EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_TIL_RISIKOEIER_TELLES_SOM_UNDER_ARBEID:
+      return <EtterleverVariantFive />
+    case EPVKTilstandStatus.RISIKOEIER_HAR_GODKJENT_ETTERLEVER_HAR_IKKE_ENDRET_SIDEN:
+      return <EtterleverVariantSeven />
+    case EPVKTilstandStatus.ETTERLEVER_HAR_BEGYNT_MED_NYE_ENDRINGER_TELLES_SOM_UNDER_ARBEID:
+      return <EtterleverVariantFour />
+    case EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_OPPDATERT_PVK_DIREKTE_TIL_RISIKOEIER_TELLES_SOM_UNDER_ARBEID:
+      return <EtterleverVariantFive />
+    default:
+      return <></>
+  }
+}
 
 export default EtterleverRolle
