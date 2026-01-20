@@ -30,6 +30,12 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
   const multiKravAlertRef = useRef<HTMLDivElement>(null)
   const kravSelectSectionRef = useRef<HTMLDivElement>(null)
 
+  const prevGenerelScenarioRef = useRef<boolean | undefined>(undefined)
+  const prevRemovedAllAlertShownRef = useRef<boolean | undefined>(undefined)
+  const prevDecoupledAlertShownRef = useRef<boolean | undefined>(undefined)
+  const prevOvrigScenarioLinkedAlertShownRef = useRef<boolean | undefined>(undefined)
+  const prevMultiKravAlertShownRef = useRef<boolean | undefined>(undefined)
+
   const getDialogEl = (rootEl: HTMLElement): HTMLElement | null => {
     return (
       (rootEl.closest('dialog') as HTMLElement | null) ||
@@ -106,32 +112,84 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
     }
   }
 
-  useEffect(() => {
-    if (!removedAllAlert) return
-    removedAllAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [removedAllAlert])
+  const isRemovedAllAlertShown = removedAllAlert
+  const isDecoupledAlertShown =
+    generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0
+  const isOvrigScenarioLinkedAlertShown =
+    isOvrigScenario && !generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0
+  const isMultiKravAlertShown = !generelScenarioFormValue && relevanteKravNummerFormValue.length > 1
 
   useEffect(() => {
-    if (!generelScenarioFormValue || relevanteKravNummerFormValue.length === 0) return
-    decoupledAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [generelScenarioFormValue, relevanteKravNummerFormValue.length])
-
-  useEffect(() => {
-    if (!isOvrigScenario || generelScenarioFormValue || relevanteKravNummerFormValue.length === 0) {
+    // Avoid scrolling on initial mount; only when it becomes visible due to user action
+    if (prevRemovedAllAlertShownRef.current === undefined) {
+      prevRemovedAllAlertShownRef.current = isRemovedAllAlertShown
       return
     }
-    ovrigScenarioLinkedAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [isOvrigScenario, generelScenarioFormValue, relevanteKravNummerFormValue.length])
+
+    const prevShown = prevRemovedAllAlertShownRef.current
+    prevRemovedAllAlertShownRef.current = isRemovedAllAlertShown
+
+    if (!prevShown && isRemovedAllAlertShown) {
+      removedAllAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [isRemovedAllAlertShown])
 
   useEffect(() => {
-    if (generelScenarioFormValue || relevanteKravNummerFormValue.length <= 1) return
-    multiKravAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  }, [generelScenarioFormValue, relevanteKravNummerFormValue.length])
+    // Avoid scrolling on initial mount; only when it becomes visible
+    if (prevDecoupledAlertShownRef.current === undefined) {
+      prevDecoupledAlertShownRef.current = isDecoupledAlertShown
+      return
+    }
+
+    const prevShown = prevDecoupledAlertShownRef.current
+    prevDecoupledAlertShownRef.current = isDecoupledAlertShown
+
+    if (!prevShown && isDecoupledAlertShown) {
+      decoupledAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [isDecoupledAlertShown])
 
   useEffect(() => {
-    // When checkbox reflects checked state (generelScenario is false), keep save button visible
-    if (!generelScenarioFormValue) {
-      // When enabling krav-specific mode, bring the newly revealed search UI into view
+    // Avoid scrolling on initial mount; only when it becomes visible
+    if (prevOvrigScenarioLinkedAlertShownRef.current === undefined) {
+      prevOvrigScenarioLinkedAlertShownRef.current = isOvrigScenarioLinkedAlertShown
+      return
+    }
+
+    const prevShown = prevOvrigScenarioLinkedAlertShownRef.current
+    prevOvrigScenarioLinkedAlertShownRef.current = isOvrigScenarioLinkedAlertShown
+
+    if (!prevShown && isOvrigScenarioLinkedAlertShown) {
+      ovrigScenarioLinkedAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [isOvrigScenarioLinkedAlertShown])
+
+  useEffect(() => {
+    // Avoid scrolling on initial mount; only when it becomes visible
+    if (prevMultiKravAlertShownRef.current === undefined) {
+      prevMultiKravAlertShownRef.current = isMultiKravAlertShown
+      return
+    }
+
+    const prevShown = prevMultiKravAlertShownRef.current
+    prevMultiKravAlertShownRef.current = isMultiKravAlertShown
+
+    if (!prevShown && isMultiKravAlertShown) {
+      multiKravAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [isMultiKravAlertShown])
+
+  useEffect(() => {
+    // Avoid scrolling on initial mount; only when toggling from general -> krav-specific
+    if (prevGenerelScenarioRef.current === undefined) {
+      prevGenerelScenarioRef.current = generelScenarioFormValue
+      return
+    }
+
+    const prev = prevGenerelScenarioRef.current
+    prevGenerelScenarioRef.current = generelScenarioFormValue
+
+    if (prev && !generelScenarioFormValue) {
       scrollKravSelectIntoView()
       deferScrollKravSelect()
     }
