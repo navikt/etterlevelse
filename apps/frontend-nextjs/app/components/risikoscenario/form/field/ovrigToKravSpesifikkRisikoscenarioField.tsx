@@ -22,6 +22,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 }) => {
   const [removedAllAlert, setRemovedAllAlert] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | undefined>(undefined)
 
   const scrollToBottomOfModal = () => {
     if (typeof window === 'undefined') return
@@ -80,6 +81,18 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       setTimeout(() => scrollSaveButtonIntoView(), 0)
     }
   }, [generelScenarioFormValue])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const rootEl = rootRef.current
+    if (!rootEl) return
+
+    const dialog =
+      (rootEl.closest('dialog') as HTMLElement | null) ||
+      (rootEl.closest('[role="dialog"]') as HTMLElement | null)
+
+    setMenuPortalTarget(dialog ?? document.body)
+  }, [])
 
   return (
     <div ref={rootRef} className='my-5'>
@@ -142,7 +155,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                     menuShouldBlockScroll={false}
                     captureMenuScroll={false}
                     menuPosition='fixed'
-                    menuPortalTarget={typeof window !== 'undefined' ? document.body : undefined}
+                    menuPortalTarget={menuPortalTarget}
                     menuShouldScrollIntoView={false}
                     loadOptions={useSearchKravToOptionsPvk}
                     onMenuOpen={() => {
