@@ -13,6 +13,8 @@ type TProps = {
   isRisikoeier: boolean
 }
 
+const test: string = 'Etterlever'
+
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
   {
     // etterlevelseDokumentasjon,
@@ -23,13 +25,16 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
   }
 ) => (
   <>
-    <EtterleverRolle
-    // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-    // risikoscenarioList={risikoscenarioList}
-    // behandlingsLivslop={behandlingsLivslop}
-    // pvkDokument={pvkDokument}
-    // isRisikoeier={isRisikoeier}
-    />
+    {test === 'Etterlever' && (
+      <EtterleverRolle
+      // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+      // risikoscenarioList={risikoscenarioList}
+      // behandlingsLivslop={behandlingsLivslop}
+      // pvkDokument={pvkDokument}
+      // isRisikoeier={isRisikoeier}
+      />
+    )}
+
     {/* <ActionMenu>
       <ActionMenu.Trigger>
         <Button

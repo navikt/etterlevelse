@@ -18,8 +18,10 @@ import {
 //   isRisikoeier: boolean
 // }
 
-const test: string =
-  EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_OPPDATERT_PVK_DIREKTE_TIL_RISIKOEIER_TELLES_SOM_UNDER_ARBEID
+const test: string = EPVKTilstandStatus.IKKE_VURDERT_BEHOV_FOR_PVK
+
+// EPVKTilstandStatus
+// PVKTilstandStatusRolle
 
 const EtterleverRolle: FunctionComponent = (
   {
