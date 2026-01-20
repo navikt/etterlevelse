@@ -24,6 +24,39 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
   const rootRef = useRef<HTMLDivElement>(null)
   const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | undefined>(undefined)
 
+  const isWindows = () => {
+    if (typeof navigator === 'undefined') return false
+    return /Windows/i.test(navigator.userAgent)
+  }
+
+  const canScrollInDirection = (el: HTMLElement, deltaY: number) => {
+    if (deltaY === 0) return false
+    const maxScrollTop = el.scrollHeight - el.clientHeight
+    if (maxScrollTop <= 1) return false
+
+    if (deltaY > 0) return el.scrollTop < maxScrollTop - 1
+    return el.scrollTop > 1
+  }
+
+  const findScrollableAncestor = (
+    startEl: HTMLElement,
+    boundary: HTMLElement
+  ): HTMLElement | null => {
+    let el: HTMLElement | null = startEl
+
+    while (el && el !== boundary) {
+      const style = window.getComputedStyle(el)
+      const overflowY = style.overflowY
+      const canScroll =
+        (overflowY === 'auto' || overflowY === 'scroll') && el.scrollHeight > el.clientHeight + 1
+
+      if (canScroll) return el
+      el = el.parentElement
+    }
+
+    return null
+  }
+
   const getModalElements = () => {
     const rootEl = rootRef.current
     if (!rootEl) return { dialog: null as HTMLElement | null, body: null as HTMLElement | null }
@@ -100,6 +133,45 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
     // This avoids scroll-lock edge-cases (notably on Windows) where the mousewheel
     // gets captured by the dialog/overlay instead of the body scroll container.
     setMenuPortalTarget(body ?? dialog ?? document.body)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (!isWindows()) return
+
+    const { dialog, body } = getModalElements()
+    if (!dialog || !body) return
+
+    const onWheelCapture = (event: WheelEvent) => {
+      // Only handle wheel events originating inside this modal body
+      const target = event.target
+      if (!(target instanceof HTMLElement)) return
+      if (!body.contains(target)) return
+
+      // If the wheel is over a nested scrollable element, only let it handle the event
+      // if it can actually scroll in the wheel direction. Otherwise, forward to modal body.
+      const nestedScrollable = findScrollableAncestor(target, body)
+      if (nestedScrollable && nestedScrollable !== body) {
+        if (nestedScrollable.tagName === 'TEXTAREA') {
+          if (canScrollInDirection(nestedScrollable, event.deltaY)) return
+        } else {
+          if (canScrollInDirection(nestedScrollable, event.deltaY)) return
+        }
+      }
+
+      // If modal body itself can't scroll, do nothing
+      if (body.scrollHeight <= body.clientHeight + 1) return
+
+      body.scrollTop += event.deltaY
+      event.preventDefault()
+    }
+
+    // Capture phase + non-passive so we can preventDefault before children (e.g. react-select) swallow wheel
+    dialog.addEventListener('wheel', onWheelCapture, { capture: true, passive: false })
+
+    return () => {
+      dialog.removeEventListener('wheel', onWheelCapture, { capture: true } as any)
+    }
   }, [])
 
   return (
