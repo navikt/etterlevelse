@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TExternalLinkProps = {
@@ -24,6 +24,8 @@ export const ExternalLink: FunctionComponent<TExternalLinkProps> = ({
     target={openOnSamePage ? '_self' : '_blank'}
     rel='noopener noreferrer'
     aria-label={label}
+    data-color='accent'
+    inlineText
   >
     {children} {!openOnSamePage && !noNewTabLabel && ' (åpner i en ny fane)'}
   </Link>
