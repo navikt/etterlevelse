@@ -24,15 +24,29 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
   const rootRef = useRef<HTMLDivElement>(null)
   const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | undefined>(undefined)
 
+  const getModalElements = () => {
+    const rootEl = rootRef.current
+    if (!rootEl) return { dialog: null as HTMLElement | null, body: null as HTMLElement | null }
+
+    const dialog =
+      (rootEl.closest('dialog') as HTMLElement | null) ||
+      (rootEl.closest('[role="dialog"]') as HTMLElement | null)
+
+    const body =
+      (dialog?.querySelector('.aksel-modal__body, .navds-modal__body') as HTMLElement | null) ||
+      null
+
+    return { dialog, body }
+  }
+
   const scrollToBottomOfModal = () => {
     if (typeof window === 'undefined') return
-    const rootEl = rootRef.current
-    if (!rootEl) return
-
-    const dialog = rootEl.closest('[role="dialog"]') as HTMLElement | null
+    const { dialog, body } = getModalElements()
     const scrollEl =
-      (dialog?.querySelector('.navds-modal__body') as HTMLElement | null) ||
-      (dialog?.querySelector('.navds-modal__content') as HTMLElement | null) ||
+      body ||
+      (dialog?.querySelector(
+        '.aksel-modal__content, .navds-modal__content'
+      ) as HTMLElement | null) ||
       dialog
 
     const target =
@@ -48,10 +62,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 
   const scrollSaveButtonIntoView = () => {
     if (typeof window === 'undefined') return
-    const rootEl = rootRef.current
-    if (!rootEl) return
-
-    const dialog = rootEl.closest('[role="dialog"]') as HTMLElement | null
+    const { dialog } = getModalElements()
     const searchScope: HTMLElement | Document = dialog ?? document
 
     const buttons = Array.from(searchScope.querySelectorAll('button')) as HTMLElement[]
@@ -84,14 +95,11 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const rootEl = rootRef.current
-    if (!rootEl) return
-
-    const dialog =
-      (rootEl.closest('dialog') as HTMLElement | null) ||
-      (rootEl.closest('[role="dialog"]') as HTMLElement | null)
-
-    setMenuPortalTarget(dialog ?? document.body)
+    const { dialog, body } = getModalElements()
+    // Portal the dropdown menu into the scrollable modal body when available.
+    // This avoids scroll-lock edge-cases (notably on Windows) where the mousewheel
+    // gets captured by the dialog/overlay instead of the body scroll container.
+    setMenuPortalTarget(body ?? dialog ?? document.body)
   }, [])
 
   return (
