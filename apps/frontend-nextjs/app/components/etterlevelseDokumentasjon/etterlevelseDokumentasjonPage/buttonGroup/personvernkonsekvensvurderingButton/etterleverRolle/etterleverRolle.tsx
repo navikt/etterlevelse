@@ -1,6 +1,7 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { VariantOne } from '../common/common'
 
 // type TProps = {
 //   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -159,50 +160,8 @@ const EtterleverRolle: FunctionComponent = (
         </ActionMenu.Item>
       </ActionMenu.Content>
     </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          See behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se art og omfang (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          See behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se art og omfang (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
+    <VariantOne />
+    <VariantOne />
     <ActionMenu>
       <ActionMenu.Trigger>
         <Button
@@ -250,28 +209,7 @@ const EtterleverRolle: FunctionComponent = (
         </ActionMenu.Item>
       </ActionMenu.Content>
     </ActionMenu>
-    <ActionMenu>
-      <ActionMenu.Trigger>
-        <Button
-          variant='secondary-neutral'
-          icon={<ChevronDownIcon aria-hidden />}
-          iconPosition='right'
-        >
-          PVK
-        </Button>
-      </ActionMenu.Trigger>
-      <ActionMenu.Content>
-        <ActionMenu.Item as='a' href=''>
-          See behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se art og omfang (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
+    <VariantOne />
   </>
 )
 
