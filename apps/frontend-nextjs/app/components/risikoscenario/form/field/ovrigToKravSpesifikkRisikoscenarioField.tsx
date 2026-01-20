@@ -24,12 +24,41 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
   const rootRef = useRef<HTMLDivElement>(null)
   const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | undefined>(undefined)
 
+  const removedAllAlertRef = useRef<HTMLDivElement>(null)
+  const decoupledAlertRef = useRef<HTMLDivElement>(null)
+  const ovrigScenarioLinkedAlertRef = useRef<HTMLDivElement>(null)
+  const multiKravAlertRef = useRef<HTMLDivElement>(null)
+  const kravSelectSectionRef = useRef<HTMLDivElement>(null)
+
+  const getDialogEl = (rootEl: HTMLElement): HTMLElement | null => {
+    return (
+      (rootEl.closest('dialog') as HTMLElement | null) ||
+      (rootEl.closest('[role="dialog"]') as HTMLElement | null)
+    )
+  }
+
+  const deferScroll = () => {
+    if (typeof window === 'undefined') return
+    // Give React + layout a moment to settle (e.g. tags rendered, dropdown menu measured)
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollSaveButtonIntoView()))
+  }
+
+  const scrollKravSelectIntoView = () => {
+    if (typeof window === 'undefined') return
+    kravSelectSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const deferScrollKravSelect = () => {
+    if (typeof window === 'undefined') return
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollKravSelectIntoView()))
+  }
+
   const scrollToBottomOfModal = () => {
     if (typeof window === 'undefined') return
     const rootEl = rootRef.current
     if (!rootEl) return
 
-    const dialog = rootEl.closest('[role="dialog"]') as HTMLElement | null
+    const dialog = getDialogEl(rootEl)
     const scrollEl =
       (dialog?.querySelector('.navds-modal__body') as HTMLElement | null) ||
       (dialog?.querySelector('.navds-modal__content') as HTMLElement | null) ||
@@ -51,7 +80,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
     const rootEl = rootRef.current
     if (!rootEl) return
 
-    const dialog = rootEl.closest('[role="dialog"]') as HTMLElement | null
+    const dialog = getDialogEl(rootEl)
     const searchScope: HTMLElement | Document = dialog ?? document
 
     const buttons = Array.from(searchScope.querySelectorAll('button')) as HTMLElement[]
@@ -65,7 +94,12 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       (searchScope.querySelector('[data-testid*="save" i]') as HTMLElement | null)
 
     if (saveButton) {
-      saveButton.scrollIntoView({ behavior: 'smooth', block: 'end' })
+      const rect = saveButton.getBoundingClientRect()
+      const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight
+      if (!isVisible) {
+        // Use 'nearest' to avoid scrolling away other important content (like alerts)
+        saveButton.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }
     } else {
       // Fallback to bottom of modal if specific button isn't found
       scrollToBottomOfModal()
@@ -73,12 +107,33 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
   }
 
   useEffect(() => {
+    if (!removedAllAlert) return
+    removedAllAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [removedAllAlert])
+
+  useEffect(() => {
+    if (!generelScenarioFormValue || relevanteKravNummerFormValue.length === 0) return
+    decoupledAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [generelScenarioFormValue, relevanteKravNummerFormValue.length])
+
+  useEffect(() => {
+    if (!isOvrigScenario || generelScenarioFormValue || relevanteKravNummerFormValue.length === 0) {
+      return
+    }
+    ovrigScenarioLinkedAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [isOvrigScenario, generelScenarioFormValue, relevanteKravNummerFormValue.length])
+
+  useEffect(() => {
+    if (generelScenarioFormValue || relevanteKravNummerFormValue.length <= 1) return
+    multiKravAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [generelScenarioFormValue, relevanteKravNummerFormValue.length])
+
+  useEffect(() => {
     // When checkbox reflects checked state (generelScenario is false), keep save button visible
     if (!generelScenarioFormValue) {
-      // Immediate attempt
-      scrollSaveButtonIntoView()
-      // Delay to ensure layout/render has settled (search field, tags etc.)
-      setTimeout(() => scrollSaveButtonIntoView(), 0)
+      // When enabling krav-specific mode, bring the newly revealed search UI into view
+      scrollKravSelectIntoView()
+      deferScrollKravSelect()
     }
   }, [generelScenarioFormValue])
 
@@ -87,9 +142,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
     const rootEl = rootRef.current
     if (!rootEl) return
 
-    const dialog =
-      (rootEl.closest('dialog') as HTMLElement | null) ||
-      (rootEl.closest('[role="dialog"]') as HTMLElement | null)
+    const dialog = getDialogEl(rootEl)
 
     setMenuPortalTarget(dialog ?? document.body)
   }, [])
@@ -106,9 +159,9 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
               if (value.length !== 0) {
                 await fieldProps.form.setFieldValue('generelScenario', false)
                 setRemovedAllAlert(false)
-                // Ensure the save button is visible when checked
-                scrollSaveButtonIntoView()
-                setTimeout(() => scrollSaveButtonIntoView(), 0)
+                // Scroll down to the search field/results when enabling
+                scrollKravSelectIntoView()
+                deferScrollKravSelect()
               } else {
                 await fieldProps.form.setFieldValue('generelScenario', true)
               }
@@ -122,21 +175,23 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       </Field>
 
       {removedAllAlert && (
-        <Alert
-          variant='info'
-          className='mt-3'
-          aria-live='polite'
-          aria-label='Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.'
-        >
-          <BodyLong>
-            Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen
-            over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.
-          </BodyLong>
-        </Alert>
+        <div ref={removedAllAlertRef}>
+          <Alert
+            variant='info'
+            className='mt-3'
+            aria-live='polite'
+            aria-label='Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.'
+          >
+            <BodyLong>
+              Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen
+              over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.
+            </BodyLong>
+          </Alert>
+        </div>
       )}
 
       {!generelScenarioFormValue && (
-        <div className='mt-5'>
+        <div ref={kravSelectSectionRef} className='mt-5'>
           <FieldArray name='relevanteKravNummer'>
             {(fieldArrayRenderProps: FieldArrayRenderProps) => (
               <div className='my-3'>
@@ -159,7 +214,6 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                     menuShouldScrollIntoView={false}
                     loadOptions={useSearchKravToOptionsPvk}
                     onMenuOpen={() => {
-                      // When opening the dropdown, nudge the modal so the save button is visible
                       scrollSaveButtonIntoView()
                     }}
                     onChange={(value: any) => {
@@ -174,7 +228,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                         }
                         // Ensure save button is visible after selecting a krav
                         scrollSaveButtonIntoView()
-                        setTimeout(() => scrollSaveButtonIntoView(), 0)
+                        deferScroll()
                       }
                     }}
                     styles={selectOverrides}
@@ -204,41 +258,47 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       )}
 
       {generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0 && (
-        <Alert variant='info' className='mt-5'>
-          <BodyLong>
-            Dere har valgt å avkoble dette risikoscenarioet fra følgende etterlevelseskrav:
-          </BodyLong>{' '}
-          <List>
-            {relevanteKravNummerFormValue.map((relevanteKrav, index) => (
-              <List.Item key={`${index}_${relevanteKrav.navn}`}>
-                {kravNummerView(relevanteKrav.kravVersjon, relevanteKrav.kravNummer)}{' '}
-                {relevanteKrav.navn}
-              </List.Item>
-            ))}
-          </List>
-          <BodyLong>
-            Fordi risikoscenarioet ikke er koblet til andre krav, vil det nå synes som “øvrig”
-            scenario på Identifisering av risikoscenarioer og tiltak.
-          </BodyLong>
-        </Alert>
+        <div ref={decoupledAlertRef}>
+          <Alert variant='info' className='mt-5'>
+            <BodyLong>
+              Dere har valgt å avkoble dette risikoscenarioet fra følgende etterlevelseskrav:
+            </BodyLong>{' '}
+            <List>
+              {relevanteKravNummerFormValue.map((relevanteKrav, index) => (
+                <List.Item key={`${index}_${relevanteKrav.navn}`}>
+                  {kravNummerView(relevanteKrav.kravVersjon, relevanteKrav.kravNummer)}{' '}
+                  {relevanteKrav.navn}
+                </List.Item>
+              ))}
+            </List>
+            <BodyLong>
+              Fordi risikoscenarioet ikke er koblet til andre krav, vil det nå synes som “øvrig”
+              scenario på Identifisering av risikoscenarioer og tiltak.
+            </BodyLong>
+          </Alert>
+        </div>
       )}
 
       {isOvrigScenario &&
         !generelScenarioFormValue &&
         relevanteKravNummerFormValue.length !== 0 && (
-          <Alert variant='info' className='mt-5'>
-            Dere har valgt å koble dette risikoscenarioet til etterlevelseskrav. Når dere lagrer
-            denne endringen, vil risikoscenarioet forsvinne fra listen over “øvrige” krav.
-            Scenarioet finner dere på de kravsidene som dere velger her. Husk at det også er mulig å
-            legge til aktuelle risikoscenarioer fra selve kravsiden.
-          </Alert>
+          <div ref={ovrigScenarioLinkedAlertRef}>
+            <Alert variant='info' className='mt-5'>
+              Dere har valgt å koble dette risikoscenarioet til etterlevelseskrav. Når dere lagrer
+              denne endringen, vil risikoscenarioet forsvinne fra listen over “øvrige” krav.
+              Scenarioet finner dere på de kravsidene som dere velger her. Husk at det også er mulig
+              å legge til aktuelle risikoscenarioer fra selve kravsiden.
+            </Alert>
+          </div>
         )}
 
       {!generelScenarioFormValue && relevanteKravNummerFormValue.length > 1 && (
-        <Alert variant='info' className='mt-5'>
-          Fordi dere har valgt at dette risikoscenarioet skal høre til flere krav, vil scenarioet nå
-          også finnes under gjeldende krav.
-        </Alert>
+        <div ref={multiKravAlertRef}>
+          <Alert variant='info' className='mt-5'>
+            Fordi dere har valgt at dette risikoscenarioet skal høre til flere krav, vil scenarioet
+            nå også finnes under gjeldende krav.
+          </Alert>
+        </div>
       )}
     </div>
   )
