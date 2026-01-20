@@ -1,5 +1,6 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 
 // type TProps = {
 //   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -9,7 +10,7 @@ import { ActionMenu, Button } from '@navikt/ds-react'
 //   isRisikoeier: boolean
 // }
 
-const EtterleverRolle = (
+const EtterleverRolle: FunctionComponent = (
   {
     //   etterlevelseDokumentasjon,
     //   behandlingsLivslop,
