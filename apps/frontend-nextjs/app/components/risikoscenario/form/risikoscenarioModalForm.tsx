@@ -55,7 +55,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
       >
         {({ submitForm, errors, values }) => (
           <Form>
-            <Modal.Body>
+            <Modal.Body className='flex-1 min-h-0 overflow-auto'>
               <>
                 <TextAreaField
                   rows={1}
