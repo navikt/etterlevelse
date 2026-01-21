@@ -23,7 +23,7 @@
     ]
   },
   "dependencies": {
-    "@apollo/client": "4.1.0",
+    "@apollo/client": "4.1.1",
     "@fontsource/source-sans-pro": "5.2.5",
     "@fortawesome/fontawesome-svg-core": "7.1.0",
     "@fortawesome/free-brands-svg-icons": "7.1.0",
@@ -66,7 +66,7 @@
     "@types/lodash": "4.17.23",
     "@types/markdown-draft-js": "2.2.7",
     "@types/node": "25.0.9",
-    "@types/react": "19.2.8",
+    "@types/react": "19.2.9",
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "8.53.1",
     "@typescript-eslint/parser": "8.53.1",
