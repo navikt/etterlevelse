@@ -1,7 +1,6 @@
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { BodyShort, FormSummary, Tag } from '@navikt/ds-react'
-import Link from 'next/link'
+import { BodyShort, FormSummary, Link, Tag } from '@navikt/ds-react'
 import { FunctionComponent, ReactNode } from 'react'
 
 type TFormSummaryPanelProps = {

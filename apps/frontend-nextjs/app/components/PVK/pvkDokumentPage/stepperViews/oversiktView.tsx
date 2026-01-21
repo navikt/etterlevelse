@@ -26,8 +26,7 @@ import {
   isRisikoUnderarbeidCheck,
   risikoscenarioFieldCheck,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { Alert, BodyShort, FormSummary, Heading, List, Tag } from '@navikt/ds-react'
-import Link from 'next/link'
+import { Alert, BodyShort, FormSummary, Heading, Link, List, Tag } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent, JSX, useEffect, useState } from 'react'
 import FormSummaryPanel from '../../common/formSummaryPanel'
