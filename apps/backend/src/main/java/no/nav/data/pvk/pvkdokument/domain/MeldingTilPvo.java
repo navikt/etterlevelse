@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MeldingTilPvo {
+    private int etterlevelsesDokumentVersjon;
     private int innsendingId;
     private String merknadTilPvo;
     private String endringsNotat;

@@ -6,7 +6,6 @@ import lombok.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -57,7 +56,7 @@ public class EtterlevelseDokumentasjonData {
 
     //versjonering
     @Builder.Default
-    private Integer versjon = 1;
+    private Integer etterlevelseDokumentVersjon = 1;
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
 
 
