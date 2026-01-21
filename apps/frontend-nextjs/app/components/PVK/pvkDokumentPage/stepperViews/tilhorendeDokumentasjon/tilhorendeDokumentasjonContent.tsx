@@ -14,8 +14,7 @@ import { behandlingskatalogenProcessUrl } from '@/routes/behandlingskatalog/beha
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { Alert, BodyLong, BodyShort, Button, Heading, List, ReadMore } from '@navikt/ds-react'
-import Link from 'next/link'
+import { Alert, BodyLong, BodyShort, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
 

@@ -2,8 +2,7 @@ import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etter
 import { etterlevelseDokumentasjonTemaUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { getEtterlevelseStatus } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { getNextKravUrl } from '@/util/krav/kravUtil'
-import { BodyShort, Button, Modal } from '@navikt/ds-react'
-import Link from 'next/link'
+import { BodyShort, Button, Link, Modal } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {

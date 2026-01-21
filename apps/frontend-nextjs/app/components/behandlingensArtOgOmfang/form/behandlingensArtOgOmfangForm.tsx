@@ -18,9 +18,18 @@ import {
 import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Heading, Label, List, Modal, ReadMore } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Heading,
+  Label,
+  Link,
+  List,
+  Modal,
+  ReadMore,
+} from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import Link from 'next/link'
 import { FunctionComponent, RefObject, useState } from 'react'
 
 type TProps = {

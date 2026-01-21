@@ -5,8 +5,7 @@ import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjo
 import { behandlingskatalogenProcessUrl } from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { BodyShort, Heading, Label, List } from '@navikt/ds-react'
-import Link from 'next/link'
+import { BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {

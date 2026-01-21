@@ -1,7 +1,6 @@
 import { useTeam } from '@/api/teamkatalogen/teamkatalogenApi'
 import { teamKatTeamLink } from '@/util/config/config'
-import { Label } from '@navikt/ds-react'
-import Link from 'next/link'
+import { Label, Link } from '@navikt/ds-react'
 
 interface IPropsTeamName {
   id: string

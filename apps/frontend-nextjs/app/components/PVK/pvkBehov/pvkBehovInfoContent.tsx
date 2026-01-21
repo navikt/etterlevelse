@@ -5,8 +5,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonBehandlingsenLivslopUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { Alert, BodyLong, BodyShort, Heading, Label, List } from '@navikt/ds-react'
-import Link from 'next/link'
+import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
 
 type TProps = {

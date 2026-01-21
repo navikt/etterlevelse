@@ -1,9 +1,8 @@
 'use client'
 
 import { ArrowUpIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Spacer } from '@navikt/ds-react'
+import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {
   behandlingsKatalogLink,

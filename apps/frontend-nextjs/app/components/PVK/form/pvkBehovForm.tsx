@@ -36,6 +36,7 @@ import {
   Checkbox,
   CheckboxGroup,
   CopyButton,
+  Link,
   List,
   Radio,
   RadioGroup,
@@ -50,7 +51,6 @@ import {
   Formik,
   FormikHelpers,
 } from 'formik'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
 import { pvkBehovSchema } from './pvkBehovSchema'
