@@ -4,6 +4,7 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { FunctionComponent } from 'react'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
+import PersonvernombudRolle from './personvernombudRolle/personvernombudRolle'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -23,19 +24,66 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
     // risikoscenarioList,
     // isRisikoeier,
   }
-) => (
-  <>
-    {test === 'Etterlever' && (
-      <EtterleverRolle
-      // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-      // risikoscenarioList={risikoscenarioList}
-      // behandlingsLivslop={behandlingsLivslop}
-      // pvkDokument={pvkDokument}
-      // isRisikoeier={isRisikoeier}
-      />
-    )}
+) => {
+  switch (test) {
+    case 'Etterlever':
+      return (
+        <EtterleverRolle
+        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        // risikoscenarioList={risikoscenarioList}
+        // behandlingsLivslop={behandlingsLivslop}
+        // pvkDokument={pvkDokument}
+        // isRisikoeier={isRisikoeier}
+        />
+      )
+    case 'Personvernombud':
+      return (
+        <PersonvernombudRolle
+        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        // risikoscenarioList={risikoscenarioList}
+        // behandlingsLivslop={behandlingsLivslop}
+        // pvkDokument={pvkDokument}
+        // isRisikoeier={isRisikoeier}
+        />
+      )
+    case 'Risikoeier':
+      return (
+        <EtterleverRolle
+        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        // risikoscenarioList={risikoscenarioList}
+        // behandlingsLivslop={behandlingsLivslop}
+        // pvkDokument={pvkDokument}
+        // isRisikoeier={isRisikoeier}
+        />
+      )
+    case 'Admin med alle andre roller ogsa skrudd pa':
+      return (
+        <EtterleverRolle
+        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        // risikoscenarioList={risikoscenarioList}
+        // behandlingsLivslop={behandlingsLivslop}
+        // pvkDokument={pvkDokument}
+        // isRisikoeier={isRisikoeier}
+        />
+      )
+    default:
+      return <></>
+  }
 
-    {/* <ActionMenu>
+  // return (
+  // <>
+  //   {test === 'Etterlever' && (
+  //     <EtterleverRolle
+  //     etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+  //     risikoscenarioList={risikoscenarioList}
+  //     behandlingsLivslop={behandlingsLivslop}
+  //     pvkDokument={pvkDokument}
+  //     isRisikoeier={isRisikoeier}
+  //     />
+  //   )}
+
+  {
+    /* <ActionMenu>
       <ActionMenu.Trigger>
         <Button
           variant='secondary-neutral'
@@ -46,8 +94,10 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
         </Button>
       </ActionMenu.Trigger>
       <ActionMenu.Content>
-        {/* {behandlingsLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
-    {/* <ActionMenu.Item
+        {/* {behandlingsLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */
+  }
+  {
+    /* <ActionMenu.Item
           as='a'
           href={pvkDokumentasjonBehandlingsenLivslopUrl(
             etterlevelseDokumentasjon.id,
@@ -82,6 +132,8 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
           )}
         </ActionMenu.Group>
       </ActionMenu.Content>
-    </ActionMenu> */}
-  </>
-)
+    </ActionMenu> */
+  }
+  //   </>
+  // )
+}
