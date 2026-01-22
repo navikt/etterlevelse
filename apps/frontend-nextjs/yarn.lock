@@ -5541,10 +5541,10 @@ react-json-view-lite@2.5.0:
   resolved "https://registry.yarnpkg.com/react-json-view-lite/-/react-json-view-lite-2.5.0.tgz#c7ff011c7cc80e9900abc7aa4916c6a5c6d6c1c6"
   integrity sha512-tk7o7QG9oYyELWHL8xiMQ8x4WzjCzbWNyig3uexmkLb54r8jO0yH3WCWx8UZS0c49eSA4QUmG5caiRJ8fAn58g==
 
-react-markdown-editor-lite@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-markdown-editor-lite/-/react-markdown-editor-lite-1.4.1.tgz#6cea7057a0e8da6aa62594a99868accbb3b94b6c"
-  integrity sha512-mHZQtrIZ58210vYQ1QB5cUqVV4tIT0qZdQ/idbaGi5LCnWwn+iNVQI6BgeninGZuOkJydVk7Pg9VbWsS4roTCw==
+react-markdown-editor-lite@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-markdown-editor-lite/-/react-markdown-editor-lite-1.4.2.tgz#0d05034c9f463c41e3456e7beb619c627f0dfc4f"
+  integrity sha512-NHbsNP6s6IxUwZow4h1wZzusfhrgWC6ZeSFgtUgEMVFlHH4TsW4MHUBLDbbnvjOn++sqCuaBB9HJsFxoQpVEBQ==
   dependencies:
     classnames "^2.2.6"
     eventemitter3 "^4.0.0"
