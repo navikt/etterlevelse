@@ -29,7 +29,7 @@
     "formik": "2.4.9",
     "graphql": "16.12.0",
     "json-diff-kit": "1.0.33",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "markdown-draft-js": "2.4.0",
     "moment": "2.30.1",
     "postcss-import": "16.1.1",
