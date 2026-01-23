@@ -8,7 +8,7 @@ import {
   EtterleverVariantSix,
   EtterleverVariantThree,
   EtterleverVariantTwo,
-} from '../commonPVK/commonPVK'
+} from '../commonPVK/etterleverCommonPVK'
 
 // type TProps = {
 //   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
