@@ -48,10 +48,12 @@ type TProps = {
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   kravnummer: number
+  kravversjon: number
   setIsTiltakFormActive: (state: boolean) => void
   isCreateMode?: boolean
   noCopyButton?: boolean
   formRef: RefObject<any>
+  onRemovedFromThisKrav?: (payload: { risikoscenarioName: string }) => void
 }
 
 export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
@@ -62,6 +64,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   risikoscenarioForKrav,
   etterlevelseDokumentasjonId,
   kravnummer,
+  kravversjon,
   setRisikoscenarioer,
   setRisikoscenarioForKrav,
   tiltakList,
@@ -69,6 +72,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   isCreateMode,
   setIsTiltakFormActive,
   formRef,
+  onRemovedFromThisKrav,
 }) => {
   const [activeRisikoscenario, setActiveRisikoscenario] = useState<IRisikoscenario>(risikoscenario)
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
@@ -80,8 +84,15 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const router = useRouter()
 
+  const isLinkedToThisKrav = (scenario: IRisikoscenario): boolean => {
+    if (scenario.generelScenario) return false
+    return (scenario.relevanteKravNummer || []).some(
+      (krav) => krav.kravNummer === kravnummer && krav.kravVersjon === kravversjon
+    )
+  }
+
   const updateRisikoscenarioList = (updatedRisikoscenario: IRisikoscenario): void => {
-    if (updatedRisikoscenario.generelScenario) {
+    if (updatedRisikoscenario.generelScenario || !isLinkedToThisKrav(updatedRisikoscenario)) {
       setRisikoscenarioForKrav(
         risikoscenarioForKrav.filter(
           (risikoscenario) => risikoscenario.id !== updatedRisikoscenario.id
@@ -101,6 +112,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   }
 
   const submit = async (risikoscenario: IRisikoscenario): Promise<void> => {
+    const wasLinkedToThisKrav = isLinkedToThisKrav(activeRisikoscenario)
     const onskedeKravnummer = risikoscenario.generelScenario
       ? []
       : (risikoscenario.relevanteKravNummer || []).map((krav) => krav.kravNummer)
@@ -120,6 +132,15 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     )
 
     const refreshed = await getRisikoscenario(response.id)
+
+    const isNowLinkedToThisKrav = isLinkedToThisKrav(refreshed)
+    if (wasLinkedToThisKrav && !isNowLinkedToThisKrav) {
+      const storageKey = `pvk:removed-risikoscenario-from-krav:${etterlevelseDokumentasjonId}:${kravnummer}:${kravversjon}`
+      const payload = { risikoscenarioName: refreshed.navn || 'Risikoscenario' }
+      window.sessionStorage.setItem(storageKey, JSON.stringify(payload))
+      onRemovedFromThisKrav?.(payload)
+    }
+
     setActiveRisikoscenario(refreshed)
     updateRisikoscenarioList(refreshed)
     setIsEditModalOpen(false)

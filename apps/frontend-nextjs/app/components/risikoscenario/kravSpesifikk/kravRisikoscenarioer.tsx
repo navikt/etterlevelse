@@ -3,6 +3,7 @@
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -12,9 +13,12 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  pvkDokumentasjonStepUrl,
+  risikoscenarioUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Accordion, Alert, Button, Loader } from '@navikt/ds-react'
+import { Accordion, Alert, Button, Loader, LocalAlert } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import AccordianAlertModal from '../../common/accordianAlertModal'
@@ -53,6 +57,13 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   const risikoscenarioId: string | null = queryParams.get('risikoscenario')
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [removedRisikoscenarioAlert, setRemovedRisikoscenarioAlert] = useState<{
+    risikoscenarioName: string
+  } | null>(null)
+
+  const handleRemovedFromThisKrav = (payload: { risikoscenarioName: string }) => {
+    setRemovedRisikoscenarioAlert(payload)
+  }
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
@@ -103,6 +114,23 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
       }
     })()
   }, [krav, pvkDokument])
+
+  useEffect(() => {
+    // One-shot success message set by the edit flow when a scenario is removed from this krav.
+    if (!pvkDokument?.etterlevelseDokumentId || !krav?.kravNummer || !krav?.kravVersjon) return
+    const storageKey = `pvk:removed-risikoscenario-from-krav:${pvkDokument.etterlevelseDokumentId}:${krav.kravNummer}:${krav.kravVersjon}`
+    const raw = window.sessionStorage.getItem(storageKey)
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as { risikoscenarioName: string }
+        if (parsed?.risikoscenarioName) {
+          setRemovedRisikoscenarioAlert(parsed)
+        }
+      } finally {
+        window.sessionStorage.removeItem(storageKey)
+      }
+    }
+  }, [krav?.kravNummer, krav?.kravVersjon, pvkDokument?.etterlevelseDokumentId])
 
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
@@ -192,6 +220,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                               etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
                               isCreateMode={isCreateMode}
                               kravnummer={krav.kravNummer}
+                              kravversjon={krav.kravVersjon}
                               risikoscenarioer={risikoscenarioer}
                               setRisikoscenarioer={setRisikoscenarioer}
                               risikoscenarioForKrav={risikoscenarioForKrav}
@@ -200,6 +229,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                               setTiltakList={setTiltakList}
                               setIsTiltakFormActive={setIsTiltakFormActive}
                               formRef={formRef}
+                              onRemovedFromThisKrav={handleRemovedFromThisKrav}
                             />
                           </Accordion.Content>
                         )}
@@ -208,6 +238,29 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                   })}
                 </Accordion>
               </div>
+            )}
+
+            {!isLeggTilEksisterendeMode && removedRisikoscenarioAlert && (
+              <LocalAlert status='success' className='mb-5 w-full max-w-[75ch] mx-auto'>
+                <LocalAlert.Header>
+                  <LocalAlert.Title>
+                    Risikoscenarioet “{removedRisikoscenarioAlert.risikoscenarioName}” er flyttet
+                    til
+                  </LocalAlert.Title>
+                  <LocalAlert.CloseButton onClick={() => setRemovedRisikoscenarioAlert(null)} />
+                </LocalAlert.Header>
+                <LocalAlert.Content>
+                  <ExternalLink
+                    href={pvkDokumentasjonStepUrl(
+                      pvkDokument.etterlevelseDokumentId,
+                      pvkDokument.id,
+                      6
+                    )}
+                  >
+                    Identifisering av risikoscenarioer og tiltak
+                  </ExternalLink>
+                </LocalAlert.Content>
+              </LocalAlert>
             )}
 
             {isCreateMode && (
