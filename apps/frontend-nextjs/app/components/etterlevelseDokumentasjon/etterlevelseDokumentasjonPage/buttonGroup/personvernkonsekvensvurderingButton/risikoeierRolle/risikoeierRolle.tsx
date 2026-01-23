@@ -11,8 +11,7 @@ import { RisikoeierVariantOne, RisikoeierVariantTwo } from '../commonPVK/risikoe
 //   isRisikoeier: boolean
 // }
 
-const test: string =
-  EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_OPPDATERT_PVK_DIREKTE_TIL_RISIKOEIER_TELLES_SOM_UNDER_ARBEID
+const test: string = EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN
 
 // EPVKTilstandStatus
 // PVKTilstandStatusRolle
@@ -27,27 +26,27 @@ const RisikoeierRolle: FunctionComponent = (
   }
 ) => {
   switch (test) {
-    case EPVKTilstandStatus.IKKE_VURDERT_BEHOV_FOR_PVK:
+    case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
       return <CommonVariantOne />
-    case EPVKTilstandStatus.SKAL_IKKE_GJORE_PVK:
+    case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
       return <CommonVariantOne />
-    case EPVKTilstandStatus.SKAL_GJORE_PVK_MEN_IKKE_PABEGYNT:
+    case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
       return <CommonVariantOne />
-    case EPVKTilstandStatus.PVK_UNDER_ARBEID_FOR_FORSTE_GANG_FOR_INNSENDING:
+    case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
       return <CommonVariantTwo />
-    case EPVKTilstandStatus.PVK_SENDT_TIL_PVO_TELLES_SOM_UNDERARBEID:
+    case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
       return <CommonVariantTwo />
-    case EPVKTilstandStatus.PVO_HAR_GITT_TILBAKEMELDING_ETTERLEVER_KAN_REDIGERE_TELLES_SOM_UNDER_ARBEID:
+    case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
       return <CommonVariantTwo />
-    case EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_TILBAKE_TIL_PVO_TELLES_SOM_UNDER_ARBEID:
+    case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
       return <CommonVariantTwo />
-    case EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_TIL_RISIKOEIER_TELLES_SOM_UNDER_ARBEID:
+    case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return <RisikoeierVariantOne />
-    case EPVKTilstandStatus.RISIKOEIER_HAR_GODKJENT_ETTERLEVER_HAR_IKKE_ENDRET_SIDEN:
+    case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
       return <RisikoeierVariantTwo />
-    case EPVKTilstandStatus.ETTERLEVER_HAR_BEGYNT_MED_NYE_ENDRINGER_TELLES_SOM_UNDER_ARBEID:
+    case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return <CommonVariantThree />
-    case EPVKTilstandStatus.ETTERLEVER_HAR_SENDT_OPPDATERT_PVK_DIREKTE_TIL_RISIKOEIER_TELLES_SOM_UNDER_ARBEID:
+    case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:
       return <RisikoeierVariantOne />
     default:
       return <></>
