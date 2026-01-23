@@ -195,7 +195,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
 
                         <BehandlingensLivslopTextContent />
 
-                        <BodyShort className='mt-3'>
+                        <BodyShort className='mb-3 mt-8'>
                           Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
                           oversikt.
                         </BodyShort>
@@ -207,7 +207,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                           setFilesToUpload={setFilesToUpload}
                         />
 
-                        <div className='mt-3'>
+                        <div className='mt-8'>
                           <TextAreaField
                             markdown
                             height='5.75rem'

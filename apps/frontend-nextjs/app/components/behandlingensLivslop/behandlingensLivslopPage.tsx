@@ -253,7 +253,7 @@ export const BehandlingensLivslopPage = () => {
                             setFilesToUpload={setFilesToUpload}
                           />
 
-                          <div className='mt-3'>
+                          <div className='mt-8'>
                             <TextAreaField
                               markdown
                               noPlaceholder
