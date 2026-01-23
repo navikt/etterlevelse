@@ -16,7 +16,7 @@ type TProps = {
   isRisikoeier: boolean
 }
 
-const test: string = 'Personvernombud'
+const test: string = 'Risikoeier'
 
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
   {
