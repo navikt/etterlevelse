@@ -24,7 +24,7 @@ const test: string =
 // EPVKTilstandStatus
 // PVKTilstandStatusRolle
 
-const EtterleverRolle: FunctionComponent = (
+const RisikoeierRolle: FunctionComponent = (
   {
     //   etterlevelseDokumentasjon,
     //   behandlingsLivslop,
@@ -61,4 +61,4 @@ const EtterleverRolle: FunctionComponent = (
   }
 }
 
-export default EtterleverRolle
+export default RisikoeierRolle

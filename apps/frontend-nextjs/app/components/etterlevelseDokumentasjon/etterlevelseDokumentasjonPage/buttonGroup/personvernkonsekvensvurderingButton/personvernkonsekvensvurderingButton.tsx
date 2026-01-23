@@ -3,8 +3,10 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { FunctionComponent } from 'react'
+import AdminMedAlleAndreRollerOgsaSkruddPaRolle from './adminMedAlleAndreRollerOgsaSkruddPaRolle/adminMedAlleAndreRollerOgsaSkruddPaRolle'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
 import PersonvernombudRolle from './personvernombudRolle/personvernombudRolle'
+import RisikoeierRolle from './risikoeierRolle/risikoeierRolle'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -48,7 +50,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
       )
     case 'Risikoeier':
       return (
-        <EtterleverRolle
+        <RisikoeierRolle
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}
@@ -58,7 +60,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
       )
     case 'Admin med alle andre roller ogsa skrudd pa':
       return (
-        <EtterleverRolle
+        <AdminMedAlleAndreRollerOgsaSkruddPaRolle
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}
