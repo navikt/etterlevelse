@@ -105,7 +105,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           )}
 
           {etterlevelseDokumentasjon.behandlinger?.length !== 0 && (
-            <BodyShort className='inline-block mb-5 max-w-[75ch]'>
+            <BodyShort className='inline-block my-3 max-w-[75ch]'>
               Dere kan redigere hvilke behandlinger som gjelder i{' '}
               <Link
                 href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
@@ -187,7 +187,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                   })}
                 </List>
 
-                <BodyLong className='inline-block max-w-[75ch]'>
+                <BodyLong className='mt-3 inline-block max-w-[75ch]'>
                   Dere kan redigere hvilke risikovurderinger og dokumenter som gjelder i{' '}
                   <Link
                     href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
