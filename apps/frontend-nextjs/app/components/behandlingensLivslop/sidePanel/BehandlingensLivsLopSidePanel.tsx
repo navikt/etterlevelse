@@ -40,8 +40,9 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
     {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
       <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
     )}
-
-    <Label>Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:</Label>
+    <div className='mt-5'>
+      <Label>Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:</Label>
+    </div>
 
     {etterlevelseDokumentasjon.risikovurderinger &&
       etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
@@ -68,7 +69,7 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
       <BodyShort className='my-5'>Det er ikke koblet noen dokumenter.</BodyShort>
     )}
 
-    <BodyShort className='inline-block mb-5'>
+    <BodyShort className='inline-block my-5'>
       Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
       <Link
         href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}

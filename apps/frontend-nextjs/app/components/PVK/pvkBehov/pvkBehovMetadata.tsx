@@ -38,7 +38,9 @@ export const PvkBehovMetadata: FunctionComponent<TProps> = ({ etterlevelseDokume
         <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
       )}
 
-      <Label>Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:</Label>
+      <div className='mt-5'>
+        <Label>Dere har koblet følgende dokumenter på denne etterlevelsesdokumentasjonen:</Label>
+      </div>
 
       {etterlevelseDokumentasjon.risikovurderinger.length > 0 ? (
         <List>
