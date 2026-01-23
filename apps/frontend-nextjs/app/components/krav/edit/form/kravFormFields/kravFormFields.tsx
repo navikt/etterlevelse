@@ -50,7 +50,7 @@ export const KravFormFields: FunctionComponent<TProps> = ({
   return (
     <>
       <div className='mt-5 mb-10'>
-        <InputField marginBottom label='Krav navn' name='navn' />
+        <InputField marginBottom label='Navn på krav' name='navn' />
         <div className='mb-10'>
           <CheckboxGroup
             legend='Send varselmelding'
