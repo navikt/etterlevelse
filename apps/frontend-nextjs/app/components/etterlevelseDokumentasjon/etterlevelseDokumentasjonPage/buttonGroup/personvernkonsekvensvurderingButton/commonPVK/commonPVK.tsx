@@ -1,6 +1,8 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 
+/** Etterlever variants */
+
 export const EtterleverVariantOne = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
@@ -177,6 +179,117 @@ export const EtterleverVariantSeven = () => (
       </ActionMenu.Item>
       <ActionMenu.Item as='a' href=''>
         Revurder behov for PVK
+      </ActionMenu.Item>
+    </ActionMenu.Content>
+  </ActionMenu>
+)
+
+/** Personvernombud variants */
+
+export const EtterleverVariantEight = () => (
+  <ActionMenu>
+    <ActionMenu.Trigger>
+      <Button
+        variant='secondary-neutral'
+        icon={<ChevronDownIcon aria-hidden />}
+        iconPosition='right'
+      >
+        PVK
+      </Button>
+    </ActionMenu.Trigger>
+    <ActionMenu.Content>
+      <ActionMenu.Item as='a' href=''>
+        Se behandlingens livsløp (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Se art og omfang (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Les behov for PVK (read-only)
+      </ActionMenu.Item>
+    </ActionMenu.Content>
+  </ActionMenu>
+)
+
+export const EtterleverVariantNine = () => (
+  <ActionMenu>
+    <ActionMenu.Trigger>
+      <Button
+        variant='secondary-neutral'
+        icon={<ChevronDownIcon aria-hidden />}
+        iconPosition='right'
+      >
+        PVK
+      </Button>
+    </ActionMenu.Trigger>
+    <ActionMenu.Content>
+      <ActionMenu.Item as='a' href=''>
+        Se behandlingens livsløp (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Se art og omfang (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Les PVK (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Les behov for PVK (read-only)
+      </ActionMenu.Item>
+    </ActionMenu.Content>
+  </ActionMenu>
+)
+
+export const EtterleverVariantTen = () => (
+  <ActionMenu>
+    <ActionMenu.Trigger>
+      <Button
+        variant='secondary-neutral'
+        icon={<ChevronDownIcon aria-hidden />}
+        iconPosition='right'
+      >
+        PVK
+      </Button>
+    </ActionMenu.Trigger>
+    <ActionMenu.Content>
+      <ActionMenu.Item as='a' href=''>
+        Se behandlingens livsløp (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Se art og omfang (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Vurderer PVK (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Les behov for PVK (read-only)
+      </ActionMenu.Item>
+    </ActionMenu.Content>
+  </ActionMenu>
+)
+
+export const EtterleverVariantEleven = () => (
+  <ActionMenu>
+    <ActionMenu.Trigger>
+      <Button
+        variant='secondary-neutral'
+        icon={<ChevronDownIcon aria-hidden />}
+        iconPosition='right'
+      >
+        PVK
+      </Button>
+    </ActionMenu.Trigger>
+    <ActionMenu.Content>
+      <ActionMenu.Item as='a' href=''>
+        Se behandlingens livsløp (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Se art og omfang (read-only)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Les PVK (read-only, ny versjon)
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        Les behov for PVK (read-only)
       </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
