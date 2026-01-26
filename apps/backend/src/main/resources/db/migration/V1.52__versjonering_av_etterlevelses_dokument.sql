@@ -18,7 +18,7 @@ WHERE s.id = PVK_DOKUMENT.id;
 -- OPPDATERE PVO tilbakemlding med etterlevelse dokument versjon lik 1 på hver eksisterende vurdering --
 
 UPDATE pvo_tilbakemelding
-SET DATA = jsonb_set(DATA, '{vurderinger}', s.new_vurderinger::jsonb, false) FROM (
+SET DATA = jsonb_set(DATA, '{vurderinger}', t.new_vurderinger::jsonb, false) FROM (
 SELECT
     id,
   json_agg((version_data)) as new_vurderinger
