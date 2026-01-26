@@ -194,10 +194,16 @@ public class EtterlevelseDokumentasjonService {
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() + 1);
 
         var relevantVerjonHistorikk = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().stream()
-                .filter(versjonHistorikk -> versjonHistorikk.getVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())).toList();
+                .filter(versjonHistorikk -> versjonHistorikk.getVersjon().equals(request.getEtterlevelseDokumentVersjon())).toList();
 
         EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
         historikk.setNyVersjonOpprettetDato(LocalDateTime.now());
+
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().add(
+                EtterlevelseVersjonHistorikk.builder()
+                        .versjon(request.getEtterlevelseDokumentVersjon() + 1)
+                        .build()
+        );
 
         Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
 

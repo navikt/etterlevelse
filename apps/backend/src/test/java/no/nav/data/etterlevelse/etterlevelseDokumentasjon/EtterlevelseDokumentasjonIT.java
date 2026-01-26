@@ -10,6 +10,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -153,6 +155,107 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         EtterlevelseDokumentasjon updated = etterlevelseDokumentasjonRepo.findById(eDok.getId()).orElseThrow();
         assertThat(updated.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
         assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk()).isNotEmpty();
+    }
+
+    @Test
+    void nyVersjon_increasesVersionAndResetsStatus_andPersists() {
+        TestConfig.MockFilter.setUser("A123456");
+
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .teams(List.of())
+                                        .resources(List.of("A123456"))
+                                        .risikoeiere(List.of("A123456"))
+                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(1).build()))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
+                .id(eDok.getId())
+                .update(true)
+                .title(eDok.getTitle())
+                .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                .etterlevelseDokumentVersjon(1)
+                .build();
+
+        ResponseEntity<EtterlevelseDokumentasjonResponse> resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/ny-versjon/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(request),
+                EtterlevelseDokumentasjonResponse.class,
+                eDok.getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertNotNull(resp.getBody());
+        EtterlevelseDokumentasjonResponse body = resp.getBody();
+
+        assertThat(body.getId()).isEqualTo(eDok.getId());
+        assertThat(body.getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
+        assertThat(body.getEtterlevelseDokumentVersjon()).isEqualTo(2);
+        assertThat(body.getVersjonHistorikk()).isNotEmpty();
+        assertThat(body.getVersjonHistorikk().stream().filter(vh -> vh.getVersjon().equals(1)).findFirst())
+                .isPresent();
+        assertThat(body.getVersjonHistorikk().stream().filter(vh -> vh.getVersjon().equals(1)).findFirst().get().getNyVersjonOpprettetDato()).isNotNull();
+
+        assertThat(body.getVersjonHistorikk().stream().filter(vh -> vh.getVersjon().equals(2)).findFirst())
+                .isPresent();
+
+        EtterlevelseDokumentasjon persisted = etterlevelseDokumentasjonRepo.findById(eDok.getId()).orElseThrow();
+        assertThat(persisted.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
+        assertThat(persisted.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()).isEqualTo(2);
+        assertThat(persisted.getEtterlevelseDokumentasjonData().getVersjonHistorikk()).isNotEmpty();
+        var historikkV2 = persisted.getEtterlevelseDokumentasjonData().getVersjonHistorikk().stream()
+                .filter(vh -> vh.getVersjon().equals(1))
+                .findFirst()
+                .orElseThrow();
+        assertThat(historikkV2.getNyVersjonOpprettetDato()).isNotNull();
+    }
+
+    @Test
+    void nyVersjon_idMismatch_returnsBadRequest() {
+        TestConfig.MockFilter.setUser("A123456");
+
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .teams(List.of())
+                                        .resources(List.of("A123456"))
+                                        .risikoeiere(List.of("A123456"))
+                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(2).build()))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        UUID otherId = UUID.randomUUID();
+        EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
+                .id(otherId)
+                .update(true)
+                .title(eDok.getTitle())
+                .etterlevelseDokumentVersjon(1)
+                .build();
+
+        ResponseEntity<String> resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/ny-versjon/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(request),
+                String.class,
+                eDok.getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
 }
