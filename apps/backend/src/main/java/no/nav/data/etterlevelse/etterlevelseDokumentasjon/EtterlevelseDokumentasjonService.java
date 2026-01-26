@@ -28,6 +28,7 @@ import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -38,10 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 
@@ -200,6 +198,14 @@ public class EtterlevelseDokumentasjonService {
 
         EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
         historikk.setNyVersjonOpprettetDato(LocalDateTime.now());
+
+        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
+
+        if (pvkDokument.isPresent()) {
+            //logikk for å endre pvk dokument og pvo tilbakemelding ved verjonsøkning
+            pvkDokumentService.etterlevelseDocumentVersionUpdate(pvkDokument.get(), request.getEtterlevelseDokumentVersjon() + 1);
+            pvoTilbakemeldingService.etterlevelseDocumentVersionUpdate(pvkDokument.get().getId());
+        }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
