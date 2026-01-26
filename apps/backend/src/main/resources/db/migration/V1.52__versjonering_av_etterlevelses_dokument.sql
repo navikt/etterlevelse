@@ -9,7 +9,7 @@ SELECT
     id,
   json_agg((version_data)) as new_meldingerTilPvo
 FROM PVK_DOKUMENT,
-    jsonb_array_elements(t.data -> 'meldingerTilPvo') as elements,
+    jsonb_array_elements(PVK_DOKUMENT.data -> 'meldingerTilPvo') as elements,
     jsonb_set(elements, '{etterlevelseDokumentVersjon}', '1', true) as version_data GROUP BY id
 ) s
 WHERE s.id = PVK_DOKUMENT.id;
@@ -23,7 +23,7 @@ SELECT
     id,
   json_agg((version_data)) as new_vurderinger
 FROM pvo_tilbakemelding,
-    jsonb_array_elements(t.data -> 'vurderinger') as elements,
+    jsonb_array_elements(pvo_tilbakemelding.data -> 'vurderinger') as elements,
     jsonb_set(elements, '{etterlevelseDokumentVersjon}', '1', true) as version_data GROUP BY id
 ) t
 WHERE t.id = pvo_tilbakemelding.id;
