@@ -39,7 +39,7 @@ public class EtterlevelseDokumentasjonResponse {
     private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
 
-    private EtterlevelseDokumentasjonStatus status = EtterlevelseDokumentasjonStatus.UNDER_ARBEID;
+    private EtterlevelseDokumentasjonStatus status;
 
     private String meldingEtterlevelerTilRisikoeier;
     private String meldingRisikoeierTilEtterleveler;
@@ -108,3 +108,7 @@ public class EtterlevelseDokumentasjonResponse {
     }
     
 }
+
+
+
+

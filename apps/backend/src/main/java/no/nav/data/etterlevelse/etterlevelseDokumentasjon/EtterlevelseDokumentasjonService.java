@@ -5,14 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepoCustom;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -37,6 +36,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -131,6 +131,40 @@ public class EtterlevelseDokumentasjonService {
             if (!documentRelations.isEmpty()) {
                 throw new ValidationException("Kan ikke fjerne gjenbruk fordi etterlevelses dokument er arvet av " + documentRelations.size() + " etterlevelsesdokumentasjon.");
             }
+        }
+
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon approvedOfRisikoeierAndSave(EtterlevelseDokumentasjonRequest request) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
+
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
+            throw new ValidationException("Kan ikke godkjenne dokumentet fordi brukeren ikke er risikoeier ");
+        }
+
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
+
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk() == null) {
+            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setVersjonHistorikk(new ArrayList<>());
+        }
+
+        var relevantVerjonHistorikk = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().stream()
+                .filter(versjonHistorikk -> versjonHistorikk.getVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())).toList();
+
+        if (relevantVerjonHistorikk.isEmpty()) {
+            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().add(
+                    EtterlevelseVersjonHistorikk.builder()
+                            .versjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
+                            .godkjentAvRisikoeier(SecurityUtils.getCurrentName())
+                            .godkjentAvRiskoierDato(LocalDateTime.now())
+                            .build()
+            );
+        } else {
+            EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
+            historikk.setGodkjentAvRisikoeier(SecurityUtils.getCurrentName());
+            historikk.setGodkjentAvRiskoierDato(LocalDateTime.now());
         }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);

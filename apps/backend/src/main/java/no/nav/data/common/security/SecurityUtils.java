@@ -30,6 +30,10 @@ public class SecurityUtils {
         return lookupCurrentIdent().orElseThrow(() -> new ValidationException("Invalid user, no ident found"));
     }
 
+    public static String getCurrentName() {
+        return getCurrentUser().map(UserInfo::getName).orElseThrow(() -> new ValidationException("Invalid user, no name found"));
+    }
+
     public static String getCurrentEmail() {
         return lookupCurrentEmail().orElseThrow(() -> new ValidationException("Invalid user, no email found"));
     }
