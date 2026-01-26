@@ -160,7 +160,7 @@ public class EtterlevelseDokumentasjonController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateAndIncreaseVersion(request));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
 
         return ResponseEntity.ok(response);

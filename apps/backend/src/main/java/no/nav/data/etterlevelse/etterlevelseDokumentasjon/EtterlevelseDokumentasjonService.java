@@ -19,6 +19,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.team.domain.Member;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
@@ -48,12 +49,12 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @Service
 @RequiredArgsConstructor
 public class EtterlevelseDokumentasjonService {
-    
+
     // TODO: Flere avhengighet i denne serviceklassen til controller
 
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom;
-    
+
     private final BehandlingService behandlingService;
     private final EtterlevelseMetadataService etterlevelseMetadataService;
     private final EtterlevelseService etterlevelseService;
@@ -68,11 +69,11 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
         if (uuid == null) {
-            return null; 
+            return null;
         }
         return etterlevelseDokumentasjonRepo.findById(uuid).orElse(null);
     }
-    
+
     public boolean exists(UUID uuid) {
         return etterlevelseDokumentasjonRepo.existsById(uuid);
     }
@@ -166,6 +167,39 @@ public class EtterlevelseDokumentasjonService {
             historikk.setGodkjentAvRisikoeier(SecurityUtils.getCurrentName());
             historikk.setGodkjentAvRiskoierDato(LocalDateTime.now());
         }
+
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon updateAndIncreaseVersion(EtterlevelseDokumentasjonRequest request) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
+        List<String> teamMembers = new ArrayList<>();
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getTeams().forEach(teamId -> {
+            var team = teamcatTeamClient.getTeam(teamId);
+            if (team.isPresent()) {
+                teamMembers.addAll(convert(team.get().getMembers(), Member::getNavIdent));
+            }
+        });
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())
+                && !teamMembers.contains(SecurityUtils.getCurrentIdent())
+                && !etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getResources().contains(SecurityUtils.getCurrentIdent())) {
+            throw new ValidationException("Kan ikke øke versjon fordi brukeren ikke er medlem av Etterlvelses dokument. ");
+        }
+
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getStatus().equals(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)) {
+            throw new ValidationException("Kan ikke øke versjon fordi dokumentet ikke er godkjent av risikoeier. ");
+        }
+
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() + 1);
+
+        var relevantVerjonHistorikk = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().stream()
+                .filter(versjonHistorikk -> versjonHistorikk.getVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())).toList();
+
+        EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
+        historikk.setNyVersjonOpprettetDato(LocalDateTime.now());
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
