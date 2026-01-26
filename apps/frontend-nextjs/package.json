@@ -35,7 +35,7 @@
     "@navikt/ds-tailwind": "8.1.0",
     "@tailwindcss/postcss": "4.1.18",
     "amplitude-js": "8.21.9",
-    "axios": "1.13.2",
+    "axios": "1.13.3",
     "draft-js": "0.11.7",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
