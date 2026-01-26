@@ -1,20 +1,28 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
     @BeforeEach
@@ -97,6 +105,54 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         assertThat(updatedEtterlevelseDokumentasjon.getId()).isEqualTo(etterlevelseDokumentasjon_1.getId());
         assertThat(updatedEtterlevelseDokumentasjon.getTitle()).isEqualTo(etterlevelseDokumentasjon_1.getTitle());
         assertThat(updatedEtterlevelseDokumentasjon.getPrioritertKravNummer()).isEqualTo(List.of("test"));
+
+        log.debug("Updated etterlevelseDokumentasjon: {}", updatedEtterlevelseDokumentasjon.getLastModifiedBy());
+    }
+
+    @Test
+    void godkjenning_updatesStatusAndVersjonHistorikk() {
+        TestConfig.MockFilter.setUser("A123456");
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .risikoeiere(List.of("A123456"))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
+                .id(eDok.getId())
+                .update(true)
+                .title(eDok.getTitle())
+                .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
+                .meldingRisikoeierTilEtterleveler("test")
+                .build();
+
+        ResponseEntity<EtterlevelseDokumentasjonResponse> resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/godkjenning/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(request),
+                EtterlevelseDokumentasjonResponse.class,
+                eDok.getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertNotNull(resp.getBody());
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = resp.getBody();
+
+        assertThat(etterlevelseDokumentasjonResponse.getId().toString()).isEqualTo(eDok.getId().toString());
+        assertThat(etterlevelseDokumentasjonResponse.getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
+        assertThat(etterlevelseDokumentasjonResponse.getVersjonHistorikk().size()).isGreaterThanOrEqualTo(1);
+
+        // persisted state
+        EtterlevelseDokumentasjon updated = etterlevelseDokumentasjonRepo.findById(eDok.getId()).orElseThrow();
+        assertThat(updated.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
+        assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk()).isNotEmpty();
     }
 
 }
