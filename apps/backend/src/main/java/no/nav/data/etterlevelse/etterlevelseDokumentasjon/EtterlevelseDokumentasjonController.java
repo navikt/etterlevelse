@@ -152,6 +152,20 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Ny versjon av Etterlevelse Dokumentasjon")
+    @ApiResponse(description = "Ny versjon av Etterlevelse Dokumentasjon")
+    @PutMapping("/ny-versjon/{id}")
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> updateVersion(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonRequest request) {
+        log.debug("Ny versjon av Etterlevelse Dokumentasjon id={}", id);
+        if (!Objects.equals(id, request.getId())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+
+        return ResponseEntity.ok(response);
+    }
+
     @Operation(summary = "Godkjenning av Etterlevelse Dokumentasjon")
     @ApiResponse(description = "Etterlevelse Dokumentasjon Godkjent")
     @PutMapping("/godkjenning/{id}")
