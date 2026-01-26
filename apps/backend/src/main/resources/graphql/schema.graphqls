@@ -328,6 +328,7 @@ type Vurdering {
     pvoVurdering: String
     pvoFolgeOppEndringer: Boolean
     vilFaPvkIRetur: Boolean
+    etterlevelseDokumentVersjon: Int!
 }
 
 type Tilbakemeldingsinnhold {

@@ -40,8 +40,8 @@ public class PvoTilbakemedlingRequest implements RequestElement {
         validator.checkUUID(Fields.pvkDokumentId, pvkDokumentId);
         validator.checkNull(Fields.status, status);
         validator.checkId(this);
-        if (duplicates(vurderinger, VurderingRequest::getInnsendingId)) {
-            validator.addError(Fields.vurderinger, "DUPLICATE_VURDERING", "Dukplikat på innsending id av vurderinger");
+        if (duplicates(vurderinger, v -> v.getEtterlevelseDokumentVersjon() + "." + v.getInnsendingId())) {
+            validator.addError(Fields.vurderinger, "DUPLICATE_VURDERING", "Duplikat på innsending id av vurderinger");
         }
     }
 

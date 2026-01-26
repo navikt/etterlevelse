@@ -16,4 +16,7 @@ public class MeldingTilPvo {
     private String endringsNotat;
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
+
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
 }
