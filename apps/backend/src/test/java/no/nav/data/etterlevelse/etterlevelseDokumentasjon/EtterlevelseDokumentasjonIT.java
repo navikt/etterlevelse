@@ -8,9 +8,9 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -140,7 +139,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 HttpMethod.PUT,
                 new HttpEntity<>(request),
                 EtterlevelseDokumentasjonResponse.class,
-                eDok.getId()
+                request.getId()
         );
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -190,7 +189,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 HttpMethod.PUT,
                 new HttpEntity<>(request),
                 EtterlevelseDokumentasjonResponse.class,
-                eDok.getId()
+                request.getId()
         );
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -220,7 +219,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
     }
 
     @Test
-    void nyVersjon_idMismatch_returnsBadRequest() {
+    void nyVersjon_increasesVersionAndResetsStatus_andPersists_wrong_status() {
         TestConfig.MockFilter.setUser("A123456");
 
         EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
@@ -228,26 +227,66 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                         .etterlevelseDokumentasjonData(
                                 EtterlevelseDokumentasjonData.builder()
                                         .title("test")
-                                        .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                                        .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
                                         .etterlevelseDokumentVersjon(1)
                                         .teams(List.of())
                                         .resources(List.of("A123456"))
                                         .risikoeiere(List.of("A123456"))
-                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(2).build()))
+                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(1).build()))
                                         .build()
                         )
                         .build()
         );
 
-        UUID otherId = UUID.randomUUID();
         EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
-                .id(otherId)
+                .id(eDok.getId())
                 .update(true)
                 .title(eDok.getTitle())
+                .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
                 .etterlevelseDokumentVersjon(1)
                 .build();
 
-        ResponseEntity<String> resp = restTemplate.exchange(
+        var resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/ny-versjon/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(request),
+                String.class,
+                eDok.getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+
+    @Test
+    void nyVersjon_increasesVersionAndResetsStatus_andPersists_not_a_member() {
+        TestConfig.MockFilter.setUser("A123456");
+
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .teams(List.of())
+                                        .resources(List.of("B123456"))
+                                        .risikoeiere(List.of("B123456"))
+                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(1).build()))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
+                .id(eDok.getId())
+                .update(true)
+                .title(eDok.getTitle())
+                .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
+                .etterlevelseDokumentVersjon(1)
+                .build();
+
+        var resp = restTemplate.exchange(
                 "/etterlevelsedokumentasjon/ny-versjon/{id}",
                 HttpMethod.PUT,
                 new HttpEntity<>(request),
