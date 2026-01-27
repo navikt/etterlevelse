@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EtterlevelseVersjonHistorikk {
-    private Integer versjon;
+    @Builder.Default
+    private Integer versjon = 1;
     private String godkjentAvRisikoeier;
     private LocalDateTime godkjentAvRiskoierDato;
     private LocalDateTime nyVersjonOpprettetDato;
