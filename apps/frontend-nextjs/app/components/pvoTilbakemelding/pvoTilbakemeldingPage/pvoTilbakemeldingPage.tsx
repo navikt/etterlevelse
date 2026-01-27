@@ -61,9 +61,14 @@ export const PvoTilbakemeldingPage = () => {
     useState<IEtterlevelseDokumentasjon>()
   const [isEtterlevelseDokumentaasjonLoading, setIsEtterlevelseDokumentaasjonLoading] =
     useState<boolean>(false)
-  const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.pvkDokumentId)
+
+  // pvk is read only data so it is ok to hard code etterlevelse dokument versjon as 1
+  const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(1, params.pvkDokumentId)
   const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
-    usePvoTilbakemelding(params.pvkDokumentId)
+    usePvoTilbakemelding(
+      etterlevelseDokumentasjon?.etterlevelseDokumentVersjon || 1,
+      params.pvkDokumentId
+    )
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
@@ -126,16 +131,30 @@ export const PvoTilbakemeldingPage = () => {
   const relevantVurdering: IVurdering = useMemo(() => {
     if (!isPvoTilbakemeldingLoading && !isPvkDokumentLoading && pvkDokument && pvoTilbakemelding) {
       if (pvkDokument.antallInnsendingTilPvo === 0) {
-        return pvoTilbakemelding.vurderinger.filter((vurdring) => vurdring.innsendingId === 1)[0]
+        return pvoTilbakemelding.vurderinger.filter(
+          (vurdring) =>
+            vurdring.innsendingId === 1 &&
+            vurdring.etterlevelseDokumentVersjon ===
+              etterlevelseDokumentasjon?.etterlevelseDokumentVersjon
+        )[0]
       } else {
         return pvoTilbakemelding.vurderinger.filter(
-          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+          (vurdering) =>
+            vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+            vurdering.etterlevelseDokumentVersjon ===
+              etterlevelseDokumentasjon?.etterlevelseDokumentVersjon
         )[0]
       }
     } else {
-      return createNewPvoVurderning(1)
+      return createNewPvoVurderning(1, etterlevelseDokumentasjon?.etterlevelseDokumentVersjon || 1)
     }
-  }, [pvoTilbakemelding, pvkDokument, isPvoTilbakemeldingLoading, isPvkDokumentLoading])
+  }, [
+    isEtterlevelseDokumentaasjonLoading,
+    pvoTilbakemelding,
+    pvkDokument,
+    isPvoTilbakemeldingLoading,
+    isPvkDokumentLoading,
+  ])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
@@ -272,6 +291,7 @@ export const PvoTilbakemeldingPage = () => {
                   )}
                   {activeStep === 3 && (
                     <BehandlingensArtOgOmfangPvoView
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       personkategorier={readOnlyData.personkategorier}
                       pvkDokument={pvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
@@ -301,6 +321,7 @@ export const PvoTilbakemeldingPage = () => {
                   )}
                   {activeStep === 5 && (
                     <InvolveringAvEksternePvoView
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       personkategorier={readOnlyData.personkategorier}
                       databehandlere={readOnlyData.databehandlere}
                       pvkDokument={pvkDokument}
@@ -325,7 +346,7 @@ export const PvoTilbakemeldingPage = () => {
                   )}
                   {activeStep === 7 && (
                     <OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView
-                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       setPvoTilbakemelding={setPvoTilbakemelding}
                       pvoTilbakemelding={pvoTilbakemelding}

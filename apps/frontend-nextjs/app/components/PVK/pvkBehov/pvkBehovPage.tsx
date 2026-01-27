@@ -36,6 +36,7 @@ export const PvkBehovPage = () => {
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
   const [pvkDokument, setPvkDokument] = usePvkDokument(
+    etterlevelseDokumentasjon?.etterlevelseDokumentVersjon || 1,
     params.pvkDokumentId,
     params.etterlevelseDokumentasjonId
   )

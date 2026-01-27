@@ -4,6 +4,7 @@ import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/beha
 import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/artOgOmfangReadOnlyContent'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   EPvoTilbakemeldingStatus,
@@ -20,6 +21,7 @@ import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
   personkategorier: string[]
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
@@ -33,6 +35,7 @@ type TProps = {
 export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
   personkategorier,
   pvkDokument,
+  etterlevelseDokumentasjon,
   pvoTilbakemelding,
   setPvoTilbakemelding,
   relevantVurdering,
@@ -87,6 +90,7 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
               )}
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                 <PvoTilbakemeldingForm
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   setPvoTilbakemelding={setPvoTilbakemelding}
                   pvkDokumentId={pvkDokument.id}
                   innsendingId={pvkDokument.antallInnsendingTilPvo}

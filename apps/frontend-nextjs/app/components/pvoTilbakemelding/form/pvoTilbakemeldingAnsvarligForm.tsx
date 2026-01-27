@@ -11,6 +11,7 @@ import { searchResourceByNameOptions } from '@/api/teamkatalogen/teamkatalogenAp
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -33,6 +34,7 @@ import AsyncSelect from 'react-select/async'
 import AlertPvoModal from '../common/alertPvoModal'
 
 type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
   initialValue: IVurdering
@@ -40,6 +42,7 @@ type TProps = {
 }
 
 export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
   initialValue,
@@ -76,11 +79,17 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
             } else {
               if (
                 !response.vurderinger.find(
-                  (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+                  (vurdering) =>
+                    vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+                    vurdering.etterlevelseDokumentVersjon ===
+                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon
                 )
               ) {
                 response.vurderinger.push(
-                  createNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+                  createNewPvoVurderning(
+                    pvkDokument.antallInnsendingTilPvo,
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                  )
                 )
               }
 
@@ -108,7 +117,10 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
         })
         .catch(async (error: AxiosError) => {
           if (error.status === 404) {
-            const newVurdering = createNewPvoVurderning(1)
+            const newVurdering = createNewPvoVurderning(
+              1,
+              etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+            )
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokument.id,
               vurderinger: [

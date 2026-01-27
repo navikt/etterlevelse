@@ -110,6 +110,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
             <PvoSidePanelWrapper>
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                 <TilhorendeDokumentasjonPvoTilbakemeldingForm
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   setPvoTilbakemelding={setPvoTilbakemelding}
                   pvkDokumentId={pvkDokument.id}
                   innsendingId={pvkDokument.antallInnsendingTilPvo}

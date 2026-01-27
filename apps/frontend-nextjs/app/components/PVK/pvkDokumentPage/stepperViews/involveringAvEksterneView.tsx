@@ -95,7 +95,10 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
               validateOnChange={false}
               validateOnBlur={false}
               onSubmit={submit}
-              initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+              initialValues={mapPvkDokumentToFormValue(
+                pvkDokument as IPvkDokument,
+                etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+              )}
               innerRef={formRef}
             >
               {({ submitForm, values, resetForm, setFieldValue, dirty, initialValues }) => (

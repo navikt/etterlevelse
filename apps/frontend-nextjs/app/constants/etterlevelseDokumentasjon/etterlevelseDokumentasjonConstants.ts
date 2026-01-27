@@ -42,6 +42,15 @@ export interface IEtterlevelseDokumentasjon {
   risikovurderinger: string[]
   p360Recno: number
   p360CaseNumber: string
+  etterlevelseDokumentVersjon: number
+  versjonHistorikk: IEtterlevelseVersjonHistorikk[]
+}
+
+export interface IEtterlevelseVersjonHistorikk {
+  versjon: number
+  godkjentAvRisikoeier?: string
+  godkjentAvRiskoierDato?: string
+  nyVersjonOpprettetDato?: string
 }
 
 export enum EEtterlevelseDokumentasjonStatus {

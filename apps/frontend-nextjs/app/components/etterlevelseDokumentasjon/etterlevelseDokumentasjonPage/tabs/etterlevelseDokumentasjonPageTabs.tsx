@@ -55,7 +55,10 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   const [tabValue, setTabValue] = useState('alleKrav')
   const router = useRouter()
   const pathname = usePathname()
-  const [pvoTilbakemelding] = usePvoTilbakemelding(pvkDokument?.id)
+  const [pvoTilbakemelding] = usePvoTilbakemelding(
+    etterlevelseDokumentasjon.etterlevelseDokumentVersjon,
+    pvkDokument?.id
+  )
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
   const previousVurdering = useMemo(() => {

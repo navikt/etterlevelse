@@ -64,6 +64,7 @@ export const PvkDokumentPage = () => {
     params.etterlevelseDokumentasjonId
   )
   const [pvkDokument, setPvkDokument] = usePvkDokument(
+    etterlevelseDokumentasjon?.etterlevelseDokumentVersjon || 1,
     params.pvkDokumentId,
     params.etterlevelseDokumentasjonId
   )
@@ -135,17 +136,23 @@ export const PvkDokumentPage = () => {
   }, [etterlevelseDokumentasjon])
 
   const relevantVurdering: IVurdering | undefined = useMemo(() => {
-    if (pvkDokument && pvoTilbakemelding) {
+    if (pvkDokument && pvoTilbakemelding && etterlevelseDokumentasjon) {
       const vurdering = pvoTilbakemelding.vurderinger.find(
-        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
+        (vurdering) =>
+          vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+          vurdering.etterlevelseDokumentVersjon ===
+            etterlevelseDokumentasjon.etterlevelseDokumentVersjon
       )
       if (vurdering) {
         return vurdering
       } else {
-        return createNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+        return createNewPvoVurderning(
+          pvkDokument.antallInnsendingTilPvo,
+          etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+        )
       }
     }
-  }, [pvoTilbakemelding, pvkDokument])
+  }, [etterlevelseDokumentasjon, pvoTilbakemelding, pvkDokument])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,

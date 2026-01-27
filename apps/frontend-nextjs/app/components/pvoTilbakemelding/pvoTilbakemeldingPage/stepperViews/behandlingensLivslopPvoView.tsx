@@ -116,6 +116,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                   )}
                   {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                     <PvoTilbakemeldingForm
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       setPvoTilbakemelding={setPvoTilbakemelding}
                       pvkDokumentId={pvkDokument.id}
                       innsendingId={pvkDokument.antallInnsendingTilPvo}

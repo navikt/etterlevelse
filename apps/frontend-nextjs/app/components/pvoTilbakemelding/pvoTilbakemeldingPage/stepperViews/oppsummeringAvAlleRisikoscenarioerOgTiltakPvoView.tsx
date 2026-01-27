@@ -8,6 +8,7 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import TiltakAccordionListReadOnly from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
@@ -35,7 +36,7 @@ import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
 import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
@@ -92,7 +93,7 @@ const visTomTiltakListeBeskrivelse = (filter: string | null) => {
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjonId,
+  etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
   setPvoTilbakemelding,
@@ -344,14 +345,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                 </Heading>
                                 Risikoscenarioer legges inn under{' '}
                                 <ExternalLink
-                                  href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}?tab=pvk`}
+                                  href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}?tab=pvk`}
                                 >
                                   PVK-relaterte krav
                                 </ExternalLink>{' '}
                                 eller eventuelt under{' '}
                                 <ExternalLink
                                   href={pvkDokumentasjonStepUrl(
-                                    etterlevelseDokumentasjonId,
+                                    etterlevelseDokumentasjon.id,
                                     pvkDokument.id,
                                     6
                                   )}
@@ -372,7 +373,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                 <OppsumeringAccordianListReadOnlyView
                                   risikoscenarioList={filteredRisikoscenarioList}
                                   allRisikoscenarioList={risikoscenarioList}
-                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                   tiltakList={tiltakList}
                                   previousVurdering={previousVurdering}
                                 />
@@ -448,6 +449,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
             )}
             {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingForm
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 setPvoTilbakemelding={setPvoTilbakemelding}
                 pvkDokumentId={pvkDokument.id}
                 innsendingId={pvkDokument.antallInnsendingTilPvo}

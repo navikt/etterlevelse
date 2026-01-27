@@ -100,16 +100,28 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
             } else {
               if (
                 !response.vurderinger.find(
-                  (vurdering) => vurdering.innsendingId === antallInnsendingTilPvo
+                  (vurdering) =>
+                    vurdering.innsendingId === antallInnsendingTilPvo &&
+                    vurdering.etterlevelseDokumentVersjon ===
+                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon
                 )
               ) {
-                response.vurderinger.push(createNewPvoVurderning(antallInnsendingTilPvo))
+                response.vurderinger.push(
+                  createNewPvoVurderning(
+                    antallInnsendingTilPvo,
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                  )
+                )
               }
               const updatedValues: IPvoTilbakemelding = {
                 ...response,
                 status: submittedStatus,
                 vurderinger: response.vurderinger.map((vurdering) => {
-                  if (vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo) {
+                  if (
+                    vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+                    vurdering.etterlevelseDokumentVersjon ===
+                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                  ) {
                     return {
                       ...vurdering,
                       internDiskusjon: submittedValues.internDiskusjon,
@@ -146,7 +158,10 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
         })
         .catch(async (error: AxiosError) => {
           if (error.status === 404) {
-            const newVurdering = createNewPvoVurderning(pvkDokument.antallInnsendingTilPvo)
+            const newVurdering = createNewPvoVurderning(
+              pvkDokument.antallInnsendingTilPvo,
+              etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+            )
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokument.id,
               status: submittedStatus,

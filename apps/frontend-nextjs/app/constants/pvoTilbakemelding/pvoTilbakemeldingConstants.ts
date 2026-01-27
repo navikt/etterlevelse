@@ -10,6 +10,7 @@ export interface IPvoTilbakemelding extends IDomainObject {
 }
 
 export interface IVurdering {
+  etterlevelseDokumentVersjon: number
   innsendingId: number
   behandlingenslivslop: ITilbakemeldingsinnhold
   behandlingensArtOgOmfang: ITilbakemeldingsinnhold

@@ -88,10 +88,14 @@ export const updatePvkDokument = async (pvkDokument: IPvkDokument): Promise<IPvk
 export const deletePvkDokument = async (id: string): Promise<IPvkDokument> =>
   (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
 
-export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjonId?: string) => {
+export const usePvkDokument = (
+  etterlevelseDokumentVersjon: number,
+  pvkDokumentId?: string,
+  etterlevelseDokumentasjonId?: string
+) => {
   const isCreateNew = pvkDokumentId === 'ny'
   const [data, setData] = useState<IPvkDokument | undefined>(
-    isCreateNew ? mapPvkDokumentToFormValue({}) : undefined
+    isCreateNew ? mapPvkDokumentToFormValue({}, etterlevelseDokumentVersjon) : undefined
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -140,6 +144,7 @@ export const mapMeldingTilPvoToFormValue = (
   meldingTilPvo: Partial<IMeldingTilPvo>
 ): IMeldingTilPvo => {
   return {
+    etterlevelseDokumentVersjon: meldingTilPvo.etterlevelseDokumentVersjon || 1,
     innsendingId: meldingTilPvo.innsendingId || 1,
     merknadTilPvo: meldingTilPvo.merknadTilPvo || '',
     endringsNotat: meldingTilPvo.endringsNotat || '',
@@ -149,7 +154,8 @@ export const mapMeldingTilPvoToFormValue = (
 }
 
 export const mapMeldingerTilPvoToFormValue = (
-  pvkDokument: Partial<IPvkDokument>
+  pvkDokument: Partial<IPvkDokument>,
+  etterlevelseDokumentVersjon: number
 ): IMeldingTilPvo[] => {
   const meldingerTilPvo: IMeldingTilPvo[] = []
   if (pvkDokument.meldingerTilPvo && pvkDokument.meldingerTilPvo.length !== 0) {
@@ -159,16 +165,24 @@ export const mapMeldingerTilPvoToFormValue = (
 
     if (pvkDokument.antallInnsendingTilPvo === pvkDokument.meldingerTilPvo.length) {
       meldingerTilPvo.push(
-        mapMeldingTilPvoToFormValue({ innsendingId: pvkDokument.antallInnsendingTilPvo + 1 })
+        mapMeldingTilPvoToFormValue({
+          etterlevelseDokumentVersjon: etterlevelseDokumentVersjon,
+          innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
+        })
       )
     }
   } else {
-    meldingerTilPvo.push(mapMeldingTilPvoToFormValue({}))
+    meldingerTilPvo.push(
+      mapMeldingTilPvoToFormValue({ etterlevelseDokumentVersjon: etterlevelseDokumentVersjon })
+    )
   }
   return meldingerTilPvo
 }
 
-export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): IPvkDokument => {
+export const mapPvkDokumentToFormValue = (
+  pvkDokument: Partial<IPvkDokument>,
+  etterlevelseDokumentVersjon: number
+): IPvkDokument => {
   return {
     id: pvkDokument.id || '',
     changeStamp: pvkDokument.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
@@ -196,7 +210,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
 
-    meldingerTilPvo: mapMeldingerTilPvoToFormValue(pvkDokument),
+    meldingerTilPvo: mapMeldingerTilPvoToFormValue(pvkDokument, etterlevelseDokumentVersjon),
     merknadTilRisikoeier: pvkDokument.merknadTilRisikoeier || '',
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
     antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,

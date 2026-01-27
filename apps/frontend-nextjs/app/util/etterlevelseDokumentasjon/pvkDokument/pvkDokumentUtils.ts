@@ -142,14 +142,21 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
 
 export const addNewMeldingTilPvo = (
   pvkDokument: IPvkDokument,
-  innsendingId: number
+  innsendingId: number,
+  etterlevelseDokumentVersjon: number
 ): IPvkDokument => {
-  pvkDokument.meldingerTilPvo.push(createNewMeldingTilPvo(innsendingId))
+  pvkDokument.meldingerTilPvo.push(
+    createNewMeldingTilPvo(innsendingId, etterlevelseDokumentVersjon)
+  )
   return pvkDokument
 }
 
-export const createNewMeldingTilPvo = (newInnsendingId: number): IMeldingTilPvo => {
+export const createNewMeldingTilPvo = (
+  newInnsendingId: number,
+  newEtterlevelseDokumentVersjon: number
+): IMeldingTilPvo => {
   return {
+    etterlevelseDokumentVersjon: newEtterlevelseDokumentVersjon,
     innsendingId: newInnsendingId,
     merknadTilPvo: '',
     endringsNotat: '',

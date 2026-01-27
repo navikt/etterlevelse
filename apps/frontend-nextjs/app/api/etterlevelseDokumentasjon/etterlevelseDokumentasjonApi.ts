@@ -158,6 +158,8 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   risikovurderinger: etterlevelseDokumentasjon.risikovurderinger || [],
   p360Recno: etterlevelseDokumentasjon.p360Recno || 0,
   p360CaseNumber: etterlevelseDokumentasjon.p360CaseNumber || '',
+  etterlevelseDokumentVersjon: etterlevelseDokumentasjon.etterlevelseDokumentVersjon || 1,
+  versjonHistorikk: etterlevelseDokumentasjon.versjonHistorikk || [{ versjon: 1 }],
 })
 
 export const etterlevelseDokumentasjonToDomainToObject = (

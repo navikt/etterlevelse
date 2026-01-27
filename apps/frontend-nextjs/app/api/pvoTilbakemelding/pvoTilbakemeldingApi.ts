@@ -49,7 +49,10 @@ export const getPvoTilbakemeldingByPvkDokumentId = async (
     )
   ).data
 
-export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
+export const usePvoTilbakemelding = (
+  etterlevelseDokumentVersjon: number,
+  pvkDokumentId?: string
+) => {
   const [data, setData] = useState<IPvoTilbakemelding>(mapPvoTilbakemeldingToFormValue({}))
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -65,7 +68,9 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
               const formValuePvo = pvoTilbakemelding
 
               if (antallInnsending > pvoTilbakemelding.vurderinger.length) {
-                formValuePvo.vurderinger.push(createNewPvoVurderning(antallInnsending))
+                formValuePvo.vurderinger.push(
+                  createNewPvoVurderning(antallInnsending, etterlevelseDokumentVersjon)
+                )
               }
 
               setData(mapPvoTilbakemeldingToFormValue(formValuePvo))
@@ -122,7 +127,7 @@ const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakem
 export const mapVurderingToFormValue = (vurdering: Partial<IVurdering>): IVurdering => {
   return {
     innsendingId: vurdering.innsendingId || 1,
-
+    etterlevelseDokumentVersjon: vurdering.etterlevelseDokumentVersjon || 1,
     internDiskusjon: vurdering.internDiskusjon || '',
     merknadTilEtterleverEllerRisikoeier: vurdering.merknadTilEtterleverEllerRisikoeier || '',
     sendtAv: vurdering.sendtAv || '',

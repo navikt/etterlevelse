@@ -31,6 +31,7 @@ export interface IPvkDokument {
 
 export interface IMeldingTilPvo {
   innsendingId: number
+  etterlevelseDokumentVersjon: number
   merknadTilPvo: string
   endringsNotat: string
   sendtTilPvoDato: string

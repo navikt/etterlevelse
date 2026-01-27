@@ -2,14 +2,21 @@ import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeld
 
 export const addNewVurderingToPvoTilbakemelding = (
   pvoTilbakemelding: IPvoTilbakemelding,
-  innsendingId: number
+  innsendingId: number,
+  etterlevelseDokumentVersjon: number
 ) => {
-  pvoTilbakemelding.vurderinger.push(createNewPvoVurderning(innsendingId))
+  pvoTilbakemelding.vurderinger.push(
+    createNewPvoVurderning(innsendingId, etterlevelseDokumentVersjon)
+  )
   return pvoTilbakemelding
 }
 
-export const createNewPvoVurderning = (newInnsendingId: number) => {
+export const createNewPvoVurderning = (
+  newInnsendingId: number,
+  newEtterlevelseDokumentVersjon: number
+) => {
   return {
+    etterlevelseDokumentVersjon: newEtterlevelseDokumentVersjon,
     innsendingId: newInnsendingId,
     internDiskusjon: '',
     merknadTilEtterleverEllerRisikoeier: '',

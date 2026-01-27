@@ -8,6 +8,7 @@ import {
   updatePvoTilbakemelding,
 } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   EPvoTilbakemeldingStatus,
@@ -32,6 +33,7 @@ export enum EBidragVerdier {
 
 type TProps = {
   setPvoTilbakemelding: (state: IPvoTilbakemelding) => void
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokumentId: string
   innsendingId: number
   fieldName:
@@ -44,6 +46,7 @@ type TProps = {
 }
 
 export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
   setPvoTilbakemelding,
   fieldName,
   pvkDokumentId,
@@ -91,15 +94,29 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
         .then(async (response: IPvoTilbakemelding) => {
           if (response) {
             if (
-              !response.vurderinger.find((vurdering) => vurdering.innsendingId === innsendingId)
+              !response.vurderinger.find(
+                (vurdering) =>
+                  vurdering.innsendingId === innsendingId &&
+                  vurdering.etterlevelseDokumentVersjon ===
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+              )
             ) {
-              response.vurderinger.push(createNewPvoVurderning(innsendingId))
+              response.vurderinger.push(
+                createNewPvoVurderning(
+                  innsendingId,
+                  etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                )
+              )
             }
 
             const updatedValues: IPvoTilbakemelding = {
               ...response,
               vurderinger: response.vurderinger.map((vurdering) => {
-                if (vurdering.innsendingId === innsendingId) {
+                if (
+                  vurdering.innsendingId === innsendingId &&
+                  vurdering.etterlevelseDokumentVersjon ===
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                ) {
                   return {
                     ...vurdering,
                     behandlingenslivslop:
@@ -137,7 +154,10 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               await updatePvoTilbakemelding(updatedValues).then((response) => {
                 setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
                 const relevantVurdering = response.vurderinger.filter(
-                  (vurdering) => vurdering.innsendingId === innsendingId
+                  (vurdering) =>
+                    vurdering.innsendingId === innsendingId &&
+                    vurdering.etterlevelseDokumentVersjon ===
+                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon
                 )[0]
                 const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
 
@@ -149,7 +169,10 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
         })
         .catch(async (error: AxiosError) => {
           if (error.status === 404) {
-            const newVurdering = createNewPvoVurderning(innsendingId)
+            const newVurdering = createNewPvoVurderning(
+              innsendingId,
+              etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+            )
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokumentId,
               vurderinger: [
@@ -179,7 +202,10 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
             await createPvoTilbakemelding(createValue).then((response) => {
               setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(response))
               const relevantVurdering = response.vurderinger.filter(
-                (vurdering) => vurdering.innsendingId === innsendingId
+                (vurdering) =>
+                  vurdering.innsendingId === innsendingId &&
+                  vurdering.etterlevelseDokumentVersjon ===
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
               )[0]
               const newInitailValues = resetFormWithNewInitalValue(relevantVurdering)
 

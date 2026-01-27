@@ -3,6 +3,7 @@
 import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import InvolveringAvEksterneReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/involveringAvEksterneReadOnlyContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   EPvoTilbakemeldingStatus,
@@ -17,6 +18,7 @@ import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
 import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   personkategorier: string[]
   databehandlere: string[]
   pvkDokument: IPvkDokument
@@ -30,6 +32,7 @@ type TProps = {
 }
 
 export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
   personkategorier,
   databehandlere,
   pvkDokument,
@@ -108,6 +111,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
               )}
               {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
                 <PvoTilbakemeldingForm
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   setPvoTilbakemelding={setPvoTilbakemelding}
                   pvkDokumentId={pvkDokument.id}
                   innsendingId={pvkDokument.antallInnsendingTilPvo}
