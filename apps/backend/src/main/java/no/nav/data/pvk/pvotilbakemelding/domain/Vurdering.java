@@ -32,4 +32,6 @@ public class Vurdering {
     private String pvoVurdering;
     private Boolean pvoFolgeOppEndringer;
     private Boolean vilFaPvkIRetur;
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
 }

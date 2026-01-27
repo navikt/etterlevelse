@@ -277,6 +277,15 @@ type EtterlevelseDokumentasjon {
     nomAvdelingId: String
     avdelingNavn: String
     seksjoner: [NomSeksjon!]!
+    etterlevelseDokumentVersjon: Int!
+    versjonHistorikk: [EtterlevelseVersjonHistorikk!]!
+}
+
+type EtterlevelseVersjonHistorikk {
+    versjon: Int
+    godkjentAvRisikoeier: String
+    godkjentAvRiskoierDato: DateTime
+    nyVersjonOpprettetDato: DateTime
 }
 
 type NomSeksjon {
@@ -319,6 +328,7 @@ type Vurdering {
     pvoVurdering: String
     pvoFolgeOppEndringer: Boolean
     vilFaPvkIRetur: Boolean
+    etterlevelseDokumentVersjon: Int!
 }
 
 type Tilbakemeldingsinnhold {

@@ -43,6 +43,8 @@ public class VurderingRequest  implements Validated {
     private String pvoVurdering;
     private Boolean pvoFolgeOppEndringer;
     private Boolean vilFaPvkIRetur;
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
 
     @Override
     public void format() {
@@ -86,6 +88,10 @@ public class VurderingRequest  implements Validated {
         if (innsendingId < 0) {
             validator.addError(Fields.innsendingId, "NEGATIVE_INNSENDING_ID", "innsending id cannot be negative");
         }
+
+        if (etterlevelseDokumentVersjon <= 0) {
+            validator.addError(Fields.etterlevelseDokumentVersjon, "NEGATIVE_ETTERLEVELSE_DOKUMENT_VERSJON", "etterlevelse dokument versjon cannot be negative or zero");
+        }
     }
 
     public Vurdering convertToVurdering() {
@@ -110,6 +116,7 @@ public class VurderingRequest  implements Validated {
                 .pvoVurdering(pvoVurdering)
                 .pvoFolgeOppEndringer(pvoFolgeOppEndringer)
                 .vilFaPvkIRetur(vilFaPvkIRetur)
+                .etterlevelseDokumentVersjon(etterlevelseDokumentVersjon)
                 .build();
 
     }

@@ -44,5 +44,4 @@ public class PvkDokumentData {
         return CodelistService.getCodelistResponseList(ListName.YTTERLIGERE_EGENSKAPER, ytterligereEgenskaper);
     }
 
-
 }

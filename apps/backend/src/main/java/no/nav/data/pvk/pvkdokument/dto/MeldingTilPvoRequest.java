@@ -22,6 +22,8 @@ public class MeldingTilPvoRequest implements Validated {
     private String endringsNotat;
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
 
     @Override
     public void format() {
@@ -42,6 +44,7 @@ public class MeldingTilPvoRequest implements Validated {
                 .endringsNotat(melding.getEndringsNotat())
                 .sendtTilPvoDato(melding.getSendtTilPvoDato())
                 .sendtTilPvoAv(melding.getSendtTilPvoAv())
+                .etterlevelseDokumentVersjon(melding.getEtterlevelseDokumentVersjon())
                 .build();
     }
 
@@ -52,6 +55,7 @@ public class MeldingTilPvoRequest implements Validated {
                 .endringsNotat(endringsNotat)
                 .sendtTilPvoDato(sendtTilPvoDato)
                 .sendtTilPvoAv(sendtTilPvoAv)
+                .etterlevelseDokumentVersjon(etterlevelseDokumentVersjon)
                 .build();
     }
 

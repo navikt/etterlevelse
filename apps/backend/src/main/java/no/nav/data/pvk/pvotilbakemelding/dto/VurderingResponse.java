@@ -42,6 +42,8 @@ public class VurderingResponse  {
     private String pvoVurdering;
     private Boolean pvoFolgeOppEndringer;
     private Boolean vilFaPvkIRetur;
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
 
     public static VurderingResponse buildFrom(Vurdering vurdering) {
         return VurderingResponse.builder()
@@ -65,6 +67,7 @@ public class VurderingResponse  {
                 .pvoVurdering(vurdering.getPvoVurdering())
                 .pvoFolgeOppEndringer(vurdering.getPvoFolgeOppEndringer())
                 .vilFaPvkIRetur(vurdering.getVilFaPvkIRetur())
+                .etterlevelseDokumentVersjon(vurdering.getEtterlevelseDokumentVersjon())
                 .build();
     }
 }

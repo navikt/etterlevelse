@@ -9,10 +9,7 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -40,7 +37,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
 
-    private EtterlevelseDokumentasjonStatus status = EtterlevelseDokumentasjonStatus.UNDER_ARBEID;
+    private EtterlevelseDokumentasjonStatus status;
 
     private String meldingEtterlevelerTilRisikoeier;
     private String meldingRisikoeierTilEtterleveler;
@@ -62,6 +59,11 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<NomSeksjon> seksjoner;
 
     private List<Varslingsadresse> varslingsadresser;
+
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
+    private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
+
     @Override
     public void format() {
         setTitle(trimToNull(title));
@@ -115,6 +117,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));
         eDokData.setP360Recno(P360Recno);
         eDokData.setP360CaseNumber(P360CaseNumber);
+        eDokData.setEtterlevelseDokumentVersjon(etterlevelseDokumentVersjon);
+        eDokData.setVersjonHistorikk(copyOf(versjonHistorikk));
     }
 
 }

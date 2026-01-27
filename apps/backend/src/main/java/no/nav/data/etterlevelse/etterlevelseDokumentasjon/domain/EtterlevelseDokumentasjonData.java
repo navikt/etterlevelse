@@ -6,7 +6,6 @@ import lombok.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -54,5 +53,11 @@ public class EtterlevelseDokumentasjonData {
     //Url id for p360
     private Integer P360Recno;
     private String P360CaseNumber;
+
+    //versjonering
+    @Builder.Default
+    private Integer etterlevelseDokumentVersjon = 1;
+    private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
+
 
 }

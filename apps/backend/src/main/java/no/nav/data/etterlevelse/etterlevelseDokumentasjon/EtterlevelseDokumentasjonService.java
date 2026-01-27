@@ -5,14 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepoCustom;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -20,6 +19,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.team.domain.Member;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
@@ -28,6 +28,7 @@ import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -37,10 +38,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 
@@ -48,12 +47,12 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 @Service
 @RequiredArgsConstructor
 public class EtterlevelseDokumentasjonService {
-    
+
     // TODO: Flere avhengighet i denne serviceklassen til controller
 
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom;
-    
+
     private final BehandlingService behandlingService;
     private final EtterlevelseMetadataService etterlevelseMetadataService;
     private final EtterlevelseService etterlevelseService;
@@ -68,11 +67,11 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
         if (uuid == null) {
-            return null; 
+            return null;
         }
         return etterlevelseDokumentasjonRepo.findById(uuid).orElse(null);
     }
-    
+
     public boolean exists(UUID uuid) {
         return etterlevelseDokumentasjonRepo.existsById(uuid);
     }
@@ -131,6 +130,87 @@ public class EtterlevelseDokumentasjonService {
             if (!documentRelations.isEmpty()) {
                 throw new ValidationException("Kan ikke fjerne gjenbruk fordi etterlevelses dokument er arvet av " + documentRelations.size() + " etterlevelsesdokumentasjon.");
             }
+        }
+
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon approvedOfRisikoeierAndSave(EtterlevelseDokumentasjonRequest request) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
+
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
+            throw new ValidationException("Kan ikke godkjenne dokumentet fordi brukeren ikke er risikoeier ");
+        }
+
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
+
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk() == null) {
+            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setVersjonHistorikk(new ArrayList<>());
+        }
+
+        var relevantVerjonHistorikk = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().stream()
+                .filter(versjonHistorikk -> versjonHistorikk.getVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())).toList();
+
+        if (relevantVerjonHistorikk.isEmpty()) {
+            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().add(
+                    EtterlevelseVersjonHistorikk.builder()
+                            .versjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
+                            .godkjentAvRisikoeier(SecurityUtils.getCurrentName())
+                            .godkjentAvRiskoierDato(LocalDateTime.now())
+                            .build()
+            );
+        } else {
+            EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
+            historikk.setGodkjentAvRisikoeier(SecurityUtils.getCurrentName());
+            historikk.setGodkjentAvRiskoierDato(LocalDateTime.now());
+        }
+
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon updateAndIncreaseVersion(EtterlevelseDokumentasjonRequest request) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
+        List<String> teamMembers = new ArrayList<>();
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getTeams().forEach(teamId -> {
+            var team = teamcatTeamClient.getTeam(teamId);
+            if (team.isPresent()) {
+                teamMembers.addAll(convert(team.get().getMembers(), Member::getNavIdent));
+            }
+        });
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())
+                && !teamMembers.contains(SecurityUtils.getCurrentIdent())
+                && !etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getResources().contains(SecurityUtils.getCurrentIdent())) {
+            throw new ValidationException("Kan ikke øke versjon fordi brukeren ikke er medlem av Etterlvelses dokument. ");
+        }
+
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getStatus().equals(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)) {
+            throw new ValidationException("Kan ikke øke versjon fordi dokumentet ikke er godkjent av risikoeier. ");
+        }
+
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() + 1);
+
+        var relevantVerjonHistorikk = etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().stream()
+                .filter(versjonHistorikk -> versjonHistorikk.getVersjon().equals(request.getEtterlevelseDokumentVersjon())).toList();
+
+        EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
+        historikk.setNyVersjonOpprettetDato(LocalDateTime.now());
+
+        etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().add(
+                EtterlevelseVersjonHistorikk.builder()
+                        .versjon(request.getEtterlevelseDokumentVersjon() + 1)
+                        .build()
+        );
+
+        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
+
+        if (pvkDokument.isPresent()) {
+            //logikk for å endre pvk dokument og pvo tilbakemelding ved verjonsøkning
+            pvkDokumentService.etterlevelseDocumentVersionUpdate(pvkDokument.get(), request.getEtterlevelseDokumentVersjon() + 1);
+            pvoTilbakemeldingService.etterlevelseDocumentVersionUpdate(pvkDokument.get().getId());
         }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);

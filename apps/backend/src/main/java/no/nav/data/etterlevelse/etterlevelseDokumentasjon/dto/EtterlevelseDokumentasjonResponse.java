@@ -8,10 +8,7 @@ import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
@@ -22,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @SuperBuilder
@@ -41,7 +39,7 @@ public class EtterlevelseDokumentasjonResponse {
     private boolean tilgjengeligForGjenbruk;
     private boolean behandlerPersonopplysninger;
 
-    private EtterlevelseDokumentasjonStatus status = EtterlevelseDokumentasjonStatus.UNDER_ARBEID;
+    private EtterlevelseDokumentasjonStatus status;
 
     private String meldingEtterlevelerTilRisikoeier;
     private String meldingRisikoeierTilEtterleveler;
@@ -70,6 +68,10 @@ public class EtterlevelseDokumentasjonResponse {
 
     private Integer P360Recno;
     private String P360CaseNumber;
+
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
+    private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {
         EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
@@ -100,7 +102,13 @@ public class EtterlevelseDokumentasjonResponse {
                 .risikovurderinger(eDokData.getRisikovurderinger())
                 .P360Recno(eDokData.getP360Recno())
                 .P360CaseNumber(eDokData.getP360CaseNumber())
+                .etterlevelseDokumentVersjon(eDokData.getEtterlevelseDokumentVersjon())
+                .versjonHistorikk(copyOf(eDokData.getVersjonHistorikk()))
                 .build();
     }
     
 }
+
+
+
+
