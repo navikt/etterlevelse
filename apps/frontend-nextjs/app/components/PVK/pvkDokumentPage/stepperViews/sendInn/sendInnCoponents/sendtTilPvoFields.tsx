@@ -14,7 +14,6 @@ import { FunctionComponent } from 'react'
 type TProps = {
   pvkDokument: IPvkDokument
   isLoading: boolean
-  etterlevelseDokumentVersjon: number
   setFieldValue: (
     field: string,
     value: any,
@@ -27,7 +26,6 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   isLoading,
-  etterlevelseDokumentVersjon,
   setFieldValue,
   submitForm,
 }) => {
@@ -39,13 +37,10 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 
       <BeskjedTilPvoReadOnly
         meldingTilPvo={
-          pvkDokument.meldingerTilPvo.find(
+          pvkDokument.meldingerTilPvo.filter(
             (melding) =>
               melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
-              melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
-          ) ??
-          pvkDokument.meldingerTilPvo.filter(
-            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+              melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
           )[0]
         }
       />
@@ -72,13 +67,14 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
               pvoTilbakemelding &&
               pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
             ) {
-              const previousVurdering = pvoTilbakemelding.vurderinger.find(
+              const previousVurdering = pvoTilbakemelding.vurderinger.filter(
                 (vurdering) =>
                   vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
-                  vurdering.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+                  vurdering.etterlevelseDokumentVersjon ===
+                    pvkDokument.currentEtterlevelseDokumentVersjon
               )
 
-              if (previousVurdering?.vilFaPvkIRetur) {
+              if (previousVurdering[0].vilFaPvkIRetur) {
                 await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
               } else {
                 await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)

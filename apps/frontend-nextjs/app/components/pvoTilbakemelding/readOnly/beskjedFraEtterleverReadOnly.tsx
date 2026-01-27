@@ -6,26 +6,23 @@ import { FunctionComponent } from 'react'
 type TBeskjedFraEtterleverReadOnlyProps = {
   pvkDokument: IPvkDokument
   innsendingId?: number
-  etterlevelseDokumentVersjon?: number
 }
 
 export const BeskjedFraEtterleverReadOnly: FunctionComponent<
   TBeskjedFraEtterleverReadOnlyProps
-> = ({ pvkDokument, innsendingId, etterlevelseDokumentVersjon }) => {
+> = ({ pvkDokument, innsendingId }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter((melding) => {
-    const innsendingIdToMatch = innsendingId ?? pvkDokument.antallInnsendingTilPvo
-    if (etterlevelseDokumentVersjon !== undefined) {
+    if (innsendingId) {
       return (
-        melding.innsendingId === innsendingIdToMatch &&
-        melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+        melding.innsendingId === innsendingId &&
+        melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
+      )
+    } else {
+      return (
+        melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+        melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
       )
     }
-    return melding.innsendingId === innsendingIdToMatch
-  })
-
-  const fallbackMeldingTilPvo = pvkDokument.meldingerTilPvo.filter((melding) => {
-    const innsendingIdToMatch = innsendingId ?? pvkDokument.antallInnsendingTilPvo
-    return melding.innsendingId === innsendingIdToMatch
   })
 
   return (
@@ -33,7 +30,7 @@ export const BeskjedFraEtterleverReadOnly: FunctionComponent<
       <div className='my-5 max-w-[75ch]'>
         <Label>Beskjed fra etterlever</Label>
         <DataTextWrapper customEmptyMessage='Ingen beskjed'>
-          {(relevantMeldingTilPvo[0] ?? fallbackMeldingTilPvo[0])?.merknadTilPvo}
+          {relevantMeldingTilPvo[0].merknadTilPvo}
         </DataTextWrapper>
       </div>
     </>

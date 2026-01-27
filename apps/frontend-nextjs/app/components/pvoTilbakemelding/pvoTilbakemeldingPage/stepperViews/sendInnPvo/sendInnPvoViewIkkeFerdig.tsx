@@ -119,10 +119,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
             </div>
           )}
 
-          <BeskjedFraEtterleverReadOnly
-            pvkDokument={pvkDokument}
-            etterlevelseDokumentVersjon={etterlevelseDokumentasjon.etterlevelseDokumentVersjon}
-          />
+          <BeskjedFraEtterleverReadOnly pvkDokument={pvkDokument} />
 
           <Heading level='1' size='medium' className='mb-5'>
             PVOs interne diskusjon

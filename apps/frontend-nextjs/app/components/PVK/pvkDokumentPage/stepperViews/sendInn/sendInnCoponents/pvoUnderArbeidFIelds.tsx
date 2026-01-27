@@ -7,26 +7,18 @@ import { FunctionComponent } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
-  etterlevelseDokumentVersjon: number
   isLoading: boolean
 }
 
-export const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({
-  pvkDokument,
-  etterlevelseDokumentVersjon,
-  isLoading,
-}) => {
+export const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, isLoading }) => {
   return (
     <div className='w-full max-w-[75ch]'>
       <BeskjedTilPvoReadOnly
         meldingTilPvo={
-          pvkDokument.meldingerTilPvo.find(
+          pvkDokument.meldingerTilPvo.filter(
             (melding) =>
               melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
-              melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
-          ) ??
-          pvkDokument.meldingerTilPvo.filter(
-            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+              melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
           )[0]
         }
       />

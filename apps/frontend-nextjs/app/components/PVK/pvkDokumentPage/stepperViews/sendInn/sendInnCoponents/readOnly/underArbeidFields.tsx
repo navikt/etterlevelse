@@ -12,7 +12,6 @@ import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {
   pvkDokument: IPvkDokument
-  etterlevelseDokumentVersjon: number
   errorSummaryComponent: ReactNode
   isLoading: boolean
   setFieldValue: (
@@ -28,7 +27,6 @@ type TProps = {
 
 export const UnderArbeidFields: FunctionComponent<TProps> = ({
   pvkDokument,
-  etterlevelseDokumentVersjon,
   errorSummaryComponent,
   isLoading,
   setFieldValue,
@@ -40,19 +38,14 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
   const relevantMeldingTilPvo: IMeldingTilPvo[] = pvkDokument.meldingerTilPvo.filter(
     (melding) =>
       melding.innsendingId === 1 &&
-      melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
   )
-  const indexByVersion = pvkDokument.meldingerTilPvo.findIndex(
+
+  const index = pvkDokument.meldingerTilPvo.findIndex(
     (melding: IMeldingTilPvo) =>
       melding.innsendingId === 1 &&
-      melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
   )
-  const index =
-    indexByVersion !== -1
-      ? indexByVersion
-      : pvkDokument.meldingerTilPvo.findIndex(
-          (melding: IMeldingTilPvo) => melding.innsendingId === 1
-        )
 
   return (
     <Field>

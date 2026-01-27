@@ -54,19 +54,12 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                 >
                   <BeskjedTilPvoReadOnly
                     meldingTilPvo={
-                      meldingerTilPvo.find(
+                      meldingerTilPvo.filter(
                         (melding) =>
                           melding.innsendingId === vurdering.innsendingId &&
                           melding.etterlevelseDokumentVersjon ===
                             vurdering.etterlevelseDokumentVersjon
-                      ) ?? {
-                        innsendingId: vurdering.innsendingId,
-                        etterlevelseDokumentVersjon: vurdering.etterlevelseDokumentVersjon,
-                        merknadTilPvo: '',
-                        endringsNotat: '',
-                        sendtTilPvoDato: '',
-                        sendtTilPvoAv: '',
-                      }
+                      )[0]
                     }
                   />
                   <BeskjedFraPvoReadOnly

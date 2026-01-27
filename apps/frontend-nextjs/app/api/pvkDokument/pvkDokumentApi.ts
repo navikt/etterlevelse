@@ -135,6 +135,7 @@ const pvkDokumentToPvkDokumentDto = (pvkDokument: IPvkDokument) => {
     ...pvkDokument,
     ytterligereEgenskaper: pvkDokument.ytterligereEgenskaper.map((egenskap) => egenskap.code),
   } as any
+  delete dto.currentEtterlevelseDokumentVersjon
   delete dto.changeStamp
   delete dto.version
   return dto
@@ -216,5 +217,6 @@ export const mapPvkDokumentToFormValue = (
     antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,
     godkjentAvRisikoeierDato: pvkDokument.godkjentAvRisikoeierDato || '',
     godkjentAvRisikoeier: pvkDokument.godkjentAvRisikoeier || '',
+    currentEtterlevelseDokumentVersjon: pvkDokument.currentEtterlevelseDokumentVersjon || 1,
   }
 }

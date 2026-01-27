@@ -37,7 +37,6 @@ export const SendInnPvoReadOnly: FunctionComponent<TProps> = ({
       <BeskjedFraEtterleverReadOnly
         pvkDokument={pvkDokument}
         innsendingId={relevantVurdering.innsendingId}
-        etterlevelseDokumentVersjon={relevantVurdering.etterlevelseDokumentVersjon}
       />
 
       <Heading

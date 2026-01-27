@@ -66,15 +66,14 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       const previousVurdering = pvoTilbakemelding.vurderinger.find(
         (vurdering) =>
           vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
-          vurdering.etterlevelseDokumentVersjon ===
-            etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+          vurdering.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
       )
 
       return previousVurdering
     } else {
       return undefined
     }
-  }, [etterlevelseDokumentasjon.etterlevelseDokumentVersjon, pvoTilbakemelding, pvkDokument])
+  }, [pvoTilbakemelding, pvkDokument])
 
   useEffect(() => {
     ;(async () => {

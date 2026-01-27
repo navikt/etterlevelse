@@ -35,11 +35,14 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
+
   const previousVurdering = useMemo(() => {
     if (pvkDokument.antallInnsendingTilPvo > 1) {
-      return pvoTilbakemelding.vurderinger
-        .filter((vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1)
-        .sort((a, b) => b.etterlevelseDokumentVersjon - a.etterlevelseDokumentVersjon)[0]
+      return pvoTilbakemelding.vurderinger.find(
+        (vurdering) =>
+          vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+          vurdering.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
+      )
     } else {
       return undefined
     }

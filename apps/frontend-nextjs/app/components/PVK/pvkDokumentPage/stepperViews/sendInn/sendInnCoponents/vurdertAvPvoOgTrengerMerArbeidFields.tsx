@@ -19,7 +19,6 @@ import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 type TProps = {
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
-  etterlevelseDokumentVersjon: number
   setFieldValue: (
     field: string,
     value: any,
@@ -36,7 +35,6 @@ type TProps = {
 export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
-  etterlevelseDokumentVersjon,
   setFieldValue,
   submitForm,
   initialStatus,
@@ -48,7 +46,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) =>
       melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
-      melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
   )
 
   const relevantIndex = useMemo(() => {
@@ -58,10 +56,10 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
       return pvkDokument.meldingerTilPvo.findIndex(
         (melding) =>
           melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
-          melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+          melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
       )
     }
-  }, [pvkDokument, relevantMeldingTilPvo.length, etterlevelseDokumentVersjon])
+  }, [pvkDokument])
 
   return (
     <Field>
@@ -74,7 +72,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
                 meldingerTilPvo={pvkDokument.meldingerTilPvo}
                 vurderinger={pvoTilbakemelding.vurderinger}
                 pvoVurderingList={pvoVurderingList}
-                etterlevelseDokumentVersjon={etterlevelseDokumentVersjon}
+                etterlevelseDokumentVersjon={pvkDokument.currentEtterlevelseDokumentVersjon}
                 defaultFirstOpen
               />
 

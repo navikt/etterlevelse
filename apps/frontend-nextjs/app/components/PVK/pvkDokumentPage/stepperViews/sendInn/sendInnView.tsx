@@ -601,9 +601,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     {underarbeidCheck && (
                       <UnderArbeidFields
                         pvkDokument={initialValues}
-                        etterlevelseDokumentVersjon={
-                          etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                        }
                         isLoading={isLoading}
                         setFieldValue={setFieldValue}
                         submitForm={submitForm}
@@ -643,9 +640,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) && (
                       <SendtTilPvoFields
                         pvkDokument={pvkDokument}
-                        etterlevelseDokumentVersjon={
-                          etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                        }
                         pvoTilbakemelding={pvoTilbakemelding}
                         isLoading={isLoading}
                         setFieldValue={setFieldValue}
@@ -654,13 +648,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     )}
 
                     {pvkDokument.status === EPvkDokumentStatus.PVO_UNDERARBEID && (
-                      <PVOUnderArbeidFIelds
-                        pvkDokument={pvkDokument}
-                        etterlevelseDokumentVersjon={
-                          etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                        }
-                        isLoading={isLoading}
-                      />
+                      <PVOUnderArbeidFIelds pvkDokument={pvkDokument} isLoading={isLoading} />
                     )}
 
                     {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID &&
@@ -668,9 +656,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         <VurdertAvPvoOgTrengerMerArbeidFields
                           pvkDokument={pvkDokument}
                           pvoTilbakemelding={pvoTilbakemelding}
-                          etterlevelseDokumentVersjon={
-                            etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                          }
                           setFieldValue={setFieldValue}
                           submitForm={submitForm}
                           initialStatus={initialValues.status}
@@ -713,9 +698,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         <VurdertAvPvoFields
                           pvkDokument={pvkDokument}
                           pvoTilbakemelding={pvoTilbakemelding}
-                          etterlevelseDokumentVersjon={
-                            etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                          }
                           setFieldValue={setFieldValue}
                           isLoading={isLoading}
                           pvoVurderingList={pvoVurderingList}
