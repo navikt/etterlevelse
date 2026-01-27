@@ -54,6 +54,8 @@ public class PvkDokumentResponse {
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
 
+    private Integer currentEtterlevelseDokumentVersjon;
+
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
                 .id(pvkDokument.getId())

@@ -28,6 +28,7 @@ public class PvkDokumentListItemResponse {
     private LocalDateTime sendtTilPvoDato;
     private String sendtTilPvoAv;
     private Integer antallInnsendingTilPvo;
+    private Integer currentEtterlevelseDokumentVersjon;
 
     public static PvkDokumentListItemResponse buildFrom(PvkDokument pvkDokument, EtterlevelseDokumentasjon etterlevelseDokumentasjon) {
         var innsendingId = pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo();
@@ -41,6 +42,9 @@ public class PvkDokumentListItemResponse {
                 .title(etterlevelseDokumentasjon.getTitle())
                 .etterlevelseNummer(etterlevelseDokumentasjon.getEtterlevelseNummer())
                 .status(pvkDokument.getStatus())
+                .currentEtterlevelseDokumentVersjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData() != null
+                        ? etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()
+                        : null)
                 .sendtTilPvoDato(latestMeldingTilPvo != null ? latestMeldingTilPvo.getSendtTilPvoDato() : null)
                 .sendtTilPvoAv(latestMeldingTilPvo != null ? latestMeldingTilPvo.getSendtTilPvoAv() : "")
                 .changeStamp(ChangeStampResponse.builder()

@@ -29,7 +29,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
         PvkDokument pvkDokument = createPvkDokument();
 
         var resp = restTemplate.getForEntity("/pvkdokument/{id}", PvkDokumentResponse.class, pvkDokument.getId());
-        
+
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         PvkDokumentResponse pvkDokumentResponse = resp.getBody();
         assertThat(pvkDokumentResponse.getId()).isEqualTo(pvkDokument.getId());
@@ -92,3 +92,5 @@ public class PvkDokumentIT extends IntegrationTestBase {
     }
 
 }
+
+

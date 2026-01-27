@@ -43,7 +43,13 @@ public class PvkDokumentController {
     ) {
         log.info("Get all Pvk Document");
         Page<PvkDokument> page = pvkDokumentService.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(PvkDokumentResponse::buildFrom));
+        Page<PvkDokumentResponse> responses = page.map(pvkDokument -> {
+            var response = PvkDokumentResponse.buildFrom(pvkDokument);
+            addEtterlevelseDokumentasjonVersjon(response);
+            return response;
+        });
+
+        return ResponseEntity.ok(new RestResponsePage<>(responses));
     }
 
     @Operation(summary = "Get All Pvk Document for PVO")
@@ -71,7 +77,9 @@ public class PvkDokumentController {
     @GetMapping("/{id}")
     public ResponseEntity<PvkDokumentResponse> getById(@PathVariable UUID id) {
         log.info("Get Pvk Document id={}", id);
-        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokumentService.get(id)));
+        var response = PvkDokumentResponse.buildFrom(pvkDokumentService.get(id));
+        addEtterlevelseDokumentasjonVersjon(response);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get Pvk Document by etterlevelsedokument id")
@@ -81,7 +89,14 @@ public class PvkDokumentController {
         log.info("Get Pvk Document by etterlevelseDokument id={}", etterlevelseDokumentId);
         Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
 
-        return pvkDokument.map(dokument -> ResponseEntity.ok(PvkDokumentResponse.buildFrom(dokument))).orElseGet(() -> ResponseEntity.notFound().build());
+        if (pvkDokument.isEmpty()) {
+            log.info("No Pvk Document found for etterlevelseDokument id={}", etterlevelseDokumentId);
+            return ResponseEntity.notFound().build();
+        } else {
+            var response = PvkDokumentResponse.buildFrom(pvkDokument.get());
+            addEtterlevelseDokumentasjonVersjon(response);
+            return ResponseEntity.ok(response);
+        }
     }
 
     @Operation(summary = "Create Pvk Document")
@@ -89,10 +104,11 @@ public class PvkDokumentController {
     @PostMapping
     public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
         log.info("Create PvkDokument");
-
         var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), request.isUpdate());
 
-        return new ResponseEntity<>(PvkDokumentResponse.buildFrom(pvkDokument), HttpStatus.CREATED);
+        var response = PvkDokumentResponse.buildFrom(pvkDokument);
+        addEtterlevelseDokumentasjonVersjon(response);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update Pvk Document")
@@ -114,7 +130,9 @@ public class PvkDokumentController {
         request.mergeInto(pvkDokumentToUpdate);
         var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
         updatePvoTilbakemeldingStatus(pvkDokument);
-        return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+        var response = PvkDokumentResponse.buildFrom(pvkDokument);
+        addEtterlevelseDokumentasjonVersjon(response);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Delete Pvk Document")
@@ -127,7 +145,9 @@ public class PvkDokumentController {
             log.warn("Could not delete pvk dokument with id = {}: Non-existing og related to other resources", id);
             throw new ValidationException("Could not delete pvk dokument: Non-existing og related to other resources");
         } else {
-            return ResponseEntity.ok(PvkDokumentResponse.buildFrom(pvkDokument));
+            var response = PvkDokumentResponse.buildFrom(pvkDokument);
+            addEtterlevelseDokumentasjonVersjon(response);
+            return ResponseEntity.ok(response);
         }
     }
 
@@ -148,5 +168,10 @@ public class PvkDokumentController {
             throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
         }
     }
+    }
+
+    private void addEtterlevelseDokumentasjonVersjon(PvkDokumentResponse pvkDokument) {
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+        pvkDokument.setCurrentEtterlevelseDokumentVersion(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon());
     }
 }
