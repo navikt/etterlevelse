@@ -61,8 +61,6 @@ export const PvoTilbakemeldingPage = () => {
     useState<IEtterlevelseDokumentasjon>()
   const [isEtterlevelseDokumentaasjonLoading, setIsEtterlevelseDokumentaasjonLoading] =
     useState<boolean>(false)
-
-  // pvk is read only data so it is ok to hard code etterlevelse dokument versjon as 1
   const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.pvkDokumentId)
   const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
     usePvoTilbakemelding(params.pvkDokumentId)
