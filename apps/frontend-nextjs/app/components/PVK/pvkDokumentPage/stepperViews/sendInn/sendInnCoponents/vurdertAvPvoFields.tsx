@@ -14,6 +14,7 @@ import SendTilRisikoeier from './vurdertAvPvoComponents.tsx/SendTilRisikoeier'
 type TProps = {
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
+  etterlevelseDokumentVersjon: number
   setFieldValue: (
     field: string,
     value: any,
@@ -28,6 +29,7 @@ type TProps = {
 export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
+  etterlevelseDokumentVersjon,
   setFieldValue,
   isLoading,
   errorSummaryComponent,
@@ -35,7 +37,9 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   pvoVurderingList,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
-    (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+    (melding) =>
+      melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
+      melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
   )
 
   const [isNullstillModalOpen, setIsNullstillModalOpen] = useState<boolean>(false)
@@ -45,10 +49,12 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
       return pvkDokument.meldingerTilPvo.length
     } else {
       return pvkDokument.meldingerTilPvo.findIndex(
-        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+        (melding) =>
+          melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
+          melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
       )
     }
-  }, [])
+  }, [pvkDokument, relevantMeldingTilPvo.length, etterlevelseDokumentVersjon])
 
   return (
     <Field>
@@ -61,6 +67,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                 meldingerTilPvo={pvkDokument.meldingerTilPvo}
                 vurderinger={pvoTilbakemelding.vurderinger}
                 pvoVurderingList={pvoVurderingList}
+                etterlevelseDokumentVersjon={etterlevelseDokumentVersjon}
                 defaultFirstOpen
               />
 

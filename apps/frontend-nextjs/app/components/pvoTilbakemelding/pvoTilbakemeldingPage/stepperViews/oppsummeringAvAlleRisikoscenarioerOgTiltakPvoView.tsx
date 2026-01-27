@@ -127,7 +127,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
   const previousVurdering: IVurdering | undefined =
     pvkDokument.antallInnsendingTilPvo > 1
       ? pvoTilbakemelding.vurderinger.find(
-          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+          (vurdering) =>
+            vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+            vurdering.etterlevelseDokumentVersjon ===
+              etterlevelseDokumentasjon.etterlevelseDokumentVersjon
         )
       : undefined
 

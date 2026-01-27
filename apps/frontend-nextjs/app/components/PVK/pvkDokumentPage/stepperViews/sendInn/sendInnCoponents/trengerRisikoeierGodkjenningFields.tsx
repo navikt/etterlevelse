@@ -63,6 +63,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             meldingerTilPvo={pvkDokument.meldingerTilPvo}
             vurderinger={pvoTilbakemelding.vurderinger}
             pvoVurderingList={pvoVurderingList}
+            etterlevelseDokumentVersjon={etterlevelseDokumentasjon.etterlevelseDokumentVersjon}
             defaultFirstOpen={!isRisikoeierCheck ? true : false}
           />
 

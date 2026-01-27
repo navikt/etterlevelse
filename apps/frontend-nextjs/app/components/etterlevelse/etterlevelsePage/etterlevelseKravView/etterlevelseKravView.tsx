@@ -179,7 +179,11 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       if (user.isPersonvernombud() && pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
         const pvoTilbakemelding = await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
         const previous = pvoTilbakemelding.vurderinger.find(
-          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+          (vurdering) =>
+            vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+            (!etterlevelseDokumentasjon ||
+              vurdering.etterlevelseDokumentVersjon ===
+                etterlevelseDokumentasjon.etterlevelseDokumentVersjon)
         )
         if (!!previous) {
           setPreviousVurdering(previous)

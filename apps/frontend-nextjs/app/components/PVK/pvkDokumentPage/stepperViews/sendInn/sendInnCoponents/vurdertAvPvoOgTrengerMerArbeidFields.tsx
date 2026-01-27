@@ -19,6 +19,7 @@ import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 type TProps = {
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
+  etterlevelseDokumentVersjon: number
   setFieldValue: (
     field: string,
     value: any,
@@ -35,6 +36,7 @@ type TProps = {
 export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
+  etterlevelseDokumentVersjon,
   setFieldValue,
   submitForm,
   initialStatus,
@@ -44,7 +46,9 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   savedAlert,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
-    (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+    (melding) =>
+      melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
+      melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
   )
 
   const relevantIndex = useMemo(() => {
@@ -52,10 +56,12 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
       return pvkDokument.meldingerTilPvo.length
     } else {
       return pvkDokument.meldingerTilPvo.findIndex(
-        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+        (melding) =>
+          melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
+          melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
       )
     }
-  }, [])
+  }, [pvkDokument, relevantMeldingTilPvo.length, etterlevelseDokumentVersjon])
 
   return (
     <Field>
@@ -68,6 +74,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
                 meldingerTilPvo={pvkDokument.meldingerTilPvo}
                 vurderinger={pvoTilbakemelding.vurderinger}
                 pvoVurderingList={pvoVurderingList}
+                etterlevelseDokumentVersjon={etterlevelseDokumentVersjon}
                 defaultFirstOpen
               />
 

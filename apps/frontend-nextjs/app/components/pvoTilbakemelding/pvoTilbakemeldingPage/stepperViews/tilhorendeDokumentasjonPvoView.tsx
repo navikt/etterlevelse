@@ -58,7 +58,10 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
     ;(async () => {
       if (pvkDokument.antallInnsendingTilPvo > 1) {
         const previousSubmission = pvoTilbakemelding.vurderinger.find(
-          (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+          (vurdering) =>
+            vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+            vurdering.etterlevelseDokumentVersjon ===
+              etterlevelseDokumentasjon.etterlevelseDokumentVersjon
         )
         if (previousSubmission && previousSubmission.sendtDato) {
           await getAuditByTableIdAndTimeStamp(

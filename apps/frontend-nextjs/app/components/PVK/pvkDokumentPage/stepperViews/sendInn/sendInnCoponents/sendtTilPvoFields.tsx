@@ -14,6 +14,7 @@ import { FunctionComponent } from 'react'
 type TProps = {
   pvkDokument: IPvkDokument
   isLoading: boolean
+  etterlevelseDokumentVersjon: number
   setFieldValue: (
     field: string,
     value: any,
@@ -26,6 +27,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   isLoading,
+  etterlevelseDokumentVersjon,
   setFieldValue,
   submitForm,
 }) => {
@@ -37,6 +39,11 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
 
       <BeskjedTilPvoReadOnly
         meldingTilPvo={
+          pvkDokument.meldingerTilPvo.find(
+            (melding) =>
+              melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+              melding.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+          ) ??
           pvkDokument.meldingerTilPvo.filter(
             (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
           )[0]
@@ -65,11 +72,13 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
               pvoTilbakemelding &&
               pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
             ) {
-              const previousVurdering = pvoTilbakemelding.vurderinger.filter(
-                (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+              const previousVurdering = pvoTilbakemelding.vurderinger.find(
+                (vurdering) =>
+                  vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+                  vurdering.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
               )
 
-              if (previousVurdering[0].vilFaPvkIRetur) {
+              if (previousVurdering?.vilFaPvkIRetur) {
                 await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
               } else {
                 await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)

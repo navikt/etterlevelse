@@ -79,9 +79,9 @@ export const PvoTilbakemeldingsList = () => {
           pvoTilbakemelding.length !== 0 &&
           pvoTilbakemelding[0].status === EPvoTilbakemeldingStatus.FERDIG
         ) {
-          const vurdering = pvoTilbakemelding[0].vurderinger.find(
-            (vurdering) => vurdering.innsendingId === pvk.antallInnsendingTilPvo
-          )
+          const vurdering = pvoTilbakemelding[0].vurderinger
+            .filter((vurdering) => vurdering.innsendingId === pvk.antallInnsendingTilPvo)
+            .sort((a, b) => b.etterlevelseDokumentVersjon - a.etterlevelseDokumentVersjon)[0]
           if (vurdering && vurdering.sendtDato) {
             return {
               ...pvk,

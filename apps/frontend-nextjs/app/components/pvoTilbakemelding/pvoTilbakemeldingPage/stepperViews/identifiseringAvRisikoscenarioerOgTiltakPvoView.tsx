@@ -37,9 +37,9 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const previousVurdering = useMemo(() => {
     if (pvkDokument.antallInnsendingTilPvo > 1) {
-      return pvoTilbakemelding.vurderinger.find(
-        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
-      )
+      return pvoTilbakemelding.vurderinger
+        .filter((vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1)
+        .sort((a, b) => b.etterlevelseDokumentVersjon - a.etterlevelseDokumentVersjon)[0]
     } else {
       return undefined
     }

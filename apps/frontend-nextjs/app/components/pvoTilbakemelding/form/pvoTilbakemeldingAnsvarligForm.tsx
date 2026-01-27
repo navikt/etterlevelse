@@ -96,7 +96,11 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               const updatedValues: IPvoTilbakemelding = {
                 ...response,
                 vurderinger: response.vurderinger.map((vurdering) => {
-                  if (vurdering.innsendingId === submitedVurderingValues.innsendingId) {
+                  if (
+                    vurdering.innsendingId === submitedVurderingValues.innsendingId &&
+                    vurdering.etterlevelseDokumentVersjon ===
+                      submitedVurderingValues.etterlevelseDokumentVersjon
+                  ) {
                     return {
                       ...vurdering,
                       ansvarligData: submitedVurderingValues.ansvarligData,
