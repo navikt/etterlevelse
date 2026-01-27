@@ -491,10 +491,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
         validateOnBlur={false}
         onSubmit={submit}
         innerRef={formRef}
-        initialValues={mapPvkDokumentToFormValue(
-          pvkDokument as IPvkDokument,
-          etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-        )}
+        initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         validate={(value) => {
           try {
             if (

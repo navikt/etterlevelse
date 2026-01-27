@@ -88,14 +88,10 @@ export const updatePvkDokument = async (pvkDokument: IPvkDokument): Promise<IPvk
 export const deletePvkDokument = async (id: string): Promise<IPvkDokument> =>
   (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
 
-export const usePvkDokument = (
-  etterlevelseDokumentVersjon: number,
-  pvkDokumentId?: string,
-  etterlevelseDokumentasjonId?: string
-) => {
+export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjonId?: string) => {
   const isCreateNew = pvkDokumentId === 'ny'
   const [data, setData] = useState<IPvkDokument | undefined>(
-    isCreateNew ? mapPvkDokumentToFormValue({}, etterlevelseDokumentVersjon) : undefined
+    isCreateNew ? mapPvkDokumentToFormValue({}) : undefined
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -155,8 +151,7 @@ export const mapMeldingTilPvoToFormValue = (
 }
 
 export const mapMeldingerTilPvoToFormValue = (
-  pvkDokument: Partial<IPvkDokument>,
-  etterlevelseDokumentVersjon: number
+  pvkDokument: Partial<IPvkDokument>
 ): IMeldingTilPvo[] => {
   const meldingerTilPvo: IMeldingTilPvo[] = []
   if (pvkDokument.meldingerTilPvo && pvkDokument.meldingerTilPvo.length !== 0) {
@@ -167,23 +162,22 @@ export const mapMeldingerTilPvoToFormValue = (
     if (pvkDokument.antallInnsendingTilPvo === pvkDokument.meldingerTilPvo.length) {
       meldingerTilPvo.push(
         mapMeldingTilPvoToFormValue({
-          etterlevelseDokumentVersjon: etterlevelseDokumentVersjon,
+          etterlevelseDokumentVersjon: pvkDokument.currentEtterlevelseDokumentVersjon,
           innsendingId: pvkDokument.antallInnsendingTilPvo + 1,
         })
       )
     }
   } else {
     meldingerTilPvo.push(
-      mapMeldingTilPvoToFormValue({ etterlevelseDokumentVersjon: etterlevelseDokumentVersjon })
+      mapMeldingTilPvoToFormValue({
+        etterlevelseDokumentVersjon: pvkDokument.currentEtterlevelseDokumentVersjon,
+      })
     )
   }
   return meldingerTilPvo
 }
 
-export const mapPvkDokumentToFormValue = (
-  pvkDokument: Partial<IPvkDokument>,
-  etterlevelseDokumentVersjon: number
-): IPvkDokument => {
+export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): IPvkDokument => {
   return {
     id: pvkDokument.id || '',
     changeStamp: pvkDokument.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
@@ -211,7 +205,7 @@ export const mapPvkDokumentToFormValue = (
     dataBehandlerRepresentantInvolveringBeskrivelse:
       pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse || '',
 
-    meldingerTilPvo: mapMeldingerTilPvoToFormValue(pvkDokument, etterlevelseDokumentVersjon),
+    meldingerTilPvo: mapMeldingerTilPvoToFormValue(pvkDokument),
     merknadTilRisikoeier: pvkDokument.merknadTilRisikoeier || '',
     merknadFraRisikoeier: pvkDokument.merknadFraRisikoeier || '',
     antallInnsendingTilPvo: pvkDokument.antallInnsendingTilPvo || 0,

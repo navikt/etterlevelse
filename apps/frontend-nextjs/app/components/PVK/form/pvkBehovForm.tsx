@@ -143,10 +143,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
             formikHelpers.resetForm({ values })
           })
         }}
-        initialValues={mapPvkDokumentToFormValue(
-          pvkDokument as IPvkDokument,
-          etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-        )}
+        initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         innerRef={formRef}
       >
         {({ initialValues, setFieldValue, values, submitForm, dirty, resetForm }) => (

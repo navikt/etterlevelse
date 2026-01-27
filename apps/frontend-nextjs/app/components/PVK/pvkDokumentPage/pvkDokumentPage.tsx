@@ -64,7 +64,6 @@ export const PvkDokumentPage = () => {
     params.etterlevelseDokumentasjonId
   )
   const [pvkDokument, setPvkDokument] = usePvkDokument(
-    etterlevelseDokumentasjon?.etterlevelseDokumentVersjon || 1,
     params.pvkDokumentId,
     params.etterlevelseDokumentasjonId
   )

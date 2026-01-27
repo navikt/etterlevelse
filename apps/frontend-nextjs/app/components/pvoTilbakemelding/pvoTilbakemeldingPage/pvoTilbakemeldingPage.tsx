@@ -63,12 +63,9 @@ export const PvoTilbakemeldingPage = () => {
     useState<boolean>(false)
 
   // pvk is read only data so it is ok to hard code etterlevelse dokument versjon as 1
-  const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(1, params.pvkDokumentId)
+  const [pvkDokument, , isPvkDokumentLoading] = usePvkDokument(params.pvkDokumentId)
   const [pvoTilbakemelding, setPvoTilbakemelding, isPvoTilbakemeldingLoading] =
-    usePvoTilbakemelding(
-      etterlevelseDokumentasjon?.etterlevelseDokumentVersjon || 1,
-      params.pvkDokumentId
-    )
+    usePvoTilbakemelding(params.pvkDokumentId)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [activeStep, setActiveStep] = useState<number>(
     currentStep !== null ? parseInt(currentStep) : 1
@@ -134,27 +131,19 @@ export const PvoTilbakemeldingPage = () => {
         return pvoTilbakemelding.vurderinger.filter(
           (vurdring) =>
             vurdring.innsendingId === 1 &&
-            vurdring.etterlevelseDokumentVersjon ===
-              etterlevelseDokumentasjon?.etterlevelseDokumentVersjon
+            vurdring.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
         )[0]
       } else {
         return pvoTilbakemelding.vurderinger.filter(
           (vurdering) =>
             vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
-            vurdering.etterlevelseDokumentVersjon ===
-              etterlevelseDokumentasjon?.etterlevelseDokumentVersjon
+            vurdering.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
         )[0]
       }
     } else {
-      return createNewPvoVurderning(1, etterlevelseDokumentasjon?.etterlevelseDokumentVersjon || 1)
+      return createNewPvoVurderning(1, pvkDokument?.currentEtterlevelseDokumentVersjon || 1)
     }
-  }, [
-    isEtterlevelseDokumentaasjonLoading,
-    pvoTilbakemelding,
-    pvkDokument,
-    isPvoTilbakemeldingLoading,
-    isPvkDokumentLoading,
-  ])
+  }, [pvoTilbakemelding, pvkDokument, isPvoTilbakemeldingLoading, isPvkDokumentLoading])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     {
