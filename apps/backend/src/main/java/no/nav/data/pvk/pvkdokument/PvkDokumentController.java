@@ -172,6 +172,6 @@ public class PvkDokumentController {
 
     private void addEtterlevelseDokumentasjonVersjon(PvkDokumentResponse pvkDokument) {
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
-        pvkDokument.setCurrentEtterlevelseDokumentVersion(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon());
+        pvkDokument.setCurrentEtterlevelseDokumentVersjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon());
     }
 }
