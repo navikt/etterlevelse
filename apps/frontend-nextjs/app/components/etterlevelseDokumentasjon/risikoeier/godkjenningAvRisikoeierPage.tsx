@@ -3,33 +3,33 @@
 import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
-  updateEtterlevelseDokumentasjon,
+  godkjennEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { Markdown } from '@/components/common/markdown/markdown'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  etterlevelseDokumentasjonIdUrl,
-  etterlevelsesDokumentasjonEditUrl,
-} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, FormSummary, Heading, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
-import { TextAreaField } from '../common/textAreaField/textAreaField'
-import { PageLayout } from '../others/scaffold/scaffold'
 
-export const SendTilRisikoeierGodkjenningPage = () => {
+export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
     }>
   > = useParams<{ etterlevelseDokumentasjonId?: string }>()
+
   const [
     etterlevelseDokumentasjon,
     setEtterlevelseDokumentasjon,
@@ -53,7 +53,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
         submitValues.meldingEtterlevelerTilRisikoeier
 
-      await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
+      await godkjennEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
         setEtterlevelseDokumentasjon(resp)
       })
     })
@@ -61,15 +61,15 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
   return (
     <PageLayout
-      pageTitle='Få etterlevelsen godkjent av risikoeier'
-      currentPage='Få etterlevelsen godkjent av risikoeier'
+      pageTitle='Godkjenn etterlevelsesdokument'
+      currentPage='Godkjenn etterlevelsesdokument'
       breadcrumbPaths={breadcrumbPaths}
     >
       {isEtterlevelseDokumentasjonLoading && <CenteredLoader />}
       {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && (
-        <div>
+        <div className='max-w-[75ch]'>
           <Heading level='1' size='large' className='mb-10'>
-            Få etterlevelsen godkjent av risikoeier
+            Godkjenn etterlevelsesdokument
           </Heading>
 
           <Heading level='2' size='medium' className='mb-5'>
@@ -78,51 +78,67 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
           {/* legg til godkjenningshistorikk når det er på plass */}
 
-          <Heading level='2' size='medium' className='mb-5'>
-            Send til ny godkjenning
-          </Heading>
-
-          {etterlevelseDokumentasjon.risikoeiere.length === 0 && (
-            <Alert variant='warning' className='my-5'>
-              <Heading spacing size='small' level='3'>
-                Denne etterlevelsen har ikke en nevnt risikoeier
+          <FormSummary>
+            <FormSummary.Header>
+              <Heading level='2' size='small'>
+                Oversikt over etterlevelsen
               </Heading>
-              Risikoeier må legges til under{' '}
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={`${etterlevelsesDokumentasjonEditUrl(params.etterlevelseDokumentasjonId)}#risikoeiereData`}
-                className='inline'
-              >
-                Rediger dokumentegenskaper.
-              </Link>{' '}
-              Dere kan ikke sende etterlevelsen til godkjenning uten en utnevnt risikoeier.
-            </Alert>
-          )}
+            </FormSummary.Header>
+            <FormSummary.Answers>
+              <FormSummary.Answer>
+                <FormSummary.Label>Barn nr. 1</FormSummary.Label>
+                <FormSummary.Value>
+                  <FormSummary.Answers>
+                    <FormSummary.Answer>
+                      <FormSummary.Label>Navn</FormSummary.Label>
+                      <FormSummary.Value>Kari Nordmann</FormSummary.Value>
+                    </FormSummary.Answer>
+                    <FormSummary.Answer>
+                      <FormSummary.Label>Navn</FormSummary.Label>
+                      <FormSummary.Value>Kari Nordmann</FormSummary.Value>
+                    </FormSummary.Answer>
+                  </FormSummary.Answers>
+                </FormSummary.Value>
+              </FormSummary.Answer>
+            </FormSummary.Answers>
+          </FormSummary>
 
-          <BodyLong>
-            Dere kan til enhver tid be risikoeier om å godkjenne etterlevelsesdokumentasjonen.
-            Risikoeieren vil da godkjenne:
-          </BodyLong>
+          <div className='mt-7 mb-9'>
+            <Heading level='3' size='xsmall' className='mb-5'>
+              Etterleverens notat til risikoeier
+            </Heading>
+            <DataTextWrapper>
+              <Markdown source={etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier} />
+            </DataTextWrapper>
+          </div>
 
-          <List as='ul' className='max-w-[75ch]'>
-            <List.Item>
-              Dokumentasjon av alle etterlevelseskrav som er en del av etterlevelsesdokumentet på
-              godkjenningstidspunktet. Dette gjelder også etterlevelseskrav som ikke er ferdigstilt.
-            </List.Item>
-            <List.Item>
-              Svar på om det er nødvendig å gjennomføre PVK. Dette gjelder kun hvis dere har huket
-              av for at personopplysninger behandles under Dokumentegenskaper.
-            </List.Item>
-          </List>
+          <div className='mt-7 mb-9'>
+            <Heading level='2' size='small' className='mb-5'>
+              Godkjenn etterlevelsesdokument
+            </Heading>
 
-          <BodyLong className='mt-5'>
-            Risikoeier vil kun godkjenne etterlevelsesdokumentet. Dersom det finnes et PVK-dokument,
-            vil dette ikke være en del av denne godkjenningen.
-            <br />
-            <br />
-            Når risikoeier godkjenner, arkiveres etterlevelsen og godkjenningen i Public 360.
-          </BodyLong>
+            <BodyLong>
+              Det er bedt om risikoeiers godkjenning av denne etterlevelsesdokumentasjonen. Dersom
+              du godkjenner vil følgende inngå i godkjenningen:
+            </BodyLong>
+
+            <List as='ul' className='my-7'>
+              <List.Item>
+                Dokumentasjon av alle etterlevelseskrav som er en del av etterlevelsesdokumentet på
+                godkjenningstidspunktet. Dette gjelder også etterlevelseskrav som ikke er
+                ferdigstilt.
+              </List.Item>
+              <List.Item>
+                Svar på om det er nødvendig å gjennomføre PVK. Dette gjelder kun hvis det er huket
+                av under Dokumentegenskaper for at personopplysninger behandles.
+              </List.Item>
+
+              <BodyLong>
+                Det er kun etterlevelsesdokumentet som godkjennes og arkiveres i Public 360. Dersom
+                det finnes et PVK-dokument, vil dette ikke være en del av denne godkjenningen.
+              </BodyLong>
+            </List>
+          </div>
 
           <Formik
             validateOnChange={false}
@@ -137,22 +153,14 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                     rows={5}
                     height='12.5rem'
                     noPlaceholder
-                    label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
-                    name='meldingEtterlevelerTilRisikoeier'
+                    label='Risikoeiers begrunnelse for godkjenningen'
+                    name='meldingRisikoeierTilEtterleveler'
                     markdown
                   />
                 </div>
 
                 {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
                   <div>
-                    <div className='my-10'>
-                      <Alert variant='info' inline>
-                        Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen
-                        låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere
-                        kunne redigere på nytt.
-                      </Alert>
-                    </div>
-
                     {saveSuccessfull && (
                       <div className='my-5'>
                         <Alert
@@ -173,7 +181,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                         onClick={async () => {
                           await setFieldValue(
                             'status',
-                            EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+                            EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
                           )
                           await submitForm()
                           setSaveSuccessfull(true)
@@ -186,15 +194,10 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                         type='button'
                         variant='primary'
                         onClick={async () => {
-                          await setFieldValue(
-                            'status',
-                            EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                          )
-
                           await submitForm()
                         }}
                       >
-                        Lagre og send til godkjenning
+                        Godkjenn og arkiver i Public360
                       </Button>
                     </div>
                   </div>
@@ -207,5 +210,4 @@ export const SendTilRisikoeierGodkjenningPage = () => {
     </PageLayout>
   )
 }
-
-export default SendTilRisikoeierGodkjenningPage
+export default GodkjenningAvEtterlevelsesDokumentPage
