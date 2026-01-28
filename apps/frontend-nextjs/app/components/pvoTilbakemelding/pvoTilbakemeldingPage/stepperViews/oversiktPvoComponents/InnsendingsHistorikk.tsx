@@ -23,7 +23,9 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
 
             if (melding.sendtTilPvoDato) {
               const vurdering = vurderinger.filter(
-                (vurdering) => vurdering.innsendingId === melding.innsendingId
+                (vurdering) =>
+                  vurdering.innsendingId === melding.innsendingId &&
+                  vurdering.etterlevelseDokumentVersjon === melding.etterlevelseDokumentVersjon
               )
               const sendtAvPvo =
                 vurdering.length !== 0 && vurdering[0].sendtAv !== ''

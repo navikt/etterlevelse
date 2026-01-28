@@ -55,16 +55,15 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   const [tabValue, setTabValue] = useState('alleKrav')
   const router = useRouter()
   const pathname = usePathname()
-  const [pvoTilbakemelding] = usePvoTilbakemelding(
-    etterlevelseDokumentasjon.etterlevelseDokumentVersjon,
-    pvkDokument?.id
-  )
+  const [pvoTilbakemelding] = usePvoTilbakemelding(pvkDokument?.id)
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
 
   const previousVurdering = useMemo(() => {
     if (!!pvoTilbakemelding && !!pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
       const previousVurdering = pvoTilbakemelding.vurderinger.find(
-        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+        (vurdering) =>
+          vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+          vurdering.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
       )
 
       return previousVurdering

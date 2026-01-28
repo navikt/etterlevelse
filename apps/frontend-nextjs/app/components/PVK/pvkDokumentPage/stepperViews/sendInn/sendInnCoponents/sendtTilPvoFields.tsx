@@ -38,7 +38,9 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
       <BeskjedTilPvoReadOnly
         meldingTilPvo={
           pvkDokument.meldingerTilPvo.filter(
-            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+            (melding) =>
+              melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+              melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
           )[0]
         }
       />
@@ -66,7 +68,10 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
               pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
             ) {
               const previousVurdering = pvoTilbakemelding.vurderinger.filter(
-                (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1
+                (vurdering) =>
+                  vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+                  vurdering.etterlevelseDokumentVersjon ===
+                    pvkDokument.currentEtterlevelseDokumentVersjon
               )
 
               if (previousVurdering[0].vilFaPvkIRetur) {

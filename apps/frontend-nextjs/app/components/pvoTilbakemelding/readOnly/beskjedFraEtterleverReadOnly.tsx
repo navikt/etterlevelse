@@ -13,9 +13,15 @@ export const BeskjedFraEtterleverReadOnly: FunctionComponent<
 > = ({ pvkDokument, innsendingId }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter((melding) => {
     if (innsendingId) {
-      return melding.innsendingId === innsendingId
+      return (
+        melding.innsendingId === innsendingId &&
+        melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
+      )
     } else {
-      return melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+      return (
+        melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+        melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
+      )
     }
   })
 

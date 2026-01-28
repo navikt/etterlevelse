@@ -11,7 +11,6 @@ import { searchResourceByNameOptions } from '@/api/teamkatalogen/teamkatalogenAp
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -34,7 +33,6 @@ import AsyncSelect from 'react-select/async'
 import AlertPvoModal from '../common/alertPvoModal'
 
 type TProps = {
-  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   pvoTilbakemelding: IPvoTilbakemelding
   initialValue: IVurdering
@@ -42,7 +40,6 @@ type TProps = {
 }
 
 export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
   initialValue,
@@ -82,13 +79,13 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                   (vurdering) =>
                     vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
                     vurdering.etterlevelseDokumentVersjon ===
-                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                      pvkDokument.currentEtterlevelseDokumentVersjon
                 )
               ) {
                 response.vurderinger.push(
                   createNewPvoVurderning(
                     pvkDokument.antallInnsendingTilPvo,
-                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                    pvkDokument.currentEtterlevelseDokumentVersjon
                   )
                 )
               }
@@ -96,7 +93,11 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               const updatedValues: IPvoTilbakemelding = {
                 ...response,
                 vurderinger: response.vurderinger.map((vurdering) => {
-                  if (vurdering.innsendingId === submitedVurderingValues.innsendingId) {
+                  if (
+                    vurdering.innsendingId === submitedVurderingValues.innsendingId &&
+                    vurdering.etterlevelseDokumentVersjon ===
+                      pvkDokument.currentEtterlevelseDokumentVersjon
+                  ) {
                     return {
                       ...vurdering,
                       ansvarligData: submitedVurderingValues.ansvarligData,
@@ -119,7 +120,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
           if (error.status === 404) {
             const newVurdering = createNewPvoVurderning(
               1,
-              etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+              pvkDokument.currentEtterlevelseDokumentVersjon
             )
             const createValue = mapPvoTilbakemeldingToFormValue({
               pvkDokumentId: pvkDokument.id,

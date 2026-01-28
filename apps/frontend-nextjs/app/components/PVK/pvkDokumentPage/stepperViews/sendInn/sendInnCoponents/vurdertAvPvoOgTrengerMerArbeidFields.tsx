@@ -44,7 +44,9 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   savedAlert,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
-    (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+    (melding) =>
+      melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
+      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
   )
 
   const relevantIndex = useMemo(() => {
@@ -52,10 +54,12 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
       return pvkDokument.meldingerTilPvo.length
     } else {
       return pvkDokument.meldingerTilPvo.findIndex(
-        (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1
+        (melding) =>
+          melding.innsendingId === pvkDokument.antallInnsendingTilPvo + 1 &&
+          melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
       )
     }
-  }, [])
+  }, [pvkDokument])
 
   return (
     <Field>
@@ -68,6 +72,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
                 meldingerTilPvo={pvkDokument.meldingerTilPvo}
                 vurderinger={pvoTilbakemelding.vurderinger}
                 pvoVurderingList={pvoVurderingList}
+                etterlevelseDokumentVersjon={pvkDokument.currentEtterlevelseDokumentVersjon}
                 defaultFirstOpen
               />
 

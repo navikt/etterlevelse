@@ -49,10 +49,7 @@ export const getPvoTilbakemeldingByPvkDokumentId = async (
     )
   ).data
 
-export const usePvoTilbakemelding = (
-  etterlevelseDokumentVersjon: number,
-  pvkDokumentId?: string
-) => {
+export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
   const [data, setData] = useState<IPvoTilbakemelding>(mapPvoTilbakemeldingToFormValue({}))
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -69,7 +66,10 @@ export const usePvoTilbakemelding = (
 
               if (antallInnsending > pvoTilbakemelding.vurderinger.length) {
                 formValuePvo.vurderinger.push(
-                  createNewPvoVurderning(antallInnsending, etterlevelseDokumentVersjon)
+                  createNewPvoVurderning(
+                    antallInnsending,
+                    pvkDokument.currentEtterlevelseDokumentVersjon
+                  )
                 )
               }
 

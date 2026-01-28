@@ -186,12 +186,21 @@ export const SendInnView: FunctionComponent<TProps> = ({
             ].includes(submitedValues.status)
           ) {
             const relevantMeldingTilPvo = updatedPvkDokument.meldingerTilPvo.filter(
-              (melding) => melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo
+              (melding) =>
+                melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
+                melding.etterlevelseDokumentVersjon ===
+                  etterlevelseDokumentasjon.etterlevelseDokumentVersjon
             )
 
             if (relevantMeldingTilPvo.length !== 0) {
               updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
-                if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
+                if (
+                  meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
+                  meldingTilPvo.etterlevelseDokumentVersjon ===
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                ) {
+                  meldingTilPvo.etterlevelseDokumentVersjon =
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
                   meldingTilPvo.sendtTilPvoAv = user.getIdent() + ' - ' + user.getName()
                   meldingTilPvo.sendtTilPvoDato = new Date().toISOString()
                 }
@@ -482,10 +491,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
         validateOnBlur={false}
         onSubmit={submit}
         innerRef={formRef}
-        initialValues={mapPvkDokumentToFormValue(
-          pvkDokument as IPvkDokument,
-          etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-        )}
+        initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
         validate={(value) => {
           try {
             if (

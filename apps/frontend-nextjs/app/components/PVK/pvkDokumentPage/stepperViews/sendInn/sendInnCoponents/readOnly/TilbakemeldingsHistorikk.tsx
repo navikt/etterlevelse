@@ -12,6 +12,7 @@ type TProps = {
   vurderinger: IVurdering[]
   meldingerTilPvo: IMeldingTilPvo[]
   pvoVurderingList: ICode[]
+  etterlevelseDokumentVersjon: number
   defaultFirstOpen?: boolean
 }
 
@@ -20,6 +21,7 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   vurderinger,
   meldingerTilPvo,
   pvoVurderingList,
+  etterlevelseDokumentVersjon,
   defaultFirstOpen,
 }) => {
   return (
@@ -28,11 +30,14 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
         Versjonshistorikk
       </Heading>
       <Heading size='small' level='3' className='mb-5'>
-        Versjon 1
+        Versjon {etterlevelseDokumentVersjon}
       </Heading>
 
       <div className='my-5'>
         {vurderinger
+          .filter(
+            (vurdering) => vurdering.etterlevelseDokumentVersjon === etterlevelseDokumentVersjon
+          )
           .sort((a, b) => b.innsendingId - a.innsendingId)
           .map((vurdering, index) => {
             if (vurdering.innsendingId <= antallInnsendingTilPvo) {
@@ -50,7 +55,10 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                   <BeskjedTilPvoReadOnly
                     meldingTilPvo={
                       meldingerTilPvo.filter(
-                        (melding) => melding.innsendingId === vurdering.innsendingId
+                        (melding) =>
+                          melding.innsendingId === vurdering.innsendingId &&
+                          melding.etterlevelseDokumentVersjon ===
+                            vurdering.etterlevelseDokumentVersjon
                       )[0]
                     }
                   />

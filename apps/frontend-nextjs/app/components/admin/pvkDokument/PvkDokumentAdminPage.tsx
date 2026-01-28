@@ -59,8 +59,7 @@ export const PvkDokumentAdminPage = () => {
   const loadData = async () => {
     const allPvkDokument = await getAllPvkDokument()
     const mappedPvkDokument = allPvkDokument.map((pvkDokument) =>
-      // ok to hard code etterlevelseDokumentVersjon as 1 since this is a readOnly data
-      mapPvkDokumentToFormValue(pvkDokument, 1)
+      mapPvkDokumentToFormValue(pvkDokument)
     )
     setTableContent(mappedPvkDokument)
   }

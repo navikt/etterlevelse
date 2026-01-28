@@ -36,10 +36,15 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
   savedAlert,
 }) => {
   const relevantMeldingTilPvo: IMeldingTilPvo[] = pvkDokument.meldingerTilPvo.filter(
-    (melding) => melding.innsendingId === 1
+    (melding) =>
+      melding.innsendingId === 1 &&
+      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
   )
+
   const index = pvkDokument.meldingerTilPvo.findIndex(
-    (melding: IMeldingTilPvo) => melding.innsendingId === 1
+    (melding: IMeldingTilPvo) =>
+      melding.innsendingId === 1 &&
+      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
   )
 
   return (

@@ -16,7 +16,9 @@ export const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, i
       <BeskjedTilPvoReadOnly
         meldingTilPvo={
           pvkDokument.meldingerTilPvo.filter(
-            (melding) => melding.innsendingId === pvkDokument.antallInnsendingTilPvo
+            (melding) =>
+              melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+              melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
           )[0]
         }
       />

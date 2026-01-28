@@ -27,6 +27,9 @@ export interface IPvkDokument {
 
   godkjentAvRisikoeierDato: string
   godkjentAvRisikoeier: string
+
+  // response field only
+  currentEtterlevelseDokumentVersjon: number
 }
 
 export interface IMeldingTilPvo {
@@ -48,6 +51,7 @@ export interface IPvkDokumentListItem {
   sendtTilPvoDato: string
   sendtTilPvoAv: string
   antallInnsendingTilPvo: number
+  currentEtterlevelseDokumentVersjon: number
 }
 
 export enum EPvkDokumentStatus {
