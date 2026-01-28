@@ -1,4 +1,4 @@
-import SendTilRisikoeierGodkjenningPage from '@/components/risikoeier/sendTilrisikoeierGodkjenningPage'
+import { SendTilRisikoeierGodkjenningPage } from '@/components/etterlevelseDokumentasjon/risikoeier/sendTilrisikoeierGodkjenningPage'
 
 const Page = () => <SendTilRisikoeierGodkjenningPage />
 

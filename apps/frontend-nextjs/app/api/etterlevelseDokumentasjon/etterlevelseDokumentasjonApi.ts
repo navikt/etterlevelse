@@ -71,6 +71,18 @@ export const updateEtterlevelseDokumentasjon = async (
   ).data
 }
 
+export const godkjennEtterlevelseDokumentasjon = async (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+) => {
+  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  return (
+    await axios.put<IEtterlevelseDokumentasjon>(
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/godkjenning/${etterlevelseDokumentasjon.id}`,
+      dto
+    )
+  ).data
+}
+
 export const createEtterlevelseDokumentasjonWithRelataion = async (
   fromDocumentId: string,
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjonWithRelation
