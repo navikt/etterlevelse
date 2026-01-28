@@ -6,6 +6,7 @@ import {
   godkjennEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import {
   getPvkDokumentByEtterlevelseDokumentId,
   mapPvkDokumentToFormValue,
@@ -15,19 +16,28 @@ import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoade
 import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { IBreadCrumbPath } from '@/constants/commonConstants'
+import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
+import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
+  IEtterlevelseDokumentasjonStats,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
+import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
+import {
+  filterEtterlevelseDokumentasjonStatsData,
+  getKravForTema,
+} from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
+import { useQuery } from '@apollo/client/react'
 import { Alert, BodyLong, Button, FormSummary, Heading, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
@@ -48,6 +58,20 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
     isEtterlevelseDokumentasjonLoading,
   ] = useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>(mapPvkDokumentToFormValue({}))
+  const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
+
+  const variables: {
+    etterlevelseDokumentasjonId: string | undefined
+  } = { etterlevelseDokumentasjonId: params.etterlevelseDokumentasjonId }
+
+  const { data: relevanteData, loading } = useQuery<{
+    etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
+  }>(getEtterlevelseDokumentasjonStatsQuery, {
+    variables,
+    skip: !params.etterlevelseDokumentasjonId,
+  })
+
+  const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(relevanteData)
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -82,14 +106,20 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
     })()
   }, [etterlevelseDokumentasjon])
 
+  useEffect(() => {
+    ;(async () => {
+      await getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
+    })()
+  }, [])
+
   return (
     <PageLayout
       pageTitle='Godkjenn etterlevelsesdokument'
       currentPage='Godkjenn etterlevelsesdokument'
       breadcrumbPaths={breadcrumbPaths}
     >
-      {isEtterlevelseDokumentasjonLoading && <CenteredLoader />}
-      {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && (
+      {isEtterlevelseDokumentasjonLoading && loading && <CenteredLoader />}
+      {!isEtterlevelseDokumentasjonLoading && !loading && etterlevelseDokumentasjon && (
         <div className='max-w-[75ch]'>
           <Heading level='1' size='large' className='mb-10'>
             Godkjenn etterlevelsesdokument
@@ -108,28 +138,58 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
               </Heading>
             </FormSummary.Header>
             <FormSummary.Answers>
-              {temaListe.map((tema) => (
-                <FormSummary.Answer>
-                  <FormSummary.Label>{tema.shortName}</FormSummary.Label>
-                  <FormSummary.Value>
-                    <FormSummary.Answers>
-                      <FormSummary.Answer>
-                        <FormSummary.Label>Krav</FormSummary.Label>
-                        <FormSummary.Value>
-                          X krav er under arbeid, Y er ferdig utfylt
-                        </FormSummary.Value>
-                      </FormSummary.Answer>
-                      <FormSummary.Answer>
-                        <FormSummary.Label>Suksesskriterier</FormSummary.Label>
-                        <FormSummary.Value>
-                          P suksesskriterier er under arbeid, Q er oppfylt, R er ikke oppfylt, S er
-                          ikke relevant.
-                        </FormSummary.Value>
-                      </FormSummary.Answer>
-                    </FormSummary.Answers>
-                  </FormSummary.Value>
-                </FormSummary.Answer>
-              ))}
+              {allKravPriority.length !== 0 &&
+                temaListe.map((tema) => {
+                  const relevantStatsKravnummer = relevanteStats.map((k) => k.kravNummer)
+
+                  const filteredUtgaatKrav = utgaattStats.filter(
+                    ({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer)
+                  )
+
+                  const kravliste = getKravForTema({
+                    tema,
+                    kravliste: [...relevanteStats, ...filteredUtgaatKrav],
+                    allKravPriority,
+                    codelist,
+                  })
+
+                  const utfylteKrav = kravliste.filter(
+                    (krav) =>
+                      krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                      krav.etterlevelseStatus ===
+                        EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
+                  )
+
+                  const underArbeidKrav = kravliste.filter(
+                    (krav) =>
+                      krav.etterlevelseStatus === EEtterlevelseStatus.UNDER_REDIGERING ||
+                      krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG
+                  )
+
+                  return (
+                    <FormSummary.Answer>
+                      <FormSummary.Label>{tema.shortName}</FormSummary.Label>
+                      <FormSummary.Value>
+                        <FormSummary.Answers>
+                          <FormSummary.Answer>
+                            <FormSummary.Label>Krav</FormSummary.Label>
+                            <FormSummary.Value>
+                              {underArbeidKrav.length} krav er under arbeid, {utfylteKrav.length} er
+                              ferdig utfylt
+                            </FormSummary.Value>
+                          </FormSummary.Answer>
+                          <FormSummary.Answer>
+                            <FormSummary.Label>Suksesskriterier</FormSummary.Label>
+                            <FormSummary.Value>
+                              P suksesskriterier er under arbeid, Q er oppfylt, R er ikke oppfylt, S
+                              er ikke relevant.
+                            </FormSummary.Value>
+                          </FormSummary.Answer>
+                        </FormSummary.Answers>
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                  )
+                })}
 
               <FormSummary.Answer>
                 <FormSummary.Label>Behov for PVK</FormSummary.Label>
