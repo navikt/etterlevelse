@@ -6,6 +6,10 @@ import {
   godkjennEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import {
+  getPvkDokumentByEtterlevelseDokumentId,
+  mapPvkDokumentToFormValue,
+} from '@/api/pvkDokument/pvkDokumentApi'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -16,12 +20,16 @@ import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { Alert, BodyLong, Button, FormSummary, Heading, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const params: Readonly<
@@ -35,6 +43,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
     setEtterlevelseDokumentasjon,
     isEtterlevelseDokumentasjonLoading,
   ] = useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>(mapPvkDokumentToFormValue({}))
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -58,6 +67,16 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       })
     })
   }
+
+  useEffect(() => {
+    ;(async () => {
+      if (!!etterlevelseDokumentasjon) {
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id).then(
+          setPvkDokument
+        )
+      }
+    })()
+  }, [etterlevelseDokumentasjon])
 
   return (
     <PageLayout
@@ -86,16 +105,52 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             </FormSummary.Header>
             <FormSummary.Answers>
               <FormSummary.Answer>
-                <FormSummary.Label>Barn nr. 1</FormSummary.Label>
+                <FormSummary.Label>Tema navn placeholder</FormSummary.Label>
                 <FormSummary.Value>
                   <FormSummary.Answers>
                     <FormSummary.Answer>
-                      <FormSummary.Label>Navn</FormSummary.Label>
-                      <FormSummary.Value>Kari Nordmann</FormSummary.Value>
+                      <FormSummary.Label>Krav</FormSummary.Label>
+                      <FormSummary.Value>
+                        X krav er under arbeid, Y er ferdig utfylt
+                      </FormSummary.Value>
                     </FormSummary.Answer>
                     <FormSummary.Answer>
-                      <FormSummary.Label>Navn</FormSummary.Label>
-                      <FormSummary.Value>Kari Nordmann</FormSummary.Value>
+                      <FormSummary.Label>Suksesskriterier</FormSummary.Label>
+                      <FormSummary.Value>
+                        P suksesskriterier er under arbeid, Q er oppfylt, R er ikke oppfylt, S er
+                        ikke relevant.
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                  </FormSummary.Answers>
+                </FormSummary.Value>
+              </FormSummary.Answer>
+
+              <FormSummary.Answer>
+                <FormSummary.Label>Behov for PVK</FormSummary.Label>
+                <FormSummary.Value>
+                  <FormSummary.Answers>
+                    <FormSummary.Answer>
+                      <FormSummary.Label>
+                        Hvilken vurdering har dere kommet fram til?
+                      </FormSummary.Label>
+                      <FormSummary.Value>
+                        {(pvkDokument.pvkVurdering === undefined ||
+                          pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED) &&
+                          'Ingen vurdering'}
+                        {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+                          'Vi skal gjennomføre en PVK'}
+                        {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE &&
+                          'Vi skal ikke gjennomføre PVK'}
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                    <FormSummary.Answer>
+                      <FormSummary.Label>Begrunn vurderingen deres</FormSummary.Label>
+                      <FormSummary.Value>
+                        {pvkDokument.pvkVurderingsBegrunnelse !== '' && (
+                          <Markdown source={pvkDokument.pvkVurderingsBegrunnelse} />
+                        )}
+                        {pvkDokument.pvkVurderingsBegrunnelse === '' && 'Ingen begrunnelse'}
+                      </FormSummary.Value>
                     </FormSummary.Answer>
                   </FormSummary.Answers>
                 </FormSummary.Value>
