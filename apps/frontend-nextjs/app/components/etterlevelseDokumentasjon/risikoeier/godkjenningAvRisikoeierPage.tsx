@@ -17,7 +17,10 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
-import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import {
+  EEtterlevelseStatus,
+  ESuksesskriterieStatus,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
@@ -166,6 +169,50 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                       krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG
                   )
 
+                  const underArbeidKriterie = []
+                  const oppfyltKriterie = []
+                  const ikkeOppfyltKriterie = []
+                  const ikkeRelevantKriteri = []
+
+                  kravliste.forEach((krav) => {
+                    if (
+                      krav.etterlevelseId !== null &&
+                      krav.etterlevelseSuksesskriterieBegrunnelser !== undefined &&
+                      krav.etterlevelseSuksesskriterieBegrunnelser.length !== 0
+                    ) {
+                      underArbeidKriterie.push(
+                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                          (begrunnelse) =>
+                            begrunnelse.suksesskriterieStatus ===
+                            ESuksesskriterieStatus.UNDER_ARBEID
+                        )
+                      )
+
+                      oppfyltKriterie.push(
+                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                          (begrunnelse) =>
+                            begrunnelse.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
+                        )
+                      )
+
+                      ikkeOppfyltKriterie.push(
+                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                          (begrunnelse) =>
+                            begrunnelse.suksesskriterieStatus ===
+                            ESuksesskriterieStatus.IKKE_OPPFYLT
+                        )
+                      )
+
+                      ikkeRelevantKriteri.push(
+                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                          (begrunnelse) =>
+                            begrunnelse.suksesskriterieStatus ===
+                            ESuksesskriterieStatus.IKKE_RELEVANT
+                        )
+                      )
+                    }
+                  })
+
                   return (
                     <FormSummary.Answer>
                       <FormSummary.Label>{tema.shortName}</FormSummary.Label>
@@ -181,8 +228,9 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                           <FormSummary.Answer>
                             <FormSummary.Label>Suksesskriterier</FormSummary.Label>
                             <FormSummary.Value>
-                              P suksesskriterier er under arbeid, Q er oppfylt, R er ikke oppfylt, S
-                              er ikke relevant.
+                              {underArbeidKriterie.length} suksesskriterier er under arbeid,{' '}
+                              {oppfyltKriterie.length} er oppfylt, {ikkeOppfyltKriterie.length} er
+                              ikke oppfylt, {ikkeRelevantKriteri.length} er ikke relevant.
                             </FormSummary.Value>
                           </FormSummary.Answer>
                         </FormSummary.Answers>
