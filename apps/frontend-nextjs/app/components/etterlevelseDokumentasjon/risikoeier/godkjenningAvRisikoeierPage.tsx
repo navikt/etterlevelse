@@ -24,12 +24,14 @@ import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { Alert, BodyLong, Button, FormSummary, Heading, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const params: Readonly<
@@ -37,6 +39,8 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       etterlevelseDokumentasjonId?: string
     }>
   > = useParams<{ etterlevelseDokumentasjonId?: string }>()
+  const codelist = useContext(CodelistContext)
+  const temaListe: TTemaCode[] = codelist.utils.getCodes(EListName.TEMA) as TTemaCode[]
 
   const [
     etterlevelseDokumentasjon,
@@ -104,26 +108,28 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
               </Heading>
             </FormSummary.Header>
             <FormSummary.Answers>
-              <FormSummary.Answer>
-                <FormSummary.Label>Tema navn placeholder</FormSummary.Label>
-                <FormSummary.Value>
-                  <FormSummary.Answers>
-                    <FormSummary.Answer>
-                      <FormSummary.Label>Krav</FormSummary.Label>
-                      <FormSummary.Value>
-                        X krav er under arbeid, Y er ferdig utfylt
-                      </FormSummary.Value>
-                    </FormSummary.Answer>
-                    <FormSummary.Answer>
-                      <FormSummary.Label>Suksesskriterier</FormSummary.Label>
-                      <FormSummary.Value>
-                        P suksesskriterier er under arbeid, Q er oppfylt, R er ikke oppfylt, S er
-                        ikke relevant.
-                      </FormSummary.Value>
-                    </FormSummary.Answer>
-                  </FormSummary.Answers>
-                </FormSummary.Value>
-              </FormSummary.Answer>
+              {temaListe.map((tema) => (
+                <FormSummary.Answer>
+                  <FormSummary.Label>{tema.shortName}</FormSummary.Label>
+                  <FormSummary.Value>
+                    <FormSummary.Answers>
+                      <FormSummary.Answer>
+                        <FormSummary.Label>Krav</FormSummary.Label>
+                        <FormSummary.Value>
+                          X krav er under arbeid, Y er ferdig utfylt
+                        </FormSummary.Value>
+                      </FormSummary.Answer>
+                      <FormSummary.Answer>
+                        <FormSummary.Label>Suksesskriterier</FormSummary.Label>
+                        <FormSummary.Value>
+                          P suksesskriterier er under arbeid, Q er oppfylt, R er ikke oppfylt, S er
+                          ikke relevant.
+                        </FormSummary.Value>
+                      </FormSummary.Answer>
+                    </FormSummary.Answers>
+                  </FormSummary.Value>
+                </FormSummary.Answer>
+              ))}
 
               <FormSummary.Answer>
                 <FormSummary.Label>Behov for PVK</FormSummary.Label>
