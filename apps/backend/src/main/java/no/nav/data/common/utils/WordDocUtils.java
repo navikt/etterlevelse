@@ -783,6 +783,10 @@ public class WordDocUtils {
                     alleAutomatiskBehandling.add(behandling.getAutomatiskBehandling());
                 }
             });
+        } else {
+            manglerOpplysningstyper.set(true);
+            alleProfilering.add(null);
+            alleAutomatiskBehandling.add(null);
         }
 
         var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
@@ -827,7 +831,11 @@ public class WordDocUtils {
         Set<String> set = new HashSet<>(databehandlerNavnList);
         databehandlerNavnList.clear();
         databehandlerNavnList.addAll(set);
-        databehandlerNavnList.forEach(navn -> addMarkdownText("- " + navn));
+        if (databehandlerNavnList.isEmpty()) {
+            addMarkdownText("- Ingen databehandlere");
+        } else {
+            databehandlerNavnList.forEach(navn -> addMarkdownText("- " + navn));
+        }
     }
 
     public void addPersonkategoriList(List<Behandling> behandlingList) {
@@ -845,9 +853,14 @@ public class WordDocUtils {
         Set<String> set = new HashSet<>(personkategoriList);
         personkategoriList.clear();
         personkategoriList.addAll(set);
-        personkategoriList.forEach(personkategori -> {
-            addMarkdownText("- " + personkategori);
-        });
+
+        if (personkategorier.isEmpty()) {
+            addMarkdownText("- Ingen personkategorier");
+        } else {
+            personkategoriList.forEach(personkategori -> {
+                addMarkdownText("- " + personkategori);
+            });
+        }
     }
 
 
