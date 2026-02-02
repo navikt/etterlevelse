@@ -16,5 +16,5 @@ import java.util.List;
 @AllArgsConstructor
 public class EtterlevelseDokumentasjonGodkjenningsRequest {
     private EtterlevelseDokumentasjonRequest etterlevelseDokumentasjonRequest;
-    private List<KravTilstandHistorikk> kravTilstandHistorikkList;
+    private List<KravTilstandHistorikk> kravTilstandHistorikk;
 }

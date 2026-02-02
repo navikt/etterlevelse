@@ -94,7 +94,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
         submitValues.meldingEtterlevelerTilRisikoeier
 
-      await godkjennEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
+      await godkjennEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon, []).then((resp) => {
         setEtterlevelseDokumentasjon(resp)
       })
     })

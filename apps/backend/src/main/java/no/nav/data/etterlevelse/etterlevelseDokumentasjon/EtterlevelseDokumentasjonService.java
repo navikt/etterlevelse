@@ -159,14 +159,14 @@ public class EtterlevelseDokumentasjonService {
                             .versjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
                             .godkjentAvRisikoeier(SecurityUtils.getCurrentName())
                             .godkjentAvRisikoierDato(LocalDateTime.now())
-                            .kravTilstandHistorikk(request.getKravTilstandHistorikkList())
+                            .kravTilstandHistorikk(request.getKravTilstandHistorikk())
                             .build()
             );
         } else {
             EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
             historikk.setGodkjentAvRisikoeier(SecurityUtils.getCurrentName());
             historikk.setGodkjentAvRisikoierDato(LocalDateTime.now());
-            historikk.setKravTilstandHistorikk(request.getKravTilstandHistorikkList());
+            historikk.setKravTilstandHistorikk(request.getKravTilstandHistorikk());
         }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);

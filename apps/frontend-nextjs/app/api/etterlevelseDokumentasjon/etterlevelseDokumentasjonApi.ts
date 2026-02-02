@@ -3,6 +3,7 @@ import { IEtterlevelseDokumentasjonWithRelation } from '@/constants/etterlevelse
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
+  IKravTilstandHistorikk,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { env } from '@/util/env/env'
@@ -72,13 +73,14 @@ export const updateEtterlevelseDokumentasjon = async (
 }
 
 export const godkjennEtterlevelseDokumentasjon = async (
-  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
+  kravTilstandHistorikk: IKravTilstandHistorikk[]
 ) => {
   const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/godkjenning/${etterlevelseDokumentasjon.id}`,
-      dto
+      { etterlevelseDokumentasjonRequest: dto, kravTilstandHistorikk: kravTilstandHistorikk }
     )
   ).data
 }
@@ -171,7 +173,9 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   p360Recno: etterlevelseDokumentasjon.p360Recno || 0,
   p360CaseNumber: etterlevelseDokumentasjon.p360CaseNumber || '',
   etterlevelseDokumentVersjon: etterlevelseDokumentasjon.etterlevelseDokumentVersjon || 1,
-  versjonHistorikk: etterlevelseDokumentasjon.versjonHistorikk || [{ versjon: 1 }],
+  versjonHistorikk: etterlevelseDokumentasjon.versjonHistorikk || [
+    { versjon: 1, kravTilstandHistorikk: [] },
+  ],
 })
 
 export const etterlevelseDokumentasjonToDomainToObject = (

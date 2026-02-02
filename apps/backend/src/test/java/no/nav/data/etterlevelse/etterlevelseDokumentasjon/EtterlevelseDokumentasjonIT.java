@@ -25,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -141,7 +140,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonGodkjenningsRequest request = EtterlevelseDokumentasjonGodkjenningsRequest.builder()
                 .etterlevelseDokumentasjonRequest(eDokRequest)
-                .kravTilstandHistorikkList(List.of(KravTilstandHistorikk.builder().tema("Test tema").build()))
+                .kravTilstandHistorikk(List.of(KravTilstandHistorikk.builder().tema("Test tema").build()))
                 .build();
 
         ResponseEntity<EtterlevelseDokumentasjonResponse> resp = restTemplate.exchange(
