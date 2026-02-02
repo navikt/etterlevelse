@@ -218,7 +218,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             Godkjenn etterlevelsesdokument
           </Heading>
 
-          {etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 && (
+          {etterlevelseDokumentasjon.etterlevelseDokumentVersjon === 1 && (
             <EtterlevelsesDokumentasjonGodkjenningsHistorikk
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
