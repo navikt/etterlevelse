@@ -31,6 +31,7 @@ import {
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
+  EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
@@ -53,6 +54,7 @@ import {
   Heading,
   Label,
   ReadMore,
+  Select,
   TextField,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
@@ -645,17 +647,46 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
           {env.isDev && user.isAdmin() && (
             <>
               <div className='mt-5'>
-                <TextAreaField rows={1} noPlaceholder label='P360 recnummer' name='p360Recno' />
+                <TextAreaField
+                  rows={1}
+                  noPlaceholder
+                  label='P360 recnummer KUN I DEV OG ADMIN'
+                  name='p360Recno'
+                />
 
                 <div className='mt-5'></div>
                 <TextAreaField
                   rows={1}
                   noPlaceholder
-                  label='P360 saknummer'
+                  label='P360 saknummer  KUN I DEV OG ADMIN'
                   name='p360CaseNumber'
                 />
               </div>
             </>
+          )}
+
+          {user.isAdmin() && (
+            <div className='mt-5'>
+              <Select
+                label='Oppdater status KUN ADMIN'
+                value={values.status}
+                onChange={(event) => {
+                  if (event.target.value) {
+                    setFieldValue('status', event.target.value)
+                  }
+                }}
+              >
+                <option value={EEtterlevelseDokumentasjonStatus.UNDER_ARBEID}>under arbeid</option>
+                <option
+                  value={EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER}
+                >
+                  Sendt til godkjenning til risikoeier
+                </option>
+                <option value={EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER}>
+                  Godkjent av risikoeier
+                </option>
+              </Select>
+            </div>
           )}
 
           {!dokumentRelasjon && (
