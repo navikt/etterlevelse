@@ -124,7 +124,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                         .etterlevelseDokumentasjonData(
                                 EtterlevelseDokumentasjonData.builder()
                                         .title("test")
-                                        .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
+                                        .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
                                         .etterlevelseDokumentVersjon(1)
                                         .risikoeiere(List.of("A123456"))
                                         .build()
