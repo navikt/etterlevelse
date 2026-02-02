@@ -6,6 +6,9 @@ import {
   updateEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
@@ -20,9 +23,6 @@ import { Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
-import { TextAreaField } from '../common/textAreaField/textAreaField'
-import { PageLayout } from '../others/scaffold/scaffold'
 
 export const SendTilRisikoeierGodkjenningPage = () => {
   const params: Readonly<

@@ -326,6 +326,7 @@ export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,
   etterlevelseStatus: etterlevelse?.status,
+  etterlevelseSuksesskriterieBegrunnelser: etterlevelse?.suksesskriterieBegrunnelser,
   etterlevelseChangeStamp: etterlevelse?.changeStamp,
   gammelVersjon: false,
 })
