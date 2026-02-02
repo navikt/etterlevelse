@@ -145,7 +145,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
                 {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
                   <div>
-                    <div className='my-10'>
+                    <div className='my-10 max-w-[75ch]'>
                       <Alert variant='info' inline>
                         Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen
                         låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere
