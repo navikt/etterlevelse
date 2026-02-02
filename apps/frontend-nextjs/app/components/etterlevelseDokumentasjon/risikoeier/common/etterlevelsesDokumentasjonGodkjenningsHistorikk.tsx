@@ -1,3 +1,5 @@
+'use client'
+
 import {
   IEtterlevelseVersjonHistorikk,
   TEtterlevelseDokumentasjonQL,
@@ -5,7 +7,7 @@ import {
 import { Accordion, FormSummary } from '@navikt/ds-react'
 import { Heading } from '@navikt/ds-react/Typography'
 import moment from 'moment'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -14,6 +16,8 @@ interface IProps {
 export const EtterlevelsesDokumentasjonGodkjenningsHistorikk: FunctionComponent<IProps> = ({
   etterlevelseDokumentasjon,
 }) => {
+  const [openItemId, setOpenItemId] = useState<string | null>(null)
+
   return (
     <div className='my-5 max-w-[75ch]'>
       <Heading level='2' size='medium' className='mb-5'>
@@ -21,20 +25,33 @@ export const EtterlevelsesDokumentasjonGodkjenningsHistorikk: FunctionComponent<
       </Heading>
 
       <Accordion>
-        {etterlevelseDokumentasjon.versjonHistorikk.map((versjon, index) => (
-          <Accordion.Item key={versjon.versjon + '_historikk' + index}>
-            <Accordion.Header>
-              Versjon {versjon.versjon}, godkjent av {versjon.godkjentAvRisikoeier},{' '}
-              {moment(versjon.godkjentAvRisikoierDato).format('LL')}
-            </Accordion.Header>
-            <Accordion.Content>
-              <GodkjenningsHistorikkContent
-                versjonHistorikk={versjon}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              />
-            </Accordion.Content>
-          </Accordion.Item>
-        ))}
+        {etterlevelseDokumentasjon.versjonHistorikk.map((versjon, index) => {
+          const itemId = `${versjon.versjon}_historikk_${index}`
+          const expanded = openItemId === itemId
+          if (versjon.versjon !== etterlevelseDokumentasjon.etterlevelseDokumentVersjon) {
+            return (
+              <Accordion.Item
+                id={itemId}
+                key={itemId}
+                open={expanded}
+                onOpenChange={(open: boolean) => setOpenItemId(open ? itemId : null)}
+              >
+                <Accordion.Header>
+                  Versjon {versjon.versjon}, godkjent av {versjon.godkjentAvRisikoeier},{' '}
+                  {moment(versjon.godkjentAvRisikoierDato).format('LL')}
+                </Accordion.Header>
+                <Accordion.Content>
+                  {expanded && (
+                    <GodkjenningsHistorikkContent
+                      versjonHistorikk={versjon}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                    />
+                  )}
+                </Accordion.Content>
+              </Accordion.Item>
+            )
+          }
+        })}
       </Accordion>
     </div>
   )
