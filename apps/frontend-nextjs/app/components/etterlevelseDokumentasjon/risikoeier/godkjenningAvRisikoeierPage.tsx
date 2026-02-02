@@ -45,6 +45,7 @@ import { Alert, BodyLong, Button, FormSummary, Heading, List } from '@navikt/ds-
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
+import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 
 export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const params: Readonly<
@@ -128,11 +129,11 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             Godkjenn etterlevelsesdokument
           </Heading>
 
-          <Heading level='2' size='medium' className='mb-5'>
-            Godkjenningshistorikk
-          </Heading>
-
-          {/* legg til godkjenningshistorikk når det er på plass */}
+          {etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 && (
+            <EtterlevelsesDokumentasjonGodkjenningsHistorikk
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            />
+          )}
 
           <FormSummary>
             <FormSummary.Header>

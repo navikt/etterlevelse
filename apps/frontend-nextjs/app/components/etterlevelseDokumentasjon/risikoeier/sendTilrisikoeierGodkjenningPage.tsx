@@ -19,11 +19,11 @@ import {
   etterlevelsesDokumentasjonEditUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Accordion, Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import moment from 'moment'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 
 export const SendTilRisikoeierGodkjenningPage = () => {
   const params: Readonly<
@@ -74,23 +74,9 @@ export const SendTilRisikoeierGodkjenningPage = () => {
           </Heading>
 
           {etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 && (
-            <div className='my-5'>
-              <Heading level='2' size='medium' className='mb-5'>
-                Godkjenningshistorikk
-              </Heading>
-
-              <Accordion>
-                {etterlevelseDokumentasjon.versjonHistorikk.map((versjon, index) => (
-                  <Accordion.Item key={versjon.versjon + '_historikk' + index}>
-                    <Accordion.Header>
-                      Versjon {versjon.versjon}, godkjent av {versjon.godkjentAvRisikoeier},{' '}
-                      {moment(versjon.godkjentAvRisikoierDato).format('LL')}
-                    </Accordion.Header>
-                    <Accordion.Content>test wip</Accordion.Content>
-                  </Accordion.Item>
-                ))}
-              </Accordion>
-            </div>
+            <EtterlevelsesDokumentasjonGodkjenningsHistorikk
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            />
           )}
 
           <Heading level='2' size='medium' className='mb-5'>
