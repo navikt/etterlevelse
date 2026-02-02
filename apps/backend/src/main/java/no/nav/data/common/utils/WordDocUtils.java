@@ -770,7 +770,7 @@ public class WordDocUtils {
         List<Boolean> alleAutomatiskBehandling = new ArrayList<>();
         AtomicBoolean manglerOpplysningstyper = new AtomicBoolean(false);
 
-        if (behandlingList != null) {
+        if (behandlingList != null && !behandlingList.isEmpty()) {
             behandlingList.forEach(behandling -> {
                 if (behandling != null) {
                     if (behandling.getPolicies() == null || behandling.getPolicies().isEmpty()) {
