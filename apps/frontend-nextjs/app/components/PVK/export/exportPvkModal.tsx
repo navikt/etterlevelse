@@ -58,6 +58,7 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
               <div className='flex justify-end gap-2'>
                 <Button
                   variant='tertiary'
+                  type='button'
                   onClick={() => {
                     setIsExportModalOpen(false)
                   }}
@@ -66,6 +67,7 @@ export const ExportPvkModal = (props: TExportPvkModalProps) => {
                 </Button>
                 <Button
                   variant='primary'
+                  type='button'
                   onClick={() => {
                     ;(async () => {
                       setIsLoading(true)
