@@ -11,6 +11,7 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGodkjenningsRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
@@ -169,10 +170,10 @@ public class EtterlevelseDokumentasjonController {
     @Operation(summary = "Godkjenning av Etterlevelse Dokumentasjon")
     @ApiResponse(description = "Etterlevelse Dokumentasjon Godkjent")
     @PutMapping("/godkjenning/{id}")
-    public ResponseEntity<EtterlevelseDokumentasjonResponse> updateEtterlevelseDokumentasjonAndApprove(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonRequest request) {
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> updateEtterlevelseDokumentasjonAndApprove(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonGodkjenningsRequest request) {
         log.debug("Godkjenning av Etterlevelse Dokumentasjon id={}", id);
-        if (!Objects.equals(id, request.getId())) {
-            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        if (!Objects.equals(id, request.getEtterlevelseDokumentasjonRequest().getId())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getEtterlevelseDokumentasjonRequest().getId(), id));
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
