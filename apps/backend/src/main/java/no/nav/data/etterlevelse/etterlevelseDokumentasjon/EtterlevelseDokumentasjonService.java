@@ -143,6 +143,10 @@ public class EtterlevelseDokumentasjonService {
             throw new ValidationException("Kan ikke godkjenne dokumentet fordi brukeren ikke er risikoeier ");
         }
 
+        if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getStatus().equals(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)) {
+            throw new ValidationException("Dette dokument er ikke sendt til godkjenning.");
+        }
+
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
 
         if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk() == null) {
