@@ -154,7 +154,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                     </div>
 
                     {saveSuccessfull && (
-                      <div className='my-5'>
+                      <div className='my-5 max-w-[75ch]'>
                         <Alert
                           size='small'
                           variant='success'
