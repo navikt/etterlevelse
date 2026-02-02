@@ -338,7 +338,7 @@ public class EtterlevelseDokumentasjonService {
 
     private List<Behandling> getBehandlingData(List<String> behandlinger) {
         if (behandlinger == null || behandlinger.isEmpty()) {
-            return null;
+            return List.of();
         }
 
         List<Behandling> behandlingList = new ArrayList<>();
