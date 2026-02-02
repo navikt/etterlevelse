@@ -284,7 +284,7 @@ type EtterlevelseDokumentasjon {
 type EtterlevelseVersjonHistorikk {
     versjon: Int
     godkjentAvRisikoeier: String
-    godkjentAvRiskoierDato: DateTime
+    godkjentAvRisikoierDato: DateTime
     nyVersjonOpprettetDato: DateTime
 }
 

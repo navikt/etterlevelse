@@ -13,6 +13,6 @@ public class EtterlevelseVersjonHistorikk {
     @Builder.Default
     private Integer versjon = 1;
     private String godkjentAvRisikoeier;
-    private LocalDateTime godkjentAvRiskoierDato;
+    private LocalDateTime godkjentAvRisikoierDato;
     private LocalDateTime nyVersjonOpprettetDato;
 }

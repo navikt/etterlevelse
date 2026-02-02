@@ -97,10 +97,10 @@ export const EtterlevelseDokumentasjonPage = () => {
               setPvkDokument(pvkDokument)
               setIsRisikoscenarioLoading(true)
               getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL)
-                .then((riskoscenario) => {
-                  setRisikoscenarioList(riskoscenario.content)
+                .then((risikoscenario) => {
+                  setRisikoscenarioList(risikoscenario.content)
                   setKravRisikoscenarioList(
-                    riskoscenario.content.filter(
+                    risikoscenario.content.filter(
                       (r: IRisikoscenario) => r.generelScenario === false
                     )
                   )

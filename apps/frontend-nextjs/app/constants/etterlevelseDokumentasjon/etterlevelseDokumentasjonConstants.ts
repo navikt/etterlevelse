@@ -49,7 +49,7 @@ export interface IEtterlevelseDokumentasjon {
 export interface IEtterlevelseVersjonHistorikk {
   versjon: number
   godkjentAvRisikoeier?: string
-  godkjentAvRiskoierDato?: string
+  godkjentAvRisikoierDato?: string
   nyVersjonOpprettetDato?: string
 }
 

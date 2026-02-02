@@ -161,13 +161,13 @@ public class EtterlevelseDokumentasjonService {
                     EtterlevelseVersjonHistorikk.builder()
                             .versjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
                             .godkjentAvRisikoeier(SecurityUtils.getCurrentName())
-                            .godkjentAvRiskoierDato(LocalDateTime.now())
+                            .godkjentAvRisikoierDato(LocalDateTime.now())
                             .build()
             );
         } else {
             EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
             historikk.setGodkjentAvRisikoeier(SecurityUtils.getCurrentName());
-            historikk.setGodkjentAvRiskoierDato(LocalDateTime.now());
+            historikk.setGodkjentAvRisikoierDato(LocalDateTime.now());
         }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);

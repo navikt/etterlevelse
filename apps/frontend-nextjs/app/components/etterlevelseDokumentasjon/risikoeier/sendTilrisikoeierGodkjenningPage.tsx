@@ -84,7 +84,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                   <Accordion.Item key={versjon.versjon + '_historikk' + index}>
                     <Accordion.Header>
                       Versjon {versjon.versjon}, godkjent av {versjon.godkjentAvRisikoeier},{' '}
-                      {moment(versjon.godkjentAvRiskoierDato).format('LL')}
+                      {moment(versjon.godkjentAvRisikoierDato).format('LL')}
                     </Accordion.Header>
                     <Accordion.Content>test wip</Accordion.Content>
                   </Accordion.Item>

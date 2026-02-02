@@ -4,7 +4,7 @@ import { Alert, BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-re
 import Image from 'next/image'
 import { useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
-import HvordanDokumentereRiskoscenario from './images/HvordanDokumentereRiskoscenario.png'
+import HvordanDokumentereRisikoscenario from './images/HvordanDokumentereRisikoscenario.png'
 import VisHvorJegFinnerDigitalPVK from './images/VisHvorJegFinnerDigitalPVK.png'
 
 const OmPvkPage = () => {
@@ -118,7 +118,7 @@ const OmPvkPage = () => {
           >
             <Image
               className='mr-2.5'
-              src={HvordanDokumentereRiskoscenario}
+              src={HvordanDokumentereRisikoscenario}
               alt='“Skjermbilde fra Støtte til etterlevelse når det er påbegynt PVK. Bildet viser en kravside som har fått en ny fane mellom Mer om kravet og Notat. Ny fane heter “PVK-dokumentasjon”, og vises side om side med etterlevelsesdokumentasjon. Her er brukeren i ferd med å legge til et nytt risikoscenario ved å gi det et navn, en beskrivelse, og vurderinger av scenarioets sannsynlighet og konsekvens.” '
               aria-hidden
               aria-label=''
