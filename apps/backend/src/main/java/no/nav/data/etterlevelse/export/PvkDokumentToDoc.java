@@ -78,6 +78,7 @@ public class PvkDokumentToDoc {
                         .status(PvoTilbakemeldingStatus.UNDERARBEID)
                         .pvoTilbakemeldingData(PvoTilbakemeldingData.builder()
                                 .vurderinger(List.of(Vurdering.builder()
+                                        .etterlevelseDokumentVersjon(1)
                                         .innsendingId(innsendingId)
                                         .merknadTilEtterleverEllerRisikoeier("")
                                         .sendtDato(LocalDateTime.now())
