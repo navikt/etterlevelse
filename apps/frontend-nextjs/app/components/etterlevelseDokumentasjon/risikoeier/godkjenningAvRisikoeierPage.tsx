@@ -27,10 +27,7 @@ import {
   IEtterlevelseDokumentasjonStats,
   IKravTilstandHistorikk,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkVurdering,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
@@ -47,6 +44,8 @@ import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
+import { GodkjenningAvRisikoeierKravFormSummary } from './common/godkjenningAvRisikoeierKravFormSummary'
+import { GodkjenningAvRisikoeierPvkFormSummary } from './common/godkjenningAvRisikoeierPvkFormSummary'
 
 export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const params: Readonly<
@@ -232,70 +231,17 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             </FormSummary.Header>
             <FormSummary.Answers>
               {allKravPriority.length !== 0 &&
-                kravTilstandsHistorikk.map((kravHistorikk) => {
+                kravTilstandsHistorikk.map((kravHistorikk, index) => {
                   return (
-                    <FormSummary.Answer
-                      key={
-                        kravHistorikk.tema +
-                        '_' +
-                        etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                      }
-                    >
-                      <FormSummary.Label>{kravHistorikk.tema}</FormSummary.Label>
-                      <FormSummary.Value>
-                        <FormSummary.Answers>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>Krav</FormSummary.Label>
-                            <FormSummary.Value>
-                              {kravHistorikk.antallKravUnderArbeid} krav er under arbeid,{' '}
-                              {kravHistorikk.antallKravFerdigUtfylt} er ferdig utfylt
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                          <FormSummary.Answer>
-                            <FormSummary.Label>Suksesskriterier</FormSummary.Label>
-                            <FormSummary.Value>
-                              {kravHistorikk.antallSuksesskriterieUnderArbeid} suksesskriterier er
-                              under arbeid, {kravHistorikk.antallSuksesskriterieOppfylt} er oppfylt,{' '}
-                              {kravHistorikk.antallSuksesskriterieOppfylt} er ikke oppfylt,{' '}
-                              {kravHistorikk.antallSuksesskriterieIkkeRelevant} er ikke relevant.
-                            </FormSummary.Value>
-                          </FormSummary.Answer>
-                        </FormSummary.Answers>
-                      </FormSummary.Value>
-                    </FormSummary.Answer>
+                    <GodkjenningAvRisikoeierKravFormSummary
+                      kravHistorikk={kravHistorikk}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      index={index}
+                    />
                   )
                 })}
 
-              <FormSummary.Answer>
-                <FormSummary.Label>Behov for PVK</FormSummary.Label>
-                <FormSummary.Value>
-                  <FormSummary.Answers>
-                    <FormSummary.Answer>
-                      <FormSummary.Label>
-                        Hvilken vurdering har dere kommet fram til?
-                      </FormSummary.Label>
-                      <FormSummary.Value>
-                        {(pvkDokument.pvkVurdering === undefined ||
-                          pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED) &&
-                          'Ingen vurdering'}
-                        {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
-                          'Vi skal gjennomføre en PVK'}
-                        {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE &&
-                          'Vi skal ikke gjennomføre PVK'}
-                      </FormSummary.Value>
-                    </FormSummary.Answer>
-                    <FormSummary.Answer>
-                      <FormSummary.Label>Begrunn vurderingen deres</FormSummary.Label>
-                      <FormSummary.Value>
-                        {pvkDokument.pvkVurderingsBegrunnelse !== '' && (
-                          <Markdown source={pvkDokument.pvkVurderingsBegrunnelse} />
-                        )}
-                        {pvkDokument.pvkVurderingsBegrunnelse === '' && 'Ingen begrunnelse'}
-                      </FormSummary.Value>
-                    </FormSummary.Answer>
-                  </FormSummary.Answers>
-                </FormSummary.Value>
-              </FormSummary.Answer>
+              <GodkjenningAvRisikoeierPvkFormSummary pvkDokument={pvkDokument} />
             </FormSummary.Answers>
           </FormSummary>
 

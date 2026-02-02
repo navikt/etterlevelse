@@ -1,13 +1,19 @@
 'use client'
 
+import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import {
   IEtterlevelseVersjonHistorikk,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Accordion, FormSummary } from '@navikt/ds-react'
 import { Heading } from '@navikt/ds-react/Typography'
 import moment from 'moment'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
+import { GodkjenningAvRisikoeierKravFormSummary } from './godkjenningAvRisikoeierKravFormSummary'
+import { GodkjenningAvRisikoeierPvkFormSummary } from './godkjenningAvRisikoeierPvkFormSummary'
 
 interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -66,65 +72,61 @@ const GodkjenningsHistorikkContent: FunctionComponent<IGodkjenningsHistorikkCont
   versjonHistorikk,
   etterlevelseDokumentasjon,
 }) => {
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    ;(async () => {
+      setIsLoading(true)
+      await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id).then(
+        async (pvkResponse) => {
+          if (pvkResponse && versjonHistorikk.godkjentAvRisikoierDato) {
+            await getAuditByTableIdAndTimeStamp(
+              pvkResponse.id,
+              versjonHistorikk.godkjentAvRisikoierDato
+            ).then((auditResponse) => {
+              if (auditResponse.length !== 0) {
+                const previousData = (auditResponse[0].data as { pvkDokumentData?: IPvkDokument })[
+                  'pvkDokumentData'
+                ]
+                setPvkDokument(previousData)
+              }
+            })
+          }
+        }
+      )
+      setIsLoading(false)
+    })()
+  }, [])
+
   return (
     <div>
-      <FormSummary>
-        <FormSummary.Header>
-          <Heading level='2' size='small'>
-            Oversikt over etterlevelsen
-          </Heading>
-        </FormSummary.Header>
-        <FormSummary.Answers>
-          {versjonHistorikk.kravTilstandHistorikk !== undefined &&
-            versjonHistorikk.kravTilstandHistorikk.map((kravHistorikk) => {
-              return (
-                <FormSummary.Answer
-                  key={
-                    kravHistorikk.tema + '_' + etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                  }
-                >
-                  <FormSummary.Label>{kravHistorikk.tema}</FormSummary.Label>
-                  <FormSummary.Value>
-                    <FormSummary.Answers>
-                      <FormSummary.Answer>
-                        <FormSummary.Label>Krav</FormSummary.Label>
-                        <FormSummary.Value>
-                          {kravHistorikk.antallKravUnderArbeid} krav er under arbeid,{' '}
-                          {kravHistorikk.antallKravFerdigUtfylt} er ferdig utfylt
-                        </FormSummary.Value>
-                      </FormSummary.Answer>
-                      <FormSummary.Answer>
-                        <FormSummary.Label>Suksesskriterier</FormSummary.Label>
-                        <FormSummary.Value>
-                          {kravHistorikk.antallSuksesskriterieUnderArbeid} suksesskriterier er under
-                          arbeid, {kravHistorikk.antallSuksesskriterieOppfylt} er oppfylt,{' '}
-                          {kravHistorikk.antallSuksesskriterieOppfylt} er ikke oppfylt,{' '}
-                          {kravHistorikk.antallSuksesskriterieIkkeRelevant} er ikke relevant.
-                        </FormSummary.Value>
-                      </FormSummary.Answer>
-                    </FormSummary.Answers>
-                  </FormSummary.Value>
-                </FormSummary.Answer>
-              )
-            })}
+      {isLoading && <CenteredLoader />}
+      {!isLoading && (
+        <div>
+          <FormSummary>
+            <FormSummary.Header>
+              <Heading level='2' size='small'>
+                Oversikt over etterlevelsen
+              </Heading>
+            </FormSummary.Header>
+            <FormSummary.Answers>
+              {versjonHistorikk.kravTilstandHistorikk !== undefined &&
+                versjonHistorikk.kravTilstandHistorikk.map((kravHistorikk, index) => {
+                  return (
+                    <GodkjenningAvRisikoeierKravFormSummary
+                      kravHistorikk={kravHistorikk}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      index={index}
+                    />
+                  )
+                })}
 
-          <FormSummary.Answer>
-            <FormSummary.Label>Behov for PVK</FormSummary.Label>
-            <FormSummary.Value>
-              <FormSummary.Answers>
-                <FormSummary.Answer>
-                  <FormSummary.Label>Hvilken vurdering har dere kommet fram til?</FormSummary.Label>
-                  <FormSummary.Value>test</FormSummary.Value>
-                </FormSummary.Answer>
-                <FormSummary.Answer>
-                  <FormSummary.Label>Begrunn vurderingen deres</FormSummary.Label>
-                  <FormSummary.Value>test</FormSummary.Value>
-                </FormSummary.Answer>
-              </FormSummary.Answers>
-            </FormSummary.Value>
-          </FormSummary.Answer>
-        </FormSummary.Answers>
-      </FormSummary>
+              <GodkjenningAvRisikoeierPvkFormSummary pvkDokument={pvkDokument} />
+            </FormSummary.Answers>
+          </FormSummary>
+        </div>
+      )}
     </div>
   )
 }
