@@ -207,7 +207,9 @@ public class PvkDokumentToDoc {
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
         PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId(), pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo());
         Vurdering pvoVurdering = pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()
-                .stream().filter(vurdering -> vurdering.getInnsendingId() == pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo()).toList().getFirst();
+                .stream().filter(vurdering -> vurdering.getInnsendingId() == pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo()
+                        && vurdering.getEtterlevelseDokumentVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
+                ).toList().getFirst();
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
@@ -247,7 +249,7 @@ public class PvkDokumentToDoc {
         } else {
             var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
                     .getMeldingerTilPvo().stream()
-                    .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
+                    .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId && meldingTilPvo.getEtterlevelseDokumentVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())).toList().getFirst();
             doc.addText(latestMeldingTilPvo.getSendtTilPvoAv() + ", " + doc.dateToString(latestMeldingTilPvo.getSendtTilPvoDato().toLocalDate()));
         }
         doc.newLine();
@@ -353,7 +355,7 @@ public class PvkDokumentToDoc {
             } else {
                 var latestMeldingTilPvoOpt = pvkDokument.getPvkDokumentData()
                         .getMeldingerTilPvo().stream()
-                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId)
+                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId && meldingTilPvo.getEtterlevelseDokumentVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()))
                         .findFirst();
                 if (latestMeldingTilPvoOpt.isEmpty() || latestMeldingTilPvoOpt.get().getMerknadTilPvo().isEmpty()) {
                     doc.addText("Ingen merknad.");
@@ -368,7 +370,7 @@ public class PvkDokumentToDoc {
             } else {
                 var latestMeldingTilPvoOpt = pvkDokument.getPvkDokumentData()
                         .getMeldingerTilPvo().stream()
-                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId)
+                        .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId && meldingTilPvo.getEtterlevelseDokumentVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()))
                         .findFirst();
                 if (latestMeldingTilPvoOpt.isEmpty() || latestMeldingTilPvoOpt.get().getMerknadTilPvo().isEmpty()) {
                     doc.addText("Ingen endrings notat.");
