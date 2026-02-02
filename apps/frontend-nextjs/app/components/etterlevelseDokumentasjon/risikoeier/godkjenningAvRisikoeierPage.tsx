@@ -25,6 +25,7 @@ import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
   IEtterlevelseDokumentasjonStats,
+  IKravTilstandHistorikk,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkVurdering,
@@ -44,7 +45,7 @@ import { useQuery } from '@apollo/client/react'
 import { Alert, BodyLong, Button, FormSummary, Heading, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 
 export const GodkjenningAvEtterlevelsesDokumentPage = () => {
@@ -87,6 +88,91 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
 
+  const kravTilstandsHistorikk: IKravTilstandHistorikk[] = useMemo(() => {
+    const tilstandHistorikk: IKravTilstandHistorikk[] = []
+
+    if (allKravPriority.length !== 0) {
+      temaListe.map((tema) => {
+        const relevantStatsKravnummer = relevanteStats.map((k) => k.kravNummer)
+
+        const filteredUtgaatKrav = utgaattStats.filter(
+          ({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer)
+        )
+
+        const kravliste = getKravForTema({
+          tema,
+          kravliste: [...relevanteStats, ...filteredUtgaatKrav],
+          allKravPriority,
+          codelist,
+        })
+
+        const utfylteKrav = kravliste.filter(
+          (krav) =>
+            krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+            krav.etterlevelseStatus === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
+        )
+
+        const underArbeidKrav = kravliste.filter(
+          (krav) =>
+            krav.etterlevelseStatus === EEtterlevelseStatus.UNDER_REDIGERING ||
+            krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG
+        )
+
+        const underArbeidKriterie = []
+        const oppfyltKriterie = []
+        const ikkeOppfyltKriterie = []
+        const ikkeRelevantKriteri = []
+
+        kravliste.forEach((krav) => {
+          if (
+            krav.etterlevelseId !== null &&
+            krav.etterlevelseSuksesskriterieBegrunnelser !== undefined &&
+            krav.etterlevelseSuksesskriterieBegrunnelser.length !== 0
+          ) {
+            underArbeidKriterie.push(
+              ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                (begrunnelse) =>
+                  begrunnelse.suksesskriterieStatus === ESuksesskriterieStatus.UNDER_ARBEID
+              )
+            )
+
+            oppfyltKriterie.push(
+              ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                (begrunnelse) =>
+                  begrunnelse.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
+              )
+            )
+
+            ikkeOppfyltKriterie.push(
+              ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                (begrunnelse) =>
+                  begrunnelse.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT
+              )
+            )
+
+            ikkeRelevantKriteri.push(
+              ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
+                (begrunnelse) =>
+                  begrunnelse.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_RELEVANT
+              )
+            )
+          }
+        })
+
+        tilstandHistorikk.push({
+          tema: tema.shortName,
+          antallKravUnderArbeid: underArbeidKrav.length,
+          antallKravFerdigUtfylt: utfylteKrav.length,
+          antallSuksesskriterieUnderArbeid: underArbeidKriterie.length,
+          antallSuksesskriterieOppfylt: oppfyltKriterie.length,
+          antallSuksesskriterieIkkeOppfylt: ikkeOppfyltKriterie.length,
+          antallSuksesskriterieIkkeRelevant: ikkeRelevantKriteri.length,
+        })
+      })
+    }
+    return tilstandHistorikk
+  }, [allKravPriority, temaListe, relevanteStats, utgaattStats])
+
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
       const updatedEtterlevelseDokumentasjon = { ...response }
@@ -94,7 +180,10 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
         submitValues.meldingEtterlevelerTilRisikoeier
 
-      await godkjennEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
+      await godkjennEtterlevelseDokumentasjon(
+        updatedEtterlevelseDokumentasjon,
+        kravTilstandsHistorikk
+      ).then((resp) => {
         setEtterlevelseDokumentasjon(resp)
       })
     })
@@ -143,95 +232,32 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             </FormSummary.Header>
             <FormSummary.Answers>
               {allKravPriority.length !== 0 &&
-                temaListe.map((tema) => {
-                  const relevantStatsKravnummer = relevanteStats.map((k) => k.kravNummer)
-
-                  const filteredUtgaatKrav = utgaattStats.filter(
-                    ({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer)
-                  )
-
-                  const kravliste = getKravForTema({
-                    tema,
-                    kravliste: [...relevanteStats, ...filteredUtgaatKrav],
-                    allKravPriority,
-                    codelist,
-                  })
-
-                  const utfylteKrav = kravliste.filter(
-                    (krav) =>
-                      krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-                      krav.etterlevelseStatus ===
-                        EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
-                  )
-
-                  const underArbeidKrav = kravliste.filter(
-                    (krav) =>
-                      krav.etterlevelseStatus === EEtterlevelseStatus.UNDER_REDIGERING ||
-                      krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG
-                  )
-
-                  const underArbeidKriterie = []
-                  const oppfyltKriterie = []
-                  const ikkeOppfyltKriterie = []
-                  const ikkeRelevantKriteri = []
-
-                  kravliste.forEach((krav) => {
-                    if (
-                      krav.etterlevelseId !== null &&
-                      krav.etterlevelseSuksesskriterieBegrunnelser !== undefined &&
-                      krav.etterlevelseSuksesskriterieBegrunnelser.length !== 0
-                    ) {
-                      underArbeidKriterie.push(
-                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
-                          (begrunnelse) =>
-                            begrunnelse.suksesskriterieStatus ===
-                            ESuksesskriterieStatus.UNDER_ARBEID
-                        )
-                      )
-
-                      oppfyltKriterie.push(
-                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
-                          (begrunnelse) =>
-                            begrunnelse.suksesskriterieStatus === ESuksesskriterieStatus.OPPFYLT
-                        )
-                      )
-
-                      ikkeOppfyltKriterie.push(
-                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
-                          (begrunnelse) =>
-                            begrunnelse.suksesskriterieStatus ===
-                            ESuksesskriterieStatus.IKKE_OPPFYLT
-                        )
-                      )
-
-                      ikkeRelevantKriteri.push(
-                        ...krav.etterlevelseSuksesskriterieBegrunnelser.filter(
-                          (begrunnelse) =>
-                            begrunnelse.suksesskriterieStatus ===
-                            ESuksesskriterieStatus.IKKE_RELEVANT
-                        )
-                      )
-                    }
-                  })
-
+                kravTilstandsHistorikk.map((kravHistorikk) => {
                   return (
-                    <FormSummary.Answer>
-                      <FormSummary.Label>{tema.shortName}</FormSummary.Label>
+                    <FormSummary.Answer
+                      key={
+                        kravHistorikk.tema +
+                        '_' +
+                        etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                      }
+                    >
+                      <FormSummary.Label>{kravHistorikk.tema}</FormSummary.Label>
                       <FormSummary.Value>
                         <FormSummary.Answers>
                           <FormSummary.Answer>
                             <FormSummary.Label>Krav</FormSummary.Label>
                             <FormSummary.Value>
-                              {underArbeidKrav.length} krav er under arbeid, {utfylteKrav.length} er
-                              ferdig utfylt
+                              {kravHistorikk.antallKravUnderArbeid} krav er under arbeid,{' '}
+                              {kravHistorikk.antallKravFerdigUtfylt} er ferdig utfylt
                             </FormSummary.Value>
                           </FormSummary.Answer>
                           <FormSummary.Answer>
                             <FormSummary.Label>Suksesskriterier</FormSummary.Label>
                             <FormSummary.Value>
-                              {underArbeidKriterie.length} suksesskriterier er under arbeid,{' '}
-                              {oppfyltKriterie.length} er oppfylt, {ikkeOppfyltKriterie.length} er
-                              ikke oppfylt, {ikkeRelevantKriteri.length} er ikke relevant.
+                              {kravHistorikk.antallSuksesskriterieUnderArbeid} suksesskriterier er
+                              under arbeid, {kravHistorikk.antallSuksesskriterieOppfylt} er oppfylt,{' '}
+                              {kravHistorikk.antallSuksesskriterieOppfylt} er ikke oppfylt,{' '}
+                              {kravHistorikk.antallSuksesskriterieIkkeRelevant} er ikke relevant.
                             </FormSummary.Value>
                           </FormSummary.Answer>
                         </FormSummary.Answers>

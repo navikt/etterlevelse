@@ -51,6 +51,17 @@ export interface IEtterlevelseVersjonHistorikk {
   godkjentAvRisikoeier?: string
   godkjentAvRisikoierDato?: string
   nyVersjonOpprettetDato?: string
+  kravTilstandHistorikk?: IKravTilstandHistorikk[]
+}
+
+export interface IKravTilstandHistorikk {
+  tema: string
+  antallKravUnderArbeid: number
+  antallKravFerdigUtfylt: number
+  antallSuksesskriterieUnderArbeid: number
+  antallSuksesskriterieOppfylt: number
+  antallSuksesskriterieIkkeOppfylt: number
+  antallSuksesskriterieIkkeRelevant: number
 }
 
 export enum EEtterlevelseDokumentasjonStatus {

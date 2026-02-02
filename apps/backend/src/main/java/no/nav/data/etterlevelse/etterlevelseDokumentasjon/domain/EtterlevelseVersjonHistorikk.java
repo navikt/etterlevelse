@@ -3,6 +3,7 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,4 +16,7 @@ public class EtterlevelseVersjonHistorikk {
     private String godkjentAvRisikoeier;
     private LocalDateTime godkjentAvRisikoierDato;
     private LocalDateTime nyVersjonOpprettetDato;
+
+    private List<KravTilstandHistorikk> kravTilstandHistorikk;
+
 }

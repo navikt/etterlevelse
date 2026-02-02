@@ -5,10 +5,8 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGodkjenningsRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
@@ -132,7 +130,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                         .build()
         );
 
-        EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
+        EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
                 .update(true)
                 .title(eDok.getTitle())
@@ -140,12 +138,17 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 .meldingRisikoeierTilEtterleveler("test")
                 .build();
 
+        EtterlevelseDokumentasjonGodkjenningsRequest request = EtterlevelseDokumentasjonGodkjenningsRequest.builder()
+                .etterlevelseDokumentasjonRequest(eDokRequest)
+                .kravTilstandHistorikk(List.of(KravTilstandHistorikk.builder().tema("Test tema").build()))
+                .build();
+
         ResponseEntity<EtterlevelseDokumentasjonResponse> resp = restTemplate.exchange(
                 "/etterlevelsedokumentasjon/godkjenning/{id}",
                 HttpMethod.PUT,
                 new HttpEntity<>(request),
                 EtterlevelseDokumentasjonResponse.class,
-                request.getId()
+                request.getEtterlevelseDokumentasjonRequest().getId()
         );
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -160,6 +163,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         EtterlevelseDokumentasjon updated = etterlevelseDokumentasjonRepo.findById(eDok.getId()).orElseThrow();
         assertThat(updated.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
         assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk()).isNotEmpty();
+        assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk().getFirst().getKravTilstandHistorikk().getFirst().getTema()).isEqualTo("Test tema");;
     }
 
     @Test

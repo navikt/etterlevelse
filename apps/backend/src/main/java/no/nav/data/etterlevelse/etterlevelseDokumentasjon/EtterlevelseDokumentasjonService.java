@@ -12,10 +12,7 @@ import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.*;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -136,8 +133,8 @@ public class EtterlevelseDokumentasjonService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public EtterlevelseDokumentasjon approvedOfRisikoeierAndSave(EtterlevelseDokumentasjonRequest request) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
+    public EtterlevelseDokumentasjon approvedOfRisikoeierAndSave(EtterlevelseDokumentasjonGodkjenningsRequest request) {
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getEtterlevelseDokumentasjonRequest().getId());
 
         if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
             throw new ValidationException("Kan ikke godkjenne dokumentet fordi brukeren ikke er risikoeier ");
@@ -162,12 +159,14 @@ public class EtterlevelseDokumentasjonService {
                             .versjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
                             .godkjentAvRisikoeier(SecurityUtils.getCurrentName())
                             .godkjentAvRisikoierDato(LocalDateTime.now())
+                            .kravTilstandHistorikk(request.getKravTilstandHistorikk())
                             .build()
             );
         } else {
             EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
             historikk.setGodkjentAvRisikoeier(SecurityUtils.getCurrentName());
             historikk.setGodkjentAvRisikoierDato(LocalDateTime.now());
+            historikk.setKravTilstandHistorikk(request.getKravTilstandHistorikk());
         }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);

@@ -59,6 +59,4 @@ public class EtterlevelseDokumentasjonData {
     private Integer etterlevelseDokumentVersjon = 1;
     @Builder.Default
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk = List.of(new EtterlevelseVersjonHistorikk());
-
-
 }
