@@ -146,10 +146,14 @@ public class EtterlevelseDokumentasjonController {
         if (!Objects.equals(id, request.getEtterlevelseDokumentasjonRequest().getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getEtterlevelseDokumentasjonRequest().getId(), id));
         }
-        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
-        setHasCurrentUserAccess(response);
-        return ResponseEntity.ok(response);
+        try {
+            var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
+            etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+            setHasCurrentUserAccess(response);
+            return ResponseEntity.ok(response);
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
     }
 
     @Operation(summary = "Update Krav Priority for Etterlevelse Dokumentasjon")
