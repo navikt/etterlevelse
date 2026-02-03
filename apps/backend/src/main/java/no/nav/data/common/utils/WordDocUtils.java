@@ -802,11 +802,11 @@ public class WordDocUtils {
         }
 
         if (alleAutomatiskBehandling.contains(true)) {
-            addMarkdownText("- **Det gjelder** automatisert behandling");
+            addMarkdownText("- **Det gjelder** helautomatisert behandling");
         } else if (alleAutomatiskBehandling.stream().filter(value -> value != null && value.equals(false)).toList().size() == alleAutomatiskBehandling.size()) {
-            addMarkdownText("- **Det gjelder ikke** automatisert behandling");
+            addMarkdownText("- **Det gjelder ikke** helautomatisert behandling");
         } else if (alleAutomatiskBehandling.contains(null)) {
-            addMarkdownText("- Mangler informasjon for å vite om automatisert behandling benyttes");
+            addMarkdownText("- Mangler informasjon for å vite om helautomatisert behandling benyttes");
         }
 
         if (!manglerOpplysningstyper.get() && !saerligKategorierOppsumert.isEmpty()) {
