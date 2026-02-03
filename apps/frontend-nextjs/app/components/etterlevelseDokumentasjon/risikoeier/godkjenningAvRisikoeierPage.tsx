@@ -4,6 +4,7 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
   godkjennEtterlevelseDokumentasjon,
+  updateEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
@@ -31,6 +32,7 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -39,7 +41,7 @@ import {
   getKravForTema,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
-import { Alert, BodyLong, Button, FormSummary, Heading, List } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, FormSummary, Heading, Label, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -54,6 +56,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
     }>
   > = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const codelist = useContext(CodelistContext)
+  const user = useContext(UserContext)
   const temaListe: TTemaCode[] = codelist.utils.getCodes(EListName.TEMA) as TTemaCode[]
 
   const [
@@ -86,6 +89,12 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   ]
 
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const hasAccess =
+    etterlevelseDokumentasjon &&
+    etterlevelseDokumentasjon.hasCurrentUserAccess === true &&
+    etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   const kravTilstandsHistorikk: IKravTilstandHistorikk[] = useMemo(() => {
     const tilstandHistorikk: IKravTilstandHistorikk[] = []
@@ -176,16 +185,30 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
       const updatedEtterlevelseDokumentasjon = { ...response }
       updatedEtterlevelseDokumentasjon.status = submitValues.status
-      updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
-        submitValues.meldingEtterlevelerTilRisikoeier
+      updatedEtterlevelseDokumentasjon.meldingRisikoeierTilEtterleveler =
+        submitValues.meldingRisikoeierTilEtterleveler
 
-      await godkjennEtterlevelseDokumentasjon(
-        updatedEtterlevelseDokumentasjon,
-        kravTilstandsHistorikk
-      ).then((resp) => {
-        setEtterlevelseDokumentasjon(resp)
-        setSaveSuccessfull(true)
-      })
+      if (
+        submitValues.status ===
+        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+      ) {
+        await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
+          setEtterlevelseDokumentasjon(resp)
+          setSaveSuccessfull(true)
+        })
+      } else {
+        await godkjennEtterlevelseDokumentasjon(
+          updatedEtterlevelseDokumentasjon,
+          kravTilstandsHistorikk
+        )
+          .then((resp) => {
+            setEtterlevelseDokumentasjon(resp)
+            setSaveSuccessfull(true)
+          })
+          .catch((error) => {
+            setErrorMessage(error.message)
+          })
+      }
     })
   }
 
@@ -288,70 +311,125 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             </List>
           </div>
 
-          <Formik
-            validateOnChange={false}
-            validateOnBlur={false}
-            initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
-            onSubmit={submit}
-          >
-            {({ submitForm, setFieldValue }) => (
-              <Form>
-                <div className='mt-3 max-w-[75ch]'>
-                  <TextAreaField
-                    rows={5}
-                    height='12.5rem'
-                    noPlaceholder
-                    label='Risikoeiers begrunnelse for godkjenningen'
-                    name='meldingRisikoeierTilEtterleveler'
-                    markdown
-                  />
-                </div>
+          {hasAccess &&
+            etterlevelseDokumentasjon.status ===
+              EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
+              <Formik
+                validateOnChange={false}
+                validateOnBlur={false}
+                initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
+                onSubmit={submit}
+              >
+                {({ submitForm, setFieldValue }) => (
+                  <Form>
+                    <div className='mt-3 max-w-[75ch]'>
+                      <TextAreaField
+                        rows={5}
+                        height='12.5rem'
+                        noPlaceholder
+                        label='Risikoeiers begrunnelse for godkjenningen'
+                        name='meldingRisikoeierTilEtterleveler'
+                        markdown
+                      />
+                    </div>
 
-                {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
-                  <div>
-                    {saveSuccessfull && (
-                      <div className='my-5'>
-                        <Alert
-                          size='small'
-                          variant='success'
-                          closeButton
-                          onClose={() => setSaveSuccessfull(false)}
-                        >
-                          Lagring vellykket
-                        </Alert>
+                    {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
+                      <div>
+                        {saveSuccessfull && (
+                          <div className='my-5'>
+                            <Alert
+                              size='small'
+                              variant='success'
+                              closeButton
+                              onClose={() => setSaveSuccessfull(false)}
+                            >
+                              Lagring vellykket
+                            </Alert>
+                          </div>
+                        )}
+
+                        {errorMessage !== '' && (
+                          <div className='my-5'>
+                            <Alert
+                              size='small'
+                              variant='error'
+                              closeButton
+                              onClose={() => setErrorMessage('')}
+                            >
+                              {errorMessage}
+                            </Alert>
+                          </div>
+                        )}
+
+                        <div className='flex items-center mt-5 gap-2'>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={async () => {
+                              await setFieldValue(
+                                'status',
+                                EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                              )
+                              await submitForm()
+                            }}
+                          >
+                            Lagre og fortsett senere
+                          </Button>
+
+                          <Button
+                            type='button'
+                            variant='primary'
+                            onClick={async () => {
+                              await submitForm()
+                            }}
+                          >
+                            Godkjenn og arkiver i Public360
+                          </Button>
+                        </div>
                       </div>
                     )}
-
-                    <div className='flex items-center mt-5 gap-2'>
-                      <Button
-                        type='button'
-                        variant='secondary'
-                        onClick={async () => {
-                          await setFieldValue(
-                            'status',
-                            EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                          )
-                          await submitForm()
-                        }}
-                      >
-                        Lagre og fortsett senere
-                      </Button>
-
-                      <Button
-                        type='button'
-                        variant='primary'
-                        onClick={async () => {
-                          await submitForm()
-                        }}
-                      >
-                        Godkjenn og arkiver i Public360
-                      </Button>
-                    </div>
-                  </div>
+                  </Form>
                 )}
-              </Form>
+              </Formik>
             )}
-          </Formik>
+
+          {(!hasAccess ||
+            [
+              EEtterlevelseDokumentasjonStatus.UNDER_ARBEID,
+              EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER,
+            ].includes(etterlevelseDokumentasjon.status)) && (
+            <div className='mt-7 mb-5 max-w-[75ch]'>
+              {etterlevelseDokumentasjon.status ===
+                EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER && (
+                <div>
+                  <Label>Risikoeiers begrunnelse for godkjenningen</Label>
+                  <DataTextWrapper>
+                    {etterlevelseDokumentasjon &&
+                      !['', null, undefined].includes(
+                        etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier
+                      ) && (
+                        <Markdown
+                          source={etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier}
+                        />
+                      )}
+
+                    {!etterlevelseDokumentasjon ||
+                      (etterlevelseDokumentasjon &&
+                        ['', null, undefined].includes(
+                          etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier
+                        ) && <BodyLong>Det er ikke lagt til begrunnelse.</BodyLong>)}
+                  </DataTextWrapper>
+                </div>
+              )}
+
+              {etterlevelseDokumentasjon.status ===
+                EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+                <div>
+                  <BodyLong>Etterlevelsesdokumentet er ikke sendt til godkjenning ennå.</BodyLong>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </PageLayout>
