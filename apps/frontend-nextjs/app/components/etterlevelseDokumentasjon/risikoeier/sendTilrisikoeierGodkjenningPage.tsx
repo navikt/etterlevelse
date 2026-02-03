@@ -6,7 +6,9 @@ import {
   updateEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
@@ -14,13 +16,15 @@ import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import alertGif from '@/resources/no_no_no.webp'
 import {
   etterlevelseDokumentasjonIdUrl,
   etterlevelsesDokumentasjonEditUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Alert, BodyLong, Button, Heading, Link, List } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, Label, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
+import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
@@ -56,9 +60,14 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
       await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
         setEtterlevelseDokumentasjon(resp)
+        console.debug(resp)
+        setSaveSuccessfull(true)
       })
     })
   }
+
+  const hasAccess =
+    etterlevelseDokumentasjon && etterlevelseDokumentasjon.hasCurrentUserAccess === true
 
   return (
     <PageLayout
@@ -67,7 +76,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       breadcrumbPaths={breadcrumbPaths}
     >
       {isEtterlevelseDokumentasjonLoading && <CenteredLoader />}
-      {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && (
+
+      {!isEtterlevelseDokumentasjonLoading && hasAccess && (
         <div>
           <Heading level='1' size='large' className='mb-10'>
             Få etterlevelsen godkjent av risikoeier
@@ -125,84 +135,124 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Når risikoeier godkjenner, arkiveres etterlevelsen og godkjenningen i Public 360.
           </BodyLong>
 
-          <Formik
-            validateOnChange={false}
-            validateOnBlur={false}
-            initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
-            onSubmit={submit}
-          >
-            {({ submitForm, setFieldValue }) => (
-              <Form>
-                <div className='mt-3 max-w-[75ch]'>
-                  <TextAreaField
-                    rows={5}
-                    height='12.5rem'
-                    noPlaceholder
-                    label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
-                    name='meldingEtterlevelerTilRisikoeier'
-                    markdown
-                  />
-                </div>
+          {etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+            <Formik
+              validateOnChange={false}
+              validateOnBlur={false}
+              initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
+              onSubmit={submit}
+            >
+              {({ submitForm, setFieldValue }) => (
+                <Form>
+                  <div className='mt-3 max-w-[75ch]'>
+                    <TextAreaField
+                      rows={5}
+                      height='12.5rem'
+                      noPlaceholder
+                      label='Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning'
+                      name='meldingEtterlevelerTilRisikoeier'
+                      markdown
+                    />
+                  </div>
 
-                {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
-                  <div>
-                    <div className='my-10 max-w-[75ch]'>
-                      <Alert variant='info' inline>
-                        Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen
-                        låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere
-                        kunne redigere på nytt.
-                      </Alert>
-                    </div>
-
-                    {saveSuccessfull && (
-                      <div className='my-5 max-w-[75ch]'>
-                        <Alert
-                          size='small'
-                          variant='success'
-                          closeButton
-                          onClose={() => setSaveSuccessfull(false)}
-                        >
-                          Lagring vellykket
+                  {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
+                    <div>
+                      <div className='my-10 max-w-[75ch]'>
+                        <Alert variant='info' inline>
+                          Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen
+                          låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere
+                          kunne redigere på nytt.
                         </Alert>
                       </div>
-                    )}
 
-                    <div className='flex items-center mt-5 gap-2'>
-                      <Button
-                        type='button'
-                        variant='secondary'
-                        onClick={async () => {
-                          await setFieldValue(
-                            'status',
-                            EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
-                          )
-                          await submitForm()
-                          setSaveSuccessfull(true)
-                        }}
-                      >
-                        Lagre og fortsett senere
-                      </Button>
+                      {saveSuccessfull && (
+                        <div className='my-5 max-w-[75ch]'>
+                          <Alert
+                            size='small'
+                            variant='success'
+                            closeButton
+                            onClose={() => setSaveSuccessfull(false)}
+                          >
+                            Lagring vellykket
+                          </Alert>
+                        </div>
+                      )}
 
-                      <Button
-                        type='button'
-                        variant='primary'
-                        onClick={async () => {
-                          await setFieldValue(
-                            'status',
-                            EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                          )
+                      <div className='flex items-center mt-5 gap-2'>
+                        <Button
+                          type='button'
+                          variant='secondary'
+                          onClick={async () => {
+                            await setFieldValue(
+                              'status',
+                              EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+                            )
+                            await submitForm()
+                          }}
+                        >
+                          Lagre og fortsett senere
+                        </Button>
 
-                          await submitForm()
-                        }}
-                      >
-                        Lagre og send til godkjenning
-                      </Button>
+                        <Button
+                          type='button'
+                          variant='primary'
+                          onClick={async () => {
+                            await setFieldValue(
+                              'status',
+                              EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                            )
+
+                            await submitForm()
+                          }}
+                        >
+                          Lagre og send til godkjenning
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Form>
-            )}
-          </Formik>
+                  )}
+                </Form>
+              )}
+            </Formik>
+          )}
+
+          {etterlevelseDokumentasjon.status !== EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+            <div className='mt-7 mb-5 max-w-[75ch]'>
+              <Label>Oppsummer for risikoeier hvorfor det er aktuelt med godkjenning</Label>
+              <DataTextWrapper>
+                {etterlevelseDokumentasjon &&
+                  !['', null, undefined].includes(
+                    etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier
+                  ) && (
+                    <Markdown source={etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier} />
+                  )}
+
+                {!etterlevelseDokumentasjon ||
+                  (etterlevelseDokumentasjon &&
+                    ['', null, undefined].includes(
+                      etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier
+                    ) && <BodyLong>Det er ikke lagt til notat.</BodyLong>)}
+              </DataTextWrapper>
+            </div>
+          )}
+        </div>
+      )}
+
+      {!isEtterlevelseDokumentasjonLoading && !hasAccess && (
+        <div className='flex w-full justify-center'>
+          <div className='flex items-center flex-col gap-5'>
+            <Alert variant='warning'>
+              Du prøvde å komme inn i en side du ikke har tilgang til.
+            </Alert>
+
+            <Image
+              src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW01emp2bzZ1OWZlOWlyOHY4YmxncXQ0ZG9jZ2x0dWg0bGw1eGdvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6Q2KA5ly49368/giphy.webp'
+              alt='no no no'
+              width='400'
+              height='400'
+            />
+
+            <Image src={alertGif} alt='no no no' width='400' />
+          </div>
         </div>
       )}
     </PageLayout>

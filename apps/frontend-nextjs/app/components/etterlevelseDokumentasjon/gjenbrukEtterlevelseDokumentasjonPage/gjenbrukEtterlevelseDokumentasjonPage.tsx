@@ -94,6 +94,7 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
                   src='https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaW01emp2bzZ1OWZlOWlyOHY4YmxncXQ0ZG9jZ2x0dWg0bGw1eGdvOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6Q2KA5ly49368/giphy.webp'
                   alt='no no no'
                   width='400'
+                  height='400'
                 />
               </div>
             </div>
