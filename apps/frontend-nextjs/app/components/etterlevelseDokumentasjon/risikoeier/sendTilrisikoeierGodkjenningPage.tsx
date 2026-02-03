@@ -60,7 +60,6 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
       await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
         setEtterlevelseDokumentasjon(resp)
-        console.debug(resp)
         setSaveSuccessfull(true)
       })
     })
