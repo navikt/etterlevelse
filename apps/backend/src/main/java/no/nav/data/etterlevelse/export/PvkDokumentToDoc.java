@@ -293,9 +293,12 @@ public class PvkDokumentToDoc {
         doc.addListItem("Behandlingens livsløp", currListId, "Behandlingens_livsløp_bookmark");
         doc.addListItem("Bør vi gjøre en PVK?", currListId, "pvk_behov");
         doc.addListItem("Behandlingens art og omfang", currListId, "pvk_art_og_omfang");
-        doc.addListItem("Tilhørende dokumentasjon", currListId, "pvk_tilhorende_dokumentasjon");
-        doc.addListItem("Innvolvering av eksterne", currListId, "pvk_innvolvering_av_ekstern");
-        doc.addListItem("Risikoscenario og tiltak", currListId, "pvk_risikoscenario_og_tiltak");
+
+        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_UTFORE) {
+            doc.addListItem("Tilhørende dokumentasjon", currListId, "pvk_tilhorende_dokumentasjon");
+            doc.addListItem("Innvolvering av eksterne", currListId, "pvk_innvolvering_av_ekstern");
+            doc.addListItem("Risikoscenario og tiltak", currListId, "pvk_risikoscenario_og_tiltak");
+        }
 
         doc.pageBreak();
 
