@@ -69,6 +69,17 @@ public class EtterlevelseDokumentasjonToDoc {
         doc.addSubtitle("E" + etterlevelseDokumentasjon.getEtterlevelseNummer() + ": " + etterlevelseDokumentasjon.getTitle());
         doc.addText("Exportert " + formatter.format(date));
 
+        doc.newLine();
+
+        doc.addHeading3("Dokumentbeskrivelse");
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getBeskrivelse() == null || etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getBeskrivelse().isEmpty()) {
+            doc.addMarkdownText("Ingen beskrivelse");
+        } else {
+            doc.addMarkdownText(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getBeskrivelse());
+        }
+
+        doc.newLine();
+
         if (etterlevelseDokumentasjon.getBehandlingIds() != null && !etterlevelseDokumentasjon.getBehandlingIds().isEmpty()) {
             doc.addHeading3("Knyttet behandling");
             etterlevelseDokumentasjon.getBehandlingIds().forEach(behandlingId -> {
