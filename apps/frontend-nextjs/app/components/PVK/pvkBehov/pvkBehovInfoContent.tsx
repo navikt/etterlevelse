@@ -95,7 +95,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
 
         {automatiskBehandling !== null && (
           <List.Item>
-            <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong> automatisert
+            <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong> helautomatisert
             behandling
           </List.Item>
         )}
@@ -113,7 +113,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
           <List>
             {profilering === null && <List.Item>Profilering</List.Item>}
-            {automatiskBehandling === null && <List.Item>Automatisert behandling</List.Item>}
+            {automatiskBehandling === null && <List.Item>Helautomatisert behandling</List.Item>}
             {opplysningstyperMangler && (
               <List.Item>Særlige kategorier av personopplysninger</List.Item>
             )}
