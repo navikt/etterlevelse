@@ -56,7 +56,8 @@ public class P360Controller {
     public ResponseEntity<EtterlevelseDokumentasjonResponse> archiveDocument(@RequestParam(name = "etterlevelseDokumentasjonId", required = false) UUID etterlevelseDokumentasjonId,
                                                                              @RequestParam(name = "onlyActiveKrav", required = false) boolean onlyActiveKrav,
                                                                              @RequestParam(name = "pvoTilbakemelding", required = false) boolean pvoTilbakemelding,
-                                                                             @RequestParam(name = "risikoeier", required = false) boolean risikoeier) {
+                                                                             @RequestParam(name = "risikoeier", required = false) boolean risikoeier,
+                                                                             @RequestParam(name = "godkjenning", required = false) boolean godkjenning) {
         log.info("Archiving etterlevelse dokumentasjon with id {}", etterlevelseDokumentasjonId);
         var eDok = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
         var pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId);
@@ -97,12 +98,14 @@ public class P360Controller {
                 documentTitle += pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". Tilbakemelding fra Personvernombudet for ";
             } else if (risikoeier) {
                 documentTitle += "Personvernkonsekvensvurdering for ";
+            } else if (godkjenning) {
+                documentTitle += "Godkjent etterlevelse ";
             }
 
-            documentTitle += "E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -").trim();
+            documentTitle += "E" + eDok.getEtterlevelseNummer() + " versjon " + eDok.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon() + ", " + eDok.getTitle().replace(":", " -").trim();
 
             //Opprette word doc filen
-            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, (pvoTilbakemelding || risikoeier));
+            byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, (pvoTilbakemelding || risikoeier || godkjenning));
 
             // hente behandlingenslivslop filene
             var behandlingenslivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(eDok.getId()).orElse(new BehandlingensLivslop());
@@ -123,7 +126,7 @@ public class P360Controller {
                     .Base64Data(Base64.getEncoder().encodeToString(wordFile))
                     .build());
 
-            if (pvoTilbakemelding || risikoeier) {
+            if (pvoTilbakemelding || risikoeier || godkjenning) {
                 BLLFiler.forEach(behandlingensLivslopFil -> {
                     String[] bllFileName = behandlingensLivslopFil.getFilnavn().split("\\.");
                     filer.add(

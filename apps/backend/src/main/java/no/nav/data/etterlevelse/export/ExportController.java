@@ -160,7 +160,10 @@ public class ExportController {
 
         if (etterlevelseId != null) {
             Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
-            filename += etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId()).getEtterlevelseNummer() + ".docx";
+            var eDok = etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId());
+            filename += eDok.getEtterlevelseNummer() + "."
+                    + eDok.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()
+                    + ".docx";
             log.info("Exporting 1 etterlevelse to doc");
             doc = etterlevelseDokumentasjonToDoc.generateDocForEtterlevelse(etterlevelseId);
         } else if (etterlevelseDokumentasjonId != null) {
@@ -170,13 +173,16 @@ public class ExportController {
 
             if (temaKode != null) {
                 log.info("Exporting list of etterlevelse for etterlevelse dokumentasjon with id " + etterlevelseDokumentasjonId + " to doc filtered by tema");
-                filename += etterlevelseDokumentasjon.getEtterlevelseNummer() + "filtert_med_tema_" + temaKode;
+                filename += etterlevelseDokumentasjon.getEtterlevelseNummer()
+                        + "." + etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()
+                        + "filtert_med_tema_" + temaKode;
 
                 codelistService.validateListNameAndCode(ListName.TEMA.name(), temaKode);
                 lover = codeUsageService.findCodeUsage(ListName.TEMA, temaKode).getCodelist().stream().map(Codelist::getCode).toList();
             } else {
                 lover = new ArrayList<>();
-                filename += etterlevelseDokumentasjon.getEtterlevelseNummer();
+                filename += etterlevelseDokumentasjon.getEtterlevelseNummer() + "."
+                        + etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon();
             }
 
             doc = etterlevelseDokumentasjonToDoc.generateDocFor(etterlevelseDokumentasjonId, statusKoder, lover, onlyActiveKrav, false);
@@ -212,14 +218,18 @@ public class ExportController {
         SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
         Date date = new Date();
 
-        String filename = "attachment; filename=" + titleDateformatter.format(date) + "_Etterlevelse_E" + eDok.getEtterlevelseNummer();
+        String filename = "attachment; filename=" + titleDateformatter.format(date)
+                + "_Etterlevelse_E" + eDok.getEtterlevelseNummer()
+                + "." + eDok.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon();
         if (onlyActiveKrav) {
             filename += "_kun_gjeldende_krav_versjon.zip";
         } else {
             filename += "_alle_krav_versjone.zip";
         }
 
-        String documentTitle  = "Personvernkonsekvensvurdering for E" + eDok.getEtterlevelseNummer() + " " + eDok.getTitle().replace(":", " -").trim();
+        String documentTitle = "Personvernkonsekvensvurdering for E" + eDok.getEtterlevelseNummer()
+                + " versjon " + eDok.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()
+                + ", " + eDok.getTitle().replace(":", " -").trim();
 
         byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, true);
 
