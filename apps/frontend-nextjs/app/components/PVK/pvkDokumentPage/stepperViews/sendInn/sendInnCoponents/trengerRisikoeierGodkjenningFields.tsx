@@ -147,7 +147,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
                   )
                   await submitForm().then(async () => {
                     if (_.isEmpty(errors)) {
-                      await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+                      await arkiver(etterlevelseDokumentasjon.id, true, false, true, false)
                     }
                   })
                 }}

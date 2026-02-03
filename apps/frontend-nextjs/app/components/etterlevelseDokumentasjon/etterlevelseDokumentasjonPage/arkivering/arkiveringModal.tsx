@@ -103,7 +103,7 @@ export const ArkiveringModal = ({
             onClick={async () => {
               setErrorMessageOpen(null)
               setIsLoading(true)
-              await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false)
+              await arkiver(etterlevelseDokumentasjon.id, onlyActiveKrav, false, false, false)
                 .then((response) => {
                   setSuccessMessageOpen(true)
                   setEtterlevelseDokumentasjon({

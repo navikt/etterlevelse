@@ -207,7 +207,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
           )
             .then(async (resp) => {
               setEtterlevelseDokumentasjon(resp)
-              await arkiver(updatedEtterlevelseDokumentasjon.id, true, false, true)
+              await arkiver(updatedEtterlevelseDokumentasjon.id, true, false, false, true)
               setSaveSuccessfull(true)
             })
             .catch((error) => {

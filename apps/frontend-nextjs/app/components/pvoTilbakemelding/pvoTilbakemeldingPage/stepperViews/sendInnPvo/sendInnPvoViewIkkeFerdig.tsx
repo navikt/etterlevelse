@@ -399,7 +399,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 await submitForm().then(async () => {
                   if (_.isEmpty(formRef.current.errors)) {
                     if (!env.isDev) {
-                      await arkiver(etterlevelseDokumentasjon.id, true, true, false)
+                      await arkiver(etterlevelseDokumentasjon.id, true, true, false, false)
                     }
                   }
                 })

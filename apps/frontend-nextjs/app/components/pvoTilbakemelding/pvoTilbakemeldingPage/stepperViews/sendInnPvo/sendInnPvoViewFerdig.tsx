@@ -112,7 +112,7 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
                 type='button'
                 onClick={async () => {
                   if (!env.isDev) {
-                    await arkiver(pvkDokument.etterlevelseDokumentId, true, true, false)
+                    await arkiver(pvkDokument.etterlevelseDokumentId, true, true, false, false)
                   }
                 }}
               >

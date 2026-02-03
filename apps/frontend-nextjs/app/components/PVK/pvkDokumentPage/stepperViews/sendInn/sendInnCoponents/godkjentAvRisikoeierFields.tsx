@@ -99,7 +99,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
             <Button
               type='button'
               onClick={async () => {
-                await arkiver(etterlevelseDokumentasjon.id, true, false, true)
+                await arkiver(etterlevelseDokumentasjon.id, true, false, true, false)
               }}
             >
               Arkiver kun synlig for ADMIN :D
