@@ -184,6 +184,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
         kravTilstandsHistorikk
       ).then((resp) => {
         setEtterlevelseDokumentasjon(resp)
+        setSaveSuccessfull(true)
       })
     })
   }
@@ -331,7 +332,6 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                             EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
                           )
                           await submitForm()
-                          setSaveSuccessfull(true)
                         }}
                       >
                         Lagre og fortsett senere
