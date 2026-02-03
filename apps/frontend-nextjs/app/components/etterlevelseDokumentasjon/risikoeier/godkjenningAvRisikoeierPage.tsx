@@ -42,6 +42,7 @@ import {
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
 import { Alert, BodyLong, Button, FormSummary, Heading, Label, List } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -188,26 +189,33 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       updatedEtterlevelseDokumentasjon.meldingRisikoeierTilEtterleveler =
         submitValues.meldingRisikoeierTilEtterleveler
 
-      if (
-        submitValues.status ===
-        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-      ) {
-        await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
-          setEtterlevelseDokumentasjon(resp)
-          setSaveSuccessfull(true)
-        })
-      } else {
-        await godkjennEtterlevelseDokumentasjon(
-          updatedEtterlevelseDokumentasjon,
-          kravTilstandsHistorikk
-        )
-          .then((resp) => {
+      const hasUpdatedUserAccess =
+        response.hasCurrentUserAccess === true && response.risikoeiere.includes(user.getIdent())
+
+      if (hasUpdatedUserAccess) {
+        if (
+          submitValues.status ===
+          EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+        ) {
+          await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
             setEtterlevelseDokumentasjon(resp)
             setSaveSuccessfull(true)
           })
-          .catch((error) => {
-            setErrorMessage(error.message)
-          })
+        } else {
+          await godkjennEtterlevelseDokumentasjon(
+            updatedEtterlevelseDokumentasjon,
+            kravTilstandsHistorikk
+          )
+            .then((resp) => {
+              setEtterlevelseDokumentasjon(resp)
+              setSaveSuccessfull(true)
+            })
+            .catch((error: AxiosError) => {
+              setErrorMessage((error.response?.data as { message: string }).message)
+            })
+        }
+      } else {
+        setErrorMessage('Kan ikke godkjenne dokumentet fordi brukeren ikke er risikoeier')
       }
     })
   }
@@ -380,6 +388,10 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                             type='button'
                             variant='primary'
                             onClick={async () => {
+                              await setFieldValue(
+                                'status',
+                                EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
+                              )
                               await submitForm()
                             }}
                           >
@@ -419,6 +431,19 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                           etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier
                         ) && <BodyLong>Det er ikke lagt til begrunnelse.</BodyLong>)}
                   </DataTextWrapper>
+
+                  {saveSuccessfull && (
+                    <div className='my-5'>
+                      <Alert
+                        size='small'
+                        variant='success'
+                        closeButton
+                        onClose={() => setSaveSuccessfull(false)}
+                      >
+                        Godkjenning og arkvering vellyket
+                      </Alert>
+                    </div>
+                  )}
                 </div>
               )}
 
