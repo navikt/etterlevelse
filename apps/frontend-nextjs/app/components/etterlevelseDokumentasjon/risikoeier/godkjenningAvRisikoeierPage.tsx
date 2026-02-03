@@ -8,6 +8,7 @@ import {
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
+import { arkiver } from '@/api/p360/p360Api'
 import {
   getPvkDokumentByEtterlevelseDokumentId,
   mapPvkDokumentToFormValue,
@@ -42,7 +43,6 @@ import {
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
 import { Alert, BodyLong, Button, FormSummary, Heading, Label, List } from '@navikt/ds-react'
-import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -189,10 +189,9 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       updatedEtterlevelseDokumentasjon.meldingRisikoeierTilEtterleveler =
         submitValues.meldingRisikoeierTilEtterleveler
 
-      const hasUpdatedUserAccess =
-        response.hasCurrentUserAccess === true && response.risikoeiere.includes(user.getIdent())
-
-      if (hasUpdatedUserAccess) {
+      if (
+        response.status === EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+      ) {
         if (
           submitValues.status ===
           EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
@@ -206,16 +205,17 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             updatedEtterlevelseDokumentasjon,
             kravTilstandsHistorikk
           )
-            .then((resp) => {
+            .then(async (resp) => {
               setEtterlevelseDokumentasjon(resp)
+              await arkiver(updatedEtterlevelseDokumentasjon.id, true, false, true)
               setSaveSuccessfull(true)
             })
-            .catch((error: AxiosError) => {
-              setErrorMessage((error.response?.data as { message: string }).message)
+            .catch((error) => {
+              setErrorMessage(error.message)
             })
         }
       } else {
-        setErrorMessage('Kan ikke godkjenne dokumentet fordi brukeren ikke er risikoeier')
+        setErrorMessage(`Kan ikke endre godkjenning siden statusen er ${response.status}.`)
       }
     })
   }
@@ -440,7 +440,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                         closeButton
                         onClose={() => setSaveSuccessfull(false)}
                       >
-                        Godkjenning og arkvering vellyket
+                        Godkjent og arkivert i Public 360
                       </Alert>
                     </div>
                   )}
