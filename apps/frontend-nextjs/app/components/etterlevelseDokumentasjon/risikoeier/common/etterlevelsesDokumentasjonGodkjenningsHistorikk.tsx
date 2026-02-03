@@ -2,14 +2,17 @@
 
 import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { Markdown } from '@/components/common/markdown/markdown'
 import {
+  IEtterlevelseDokumentasjon,
   IEtterlevelseVersjonHistorikk,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Accordion, FormSummary } from '@navikt/ds-react'
-import { Heading } from '@navikt/ds-react/Typography'
+import { BodyLong, Heading } from '@navikt/ds-react/Typography'
 import moment from 'moment'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { GodkjenningAvRisikoeierKravFormSummary } from './godkjenningAvRisikoeierKravFormSummary'
@@ -72,7 +75,9 @@ const GodkjenningsHistorikkContent: FunctionComponent<IGodkjenningsHistorikkCont
   versjonHistorikk,
   etterlevelseDokumentasjon,
 }) => {
-  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [previousPvkDokument, setPreviousPvkDokument] = useState<IPvkDokument>()
+  const [previousEtterlevelsesDokument, setPreviousEtterlevelsesDokument] =
+    useState<IEtterlevelseDokumentasjon>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -89,7 +94,21 @@ const GodkjenningsHistorikkContent: FunctionComponent<IGodkjenningsHistorikkCont
                 const previousData = (auditResponse[0].data as { pvkDokumentData?: IPvkDokument })[
                   'pvkDokumentData'
                 ]
-                setPvkDokument(previousData)
+                setPreviousPvkDokument(previousData)
+              }
+            })
+
+            await getAuditByTableIdAndTimeStamp(
+              etterlevelseDokumentasjon.id,
+              versjonHistorikk.godkjentAvRisikoierDato
+            ).then((auditResponse) => {
+              if (auditResponse.length !== 0) {
+                const previousData = (
+                  auditResponse[0].data as {
+                    etterlevelseDokumentasjonData?: IEtterlevelseDokumentasjon
+                  }
+                )['etterlevelseDokumentasjonData']
+                setPreviousEtterlevelsesDokument(previousData)
               }
             })
           }
@@ -122,9 +141,49 @@ const GodkjenningsHistorikkContent: FunctionComponent<IGodkjenningsHistorikkCont
                   )
                 })}
 
-              <GodkjenningAvRisikoeierPvkFormSummary pvkDokument={pvkDokument} />
+              <GodkjenningAvRisikoeierPvkFormSummary pvkDokument={previousPvkDokument} />
             </FormSummary.Answers>
           </FormSummary>
+
+          <div className='mb-5 mt-7'>
+            <Heading level='2' size='medium' className='mb-5'>
+              Etterleverens notat til risikoeier
+            </Heading>
+            <DataTextWrapper>
+              {previousEtterlevelsesDokument &&
+                !['', null, undefined].includes(
+                  previousEtterlevelsesDokument.meldingEtterlevelerTilRisikoeier
+                ) && (
+                  <Markdown source={etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier} />
+                )}
+
+              {!previousEtterlevelsesDokument ||
+                (previousEtterlevelsesDokument &&
+                  ['', null, undefined].includes(
+                    previousEtterlevelsesDokument.meldingEtterlevelerTilRisikoeier
+                  ) && <BodyLong>Det er ikke lagt til notat.</BodyLong>)}
+            </DataTextWrapper>
+          </div>
+
+          <div className='mb-5 mt-7'>
+            <Heading level='2' size='medium' className='mb-5'>
+              Risikoeiers godkjenningsmelding
+            </Heading>
+            <DataTextWrapper>
+              {previousEtterlevelsesDokument &&
+                !['', null, undefined].includes(
+                  previousEtterlevelsesDokument.meldingRisikoeierTilEtterleveler
+                ) && (
+                  <Markdown source={etterlevelseDokumentasjon.meldingRisikoeierTilEtterleveler} />
+                )}
+
+              {!previousEtterlevelsesDokument ||
+                (previousEtterlevelsesDokument &&
+                  ['', null, undefined].includes(
+                    previousEtterlevelsesDokument.meldingRisikoeierTilEtterleveler
+                  ) && <BodyLong>Det er ikke lagt til melding til etterlever.</BodyLong>)}
+            </DataTextWrapper>
+          </div>
         </div>
       )}
     </div>

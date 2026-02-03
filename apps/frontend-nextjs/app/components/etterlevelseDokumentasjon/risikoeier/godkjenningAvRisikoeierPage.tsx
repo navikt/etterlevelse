@@ -255,7 +255,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
               ) && <Markdown source={etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier} />}
               {['', null, undefined].includes(
                 etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier
-              ) && <BodyLong>Ingen notat er lagt til.</BodyLong>}
+              ) && <BodyLong>Det er ikke lagt til notat.</BodyLong>}
             </DataTextWrapper>
           </div>
 
