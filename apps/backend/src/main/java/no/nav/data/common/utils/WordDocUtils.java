@@ -798,7 +798,7 @@ public class WordDocUtils {
         } else if (alleProfilering.stream().filter(value -> value != null && value.equals(false)).toList().size() == alleProfilering.size()) {
             addMarkdownText("- **Det gjelder ikke** profilering");
         } else if (alleProfilering.contains(null)) {
-            addMarkdownText("- Mangler informasjon for å vite om profilering");
+            addMarkdownText("- Mangler informasjon for å vite om profilering benyttes");
         }
 
         if (alleAutomatiskBehandling.contains(true)) {
@@ -806,7 +806,7 @@ public class WordDocUtils {
         } else if (alleAutomatiskBehandling.stream().filter(value -> value != null && value.equals(false)).toList().size() == alleAutomatiskBehandling.size()) {
             addMarkdownText("- **Det gjelder ikke** automatisert behandling");
         } else if (alleAutomatiskBehandling.contains(null)) {
-            addMarkdownText("- Mangler informasjon for å vite om automatisert behandling");
+            addMarkdownText("- Mangler informasjon for å vite om automatisert behandling benyttes");
         }
 
         if (!manglerOpplysningstyper.get() && !saerligKategorierOppsumert.isEmpty()) {
@@ -814,7 +814,7 @@ public class WordDocUtils {
         } else if (!manglerOpplysningstyper.get() && saerligKategorierOppsumert.isEmpty()) {
             addMarkdownText("- **Det gjelder ikke** saerlig kategorier");
         } else if (manglerOpplysningstyper.get()) {
-            addMarkdownText("- Mangler informasjon for å vite saerlig kategorier");
+            addMarkdownText("- Mangler informasjon for å vite om saerlige kategorier av personopplysninger benyttes");
         }
 
     }
