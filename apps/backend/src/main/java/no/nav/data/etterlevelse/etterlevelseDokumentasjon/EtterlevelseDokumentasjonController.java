@@ -54,36 +54,7 @@ public class EtterlevelseDokumentasjonController {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(id));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
-        
-        boolean resourceIsEmpty = response.getResources() == null || response.getResources().isEmpty();
-        boolean teamIsEmpty = response.getTeams() == null || response.getTeams().isEmpty();
-        boolean risikoeiereIsEmpty = response.getRisikoeiere() == null || response.getRisikoeiere().isEmpty();
-
-        if (resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
-            response.setHasCurrentUserAccess(true);
-        } else {
-            List<String> memeberList = new ArrayList<>();
-            if (!resourceIsEmpty) {
-                memeberList.addAll(response.getResources());
-            }
-            if (!risikoeiereIsEmpty) {
-                memeberList.addAll(response.getRisikoeiere());
-            }
-            if (!teamIsEmpty) {
-                response.getTeamsData().forEach((team) -> {
-                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
-                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
-                    }
-                });
-            }
-            try {
-                String currentUser = SecurityUtils.getCurrentIdent();
-                response.setHasCurrentUserAccess(memeberList.contains(currentUser));
-            } catch (ValidationException e) {
-                response.setHasCurrentUserAccess(false);
-            }
-        }
-
+        setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
 
@@ -149,7 +120,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
-
+        setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
 
@@ -163,7 +134,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateAndIncreaseVersion(request));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
-
+        setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
 
@@ -177,7 +148,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
-
+        setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
 
@@ -191,7 +162,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateKravPriority(request));
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
-
+        setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
 
@@ -209,6 +180,7 @@ public class EtterlevelseDokumentasjonController {
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelationWithEtterlevelseAndBehandlingenslivslopCopy(fromDocumentId ,request);
         var response = EtterlevelseDokumentasjonResponse.buildFrom(newEtterlevelseDokumentasjon);
         etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
 
@@ -226,5 +198,36 @@ public class EtterlevelseDokumentasjonController {
     }
 
     static class EtterlevelseDokumentasjonPage extends RestResponsePage<EtterlevelseDokumentasjonResponse> {
+    }
+
+    private void setHasCurrentUserAccess(EtterlevelseDokumentasjonResponse response) {
+        boolean resourceIsEmpty = response.getResources() == null || response.getResources().isEmpty();
+        boolean teamIsEmpty = response.getTeams() == null || response.getTeams().isEmpty();
+        boolean risikoeiereIsEmpty = response.getRisikoeiere() == null || response.getRisikoeiere().isEmpty();
+
+        if (resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
+            response.setHasCurrentUserAccess(true);
+        } else {
+            List<String> memeberList = new ArrayList<>();
+            if (!resourceIsEmpty) {
+                memeberList.addAll(response.getResources());
+            }
+            if (!risikoeiereIsEmpty) {
+                memeberList.addAll(response.getRisikoeiere());
+            }
+            if (!teamIsEmpty) {
+                response.getTeamsData().forEach((team) -> {
+                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
+                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
+                    }
+                });
+            }
+            try {
+                String currentUser = SecurityUtils.getCurrentIdent();
+                response.setHasCurrentUserAccess(memeberList.contains(currentUser));
+            } catch (ValidationException e) {
+                response.setHasCurrentUserAccess(false);
+            }
+        }
     }
 }
