@@ -1,16 +1,16 @@
 import { EPVKTilstandStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
 import {
-  AdminMedAlleAndreRollerOgsaSkruddPaVariantOne,
-  AdminMedAlleAndreRollerOgsaSkruddPaVariantThree,
-  AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo,
-} from '../commonPVK/adminMedAlleAndreRollerOgsaSkruddPaCommonPVK'
-import {
-  CommonVariantFive,
-  CommonVariantFour,
-  CommonVariantSeven,
-  CommonVariantSix,
+  CommonVariantFivePVK,
+  CommonVariantFourPVK,
+  CommonVariantSevenPVK,
+  CommonVariantSixPVK,
 } from '../commonPVK/commonPVK'
+import {
+  EtterleverVariantOne,
+  EtterleverVariantThree,
+  EtterleverVariantTwo,
+} from '../commonPVK/etterleverCommonPVK'
 
 // type TProps = {
 //   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -20,12 +20,12 @@ import {
 //   isRisikoeier: boolean
 // }
 
-const test: string = EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN
+const test: string = EPVKTilstandStatus.TILSTAND_STATUS_TEN
 
 // EPVKTilstandStatus
 // PVKTilstandStatusRolle
 
-const AdminMedAlleAndreRollerOgsaSkruddPaRolle: FunctionComponent = (
+const EtterleverRollePVK: FunctionComponent = (
   {
     //   etterlevelseDokumentasjon,
     //   behandlingsLivslop,
@@ -36,30 +36,30 @@ const AdminMedAlleAndreRollerOgsaSkruddPaRolle: FunctionComponent = (
 ) => {
   switch (test) {
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return <CommonVariantFour />
+      return <CommonVariantFourPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
-      return <CommonVariantFour />
+      return <EtterleverVariantOne />
     case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
-      return <AdminMedAlleAndreRollerOgsaSkruddPaVariantOne />
+      return <EtterleverVariantTwo />
     case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
-      return <CommonVariantFive />
+      return <CommonVariantFivePVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <CommonVariantSix />
+      return <CommonVariantSixPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
-      return <CommonVariantSeven />
+      return <CommonVariantSevenPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <CommonVariantSix />
+      return <CommonVariantSixPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
-      return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
+      return <CommonVariantSixPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
-      return <AdminMedAlleAndreRollerOgsaSkruddPaVariantThree />
+      return <EtterleverVariantThree />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
-      return <CommonVariantFive />
+      return <CommonVariantFivePVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:
-      return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
+      return <CommonVariantSixPVK />
     default:
       return <></>
   }
 }
 
-export default AdminMedAlleAndreRollerOgsaSkruddPaRolle
+export default EtterleverRollePVK

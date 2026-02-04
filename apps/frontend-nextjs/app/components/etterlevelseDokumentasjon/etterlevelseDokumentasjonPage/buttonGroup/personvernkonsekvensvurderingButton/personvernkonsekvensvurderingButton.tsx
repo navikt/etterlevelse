@@ -3,10 +3,10 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { FunctionComponent } from 'react'
-import AdminMedAlleAndreRollerOgsaSkruddPaRolle from './adminMedAlleAndreRollerOgsaSkruddPaRolle/adminMedAlleAndreRollerOgsaSkruddPaRolle'
-import EtterleverRolle from './etterleverRolle/etterleverRolle'
-import PersonvernombudRolle from './personvernombudRolle/personvernombudRolle'
-import RisikoeierRolle from './risikoeierRolle/risikoeierRolle'
+import AdminMedAlleAndreRollerOgsaSkruddPaRollePVK from './adminMedAlleAndreRollerOgsaSkruddPaRollePVK/adminMedAlleAndreRollerOgsaSkruddPaRollePVK'
+import EtterleverRollePVK from './etterleverRollePVK/etterleverRollePVK'
+import PersonvernombudRollePVK from './personvernombudRollePVK/personvernombudRollePVK'
+import RisikoeierRollePVK from './risikoeierRollePVK/risikoeierRollePVK'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -30,7 +30,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
   switch (test) {
     case 'Etterlever':
       return (
-        <EtterleverRolle
+        <EtterleverRollePVK
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}
@@ -40,7 +40,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
       )
     case 'Personvernombud':
       return (
-        <PersonvernombudRolle
+        <PersonvernombudRollePVK
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}
@@ -50,7 +50,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
       )
     case 'Risikoeier':
       return (
-        <RisikoeierRolle
+        <RisikoeierRollePVK
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}
@@ -60,7 +60,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
       )
     case 'Admin med alle andre roller ogsa skrudd pa':
       return (
-        <AdminMedAlleAndreRollerOgsaSkruddPaRolle
+        <AdminMedAlleAndreRollerOgsaSkruddPaRollePVK
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}

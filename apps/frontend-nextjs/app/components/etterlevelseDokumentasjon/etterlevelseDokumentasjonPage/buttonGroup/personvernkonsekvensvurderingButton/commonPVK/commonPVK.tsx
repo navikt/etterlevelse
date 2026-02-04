@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 
-export const CommonVariantOne = () => (
+export const CommonVariantOnePVK = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -26,7 +26,7 @@ export const CommonVariantOne = () => (
   </ActionMenu>
 )
 
-export const CommonVariantTwo = () => (
+export const CommonVariantTwoPVK = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -54,7 +54,7 @@ export const CommonVariantTwo = () => (
   </ActionMenu>
 )
 
-export const CommonVariantThree = () => (
+export const CommonVariantThreePVK = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -82,7 +82,7 @@ export const CommonVariantThree = () => (
   </ActionMenu>
 )
 
-export const CommonVariantFour = () => (
+export const CommonVariantFourPVK = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -107,7 +107,7 @@ export const CommonVariantFour = () => (
   </ActionMenu>
 )
 
-export const CommonVariantFive = () => (
+export const CommonVariantFivePVK = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -132,7 +132,7 @@ export const CommonVariantFive = () => (
   </ActionMenu>
 )
 
-export const CommonVariantSix = () => (
+export const CommonVariantSixPVK = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -157,7 +157,7 @@ export const CommonVariantSix = () => (
   </ActionMenu>
 )
 
-export const CommonVariantSeven = () => (
+export const CommonVariantSevenPVK = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
