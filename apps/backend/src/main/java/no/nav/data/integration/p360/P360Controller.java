@@ -99,7 +99,7 @@ public class P360Controller {
             } else if (risikoeier) {
                 documentTitle += "Personvernkonsekvensvurdering for ";
             } else if (godkjenning) {
-                documentTitle += "Godkjent etterlevelse ";
+                documentTitle += "Godkjent etterlevelsesdokument ";
             }
 
             documentTitle += "E" + eDok.getEtterlevelseNummer() + " versjon " + eDok.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon() + ", " + eDok.getTitle().replace(":", " -").trim();
