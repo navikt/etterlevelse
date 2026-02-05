@@ -84,7 +84,7 @@ export const Footer = () => {
               />
               Støtte til etterlevelse
             </BodyShort>
-            <BodyShort>2023 Nav</BodyShort>
+            <BodyShort>Nav</BodyShort>
             <BodyShort>Arbeids- og velferdsetaten</BodyShort>
           </div>
           <Spacer />
