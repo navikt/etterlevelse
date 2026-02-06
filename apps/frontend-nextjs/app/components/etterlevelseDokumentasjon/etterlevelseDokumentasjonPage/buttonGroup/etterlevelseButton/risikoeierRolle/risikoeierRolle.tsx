@@ -1,7 +1,4 @@
-import {
-  EPVKTilstandStatus,
-  EPvkDokumentStatus,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
 import { CommonVariantOne } from '../commonEtterlevelse/commonEtterlevelse'
 import { RisikoeierVariantOne } from '../commonEtterlevelse/risikoeierCommon'
@@ -14,7 +11,7 @@ import { RisikoeierVariantOne } from '../commonEtterlevelse/risikoeierCommon'
 //   isRisikoeier: boolean
 // }
 
-const test: string = EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN
+const test: string = EPvkDokumentStatus.VURDERT_AV_PVO
 
 // EPVKTilstandStatus
 // PVKTilstandStatusRolle
