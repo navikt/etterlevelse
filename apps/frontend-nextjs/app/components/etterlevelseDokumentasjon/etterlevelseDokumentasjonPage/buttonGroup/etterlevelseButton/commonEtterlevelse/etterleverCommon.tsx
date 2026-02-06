@@ -13,15 +13,19 @@ export const EtterleverVariantOne = () => (
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Rediger dokumentegenskaper
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Få etterlevelsen godkjent av risikoeier
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Eksporter til Word
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Dokumenter'>
+        <ActionMenu.Item as='a' href=''>
+          Få etterlevelsen godkjent av risikoeier
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Administrer etterlevelsedokument'>
+        <ActionMenu.Item as='a' href=''>
+          Rediger dokumentegenskaper
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Eksporter til Word
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -38,9 +42,11 @@ export const EtterleverVariantTwo = () => (
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Beslutning trenges, skal etterleveren også kunne redigere nå?
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Dokumenter'>
+        <ActionMenu.Item as='a' href=''>
+          Beslutning trenges, skal etterleveren også kunne redigere nå?
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )

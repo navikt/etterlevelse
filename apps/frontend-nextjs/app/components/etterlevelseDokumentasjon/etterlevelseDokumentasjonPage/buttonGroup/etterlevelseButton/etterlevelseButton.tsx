@@ -10,7 +10,7 @@ type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-const test: string = ''
+const test: string = 'Etterlever'
 
 export const EtterlevelseButton: FunctionComponent<TProps> = (
   {
@@ -61,9 +61,11 @@ export const EtterlevelseButton: FunctionComponent<TProps> = (
             </Button>
           </ActionMenu.Trigger>
           <ActionMenu.Content>
-            <ActionMenu.Item as='a' href=''>
-              Eksporter til Word
-            </ActionMenu.Item>
+            <ActionMenu.Group label='Administrer etterlevelsedokument'>
+              <ActionMenu.Item as='a' href=''>
+                Eksporter til Word
+              </ActionMenu.Item>
+            </ActionMenu.Group>
           </ActionMenu.Content>
         </ActionMenu>
       )

@@ -13,12 +13,16 @@ export const CommonVariantOne = () => (
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Rediger dokumentegenskaper
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Eksporter til Word
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Dokumenter'>
+        <ActionMenu.Item as='a' href=''>
+          Rediger dokumentegenskaper
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Administrer etterlevelsedokument'>
+        <ActionMenu.Item as='a' href=''>
+          Eksporter til Word
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -35,15 +39,19 @@ export const CommonVariantTwo = () => (
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Rediger dokumentegenskaper
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Oppdater etterlevelsen
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Eksporter til Word
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Dokumenter'>
+        <ActionMenu.Item as='a' href=''>
+          Rediger dokumentegenskaper
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Administrer etterlevelsedokument'>
+        <ActionMenu.Item as='a' href=''>
+          Oppdater etterlevelsen
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Eksporter til Word
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )

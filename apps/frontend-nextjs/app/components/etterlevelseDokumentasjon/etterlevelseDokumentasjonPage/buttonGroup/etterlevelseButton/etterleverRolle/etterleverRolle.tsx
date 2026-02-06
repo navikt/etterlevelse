@@ -11,7 +11,7 @@ import { EtterleverVariantOne, EtterleverVariantTwo } from '../commonEtterlevels
 //   isRisikoeier: boolean
 // }
 
-const test: string = EPvkDokumentStatus.VURDERT_AV_PVO
+const test: string = EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
 
 // EPVKTilstandStatus
 // PVKTilstandStatusRolle

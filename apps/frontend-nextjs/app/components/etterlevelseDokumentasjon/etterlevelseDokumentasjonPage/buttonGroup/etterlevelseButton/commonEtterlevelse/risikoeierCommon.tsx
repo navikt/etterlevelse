@@ -13,12 +13,16 @@ export const RisikoeierVariantOne = () => (
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Rediger dokumentegenskaper
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Godkjenn etterlevelsen
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Dokumenter'>
+        <ActionMenu.Item as='a' href=''>
+          Rediger dokumentegenskaper
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Administrer etterlevelsedokument'>
+        <ActionMenu.Item as='a' href=''>
+          Godkjenn etterlevelsen
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )

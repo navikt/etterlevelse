@@ -13,21 +13,23 @@ export const CommonVariantOneGjenbruk = () => (
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Tilrettelegg for Gjenbruk
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Slå på Gjenbruk
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Nullstill Gjenbruk
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Endre Gjenbruk
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Nullstill Gjenbruk
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Administrer'>
+        <ActionMenu.Item as='a' href=''>
+          Tilrettelegg for Gjenbruk
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Slå på Gjenbruk
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Nullstill Gjenbruk
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Endre Gjenbruk
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Nullstill Gjenbruk
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
