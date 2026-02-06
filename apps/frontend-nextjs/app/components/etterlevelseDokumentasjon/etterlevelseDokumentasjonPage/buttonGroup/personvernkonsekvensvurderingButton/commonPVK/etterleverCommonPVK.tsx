@@ -9,19 +9,23 @@ export const EtterleverVariantOne = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Tegn behandlingens livsløp
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Beskriv art og omfang
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Revurder behov for PVK
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Tegn behandlingens livsløp
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Beskriv art og omfang
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Revurder behov for PVK
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -34,22 +38,26 @@ export const EtterleverVariantTwo = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Tegn Behandlingens livsløp
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Beskriv Art og omfang
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Påbegynn PVK
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Revurder Behov for PVK
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Tegn Behandlingens livsløp
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Beskriv Art og omfang
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Påbegynn PVK
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Revurder Behov for PVK
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -62,22 +70,26 @@ export const EtterleverVariantThree = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Tegn behandlingens livsløp
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Beskriv art og omfang
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Les PVK (read-only, godkjent versjon) og Oppdater PVK (åpner neste versjon)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Revurder behov for PVK
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Tegn behandlingens livsløp
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Beskriv art og omfang
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Les PVK (read-only, godkjent versjon) og Oppdater PVK (åpner neste versjon)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Revurder behov for PVK
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )

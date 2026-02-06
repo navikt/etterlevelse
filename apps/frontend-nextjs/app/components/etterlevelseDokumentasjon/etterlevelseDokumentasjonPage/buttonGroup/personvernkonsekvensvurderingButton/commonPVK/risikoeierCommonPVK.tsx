@@ -9,25 +9,29 @@ export const RisikoeierVariantOnePVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Se Behandlingens livsløp (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Les PVK (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Godkjenn PVK
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Se Behandlingens livsløp (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Art og omfang (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Les PVK (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Godkjenn PVK
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Behov for PVK (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -40,22 +44,26 @@ export const RisikoeierVariantTwoPVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Se Behandlingens livsløp (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Les PVK (read-only, godkjent versjon)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Se Behandlingens livsløp (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Art og omfang (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Les PVK (read-only, godkjent versjon)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Behov for PVK (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )

@@ -9,19 +9,23 @@ export const CommonVariantOnePVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Se Behandlingens livsløp (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Se Behandlingens livsløp (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Art og omfang (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Se Behov for PVK (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -34,22 +38,26 @@ export const CommonVariantTwoPVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Se Behandlingens livsløp (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Les PVK (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Se Behandlingens livsløp (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Art og omfang (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Les PVK (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Behov for PVK (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -62,22 +70,26 @@ export const CommonVariantThreePVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Se Behandlingens livsløp (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Les PVK (read-only, ny versjon)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Se Behandlingens livsløp (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Art og omfang (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Les PVK (read-only, ny versjon)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Behov for PVK (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -90,19 +102,23 @@ export const CommonVariantFourPVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Tegn behandlingens livsløp
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Beskriv art og omfang
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Vurder behov for PVK
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Tegn behandlingens livsløp
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Beskriv art og omfang
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Vurder behov for PVK
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -115,19 +131,23 @@ export const CommonVariantFivePVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Tegn Behandlingens livsløp
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Beskriv Art og omfang
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Fullfør PVK
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Tegn Behandlingens livsløp
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Beskriv Art og omfang
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Fullfør PVK
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -140,19 +160,23 @@ export const CommonVariantSixPVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Se Behandlingens livsløp (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Les PVK (read-only)
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Se Behandlingens livsløp (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Art og omfang (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Les PVK (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -165,19 +189,23 @@ export const CommonVariantSevenPVK = () => (
         icon={<ChevronDownIcon aria-hidden />}
         iconPosition='right'
       >
-        PVK
+        Personvernkonsekvensvurdering (PVK)
       </Button>
     </ActionMenu.Trigger>
     <ActionMenu.Content>
-      <ActionMenu.Item as='a' href=''>
-        Tegn Behandlingens livsløp
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
-      <ActionMenu.Item as='a' href=''>
-        Les PVOs tilbakemelding
-      </ActionMenu.Item>
+      <ActionMenu.Group label='Forstå behandlingen'>
+        <ActionMenu.Item as='a' href=''>
+          Tegn Behandlingens livsløp
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Se Art og omfang (read-only)
+        </ActionMenu.Item>
+      </ActionMenu.Group>
+      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
+        <ActionMenu.Item as='a' href=''>
+          Les PVOs tilbakemelding
+        </ActionMenu.Item>
+      </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
 )
