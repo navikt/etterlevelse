@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext } from 'react'
 import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
+import GjenbrukButton from './gjenbrukButton/gjenbrukButton'
 import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurderingButton/personvernkonsekvensvurderingButton'
 
 type TProps = {
@@ -149,6 +150,15 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
       </>
 
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
+      {env.isDev && (
+        <GjenbrukButton
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          risikoscenarioList={risikoscenarioList}
+          behandlingsLivslop={behandlingsLivslop}
+          pvkDokument={pvkDokument}
+          isRisikoeier={isRisikoeier}
+        />
+      )}
       {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
       {env.isDev && (
         <PersonvernkonsekvensvurderingButton

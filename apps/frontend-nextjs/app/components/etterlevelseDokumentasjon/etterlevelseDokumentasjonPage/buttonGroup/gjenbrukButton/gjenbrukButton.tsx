@@ -3,10 +3,8 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { FunctionComponent } from 'react'
-import AdminMedAlleAndreRollerOgsaSkruddPaRollePVK from './adminMedAlleAndreRollerOgsaSkruddPaRollePVK/adminMedAlleAndreRollerOgsaSkruddPaRollePVK'
-import EtterleverRollePVK from './etterleverRollePVK/etterleverRollePVK'
-import PersonvernombudRollePVK from './personvernombudRollePVK/personvernombudRollePVK'
-import RisikoeierRollePVK from './risikoeierRollePVK/risikoeierRollePVK'
+import AdminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk from './adminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk/adminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk'
+import EtterleverRolleGjenbruk from './etterleverRolleGjenbruk/etterleverRolleGjenbruk'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -18,7 +16,7 @@ type TProps = {
 
 const test: string = 'Admin med alle andre roller ogsa skrudd pa'
 
-export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
+const GjenbrukButton: FunctionComponent<TProps> = (
   {
     // etterlevelseDokumentasjon,
     // behandlingsLivslop,
@@ -30,27 +28,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
   switch (test) {
     case 'Etterlever':
       return (
-        <EtterleverRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
-    case 'Personvernombud':
-      return (
-        <PersonvernombudRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
-    case 'Risikoeier':
-      return (
-        <RisikoeierRollePVK
+        <EtterleverRolleGjenbruk
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}
@@ -60,7 +38,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
       )
     case 'Admin med alle andre roller ogsa skrudd pa':
       return (
-        <AdminMedAlleAndreRollerOgsaSkruddPaRollePVK
+        <AdminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         // risikoscenarioList={risikoscenarioList}
         // behandlingsLivslop={behandlingsLivslop}
@@ -72,3 +50,5 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
       return <></>
   }
 }
+
+export default GjenbrukButton

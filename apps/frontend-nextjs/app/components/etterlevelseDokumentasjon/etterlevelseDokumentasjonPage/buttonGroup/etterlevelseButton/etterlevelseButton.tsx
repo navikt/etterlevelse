@@ -10,7 +10,7 @@ type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-const test: string = 'Risikoeier'
+const test: string = ''
 
 export const EtterlevelseButton: FunctionComponent<TProps> = (
   {
