@@ -131,12 +131,15 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
                     <List as='ul' className='mt-5'>
                       {risikoscenario.relevanteKravNummer.map(
                         (relevantKrav: IKravReference, index: number) => {
-                          const kravHref: string = risikoDokumentasjonTemaKravNummerVersjonUrl(
-                            etterlevelseDokumentasjonId,
-                            relevantKrav.temaCode || 'PVK',
-                            relevantKrav.kravNummer,
-                            relevantKrav.kravVersjon
-                          )
+                          const kravHref: string =
+                            risikoDokumentasjonTemaKravNummerVersjonUrl(
+                              etterlevelseDokumentasjonId,
+                              relevantKrav.temaCode || 'PVK',
+                              relevantKrav.kravNummer,
+                              relevantKrav.kravVersjon
+                            ) +
+                            '?risikoscenario=' +
+                            risikoscenario.id
                           return (
                             <List.Item
                               className='max-w-[75ch]'
