@@ -1541,10 +1541,10 @@
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-8.2.2.tgz#1faa9eded50736d7c382132852b540eebd2b8dcf"
   integrity sha512-eTvToTv7V3iR6b9H4bnGa23ONZNY2aOUuLCtjYE/+BjPph/ULrel12k6/H2I3ShcUu9liYAzTUn6q/oeqhKRtw==
 
-"@navikt/ds-css@8.2.2":
-  version "8.2.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-8.2.2.tgz#f6d24b248c6657c494423687bbdaf0129bae9cd2"
-  integrity sha512-3/N2aROdQJiht7aP1yvNW8lPvM1O7gjmR4mMYCfmSOeEedmTmKUIYLxtXDD610JgrKk/zpT6F5ZZB64lozuD6g==
+"@navikt/ds-css@8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-8.3.0.tgz#93862b05ed47bfeb157e83b5147e56a01462dc5f"
+  integrity sha512-yl0AZEjnRz2bTUl8MpD5GDdy3j/BzIBcAflOjznnSLc8QZ/80Z1QhUuvOzSxbCNj2stPO/nIEfCXzGIr+NG2rw==
 
 "@navikt/ds-react@8.2.2":
   version "8.2.2"
