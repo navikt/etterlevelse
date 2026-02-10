@@ -161,7 +161,7 @@ const GodkjenningsHistorikkContent: FunctionComponent<IGodkjenningsHistorikkCont
                 (previousEtterlevelsesDokument &&
                   ['', null, undefined].includes(
                     previousEtterlevelsesDokument.meldingEtterlevelerTilRisikoeier
-                  ) && <BodyLong>Det er ikke lagt til notat.</BodyLong>)}
+                  ) && <BodyLong>Det er ikke lagt til en oppsummering.</BodyLong>)}
             </DataTextWrapper>
           </div>
 

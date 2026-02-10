@@ -250,7 +250,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                   (etterlevelseDokumentasjon &&
                     ['', null, undefined].includes(
                       etterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier
-                    ) && <BodyLong>Det er ikke lagt til notat.</BodyLong>)}
+                    ) && <BodyLong>Det er ikke lagt til en oppsummering.</BodyLong>)}
               </DataTextWrapper>
 
               {saveSuccessfull && (
