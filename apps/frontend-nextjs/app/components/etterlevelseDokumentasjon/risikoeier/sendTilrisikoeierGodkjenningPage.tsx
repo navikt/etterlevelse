@@ -6,6 +6,7 @@ import {
   updateEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -16,6 +17,10 @@ import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  EPvkVurdering,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   etterlevelseDokumentasjonIdUrl,
   etterlevelsesDokumentasjonEditUrl,
@@ -47,24 +52,36 @@ export const SendTilRisikoeierGodkjenningPage = () => {
     },
   ]
 
-  const [submitAlert, setSubmitAlert] = useState<boolean>(false)
+  const [submitAlert, setSubmitAlert] = useState<string>('')
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
-  const errorMessage = 'Kan ikke redigere en etterlevelse som er godkjent av risikoeier.'
 
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
       if (response.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) {
-        setSubmitAlert(true)
+        setSubmitAlert('Kan ikke redigere en etterlevelse som er godkjent av risikoeier.')
       } else {
-        const updatedEtterlevelseDokumentasjon = { ...response }
-        updatedEtterlevelseDokumentasjon.status = submitValues.status
-        updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
-          submitValues.meldingEtterlevelerTilRisikoeier
+        const pvkDokument = await getPvkDokumentByEtterlevelseDokumentId(submitValues.id)
+        if (
+          pvkDokument &&
+          pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+          submitValues.status ===
+            EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+        ) {
+          setSubmitAlert(
+            'Kan ikke sende til godkjenning når det finnes en personvernkonsekvensvurdering som ikke er ferdig.'
+          )
+        } else {
+          const updatedEtterlevelseDokumentasjon = { ...response }
+          updatedEtterlevelseDokumentasjon.status = submitValues.status
+          updatedEtterlevelseDokumentasjon.meldingEtterlevelerTilRisikoeier =
+            submitValues.meldingEtterlevelerTilRisikoeier
 
-        await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
-          setEtterlevelseDokumentasjon(resp)
-          setSaveSuccessfull(true)
-        })
+          await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
+            setEtterlevelseDokumentasjon(resp)
+            setSaveSuccessfull(true)
+          })
+        }
       }
     })
   }
@@ -72,12 +89,6 @@ export const SendTilRisikoeierGodkjenningPage = () => {
   const hasAccess =
     etterlevelseDokumentasjon && etterlevelseDokumentasjon.hasCurrentUserAccess === true
 
-  console.debug(
-    'check this',
-    hasAccess &&
-      etterlevelseDokumentasjon.status ===
-        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-  )
   return (
     <PageLayout
       pageTitle='Få etterlevelsen godkjent av risikoeier'
@@ -101,7 +112,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             godkjenning
           </Heading>
           {etterlevelseDokumentasjon.risikoeiere.length === 0 && (
-            <Alert variant='warning' className='my-5'>
+            <Alert variant='warning' className='my-5 max-w-[75ch]'>
               <Heading spacing size='small' level='3'>
                 Denne etterlevelsen har ikke en nevnt risikoeier
               </Heading>
@@ -183,14 +194,14 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                           </div>
                         )}
 
-                        {submitAlert && (
+                        {submitAlert !== '' && (
                           <Alert
                             variant='error'
-                            className='my-5'
+                            className='my-5 max-w-[75ch]'
                             closeButton={true}
-                            onClose={() => setSubmitAlert(false)}
+                            onClose={() => setSubmitAlert('')}
                           >
-                            {errorMessage}
+                            {submitAlert}
                           </Alert>
                         )}
 
@@ -270,14 +281,14 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                 etterlevelseDokumentasjon.status ===
                   EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
                   <div>
-                    {submitAlert && (
+                    {submitAlert !== '' && (
                       <Alert
                         variant='error'
                         className='my-5'
                         closeButton={true}
-                        onClose={() => setSubmitAlert(false)}
+                        onClose={() => setSubmitAlert('')}
                       >
-                        {errorMessage}
+                        {submitAlert}
                       </Alert>
                     )}
                     <Button
