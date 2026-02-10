@@ -10,7 +10,10 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import ExpiredAlert from '@/components/krav/kravPage/expiredAlert/expiredAlertComponent'
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravId, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
@@ -257,6 +260,16 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                   }
                 />
               )}
+
+              {etterlevelseDokumentasjon &&
+                etterlevelseDokumentasjon.status !==
+                  EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+                  <Alert variant='warning' className='my-5 max-w-[75ch]'>
+                    Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil
+                    det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet er
+                    godkjent.
+                  </Alert>
+                )}
 
               <div className='rounded-sm bg-purple-50 p-8'>
                 <Heading level='2' size='small'>

@@ -12,7 +12,10 @@ import {
   ERelationType,
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
-import { IEtterlevelseDokumentasjonStats } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  IEtterlevelseDokumentasjonStats,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
@@ -26,7 +29,7 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { filterEtterlevelseDokumentasjonStatsData } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
-import { BodyShort, Heading, Link, ReadMore } from '@navikt/ds-react'
+import { Alert, BodyShort, Heading, Link, ReadMore } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
@@ -150,6 +153,15 @@ export const EtterlevelseDokumentasjonPage = () => {
 
               <ContentLayout>
                 <div className='max-w-5xl flex-1'>
+                  {etterlevelseDokumentasjon.status !==
+                    EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+                    <Alert variant='warning' className='my-5 max-w-[75ch]'>
+                      Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil
+                      det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet er
+                      godkjent.
+                    </Alert>
+                  )}
+
                   {etterlevelseDokumentasjon.forGjenbruk &&
                     !etterlevelseDokumentasjon.tilgjengeligForGjenbruk && <GjenbrukAlert />}
 

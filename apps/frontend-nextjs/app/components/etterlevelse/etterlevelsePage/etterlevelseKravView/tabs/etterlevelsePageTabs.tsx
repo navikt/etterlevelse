@@ -5,6 +5,7 @@ import {
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
   updateEtterlevelse,
 } from '@/api/etterlevelse/etterlevelseApi'
+import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
 import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
@@ -13,7 +14,10 @@ import {
   EEtterlevelseStatus,
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -99,6 +103,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   const [editedEtterlevelse, setEditedEtterlevelse] = useState<IEtterlevelse>()
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [isPvoUnderarbeidWarningActive, setIsPvoUnderarbeidWarningActive] = useState<boolean>(false)
+  const [etterlevelseDokStatusAlert, setEtterlevelseDokStatusAlert] = useState<boolean>(false)
 
   const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
 
@@ -166,25 +171,35 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
       }
     }
 
-    await getPvkDokumentByEtterlevelseDokumentId(etterlevelse.etterlevelseDokumentasjonId)
-      .then(async (response) => {
-        if (
-          response &&
-          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-            response.status
-          ) &&
-          krav?.tagger.includes('Personvernkonsekvensvurdering')
-        ) {
-          setIsPvoAlertModalOpen(true)
-        } else {
-          await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
-        }
-      })
-      .catch(async (error: AxiosError) => {
-        if (error.status === 404) {
-          await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
-        }
-      })
+    const updatedEtterlevelsesDokumentasjon = await getEtterlevelseDokumentasjon(
+      etterlevelseDokumentasjon?.id as string
+    )
+
+    if (
+      updatedEtterlevelsesDokumentasjon.status !== EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+    ) {
+      setEtterlevelseDokStatusAlert(true)
+    } else {
+      await getPvkDokumentByEtterlevelseDokumentId(etterlevelse.etterlevelseDokumentasjonId)
+        .then(async (response) => {
+          if (
+            response &&
+            [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+              response.status
+            ) &&
+            krav?.tagger.includes('Personvernkonsekvensvurdering')
+          ) {
+            setIsPvoAlertModalOpen(true)
+          } else {
+            await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
+          }
+        })
+        .catch(async (error: AxiosError) => {
+          if (error.status === 404) {
+            await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
+          }
+        })
+    }
   }
 
   useEffect(() => {
@@ -276,7 +291,8 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         <Tabs.Panel value='dokumentasjon'>
           {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
             !isPvkTabActive &&
-            !isPvoUnderarbeidWarningActive && (
+            !isPvoUnderarbeidWarningActive &&
+            etterlevelseDokumentasjon?.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
               <ToggleGroup
                 className='mt-6'
                 defaultValue='OFF'
@@ -300,6 +316,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
             </Alert>
           )}
           {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
+            etterlevelseDokumentasjon?.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
             !isPvoUnderarbeidWarningActive && (
               <div className='mt-2'>
                 {!isPreview && (
@@ -336,11 +353,15 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   editedEtterlevelse={editedEtterlevelse}
                   tidligereEtterlevelser={tidligereEtterlevelser}
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  etterlevelseDokStatusAlert={etterlevelseDokStatusAlert}
+                  setEtterlevelseDokStatusAlert={setEtterlevelseDokStatusAlert}
                 />
               </div>
             )}
           {((!etterlevelseDokumentasjon?.hasCurrentUserAccess && !user.isAdmin()) ||
-            isPvoUnderarbeidWarningActive) && (
+            isPvoUnderarbeidWarningActive ||
+            etterlevelseDokumentasjon?.status !==
+              EEtterlevelseDokumentasjonStatus.UNDER_ARBEID) && (
             <EtterlevelseViewFields
               etterlevelse={etterlevelse}
               suksesskriterier={krav.suksesskriterier}

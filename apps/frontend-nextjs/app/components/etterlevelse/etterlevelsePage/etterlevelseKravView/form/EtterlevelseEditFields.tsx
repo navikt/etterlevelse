@@ -42,6 +42,8 @@ type TEditProps = {
   tidligereEtterlevelser?: IEtterlevelse[]
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   isPreview: boolean
+  etterlevelseDokStatusAlert: boolean
+  setEtterlevelseDokStatusAlert: (state: boolean) => void
 }
 
 export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
@@ -54,6 +56,8 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   tidligereEtterlevelser,
   etterlevelseDokumentasjon,
   isPreview,
+  etterlevelseDokStatusAlert,
+  setEtterlevelseDokStatusAlert,
 }) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
@@ -224,6 +228,18 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           </ErrorSummary.Item>
                         )}
                       </ErrorSummary>
+                    )}
+
+                    {etterlevelseDokStatusAlert && (
+                      <Alert
+                        variant='error'
+                        closeButton
+                        onClose={() => setEtterlevelseDokStatusAlert(false)}
+                      >
+                        Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,
+                        vil det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet
+                        er godkjent.
+                      </Alert>
                     )}
 
                     <div className='w-full justify-end mt-5'>
