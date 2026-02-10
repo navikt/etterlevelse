@@ -19,7 +19,7 @@
     "@types/draft-js": "0.11.20",
     "@types/markdown-draft-js": "2.2.7",
     "@types/react-draft-wysiwyg": "1.13.9",
-    "axios": "1.13.2",
+    "axios": "1.13.5",
     "buffer": "6.0.3",
     "core-js": "3.47.0",
     "depcheck": "1.4.7",
