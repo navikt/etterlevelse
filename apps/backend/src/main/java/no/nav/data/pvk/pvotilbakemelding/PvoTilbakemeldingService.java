@@ -7,7 +7,6 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepoCustom;
-import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -89,16 +88,6 @@ public class PvoTilbakemeldingService {
         if (pvoTilbakemelding != null) {
             log.info("deleting risikoscenario with id={}, connected to pvk dokument with id={}", pvoTilbakemelding.getId(), pvkDokumentId);
             pvoTilbakemeldingRepo.delete(pvoTilbakemelding);
-        }
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void etterlevelseDocumentVersionUpdate(UUID pvkDokumentId) {
-        Optional<PvoTilbakemelding> pvoTilbakemeldingOpt = getByPvkDokumentId(pvkDokumentId);
-        if (pvoTilbakemeldingOpt.isPresent()) {
-            PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingOpt.get();
-            pvoTilbakemelding.setStatus(PvoTilbakemeldingStatus.IKKE_PABEGYNT);
-            save(pvoTilbakemelding, true);
         }
     }
 }

@@ -3,10 +3,8 @@ package no.nav.data.pvk.pvkdokument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
@@ -87,19 +85,5 @@ public class PvkDokumentService {
         pvoTilbakemeldingService.deleteByPvkDokumentId(id);
 
         return delete(id);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void etterlevelseDocumentVersionUpdate(PvkDokument pvkDokument, Integer etterlevelseDokumentasjonsVersjon) {
-        pvkDokument.setStatus(PvkDokumentStatus.UNDERARBEID);
-        pvkDokument.getPvkDokumentData().setAntallInnsendingTilPvo(0);
-        pvkDokument.getPvkDokumentData().getMeldingerTilPvo().add(
-                MeldingTilPvo.builder()
-                        .innsendingId(1)
-                        .etterlevelsesDokumentVersjon(etterlevelseDokumentasjonsVersjon)
-                        .build()
-        );
-
-        save(pvkDokument, true);
     }
 }

@@ -183,6 +183,8 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updateAndIncreaseVersion(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
+        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
+
         List<String> teamMembers = new ArrayList<>();
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getTeams().forEach(teamId -> {
             var team = teamcatTeamClient.getTeam(teamId);
@@ -200,6 +202,10 @@ public class EtterlevelseDokumentasjonService {
             throw new ValidationException("Kan ikke øke versjon fordi dokumentet ikke er godkjent av risikoeier. ");
         }
 
+        if (pvkDokument.isPresent() && pvkDokument.get().getPvkDokumentData().getPvkVurdering().equals(PvkVurdering.SKAL_UTFORE) && !pvkDokument.get().getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+            throw new ValidationException("Kan ikke øke versjon fordi det tilhørende PVK dokumentet ikke er godkjent av risikoeier.");
+        }
+
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() + 1);
 
@@ -215,13 +221,6 @@ public class EtterlevelseDokumentasjonService {
                         .build()
         );
 
-        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
-
-        if (pvkDokument.isPresent()) {
-            //logikk for å endre pvk dokument og pvo tilbakemelding ved verjonsøkning
-            pvkDokumentService.etterlevelseDocumentVersionUpdate(pvkDokument.get(), request.getEtterlevelseDokumentVersjon() + 1);
-            pvoTilbakemeldingService.etterlevelseDocumentVersionUpdate(pvkDokument.get().getId());
-        }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
