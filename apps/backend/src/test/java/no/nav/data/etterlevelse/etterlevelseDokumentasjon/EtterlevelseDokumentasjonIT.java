@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
@@ -164,6 +165,54 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         assertThat(updated.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
         assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk()).isNotEmpty();
         assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk().getFirst().getKravTilstandHistorikk().getFirst().getTema()).isEqualTo("Test tema");;
+    }
+
+    @Test
+    void godkjenning_updatesStatusAndVersjonHistorikk_with_ikke_godkjent_pvk_and_fail() {
+        TestConfig.MockFilter.setUser("A123456");
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .risikoeiere(List.of("A123456"))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        pvkDokumentRepo.save(PvkDokument.builder()
+                .status(PvkDokumentStatus.UNDERARBEID)
+                .etterlevelseDokumentId(eDok.getId())
+                .pvkDokumentData(PvkDokumentData.builder()
+                        .pvkVurdering(PvkVurdering.SKAL_UTFORE)
+                        .build())
+                .build());
+
+        EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
+                .id(eDok.getId())
+                .update(true)
+                .title(eDok.getTitle())
+                .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
+                .meldingRisikoeierTilEtterleveler("test")
+                .build();
+
+        EtterlevelseDokumentasjonGodkjenningsRequest request = EtterlevelseDokumentasjonGodkjenningsRequest.builder()
+                .etterlevelseDokumentasjonRequest(eDokRequest)
+                .kravTilstandHistorikk(List.of(KravTilstandHistorikk.builder().tema("Test tema").build()))
+                .build();
+
+        var resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/godkjenning/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(request),
+                String.class,
+                request.getEtterlevelseDokumentasjonRequest().getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test

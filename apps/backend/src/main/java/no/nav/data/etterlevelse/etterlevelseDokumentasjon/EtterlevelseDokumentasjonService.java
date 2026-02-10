@@ -26,6 +26,8 @@ import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -135,6 +137,7 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon approvedOfRisikoeierAndSave(EtterlevelseDokumentasjonGodkjenningsRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getEtterlevelseDokumentasjonRequest().getId());
+        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getEtterlevelseDokumentasjonRequest().getId());
 
         if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
             throw new ValidationException("Kan ikke godkjenne dokumentet fordi brukeren ikke er risikoeier ");
@@ -142,6 +145,10 @@ public class EtterlevelseDokumentasjonService {
 
         if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getStatus().equals(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)) {
             throw new ValidationException("Dette dokument er ikke sendt til godkjenning.");
+        }
+
+        if (pvkDokument.isPresent() && pvkDokument.get().getPvkDokumentData().getPvkVurdering().equals(PvkVurdering.SKAL_UTFORE) && !pvkDokument.get().getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+            throw new ValidationException("Kan ikke godkjenne dokumentet fordi det tilhørende PVK dokumentet ikke er godkjent av risikoeier.");
         }
 
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
