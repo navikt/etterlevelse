@@ -93,9 +93,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
 
   const hasAccess =
-    etterlevelseDokumentasjon &&
-    etterlevelseDokumentasjon.hasCurrentUserAccess === true &&
-    etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+    etterlevelseDokumentasjon && etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
   const kravTilstandsHistorikk: IKravTilstandHistorikk[] = useMemo(() => {
     const tilstandHistorikk: IKravTilstandHistorikk[] = []
