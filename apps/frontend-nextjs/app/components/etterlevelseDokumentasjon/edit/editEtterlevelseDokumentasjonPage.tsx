@@ -3,6 +3,7 @@
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import ForbiddenAlert from '@/components/common/forbiddenAlert'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
   etterlevelseDokumentasjonIdUrl,
@@ -12,6 +13,7 @@ import { Loader } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useContext } from 'react'
 import EtterlevelseDokumentasjonForm from '../form/etterlevelseDokumentasjonForm'
+import EtterlevelseDokumentasjonFormSendTilGodkjenningState from '../form/etterlevelseDokumentasjonFormSendTilGodkjenningState'
 
 export const EditEtterlevelseDokumentasjonPage = () => {
   const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
@@ -42,13 +44,21 @@ export const EditEtterlevelseDokumentasjonPage = () => {
             },
           ]}
         >
-          {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-            <EtterlevelseDokumentasjonForm
-              title='Rediger etterlevelsesdokumentet'
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              isEditButton
-            />
-          )}
+          {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+            etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+              <EtterlevelseDokumentasjonForm
+                title='Rediger etterlevelsesdokumentet'
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                isEditButton
+              />
+            )}
+
+          {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+            etterlevelseDokumentasjon.status !== EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+              <EtterlevelseDokumentasjonFormSendTilGodkjenningState
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              />
+            )}
 
           {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && <ForbiddenAlert />}
         </PageLayout>
