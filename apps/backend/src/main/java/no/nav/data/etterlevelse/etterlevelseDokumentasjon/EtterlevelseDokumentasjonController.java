@@ -204,17 +204,13 @@ public class EtterlevelseDokumentasjonController {
     private void setHasCurrentUserAccess(EtterlevelseDokumentasjonResponse response) {
         boolean resourceIsEmpty = response.getResources() == null || response.getResources().isEmpty();
         boolean teamIsEmpty = response.getTeams() == null || response.getTeams().isEmpty();
-        boolean risikoeiereIsEmpty = response.getRisikoeiere() == null || response.getRisikoeiere().isEmpty();
 
-        if (resourceIsEmpty && teamIsEmpty && risikoeiereIsEmpty) {
+        if (resourceIsEmpty && teamIsEmpty) {
             response.setHasCurrentUserAccess(true);
         } else {
             List<String> memeberList = new ArrayList<>();
             if (!resourceIsEmpty) {
                 memeberList.addAll(response.getResources());
-            }
-            if (!risikoeiereIsEmpty) {
-                memeberList.addAll(response.getRisikoeiere());
             }
             if (!teamIsEmpty) {
                 response.getTeamsData().forEach((team) -> {
