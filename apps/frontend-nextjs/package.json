@@ -27,7 +27,7 @@
     "@fontsource/source-sans-pro": "5.2.5",
     "@fortawesome/fontawesome-svg-core": "7.1.0",
     "@fortawesome/free-brands-svg-icons": "7.1.0",
-    "@fortawesome/free-solid-svg-icons": "7.1.0",
+    "@fortawesome/free-solid-svg-icons": "7.2.0",
     "@fortawesome/react-fontawesome": "3.2.0",
     "@navikt/aksel-icons": "8.3.0",
     "@navikt/ds-css": "8.3.0",
