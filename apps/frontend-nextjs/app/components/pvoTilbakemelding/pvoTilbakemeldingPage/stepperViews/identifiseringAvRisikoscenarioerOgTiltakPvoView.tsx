@@ -75,6 +75,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<
           stylingHeading='mb-5'
           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
           risikoscenarioList={risikoscenarioList}
+          antallInnsendingerTilPvo={pvkDokument?.antallInnsendingTilPvo}
         />
 
         <div className='w-full'>

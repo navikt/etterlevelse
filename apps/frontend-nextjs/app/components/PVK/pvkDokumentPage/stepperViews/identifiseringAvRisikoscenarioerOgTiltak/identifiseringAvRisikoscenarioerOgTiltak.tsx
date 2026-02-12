@@ -71,6 +71,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
           stylingHeading='my-5'
           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
           risikoscenarioList={risikoscenarioList}
+          antallInnsendingerTilPvo={pvkDokument?.antallInnsendingTilPvo}
         />
 
         {pvkDokument &&
