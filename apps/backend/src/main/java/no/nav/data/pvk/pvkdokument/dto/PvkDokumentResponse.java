@@ -55,6 +55,7 @@ public class PvkDokumentResponse {
     private String godkjentAvRisikoeier;
 
     private Integer currentEtterlevelseDokumentVersjon;
+    private boolean hasPvkDocumentationStarted;
 
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()

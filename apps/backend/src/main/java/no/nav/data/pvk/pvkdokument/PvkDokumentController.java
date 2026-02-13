@@ -17,6 +17,8 @@ import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,7 @@ public class PvkDokumentController {
     private final PvkDokumentService pvkDokumentService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
+    private final RisikoscenarioService risikoscenarioService;
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")
@@ -46,6 +49,7 @@ public class PvkDokumentController {
         Page<PvkDokumentResponse> responses = page.map(pvkDokument -> {
             var response = PvkDokumentResponse.buildFrom(pvkDokument);
             addEtterlevelseDokumentasjonVersjon(response);
+            checkIfPvkDocumentationHasStarted(response);
             return response;
         });
 
@@ -79,6 +83,7 @@ public class PvkDokumentController {
         log.info("Get Pvk Document id={}", id);
         var response = PvkDokumentResponse.buildFrom(pvkDokumentService.get(id));
         addEtterlevelseDokumentasjonVersjon(response);
+        checkIfPvkDocumentationHasStarted(response);
         return ResponseEntity.ok(response);
     }
 
@@ -95,6 +100,7 @@ public class PvkDokumentController {
         } else {
             var response = PvkDokumentResponse.buildFrom(pvkDokument.get());
             addEtterlevelseDokumentasjonVersjon(response);
+            checkIfPvkDocumentationHasStarted(response);
             return ResponseEntity.ok(response);
         }
     }
@@ -108,6 +114,7 @@ public class PvkDokumentController {
 
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
         addEtterlevelseDokumentasjonVersjon(response);
+        checkIfPvkDocumentationHasStarted(response);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -132,6 +139,7 @@ public class PvkDokumentController {
         updatePvoTilbakemeldingStatus(pvkDokument);
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
         addEtterlevelseDokumentasjonVersjon(response);
+        checkIfPvkDocumentationHasStarted(response);
         return ResponseEntity.ok(response);
     }
 
@@ -147,6 +155,7 @@ public class PvkDokumentController {
         } else {
             var response = PvkDokumentResponse.buildFrom(pvkDokument);
             addEtterlevelseDokumentasjonVersjon(response);
+            checkIfPvkDocumentationHasStarted(response);
             return ResponseEntity.ok(response);
         }
     }
@@ -173,5 +182,24 @@ public class PvkDokumentController {
     private void addEtterlevelseDokumentasjonVersjon(PvkDokumentResponse pvkDokument) {
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
         pvkDokument.setCurrentEtterlevelseDokumentVersjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon());
+    }
+
+    private void checkIfPvkDocumentationHasStarted(PvkDokumentResponse pvkDokument) {
+        var risikoscenario = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL);
+
+        if (!risikoscenario.isEmpty()) {
+            pvkDokument.setHasPvkDocumentationStarted(true);
+        }
+        if (pvkDokument.getHarInvolvertRepresentant() != null || pvkDokument.getHarDatabehandlerRepresentantInvolvering() != null ||
+                (pvkDokument.getRepresentantInvolveringsBeskrivelse() != null &&
+                        !Objects.equals(pvkDokument.getRepresentantInvolveringsBeskrivelse(), "")) ||
+                (pvkDokument.getDataBehandlerRepresentantInvolveringBeskrivelse() != null &&
+                        !Objects.equals(pvkDokument.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""))
+        ) {
+            pvkDokument.setHasPvkDocumentationStarted(true);
+        } else {
+            pvkDokument.setHasPvkDocumentationStarted(false);
+        }
+
     }
 }
