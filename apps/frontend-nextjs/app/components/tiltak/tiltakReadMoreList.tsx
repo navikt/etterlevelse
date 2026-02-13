@@ -49,6 +49,7 @@ export const TiltakReadMoreList = (props: IProps) => {
     formRef,
   } = props
   const [activeTiltak, setActiveTiltak] = useState<string>('')
+  const [activeTiltakForm, setActiveTiltakForm] = useState<boolean>(false)
   const queryParams = useSearchParams()
   const tiltakId = queryParams.get('tiltak')
 
@@ -82,6 +83,8 @@ export const TiltakReadMoreList = (props: IProps) => {
                 isAddExistingMode={isAddExistingMode}
                 customDelete={customDelete}
                 formRef={formRef}
+                activeTiltakForm={activeTiltakForm}
+                setActiveTiltakForm={setActiveTiltakForm}
               />
             </div>
           )
@@ -94,6 +97,8 @@ interface ITiltakListContentProps extends IProps {
   activeTiltak: string
   setActiveTiltak: (state: string) => void
   tiltak: ITiltak
+  activeTiltakForm: boolean
+  setActiveTiltakForm: (state: boolean) => void
 }
 
 const TiltakListContent = (props: ITiltakListContentProps) => {
@@ -114,6 +119,8 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     isAddExistingMode,
     customDelete,
     formRef,
+    activeTiltakForm,
+    setActiveTiltakForm,
   } = props
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
@@ -137,6 +144,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           }
         })
       )
+      setActiveTiltakForm(false)
       setIsEditTiltakFormActive(false)
       setIsEditMode(false)
     })
@@ -197,6 +205,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
             pvkDokumentId={tiltak.pvkDokumentId}
             submit={submit}
             close={() => {
+              setActiveTiltakForm(false)
               setIsEditMode(false)
               setIsEditTiltakFormActive(false)
             }}
@@ -205,6 +214,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
         )}
 
         {activeTiltak === tiltak.id &&
+          !activeTiltakForm &&
           !isEditMode &&
           !isCreateTiltakFormActive &&
           !isAddExistingMode && (
@@ -216,6 +226,7 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                 icon={<PencilIcon title='' aria-hidden />}
                 onClick={async () => {
                   await activeFormButton(() => {
+                    setActiveTiltakForm(true)
                     setIsEditTiltakFormActive(true)
                     setIsEditMode(true)
                   })
