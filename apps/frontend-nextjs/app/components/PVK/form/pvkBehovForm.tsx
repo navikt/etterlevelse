@@ -85,6 +85,7 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   const [urlToNavigate, setUrlToNavigate] = useState<string>('')
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [savedAlert, setSavedAlert] = useState<boolean>(false)
+  const [errorAlert, setErrorAlert] = useState<boolean>(false)
 
   const codelist = useContext(CodelistContext)
 
@@ -110,6 +111,12 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
       if (pvkDokument.id || existingPvkDokumentId) {
         if (isReadOnlyPvkStatus(pvkDokument.status)) {
           setIsPvoAlertModalOpen(true)
+        } else if (
+          pvkDokument &&
+          pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+          pvkDokument.hasPvkDocumentationStarted === true
+        ) {
+          setErrorAlert(true)
         } else {
           await updatePvkDokument(mutatedPvkDokument)
             .then((response: IPvkDokument) => {
@@ -287,6 +294,17 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 onClose={() => setSavedAlert(false)}
               >
                 Lagring vellykket
+              </Alert>
+            )}
+
+            {errorAlert && (
+              <Alert
+                className='mt-5'
+                variant='error'
+                closeButton
+                onClose={() => setErrorAlert(false)}
+              >
+                Kan ikke oppdatere vurderingen fordi personvernkonsekvensevurderingen pågår.
               </Alert>
             )}
 

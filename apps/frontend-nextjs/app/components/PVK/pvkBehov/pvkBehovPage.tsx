@@ -11,6 +11,7 @@ import {
 } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { EPvkVurdering } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
@@ -126,6 +127,11 @@ export const PvkBehovPage = () => {
     }
   }, [pvkDokument])
 
+  const isPvkBehovLock =
+    pvkDokument &&
+    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+    pvkDokument.hasPvkDocumentationStarted === true
+
   return (
     <PageLayout
       pageTitle='Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?'
@@ -149,7 +155,8 @@ export const PvkBehovPage = () => {
               behandlingensLivslop={behandlingensLivslop}
             />
             {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-              !isReadOnlyPvkStatus(pvkDokument.status) && (
+              !isReadOnlyPvkStatus(pvkDokument.status) &&
+              !isPvkBehovLock && (
                 <PvkBehovForm
                   pvkDokument={pvkDokument}
                   setPvkDokument={setPvkDokument}
@@ -163,13 +170,14 @@ export const PvkBehovPage = () => {
                 />
               )}
 
-            {(!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin()) ||
-              (isReadOnlyPvkStatus(pvkDokument.status) && (
-                <PvkBehovReadOnly
-                  pvkDokument={pvkDokument}
-                  ytterligereEgenskaper={ytterligereEgenskaper}
-                />
-              ))}
+            {((!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin()) ||
+              isReadOnlyPvkStatus(pvkDokument.status) ||
+              isPvkBehovLock) && (
+              <PvkBehovReadOnly
+                pvkDokument={pvkDokument}
+                ytterligereEgenskaper={ytterligereEgenskaper}
+              />
+            )}
           </div>
 
           {etterlevelseDokumentasjon && (
