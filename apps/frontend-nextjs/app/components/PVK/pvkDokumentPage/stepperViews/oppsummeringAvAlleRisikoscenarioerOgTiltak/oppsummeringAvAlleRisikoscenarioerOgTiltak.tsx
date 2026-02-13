@@ -320,7 +320,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
               gjennomført.
             </BodyLong>
 
-            {pvkDokument.antallInnsendingTilPvo >= 2 && (
+            {(pvkDokument.antallInnsendingTilPvo ?? 0) >= 2 && (
               <ReadMore
                 className='mt-5 max-w-[75ch]'
                 header='Hva hvis noen av våre eldre risikoscenarioer ikke lenger er aktuelle?'
