@@ -238,24 +238,22 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
             </Alert>
           )}
 
-          <div>
-            <LabelWithDescription
-              label={labelNavngiDokument}
-              description='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre,
-              lignende'
-            />
-            <DataTextWrapper>{values.title}</DataTextWrapper>
-          </div>
+          <TextAreaField
+            rows={2}
+            noPlaceholder
+            label={labelNavngiDokument}
+            caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+            name='title'
+          />
 
           <div className='mt-5'>
-            <Label>
-              Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller
-              arbeid som omfattes
-            </Label>
-
-            <DataTextWrapper>
-              <Markdown source={values.beskrivelse} />
-            </DataTextWrapper>
+            <TextAreaField
+              height='150px'
+              noPlaceholder
+              label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+              name='beskrivelse'
+              markdown
+            />
           </div>
 
           {!dokumentRelasjon && (
