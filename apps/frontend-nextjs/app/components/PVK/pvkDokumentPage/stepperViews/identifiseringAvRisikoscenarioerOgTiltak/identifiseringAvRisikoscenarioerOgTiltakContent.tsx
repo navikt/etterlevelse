@@ -2,7 +2,7 @@
 
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent } from 'react'
 
@@ -10,12 +10,14 @@ type TProps = {
   stylingHeading: string
   etterlevelseDokumentasjonId: string
   risikoscenarioList: IRisikoscenario[]
+  antallInnsendingerTilPvo?: number
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<TProps> = ({
   stylingHeading,
   etterlevelseDokumentasjonId,
   risikoscenarioList,
+  antallInnsendingerTilPvo,
 }) => {
   const router = useRouter()
 
@@ -35,6 +37,20 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
         <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dere dokumenterer, kan dere
         finne og gjenbruke andre steder hvor det er aktuelt.
       </Alert>
+
+      {(antallInnsendingerTilPvo ?? 0) >= 2 && (
+        <ReadMore
+          className='mt-5 max-w-[75ch]'
+          header='Hva hvis noen av våre eldre risikoscenarioer ikke lenger er aktuelle?'
+        >
+          Vi jobber med å få på plass en slags “pensjonering” av risikoscenarioer som ikke lenger er
+          aktuelle. Etter hvert som vi oppdaterer løsningen vil dere kunne markere enkelte
+          risikoscenarioer som historiske. Slik skal dere, risikoeier og PVO enkelt kunne vite
+          hvilke scenarioer dere skal forholde dere til. Imens får dere ikke slette risikoscenarioer
+          som ble opprettet i tidligere versjoner, men som midlertidig grep kan dere velge om dere
+          vil innlede scenarioets navn med f. eks. “HISTORISK:” og så scenarionavnet.
+        </ReadMore>
+      )}
 
       <Heading spacing size='small' level='2' className='mb-5 mt-10'>
         Legg til risikoscenarioer og tiltak med en tilknytning til etterlevelseskrav
@@ -63,7 +79,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
       <BodyLong>
         Noen risikoscenarioer vil ikke har en direkte tilknytning til etterlevelseskrav. Disse, samt
         motvirkende tiltak, legger dere inn på denne siden. Vi anbefaler at dette gjøres etter at
-        dere har vurderert kravspesifikke risikoscenarioer.
+        dere har vurdert kravspesifikke risikoscenarioer.
       </BodyLong>
 
       {risikoscenarioList.length === 0 && (

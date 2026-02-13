@@ -28,7 +28,7 @@ import {
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { Alert, BodyLong, Heading, Loader, ReadMore, Tabs, ToggleGroup } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
@@ -319,6 +319,21 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
               Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er
               gjennomført.
             </BodyLong>
+
+            {(pvkDokument.antallInnsendingTilPvo ?? 0) >= 2 && (
+              <ReadMore
+                className='mt-5 max-w-[75ch]'
+                header='Hva hvis noen av våre eldre risikoscenarioer ikke lenger er aktuelle?'
+              >
+                Vi jobber med å få på plass en slags “pensjonering” av risikoscenarioer som ikke
+                lenger er aktuelle. Etter hvert som vi oppdaterer løsningen vil dere kunne markere
+                enkelte risikoscenarioer som historiske. Slik skal dere, risikoeier og PVO enkelt
+                kunne vite hvilke scenarioer dere skal forholde dere til. Imens får dere ikke slette
+                risikoscenarioer som ble opprettet i tidligere versjoner, men som midlertidig grep
+                kan dere velge om dere vil innlede scenarioets navn med f. eks. “HISTORISK:” og så
+                scenarionavnet.
+              </ReadMore>
+            )}
           </div>
           <div className='w-full mt-5'>
             <div className='pt-6 pr-4 flex flex-1 flex-row gap-4 col-span-8'>
