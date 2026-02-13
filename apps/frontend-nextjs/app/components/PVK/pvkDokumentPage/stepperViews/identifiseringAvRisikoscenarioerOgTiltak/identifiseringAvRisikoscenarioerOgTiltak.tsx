@@ -15,6 +15,7 @@ import {
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import FormButtons from '../../../edit/formButtons'
@@ -74,9 +75,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
         />
 
         {pvkDokument &&
-          ![EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-            pvkDokument.status
-          ) && (
+          !isReadOnlyPvkStatus(pvkDokument.status) &&
+          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
             <div className='w-full'>
               {risikoscenarioList.length !== 0 && (
                 <div className='my-5'>
@@ -113,9 +113,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
           )}
 
         {pvkDokument &&
-          [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-            pvkDokument.status
-          ) && (
+          (isReadOnlyPvkStatus(pvkDokument.status) ||
+            pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) && (
             <div className='w-full my-5'>
               <RisikoscenarioAccordianListReadOnlyView
                 risikoscenarioList={risikoscenarioList}
