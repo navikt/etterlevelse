@@ -130,13 +130,17 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                 </div>
 
                 {fieldProps.form.values.berOmNyVurderingFraPvo === false && (
-                  <SendTilRisikoeier fieldProps={fieldProps} />
+                  <SendTilRisikoeier
+                    fieldProps={fieldProps}
+                    errorComponent={errorSummaryComponent}
+                  />
                 )}
                 {fieldProps.form.values.berOmNyVurderingFraPvo === true && (
                   <SendTilPvo
                     relevantIndex={relevantIndex}
                     pvkDokument={pvkDokument}
                     fieldProps={fieldProps}
+                    errorComponent={errorSummaryComponent}
                   />
                 )}
               </div>
@@ -149,8 +153,6 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                     deretter behandlet som en ny innsending
                   </Alert>
                 )}
-
-              {errorSummaryComponent}
 
               {isLoading && (
                 <div className='flex justify-center items-center w-full'>

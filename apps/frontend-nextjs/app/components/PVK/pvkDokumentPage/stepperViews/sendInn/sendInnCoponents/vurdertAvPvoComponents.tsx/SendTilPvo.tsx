@@ -5,19 +5,21 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FieldProps } from 'formik'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {
   relevantIndex: number
   pvkDokument: IPvkDokument
   fieldProps: FieldProps<any, any>
+  errorComponent: ReactNode
 }
 
 export const SendTilPvo: FunctionComponent<TProps> = ({
   relevantIndex,
   pvkDokument,
   fieldProps,
+  errorComponent,
 }) => {
   return (
     <div>
@@ -60,6 +62,9 @@ export const SendTilPvo: FunctionComponent<TProps> = ({
           ved PVK-relaterte krav, låses og ikke kunne redigeres. Dette innholdet forbli låst enn så
           lenge saken ligger hos Personvernombudet.
         </Alert>
+
+        {errorComponent}
+
         <div className='mt-5 flex justify-end gap-2 items-center'>
           <LagreOgFortsettSenereButton
             setFieldValue={fieldProps.form.setFieldValue}
