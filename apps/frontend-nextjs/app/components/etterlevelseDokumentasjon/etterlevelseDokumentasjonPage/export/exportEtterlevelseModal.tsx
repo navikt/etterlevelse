@@ -7,13 +7,38 @@ import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from
 import axios from 'axios'
 import { ChangeEvent, useContext, useState } from 'react'
 
-type TExportEtterlevelseModalProps = {
+type TExportEtterlevelseModalWithButtonProps = {
   etterlevelseDokumentasjonId: string
 }
 
-export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) => {
+interface IExportEtterlevelseModalProps extends TExportEtterlevelseModalWithButtonProps {
+  isExportModalOpen: boolean
+  setIsExportModalOpen: (state: boolean) => void
+}
+
+export const ExportEtterlevelseModalWithButton = (
+  props: TExportEtterlevelseModalWithButtonProps
+) => {
   const { etterlevelseDokumentasjonId } = props
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
+
+  return (
+    <div>
+      <Button variant='tertiary' size='small' onClick={() => setIsExportModalOpen(true)}>
+        Eksporter til Word
+      </Button>
+
+      <ExportEtterlevelseModal
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        isExportModalOpen={isExportModalOpen}
+        setIsExportModalOpen={setIsExportModalOpen}
+      />
+    </div>
+  )
+}
+
+export const ExportEtterlevelseModal = (props: IExportEtterlevelseModalProps) => {
+  const { etterlevelseDokumentasjonId, isExportModalOpen, setIsExportModalOpen } = props
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [valgtTema, setValgtTema] = useState<string>('')
@@ -22,10 +47,6 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
 
   return (
     <div>
-      <Button variant='tertiary' size='small' onClick={() => setIsExportModalOpen(true)}>
-        Eksporter til Word
-      </Button>
-
       <Modal
         width='30rem'
         open={isExportModalOpen}
@@ -136,4 +157,4 @@ export const ExportEtterlevelseModal = (props: TExportEtterlevelseModalProps) =>
   )
 }
 
-export default ExportEtterlevelseModal
+export default ExportEtterlevelseModalWithButton
