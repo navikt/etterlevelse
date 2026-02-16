@@ -4,6 +4,7 @@ import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/beha
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import InnsendingHistorikk from '@/components/pvoTilbakemelding/pvoTilbakemeldingPage/stepperViews/oversiktPvoComponents/InnsendingsHistorikk'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
@@ -19,6 +20,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
@@ -45,6 +47,7 @@ type TProps = {
         krav: IPageResponse<TKravQL>
       }
     | undefined
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 export const getFormStatus = (
@@ -160,6 +163,7 @@ export const getTilhorendeDokumentasjonStatusTags = (
 export const OversiktView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
+  pvoTilbakemelding,
   activeStep,
   setSelectedStep,
   updateTitleUrlAndStep,
@@ -401,6 +405,13 @@ export const OversiktView: FunctionComponent<TProps> = ({
             })}
           </FormSummary.Answers>
         </FormSummary>
+
+        <div className='my-5'>
+          <InnsendingHistorikk
+            vurderinger={pvoTilbakemelding ? pvoTilbakemelding.vurderinger : []}
+            meldingerTilPvo={pvkDokument.meldingerTilPvo}
+          />
+        </div>
 
         <List className='w-full'>
           <Heading size='medium' className='mb-3'>

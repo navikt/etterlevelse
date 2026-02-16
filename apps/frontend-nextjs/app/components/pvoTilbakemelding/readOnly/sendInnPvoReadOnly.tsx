@@ -60,7 +60,7 @@ export const SendInnPvoReadOnly: FunctionComponent<TProps> = ({
       <Heading
         level={headingLevel ? headingLevel : '1'}
         size={headingSize ? headingSize : 'medium'}
-        className='mb-5'
+        className='mt-7 mb-5'
       >
         Tilbakemelding til etterlever
       </Heading>
