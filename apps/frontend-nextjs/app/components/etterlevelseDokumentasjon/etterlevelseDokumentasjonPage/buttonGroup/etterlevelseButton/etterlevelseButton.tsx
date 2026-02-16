@@ -16,6 +16,7 @@ enum EButtonRole {
   EtterlevelerOgRisikoeier = 'EtterlevelerOgRisikoeier',
   Admin = 'Admin',
   Risikoeier = 'Risikoeier',
+  Personvernombud = 'Personvernombud',
   Les = 'Les',
 }
 
