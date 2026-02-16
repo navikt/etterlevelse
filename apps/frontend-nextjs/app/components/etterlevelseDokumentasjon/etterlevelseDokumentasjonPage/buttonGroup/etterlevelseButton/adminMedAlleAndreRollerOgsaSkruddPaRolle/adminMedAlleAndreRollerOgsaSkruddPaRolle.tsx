@@ -1,43 +1,32 @@
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { FunctionComponent } from 'react'
 import {
-  CommonVariantTwo,
-  EtterlevelseReadOnlyActionMenuVariant,
-} from '../commonEtterlevelse/commonEtterlevelse'
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { FunctionComponent } from 'react'
+import { RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant } from '../commonEtterlevelse/commonEtterlevelse'
+import {
+  EtterleverGodkjentVariant,
+  EtterleverUnderArbeidVariant,
+} from '../commonEtterlevelse/etterleverCommon'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-const test: string = EPvkDokumentStatus.VURDERT_AV_PVO
-
 const AdminMedAlleAndreRollerOgsaSkruddPaRolle: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
 }) => {
-  switch (test) {
-    case EPvkDokumentStatus.UNDERARBEID:
+  switch (etterlevelseDokumentasjon.status) {
+    case EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER:
       return (
-        <EtterlevelseReadOnlyActionMenuVariant
+        <RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         />
       )
-    case EPvkDokumentStatus.TRENGER_GODKJENNING:
-      return (
-        <EtterlevelseReadOnlyActionMenuVariant
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        />
-      )
-    case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
-      return <CommonVariantTwo />
-    case EPvkDokumentStatus.VURDERT_AV_PVO:
-      return (
-        <EtterlevelseReadOnlyActionMenuVariant
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        />
-      )
+    case EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER:
+      return <EtterleverGodkjentVariant etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     default:
-      return <></>
+      return <EtterleverUnderArbeidVariant etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
   }
 }
 

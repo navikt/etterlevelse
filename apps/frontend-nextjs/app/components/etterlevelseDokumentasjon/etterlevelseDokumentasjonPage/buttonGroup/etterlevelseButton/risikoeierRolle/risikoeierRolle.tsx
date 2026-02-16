@@ -3,15 +3,15 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { FunctionComponent } from 'react'
-import { EtterlevelseReadOnlyActionMenuVariant } from '../commonEtterlevelse/commonEtterlevelse'
+import {
+  EtterlevelseReadOnlyActionMenuVariant,
+  RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant,
+} from '../commonEtterlevelse/commonEtterlevelse'
 import {
   EtterleverGodkjentVariant,
   EtterleverUnderArbeidVariant,
 } from '../commonEtterlevelse/etterleverCommon'
-import {
-  RisikoeierGodkjenningAvEtterlevelseActionMenuVariant,
-  RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant,
-} from '../commonEtterlevelse/risikoeierCommon'
+import { RisikoeierGodkjenningAvEtterlevelseActionMenuVariant } from '../commonEtterlevelse/risikoeierCommon'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
