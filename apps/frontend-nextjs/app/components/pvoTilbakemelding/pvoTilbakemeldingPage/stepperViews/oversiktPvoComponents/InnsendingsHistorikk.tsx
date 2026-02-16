@@ -32,19 +32,19 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
                   ? vurdering[0].sendtAv.split(' - ')[1]
                   : 'Personvernombudet'
               return (
-                <>
-                  <List.Item key={`${index}_innsending_${melding.innsendingId}`}>
+                <React.Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
+                  <List.Item key={`etterleveler_${index}_innsending_${melding.innsendingId}`}>
                     {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}&nbsp;&nbsp;&nbsp;
                     {melding.innsendingId}. innsending til PVO av {melderNavm}
                   </List.Item>
 
                   {vurdering.length !== 0 && vurdering[0].sendtDato && (
-                    <ListItem key={`${index}_innsending_${melding.innsendingId}_vurdering`}>
+                    <ListItem key={`pvo_${index}_innsending_${melding.innsendingId}_vurdering`}>
                       {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')}
                       &nbsp;&nbsp;&nbsp;tilbakemelding fra {sendtAvPvo}
                     </ListItem>
                   )}
-                </>
+                </React.Fragment>
               )
             }
           })}

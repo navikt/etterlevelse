@@ -197,7 +197,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      <div className='px-6 py-9 rounded-lg max-w-[766px] w-full bg-[#E3EFF7] mb-18'>
+      <div className='px-6 py-9 rounded-lg max-w-191.5 w-full bg-[#E3EFF7] mb-18'>
         {pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG && (
           <PvoTilbakemeldingAnsvarligForm
             pvkDokument={pvkDokument}
@@ -223,7 +223,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
           </div>
         )}
       </div>
-      <div className='max-w-[766px] w-full'>
+      <div className='max-w-191.5 w-full'>
         <Heading level='1' size='medium' className='mb-5'>
           Oversikt over PVK-prosessen
         </Heading>
