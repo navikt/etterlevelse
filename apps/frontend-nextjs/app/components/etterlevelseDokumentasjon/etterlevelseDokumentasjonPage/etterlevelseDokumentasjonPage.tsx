@@ -164,7 +164,9 @@ export const EtterlevelseDokumentasjonPage = () => {
                 <div className='flex justify-end'>
                   {etterlevelseDokumentasjon && (
                     <div className='gap-4 ml-5 flex flex-col '>
-                      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                      {(etterlevelseDokumentasjon.hasCurrentUserAccess ||
+                        user.isAdmin() ||
+                        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
                         <EtterlevelseDokumentasjonButtonGroup
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
