@@ -27,6 +27,10 @@ export interface IPvkDokument {
 
   godkjentAvRisikoeierDato: string
   godkjentAvRisikoeier: string
+
+  // response field only
+  currentEtterlevelseDokumentVersjon: number
+  hasPvkDocumentationStarted: boolean
 }
 
 export interface IMeldingTilPvo {

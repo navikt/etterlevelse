@@ -1,7 +1,8 @@
+'use client'
+
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { UserContext } from '@/provider/user/userProvider'
+import { FunctionComponent, useContext } from 'react'
 import AdminMedAlleAndreRollerOgsaSkruddPaRolle from './adminMedAlleAndreRollerOgsaSkruddPaRolle/adminMedAlleAndreRollerOgsaSkruddPaRolle'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
 import RisikoeierRolle from './risikoeierRolle/risikoeierRolle'
@@ -10,25 +11,32 @@ type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-const test: string = 'Etterlever'
+enum EButtonRole {
+  Etterleveler = 'Etterleveler',
+  Admin = 'Admin',
+  Risikoeier = 'Risikoeier',
+  Les = 'Les',
+}
 
-export const EtterlevelseButton: FunctionComponent<TProps> = (
-  {
-    // etterlevelseDokumentasjon
+export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
+  const user = useContext(UserContext)
+
+  const getRolle = (): EButtonRole => {
+    if (user.isAdmin()) {
+      return EButtonRole.Admin
+    } else {
+      if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
+        return EButtonRole.Risikoeier
+      } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
+        return EButtonRole.Etterleveler
+      } else {
+        return EButtonRole.Les
+      }
+    }
   }
-) => {
-  switch (test) {
-    case 'Etterlever':
-      return (
-        <EtterleverRolle
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
-    case 'Risikoeier':
+
+  switch (getRolle()) {
+    case EButtonRole.Risikoeier:
       return (
         <RisikoeierRolle
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -38,7 +46,7 @@ export const EtterlevelseButton: FunctionComponent<TProps> = (
         // isRisikoeier={isRisikoeier}
         />
       )
-    case 'Admin med alle andre roller ogsa skrudd pa':
+    case EButtonRole.Admin:
       return (
         <AdminMedAlleAndreRollerOgsaSkruddPaRolle
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -49,25 +57,6 @@ export const EtterlevelseButton: FunctionComponent<TProps> = (
         />
       )
     default:
-      return (
-        <ActionMenu>
-          <ActionMenu.Trigger>
-            <Button
-              variant='secondary-neutral'
-              icon={<ChevronDownIcon aria-hidden />}
-              iconPosition='right'
-            >
-              Etterlevelse
-            </Button>
-          </ActionMenu.Trigger>
-          <ActionMenu.Content>
-            <ActionMenu.Group label='Administrer etterlevelsedokument'>
-              <ActionMenu.Item as='a' href=''>
-                Eksporter til Word
-              </ActionMenu.Item>
-            </ActionMenu.Group>
-          </ActionMenu.Content>
-        </ActionMenu>
-      )
+      return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
   }
 }
