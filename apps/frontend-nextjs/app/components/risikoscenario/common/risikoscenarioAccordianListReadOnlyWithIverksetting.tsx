@@ -8,7 +8,7 @@ import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvern
 import { Accordion, Alert, BodyLong, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, useEffect, useRef } from 'react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import NyttInnholdTag from './NyttInnholdTag'
 import RisikoscenarioView from './RisikoscenarioView'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from './risikoscenarioAccordionHeader'
@@ -38,6 +38,7 @@ export const RisikoscenarioAccordianListReadOnlyWithIverksetting: FunctionCompon
   const steg: string | undefined = queryParams.get('steg') || undefined
   const risikoscenarioId: string | null = queryParams.get('risikoscenario')
   const tiltakId: string | null = queryParams.get('tiltak')
+  const [expandedReadMore, setExpandedReadMore] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     if (risikoscenarioId) {
@@ -118,11 +119,13 @@ export const RisikoscenarioAccordianListReadOnlyWithIverksetting: FunctionCompon
 
                       {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length !== 0 && (
                         <div className='mt-5'>
-                          {tiltakList
-                            .filter((tiltak: ITiltak) =>
-                              risikoscenario.tiltakIds.includes(tiltak.id)
+                          {risikoscenario.tiltakIds
+                            .map((tiltakId: string) => tiltakList.find((t) => t.id === tiltakId))
+                            .filter(
+                              (tiltak: ITiltak | undefined): tiltak is ITiltak =>
+                                tiltak !== undefined
                             )
-                            .map((tiltak: ITiltak, index: number) => {
+                            .map((tiltak: ITiltak) => {
                               const isChangesMade =
                                 (previousVurdering &&
                                   moment(tiltak.changeStamp.lastModifiedDate).isAfter(
@@ -132,7 +135,7 @@ export const RisikoscenarioAccordianListReadOnlyWithIverksetting: FunctionCompon
 
                               return (
                                 <ReadMore
-                                  key={risikoscenario.id + '_' + tiltak.id + '_' + index}
+                                  key={risikoscenario.id + '_' + tiltak.id}
                                   header={
                                     <>
                                       {tiltak.navn} &nbsp;&nbsp;{' '}
@@ -140,10 +143,24 @@ export const RisikoscenarioAccordianListReadOnlyWithIverksetting: FunctionCompon
                                     </>
                                   }
                                   className='mb-3'
+                                  open={expandedReadMore.has(risikoscenario.id + '_' + tiltak.id)}
+                                  onOpenChange={(open: boolean) => {
+                                    const id = risikoscenario.id + '_' + tiltak.id
+                                    setExpandedReadMore((prev) => {
+                                      const newSet = new Set(prev)
+                                      if (open) {
+                                        newSet.add(id)
+                                      } else {
+                                        newSet.delete(id)
+                                      }
+                                      return newSet
+                                    })
+                                  }}
                                 >
                                   <TiltakViewWithIverksetting
                                     tiltak={tiltak}
                                     risikoscenarioList={allRisikoscenarioList}
+                                    tiltakList={tiltakList}
                                     setTiltakList={setTiltakList}
                                   />
                                 </ReadMore>

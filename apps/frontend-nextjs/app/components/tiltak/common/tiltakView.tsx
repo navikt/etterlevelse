@@ -1,12 +1,15 @@
 'use client'
 
+import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
 import ReadOnlyField, {
   ReadOnlyFieldBool,
   ReadOnlyFieldDescriptionOptional,
 } from '@/components/common/readOnlyFields'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { Alert, List } from '@navikt/ds-react'
+import { PencilIcon } from '@navikt/aksel-icons'
+import { Alert, Button, Checkbox, CheckboxGroup, List, Modal } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
 import { FunctionComponent, useEffect, useState } from 'react'
 
@@ -101,18 +104,117 @@ export const TiltakView = (props: IProps) => {
 }
 
 interface tilakViewWithIverksetting extends IProps {
+  tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
 }
 
 export const TiltakViewWithIverksetting: FunctionComponent<tilakViewWithIverksetting> = ({
   tiltak,
   risikoscenarioList,
-  //setTiltakList,
+  tiltakList,
+  setTiltakList,
 }) => {
+  const [isTiltakEditModalOpen, setIsTiltakEditModalOpen] = useState<boolean>(false)
+
+  const submit = async (submitedValues: ITiltak) => {
+    await updateTiltak(submitedValues)
+      .then((response) => {
+        setTiltakList(
+          tiltakList.map((tiltak) => {
+            if (tiltak.id === response.id) {
+              return { ...response }
+            } else {
+              return tiltak
+            }
+          })
+        )
+      })
+      .finally(() => {
+        setIsTiltakEditModalOpen(false)
+      })
+  }
+
   return (
     <div>
       <TiltakView risikoscenarioList={risikoscenarioList} tiltak={tiltak} />
-      <div>button placeholder</div>
+      <div className='my-5'>
+        <Button
+          variant='tertiary'
+          size='small'
+          type='button'
+          icon={<PencilIcon title='' aria-hidden />}
+          onClick={() => setIsTiltakEditModalOpen(true)}
+        >
+          Endre iverksatt tilstand
+        </Button>
+        {isTiltakEditModalOpen && (
+          <Modal
+            open={isTiltakEditModalOpen}
+            onClose={() => setIsTiltakEditModalOpen(false)}
+            header={{ heading: 'Endre iverksatt tilstand' }}
+          >
+            <Formik
+              onSubmit={submit}
+              initialValues={mapTiltakToFormValue({
+                ...tiltak,
+                pvkDokumentId: tiltak.pvkDokumentId,
+              })}
+            >
+              {({ resetForm, submitForm }) => (
+                <Form>
+                  <Modal.Body>
+                    <ReadOnlyField
+                      label='Tiltak:'
+                      description={tiltak.navn}
+                      className='my-3 flex gap-2'
+                    />
+
+                    <TiltakView risikoscenarioList={risikoscenarioList} tiltak={tiltak} />
+
+                    <div className='mb-5'>
+                      <Field name='iverksatt'>
+                        {(fieldProps: FieldProps) => (
+                          <CheckboxGroup
+                            legend=''
+                            hideLegend
+                            value={fieldProps.field.value ? ['iverksatt'] : []}
+                            onChange={(value) => {
+                              const fieldValue: boolean = value.length > 0 ? true : false
+                              fieldProps.form.setFieldValue('iverksatt', fieldValue)
+                            }}
+                          >
+                            <Checkbox value='iverksatt'>Marker tiltaket som iverksatt</Checkbox>
+                          </CheckboxGroup>
+                        )}
+                      </Field>
+                    </div>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      type='button'
+                      onClick={async () => {
+                        await submitForm()
+                      }}
+                    >
+                      Lagre tiltak
+                    </Button>
+                    <Button
+                      type='button'
+                      variant='secondary'
+                      onClick={() => {
+                        resetForm()
+                        setIsTiltakEditModalOpen(false)
+                      }}
+                    >
+                      Avbryt
+                    </Button>
+                  </Modal.Footer>
+                </Form>
+              )}
+            </Formik>
+          </Modal>
+        )}
+      </div>
     </div>
   )
 }
