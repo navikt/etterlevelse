@@ -3,9 +3,7 @@
 import {
   deletePvkDokument,
   getAllPvkDokument,
-  getPvkDokument,
   mapPvkDokumentToFormValue,
-  updatePvkDokument,
 } from '@/api/pvkDokument/pvkDokumentApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -37,10 +35,6 @@ export const PvkDokumentAdminPage = () => {
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
-
-  const [pvkDocToUpdate, setPvkDocToUpdate] = useState<string>('')
-  const [sendtDato, setSendtDato] = useState<string>('')
-  const [sendtAv, setSendtAv] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
@@ -102,55 +96,6 @@ export const PvkDokumentAdminPage = () => {
           }}
         >
           Slett
-        </Button>
-      </div>
-
-      {/* TEMP FUNCTION WILL REMOVE AFTER CORRECTING PROD DATA*/}
-      <div className='flex items-end mt-8'>
-        <TextField
-          label='oppdater pvk dokument'
-          placeholder='Pvk Dokument UID'
-          onChange={(e) => setPvkDocToUpdate(e.target.value)}
-          className='w-full mr-3'
-        />
-
-        <TextField
-          label='Sendt Dato'
-          onChange={(e) => setSendtDato(e.target.value)}
-          className='w-full mr-3'
-        />
-
-        <TextField
-          label='Sendt av'
-          onChange={(e) => setSendtAv(e.target.value)}
-          className='w-full mr-3'
-        />
-        <Button
-          disabled={!pvkDocToUpdate}
-          onClick={async () => {
-            await getPvkDokument(pvkDocToUpdate).then(async (response) => {
-              const mutatedPvkDocument = { ...response }
-
-              const meldinger = mutatedPvkDocument.meldingerTilPvo.map((melding) => {
-                if (melding.innsendingId === 1) {
-                  console.debug('TRIGGER')
-                  return {
-                    ...melding,
-                    sendtTilPvoDato: sendtDato,
-                    sendtTilPvoAv: sendtAv,
-                  }
-                } else {
-                  return melding
-                }
-              })
-
-              console.debug({ ...mutatedPvkDocument, meldingerTilPvo: meldinger })
-
-              await updatePvkDokument({ ...mutatedPvkDocument, meldingerTilPvo: meldinger })
-            })
-          }}
-        >
-          update
         </Button>
       </div>
 
