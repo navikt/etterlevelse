@@ -5,7 +5,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
 import AdminMedAlleAndreRollerOgsaSkruddPaRolle from './adminMedAlleAndreRollerOgsaSkruddPaRolle/adminMedAlleAndreRollerOgsaSkruddPaRolle'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
-import RisikoeierRolle from './risikoeierRolle/risikoeierRolle'
+import RisikoeierRolle, { RisikoeierOgEtterleverRolle } from './risikoeierRolle/risikoeierRolle'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -13,6 +13,7 @@ type TProps = {
 
 enum EButtonRole {
   Etterleveler = 'Etterleveler',
+  EtterlevelerOgRisikoeier = 'EtterlevelerOgRisikoeier',
   Admin = 'Admin',
   Risikoeier = 'Risikoeier',
   Les = 'Les',
@@ -25,7 +26,12 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
     if (user.isAdmin()) {
       return EButtonRole.Admin
     } else {
-      if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
+      if (
+        etterlevelseDokumentasjon.hasCurrentUserAccess &&
+        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+      ) {
+        return EButtonRole.EtterlevelerOgRisikoeier
+      } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
         return EButtonRole.Risikoeier
       } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
         return EButtonRole.Etterleveler
@@ -37,23 +43,13 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
 
   switch (getRolle()) {
     case EButtonRole.Risikoeier:
-      return (
-        <RisikoeierRolle
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
+      return <RisikoeierRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+    case EButtonRole.EtterlevelerOgRisikoeier:
+      return <RisikoeierOgEtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EButtonRole.Admin:
       return (
         <AdminMedAlleAndreRollerOgsaSkruddPaRolle
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         />
       )
     default:

@@ -1,41 +1,53 @@
-import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { FunctionComponent } from 'react'
-import { CommonVariantOne } from '../commonEtterlevelse/commonEtterlevelse'
-import { RisikoeierVariantOne } from '../commonEtterlevelse/risikoeierCommon'
+import { EtterlevelseReadOnlyActionMenuVariant } from '../commonEtterlevelse/commonEtterlevelse'
+import {
+  EtterleverGodkjentVariant,
+  EtterleverUnderArbeidVariant,
+} from '../commonEtterlevelse/etterleverCommon'
+import {
+  RisikoeierGodkjenningAvEtterlevelseActionMenuVariant,
+  RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant,
+} from '../commonEtterlevelse/risikoeierCommon'
 
-// type TProps = {
-//   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-//   risikoscenarioList: IRisikoscenario[]
-//   behandlingsLivslop?: IBehandlingensLivslop
-//   pvkDokument?: IPvkDokument
-//   isRisikoeier: boolean
-// }
+type TProps = {
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+}
 
-const test: string = EPvkDokumentStatus.VURDERT_AV_PVO
-
-// EPVKTilstandStatus
-// PVKTilstandStatusRolle
-
-const RisikoeierRolle: FunctionComponent = (
-  {
-    //   etterlevelseDokumentasjon,
-    //   behandlingsLivslop,
-    //   pvkDokument,
-    //   risikoscenarioList,
-    //   isRisikoeier,
-  }
-) => {
-  switch (test) {
-    case EPvkDokumentStatus.UNDERARBEID:
-      return <CommonVariantOne />
-    case EPvkDokumentStatus.TRENGER_GODKJENNING:
-      return <RisikoeierVariantOne />
-    case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
-      return <CommonVariantOne />
-    case EPvkDokumentStatus.VURDERT_AV_PVO:
-      return <CommonVariantOne />
+const RisikoeierRolle: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
+  switch (etterlevelseDokumentasjon.status) {
+    case EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER:
+      return (
+        <RisikoeierGodkjenningAvEtterlevelseActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
     default:
-      return <></>
+      return (
+        <EtterlevelseReadOnlyActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
+  }
+}
+
+export const RisikoeierOgEtterleverRolle: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+}) => {
+  switch (etterlevelseDokumentasjon.status) {
+    case EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER:
+      return (
+        <RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
+    case EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER:
+      return <EtterleverGodkjentVariant etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+    default:
+      return <EtterleverUnderArbeidVariant etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
   }
 }
 

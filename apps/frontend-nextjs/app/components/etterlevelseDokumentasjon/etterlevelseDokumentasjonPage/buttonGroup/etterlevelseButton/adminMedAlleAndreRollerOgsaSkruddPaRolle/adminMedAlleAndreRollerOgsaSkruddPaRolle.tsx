@@ -1,38 +1,41 @@
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
-import { CommonVariantOne, CommonVariantTwo } from '../commonEtterlevelse/commonEtterlevelse'
+import {
+  CommonVariantTwo,
+  EtterlevelseReadOnlyActionMenuVariant,
+} from '../commonEtterlevelse/commonEtterlevelse'
 
-// type TProps = {
-//   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-//   risikoscenarioList: IRisikoscenario[]
-//   behandlingsLivslop?: IBehandlingensLivslop
-//   pvkDokument?: IPvkDokument
-//   isRisikoeier: boolean
-// }
+type TProps = {
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+}
 
 const test: string = EPvkDokumentStatus.VURDERT_AV_PVO
 
-// EPVKTilstandStatus
-// PVKTilstandStatusRolle
-
-const AdminMedAlleAndreRollerOgsaSkruddPaRolle: FunctionComponent = (
-  {
-    //   etterlevelseDokumentasjon,
-    //   behandlingsLivslop,
-    //   pvkDokument,
-    //   risikoscenarioList,
-    //   isRisikoeier,
-  }
-) => {
+const AdminMedAlleAndreRollerOgsaSkruddPaRolle: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+}) => {
   switch (test) {
     case EPvkDokumentStatus.UNDERARBEID:
-      return <CommonVariantOne />
+      return (
+        <EtterlevelseReadOnlyActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
     case EPvkDokumentStatus.TRENGER_GODKJENNING:
-      return <CommonVariantOne />
+      return (
+        <EtterlevelseReadOnlyActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
       return <CommonVariantTwo />
     case EPvkDokumentStatus.VURDERT_AV_PVO:
-      return <CommonVariantOne />
+      return (
+        <EtterlevelseReadOnlyActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
     default:
       return <></>
   }
