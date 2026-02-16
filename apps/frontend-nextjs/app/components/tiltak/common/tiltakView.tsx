@@ -8,7 +8,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { Alert, List } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 
 interface IProps {
   tiltak: ITiltak
@@ -96,6 +96,23 @@ export const TiltakView = (props: IProps) => {
           </Alert>
         )}
       </div>
+    </div>
+  )
+}
+
+interface tilakViewWithIverksetting extends IProps {
+  setTiltakList: (state: ITiltak[]) => void
+}
+
+export const TiltakViewWithIverksetting: FunctionComponent<tilakViewWithIverksetting> = ({
+  tiltak,
+  risikoscenarioList,
+  //setTiltakList,
+}) => {
+  return (
+    <div>
+      <TiltakView risikoscenarioList={risikoscenarioList} tiltak={tiltak} />
+      <div>button placeholder</div>
     </div>
   )
 }

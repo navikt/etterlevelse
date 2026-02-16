@@ -64,7 +64,11 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
             .then(async (pvoTilbakemelding) => {
               const formValuePvo = pvoTilbakemelding
 
-              if (antallInnsending > pvoTilbakemelding.vurderinger.length) {
+              if (
+                pvoTilbakemelding.vurderinger.filter(
+                  (vurdering) => vurdering.innsendingId === antallInnsending
+                ).length === 0
+              ) {
                 formValuePvo.vurderinger.push(
                   createNewPvoVurderning(
                     antallInnsending,

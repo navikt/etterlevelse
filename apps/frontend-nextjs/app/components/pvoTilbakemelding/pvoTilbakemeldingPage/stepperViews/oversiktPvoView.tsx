@@ -232,7 +232,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
         <FormSummary className='my-3'>
           <FormSummary.Header>
             <FormSummary.Heading className='flex gap-2' level='2'>
-              Status <InnsendingTag antallInnsendingTilPvo={relevantVurdering.innsendingId} />
+              Status <InnsendingTag antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo} />
             </FormSummary.Heading>
           </FormSummary.Header>
           <FormSummary.Answers>
