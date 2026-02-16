@@ -3,7 +3,7 @@ import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConst
 import { List, ReadMore } from '@navikt/ds-react'
 import { ListItem } from '@navikt/ds-react/List'
 import moment from 'moment'
-import { FunctionComponent } from 'react'
+import { Fragment, FunctionComponent } from 'react'
 
 type TProps = {
   vurderinger: IVurdering[]
@@ -32,19 +32,19 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
                   ? vurdering[0].sendtAv.split(' - ')[1]
                   : 'Personvernombudet'
               return (
-                <React.Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
+                <Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
                   <List.Item key={`etterleveler_${index}_innsending_${melding.innsendingId}`}>
                     {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}&nbsp;&nbsp;&nbsp;
                     {melding.innsendingId}. innsending til PVO av {melderNavm}
                   </List.Item>
 
                   {vurdering.length !== 0 && vurdering[0].sendtDato && (
-                    <ListItem key={`pvo_${index}_innsending_${melding.innsendingId}_vurdering`}>
+                    <ListItem key={`${index}_innsending_${melding.innsendingId}_vurdering`}>
                       {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')}
                       &nbsp;&nbsp;&nbsp;tilbakemelding fra {sendtAvPvo}
                     </ListItem>
                   )}
-                </React.Fragment>
+                </Fragment>
               )
             }
           })}
@@ -53,3 +53,5 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
+export default InnsendingHistorikk
