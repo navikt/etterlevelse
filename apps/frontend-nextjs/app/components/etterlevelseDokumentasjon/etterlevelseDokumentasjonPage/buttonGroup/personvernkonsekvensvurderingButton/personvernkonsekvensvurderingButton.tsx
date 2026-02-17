@@ -24,6 +24,8 @@ type TProps = {
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
+  behandlingsLivslop,
+  behandlingensArtOgOmfang,
 }) => {
   const user = useContext(UserContext)
 
@@ -69,11 +71,10 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
     case EActionMenuRoles.Admin:
       return (
         <AdminMedAlleAndreRollerOgsaSkruddPaRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
         />
       )
     default:
@@ -81,6 +82,8 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         <EtterleverRollePVK
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
         />
       )
   }

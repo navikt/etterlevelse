@@ -1,5 +1,22 @@
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopUrl,
+  pvkDokumentasjonPvkBehovUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
+
+type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  pvkDokument?: IPvkDokument
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
+  behandlingsLivslop?: IBehandlingensLivslop
+}
 
 export const PvkIkkePabegyntActionMenuVariant = () => (
   <ActionMenu>
@@ -94,7 +111,12 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant = () => (
   </ActionMenu>
 )
 
-export const PvkIkkeVurdertActionMenuVariant = () => (
+export const PvkIkkeVurdertActionMenuVariant: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  behandlingensArtOgOmfang,
+  behandlingsLivslop,
+}) => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -107,15 +129,33 @@ export const PvkIkkeVurdertActionMenuVariant = () => (
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+          )}
+        >
           Tegn behandlingens livsløp
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
+          )}
+        >
           Beskriv art og omfang
         </ActionMenu.Item>
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonPvkBehovUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny'
+          )}
+        >
           Vurder behov for PVK
         </ActionMenu.Item>
       </ActionMenu.Group>

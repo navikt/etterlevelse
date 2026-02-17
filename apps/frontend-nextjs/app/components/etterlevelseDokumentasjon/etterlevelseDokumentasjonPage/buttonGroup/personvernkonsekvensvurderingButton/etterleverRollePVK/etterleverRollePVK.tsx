@@ -1,3 +1,5 @@
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
@@ -21,11 +23,15 @@ import {
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument?: IPvkDokument
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
+  behandlingsLivslop?: IBehandlingensLivslop
 }
 
 const EtterleverRollePVK: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
+  behandlingensArtOgOmfang,
+  behandlingsLivslop,
 }) => {
   const getPvkTilstand = (): EPVKTilstandStatus => {
     if (
@@ -77,7 +83,14 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
 
   switch (getPvkTilstand()) {
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return <PvkIkkeVurdertActionMenuVariant />
+      return (
+        <PvkIkkeVurdertActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
       return <EtterleverSkalIkkeUtforePvkActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_THREE:

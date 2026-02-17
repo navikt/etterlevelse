@@ -1,4 +1,10 @@
-import { EPVKTilstandStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPVKTilstandStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
 import {
   AdminMedAlleAndreRollerOgsaSkruddPaVariantOne,
@@ -12,33 +18,40 @@ import {
   PvkUnderArbeidActionMenuVariant,
 } from '../commonPVK/commonPVK'
 
-// type TProps = {
-//   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-//   risikoscenarioList: IRisikoscenario[]
-//   behandlingsLivslop?: IBehandlingensLivslop
-//   pvkDokument?: IPvkDokument
-//   isRisikoeier: boolean
-// }
+type TProps = {
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  behandlingsLivslop?: IBehandlingensLivslop
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
+  pvkDokument?: IPvkDokument
+}
 
 const test: string = EPVKTilstandStatus.TILSTAND_STATUS_SEVEN
 
-// EPVKTilstandStatus
-// PVKTilstandStatusRolle
-
-const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent = (
-  {
-    //   etterlevelseDokumentasjon,
-    //   behandlingsLivslop,
-    //   pvkDokument,
-    //   risikoscenarioList,
-    //   isRisikoeier,
-  }
-) => {
+const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  behandlingsLivslop,
+  behandlingensArtOgOmfang,
+  pvkDokument,
+}) => {
   switch (test) {
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return <PvkIkkeVurdertActionMenuVariant />
+      return (
+        <PvkIkkeVurdertActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
-      return <PvkIkkeVurdertActionMenuVariant />
+      return (
+        <PvkIkkeVurdertActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantOne />
     case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
