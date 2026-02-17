@@ -19,7 +19,7 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
       <ReadMore header='Vis innsendingshistorikken'>
         <List>
           {meldingerTilPvo.map((melding, index) => {
-            const melderNavm = melding.sendtTilPvoAv.split(' - ')[1]
+            const melderNavn = melding.sendtTilPvoAv.split(' - ')[1]
 
             if (melding.sendtTilPvoDato) {
               const vurdering = vurderinger.filter(
@@ -28,14 +28,16 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
                   vurdering.etterlevelseDokumentVersjon === melding.etterlevelseDokumentVersjon
               )
               const sendtAvPvo =
-                vurdering.length !== 0 && vurdering[0].sendtAv !== ''
+                vurdering.length !== 0 &&
+                vurdering[0].sendtAv !== '' &&
+                vurdering[0].sendtAv !== null
                   ? vurdering[0].sendtAv.split(' - ')[1]
                   : 'Personvernombudet'
               return (
                 <Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
                   <List.Item key={`etterleveler_${index}_innsending_${melding.innsendingId}`}>
                     {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}&nbsp;&nbsp;&nbsp;
-                    {melding.innsendingId}. innsending til PVO av {melderNavm}
+                    {melding.innsendingId}. innsending til PVO av {melderNavn}
                   </List.Item>
 
                   {vurdering.length !== 0 && vurdering[0].sendtDato && (
