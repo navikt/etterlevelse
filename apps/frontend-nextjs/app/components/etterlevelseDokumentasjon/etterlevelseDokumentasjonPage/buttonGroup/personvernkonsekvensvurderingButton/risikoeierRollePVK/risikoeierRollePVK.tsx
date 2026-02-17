@@ -1,9 +1,9 @@
 import { EPVKTilstandStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
 import {
-  CommonVariantOnePVK,
-  CommonVariantThreePVK,
-  CommonVariantTwoPVK,
+  PvkIkkePabegyntActionMenuVariant,
+  PvkOppdatertEtterNyVersjonActionMenuVariant,
+  PvkPabegyntActionMenuVariant,
 } from '../commonPVK/commonPVK'
 import { RisikoeierVariantOnePVK, RisikoeierVariantTwoPVK } from '../commonPVK/risikoeierCommonPVK'
 
@@ -31,25 +31,25 @@ const RisikoeierRollePVK: FunctionComponent = (
 ) => {
   switch (test) {
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return <CommonVariantOnePVK />
+      return <PvkIkkePabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
-      return <CommonVariantOnePVK />
+      return <PvkIkkePabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
-      return <CommonVariantOnePVK />
+      return <PvkIkkePabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
-      return <CommonVariantTwoPVK />
+      return <PvkPabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <CommonVariantTwoPVK />
+      return <PvkPabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
-      return <CommonVariantTwoPVK />
+      return <PvkPabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <CommonVariantTwoPVK />
+      return <PvkPabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return <RisikoeierVariantOnePVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
       return <RisikoeierVariantTwoPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
-      return <CommonVariantThreePVK />
+      return <PvkOppdatertEtterNyVersjonActionMenuVariant />
     default:
       return <></>
   }

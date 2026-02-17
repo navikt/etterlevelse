@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 
-export const CommonVariantOnePVK = () => (
+export const PvkIkkePabegyntActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -30,7 +30,7 @@ export const CommonVariantOnePVK = () => (
   </ActionMenu>
 )
 
-export const CommonVariantTwoPVK = () => (
+export const PvkPabegyntActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -62,7 +62,7 @@ export const CommonVariantTwoPVK = () => (
   </ActionMenu>
 )
 
-export const CommonVariantThreePVK = () => (
+export const PvkOppdatertEtterNyVersjonActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button

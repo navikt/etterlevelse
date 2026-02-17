@@ -52,11 +52,8 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
     case EActionMenuRoles.Personvernombud:
       return (
         <PersonvernombudRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
         />
       )
     case EActionMenuRoles.Risikoeier:

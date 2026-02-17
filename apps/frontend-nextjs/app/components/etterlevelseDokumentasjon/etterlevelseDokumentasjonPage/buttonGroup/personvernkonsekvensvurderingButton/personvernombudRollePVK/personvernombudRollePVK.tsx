@@ -1,55 +1,57 @@
-import { EPVKTilstandStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPVKTilstandStatus,
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
 import {
-  CommonVariantOnePVK,
-  CommonVariantThreePVK,
-  CommonVariantTwoPVK,
+  PvkIkkePabegyntActionMenuVariant,
+  PvkOppdatertEtterNyVersjonActionMenuVariant,
+  PvkPabegyntActionMenuVariant,
 } from '../commonPVK/commonPVK'
 import { PersonvernombudVariantOne } from '../commonPVK/personvernombudCommonPVK'
 
-// type TProps = {
-//   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-//   risikoscenarioList: IRisikoscenario[]
-//   behandlingsLivslop?: IBehandlingensLivslop
-//   pvkDokument?: IPvkDokument
-//   isRisikoeier: boolean
-// }
+type TProps = {
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  pvkDokument?: IPvkDokument
+}
 
-const test: string = EPVKTilstandStatus.TILSTAND_STATUS_ONE
-
-// EPVKTilstandStatus
-// PVKTilstandStatusRolle
-
-const PersonvernombudRollePVK: FunctionComponent = (
-  {
-    //   etterlevelseDokumentasjon,
-    //   behandlingsLivslop,
-    //   pvkDokument,
-    //   risikoscenarioList,
-    //   isRisikoeier,
+const PersonvernombudRollePVK: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+}) => {
+  const getPvkTilstand = (): EPVKTilstandStatus => {
+    if ((pvkDokument && pvkDokument.hasPvkDocumentationStarted === false) || !pvkDokument) {
+      return EPVKTilstandStatus.TILSTAND_STATUS_ONE
+    } else if (
+      etterlevelseDokumentasjon.etterlevelseDokumentVersjon === 1 &&
+      [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING].includes(
+        pvkDokument.status
+      )
+    ) {
+      return EPVKTilstandStatus.TILSTAND_STATUS_FIVE
+    } else if (
+      etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 &&
+      [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING].includes(
+        pvkDokument.status
+      )
+    ) {
+      return EPVKTilstandStatus.TILSTAND_STATUS_TEN
+    } else {
+      return EPVKTilstandStatus.TILSTAND_STATUS_FOUR
+    }
   }
-) => {
-  switch (test) {
+
+  switch (getPvkTilstand()) {
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return <CommonVariantOnePVK />
-    case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
-      return <CommonVariantOnePVK />
-    case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
-      return <CommonVariantOnePVK />
+      return <PvkIkkePabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
-      return <CommonVariantTwoPVK />
+      return <PvkPabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
       return <PersonvernombudVariantOne />
-    case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
-      return <CommonVariantTwoPVK />
-    case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <CommonVariantTwoPVK />
-    case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
-      return <CommonVariantTwoPVK />
-    case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
-      return <CommonVariantTwoPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
-      return <CommonVariantThreePVK />
+      return <PvkOppdatertEtterNyVersjonActionMenuVariant />
     default:
       return <></>
   }
