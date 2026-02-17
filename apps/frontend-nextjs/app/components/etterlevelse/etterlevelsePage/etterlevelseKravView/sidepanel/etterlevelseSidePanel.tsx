@@ -3,11 +3,13 @@
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
+import KravRisikoscenarioGodkjentAccordianList from '@/components/risikoscenario/kravSpesifikk/KravRisikoscenarioGodkjentAccordianList'
 import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/kravRisikoscenarioer'
 import KravRisikoscenarioReadOnly from '@/components/risikoscenario/readOnly/KravRisikoscenarioReadOnly'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
+  EPvkDokumentStatus,
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -141,14 +143,27 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
           {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
             <Tabs.Panel className='overflow-auto h-[90vh]' value='pvkDokumentasjon'>
               <div className='mt-2 p-4 mb-52'>
-                {userHasAccess() && pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
-                  <KravRisikoscenarioer
-                    krav={krav}
-                    pvkDokument={pvkDokument}
-                    setIsPvkFormActive={setIsPvkFormActive}
-                    formRef={formRef}
-                  />
-                )}
+                {userHasAccess() &&
+                  pvkDokument &&
+                  !isReadOnlyPvkStatus(pvkDokument.status) &&
+                  pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                    <KravRisikoscenarioer
+                      krav={krav}
+                      pvkDokument={pvkDokument}
+                      setIsPvkFormActive={setIsPvkFormActive}
+                      formRef={formRef}
+                    />
+                  )}
+
+                {userHasAccess() &&
+                  pvkDokument &&
+                  pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                    <KravRisikoscenarioGodkjentAccordianList
+                      krav={krav}
+                      pvkDokument={pvkDokument}
+                      previousVurdering={previousVurdering}
+                    />
+                  )}
 
                 {(!userHasAccess() || (pvkDokument && isReadOnlyPvkStatus(pvkDokument.status))) && (
                   <KravRisikoscenarioReadOnly

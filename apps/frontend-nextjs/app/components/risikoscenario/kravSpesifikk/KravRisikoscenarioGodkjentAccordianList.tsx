@@ -18,7 +18,7 @@ import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import NyttInnholdTag from '../common/NyttInnholdTag'
 import { KravRisikoscenarioOvrigeRisikoscenarierLink } from '../common/kravRisikoscenarioOvrigeRisikoscenarierLink'
 import { KravRisikoscenarioReadMore } from '../common/kravRisikoscenarioReadMore'
-import KravRisikoscenarioAccordionContentReadOnly from './kravRisikoscenarioAccordionContentReadOnly'
+import KravRisikoscenarioGodkjentAccordionContent from './kravRisikoscenarioGodkjentAccordionContent'
 
 type TProps = {
   krav: TKravQL
@@ -26,7 +26,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
+export const KravRisikoscenarioGodkjentAccordianList: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
   previousVurdering,
@@ -108,10 +108,11 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
                     )}
                   </Accordion.Header>
                   <Accordion.Content>
-                    <KravRisikoscenarioAccordionContentReadOnly
+                    <KravRisikoscenarioGodkjentAccordionContent
                       risikoscenario={risikoscenario}
                       alleRisikoscenarioer={alleRisikoscenarioer}
                       tiltakList={tiltakList}
+                      setTiltakList={setTiltakList}
                       previousVurdering={previousVurdering}
                     />
                   </Accordion.Content>
@@ -129,4 +130,4 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
   )
 }
 
-export default KravRisikoscenarioReadOnly
+export default KravRisikoscenarioGodkjentAccordianList
