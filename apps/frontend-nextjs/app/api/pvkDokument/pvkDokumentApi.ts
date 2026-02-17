@@ -204,5 +204,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     godkjentAvRisikoeier: pvkDokument.godkjentAvRisikoeier || '',
     currentEtterlevelseDokumentVersjon: pvkDokument.currentEtterlevelseDokumentVersjon || 1,
     hasPvkDocumentationStarted: pvkDokument.hasPvkDocumentationStarted || false,
+    hasPvkDocumentBeenUpdatedAfterApproval:
+      pvkDokument.hasPvkDocumentBeenUpdatedAfterApproval || false,
   }
 }
