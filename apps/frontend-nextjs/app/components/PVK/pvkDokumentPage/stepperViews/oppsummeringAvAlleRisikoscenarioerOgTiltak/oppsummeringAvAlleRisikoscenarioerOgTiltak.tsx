@@ -531,6 +531,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         !isReadOnlyPvkStatus(pvkDokument.status) &&
                         filteredTiltakList.length !== 0 && (
                           <TiltakAccordionList
+                            pvkDokument={pvkDokument}
                             tiltakList={tiltakList}
                             setTiltakList={setTiltakList}
                             filteredTiltakList={filteredTiltakList}

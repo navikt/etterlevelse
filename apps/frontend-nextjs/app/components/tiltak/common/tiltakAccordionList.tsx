@@ -4,6 +4,10 @@ import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import TiltakView from '@/components/tiltak/common/tiltakView'
 import TiltakForm from '@/components/tiltak/form/tiltakForm'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
@@ -18,6 +22,7 @@ import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react
 import IverksattTiltakForm from '../form/iverksattTiltakForm'
 
 type TProps = {
+  pvkDokument: IPvkDokument
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   filteredTiltakList: ITiltak[]
@@ -28,6 +33,7 @@ type TProps = {
 
 type TContentProps = {
   tiltak: ITiltak
+  pvkDokument: IPvkDokument
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
   filteredTiltakList: ITiltak[]
@@ -37,6 +43,7 @@ type TContentProps = {
 }
 
 export const TiltakAccordionList: FunctionComponent<TProps> = ({
+  pvkDokument,
   tiltakList,
   setTiltakList,
   filteredTiltakList,
@@ -125,6 +132,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
               {expanded && (
                 <Accordion.Content>
                   <TiltakAccordionContent
+                    pvkDokument={pvkDokument}
                     tiltak={tiltak}
                     risikoscenarioList={risikoscenarioList}
                     tiltakList={tiltakList}
@@ -152,6 +160,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
 
 export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
   tiltak,
+  pvkDokument,
   risikoscenarioList,
   tiltakList,
   setTiltakList,
@@ -193,7 +202,7 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
   return (
     <div>
       <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
-      {!iverksattFormDirty && (
+      {!iverksattFormDirty && pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
         <div className='mb-5'>
           <Button
             type='button'
