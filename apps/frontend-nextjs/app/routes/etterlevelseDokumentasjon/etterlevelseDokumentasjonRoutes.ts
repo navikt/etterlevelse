@@ -40,6 +40,18 @@ export const etterlevelsesDokumentasjonEditUrl = (etterlevelseDokumentasjonId?: 
   return url
 }
 
+export const etterlevelsesDokumentasjonSendTilGodkjenningUrl = (
+  etterlevelseDokumentasjonId?: string
+): string => {
+  return `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}/send-til-godkjenning-risikoeier`
+}
+
+export const etterlevelsesDokumentasjonRisikoeierGodkjenningUrl = (
+  etterlevelseDokumentasjonId?: string
+): string => {
+  return `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}/godkjenning-av-etterlevelsesdokument`
+}
+
 export const etterlevelseDokumentasjonAlleOpenUrl = (
   etterlevelseDokumentasjonId: string | undefined
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tema=all-open`

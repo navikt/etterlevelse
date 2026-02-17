@@ -1,33 +1,53 @@
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+'use client'
+
+import {
+  EActionMenuRoles,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { UserContext } from '@/provider/user/userProvider'
+import { FunctionComponent, useContext } from 'react'
+import AdminMedAlleAndreRollerOgsaSkruddPaRolle from './adminMedAlleAndreRollerOgsaSkruddPaRolle/adminMedAlleAndreRollerOgsaSkruddPaRolle'
+import EtterleverRolle from './etterleverRolle/etterleverRolle'
+import RisikoeierRolle, { RisikoeierOgEtterleverRolle } from './risikoeierRolle/risikoeierRolle'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => (
-  <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Etterlevelse
-      </Button>
-    </ActionMenu.Trigger>
-    <ActionMenu.Content>
-      <ActionMenu.Group label=''>
-        <ActionMenu.Item
-          as='a'
-          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-        >
-          Rediger dokumentegenskaper
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-    </ActionMenu.Content>
-  </ActionMenu>
-)
+export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
+  const user = useContext(UserContext)
+
+  const getRolle = (): EActionMenuRoles => {
+    if (user.isAdmin()) {
+      return EActionMenuRoles.Admin
+    } else {
+      if (
+        etterlevelseDokumentasjon.hasCurrentUserAccess &&
+        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+      ) {
+        return EActionMenuRoles.EtterleverOgRisikoeier
+      } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
+        return EActionMenuRoles.Risikoeier
+      } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
+        return EActionMenuRoles.Etterlever
+      } else {
+        return EActionMenuRoles.Les
+      }
+    }
+  }
+
+  switch (getRolle()) {
+    case EActionMenuRoles.Risikoeier:
+      return <RisikoeierRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+    case EActionMenuRoles.EtterleverOgRisikoeier:
+      return <RisikoeierOgEtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+    case EActionMenuRoles.Admin:
+      return (
+        <AdminMedAlleAndreRollerOgsaSkruddPaRolle
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
+    default:
+      return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+  }
+}

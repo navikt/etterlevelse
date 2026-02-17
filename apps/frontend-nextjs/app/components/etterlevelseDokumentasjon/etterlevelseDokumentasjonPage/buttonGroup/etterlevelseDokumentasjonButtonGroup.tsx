@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext } from 'react'
 import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
+import GjenbrukButton from './gjenbrukButton/gjenbrukButton'
 import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurderingButton/personvernkonsekvensvurderingButton'
 
 type TProps = {
@@ -38,6 +39,7 @@ type TProps = {
   risikoscenarioList: IRisikoscenario[]
   artOgOmfang: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   pvkDokument?: IPvkDokument
 }
 
@@ -47,6 +49,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
   risikoscenarioList,
   artOgOmfang,
   behandlingsLivslop,
+  behandlingensArtOgOmfang,
   pvkDokument,
 }) => {
   const router = useRouter()
@@ -149,14 +152,20 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
       </>
 
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
+      {env.isDev && (
+        <GjenbrukButton
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          behandlingsLivslop={behandlingsLivslop}
+          pvkDokument={pvkDokument}
+        />
+      )}
       {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
       {env.isDev && (
         <PersonvernkonsekvensvurderingButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          risikoscenarioList={risikoscenarioList}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
           pvkDokument={pvkDokument}
-          isRisikoeier={isRisikoeier}
         />
       )}
     </>
