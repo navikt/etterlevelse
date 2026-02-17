@@ -39,6 +39,7 @@ type TProps = {
   risikoscenarioList: IRisikoscenario[]
   artOgOmfang: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   pvkDokument?: IPvkDokument
 }
 
@@ -48,6 +49,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
   risikoscenarioList,
   artOgOmfang,
   behandlingsLivslop,
+  behandlingensArtOgOmfang,
   pvkDokument,
 }) => {
   const router = useRouter()
@@ -153,20 +155,17 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
       {env.isDev && (
         <GjenbrukButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          risikoscenarioList={risikoscenarioList}
           behandlingsLivslop={behandlingsLivslop}
           pvkDokument={pvkDokument}
-          isRisikoeier={isRisikoeier}
         />
       )}
       {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
       {env.isDev && (
         <PersonvernkonsekvensvurderingButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          risikoscenarioList={risikoscenarioList}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
           pvkDokument={pvkDokument}
-          isRisikoeier={isRisikoeier}
         />
       )}
     </>

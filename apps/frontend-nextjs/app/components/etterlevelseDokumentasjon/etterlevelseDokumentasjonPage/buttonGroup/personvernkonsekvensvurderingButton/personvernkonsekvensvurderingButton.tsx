@@ -1,12 +1,12 @@
 'use client'
 
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
 import AdminMedAlleAndreRollerOgsaSkruddPaRollePVK from './adminMedAlleAndreRollerOgsaSkruddPaRollePVK/adminMedAlleAndreRollerOgsaSkruddPaRollePVK'
@@ -16,10 +16,9 @@ import RisikoeierRollePVK from './risikoeierRollePVK/risikoeierRollePVK'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  risikoscenarioList: IRisikoscenario[]
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
   pvkDokument?: IPvkDokument
-  isRisikoeier: boolean
 }
 
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({

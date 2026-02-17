@@ -1,11 +1,15 @@
 'use client'
 
-import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
+import {
+  getBehandlingensArtOgOmfangByEtterlevelseDokumentId,
+  useBehandlingensArtOgOmfang,
+} from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -71,6 +75,8 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [artOgOmfang] = useBehandlingensArtOgOmfang(params.etterlevelseDokumentasjonId)
   const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
+  const [behandlingensArtOgOmfang, setBehandlingensArtOgOmfang] =
+    useState<IBehandlingensArtOgOmfang>()
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [kravRisikoscenarioList, setKravRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(false)
@@ -112,7 +118,17 @@ export const EtterlevelseDokumentasjonPage = () => {
 
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
           .then((response: IBehandlingensLivslop) => {
-            if (response) setBehandlingsLivslop(response)
+            if (response) {
+              setBehandlingsLivslop(response)
+            }
+          })
+          .catch(() => undefined)
+
+        await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response: IBehandlingensArtOgOmfang) => {
+            if (response) {
+              setBehandlingensArtOgOmfang(response)
+            }
           })
           .catch(() => undefined)
       })()
@@ -173,6 +189,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                           artOgOmfang={artOgOmfang}
                           pvkDokument={pvkDokument}
                           behandlingsLivslop={behandlingsLivslop}
+                          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
                           risikoscenarioList={risikoscenarioList}
                         />
                       )}
