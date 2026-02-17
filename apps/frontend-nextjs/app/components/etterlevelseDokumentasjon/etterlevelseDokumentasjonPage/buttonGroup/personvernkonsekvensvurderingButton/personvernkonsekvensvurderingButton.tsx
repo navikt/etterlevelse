@@ -1,8 +1,14 @@
+'use client'
+
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EActionMenuRoles,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { FunctionComponent } from 'react'
+import { UserContext } from '@/provider/user/userProvider'
+import { FunctionComponent, useContext } from 'react'
 import AdminMedAlleAndreRollerOgsaSkruddPaRollePVK from './adminMedAlleAndreRollerOgsaSkruddPaRollePVK/adminMedAlleAndreRollerOgsaSkruddPaRollePVK'
 import EtterleverRollePVK from './etterleverRollePVK/etterleverRollePVK'
 import PersonvernombudRollePVK from './personvernombudRollePVK/personvernombudRollePVK'
@@ -16,29 +22,38 @@ type TProps = {
   isRisikoeier: boolean
 }
 
-const test: string = 'Admin med alle andre roller ogsa skrudd pa'
+export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  // behandlingsLivslop,
+  // pvkDokument,
+  // risikoscenarioList,
+  // isRisikoeier,
+}) => {
+  const user = useContext(UserContext)
 
-export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
-  {
-    // etterlevelseDokumentasjon,
-    // behandlingsLivslop,
-    // pvkDokument,
-    // risikoscenarioList,
-    // isRisikoeier,
+  const getRole = (): EActionMenuRoles => {
+    if (user.isAdmin()) {
+      return EActionMenuRoles.Admin
+    } else if (user.isPersonvernombud()) {
+      return EActionMenuRoles.Personvernombud
+    } else {
+      if (
+        etterlevelseDokumentasjon.hasCurrentUserAccess &&
+        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+      ) {
+        return EActionMenuRoles.EtterleverOgRisikoeier
+      } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
+        return EActionMenuRoles.Risikoeier
+      } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
+        return EActionMenuRoles.Etterlever
+      } else {
+        return EActionMenuRoles.Les
+      }
+    }
   }
-) => {
-  switch (test) {
-    case 'Etterlever':
-      return (
-        <EtterleverRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
-    case 'Personvernombud':
+
+  switch (getRole()) {
+    case EActionMenuRoles.Personvernombud:
       return (
         <PersonvernombudRollePVK
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -48,7 +63,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
         // isRisikoeier={isRisikoeier}
         />
       )
-    case 'Risikoeier':
+    case EActionMenuRoles.Risikoeier:
       return (
         <RisikoeierRollePVK
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -58,7 +73,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
         // isRisikoeier={isRisikoeier}
         />
       )
-    case 'Admin med alle andre roller ogsa skrudd pa':
+    case EActionMenuRoles.Admin:
       return (
         <AdminMedAlleAndreRollerOgsaSkruddPaRollePVK
         // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -69,6 +84,14 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = (
         />
       )
     default:
-      return <></>
+      return (
+        <EtterleverRollePVK
+        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        // risikoscenarioList={risikoscenarioList}
+        // behandlingsLivslop={behandlingsLivslop}
+        // pvkDokument={pvkDokument}
+        // isRisikoeier={isRisikoeier}
+        />
+      )
   }
 }

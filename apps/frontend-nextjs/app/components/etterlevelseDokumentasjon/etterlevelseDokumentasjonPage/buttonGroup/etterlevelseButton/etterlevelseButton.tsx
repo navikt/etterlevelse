@@ -25,11 +25,11 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
         etterlevelseDokumentasjon.hasCurrentUserAccess &&
         etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
       ) {
-        return EActionMenuRoles.EtterlevelerOgRisikoeier
+        return EActionMenuRoles.EtterleverOgRisikoeier
       } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
         return EActionMenuRoles.Risikoeier
       } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
-        return EActionMenuRoles.Etterleveler
+        return EActionMenuRoles.Etterlever
       } else {
         return EActionMenuRoles.Les
       }
@@ -39,7 +39,7 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
   switch (getRolle()) {
     case EActionMenuRoles.Risikoeier:
       return <RisikoeierRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
-    case EActionMenuRoles.EtterlevelerOgRisikoeier:
+    case EActionMenuRoles.EtterleverOgRisikoeier:
       return <RisikoeierOgEtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EActionMenuRoles.Admin:
       return (
