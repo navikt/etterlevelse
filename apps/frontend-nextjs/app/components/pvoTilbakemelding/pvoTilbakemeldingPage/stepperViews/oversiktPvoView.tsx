@@ -329,6 +329,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
 
         <div className='my-5'>
           <InnsendingHistorikk
+            pvkDokument={pvkDokument}
             vurderinger={pvoTilbakemelding.vurderinger}
             meldingerTilPvo={pvkDokument.meldingerTilPvo}
           />

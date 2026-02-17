@@ -1,4 +1,7 @@
-import { IMeldingTilPvo } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  IMeldingTilPvo,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { List, ReadMore } from '@navikt/ds-react'
 import { ListItem } from '@navikt/ds-react/List'
@@ -6,11 +9,13 @@ import moment from 'moment'
 import { Fragment, FunctionComponent } from 'react'
 
 type TProps = {
+  pvkDokument: IPvkDokument
   vurderinger: IVurdering[]
   meldingerTilPvo: IMeldingTilPvo[]
 }
 
 export const InnsendingHistorikk: FunctionComponent<TProps> = ({
+  pvkDokument,
   meldingerTilPvo,
   vurderinger,
 }) => {
@@ -20,8 +25,10 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
         <List>
           {meldingerTilPvo.map((melding, index) => {
             const melderNavn = melding.sendtTilPvoAv.split(' - ')[1]
-
-            if (melding.sendtTilPvoDato) {
+            if (
+              pvkDokument.antallInnsendingTilPvo >= melding.innsendingId &&
+              melding.sendtTilPvoDato
+            ) {
               const vurdering = vurderinger.filter(
                 (vurdering) =>
                   vurdering.innsendingId === melding.innsendingId &&
@@ -33,6 +40,12 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
                 vurdering[0].sendtAv !== null
                   ? vurdering[0].sendtAv.split(' - ')[1]
                   : 'Personvernombudet'
+
+              if (melding.innsendingId === 10) {
+                console.debug(melding, 'MELDING')
+                console.debug(vurdering, 'PVO')
+              }
+
               return (
                 <Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
                   <List.Item key={`etterleveler_${index}_innsending_${melding.innsendingId}`}>
