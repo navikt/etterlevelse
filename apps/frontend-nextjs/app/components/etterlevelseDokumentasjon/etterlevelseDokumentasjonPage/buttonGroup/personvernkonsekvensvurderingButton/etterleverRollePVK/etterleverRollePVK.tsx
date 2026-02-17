@@ -25,7 +25,7 @@ type TProps = {
 
 const EtterleverRollePVK: FunctionComponent<TProps> = ({
   pvkDokument,
-  // etterlevelseDokumentasjon,
+  etterlevelseDokumentasjon,
 }) => {
   const getPvkTilstand = (): EPVKTilstandStatus => {
     if (
@@ -62,6 +62,11 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
         return EPVKTilstandStatus.TILSTAND_STATUS_EIGHT
       } else if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
         return EPVKTilstandStatus.TILSTAND_STATUS_NINE
+      } else if (
+        etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 &&
+        pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO
+      ) {
+        return EPVKTilstandStatus.TILSTAND_STATUS_TEN
       } else {
         return EPVKTilstandStatus.TILSTAND_STATUS_TWO
       }
@@ -91,8 +96,6 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
       return <PvkGodkjentAvRisikoeierActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return <PvkUnderArbeidActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:
-      return <PvkSendtTilPvoActionMenuVariant />
     default:
       return <></>
   }

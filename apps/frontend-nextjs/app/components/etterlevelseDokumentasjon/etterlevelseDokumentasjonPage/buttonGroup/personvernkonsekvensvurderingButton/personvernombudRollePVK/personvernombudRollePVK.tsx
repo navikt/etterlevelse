@@ -50,8 +50,6 @@ const PersonvernombudRollePVK: FunctionComponent = (
       return <CommonVariantTwoPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return <CommonVariantThreePVK />
-    case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:
-      return <CommonVariantTwoPVK />
     default:
       return <></>
   }

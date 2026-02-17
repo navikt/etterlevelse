@@ -15,7 +15,7 @@ import { RisikoeierVariantOnePVK, RisikoeierVariantTwoPVK } from '../commonPVK/r
 //   isRisikoeier: boolean
 // }
 
-const test: string = EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN
+const test: string = EPVKTilstandStatus.TILSTAND_STATUS_SEVEN
 
 // EPVKTilstandStatus
 // PVKTilstandStatusRolle
@@ -50,8 +50,6 @@ const RisikoeierRollePVK: FunctionComponent = (
       return <RisikoeierVariantTwoPVK />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return <CommonVariantThreePVK />
-    case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:
-      return <RisikoeierVariantOnePVK />
     default:
       return <></>
   }

@@ -20,7 +20,7 @@ import {
 //   isRisikoeier: boolean
 // }
 
-const test: string = EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN
+const test: string = EPVKTilstandStatus.TILSTAND_STATUS_SEVEN
 
 // EPVKTilstandStatus
 // PVKTilstandStatusRolle
@@ -55,8 +55,6 @@ const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent = (
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantThree />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return <PvkUnderArbeidActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:
-      return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
     default:
       return <></>
   }
