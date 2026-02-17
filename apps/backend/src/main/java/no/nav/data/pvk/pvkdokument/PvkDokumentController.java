@@ -19,6 +19,7 @@ import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.tiltak.TiltakService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,7 @@ public class PvkDokumentController {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final RisikoscenarioService risikoscenarioService;
+    private final TiltakService tiltakService;
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")
@@ -50,6 +52,7 @@ public class PvkDokumentController {
             var response = PvkDokumentResponse.buildFrom(pvkDokument);
             addEtterlevelseDokumentasjonVersjon(response);
             checkIfPvkDocumentationHasStarted(response);
+            checkIfPvkDocumentBeenUpdatedAfterApproval(response);
             return response;
         });
 
@@ -84,6 +87,7 @@ public class PvkDokumentController {
         var response = PvkDokumentResponse.buildFrom(pvkDokumentService.get(id));
         addEtterlevelseDokumentasjonVersjon(response);
         checkIfPvkDocumentationHasStarted(response);
+        checkIfPvkDocumentBeenUpdatedAfterApproval(response);
         return ResponseEntity.ok(response);
     }
 
@@ -101,6 +105,7 @@ public class PvkDokumentController {
             var response = PvkDokumentResponse.buildFrom(pvkDokument.get());
             addEtterlevelseDokumentasjonVersjon(response);
             checkIfPvkDocumentationHasStarted(response);
+            checkIfPvkDocumentBeenUpdatedAfterApproval(response);
             return ResponseEntity.ok(response);
         }
     }
@@ -115,6 +120,7 @@ public class PvkDokumentController {
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
         addEtterlevelseDokumentasjonVersjon(response);
         checkIfPvkDocumentationHasStarted(response);
+        checkIfPvkDocumentBeenUpdatedAfterApproval(response);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -140,6 +146,7 @@ public class PvkDokumentController {
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
         addEtterlevelseDokumentasjonVersjon(response);
         checkIfPvkDocumentationHasStarted(response);
+        checkIfPvkDocumentBeenUpdatedAfterApproval(response);
         return ResponseEntity.ok(response);
     }
 
@@ -156,6 +163,7 @@ public class PvkDokumentController {
             var response = PvkDokumentResponse.buildFrom(pvkDokument);
             addEtterlevelseDokumentasjonVersjon(response);
             checkIfPvkDocumentationHasStarted(response);
+            checkIfPvkDocumentBeenUpdatedAfterApproval(response);
             return ResponseEntity.ok(response);
         }
     }
@@ -201,5 +209,25 @@ public class PvkDokumentController {
             pvkDokument.setHasPvkDocumentationStarted(false);
         }
 
+    }
+
+    private void checkIfPvkDocumentBeenUpdatedAfterApproval(PvkDokumentResponse pvkDokument) {
+        if (pvkDokument.getStatus() == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER && pvkDokument.getGodkjentAvRisikoeierDato() != null) {
+            var alleRisikoscenario = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL);
+            var alleTitlak = tiltakService.getByPvkDokument(pvkDokument.getId());
+
+            boolean anyRisikoscenarioUpdatedAfterApproval = alleRisikoscenario.stream()
+                    .anyMatch(r -> r.getChangeStamp().getLastModifiedDate().isAfter(pvkDokument.getGodkjentAvRisikoeierDato()));
+
+            boolean anyTiltakUpdatedAfterApproval = alleTitlak.stream()
+                    .anyMatch(t -> t.getChangeStamp().getLastModifiedDate().isAfter(pvkDokument.getGodkjentAvRisikoeierDato()));
+
+            pvkDokument.setHasPvkDocumentBeenUpdatedAfterApproval(
+                    anyRisikoscenarioUpdatedAfterApproval ||
+                            anyTiltakUpdatedAfterApproval ||
+                    pvkDokument.getChangeStamp().getLastModifiedDate().isAfter(pvkDokument.getGodkjentAvRisikoeierDato()));
+        } else {
+            pvkDokument.setHasPvkDocumentBeenUpdatedAfterApproval(false);
+        }
     }
 }

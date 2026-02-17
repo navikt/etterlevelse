@@ -31,6 +31,7 @@ export interface IPvkDokument {
   // response field only
   currentEtterlevelseDokumentVersjon: number
   hasPvkDocumentationStarted: boolean
+  hasPvkDocumentBeenUpdatedAfterApproval: boolean
 }
 
 export interface IMeldingTilPvo {

@@ -56,6 +56,7 @@ public class PvkDokumentResponse {
 
     private Integer currentEtterlevelseDokumentVersjon;
     private boolean hasPvkDocumentationStarted;
+    private boolean hasPvkDocumentBeenUpdatedAfterApproval;
 
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
