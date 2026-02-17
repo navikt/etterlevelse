@@ -1,6 +1,9 @@
 'use client'
 
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EActionMenuRoles,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
 import AdminMedAlleAndreRollerOgsaSkruddPaRolle from './adminMedAlleAndreRollerOgsaSkruddPaRolle/adminMedAlleAndreRollerOgsaSkruddPaRolle'
@@ -11,43 +14,34 @@ type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-enum EButtonRole {
-  Etterleveler = 'Etterleveler',
-  EtterlevelerOgRisikoeier = 'EtterlevelerOgRisikoeier',
-  Admin = 'Admin',
-  Risikoeier = 'Risikoeier',
-  Personvernombud = 'Personvernombud',
-  Les = 'Les',
-}
-
 export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
   const user = useContext(UserContext)
 
-  const getRolle = (): EButtonRole => {
+  const getRolle = (): EActionMenuRoles => {
     if (user.isAdmin()) {
-      return EButtonRole.Admin
+      return EActionMenuRoles.Admin
     } else {
       if (
         etterlevelseDokumentasjon.hasCurrentUserAccess &&
         etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
       ) {
-        return EButtonRole.EtterlevelerOgRisikoeier
+        return EActionMenuRoles.EtterlevelerOgRisikoeier
       } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
-        return EButtonRole.Risikoeier
+        return EActionMenuRoles.Risikoeier
       } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
-        return EButtonRole.Etterleveler
+        return EActionMenuRoles.Etterleveler
       } else {
-        return EButtonRole.Les
+        return EActionMenuRoles.Les
       }
     }
   }
 
   switch (getRolle()) {
-    case EButtonRole.Risikoeier:
+    case EActionMenuRoles.Risikoeier:
       return <RisikoeierRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
-    case EButtonRole.EtterlevelerOgRisikoeier:
+    case EActionMenuRoles.EtterlevelerOgRisikoeier:
       return <RisikoeierOgEtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
-    case EButtonRole.Admin:
+    case EActionMenuRoles.Admin:
       return (
         <AdminMedAlleAndreRollerOgsaSkruddPaRolle
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}

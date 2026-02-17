@@ -81,3 +81,12 @@ export interface INomSeksjon {
   nomSeksjonId: string
   nomSeksjonName: string
 }
+
+export enum EActionMenuRoles {
+  Etterleveler = 'Etterleveler',
+  EtterlevelerOgRisikoeier = 'EtterlevelerOgRisikoeier',
+  Admin = 'Admin',
+  Risikoeier = 'Risikoeier',
+  Personvernombud = 'Personvernombud',
+  Les = 'Les',
+}
