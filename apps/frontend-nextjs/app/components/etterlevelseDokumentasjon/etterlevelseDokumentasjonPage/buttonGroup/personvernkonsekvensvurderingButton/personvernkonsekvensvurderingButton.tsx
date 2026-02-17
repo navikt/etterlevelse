@@ -80,6 +80,11 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return <EtterleverRollePVK pvkDokument={pvkDokument} />
+      return (
+        <EtterleverRollePVK
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+        />
+      )
   }
 }

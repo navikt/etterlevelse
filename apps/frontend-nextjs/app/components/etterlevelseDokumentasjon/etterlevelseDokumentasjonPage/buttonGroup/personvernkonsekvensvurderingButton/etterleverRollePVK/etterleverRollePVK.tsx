@@ -1,3 +1,4 @@
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
   EPvkDokumentStatus,
@@ -14,14 +15,18 @@ import {
 import {
   EtterleverSkalIkkeUtforePvkActionMenuVariant,
   EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant,
-  EtterleverVariantThree,
+  PvkGodkjentAvRisikoeierActionMenuVariant,
 } from '../commonPVK/etterleverCommonPVK'
 
 type TProps = {
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument?: IPvkDokument
 }
 
-const EtterleverRollePVK: FunctionComponent<TProps> = ({ pvkDokument }) => {
+const EtterleverRollePVK: FunctionComponent<TProps> = ({
+  pvkDokument,
+  // etterlevelseDokumentasjon,
+}) => {
   const getPvkTilstand = (): EPVKTilstandStatus => {
     if (
       pvkDokument &&
@@ -55,6 +60,8 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({ pvkDokument }) => {
         return EPVKTilstandStatus.TILSTAND_STATUS_SEVEN
       } else if (pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) {
         return EPVKTilstandStatus.TILSTAND_STATUS_EIGHT
+      } else if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+        return EPVKTilstandStatus.TILSTAND_STATUS_NINE
       } else {
         return EPVKTilstandStatus.TILSTAND_STATUS_TWO
       }
@@ -81,7 +88,7 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({ pvkDokument }) => {
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return <PvkSendtTilPvoActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
-      return <EtterleverVariantThree />
+      return <PvkGodkjentAvRisikoeierActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return <PvkUnderArbeidActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:

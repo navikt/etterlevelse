@@ -147,6 +147,9 @@ export const PvkUnderArbeidActionMenuVariant = () => (
         <ActionMenu.Item as='a' href=''>
           Fullfør PVK
         </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Les om behov for PVK (read-only)
+        </ActionMenu.Item>
       </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
@@ -176,6 +179,9 @@ export const PvkSendtTilPvoActionMenuVariant = () => (
         <ActionMenu.Item as='a' href=''>
           Les PVK (read-only)
         </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Les om behov for PVK (read-only)
+        </ActionMenu.Item>
       </ActionMenu.Group>
     </ActionMenu.Content>
   </ActionMenu>
@@ -204,6 +210,9 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant = () => (
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
         <ActionMenu.Item as='a' href=''>
           Les PVOs tilbakemelding
+        </ActionMenu.Item>
+        <ActionMenu.Item as='a' href=''>
+          Les om behov for PVK (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
     </ActionMenu.Content>

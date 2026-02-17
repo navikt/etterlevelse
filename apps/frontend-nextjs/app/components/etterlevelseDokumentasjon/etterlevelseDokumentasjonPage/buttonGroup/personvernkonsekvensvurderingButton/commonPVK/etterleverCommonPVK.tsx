@@ -62,7 +62,7 @@ export const EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant = () => (
   </ActionMenu>
 )
 
-export const EtterleverVariantThree = () => (
+export const PvkGodkjentAvRisikoeierActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -87,7 +87,7 @@ export const EtterleverVariantThree = () => (
           Les PVK (read-only, godkjent versjon) og Oppdater PVK (åpner neste versjon)
         </ActionMenu.Item>
         <ActionMenu.Item as='a' href=''>
-          Revurder behov for PVK
+          Les om behov for PVK (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
     </ActionMenu.Content>
