@@ -23,10 +23,7 @@ type TProps = {
 
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  // behandlingsLivslop,
-  // pvkDokument,
-  // risikoscenarioList,
-  // isRisikoeier,
+  pvkDokument,
 }) => {
   const user = useContext(UserContext)
 
@@ -83,14 +80,6 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return (
-        <EtterleverRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
+      return <EtterleverRollePVK pvkDokument={pvkDokument} />
   }
 }

@@ -6,10 +6,10 @@ import {
   AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo,
 } from '../commonPVK/adminMedAlleAndreRollerOgsaSkruddPaCommonPVK'
 import {
-  CommonVariantFivePVK,
-  CommonVariantFourPVK,
-  CommonVariantSevenPVK,
-  CommonVariantSixPVK,
+  PvkHarFattTilbakemeldingFraPvoActionMenuVariant,
+  PvkIkkeVurdertActionMenuVariant,
+  PvkSendtTilPvoActionMenuVariant,
+  PvkUnderArbeidActionMenuVariant,
 } from '../commonPVK/commonPVK'
 
 // type TProps = {
@@ -36,25 +36,25 @@ const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent = (
 ) => {
   switch (test) {
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return <CommonVariantFourPVK />
+      return <PvkIkkeVurdertActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
-      return <CommonVariantFourPVK />
+      return <PvkIkkeVurdertActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantOne />
     case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
-      return <CommonVariantFivePVK />
+      return <PvkUnderArbeidActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <CommonVariantSixPVK />
+      return <PvkSendtTilPvoActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
-      return <CommonVariantSevenPVK />
+      return <PvkHarFattTilbakemeldingFraPvoActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <CommonVariantSixPVK />
+      return <PvkSendtTilPvoActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantThree />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
-      return <CommonVariantFivePVK />
+      return <PvkUnderArbeidActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_ELEVEN:
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
     default:

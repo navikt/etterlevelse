@@ -94,7 +94,7 @@ export const CommonVariantThreePVK = () => (
   </ActionMenu>
 )
 
-export const CommonVariantFourPVK = () => (
+export const PvkIkkeVurdertActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -123,7 +123,7 @@ export const CommonVariantFourPVK = () => (
   </ActionMenu>
 )
 
-export const CommonVariantFivePVK = () => (
+export const PvkUnderArbeidActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -152,7 +152,7 @@ export const CommonVariantFivePVK = () => (
   </ActionMenu>
 )
 
-export const CommonVariantSixPVK = () => (
+export const PvkSendtTilPvoActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -181,7 +181,7 @@ export const CommonVariantSixPVK = () => (
   </ActionMenu>
 )
 
-export const CommonVariantSevenPVK = () => (
+export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button

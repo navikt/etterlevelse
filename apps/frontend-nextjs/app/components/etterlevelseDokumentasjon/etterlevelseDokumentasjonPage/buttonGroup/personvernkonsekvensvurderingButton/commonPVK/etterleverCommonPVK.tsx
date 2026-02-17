@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 
-export const EtterleverVariantOne = () => (
+export const EtterleverSkalIkkeUtforePvkActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -30,7 +30,7 @@ export const EtterleverVariantOne = () => (
   </ActionMenu>
 )
 
-export const EtterleverVariantTwo = () => (
+export const EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
