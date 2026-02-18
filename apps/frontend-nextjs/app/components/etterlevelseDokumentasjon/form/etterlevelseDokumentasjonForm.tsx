@@ -54,6 +54,7 @@ import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -62,6 +63,7 @@ import {
   CheckboxGroup,
   ErrorSummary,
   Heading,
+  InfoCard,
   Label,
   List,
   Modal,
@@ -74,10 +76,12 @@ import _ from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   ChangeEvent,
+  Fragment,
   FunctionComponent,
   RefObject,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -102,6 +106,12 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
   )
   const router = useRouter()
   const [selectedFilter, setSelectedFilter] = useState<number[]>([])
+
+  const behandlerPersonopplysningerIndex = useMemo(() => {
+    return relevansOptions.findIndex(
+      (relevans: IGetParsedOptionsProps) => relevans.label === 'Behandler personopplysninger'
+    )
+  }, [relevansOptions])
 
   const [dokumentRelasjon, setDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
@@ -156,6 +166,28 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
       )
     }
   }, [etterlevelseDokumentasjon, codelist.lists])
+
+  useEffect(() => {
+    if (!pvkDokument) return
+    if (behandlerPersonopplysningerIndex < 0) return
+    if (selectedFilter.includes(behandlerPersonopplysningerIndex)) return
+
+    const nextSelectedFilter = [...selectedFilter, behandlerPersonopplysningerIndex]
+    setSelectedFilter(nextSelectedFilter)
+
+    const irrelevansListe = relevansOptions.filter(
+      (_irrelevans: IGetParsedOptionsProps, index: number) => !nextSelectedFilter.includes(index)
+    )
+
+    if (formRef.current?.setFieldValue) {
+      formRef.current.setFieldValue(
+        'irrelevansFor',
+        irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
+          codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
+        )
+      )
+    }
+  }, [pvkDokument, behandlerPersonopplysningerIndex, selectedFilter, relevansOptions, codelist])
 
   useEffect(() => {
     ;(async () => {
@@ -300,29 +332,27 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
                     value={selectedFilter}
                     onChange={(selected: number[]) => {
+                      const nextSelected =
+                        pvkDokument && behandlerPersonopplysningerIndex >= 0
+                          ? Array.from(new Set([...selected, behandlerPersonopplysningerIndex]))
+                          : selected
+
                       const irrelevansListe = relevansOptions.filter(
                         (_irrelevans: IGetParsedOptionsProps, index: number) =>
-                          !selected.includes(index)
+                          !nextSelected.includes(index)
                       )
-
-                      const behandlerPvkIndex = relevansOptions
-                        .map((_irrelevans: IGetParsedOptionsProps, index: number) => {
-                          if (_irrelevans.label === 'Behandler personopplysninger') {
-                            return index
-                          }
-                        })
-                        .filter((index) => index !== undefined)
 
                       if (
                         (pvkDokument || behandlingensLivslop || behandlingensArtOgOmfang) &&
-                        selectedFilter.includes(behandlerPvkIndex[0]) &&
-                        !selected.includes(behandlerPvkIndex[0])
+                        behandlerPersonopplysningerIndex >= 0 &&
+                        selectedFilter.includes(behandlerPersonopplysningerIndex) &&
+                        !nextSelected.includes(behandlerPersonopplysningerIndex)
                       ) {
-                        setTempSelectedFilter(selected)
+                        setTempSelectedFilter(nextSelected)
                         setTempIrrelevansList(irrelevansListe)
                         setIsPvkAlertModalOpen(true)
                       } else {
-                        setSelectedFilter(selected)
+                        setSelectedFilter(nextSelected)
                         fieldArrayRenderProps.form.setFieldValue(
                           'irrelevansFor',
                           irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
@@ -343,13 +373,21 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     }}
                   >
                     {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => (
-                      <Checkbox
-                        key={'relevans_' + relevans.value}
-                        value={index}
-                        description={relevans.description}
-                      >
-                        {relevans.label}
-                      </Checkbox>
+                      <Fragment key={'relevans_' + relevans.value}>
+                        <Checkbox value={index} description={relevans.description}>
+                          {relevans.label}
+                        </Checkbox>
+                        {!!pvkDokument && relevans.label === 'Behandler personopplysninger' && (
+                          <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
+                            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                              <InfoCard.Title as='div'>
+                                Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
+                                fjernes som egenskap.
+                              </InfoCard.Title>
+                            </InfoCard.Header>
+                          </InfoCard>
+                        )}
+                      </Fragment>
                     ))}
                   </CheckboxGroup>
 

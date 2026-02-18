@@ -130,6 +130,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
           </Button>
         )}
+
         {!etterlevelseDokumentasjon.irrelevansFor.some(
           (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
         ) && (
