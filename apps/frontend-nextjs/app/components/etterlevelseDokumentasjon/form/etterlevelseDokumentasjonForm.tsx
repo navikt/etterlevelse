@@ -1,5 +1,7 @@
 'use client'
 
+import { getBehandlingensArtOgOmfangByEtterlevelseDokumentId } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
+import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { searchBehandlingOptions } from '@/api/behandlingskatalog/behandlingskatalogApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import {
@@ -8,6 +10,7 @@ import {
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAvdelingOptions, getSeksjonOptionsByAvdelingId } from '@/api/nom/nomApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
@@ -24,8 +27,10 @@ import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { TOption } from '@/constants/commonConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   ERelationType,
   IDocumentRelationWithEtterlevelseDokumetajson,
@@ -36,6 +41,10 @@ import {
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
@@ -47,12 +56,15 @@ import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDoku
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import {
   Alert,
+  BodyLong,
   Button,
   Checkbox,
   CheckboxGroup,
   ErrorSummary,
   Heading,
   Label,
+  List,
+  Modal,
   ReadMore,
   Select,
   TextField,
@@ -110,6 +122,13 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
       : ''
   )
   const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+  const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
+  const [behandlingensArtOgOmfang, setBehandlingensArtOgOmfang] =
+    useState<IBehandlingensArtOgOmfang>()
+  const [isPvkAlertModalOpen, setIsPvkAlertModalOpen] = useState<boolean>(false)
+  const [tempSelectedFilter, setTempSelectedFilter] = useState<number[]>([])
+  const [tempIrrelevansListe, setTempIrrelevansList] = useState<IGetParsedOptionsProps[]>([])
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -147,6 +166,24 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
         ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) =>
           setDokumentRelasjon(response[0])
         )
+
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response) => {
+            if (response) setPvkDokument(response)
+          })
+          .catch(() => undefined)
+
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response) => {
+            if (response) setBehandlingensLivslop(response)
+          })
+          .catch(() => undefined)
+
+        await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response) => {
+            if (response) setBehandlingensArtOgOmfang(response)
+          })
+          .catch(() => undefined)
       }
     })()
   }, [etterlevelseDokumentasjon])
@@ -263,28 +300,46 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
                     value={selectedFilter}
                     onChange={(selected: number[]) => {
-                      setSelectedFilter(selected)
                       const irrelevansListe = relevansOptions.filter(
                         (_irrelevans: IGetParsedOptionsProps, index: number) =>
                           !selected.includes(index)
                       )
 
-                      fieldArrayRenderProps.form.setFieldValue(
-                        'irrelevansFor',
-                        irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
-                          codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
+                      const behandlerPvkIndex = relevansOptions
+                        .map((_irrelevans: IGetParsedOptionsProps, index: number) => {
+                          if (_irrelevans.label === 'Behandler personopplysninger') {
+                            return index
+                          }
+                        })
+                        .filter((index) => index !== undefined)
+
+                      if (
+                        (pvkDokument || behandlingensLivslop || behandlingensArtOgOmfang) &&
+                        selectedFilter.includes(behandlerPvkIndex[0]) &&
+                        !selected.includes(behandlerPvkIndex[0])
+                      ) {
+                        setTempSelectedFilter(selected)
+                        setTempIrrelevansList(irrelevansListe)
+                        setIsPvkAlertModalOpen(true)
+                      } else {
+                        setSelectedFilter(selected)
+                        fieldArrayRenderProps.form.setFieldValue(
+                          'irrelevansFor',
+                          irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
+                            codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
+                          )
                         )
-                      )
-                      // selected.forEach((value) => {
-                      //   const i = parseInt(value)
-                      //   if (!selectedFilter.includes(i)) {
-                      //     setSelectedFilter([...selectedFilter, i])
-                      //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
-                      //   } else {
-                      //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                      //     p.push(codelistUtils.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                      //   }
-                      // })
+                        // selected.forEach((value) => {
+                        //   const i = parseInt(value)
+                        //   if (!selectedFilter.includes(i)) {
+                        //     setSelectedFilter([...selectedFilter, i])
+                        //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
+                        //   } else {
+                        //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
+                        //     p.push(codelistUtils.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
+                        //   }
+                        // })
+                      }
                     }}
                   >
                     {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => (
@@ -297,6 +352,74 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                       </Checkbox>
                     ))}
                   </CheckboxGroup>
+
+                  {isPvkAlertModalOpen && (
+                    <Modal
+                      open={isPvkAlertModalOpen}
+                      onClose={() => setIsPvkAlertModalOpen(false)}
+                      header={{ heading: 'Vil dere fjerne “Behandler personopplysninger?' }}
+                    >
+                      <Modal.Body>
+                        <BodyLong className='mb-7'>
+                          Hvis dere fjerner egenskapen “Behandler personopplysninger”, vil dere ikke
+                          lenger kunne se eller redigere
+                        </BodyLong>
+                        <List as='ul'>
+                          {behandlingensLivslop && (
+                            <List.Item>“Tegn Behandlingens livsløp”</List.Item>
+                          )}
+                          {behandlingensArtOgOmfang && (
+                            <List.Item>“Behandlingens art og omfang”</List.Item>
+                          )}
+                          {pvkDokument && <List.Item>“Vurder behov for PVK”</List.Item>}
+                          {pvkDokument &&
+                            pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+                              <List.Item>PVK-dokumentet</List.Item>
+                            )}
+                        </List>
+                        <BodyLong className='my-7'>
+                          Dersom dere ikke lenger behandler personopplysninger, vil ikke disse
+                          sidene være relevante lenger. Innhold som dere kan ha lagt inn på de
+                          sidene, vil fortsatt være lagret, bare skjult.
+                        </BodyLong>
+                        <BodyLong>
+                          Hvis dere senere velger “Behandler personopplysninger” på nytt, vil disse
+                          sidene, og innhold som dere har lagret der, vises og kunne redigeres som
+                          før.
+                        </BodyLong>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          type='button'
+                          onClick={() => {
+                            setSelectedFilter(tempSelectedFilter)
+                            setTempSelectedFilter([])
+                            fieldArrayRenderProps.form.setFieldValue(
+                              'irrelevansFor',
+                              tempIrrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
+                                codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
+                              )
+                            )
+                            setTempIrrelevansList([])
+                            setIsPvkAlertModalOpen(false)
+                          }}
+                        >
+                          Fjern “Behandler personopplysninger”
+                        </Button>
+                        <Button
+                          type='button'
+                          variant='secondary'
+                          onClick={() => {
+                            setTempSelectedFilter([])
+                            setTempIrrelevansList([])
+                            setIsPvkAlertModalOpen(false)
+                          }}
+                        >
+                          Avbryt, ikke fjern
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  )}
                 </div>
               )}
             </FieldArray>
