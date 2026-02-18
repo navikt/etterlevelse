@@ -171,7 +171,8 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
   }, [etterlevelseDokumentasjon, codelist.lists])
 
   useEffect(() => {
-    if (!pvkDokument) return
+    const isPvkDokumentasjonStartet = pvkDokument?.hasPvkDocumentationStarted === true
+    if (!isPvkDokumentasjonStartet) return
     if (behandlerPersonopplysningerIndex < 0) return
     if (selectedFilter.includes(behandlerPersonopplysningerIndex)) return
 
@@ -335,8 +336,10 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
                     value={selectedFilter}
                     onChange={(selected: number[]) => {
+                      const isPvkDokumentasjonStartet =
+                        pvkDokument?.hasPvkDocumentationStarted === true
                       const nextSelected =
-                        pvkDokument && behandlerPersonopplysningerIndex >= 0
+                        isPvkDokumentasjonStartet && behandlerPersonopplysningerIndex >= 0
                           ? Array.from(new Set([...selected, behandlerPersonopplysningerIndex]))
                           : selected
 
@@ -403,16 +406,17 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         <Checkbox value={index} description={relevans.description}>
                           {relevans.label}
                         </Checkbox>
-                        {!!pvkDokument && relevans.label === 'Behandler personopplysninger' && (
-                          <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
-                            <InfoCard.Header>
-                              <InfoCard.Title as='div'>
-                                Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
-                                fjernes som egenskap.
-                              </InfoCard.Title>
-                            </InfoCard.Header>
-                          </InfoCard>
-                        )}
+                        {pvkDokument?.hasPvkDocumentationStarted === true &&
+                          relevans.label === 'Behandler personopplysninger' && (
+                            <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
+                              <InfoCard.Header>
+                                <InfoCard.Title as='div'>
+                                  Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
+                                  fjernes som egenskap.
+                                </InfoCard.Title>
+                              </InfoCard.Header>
+                            </InfoCard>
+                          )}
 
                         {showBehandlerPersonopplysningerInfoCard &&
                           relevans.label === 'Behandler personopplysninger' &&
