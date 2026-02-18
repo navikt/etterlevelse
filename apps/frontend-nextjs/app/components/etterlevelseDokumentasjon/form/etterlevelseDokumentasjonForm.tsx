@@ -425,7 +425,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         {showBehandlerPersonopplysningerInfoCard &&
                           relevans.label === 'Behandler personopplysninger' &&
                           (behandlingensLivslop || behandlingensArtOgOmfang || pvkDokument) && (
-                            <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
+                            <InfoCard
+                              data-color='info'
+                              size='small'
+                              className='-mt-3 ml-6 max-w-[75ch]'
+                            >
                               <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                                 <InfoCard.Title as='div'>
                                   Dere har dokumentasjon fra før om hvordan dere behandler
