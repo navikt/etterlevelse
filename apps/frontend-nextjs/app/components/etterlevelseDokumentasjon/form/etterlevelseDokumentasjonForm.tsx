@@ -408,7 +408,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         </Checkbox>
                         {pvkDokument?.hasPvkDocumentationStarted === true &&
                           relevans.label === 'Behandler personopplysninger' && (
-                            <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
+                            <InfoCard
+                              data-color='info'
+                              size='small'
+                              className='-mt-3 ml-6 max-w-[75ch]'
+                            >
                               <InfoCard.Header>
                                 <InfoCard.Title as='div'>
                                   Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
