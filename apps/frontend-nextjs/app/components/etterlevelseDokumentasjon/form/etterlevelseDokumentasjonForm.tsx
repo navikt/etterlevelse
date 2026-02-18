@@ -140,6 +140,9 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
   const [tempSelectedFilter, setTempSelectedFilter] = useState<number[]>([])
   const [tempIrrelevansListe, setTempIrrelevansList] = useState<IGetParsedOptionsProps[]>([])
 
+  const [showBehandlerPersonopplysningerInfoCard, setShowBehandlerPersonopplysningerInfoCard] =
+    useState<boolean>(false)
+
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
     : 'Navngi det nye dokumentet ditt'
@@ -342,6 +345,29 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                           !nextSelected.includes(index)
                       )
 
+                      const harLagretInnholdSomPaavirkesAvEgenskap =
+                        !!pvkDokument || !!behandlingensLivslop || !!behandlingensArtOgOmfang
+
+                      const varBehandlerPersonopplysningerValgt =
+                        behandlerPersonopplysningerIndex >= 0 &&
+                        selectedFilter.includes(behandlerPersonopplysningerIndex)
+
+                      const blirBehandlerPersonopplysningerValgt =
+                        behandlerPersonopplysningerIndex >= 0 &&
+                        nextSelected.includes(behandlerPersonopplysningerIndex)
+
+                      if (
+                        harLagretInnholdSomPaavirkesAvEgenskap &&
+                        !varBehandlerPersonopplysningerValgt &&
+                        blirBehandlerPersonopplysningerValgt
+                      ) {
+                        setShowBehandlerPersonopplysningerInfoCard(true)
+                      }
+
+                      if (!blirBehandlerPersonopplysningerValgt) {
+                        setShowBehandlerPersonopplysningerInfoCard(false)
+                      }
+
                       if (
                         (pvkDokument || behandlingensLivslop || behandlingensArtOgOmfang) &&
                         behandlerPersonopplysningerIndex >= 0 &&
@@ -379,7 +405,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         </Checkbox>
                         {!!pvkDokument && relevans.label === 'Behandler personopplysninger' && (
                           <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
-                            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                            <InfoCard.Header>
                               <InfoCard.Title as='div'>
                                 Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
                                 fjernes som egenskap.
@@ -387,6 +413,39 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                             </InfoCard.Header>
                           </InfoCard>
                         )}
+
+                        {showBehandlerPersonopplysningerInfoCard &&
+                          relevans.label === 'Behandler personopplysninger' &&
+                          (behandlingensLivslop || behandlingensArtOgOmfang || pvkDokument) && (
+                            <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
+                              <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                                <InfoCard.Title as='div'>
+                                  Dere har dokumentasjon fra før om hvordan dere behandler
+                                  personopplysninger.
+                                </InfoCard.Title>
+                              </InfoCard.Header>
+                              <InfoCard.Content>
+                                <BodyLong className='mb-7'>
+                                  Tidligere har dere skrevet innhold tilknyttet én eller flere av:
+                                </BodyLong>
+                                <List as='ul'>
+                                  {behandlingensArtOgOmfang && (
+                                    <List.Item>“Behandlingens art og omfang”</List.Item>
+                                  )}
+                                  {pvkDokument && <List.Item>“Vurder behov for PVK”</List.Item>}
+                                  {behandlingensLivslop && (
+                                    <List.Item>“Tegn Behandlingens livsløp”</List.Item>
+                                  )}
+                                </List>
+                                <BodyLong className='my-7'>
+                                  Dette innholdet har vært skjult fordi det ble valgt bort
+                                  “Behandler personopplysninger”. Nå som dere har valgt egenskapen
+                                  på nytt, vil innholdet synes og kunne redigeres på gjeldende
+                                  sider.
+                                </BodyLong>
+                              </InfoCard.Content>
+                            </InfoCard>
+                          )}
                       </Fragment>
                     ))}
                   </CheckboxGroup>
