@@ -45,6 +45,7 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -53,6 +54,7 @@ import {
   CheckboxGroup,
   ErrorSummary,
   Heading,
+  InfoCard,
   Label,
   List,
   ReadMore,
@@ -223,10 +225,14 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
             Rediger etterlevelsesdokumentet
           </Heading>
 
-          <Alert variant='warning' className='mb-5' fullWidth>
-            Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det ikke
-            være mulig å redigere enkelte av feltene fram til at dokumentet er godkjent.
-          </Alert>
+          <InfoCard data-color='warning' className='mb-5'>
+            <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+              <InfoCard.Title>
+                Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det
+                ikke være mulig å redigere kravdokumentasjon fram til at dokumentet er godkjent.
+              </InfoCard.Title>
+            </InfoCard.Header>
+          </InfoCard>
 
           {dokumentRelasjon && (
             <Alert contentMaxWidth={false} variant='info' className='mb-5'>

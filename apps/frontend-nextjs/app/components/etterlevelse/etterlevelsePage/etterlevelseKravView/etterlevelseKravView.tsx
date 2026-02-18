@@ -20,7 +20,8 @@ import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConst
 import { UserContext } from '@/provider/user/userProvider'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
 import { useQuery } from '@apollo/client/react'
-import { Alert, BodyShort, Heading, ReadMore, Tag } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Heading, InfoCard, ReadMore, Tag } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import moment from 'moment'
 import {
@@ -264,11 +265,15 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               {etterlevelseDokumentasjon &&
                 etterlevelseDokumentasjon.status !==
                   EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
-                  <Alert variant='warning' className='my-5 max-w-[75ch]'>
-                    Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil
-                    det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet er
-                    godkjent.
-                  </Alert>
+                  <InfoCard data-color='warning' className='my-5 max-w-[75ch]'>
+                    <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                      <InfoCard.Title>
+                        Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,
+                        vil det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet
+                        er godkjent.
+                      </InfoCard.Title>
+                    </InfoCard.Header>
+                  </InfoCard>
                 )}
 
               <div className='rounded-sm bg-purple-50 p-8'>
