@@ -33,6 +33,7 @@ export const ToggleActiveRole = () => {
       <Button
         size='xsmall'
         variant='tertiary'
+        style={{ color: '#DFE1E5' }}
         onClick={() => setViewRoller(!viewRoller)}
         icon={
           viewRoller ? (

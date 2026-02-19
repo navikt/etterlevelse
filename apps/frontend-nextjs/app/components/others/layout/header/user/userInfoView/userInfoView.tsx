@@ -24,7 +24,9 @@ export const UserInfoView = () => {
       </div>
       {user.isAdmin() && (
         <div className='flex self-end ml-6'>
-          <Link href={`/logout?redirect_uri=${frontpage}${pathname}`}>Logg ut</Link>
+          <Link href={`/logout?redirect_uri=${frontpage}${pathname}`} style={{ color: '#DFE1E5' }}>
+            Logg ut
+          </Link>
         </div>
       )}
     </div>
