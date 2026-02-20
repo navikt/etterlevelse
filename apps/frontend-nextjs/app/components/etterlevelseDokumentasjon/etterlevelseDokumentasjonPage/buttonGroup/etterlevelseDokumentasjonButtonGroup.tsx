@@ -55,6 +55,9 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
   const router = useRouter()
   const user = useContext(UserContext)
   const isRisikoeier: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+  const behandlerPersonopplysninger: boolean = !etterlevelseDokumentasjon.irrelevansFor.some(
+    (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
+  )
 
   return (
     <>
@@ -77,9 +80,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           />
         )}
 
-        {!etterlevelseDokumentasjon.irrelevansFor.some(
-          (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
-        ) && (
+        {behandlerPersonopplysninger && (
           <Button
             onClick={() => {
               router.push(
@@ -98,9 +99,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           </Button>
         )}
 
-        {!etterlevelseDokumentasjon.irrelevansFor.some(
-          (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
-        ) && (
+        {behandlerPersonopplysninger && (
           <Button
             onClick={() => {
               router.push(
@@ -118,21 +117,24 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           </Button>
         )}
 
-        {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
-          <Button
-            onClick={() => {
-              router.push(pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1))
-            }}
-            size='small'
-            variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
-            className='whitespace-nowrap'
-          >
-            {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
-          </Button>
-        )}
-        {!etterlevelseDokumentasjon.irrelevansFor.some(
-          (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
-        ) && (
+        {behandlerPersonopplysninger &&
+          pvkDokument &&
+          pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+            <Button
+              onClick={() => {
+                router.push(
+                  pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                )
+              }}
+              size='small'
+              variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
+              className='whitespace-nowrap'
+            >
+              {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
+            </Button>
+          )}
+
+        {behandlerPersonopplysninger && (
           <Button
             onClick={() => {
               router.push(
@@ -160,7 +162,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         />
       )}
       {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
-      {env.isDev && (
+      {env.isDev && behandlerPersonopplysninger && (
         <PersonvernkonsekvensvurderingButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
