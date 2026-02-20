@@ -42,10 +42,7 @@ import {
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkVurdering,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
@@ -458,13 +455,9 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                                     Tidligere har dere skrevet innhold tilknyttet én eller flere av:
                                   </BodyLong>
                                   <List as='ul'>
-                                    {behandlingensArtOgOmfang && (
-                                      <List.Item>“Behandlingens art og omfang”</List.Item>
-                                    )}
-                                    {pvkDokument && <List.Item>“Vurder behov for PVK”</List.Item>}
-                                    {behandlingensLivslop && (
-                                      <List.Item>“Tegn Behandlingens livsløp”</List.Item>
-                                    )}
+                                    <List.Item>“Behandlingens livsløp”</List.Item>
+                                    <List.Item>“Behandlingens art og omfang”</List.Item>
+                                    <List.Item>“Vurder behov for PVK”</List.Item>
                                   </List>
                                   <BodyLong className='my-7'>
                                     Dette innholdet har vært skjult fordi det ble valgt bort
@@ -492,17 +485,10 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                           lenger kunne se eller redigere
                         </BodyLong>
                         <List as='ul'>
-                          {behandlingensLivslop && (
-                            <List.Item>“Tegn Behandlingens livsløp”</List.Item>
-                          )}
-                          {behandlingensArtOgOmfang && (
-                            <List.Item>“Behandlingens art og omfang”</List.Item>
-                          )}
-                          {pvkDokument && <List.Item>“Vurder behov for PVK”</List.Item>}
-                          {pvkDokument &&
-                            pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
-                              <List.Item>PVK-dokumentet</List.Item>
-                            )}
+                          <List.Item>“Tegn Behandlingens livsløp”</List.Item>
+                          <List.Item>“Behandlingens art og omfang”</List.Item>
+                          <List.Item>“Vurder behov for PVK”</List.Item>
+                          <List.Item>PVK-dokumentet</List.Item>
                         </List>
                         <BodyLong className='my-7'>
                           Dersom dere ikke lenger behandler personopplysninger, vil ikke disse
