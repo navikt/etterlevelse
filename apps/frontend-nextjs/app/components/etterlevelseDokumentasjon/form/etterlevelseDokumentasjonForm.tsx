@@ -55,7 +55,7 @@ import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon, PadlockLockedIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -414,14 +414,15 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         <Fragment key={'relevans_' + relevans.value}>
                           {isBehandlerPersonopplysningerLocked ? (
                             <DataTextWrapper className='mt-0 max-w-[75ch]'>
-                              <Checkbox
-                                value={index}
-                                description={relevans.description}
-                                readOnly
-                                className='behandler-personopplysninger--locked'
-                              >
-                                {relevans.label}
-                              </Checkbox>
+                              <div className='behandler-personopplysninger--locked'>
+                                <Label as='p' className='flex items-center gap-2'>
+                                  <PadlockLockedIcon aria-hidden className='text-xl' />
+                                  {relevans.label}
+                                </Label>
+                                <BodyLong size='small' className='mt-1'>
+                                  {relevans.description}
+                                </BodyLong>
+                              </div>
                             </DataTextWrapper>
                           ) : (
                             <Checkbox value={index} description={relevans.description}>
@@ -429,7 +430,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                             </Checkbox>
                           )}
                           {isBehandlerPersonopplysningerLocked && (
-                            <InfoCard data-color='info' size='small' className='-mt-1 max-w-[75ch]'>
+                            <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch]'>
                               <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                                 <InfoCard.Title as='div'>
                                   Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
