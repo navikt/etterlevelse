@@ -55,7 +55,7 @@ import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { InformationSquareIcon, PadlockLockedIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -414,15 +414,14 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         <Fragment key={'relevans_' + relevans.value}>
                           {isBehandlerPersonopplysningerLocked ? (
                             <DataTextWrapper className='mt-0 max-w-[75ch]'>
-                              <div className='behandler-personopplysninger--locked'>
-                                <Label as='p' className='flex items-center gap-2'>
-                                  <PadlockLockedIcon aria-hidden className='text-xl' />
-                                  {relevans.label}
-                                </Label>
-                                <BodyLong size='small' className='mt-1'>
-                                  {relevans.description}
-                                </BodyLong>
-                              </div>
+                              <Checkbox
+                                value={index}
+                                description={relevans.description}
+                                readOnly
+                                className='behandler-personopplysninger--locked'
+                              >
+                                {relevans.label}
+                              </Checkbox>
                             </DataTextWrapper>
                           ) : (
                             <Checkbox value={index} description={relevans.description}>
