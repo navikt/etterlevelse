@@ -411,7 +411,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                             <InfoCard
                               data-color='info'
                               size='small'
-                              className='-mt-3 ml-6 max-w-[75ch]'
+                              className='-mt-1 ml-6 max-w-[75ch]'
                             >
                               <InfoCard.Header>
                                 <InfoCard.Title as='div'>
