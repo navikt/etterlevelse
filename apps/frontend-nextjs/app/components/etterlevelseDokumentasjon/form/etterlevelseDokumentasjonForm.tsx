@@ -15,6 +15,7 @@ import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
 } from '@/api/teamkatalogen/teamkatalogenApi'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
@@ -401,18 +402,34 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                       }
                     }}
                   >
-                    {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => (
-                      <Fragment key={'relevans_' + relevans.value}>
-                        <Checkbox value={index} description={relevans.description}>
-                          {relevans.label}
-                        </Checkbox>
-                        {pvkDokument?.hasPvkDocumentationStarted === true &&
-                          relevans.label === 'Behandler personopplysninger' && (
-                            <InfoCard
-                              data-color='info'
-                              size='small'
-                              className='-mt-1 ml-6 max-w-[75ch]'
-                            >
+                    {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => {
+                      const isBehandlerPersonopplysninger =
+                        relevans.label === 'Behandler personopplysninger'
+
+                      const isBehandlerPersonopplysningerLocked =
+                        pvkDokument?.hasPvkDocumentationStarted === true &&
+                        isBehandlerPersonopplysninger
+
+                      return (
+                        <Fragment key={'relevans_' + relevans.value}>
+                          {isBehandlerPersonopplysningerLocked ? (
+                            <DataTextWrapper className='mt-0 max-w-[75ch]'>
+                              <Checkbox
+                                value={index}
+                                description={relevans.description}
+                                readOnly
+                                className='behandler-personopplysninger--locked'
+                              >
+                                {relevans.label}
+                              </Checkbox>
+                            </DataTextWrapper>
+                          ) : (
+                            <Checkbox value={index} description={relevans.description}>
+                              {relevans.label}
+                            </Checkbox>
+                          )}
+                          {isBehandlerPersonopplysningerLocked && (
+                            <InfoCard data-color='info' size='small' className='-mt-1 max-w-[75ch]'>
                               <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                                 <InfoCard.Title as='div'>
                                   Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
@@ -422,44 +439,45 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                             </InfoCard>
                           )}
 
-                        {showBehandlerPersonopplysningerInfoCard &&
-                          relevans.label === 'Behandler personopplysninger' &&
-                          (behandlingensLivslop || behandlingensArtOgOmfang || pvkDokument) && (
-                            <InfoCard
-                              data-color='info'
-                              size='small'
-                              className='-mt-1 ml-6 max-w-[75ch]'
-                            >
-                              <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-                                <InfoCard.Title as='div'>
-                                  Dere har dokumentasjon fra før om hvordan dere behandler
-                                  personopplysninger.
-                                </InfoCard.Title>
-                              </InfoCard.Header>
-                              <InfoCard.Content>
-                                <BodyLong className='mb-7'>
-                                  Tidligere har dere skrevet innhold tilknyttet én eller flere av:
-                                </BodyLong>
-                                <List as='ul'>
-                                  {behandlingensArtOgOmfang && (
-                                    <List.Item>“Behandlingens art og omfang”</List.Item>
-                                  )}
-                                  {pvkDokument && <List.Item>“Vurder behov for PVK”</List.Item>}
-                                  {behandlingensLivslop && (
-                                    <List.Item>“Tegn Behandlingens livsløp”</List.Item>
-                                  )}
-                                </List>
-                                <BodyLong className='my-7'>
-                                  Dette innholdet har vært skjult fordi det ble valgt bort
-                                  “Behandler personopplysninger”. Nå som dere har valgt egenskapen
-                                  på nytt, vil innholdet synes og kunne redigeres på gjeldende
-                                  sider.
-                                </BodyLong>
-                              </InfoCard.Content>
-                            </InfoCard>
-                          )}
-                      </Fragment>
-                    ))}
+                          {showBehandlerPersonopplysningerInfoCard &&
+                            isBehandlerPersonopplysninger &&
+                            (behandlingensLivslop || behandlingensArtOgOmfang || pvkDokument) && (
+                              <InfoCard
+                                data-color='info'
+                                size='small'
+                                className='-mt-1 ml-6 max-w-[75ch]'
+                              >
+                                <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                                  <InfoCard.Title as='div'>
+                                    Dere har dokumentasjon fra før om hvordan dere behandler
+                                    personopplysninger.
+                                  </InfoCard.Title>
+                                </InfoCard.Header>
+                                <InfoCard.Content>
+                                  <BodyLong className='mb-7'>
+                                    Tidligere har dere skrevet innhold tilknyttet én eller flere av:
+                                  </BodyLong>
+                                  <List as='ul'>
+                                    {behandlingensArtOgOmfang && (
+                                      <List.Item>“Behandlingens art og omfang”</List.Item>
+                                    )}
+                                    {pvkDokument && <List.Item>“Vurder behov for PVK”</List.Item>}
+                                    {behandlingensLivslop && (
+                                      <List.Item>“Tegn Behandlingens livsløp”</List.Item>
+                                    )}
+                                  </List>
+                                  <BodyLong className='my-7'>
+                                    Dette innholdet har vært skjult fordi det ble valgt bort
+                                    “Behandler personopplysninger”. Nå som dere har valgt egenskapen
+                                    på nytt, vil innholdet synes og kunne redigeres på gjeldende
+                                    sider.
+                                  </BodyLong>
+                                </InfoCard.Content>
+                              </InfoCard>
+                            )}
+                        </Fragment>
+                      )
+                    })}
                   </CheckboxGroup>
 
                   {isPvkAlertModalOpen && (
