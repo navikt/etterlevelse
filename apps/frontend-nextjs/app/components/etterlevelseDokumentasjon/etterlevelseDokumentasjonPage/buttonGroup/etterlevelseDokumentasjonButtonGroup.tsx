@@ -56,7 +56,9 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
   const user = useContext(UserContext)
   const isRisikoeier: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
   const behandlerPersonopplysninger: boolean = !etterlevelseDokumentasjon.irrelevansFor.some(
-    (irrelevans) => irrelevans.code === 'PERSONOPPLYSNINGER'
+    (irrelevans) =>
+      irrelevans.code === 'PERSONOPPLYSNINGER' ||
+      irrelevans.shortName === 'Behandler personopplysninger'
   )
 
   return (
