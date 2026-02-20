@@ -413,7 +413,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                               size='small'
                               className='-mt-1 ml-6 max-w-[75ch]'
                             >
-                              <InfoCard.Header>
+                              <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                                 <InfoCard.Title as='div'>
                                   Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
                                   fjernes som egenskap.
