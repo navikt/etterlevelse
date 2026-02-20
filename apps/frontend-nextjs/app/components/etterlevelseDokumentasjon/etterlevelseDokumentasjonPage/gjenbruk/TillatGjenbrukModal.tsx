@@ -45,7 +45,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
       <Button
         size='small'
         variant='tertiary'
-        className='whitespace-nowrap mt-3'
+        className='whitespace-nowrap w-full justify-center'
         type='button'
         onClick={() => setIsOpen(true)}
       >

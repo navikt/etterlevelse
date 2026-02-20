@@ -71,7 +71,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           }}
           size='small'
           variant='tertiary'
-          className='whitespace-nowrap'
+          className='whitespace-nowrap w-full justify-center'
         >
           Rediger dokumentegenskaper
         </Button>
