@@ -10,7 +10,7 @@ import {
   PvkOppdatertEtterNyVersjonActionMenuVariant,
   PvkPabegyntActionMenuVariant,
 } from '../commonPVK/commonPVK'
-import { PersonvernombudVariantOne } from '../commonPVK/personvernombudCommonPVK'
+import { PersonvernombudSendtForTilbakemeldingActionMenuVariant } from '../commonPVK/personvernombudCommonPVK'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -21,8 +21,10 @@ const PersonvernombudRollePVK: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
 }) => {
-  const getPvkTilstand = (): EPVKTilstandStatus => {
+  const getPvkTilstand = (): EPVKTilstandStatus | string => {
     if ((pvkDokument && pvkDokument.hasPvkDocumentationStarted === false) || !pvkDokument) {
+      // Will render same component for statuses [will not do pvk, will do pvk but documentation not yet started]
+      // DVS  EPVKTilstandStatus.TILSTAND_STATUS_TWO,  EPVKTilstandStatus.TILSTAND_STATUS_THREE
       return EPVKTilstandStatus.TILSTAND_STATUS_ONE
     } else if (
       etterlevelseDokumentasjon.etterlevelseDokumentVersjon === 1 &&
@@ -39,21 +41,21 @@ const PersonvernombudRollePVK: FunctionComponent<TProps> = ({
     ) {
       return EPVKTilstandStatus.TILSTAND_STATUS_TEN
     } else {
-      return EPVKTilstandStatus.TILSTAND_STATUS_FOUR
+      return 'default'
     }
   }
 
   switch (getPvkTilstand()) {
+    // Will render same component for statuses [will not do pvk, will do pvk but documentation not yet started]
+    // DVS  EPVKTilstandStatus.TILSTAND_STATUS_TWO,  EPVKTilstandStatus.TILSTAND_STATUS_THREE
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
       return <PvkIkkePabegyntActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
-      return <PvkPabegyntActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <PersonvernombudVariantOne />
+      return <PersonvernombudSendtForTilbakemeldingActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return <PvkOppdatertEtterNyVersjonActionMenuVariant />
     default:
-      return <></>
+      return <PvkPabegyntActionMenuVariant />
   }
 }
 

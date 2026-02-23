@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 
-export const PersonvernombudVariantOne = () => (
+export const PersonvernombudSendtForTilbakemeldingActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button

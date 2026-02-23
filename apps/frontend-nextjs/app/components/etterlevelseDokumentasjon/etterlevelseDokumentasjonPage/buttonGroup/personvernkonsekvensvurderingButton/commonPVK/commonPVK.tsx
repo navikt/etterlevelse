@@ -101,7 +101,7 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant = () => (
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
         <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only, ny versjon)
+          Vurderer PVK (read-only, ny versjon)
         </ActionMenu.Item>
         <ActionMenu.Item as='a' href=''>
           Se Behov for PVK (read-only)
@@ -195,7 +195,7 @@ export const PvkUnderArbeidActionMenuVariant = () => (
   </ActionMenu>
 )
 
-export const PvkSendtTilPvoActionMenuVariant = () => (
+export const PvkSendtTilPvoEllerRisikoeierActionMenuVariant = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button

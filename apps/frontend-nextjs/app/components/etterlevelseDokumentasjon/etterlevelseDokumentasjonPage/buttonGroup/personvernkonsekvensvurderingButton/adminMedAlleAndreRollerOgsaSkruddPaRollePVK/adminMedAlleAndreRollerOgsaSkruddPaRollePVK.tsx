@@ -14,7 +14,7 @@ import {
 import {
   PvkHarFattTilbakemeldingFraPvoActionMenuVariant,
   PvkIkkeVurdertActionMenuVariant,
-  PvkSendtTilPvoActionMenuVariant,
+  PvkSendtTilPvoEllerRisikoeierActionMenuVariant,
   PvkUnderArbeidActionMenuVariant,
 } from '../commonPVK/commonPVK'
 
@@ -57,11 +57,11 @@ const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent<TProps> = (
     case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
       return <PvkUnderArbeidActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <PvkSendtTilPvoActionMenuVariant />
+      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
       return <PvkHarFattTilbakemeldingFraPvoActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <PvkSendtTilPvoActionMenuVariant />
+      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:

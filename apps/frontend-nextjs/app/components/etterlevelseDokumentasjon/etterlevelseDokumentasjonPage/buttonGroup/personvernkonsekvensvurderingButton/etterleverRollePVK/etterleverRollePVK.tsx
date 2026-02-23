@@ -11,7 +11,7 @@ import { FunctionComponent } from 'react'
 import {
   PvkHarFattTilbakemeldingFraPvoActionMenuVariant,
   PvkIkkeVurdertActionMenuVariant,
-  PvkSendtTilPvoActionMenuVariant,
+  PvkSendtTilPvoEllerRisikoeierActionMenuVariant,
   PvkUnderArbeidActionMenuVariant,
 } from '../commonPVK/commonPVK'
 import {
@@ -82,7 +82,25 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
   }
 
   switch (getPvkTilstand()) {
-    case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
+    case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
+      return <EtterleverSkalIkkeUtforePvkActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
+      return <EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
+      return <PvkUnderArbeidActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
+      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
+      return <PvkHarFattTilbakemeldingFraPvoActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
+      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
+      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
+      return <PvkGodkjentAvRisikoeierActionMenuVariant />
+    case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
+      return <PvkUnderArbeidActionMenuVariant />
+    default:
       return (
         <PvkIkkeVurdertActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -91,26 +109,6 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
           behandlingsLivslop={behandlingsLivslop}
         />
       )
-    case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
-      return <EtterleverSkalIkkeUtforePvkActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
-      return <EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
-      return <PvkUnderArbeidActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <PvkSendtTilPvoActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
-      return <PvkHarFattTilbakemeldingFraPvoActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <PvkSendtTilPvoActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
-      return <PvkSendtTilPvoActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
-      return <PvkGodkjentAvRisikoeierActionMenuVariant />
-    case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
-      return <PvkUnderArbeidActionMenuVariant />
-    default:
-      return <></>
   }
 }
 
