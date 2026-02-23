@@ -65,16 +65,18 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
     <>
       {/** satt knappene tilbake slik at vi kan prodsette ting */}
       <>
-        <Button
-          onClick={() => {
-            router.push(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
-          }}
-          size='small'
-          variant='tertiary'
-          className='whitespace-nowrap w-full justify-center'
-        >
-          Rediger dokumentegenskaper
-        </Button>
+        {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+          <Button
+            onClick={() => {
+              router.push(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
+            }}
+            size='small'
+            variant='tertiary'
+            className='whitespace-nowrap w-full justify-center'
+          >
+            Rediger dokumentegenskaper
+          </Button>
+        )}
         {etterlevelseDokumentasjon.forGjenbruk && (
           <TillatGjenbrukModal
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
