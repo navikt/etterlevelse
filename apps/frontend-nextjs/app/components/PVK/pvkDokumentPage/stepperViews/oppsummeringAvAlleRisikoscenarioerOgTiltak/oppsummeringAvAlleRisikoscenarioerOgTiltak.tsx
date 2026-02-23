@@ -8,10 +8,7 @@ import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/p
 import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
 import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
-import {
-  EPvkDokumentStatus,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
   IRisikoscenario,
@@ -40,7 +37,6 @@ import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
 import OppsumeringAccordianListReadOnlyView from '../readOnlyViews/oppsumeringAccordianListReadOnlyView'
 import { OppsumeringAccordianList } from './oppsumeringAccordianList'
-import { OppsumeringAccordianListGodkjentView } from './oppsumeringAccordianListGodkjentView'
 
 type TProps = {
   etterlevelseDokumentasjonId: string
@@ -437,22 +433,20 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
                           <div className='my-5'>
-                            {pvkDokument &&
-                              !isReadOnlyPvkStatus(pvkDokument.status) &&
-                              pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
-                                <OppsumeringAccordianList
-                                  risikoscenarioList={filteredRisikoscenarioList}
-                                  setRisikosenarioList={setFilteredRisikosenarioList}
-                                  allRisikoscenarioList={risikoscenarioList}
-                                  setAllRisikoscenarioList={setRisikoscenarioList}
-                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                                  tiltakList={tiltakList}
-                                  setTiltakList={setTiltakList}
-                                  formRef={formRef}
-                                  isUnsaved={isUnsaved}
-                                  setIsUnsaved={setIsUnsaved}
-                                />
-                              )}
+                            {pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status) && (
+                              <OppsumeringAccordianList
+                                risikoscenarioList={filteredRisikoscenarioList}
+                                setRisikosenarioList={setFilteredRisikosenarioList}
+                                allRisikoscenarioList={risikoscenarioList}
+                                setAllRisikoscenarioList={setRisikoscenarioList}
+                                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                tiltakList={tiltakList}
+                                setTiltakList={setTiltakList}
+                                formRef={formRef}
+                                isUnsaved={isUnsaved}
+                                setIsUnsaved={setIsUnsaved}
+                              />
+                            )}
                             {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
                               <OppsumeringAccordianListReadOnlyView
                                 risikoscenarioList={filteredRisikoscenarioList}
@@ -463,7 +457,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               />
                             )}
 
-                            {pvkDokument &&
+                            {/* {pvkDokument &&
                               pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
                                 <OppsumeringAccordianListGodkjentView
                                   risikoscenarioList={filteredRisikoscenarioList}
@@ -473,7 +467,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                   setTiltakList={setTiltakList}
                                   noMarkdownCopyLinkButton
                                 />
-                              )}
+                              )} */}
                           </div>
                         )}
                     </Tabs.Panel>

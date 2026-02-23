@@ -42,7 +42,7 @@ export const isReadOnlyPvkStatus = (status: string) => {
     EPvkDokumentStatus.PVO_UNDERARBEID.toString(),
     EPvkDokumentStatus.SENDT_TIL_PVO.toString(),
     EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING.toString(),
-    EPvkDokumentStatus.TRENGER_GODKJENNING.toString(),
+    // EPvkDokumentStatus.TRENGER_GODKJENNING.toString(),
   ].includes(status)
 }
 
