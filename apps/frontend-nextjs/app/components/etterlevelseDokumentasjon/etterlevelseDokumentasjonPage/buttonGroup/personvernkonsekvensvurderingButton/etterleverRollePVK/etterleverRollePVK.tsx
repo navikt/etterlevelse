@@ -83,11 +83,32 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
 
   switch (getPvkTilstand()) {
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
-      return <EtterleverSkalIkkeUtforePvkActionMenuVariant />
+      return (
+        <EtterleverSkalIkkeUtforePvkActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_THREE:
-      return <EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant />
+      return (
+        <EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_FOUR:
-      return <PvkUnderArbeidActionMenuVariant />
+      return (
+        <PvkUnderArbeidActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
       return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
@@ -99,7 +120,14 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
       return <PvkGodkjentAvRisikoeierActionMenuVariant />
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
-      return <PvkUnderArbeidActionMenuVariant />
+      return (
+        <PvkUnderArbeidActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     default:
       return (
         <PvkIkkeVurdertActionMenuVariant

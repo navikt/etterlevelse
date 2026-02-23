@@ -6,6 +6,7 @@ import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
@@ -163,7 +164,12 @@ export const PvkIkkeVurdertActionMenuVariant: FunctionComponent<TProps> = ({
   </ActionMenu>
 )
 
-export const PvkUnderArbeidActionMenuVariant = () => (
+export const PvkUnderArbeidActionMenuVariant: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  behandlingensArtOgOmfang,
+  behandlingsLivslop,
+}) => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -176,18 +182,43 @@ export const PvkUnderArbeidActionMenuVariant = () => (
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+          )}
+        >
           Tegn Behandlingens livsløp
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
+          )}
+        >
           Beskriv Art og omfang
         </ActionMenu.Item>
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            1
+          )}
+        >
           Fullfør PVK
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonPvkBehovUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny'
+          )}
+        >
           Les om behov for PVK (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
