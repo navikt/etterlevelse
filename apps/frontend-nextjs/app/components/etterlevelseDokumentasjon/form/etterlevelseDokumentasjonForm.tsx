@@ -79,7 +79,6 @@ import {
   RefObject,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -104,12 +103,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
   )
   const router = useRouter()
   const [selectedFilter, setSelectedFilter] = useState<number[]>([])
-
-  const behandlerPersonopplysningerIndex = useMemo(() => {
-    return relevansOptions.findIndex(
-      (relevans: IGetParsedOptionsProps) => relevans.label === 'Behandler personopplysninger'
-    )
-  }, [relevansOptions])
 
   const [dokumentRelasjon, setDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
@@ -167,29 +160,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
       )
     }
   }, [etterlevelseDokumentasjon, codelist.lists])
-
-  useEffect(() => {
-    const isPvkDokumentasjonStartet = pvkDokument?.hasPvkDocumentationStarted === true
-    if (!isPvkDokumentasjonStartet) return
-    if (behandlerPersonopplysningerIndex < 0) return
-    if (selectedFilter.includes(behandlerPersonopplysningerIndex)) return
-
-    const nextSelectedFilter = [...selectedFilter, behandlerPersonopplysningerIndex]
-    setSelectedFilter(nextSelectedFilter)
-
-    const irrelevansListe = relevansOptions.filter(
-      (_irrelevans: IGetParsedOptionsProps, index: number) => !nextSelectedFilter.includes(index)
-    )
-
-    if (formRef.current?.setFieldValue) {
-      formRef.current.setFieldValue(
-        'irrelevansFor',
-        irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
-          codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
-        )
-      )
-    }
-  }, [pvkDokument, behandlerPersonopplysningerIndex, selectedFilter, relevansOptions, codelist])
 
   useEffect(() => {
     ;(async () => {
@@ -334,52 +304,43 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
                     value={selectedFilter}
                     onChange={(selected: number[]) => {
-                      const isPvkDokumentasjonStartet =
-                        pvkDokument?.hasPvkDocumentationStarted === true
-                      const nextSelected =
-                        isPvkDokumentasjonStartet && behandlerPersonopplysningerIndex >= 0
-                          ? Array.from(new Set([...selected, behandlerPersonopplysningerIndex]))
-                          : selected
-
                       const irrelevansListe = relevansOptions.filter(
                         (_irrelevans: IGetParsedOptionsProps, index: number) =>
-                          !nextSelected.includes(index)
+                          !selected.includes(index)
                       )
+
+                      const behandlerPvkIndex = relevansOptions
+                        .map((_irrelevans: IGetParsedOptionsProps, index: number) => {
+                          if (_irrelevans.label === 'Behandler personopplysninger') {
+                            return index
+                          }
+                        })
+                        .filter((index) => index !== undefined)
 
                       const harLagretInnholdSomPaavirkesAvEgenskap =
                         !!pvkDokument || !!behandlingensLivslop || !!behandlingensArtOgOmfang
 
-                      const varBehandlerPersonopplysningerValgt =
-                        behandlerPersonopplysningerIndex >= 0 &&
-                        selectedFilter.includes(behandlerPersonopplysningerIndex)
-
-                      const blirBehandlerPersonopplysningerValgt =
-                        behandlerPersonopplysningerIndex >= 0 &&
-                        nextSelected.includes(behandlerPersonopplysningerIndex)
-
                       if (
                         harLagretInnholdSomPaavirkesAvEgenskap &&
-                        !varBehandlerPersonopplysningerValgt &&
-                        blirBehandlerPersonopplysningerValgt
+                        selected.includes(behandlerPvkIndex[0])
                       ) {
                         setShowBehandlerPersonopplysningerInfoCard(true)
                       }
 
-                      if (!blirBehandlerPersonopplysningerValgt) {
+                      if (!selected.includes(behandlerPvkIndex[0])) {
                         setShowBehandlerPersonopplysningerInfoCard(false)
                       }
 
                       if (
-                        (pvkDokument || behandlingensLivslop || behandlingensArtOgOmfang) &&
-                        behandlerPersonopplysningerIndex >= 0 &&
-                        selectedFilter.includes(behandlerPersonopplysningerIndex) &&
-                        !nextSelected.includes(behandlerPersonopplysningerIndex)
+                        harLagretInnholdSomPaavirkesAvEgenskap &&
+                        selectedFilter.includes(behandlerPvkIndex[0]) &&
+                        !selected.includes(behandlerPvkIndex[0])
                       ) {
-                        setTempSelectedFilter(nextSelected)
+                        setTempSelectedFilter(selected)
                         setTempIrrelevansList(irrelevansListe)
                         setIsPvkAlertModalOpen(true)
                       } else {
-                        setSelectedFilter(nextSelected)
+                        setSelectedFilter(selected)
                         fieldArrayRenderProps.form.setFieldValue(
                           'irrelevansFor',
                           irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
