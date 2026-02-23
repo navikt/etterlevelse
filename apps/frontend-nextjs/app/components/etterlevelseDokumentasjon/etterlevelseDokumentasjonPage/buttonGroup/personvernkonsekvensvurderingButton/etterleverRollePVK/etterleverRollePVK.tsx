@@ -13,12 +13,12 @@ import {
   PvkIkkeVurdertActionMenuVariant,
   PvkSendtTilPvoEllerRisikoeierActionMenuVariant,
   PvkUnderArbeidActionMenuVariant,
-} from '../commonPVK/commonPVK'
+} from '../commonActionMenuPVK/commonPVK'
 import {
   EtterleverSkalIkkeUtforePvkActionMenuVariant,
   EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant,
   PvkGodkjentAvRisikoeierActionMenuVariant,
-} from '../commonPVK/etterleverCommonPVK'
+} from '../commonActionMenuPVK/etterleverCommonPVK'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

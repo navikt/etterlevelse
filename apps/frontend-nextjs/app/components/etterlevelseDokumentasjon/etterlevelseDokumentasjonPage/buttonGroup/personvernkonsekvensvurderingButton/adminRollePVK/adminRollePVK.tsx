@@ -11,14 +11,14 @@ import { FunctionComponent } from 'react'
 import {
   AdminMedAlleAndreRollerOgsaSkruddPaVariantThree,
   AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo,
-} from '../commonPVK/adminMedAlleAndreRollerOgsaSkruddPaCommonPVK'
+} from '../commonActionMenuPVK/adminCommonPVK'
 import {
   PvkHarFattTilbakemeldingFraPvoActionMenuVariant,
   PvkIkkeVurdertActionMenuVariant,
   PvkSendtTilPvoEllerRisikoeierActionMenuVariant,
   PvkUnderArbeidActionMenuVariant,
-} from '../commonPVK/commonPVK'
-import { EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant } from '../commonPVK/etterleverCommonPVK'
+} from '../commonActionMenuPVK/commonPVK'
+import { EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant } from '../commonActionMenuPVK/etterleverCommonPVK'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

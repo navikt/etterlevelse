@@ -11,8 +11,8 @@ import {
   PvkIkkePabegyntActionMenuVariant,
   PvkOppdatertEtterNyVersjonActionMenuVariant,
   PvkPabegyntActionMenuVariant,
-} from '../commonPVK/commonPVK'
-import { PersonvernombudSendtForTilbakemeldingActionMenuVariant } from '../commonPVK/personvernombudCommonPVK'
+} from '../commonActionMenuPVK/commonPVK'
+import { PersonvernombudSendtForTilbakemeldingActionMenuVariant } from '../commonActionMenuPVK/personvernombudCommonPVK'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

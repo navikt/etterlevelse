@@ -10,12 +10,12 @@ import { FunctionComponent } from 'react'
 import {
   PvkIkkePabegyntActionMenuVariant,
   PvkPabegyntActionMenuVariant,
-} from '../commonPVK/commonPVK'
+} from '../commonActionMenuPVK/commonPVK'
 import {
   RisikoeierGodkjentPvkActionMenuVariant,
   RisikoeierPvkTrengerGodkjenningActionMenuVariant,
   RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant,
-} from '../commonPVK/risikoeierCommonPVK'
+} from '../commonActionMenuPVK/risikoeierCommonPVK'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
