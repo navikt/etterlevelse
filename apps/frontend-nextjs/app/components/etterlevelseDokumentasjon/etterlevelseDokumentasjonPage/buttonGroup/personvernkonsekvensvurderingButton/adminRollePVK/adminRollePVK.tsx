@@ -27,7 +27,7 @@ type TProps = {
 
 const test: string = EPVKTilstandStatus.TILSTAND_STATUS_SEVEN
 
-const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent<TProps> = ({
+const AdminRollePVK: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingsLivslop,
   behandlingensArtOgOmfang,
@@ -108,4 +108,4 @@ const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent<TProps> = (
   }
 }
 
-export default AdminMedAlleAndreRollerOgsaSkruddPaRollePVK
+export default AdminRollePVK
