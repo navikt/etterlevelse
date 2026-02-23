@@ -133,7 +133,12 @@ export const EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant: FunctionCompo
   </ActionMenu>
 )
 
-export const PvkGodkjentAvRisikoeierActionMenuVariant = () => (
+export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  behandlingensArtOgOmfang,
+  behandlingsLivslop,
+}) => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -146,18 +151,43 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant = () => (
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+          )}
+        >
           Tegn behandlingens livsløp
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
+          )}
+        >
           Beskriv art og omfang
         </ActionMenu.Item>
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            1
+          )}
+        >
           Les PVK (read-only, godkjent versjon) og Oppdater PVK (åpner neste versjon)
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonPvkBehovUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny'
+          )}
+        >
           Les om behov for PVK (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>

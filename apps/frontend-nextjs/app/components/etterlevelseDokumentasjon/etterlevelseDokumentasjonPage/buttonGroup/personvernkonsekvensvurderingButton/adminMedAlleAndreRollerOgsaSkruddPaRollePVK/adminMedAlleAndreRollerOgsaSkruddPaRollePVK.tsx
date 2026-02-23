@@ -64,11 +64,32 @@ const AdminMedAlleAndreRollerOgsaSkruddPaRollePVK: FunctionComponent<TProps> = (
         />
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+      return (
+        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
-      return <PvkHarFattTilbakemeldingFraPvoActionMenuVariant />
+      return (
+        <PvkHarFattTilbakemeldingFraPvoActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+      return (
+        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:

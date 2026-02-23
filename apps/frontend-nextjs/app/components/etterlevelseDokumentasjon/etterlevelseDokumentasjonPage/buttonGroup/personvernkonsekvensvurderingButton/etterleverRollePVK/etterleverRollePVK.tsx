@@ -110,15 +110,50 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
         />
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+      return (
+        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_SIX:
-      return <PvkHarFattTilbakemeldingFraPvoActionMenuVariant />
+      return (
+        <PvkHarFattTilbakemeldingFraPvoActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
-      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+      return (
+        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
-      return <PvkSendtTilPvoEllerRisikoeierActionMenuVariant />
+      return (
+        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
-      return <PvkGodkjentAvRisikoeierActionMenuVariant />
+      return (
+        <PvkGodkjentAvRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return (
         <PvkUnderArbeidActionMenuVariant
