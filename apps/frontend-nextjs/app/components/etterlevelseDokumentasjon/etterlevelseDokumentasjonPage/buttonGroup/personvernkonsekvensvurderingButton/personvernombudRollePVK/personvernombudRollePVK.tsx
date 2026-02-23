@@ -1,3 +1,5 @@
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
@@ -15,11 +17,15 @@ import { PersonvernombudSendtForTilbakemeldingActionMenuVariant } from '../commo
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument?: IPvkDokument
+  behandlingsLivslop?: IBehandlingensLivslop
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
 }
 
 const PersonvernombudRollePVK: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
+  behandlingsLivslop,
+  behandlingensArtOgOmfang,
 }) => {
   const getPvkTilstand = (): EPVKTilstandStatus | string => {
     if ((pvkDokument && pvkDokument.hasPvkDocumentationStarted === false) || !pvkDokument) {
@@ -49,13 +55,41 @@ const PersonvernombudRollePVK: FunctionComponent<TProps> = ({
     // Will render same component for statuses [will not do pvk, will do pvk but documentation not yet started]
     // DVS  EPVKTilstandStatus.TILSTAND_STATUS_TWO,  EPVKTilstandStatus.TILSTAND_STATUS_THREE
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return <PvkIkkePabegyntActionMenuVariant />
+      return (
+        <PvkIkkePabegyntActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
-      return <PersonvernombudSendtForTilbakemeldingActionMenuVariant />
+      return (
+        <PersonvernombudSendtForTilbakemeldingActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
-      return <PvkOppdatertEtterNyVersjonActionMenuVariant />
+      return (
+        <PvkOppdatertEtterNyVersjonActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     default:
-      return <PvkPabegyntActionMenuVariant />
+      return (
+        <PvkPabegyntActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
   }
 }
 

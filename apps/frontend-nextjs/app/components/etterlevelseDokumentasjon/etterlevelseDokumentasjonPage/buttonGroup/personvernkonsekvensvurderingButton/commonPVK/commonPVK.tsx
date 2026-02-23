@@ -7,6 +7,7 @@ import {
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
+  pvkDokumenteringPvoTilbakemeldingUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
@@ -19,7 +20,12 @@ type TProps = {
   behandlingsLivslop?: IBehandlingensLivslop
 }
 
-export const PvkIkkePabegyntActionMenuVariant = () => (
+export const PvkIkkePabegyntActionMenuVariant: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  behandlingensArtOgOmfang,
+  behandlingsLivslop,
+}) => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -32,15 +38,33 @@ export const PvkIkkePabegyntActionMenuVariant = () => (
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+          )}
+        >
           Se Behandlingens livsløp (read-only)
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
+          )}
+        >
           Se Art og omfang (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonPvkBehovUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny'
+          )}
+        >
           Se Behov for PVK (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
@@ -48,7 +72,12 @@ export const PvkIkkePabegyntActionMenuVariant = () => (
   </ActionMenu>
 )
 
-export const PvkPabegyntActionMenuVariant = () => (
+export const PvkPabegyntActionMenuVariant: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  behandlingensArtOgOmfang,
+  behandlingsLivslop,
+}) => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -61,18 +90,43 @@ export const PvkPabegyntActionMenuVariant = () => (
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+          )}
+        >
           Se Behandlingens livsløp (read-only)
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
+          )}
+        >
           Se Art og omfang (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            1
+          )}
+        >
           Les PVK (read-only)
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonPvkBehovUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny'
+          )}
+        >
           Se Behov for PVK (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
@@ -80,7 +134,12 @@ export const PvkPabegyntActionMenuVariant = () => (
   </ActionMenu>
 )
 
-export const PvkOppdatertEtterNyVersjonActionMenuVariant = () => (
+export const PvkOppdatertEtterNyVersjonActionMenuVariant: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+  behandlingensArtOgOmfang,
+  behandlingsLivslop,
+}) => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -93,18 +152,39 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant = () => (
     </ActionMenu.Trigger>
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
+          )}
+        >
           Se Behandlingens livsløp (read-only)
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
+          )}
+        >
           Se Art og omfang (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Vurderer PVK (read-only, ny versjon)
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument ? pvkDokument.id : 'ny', 1)}
+        >
+          Vurderer PVK (ny versjon)
         </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonPvkBehovUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny'
+          )}
+        >
           Se Behov for PVK (read-only)
         </ActionMenu.Item>
       </ActionMenu.Group>
