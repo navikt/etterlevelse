@@ -402,7 +402,7 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
             behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
           )}
         >
-          Se Art og omfang (read-only)
+          Se Art og omfang
         </ActionMenu.Item>
       </ActionMenu.Group>
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>

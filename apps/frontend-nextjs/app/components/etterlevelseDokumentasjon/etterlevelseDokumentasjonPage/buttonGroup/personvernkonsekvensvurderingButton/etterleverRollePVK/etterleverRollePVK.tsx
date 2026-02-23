@@ -74,7 +74,7 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
       ) {
         return EPVKTilstandStatus.TILSTAND_STATUS_TEN
       } else {
-        return EPVKTilstandStatus.TILSTAND_STATUS_TWO
+        return EPVKTilstandStatus.TILSTAND_STATUS_FOUR
       }
     } else {
       return EPVKTilstandStatus.TILSTAND_STATUS_ONE

@@ -1,38 +1,6 @@
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 
-export const AdminMedAlleAndreRollerOgsaSkruddPaVariantOne = () => (
-  <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
-    <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Tegn Behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv Art og omfang
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Påbegynn PVK
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Vurder Behov for PVK
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-    </ActionMenu.Content>
-  </ActionMenu>
-)
-
 export const AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo = () => (
   <ActionMenu>
     <ActionMenu.Trigger>
