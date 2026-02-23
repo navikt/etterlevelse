@@ -11,11 +11,11 @@ import { FunctionComponent } from 'react'
 import {
   AdminMedAlleAndreRollerOgsaSkruddPaVariantThree,
   AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo,
+  AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant,
 } from '../commonActionMenuPVK/adminCommonPVK'
 import {
   PvkHarFattTilbakemeldingFraPvoActionMenuVariant,
   PvkIkkeVurdertActionMenuVariant,
-  PvkSendtTilPvoEllerRisikoeierActionMenuVariant,
   PvkUnderArbeidActionMenuVariant,
 } from '../commonActionMenuPVK/commonPVK'
 import { EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant } from '../commonActionMenuPVK/etterleverCommonPVK'
@@ -120,7 +120,7 @@ const AdminRollePVK: FunctionComponent<TProps> = ({
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
       return (
-        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+        <AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -138,7 +138,7 @@ const AdminRollePVK: FunctionComponent<TProps> = ({
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
       return (
-        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+        <AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
