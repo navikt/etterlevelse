@@ -7,7 +7,6 @@ import {
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
-  pvkDokumenteringPvoTilbakemeldingUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
@@ -20,12 +19,9 @@ type TProps = {
   behandlingsLivslop?: IBehandlingensLivslop
 }
 
-export const AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjon,
-  pvkDokument,
-  behandlingensArtOgOmfang,
-  behandlingsLivslop,
-}) => (
+export const EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<
+  TProps
+> = ({ etterlevelseDokumentasjon, pvkDokument, behandlingensArtOgOmfang, behandlingsLivslop }) => (
   <ActionMenu>
     <ActionMenu.Trigger>
       <Button
@@ -60,12 +56,6 @@ export const AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionCompon
       <ActionMenu.Group label='Personvernkonsekvensvurdering'>
         <ActionMenu.Item
           as='a'
-          href={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument ? pvkDokument.id : 'ny', 1)}
-        >
-          Vurderer PVK
-        </ActionMenu.Item>
-        <ActionMenu.Item
-          as='a'
           href={pvkDokumentasjonStepUrl(
             etterlevelseDokumentasjon.id,
             pvkDokument ? pvkDokument.id : 'ny',
@@ -73,6 +63,16 @@ export const AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionCompon
           )}
         >
           Les PVK (read-only)
+        </ActionMenu.Item>
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            8
+          )}
+        >
+          Godkjenn PVK
         </ActionMenu.Item>
         <ActionMenu.Item
           as='a'

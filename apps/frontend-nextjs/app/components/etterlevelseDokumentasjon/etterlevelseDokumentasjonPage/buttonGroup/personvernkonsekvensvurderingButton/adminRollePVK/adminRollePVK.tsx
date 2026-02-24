@@ -8,17 +8,17 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
-import {
-  AdminMedAlleAndreRollerOgsaSkruddPaVariantThree,
-  AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo,
-  AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant,
-} from '../commonActionMenuPVK/adminCommonPVK'
+import { AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant } from '../commonActionMenuPVK/adminCommonPVK'
 import {
   PvkHarFattTilbakemeldingFraPvoActionMenuVariant,
   PvkIkkeVurdertActionMenuVariant,
   PvkUnderArbeidActionMenuVariant,
 } from '../commonActionMenuPVK/commonPVK'
-import { EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant } from '../commonActionMenuPVK/etterleverCommonPVK'
+import {
+  EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant,
+  PvkGodkjentAvRisikoeierActionMenuVariant,
+} from '../commonActionMenuPVK/etterleverCommonPVK'
+import { EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVariant } from '../commonActionMenuPVK/etterleverOgRisikoeierComminPvk'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -82,15 +82,6 @@ const AdminRollePVK: FunctionComponent<TProps> = ({
   }
 
   switch (getPvkTilstand()) {
-    case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
-      return (
-        <PvkIkkeVurdertActionMenuVariant
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          pvkDokument={pvkDokument}
-          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
-          behandlingsLivslop={behandlingsLivslop}
-        />
-      )
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
       return (
         <PvkIkkeVurdertActionMenuVariant
@@ -146,9 +137,23 @@ const AdminRollePVK: FunctionComponent<TProps> = ({
         />
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
-      return <AdminMedAlleAndreRollerOgsaSkruddPaVariantTwo />
+      return (
+        <EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
-      return <AdminMedAlleAndreRollerOgsaSkruddPaVariantThree />
+      return (
+        <PvkGodkjentAvRisikoeierActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EPVKTilstandStatus.TILSTAND_STATUS_TEN:
       return (
         <PvkUnderArbeidActionMenuVariant
@@ -159,7 +164,14 @@ const AdminRollePVK: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return <></>
+      return (
+        <PvkIkkeVurdertActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
   }
 }
 
