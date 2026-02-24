@@ -4,13 +4,15 @@ import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjo
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
-  pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
-import { PvkActionMenuTrigger } from './commonActionMenuComponentsPvk'
+import {
+  BehandlingensLivslopActionMenuItem,
+  PvkActionMenuTrigger,
+} from './commonActionMenuComponentsPvk'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -29,15 +31,11 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item
-          as='a'
-          href={pvkDokumentasjonBehandlingsenLivslopUrl(
-            etterlevelseDokumentasjon.id,
-            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
-          )}
-        >
-          Se Behandlingens livsløp (read-only)
-        </ActionMenu.Item>
+        <BehandlingensLivslopActionMenuItem
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+          behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
+          readOnly={true}
+        />
         <ActionMenu.Item
           as='a'
           href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
@@ -93,15 +91,11 @@ export const RisikoeierGodkjentPvkActionMenuVariant: FunctionComponent<TProps> =
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item
-          as='a'
-          href={pvkDokumentasjonBehandlingsenLivslopUrl(
-            etterlevelseDokumentasjon.id,
-            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
-          )}
-        >
-          Se Behandlingens livsløp (read-only)
-        </ActionMenu.Item>
+        <BehandlingensLivslopActionMenuItem
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+          behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
+          readOnly={true}
+        />
         <ActionMenu.Item
           as='a'
           href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
@@ -144,15 +138,11 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item
-          as='a'
-          href={pvkDokumentasjonBehandlingsenLivslopUrl(
-            etterlevelseDokumentasjon.id,
-            behandlingsLivslop ? behandlingsLivslop.id : 'ny'
-          )}
-        >
-          Se Behandlingens livsløp (read-only)
-        </ActionMenu.Item>
+        <BehandlingensLivslopActionMenuItem
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+          behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
+          readOnly={true}
+        />
         <ActionMenu.Item
           as='a'
           href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
