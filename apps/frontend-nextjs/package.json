@@ -33,7 +33,7 @@
     "@navikt/ds-css": "8.5.2",
     "@navikt/ds-react": "8.5.2",
     "@navikt/ds-tailwind": "8.5.2",
-    "@tailwindcss/postcss": "4.2.0",
+    "@tailwindcss/postcss": "4.2.1",
     "axios": "1.13.5",
     "draft-js": "0.11.7",
     "eslint-config-prettier": "10.1.8",
