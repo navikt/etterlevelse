@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
   integrity sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==
 
-"@apollo/client@4.1.5":
-  version "4.1.5"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-4.1.5.tgz#ccadd68be0051108ade146dcc557eb804d54a6cf"
-  integrity sha512-kqo4BUL/d3cj3CmQyo0CqrgKr/nxYnmHmM5Lv2xqFz2P4FaJQ0SxpRu+bEjWUftGhRSmLqDLuP2cTAj0wIPKWw==
+"@apollo/client@4.1.6":
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-4.1.6.tgz#6eff1cfc09b1a2ef15f4f46471e6767958e109f7"
+  integrity sha512-ak8uzqmKeX3u9BziGf83RRyODAJKFkPG72hTNvEj4WjMWFmuKW2gGN1i3OfajKT6yuGjvo+n23ES2zqWDKFCZg==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@wry/caches" "^1.0.0"
