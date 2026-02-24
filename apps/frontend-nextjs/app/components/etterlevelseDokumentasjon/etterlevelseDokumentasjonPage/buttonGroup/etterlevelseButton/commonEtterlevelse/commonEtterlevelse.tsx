@@ -2,14 +2,16 @@
 
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
-  etterlevelsesDokumentasjonEditUrl,
   etterlevelsesDokumentasjonRisikoeierGodkjenningUrl,
   etterlevelsesDokumentasjonSendTilGodkjenningUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
+import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { ExportEtterlevelseModal } from '../../../export/exportEtterlevelseModal'
+import {
+  ActionMenuButtonEtterlevelse,
+  RedigerEgenskaperActionMenuItem,
+} from './commonActionMenuComponents'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -22,21 +24,11 @@ export const EtterlevelseReadOnlyActionMenuVariant: FunctionComponent<TProps> = 
   return (
     <>
       <ActionMenu>
-        <ActionMenu.Trigger>
-          <Button
-            variant='secondary-neutral'
-            icon={<ChevronDownIcon aria-hidden />}
-            iconPosition='right'
-          >
-            Etterlevelse
-          </Button>
-        </ActionMenu.Trigger>
+        <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <ActionMenu.Group label='Administrer etterlevelsedokument'>
-            <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
-              Eksporter til Word
-            </ActionMenu.Item>
-          </ActionMenu.Group>
+          <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
+            Eksporter til Word
+          </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
@@ -55,43 +47,26 @@ export const RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant: F
   return (
     <>
       <ActionMenu>
-        <ActionMenu.Trigger>
-          <Button
-            variant='secondary-neutral'
-            icon={<ChevronDownIcon aria-hidden />}
-            iconPosition='right'
-          >
-            Etterlevelse
-          </Button>
-        </ActionMenu.Trigger>
+        <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <ActionMenu.Group label='Dokumenter'>
-            <ActionMenu.Item
-              as='a'
-              href={etterlevelsesDokumentasjonSendTilGodkjenningUrl(etterlevelseDokumentasjon.id)}
-            >
-              Les innsending til risikoeier
-            </ActionMenu.Item>
-          </ActionMenu.Group>
-          <ActionMenu.Group label='Administrer etterlevelsedokument'>
-            <ActionMenu.Item
-              as='a'
-              href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-            >
-              Rediger dokumentegenskaper
-            </ActionMenu.Item>
-            <ActionMenu.Item
-              as='a'
-              href={etterlevelsesDokumentasjonRisikoeierGodkjenningUrl(
-                etterlevelseDokumentasjon.id
-              )}
-            >
-              Godkjenn etterlevelsen
-            </ActionMenu.Item>
-            <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
-              Eksporter til Word
-            </ActionMenu.Item>
-          </ActionMenu.Group>
+          <ActionMenu.Item
+            as='a'
+            href={etterlevelsesDokumentasjonSendTilGodkjenningUrl(etterlevelseDokumentasjon.id)}
+          >
+            Les innsending til risikoeier
+          </ActionMenu.Item>
+          <RedigerEgenskaperActionMenuItem
+            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+          />
+          <ActionMenu.Item
+            as='a'
+            href={etterlevelsesDokumentasjonRisikoeierGodkjenningUrl(etterlevelseDokumentasjon.id)}
+          >
+            Godkjenn etterlevelsen
+          </ActionMenu.Item>
+          <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
+            Eksporter til Word
+          </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
