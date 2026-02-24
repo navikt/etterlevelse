@@ -8,9 +8,9 @@ import {
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
+import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { PvkActionMenuTrigger } from './commonActionMenuComponentsPvk'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -26,15 +26,7 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
   behandlingsLivslop,
 }) => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
         <ActionMenu.Item
@@ -98,15 +90,7 @@ export const RisikoeierGodkjentPvkActionMenuVariant: FunctionComponent<TProps> =
   behandlingsLivslop,
 }) => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
         <ActionMenu.Item
@@ -157,15 +141,7 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
   TProps
 > = ({ etterlevelseDokumentasjon, pvkDokument, behandlingensArtOgOmfang, behandlingsLivslop }) => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <ActionMenu.Group label='Forstå behandlingen'>
         <ActionMenu.Item
