@@ -1,0 +1,17 @@
+
+# Velge visualiseringsverktøy for dashboard
+
+## Dato
+
+24.02.2026
+
+## Kontekst
+Vi trenger å lage dashboard på innholdet i etterlevelsesløsningen, og kanskje behandlingskatalogenen etterhvert. 
+I første omgang til ledere og internkontroll
+
+## Beslutning
+Vi velger å benytte Tableau
+
+## Kriterier
+Må være mulig å utvikle løsningen raskt
+Kan vedlikeholdes av teamet etterpå
