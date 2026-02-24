@@ -10,6 +10,7 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
 import AdminRollePVK from './adminRollePVK/adminRollePVK'
+import EtterleverOgRisikoeierRollePVK from './etterleverOgRisikoeierRollePVK/etterleverOgRisikoeierRollePVK'
 import EtterleverRollePVK from './etterleverRollePVK/etterleverRollePVK'
 import PersonvernombudRollePVK from './personvernombudRollePVK/personvernombudRollePVK'
 import RisikoeierRollePVK from './risikoeierRollePVK/risikoeierRollePVK'
@@ -72,6 +73,15 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
     case EActionMenuRoles.Admin:
       return (
         <AdminRollePVK
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
+    case EActionMenuRoles.EtterleverOgRisikoeier:
+      return (
+        <EtterleverOgRisikoeierRollePVK
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
