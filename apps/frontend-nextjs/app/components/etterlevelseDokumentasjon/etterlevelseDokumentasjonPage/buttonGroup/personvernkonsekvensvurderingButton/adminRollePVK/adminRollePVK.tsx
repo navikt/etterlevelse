@@ -1,6 +1,6 @@
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
   EPvkDokumentStatus,
@@ -8,30 +8,30 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { FunctionComponent } from 'react'
+import { AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant } from '../commonActionMenuPVK/adminCommonPVK'
 import {
   PvkHarFattTilbakemeldingFraPvoActionMenuVariant,
   PvkIkkeVurdertActionMenuVariant,
-  PvkSendtTilPvoEllerRisikoeierActionMenuVariant,
   PvkUnderArbeidActionMenuVariant,
 } from '../commonActionMenuPVK/commonPVK'
 import {
-  EtterleverSkalIkkeUtforePvkActionMenuVariant,
   EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant,
   PvkGodkjentAvRisikoeierActionMenuVariant,
 } from '../commonActionMenuPVK/etterleverCommonPVK'
+import { EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVariant } from '../commonActionMenuPVK/etterleverOgRisikoeierComminPvk'
 
 type TProps = {
-  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
-  pvkDokument?: IPvkDokument
-  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   behandlingsLivslop?: IBehandlingensLivslop
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
+  pvkDokument?: IPvkDokument
 }
 
-const EtterleverRollePVK: FunctionComponent<TProps> = ({
-  pvkDokument,
+const AdminRollePVK: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  behandlingensArtOgOmfang,
   behandlingsLivslop,
+  behandlingensArtOgOmfang,
+  pvkDokument,
 }) => {
   const getPvkTilstand = (): EPVKTilstandStatus => {
     if (
@@ -84,7 +84,7 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
   switch (getPvkTilstand()) {
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
       return (
-        <EtterleverSkalIkkeUtforePvkActionMenuVariant
+        <PvkIkkeVurdertActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -111,7 +111,7 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_FIVE:
       return (
-        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+        <AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -129,7 +129,7 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_SEVEN:
       return (
-        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+        <AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -138,7 +138,7 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return (
-        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+        <EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -175,4 +175,4 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
   }
 }
 
-export default EtterleverRollePVK
+export default AdminRollePVK

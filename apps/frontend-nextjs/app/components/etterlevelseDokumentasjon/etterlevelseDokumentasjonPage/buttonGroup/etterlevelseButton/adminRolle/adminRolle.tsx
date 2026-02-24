@@ -13,9 +13,7 @@ type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-const AdminMedAlleAndreRollerOgsaSkruddPaRolle: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjon,
-}) => {
+const AdminRolle: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
   switch (etterlevelseDokumentasjon.status) {
     case EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER:
       return (
@@ -30,4 +28,4 @@ const AdminMedAlleAndreRollerOgsaSkruddPaRolle: FunctionComponent<TProps> = ({
   }
 }
 
-export default AdminMedAlleAndreRollerOgsaSkruddPaRolle
+export default AdminRolle

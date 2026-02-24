@@ -6,7 +6,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
-import AdminMedAlleAndreRollerOgsaSkruddPaRolle from './adminMedAlleAndreRollerOgsaSkruddPaRolle/adminMedAlleAndreRollerOgsaSkruddPaRolle'
+import AdminRolle from './adminRolle/adminRolle'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
 import RisikoeierRolle, { RisikoeierOgEtterleverRolle } from './risikoeierRolle/risikoeierRolle'
 
@@ -42,11 +42,7 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
     case EActionMenuRoles.EtterleverOgRisikoeier:
       return <RisikoeierOgEtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EActionMenuRoles.Admin:
-      return (
-        <AdminMedAlleAndreRollerOgsaSkruddPaRolle
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        />
-      )
+      return <AdminRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     default:
       return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
   }

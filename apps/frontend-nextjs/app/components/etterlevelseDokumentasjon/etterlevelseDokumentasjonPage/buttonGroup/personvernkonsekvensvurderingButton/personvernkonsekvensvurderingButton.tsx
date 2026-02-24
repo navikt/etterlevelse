@@ -9,7 +9,8 @@ import {
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
-import AdminMedAlleAndreRollerOgsaSkruddPaRollePVK from './adminMedAlleAndreRollerOgsaSkruddPaRollePVK/adminMedAlleAndreRollerOgsaSkruddPaRollePVK'
+import AdminRollePVK from './adminRollePVK/adminRollePVK'
+import EtterleverOgRisikoeierRollePVK from './etterleverOgRisikoeierRollePVK/etterleverOgRisikoeierRollePVK'
 import EtterleverRollePVK from './etterleverRollePVK/etterleverRollePVK'
 import PersonvernombudRollePVK from './personvernombudRollePVK/personvernombudRollePVK'
 import RisikoeierRollePVK from './risikoeierRollePVK/risikoeierRollePVK'
@@ -24,6 +25,8 @@ type TProps = {
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
+  behandlingsLivslop,
+  behandlingensArtOgOmfang,
 }) => {
   const user = useContext(UserContext)
 
@@ -52,31 +55,37 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
     case EActionMenuRoles.Personvernombud:
       return (
         <PersonvernombudRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
         />
       )
     case EActionMenuRoles.Risikoeier:
       return (
         <RisikoeierRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
         />
       )
     case EActionMenuRoles.Admin:
       return (
-        <AdminMedAlleAndreRollerOgsaSkruddPaRollePVK
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
+        <AdminRollePVK
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
+    case EActionMenuRoles.EtterleverOgRisikoeier:
+      return (
+        <EtterleverOgRisikoeierRollePVK
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
         />
       )
     default:
@@ -84,6 +93,8 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         <EtterleverRollePVK
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
         />
       )
   }

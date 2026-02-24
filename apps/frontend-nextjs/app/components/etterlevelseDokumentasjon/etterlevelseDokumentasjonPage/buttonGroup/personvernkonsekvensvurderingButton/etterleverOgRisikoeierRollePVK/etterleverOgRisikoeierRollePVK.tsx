@@ -19,6 +19,7 @@ import {
   EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant,
   PvkGodkjentAvRisikoeierActionMenuVariant,
 } from '../commonActionMenuPVK/etterleverCommonPVK'
+import { EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVariant } from '../commonActionMenuPVK/etterleverOgRisikoeierComminPvk'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -27,7 +28,7 @@ type TProps = {
   behandlingsLivslop?: IBehandlingensLivslop
 }
 
-const EtterleverRollePVK: FunctionComponent<TProps> = ({
+const EtterleverOgRisikoeierRollePVK: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
   behandlingensArtOgOmfang,
@@ -138,7 +139,7 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_EIGHT:
       return (
-        <PvkSendtTilPvoEllerRisikoeierActionMenuVariant
+        <EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -175,4 +176,4 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
   }
 }
 
-export default EtterleverRollePVK
+export default EtterleverOgRisikoeierRollePVK
