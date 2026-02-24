@@ -1,4 +1,7 @@
-import { pvkDokumentasjonBehandlingsenLivslopUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
@@ -28,5 +31,25 @@ export const BehandlingensLivslopActionMenuItem: FunctionComponent<
     )}
   >
     {readOnly ? 'Se Behandlingens livsløp (read-only)' : 'Tegn Behandlingens livsløp'}
+  </ActionMenu.Item>
+)
+
+type TBehandlingensArtOgOmfangActionMenuItemProp = {
+  etterlevelseDokumentasjonId: string
+  behandlingensArtOgOmfangId: string
+  readOnly?: boolean
+}
+
+export const ArtOgOmfangActionMenuItem: FunctionComponent<
+  TBehandlingensArtOgOmfangActionMenuItemProp
+> = ({ etterlevelseDokumentasjonId, behandlingensArtOgOmfangId, readOnly }) => (
+  <ActionMenu.Item
+    as='a'
+    href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+      etterlevelseDokumentasjonId,
+      behandlingensArtOgOmfangId
+    )}
+  >
+    {readOnly ? 'Se Art og omfang (read-only)' : 'Beskriv art og omfang'}
   </ActionMenu.Item>
 )

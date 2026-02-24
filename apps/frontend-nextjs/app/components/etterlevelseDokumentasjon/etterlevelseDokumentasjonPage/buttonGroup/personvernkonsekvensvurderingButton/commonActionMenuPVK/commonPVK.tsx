@@ -3,7 +3,6 @@ import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/beh
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
-  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
   pvkDokumenteringPvoTilbakemeldingUrl,
@@ -11,6 +10,7 @@ import {
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import {
+  ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
   PvkActionMenuTrigger,
 } from './commonActionMenuComponentsPvk'
@@ -36,15 +36,12 @@ export const PvkIkkePabegyntActionMenuVariant: FunctionComponent<TProps> = ({
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
         readOnly={true}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+        readOnly={true}
+      />
 
       <ActionMenu.Item
         as='a'
@@ -73,15 +70,12 @@ export const PvkPabegyntActionMenuVariant: FunctionComponent<TProps> = ({
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
         readOnly={true}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+        readOnly={true}
+      />
 
       <ActionMenu.Item
         as='a'
@@ -120,15 +114,13 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant: FunctionComponent<TPro
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
         readOnly={true}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+        readOnly={true}
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument ? pvkDokument.id : 'ny', 1)}
@@ -161,15 +153,12 @@ export const PvkIkkeVurdertActionMenuVariant: FunctionComponent<TProps> = ({
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Beskriv art og omfang
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonPvkBehovUrl(
@@ -196,15 +185,12 @@ export const PvkUnderArbeidActionMenuVariant: FunctionComponent<TProps> = ({
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Beskriv Art og omfang
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(
@@ -242,15 +228,13 @@ export const PvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<T
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
         readOnly={true}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+        readOnly={true}
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(
@@ -287,15 +271,13 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Se Art og omfang
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+        readOnly={true}
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(

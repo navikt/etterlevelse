@@ -3,13 +3,13 @@ import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/beh
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
-  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import {
+  ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
   PvkActionMenuTrigger,
 } from './commonActionMenuComponentsPvk'
@@ -32,15 +32,13 @@ export const EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVarian
         behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
         readOnly={true}
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-          etterlevelseDokumentasjon.id,
-          behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
-        )}
-      >
-        Se Art og omfang (read-only)
-      </ActionMenu.Item>
+
+      <ArtOgOmfangActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
+        readOnly={true}
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(
