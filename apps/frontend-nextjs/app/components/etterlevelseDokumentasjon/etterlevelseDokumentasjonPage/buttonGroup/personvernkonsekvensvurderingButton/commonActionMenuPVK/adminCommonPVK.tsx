@@ -2,10 +2,7 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import {
-  pvkDokumentasjonPvkBehovUrl,
-  pvkDokumenteringPvoTilbakemeldingUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import {
@@ -13,6 +10,7 @@ import {
   BehandlingensLivslopActionMenuItem,
   PvkActionMenuItem,
   PvkActionMenuTrigger,
+  PvkBehovActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -54,15 +52,11 @@ export const AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionCompon
         pvkDokumentId={pvkDokument?.id}
         variant='LES_READONLY'
       />
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Les om behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_OM_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )

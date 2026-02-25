@@ -1,6 +1,7 @@
 import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
+  pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
@@ -51,7 +52,39 @@ export const ArtOgOmfangActionMenuItem: FunctionComponent<
       behandlingensArtOgOmfangId
     )}
   >
-    {readOnly ? 'Se Art og omfang (read-only)' : 'Beskriv art og omfang'}
+    {readOnly ? 'Se behandlingens art og omfang ' : 'Beskriv behandlingens art og omfang'}
+  </ActionMenu.Item>
+)
+
+export type TPvkBehovActionMenuVariant =
+  | 'LES_OM_BEHOV_READONLY'
+  | 'SE_BEHOV_READONLY'
+  | 'VURDER_BEHOV'
+  | 'REVURDER_BEHOV'
+
+const pvkBehovActionMenuVariantToText = (variant: TPvkBehovActionMenuVariant): string => {
+  switch (variant) {
+    case 'LES_OM_BEHOV_READONLY':
+      return 'Les om behov for PVK'
+    case 'SE_BEHOV_READONLY':
+      return 'Se Behov for PVK'
+    case 'VURDER_BEHOV':
+      return 'Vurder behov for PVK'
+    case 'REVURDER_BEHOV':
+      return 'Revurder behov for PVK'
+  }
+}
+
+export const PvkBehovActionMenuItem: FunctionComponent<{
+  etterlevelseDokumentasjonId: string
+  pvkDokumentId?: string | number
+  variant: TPvkBehovActionMenuVariant
+}> = ({ etterlevelseDokumentasjonId, pvkDokumentId, variant }) => (
+  <ActionMenu.Item
+    as='a'
+    href={pvkDokumentasjonPvkBehovUrl(etterlevelseDokumentasjonId, `${pvkDokumentId ?? 'ny'}`)}
+  >
+    {pvkBehovActionMenuVariantToText(variant)}
   </ActionMenu.Item>
 )
 

@@ -2,10 +2,7 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import {
-  pvkDokumentasjonPvkBehovUrl,
-  pvkDokumenteringPvoTilbakemeldingUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import {
@@ -13,6 +10,7 @@ import {
   BehandlingensLivslopActionMenuItem,
   PvkActionMenuItem,
   PvkActionMenuTrigger,
+  PvkBehovActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -43,15 +41,11 @@ export const PvkIkkePabegyntActionMenuVariant: FunctionComponent<TProps> = ({
         readOnly={true}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='SE_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -83,15 +77,11 @@ export const PvkPabegyntActionMenuVariant: FunctionComponent<TProps> = ({
         variant='LES_READONLY'
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='SE_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -123,15 +113,11 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant: FunctionComponent<TPro
       >
         Vurderer PVK (ny versjon)
       </ActionMenu.Item>
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='SE_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -155,15 +141,11 @@ export const PvkIkkeVurdertActionMenuVariant: FunctionComponent<TProps> = ({
         behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Vurder behov for PVK
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='VURDER_BEHOV'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -193,15 +175,11 @@ export const PvkUnderArbeidActionMenuVariant: FunctionComponent<TProps> = ({
         variant='FULLFOR'
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Les om behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_OM_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -232,15 +210,11 @@ export const PvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<T
         variant='LES_READONLY'
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Les om behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_OM_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -271,15 +245,11 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
         variant='LES_PVO_TILBAKEMELDING'
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Les om behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_OM_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )

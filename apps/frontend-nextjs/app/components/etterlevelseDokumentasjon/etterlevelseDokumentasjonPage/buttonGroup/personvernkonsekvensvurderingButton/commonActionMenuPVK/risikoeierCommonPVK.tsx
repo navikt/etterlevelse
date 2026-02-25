@@ -2,10 +2,7 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import {
-  pvkDokumentasjonPvkBehovUrl,
-  pvkDokumentasjonStepUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import {
@@ -13,6 +10,7 @@ import {
   BehandlingensLivslopActionMenuItem,
   PvkActionMenuItem,
   PvkActionMenuTrigger,
+  PvkBehovActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -59,15 +57,11 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
       >
         Godkjenn PVK
       </ActionMenu.Item>
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='SE_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -99,15 +93,11 @@ export const RisikoeierGodkjentPvkActionMenuVariant: FunctionComponent<TProps> =
         variant='LES_READONLY_GODKJENT_VERSJON'
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='SE_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -146,15 +136,11 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
       >
         Godkjenn PVK (ny versjon)
       </ActionMenu.Item>
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='SE_BEHOV_READONLY'
+      />
     </ActionMenu.Content>
   </ActionMenu>
 )
