@@ -44,7 +44,12 @@ export const LoginHeaderButton = () => {
   }, [])
 
   return (
-    <InternalHeader.Button as={Link} href={loginUrl(fullUrl, pathname)} underline={false}>
+    <InternalHeader.Button
+      as={Link}
+      href={loginUrl(fullUrl, pathname)}
+      underline={false}
+      style={{ color: '#cdd0d4' }}
+    >
       Logg inn
     </InternalHeader.Button>
   )
