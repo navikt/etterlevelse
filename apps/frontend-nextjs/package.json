@@ -38,7 +38,7 @@
     "draft-js": "0.11.7",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
-    "graphql": "16.12.0",
+    "graphql": "16.13.0",
     "json-diff-kit": "1.0.34",
     "lodash": "4.17.23",
     "markdown-draft-js": "2.4.0",
