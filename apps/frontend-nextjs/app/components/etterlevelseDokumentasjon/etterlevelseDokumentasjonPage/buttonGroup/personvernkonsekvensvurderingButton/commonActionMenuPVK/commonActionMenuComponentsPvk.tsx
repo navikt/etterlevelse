@@ -32,7 +32,7 @@ export const BehandlingensLivslopActionMenuItem: FunctionComponent<
       behandlingensLivslopId
     )}
   >
-    {readOnly ? 'Se Behandlingens livsløp (read-only)' : 'Tegn Behandlingens livsløp'}
+    {readOnly ? 'Se Behandlingens livsløp' : 'Tegn Behandlingens livsløp'}
   </ActionMenu.Item>
 )
 
