@@ -27,15 +27,10 @@ export interface IPvkDokument {
 
   godkjentAvRisikoeierDato: string
   godkjentAvRisikoeier: string
-  // response field only
-  currentEtterlevelseDokumentVersjon: number
-  hasPvkDocumentationStarted: boolean
-  hasPvkDocumentBeenUpdatedAfterApproval: boolean
 }
 
 export interface IMeldingTilPvo {
   innsendingId: number
-  etterlevelseDokumentVersjon: number
   merknadTilPvo: string
   endringsNotat: string
   sendtTilPvoDato: string
