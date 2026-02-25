@@ -27,10 +27,15 @@ export interface IPvkDokument {
 
   godkjentAvRisikoeierDato: string
   godkjentAvRisikoeier: string
+  // response field only
+  currentEtterlevelseDokumentVersjon: number
+  hasPvkDocumentationStarted: boolean
+  hasPvkDocumentBeenUpdatedAfterApproval: boolean
 }
 
 export interface IMeldingTilPvo {
   innsendingId: number
+  etterlevelseDokumentVersjon: number
   merknadTilPvo: string
   endringsNotat: string
   sendtTilPvoDato: string
@@ -47,6 +52,7 @@ export interface IPvkDokumentListItem {
   sendtTilPvoDato: string
   sendtTilPvoAv: string
   antallInnsendingTilPvo: number
+  currentEtterlevelseDokumentVersjon: number
 }
 
 export enum EPvkDokumentStatus {
@@ -72,6 +78,25 @@ export enum EPVKTilstandStatus {
   TILSTAND_STATUS_NINE = 'RISIKOEIER_HAR_GODKJENT_ETTERLEVER_HAR_IKKE_ENDRET_SIDEN',
   TILSTAND_STATUS_TEN = 'ETTERLEVER_HAR_BEGYNT_MED_NYE_ENDRINGER_TELLES_SOM_UNDER_ARBEID',
   TILSTAND_STATUS_ELEVEN = 'ETTERLEVER_HAR_SENDT_OPPDATERT_PVK_DIREKTE_TIL_RISIKOEIER_TELLES_SOM_UNDER_ARBEID',
+}
+
+export enum EPVKActionMenuTilstandsKnapper {
+  TEGN_BBL = 'Tegn Behandlingenslivsløp',
+  BESKRIV_AO = 'Beskriv Art og omfang',
+  SE_BBL = 'Se Behandlingens livsløp (read-only)',
+  SE_AO = 'Se Art og omfang (read-only)',
+  SE_BEHOV_PVK = 'Se Behov for PVK (read-only)',
+  VURDER_BEHOV_PVK = 'Vurder Behov for PVK',
+  PABEGYNN_PVK = 'Påbegynn PVK',
+  FULLFOR_PVK = 'Fullfør PVK',
+  VURDER_PVK = 'Vurder PVK (read-only)',
+  GODKJENN_PVK = 'Godkjenn PVK',
+  LES_TILBAKEMELDING_PVO = 'Les PVOs tilbakemelding',
+  REVURDER_BEHOV_PVK = 'Revurder Behov for PVK',
+  LES_PVK = 'Les PVK (read-only)',
+  LES_PVK_NY = ' Les PVK (read-only, ny versjon)',
+  LES_OPPDATER_PVK = 'Les PVK (read-only, godkjent versjon) og Oppdater PVK (åpner neste versjon)',
+  LES_GODKJENT_PVK = 'Les PVK (read-only, godkjent versjon)',
 }
 
 export enum EPvkVurdering {

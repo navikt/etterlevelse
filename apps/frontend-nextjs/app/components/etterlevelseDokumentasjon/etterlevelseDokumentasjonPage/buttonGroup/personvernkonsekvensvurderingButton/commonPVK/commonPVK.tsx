@@ -1,211 +1,136 @@
+import { EPVKActionMenuTilstandsKnapper } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 
+export const ActionMenuTriggerPKV = () => (
+  <ActionMenu.Trigger>
+    <Button variant='secondary-neutral' icon={<ChevronDownIcon aria-hidden />} iconPosition='right'>
+      Personvernkonsekvensvurdering (PVK)
+    </Button>
+  </ActionMenu.Trigger>
+)
+
 export const CommonVariantOnePVK = () => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <ActionMenuTriggerPKV />
     <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Se Behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se Art og omfang (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Se Behov for PVK (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_BBL}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.FULLFOR_PVK}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_BEHOV_PVK}
+      </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
 )
 
 export const CommonVariantTwoPVK = () => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <ActionMenuTriggerPKV />
     <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Se Behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se Art og omfang (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se Behov for PVK (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_BBL}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.FULLFOR_PVK}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.FULLFOR_PVK}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_BEHOV_PVK}
+      </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
 )
 
 export const CommonVariantThreePVK = () => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <ActionMenuTriggerPKV />
     <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Se Behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se Art og omfang (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only, ny versjon)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se Behov for PVK (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_BBL}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.FULLFOR_PVK}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.LES_PVK_NY}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_BEHOV_PVK}
+      </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
 )
 
 export const CommonVariantFourPVK = () => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <ActionMenuTriggerPKV />
     <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Tegn behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv art og omfang
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Vurder behov for PVK
-        </ActionMenu.Item>
-      </ActionMenu.Group>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.TEGN_BBL}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.BESKRIV_AO}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.VURDER_BEHOV_PVK}
+      </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
 )
 
 export const CommonVariantFivePVK = () => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <ActionMenuTriggerPKV />
     <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Tegn Behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Beskriv Art og omfang
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Fullfør PVK
-        </ActionMenu.Item>
-      </ActionMenu.Group>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.TEGN_BBL}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.BESKRIV_AO}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.FULLFOR_PVK}
+      </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
 )
 
 export const CommonVariantSixPVK = () => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <ActionMenuTriggerPKV />
     <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Se Behandlingens livsløp (read-only)
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se Art og omfang (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Les PVK (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_BBL}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.SE_AO}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.LES_PVK}
+      </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
 )
 
 export const CommonVariantSevenPVK = () => (
   <ActionMenu>
-    <ActionMenu.Trigger>
-      <Button
-        variant='secondary-neutral'
-        icon={<ChevronDownIcon aria-hidden />}
-        iconPosition='right'
-      >
-        Personvernkonsekvensvurdering (PVK)
-      </Button>
-    </ActionMenu.Trigger>
+    <ActionMenuTriggerPKV />
     <ActionMenu.Content>
-      <ActionMenu.Group label='Forstå behandlingen'>
-        <ActionMenu.Item as='a' href=''>
-          Tegn Behandlingens livsløp
-        </ActionMenu.Item>
-        <ActionMenu.Item as='a' href=''>
-          Se Art og omfang (read-only)
-        </ActionMenu.Item>
-      </ActionMenu.Group>
-      <ActionMenu.Group label='Personvernkonsekvensvurdering'>
-        <ActionMenu.Item as='a' href=''>
-          Les PVOs tilbakemelding
-        </ActionMenu.Item>
-      </ActionMenu.Group>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.TEGN_BBL}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.FULLFOR_PVK}
+      </ActionMenu.Item>
+      <ActionMenu.Item as='a' href=''>
+        {EPVKActionMenuTilstandsKnapper.LES_TILBAKEMELDING_PVO}
+      </ActionMenu.Item>
     </ActionMenu.Content>
   </ActionMenu>
 )
