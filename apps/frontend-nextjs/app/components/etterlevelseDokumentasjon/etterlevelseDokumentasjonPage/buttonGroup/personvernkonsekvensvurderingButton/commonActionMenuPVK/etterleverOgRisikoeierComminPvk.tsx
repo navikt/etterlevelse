@@ -11,6 +11,7 @@ import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
+  PvkActionMenuItem,
   PvkActionMenuTrigger,
 } from './commonActionMenuComponentsPvk'
 
@@ -39,16 +40,12 @@ export const EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVarian
         readOnly={true}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
-      >
-        Les PVK (read-only)
-      </ActionMenu.Item>
+      <PvkActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_READONLY'
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(

@@ -11,6 +11,7 @@ import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
+  PvkActionMenuItem,
   PvkActionMenuTrigger,
 } from './commonActionMenuComponentsPvk'
 
@@ -42,16 +43,12 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
         readOnly={true}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
-      >
-        Les PVK (read-only)
-      </ActionMenu.Item>
+      <PvkActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_READONLY'
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(
@@ -96,16 +93,12 @@ export const RisikoeierGodkjentPvkActionMenuVariant: FunctionComponent<TProps> =
         readOnly={true}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
-      >
-        Les PVK (read-only, godkjent versjon)
-      </ActionMenu.Item>
+      <PvkActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_READONLY_GODKJENT_VERSJON'
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonPvkBehovUrl(
@@ -137,16 +130,12 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
         readOnly={true}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
-      >
-        Les PVK (read-only, ny versjon)
-      </ActionMenu.Item>
+      <PvkActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_READONLY_NY_VERSJON'
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(

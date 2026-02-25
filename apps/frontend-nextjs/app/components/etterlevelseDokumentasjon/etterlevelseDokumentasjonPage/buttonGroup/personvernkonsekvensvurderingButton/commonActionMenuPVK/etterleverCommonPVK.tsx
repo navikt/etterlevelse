@@ -2,15 +2,13 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import {
-  pvkDokumentasjonPvkBehovUrl,
-  pvkDokumentasjonStepUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
+  PvkActionMenuItem,
   PvkActionMenuTrigger,
 } from './commonActionMenuComponentsPvk'
 
@@ -72,16 +70,12 @@ export const EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant: FunctionCompo
         behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
-      >
-        Påbegynn PVK
-      </ActionMenu.Item>
+      <PvkActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='PABEGYNN'
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonPvkBehovUrl(
@@ -115,16 +109,12 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
         behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
       />
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
-      >
-        Les PVK (read-only, godkjent versjon) og Oppdater PVK (åpner neste versjon)
-      </ActionMenu.Item>
+      <PvkActionMenuItem
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        pvkDokumentId={pvkDokument?.id}
+        variant='LES_READONLY_GODKJENT_VERSJON_OG_OPPDATER'
+      />
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonPvkBehovUrl(
