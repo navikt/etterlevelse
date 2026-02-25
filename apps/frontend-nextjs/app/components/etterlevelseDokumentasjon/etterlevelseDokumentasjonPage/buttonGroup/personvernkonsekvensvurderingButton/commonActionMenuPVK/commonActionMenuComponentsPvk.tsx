@@ -52,7 +52,7 @@ export const ArtOgOmfangActionMenuItem: FunctionComponent<
       behandlingensArtOgOmfangId
     )}
   >
-    {readOnly ? 'Se behandlingens art og omfang ' : 'Beskriv behandlingens art og omfang'}
+    {readOnly ? 'Se behandlingens art og omfang' : 'Beskriv behandlingens art og omfang'}
   </ActionMenu.Item>
 )
 
@@ -67,7 +67,7 @@ const pvkBehovActionMenuVariantToText = (variant: TPvkBehovActionMenuVariant): s
     case 'LES_OM_BEHOV_READONLY':
       return 'Les om behov for PVK'
     case 'SE_BEHOV_READONLY':
-      return 'Se Behov for PVK'
+      return 'Se behov for PVK'
     case 'VURDER_BEHOV':
       return 'Vurder behov for PVK'
     case 'REVURDER_BEHOV':
