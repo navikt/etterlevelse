@@ -108,7 +108,7 @@ const pvkActionMenuVariantToText = (variant: TPvkActionMenuVariant): string => {
     case 'PABEGYNN':
       return 'Påbegynn PVK'
     case 'LES_READONLY_GODKJENT_VERSJON_OG_OPPDATER':
-      return 'Les PVK'
+      return 'Les og oppdater PVK'
     case 'LES_READONLY_GODKJENT_VERSJON':
       return 'Les PVK '
     case 'LES_READONLY_NY_VERSJON':
