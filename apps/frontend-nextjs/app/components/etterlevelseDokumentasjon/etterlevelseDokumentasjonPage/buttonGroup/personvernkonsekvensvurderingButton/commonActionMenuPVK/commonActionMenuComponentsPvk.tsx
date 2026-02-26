@@ -44,12 +44,11 @@ type TBehandlingensArtOgOmfangActionMenuItemProp = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   children: string
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
-  readOnly?: boolean
 }
 
 export const ArtOgOmfangActionMenuItem: FunctionComponent<
   TBehandlingensArtOgOmfangActionMenuItemProp
-> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, readOnly, children }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, children }) => (
   <ActionMenu.Item
     as='a'
     href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
@@ -57,7 +56,6 @@ export const ArtOgOmfangActionMenuItem: FunctionComponent<
       behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
     )}
   >
-    {readOnly ? 'Se behandlingens art og omfang' : 'Beskriv behandlingens art og omfang'}
     {children}
   </ActionMenu.Item>
 )
