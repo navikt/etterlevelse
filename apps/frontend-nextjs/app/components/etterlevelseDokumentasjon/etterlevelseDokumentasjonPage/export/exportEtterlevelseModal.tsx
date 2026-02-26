@@ -1,14 +1,15 @@
 'use client'
 
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { env } from '@/util/env/env'
 import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from '@navikt/ds-react'
 import axios from 'axios'
-import { ChangeEvent, useContext, useState } from 'react'
+import { ChangeEvent, FunctionComponent, useContext, useState } from 'react'
 
 type TExportEtterlevelseModalWithButtonProps = {
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
 interface IExportEtterlevelseModalProps extends TExportEtterlevelseModalWithButtonProps {
@@ -16,10 +17,9 @@ interface IExportEtterlevelseModalProps extends TExportEtterlevelseModalWithButt
   setIsExportModalOpen: (state: boolean) => void
 }
 
-export const ExportEtterlevelseModalWithButton = (
-  props: TExportEtterlevelseModalWithButtonProps
-) => {
-  const { etterlevelseDokumentasjonId } = props
+export const ExportEtterlevelseModalWithButton: FunctionComponent<
+  TExportEtterlevelseModalWithButtonProps
+> = ({ etterlevelseDokumentasjon }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
 
   return (
@@ -29,7 +29,7 @@ export const ExportEtterlevelseModalWithButton = (
       </Button>
 
       <ExportEtterlevelseModal
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}
         setIsExportModalOpen={setIsExportModalOpen}
       />
@@ -37,8 +37,11 @@ export const ExportEtterlevelseModalWithButton = (
   )
 }
 
-export const ExportEtterlevelseModal = (props: IExportEtterlevelseModalProps) => {
-  const { etterlevelseDokumentasjonId, isExportModalOpen, setIsExportModalOpen } = props
+export const ExportEtterlevelseModal: FunctionComponent<IExportEtterlevelseModalProps> = ({
+  etterlevelseDokumentasjon,
+  isExportModalOpen,
+  setIsExportModalOpen,
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [valgtTema, setValgtTema] = useState<string>('')
@@ -114,7 +117,7 @@ export const ExportEtterlevelseModal = (props: IExportEtterlevelseModalProps) =>
                   ;(async () => {
                     setIsLoading(true)
                     setErrorMessage('')
-                    let exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}`
+                    let exportUrl = `${env.backendBaseUrl}/export/etterlevelsedokumentasjon?etterlevelseDokumentasjonId=${etterlevelseDokumentasjon.id}`
                     if (valgtTema !== '') {
                       exportUrl += `&temakode=${valgtTema}&onlyActiveKrav=${onlyActiveKrav}`
                       axios

@@ -32,7 +32,7 @@ export const RisikoeierGodkjenningAvEtterlevelseActionMenuVariant: FunctionCompo
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}
         setIsExportModalOpen={setIsExportModalOpen}
       />

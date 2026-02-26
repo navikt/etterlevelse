@@ -30,16 +30,16 @@ export const EtterleverUnderArbeidVariant: FunctionComponent<TProps> = ({
           >
             Få etterlevelsen godkjent av risikoeier
           </ActionMenu.Item>
-          <RedigerEgenskaperActionMenuItem
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-          />
+          <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
+            Rediger dokumentegenskaper
+          </RedigerEgenskaperActionMenuItem>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
             Eksporter til Word
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}
         setIsExportModalOpen={setIsExportModalOpen}
       />
@@ -62,16 +62,16 @@ export const EtterleverSendtTilGodkjenningVariant: FunctionComponent<TProps> = (
           >
             Les innsending til risikoeier
           </ActionMenu.Item>
-          <RedigerEgenskaperActionMenuItem
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-          />
+          <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
+            Rediger dokumentegenskaper
+          </RedigerEgenskaperActionMenuItem>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
             Eksporter til Word
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}
         setIsExportModalOpen={setIsExportModalOpen}
       />
@@ -88,9 +88,10 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
       <ActionMenu>
         <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <RedigerEgenskaperActionMenuItem
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-          />
+          <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
+            Rediger dokumentegenskaper
+          </RedigerEgenskaperActionMenuItem>
+
           <ActionMenu.Item as='a' href=''>
             Oppdater etterlevelsen
           </ActionMenu.Item>
@@ -100,7 +101,7 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}
         setIsExportModalOpen={setIsExportModalOpen}
       />

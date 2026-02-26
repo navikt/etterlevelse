@@ -130,7 +130,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
 
           <div className='w-full flex justify-end items-center'>
             <ExportEtterlevelseModalWithButton
-              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             />
             <div>
               <Button variant='tertiary' size='small' onClick={() => setIsArkivModalOpen(true)}>

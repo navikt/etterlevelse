@@ -32,7 +32,7 @@ export const EtterlevelseReadOnlyActionMenuVariant: FunctionComponent<TProps> = 
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}
         setIsExportModalOpen={setIsExportModalOpen}
       />
@@ -55,9 +55,9 @@ export const RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant: F
           >
             Les innsending til risikoeier
           </ActionMenu.Item>
-          <RedigerEgenskaperActionMenuItem
-            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-          />
+          <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
+            Rediger dokumentegenskaper
+          </RedigerEgenskaperActionMenuItem>
           <ActionMenu.Item
             as='a'
             href={etterlevelsesDokumentasjonRisikoeierGodkjenningUrl(etterlevelseDokumentasjon.id)}
@@ -70,7 +70,7 @@ export const RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant: F
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}
         setIsExportModalOpen={setIsExportModalOpen}
       />

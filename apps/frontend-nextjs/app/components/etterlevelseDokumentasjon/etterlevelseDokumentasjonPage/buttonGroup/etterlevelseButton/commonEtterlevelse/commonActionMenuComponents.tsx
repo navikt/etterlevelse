@@ -1,3 +1,4 @@
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
@@ -12,13 +13,14 @@ export const ActionMenuButtonEtterlevelse = () => (
 )
 
 type TRedigerEgenskaperActionMenuItemProps = {
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  children: string
 }
 
 export const RedigerEgenskaperActionMenuItem: FunctionComponent<
   TRedigerEgenskaperActionMenuItemProps
-> = ({ etterlevelseDokumentasjonId }) => (
-  <ActionMenu.Item as='a' href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjonId)}>
-    Rediger dokumentegenskaper
+> = ({ etterlevelseDokumentasjon, children }) => (
+  <ActionMenu.Item as='a' href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}>
+    {children}
   </ActionMenu.Item>
 )
