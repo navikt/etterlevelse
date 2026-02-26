@@ -56,11 +56,13 @@ export const EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVarian
       >
         Godkjenn PVK
       </ActionMenu.Item>
+
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_OM_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )

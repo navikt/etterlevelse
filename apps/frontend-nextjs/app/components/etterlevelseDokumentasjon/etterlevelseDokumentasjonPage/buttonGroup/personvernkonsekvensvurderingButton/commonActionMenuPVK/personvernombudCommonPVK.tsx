@@ -48,11 +48,13 @@ export const PersonvernombudSendtForTilbakemeldingActionMenuVariant: FunctionCom
       >
         Vurderer PVK
       </ActionMenu.Item>
+
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='SE_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )

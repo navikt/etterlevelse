@@ -54,11 +54,13 @@ export const AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionCompon
         pvkDokumentId={pvkDokument?.id}
         variant='LES_READONLY'
       />
+
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_OM_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )

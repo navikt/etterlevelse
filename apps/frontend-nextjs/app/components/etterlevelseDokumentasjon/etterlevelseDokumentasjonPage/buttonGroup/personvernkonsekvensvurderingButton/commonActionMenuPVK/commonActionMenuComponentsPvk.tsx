@@ -1,6 +1,7 @@
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
@@ -61,35 +62,19 @@ export const ArtOgOmfangActionMenuItem: FunctionComponent<
   </ActionMenu.Item>
 )
 
-export type TPvkBehovActionMenuVariant =
-  | 'LES_OM_BEHOV_READONLY'
-  | 'SE_BEHOV_READONLY'
-  | 'VURDER_BEHOV'
-  | 'REVURDER_BEHOV'
-
-const pvkBehovActionMenuVariantToText = (variant: TPvkBehovActionMenuVariant): string => {
-  switch (variant) {
-    case 'LES_OM_BEHOV_READONLY':
-      return 'Les om behov for PVK'
-    case 'SE_BEHOV_READONLY':
-      return 'Se behov for PVK'
-    case 'VURDER_BEHOV':
-      return 'Vurder behov for PVK'
-    case 'REVURDER_BEHOV':
-      return 'Revurder behov for PVK'
-  }
-}
-
 export const PvkBehovActionMenuItem: FunctionComponent<{
-  etterlevelseDokumentasjonId: string
-  pvkDokumentId?: string | number
-  variant: TPvkBehovActionMenuVariant
-}> = ({ etterlevelseDokumentasjonId, pvkDokumentId, variant }) => (
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  children: string
+  pvkDokument?: IPvkDokument
+}> = ({ etterlevelseDokumentasjon, children, pvkDokument }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonPvkBehovUrl(etterlevelseDokumentasjonId, `${pvkDokumentId ?? 'ny'}`)}
+    href={pvkDokumentasjonPvkBehovUrl(
+      etterlevelseDokumentasjon.id,
+      pvkDokument ? pvkDokument.id : 'ny'
+    )}
   >
-    {pvkBehovActionMenuVariantToText(variant)}
+    {children}
   </ActionMenu.Item>
 )
 

@@ -44,10 +44,11 @@ export const PvkIkkePabegyntActionMenuVariant: FunctionComponent<TProps> = ({
       </ArtOgOmfangActionMenuItem>
 
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='SE_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -82,10 +83,11 @@ export const PvkPabegyntActionMenuVariant: FunctionComponent<TProps> = ({
       />
 
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='SE_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -120,10 +122,11 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant: FunctionComponent<TPro
         Vurderer PVK (ny versjon)
       </ActionMenu.Item>
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='SE_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -152,10 +155,11 @@ export const PvkIkkeVurdertActionMenuVariant: FunctionComponent<TProps> = ({
       </ArtOgOmfangActionMenuItem>
 
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='VURDER_BEHOV'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Vurder behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -190,10 +194,11 @@ export const PvkUnderArbeidActionMenuVariant: FunctionComponent<TProps> = ({
       />
 
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_OM_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -228,10 +233,11 @@ export const PvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<T
       />
 
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_OM_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -266,10 +272,11 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
       />
 
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_OM_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )

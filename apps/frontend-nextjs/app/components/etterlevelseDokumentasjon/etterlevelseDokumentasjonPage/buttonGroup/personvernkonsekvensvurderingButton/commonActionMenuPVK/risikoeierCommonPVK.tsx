@@ -59,11 +59,13 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
       >
         Godkjenn PVK
       </ActionMenu.Item>
+
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='SE_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -98,10 +100,11 @@ export const RisikoeierGodkjentPvkActionMenuVariant: FunctionComponent<TProps> =
       />
 
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='SE_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -142,11 +145,13 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
       >
         Godkjenn PVK (ny versjon)
       </ActionMenu.Item>
+
       <PvkBehovActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='SE_BEHOV_READONLY'
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
