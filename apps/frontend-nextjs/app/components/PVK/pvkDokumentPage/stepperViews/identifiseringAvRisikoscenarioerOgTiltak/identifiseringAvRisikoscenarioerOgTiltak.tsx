@@ -7,6 +7,7 @@ import CreateRisikoscenarioModal from '@/components/risikoscenario/edit/createRi
 import RisikoscenarioAccordianList from '@/components/risikoscenario/generellScenario/risikoscenarioAccordianList'
 import { RisikoscenarioAccordianListReadOnlyView } from '@/components/risikoscenario/readOnly/risikoscenarioAccordianListReadOnlyView'
 import { IPageResponse } from '@/constants/commonConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -16,14 +17,15 @@ import {
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import FormButtons from '../../../edit/formButtons'
 import { IdentifiseringAvRisikoscenarioerOgTiltakContent } from './identifiseringAvRisikoscenarioerOgTiltakContent'
 
 type TProps = {
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   activeStep: number
   setActiveStep: (step: number) => void
@@ -32,13 +34,14 @@ type TProps = {
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjonId,
+  etterlevelseDokumentasjon,
   pvkDokument,
   activeStep,
   setActiveStep,
   setSelectedStep,
   formRef,
 }) => {
+  const user = useContext(UserContext)
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
@@ -71,14 +74,15 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
       <div className='flex-col justify-items-center'>
         <IdentifiseringAvRisikoscenarioerOgTiltakContent
           stylingHeading='my-5'
-          etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
           risikoscenarioList={risikoscenarioList}
           antallInnsendingerTilPvo={pvkDokument?.antallInnsendingTilPvo}
         />
 
         {pvkDokument &&
           !isReadOnlyPvkStatus(pvkDokument.status) &&
-          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+          (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
             <div className='w-full'>
               {risikoscenarioList.length !== 0 && (
                 <div className='my-5'>
@@ -87,7 +91,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
                     allRisikoscenarioList={allRisikoscenarioList}
                     setAllRisikoscenarioList={setAllRisikoscenarioList}
                     tiltakList={tiltakList}
-                    etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                     setTiltakList={setTiltakList}
                     setRisikoscenarioList={setRisikoscenarioList}
                     setIsTiltakFormActive={setIsTiltakFormActive}
@@ -114,22 +118,26 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
             </div>
           )}
 
-        {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
-          <div className='w-full my-5'>
-            <RisikoscenarioAccordianListReadOnlyView
-              risikoscenarioList={risikoscenarioList}
-              etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-              allRisikoscenarioList={allRisikoscenarioList}
-              tiltakList={tiltakList}
-            />
-          </div>
-        )}
+        {pvkDokument &&
+          (isReadOnlyPvkStatus(pvkDokument.status) ||
+            (!user.isAdmin() &&
+              (user.isPersonvernombud() ||
+                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) && (
+            <div className='w-full my-5'>
+              <RisikoscenarioAccordianListReadOnlyView
+                risikoscenarioList={risikoscenarioList}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                allRisikoscenarioList={allRisikoscenarioList}
+                tiltakList={tiltakList}
+              />
+            </div>
+          )}
 
         {pvkDokument && pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
           <div className='w-full my-5'>
             <RisikoscenarioAccordianListReadOnlyWithIverksetting
               risikoscenarioList={risikoscenarioList}
-              etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
               allRisikoscenarioList={allRisikoscenarioList}
               tiltakList={tiltakList}
               setTiltakList={setTiltakList}
@@ -144,7 +152,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
         />
 
         <FormButtons
-          etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
           activeStep={activeStep}
           setActiveStep={setActiveStep}
           setSelectedStep={setSelectedStep}

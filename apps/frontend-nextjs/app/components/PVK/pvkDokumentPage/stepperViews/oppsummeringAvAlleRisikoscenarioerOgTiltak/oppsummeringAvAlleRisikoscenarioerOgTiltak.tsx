@@ -8,6 +8,7 @@ import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/p
 import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
 import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -22,6 +23,7 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
   etterlevelseDokumentasjonPvkTabUrl,
@@ -34,7 +36,7 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { Alert, BodyLong, Heading, Loader, ReadMore, Tabs, ToggleGroup } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
@@ -43,7 +45,7 @@ import { OppsumeringAccordianList } from './oppsumeringAccordianList'
 import { OppsumeringAccordianListGodkjentView } from './oppsumeringAccordianListGodkjentView'
 
 type TProps = {
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   pvkDokument: IPvkDokument
   activeStep: number
   setActiveStep: (step: number) => void
@@ -99,7 +101,7 @@ const visTomTiltakListeBeskrivelse = (filter: string | null) => {
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjonId,
+  etterlevelseDokumentasjon,
   pvkDokument,
   activeStep,
   setActiveStep,
@@ -108,6 +110,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   pvoTilbakemelding,
   relevantVurdering,
 }) => {
+  const user = useContext(UserContext)
   const router = useRouter()
   const queryParams = useSearchParams()
   const steg: string | null = queryParams.get('steg')
@@ -412,14 +415,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             </Heading>
                             Risikoscenarioer legges inn under{' '}
                             <ExternalLink
-                              href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)}?tab=pvk`}
+                              href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}?tab=pvk`}
                             >
                               PVK-relaterte krav
                             </ExternalLink>{' '}
                             eller eventuelt under{' '}
                             <ExternalLink
                               href={pvkDokumentasjonStepUrl(
-                                etterlevelseDokumentasjonId,
+                                etterlevelseDokumentasjon.id,
                                 pvkDokument.id,
                                 6
                               )}
@@ -439,13 +442,15 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                           <div className='my-5'>
                             {pvkDokument &&
                               !isReadOnlyPvkStatus(pvkDokument.status) &&
-                              pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+                              pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                              (user.isAdmin() ||
+                                etterlevelseDokumentasjon.hasCurrentUserAccess) && (
                                 <OppsumeringAccordianList
                                   risikoscenarioList={filteredRisikoscenarioList}
                                   setRisikosenarioList={setFilteredRisikosenarioList}
                                   allRisikoscenarioList={risikoscenarioList}
                                   setAllRisikoscenarioList={setRisikoscenarioList}
-                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                   tiltakList={tiltakList}
                                   setTiltakList={setTiltakList}
                                   formRef={formRef}
@@ -453,22 +458,28 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                   setIsUnsaved={setIsUnsaved}
                                 />
                               )}
-                            {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
-                              <OppsumeringAccordianListReadOnlyView
-                                risikoscenarioList={filteredRisikoscenarioList}
-                                allRisikoscenarioList={risikoscenarioList}
-                                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
-                                tiltakList={tiltakList}
-                                noMarkdownCopyLinkButton
-                              />
-                            )}
+                            {pvkDokument &&
+                              (isReadOnlyPvkStatus(pvkDokument.status) ||
+                                (!user.isAdmin() &&
+                                  (user.isPersonvernombud() ||
+                                    etterlevelseDokumentasjon.risikoeiere.includes(
+                                      user.getIdent()
+                                    )))) && (
+                                <OppsumeringAccordianListReadOnlyView
+                                  risikoscenarioList={filteredRisikoscenarioList}
+                                  allRisikoscenarioList={risikoscenarioList}
+                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                                  tiltakList={tiltakList}
+                                  noMarkdownCopyLinkButton
+                                />
+                              )}
 
                             {pvkDokument &&
                               pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
                                 <OppsumeringAccordianListGodkjentView
                                   risikoscenarioList={filteredRisikoscenarioList}
                                   allRisikoscenarioList={risikoscenarioList}
-                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                   tiltakList={tiltakList}
                                   setTiltakList={setTiltakList}
                                   noMarkdownCopyLinkButton
@@ -486,14 +497,16 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             </Heading>
                             Tiltak legges inn under{' '}
                             <ExternalLink
-                              href={etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId)}
+                              href={etterlevelseDokumentasjonPvkTabUrl(
+                                etterlevelseDokumentasjon.id
+                              )}
                             >
                               PVK-relaterte krav{' '}
                             </ExternalLink>{' '}
                             eller eventuelt under{' '}
                             <ExternalLink
                               href={pvkDokumentasjonStepUrl(
-                                etterlevelseDokumentasjonId,
+                                etterlevelseDokumentasjon.id,
                                 pvkDokument.id,
                                 6
                               )}
@@ -529,7 +542,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
                       {pvkDokument &&
                         !isReadOnlyPvkStatus(pvkDokument.status) &&
-                        filteredTiltakList.length !== 0 && (
+                        filteredTiltakList.length !== 0 &&
+                        (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
                           <TiltakAccordionList
                             pvkDokument={pvkDokument}
                             tiltakList={tiltakList}
@@ -542,7 +556,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                         )}
 
                       {pvkDokument &&
-                        isReadOnlyPvkStatus(pvkDokument.status) &&
+                        (isReadOnlyPvkStatus(pvkDokument.status) ||
+                          (!user.isAdmin() &&
+                            (user.isPersonvernombud() ||
+                              etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) &&
                         filteredTiltakList.length !== 0 && (
                           <TiltakAccordionListReadOnly
                             tiltakList={filteredTiltakList}
@@ -588,7 +605,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
       </div>
 
       <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
         activeStep={activeStep}
         setActiveStep={setActiveStep}
         setSelectedStep={setSelectedStep}

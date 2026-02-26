@@ -312,7 +312,7 @@ export const PvkDokumentPage = () => {
                   )}
                   {activeStep === 6 && (
                     <IdentifiseringAvRisikoscenarioerOgTiltak
-                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
@@ -322,7 +322,7 @@ export const PvkDokumentPage = () => {
                   )}
                   {activeStep === 7 && (
                     <OppsummeringAvAlleRisikoscenarioerOgTiltak
-                      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
                       relevantVurdering={relevantVurdering}

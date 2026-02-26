@@ -164,47 +164,49 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                     </div>
                   )}
 
-                  <div className='mt-5'>
-                    <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
+                  {!risikoscenario.ingenTiltak && (
+                    <div className='mt-5'>
+                      <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
-                    {revurdertEffektCheck && (
-                      <Alert className='mt-3' variant='warning'>
-                        Dere må vurdere tiltakenes effekt
-                      </Alert>
-                    )}
+                      {revurdertEffektCheck && (
+                        <Alert className='mt-3' variant='warning'>
+                          Dere må vurdere tiltakenes effekt
+                        </Alert>
+                      )}
 
-                    {!revurdertEffektCheck && (
-                      <div className='mt-3'>
-                        <RisikoscenarioTag
-                          level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
-                          text={getSannsynlighetsnivaaText(
-                            risikoscenario.sannsynlighetsNivaaEtterTiltak
-                          )}
-                        />
-
+                      {!revurdertEffektCheck && (
                         <div className='mt-3'>
                           <RisikoscenarioTag
-                            level={risikoscenario.konsekvensNivaaEtterTiltak}
-                            text={getKonsekvenssnivaaText(
-                              risikoscenario.konsekvensNivaaEtterTiltak
+                            level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
+                            text={getSannsynlighetsnivaaText(
+                              risikoscenario.sannsynlighetsNivaaEtterTiltak
                             )}
                           />
+
+                          <div className='mt-3'>
+                            <RisikoscenarioTag
+                              level={risikoscenario.konsekvensNivaaEtterTiltak}
+                              text={getKonsekvenssnivaaText(
+                                risikoscenario.konsekvensNivaaEtterTiltak
+                              )}
+                            />
+                          </div>
+
+                          {risikoscenario.nivaaBegrunnelseEtterTiltak !== '' && (
+                            <BodyLong className='mt-3'>
+                              {risikoscenario.nivaaBegrunnelseEtterTiltak}
+                            </BodyLong>
+                          )}
+
+                          {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
+                            <Alert variant='warning' inline className='mt-3'>
+                              Dere må begrunne denne vurderingen av tiltakenes effekt.
+                            </Alert>
+                          )}
                         </div>
-
-                        {risikoscenario.nivaaBegrunnelseEtterTiltak !== '' && (
-                          <BodyLong className='mt-3'>
-                            {risikoscenario.nivaaBegrunnelseEtterTiltak}
-                          </BodyLong>
-                        )}
-
-                        {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
-                          <Alert variant='warning' inline className='mt-3'>
-                            Dere må begrunne denne vurderingen av tiltakenes effekt.
-                          </Alert>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </Accordion.Content>
             </Accordion.Item>
