@@ -191,7 +191,7 @@ export const getPvkTilstand = (
     pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
     pvkDokument.hasPvkDocumentationStarted === true
   ) {
-    if (pvkDokument.antallInnsendingTilPvo === 1) {
+    if (pvkDokument.antallInnsendingTilPvo <= 1) {
       return EPVKTilstandStatus.TILSTAND_STATUS_FOUR
     } else if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO) {
       return EPVKTilstandStatus.TILSTAND_STATUS_FIVE
