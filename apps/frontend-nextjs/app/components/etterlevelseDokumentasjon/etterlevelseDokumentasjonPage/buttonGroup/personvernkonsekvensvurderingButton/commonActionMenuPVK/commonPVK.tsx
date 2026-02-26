@@ -265,7 +265,7 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         behandlingensArtOgOmfang={behandlingensArtOgOmfang}
       >
-        Se behandlingens art og omfang
+        Beskriv behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
       <PvkDokumentActionMenuItem
