@@ -199,6 +199,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                     <div className='gap-4 ml-5 flex flex-col '>
                       {(etterlevelseDokumentasjon.hasCurrentUserAccess ||
                         user.isAdmin() ||
+                        user.isPersonvernombud() ||
                         etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
                         <EtterlevelseDokumentasjonButtonGroup
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
