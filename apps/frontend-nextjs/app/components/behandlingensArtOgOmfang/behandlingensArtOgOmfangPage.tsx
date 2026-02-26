@@ -157,16 +157,25 @@ export const BehandlingensArtOgOmfangPage = () => {
         etterlevelseDokumentasjon &&
         artOgOmfang &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        !user.isAdmin() && <ForbiddenAlert />}
+        !etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) &&
+        !user.isAdmin() &&
+        !user.isPersonvernombud() && <ForbiddenAlert />}
 
       {!isEtterlevelseDokumentasjonLoading &&
         !artOgOmfangLoading &&
         etterlevelseDokumentasjon &&
         artOgOmfang &&
-        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+        (etterlevelseDokumentasjon.hasCurrentUserAccess ||
+          etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) ||
+          user.isAdmin() ||
+          user.isPersonvernombud()) && (
           <ContentLayout>
             <MainPanelLayout hasSidePanel>
-              {((pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status)) || !pvkDokument) && (
+              {((pvkDokument &&
+                !isReadOnlyPvkStatus(pvkDokument.status) &&
+                user.isAdmin() &&
+                etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+                !pvkDokument) && (
                 <div>
                   <BehandlingensArtOgOmfangForm
                     etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -238,7 +247,9 @@ export const BehandlingensArtOgOmfangPage = () => {
                 formRef={formRef}
               />
 
-              {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
+              {((pvkDokument && isReadOnlyPvkStatus(pvkDokument.status)) ||
+                user.isPersonvernombud() ||
+                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
                 <ArtOgOmfangReadOnlyContent
                   artOgOmfang={artOgOmfang}
                   personkategorier={readOnlyData.personkategorier}

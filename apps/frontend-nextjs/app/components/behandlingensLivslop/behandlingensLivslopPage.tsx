@@ -204,15 +204,24 @@ export const BehandlingensLivslopPage = () => {
         etterlevelseDokumentasjon &&
         behandlingsLivslop &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        !user.isAdmin() && <ForbiddenAlert />}
+        !etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) &&
+        !user.isAdmin() &&
+        !user.isPersonvernombud() && <ForbiddenAlert />}
 
       {!isEtterlevelseDokumentasjonLoading &&
         etterlevelseDokumentasjon &&
         behandlingsLivslop &&
-        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+        (etterlevelseDokumentasjon.hasCurrentUserAccess ||
+          etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) ||
+          user.isAdmin() ||
+          user.isPersonvernombud()) && (
           <ContentLayout>
             <MainPanelLayout hasSidePanel>
-              {((pvkDokument && !isReadOnlyPvkStatus(pvkDokument.status)) || !pvkDokument) && (
+              {((pvkDokument &&
+                !isReadOnlyPvkStatus(pvkDokument.status) &&
+                user.isAdmin() &&
+                etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+                !pvkDokument) && (
                 <div>
                   <Formik
                     validateOnBlur={false}
@@ -376,7 +385,9 @@ export const BehandlingensLivslopPage = () => {
                 formRef={formRef}
               />
 
-              {pvkDokument && isReadOnlyPvkStatus(pvkDokument.status) && (
+              {((pvkDokument && isReadOnlyPvkStatus(pvkDokument.status)) ||
+                user.isPersonvernombud() ||
+                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
                 <BehandlingensLivslopReadOnlyContent
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(
