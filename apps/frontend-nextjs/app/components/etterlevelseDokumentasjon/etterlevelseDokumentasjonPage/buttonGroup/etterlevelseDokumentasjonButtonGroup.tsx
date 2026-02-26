@@ -165,7 +165,9 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           pvkDokument={pvkDokument}
         />
       )}
-      {env.isDev && <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />}
+      {env.isDev && (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+        <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+      )}
       {env.isDev && behandlerPersonopplysninger && (
         <PersonvernkonsekvensvurderingButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
