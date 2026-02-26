@@ -8,9 +8,9 @@ import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
-  PvkActionMenuItem,
   PvkActionMenuTrigger,
   PvkBehovActionMenuItem,
+  PvkDokumentActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -43,11 +43,12 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
         Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_READONLY'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
 
       <ActionMenu.Item
         as='a'
@@ -93,11 +94,12 @@ export const RisikoeierGodkjentPvkActionMenuVariant: FunctionComponent<TProps> =
         Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_READONLY_GODKJENT_VERSJON'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -129,11 +131,12 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
         Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_READONLY_NY_VERSJON'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
 
       <ActionMenu.Item
         as='a'

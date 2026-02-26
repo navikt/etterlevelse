@@ -8,9 +8,9 @@ import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
-  PvkActionMenuItem,
   PvkActionMenuTrigger,
   PvkBehovActionMenuItem,
+  PvkDokumentActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -76,11 +76,12 @@ export const PvkPabegyntActionMenuVariant: FunctionComponent<TProps> = ({
         Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_READONLY'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -187,11 +188,12 @@ export const PvkUnderArbeidActionMenuVariant: FunctionComponent<TProps> = ({
         Beskriv behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='FULLFOR'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Fullfør PVK
+      </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -226,11 +228,12 @@ export const PvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<T
         Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_READONLY'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -265,11 +268,12 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
         Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_PVO_TILBAKEMELDING'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVOs tilbakemelding
+      </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}

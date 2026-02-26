@@ -8,9 +8,9 @@ import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
-  PvkActionMenuItem,
   PvkActionMenuTrigger,
   PvkBehovActionMenuItem,
+  PvkDokumentActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -40,11 +40,12 @@ export const EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVarian
         Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_READONLY'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
 
       <ActionMenu.Item
         as='a'

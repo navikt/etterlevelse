@@ -7,9 +7,9 @@ import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
-  PvkActionMenuItem,
   PvkActionMenuTrigger,
   PvkBehovActionMenuItem,
+  PvkDokumentActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -75,11 +75,12 @@ export const EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant: FunctionCompo
         Beskriv behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='PABEGYNN'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Påbegynn PVK
+      </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -114,11 +115,12 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
         Beskriv behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
-      <PvkActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        pvkDokumentId={pvkDokument?.id}
-        variant='LES_READONLY_GODKJENT_VERSJON_OG_OPPDATER'
-      />
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les og oppdater PVK
+      </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}

@@ -78,44 +78,19 @@ export const PvkBehovActionMenuItem: FunctionComponent<{
   </ActionMenu.Item>
 )
 
-export type TPvkActionMenuVariant =
-  | 'LES_READONLY'
-  | 'FULLFOR'
-  | 'LES_PVO_TILBAKEMELDING'
-  | 'PABEGYNN'
-  | 'LES_READONLY_GODKJENT_VERSJON_OG_OPPDATER'
-  | 'LES_READONLY_GODKJENT_VERSJON'
-  | 'LES_READONLY_NY_VERSJON'
-
-const pvkActionMenuVariantToText = (variant: TPvkActionMenuVariant): string => {
-  switch (variant) {
-    case 'LES_READONLY':
-      return 'Les PVK'
-    case 'FULLFOR':
-      return 'Fullfør PVK'
-    case 'LES_PVO_TILBAKEMELDING':
-      return 'Les PVOs tilbakemelding'
-    case 'PABEGYNN':
-      return 'Påbegynn PVK'
-    case 'LES_READONLY_GODKJENT_VERSJON_OG_OPPDATER':
-      return 'Les og oppdater PVK'
-    case 'LES_READONLY_GODKJENT_VERSJON':
-      return 'Les PVK '
-    case 'LES_READONLY_NY_VERSJON':
-      return 'Les PVK'
-  }
-}
-
-export const PvkActionMenuItem: FunctionComponent<{
-  etterlevelseDokumentasjonId: string
-  pvkDokumentId?: string | number
-  variant: TPvkActionMenuVariant
-  step?: number
-}> = ({ etterlevelseDokumentasjonId, pvkDokumentId, variant, step = 1 }) => (
+export const PvkDokumentActionMenuItem: FunctionComponent<{
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  children: string
+  pvkDokument?: IPvkDokument
+}> = ({ etterlevelseDokumentasjon, pvkDokument, children }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjonId, pvkDokumentId ?? 'ny', step)}
+    href={pvkDokumentasjonStepUrl(
+      etterlevelseDokumentasjon.id,
+      pvkDokument ? pvkDokument.id : 'ny',
+      1
+    )}
   >
-    {pvkActionMenuVariantToText(variant)}
+    {children}
   </ActionMenu.Item>
 )
