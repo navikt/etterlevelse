@@ -138,16 +138,14 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
         Les PVK
       </PvkDokumentActionMenuItem>
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          8
-        )}
-      >
-        Godkjenn PVK (ny versjon)
-      </ActionMenu.Item>
+      {pvkDokument && (
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 8)}
+        >
+          Godkjenn PVK (ny versjon)
+        </ActionMenu.Item>
+      )}
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
