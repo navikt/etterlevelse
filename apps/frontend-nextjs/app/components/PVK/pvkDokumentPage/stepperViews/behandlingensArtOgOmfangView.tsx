@@ -16,8 +16,9 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { FunctionComponent, RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useState } from 'react'
 
 type TProps = {
   personkategorier: string[]
@@ -42,6 +43,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   relevantVurdering,
 }) => {
+  const user = useContext(UserContext)
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const [artOgOmfang, setArtOgOmfang, loading] = useBehandlingensArtOgOmfang(
     etterlevelseDokumentasjon.id
@@ -54,34 +56,42 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
       <ContentLayout>
         {loading && <CenteredLoader />}
 
-        {!loading && artOgOmfang && !isReadOnlyPvkStatus(pvkDokument.status) && (
-          <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
-            <BehandlingensArtOgOmfangForm
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              personkategorier={personkategorier}
-              artOgOmfang={artOgOmfang}
-              setArtOgOmfang={setArtOgOmfang}
-              savedSuccessful={savedSuccessful}
-              setSavedSuccessful={setSavedSuccessful}
-              setIsPvoAlertModalOpen={setIsPvoAlertModalOpen}
-              formRef={formRef}
-            />
-            {isPvoAlertModalOpen && (
-              <AlertPvoUnderArbeidModal
-                isOpen={isPvoAlertModalOpen}
-                onClose={() => setIsPvoAlertModalOpen(false)}
-                pvkDokumentId={pvkDokument.id}
+        {!loading &&
+          artOgOmfang &&
+          !isReadOnlyPvkStatus(pvkDokument.status) &&
+          (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+            <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+              <BehandlingensArtOgOmfangForm
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                personkategorier={personkategorier}
+                artOgOmfang={artOgOmfang}
+                setArtOgOmfang={setArtOgOmfang}
+                savedSuccessful={savedSuccessful}
+                setSavedSuccessful={setSavedSuccessful}
+                setIsPvoAlertModalOpen={setIsPvoAlertModalOpen}
+                formRef={formRef}
               />
-            )}
-          </div>
-        )}
+              {isPvoAlertModalOpen && (
+                <AlertPvoUnderArbeidModal
+                  isOpen={isPvoAlertModalOpen}
+                  onClose={() => setIsPvoAlertModalOpen(false)}
+                  pvkDokumentId={pvkDokument.id}
+                />
+              )}
+            </div>
+          )}
 
-        {!loading && artOgOmfang && isReadOnlyPvkStatus(pvkDokument.status) && (
-          <ArtOgOmfangReadOnlyContent
-            artOgOmfang={artOgOmfang}
-            personkategorier={personkategorier}
-          />
-        )}
+        {!loading &&
+          artOgOmfang &&
+          (isReadOnlyPvkStatus(pvkDokument.status) ||
+            (!user.isAdmin() &&
+              (user.isPersonvernombud() ||
+                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) && (
+            <ArtOgOmfangReadOnlyContent
+              artOgOmfang={artOgOmfang}
+              personkategorier={personkategorier}
+            />
+          )}
 
         {/* sidepanel */}
         {pvoTilbakemelding &&

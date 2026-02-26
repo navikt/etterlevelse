@@ -25,10 +25,11 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, BodyLong, Button, Heading, Label, List, Modal, ReadMore } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
 
 type TProps = {
@@ -58,6 +59,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   relevantVurdering,
 }) => {
+  const user = useContext(UserContext)
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
@@ -92,7 +94,8 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
       <ContentLayout>
         {pvkDokument &&
           !isReadOnlyPvkStatus(pvkDokument.status) &&
-          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+          (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
             <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
               <Formik
                 validateOnChange={false}
@@ -388,13 +391,17 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
 
         {pvkDokument &&
           (isReadOnlyPvkStatus(pvkDokument.status) ||
-            pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) && (
+            pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
+            (!user.isAdmin() &&
+              (user.isPersonvernombud() ||
+                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) && (
             <InvolveringAvEksterneReadOnlyContent
               personkategorier={personkategorier}
               databehandlere={databehandlere}
               pvkDokument={pvkDokument}
             />
           )}
+
         {/* sidepanel */}
 
         {pvoTilbakemelding &&
