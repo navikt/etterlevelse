@@ -37,10 +37,11 @@ export const AdminPvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionCompon
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <ActionMenu.Item
         as='a'

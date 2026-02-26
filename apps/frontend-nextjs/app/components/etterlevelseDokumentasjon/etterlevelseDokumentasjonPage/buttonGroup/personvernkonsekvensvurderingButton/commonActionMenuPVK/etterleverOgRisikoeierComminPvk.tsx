@@ -34,10 +34,11 @@ export const EtterleverOgRisikoeierPvkSendtTilPvoEllerRisikoeierActionMenuVarian
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

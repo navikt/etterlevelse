@@ -37,10 +37,11 @@ export const PvkIkkePabegyntActionMenuVariant: FunctionComponent<TProps> = ({
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -68,10 +69,11 @@ export const PvkPabegyntActionMenuVariant: FunctionComponent<TProps> = ({
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -105,10 +107,11 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant: FunctionComponent<TPro
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <ActionMenu.Item
         as='a'
@@ -142,9 +145,11 @@ export const PvkIkkeVurdertActionMenuVariant: FunctionComponent<TProps> = ({
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Beskriv behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -172,9 +177,11 @@ export const PvkUnderArbeidActionMenuVariant: FunctionComponent<TProps> = ({
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Beskriv behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -208,10 +215,12 @@ export const PvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<T
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
+
       <PvkActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
         pvkDokumentId={pvkDokument?.id}
@@ -244,10 +253,11 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

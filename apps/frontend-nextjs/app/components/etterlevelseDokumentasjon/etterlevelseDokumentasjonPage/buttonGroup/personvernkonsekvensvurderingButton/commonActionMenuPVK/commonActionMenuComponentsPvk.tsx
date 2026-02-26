@@ -1,3 +1,4 @@
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -20,14 +21,13 @@ export const PvkActionMenuTrigger = () => (
 
 type TBehandlingensLivslopActionMenuItemProp = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
-  readOnly?: boolean
   children: string
   behandlingensLivslop?: IBehandlingensLivslop
 }
 
 export const BehandlingensLivslopActionMenuItem: FunctionComponent<
   TBehandlingensLivslopActionMenuItemProp
-> = ({ etterlevelseDokumentasjon, behandlingensLivslop, readOnly, children }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensLivslop, children }) => (
   <ActionMenu.Item
     as='a'
     href={pvkDokumentasjonBehandlingsenLivslopUrl(
@@ -35,28 +35,29 @@ export const BehandlingensLivslopActionMenuItem: FunctionComponent<
       behandlingensLivslop ? behandlingensLivslop.id : 'ny'
     )}
   >
-    {readOnly ? 'Se Behandlingens livsløp' : 'Tegn Behandlingens livsløp'}
     {children}
   </ActionMenu.Item>
 )
 
 type TBehandlingensArtOgOmfangActionMenuItemProp = {
-  etterlevelseDokumentasjonId: string
-  behandlingensArtOgOmfangId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  children: string
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   readOnly?: boolean
 }
 
 export const ArtOgOmfangActionMenuItem: FunctionComponent<
   TBehandlingensArtOgOmfangActionMenuItemProp
-> = ({ etterlevelseDokumentasjonId, behandlingensArtOgOmfangId, readOnly }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, readOnly, children }) => (
   <ActionMenu.Item
     as='a'
     href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-      etterlevelseDokumentasjonId,
-      behandlingensArtOgOmfangId
+      etterlevelseDokumentasjon.id,
+      behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
     )}
   >
     {readOnly ? 'Se behandlingens art og omfang' : 'Beskriv behandlingens art og omfang'}
+    {children}
   </ActionMenu.Item>
 )
 

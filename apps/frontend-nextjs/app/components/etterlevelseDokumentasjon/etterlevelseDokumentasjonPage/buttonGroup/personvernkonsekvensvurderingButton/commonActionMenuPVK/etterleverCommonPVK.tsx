@@ -36,9 +36,11 @@ export const EtterleverSkalIkkeUtforePvkActionMenuVariant: FunctionComponent<TPr
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Beskriv behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -66,9 +68,11 @@ export const EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant: FunctionCompo
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Beskriv behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -102,9 +106,11 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Beskriv behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
       <PvkActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
