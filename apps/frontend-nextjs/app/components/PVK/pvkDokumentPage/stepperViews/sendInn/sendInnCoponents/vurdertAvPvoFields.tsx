@@ -23,6 +23,7 @@ type TProps = {
   errorSummaryComponent: ReactNode
   savedAlert: ReactNode
   pvoVurderingList: ICode[]
+  userHasAccess: boolean
 }
 
 export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
@@ -33,6 +34,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   errorSummaryComponent,
   savedAlert,
   pvoVurderingList,
+  userHasAccess,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) =>
@@ -74,68 +76,72 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                   Send oppdatert PVK
                 </Heading>
 
-                <RadioGroup
-                  legend='Hvem skal dere sende PVK-en til?'
-                  onChange={async (value: boolean) => {
-                    await setFieldValue('berOmNyVurderingFraPvo', value)
-                  }}
-                  value={fieldProps.form.values.berOmNyVurderingFraPvo}
-                  description='PVO har ikke bedt om å få deres PVK i retur, og da skal dere i utgangspunktet sende til risikoeier for godkjenning. Men dersom risikobildet er endret siden dere sendte inn til PVO sist, burde dere sende til PVO for ny vurdering.'
-                >
-                  <Radio value={false}>Risikoeier, til godkjenning</Radio>
-                  <Radio value={true}>PVO, til ny vurdering</Radio>
-                </RadioGroup>
-
-                <div className='mb-2'>
-                  <Button
-                    size='small'
-                    type='button'
-                    variant='secondary'
-                    onClick={() => {
-                      setIsNullstillModalOpen(true)
+                {userHasAccess && (
+                  <RadioGroup
+                    legend='Hvem skal dere sende PVK-en til?'
+                    onChange={async (value: boolean) => {
+                      await setFieldValue('berOmNyVurderingFraPvo', value)
                     }}
+                    value={fieldProps.form.values.berOmNyVurderingFraPvo}
+                    description='PVO har ikke bedt om å få deres PVK i retur, og da skal dere i utgangspunktet sende til risikoeier for godkjenning. Men dersom risikobildet er endret siden dere sendte inn til PVO sist, burde dere sende til PVO for ny vurdering.'
                   >
-                    Nullstill valg
-                  </Button>
+                    <Radio value={false}>Risikoeier, til godkjenning</Radio>
+                    <Radio value={true}>PVO, til ny vurdering</Radio>
+                  </RadioGroup>
+                )}
 
-                  {isNullstillModalOpen && (
-                    <Modal
-                      header={{ heading: 'Er du sikker på at du vil nullstille valg?' }}
-                      open={isNullstillModalOpen}
-                      onClose={() => setIsNullstillModalOpen(false)}
+                {userHasAccess && (
+                  <div className='mb-2'>
+                    <Button
+                      size='small'
+                      type='button'
+                      variant='secondary'
+                      onClick={() => {
+                        setIsNullstillModalOpen(true)
+                      }}
                     >
-                      <Modal.Footer>
-                        <Button
-                          type='button'
-                          variant='primary'
-                          onClick={async () => {
-                            await setFieldValue('berOmNyVurderingFraPvo', null)
-                            await fieldProps.form.submitForm().then(() => {
-                              setIsNullstillModalOpen(false)
-                            })
-                          }}
-                        >
-                          Nullstill valg
-                        </Button>
-                        <Button
-                          type='button'
-                          variant='secondary'
-                          onClick={() => setIsNullstillModalOpen(false)}
-                        >
-                          Avbryt
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  )}
-                </div>
+                      Nullstill valg
+                    </Button>
 
-                {fieldProps.form.values.berOmNyVurderingFraPvo === false && (
+                    {isNullstillModalOpen && (
+                      <Modal
+                        header={{ heading: 'Er du sikker på at du vil nullstille valg?' }}
+                        open={isNullstillModalOpen}
+                        onClose={() => setIsNullstillModalOpen(false)}
+                      >
+                        <Modal.Footer>
+                          <Button
+                            type='button'
+                            variant='primary'
+                            onClick={async () => {
+                              await setFieldValue('berOmNyVurderingFraPvo', null)
+                              await fieldProps.form.submitForm().then(() => {
+                                setIsNullstillModalOpen(false)
+                              })
+                            }}
+                          >
+                            Nullstill valg
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => setIsNullstillModalOpen(false)}
+                          >
+                            Avbryt
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    )}
+                  </div>
+                )}
+
+                {userHasAccess && fieldProps.form.values.berOmNyVurderingFraPvo === false && (
                   <SendTilRisikoeier
                     fieldProps={fieldProps}
                     errorComponent={errorSummaryComponent}
                   />
                 )}
-                {fieldProps.form.values.berOmNyVurderingFraPvo === true && (
+                {userHasAccess && fieldProps.form.values.berOmNyVurderingFraPvo === true && (
                   <SendTilPvo
                     relevantIndex={relevantIndex}
                     pvkDokument={pvkDokument}

@@ -132,6 +132,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
 
   const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
+  const hasAccess = user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess
 
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (
@@ -595,7 +596,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
                 <div className='flex justify-center'>
                   <div>
-                    {underarbeidCheck && (
+                    {underarbeidCheck && hasAccess && (
                       <UnderArbeidFields
                         pvkDokument={initialValues}
                         isLoading={isLoading}
@@ -641,6 +642,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         isLoading={isLoading}
                         setFieldValue={setFieldValue}
                         submitForm={submitForm}
+                        userHasAccess={hasAccess}
                       />
                     )}
 
@@ -658,6 +660,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           initialStatus={initialValues.status}
                           isLoading={isLoading}
                           pvoVurderingList={pvoVurderingList}
+                          userHasAccess={hasAccess}
                           errorSummaryComponent={
                             <SendInnErrorSummary
                               errors={errors}
@@ -698,6 +701,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           setFieldValue={setFieldValue}
                           isLoading={isLoading}
                           pvoVurderingList={pvoVurderingList}
+                          userHasAccess={hasAccess}
                           errorSummaryComponent={
                             <SendInnErrorSummary
                               errors={errors}

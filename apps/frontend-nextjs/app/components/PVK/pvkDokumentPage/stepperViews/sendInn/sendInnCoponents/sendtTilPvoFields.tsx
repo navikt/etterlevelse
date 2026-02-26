@@ -21,6 +21,7 @@ type TProps = {
   ) => Promise<void | FormikErrors<IPvkDokument>>
   submitForm: () => Promise<void>
   pvoTilbakemelding?: IPvoTilbakemelding
+  userHasAccess: boolean
 }
 export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
@@ -28,6 +29,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
   isLoading,
   setFieldValue,
   submitForm,
+  userHasAccess,
 }) => {
   return (
     <div className='w-full max-w-[75ch]'>
@@ -58,39 +60,50 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      <div className='mt-5 ml-12'>
-        <Button
-          type='button'
-          variant='secondary'
-          onClick={async () => {
-            if (
-              pvoTilbakemelding &&
-              pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
-            ) {
-              const previousVurdering = pvoTilbakemelding.vurderinger.filter(
-                (vurdering) =>
-                  vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
-                  vurdering.etterlevelseDokumentVersjon ===
-                    pvkDokument.currentEtterlevelseDokumentVersjon
-              )
+      {userHasAccess && (
+        <div className='mt-5 ml-12'>
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={async () => {
+              if (
+                pvoTilbakemelding &&
+                pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+              ) {
+                const previousVurdering = pvoTilbakemelding.vurderinger.filter(
+                  (vurdering) =>
+                    vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo - 1 &&
+                    vurdering.etterlevelseDokumentVersjon ===
+                      pvkDokument.currentEtterlevelseDokumentVersjon
+                )
 
-              if (previousVurdering[0].vilFaPvkIRetur) {
-                await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+                if (previousVurdering[0].vilFaPvkIRetur) {
+                  await setFieldValue(
+                    'status',
+                    EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
+                  )
+                } else {
+                  await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                }
+
+                await setFieldValue(
+                  'antallInnsendingTilPvo',
+                  pvkDokument.antallInnsendingTilPvo - 1
+                )
               } else {
-                await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
+                await setFieldValue(
+                  'antallInnsendingTilPvo',
+                  pvkDokument.antallInnsendingTilPvo - 1
+                )
               }
-
-              await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo - 1)
-            } else {
-              await setFieldValue('status', EPvkDokumentStatus.UNDERARBEID)
-              await setFieldValue('antallInnsendingTilPvo', pvkDokument.antallInnsendingTilPvo - 1)
-            }
-            await submitForm()
-          }}
-        >
-          Trekk innsending
-        </Button>
-      </div>
+              await submitForm()
+            }}
+          >
+            Trekk innsending
+          </Button>
+        </div>
+      )}
 
       <div>
         <Alert variant='info' className='my-5'>

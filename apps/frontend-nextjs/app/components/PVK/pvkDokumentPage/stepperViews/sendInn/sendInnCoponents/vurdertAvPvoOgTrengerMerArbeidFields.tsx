@@ -30,6 +30,7 @@ type TProps = {
   errorSummaryComponent: ReactNode
   savedAlert: ReactNode
   pvoVurderingList: ICode[]
+  userHasAccess: boolean
 }
 
 export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
@@ -42,6 +43,7 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
   errorSummaryComponent,
   pvoVurderingList,
   savedAlert,
+  userHasAccess,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) =>
@@ -76,15 +78,17 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
                 defaultFirstOpen
               />
 
-              <div className='mt-8 mb-3'>
-                <TextAreaField
-                  height='150px'
-                  noPlaceholder
-                  label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-                  name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
-                  markdown
-                />
-              </div>
+              {userHasAccess && (
+                <div className='mt-8 mb-3'>
+                  <TextAreaField
+                    height='150px'
+                    noPlaceholder
+                    label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
+                    name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
+                    markdown
+                  />
+                </div>
+              )}
 
               {relevantMeldingTilPvo.length !== 0 &&
                 !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
@@ -113,29 +117,31 @@ export const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = (
             </div>
           </div>
 
-          <div className='mt-5 flex gap-2 items-center'>
-            <LagreOgFortsettSenereButton
-              setFieldValue={setFieldValue}
-              submitForm={submitForm}
-              initialStatus={initialStatus}
-              resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
-            />
+          {userHasAccess && (
+            <div className='mt-5 flex gap-2 items-center'>
+              <LagreOgFortsettSenereButton
+                setFieldValue={setFieldValue}
+                submitForm={submitForm}
+                initialStatus={initialStatus}
+                resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
+              />
 
-            <Button
-              type='button'
-              variant='primary'
-              onClick={async () => {
-                await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
-                await setFieldValue(
-                  'antallInnsendingTilPvo',
-                  pvkDokument.antallInnsendingTilPvo + 1
-                )
-                await submitForm()
-              }}
-            >
-              Lagre og send tilbake til PVO
-            </Button>
-          </div>
+              <Button
+                type='button'
+                variant='primary'
+                onClick={async () => {
+                  await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+                  await setFieldValue(
+                    'antallInnsendingTilPvo',
+                    pvkDokument.antallInnsendingTilPvo + 1
+                  )
+                  await submitForm()
+                }}
+              >
+                Lagre og send tilbake til PVO
+              </Button>
+            </div>
+          )}
 
           <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
         </div>
