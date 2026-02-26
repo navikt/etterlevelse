@@ -35,23 +35,30 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
       return EActionMenuRoles.Admin
     } else if (user.isPersonvernombud()) {
       return EActionMenuRoles.Personvernombud
+    } else if (
+      etterlevelseDokumentasjon.hasCurrentUserAccess &&
+      etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+    ) {
+      return EActionMenuRoles.EtterleverOgRisikoeier
+    } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
+      return EActionMenuRoles.Risikoeier
+    } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
+      return EActionMenuRoles.Etterlever
     } else {
-      if (
-        etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
-      ) {
-        return EActionMenuRoles.EtterleverOgRisikoeier
-      } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
-        return EActionMenuRoles.Risikoeier
-      } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
-        return EActionMenuRoles.Etterlever
-      } else {
-        return EActionMenuRoles.Les
-      }
+      return EActionMenuRoles.Les
     }
   }
 
   switch (getRole()) {
+    case EActionMenuRoles.Etterlever:
+      return (
+        <EtterleverRollePVK
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+        />
+      )
     case EActionMenuRoles.Personvernombud:
       return (
         <PersonvernombudRollePVK
@@ -89,13 +96,6 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return (
-        <EtterleverRollePVK
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          pvkDokument={pvkDokument}
-          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
-          behandlingsLivslop={behandlingsLivslop}
-        />
-      )
+      return <></>
   }
 }
