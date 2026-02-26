@@ -2,16 +2,15 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import {
-  pvkDokumentasjonPvkBehovUrl,
-  pvkDokumentasjonStepUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
   PvkActionMenuTrigger,
+  PvkBehovActionMenuItem,
+  PvkDokumentActionMenuItem,
 } from './commonActionMenuComponentsPvk'
 
 type TProps = {
@@ -31,27 +30,26 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
-
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
       >
-        Les PVK (read-only)
-      </ActionMenu.Item>
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
+
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
+
       <ActionMenu.Item
         as='a'
         href={pvkDokumentasjonStepUrl(
@@ -62,15 +60,13 @@ export const RisikoeierPvkTrengerGodkjenningActionMenuVariant: FunctionComponent
       >
         Godkjenn PVK
       </ActionMenu.Item>
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
+
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
       >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -85,36 +81,32 @@ export const RisikoeierGodkjentPvkActionMenuVariant: FunctionComponent<TProps> =
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
       >
-        Les PVK (read-only, godkjent versjon)
-      </ActionMenu.Item>
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
+        Les PVK
+      </PvkDokumentActionMenuItem>
+
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
       >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )
@@ -126,46 +118,41 @@ export const RisikoeierPvkTrengerGodkjenningNyVersjonActionMenuVariant: Function
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensArtOgOmfangId={behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      >
+        Se behandlingens art og omfang
+      </ArtOgOmfangActionMenuItem>
 
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          1
-        )}
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
       >
-        Les PVK (read-only, ny versjon)
-      </ActionMenu.Item>
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonStepUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny',
-          8
-        )}
+        Les PVK
+      </PvkDokumentActionMenuItem>
+
+      {pvkDokument && (
+        <ActionMenu.Item
+          as='a'
+          href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 8)}
+        >
+          Godkjenn PVK (ny versjon)
+        </ActionMenu.Item>
+      )}
+
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
       >
-        Godkjenn PVK (ny versjon)
-      </ActionMenu.Item>
-      <ActionMenu.Item
-        as='a'
-        href={pvkDokumentasjonPvkBehovUrl(
-          etterlevelseDokumentasjon.id,
-          pvkDokument ? pvkDokument.id : 'ny'
-        )}
-      >
-        Se Behov for PVK (read-only)
-      </ActionMenu.Item>
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
     </ActionMenu.Content>
   </ActionMenu>
 )

@@ -1,6 +1,12 @@
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
+  pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
@@ -15,41 +21,76 @@ export const PvkActionMenuTrigger = () => (
 )
 
 type TBehandlingensLivslopActionMenuItemProp = {
-  etterlevelseDokumentasjonId: string
-  behandlingensLivslopId: string
-  readOnly?: boolean
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  children: string
+  behandlingensLivslop?: IBehandlingensLivslop
 }
 
 export const BehandlingensLivslopActionMenuItem: FunctionComponent<
   TBehandlingensLivslopActionMenuItemProp
-> = ({ etterlevelseDokumentasjonId, behandlingensLivslopId, readOnly }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensLivslop, children }) => (
   <ActionMenu.Item
     as='a'
     href={pvkDokumentasjonBehandlingsenLivslopUrl(
-      etterlevelseDokumentasjonId,
-      behandlingensLivslopId
+      etterlevelseDokumentasjon.id,
+      behandlingensLivslop ? behandlingensLivslop.id : 'ny'
     )}
   >
-    {readOnly ? 'Se Behandlingens livsløp (read-only)' : 'Tegn Behandlingens livsløp'}
+    {children}
   </ActionMenu.Item>
 )
 
 type TBehandlingensArtOgOmfangActionMenuItemProp = {
-  etterlevelseDokumentasjonId: string
-  behandlingensArtOgOmfangId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  children: string
+  behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   readOnly?: boolean
 }
 
 export const ArtOgOmfangActionMenuItem: FunctionComponent<
   TBehandlingensArtOgOmfangActionMenuItemProp
-> = ({ etterlevelseDokumentasjonId, behandlingensArtOgOmfangId, readOnly }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, readOnly, children }) => (
   <ActionMenu.Item
     as='a'
     href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-      etterlevelseDokumentasjonId,
-      behandlingensArtOgOmfangId
+      etterlevelseDokumentasjon.id,
+      behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
     )}
   >
-    {readOnly ? 'Se Art og omfang (read-only)' : 'Beskriv art og omfang'}
+    {readOnly ? 'Se behandlingens art og omfang' : 'Beskriv behandlingens art og omfang'}
+    {children}
+  </ActionMenu.Item>
+)
+
+export const PvkBehovActionMenuItem: FunctionComponent<{
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  children: string
+  pvkDokument?: IPvkDokument
+}> = ({ etterlevelseDokumentasjon, children, pvkDokument }) => (
+  <ActionMenu.Item
+    as='a'
+    href={pvkDokumentasjonPvkBehovUrl(
+      etterlevelseDokumentasjon.id,
+      pvkDokument ? pvkDokument.id : 'ny'
+    )}
+  >
+    {children}
+  </ActionMenu.Item>
+)
+
+export const PvkDokumentActionMenuItem: FunctionComponent<{
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  children: string
+  pvkDokument?: IPvkDokument
+}> = ({ etterlevelseDokumentasjon, pvkDokument, children }) => (
+  <ActionMenu.Item
+    as='a'
+    href={pvkDokumentasjonStepUrl(
+      etterlevelseDokumentasjon.id,
+      pvkDokument ? pvkDokument.id : 'ny',
+      1
+    )}
+  >
+    {children}
   </ActionMenu.Item>
 )

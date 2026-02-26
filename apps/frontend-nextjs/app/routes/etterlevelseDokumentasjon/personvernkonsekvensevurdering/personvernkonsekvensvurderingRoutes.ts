@@ -46,7 +46,7 @@ export const pvkDokumentasjonCopyUrl = (
 
 export const pvkDokumentasjonBehandlingsenLivslopUrl = (
   etterlevelseDokumentId: string,
-  behandlingensLivslopId: string
+  behandlingensLivslopId?: string
 ): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslopId}`
 
