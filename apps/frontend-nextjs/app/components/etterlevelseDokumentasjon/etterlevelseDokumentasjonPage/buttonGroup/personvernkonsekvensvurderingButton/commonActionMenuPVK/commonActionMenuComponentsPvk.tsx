@@ -1,3 +1,5 @@
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
@@ -17,22 +19,24 @@ export const PvkActionMenuTrigger = () => (
 )
 
 type TBehandlingensLivslopActionMenuItemProp = {
-  etterlevelseDokumentasjonId: string
-  behandlingensLivslopId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   readOnly?: boolean
+  children: string
+  behandlingensLivslop?: IBehandlingensLivslop
 }
 
 export const BehandlingensLivslopActionMenuItem: FunctionComponent<
   TBehandlingensLivslopActionMenuItemProp
-> = ({ etterlevelseDokumentasjonId, behandlingensLivslopId, readOnly }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensLivslop, readOnly, children }) => (
   <ActionMenu.Item
     as='a'
     href={pvkDokumentasjonBehandlingsenLivslopUrl(
-      etterlevelseDokumentasjonId,
-      behandlingensLivslopId
+      etterlevelseDokumentasjon.id,
+      behandlingensLivslop ? behandlingensLivslop.id : 'ny'
     )}
   >
     {readOnly ? 'Se Behandlingens livsløp' : 'Tegn Behandlingens livsløp'}
+    {children}
   </ActionMenu.Item>
 )
 

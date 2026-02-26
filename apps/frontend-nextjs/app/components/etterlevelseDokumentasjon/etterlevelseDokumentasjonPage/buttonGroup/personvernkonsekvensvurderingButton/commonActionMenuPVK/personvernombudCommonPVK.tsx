@@ -29,10 +29,11 @@ export const PersonvernombudSendtForTilbakemeldingActionMenuVariant: FunctionCom
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

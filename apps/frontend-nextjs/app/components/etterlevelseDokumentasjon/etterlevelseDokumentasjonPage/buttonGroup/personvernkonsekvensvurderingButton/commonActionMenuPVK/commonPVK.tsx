@@ -30,10 +30,11 @@ export const PvkIkkePabegyntActionMenuVariant: FunctionComponent<TProps> = ({
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -60,10 +61,11 @@ export const PvkPabegyntActionMenuVariant: FunctionComponent<TProps> = ({
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -96,10 +98,11 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant: FunctionComponent<TPro
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -132,9 +135,11 @@ export const PvkIkkeVurdertActionMenuVariant: FunctionComponent<TProps> = ({
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Tegn Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -160,9 +165,11 @@ export const PvkUnderArbeidActionMenuVariant: FunctionComponent<TProps> = ({
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Tegn Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -194,10 +201,11 @@ export const PvkSendtTilPvoEllerRisikoeierActionMenuVariant: FunctionComponent<T
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-        readOnly={true}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Se Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
@@ -229,9 +237,11 @@ export const PvkHarFattTilbakemeldingFraPvoActionMenuVariant: FunctionComponent<
     <PvkActionMenuTrigger />
     <ActionMenu.Content>
       <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        behandlingensLivslopId={behandlingsLivslop ? behandlingsLivslop.id : 'ny'}
-      />
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        behandlingensLivslop={behandlingsLivslop}
+      >
+        Tegn Behandlingens livsløp
+      </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
