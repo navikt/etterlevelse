@@ -219,8 +219,7 @@ export const BehandlingensLivslopPage = () => {
             <MainPanelLayout hasSidePanel>
               {((pvkDokument &&
                 !isReadOnlyPvkStatus(pvkDokument.status) &&
-                user.isAdmin() &&
-                etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+                (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) ||
                 !pvkDokument) && (
                 <div>
                   <Formik
@@ -386,8 +385,9 @@ export const BehandlingensLivslopPage = () => {
               />
 
               {((pvkDokument && isReadOnlyPvkStatus(pvkDokument.status)) ||
-                user.isPersonvernombud() ||
-                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
+                ((user.isPersonvernombud() ||
+                  etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) &&
+                  !user.isAdmin())) && (
                 <BehandlingensLivslopReadOnlyContent
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(

@@ -107,7 +107,6 @@ export const BehandlingensArtOgOmfangPage = () => {
         etterlevelseDokumentasjon?.title,
     },
   ]
-
   useEffect(() => {
     if (etterlevelseDokumentasjon) {
       getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
@@ -173,8 +172,7 @@ export const BehandlingensArtOgOmfangPage = () => {
             <MainPanelLayout hasSidePanel>
               {((pvkDokument &&
                 !isReadOnlyPvkStatus(pvkDokument.status) &&
-                user.isAdmin() &&
-                etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+                (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) ||
                 !pvkDokument) && (
                 <div>
                   <BehandlingensArtOgOmfangForm
@@ -248,8 +246,9 @@ export const BehandlingensArtOgOmfangPage = () => {
               />
 
               {((pvkDokument && isReadOnlyPvkStatus(pvkDokument.status)) ||
-                user.isPersonvernombud() ||
-                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
+                ((user.isPersonvernombud() ||
+                  etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) &&
+                  !user.isAdmin())) && (
                 <ArtOgOmfangReadOnlyContent
                   artOgOmfang={artOgOmfang}
                   personkategorier={readOnlyData.personkategorier}

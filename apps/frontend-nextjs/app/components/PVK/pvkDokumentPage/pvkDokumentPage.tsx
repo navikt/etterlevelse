@@ -207,12 +207,14 @@ export const PvkDokumentPage = () => {
       {etterlevelseDokumentasjon &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
         !etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent()) &&
+        !user.isPersonvernombud() &&
         !user.isAdmin() && <ForbiddenAlert />}
 
       {etterlevelseDokumentasjon &&
         pvkDokument &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess ||
           user.isAdmin() ||
+          user.isPersonvernombud() ||
           etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
           <div className='w-full'>
             <div className='min-h-48 bg-[#8269A21F] flex flex-col w-full items-center'>
