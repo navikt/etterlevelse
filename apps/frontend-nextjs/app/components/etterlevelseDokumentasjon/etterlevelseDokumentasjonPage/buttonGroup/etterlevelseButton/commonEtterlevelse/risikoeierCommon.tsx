@@ -1,11 +1,13 @@
 'use client'
 
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { etterlevelsesDokumentasjonRisikoeierGodkjenningUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { ExportEtterlevelseModal } from '../../../export/exportEtterlevelseModal'
-import { ActionMenuButtonEtterlevelse } from './commonActionMenuComponents'
+import {
+  ActionMenuButtonEtterlevelse,
+  GodkjennEtterlevelseActionMenuItem,
+} from './commonActionMenuComponents'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -15,17 +17,15 @@ export const RisikoeierGodkjenningAvEtterlevelseActionMenuVariant: FunctionCompo
   etterlevelseDokumentasjon,
 }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
+
   return (
     <>
       <ActionMenu>
         <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <ActionMenu.Item
-            as='a'
-            href={etterlevelsesDokumentasjonRisikoeierGodkjenningUrl(etterlevelseDokumentasjon.id)}
-          >
+          <GodkjennEtterlevelseActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
             Godkjenn etterlevelsen
-          </ActionMenu.Item>
+          </GodkjennEtterlevelseActionMenuItem>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
             Eksporter til Word
           </ActionMenu.Item>

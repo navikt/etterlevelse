@@ -1,12 +1,12 @@
 'use client'
 
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { etterlevelsesDokumentasjonSendTilGodkjenningUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { ExportEtterlevelseModal } from '../../../export/exportEtterlevelseModal'
 import {
   ActionMenuButtonEtterlevelse,
+  EtterlevelseTilGodkjenningActionMenuItem,
   RedigerEgenskaperActionMenuItem,
 } from './commonActionMenuComponents'
 
@@ -24,12 +24,11 @@ export const EtterleverUnderArbeidVariant: FunctionComponent<TProps> = ({
       <ActionMenu>
         <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <ActionMenu.Item
-            as='a'
-            href={etterlevelsesDokumentasjonSendTilGodkjenningUrl(etterlevelseDokumentasjon.id)}
+          <EtterlevelseTilGodkjenningActionMenuItem
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           >
             Få etterlevelsen godkjent av risikoeier
-          </ActionMenu.Item>
+          </EtterlevelseTilGodkjenningActionMenuItem>
           <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
             Rediger dokumentegenskaper
           </RedigerEgenskaperActionMenuItem>
@@ -51,17 +50,17 @@ export const EtterleverSendtTilGodkjenningVariant: FunctionComponent<TProps> = (
   etterlevelseDokumentasjon,
 }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
+
   return (
     <>
       <ActionMenu>
         <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <ActionMenu.Item
-            as='a'
-            href={etterlevelsesDokumentasjonSendTilGodkjenningUrl(etterlevelseDokumentasjon.id)}
+          <EtterlevelseTilGodkjenningActionMenuItem
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           >
             Les innsending til risikoeier
-          </ActionMenu.Item>
+          </EtterlevelseTilGodkjenningActionMenuItem>
           <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
             Rediger dokumentegenskaper
           </RedigerEgenskaperActionMenuItem>

@@ -1,15 +1,13 @@
 'use client'
 
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  etterlevelsesDokumentasjonRisikoeierGodkjenningUrl,
-  etterlevelsesDokumentasjonSendTilGodkjenningUrl,
-} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { ExportEtterlevelseModal } from '../../../export/exportEtterlevelseModal'
 import {
   ActionMenuButtonEtterlevelse,
+  EtterlevelseTilGodkjenningActionMenuItem,
+  GodkjennEtterlevelseActionMenuItem,
   RedigerEgenskaperActionMenuItem,
 } from './commonActionMenuComponents'
 
@@ -21,6 +19,7 @@ export const EtterlevelseReadOnlyActionMenuVariant: FunctionComponent<TProps> = 
   etterlevelseDokumentasjon,
 }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
+
   return (
     <>
       <ActionMenu>
@@ -44,26 +43,23 @@ export const RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant: F
   TProps
 > = ({ etterlevelseDokumentasjon }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
+
   return (
     <>
       <ActionMenu>
         <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <ActionMenu.Item
-            as='a'
-            href={etterlevelsesDokumentasjonSendTilGodkjenningUrl(etterlevelseDokumentasjon.id)}
+          <EtterlevelseTilGodkjenningActionMenuItem
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           >
             Les innsending til risikoeier
-          </ActionMenu.Item>
+          </EtterlevelseTilGodkjenningActionMenuItem>
           <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
             Rediger dokumentegenskaper
           </RedigerEgenskaperActionMenuItem>
-          <ActionMenu.Item
-            as='a'
-            href={etterlevelsesDokumentasjonRisikoeierGodkjenningUrl(etterlevelseDokumentasjon.id)}
-          >
+          <GodkjennEtterlevelseActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
             Godkjenn etterlevelsen
-          </ActionMenu.Item>
+          </GodkjennEtterlevelseActionMenuItem>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
             Eksporter til Word
           </ActionMenu.Item>
