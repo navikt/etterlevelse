@@ -70,7 +70,7 @@ export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
     )}
 
     <BodyShort className='inline-block my-5'>
-      Dere kan redigere hvilke behandinger og risikovurderinger som gjelder i{' '}
+      Dere kan redigere hvilke behandlinger og risikovurderinger som gjelder i{' '}
       <Link
         href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
         target='_blank'
