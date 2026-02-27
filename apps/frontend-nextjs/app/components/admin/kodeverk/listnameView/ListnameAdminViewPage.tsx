@@ -103,7 +103,7 @@ export const ListnameAdminViewPage = () => {
 
         {listname && (
           <Button
-            icon={<PlusIcon area-label='' aria-hidden />}
+            icon={<PlusIcon aria-label='' aria-hidden />}
             variant='tertiary'
             onClick={() => setCreateCodeListModal(!createCodeListModal)}
           >

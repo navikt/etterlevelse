@@ -209,7 +209,7 @@ export const Krav: FunctionComponent<TProps> = ({
           <div className='flex items-center'>
             <Button
               onClick={lastMer}
-              icon={<PlusIcon area-label='' aria-hidden />}
+              icon={<PlusIcon aria-label='' aria-hidden />}
               variant='secondary'
               size='medium'
               disabled={gqlLoading || kravene.numberOfElements >= kravene.totalElements}

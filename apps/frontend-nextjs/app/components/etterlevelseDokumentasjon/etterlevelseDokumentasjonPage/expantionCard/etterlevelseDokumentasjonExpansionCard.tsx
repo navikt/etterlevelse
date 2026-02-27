@@ -276,7 +276,7 @@ const RelevansView: FunctionComponent<TRelevansProps> = ({
         <div className='flex gap-1'>
           <div>
             <InformationSquareFillIcon
-              area-label=''
+              aria-label=''
               aria-hidden
               className='text-2xl text-icon-warning mt-1'
               color={ettlevColors.green400}

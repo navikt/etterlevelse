@@ -180,7 +180,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
             <div className='mt-2 p-4'>
               <div className='flex justify-between mb-2.5'>
                 <Label className='flex gap-1' size='medium'>
-                  <FileTextIcon fontSize='1.5rem' area-label='' aria-hidden />
+                  <FileTextIcon fontSize='1.5rem' aria-label='' aria-hidden />
                   Notat
                 </Label>
                 <Button variant='secondary' size='xsmall' onClick={() => setIsNotatModalOpen(true)}>

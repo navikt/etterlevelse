@@ -19,7 +19,7 @@ export const KravlistePage = () => {
           {user.isKraveier() && (
             <Button
               iconPosition='left'
-              icon={<PlusIcon area-label='' aria-hidden />}
+              icon={<PlusIcon aria-label='' aria-hidden />}
               size='medium'
               as='a'
               href={kravlisteOpprettUrl()}

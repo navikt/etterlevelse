@@ -102,41 +102,41 @@ export const LoggedInHeader = () => {
           [{ label: <ToggleActiveRole /> }],
         ]}
         title={user.getIdent()}
-        icon={<PersonIcon area-label='' aria-hidden />}
+        icon={<PersonIcon aria-label='' aria-hidden />}
       />
 
       <div className='w-3' />
 
       <Menu
-        icon={<MenuHamburgerIcon area-label='' aria-hidden />}
+        icon={<MenuHamburgerIcon aria-label='' aria-hidden />}
         pages={[
-          [{ label: 'Forsiden', href: '/', icon: <HouseIcon area-label='' aria-hidden /> }],
+          [{ label: 'Forsiden', href: '/', icon: <HouseIcon aria-label='' aria-hidden /> }],
           [
             {
               label: 'Dokumentere etterlevelse',
               href: etterlevelseDokumentasjonerUrl(),
-              icon: <DocPencilIcon area-label='' aria-hidden />,
+              icon: <DocPencilIcon aria-label='' aria-hidden />,
             },
           ],
           [
             {
               label: 'Status i organisasjonen',
               href: '//metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse',
-              icon: <BarChartIcon area-label='' aria-hidden />,
+              icon: <BarChartIcon aria-label='' aria-hidden />,
             },
           ],
           [
             {
               label: 'Forstå kravene',
               href: temaUrl,
-              icon: <ReceiptIcon area-label='' aria-hidden />,
+              icon: <ReceiptIcon aria-label='' aria-hidden />,
             },
           ],
           [
             {
               label: 'Mer om etterlevelse i Nav',
               href: '/omstottetiletterlevelse',
-              icon: <InformationIcon area-label='' aria-hidden />,
+              icon: <InformationIcon aria-label='' aria-hidden />,
             },
           ],
         ]}

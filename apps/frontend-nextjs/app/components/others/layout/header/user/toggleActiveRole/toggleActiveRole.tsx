@@ -37,9 +37,9 @@ export const ToggleActiveRole = () => {
         onClick={() => setViewRoller(!viewRoller)}
         icon={
           viewRoller ? (
-            <ChevronUpIcon area-label='' aria-hidden />
+            <ChevronUpIcon aria-label='' aria-hidden />
           ) : (
-            <ChevronDownIcon area-label='' aria-hidden />
+            <ChevronDownIcon aria-label='' aria-hidden />
           )
         }
       >
