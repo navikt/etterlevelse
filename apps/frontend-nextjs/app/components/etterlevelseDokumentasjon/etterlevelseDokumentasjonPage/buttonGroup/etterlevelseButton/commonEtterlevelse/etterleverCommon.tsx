@@ -91,7 +91,7 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
             Rediger dokumentegenskaper
           </RedigerEgenskaperActionMenuItem>
 
-          <ActionMenu.Item as='a' href=''>
+          <ActionMenu.Item as='a' href='????'>
             Oppdater etterlevelsen
           </ActionMenu.Item>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
