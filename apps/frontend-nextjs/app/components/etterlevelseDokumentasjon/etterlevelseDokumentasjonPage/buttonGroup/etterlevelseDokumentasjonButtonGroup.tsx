@@ -173,8 +173,6 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         <GjenbrukButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-          behandlingsLivslop={behandlingsLivslop}
-          pvkDokument={pvkDokument}
         />
       )}
     </>

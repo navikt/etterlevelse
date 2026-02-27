@@ -13,18 +13,12 @@ type TProps = {
   canManage: boolean
 }
 
-export const CommonVariantOneGjenbruk: FunctionComponent<TProps> = ({
+export const CommonActionMenuGjenbruk: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   canManage,
 }) => {
   const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
-
-  const tillatGjenbrukLabel =
-    etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
-    etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-      ? 'Endre gjenbruk'
-      : 'Slå på gjenbruk'
 
   return (
     <>
@@ -47,7 +41,10 @@ export const CommonVariantOneGjenbruk: FunctionComponent<TProps> = ({
             Tilrettelegg for gjenbruk
           </ActionMenu.Item>
           <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)} disabled={!canManage}>
-            {tillatGjenbrukLabel}
+            {etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
+            etterlevelseDokumentasjon.tilgjengeligForGjenbruk
+              ? 'Endre gjenbruk'
+              : 'Slå på gjenbruk'}
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>

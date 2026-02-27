@@ -1,20 +1,16 @@
 'use client'
 
-import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
-import { CommonVariantOneGjenbruk } from './commonGjenbruk/commonGjenbruk'
+import { CommonActionMenuGjenbruk } from './commonGjenbruk/commonGjenbruk'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
-  behandlingsLivslop?: IBehandlingensLivslop
-  pvkDokument?: IPvkDokument
 }
 
 const GjenbrukButton: FunctionComponent<TProps> = ({
@@ -50,7 +46,7 @@ const GjenbrukButton: FunctionComponent<TProps> = ({
   const canManage = role !== EActionMenuRoles.Les
 
   return (
-    <CommonVariantOneGjenbruk
+    <CommonActionMenuGjenbruk
       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
       setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
       canManage={canManage}
