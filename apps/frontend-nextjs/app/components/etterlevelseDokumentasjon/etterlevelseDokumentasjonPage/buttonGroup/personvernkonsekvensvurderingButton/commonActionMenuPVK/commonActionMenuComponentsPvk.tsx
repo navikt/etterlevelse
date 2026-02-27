@@ -10,7 +10,7 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, PropsWithChildren } from 'react'
 
 export const PvkActionMenuTrigger = () => (
   <ActionMenu.Trigger>
@@ -20,11 +20,10 @@ export const PvkActionMenuTrigger = () => (
   </ActionMenu.Trigger>
 )
 
-type TBehandlingensLivslopActionMenuItemProp = {
+type TBehandlingensLivslopActionMenuItemProp = PropsWithChildren<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
-  children: string
   behandlingensLivslop?: IBehandlingensLivslop
-}
+}>
 
 export const BehandlingensLivslopActionMenuItem: FunctionComponent<
   TBehandlingensLivslopActionMenuItemProp
@@ -40,11 +39,10 @@ export const BehandlingensLivslopActionMenuItem: FunctionComponent<
   </ActionMenu.Item>
 )
 
-type TBehandlingensArtOgOmfangActionMenuItemProp = {
+type TBehandlingensArtOgOmfangActionMenuItemProp = PropsWithChildren<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
-  children: string
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
-}
+}>
 
 export const ArtOgOmfangActionMenuItem: FunctionComponent<
   TBehandlingensArtOgOmfangActionMenuItemProp

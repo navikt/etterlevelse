@@ -4,7 +4,7 @@ import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { getRole } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
+import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import AdminRolle from './adminRolle/adminRolle'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
@@ -15,7 +15,7 @@ type TProps = {
 }
 
 export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
-  switch (getRole(etterlevelseDokumentasjon)) {
+  switch (getRolle(etterlevelseDokumentasjon)) {
     case EActionMenuRoles.Etterlever:
       return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EActionMenuRoles.Risikoeier:
