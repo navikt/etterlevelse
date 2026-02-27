@@ -1,51 +1,41 @@
-import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+'use client'
+
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { FunctionComponent } from 'react'
-import AdminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk from './adminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk/adminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk'
-import EtterleverRolleGjenbruk from './etterleverRolleGjenbruk/etterleverRolleGjenbruk'
+import { UserContext } from '@/provider/user/userProvider'
+import { FunctionComponent, useContext } from 'react'
+import { CommonActionMenuGjenbruk } from './commonGjenbruk/commonGjenbruk'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  behandlingsLivslop?: IBehandlingensLivslop
-  pvkDokument?: IPvkDokument
+  setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
 
-const test: string = 'Admin med alle andre roller ogsa skrudd pa'
+const GjenbrukButton: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
+}) => {
+  const user = useContext(UserContext)
+  const isAdmin = user.isAdmin()
+  const isPersonvernombud = user.isPersonvernombud()
+  const hasAccess = etterlevelseDokumentasjon.hasCurrentUserAccess
 
-const GjenbrukButton: FunctionComponent<TProps> = (
-  {
-    // etterlevelseDokumentasjon,
-    // behandlingsLivslop,
-    // pvkDokument,
-    // risikoscenarioList,
-    // isRisikoeier,
+  if (isPersonvernombud && !isAdmin) {
+    return null
   }
-) => {
-  switch (test) {
-    case 'Etterlever':
-      return (
-        <EtterleverRolleGjenbruk
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
-    case 'Admin med alle andre roller ogsa skrudd pa':
-      return (
-        <AdminMedAlleAndreRollerOgsaSkruddPaRolleGjenbruk
-        // etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        // risikoscenarioList={risikoscenarioList}
-        // behandlingsLivslop={behandlingsLivslop}
-        // pvkDokument={pvkDokument}
-        // isRisikoeier={isRisikoeier}
-        />
-      )
-    default:
-      return <></>
+
+  if (!isAdmin && !hasAccess) {
+    return null
   }
+
+  const canManage = isAdmin || hasAccess
+
+  return (
+    <CommonActionMenuGjenbruk
+      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+      setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+      canManage={canManage}
+    />
+  )
 }
 
 export default GjenbrukButton

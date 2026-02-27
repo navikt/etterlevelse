@@ -15,13 +15,22 @@ import { gjenbrukDokumentasjonSchema } from './form/gjenbrukSchema'
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
+  isOpen?: boolean
+  setIsOpen?: (open: boolean) => void
+  renderTrigger?: boolean
 }
 
 export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
+  isOpen: controlledIsOpen,
+  setIsOpen: controlledSetIsOpen,
+  renderTrigger = true,
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+
+  const isOpen = controlledIsOpen ?? internalIsOpen
+  const setIsOpen = controlledSetIsOpen ?? setInternalIsOpen
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
     const updatedEtterlevelseDokumentajson = await getEtterlevelseDokumentasjon(
@@ -40,20 +49,26 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
     setIsOpen(false)
   }
 
+  if (!renderTrigger && !isOpen) {
+    return null
+  }
+
   return (
-    <div>
-      <Button
-        size='small'
-        variant='tertiary'
-        className='whitespace-nowrap w-full justify-center'
-        type='button'
-        onClick={() => setIsOpen(true)}
-      >
-        {etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
-        etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-          ? 'Endre gjenbruk'
-          : 'Slå på gjenbruk'}
-      </Button>
+    <>
+      {renderTrigger && (
+        <Button
+          size='small'
+          variant='tertiary'
+          className='whitespace-nowrap w-full justify-center'
+          type='button'
+          onClick={() => setIsOpen(true)}
+        >
+          {etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
+          etterlevelseDokumentasjon.tilgjengeligForGjenbruk
+            ? 'Endre gjenbruk'
+            : 'Slå på gjenbruk'}
+        </Button>
+      )}
 
       {isOpen && (
         <Modal
@@ -143,7 +158,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
           </Formik>
         </Modal>
       )}
-    </div>
+    </>
   )
 }
 export default TillatGjenbrukModal

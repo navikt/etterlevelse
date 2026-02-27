@@ -77,7 +77,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             Rediger dokumentegenskaper
           </Button>
         )}
-        {etterlevelseDokumentasjon.forGjenbruk && (
+        {etterlevelseDokumentasjon.forGjenbruk && !user.isPersonvernombud() && (
           <TillatGjenbrukModal
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
@@ -158,13 +158,6 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
       </>
 
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
-      {env.isDev && (
-        <GjenbrukButton
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          behandlingsLivslop={behandlingsLivslop}
-          pvkDokument={pvkDokument}
-        />
-      )}
       {env.isDev && (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
         <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
       )}
@@ -176,6 +169,14 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           pvkDokument={pvkDokument}
         />
       )}
+      {env.isDev &&
+        etterlevelseDokumentasjon.forGjenbruk &&
+        (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+          <GjenbrukButton
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+          />
+        )}
     </>
   )
 }
