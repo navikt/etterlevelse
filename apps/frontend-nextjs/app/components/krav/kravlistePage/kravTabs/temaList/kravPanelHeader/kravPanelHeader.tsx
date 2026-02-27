@@ -1,5 +1,5 @@
-import { ContentLayout } from '@/components/others/layout/content/content'
 import { IKrav, TKravEtterlevelseData } from '@/constants/krav/kravConstants'
+import { BodyShort } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -15,21 +15,12 @@ export const KravPanelHeader: FunctionComponent<TProps> = ({ title, kravData }) 
   })
 
   return (
-    <ContentLayout>
-      <div className='flex justify-center items-center'>
-        <span>{title}</span>
-      </div>
-      <div className='flex justify-end flex-1 mr-6'>
-        <div>
-          <div className='flex justify-end align-baseline flex-1'>
-            <span className='mr-1'>{kravData.length}</span>
-            <span>krav</span>
-          </div>
-          <div className='flex justify-end flex-1'>
-            <span>{antallSuksesskriterier} suksesskriterier</span>
-          </div>
-        </div>
-      </div>
-    </ContentLayout>
+    <div className='flex flex-col w-full'>
+      <span>{title}</span>
+      <BodyShort size='small' className='mt-1 flex flex-col'>
+        <span>{kravData.length} krav</span>
+        <span>{antallSuksesskriterier} suksesskriterier</span>
+      </BodyShort>
+    </div>
   )
 }
