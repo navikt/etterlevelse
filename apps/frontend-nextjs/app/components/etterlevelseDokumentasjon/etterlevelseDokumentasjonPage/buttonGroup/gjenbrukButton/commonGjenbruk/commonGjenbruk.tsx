@@ -4,11 +4,14 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import TillatGjenbrukModal from '../../../gjenbruk/TillatGjenbrukModal'
 
-type TProps = {
+type TProps = PropsWithChildren<{
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+}>
+
+interface TGjenbrukProps extends TProps {
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
 
@@ -22,38 +25,27 @@ const GjenbrukKnapp = () => (
 
 export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  setEtterlevelseDokumentasjon,
-}) => {
-  const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
+  children,
+}) => (
+  <>
+    <ActionMenu>
+      <GjenbrukKnapp />
+      <ActionMenu.Content>
+        <ActionMenu.Item
+          as='a'
+          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+        >
+          {children}
+        </ActionMenu.Item>
+      </ActionMenu.Content>
+    </ActionMenu>
+  </>
+)
 
-  return (
-    <>
-      <ActionMenu>
-        <GjenbrukKnapp />
-        <ActionMenu.Content>
-          <ActionMenu.Item
-            as='a'
-            href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-          >
-            Tilrettelegg for gjenbruk
-          </ActionMenu.Item>
-        </ActionMenu.Content>
-      </ActionMenu>
-
-      <TillatGjenbrukModal
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-        isOpen={isTillatGjenbrukOpen}
-        setIsOpen={setIsTillatGjenbrukOpen}
-        renderTrigger={false}
-      />
-    </>
-  )
-}
-
-export const EndreGjenbrukActionMenu: FunctionComponent<TProps> = ({
+export const GjenbrukActionMenu: FunctionComponent<TGjenbrukProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
+  children,
 }) => {
   const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
 
@@ -63,35 +55,7 @@ export const EndreGjenbrukActionMenu: FunctionComponent<TProps> = ({
         <GjenbrukKnapp />
         <ActionMenu.Content>
           <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)}>
-            Endre gjenbruk
-          </ActionMenu.Item>
-        </ActionMenu.Content>
-      </ActionMenu>
-
-      <TillatGjenbrukModal
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-        isOpen={isTillatGjenbrukOpen}
-        setIsOpen={setIsTillatGjenbrukOpen}
-        renderTrigger={false}
-      />
-    </>
-  )
-}
-
-export const SlaPaGjenbrukActionMenu: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjon,
-  setEtterlevelseDokumentasjon,
-}) => {
-  const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
-
-  return (
-    <>
-      <ActionMenu>
-        <GjenbrukKnapp />
-        <ActionMenu.Content>
-          <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)}>
-            Slå på gjenbruk
+            {children}
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>

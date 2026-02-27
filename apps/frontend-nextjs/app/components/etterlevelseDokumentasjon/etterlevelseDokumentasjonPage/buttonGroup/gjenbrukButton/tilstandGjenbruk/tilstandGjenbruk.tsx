@@ -1,8 +1,7 @@
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { FunctionComponent } from 'react'
 import {
-  EndreGjenbrukActionMenu,
-  SlaPaGjenbrukActionMenu,
+  GjenbrukActionMenu,
   TilretteleggForGjenbrukActionMenu,
 } from '../commonGjenbruk/commonGjenbruk'
 
@@ -17,46 +16,51 @@ type TProps = {
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
 
+function getTilstand(
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+): EEtterlevelseGjenbruk {
+  if (etterlevelseDokumentasjon == null) {
+    return EEtterlevelseGjenbruk.TILRETTELEGGING_FOR_GJENBRUK
+  }
+
+  if (
+    etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
+    etterlevelseDokumentasjon.tilgjengeligForGjenbruk
+  ) {
+    return EEtterlevelseGjenbruk.ENDRE_GJENBRUK
+  }
+
+  return EEtterlevelseGjenbruk.SLA_PA_GJENBRUK
+}
+
 const TilstandGjenbruk: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
 }) => {
-  const getTilstand = () => {
-    if (etterlevelseDokumentasjon) {
-      if (
-        etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
-        etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-      ) {
-        return EEtterlevelseGjenbruk.ENDRE_GJENBRUK
-      } else {
-        return EEtterlevelseGjenbruk.SLA_PA_GJENBRUK
-      }
-    } else {
-      return EEtterlevelseGjenbruk.TILRETTELEGGING_FOR_GJENBRUK
-    }
-  }
-
-  switch (getTilstand()) {
+  switch (getTilstand(etterlevelseDokumentasjon)) {
     case EEtterlevelseGjenbruk.TILRETTELEGGING_FOR_GJENBRUK:
       return (
-        <TilretteleggForGjenbrukActionMenu
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-        />
+        <TilretteleggForGjenbrukActionMenu etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
+          Tilrettelegging for Gjenbruk
+        </TilretteleggForGjenbrukActionMenu>
       )
     case EEtterlevelseGjenbruk.SLA_PA_GJENBRUK:
       return (
-        <EndreGjenbrukActionMenu
+        <GjenbrukActionMenu
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-        />
+        >
+          Slå på Gjenbruk
+        </GjenbrukActionMenu>
       )
     case EEtterlevelseGjenbruk.ENDRE_GJENBRUK:
       return (
-        <SlaPaGjenbrukActionMenu
+        <GjenbrukActionMenu
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-        />
+        >
+          Endre Gjenbruk
+        </GjenbrukActionMenu>
       )
     default:
       return <>Feilmelding: Denne tilstanden finnes ikke</>

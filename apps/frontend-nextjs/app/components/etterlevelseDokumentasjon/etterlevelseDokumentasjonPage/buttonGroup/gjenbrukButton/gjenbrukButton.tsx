@@ -18,17 +18,18 @@ const GjenbrukButton: FunctionComponent<TProps> = ({
   setEtterlevelseDokumentasjon,
 }) => {
   switch (getRole(etterlevelseDokumentasjon)) {
-    case (EActionMenuRoles.Etterlever, EActionMenuRoles.Admin):
+    case EActionMenuRoles.Etterlever:
+    case EActionMenuRoles.Admin:
       return (
         <TilstandGjenbruk
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
         />
       )
-    case (EActionMenuRoles.Personvernombud,
-    EActionMenuRoles.Risikoeier,
-    EActionMenuRoles.EtterleverOgRisikoeier,
-    EActionMenuRoles.Les):
+    case EActionMenuRoles.Personvernombud:
+    case EActionMenuRoles.Risikoeier:
+    case EActionMenuRoles.EtterleverOgRisikoeier:
+    case EActionMenuRoles.Les:
       return <>Disse rollene skal ikke ha gjenbruk som alternativ</>
     default:
       return <>Feilmelding: Denne rollen finnes ikke</>
