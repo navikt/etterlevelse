@@ -1,9 +1,6 @@
 'use client'
 
-import {
-  EActionMenuRoles,
-  TEtterlevelseDokumentasjonQL,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { FunctionComponent, useContext } from 'react'
 import { CommonActionMenuGjenbruk } from './commonGjenbruk/commonGjenbruk'
@@ -19,31 +16,16 @@ const GjenbrukButton: FunctionComponent<TProps> = ({
 }) => {
   const user = useContext(UserContext)
 
-  const getRole = (): EActionMenuRoles => {
-    if (user.isAdmin()) {
-      return EActionMenuRoles.Admin
-    } else if (user.isPersonvernombud()) {
-      return EActionMenuRoles.Personvernombud
-    } else if (
-      etterlevelseDokumentasjon.hasCurrentUserAccess &&
-      etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
-    ) {
-      return EActionMenuRoles.EtterleverOgRisikoeier
-    } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
-      return EActionMenuRoles.Risikoeier
-    } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
-      return EActionMenuRoles.Etterlever
-    }
-    return EActionMenuRoles.Les
+  const isAdmin = user.isAdmin()
+  const isPersonvernombud = user.isPersonvernombud()
+  const hasAccess = etterlevelseDokumentasjon.hasCurrentUserAccess
+  const isRisikoeier = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+
+  if (!isAdmin && !isPersonvernombud && isRisikoeier && !hasAccess) {
+    return null
   }
 
-  const role = getRole()
-
-  if (role === EActionMenuRoles.Risikoeier) {
-    return <></>
-  }
-
-  const canManage = role !== EActionMenuRoles.Les
+  const canManage = isAdmin || hasAccess
 
   return (
     <CommonActionMenuGjenbruk
