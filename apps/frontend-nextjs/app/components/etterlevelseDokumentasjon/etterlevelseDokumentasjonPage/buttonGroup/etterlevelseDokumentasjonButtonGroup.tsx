@@ -77,7 +77,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             Rediger dokumentegenskaper
           </Button>
         )}
-        {etterlevelseDokumentasjon.forGjenbruk && !env.isDev && (
+        {etterlevelseDokumentasjon.forGjenbruk && !user.isPersonvernombud() && (
           <TillatGjenbrukModal
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
