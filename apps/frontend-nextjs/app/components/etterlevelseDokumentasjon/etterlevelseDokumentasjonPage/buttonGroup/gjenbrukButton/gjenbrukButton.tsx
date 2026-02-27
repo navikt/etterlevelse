@@ -15,13 +15,15 @@ const GjenbrukButton: FunctionComponent<TProps> = ({
   setEtterlevelseDokumentasjon,
 }) => {
   const user = useContext(UserContext)
-
   const isAdmin = user.isAdmin()
   const isPersonvernombud = user.isPersonvernombud()
   const hasAccess = etterlevelseDokumentasjon.hasCurrentUserAccess
-  const isRisikoeier = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
 
-  if (!isAdmin && !isPersonvernombud && isRisikoeier && !hasAccess) {
+  if (isPersonvernombud && !isAdmin) {
+    return null
+  }
+
+  if (!isAdmin && !hasAccess) {
     return null
   }
 
