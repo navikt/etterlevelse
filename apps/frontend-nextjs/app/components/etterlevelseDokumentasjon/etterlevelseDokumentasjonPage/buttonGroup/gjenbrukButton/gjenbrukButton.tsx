@@ -41,10 +41,6 @@ const GjenbrukButton: FunctionComponent<TProps> = ({
     return EActionMenuRoles.Les
   }
 
-  if (!etterlevelseDokumentasjon.forGjenbruk) {
-    return <></>
-  }
-
   const role = getRole()
 
   if (role === EActionMenuRoles.Risikoeier) {
