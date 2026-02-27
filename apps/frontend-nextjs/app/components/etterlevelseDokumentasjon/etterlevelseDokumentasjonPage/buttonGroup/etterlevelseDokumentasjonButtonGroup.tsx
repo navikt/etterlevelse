@@ -158,14 +158,6 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
       </>
 
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
-      {env.isDev && (
-        <GjenbrukButton
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-          behandlingsLivslop={behandlingsLivslop}
-          pvkDokument={pvkDokument}
-        />
-      )}
       {env.isDev && (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
         <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
       )}
@@ -173,6 +165,14 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         <PersonvernkonsekvensvurderingButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+          behandlingsLivslop={behandlingsLivslop}
+          pvkDokument={pvkDokument}
+        />
+      )}
+      {env.isDev && (
+        <GjenbrukButton
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
           behandlingsLivslop={behandlingsLivslop}
           pvkDokument={pvkDokument}
         />
