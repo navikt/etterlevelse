@@ -9,42 +9,89 @@ import TillatGjenbrukModal from '../../../gjenbruk/TillatGjenbrukModal'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
-  canManage: boolean
+  setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
 
-export const CommonActionMenuGjenbruk: FunctionComponent<TProps> = ({
+const GjenbrukKnapp = () => (
+  <ActionMenu.Trigger>
+    <Button variant='secondary-neutral' icon={<ChevronDownIcon aria-hidden />} iconPosition='right'>
+      Gjenbruk
+    </Button>
+  </ActionMenu.Trigger>
+)
+
+export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
-  canManage,
 }) => {
   const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
 
   return (
     <>
       <ActionMenu>
-        <ActionMenu.Trigger>
-          <Button
-            variant='secondary-neutral'
-            icon={<ChevronDownIcon aria-hidden />}
-            iconPosition='right'
-          >
-            Gjenbruk
-          </Button>
-        </ActionMenu.Trigger>
+        <GjenbrukKnapp />
         <ActionMenu.Content>
           <ActionMenu.Item
             as='a'
             href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-            disabled={!canManage}
           >
             Tilrettelegg for gjenbruk
           </ActionMenu.Item>
-          <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)} disabled={!canManage}>
-            {etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
-            etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-              ? 'Endre gjenbruk'
-              : 'Slå på gjenbruk'}
+        </ActionMenu.Content>
+      </ActionMenu>
+
+      <TillatGjenbrukModal
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+        isOpen={isTillatGjenbrukOpen}
+        setIsOpen={setIsTillatGjenbrukOpen}
+        renderTrigger={false}
+      />
+    </>
+  )
+}
+
+export const EndreGjenbrukActionMenu: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
+}) => {
+  const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
+
+  return (
+    <>
+      <ActionMenu>
+        <GjenbrukKnapp />
+        <ActionMenu.Content>
+          <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)}>
+            Endre gjenbruk
+          </ActionMenu.Item>
+        </ActionMenu.Content>
+      </ActionMenu>
+
+      <TillatGjenbrukModal
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+        isOpen={isTillatGjenbrukOpen}
+        setIsOpen={setIsTillatGjenbrukOpen}
+        renderTrigger={false}
+      />
+    </>
+  )
+}
+
+export const SlaPaGjenbrukActionMenu: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
+}) => {
+  const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
+
+  return (
+    <>
+      <ActionMenu>
+        <GjenbrukKnapp />
+        <ActionMenu.Content>
+          <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)}>
+            Slå på gjenbruk
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
