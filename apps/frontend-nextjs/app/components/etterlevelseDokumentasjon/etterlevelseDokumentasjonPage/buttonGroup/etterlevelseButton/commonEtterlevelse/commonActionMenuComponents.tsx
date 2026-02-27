@@ -6,7 +6,7 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, PropsWithChildren } from 'react'
 
 export const ActionMenuButtonEtterlevelse = () => (
   <ActionMenu.Trigger>
@@ -16,10 +16,9 @@ export const ActionMenuButtonEtterlevelse = () => (
   </ActionMenu.Trigger>
 )
 
-type TActionMenuItemProps = {
+type TActionMenuItemProps = PropsWithChildren<{
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  children: string
-}
+}>
 
 export const RedigerEgenskaperActionMenuItem: FunctionComponent<TActionMenuItemProps> = ({
   etterlevelseDokumentasjon,

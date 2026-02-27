@@ -4,47 +4,58 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import TillatGjenbrukModal from '../../../gjenbruk/TillatGjenbrukModal'
 
-type TProps = {
+type TProps = PropsWithChildren<{
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  setEtterlevelseDokumentasjon: (e: TEtterlevelseDokumentasjonQL) => void
-  canManage: boolean
+}>
+
+interface TGjenbrukProps extends TProps {
+  setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
 
-export const CommonActionMenuGjenbruk: FunctionComponent<TProps> = ({
+const GjenbrukKnapp = () => (
+  <ActionMenu.Trigger>
+    <Button variant='secondary-neutral' icon={<ChevronDownIcon aria-hidden />} iconPosition='right'>
+      Gjenbruk
+    </Button>
+  </ActionMenu.Trigger>
+)
+
+export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  children,
+}) => (
+  <>
+    <ActionMenu>
+      <GjenbrukKnapp />
+      <ActionMenu.Content>
+        <ActionMenu.Item
+          as='a'
+          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+        >
+          {children}
+        </ActionMenu.Item>
+      </ActionMenu.Content>
+    </ActionMenu>
+  </>
+)
+
+export const GjenbrukActionMenu: FunctionComponent<TGjenbrukProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
-  canManage,
+  children,
 }) => {
   const [isTillatGjenbrukOpen, setIsTillatGjenbrukOpen] = useState(false)
 
   return (
     <>
       <ActionMenu>
-        <ActionMenu.Trigger>
-          <Button
-            variant='secondary-neutral'
-            icon={<ChevronDownIcon aria-hidden />}
-            iconPosition='right'
-          >
-            Gjenbruk
-          </Button>
-        </ActionMenu.Trigger>
+        <GjenbrukKnapp />
         <ActionMenu.Content>
-          <ActionMenu.Item
-            as='a'
-            href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-            disabled={!canManage}
-          >
-            Tilrettelegg for gjenbruk
-          </ActionMenu.Item>
-          <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)} disabled={!canManage}>
-            {etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
-            etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-              ? 'Endre gjenbruk'
-              : 'Slå på gjenbruk'}
+          <ActionMenu.Item onSelect={() => setIsTillatGjenbrukOpen(true)}>
+            {children}
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>

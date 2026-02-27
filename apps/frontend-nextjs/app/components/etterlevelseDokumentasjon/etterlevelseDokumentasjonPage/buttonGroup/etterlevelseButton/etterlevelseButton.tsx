@@ -4,8 +4,8 @@ import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { UserContext } from '@/provider/user/userProvider'
-import { FunctionComponent, useContext } from 'react'
+import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
+import { FunctionComponent } from 'react'
 import AdminRolle from './adminRolle/adminRolle'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
 import RisikoeierRolle, { RisikoeierOgEtterleverRolle } from './risikoeierRolle/risikoeierRolle'
@@ -15,28 +15,9 @@ type TProps = {
 }
 
 export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
-  const user = useContext(UserContext)
-
-  const getRolle = (): EActionMenuRoles => {
-    if (user.isAdmin()) {
-      return EActionMenuRoles.Admin
-    } else {
-      if (
-        etterlevelseDokumentasjon.hasCurrentUserAccess &&
-        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
-      ) {
-        return EActionMenuRoles.EtterleverOgRisikoeier
-      } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
-        return EActionMenuRoles.Risikoeier
-      } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
-        return EActionMenuRoles.Etterlever
-      } else {
-        return EActionMenuRoles.Les
-      }
-    }
-  }
-
-  switch (getRolle()) {
+  switch (getRolle(etterlevelseDokumentasjon)) {
+    case EActionMenuRoles.Etterlever:
+      return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EActionMenuRoles.Risikoeier:
       return <RisikoeierRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EActionMenuRoles.EtterleverOgRisikoeier:
@@ -44,6 +25,6 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
     case EActionMenuRoles.Admin:
       return <AdminRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     default:
-      return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+      return <>Feilmelding: Denne rollen finnes ikke</>
   }
 }

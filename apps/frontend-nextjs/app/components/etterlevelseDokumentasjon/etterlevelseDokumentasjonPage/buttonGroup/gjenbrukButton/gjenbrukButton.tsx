@@ -1,9 +1,12 @@
 'use client'
 
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { UserContext } from '@/provider/user/userProvider'
-import { FunctionComponent, useContext } from 'react'
-import { CommonActionMenuGjenbruk } from './commonGjenbruk/commonGjenbruk'
+import {
+  EActionMenuRoles,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
+import { FunctionComponent } from 'react'
+import TilstandGjenbruk from './tilstandGjenbruk/tilstandGjenbruk'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -14,28 +17,23 @@ const GjenbrukButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
 }) => {
-  const user = useContext(UserContext)
-  const isAdmin = user.isAdmin()
-  const isPersonvernombud = user.isPersonvernombud()
-  const hasAccess = etterlevelseDokumentasjon.hasCurrentUserAccess
-
-  if (isPersonvernombud && !isAdmin) {
-    return null
+  switch (getRolle(etterlevelseDokumentasjon)) {
+    case EActionMenuRoles.Etterlever:
+    case EActionMenuRoles.Admin:
+      return (
+        <TilstandGjenbruk
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+        />
+      )
+    case EActionMenuRoles.Personvernombud:
+    case EActionMenuRoles.Risikoeier:
+    case EActionMenuRoles.EtterleverOgRisikoeier:
+    case EActionMenuRoles.Les:
+      return <>Disse rollene skal ikke ha gjenbruk som alternativ</>
+    default:
+      return <>Feilmelding: Denne rollen finnes ikke</>
   }
-
-  if (!isAdmin && !hasAccess) {
-    return null
-  }
-
-  const canManage = isAdmin || hasAccess
-
-  return (
-    <CommonActionMenuGjenbruk
-      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-      setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-      canManage={canManage}
-    />
-  )
 }
 
 export default GjenbrukButton
