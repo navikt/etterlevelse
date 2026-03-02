@@ -2,6 +2,8 @@
 
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
+import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { mapPvkDokumentToFormValue, updatePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import InnsendingHistorikk from '@/components/pvoTilbakemelding/pvoTilbakemeldingPage/stepperViews/oversiktPvoComponents/InnsendingsHistorikk'
@@ -12,8 +14,14 @@ import {
   EEtterlevelseStatus,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
   IRisikoscenario,
@@ -22,15 +30,26 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import {
   isRisikoUnderarbeidCheck,
   risikoscenarioFieldCheck,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { Alert, BodyShort, FormSummary, Heading, Link, List, Tag } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyShort,
+  Button,
+  FormSummary,
+  Heading,
+  Link,
+  List,
+  LocalAlert,
+  Tag,
+} from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, JSX, useEffect, useState } from 'react'
+import { FunctionComponent, JSX, useContext, useEffect, useState } from 'react'
 import FormSummaryPanel from '../../common/formSummaryPanel'
 import HvordanSkalViJobbeMedPvkReadMore from '../../common/hvordanSkalViJobbeMedPvkReadMore'
 import FormButtons from '../../edit/formButtons'
@@ -39,6 +58,7 @@ import { StepTitle } from '../pvkDokumentPage'
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   pvkDokument: IPvkDokument
+  setPvkDokument: (state: IPvkDokument) => void
   activeStep: number
   setSelectedStep: (step: number) => void
   updateTitleUrlAndStep: (step: number) => void
@@ -163,17 +183,21 @@ export const getTilhorendeDokumentasjonStatusTags = (
 export const OversiktView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
+  setPvkDokument,
   pvoTilbakemelding,
   activeStep,
   setSelectedStep,
   updateTitleUrlAndStep,
   pvkKrav,
 }) => {
+  const user = useContext(UserContext)
   const pathName = usePathname()
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [artOgOmfang] = useBehandlingensArtOgOmfang(pvkDokument.etterlevelseDokumentId)
   const [allRisikoscenario, setAllRisikoscenario] = useState<IRisikoscenario[]>([])
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
+  const [updatePvkStatusErrorMelding, setUpdatePvkStatusErrorMelding] = useState<string>('')
+  const [updatePvkStatusSuccessMelding, setUpdatePvkStatusSuccessMelding] = useState<string>('')
 
   const getMemberListToString = (membersData: ITeamResource[]): string => {
     let memberList: string = ''
@@ -296,6 +320,28 @@ export const OversiktView: FunctionComponent<TProps> = ({
     }
   }
 
+  const updatePvkDokumentStatus = async () => {
+    await getEtterlevelseDokumentasjon(etterlevelseDokumentasjon.id).then(
+      async (updatedEtterlevelsesDokumentasjon) => {
+        if (
+          updatedEtterlevelsesDokumentasjon.status !== EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+        ) {
+          setUpdatePvkStatusErrorMelding(
+            'Kan ikke oppdatere PVK fordi etterlevelses dokumentasjon er godkjent eller sendt til godkjenning til risikoeier'
+          )
+        } else {
+          await updatePvkDokument({
+            ...pvkDokument,
+            status: EPvkDokumentStatus.VURDERT_AV_PVO,
+          }).then((response) => {
+            setPvkDokument(mapPvkDokumentToFormValue(response))
+            setUpdatePvkStatusSuccessMelding('Nå er det mulig å oppdatere PVK igjen')
+          })
+        }
+      }
+    )
+  }
+
   useEffect(() => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
@@ -330,6 +376,37 @@ export const OversiktView: FunctionComponent<TProps> = ({
           Oversikt over PVK-prosessen
         </Heading>
         <HvordanSkalViJobbeMedPvkReadMore />
+
+        {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
+          etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+            <div className='my-5'>
+              <Button
+                type='button'
+                onClick={async () => await updatePvkDokumentStatus()}
+                variant='secondary'
+              >
+                Oppdater PVK
+              </Button>
+
+              {updatePvkStatusErrorMelding !== '' && (
+                <LocalAlert status='error' className='my-5'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>{updatePvkStatusErrorMelding}</LocalAlert.Title>
+                    <LocalAlert.CloseButton onClick={() => setUpdatePvkStatusErrorMelding('')} />
+                  </LocalAlert.Header>
+                </LocalAlert>
+              )}
+
+              {updatePvkStatusSuccessMelding !== '' && (
+                <LocalAlert status='success' className='my-5'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>{updatePvkStatusSuccessMelding}</LocalAlert.Title>
+                    <LocalAlert.CloseButton onClick={() => setUpdatePvkStatusSuccessMelding('')} />
+                  </LocalAlert.Header>
+                </LocalAlert>
+              )}
+            </div>
+          )}
 
         <FormSummary className='my-3'>
           <FormSummary.Header>

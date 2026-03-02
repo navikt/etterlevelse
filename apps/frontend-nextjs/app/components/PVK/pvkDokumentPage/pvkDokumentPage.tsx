@@ -251,6 +251,7 @@ export const PvkDokumentPage = () => {
                     <OversiktView
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}
