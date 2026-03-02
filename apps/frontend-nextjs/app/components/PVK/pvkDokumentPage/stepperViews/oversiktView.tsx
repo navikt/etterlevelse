@@ -397,17 +397,17 @@ export const OversiktView: FunctionComponent<TProps> = ({
                   </LocalAlert.Header>
                 </LocalAlert>
               )}
-
-              {updatePvkStatusSuccessMelding !== '' && (
-                <LocalAlert status='success' className='my-5'>
-                  <LocalAlert.Header>
-                    <LocalAlert.Title>{updatePvkStatusSuccessMelding}</LocalAlert.Title>
-                    <LocalAlert.CloseButton onClick={() => setUpdatePvkStatusSuccessMelding('')} />
-                  </LocalAlert.Header>
-                </LocalAlert>
-              )}
             </div>
           )}
+
+        {updatePvkStatusSuccessMelding !== '' && (
+          <LocalAlert status='success' className='my-5'>
+            <LocalAlert.Header>
+              <LocalAlert.Title>{updatePvkStatusSuccessMelding}</LocalAlert.Title>
+              <LocalAlert.CloseButton onClick={() => setUpdatePvkStatusSuccessMelding('')} />
+            </LocalAlert.Header>
+          </LocalAlert>
+        )}
 
         <FormSummary className='my-3'>
           <FormSummary.Header>
