@@ -1,7 +1,7 @@
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Accordion, Heading } from '@navikt/ds-react'
+import { Accordion, Heading, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
 import { SendInnPvoReadOnly } from '../../readOnly/sendInnPvoReadOnly'
@@ -19,17 +19,36 @@ export const PvoSendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoVurderingList,
 }) => {
+  const versjoner = [
+    ...new Set(
+      pvoTilbakemelding.vurderinger.map((vurdering) => vurdering.etterlevelseDokumentVersjon)
+    ),
+  ].sort((a, b) => b - a)
+
   return (
     <div>
       <Heading level='2' size='small' className='mb-5'>
         Tilbakemeldingshistorikk
       </Heading>
-      <Accordion>
-        {pvoTilbakemelding.vurderinger
+
+      {versjoner.map((versjon) => {
+        const vurderingerForVersjon = pvoTilbakemelding.vurderinger
+          .filter(
+            (vurdering) =>
+              vurdering.etterlevelseDokumentVersjon === versjon &&
+              vurdering.innsendingId < relevantVurderingsInnsendingId
+          )
           .sort((a, b) => b.innsendingId - a.innsendingId)
-          .map((vurdering) => {
-            if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
-              return (
+
+        if (vurderingerForVersjon.length === 0) {
+          return null
+        }
+
+        return (
+          <div key={'tilbakemeldinghistorikk_label_' + versjon} className='mb-5'>
+            <Label>Versjon {versjon}</Label>
+            <Accordion className='mt-3'>
+              {vurderingerForVersjon.map((vurdering) => (
                 <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
                   <Accordion.Header>
                     {vurdering.innsendingId}. tilbakemelding -{' '}
@@ -45,10 +64,11 @@ export const PvoSendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                     />
                   </Accordion.Content>
                 </Accordion.Item>
-              )
-            }
-          })}
-      </Accordion>
+              ))}
+            </Accordion>
+          </div>
+        )
+      })}
     </div>
   )
 }

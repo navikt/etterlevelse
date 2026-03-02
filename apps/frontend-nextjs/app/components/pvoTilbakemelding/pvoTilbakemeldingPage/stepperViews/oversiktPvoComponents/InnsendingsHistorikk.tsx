@@ -26,13 +26,20 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
   return (
     <div>
       <ReadMore header='Vis innsendingshistorikken'>
-        {versjoner.map((versjon) => (
-          <div className='mb-5'>
-            <Label key={'innsending_' + versjon}>Versjon {versjon}</Label>
-            <List>
-              {meldingerTilPvo
-                .filter((melding) => melding.etterlevelseDokumentVersjon === versjon)
-                .map((melding, index) => {
+        {versjoner.map((versjon) => {
+          const meldingerTilPvoForVersjon = meldingerTilPvo.filter(
+            (melding) => melding.etterlevelseDokumentVersjon === versjon
+          )
+
+          if (meldingerTilPvoForVersjon.length === 0) {
+            return null
+          }
+
+          return (
+            <div className='mb-5'>
+              <Label key={'innsending_' + versjon}>Versjon {versjon}</Label>
+              <List>
+                {meldingerTilPvoForVersjon.map((melding, index) => {
                   const melderNavn = melding.sendtTilPvoAv.split(' - ')[1]
                   if (
                     pvkDokument.antallInnsendingTilPvo >= melding.innsendingId &&
@@ -59,7 +66,8 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
                     return (
                       <Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
                         <List.Item key={`etterleveler_${index}_innsending_${melding.innsendingId}`}>
-                          {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}&nbsp;&nbsp;&nbsp;
+                          {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}
+                          &nbsp;&nbsp;&nbsp;
                           {melding.innsendingId}. innsending til PVO av {melderNavn}
                         </List.Item>
 
@@ -73,9 +81,10 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
                     )
                   }
                 })}
-            </List>
-          </div>
-        ))}
+              </List>
+            </div>
+          )
+        })}
       </ReadMore>
     </div>
   )
