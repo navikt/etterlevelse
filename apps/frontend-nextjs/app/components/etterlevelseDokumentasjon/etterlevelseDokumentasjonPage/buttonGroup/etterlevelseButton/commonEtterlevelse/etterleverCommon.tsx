@@ -94,7 +94,7 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
           </RedigerEgenskaperActionMenuItem>
 
           <ActionMenu.Item as='button' onSelect={() => setIsNewVersionModalOpen(true)}>
-            Oppdater etterlevelsen
+            Lås opp og oppdater dokumentasjon
           </ActionMenu.Item>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
             Eksporter til Word

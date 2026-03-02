@@ -2,8 +2,7 @@
 
 import { newVersionEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Button, Modal } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
+import { BodyLong, Button, Modal } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 interface IProps {
@@ -17,11 +16,10 @@ export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> 
   isNewVersionModalOpen,
   setIsNewVersionModalOpen,
 }) => {
-  const router = useRouter()
   const submit = async () => {
     await newVersionEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then(() => {
-      router.refresh()
       setIsNewVersionModalOpen(false)
+      window.location.reload()
     })
   }
 
@@ -32,15 +30,22 @@ export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> 
       onClose={() => {
         setIsNewVersionModalOpen(false)
       }}
-      header={{ heading: 'Ny etterlevelse dokument versjon', closeButton: false }}
+      header={{ heading: 'Lås opp og oppdater dokumentasjon', closeButton: false }}
     >
-      <Modal.Body>Er du sikkert på at du vil øke versjon</Modal.Body>
+      <Modal.Body>
+        <BodyLong className='mb-5'>
+          Ved opplåsing oppretter dere en ny versjon som dere kan redigere.
+        </BodyLong>
+        <BodyLong>
+          Etter hvert som dere er klare, kan dere sende den nye versjonen til godkjenning på nytt.
+        </BodyLong>
+      </Modal.Body>
       <Modal.Footer>
         <Button type='button' variant='primary' onClick={async () => await submit()}>
-          Ja, øk versjon
+          Oppdater
         </Button>
         <Button type='button' variant='secondary' onClick={() => setIsNewVersionModalOpen(false)}>
-          Nei, lukk
+          Avbryt
         </Button>
       </Modal.Footer>
     </Modal>
