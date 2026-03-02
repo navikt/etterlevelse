@@ -332,7 +332,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
         } else {
           await updatePvkDokument({
             ...pvkDokument,
-            status: EPvkDokumentStatus.OPPDATERING_ETTER_GODKJENNING,
+            status: EPvkDokumentStatus.VURDERT_AV_PVO,
           }).then((response) => {
             setPvkDokument(mapPvkDokumentToFormValue(response))
             setUpdatePvkStatusSuccessMelding('Nå er det mulig å oppdatere PVK igjen')

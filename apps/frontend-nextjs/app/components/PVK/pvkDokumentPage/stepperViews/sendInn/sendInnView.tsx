@@ -693,10 +693,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         />
                       )}
 
-                    {[
-                      EPvkDokumentStatus.VURDERT_AV_PVO,
-                      EPvkDokumentStatus.OPPDATERING_ETTER_GODKJENNING,
-                    ].includes(pvkDokument.status) &&
+                    {pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO &&
                       pvoTilbakemelding && (
                         <VurdertAvPvoFields
                           pvkDokument={pvkDokument}
