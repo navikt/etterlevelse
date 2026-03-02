@@ -378,7 +378,8 @@ export const OversiktView: FunctionComponent<TProps> = ({
         <HvordanSkalViJobbeMedPvkReadMore />
 
         {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
-          etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+          etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
+          pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
             <div className='my-5'>
               <Button
                 type='button'

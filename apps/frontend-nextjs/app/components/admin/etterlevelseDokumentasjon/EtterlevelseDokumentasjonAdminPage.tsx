@@ -1,6 +1,10 @@
 'use client'
 
-import { deleteEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import {
+  deleteEtterlevelseDokumentasjon,
+  getEtterlevelseDokumentasjon,
+  updateEtterlevelseDokumentasjon,
+} from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { Box, Button, Heading, TextField } from '@navikt/ds-react'
 import { useState } from 'react'
@@ -8,6 +12,7 @@ import { UpdateMessage } from '../common/commonComponents'
 
 export const EtterlevelseDokumentasjonAdminPage = () => {
   const [etterlevelseDokumentasjonId, setEtterlevelseDokumentasjonId] = useState('')
+  const [etterlevelseDokumentasjonREVERTId, setEtterlevelseDokumentasjonREVERTId] = useState('')
   const [updateMessage, setUpdateMessage] = useState('')
 
   return (
@@ -51,6 +56,34 @@ export const EtterlevelseDokumentasjonAdminPage = () => {
             Slett
           </Button>
         </div>
+      </div>
+
+      <div className='flex items-end my-5'>
+        <TextField
+          label='revert versjon etterlevelse dokumentasjon med uid'
+          placeholder='Etterlevelse dokumentasjon UID'
+          onChange={(e) => setEtterlevelseDokumentasjonREVERTId(e.target.value)}
+          className='w-full mr-3'
+        />
+        <Button
+          type='button'
+          onClick={async () => {
+            await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonREVERTId).then(
+              async (response) => {
+                const versjonHistorikk = response.versjonHistorikk.filter(
+                  (historikk) => historikk.versjon === 1
+                )
+                await updateEtterlevelseDokumentasjon({
+                  ...response,
+                  etterlevelseDokumentVersjon: 1,
+                  versjonHistorikk: versjonHistorikk,
+                })
+              }
+            )
+          }}
+        >
+          Revert Versjon
+        </Button>
       </div>
       <UpdateMessage message={updateMessage} />
     </PageLayout>
