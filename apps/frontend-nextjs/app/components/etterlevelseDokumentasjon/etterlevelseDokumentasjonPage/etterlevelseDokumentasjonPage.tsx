@@ -144,14 +144,29 @@ export const EtterlevelseDokumentasjonPage = () => {
       {!etterlevelseDokumentasjon && <LoadingSkeleton header='Dokumentasjon' />}
       {etterlevelseDokumentasjon && (
         <PageLayout
-          pageTitle={'E' + etterlevelseNummer.toString() + ' ' + title}
-          currentPage={'E' + etterlevelseNummer.toString() + ' ' + title}
+          pageTitle={
+            'E' +
+            etterlevelseNummer.toString() +
+            '.' +
+            etterlevelseDokumentasjon.etterlevelseDokumentVersjon.toString() +
+            ' ' +
+            title
+          }
+          currentPage={
+            'E' +
+            etterlevelseNummer.toString() +
+            '.' +
+            etterlevelseDokumentasjon.etterlevelseDokumentVersjon.toString() +
+            ' ' +
+            title
+          }
           breadcrumbPaths={breadcrumbPaths}
         >
           <div className='flex flex-col gap-4'>
             <div className='flex flex-col gap-2'>
               <Heading level='1' size='medium' className='max-w-[75ch]'>
-                E{etterlevelseNummer.toString()} {title}
+                E{etterlevelseNummer.toString()}.
+                {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} {title}
               </Heading>
 
               {morDokumentRelasjon && (
@@ -162,7 +177,8 @@ export const EtterlevelseDokumentasjonPage = () => {
                       morDokumentRelasjon.fromDocumentWithData.id
                     )}
                   >
-                    E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}{' '}
+                    E{morDokumentRelasjon.fromDocumentWithData.etterlevelseNummer}.
+                    {morDokumentRelasjon.fromDocumentWithData.etterlevelseDokumentVersjon}{' '}
                     {morDokumentRelasjon.fromDocumentWithData.title}
                   </Link>
                 </BodyShort>

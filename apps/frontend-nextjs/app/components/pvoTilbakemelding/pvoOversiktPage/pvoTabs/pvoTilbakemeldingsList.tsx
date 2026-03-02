@@ -117,6 +117,7 @@ export const PvoTilbakemeldingsList = () => {
           status: data.status,
           title: data.title,
           etterlevelseNummer: data.etterlevelseNummer,
+          currentEtterlevelseDokumentVersjon: data.currentEtterlevelseDokumentVersjon,
           sendtTilPvoDato: data.sendtTilPvoDato,
           antallInnsendingTilPvo: data.antallInnsendingTilPvo,
           sendtTilPvoAv:
@@ -184,7 +185,7 @@ export const PvoTilbakemeldingsList = () => {
 
     if (searchPvk !== '') {
       filteredData = filteredData.filter((pvk: IPvkDokumentListItem) => {
-        const pvkName: string = `E${pvk.etterlevelseNummer} ${pvk.title}`
+        const pvkName: string = `E${pvk.etterlevelseNummer}.${pvk.currentEtterlevelseDokumentVersjon} ${pvk.title}`
 
         return pvkName.toLowerCase().includes(searchPvk.toLowerCase())
       })
@@ -284,7 +285,7 @@ export const PvoTilbakemeldingsList = () => {
                     key={pvkDokument.id}
                     id={pvkDokument.id}
                     url={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 1)}
-                    title={`E${pvkDokument.etterlevelseNummer} ${pvkDokument.title}`}
+                    title={`E${pvkDokument.etterlevelseNummer}.${pvkDokument.currentEtterlevelseDokumentVersjon} ${pvkDokument.title}`}
                     status={
                       <PvoStatusView
                         status={

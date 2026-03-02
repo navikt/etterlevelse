@@ -40,8 +40,11 @@ export const EtterlevelseLinkPanel: FunctionComponent<TProps> = ({
     <LinkPanel.Title className='flex items-center'>
       <div>
         <BodyShort>
-          <strong>E{etterlevelse.etterlevelseDokumentasjon.etterlevelseNummer}</strong>:{' '}
-          {etterlevelse.etterlevelseDokumentasjon.title}
+          <strong>
+            E{etterlevelse.etterlevelseDokumentasjon.etterlevelseNummer}.
+            {etterlevelse.etterlevelseDokumentasjon.etterlevelseDokumentVersjon}
+          </strong>
+          : {etterlevelse.etterlevelseDokumentasjon.title}
         </BodyShort>
       </div>
       <Spacer />

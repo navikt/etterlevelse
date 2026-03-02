@@ -131,7 +131,7 @@ export const EtterlevelsePage = () => {
 
   return (
     <PageLayout
-      pageTitle={`K${params.kravNummer.toString()}.${params.kravVersjon.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title.toString()}`}
+      pageTitle={`K${params.kravNummer.toString()}.${params.kravVersjon.toString()} ${temaData?.shortName} E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()}.${etterlevelseDokumentasjon?.etterlevelseDokumentVersjon.toString()} ${etterlevelseDokumentasjon?.title.toString()}`}
       currentPage={'K' + params.kravNummer + '.' + params.kravVersjon}
       breadcrumbPaths={breadcrumbPaths}
     >

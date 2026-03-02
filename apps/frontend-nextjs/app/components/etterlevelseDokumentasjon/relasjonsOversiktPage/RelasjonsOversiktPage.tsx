@@ -50,7 +50,13 @@ export const RelasjonsOversiktPage = () => {
   if (!etterlevelseDokumentasjon) return <LoadingSkeleton header='Dokumentasjon' />
 
   const { etterlevelseNummer, title } = etterlevelseDokumentasjon
-  const etterlevelseNavn: string = 'E' + etterlevelseNummer.toString() + ' ' + title
+  const etterlevelseNavn: string =
+    'E' +
+    etterlevelseNummer.toString() +
+    '.' +
+    etterlevelseDokumentasjon.etterlevelseDokumentVersjon +
+    ' ' +
+    title
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonBreadCrumbPath(
       dokumentasjonerBreadCrumbPath.pathName,
@@ -73,7 +79,8 @@ export const RelasjonsOversiktPage = () => {
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col gap-2'>
           <Heading level='1' size='medium'>
-            Dokumenter som gjenbruker E{etterlevelseNummer.toString()} {title}
+            Dokumenter som gjenbruker E{etterlevelseNummer.toString()}.
+            {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} {title}
           </Heading>
           {dokumentRelasjonBarn && (
             <Table zebraStripes>
@@ -87,6 +94,8 @@ export const RelasjonsOversiktPage = () => {
                       <Link href={etterlevelseDokumentasjonIdUrl(dokument.toDocumentWithData.id)}>
                         {'E' +
                           dokument.toDocumentWithData.etterlevelseNummer.toString() +
+                          '.' +
+                          dokument.toDocumentWithData.etterlevelseDokumentVersjon.toString() +
                           ' ' +
                           dokument.toDocumentWithData.title}
                       </Link>

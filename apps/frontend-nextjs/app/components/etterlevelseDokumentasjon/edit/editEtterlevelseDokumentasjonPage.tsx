@@ -40,7 +40,7 @@ export const EditEtterlevelseDokumentasjonPage = () => {
             },
             {
               href: etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId),
-              pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`,
+              pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer}.${etterlevelseDokumentasjon.etterlevelseDokumentVersjon} ${etterlevelseDokumentasjon.title}`,
             },
           ]}
         >

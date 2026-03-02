@@ -90,6 +90,8 @@ export const BehandlingensLivslopPage = () => {
       pathName:
         'E' +
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
+        '.' +
+        etterlevelseDokumentasjon?.etterlevelseDokumentVersjon +
         ' ' +
         etterlevelseDokumentasjon?.title,
     },

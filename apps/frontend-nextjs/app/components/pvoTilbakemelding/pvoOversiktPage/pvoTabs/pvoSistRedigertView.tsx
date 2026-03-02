@@ -65,7 +65,7 @@ export const PvoSistRedigertView = () => {
                     key={pvoTilbakemelding.id}
                     id={pvoTilbakemelding.id}
                     url={pvkDokumenteringPvoTilbakemeldingUrl(pvoTilbakemelding.pvkDokumentId, 1)}
-                    title={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer} ${pvoTilbakemelding.etterlevelseDokumentasjonData.title}`}
+                    title={`E${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseNummer}.${pvoTilbakemelding.etterlevelseDokumentasjonData.etterlevelseDokumentVersjon} ${pvoTilbakemelding.etterlevelseDokumentasjonData.title}`}
                     status={
                       <PvoStatusView
                         pvkDokumentStatus={
