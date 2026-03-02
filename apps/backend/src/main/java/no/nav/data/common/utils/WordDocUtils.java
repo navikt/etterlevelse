@@ -874,6 +874,7 @@ public class WordDocUtils {
             case VURDERT_AV_PVO -> "Vurdert av personvernombudet";
             case TRENGER_GODKJENNING -> "Trenger godkjenning fra risikoeier";
             case GODKJENT_AV_RISIKOEIER -> "Godkjent av risikoeier";
+            case OPPDATERING_ETTER_GODKJENNING -> "Oppdaterer personverkonsekvensvurdering";
         };
     }
 }

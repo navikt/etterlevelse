@@ -177,7 +177,10 @@ public class PvkDokumentController {
             if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
                 pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.TRENGER_REVURDERING);
                 pvoTilbakemeldingService.save(pvoTilbakmelding, true);
-            } else if (pvoTilbakmelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING && (pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID || pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO)) {
+            } else if (pvoTilbakmelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING &&
+                    (pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID ||
+                            pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO ||
+                            pvkDokument.getStatus() == PvkDokumentStatus.OPPDATERING_ETTER_GODKJENNING)) {
                 pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.FERDIG);
                 pvoTilbakemeldingService.save(pvoTilbakmelding, true);
             }
