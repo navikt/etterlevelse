@@ -77,7 +77,7 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
                       pvkDokument.currentEtterlevelseDokumentVersjon
                 )
 
-                if (previousVurdering[0].vilFaPvkIRetur) {
+                if (previousVurdering.length !== 0 && previousVurdering[0].vilFaPvkIRetur) {
                   await setFieldValue(
                     'status',
                     EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
