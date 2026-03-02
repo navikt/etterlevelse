@@ -9,10 +9,11 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGodkjenningsRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
+import no.nav.data.pvk.pvkdokument.domain.*;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
+import no.nav.data.pvk.pvotilbakemelding.domain.Vurdering;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -272,6 +273,113 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 .findFirst()
                 .orElseThrow();
         assertThat(historikkV2.getNyVersjonOpprettetDato()).isNotNull();
+    }
+
+    @Test
+    void nyVersjon_increasesVersionAndResetsStatus_with_pvk_document_and_pvo_tilbakemelding() {
+        TestConfig.MockFilter.setUser("A123456");
+
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .teams(List.of())
+                                        .resources(List.of("A123456"))
+                                        .risikoeiere(List.of("A123456"))
+                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(1).build()))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        var pvkDokument = pvkDokumentRepo.save(PvkDokument.builder()
+                .etterlevelseDokumentId(eDok.getId())
+                .status(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                .pvkDokumentData(PvkDokumentData.builder()
+                        .pvkVurdering(PvkVurdering.SKAL_UTFORE)
+                        .antallInnsendingTilPvo(1)
+                        .meldingerTilPvo(
+                                List.of(
+                                MeldingTilPvo.builder()
+                                        .etterlevelseDokumentVersjon(1)
+                                        .innsendingId(1).build() ,
+                                MeldingTilPvo.builder()
+                                        .etterlevelseDokumentVersjon(1)
+                                        .innsendingId(2).build(),
+                                        MeldingTilPvo.builder()
+                                                .etterlevelseDokumentVersjon(1)
+                                                .innsendingId(3).build()
+                                ))
+                    .build())
+                .build()
+        );
+
+        var pvoTilbakemelding = pvoTilbakemeldingRepo.save(
+                PvoTilbakemelding.builder()
+                        .pvkDokumentId(pvkDokument.getId())
+                        .status(PvoTilbakemeldingStatus.FERDIG)
+                        .pvoTilbakemeldingData(
+                                PvoTilbakemeldingData.builder()
+                                        .vurderinger(List.of(
+                                                Vurdering.builder().innsendingId(1).etterlevelseDokumentVersjon(1).build(),
+                                                Vurdering.builder().innsendingId(2).etterlevelseDokumentVersjon(1).build(),
+                                                Vurdering.builder().innsendingId(3).etterlevelseDokumentVersjon(1).build()
+                                        ))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
+                .id(eDok.getId())
+                .update(true)
+                .title(eDok.getTitle())
+                .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                .etterlevelseDokumentVersjon(1)
+                .build();
+
+        ResponseEntity<EtterlevelseDokumentasjonResponse> resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/ny-versjon/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(request),
+                EtterlevelseDokumentasjonResponse.class,
+                request.getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertNotNull(resp.getBody());
+        EtterlevelseDokumentasjonResponse body = resp.getBody();
+
+        assertThat(body.getId()).isEqualTo(eDok.getId());
+        assertThat(body.getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
+        assertThat(body.getEtterlevelseDokumentVersjon()).isEqualTo(2);
+        assertThat(body.getVersjonHistorikk()).isNotEmpty();
+        assertThat(body.getVersjonHistorikk().stream().filter(vh -> vh.getVersjon().equals(1)).findFirst())
+                .isPresent();
+        assertThat(body.getVersjonHistorikk().stream().filter(vh -> vh.getVersjon().equals(1)).findFirst().get().getNyVersjonOpprettetDato()).isNotNull();
+
+        assertThat(body.getVersjonHistorikk().stream().filter(vh -> vh.getVersjon().equals(2)).findFirst())
+                .isPresent();
+
+        EtterlevelseDokumentasjon persisted = etterlevelseDokumentasjonRepo.findById(eDok.getId()).orElseThrow();
+        assertThat(persisted.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
+        assertThat(persisted.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon()).isEqualTo(2);
+        assertThat(persisted.getEtterlevelseDokumentasjonData().getVersjonHistorikk()).isNotEmpty();
+        var historikkV2 = persisted.getEtterlevelseDokumentasjonData().getVersjonHistorikk().stream()
+                .filter(vh -> vh.getVersjon().equals(1))
+                .findFirst()
+                .orElseThrow();
+        assertThat(historikkV2.getNyVersjonOpprettetDato()).isNotNull();
+
+
+        PvkDokument persistedPvkDokument = pvkDokumentRepo.findById(pvkDokument.getId()).orElseThrow();
+        assertThat(persistedPvkDokument.getPvkDokumentData().getMeldingerTilPvo().stream().filter(melding -> melding.getEtterlevelseDokumentVersjon().equals(2)).count()).isEqualTo(2);
+
+        PvoTilbakemelding persistedPvoTilbakemelding = pvoTilbakemeldingRepo.findById(pvoTilbakemelding.getId()).orElseThrow();
+        assertThat(persistedPvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger().stream().filter(vurdering -> vurdering.getEtterlevelseDokumentVersjon().equals(2)).count()).isEqualTo(2);
     }
 
     @Test

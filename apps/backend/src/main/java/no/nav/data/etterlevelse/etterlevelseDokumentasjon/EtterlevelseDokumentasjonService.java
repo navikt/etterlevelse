@@ -29,6 +29,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -183,7 +184,7 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updateAndIncreaseVersion(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
-        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
+            Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
 
         List<String> teamMembers = new ArrayList<>();
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getTeams().forEach(teamId -> {
@@ -210,6 +211,27 @@ public class EtterlevelseDokumentasjonService {
 
         EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
         historikk.setNyVersjonOpprettetDato(LocalDateTime.now());
+
+        if(pvkDokument.isPresent()) {
+            pvkDokument.get().getPvkDokumentData().getMeldingerTilPvo().forEach(innsending -> {
+                if (innsending.getInnsendingId() > pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo()) {
+                    innsending.setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() +1);
+                }
+            });
+
+            Optional<PvoTilbakemelding> pvoTilbakemelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.get().getId());
+            pvoTilbakemelding.ifPresent(tilbakemelding ->
+                {
+                tilbakemelding.getPvoTilbakemeldingData().getVurderinger().forEach(vurdering -> {
+                    if (vurdering.getInnsendingId() > pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo()) {
+                        vurdering.setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() + 1);
+                    }
+                });
+                pvoTilbakemeldingService.save(tilbakemelding, true);
+            });
+
+            pvkDokumentService.save(pvkDokument.get(), true);
+        }
 
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getVersjonHistorikk().add(
                 EtterlevelseVersjonHistorikk.builder()
