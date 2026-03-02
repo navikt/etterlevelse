@@ -52,7 +52,7 @@ import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -264,6 +264,24 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             {title}
           </Heading>
 
+          {env.isDev && user.isAdmin() && (
+            <InfoCard data-color='warning' className='mb-5'>
+              <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                <InfoCard.Title>
+                  Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det
+                  ikke være mulig å redigere følgende dokumentegenskaper fram til at dokumentet er
+                  godkjent:
+                </InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
+                <List as='ul'>
+                  <List.Item>Egenskaper som gjelder for etterlevelsen</List.Item>
+                  <List.Item>Behandlinger</List.Item>
+                  <List.Item>Annen dokumentasjon</List.Item>
+                </List>
+              </InfoCard.Content>
+            </InfoCard>
+          )}
           {dokumentRelasjon && (
             <Alert contentMaxWidth={false} variant='info' className='mb-5'>
               <Label>Dette må du vite om gjenbruk</Label>
