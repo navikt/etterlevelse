@@ -5,6 +5,7 @@ import {
   EPVKTilstandStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { getPvkTilstand } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { FunctionComponent } from 'react'
 import {
@@ -24,6 +25,7 @@ type TProps = {
   pvkDokument?: IPvkDokument
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 const EtterleverRollePVK: FunctionComponent<TProps> = ({
@@ -31,8 +33,9 @@ const EtterleverRollePVK: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingensArtOgOmfang,
   behandlingsLivslop,
+  pvoTilbakemelding,
 }) => {
-  switch (getPvkTilstand(etterlevelseDokumentasjon, pvkDokument)) {
+  switch (getPvkTilstand(pvkDokument, pvoTilbakemelding)) {
     case EPVKTilstandStatus.TILSTAND_STATUS_ONE:
       return (
         <PvkIkkeVurdertActionMenuVariant

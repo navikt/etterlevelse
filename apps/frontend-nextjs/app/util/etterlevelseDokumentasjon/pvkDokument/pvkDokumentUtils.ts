@@ -1,5 +1,4 @@
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
   EPvkDokumentStatus,
@@ -8,6 +7,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import moment from 'moment'
 
 export const getVariantForPVKBehovButton = (
@@ -169,24 +169,9 @@ export const createNewMeldingTilPvo = (
 }
 
 export const getPvkTilstand = (
-  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon,
-  pvkDokument?: IPvkDokument
+  pvkDokument?: IPvkDokument,
+  pvoTilbakemelding?: IPvoTilbakemelding
 ): string => {
-  const hasAtLeastOneCurrentMeldingWithSendtTilPvoDato = !!pvkDokument?.meldingerTilPvo?.some(
-    (melding) =>
-      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon &&
-      !!melding.sendtTilPvoDato?.trim()
-  )
-
-  console.debug(
-    pvkDokument &&
-      pvkDokument.meldingerTilPvo.filter(
-        (melding) =>
-          melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
-      )
-  )
-  console.debug(hasAtLeastOneCurrentMeldingWithSendtTilPvoDato)
-
   if (!pvkDokument) {
     return EPVKTilstandStatus.TILSTAND_STATUS_ONE
   } else if (
@@ -217,9 +202,17 @@ export const getPvkTilstand = (
       ].includes(pvkDokument.status)
     ) {
       if (
-        etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 &&
         pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO &&
-        !hasAtLeastOneCurrentMeldingWithSendtTilPvoDato
+        pvkDokument.godkjentAvRisikoeierDato !== null &&
+        pvkDokument.godkjentAvRisikoeierDato !== undefined &&
+        pvkDokument.godkjentAvRisikoeierDato !== '' &&
+        moment(pvkDokument.godkjentAvRisikoeierDato).isBefore(
+          pvkDokument.changeStamp.lastModifiedDate
+        ) &&
+        pvoTilbakemelding &&
+        moment(pvoTilbakemelding.changeStamp.lastModifiedDate).isBefore(
+          pvkDokument.godkjentAvRisikoeierDato
+        )
       ) {
         return EPVKTilstandStatus.TILSTAND_STATUS_TEN
       } else {
