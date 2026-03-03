@@ -14,8 +14,6 @@ export const getRolle = (
 
   if (user.isAdmin()) {
     return EActionMenuRoles.Admin
-  } else if (user.isPersonvernombud()) {
-    return EActionMenuRoles.Personvernombud
   } else if (
     etterlevelseDokumentasjon.hasCurrentUserAccess &&
     etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
@@ -25,6 +23,8 @@ export const getRolle = (
     return EActionMenuRoles.Risikoeier
   } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
     return EActionMenuRoles.Etterlever
+  } else if (user.isPersonvernombud()) {
+    return EActionMenuRoles.Personvernombud
   } else {
     return EActionMenuRoles.Les
   }
