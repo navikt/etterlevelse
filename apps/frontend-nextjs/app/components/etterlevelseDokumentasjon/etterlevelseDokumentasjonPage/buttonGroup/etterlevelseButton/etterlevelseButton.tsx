@@ -18,6 +18,7 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDoku
   switch (getRolle(etterlevelseDokumentasjon)) {
     case EActionMenuRoles.Etterlever:
       return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+    case EActionMenuRoles.Personvernombud:
     case EActionMenuRoles.Risikoeier:
       return <RisikoeierRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EActionMenuRoles.EtterleverOgRisikoeier:
