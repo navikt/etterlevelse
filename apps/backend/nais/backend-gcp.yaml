@@ -81,6 +81,8 @@ spec:
           permissions:
             roles:
               - "arkiv-admin"
+      external:
+        - host: {{ardoq_ingress}}
     outbound:
       rules:
         - application: behandlingskatalog-backend
@@ -91,3 +93,4 @@ spec:
         - host: {{teamcat_ingress}}
         - host: {{p360_ingress}}
         - host: slack.com
+        - host: {{ardoq_ingress}}
