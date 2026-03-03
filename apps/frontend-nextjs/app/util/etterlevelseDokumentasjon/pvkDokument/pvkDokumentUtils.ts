@@ -172,6 +172,21 @@ export const getPvkTilstand = (
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon,
   pvkDokument?: IPvkDokument
 ): string => {
+  const hasAtLeastOneCurrentMeldingWithSendtTilPvoDato = !!pvkDokument?.meldingerTilPvo?.some(
+    (melding) =>
+      melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon &&
+      !!melding.sendtTilPvoDato?.trim()
+  )
+
+  console.debug(
+    pvkDokument &&
+      pvkDokument.meldingerTilPvo.filter(
+        (melding) =>
+          melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
+      )
+  )
+  console.debug(hasAtLeastOneCurrentMeldingWithSendtTilPvoDato)
+
   if (!pvkDokument) {
     return EPVKTilstandStatus.TILSTAND_STATUS_ONE
   } else if (
@@ -201,18 +216,21 @@ export const getPvkTilstand = (
         EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
       ].includes(pvkDokument.status)
     ) {
-      return EPVKTilstandStatus.TILSTAND_STATUS_SIX
+      if (
+        etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 &&
+        pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO &&
+        !hasAtLeastOneCurrentMeldingWithSendtTilPvoDato
+      ) {
+        return EPVKTilstandStatus.TILSTAND_STATUS_TEN
+      } else {
+        return EPVKTilstandStatus.TILSTAND_STATUS_SIX
+      }
     } else if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
       return EPVKTilstandStatus.TILSTAND_STATUS_SEVEN
     } else if (pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) {
       return EPVKTilstandStatus.TILSTAND_STATUS_EIGHT
     } else if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
       return EPVKTilstandStatus.TILSTAND_STATUS_NINE
-    } else if (
-      etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1 &&
-      pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO
-    ) {
-      return EPVKTilstandStatus.TILSTAND_STATUS_TEN
     } else {
       return ''
     }

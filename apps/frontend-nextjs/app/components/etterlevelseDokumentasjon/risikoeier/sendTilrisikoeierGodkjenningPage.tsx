@@ -48,7 +48,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
     dokumentasjonerBreadCrumbPath,
     {
       href: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id),
-      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()}.${etterlevelseDokumentasjon?.etterlevelseDokumentVersjon} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
 

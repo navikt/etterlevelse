@@ -156,7 +156,7 @@ export const PvkDokumentPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()} ${etterlevelseDokumentasjon?.title}`,
+      pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()}.${etterlevelseDokumentasjon?.etterlevelseDokumentVersjon} ${etterlevelseDokumentasjon?.title}`,
       href: etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId),
     },
   ]
@@ -251,6 +251,7 @@ export const PvkDokumentPage = () => {
                     <OversiktView
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       pvkDokument={pvkDokument}
+                      setPvkDokument={setPvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
                       activeStep={activeStep}
                       setSelectedStep={setSelectedStep}

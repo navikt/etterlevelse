@@ -57,12 +57,13 @@ export const GjenbrukEtterlevelseDokumentasjonPage = () => {
             },
             {
               href: etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId),
-              pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`,
+              pathName: `E${etterlevelseDokumentasjon.etterlevelseNummer}.${etterlevelseDokumentasjon.etterlevelseDokumentVersjon} ${etterlevelseDokumentasjon.title}`,
             },
           ]}
         >
           <Heading size='medium' level='1' spacing>
-            Gjenbruk E{etterlevelseDokumentasjon.etterlevelseNummer}{' '}
+            Gjenbruk E{etterlevelseDokumentasjon.etterlevelseNummer}.
+            {etterlevelseDokumentasjon.etterlevelseDokumentVersjon}{' '}
             {etterlevelseDokumentasjon.title}
           </Heading>
 

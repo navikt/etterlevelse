@@ -15,4 +15,4 @@ ENV NODE_ENV=production
 
 RUN yarn run build
 
-CMD yarn run start
+CMD ["yarn", "run", "start"]

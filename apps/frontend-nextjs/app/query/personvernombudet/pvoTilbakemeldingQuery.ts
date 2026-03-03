@@ -25,6 +25,7 @@ export const getPvoTilbakemeldingListQuery = gql`
         etterlevelseDokumentasjonData {
           title
           etterlevelseNummer
+          etterlevelseDokumentVersjon
         }
         vurderinger {
           innsendingId

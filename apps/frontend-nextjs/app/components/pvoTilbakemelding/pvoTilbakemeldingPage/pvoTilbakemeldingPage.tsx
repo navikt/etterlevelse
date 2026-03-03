@@ -152,6 +152,8 @@ export const PvoTilbakemeldingPage = () => {
       pathName:
         'E' +
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
+        '.' +
+        etterlevelseDokumentasjon?.etterlevelseDokumentVersjon +
         ' ' +
         etterlevelseDokumentasjon?.title,
       href: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id),

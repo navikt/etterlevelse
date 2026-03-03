@@ -28,6 +28,7 @@ export const getEtterlevelseDokumentasjonListQuery = gql`
         id
         title
         etterlevelseNummer
+        etterlevelseDokumentVersjon
         sistEndretEtterlevelse
         sistEndretEtterlevelseAvMeg
         sistEndretDokumentasjonAvMeg

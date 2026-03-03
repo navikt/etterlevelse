@@ -49,7 +49,9 @@ export const ViewEtterlevelse: FunctionComponent<TProps> = ({
         {etterlevelseDokumentasjon && (
           <div className='mb-12'>
             <BodyShort>
-              E{etterlevelseDokumentasjon.etterlevelseNummer} - {etterlevelseDokumentasjon.title}
+              E{etterlevelseDokumentasjon.etterlevelseNummer}.
+              {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} -{' '}
+              {etterlevelseDokumentasjon.title}
             </BodyShort>
             {!modalVersion && (
               <>

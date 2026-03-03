@@ -4,6 +4,7 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import { ExportEtterlevelseModal } from '../../../export/exportEtterlevelseModal'
+import NyVersjonEtterlevelseDokumentasjonModal from '../../../nyVersjon/nyVersjonEtterlevelseDokumentasjonModal'
 import {
   ActionMenuButtonEtterlevelse,
   EtterlevelseTilGodkjenningActionMenuItem,
@@ -82,7 +83,8 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
 }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
-
+  const [isNewVersionModalOpen, setIsNewVersionModalOpen] = useState<boolean>(false)
+  
   return (
     <>
       <ActionMenu>
@@ -92,14 +94,23 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
             Rediger dokumentegenskaper
           </RedigerEgenskaperActionMenuItem>
 
-          <ActionMenu.Item as='a' href=''>
-            Oppdater etterlevelsen
+          <ActionMenu.Item as='button' onSelect={() => setIsNewVersionModalOpen(true)}>
+            Lås opp og oppdater dokumentasjon
           </ActionMenu.Item>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
             Eksporter til Word
           </ActionMenu.Item>
         </ActionMenu.Content>
       </ActionMenu>
+
+      {isNewVersionModalOpen && (
+        <NyVersjonEtterlevelseDokumentasjonModal
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          isNewVersionModalOpen={isNewVersionModalOpen}
+          setIsNewVersionModalOpen={setIsNewVersionModalOpen}
+        />
+      )}
+
       <ExportEtterlevelseModal
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         isExportModalOpen={isExportModalOpen}

@@ -3,7 +3,7 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { List, ReadMore } from '@navikt/ds-react'
+import { Label, List, ReadMore } from '@navikt/ds-react'
 import { ListItem } from '@navikt/ds-react/List'
 import moment from 'moment'
 import { Fragment, FunctionComponent } from 'react'
@@ -19,51 +19,72 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
   meldingerTilPvo,
   vurderinger,
 }) => {
+  const versjoner = [
+    ...new Set(meldingerTilPvo.map((melding) => melding.etterlevelseDokumentVersjon)),
+  ].sort((a, b) => a - b)
+
   return (
     <div>
       <ReadMore header='Vis innsendingshistorikken'>
-        <List>
-          {meldingerTilPvo.map((melding, index) => {
-            const melderNavn = melding.sendtTilPvoAv.split(' - ')[1]
-            if (
-              pvkDokument.antallInnsendingTilPvo >= melding.innsendingId &&
-              melding.sendtTilPvoDato
-            ) {
-              const vurdering = vurderinger.filter(
-                (vurdering) =>
-                  vurdering.innsendingId === melding.innsendingId &&
-                  vurdering.etterlevelseDokumentVersjon === melding.etterlevelseDokumentVersjon
-              )
-              const sendtAvPvo =
-                vurdering.length !== 0 &&
-                vurdering[0].sendtAv !== '' &&
-                vurdering[0].sendtAv !== null
-                  ? vurdering[0].sendtAv.split(' - ')[1]
-                  : 'Personvernombudet'
+        {versjoner.map((versjon) => {
+          const meldingerTilPvoForVersjon = meldingerTilPvo.filter(
+            (melding) => melding.etterlevelseDokumentVersjon === versjon
+          )
 
-              if (melding.innsendingId === 10) {
-                console.debug(melding, 'MELDING')
-                console.debug(vurdering, 'PVO')
-              }
+          if (meldingerTilPvoForVersjon.length === 0) {
+            return null
+          }
 
-              return (
-                <Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
-                  <List.Item key={`etterleveler_${index}_innsending_${melding.innsendingId}`}>
-                    {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}&nbsp;&nbsp;&nbsp;
-                    {melding.innsendingId}. innsending til PVO av {melderNavn}
-                  </List.Item>
+          return (
+            <div className='mb-5'>
+              <Label key={'innsending_' + versjon}>Versjon {versjon}</Label>
+              <List>
+                {meldingerTilPvoForVersjon.map((melding, index) => {
+                  const melderNavn = melding.sendtTilPvoAv.split(' - ')[1]
+                  if (
+                    pvkDokument.antallInnsendingTilPvo >= melding.innsendingId &&
+                    melding.sendtTilPvoDato
+                  ) {
+                    const vurdering = vurderinger.filter(
+                      (vurdering) =>
+                        vurdering.innsendingId === melding.innsendingId &&
+                        vurdering.etterlevelseDokumentVersjon ===
+                          melding.etterlevelseDokumentVersjon
+                    )
+                    const sendtAvPvo =
+                      vurdering.length !== 0 &&
+                      vurdering[0].sendtAv !== '' &&
+                      vurdering[0].sendtAv !== null
+                        ? vurdering[0].sendtAv.split(' - ')[1]
+                        : 'Personvernombudet'
 
-                  {vurdering.length !== 0 && vurdering[0].sendtDato && (
-                    <ListItem key={`${index}_innsending_${melding.innsendingId}_vurdering`}>
-                      {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')}
-                      &nbsp;&nbsp;&nbsp;tilbakemelding fra {sendtAvPvo}
-                    </ListItem>
-                  )}
-                </Fragment>
-              )
-            }
-          })}
-        </List>
+                    if (melding.innsendingId === 10) {
+                      console.debug(melding, 'MELDING')
+                      console.debug(vurdering, 'PVO')
+                    }
+
+                    return (
+                      <Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>
+                        <List.Item key={`etterleveler_${index}_innsending_${melding.innsendingId}`}>
+                          {moment(melding.sendtTilPvoDato).format('DD. MMM YYYY')}
+                          &nbsp;&nbsp;&nbsp;
+                          {melding.innsendingId}. innsending til PVO av {melderNavn}
+                        </List.Item>
+
+                        {vurdering.length !== 0 && vurdering[0].sendtDato && (
+                          <ListItem key={`${index}_innsending_${melding.innsendingId}_vurdering`}>
+                            {moment(vurdering[0].sendtDato).format('DD. MMM YYYY')}
+                            &nbsp;&nbsp;&nbsp;tilbakemelding fra {sendtAvPvo}
+                          </ListItem>
+                        )}
+                      </Fragment>
+                    )
+                  }
+                })}
+              </List>
+            </div>
+          )
+        })}
       </ReadMore>
     </div>
   )

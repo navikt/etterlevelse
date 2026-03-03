@@ -103,6 +103,8 @@ export const BehandlingensArtOgOmfangPage = () => {
       pathName:
         'E' +
         etterlevelseDokumentasjon?.etterlevelseNummer.toString() +
+        '.' +
+        etterlevelseDokumentasjon?.etterlevelseDokumentVersjon +
         ' ' +
         etterlevelseDokumentasjon?.title,
     },

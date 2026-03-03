@@ -25,7 +25,7 @@ export const etterlevelseDokumentasjonName = (
   etterlevelseDokumentasjon?: IEtterlevelseDokumentasjon
 ): string =>
   etterlevelseDokumentasjon
-    ? `E${etterlevelseDokumentasjon.etterlevelseNummer} ${etterlevelseDokumentasjon.title}`
+    ? `E${etterlevelseDokumentasjon.etterlevelseNummer}.${etterlevelseDokumentasjon.etterlevelseDokumentVersjon} ${etterlevelseDokumentasjon.title}`
     : ''
 
 export const getMembersFromEtterlevelseDokumentasjon = (

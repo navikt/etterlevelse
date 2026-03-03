@@ -26,7 +26,8 @@ export const EtterlevelseDokumentasjonsPanel: FunctionComponent<TProps> = ({
       onClick={onClick}
     >
       <LinkPanel.Title className='text-xl'>
-        E{etterlevelseDokumentasjon.etterlevelseNummer} {etterlevelseDokumentasjon.title}
+        E{etterlevelseDokumentasjon.etterlevelseNummer}.
+        {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} {etterlevelseDokumentasjon.title}
       </LinkPanel.Title>
       <LinkPanel.Description className='h-7'>
         {hasDateForLastModifiedByUser &&

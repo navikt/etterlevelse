@@ -229,9 +229,17 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
             <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
               <InfoCard.Title>
                 Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det
-                ikke være mulig å redigere kravdokumentasjon fram til at dokumentet er godkjent.
+                ikke være mulig å redigere følgende dokumentegenskaper fram til at dokumentet er
+                godkjent:
               </InfoCard.Title>
             </InfoCard.Header>
+            <InfoCard.Content>
+              <List as='ul'>
+                <List.Item>Egenskaper som gjelder for etterlevelsen</List.Item>
+                <List.Item>Behandlinger</List.Item>
+                <List.Item>Annen dokumentasjon</List.Item>
+              </List>
+            </InfoCard.Content>
           </InfoCard>
 
           {dokumentRelasjon && (
