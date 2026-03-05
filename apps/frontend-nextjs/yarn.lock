@@ -1762,11 +1762,6 @@
   dependencies:
     tslib "^2.4.0"
 
-"@types/amplitude-js@8.16.5":
-  version "8.16.5"
-  resolved "https://registry.yarnpkg.com/@types/amplitude-js/-/amplitude-js-8.16.5.tgz#ad8c2c0f2f8b436f014f8b72ddb5535dd00368e6"
-  integrity sha512-W73JfDpwDH4VijOGo+nVuQOqUCiqyEGGVdajU4ziWTLn27cn+QtFuFuBdlhCraIIrO52fDRO4NSOGkawtn77Jw==
-
 "@types/debug@^4.0.0":
   version "4.1.12"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.12.tgz#a155f21690871953410df4b6b6f53187f0500917"
@@ -3772,10 +3767,10 @@ graphql-tag@^2.12.6:
   dependencies:
     tslib "^2.1.0"
 
-graphql@16.13.0:
-  version "16.13.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.13.0.tgz#726857e897e87d54412d62356ec0b6b76bfab409"
-  integrity sha512-uSisMYERbaB9bkA9M4/4dnqyktaEkf1kMHNKq/7DHyxVeWqHQ2mBmVqm5u6/FVHwF3iCNalKcg82Zfl+tffWoA==
+graphql@16.13.1:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.13.1.tgz#38ae5c76fbc4a009e0004dca6c76c370a1da7b54"
+  integrity sha512-gGgrVCoDKlIZ8fIqXBBb0pPKqDgki0Z/FSKNiQzSGj2uEYHr1tq5wmBegGwJx6QB5S5cM0khSBpi/JFHMCvsmQ==
 
 has-bigints@^1.0.2:
   version "1.1.0"

@@ -38,7 +38,7 @@
     "draft-js": "0.11.7",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
-    "graphql": "16.13.0",
+    "graphql": "16.13.1",
     "json-diff-kit": "1.0.35",
     "lodash": "4.17.23",
     "markdown-draft-js": "2.4.0",
@@ -60,7 +60,6 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
-    "@types/amplitude-js": "8.16.5",
     "@types/draft-js": "0.11.20",
     "@types/lodash": "4.17.24",
     "@types/markdown-draft-js": "2.2.7",
