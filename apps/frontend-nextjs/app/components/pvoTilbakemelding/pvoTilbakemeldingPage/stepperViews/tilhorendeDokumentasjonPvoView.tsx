@@ -134,6 +134,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
                   <PvoTilhorendeDokTilbakemeldingsHistorikk
                     pvoTilbakemelding={pvoTilbakemelding}
                     relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                    forPvo={true}
                   />
                 </div>
               )}

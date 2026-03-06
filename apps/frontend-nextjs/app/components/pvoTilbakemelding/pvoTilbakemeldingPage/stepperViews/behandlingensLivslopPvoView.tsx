@@ -136,6 +136,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                         pvoTilbakemelding={pvoTilbakemelding}
                         fieldName='behandlingenslivslop'
                         relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                        forPvo={true}
                       />
                     </div>
                   )}

@@ -15,12 +15,14 @@ type TProps = {
     | 'innvolveringAvEksterne'
     | 'risikoscenarioEtterTiltakk'
   relevantVurderingsInnsendingId: number
+  forPvo: boolean
 }
 
 export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   fieldName,
   relevantVurderingsInnsendingId,
+  forPvo,
 }) => {
   const versjoner = [
     ...new Set(
@@ -63,7 +65,7 @@ export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                       <Accordion.Content>
                         <PvoTilbakemeldingsHistorikkContent
                           tilbakemeldingsinnhold={vurdering[fieldName]}
-                          forPvo={true}
+                          forPvo={forPvo}
                           noHeader={true}
                         />
                       </Accordion.Content>

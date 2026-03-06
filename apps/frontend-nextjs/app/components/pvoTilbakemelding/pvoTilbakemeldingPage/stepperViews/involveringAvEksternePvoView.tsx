@@ -131,6 +131,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
                     pvoTilbakemelding={pvoTilbakemelding}
                     fieldName='innvolveringAvEksterne'
                     relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                    forPvo={true}
                   />
                 </div>
               )}

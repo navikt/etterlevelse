@@ -7,11 +7,13 @@ import PvoTilhorendeDokTilbakemeldingsHistorikkContent from './pvoTilhorendeDokT
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
   relevantVurderingsInnsendingId: number
+  forPvo: boolean
 }
 
 export const PvoTilhorendeDokTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   relevantVurderingsInnsendingId,
+  forPvo,
 }) => {
   const versioner = [
     ...new Set(
@@ -41,7 +43,7 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikk: FunctionComponent<TProps>
                       <Accordion.Content>
                         <PvoTilhorendeDokTilbakemeldingsHistorikkContent
                           tilbakemeldingsinnhold={vurdering.tilhorendeDokumentasjon}
-                          forPvo={true}
+                          forPvo={forPvo}
                         />
                       </Accordion.Content>
                     </Accordion.Item>

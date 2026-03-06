@@ -469,6 +469,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                   pvoTilbakemelding={pvoTilbakemelding}
                   fieldName='risikoscenarioEtterTiltakk'
                   relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                  forPvo={true}
                 />
               </div>
             )}
