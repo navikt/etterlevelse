@@ -7,7 +7,6 @@ import {
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAvdelingOptions, getSeksjonOptionsByAvdelingId } from '@/api/nom/nomApi'
-import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
@@ -38,10 +37,6 @@ import {
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkDokumentStatus,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
@@ -116,8 +111,6 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
       : ''
   )
   const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
-  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
-
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
     : 'Navngi det nye dokumentet ditt'
@@ -154,12 +147,6 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
         ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) =>
           setDokumentRelasjon(response[0])
         )
-
-        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
-          .then((response) => {
-            if (response) setPvkDokument(response)
-          })
-          .catch(() => undefined)
       }
     })()
   }, [etterlevelseDokumentasjon])
