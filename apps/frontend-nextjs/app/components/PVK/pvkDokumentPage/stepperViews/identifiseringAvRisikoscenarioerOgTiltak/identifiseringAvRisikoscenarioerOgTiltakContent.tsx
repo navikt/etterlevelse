@@ -4,13 +4,14 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, ReactNode } from 'react'
 
 type TProps = {
   stylingHeading: string
   etterlevelseDokumentasjonId: string
   risikoscenarioList: IRisikoscenario[]
   antallInnsendingerTilPvo?: number
+  alertChangesMadeAfterApproval?: ReactNode
 }
 
 export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<TProps> = ({
@@ -18,6 +19,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
   etterlevelseDokumentasjonId,
   risikoscenarioList,
   antallInnsendingerTilPvo,
+  alertChangesMadeAfterApproval,
 }) => {
   const router = useRouter()
 
@@ -26,6 +28,8 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
       <Heading level='1' size='medium' className={stylingHeading}>
         Identifisering av risikoscenarioer og tiltak
       </Heading>
+
+      {alertChangesMadeAfterApproval}
 
       <BodyLong>
         I en PVK må dere vurdere sannsynligheten for at personvern ikke ivaretas på tilstrekkelig

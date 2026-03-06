@@ -8,7 +8,8 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { Alert } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { InfoCard } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent, useEffect, useState } from 'react'
 
@@ -120,12 +121,16 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
     <>
       {isChangesMade && (
         <div>
-          <Alert variant='info' className='mt-5'>
-            Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
-            <strong>
-              {moment(approvedDate).format('LL')} kl. {approvedTime}
-            </strong>
-          </Alert>
+          <InfoCard data-color='info' className='my-5 max-w-[75ch]' size='small'>
+            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+              <InfoCard.Title>
+                Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
+                <strong>
+                  {moment(approvedDate).format('LL')} kl. {approvedTime}
+                </strong>
+              </InfoCard.Title>
+            </InfoCard.Header>
+          </InfoCard>
         </div>
       )}
     </>

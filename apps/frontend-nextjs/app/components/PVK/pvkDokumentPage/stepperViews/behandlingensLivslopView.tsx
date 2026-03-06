@@ -197,6 +197,11 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                             Behandlingens livsløp
                           </Heading>
 
+                          <InfoChangesMadeAfterApproval
+                            pvkDokument={pvkDokument}
+                            behandlingensLivslop={behandlingensLivslop}
+                          />
+
                           <BehandlingensLivslopTextContent />
 
                           <BodyShort className='mb-3 mt-8'>
@@ -240,11 +245,6 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                               </Alert>
                             </div>
                           )}
-
-                          <InfoChangesMadeAfterApproval
-                            pvkDokument={pvkDokument}
-                            behandlingensLivslop={behandlingensLivslop}
-                          />
 
                           {!isSubmitting && (
                             <div className='flex gap-2 mt-5 lg:flex-row flex-col'>

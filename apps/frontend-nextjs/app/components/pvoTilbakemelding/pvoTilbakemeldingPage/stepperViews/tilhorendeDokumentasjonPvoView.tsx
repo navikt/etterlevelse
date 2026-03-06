@@ -69,7 +69,6 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
             previousSubmission?.sendtDato
           ).then((previousEtterlevelseDokument) => {
             if (previousEtterlevelseDokument.length !== 0) {
-              console.log(previousEtterlevelseDokument)
               const previousData = (
                 previousEtterlevelseDokument[0].data as {
                   etterlevelseDokumentasjonData?: IEtterlevelseDokumentasjon

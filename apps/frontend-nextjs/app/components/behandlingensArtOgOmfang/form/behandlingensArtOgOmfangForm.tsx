@@ -132,6 +132,8 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 Behandlingens art og omfang
               </Heading>
 
+              {pvkDokument && <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />}
+
               <List>
                 <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
                 {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
@@ -218,8 +220,6 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                   </Alert>
                 </div>
               )}
-
-              {pvkDokument && <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />}
 
               <div className='mt-5 flex gap-2'>
                 <Button
