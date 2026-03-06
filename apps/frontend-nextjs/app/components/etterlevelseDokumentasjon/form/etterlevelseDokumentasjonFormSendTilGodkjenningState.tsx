@@ -102,7 +102,6 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
 
   const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
-  const [customRisikoeierForDev, setCustomRisikoeierForDev] = useState<string>('')
 
   const isForRedigering: boolean = pathName.includes('/edit')
 
@@ -250,6 +249,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                 <List.Item>Egenskaper som gjelder for etterlevelsen</List.Item>
                 <List.Item>Behandlinger</List.Item>
                 <List.Item>Annen dokumentasjon</List.Item>
+                <List.Item>Risikoeier</List.Item>
               </List>
             </InfoCard.Content>
           </InfoCard>
@@ -619,98 +619,50 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
 
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => {
-                const isRisikoeiereFieldLocked =
-                  pvkDokument?.status === EPvkDokumentStatus.TRENGER_GODKJENNING ||
-                  values.status ===
-                    EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                return (
-                  <div className='flex-1'>
-                    <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
-                    {isRisikoeiereFieldLocked && (
-                      <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
-                        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-                          <InfoCard.Title as='div'>
-                            Det er ikke mulig å endre risikoeier når Etterlevelse eller PVK er sendt
-                            til godkjenning hos risikoeier.
-                          </InfoCard.Title>
-                        </InfoCard.Header>
-                      </InfoCard>
-                    )}
-                    <div className='w-full'>
-                      <AsyncSelect
-                        aria-label='Søk etter risikoeier'
-                        placeholder=''
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => {
-                          return noOptionMessage(inputValue)
-                        }}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        isDisabled={isRisikoeiereFieldLocked}
-                        loadOptions={searchResourceByNameOptions}
-                        onChange={(value: any) => {
-                          if (
-                            value &&
-                            fieldArrayRenderProps.form.values.risikoeiereData.filter(
-                              (team: ITeamResource) => team.navIdent === value.navIdent
-                            ).length === 0
-                          ) {
-                            fieldArrayRenderProps.push(value)
-                          }
-                        }}
-                        styles={selectOverrides}
-                      />
-                      <RenderTagList
-                        list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                          (resource: ITeamResource) => resource.fullName
-                        )}
-                        onRemove={
-                          isRisikoeiereFieldLocked ? undefined : fieldArrayRenderProps.remove
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='flex-1'>
+                  <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
+                  <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
+                    <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                      <InfoCard.Title as='div'>
+                        Det er ikke mulig å endre risikoeier når Etterlevelse eller PVK er sendt til
+                        godkjenning hos risikoeier.
+                      </InfoCard.Title>
+                    </InfoCard.Header>
+                  </InfoCard>
+                  <div className='w-full'>
+                    <AsyncSelect
+                      aria-label='Søk etter risikoeier'
+                      placeholder=''
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => {
+                        return noOptionMessage(inputValue)
+                      }}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      isDisabled
+                      loadOptions={searchResourceByNameOptions}
+                      onChange={(value: any) => {
+                        if (
+                          value &&
+                          fieldArrayRenderProps.form.values.risikoeiereData.filter(
+                            (team: ITeamResource) => team.navIdent === value.navIdent
+                          ).length === 0
+                        ) {
+                          fieldArrayRenderProps.push(value)
                         }
-                      />
-                    </div>
-
-                    {env.isDev && !isRisikoeiereFieldLocked && (
-                      <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
-                        <div className='flex gap-2 items-end my-2'>
-                          <TextField
-                            label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
-                            value={customRisikoeierForDev}
-                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                              setCustomRisikoeierForDev(event.target.value)
-                            }
-                          />
-                          <div>
-                            <Button
-                              type='button'
-                              onClick={() => {
-                                fieldArrayRenderProps.push({
-                                  navIdent: customRisikoeierForDev,
-                                  givenName: customRisikoeierForDev,
-                                  familyName: customRisikoeierForDev,
-                                  fullName: customRisikoeierForDev,
-                                  email: customRisikoeierForDev,
-                                  resourceType: customRisikoeierForDev,
-                                })
-                              }}
-                            >
-                              Legg til
-                            </Button>
-                          </div>
-                        </div>
-                        <RenderTagList
-                          list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                            (resource: ITeamResource) => resource.fullName
-                          )}
-                          onRemove={fieldArrayRenderProps.remove}
-                        />
-                      </ReadMore>
-                    )}
+                      }}
+                      styles={selectOverrides}
+                    />
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                        (resource: ITeamResource) => resource.fullName
+                      )}
+                    />
                   </div>
-                )
-              }}
+                </div>
+              )}
             </FieldArray>
 
             <div className='flex-1' />
