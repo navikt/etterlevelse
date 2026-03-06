@@ -7,6 +7,7 @@ import {
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAvdelingOptions, getSeksjonOptionsByAvdelingId } from '@/api/nom/nomApi'
+import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
@@ -37,6 +38,10 @@ import {
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
@@ -45,7 +50,7 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -112,6 +117,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
       : ''
   )
   const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
 
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
@@ -149,6 +155,12 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
         ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) =>
           setDokumentRelasjon(response[0])
         )
+
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+          .then((response) => {
+            if (response) setPvkDokument(response)
+          })
+          .catch(() => undefined)
       }
     })()
   }, [etterlevelseDokumentasjon])
@@ -607,79 +619,97 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
 
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter risikoeier'
-                      placeholder=''
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        return noOptionMessage(inputValue)
-                      }}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={searchResourceByNameOptions}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.risikoeiereData.filter(
-                            (team: ITeamResource) => team.navIdent === value.navIdent
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                        (resource: ITeamResource) => resource.fullName
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
-                    />
-                  </div>
-
-                  {env.isDev && (
-                    <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
-                      <div className='flex gap-2 items-end my-2'>
-                        <TextField
-                          label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
-                          value={customRisikoeierForDev}
-                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                            setCustomRisikoeierForDev(event.target.value)
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => {
+                const isRisikoeiereFieldLocked =
+                  pvkDokument?.status === EPvkDokumentStatus.TRENGER_GODKJENNING ||
+                  values.status ===
+                    EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                return (
+                  <div className='flex-1'>
+                    <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
+                    {isRisikoeiereFieldLocked && (
+                      <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
+                        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                          <InfoCard.Title as='div'>
+                            Risikoeier kan ikke redigeres når Etterlevelse er sendt til godkjenning.
+                          </InfoCard.Title>
+                        </InfoCard.Header>
+                      </InfoCard>
+                    )}
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter risikoeier'
+                        placeholder=''
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => {
+                          return noOptionMessage(inputValue)
+                        }}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        isDisabled={isRisikoeiereFieldLocked}
+                        loadOptions={searchResourceByNameOptions}
+                        onChange={(value: any) => {
+                          if (
+                            value &&
+                            fieldArrayRenderProps.form.values.risikoeiereData.filter(
+                              (team: ITeamResource) => team.navIdent === value.navIdent
+                            ).length === 0
+                          ) {
+                            fieldArrayRenderProps.push(value)
                           }
-                        />
-                        <div>
-                          <Button
-                            type='button'
-                            onClick={() => {
-                              fieldArrayRenderProps.push({
-                                navIdent: customRisikoeierForDev,
-                                givenName: customRisikoeierForDev,
-                                familyName: customRisikoeierForDev,
-                                fullName: customRisikoeierForDev,
-                                email: customRisikoeierForDev,
-                                resourceType: customRisikoeierForDev,
-                              })
-                            }}
-                          >
-                            Legg til
-                          </Button>
-                        </div>
-                      </div>
+                        }}
+                        styles={selectOverrides}
+                      />
                       <RenderTagList
                         list={fieldArrayRenderProps.form.values.risikoeiereData.map(
                           (resource: ITeamResource) => resource.fullName
                         )}
-                        onRemove={fieldArrayRenderProps.remove}
+                        onRemove={
+                          isRisikoeiereFieldLocked ? undefined : fieldArrayRenderProps.remove
+                        }
                       />
-                    </ReadMore>
-                  )}
-                </div>
-              )}
+                    </div>
+
+                    {env.isDev && !isRisikoeiereFieldLocked && (
+                      <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
+                        <div className='flex gap-2 items-end my-2'>
+                          <TextField
+                            label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
+                            value={customRisikoeierForDev}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                              setCustomRisikoeierForDev(event.target.value)
+                            }
+                          />
+                          <div>
+                            <Button
+                              type='button'
+                              onClick={() => {
+                                fieldArrayRenderProps.push({
+                                  navIdent: customRisikoeierForDev,
+                                  givenName: customRisikoeierForDev,
+                                  familyName: customRisikoeierForDev,
+                                  fullName: customRisikoeierForDev,
+                                  email: customRisikoeierForDev,
+                                  resourceType: customRisikoeierForDev,
+                                })
+                              }}
+                            >
+                              Legg til
+                            </Button>
+                          </div>
+                        </div>
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                            (resource: ITeamResource) => resource.fullName
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </ReadMore>
+                    )}
+                  </div>
+                )
+              }}
             </FieldArray>
 
             <div className='flex-1' />
