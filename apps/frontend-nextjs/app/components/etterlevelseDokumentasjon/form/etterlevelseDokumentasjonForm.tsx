@@ -776,7 +776,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                       <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
                         <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                           <InfoCard.Title as='div'>
-                            Risikoeier kan ikke redigeres når PVK er sent til godkjenning.
+                            Risikoeier kan ikke redigeres når PVK er sendt til godkjenning.
                           </InfoCard.Title>
                         </InfoCard.Header>
                       </InfoCard>
