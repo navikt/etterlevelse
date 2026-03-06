@@ -120,7 +120,7 @@ export const PvkOppdatertEtterNyVersjonActionMenuVariant: FunctionComponent<TPro
         as='a'
         href={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument ? pvkDokument.id : 'ny', 1)}
       >
-        Vurderer PVK (ny versjon)
+        Vurder PVK (ny versjon)
       </ActionMenu.Item>
       <PvkBehovActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}

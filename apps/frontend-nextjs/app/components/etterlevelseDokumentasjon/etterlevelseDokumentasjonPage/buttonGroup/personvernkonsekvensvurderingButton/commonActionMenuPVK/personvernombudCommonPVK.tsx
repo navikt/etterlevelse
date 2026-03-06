@@ -46,7 +46,7 @@ export const PersonvernombudSendtForTilbakemeldingActionMenuVariant: FunctionCom
         as='a'
         href={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument ? pvkDokument.id : 'ny', 1)}
       >
-        Vurderer PVK
+        Vurder PVK
       </ActionMenu.Item>
 
       <PvkBehovActionMenuItem
