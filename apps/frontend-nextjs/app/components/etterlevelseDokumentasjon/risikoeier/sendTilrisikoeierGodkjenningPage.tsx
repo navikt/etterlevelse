@@ -20,6 +20,7 @@ import {
 import {
   EPvkDokumentStatus,
   EPvkVurdering,
+  IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   etterlevelseDokumentasjonIdUrl,
@@ -30,7 +31,7 @@ import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 
 export const SendTilRisikoeierGodkjenningPage = () => {
@@ -52,6 +53,21 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       pathName: `E${etterlevelseDokumentasjon?.etterlevelseNummer.toString()}.${etterlevelseDokumentasjon?.etterlevelseDokumentVersjon} ${etterlevelseDokumentasjon?.title}`,
     },
   ]
+
+  const [pvkDokument, setPvkDokument] = useState<IPvkDokument | undefined>(undefined)
+
+  useEffect(() => {
+    if (etterlevelseDokumentasjon?.id) {
+      getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+        .then(setPvkDokument)
+        .catch(() => setPvkDokument(undefined))
+    }
+  }, [etterlevelseDokumentasjon?.id])
+
+  const pvkBlocksSending =
+    pvkDokument !== undefined &&
+    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+    pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
 
   const [submitAlert, setSubmitAlert] = useState<string>('')
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
@@ -115,6 +131,15 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             Send til {etterlevelseDokumentasjon.etterlevelseDokumentVersjon === 1 ? '' : 'ny'}{' '}
             godkjenning
           </Heading>
+          {pvkBlocksSending && (
+            <InfoCard data-color='warning' className='mb-5 max-w-[75ch]' size='small'>
+              <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                <InfoCard.Title>
+                  Dere kan ikke sende etterlevelsen til risikoeier før deres PVK er ferdig godkjent.
+                </InfoCard.Title>
+              </InfoCard.Header>
+            </InfoCard>
+          )}
           {etterlevelseDokumentasjon.risikoeiere.length === 0 && (
             <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
               <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
@@ -243,7 +268,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                           Lagre og fortsett senere
                         </Button>
 
-                        {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
+                        {etterlevelseDokumentasjon.risikoeiere.length > 0 && !pvkBlocksSending && (
                           <Button
                             type='button'
                             variant='primary'
