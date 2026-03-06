@@ -34,10 +34,10 @@ export const EtterlevelsesDokumentasjonGodkjenningsHistorikk: FunctionComponent<
       </Heading>
 
       <Accordion>
-        {etterlevelseDokumentasjon.versjonHistorikk.map((versjon, index) => {
-          const itemId = `${versjon.versjon}_historikk_${index}`
+        {etterlevelseDokumentasjon.versjonHistorikk.map((historikk, index) => {
+          const itemId = `${historikk.versjon}_historikk_${index}`
           const expanded = openItemId === itemId
-          if (versjon.versjon !== etterlevelseDokumentasjon.etterlevelseDokumentVersjon) {
+          if (historikk.versjon !== etterlevelseDokumentasjon.etterlevelseDokumentVersjon) {
             return (
               <Accordion.Item
                 id={itemId}
@@ -46,13 +46,13 @@ export const EtterlevelsesDokumentasjonGodkjenningsHistorikk: FunctionComponent<
                 onOpenChange={(open: boolean) => setOpenItemId(open ? itemId : null)}
               >
                 <Accordion.Header>
-                  Versjon {versjon.versjon}, godkjent av {versjon.godkjentAvRisikoeier},{' '}
-                  {moment(versjon.godkjentAvRisikoierDato).format('LL')}
+                  Versjon {historikk.versjon}, godkjent av {historikk.godkjentAvRisikoeier},{' '}
+                  {moment(historikk.godkjentAvRisikoierDato).format('LL')}
                 </Accordion.Header>
                 <Accordion.Content>
                   {expanded && (
                     <GodkjenningsHistorikkContent
-                      versjonHistorikk={versjon}
+                      versjonHistorikk={historikk}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                     />
                   )}

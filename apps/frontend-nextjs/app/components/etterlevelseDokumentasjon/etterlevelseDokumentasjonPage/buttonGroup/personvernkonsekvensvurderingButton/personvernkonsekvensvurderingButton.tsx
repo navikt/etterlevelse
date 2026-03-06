@@ -7,6 +7,7 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import AdminRollePVK from './adminRollePVK/adminRollePVK'
@@ -20,6 +21,7 @@ type TProps = {
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
   pvkDokument?: IPvkDokument
+  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
@@ -27,6 +29,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   pvkDokument,
   behandlingsLivslop,
   behandlingensArtOgOmfang,
+  pvoTilbakemelding,
 }) => {
   switch (getRolle(etterlevelseDokumentasjon)) {
     case EActionMenuRoles.Etterlever:
@@ -36,6 +39,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
+          pvoTilbakemelding={pvoTilbakemelding}
         />
       )
     case EActionMenuRoles.Personvernombud:
@@ -45,6 +49,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
+          pvoTilbakemelding={pvoTilbakemelding}
         />
       )
     case EActionMenuRoles.Risikoeier:
@@ -54,6 +59,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
+          pvoTilbakemelding={pvoTilbakemelding}
         />
       )
     case EActionMenuRoles.Admin:
@@ -63,6 +69,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
+          pvoTilbakemelding={pvoTilbakemelding}
         />
       )
     case EActionMenuRoles.EtterleverOgRisikoeier:
@@ -72,6 +79,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
+          pvoTilbakemelding={pvoTilbakemelding}
         />
       )
     default:
