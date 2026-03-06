@@ -38,12 +38,27 @@ export const AlertPvoModal: FunctionComponent<TProps> = ({ isOpen, onClose, pvkD
         <div>
           {pvkDokument && pvkDokument.status === EPvkDokumentStatus.UNDERARBEID && (
             <Modal.Body>
-              Kan ikke redigere fordi etterleveren har trukket tilbake innsendingen.
+              Kan ikke angre tilbakemeldingen fordi PVK-en ikke er sendt til PVO.
             </Modal.Body>
           )}
-          {pvkDokument && pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
-            <Modal.Body>Kan ikke redigere på en sendt Pvo tilbakemelding</Modal.Body>
+          {pvkDokument && pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
+            <Modal.Body>
+              Kan ikke angre tilbakemeldingen fordi PVK-en er sendt til risikoeier for godkjenning.
+            </Modal.Body>
           )}
+          {pvkDokument && pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+            <Modal.Body>
+              Kan ikke angre tilbakemeldingen fordi PVK-en er godkjent av risikoeier.
+            </Modal.Body>
+          )}
+          {pvkDokument &&
+            ![
+              EPvkDokumentStatus.UNDERARBEID,
+              EPvkDokumentStatus.TRENGER_GODKJENNING,
+              EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER,
+            ].includes(pvkDokument.status) && (
+              <Modal.Body>Tilbakemeldingen er allerede sendt og kan ikke angres.</Modal.Body>
+            )}
           <Modal.Footer>
             <Button type='button' onClick={() => onClose()}>
               Lukk
