@@ -8,6 +8,7 @@ import BehandlingensArtOgOmfangForm from '@/components/behandlingensArtOgOmfang/
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -104,6 +105,17 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                   tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
                   sentDate={relevantVurdering.sendtDato}
                 />
+
+                {pvkDokument.antallInnsendingTilPvo > 1 && (
+                  <div className='mt-10'>
+                    <PvoTilbakemeldingsHistorikk
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      fieldName='behandlingensArtOgOmfang'
+                      relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                      forPvo={false}
+                    />
+                  </div>
+                )}
               </PvkSidePanelWrapper>
             </div>
           )}

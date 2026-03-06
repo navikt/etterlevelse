@@ -2,9 +2,11 @@ import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper
 import FormButtons from '@/components/PVK/edit/formButtons'
 import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
+import PvoTilhorendeDokTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilhorendeDokTilbakemeldingsHistorikk'
 import TilhorendeDokumentasjonTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import {
   EPvoTilbakemeldingStatus,
@@ -18,6 +20,7 @@ type TProps = {
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
+  pvkDokument: IPvkDokument
   pvkKrav:
     | {
         krav: IPageResponse<TKravQL>
@@ -31,6 +34,7 @@ type TProps = {
 export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   activeStep,
+  pvkDokument,
   setActiveStep,
   setSelectedStep,
   pvkKrav,
@@ -57,6 +61,16 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
                   tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
                   sentDate={relevantVurdering.sendtDato}
                 />
+
+                {pvkDokument.antallInnsendingTilPvo > 1 && (
+                  <div className='mt-10'>
+                    <PvoTilhorendeDokTilbakemeldingsHistorikk
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                      forPvo={false}
+                    />
+                  </div>
+                )}
               </PvkSidePanelWrapper>
             </div>
           )}

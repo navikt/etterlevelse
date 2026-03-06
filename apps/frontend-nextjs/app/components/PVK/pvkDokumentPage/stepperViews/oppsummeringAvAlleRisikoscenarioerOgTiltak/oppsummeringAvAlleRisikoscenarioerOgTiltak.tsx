@@ -4,6 +4,7 @@ import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikosce
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
 import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
@@ -601,6 +602,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                 tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
                 sentDate={relevantVurdering.sendtDato}
               />
+
+              {pvkDokument.antallInnsendingTilPvo > 1 && (
+                <div className='mt-10'>
+                  <PvoTilbakemeldingsHistorikk
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    fieldName='risikoscenarioEtterTiltakk'
+                    relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                    forPvo={false}
+                  />
+                </div>
+              )}
             </PvkSidePanelWrapper>
           )}
         </div>

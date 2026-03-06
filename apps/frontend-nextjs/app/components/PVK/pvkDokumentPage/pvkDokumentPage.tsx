@@ -293,6 +293,7 @@ export const PvkDokumentPage = () => {
                       setActiveStep={updateTitleUrlAndStep}
                       setSelectedStep={setSelectedStep}
                       pvkKrav={pvkKrav}
+                      pvkDokument={pvkDokument}
                       isPvkKravLoading={isPvkKravLoading}
                     />
                   )}

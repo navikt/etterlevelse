@@ -32,6 +32,7 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikk: FunctionComponent<TProps>
           <Accordion className='mt-3'>
             {pvoTilbakemelding.vurderinger
               .filter((vurdering) => vurdering.etterlevelseDokumentVersjon === version)
+              .sort((a, b) => b.innsendingId - a.innsendingId)
               .map((vurdering) => {
                 if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
                   return (

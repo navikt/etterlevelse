@@ -17,6 +17,7 @@ import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoade
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { IBehandlingensLivslopRequest } from '@/constants/behandlingensLivslop/behandlingensLivslop'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
@@ -320,6 +321,16 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                     tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
                     sentDate={relevantVurdering.sendtDato}
                   />
+                  {pvkDokument.antallInnsendingTilPvo > 1 && (
+                    <div className='mt-10'>
+                      <PvoTilbakemeldingsHistorikk
+                        pvoTilbakemelding={pvoTilbakemelding}
+                        fieldName='behandlingenslivslop'
+                        relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                        forPvo={false}
+                      />
+                    </div>
+                  )}
                 </PvkSidePanelWrapper>
               )}
 

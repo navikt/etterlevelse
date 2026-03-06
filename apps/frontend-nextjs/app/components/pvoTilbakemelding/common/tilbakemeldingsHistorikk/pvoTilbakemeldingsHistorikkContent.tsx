@@ -47,9 +47,11 @@ export const PvoTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
       </div>
     )}
 
-    <Heading level='4' size='small' className='mb-5 mt-7'>
-      Gi tilbakemelding
-    </Heading>
+    {forPvo && (
+      <Heading level='4' size='small' className='mb-5 mt-7'>
+        Gi tilbakemelding
+      </Heading>
+    )}
 
     <div className='w-full'>
       <Label>Vurdering av etterleverens svar.</Label>

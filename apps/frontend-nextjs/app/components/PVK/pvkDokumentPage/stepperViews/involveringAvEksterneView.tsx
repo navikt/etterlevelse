@@ -13,6 +13,7 @@ import { BoolField } from '@/components/common/inputs'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -414,6 +415,17 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                   tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
                   sentDate={relevantVurdering.sendtDato}
                 />
+
+                {pvkDokument.antallInnsendingTilPvo > 1 && (
+                  <div className='mt-10'>
+                    <PvoTilbakemeldingsHistorikk
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      fieldName='innvolveringAvEksterne'
+                      relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                      forPvo={false}
+                    />
+                  </div>
+                )}
               </PvkSidePanelWrapper>
             </div>
           )}
