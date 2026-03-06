@@ -26,7 +26,8 @@ import {
   etterlevelsesDokumentasjonEditUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Alert, BodyLong, Button, Heading, Label, Link, List } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, Button, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
@@ -58,7 +59,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
       if (response.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) {
-        setSubmitAlert('Kan ikke redigere en etterlevelse som er godkjent av risikoeier.')
+        setSubmitAlert('Etterlevelsesdokument er allerede godkjent av risikoeier.')
       } else {
         const pvkDokument = await getPvkDokumentByEtterlevelseDokumentId(submitValues.id).catch(
           () => undefined
@@ -114,21 +115,27 @@ export const SendTilRisikoeierGodkjenningPage = () => {
             godkjenning
           </Heading>
           {etterlevelseDokumentasjon.risikoeiere.length === 0 && (
-            <Alert variant='warning' className='my-5 max-w-[75ch]'>
-              <Heading spacing size='small' level='3'>
-                Denne etterlevelsen har ikke en nevnt risikoeier
-              </Heading>
-              Risikoeier må legges til under{' '}
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                href={`${etterlevelsesDokumentasjonEditUrl(params.etterlevelseDokumentasjonId)}#risikoeiereData`}
-                className='inline'
-              >
-                Rediger dokumentegenskaper.
-              </Link>{' '}
-              Dere kan ikke sende etterlevelsen til godkjenning uten en utnevnt risikoeier.
-            </Alert>
+            <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
+              <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                <InfoCard.Title>
+                  <div>
+                    <Heading spacing size='small' level='3'>
+                      Denne etterlevelsen har ingen risikoeier
+                    </Heading>
+                    Risikoeier må legges til under{' '}
+                    <Link
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      href={`${etterlevelsesDokumentasjonEditUrl(params.etterlevelseDokumentasjonId)}#risikoeiereData`}
+                      className='inline'
+                    >
+                      Rediger dokumentegenskaper.
+                    </Link>{' '}
+                    Dere kan ikke sende etterlevelsen til godkjenning uten en utnevnt risikoeier.
+                  </div>
+                </InfoCard.Title>
+              </InfoCard.Header>
+            </InfoCard>
           )}
           <BodyLong>
             Dere kan til enhver tid be risikoeier om å godkjenne etterlevelsesdokumentasjonen.
@@ -173,55 +180,55 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                       />
                     </div>
 
-                    {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
-                      <div>
-                        <div className='my-10 max-w-[75ch]'>
-                          <Alert variant='info' inline>
-                            Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen
-                            låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil
-                            dere kunne redigere på nytt.
+                    <div>
+                      <div className='my-10 max-w-[75ch]'>
+                        <Alert variant='info' inline>
+                          Når dere sender etterlevelsen til godkjenning, vil hele dokumentasjonen
+                          låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere
+                          kunne redigere på nytt.
+                        </Alert>
+                      </div>
+
+                      {saveSuccessfull && (
+                        <div className='my-5 max-w-[75ch]'>
+                          <Alert
+                            size='small'
+                            variant='success'
+                            closeButton
+                            onClose={() => setSaveSuccessfull(false)}
+                          >
+                            Lagring vellykket
                           </Alert>
                         </div>
+                      )}
 
-                        {saveSuccessfull && (
-                          <div className='my-5 max-w-[75ch]'>
-                            <Alert
-                              size='small'
-                              variant='success'
-                              closeButton
-                              onClose={() => setSaveSuccessfull(false)}
-                            >
-                              Lagring vellykket
-                            </Alert>
-                          </div>
-                        )}
+                      {submitAlert !== '' && (
+                        <Alert
+                          variant='error'
+                          className='my-5 max-w-[75ch]'
+                          closeButton={true}
+                          onClose={() => setSubmitAlert('')}
+                        >
+                          {submitAlert}
+                        </Alert>
+                      )}
 
-                        {submitAlert !== '' && (
-                          <Alert
-                            variant='error'
-                            className='my-5 max-w-[75ch]'
-                            closeButton={true}
-                            onClose={() => setSubmitAlert('')}
-                          >
-                            {submitAlert}
-                          </Alert>
-                        )}
+                      <div className='flex items-center mt-5 gap-2'>
+                        <Button
+                          type='button'
+                          variant='secondary'
+                          onClick={async () => {
+                            await setFieldValue(
+                              'status',
+                              EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+                            )
+                            await submitForm()
+                          }}
+                        >
+                          Lagre og fortsett senere
+                        </Button>
 
-                        <div className='flex items-center mt-5 gap-2'>
-                          <Button
-                            type='button'
-                            variant='secondary'
-                            onClick={async () => {
-                              await setFieldValue(
-                                'status',
-                                EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
-                              )
-                              await submitForm()
-                            }}
-                          >
-                            Lagre og fortsett senere
-                          </Button>
-
+                        {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
                           <Button
                             type='button'
                             variant='primary'
@@ -236,9 +243,9 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                           >
                             Lagre og send til godkjenning
                           </Button>
-                        </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </Form>
                 )}
               </Formik>
