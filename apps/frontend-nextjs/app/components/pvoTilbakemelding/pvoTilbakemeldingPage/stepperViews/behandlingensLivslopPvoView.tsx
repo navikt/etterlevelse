@@ -112,6 +112,7 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
                 <PvoSidePanelWrapper>
                   {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                     <PvoTilbakemeldingReadOnly
+                      relevantVurdering={relevantVurdering}
                       tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
                       sentDate={relevantVurdering.sendtDato}
                       forPvo={true}

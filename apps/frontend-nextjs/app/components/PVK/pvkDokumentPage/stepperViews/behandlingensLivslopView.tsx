@@ -316,6 +316,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               relevantVurdering && (
                 <PvkSidePanelWrapper>
                   <PvoTilbakemeldingReadOnly
+                    relevantVurdering={relevantVurdering}
                     tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
                     sentDate={relevantVurdering.sendtDato}
                   />

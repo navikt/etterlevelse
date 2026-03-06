@@ -597,6 +597,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           {isPvoTilbakemeldingFerdig && relevantVurdering && (
             <PvkSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
+                relevantVurdering={relevantVurdering}
                 tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
                 sentDate={relevantVurdering.sendtDato}
               />

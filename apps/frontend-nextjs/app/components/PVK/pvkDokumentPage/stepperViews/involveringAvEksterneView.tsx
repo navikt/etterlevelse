@@ -410,6 +410,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
             <div>
               <PvkSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
                   tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
                   sentDate={relevantVurdering.sendtDato}
                 />
