@@ -55,8 +55,9 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
   const [submitAlert, setSubmitAlert] = useState<string>('')
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
+  const [trekkInnsendingSuccessfull, setTrekkInnsendingSuccessfull] = useState<boolean>(false)
 
-  const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
+  const submit = async (submitValues: IEtterlevelseDokumentasjon, skipSaveAlert?: boolean) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
       if (response.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) {
         setSubmitAlert('Etterlevelsesdokument er allerede godkjent av risikoeier.')
@@ -82,7 +83,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
           await updateEtterlevelseDokumentasjon(updatedEtterlevelseDokumentasjon).then((resp) => {
             setEtterlevelseDokumentasjon(resp)
-            setSaveSuccessfull(true)
+            if (!skipSaveAlert) setSaveSuccessfull(true)
           })
         }
       }
@@ -165,7 +166,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                 validateOnChange={false}
                 validateOnBlur={false}
                 initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
-                onSubmit={submit}
+                onSubmit={(values) => submit(values)}
               >
                 {({ submitForm, setFieldValue }) => (
                   <Form>
@@ -202,6 +203,19 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                         </div>
                       )}
 
+                      {trekkInnsendingSuccessfull && (
+                        <div className='my-5 max-w-[75ch]'>
+                          <Alert
+                            size='small'
+                            variant='success'
+                            closeButton
+                            onClose={() => setTrekkInnsendingSuccessfull(false)}
+                          >
+                            Innsending er trukket
+                          </Alert>
+                        </div>
+                      )}
+
                       {submitAlert !== '' && (
                         <Alert
                           variant='error'
@@ -222,6 +236,7 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                               'status',
                               EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
                             )
+                            setTrekkInnsendingSuccessfull(false)
                             await submitForm()
                           }}
                         >
@@ -305,10 +320,15 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                       variant='primary'
                       type='button'
                       onClick={async () => {
-                        await submit({
-                          ...etterlevelseDokumentasjon,
-                          status: EEtterlevelseDokumentasjonStatus.UNDER_ARBEID,
-                        })
+                        await submit(
+                          {
+                            ...etterlevelseDokumentasjon,
+                            status: EEtterlevelseDokumentasjonStatus.UNDER_ARBEID,
+                          },
+                          true
+                        )
+                        setSaveSuccessfull(false)
+                        setTrekkInnsendingSuccessfull(true)
                       }}
                     >
                       Trekk innsending
