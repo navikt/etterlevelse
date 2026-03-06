@@ -107,6 +107,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
             <PvoSidePanelWrapper>
               {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                 <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
                   tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
                   sentDate={relevantVurdering.sendtDato}
                   forPvo={true}

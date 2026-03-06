@@ -122,7 +122,7 @@ const PersonvernombudRollePVK: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return <></>
+      return <>Feilmelding: Denne tilstanden finnes ikke</>
   }
 }
 

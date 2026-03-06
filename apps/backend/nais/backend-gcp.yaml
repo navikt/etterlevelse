@@ -81,8 +81,6 @@ spec:
           permissions:
             roles:
               - "arkiv-admin"
-      external:
-        - host: {{ardoq_ingress}}
     outbound:
       rules:
         - application: behandlingskatalog-backend

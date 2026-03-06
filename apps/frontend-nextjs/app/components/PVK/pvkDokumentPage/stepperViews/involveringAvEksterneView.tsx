@@ -112,6 +112,8 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           Involvering av eksterne deltakere
                         </Heading>
 
+                        <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />
+
                         <BodyLong className='mb-3'>
                           Personene Nav behandler personopplysninger om, kaller vi for &quot;de
                           registrerte&quot;.
@@ -265,8 +267,6 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           </div>
                         )}
 
-                        <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />
-
                         <div className='flex gap-2 mt-5'>
                           <Button
                             type='button'
@@ -410,6 +410,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
             <div>
               <PvkSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
                   tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
                   sentDate={relevantVurdering.sendtDato}
                 />

@@ -77,6 +77,13 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
           risikoscenarioList={risikoscenarioList}
           antallInnsendingerTilPvo={pvkDokument?.antallInnsendingTilPvo}
+          alertChangesMadeAfterApproval={
+            <InfoChangesMadeAfterApproval
+              pvkDokument={pvkDokument}
+              alleRisikoscenario={allRisikoscenarioList}
+              alleTiltak={tiltakList}
+            />
+          }
         />
 
         {pvkDokument &&
@@ -144,12 +151,6 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
             />
           </div>
         )}
-
-        <InfoChangesMadeAfterApproval
-          pvkDokument={pvkDokument}
-          alleRisikoscenario={allRisikoscenarioList}
-          alleTiltak={tiltakList}
-        />
 
         <FormButtons
           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

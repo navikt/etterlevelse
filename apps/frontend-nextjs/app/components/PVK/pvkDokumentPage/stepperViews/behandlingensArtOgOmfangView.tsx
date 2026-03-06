@@ -100,6 +100,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
             <div>
               <PvkSidePanelWrapper>
                 <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
                   tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
                   sentDate={relevantVurdering.sendtDato}
                 />

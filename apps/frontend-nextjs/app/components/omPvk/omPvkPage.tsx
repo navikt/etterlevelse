@@ -256,12 +256,12 @@ const OmPvkPage = () => {
             Dere har en PVK i Word som allerede er godkjent og arkivert
           </Heading>
           <BodyLong className='mt-3'>
-            <b>Hvis ikke risikobildet er endret </b>, skal ikke deres godkjente, arkiverte PVK inn i
+            <i>Hvis ikke risikobildet er endret </i>, skal ikke deres godkjente, arkiverte PVK inn i
             ny løsning. Men dere skal likevel registrere denne vurderingen under «Vurder behov for
             PVK». Her velger dere «Vi har en PVK i Word som ikke trenger en ny vurdering».
           </BodyLong>
           <BodyLong className='mt-3'>
-            <b>Hvis risikobildet er endret </b>, siden dere fikk godkjent og arkivert deres PVK, bør
+            <i>Hvis risikobildet er endret </i>, siden dere fikk godkjent og arkivert deres PVK, bør
             dere bruke ny løsning til å dokumentere framover. Det er dessverre ikke mulig å
             importere eksisterende PVK-er fra Word. Da må dere klippe og lime tidligere innhold i
             Word over i den nye løsningen og oppdatere med det som er nytt. Dere kan også legge inn

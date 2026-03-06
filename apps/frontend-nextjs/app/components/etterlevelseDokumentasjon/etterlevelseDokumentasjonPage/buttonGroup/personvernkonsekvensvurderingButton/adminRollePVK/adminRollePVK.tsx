@@ -15,6 +15,7 @@ import {
   PvkUnderArbeidActionMenuVariant,
 } from '../commonActionMenuPVK/commonPVK'
 import {
+  EtterleverSkalIkkeUtforePvkActionMenuVariant,
   EtterleverSkalUtforePvkIkkePabegyntActionMenuVariant,
   PvkGodkjentAvRisikoeierActionMenuVariant,
 } from '../commonActionMenuPVK/etterleverCommonPVK'
@@ -47,7 +48,7 @@ const AdminRollePVK: FunctionComponent<TProps> = ({
       )
     case EPVKTilstandStatus.TILSTAND_STATUS_TWO:
       return (
-        <PvkIkkeVurdertActionMenuVariant
+        <EtterleverSkalIkkeUtforePvkActionMenuVariant
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           pvkDokument={pvkDokument}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -127,7 +128,7 @@ const AdminRollePVK: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return <></>
+      return <>Feilmelding: Denne tilstanden finnes ikke</>
   }
 }
 

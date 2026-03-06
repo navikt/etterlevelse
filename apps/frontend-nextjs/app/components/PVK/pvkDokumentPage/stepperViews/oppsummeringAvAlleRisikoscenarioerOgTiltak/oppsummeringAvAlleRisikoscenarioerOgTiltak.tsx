@@ -322,6 +322,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
               Risikobildet etter tiltak
             </Heading>
 
+            <div className='max-w-204 mt-5'>
+              <InfoChangesMadeAfterApproval
+                pvkDokument={pvkDokument}
+                alleRisikoscenario={risikoscenarioList}
+                alleTiltak={tiltakList}
+              />
+            </div>
+
             <BodyLong className='mt-5'>
               Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er
               gjennomført.
@@ -589,19 +597,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           {isPvoTilbakemeldingFerdig && relevantVurdering && (
             <PvkSidePanelWrapper>
               <PvoTilbakemeldingReadOnly
+                relevantVurdering={relevantVurdering}
                 tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
                 sentDate={relevantVurdering.sendtDato}
               />
             </PvkSidePanelWrapper>
           )}
         </div>
-      </div>
-      <div className='max-w-204 mt-5'>
-        <InfoChangesMadeAfterApproval
-          pvkDokument={pvkDokument}
-          alleRisikoscenario={risikoscenarioList}
-          alleTiltak={tiltakList}
-        />
       </div>
 
       <FormButtons

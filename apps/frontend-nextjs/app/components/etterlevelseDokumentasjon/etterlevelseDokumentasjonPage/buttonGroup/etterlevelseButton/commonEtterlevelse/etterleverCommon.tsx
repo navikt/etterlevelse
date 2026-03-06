@@ -84,6 +84,7 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
 }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isNewVersionModalOpen, setIsNewVersionModalOpen] = useState<boolean>(false)
+  
   return (
     <>
       <ActionMenu>

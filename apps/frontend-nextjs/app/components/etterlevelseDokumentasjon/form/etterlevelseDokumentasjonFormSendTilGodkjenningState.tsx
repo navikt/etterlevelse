@@ -225,7 +225,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
             Rediger etterlevelsesdokumentet
           </Heading>
 
-          <InfoCard data-color='warning' className='mb-5'>
+          <InfoCard data-color='warning' className='mb-5' size='small'>
             <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
               <InfoCard.Title>
                 Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det

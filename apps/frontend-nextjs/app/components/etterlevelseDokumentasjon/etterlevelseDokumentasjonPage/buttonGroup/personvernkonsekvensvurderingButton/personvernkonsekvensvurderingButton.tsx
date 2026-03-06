@@ -8,8 +8,8 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { UserContext } from '@/provider/user/userProvider'
-import { FunctionComponent, useContext } from 'react'
+import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
+import { FunctionComponent } from 'react'
 import AdminRollePVK from './adminRollePVK/adminRollePVK'
 import EtterleverOgRisikoeierRollePVK from './etterleverOgRisikoeierRollePVK/etterleverOgRisikoeierRollePVK'
 import EtterleverRollePVK from './etterleverRollePVK/etterleverRollePVK'
@@ -31,28 +31,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   behandlingensArtOgOmfang,
   pvoTilbakemelding,
 }) => {
-  const user = useContext(UserContext)
-
-  const getRole = (): EActionMenuRoles => {
-    if (user.isAdmin()) {
-      return EActionMenuRoles.Admin
-    } else if (user.isPersonvernombud()) {
-      return EActionMenuRoles.Personvernombud
-    } else if (
-      etterlevelseDokumentasjon.hasCurrentUserAccess &&
-      etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
-    ) {
-      return EActionMenuRoles.EtterleverOgRisikoeier
-    } else if (etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) {
-      return EActionMenuRoles.Risikoeier
-    } else if (etterlevelseDokumentasjon.hasCurrentUserAccess) {
-      return EActionMenuRoles.Etterlever
-    } else {
-      return EActionMenuRoles.Les
-    }
-  }
-
-  switch (getRole()) {
+  switch (getRolle(etterlevelseDokumentasjon)) {
     case EActionMenuRoles.Etterlever:
       return (
         <EtterleverRollePVK
@@ -104,6 +83,6 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return <></>
+      return <>Feilmelding: Denne rollen finnes ikke</>
   }
 }

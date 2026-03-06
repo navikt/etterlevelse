@@ -1,5 +1,8 @@
 import { Markdown } from '@/components/common/markdown/markdown'
-import { ITilbakemeldingsinnhold } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import {
+  ITilbakemeldingsinnhold,
+  IVurdering,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
@@ -11,6 +14,7 @@ export enum EBidragVerdier {
 }
 
 type TProps = {
+  relevantVurdering: IVurdering
   tilbakemeldingsinnhold: ITilbakemeldingsinnhold
   sentDate: string
   forPvo?: boolean
@@ -29,6 +33,7 @@ export const bidragsVerdierToText = (bidragsVerdi: EBidragVerdier) => {
 }
 
 export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
+  relevantVurdering,
   tilbakemeldingsinnhold,
   sentDate,
   forPvo,
@@ -61,9 +66,13 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
     )}
 
     {sentDate && sentDate.length !== 0 && (
-      <BodyShort size='medium' className='pb-5'>
-        Tilbakemeldingsdato: {moment(sentDate).format('LL')}
-      </BodyShort>
+      <div className='pb-5'>
+        <Label>
+          Versjon {relevantVurdering.etterlevelseDokumentVersjon}, tilbakemelding på{' '}
+          {relevantVurdering.innsendingId}. innsending
+        </Label>
+        <BodyShort size='medium'>{moment(sentDate).format('LL')}</BodyShort>
+      </div>
     )}
 
     <div className='w-full'>

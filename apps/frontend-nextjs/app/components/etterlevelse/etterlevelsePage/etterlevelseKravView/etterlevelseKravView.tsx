@@ -265,7 +265,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               {etterlevelseDokumentasjon &&
                 etterlevelseDokumentasjon.status !==
                   EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
-                  <InfoCard data-color='warning' className='my-5 max-w-[75ch]'>
+                  <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
                     <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
                       <InfoCard.Title>
                         Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,

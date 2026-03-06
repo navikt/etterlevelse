@@ -445,6 +445,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
           <PvoSidePanelWrapper>
             {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
               <PvoTilbakemeldingReadOnly
+                relevantVurdering={relevantVurdering}
                 tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
                 sentDate={relevantVurdering.sendtDato}
                 forPvo={true}

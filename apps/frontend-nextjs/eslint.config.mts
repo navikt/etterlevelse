@@ -1,24 +1,19 @@
-import { FlatCompat } from '@eslint/eslintrc'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
+import coreWebVitals from 'eslint-config-next/core-web-vitals'
+import nextTypescript from 'eslint-config-next/typescript'
+import eslintConfigPrettier from 'eslint-config-prettier'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
+import prettierPlugin from 'eslint-plugin-prettier'
 
 const eslintConfig = [
-  ...compat.extends(
-    'next/core-web-vitals',
-    'next/typescript',
-    'plugin:jsx-a11y/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended'
-  ),
+  ...coreWebVitals,
+  ...nextTypescript,
   {
+    plugins: {
+      prettier: prettierPlugin,
+    },
     rules: {
+      ...eslintConfigPrettier.rules,
+      ...jsxA11y.flatConfigs.recommended.rules,
       '@typescript-eslint/ban-ts-ignore': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -50,7 +45,6 @@ const eslintConfig = [
           },
         },
       ],
-      // React plugin rules removed to avoid legacy plugin circular config issues in FlatCompat
       'no-console': ['warn', { allow: ['warn', 'error', 'debug'] }],
       // no-extra-semi is added because there are places where the ; is necessary
       'no-extra-semi': 'off',

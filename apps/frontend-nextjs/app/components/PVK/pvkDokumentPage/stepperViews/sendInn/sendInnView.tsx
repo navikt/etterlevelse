@@ -548,6 +548,18 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 <Heading level='1' size='medium' className='mb-5'>
                   Les og send inn
                 </Heading>
+
+                <div className='flex justify-center w-full'>
+                  <div className='max-w-[75ch]'>
+                    <InfoChangesMadeAfterApproval
+                      pvkDokument={pvkDokument}
+                      behandlingensLivslop={behandlingensLivslop}
+                      alleRisikoscenario={alleRisikoscenario}
+                      alleTiltak={alleTiltak}
+                    />
+                  </div>
+                </div>
+
                 <BodyLong>
                   Her kan dere lese over det som er lagt inn i PVK-en. Hvis dere oppdager feil eller
                   mangel, er det mulig å gå tilbake og endre svar. Til slutt er det plass til å
@@ -823,16 +835,6 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           }
                         />
                       )}
-                    <div className='flex justify-center w-full'>
-                      <div className='max-w-[75ch]'>
-                        <InfoChangesMadeAfterApproval
-                          pvkDokument={pvkDokument}
-                          behandlingensLivslop={behandlingensLivslop}
-                          alleRisikoscenario={alleRisikoscenario}
-                          alleTiltak={alleTiltak}
-                        />
-                      </div>
-                    </div>
                   </div>
                 </div>
 
