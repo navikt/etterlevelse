@@ -768,7 +768,9 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             <FieldArray name='risikoeiereData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => {
                 const isRisikoeiereFieldLocked =
-                  pvkDokument?.status === EPvkDokumentStatus.TRENGER_GODKJENNING
+                  pvkDokument?.status === EPvkDokumentStatus.TRENGER_GODKJENNING ||
+                  values.status ===
+                    EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
                 return (
                   <div className='flex-1'>
                     <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
