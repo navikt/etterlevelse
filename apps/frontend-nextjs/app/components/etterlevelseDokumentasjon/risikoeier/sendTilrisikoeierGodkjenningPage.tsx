@@ -60,7 +60,9 @@ export const SendTilRisikoeierGodkjenningPage = () => {
       if (response.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) {
         setSubmitAlert('Kan ikke redigere en etterlevelse som er godkjent av risikoeier.')
       } else {
-        const pvkDokument = await getPvkDokumentByEtterlevelseDokumentId(submitValues.id)
+        const pvkDokument = await getPvkDokumentByEtterlevelseDokumentId(submitValues.id).catch(
+          () => undefined
+        )
         if (
           pvkDokument &&
           pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
