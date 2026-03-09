@@ -33,11 +33,17 @@ Systemet støtter i dag følgende PVK-vurderinger:
 ### Regler for oppretting av etterlevelsesdokumentasjon
 
 1. Etterlevelsesdokumentasjon **skal** opprettes for alle behandlinger som er registrert i Behandlingskatalogen og er i aktiv bruk.
+
+// **Kommentar:** Dette innrømmer ikke at du kan ha en etterlevelse som ikke bruker en behandling, som du faktisk kan. Ei heller at man kan ha med to eller flere behandlinger i samme etterlevelsesdokument.
+
 2. Det er **ett etterlevelsesdokument per behandling**. Duplikater er ikke tillatt.
 
-// **Presisering:** Det er ikke 1:1 Behandling:Etterlevelsesdokument. Du kan ha 0:1, 1:1, 2:1 osv.  
+// **Feil:** Det er ikke 1:1 Behandling:Etterlevelsesdokument. Du kan ha 0:1, 1:1, 2:1 osv.  
 
 3. Det er **behandlingsansvarlig team** som oppretter og eier etterlevelsesdokumentasjonen.
+
+// **Hva vil det si å være behandlingsansvarlig?**
+
 4. Etterlevelsesdokumentasjonen skal romme besvarelse av etterlevelseskravene, vurdering av om PVK er nødvendig, og risikoeiers godkjenning.
 
 ### Regler for oppretting av PVK
