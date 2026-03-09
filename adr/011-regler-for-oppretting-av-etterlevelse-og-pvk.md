@@ -6,14 +6,9 @@
 
 ## Kontekst
 
-
 Det er behov for å definere klare regler for hvordan etterlevelsesdokumentasjon og personvernkonsekvensvurdering (PVK) opprettes, redigeres, vurderes av PVO, godkjennes av risikoeier og versjoneres.
 
-Etterlevelsesdokumentasjon brukes til å dokumentere at krav er oppfylt. Den kan knyttes til én eller flere behandlinger i Behandlingskatalogen (BK), men det er ikke et krav at alle etterlevelsesdokumenter har en tilknyttet behandling i BK. 
-
-Etterlevelsesdokumentasjon er knyttet til en behandling i Behandlingskatalogen og brukes til å dokumentere at krav er oppfylt.
-
-// **Pirk:** Det er ikke sånn at alle etterlevelser vil ha en behandling i BK (tror jeg –– CJA).
+Etterlevelsesdokumentasjon brukes til å dokumentere at krav er oppfylt. Den kan knyttes til én eller flere behandlinger i Behandlingskatalogen, men det er ikke et krav at alle etterlevelsesdokumenter har en tilknyttet behandling i Behandlingskatalogen.
 
 PVK er en grundig risikovurdering som gjøres for behandlinger der det er høy risiko for at folks rettigheter og friheter ikke ivaretas godt nok, jf. GDPR artikkel 35.
 
@@ -35,7 +30,7 @@ Systemet støtter i dag følgende PVK-vurderinger:
 
 2. Det er **ett etterlevelsesdokument per behandling**. Duplikater er ikke tillatt.
 
-// **Feil:** Det er ikke 1:1 Behandling:Etterlevelsesdokument. Du kan ha 0:1, 1:1, 2:1 osv.  
+// **Feil:** Det er ikke 1:1 Behandling:Etterlevelsesdokument. Du kan ha 0:1, 1:1, 2:1 osv.
 
 3. Det er **behandlingsansvarlig team** som oppretter og eier etterlevelsesdokumentasjonen.
 
