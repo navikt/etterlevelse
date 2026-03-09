@@ -40,7 +40,17 @@ Systemet støtter i dag følgende PVK-vurderinger:
    - Det finnes minst ett risikoscenario med navn og beskrivelse (Identifisering av risikoscenarioer og tiltak)
    - Minst ett felt for involvering av eksterne er utfylt, dvs. involvering av representanter eller databehandlerrepresentanter (Involvering av eksterne)
    - Det er lagt inn en kommentar til PVO.
-7. Dersom PVO vurderer at PVK-en trenger mer arbeid (`VURDERT_AV_PVO_TRENGER_MER_ARBEID`), **skal** etterlever gjennomgå PVOs tilbakemelding, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`). PVK-en kan ikke gå videre til risikoeier for godkjenning uten at PVO er fornøyd med arbeidet.
+7. Når PVO har vurdert PVK-en, gir de én av følgende tilbakemeldinger. Etterlever **skal** lese tilbakemeldingen, ta stilling til kommentarene og gjøre nødvendige endringer før PVK-en sendes videre til risikoeier for godkjenning. Dersom PVO mener PVK-en trenger mer arbeid (`VURDERT_AV_PVO_TRENGER_MER_ARBEID`), skal etterlever sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`) — og PVK-en kan ikke gå videre til risikoeier uten at PVO er fornøyd.
+
+   | PVOs vurdering | Hva etterlever skal gjøre |
+   |---|---|
+   | **Dette er en god PVK** | Les og ta stilling til tilbakemeldinger, gjør eventuelle endringer – send deretter PVK-en til risikoeier for godkjenning. |
+   | **PVK-en er stort sett bra** | Les og ta stilling til tilbakemeldinger, gjør eventuelle endringer – send deretter PVK-en til risikoeier for godkjenning. |
+   | **PVK-en har noen mangler** | Ta stilling til kommentarene og gjør endringer. PVO forutsetter at endringene er gjort før PVK-en sendes til risikoeier. |
+   | **PVK-en har en hel del mangler** | Ta stilling til kommentarene og gjør nødvendige endringer. Det anbefales at behandlingen ikke starter, eller stoppes, inntil endringene er utført og PVK-en er sendt til risikoeier. |
+   | **PVK-en har grunnleggende mangler** | Ta stilling til kommentarene og gjør nødvendige endringer. Behandlingen bør stoppes inntil endringene er utført. PVO ber om at risikoeier ikke godkjenner PVK-en før dette er gjort. PVO kan eskalere saken til nødvendig ledelsesnivå. |
+
+   PVO kan i tillegg angi om de vil følge opp endringene etterlever gjør, eller om de ønsker å få PVK-en i retur etter at etterlever har gjennomgått tilbakemeldingene.
 
 
 ### Statusflyt for PVK
