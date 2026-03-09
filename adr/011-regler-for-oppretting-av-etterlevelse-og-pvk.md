@@ -13,6 +13,7 @@ Etterlevelsesdokumentasjon er knyttet til en behandling i Behandlingskatalogen o
 PVK er en grundig risikovurdering som gjøres for behandlinger der det er høy risiko for at folks rettigheter og friheter ikke ivaretas godt nok, jf. GDPR artikkel 35.
 
 Systemet støtter i dag følgende PVK-vurderinger:
+
 - `SKAL_UTFORE` – PVK er nødvendig og skal gjennomføres
 - `SKAL_IKKE_UTFORE` – PVK er vurdert til ikke å være nødvendig, med begrunnelse
 - `ALLEREDE_UTFORT` – PVK er tidligere gjennomført og gjelder fortsatt
@@ -37,10 +38,12 @@ Systemet støtter i dag følgende PVK-vurderinger:
 4. Dersom PVK **allerede er gjennomført** (`ALLEREDE_UTFORT`), skal det lenkes til eller refereres til den eksisterende vurderingen.
 5. Det er **ett PVK-dokument per etterlevelsesdokument**. Dersom et PVK-dokument allerede finnes for en behandling, skal det eksisterende gjenbrukes fremfor å opprette et nytt.
 6. PVK-dokumentet kan **ikke slettes** dersom det finnes tilknyttede risikoscenarioer eller tiltak.
+7. Dersom PVO vurderer at PVK-en trenger mer arbeid (`VURDERT_AV_PVO_TRENGER_MER_ARBEID`), **skal** etterlever gjennomgå PVOs tilbakemelding, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`). PVK-en kan ikke gå videre til risikoeier for godkjenning uten at PVO er fornøyd med arbeidet.
 
 ### Statusflyt for PVK
 
 PVK-dokumentet følger denne statusflyten:
+
 1. `UNDERARBEID` – Etterlever fyller ut PVK
 2. `SENDT_TIL_PVO` – PVK er sendt til personvernombudet (PVO) for vurdering
 3. `PVO_UNDERARBEID` – PVO behandler innsendt PVK
@@ -52,11 +55,11 @@ PVK-dokumentet følger denne statusflyten:
 
 ### Ansvar
 
-| Rolle | Ansvar |
-|---|---|
+| Rolle                                  | Ansvar                                                        |
+| -------------------------------------- | ------------------------------------------------------------- |
 | Etterlever (behandlingsansvarlig team) | Opprette etterlevelsesdokument, fylle ut og sende PVK til PVO |
-| Personvernombudet (PVO) | Gi tilbakemelding på PVK |
-| Risikoeier | Godkjenne restrisiko og ferdigstille PVK |
+| Personvernombudet (PVO)                | Gi tilbakemelding på PVK                                      |
+| Risikoeier                             | Godkjenne restrisiko og ferdigstille PVK                      |
 
 ## Status
 
@@ -65,11 +68,13 @@ Under arbeid / til beslutning i teamet.
 ## Konsekvenser
 
 PLUSS
-+ Klare regler gjør det enklere for etterlevere å vite hva de skal gjøre og når
-+ Vi unngår duplisering av dokumenter og tvetydighet rundt eierskap
-+ Reglene er i tråd med GDPR-kravene og etterlevelsesrammeverket
-+ Enklere å validere og håndheve reglene teknisk i løsningen
+
+- Klare regler gjør det enklere for etterlevere å vite hva de skal gjøre og når
+- Vi unngår duplisering av dokumenter og tvetydighet rundt eierskap
+- Reglene er i tråd med GDPR-kravene og etterlevelsesrammeverket
+- Enklere å validere og håndheve reglene teknisk i løsningen
 
 MINUS
+
 - Strenge regler kan oppleves som byrdefulle for team med mange behandlinger
 - Reglene forutsetter at Behandlingskatalogen er oppdatert og korrekt
