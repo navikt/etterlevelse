@@ -6,13 +6,10 @@
 
 ## Kontekst
 
-Det er behov for å definere klare regler for når og hvordan etterlevelsesdokumentasjon og personvernkonsekvensvurdering (PVK) skal opprettes i løsningen.
 
-// **Forslag:** "… klare regler for hvordan etterlevelsesdokumentasjon og personvernkonsekvensvurdering (PVK) opprettes, redigeres, vurderes av PVO, godkjennes av risikoeier og versjoneres".
+Det er behov for å definere klare regler for hvordan etterlevelsesdokumentasjon og personvernkonsekvensvurdering (PVK) opprettes, redigeres, vurderes av PVO, godkjennes av risikoeier og versjoneres.
 
-Uten slike regler risikerer vi at dokumenter opprettes unødvendig, at det er uklart hvem som har ansvar, og at vi ikke fanger opp behandlinger der PVK er påkrevd.
-
-// **Kommentar:** Synes _ikke_ det ble en god oppsummering på hva denne ADR-en egentlig spesifiserer. 
+Etterlevelsesdokumentasjon brukes til å dokumentere at krav er oppfylt. Den kan knyttes til én eller flere behandlinger i Behandlingskatalogen (BK), men det er ikke et krav at alle etterlevelsesdokumenter har en tilknyttet behandling i BK. 
 
 Etterlevelsesdokumentasjon er knyttet til en behandling i Behandlingskatalogen og brukes til å dokumentere at krav er oppfylt.
 
