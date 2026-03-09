@@ -14,8 +14,7 @@ PVK er en grundig risikovurdering som gjøres for behandlinger der det er høy r
 
 Systemet støtter i dag følgende PVK-vurderinger:
 
-// **Chris savner** "Ikke ennå vurdert behov for PVK" som tilstand.
-
+- `UNDEFINED` – Behov for PVK er ikke ennå vurdert (starttilstand)
 - `SKAL_UTFORE` – PVK er nødvendig og skal gjennomføres
 - `SKAL_IKKE_UTFORE` – PVK er vurdert til ikke å være nødvendig, med begrunnelse
 - `ALLEREDE_UTFORT` – PVK er tidligere gjennomført og gjelder fortsatt
