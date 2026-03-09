@@ -1,4 +1,4 @@
-# Regler for oppretting av etterlevelsesdokumentasjon og PVK
+# Regler for oppretting og håndtering av etterlevelsesdokumentasjon og PVK
 
 ## Dato
 
@@ -7,12 +7,22 @@
 ## Kontekst
 
 Det er behov for å definere klare regler for når og hvordan etterlevelsesdokumentasjon og personvernkonsekvensvurdering (PVK) skal opprettes i løsningen.
+
+// **Forslag:** "… klare regler for hvordan etterlevelsesdokumentasjon og personvernkonsekvensvurdering (PVK) opprettes, redigeres, vurderes av PVO, godkjennes av risikoeier og versjoneres".
+
 Uten slike regler risikerer vi at dokumenter opprettes unødvendig, at det er uklart hvem som har ansvar, og at vi ikke fanger opp behandlinger der PVK er påkrevd.
 
+// **Kommentar:** Synes _ikke_ det ble en god oppsummering på hva denne ADR-en egentlig spesifiserer. 
+
 Etterlevelsesdokumentasjon er knyttet til en behandling i Behandlingskatalogen og brukes til å dokumentere at krav er oppfylt.
+
+// **Pirk:** Det er ikke sånn at alle etterlevelser vil ha en behandling i BK (tror jeg –– CJA).
+
 PVK er en grundig risikovurdering som gjøres for behandlinger der det er høy risiko for at folks rettigheter og friheter ikke ivaretas godt nok, jf. GDPR artikkel 35.
 
 Systemet støtter i dag følgende PVK-vurderinger:
+
+// **Chris savner** "Ikke ennå vurdert behov for PVK" som tilstand.
 
 - `SKAL_UTFORE` – PVK er nødvendig og skal gjennomføres
 - `SKAL_IKKE_UTFORE` – PVK er vurdert til ikke å være nødvendig, med begrunnelse
@@ -24,6 +34,9 @@ Systemet støtter i dag følgende PVK-vurderinger:
 
 1. Etterlevelsesdokumentasjon **skal** opprettes for alle behandlinger som er registrert i Behandlingskatalogen og er i aktiv bruk.
 2. Det er **ett etterlevelsesdokument per behandling**. Duplikater er ikke tillatt.
+
+// **Presisering:** Det er ikke 1:1 Behandling:Etterlevelsesdokument. Du kan ha 0:1, 1:1, 2:1 osv.  
+
 3. Det er **behandlingsansvarlig team** som oppretter og eier etterlevelsesdokumentasjonen.
 4. Etterlevelsesdokumentasjonen skal romme besvarelse av etterlevelseskravene, vurdering av om PVK er nødvendig, og risikoeiers godkjenning.
 
