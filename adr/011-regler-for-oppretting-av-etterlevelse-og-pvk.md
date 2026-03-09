@@ -23,32 +23,25 @@ Systemet støtter i dag følgende PVK-vurderinger:
 
 ### Regler for oppretting av etterlevelsesdokumentasjon
 
-1. Etterlevelsesdokumentasjon **skal** opprettes for alle behandlinger som er registrert i Behandlingskatalogen og er i aktiv bruk.
+1. Etterlevelsesdokumentasjon **kan** opprettes uten tilknytning til en behandling i Behandlingskatalogen. Dersom dokumentasjonen gjelder én eller flere behandlinger, **skal** disse knyttes til etterlevelsesdokumentet.
 
-// **Kommentar:** Dette innrømmer ikke at du kan ha en etterlevelse som ikke bruker en behandling, som du faktisk kan. Ei heller at man kan ha med to eller flere behandlinger i samme etterlevelsesdokument.
+2. Det er **teamet eller personene som er ansvarlige for å dokumentere etterlevelsen**, samt **seksjonen eller avdelingen som er ansvarlig for etterlevelsen**.
 
-2. Det er **ett etterlevelsesdokument per behandling**. Duplikater er ikke tillatt.
-
-// **Feil:** Det er ikke 1:1 Behandling:Etterlevelsesdokument. Du kan ha 0:1, 1:1, 2:1 osv.
-
-3. Det er **behandlingsansvarlig team** som oppretter og eier etterlevelsesdokumentasjonen.
-
-// **Hva vil det si å være behandlingsansvarlig?**
-
-4. Etterlevelsesdokumentasjonen skal romme besvarelse av etterlevelseskravene, vurdering av om PVK er nødvendig, og risikoeiers godkjenning.
+3. Etterlevelsesdokumentasjonen skal romme besvarelse av etterlevelseskravene, vurdering av om PVK er nødvendig, og risikoeiers godkjenning.
 
 ### Regler for oppretting av PVK
 
 1. Etterlever **skal** vurdere om PVK er nødvendig for sin behandling. Vurderingen skal dokumenteres med en begrunnelse.
-2. PVK **skal** opprettes dersom behandlingen er klassifisert som høy risiko iht. GDPR artikkel 35, for eksempel ved:
-   - Systematisk og omfattende profilering av personer
-   - Behandling av særlige kategorier personopplysninger i stor skala
-   - Systematisk overvåking av et offentlig tilgjengelig område i stor skala
+2. PVK **skal** opprettes dersom behandlingen er klassifisert som høy risiko iht. GDPR artikkel 35.
 3. Dersom PVK **ikke** er nødvendig (`SKAL_IKKE_UTFORE`), skal etterlever dokumentere begrunnelsen i løsningen.
-4. Dersom PVK **allerede er gjennomført** (`ALLEREDE_UTFORT`), skal det lenkes til eller refereres til den eksisterende vurderingen.
-5. Det er **ett PVK-dokument per etterlevelsesdokument**. Dersom et PVK-dokument allerede finnes for en behandling, skal det eksisterende gjenbrukes fremfor å opprette et nytt.
-6. PVK-dokumentet kan **ikke slettes** dersom det finnes tilknyttede risikoscenarioer eller tiltak.
+4. Dersom PVK **allerede er gjennomført og godkjent utenfor løsningen** (`ALLEREDE_UTFORT`), skal etterlever dokumentere dette i løsningen med en begrunnelse og lenke til eller referere til den eksisterende vurderingen.
+5. Det er **ett PVK-dokument per etterlevelsesdokument**. Dersom et PVK-dokument allerede finnes for etterlevelsesdokumentet, vil systemet automatisk gjenbruke det eksisterende fremfor å opprette et nytt. Dette skjer i backend og er ikke synlig for brukeren.
+6. PVK-dokumentet kan **ikke slettes** dersom dokumentasjonsarbeidet er påbegynt. Minimumskravet for at en PVK anses som påbegynt er at minst ett av følgende er oppfylt:
+   - Det finnes minst ett risikoscenario med navn og beskrivelse (Identifisering av risikoscenarioer og tiltak)
+   - Minst ett felt for involvering av eksterne er utfylt, dvs. involvering av representanter eller databehandlerrepresentanter (Involvering av eksterne)
+   - Det er lagt inn en kommentar til PVO.
 7. Dersom PVO vurderer at PVK-en trenger mer arbeid (`VURDERT_AV_PVO_TRENGER_MER_ARBEID`), **skal** etterlever gjennomgå PVOs tilbakemelding, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`). PVK-en kan ikke gå videre til risikoeier for godkjenning uten at PVO er fornøyd med arbeidet.
+
 
 ### Statusflyt for PVK
 
@@ -62,6 +55,11 @@ PVK-dokumentet følger denne statusflyten:
 6. `SENDT_TIL_PVO_FOR_REVURDERING` – Etterlever sender revidert PVK tilbake til PVO
 7. `TRENGER_GODKJENNING` – Klar for risikoeiers godkjenning
 8. `GODKJENT_AV_RISIKOEIER` – Risikoeier har godkjent restrisiko og PVK er ferdigstilt
+
+**Merknader til statusflyten:**
+
+- Dersom PVO setter status til `VURDERT_AV_PVO_TRENGER_MER_ARBEID`, **skal** etterlever gjennomgå tilbakemeldingen, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`). PVK-en kan ikke gå videre til `TRENGER_GODKJENNING` uten at PVO er fornøyd med arbeidet.
+- Dersom etterlevelsesdokumentasjonen er på **versjon 2 eller høyere** og PVK allerede er godkjent av risikoeier (`GODKJENT_AV_RISIKOEIER`), kan etterlever sende oppdateringer direkte til risikoeier for godkjenning — uten at PVK-en må innom PVO på nytt. Dersom endringene er av en slik karakter at det er faglig behov for ny PVO-vurdering, **kan** etterlever likevel velge å sende PVK-en til PVO før den sendes til risikoeier.
 
 ### Ansvar
 
