@@ -350,16 +350,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                             codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
                           )
                         )
-                        // selected.forEach((value) => {
-                        //   const i = parseInt(value)
-                        //   if (!selectedFilter.includes(i)) {
-                        //     setSelectedFilter([...selectedFilter, i])
-                        //     p.remove(p.form.values.irrelevansFor.findIndex((ir: ICode) => ir.code === relevansOptions[i].value))
-                        //   } else {
-                        //     setSelectedFilter(selectedFilter.filter((value) => value !== i))
-                        //     p.push(codelistUtils.getCode(ListName.RELEVANS, relevansOptions[i].value as string))
-                        //   }
-                        // })
                       }
                     }}
                   >
@@ -784,40 +774,58 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         </InfoCard.Header>
                       </InfoCard>
                     )}
-                    <div className='w-full'>
-                      <AsyncSelect
-                        aria-label='Søk etter risikoeier'
-                        placeholder=''
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => {
-                          return noOptionMessage(inputValue)
-                        }}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        isDisabled={isRisikoeiereFieldLocked}
-                        loadOptions={searchResourceByNameOptions}
-                        onChange={(value: any) => {
-                          if (
-                            value &&
-                            fieldArrayRenderProps.form.values.risikoeiereData.filter(
-                              (team: ITeamResource) => team.navIdent === value.navIdent
-                            ).length === 0
-                          ) {
-                            fieldArrayRenderProps.push(value)
-                          }
-                        }}
-                        styles={selectOverrides}
-                      />
-                      <RenderTagList
-                        list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                          (resource: ITeamResource) => resource.fullName
-                        )}
-                        onRemove={
-                          isRisikoeiereFieldLocked ? undefined : fieldArrayRenderProps.remove
-                        }
-                      />
-                    </div>
+                    {!isRisikoeiereFieldLocked && (
+                      <div className='w-full'>
+                        <AsyncSelect
+                          aria-label='Søk etter risikoeier'
+                          placeholder=''
+                          components={{ DropdownIndicator }}
+                          noOptionsMessage={({ inputValue }) => {
+                            return noOptionMessage(inputValue)
+                          }}
+                          controlShouldRenderValue={false}
+                          loadingMessage={() => 'Søker...'}
+                          isClearable={false}
+                          loadOptions={searchResourceByNameOptions}
+                          onChange={(value: any) => {
+                            if (
+                              value &&
+                              fieldArrayRenderProps.form.values.risikoeiereData.filter(
+                                (team: ITeamResource) => team.navIdent === value.navIdent
+                              ).length === 0
+                            ) {
+                              fieldArrayRenderProps.push(value)
+                            }
+                          }}
+                          styles={selectOverrides}
+                        />
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                            (resource: ITeamResource) => resource.fullName
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </div>
+                    )}
+
+                    {isRisikoeiereFieldLocked && (
+                      <div>
+                        <DataTextWrapper>
+                          {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
+                            'Ingen risikoeier satt'}
+
+                          {fieldArrayRenderProps.form.values.risikoeiereData.length !== 0 && (
+                            <List as='ul'>
+                              {fieldArrayRenderProps.form.values.risikoeiereData.map(
+                                (resource: ITeamResource) => (
+                                  <List.Item key={resource.fullName}>{resource.fullName}</List.Item>
+                                )
+                              )}
+                            </List>
+                          )}
+                        </DataTextWrapper>
+                      </div>
+                    )}
 
                     {env.isDev && !isRisikoeiereFieldLocked && (
                       <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>

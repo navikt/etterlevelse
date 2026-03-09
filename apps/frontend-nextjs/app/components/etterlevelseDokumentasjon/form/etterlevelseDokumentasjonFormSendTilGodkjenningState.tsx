@@ -617,36 +617,21 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                       </InfoCard.Title>
                     </InfoCard.Header>
                   </InfoCard>
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter risikoeier'
-                      placeholder=''
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        return noOptionMessage(inputValue)
-                      }}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      isDisabled
-                      loadOptions={searchResourceByNameOptions}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.risikoeiereData.filter(
-                            (team: ITeamResource) => team.navIdent === value.navIdent
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                        (resource: ITeamResource) => resource.fullName
+                  <div>
+                    <DataTextWrapper>
+                      {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
+                        'Ingen risikoeier satt'}
+
+                      {fieldArrayRenderProps.form.values.risikoeiereData.length !== 0 && (
+                        <List as='ul'>
+                          {fieldArrayRenderProps.form.values.risikoeiereData.map(
+                            (resource: ITeamResource) => (
+                              <List.Item key={resource.fullName}>{resource.fullName}</List.Item>
+                            )
+                          )}
+                        </List>
                       )}
-                    />
+                    </DataTextWrapper>
                   </div>
                 </div>
               )}
