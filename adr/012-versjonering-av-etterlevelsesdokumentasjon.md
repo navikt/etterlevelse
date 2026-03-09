@@ -24,13 +24,13 @@ Versjonering implementeres som **soft versjonering** direkte i etterlevelsesdoku
 
 Feltet `etterlevelseDokumentVersjon` (heltall, starter på 1) angir gjeldende versjonsnummer. Hvert dokument har i tillegg en liste `versjonHistorikk` av `EtterlevelseVersjonHistorikk`-objekter, ett per godkjent versjon, med følgende felter:
 
-| Felt | Beskrivelse |
-|---|---|
-| `versjon` | Versjonsnummeret dette historikkelementet gjelder |
-| `godkjentAvRisikoeier` | Navn på risikoeier som godkjente |
-| `godkjentAvRisikoierDato` | Tidspunkt for godkjenning |
-| `nyVersjonOpprettetDato` | Tidspunkt da etterlever opprettet neste versjon |
-| `kravTilstandHistorikk` | Snapshot av kravstatus per tema på godkjenningstidspunktet |
+| Felt                      | Beskrivelse                                                |
+| ------------------------- | ---------------------------------------------------------- |
+| `versjon`                 | Versjonsnummeret dette historikkelementet gjelder          |
+| `godkjentAvRisikoeier`    | Navn på risikoeier som godkjente                           |
+| `godkjentAvRisikoierDato` | Tidspunkt for godkjenning                                  |
+| `nyVersjonOpprettetDato`  | Tidspunkt da etterlever opprettet neste versjon            |
+| `kravTilstandHistorikk`   | Snapshot av kravstatus per tema på godkjenningstidspunktet |
 
 `KravTilstandHistorikk` inneholder per tema: antall krav under arbeid, ferdig utfylt, og antall suksesskriterier i ulike tilstander (under arbeid, oppfylt, ikke oppfylt, ikke relevant).
 
