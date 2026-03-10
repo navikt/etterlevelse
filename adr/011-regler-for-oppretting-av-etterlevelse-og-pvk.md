@@ -68,7 +68,14 @@ PVK-dokumentet følger denne statusflyten:
 
 **Merknader til statusflyten:**
 
-- Dersom PVO setter status til `VURDERT_AV_PVO_TRENGER_MER_ARBEID`, **skal** etterlever gjennomgå tilbakemeldingen, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`). PVK-en kan ikke gå videre til `TRENGER_GODKJENNING` uten at PVO er fornøyd med arbeidet.
+- Dersom PVO setter status til `VURDERT_AV_PVO_TRENGER_MER_ARBEID`, **skal** etterlever gjennomgå tilbakemeldingen, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`).
+
+// **Vi har valgt dårlige navn:** Er "VURDERT_AV_PVO_TRENGER_MER_ARBEID" lik "vil få i retur?" I så fall, da må etterlever sende tilbake. Men "trenger mer arbeid" er et dårlig navn, da det er fullt mulig at PVO ikke vil få i retur, men likevel mener at mer arbeid trenges. Bør vi endre på navnet?
+  
+PVK-en kan ikke gå videre til `TRENGER_GODKJENNING` uten at PVO er fornøyd med arbeidet.
+
+// **Feil:** Risikoeier kan likevel velge godkjenne en PVK der PVO ikke er fornøyd. Det som styrer er "vil få i retur", ikke om PVO er fornøyd. Eller?
+
 - Dersom etterlevelsesdokumentasjonen er på **versjon 2 eller høyere** og PVK allerede er godkjent av risikoeier (`GODKJENT_AV_RISIKOEIER`), kan etterlever sende oppdateringer direkte til risikoeier for godkjenning — uten at PVK-en må innom PVO på nytt. Dersom endringene er av en slik karakter at det er faglig behov for ny PVO-vurdering, **kan** etterlever likevel velge å sende PVK-en til PVO før den sendes til risikoeier.
 
 ### Ansvar
