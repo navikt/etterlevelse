@@ -4,31 +4,10 @@ import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvo
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkVurdering,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import {
-  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
-  pvkDokumentasjonBehandlingsenLivslopUrl,
-  pvkDokumentasjonPvkBehovUrl,
-  pvkDokumentasjonStepUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { env } from '@/util/env/env'
-import { getVariantForBAOButton } from '@/util/etterlevelseDokumentasjon/behandlingensArtOgOmfang/behandlingensArtOgOmfangUtils'
-import { getVariantForBLLButton } from '@/util/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopUtils'
-import {
-  getPvkButtonText,
-  getVariantForPVKBehovButton,
-  getVariantForPVKButton,
-  isPvkDokumentVurdert,
-} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Button } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
@@ -38,8 +17,6 @@ import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurde
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
-  risikoscenarioList: IRisikoscenario[]
-  artOgOmfang: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   pvkDokument?: IPvkDokument
@@ -48,16 +25,12 @@ type TProps = {
 export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
-  risikoscenarioList,
-  artOgOmfang,
   behandlingsLivslop,
   behandlingensArtOgOmfang,
   pvkDokument,
 }) => {
-  const router = useRouter()
   const user = useContext(UserContext)
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
-  const isRisikoeier: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
   const behandlerPersonopplysninger: boolean = !etterlevelseDokumentasjon.irrelevansFor.some(
     (irrelevans) =>
       irrelevans.code === 'PERSONOPPLYSNINGER' ||
@@ -80,9 +53,8 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
 
   return (
     <>
-      {/** satt knappene tilbake slik at vi kan prodsette ting */}
       <>
-        {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+        {/* {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
           <Button
             onClick={() => {
               router.push(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
@@ -93,7 +65,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           >
             Rediger dokumentegenskaper
           </Button>
-        )}
+        )} */}
         {etterlevelseDokumentasjon.forGjenbruk && !user.isPersonvernombud() && (
           <TillatGjenbrukModal
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -101,7 +73,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           />
         )}
 
-        {behandlerPersonopplysninger && (
+        {/* {behandlerPersonopplysninger && (
           <Button
             onClick={() => {
               router.push(
@@ -115,12 +87,11 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             variant={getVariantForBLLButton(behandlingsLivslop)}
             className='whitespace-nowrap'
           >
-            {/* {behandligensLivslop ? 'Rediger behandlinges livsløp' : 'Tegn behandlingens livsløp'} */}
             Tegn behandlingens livsløp
           </Button>
         )}
 
-        {behandlerPersonopplysninger && (
+         {behandlerPersonopplysninger && (
           <Button
             onClick={() => {
               router.push(
@@ -171,14 +142,13 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           >
             {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
           </Button>
-        )}
+        )} */}
       </>
 
-      {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
-      {env.isDev && (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+      {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
         <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
       )}
-      {env.isDev && behandlerPersonopplysninger && (
+      {behandlerPersonopplysninger && (
         <PersonvernkonsekvensvurderingButton
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
@@ -187,6 +157,8 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           pvoTilbakemelding={pvoTilbakemelding}
         />
       )}
+
+      {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
       {env.isDev &&
         etterlevelseDokumentasjon.forGjenbruk &&
         (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
