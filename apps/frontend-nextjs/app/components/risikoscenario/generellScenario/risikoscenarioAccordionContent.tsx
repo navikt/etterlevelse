@@ -21,7 +21,7 @@ import { IKravReference } from '@/constants/krav/kravConstants'
 import { risikoscenarioTiltakUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, Button } from '@navikt/ds-react'
+import { Alert, Button, InlineMessage } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
@@ -279,9 +279,9 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             {risikoscenario.tiltakIds.length === 0 &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive && (
-                <Alert inline className='mt-5 mb-9' variant='warning'>
+                <InlineMessage className='mt-5 mb-9' status='warning'>
                   Dere har ikke lagt inn tiltak
-                </Alert>
+                </InlineMessage>
               )}
 
             {risikoscenario.tiltakIds.length !== 0 && (
@@ -370,7 +370,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             </div>
           )}
 
-        {submitSuccess && !formRef.current.dirty && (
+        {submitSuccess && !isIngenTilgangFormDirty && (
           <Alert
             className='mt-3'
             variant='success'
