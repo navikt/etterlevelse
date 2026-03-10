@@ -66,12 +66,13 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
             Rediger dokumentegenskaper
           </Button>
         )} */}
-        {etterlevelseDokumentasjon.forGjenbruk && !user.isPersonvernombud() && (
-          <TillatGjenbrukModal
-            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-            setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-          />
-        )}
+        {etterlevelseDokumentasjon.forGjenbruk &&
+          etterlevelseDokumentasjon.hasCurrentUserAccess && (
+            <TillatGjenbrukModal
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+            />
+          )}
 
         {/* {behandlerPersonopplysninger && (
           <Button
