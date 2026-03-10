@@ -82,7 +82,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
             doc.addText(
                     versjonHistorikk.getGodkjentAvRisikoeier() +
-                            "den " + doc.dateToString(versjonHistorikk.getGodkjentAvRisikoierDato().toLocalDate())
+                            ", den " + doc.dateToString(versjonHistorikk.getGodkjentAvRisikoierDato().toLocalDate())
             );
         } else {
             doc.addText("Ikke ferdig godkjent");

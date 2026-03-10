@@ -22,6 +22,7 @@ import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import {
   etterlevelseDokumentasjonIdUrl,
   etterlevelsesDokumentasjonEditUrl,
@@ -31,10 +32,11 @@ import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, Button, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 
 export const SendTilRisikoeierGodkjenningPage = () => {
+  const user = useContext(UserContext)
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
@@ -107,7 +109,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
   }
 
   const hasAccess =
-    etterlevelseDokumentasjon && etterlevelseDokumentasjon.hasCurrentUserAccess === true
+    (etterlevelseDokumentasjon && etterlevelseDokumentasjon.hasCurrentUserAccess === true) ||
+    user.isAdmin()
 
   return (
     <PageLayout
