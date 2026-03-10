@@ -8,9 +8,9 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { behandlingName } from '@/util/behandling/behandlingUtil'
-import { FormSummary, Link, List } from '@navikt/ds-react'
+import { FormSummary, List } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 import FormAlert from './formAlert'
 
 type TProps = {
@@ -31,20 +31,17 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
   pvkKrav,
 }) => {
   const pathName = usePathname()
-  const [antallFerdigPvkKrav, setAntallFerdigPvkKrav] = useState<number>(0)
 
-  useEffect(() => {
+  const antallFerdigPvkKrav = useMemo(() => {
     const pvkEtterlevelser: TEtterlevelseQL[] = []
 
-    pvkKrav?.krav.content.forEach((krav) => {
+    pvkKrav?.krav?.content?.forEach((krav) => {
       pvkEtterlevelser.push(...krav.etterlevelser)
     })
 
-    setAntallFerdigPvkKrav(
-      pvkEtterlevelser.filter(
-        (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
-      ).length
-    )
+    return pvkEtterlevelser.filter(
+      (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+    ).length
   }, [pvkKrav])
 
   return (
@@ -53,9 +50,6 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
         <FormSummary.Heading level='2' id='behandlingensLivslop'>
           Tilhørende dokumentasjon
         </FormSummary.Heading>
-        <Link className='cursor-pointer' href={`${pathName}?steg=4`}>
-          Les detaljer
-        </Link>
       </FormSummary.Header>
       <FormSummary.Answers>
         <FormSummary.Answer>
@@ -122,6 +116,11 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
           </FormSummary.Value>
         </FormSummary.Answer>
       </FormSummary.Answers>
+      <FormSummary.Footer>
+        <FormSummary.EditLink className='cursor-pointer' href={`${pathName}?steg=4`}>
+          Les detaljer
+        </FormSummary.EditLink>
+      </FormSummary.Footer>
     </FormSummary>
   )
 }
