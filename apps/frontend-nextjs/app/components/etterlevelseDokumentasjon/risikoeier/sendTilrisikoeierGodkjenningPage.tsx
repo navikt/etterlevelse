@@ -29,13 +29,28 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  ErrorSummary,
+  Heading,
+  InfoCard,
+  Label,
+  Link,
+  List,
+} from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
+import _ from 'lodash'
 import { useParams } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 
 export const SendTilRisikoeierGodkjenningPage = () => {
+  const formRef: RefObject<any> = useRef(undefined)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const [submitClick] = useState<boolean>(false)
+
   const user = useContext(UserContext)
   const params: Readonly<
     Partial<{
@@ -74,6 +89,14 @@ export const SendTilRisikoeierGodkjenningPage = () => {
   const [submitAlert, setSubmitAlert] = useState<string>('')
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
   const [trekkInnsendingSuccessfull, setTrekkInnsendingSuccessfull] = useState<boolean>(false)
+
+  // useEffect(() => {
+  //   console.log('formRef', formRef)
+
+  //   if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
+  //     errorSummaryRef.current.focus()
+  //   }
+  // }, [submitClick])
 
   const submit = async (submitValues: IEtterlevelseDokumentasjon, skipSaveAlert?: boolean) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
@@ -195,8 +218,9 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                 validateOnBlur={false}
                 initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
                 onSubmit={(values) => submit(values)}
+                innerRef={formRef}
               >
-                {({ submitForm, setFieldValue }) => (
+                {({ submitForm, setFieldValue, errors }) => (
                   <Form>
                     <div className='mt-3 max-w-[75ch]'>
                       <TextAreaField
@@ -217,6 +241,18 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                           kunne redigere på nytt.
                         </Alert>
                       </div>
+
+                      {!_.isEmpty(errors) && (
+                        <ErrorSummary
+                          className='mt-3'
+                          ref={errorSummaryRef}
+                          heading='Før dere sender inn, må dere fylle ut følgende felt'
+                        >
+                          <ErrorSummary.Item href={'#meldingEtterlevelerTilRisikoeier'}>
+                            Oppsummere for risikoeier hvorfor det er aktuelt med godkjenning
+                          </ErrorSummary.Item>
+                        </ErrorSummary>
+                      )}
 
                       {saveSuccessfull && (
                         <div className='my-5 max-w-[75ch]'>
@@ -276,12 +312,14 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                             type='button'
                             variant='primary'
                             onClick={async () => {
-                              await setFieldValue(
-                                'status',
-                                EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                              )
+                              if (!formRef.current.dirty) {
+                                await setFieldValue(
+                                  'status',
+                                  EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                                )
 
-                              await submitForm()
+                                await submitForm()
+                              }
                             }}
                           >
                             Lagre og send til godkjenning
