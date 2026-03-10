@@ -45,7 +45,8 @@ export const EditEtterlevelseDokumentasjonPage = () => {
           ]}
         >
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-            etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+            etterlevelseDokumentasjon.status !==
+              EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
               <EtterlevelseDokumentasjonForm
                 title='Rediger etterlevelsesdokumentet'
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -54,7 +55,8 @@ export const EditEtterlevelseDokumentasjonPage = () => {
             )}
 
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
-            etterlevelseDokumentasjon.status !== EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+            etterlevelseDokumentasjon.status ===
+              EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
               <EtterlevelseDokumentasjonFormSendTilGodkjenningState
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               />

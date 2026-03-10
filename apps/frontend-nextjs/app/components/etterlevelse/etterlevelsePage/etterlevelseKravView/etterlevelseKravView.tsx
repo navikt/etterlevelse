@@ -263,8 +263,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               )}
 
               {etterlevelseDokumentasjon &&
-                etterlevelseDokumentasjon.status !==
-                  EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+                etterlevelseDokumentasjon.status ===
+                  EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
                   <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
                     <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
                       <InfoCard.Title>
