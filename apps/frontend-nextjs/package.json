@@ -32,7 +32,7 @@
     "@navikt/aksel-icons": "8.6.0",
     "@navikt/ds-css": "8.6.0",
     "@navikt/ds-react": "8.6.0",
-    "@navikt/ds-tailwind": "8.6.0",
+    "@navikt/ds-tailwind": "8.7.0",
     "@tailwindcss/postcss": "4.2.1",
     "axios": "1.13.6",
     "draft-js": "0.11.7",
