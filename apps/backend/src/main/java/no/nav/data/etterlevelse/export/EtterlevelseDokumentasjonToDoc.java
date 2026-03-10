@@ -15,6 +15,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.export.domain.EtterlevelseMedKravData;
 import no.nav.data.etterlevelse.krav.KravService;
@@ -30,6 +31,7 @@ import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
@@ -62,7 +64,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
     private final PvkDokumentToDoc pvkDokumentToDoc;
 
-    public void getEtterlevelseDokumentasjonData(EtterlevelseDokumentasjon etterlevelseDokumentasjon, EtterlevelseDocumentBuilder doc) {
+    public void getEtterlevelseDokumentasjonData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon, EtterlevelseDocumentBuilder doc) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd'.' MMMM yyyy 'kl 'HH:mm");
         Date date = new Date();
         doc.addTitle("Etterlevelsesdokumentasjon");
@@ -70,12 +72,29 @@ public class EtterlevelseDokumentasjonToDoc {
         doc.addText("Exportert " + formatter.format(date));
 
         doc.newLine();
+        doc.addLabel("Godkjent av risikoeier:");
+        if (etterlevelseDokumentasjon.getStatus() == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) {
+            List<String> risikoeierNameList = etterlevelseDokumentasjon.getRisikoeiereData().stream().map(risikoeier -> risikoeier.getFullName() + ", ").toList();
+            var nameListLength = risikoeierNameList.size();
+            var versjonHistorikk = etterlevelseDokumentasjon
+                    .getVersjonHistorikk().stream().filter(historikk -> Objects.equals(historikk.getVersjon(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon()))
+                    .toList().getFirst();
+
+            doc.addText(
+                    versjonHistorikk.getGodkjentAvRisikoeier() +
+                            "den " + doc.dateToString(versjonHistorikk.getGodkjentAvRisikoierDato().toLocalDate())
+            );
+        } else {
+            doc.addText("Ikke ferdig godkjent");
+        }
+
+        doc.newLine();
 
         doc.addHeading3("Dokumentbeskrivelse");
-        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getBeskrivelse() == null || etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getBeskrivelse().isEmpty()) {
+        if (etterlevelseDokumentasjon.getBeskrivelse() == null || etterlevelseDokumentasjon.getBeskrivelse().isEmpty()) {
             doc.addMarkdownText("Ingen beskrivelse");
         } else {
-            doc.addMarkdownText(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getBeskrivelse());
+            doc.addMarkdownText(etterlevelseDokumentasjon.getBeskrivelse());
         }
 
         doc.newLine();
@@ -93,10 +112,10 @@ public class EtterlevelseDokumentasjonToDoc {
         }
 
         doc.addHeading3("Avdeling");
-        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId() == null || etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getNomAvdelingId().isEmpty()) {
+        if (etterlevelseDokumentasjon.getNomAvdelingId() == null || etterlevelseDokumentasjon.getNomAvdelingId().isEmpty()) {
             doc.addMarkdownText("Ingen avdeling satt");
         } else {
-            doc.addMarkdownText(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getAvdelingNavn());
+            doc.addMarkdownText(etterlevelseDokumentasjon.getAvdelingNavn());
         }
 
         doc.addHeading3("Team");
@@ -115,8 +134,8 @@ public class EtterlevelseDokumentasjonToDoc {
         }
 
         doc.addHeading3("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
-        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger() != null && !etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger().isEmpty()) {
-            etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikovurderinger().forEach(risikovurdering -> {
+        if (etterlevelseDokumentasjon.getRisikovurderinger() != null && !etterlevelseDokumentasjon.getRisikovurderinger().isEmpty()) {
+            etterlevelseDokumentasjon.getRisikovurderinger().forEach(risikovurdering -> {
                 doc.addMarkdownText("- " + risikovurdering);
             });
         } else {
@@ -160,10 +179,12 @@ public class EtterlevelseDokumentasjonToDoc {
         Etterlevelse etterlevelse = etterlevelseService.get(etterlevelseId);
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId());
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         var doc = new EtterlevelseDocumentBuilder();
 
-        getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
+        getEtterlevelseDokumentasjonData(etterlevelseDokumentasjonResponse, doc);
 
 
         var krav = kravService.getByKravNummer(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon());
@@ -193,6 +214,8 @@ public class EtterlevelseDokumentasjonToDoc {
     public byte[] generateDocFor(UUID etterlevelseDokumentasjonId, List<String> statusKoder, List<String> lover, boolean onlyActiveKrav, boolean withPvkDocument) {
 
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
+        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA).stream()
                 .sorted(Comparator.comparing(CodeUsage::getShortName)).toList();
@@ -268,7 +291,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
 
         var doc = new EtterlevelseDocumentBuilder();
-        getEtterlevelseDokumentasjonData(etterlevelseDokumentasjon, doc);
+        getEtterlevelseDokumentasjonData(etterlevelseDokumentasjonResponse, doc);
 
         if (withPvkDocument) {
             pvkDokumentToDoc.generateDocForP360(doc, etterlevelseDokumentasjon);
@@ -285,8 +308,6 @@ public class EtterlevelseDokumentasjonToDoc {
             doc.addBookmark(pvkBehovHeading, "pvk_behov");
             doc.newLine();
             PvkDokument pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon.getId()).orElse(new PvkDokument());
-            EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
-            etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
             pvkDokumentToDoc.generateBehovForPvkSection(doc, pvkDokument, etterlevelseDokumentasjonResponse);
         }
 
