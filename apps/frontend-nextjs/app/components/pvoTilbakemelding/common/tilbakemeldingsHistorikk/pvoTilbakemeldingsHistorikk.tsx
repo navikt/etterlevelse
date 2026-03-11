@@ -32,16 +32,6 @@ export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
       pvoTilbakemelding.vurderinger.map((vurdering) => vurdering.etterlevelseDokumentVersjon)
     ),
   ].sort((a, b) => b - a)
-  let vurderingerForVersjon: IVurdering[] = []
-  const sortertVurderingerForVersjon: IVurdering[] = pvoTilbakemelding.vurderinger.sort(
-    (a: IVurdering, b: IVurdering) => b.innsendingId - a.innsendingId
-  )
-
-  sortertVurderingerForVersjon.map((vurdering: IVurdering) => {
-    if (vurdering.innsendingId < relevantVurdering.innsendingId) {
-      vurderingerForVersjon.push(vurdering)
-    }
-  })
 
   return (
     <div>
