@@ -1,3 +1,4 @@
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   IPvoTilbakemelding,
   IVurdering,
@@ -14,14 +15,16 @@ type TProps = {
     | 'behandlingensArtOgOmfang'
     | 'innvolveringAvEksterne'
     | 'risikoscenarioEtterTiltakk'
-  relevantVurderingsInnsendingId: number
+  relevantVurdering: IVurdering
+  pvkDokument: IPvkDokument
   forPvo: boolean
 }
 
 export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   fieldName,
-  relevantVurderingsInnsendingId,
+  relevantVurdering,
+  pvkDokument,
   forPvo,
 }) => {
   const versjoner = [
@@ -35,7 +38,7 @@ export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   )
 
   sortertVurderingerForVersjon.map((vurdering: IVurdering) => {
-    if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
+    if (vurdering.innsendingId < relevantVurdering.innsendingId) {
       vurderingerForVersjon.push(vurdering)
     }
   })
@@ -46,16 +49,46 @@ export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
         Tilbakemeldingshistorikk
       </Heading>
 
-      {versjoner.map((versjon) => (
-        <div key={'tilbakemelding_historik_' + versjon} className='mb-5'>
-          <Label>Versjon {versjon}</Label>
+      {versjoner.map((versjon) => {
+        const tilbakemeldinger = pvoTilbakemelding.vurderinger
+          .filter((vurdering) => vurdering.etterlevelseDokumentVersjon === versjon)
+          .sort((a, b) => b.innsendingId - a.innsendingId)
 
-          <Accordion className='mt-3'>
-            {pvoTilbakemelding.vurderinger
-              .filter((vurdering) => vurdering.etterlevelseDokumentVersjon === versjon)
-              .sort((a, b) => b.innsendingId - a.innsendingId)
-              .map((vurdering) => {
-                if (vurdering.innsendingId < relevantVurderingsInnsendingId) {
+        if (
+          !forPvo &&
+          tilbakemeldinger.filter(
+            (vurdering) => vurdering.innsendingId < relevantVurdering.innsendingId
+          ).length === 0 &&
+          [undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato)
+        ) {
+          return null
+        }
+
+        return (
+          <div key={'tilbakemelding_historik_' + versjon} className='mb-5'>
+            <Label>Versjon {versjon}</Label>
+
+            <Accordion className='mt-3'>
+              {!forPvo &&
+                ![undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) &&
+                versjon === relevantVurdering.etterlevelseDokumentVersjon && (
+                  <Accordion.Item key={`${versjon}_vurdering_${relevantVurdering.innsendingId}`}>
+                    <Accordion.Header>
+                      {relevantVurdering.innsendingId}. tilbakemelding -{' '}
+                      {moment(relevantVurdering.sendtDato).format('LL')}
+                    </Accordion.Header>
+                    <Accordion.Content>
+                      <PvoTilbakemeldingsHistorikkContent
+                        tilbakemeldingsinnhold={relevantVurdering[fieldName]}
+                        forPvo={forPvo}
+                        noHeader={true}
+                      />
+                    </Accordion.Content>
+                  </Accordion.Item>
+                )}
+
+              {tilbakemeldinger.map((vurdering) => {
+                if (vurdering.innsendingId < relevantVurdering.innsendingId) {
                   return (
                     <Accordion.Item key={`${versjon}_vurdering_${vurdering.innsendingId}`}>
                       <Accordion.Header>
@@ -73,9 +106,10 @@ export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                   )
                 }
               })}
-          </Accordion>
-        </div>
-      ))}
+            </Accordion>
+          </div>
+        )
+      })}
     </div>
   )
 }

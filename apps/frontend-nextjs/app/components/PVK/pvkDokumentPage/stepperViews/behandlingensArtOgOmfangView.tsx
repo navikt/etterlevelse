@@ -109,9 +109,10 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                 {pvkDokument.antallInnsendingTilPvo > 1 && (
                   <div className='mt-10'>
                     <PvoTilbakemeldingsHistorikk
+                      pvkDokument={pvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
                       fieldName='behandlingensArtOgOmfang'
-                      relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                      relevantVurdering={relevantVurdering}
                       forPvo={false}
                     />
                   </div>
