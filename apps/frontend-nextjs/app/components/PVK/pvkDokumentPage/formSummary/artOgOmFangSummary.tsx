@@ -29,13 +29,6 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
   <FormSummary className='my-3'>
     <FormSummary.Header>
       <FormSummary.Heading level='2'>{StepTitle[2]}</FormSummary.Heading>
-      <FormSummary.EditLink
-        className='cursor-pointer'
-        onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 3)}
-        href={window.location.pathname + '?steg=' + `${customStepNumber ? customStepNumber : 3}`}
-      >
-        {customLinktext ? customLinktext : 'Endre svar'}
-      </FormSummary.EditLink>
     </FormSummary.Header>
     <FormSummary.Answers>
       <FormSummary.Answer>
@@ -156,6 +149,15 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
         </FormSummary.Value>
       </FormSummary.Answer>
     </FormSummary.Answers>
+    <FormSummary.Footer>
+      <FormSummary.EditLink
+        className='cursor-pointer'
+        onClick={() => updateTitleUrlAndStep(customStepNumber ? customStepNumber : 3)}
+        href={window.location.pathname + '?steg=' + `${customStepNumber ? customStepNumber : 3}`}
+      >
+        {customLinktext ? customLinktext : 'Endre svar'}
+      </FormSummary.EditLink>
+    </FormSummary.Footer>
   </FormSummary>
 )
 

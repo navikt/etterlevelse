@@ -26,7 +26,7 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
   const booleanToText = (value?: boolean) => {
     if (value === undefined || value === null) {
       return 'Ikke besvart'
-    } else if (value === true) return 'Ja'
+    } else if (value) return 'Ja'
     else return 'Nei'
   }
 
@@ -36,12 +36,6 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
         <FormSummary className='my-3'>
           <FormSummary.Header>
             <FormSummary.Heading level='2'>{StepTitle[4]}</FormSummary.Heading>
-            <FormSummary.EditLink
-              className='cursor-pointer'
-              href={`${pathName}?steg=${customStepNumber ? customStepNumber : 5}`}
-            >
-              {customLinktext ? customLinktext : 'Endre svar'}
-            </FormSummary.EditLink>
           </FormSummary.Header>
           <FormSummary.Answers>
             <FormSummary.Answer>
@@ -160,6 +154,14 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
               </FormSummary.Value>
             </FormSummary.Answer>
           </FormSummary.Answers>
+          <FormSummary.Footer>
+            <FormSummary.EditLink
+              className='cursor-pointer'
+              href={`${pathName}?steg=${customStepNumber ? customStepNumber : 5}`}
+            >
+              {customLinktext ? customLinktext : 'Endre svar'}
+            </FormSummary.EditLink>
+          </FormSummary.Footer>
         </FormSummary>
       )}
     </Field>
