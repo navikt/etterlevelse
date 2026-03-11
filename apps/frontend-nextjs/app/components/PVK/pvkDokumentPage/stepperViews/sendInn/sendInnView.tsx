@@ -5,6 +5,7 @@ import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopToFormValue,
 } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
+import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -28,7 +29,10 @@ import {
   EEtterlevelseStatus,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -46,7 +50,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { isRisikoUnderarbeidCheck } from '@/util/risikoscenario/risikoscenarioUtils'
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, CopyButton, Heading } from '@navikt/ds-react'
+import { Alert, BodyLong, Button, CopyButton, Heading, Modal } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -119,6 +123,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [isEdokStatusAlertModalOpen, setIsEdokStatusAlertModalOpen] = useState<boolean>(false)
   const [pvoVurderingList, setPvoVurderingList] = useState<ICode[]>([])
   const [angretAvRisikoeier, setAngretAvRisikoeier] = useState<boolean>(false)
   const [savedSuccess, setSavedSuccess] = useState<boolean>(false)
@@ -153,79 +158,86 @@ export const SendInnView: FunctionComponent<TProps> = ({
       pvkKravError === '' &&
       !manglerBehandlingError
     ) {
-      await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
-        if ([EPvkDokumentStatus.PVO_UNDERARBEID].includes(response.status)) {
-          setIsPvoAlertModalOpen(true)
-        } else {
-          const updatedPvkDokument: IPvkDokument = {
-            ...response,
-            status:
-              response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && !angretAvRisikoeier
-                ? response.status
-                : submitedValues.status,
-            berOmNyVurderingFraPvo: submitedValues.berOmNyVurderingFraPvo,
-            meldingerTilPvo: submitedValues.meldingerTilPvo,
-            merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
-            merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
-            godkjentAvRisikoeier: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
-              submitedValues.status
-            )
-              ? submitedValues.godkjentAvRisikoeier
-              : response.godkjentAvRisikoeier,
-            godkjentAvRisikoeierDato: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
-              submitedValues.status
-            )
-              ? submitedValues.godkjentAvRisikoeierDato
-              : response.godkjentAvRisikoeierDato,
-            antallInnsendingTilPvo: submitedValues.antallInnsendingTilPvo,
-          }
+      await getEtterlevelseDokumentasjon(etterlevelseDokumentasjon.id).then(async (edok) => {
+        if (edok.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID) {
+          await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
+            if ([EPvkDokumentStatus.PVO_UNDERARBEID].includes(response.status)) {
+              setIsPvoAlertModalOpen(true)
+            } else {
+              const updatedPvkDokument: IPvkDokument = {
+                ...response,
+                status:
+                  response.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+                  !angretAvRisikoeier
+                    ? response.status
+                    : submitedValues.status,
+                berOmNyVurderingFraPvo: submitedValues.berOmNyVurderingFraPvo,
+                meldingerTilPvo: submitedValues.meldingerTilPvo,
+                merknadTilRisikoeier: submitedValues.merknadTilRisikoeier,
+                merknadFraRisikoeier: submitedValues.merknadFraRisikoeier,
+                godkjentAvRisikoeier: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
+                  submitedValues.status
+                )
+                  ? submitedValues.godkjentAvRisikoeier
+                  : response.godkjentAvRisikoeier,
+                godkjentAvRisikoeierDato: [EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER].includes(
+                  submitedValues.status
+                )
+                  ? submitedValues.godkjentAvRisikoeierDato
+                  : response.godkjentAvRisikoeierDato,
+                antallInnsendingTilPvo: submitedValues.antallInnsendingTilPvo,
+              }
 
-          if (
-            [
-              EPvkDokumentStatus.SENDT_TIL_PVO,
-              EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
-            ].includes(submitedValues.status)
-          ) {
-            const relevantMeldingTilPvo = updatedPvkDokument.meldingerTilPvo.filter(
-              (melding) =>
-                melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
-                melding.etterlevelseDokumentVersjon ===
-                  etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-            )
+              if (
+                [
+                  EPvkDokumentStatus.SENDT_TIL_PVO,
+                  EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+                ].includes(submitedValues.status)
+              ) {
+                const relevantMeldingTilPvo = updatedPvkDokument.meldingerTilPvo.filter(
+                  (melding) =>
+                    melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
+                    melding.etterlevelseDokumentVersjon ===
+                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                )
 
-            if (relevantMeldingTilPvo.length !== 0) {
-              updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
-                if (
-                  meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
-                  meldingTilPvo.etterlevelseDokumentVersjon ===
-                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                ) {
-                  meldingTilPvo.etterlevelseDokumentVersjon =
-                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                  meldingTilPvo.sendtTilPvoAv = user.getIdent() + ' - ' + user.getName()
-                  meldingTilPvo.sendtTilPvoDato = new Date().toISOString()
+                if (relevantMeldingTilPvo.length !== 0) {
+                  updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
+                    if (
+                      meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
+                      meldingTilPvo.etterlevelseDokumentVersjon ===
+                        etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                    ) {
+                      meldingTilPvo.etterlevelseDokumentVersjon =
+                        etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                      meldingTilPvo.sendtTilPvoAv = user.getIdent() + ' - ' + user.getName()
+                      meldingTilPvo.sendtTilPvoDato = new Date().toISOString()
+                    }
+                  })
                 }
+              } else if (
+                [
+                  EPvkDokumentStatus.VURDERT_AV_PVO,
+                  EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
+                ].includes(submitedValues.status)
+              ) {
+                updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
+                  if (meldingTilPvo.innsendingId > submitedValues.antallInnsendingTilPvo) {
+                    meldingTilPvo.sendtTilPvoAv = ''
+                    meldingTilPvo.sendtTilPvoDato = ''
+                  }
+                })
+              }
+
+              updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
+                setPvkDokument(savedResponse)
+                setAngretAvRisikoeier(false)
+                setSavedSuccess(true)
               })
             }
-          } else if (
-            [
-              EPvkDokumentStatus.VURDERT_AV_PVO,
-              EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
-            ].includes(submitedValues.status)
-          ) {
-            updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
-              if (meldingTilPvo.innsendingId > submitedValues.antallInnsendingTilPvo) {
-                meldingTilPvo.sendtTilPvoAv = ''
-                meldingTilPvo.sendtTilPvoDato = ''
-              }
-            })
-          }
-
-          updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
-            setPvkDokument(savedResponse)
-            setAngretAvRisikoeier(false)
-            setSavedSuccess(true)
           })
+        } else {
+          setIsEdokStatusAlertModalOpen(true)
         }
       })
     }
@@ -498,6 +510,21 @@ export const SendInnView: FunctionComponent<TProps> = ({
           }}
           pvkDokumentId={pvkDokument.id}
         />
+      )}
+
+      {isEdokStatusAlertModalOpen && (
+        <Modal
+          open={isEdokStatusAlertModalOpen}
+          onClose={() => setIsEdokStatusAlertModalOpen(false)}
+          header={{ heading: 'Kan ikke redigeres' }}
+        >
+          <Modal.Body>Kan ikke redigeres pga statusen til etterlevelsesdokumentet</Modal.Body>
+          <Modal.Footer>
+            <Button type='button' onClick={() => setIsEdokStatusAlertModalOpen(false)}>
+              Lukk
+            </Button>
+          </Modal.Footer>
+        </Modal>
       )}
       <Formik
         validateOnChange={false}
