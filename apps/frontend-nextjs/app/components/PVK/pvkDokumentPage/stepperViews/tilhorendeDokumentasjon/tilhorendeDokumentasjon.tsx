@@ -57,16 +57,19 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
           relevantVurdering && (
             <div>
               <PvkSidePanelWrapper>
-                <TilhorendeDokumentasjonTilbakemeldingReadOnly
-                  tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
-                  sentDate={relevantVurdering.sendtDato}
-                />
+                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                  <TilhorendeDokumentasjonTilbakemeldingReadOnly
+                    tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
+                    sentDate={relevantVurdering.sendtDato}
+                  />
+                )}
 
                 {pvkDokument.antallInnsendingTilPvo > 1 && (
                   <div className='mt-10'>
                     <PvoTilhorendeDokTilbakemeldingsHistorikk
                       pvoTilbakemelding={pvoTilbakemelding}
-                      relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                      pvkDokument={pvkDokument}
+                      relevantVurdering={relevantVurdering}
                       forPvo={false}
                     />
                   </div>

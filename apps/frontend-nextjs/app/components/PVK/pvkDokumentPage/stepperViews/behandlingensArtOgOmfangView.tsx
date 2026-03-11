@@ -100,18 +100,21 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
           relevantVurdering && (
             <div>
               <PvkSidePanelWrapper>
-                <PvoTilbakemeldingReadOnly
-                  relevantVurdering={relevantVurdering}
-                  tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
-                  sentDate={relevantVurdering.sendtDato}
-                />
+                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                  <PvoTilbakemeldingReadOnly
+                    relevantVurdering={relevantVurdering}
+                    tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
+                    sentDate={relevantVurdering.sendtDato}
+                  />
+                )}
 
                 {pvkDokument.antallInnsendingTilPvo > 1 && (
                   <div className='mt-10'>
                     <PvoTilbakemeldingsHistorikk
+                      pvkDokument={pvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
                       fieldName='behandlingensArtOgOmfang'
-                      relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                      relevantVurdering={relevantVurdering}
                       forPvo={false}
                     />
                   </div>
