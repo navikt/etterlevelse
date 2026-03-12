@@ -26,6 +26,7 @@ import {
   Label,
   Link,
   List,
+  LocalAlert,
   Modal,
   ReadMore,
 } from '@navikt/ds-react'
@@ -215,9 +216,12 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
 
               {savedSuccessful && !dirty && (
                 <div className='mt-5'>
-                  <Alert variant='success' closeButton onClose={() => setSavedSuccessful(false)}>
-                    Lagring vellykket
-                  </Alert>
+                  <LocalAlert status='success'>
+                    <LocalAlert.Header>
+                      <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                      <LocalAlert.CloseButton onClick={() => setSavedSuccessful(false)} />
+                    </LocalAlert.Header>
+                  </LocalAlert>
                 </div>
               )}
 

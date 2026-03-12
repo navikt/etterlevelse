@@ -22,11 +22,11 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import {
-  Alert,
   Button,
   Checkbox,
   CheckboxGroup,
   Heading,
+  LocalAlert,
   Radio,
   RadioGroup,
 } from '@navikt/ds-react'
@@ -364,9 +364,12 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
           <CopyLinkPvoButton />
 
           {sucessSubmit && (
-            <Alert variant='success' closeButton onClose={() => setSuccessSubmit(false)}>
-              Lagring velykket
-            </Alert>
+            <LocalAlert status='success'>
+              <LocalAlert.Header>
+                <LocalAlert.Title>Lagring velykket</LocalAlert.Title>
+                <LocalAlert.CloseButton onClick={() => setSuccessSubmit(false)} />
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
 
           <PvoFormErrors errors={errors} errorSummaryRef={errorSummaryRef} />

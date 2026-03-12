@@ -29,7 +29,17 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Heading,
+  InfoCard,
+  Label,
+  Link,
+  List,
+  LocalAlert,
+} from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
@@ -220,27 +230,25 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
                       {saveSuccessfull && (
                         <div className='my-5 max-w-[75ch]'>
-                          <Alert
-                            size='small'
-                            variant='success'
-                            closeButton
-                            onClose={() => setSaveSuccessfull(false)}
-                          >
-                            Lagring vellykket
-                          </Alert>
+                          <LocalAlert size='small' status='success'>
+                            <LocalAlert.Header>
+                              <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                              <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
+                            </LocalAlert.Header>
+                          </LocalAlert>
                         </div>
                       )}
 
                       {trekkInnsendingSuccessfull && (
                         <div className='my-5 max-w-[75ch]'>
-                          <Alert
-                            size='small'
-                            variant='success'
-                            closeButton
-                            onClose={() => setTrekkInnsendingSuccessfull(false)}
-                          >
-                            Innsending er trukket
-                          </Alert>
+                          <LocalAlert size='small' status='success'>
+                            <LocalAlert.Header>
+                              <LocalAlert.Title>Innsending trukket</LocalAlert.Title>
+                              <LocalAlert.CloseButton
+                                onClick={() => setTrekkInnsendingSuccessfull(false)}
+                              />
+                            </LocalAlert.Header>
+                          </LocalAlert>
                         </div>
                       )}
 
@@ -318,14 +326,12 @@ export const SendTilRisikoeierGodkjenningPage = () => {
 
               {saveSuccessfull && (
                 <div className='my-5 max-w-[75ch]'>
-                  <Alert
-                    size='small'
-                    variant='success'
-                    closeButton
-                    onClose={() => setSaveSuccessfull(false)}
-                  >
-                    Sendt til godkjenning
-                  </Alert>
+                  <LocalAlert size='small' status='success'>
+                    <LocalAlert.Header>
+                      <LocalAlert.Title>Sendt til godkjenning</LocalAlert.Title>
+                      <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
+                    </LocalAlert.Header>
+                  </LocalAlert>
                 </div>
               )}
 

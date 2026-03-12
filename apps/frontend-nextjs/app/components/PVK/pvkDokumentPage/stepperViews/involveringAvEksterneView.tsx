@@ -28,7 +28,16 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, BodyLong, Button, Heading, Label, List, Modal, ReadMore } from '@navikt/ds-react'
+import {
+  BodyLong,
+  Button,
+  Heading,
+  Label,
+  List,
+  LocalAlert,
+  Modal,
+  ReadMore,
+} from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useContext, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
@@ -258,13 +267,12 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
 
                         {savedSuccessful && !dirty && (
                           <div className='mt-5'>
-                            <Alert
-                              variant='success'
-                              closeButton
-                              onClose={() => setSavedSuccessful(false)}
-                            >
-                              Lagring vellykket
-                            </Alert>
+                            <LocalAlert status='success'>
+                              <LocalAlert.Header>
+                                <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                                <LocalAlert.CloseButton onClick={() => setSavedSuccessful(false)} />
+                              </LocalAlert.Header>
+                            </LocalAlert>
                           </div>
                         )}
 

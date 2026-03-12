@@ -18,7 +18,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { Alert, BodyShort, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, LocalAlert, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
@@ -254,14 +254,12 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
               </div>
               {saveSuccessfull && (
                 <div className='my-5'>
-                  <Alert
-                    size='small'
-                    variant='success'
-                    closeButton
-                    onClose={() => setSaveSuccessfull(false)}
-                  >
-                    Lagring vellykket
-                  </Alert>
+                  <LocalAlert size='small' status='success'>
+                    <LocalAlert.Header>
+                      <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                      <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
+                    </LocalAlert.Header>
+                  </LocalAlert>
                 </div>
               )}
             </div>

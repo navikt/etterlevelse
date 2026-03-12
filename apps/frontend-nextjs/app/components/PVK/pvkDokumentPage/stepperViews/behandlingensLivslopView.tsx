@@ -34,13 +34,13 @@ import {
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import {
-  Alert,
   BodyShort,
   Button,
   ErrorSummary,
   FileRejected,
   Heading,
   Loader,
+  LocalAlert,
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
@@ -237,13 +237,14 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
 
                           {savedSuccessful && !dirty && (
                             <div className='mt-5'>
-                              <Alert
-                                variant='success'
-                                closeButton
-                                onClose={() => setSavedSuccessful(false)}
-                              >
-                                Lagring vellykket
-                              </Alert>
+                              <LocalAlert status='success'>
+                                <LocalAlert.Header>
+                                  <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                                  <LocalAlert.CloseButton
+                                    onClick={() => setSavedSuccessful(false)}
+                                  />
+                                </LocalAlert.Header>
+                              </LocalAlert>
                             </div>
                           )}
 

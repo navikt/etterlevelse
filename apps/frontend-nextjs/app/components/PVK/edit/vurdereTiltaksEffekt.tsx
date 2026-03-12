@@ -26,6 +26,7 @@ import {
   Heading,
   InlineMessage,
   Label,
+  LocalAlert,
   Radio,
   RadioGroup,
 } from '@navikt/ds-react'
@@ -241,14 +242,12 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
       </div>
 
       {lagringVellykket && (
-        <Alert
-          variant='success'
-          className='my-5'
-          closeButton
-          onClose={() => setLagringVellykket(false)}
-        >
-          Lagring vellykket
-        </Alert>
+        <LocalAlert status='success' className='my-5'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+            <LocalAlert.CloseButton onClick={() => setLagringVellykket(false)} />
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
 
       {isFormActive && (
