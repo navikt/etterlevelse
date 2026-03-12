@@ -650,7 +650,6 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                   name='p360Recno'
                 />
 
-                <div className='mt-5'></div>
                 <TextAreaField
                   rows={1}
                   noPlaceholder
