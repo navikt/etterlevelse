@@ -29,13 +29,28 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  ErrorSummary,
+  Heading,
+  InfoCard,
+  Label,
+  Link,
+  List,
+} from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
+import _ from 'lodash'
 import { useParams } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
+import { sendTilRisikoGodkjenningSchema } from './sendTilrisikoeierGodkjenningSchema'
 
 export const SendTilRisikoeierGodkjenningPage = () => {
+  const formRef: RefObject<any> = useRef(undefined)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
+
   const user = useContext(UserContext)
   const params: Readonly<
     Partial<{
@@ -195,8 +210,10 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                 validateOnBlur={false}
                 initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
                 onSubmit={(values) => submit(values)}
+                validationSchema={sendTilRisikoGodkjenningSchema()}
+                innerRef={formRef}
               >
-                {({ submitForm, setFieldValue }) => (
+                {({ submitForm, setFieldValue, errors }) => (
                   <Form>
                     <div className='mt-3 max-w-[75ch]'>
                       <TextAreaField
@@ -216,6 +233,20 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                           låses og ikke kunne redigeres. Etter at risikoeier har godkjent, vil dere
                           kunne redigere på nytt.
                         </Alert>
+                      </div>
+
+                      <div className='my-10 max-w-[75ch]'>
+                        {!_.isEmpty(errors) && (
+                          <ErrorSummary
+                            className='mt-3'
+                            ref={errorSummaryRef}
+                            heading='Før dere sender inn, må dere fylle ut følgende felt'
+                          >
+                            <ErrorSummary.Item href={'#meldingEtterlevelerTilRisikoeier'}>
+                              Oppsummere for risikoeier hvorfor det er aktuelt med godkjenning
+                            </ErrorSummary.Item>
+                          </ErrorSummary>
+                        )}
                       </div>
 
                       {saveSuccessfull && (
