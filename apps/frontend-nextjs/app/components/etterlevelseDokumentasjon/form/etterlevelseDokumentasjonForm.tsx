@@ -916,19 +916,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             </div>
           )}
 
-          {!dokumentRelasjon && (
-            <div className='mt-5'>
-              <CheckboxGroup
-                legend='Skal dette dokumentet kunne gjenbrukes av andre?'
-                onChange={(value: boolean[]) => setFieldValue('forGjenbruk', value.length !== 0)}
-                value={[values.forGjenbruk]}
-                description='Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk.'
-              >
-                <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
-              </CheckboxGroup>
-            </div>
-          )}
-
           {!_.isEmpty(errors) && (
             <ErrorSummary
               ref={errorSummaryRef}
