@@ -36,7 +36,7 @@ import BehandlingensArtOgOmfangForm from './form/behandlingensArtOgOmfangForm'
 export const BehandlingensArtOgOmfangPage = () => {
   const params: Readonly<
     Partial<{
-      etterlevelseDokumentasjonId: string
+      etterlevelseDokumentasjonId?: string
       behandlingensArtOgOmfangId?: string
     }>
   > = useParams<{ etterlevelseDokumentasjonId?: string; behandlingensArtOgOmfangId?: string }>()
