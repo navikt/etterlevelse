@@ -26,6 +26,7 @@ const CustomizedBreadcrumbs: FunctionComponent<TCustomizedProps> = ({ paths, cur
           key={`breadcrumb_link_${getName(path.pathName)}`}
           className='gap-1 flex break-all'
         >
+          økjger
           {getName(path.pathName)} <ChevronRightIcon aria-label='Inneholder' aria-hidden />
         </Link>
       ))}
