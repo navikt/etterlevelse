@@ -612,8 +612,8 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                   <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
                     <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                       <InfoCard.Title as='div'>
-                        Det er ikke mulig å endre risikoeier når Etterlevelse eller PVK er sendt til
-                        godkjenning hos risikoeier.
+                        Det er ikke mulig å endre risikoeier når etterlevelsesdokument eller PVK er
+                        sendt til godkjenning hos risikoeier.
                       </InfoCard.Title>
                     </InfoCard.Header>
                   </InfoCard>
