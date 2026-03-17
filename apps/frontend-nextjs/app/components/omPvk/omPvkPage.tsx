@@ -90,7 +90,7 @@ const OmPvkPage = () => {
             vurdere behov for PVK, og eventuelt gjennomføre den.
           </BodyLong>
 
-          <Heading size='medium' level='2' className='mt-7' id='beslutningsstotte'>
+          <Heading size='medium' level='2' spacing id='beslutningsstotte'>
             Beslutningsstøtte når dere vurderer behov for PVK
           </Heading>
           <BodyLong className='mt-3'>
@@ -108,14 +108,14 @@ const OmPvkPage = () => {
           </BodyLong>
           <ReadMore
             header='Hvilke egenskaper er aktuelle når man vurderer behov for PVK? '
-            className='mt-3'
+            className='mb-6'
           >
-            <BodyLong>
+            <BodyLong spacing>
               Følgende behandlingsegenskaper i innebærer høyere risiko, og gjør det mer sannsynlig
               at en PVK burde gjennomføres:
             </BodyLong>
 
-            <List className='mt-3'>
+            <List>
               <List.Item>profilering og/eller automatisering</List.Item>
               <List.Item>systematisk overvåkning/monitorering i stor skala.</List.Item>
               <List.Item>særlige kategorier av personopplysninger.</List.Item>
@@ -136,10 +136,10 @@ const OmPvkPage = () => {
           </ReadMore>
           <ReadMore
             header='Når er riktig tidspunkt å vurdere eller revurdere behov for PVK?'
-            className='mt-3'
+            className='mb-6'
           >
-            <BodyLong>Det er aktuelt å vurdere behov for PVK når:</BodyLong>
-            <List className='mt-3'>
+            <BodyLong spacing>Det er aktuelt å vurdere behov for PVK når:</BodyLong>
+            <List className='mb-6'>
               <List.Item>
                 Vi skal behandle personopplysninger i en ny kontekst, for eksempel bygge en ny
                 digital søknad eller ta i bruk en ny teknisk løsning.
@@ -149,18 +149,18 @@ const OmPvkPage = () => {
               </List.Item>
             </List>
 
-            <BodyLong className='mt-3'>
+            <BodyLong spacing>
               Det er viktig at vi vurderer behov for PVK allerede før vi begynner å behandle
               personopplysninger eller endre hvordan vi behandler disse. Dokumentasjon av PVK,
               vurdering av Personvernombudet (PVO) og godkjenning hos risikoeieren kan til sammen ta
               flere uker å gjennomføre. Husk å tillate nok tid.
             </BodyLong>
           </ReadMore>
-          <Heading level='2' size='small' className='mt-7' id='behandlingens-livslop'>
+          <Heading level='2' size='medium' spacing id='behandlingens-livslop'>
             Dokumentasjon av Behandlingens livsløp
           </Heading>
-          <ReadMore header='Hva er Behandlingens livsløp?' className='mt-3'>
-            <BodyLong>
+          <ReadMore header='Hva er Behandlingens livsløp?' className='mb-6'>
+            <BodyLong spacing>
               «Behandlingens livsløp» beskriver hvor og hvordan personopplysninger flyter når de
               behandles i deres kontekst. Hensikten med å tegne behandlingens livsløp er at dere
               blant annet må tenke på:
@@ -175,7 +175,7 @@ const OmPvkPage = () => {
               </List.Item>
             </List>
           </ReadMore>
-          <BodyLong className='mt-3'>
+          <BodyLong spacing>
             I den nye løsningen kan dere laste opp en eller flere tegninger av behandlingens livsløp
             og/eller lagre en skriftlig beskrivelse.
             <br />
@@ -186,22 +186,22 @@ const OmPvkPage = () => {
             om det er nødvendig å gjennomføre PVK.
           </BodyLong>
 
-          <Heading level='2' size='small' className='mt-7' id='behanlinges-art-og-omfang'>
+          <Heading level='2' size='medium' spacing id='behanlinges-art-og-omfang'>
             Dokumentasjon av behandlingens art og omfang
           </Heading>
-          <BodyLong className='mt-3'>Behandlingens art og omfang handler om:</BodyLong>
-          <List className='mt-3'>
+          <BodyLong spacing>Behandlingens art og omfang handler om:</BodyLong>
+          <List className='mb-6'>
             <List.Item>Hvilke personkategorier vi behandler</List.Item>
             <List.Item>Hvor mange personer vi behandler personopplysninger om</List.Item>
             <List.Item>Hvilke roller som skal ha tilgang til personopplysningene</List.Item>
             <List.Item>Hvordan og hvor lenge personopplysningene lagres</List.Item>
           </List>
-          <BodyLong className='mt-3'>
+          <BodyLong spacing>
             Dokumentasjon av behandlingens art og omfang vil være til hjelp når dere svarer ut
             etterlevelseskrav innen personvern og arkiv og dokumentasjon, og i selve vurderingen av
             om det er nødvendig å gjennomføre PVK.
           </BodyLong>
-          <Heading level='2' size='small' className='mt-7' id='bruk-av-den-nye-losningen'>
+          <Heading level='2' size='medium' spacing id='bruk-av-den-nye-losningen'>
             Når skal vi begynne å bruke den nye løsningen?
           </Heading>
           <Heading level='3' size='xsmall' className='mt-5'>
