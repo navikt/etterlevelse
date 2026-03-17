@@ -36,7 +36,7 @@ export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> 
       onClose={() => {
         setIsNewVersionModalOpen(false)
       }}
-      header={{ heading: 'Lås opp og oppdater dokumentasjon', closeButton: false }}
+      header={{ heading: 'Lås opp og oppdater etterlevelsesdokumentasjon', closeButton: false }}
     >
       <Modal.Body>
         <BodyLong className='mb-5'>
@@ -57,7 +57,7 @@ export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> 
       </Modal.Body>
       <Modal.Footer>
         <Button type='button' variant='primary' onClick={async () => await submit()}>
-          Oppdater
+          Oppdater etterlevelsen
         </Button>
         <Button type='button' variant='secondary' onClick={() => setIsNewVersionModalOpen(false)}>
           Avbryt
