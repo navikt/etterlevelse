@@ -4,8 +4,8 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Alert, BodyLong, Heading, List } from '@navikt/ds-react'
-import Link from 'next/link'
+import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyLong, InfoCard, Link, List } from '@navikt/ds-react'
 import { Fragment, FunctionComponent } from 'react'
 
 type TProps = {
@@ -20,32 +20,39 @@ export const PvkAlertGuide: FunctionComponent<TProps> = ({
   return (
     <Fragment>
       {pvkDokument && pvkDokument.status === EPvkDokumentStatus.UNDERARBEID && (
-        <Alert variant='info' fullWidth>
-          <Heading spacing size='small' level='3'>
-            Personvernkonsekvensvurdering: slik gjør dere nå
-          </Heading>
-
-          <BodyLong>
-            Beskriv risikoscenarioer og tiltak som gjelder for deres kontekst. Disse kan beskrives:
-          </BodyLong>
-          <List as='ul'>
-            <List.Item>ved aktuelle etterlevelseskrav</List.Item>
-            <List.Item>
-              <Link
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label='redigere etterlevelsesdokumentasjon'
-                href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 6)}
-              >
-                under “øvrige risikoscenarioer” (åpnes i ny fane)
-              </Link>
-            </List.Item>
-          </List>
-          <BodyLong>
-            Dere kan gjenbruke deres egne risikoscenarioer eller tiltak der det er aktuelt ved å
-            velge “Legg til et eksisterende risikoscenario” eller “Legg til et eksisterende tiltak”.
-          </BodyLong>
-        </Alert>
+        <InfoCard data-color='info' className='max-w-[75ch]'>
+          <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+            <InfoCard.Title>Personvernkonsekvensvurdering: slik gjør dere nå</InfoCard.Title>
+          </InfoCard.Header>
+          <InfoCard.Content>
+            <BodyLong className='mb-5'>
+              Beskriv risikoscenarioer og tiltak som gjelder for deres kontekst. Disse kan
+              dokumenteres:
+            </BodyLong>
+            <List as='ul' className='mb-5'>
+              <List.Item>på kravsider hvor risikoscenarioene gjelder</List.Item>
+              <List.Item>
+                <span>
+                  under&nbsp;
+                  <Link
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label='redigere etterlevelsesdokumentasjon'
+                    href={pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 6)}
+                  >
+                    Øvrige risikoscenarioer (åpner i en ny fane)
+                  </Link>
+                  &nbsp;dersom risikoscenarioet ikke er kravspesifikt
+                </span>
+              </List.Item>
+            </List>
+            <BodyLong>
+              Dere kan gjenbruke deres egne risikoscenarioer og tiltak der det er aktuelt. Dette
+              gjør dere ved å velge “Legg til et eksisterende risikoscenario” eller “Legg til et
+              eksisterende tiltak”.
+            </BodyLong>
+          </InfoCard.Content>
+        </InfoCard>
       )}
 
       {pvkDokument &&
@@ -54,25 +61,29 @@ export const PvkAlertGuide: FunctionComponent<TProps> = ({
           EPvkDokumentStatus.SENDT_TIL_PVO,
           EPvkDokumentStatus.PVO_UNDERARBEID,
         ].includes(pvkDokument.status) && (
-          <Alert className='max-w-[75ch]' variant='warning'>
-            <Heading spacing size='small' level='3'>
-              PVK ligger til vurdering hos Personvernombudet.
-            </Heading>
-            Dokumentasjon tilknyttet deres PVK er låst og kan ikke redigeres.
-            <br />
-            Dette gjelder for:
-            <List as='ul'>
-              <List.Item>
-                Dokumentasjon av risikoscenarioer og tiltak i forbindelse med PVK
-              </List.Item>
-              <List.Item>Etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav.</List.Item>
-              Etterlevelseskrav som ikke er tilknyttet PVK kan forsatt redigeres som normalt.
-              <br />
-              <br />
-              Hvis dere oppdager betydelig behov for å endre på dokumentasjonen i forbindelse med
-              vurdering av PVK, ta kontakt med PVO på personvernombudet@nav.no.
-            </List>
-          </Alert>
+          <InfoCard data-color='warning' className='max-w-[75ch]'>
+            <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+              <InfoCard.Title>PVK ligger til vurdering hos Personvernombudet</InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+              <BodyLong className='mb-5'>
+                Dokumentasjon tilknyttet PVK-en er låst og kan ikke redigeres mens den ligger til
+                vurdering hos Personvernombudet. Innholdet som er låst er:
+              </BodyLong>
+              <List as='ul' className='mb-5'>
+                <List.Item>etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav</List.Item>
+                <List.Item>risikoscenarioer og tiltak, både kravspesifikke og øvrige</List.Item>
+                <List.Item>
+                  PVK-dokumentasjon ellers: Behandlings livsløp, Art og omfang, Involvering av
+                  eksterne, kommentar til personvernombudet
+                </List.Item>
+              </List>
+              <BodyLong>
+                Etterlevelsesdokumentasjon som ikke er tilknyttet PVK kan fortsatt redigeres som
+                normalt.
+              </BodyLong>
+            </InfoCard.Content>
+          </InfoCard>
         )}
 
       {pvkDokument &&
@@ -80,39 +91,57 @@ export const PvkAlertGuide: FunctionComponent<TProps> = ({
           EPvkDokumentStatus.VURDERT_AV_PVO,
           EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
         ].includes(pvkDokument.status) && (
-          <Alert className='max-w-[75ch]' variant='info'>
-            <Heading spacing size='small' level='3'>
-              Nå som Personvernombudet har sendt sin tilbakemelding, kan dere redigere
-              PVK-dokumentasjonen på nytt.
-            </Heading>
-            Dette gjelder for:
-            <List as='ul'>
-              <List.Item>Risikoscenario- og tiltaksbeskrivelser</List.Item>
-              <List.Item>Etterlevelsesdokumentasjon tilknyttet PVK-relaterte krav.</List.Item>
-            </List>
-            <br />
-            <br />
-            Resten av deres etterlevelsesdokumentasjon er alltid redigerbar.
-          </Alert>
+          <InfoCard data-color='info' className='max-w-[75ch]'>
+            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+              <InfoCard.Title>
+                Personvernombudet har sendt sin tilbakemelding, og PVK er nå låst opp
+              </InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+              <BodyLong className='mb-5'>
+                Følgende dokumentasjon er låst opp og kan redigeres:
+              </BodyLong>
+              <List as='ul' className='mb-5'>
+                <List.Item>etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav</List.Item>
+                <List.Item>risikoscenarioer og tiltak, både kravspesifikke og øvrige</List.Item>
+                <List.Item>
+                  PVK-dokumentasjon ellers: Behandlings livsløp, Art og omfang, Involvering av
+                  eksterne, kommentar til personvernombudet eller risikoeier
+                </List.Item>
+              </List>
+              <BodyLong>
+                Nå skal dere ta stilling til Personvernombudets tilbakemeldinger og gjøre eventuelle
+                endringer. Så sender dere PVK-en videre til godkjenning hos risikoeieren, eller
+                tilbake til Personvernombudet hvis de har bedt om det.
+              </BodyLong>
+            </InfoCard.Content>
+          </InfoCard>
         )}
 
       {pvkDokument && pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING && (
-        <Alert className='max-w-[75ch]' variant='warning'>
-          <Heading spacing size='small' level='3'>
-            PVK ligger til godkjenning hos risikoeier.
-          </Heading>
-          Dokumentasjon tilknyttet deres PVK er låst og kan ikke redigeres.
-          <br />
-          Dette gjelder for:
-          <List as='ul'>
-            <List.Item>Dokumentasjon av risikoscenarioer og tiltak i forbindelse med PVK</List.Item>
-            <List.Item>Etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav.</List.Item>
-          </List>
-          <br />
-          <BodyLong>
-            Etterlevelseskrav som ikke er tilknyttet PVK kan forsatt redigeres som normalt.
-          </BodyLong>
-        </Alert>
+        <InfoCard data-color='warning' className='max-w-[75ch]'>
+          <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+            <InfoCard.Title>PVK ligger til godkjenning hos risikoeier</InfoCard.Title>
+          </InfoCard.Header>
+          <InfoCard.Content>
+            <BodyLong className='mb-5'>
+              Dokumentasjon tilknyttet PVK-en er låst og kan ikke redigeres mens den ligger til
+              godkjenning hos risikoeier. Innholdet som er låst er:
+            </BodyLong>
+            <List as='ul' className='mb-5'>
+              <List.Item>etterlevelsesdokumentasjon tilknyttet alle PVK-relaterte krav</List.Item>
+              <List.Item>risikoscenarioer og tiltak, både kravspesifikke og øvrige</List.Item>
+              <List.Item>
+                PVK-dokumentasjon ellers: Behandlings livsløp, Art og omfang, Involvering av
+                eksterne, kommentar til personvernombudet
+              </List.Item>
+            </List>
+            <BodyLong>
+              Etterlevelsesdokumentasjon som ikke er tilknyttet PVK kan fortsatt redigeres som
+              normalt.
+            </BodyLong>
+          </InfoCard.Content>
+        </InfoCard>
       )}
     </Fragment>
   )
