@@ -241,6 +241,12 @@ type Behandling {
     teamsData: [Team!]!
 }
 
+type DpBehandling {
+    id: String!
+    navn: String!
+    nummer: Int!
+}
+
 type EtterlevelseDokumentasjonStats {
     relevantKrav: [Krav!]!
     irrelevantKrav: [Krav!]!
@@ -258,6 +264,7 @@ type EtterlevelseDokumentasjon {
     behandlingIds: [String!]!
     behandlinger: [Behandling!]!
     dpBehandlingId: [String!]!
+    dpBehandlinger: [DpBehandling!]!
     behandlerPersonopplysninger: Boolean
     irrelevansFor: [Code!]!
     prioritertKravNummer: [String!]!

@@ -16,6 +16,8 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.*;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.dpBehandling.DpBehandlingService;
+import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.domain.Member;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
@@ -53,6 +55,7 @@ public class EtterlevelseDokumentasjonService {
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom;
 
+    private final DpBehandlingService dpBehandlingService;
     private final BehandlingService behandlingService;
     private final EtterlevelseMetadataService etterlevelseMetadataService;
     private final EtterlevelseService etterlevelseService;
@@ -359,8 +362,9 @@ public class EtterlevelseDokumentasjonService {
 
     // Does not update DB
     // TODO: Skal ikke være avhengighet til dto i service
-    public void addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+    public void addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
         etterlevelseDokumentasjonResponse.setBehandlinger(getBehandlingData(etterlevelseDokumentasjonResponse.getBehandlingIds()));
+        etterlevelseDokumentasjonResponse.setDpBehandlinger(getDpBehandlingData(etterlevelseDokumentasjonResponse.getDPbehandlingIds()));
         etterlevelseDokumentasjonResponse.setTeamsData(getTeamsData(etterlevelseDokumentasjonResponse.getTeams()));
         etterlevelseDokumentasjonResponse.setResourcesData(getResourcesData(etterlevelseDokumentasjonResponse.getResources()));
         etterlevelseDokumentasjonResponse.setRisikoeiereData(getRisikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiere()));
@@ -384,6 +388,26 @@ public class EtterlevelseDokumentasjonService {
             }
         });
         return behandlingList;
+    }
+
+    private List<DpBehandling> getDpBehandlingData(List<String> dpBehandlinger) {
+        if (dpBehandlinger == null || dpBehandlinger.isEmpty()) {
+            return List.of();
+        }
+
+        List<DpBehandling> dpBehandlingList = new ArrayList<>();
+        dpBehandlinger.forEach((dpBehandlingId) -> {
+            try {
+                var dpBehandling = dpBehandlingService.getDpBehandling(dpBehandlingId);
+                dpBehandlingList.add(dpBehandling);
+            } catch (WebClientResponseException.NotFound e) {
+                var dpBehandling = new DpBehandling();
+                dpBehandling.setId(dpBehandlingId);
+                dpBehandling.setNavn("Fant ikke DP behandling med id: " + dpBehandlingId);
+                dpBehandlingList.add(dpBehandling);
+            }
+        });
+        return dpBehandlingList;
     }
 
     private List<TeamResponse> getTeamsData(List<String> teams) {

@@ -31,7 +31,6 @@ import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
@@ -180,7 +179,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId());
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         var doc = new EtterlevelseDocumentBuilder();
 
@@ -215,7 +214,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA).stream()
                 .sorted(Comparator.comparing(CodeUsage::getShortName)).toList();

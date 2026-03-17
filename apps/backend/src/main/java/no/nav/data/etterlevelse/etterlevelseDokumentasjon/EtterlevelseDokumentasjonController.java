@@ -53,7 +53,7 @@ public class EtterlevelseDokumentasjonController {
     public ResponseEntity<EtterlevelseDokumentasjonResponse> getById(@PathVariable UUID id) {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(id));
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -130,7 +130,7 @@ public class EtterlevelseDokumentasjonController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -144,7 +144,7 @@ public class EtterlevelseDokumentasjonController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateAndIncreaseVersion(request));
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -159,7 +159,7 @@ public class EtterlevelseDokumentasjonController {
         }
 
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -173,7 +173,7 @@ public class EtterlevelseDokumentasjonController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateKravPriority(request));
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -191,7 +191,7 @@ public class EtterlevelseDokumentasjonController {
 
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelationWithEtterlevelseAndBehandlingenslivslopCopy(fromDocumentId ,request);
         var response = EtterlevelseDokumentasjonResponse.buildFrom(newEtterlevelseDokumentasjon);
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
