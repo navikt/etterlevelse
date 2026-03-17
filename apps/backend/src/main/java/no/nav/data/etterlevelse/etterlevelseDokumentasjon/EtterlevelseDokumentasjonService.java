@@ -364,7 +364,7 @@ public class EtterlevelseDokumentasjonService {
     // TODO: Skal ikke være avhengighet til dto i service
     public void addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
         etterlevelseDokumentasjonResponse.setBehandlinger(getBehandlingData(etterlevelseDokumentasjonResponse.getBehandlingIds()));
-        etterlevelseDokumentasjonResponse.setDpBehandlinger(getDpBehandlingData(etterlevelseDokumentasjonResponse.getDPbehandlingIds()));
+        etterlevelseDokumentasjonResponse.setDpBehandlinger(getDpBehandlingData(etterlevelseDokumentasjonResponse.getDpBehandlingIds()));
         etterlevelseDokumentasjonResponse.setTeamsData(getTeamsData(etterlevelseDokumentasjonResponse.getTeams()));
         etterlevelseDokumentasjonResponse.setResourcesData(getResourcesData(etterlevelseDokumentasjonResponse.getResources()));
         etterlevelseDokumentasjonResponse.setRisikoeiereData(getRisikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiere()));
