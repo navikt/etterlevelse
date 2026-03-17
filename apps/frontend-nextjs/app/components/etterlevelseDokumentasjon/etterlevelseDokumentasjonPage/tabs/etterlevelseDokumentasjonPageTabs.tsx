@@ -19,7 +19,6 @@ import { Button, Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { ArkiveringModal } from '../arkivering/arkiveringModal'
-import ExportEtterlevelseModalWithButton from '../export/exportEtterlevelseModal'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
 import PvkKravListeTab from './pvkKravListe/pvkKravListeTab'
 
@@ -129,9 +128,6 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
           />
 
           <div className='w-full flex justify-end items-center'>
-            <ExportEtterlevelseModalWithButton
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-            />
             <div>
               <Button variant='tertiary' size='small' onClick={() => setIsArkivModalOpen(true)}>
                 Arkiver i Public 360
