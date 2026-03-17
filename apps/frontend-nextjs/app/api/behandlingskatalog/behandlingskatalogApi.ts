@@ -49,3 +49,19 @@ export const searchBehandlingOptions = async (searchParam: string) => {
   }
   return []
 }
+
+export const searchDpBehandlingOptions = async (searchParam: string) => {
+  if (searchParam && searchParam.length > 2) {
+    const dpBehandlinger = await searchDpBehandling(searchParam)
+    if (dpBehandlinger && dpBehandlinger.length) {
+      return dpBehandlinger.map((dpBehandling) => {
+        return {
+          value: dpBehandling.id,
+          label: 'D' + dpBehandling.nummer + ' ' + dpBehandling.navn,
+          ...dpBehandling,
+        }
+      })
+    }
+  }
+  return []
+}

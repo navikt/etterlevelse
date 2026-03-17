@@ -1,6 +1,9 @@
 'use client'
 
-import { searchBehandlingOptions } from '@/api/behandlingskatalog/behandlingskatalogApi'
+import {
+  searchBehandlingOptions,
+  searchDpBehandlingOptions,
+} from '@/api/behandlingskatalog/behandlingskatalogApi'
 import {
   createEtterlevelseDokumentasjonWithRelataion,
   etterlevelseDokumentasjonWithRelationMapToFormVal,
@@ -20,7 +23,10 @@ import { Error, FormError } from '@/components/common/modalSchema/formError/form
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
-import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import {
+  IBehandling,
+  IDpBehandling,
+} from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { TOption } from '@/constants/commonConstants'
 import {
   ERelationType,
@@ -34,10 +40,10 @@ import {
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { behandlingName } from '@/util/behandling/behandlingUtil'
+import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { Button, ErrorSummary, Heading, Radio, RadioGroup } from '@navikt/ds-react'
+import { Button, ErrorSummary, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { useRouter } from 'next/navigation'
@@ -130,7 +136,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ errors, submitForm }) => (
+      {({ values, errors, submitForm }) => (
         <Form className='flex flex-col gap-3'>
           <FieldWrapper marginBottom>
             <Field name='relationType'>
@@ -213,6 +219,46 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
               )}
             </FieldArray>
           </FieldWrapper>
+
+          <ReadMore
+            header='Dersom Nav er databehandler'
+            defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
+          >
+            <FieldArray name='dpBehandlinger'>
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='my-3'>
+                  <LabelWithDescription
+                    label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen'
+                    description='Skriv minst 3 tegn for å søke'
+                  />
+                  <div className='w-full'>
+                    <AsyncSelect
+                      aria-label='Søk etter behandlinger'
+                      placeholder=''
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={searchDpBehandlingOptions}
+                      onChange={(value: any) => {
+                        if (value) {
+                          fieldArrayRenderProps.push(value)
+                        }
+                      }}
+                      styles={selectOverrides}
+                    />
+                  </div>
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.dpBehandlinger.map(
+                      (dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling)
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+          </ReadMore>
 
           <ROSEdit />
 
