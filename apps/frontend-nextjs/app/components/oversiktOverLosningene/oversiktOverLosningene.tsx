@@ -13,7 +13,7 @@ export const OversiktOverLosningene = () => {
   const [activeStep, setActiveStep] = useState(0)
   return (
     <PageLayout
-      pageTitle='Oversikt over Behandlingskatalogen, Støtte til etterlevelse og Digital PVK'
+      pageTitle='Oversikt over Løsningene'
       currentPage='Behandlinger, etterlevelse og PVK'
     >
       <div className='flex gap-7 mt-10'>
