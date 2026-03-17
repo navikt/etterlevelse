@@ -897,7 +897,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               </Select>
             </div>
           )}
-          gsdfgds
+
           {!dokumentRelasjon && (
             <div className='mt-5'>
               <CheckboxGroup
