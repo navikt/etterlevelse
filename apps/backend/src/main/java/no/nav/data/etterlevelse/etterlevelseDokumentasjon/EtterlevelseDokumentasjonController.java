@@ -78,6 +78,17 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjonResponse::buildFrom));
     }
 
+    @Operation(summary = "Search Etterlevelse Dokumentasjon by Nav som databehandler Id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/search/dpbehandling/{id}")
+    public ResponseEntity<RestResponsePage<EtterlevelseDokumentasjonResponse>> searchByDpBehandling(@PathVariable String id) {
+        log.info("Search Etterlevelse Dokumentsjon by Nav som databehandler with id={}", id);
+
+        var etterleveseDokumentasjon = etterlevelseDokumentasjonService.getByDpBehandlingId(List.of(id));
+
+        return ResponseEntity.ok(new RestResponsePage<>(etterleveseDokumentasjon).convert(EtterlevelseDokumentasjonResponse::buildFrom));
+    }
+
     @Operation(summary = "Search Etterlevelse Dokumentasjon by team id")
     @ApiResponse(description = "ok")
     @GetMapping("/search/team/{id}")

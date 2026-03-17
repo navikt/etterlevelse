@@ -32,6 +32,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private Integer etterlevelseNummer;
     private String title;
     private List<String> behandlingIds;
+    private List<String> dpBehandlingIds;
     private String beskrivelse;
     private String gjenbrukBeskrivelse;
     private boolean tilgjengeligForGjenbruk;
@@ -72,6 +73,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setMeldingEtterlevelerTilRisikoeier(trimToNull(meldingEtterlevelerTilRisikoeier));
         setGjenbrukBeskrivelse(trimToNull(gjenbrukBeskrivelse));
         setBehandlingIds(formatList(behandlingIds));
+        setDpBehandlingIds(formatList(dpBehandlingIds));
         setIrrelevansFor(formatListToUppercase(irrelevansFor));
         setTeams(formatList(teams));
         setResources(formatList(resources));
@@ -97,6 +99,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDok.setEtterlevelseNummer(etterlevelseNummer);
         eDokData.setTitle(title);
         eDokData.setBehandlingIds(copyOf(behandlingIds));
+        eDokData.setDpBehandlingIds(copyOf(dpBehandlingIds));
         eDokData.setBeskrivelse(beskrivelse);
         eDokData.setGjenbrukBeskrivelse(gjenbrukBeskrivelse);
         eDokData.setStatus(status);

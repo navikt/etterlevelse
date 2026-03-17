@@ -34,6 +34,7 @@ public class EtterlevelseDokumentasjonResponse {
     private Integer etterlevelseNummer;
     private String title;
     private List<String> behandlingIds;
+    private List<String> dPbehandlingIds;
     private String beskrivelse;
     private String gjenbrukBeskrivelse;
     private boolean tilgjengeligForGjenbruk;
@@ -88,6 +89,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
                 .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
                 .behandlingIds(nullsafeCopyOf(eDokData.getBehandlingIds()))
+                .dPbehandlingIds(nullsafeCopyOf(eDokData.getDpBehandlingIds()))
                 .irrelevansFor(eDok.irrelevantForAsCodes())
                 .prioritertKravNummer(nullsafeCopyOf(eDokData.getPrioritertKravNummer()))
                 .forGjenbruk(eDokData.isForGjenbruk())

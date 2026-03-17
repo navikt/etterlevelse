@@ -113,6 +113,9 @@ public class EtterlevelseDokumentasjonService {
         if (filter.getBehandlingId() != null && !filter.getBehandlingId().isEmpty()) {
             return getByBehandlingId(List.of(filter.getBehandlingId()));
         }
+        if (filter.getDpBehandlingId() != null && !filter.getDpBehandlingId().isEmpty()) {
+            return getByDpBehandlingId(List.of(filter.getDpBehandlingId()));
+        }
         return etterlevelseDokumentasjonRepoCustom.findBy(filter);
     }
 
@@ -336,6 +339,10 @@ public class EtterlevelseDokumentasjonService {
 
     public List<EtterlevelseDokumentasjon> getByBehandlingId(List<String> ids) {
         return etterlevelseDokumentasjonRepoCustom.findByBehandlingIds(ids);
+    }
+
+    public List<EtterlevelseDokumentasjon> getByDpBehandlingId(List<String> ids) {
+        return etterlevelseDokumentasjonRepoCustom.findByDpBehandlingIds(ids);
     }
 
     public Page<EtterlevelseDokumentasjon> getAllWithValidBehandling(Pageable page) {
