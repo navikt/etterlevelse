@@ -1,20 +1,16 @@
 'use client'
 
-import { Alert, BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
-import HvordanDokumentereRisikoscenario from './images/HvordanDokumentereRisikoscenario.png'
-import VisHvorJegFinnerDigitalPVK from './images/VisHvorJegFinnerDigitalPVK.png'
+import SkjermbildePVK from './images/SkjermbildePVK.png'
 
 const OmPvkPage = () => {
   const [activeStep, setActiveStep] = useState(0)
 
   return (
-    <PageLayout
-      pageTitle='Ny Digital PVK (løsning for Personvernkonsekvensvurdering)'
-      currentPage='Om digital PVK'
-    >
+    <PageLayout pageTitle='Om Digital PVK' currentPage='Digital PVK'>
       <div className='flex gap-7 mt-10'>
         <div className='sticky top-4 h-full'>
           <div className='max-w-[274px]'>
@@ -23,8 +19,9 @@ const OmPvkPage = () => {
               activeStep={activeStep}
               onStepChange={setActiveStep}
             >
-              <Stepper.Step href='#dette-kan-dere-gjore-i-digital-pvk'>
-                Dette kan dere gjøre i Digital PVK
+              <Stepper.Step href='#formaalet-med-pvk'>Formålet med PVK</Stepper.Step>
+              <Stepper.Step href='#hvordan-bruke-digital-pvk'>
+                Hvordan bruke Digital PVK
               </Stepper.Step>
               <Stepper.Step href='#beslutningsstotte'>
                 Beslutningsstøtte når dere vurderer behov for PVK
@@ -43,88 +40,57 @@ const OmPvkPage = () => {
           </div>
         </div>
         <div className='max-w-[75ch]'>
-          <Heading size='medium' level='1'>
-            Ny Digital PVK (løsning for Personvernkonsekvensvurdering)
+          <Heading spacing size='large' level='1'>
+            Om Digital PVK
           </Heading>
-          <BodyLong className='mt-6'>
+          <BodyLong spacing>
             Fra september 2025 bruker dere den nye, digitale PVK-løsningen i stedet for den gamle
-            Word-malen.{' '}
+            Word-malen.
           </BodyLong>
-          <ReadMore header='Hva betyr PVK?' className='mt-3'>
-            <BodyLong>
-              PVK står for «Personvernkonsekvensvurdering». PVK gjelder noen ganger der vi ser at
-              måten vi behandler folks persondata på i Nav, kan risikere at vi ikke ivaretar deres
-              rettigheter og friheter. Dette kan handle om alt fra hva vi ber om i en digital
-              søknad, til bruk av videopptak på Nav-kontor, til lagring av data i skyen, til at
-              uhensiktsmessig mange i Nav har tilgang til personens informasjon. Ny Digital PVK skal
-              bidra til at det blir lettere å vurdere det vi gjør, og hvordan vi skal redusere
-              risikonivået.
-            </BodyLong>
-          </ReadMore>
-          <Heading size='small' level='2' className='mt-7' id='dette-kan-dere-gjore-i-digital-pvk'>
-            Dette kan dere gjøre i Digital PVK
+          <Image
+            className='mr-2.5 mt-6 mb-12'
+            src={SkjermbildePVK}
+            alt='Skjermbilde fra forsiden av vår digitale PVK-løsning.'
+            aria-hidden
+            aria-label=''
+          />
+          <Heading size='medium' level='2' spacing id='formaalet-med-pvk'>
+            Hva er formålet med Personvernkonsekvensvurdering (PVK)?
           </Heading>
-          <List className='mt-3'>
-            <List.Item>
-              Dokumentere hvor og hvordan personopplysninger flyter når de behandles i deres
-              kontekst (behandlingens livsløp).
-            </List.Item>
-            <List.Item>Beskrive behandlingens art og omfang.</List.Item>
-            <List.Item>Vurdere så om dere har behov for å gjennomføre PVK.</List.Item>
-            <List.Item>
-              Fylle ut PVK-skjema steg for steg – men det er også lov å gå fram og tilbake mellom
-              steg underveis.
-            </List.Item>
-            <List.Item>
-              Beskrive risikoscenarioer og tiltak side om side med deres etterlevelsesdokumentasjon.
-            </List.Item>
-            <List.Item>
-              Lese over svarene deres. Løsningen varsler hvis det savnes viktig informasjon slik at
-              deres innsending blir så komplett som mulig.
-            </List.Item>
-            <List.Item>
-              Sende inn PVK til Personvernombudet (PVO). Se statusendring etter hvert som PVO har
-              påbegynt vurderingen sin, og når PVO har gitt tilbakemeldinger.
-            </List.Item>
-            <List.Item>
-              Lese tilbakemeldinger fra PVO og ta stilling til dem, og gjøre eventuelt endringer i
-              deres dokumentasjon.{' '}
-            </List.Item>
-            <List.Item>Få PVK-en godkjent av risikoeier.</List.Item>
-            <List.Item>
-              Finne deres arkiverte PVK i Public 360. Dokumentet arkiveres automatisk når PVO sender
-              sine tilbakemeldinger, og på nytt når risikoeier godkjenner.
-            </List.Item>
+          <BodyLong spacing>
+            PVK gjelder noen ganger der vi ser at måten vi behandler folks persondata på i Nav, kan
+            risikere at vi ikke ivaretar deres rettigheter og friheter. Dette kan handle om alt fra
+            hva vi ber om i en digital søknad, til bruk av videopptak på Nav-kontor, til lagring av
+            data i skyen, til at uhensiktsmessig mange i Nav har tilgang til personens informasjon.
+            Ny Digital PVK skal bidra til at det blir lettere å vurdere det vi gjør, og hvordan vi
+            skal redusere risikonivået.
+          </BodyLong>
+          <Heading size='medium' level='2' spacing id='hvordan-bruke-digital-pvk'>
+            Hvordan bruker man Digital PVK?
+          </Heading>
+          <BodyLong spacing>
+            Digital PVK utgjør en del av Støtte til etterlevelse. Når det er registrert at en viss
+            etterlevelse inkluderer behandling av personopplysninger, vil alle med
+            redigeringstilgang til etterlevelsesdokumentet kunne:
+          </BodyLong>
+          <List className='mb-6'>
+            <List.Item>Tegne behandlingens livsløp</List.Item>
+            <List.Item>Vurdere behandlingens art og omfang</List.Item>
+            <List.Item>Vurdere behov for å gjennomføre PVK.</List.Item>
           </List>
-          <Alert variant='info' className='my-5'>
-            Digital PVK er ikke en selvstendig løsning, men er innebygd i Støtte til etterlevelse
-            for å ivareta sammenhengen med etterlevelsesdokumentasjon. Inngangen til PVK finner dere
-            øverst på temasiden i etterlevelsesdokumentet. Merk at dere må ha redigeringstilgang til
-            etterlevelsesdokumentet og ha huket av for at dere behandler personopplysninger under
-            dokumentegenskaper for å se inngangen til Digital PVK.
-          </Alert>
-          <ReadMore header='Vis meg hvor jeg finner Digital PVK' className='mt-3'>
-            <Image
-              className='mr-2.5'
-              src={VisHvorJegFinnerDigitalPVK}
-              alt={`"Skjermbilde fra Støtte til etterlevelse som viser inngangen til Digital PVK. Lenkene står øverst i etterlevelsesdokumentet deres, like etter 'Rediger dokumentegenskaper'. Her står det to lenker: Tegn behandlingens livsløp, og Vurder behov for PVK."`}
-              aria-hidden
-              aria-label=''
-            />
+          <BodyLong spacing>
+            Hvis man kommer fram til at det er behov for PVK, fyller man ut PVK der i
+            etterlevelsesdokumentet.
+          </BodyLong>
+          <ReadMore header='Vis meg hvor jeg finner Digital PVK' className='mb-6'>
+            mangler
           </ReadMore>
-          <ReadMore
-            header='Vis meg hvordan jeg dokumenterer risikoscenarier side om side med etterlevelseskrav'
-            className='mt-3'
-          >
-            <Image
-              className='mr-2.5'
-              src={HvordanDokumentereRisikoscenario}
-              alt='“Skjermbilde fra Støtte til etterlevelse når det er påbegynt PVK. Bildet viser en kravside som har fått en ny fane mellom Mer om kravet og Notat. Ny fane heter “PVK-dokumentasjon”, og vises side om side med etterlevelsesdokumentasjon. Her er brukeren i ferd med å legge til et nytt risikoscenario ved å gi det et navn, en beskrivelse, og vurderinger av scenarioets sannsynlighet og konsekvens.” '
-              aria-hidden
-              aria-label=''
-            />
-          </ReadMore>
-          <Heading size='small' level='2' className='mt-7' id='beslutningsstotte'>
+          <BodyLong spacing>
+            Resten av denne siden beskriver i nærmere detalj hvordan man bruker Digital PVK til å
+            vurdere behov for PVK, og eventuelt gjennomføre den.
+          </BodyLong>
+
+          <Heading size='medium' level='2' className='mt-7' id='beslutningsstotte'>
             Beslutningsstøtte når dere vurderer behov for PVK
           </Heading>
           <BodyLong className='mt-3'>
@@ -146,7 +112,7 @@ const OmPvkPage = () => {
           >
             <BodyLong>
               Følgende behandlingsegenskaper i innebærer høyere risiko, og gjør det mer sannsynlig
-              at en PVK burde gjennomføres:{' '}
+              at en PVK burde gjennomføres:
             </BodyLong>
 
             <List className='mt-3'>
@@ -256,12 +222,12 @@ const OmPvkPage = () => {
             Dere har en PVK i Word som allerede er godkjent og arkivert
           </Heading>
           <BodyLong className='mt-3'>
-            <i>Hvis ikke risikobildet er endret </i>, skal ikke deres godkjente, arkiverte PVK inn i
+            <b>Hvis ikke risikobildet er endret </b>, skal ikke deres godkjente, arkiverte PVK inn i
             ny løsning. Men dere skal likevel registrere denne vurderingen under «Vurder behov for
             PVK». Her velger dere «Vi har en PVK i Word som ikke trenger en ny vurdering».
           </BodyLong>
           <BodyLong className='mt-3'>
-            <i>Hvis risikobildet er endret </i>, siden dere fikk godkjent og arkivert deres PVK, bør
+            <b>Hvis risikobildet er endret siden dere fikk godkjent og arkivert deres PVK,</b> bør
             dere bruke ny løsning til å dokumentere framover. Det er dessverre ikke mulig å
             importere eksisterende PVK-er fra Word. Da må dere klippe og lime tidligere innhold i
             Word over i den nye løsningen og oppdatere med det som er nytt. Dere kan også legge inn
