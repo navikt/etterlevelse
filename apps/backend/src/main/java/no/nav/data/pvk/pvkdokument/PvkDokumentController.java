@@ -199,12 +199,12 @@ public class PvkDokumentController {
 
         var relevantMeldingTilPvo = pvkDokument.getMeldingerTilPvo().stream()
                 .filter(melding -> melding.getInnsendingId() == pvkDokument.getAntallInnsendingTilPvo())
-                .toList().getFirst();
+                .toList();
 
         if (!risikoscenario.isEmpty()) {
             pvkDokument.setHasPvkDocumentationStarted(true);
         }
-        if (relevantMeldingTilPvo.getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getMerknadTilPvo(), "")) {
+        if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
             pvkDokument.setHasPvkDocumentationStarted(true);
         }
         if (pvkDokument.getHarInvolvertRepresentant() != null || pvkDokument.getHarDatabehandlerRepresentantInvolvering() != null ||
