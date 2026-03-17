@@ -70,13 +70,15 @@ PVK-dokumentet følger denne statusflyten:
 
 - Dersom PVO setter status til `VURDERT_AV_PVO_TRENGER_MER_ARBEID`, **skal** etterlever gjennomgå tilbakemeldingen, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`).
 
-// **Vi har valgt dårlige navn:** Er "VURDERT_AV_PVO_TRENGER_MER_ARBEID" lik "vil få i retur?" I så fall, da må etterlever sende tilbake. Men "trenger mer arbeid" er et dårlig navn, da det er fullt mulig at PVO ikke vil få i retur, men likevel mener at mer arbeid trenges. Bør vi endre på navnet?
+// **Vi har valgt et dårlig navn:** I koden, betyr "VURDERT_AV_PVO_TRENGER_MER_ARBEID" "PVO vil få i retur"? Tror det. Men "trenger mer arbeid" er et upresist/feil navn, da det det kan være tilfellet at PVO ikke vil få i retur, samtidig som de likevel mener at mer arbeid trenges. Bør vi endre på navnet?
   
 PVK-en kan ikke gå videre til `TRENGER_GODKJENNING` uten at PVO er fornøyd med arbeidet.
 
-// **Feil:** Risikoeier kan likevel velge godkjenne en PVK der PVO ikke er fornøyd. Det som styrer er "vil få i retur", ikke om PVO er fornøyd. Eller?
+// **Upresist:** Hvis PVO har bedt om å få i retur, tvinger systemet at de skal få i retur. Men "fornøyd" er ikke et godt begrep (se punktet over). 
 
 - Dersom etterlevelsesdokumentasjonen er på **versjon 2 eller høyere** og PVK allerede er godkjent av risikoeier (`GODKJENT_AV_RISIKOEIER`), kan etterlever sende oppdateringer direkte til risikoeier for godkjenning — uten at PVK-en må innom PVO på nytt. Dersom endringene er av en slik karakter at det er faglig behov for ny PVO-vurdering, **kan** etterlever likevel velge å sende PVK-en til PVO før den sendes til risikoeier.
+
+// **Forslag til omskrivning, CJA sine endringer _i kursiv_:** Dersom etterlevelsesdokumentasjonen er på **versjon 2 eller høyere**, _noe som innebærer at_ PVK allerede er godkjent av risikoeier (`GODKJENT_AV_RISIKOEIER`), kan etterlever sende oppdateringer direkte til risikoeier for godkjenning — uten at PVK-en må innom PVO på nytt. Dersom endringene er av en slik karakter at det er faglig behov for ny PVO-vurdering, **skal** etterlever likevel velge å sende PVK-en til PVO _til en ny vurdering_ .
 
 ### Ansvar
 
@@ -86,9 +88,15 @@ PVK-en kan ikke gå videre til `TRENGER_GODKJENNING` uten at PVO er fornøyd med
 | Personvernombudet (PVO)                | Gi tilbakemelding på PVK                                      |
 | Risikoeier                             | Godkjenne restrisiko og ferdigstille PVK                      |
 
+// **Savner et ansvar:** Etterlever er også ansvarlig for å ta stilling til PVOs tilbakemelding og gjøre eventuelle endringer.
+
+// **Utydelig hva som legges i 'ferdigstille PVK':** Ikke arkivering i P360, da dette skjer automatisk. 
+
 ## Status
 
 Under arbeid / til beslutning i teamet.
+
+// **Forstår ikke hva dette skal bety** Er dette status på selve ADR-en?
 
 ## Konsekvenser
 

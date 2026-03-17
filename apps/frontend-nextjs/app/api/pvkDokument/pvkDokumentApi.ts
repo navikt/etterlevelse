@@ -100,7 +100,7 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
     if (pvkDokumentId && !isCreateNew) {
       ;(async () => {
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument: IPvkDokument) => {
-          setData(pvkDokument)
+          setData(mapPvkDokumentToFormValue(pvkDokument))
           setIsLoading(false)
         })
       })()
@@ -110,7 +110,7 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
           async (pvkDokument) => {
             if (pvkDokument) {
-              setData(pvkDokument)
+              setData(mapPvkDokumentToFormValue(pvkDokument))
             }
             setIsLoading(false)
           }

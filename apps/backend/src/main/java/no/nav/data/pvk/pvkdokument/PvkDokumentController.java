@@ -197,7 +197,14 @@ public class PvkDokumentController {
     private void checkIfPvkDocumentationHasStarted(PvkDokumentResponse pvkDokument) {
         var risikoscenario = risikoscenarioService.getByPvkDokument(pvkDokument.getId().toString(), RisikoscenarioType.ALL);
 
+        var relevantMeldingTilPvo = pvkDokument.getMeldingerTilPvo().stream()
+                .filter(melding -> melding.getInnsendingId() == pvkDokument.getAntallInnsendingTilPvo())
+                .toList().getFirst();
+
         if (!risikoscenario.isEmpty()) {
+            pvkDokument.setHasPvkDocumentationStarted(true);
+        }
+        if (relevantMeldingTilPvo.getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getMerknadTilPvo(), "")) {
             pvkDokument.setHasPvkDocumentationStarted(true);
         }
         if (pvkDokument.getHarInvolvertRepresentant() != null || pvkDokument.getHarDatabehandlerRepresentantInvolvering() != null ||

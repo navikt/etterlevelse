@@ -1,7 +1,10 @@
 'use client'
 
 import { arkiver } from '@/api/p360/p360Api'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -83,17 +86,19 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
 
       {isRisikoeierCheck && (
         <div className='mt-5 flex gap-2 items-center'>
-          <Button
-            type='button'
-            variant='secondary'
-            onClick={async () => {
-              setAngretAvRisikoeier(true)
-              await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-              await submitForm()
-            }}
-          >
-            Angre godkjenning
-          </Button>
+          {etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID && (
+            <Button
+              type='button'
+              variant='secondary'
+              onClick={async () => {
+                setAngretAvRisikoeier(true)
+                await setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+                await submitForm()
+              }}
+            >
+              Angre godkjenning
+            </Button>
+          )}
 
           {user.isAdmin() && (
             <Button

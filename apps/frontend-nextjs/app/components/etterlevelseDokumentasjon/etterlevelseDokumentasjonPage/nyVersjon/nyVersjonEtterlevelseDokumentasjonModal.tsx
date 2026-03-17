@@ -2,8 +2,8 @@
 
 import { newVersionEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { BodyLong, Button, Modal } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { BodyLong, Button, LocalAlert, Modal } from '@navikt/ds-react'
+import { FunctionComponent, useState } from 'react'
 
 interface IProps {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -16,11 +16,17 @@ export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> 
   isNewVersionModalOpen,
   setIsNewVersionModalOpen,
 }) => {
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const submit = async () => {
-    await newVersionEtterlevelseDokumentasjon(etterlevelseDokumentasjon).then(() => {
-      setIsNewVersionModalOpen(false)
-      window.location.reload()
-    })
+    await newVersionEtterlevelseDokumentasjon(etterlevelseDokumentasjon)
+      .then(() => {
+        setIsNewVersionModalOpen(false)
+        window.location.reload()
+      })
+      .catch((e) => {
+        const message = e?.response?.data?.message || e?.message || 'Arkivering feilet'
+        setErrorMessage(message)
+      })
   }
 
   return (
@@ -39,6 +45,15 @@ export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> 
         <BodyLong>
           Etter hvert som dere er klare, kan dere sende den nye versjonen til godkjenning på nytt.
         </BodyLong>
+
+        {errorMessage !== '' && (
+          <LocalAlert status='error' className='my-5'>
+            <LocalAlert.Header>
+              <LocalAlert.Title>{errorMessage}</LocalAlert.Title>
+              <LocalAlert.CloseButton onClick={() => setErrorMessage('')} />
+            </LocalAlert.Header>
+          </LocalAlert>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button type='button' variant='primary' onClick={async () => await submit()}>

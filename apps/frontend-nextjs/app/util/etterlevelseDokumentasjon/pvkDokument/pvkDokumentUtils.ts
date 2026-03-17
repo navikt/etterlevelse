@@ -172,7 +172,12 @@ export const getPvkTilstand = (
   pvkDokument?: IPvkDokument,
   pvoTilbakemelding?: IPvoTilbakemelding
 ): string => {
-  if (!pvkDokument) {
+  if (
+    !pvkDokument ||
+    (pvkDokument &&
+      (pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED ||
+        pvkDokument.pvkVurdering === undefined))
+  ) {
     return EPVKTilstandStatus.TILSTAND_STATUS_ONE
   } else if (
     pvkDokument &&

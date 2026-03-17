@@ -40,11 +40,13 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
               <Label key={'innsending_' + versjon}>Versjon {versjon}</Label>
               <List>
                 {meldingerTilPvoForVersjon.map((melding, index) => {
-                  const melderNavn = melding.sendtTilPvoAv.split(' - ')[1]
                   if (
                     pvkDokument.antallInnsendingTilPvo >= melding.innsendingId &&
                     melding.sendtTilPvoDato
                   ) {
+                    const melderNavn = ![undefined, null, ''].includes(melding.sendtTilPvoAv)
+                      ? melding.sendtTilPvoAv.split(' - ')[1]
+                      : ''
                     const vurdering = vurderinger.filter(
                       (vurdering) =>
                         vurdering.innsendingId === melding.innsendingId &&
@@ -57,11 +59,6 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
                       vurdering[0].sendtAv !== null
                         ? vurdering[0].sendtAv.split(' - ')[1]
                         : 'Personvernombudet'
-
-                    if (melding.innsendingId === 10) {
-                      console.debug(melding, 'MELDING')
-                      console.debug(vurdering, 'PVO')
-                    }
 
                     return (
                       <Fragment key={`melding_${index}_innsending_${melding.innsendingId}`}>

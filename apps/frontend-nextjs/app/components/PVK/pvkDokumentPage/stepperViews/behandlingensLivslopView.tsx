@@ -316,17 +316,20 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
               relevantVurdering && (
                 <PvkSidePanelWrapper>
-                  <PvoTilbakemeldingReadOnly
-                    relevantVurdering={relevantVurdering}
-                    tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
-                    sentDate={relevantVurdering.sendtDato}
-                  />
+                  {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                    <PvoTilbakemeldingReadOnly
+                      relevantVurdering={relevantVurdering}
+                      tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
+                      sentDate={relevantVurdering.sendtDato}
+                    />
+                  )}
                   {pvkDokument.antallInnsendingTilPvo > 1 && (
                     <div className='mt-10'>
                       <PvoTilbakemeldingsHistorikk
+                        pvkDokument={pvkDokument}
                         pvoTilbakemelding={pvoTilbakemelding}
                         fieldName='behandlingenslivslop'
-                        relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                        relevantVurdering={relevantVurdering}
                         forPvo={false}
                       />
                     </div>
