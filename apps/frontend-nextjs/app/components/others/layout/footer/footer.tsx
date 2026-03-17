@@ -1,9 +1,5 @@
 'use client'
 
-import { ArrowUpIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import {
   behandlingsKatalogLink,
   datajegerSlackLink,
@@ -14,7 +10,11 @@ import {
   statusPageLink,
   teamInfoLink,
   veilederEtterlevelseskrav,
-} from '../../../../util/footer/footerUtil'
+} from '@/util/footer/footerUtil'
+import { ArrowUpIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { etterlevelseLogoWhiteIcon } from '../../images/images'
 
 // import {
@@ -109,8 +109,17 @@ export const Footer = () => {
           <Spacer />
           <div className='flex flex-col gap-4'>
             <BodyShort>Om nettstedet</BodyShort>
+            <Link className='text-white' href='/oversikt-over-losningene'>
+              Oversikt over løsningene
+            </Link>
+            <Link className='text-white' href='/om-behandlingskatalogen'>
+              Om behandlingskatalogen
+            </Link>
             <Link className='text-white' href={dokumentasjonLink}>
               Hva er Støtte til etterlevelse?
+            </Link>
+            <Link className='text-white' href='/om-pvk'>
+              Om Digital PVK
             </Link>
           </div>
           <Spacer />
