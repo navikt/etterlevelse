@@ -57,7 +57,7 @@ export const searchDpBehandlingOptions = async (searchParam: string) => {
       return dpBehandlinger.map((dpBehandling) => {
         return {
           value: dpBehandling.id,
-          label: 'D' + dpBehandling.nummer + ' ' + dpBehandling.navn,
+          label: 'D' + dpBehandling.nummer + ': ' + dpBehandling.navn,
           ...dpBehandling,
         }
       })

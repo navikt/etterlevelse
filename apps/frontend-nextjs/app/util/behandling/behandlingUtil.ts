@@ -27,7 +27,7 @@ export const dpBehandlingName = (dpBehandling?: IDpBehandling): string => {
 
   if (dpBehandling) {
     if (dpBehandling.nummer) {
-      dpBehandlingName += 'D' + dpBehandling.nummer + ' '
+      dpBehandlingName += 'D' + dpBehandling.nummer + ': '
     }
     if (dpBehandling.navn) {
       dpBehandlingName += dpBehandling.navn
