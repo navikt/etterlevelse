@@ -50,8 +50,7 @@ export const OmBehandlingskatalogen = () => {
             vi har etter personvernregelverket. Katalogen gir oss kontroll over behandlingene, og
             hjelper oss med å beskytte rettighetene til alle vi har opplysninger om.
           </BodyLong>
-          <BodyLong>I Behandlingskatalogen har vi oversikt over blant annet:</BodyLong>
-          <br />
+          <BodyLong spacing>I Behandlingskatalogen har vi oversikt over blant annet:</BodyLong>
           <List as='ul' className='mb-6'>
             <List.Item>alle behandlingsaktiviteter som vi gjør</List.Item>
             <List.Item>hvilket behandlingsgrunnlag som brukes</List.Item>
@@ -59,7 +58,7 @@ export const OmBehandlingskatalogen = () => {
             <List.Item>hvilke systemer personopplysningene behandles i</List.Item>
             <List.Item>om det benyttes databehandler</List.Item>
           </List>
-          <BodyLong className='mb-6'>
+          <BodyLong spacing>
             Avdelingene har ansvaret for at innholdet i katalogen er korrekt og oppdatert innenfor
             sine områder.
           </BodyLong>
@@ -73,7 +72,7 @@ export const OmBehandlingskatalogen = () => {
           >
             Hvordan bruke Behandlingskatalogen
           </Heading>
-          <BodyLong className='mt-6'>
+          <BodyLong spacing>
             Seksjon for personvern og forvaltningsrett i Juridisk avdeling har laget en{' '}
             <Link href='https://navikt.github.io/naka/behandlingskatalog'>veilder</Link> til
             Behandlingskatalogen. Her finner dere blant annet{' '}
@@ -101,7 +100,7 @@ export const OmBehandlingskatalogen = () => {
             Hvis dere har behov for juridisk rådgivning ved utfylling av Behandlingskatalogen, ta
             kontakt med Juridisk avdeling: nav.juridisk.avdeling@nav.no.
           </BodyLong>
-          <BodyLong className='my-6'>
+          <BodyLong spacing>
             Hvis dere finner feil i løsningen eller har forslag til forbedringer, ta kontakt med
             Team Datajegerne:
           </BodyLong>
