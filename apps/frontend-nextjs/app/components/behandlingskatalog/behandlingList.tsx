@@ -1,6 +1,6 @@
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { BodyLong, Label } from '@navikt/ds-react'
+import { BodyLong, Label, List } from '@navikt/ds-react'
 import { ExternalLink } from '../common/externalLink/externalLink'
 
 interface IProps {
@@ -16,10 +16,10 @@ export const BehandlingList = (props: IProps) => {
       <div>
         <Label size='medium'>Behandlinger:</Label>
       </div>
-      <div>
+      <List>
         {behandlingIds?.length >= 1 &&
           behandlingIds.map((behandlingId, index) => (
-            <div key={'behandling_link_' + index}>
+            <List.Item key={'behandling_link_' + index}>
               {behandlinger && behandlinger[index].navn && (
                 <ExternalLink
                   className='text-medium'
@@ -31,16 +31,14 @@ export const BehandlingList = (props: IProps) => {
                 </ExternalLink>
               )}
 
-              {behandlinger && !behandlinger[index].navn && (
-                <BodyLong size='medium'>Ingen data</BodyLong>
-              )}
-            </div>
+              {behandlinger && !behandlinger[index].navn && <List.Item>Ingen data</List.Item>}
+            </List.Item>
           ))}
 
         {behandlingIds?.length === 0 && (
           <BodyLong size='medium'>Husk å legge til behandling fra behandlingskatalogen</BodyLong>
         )}
-      </div>
+      </List>
     </div>
   )
 }
