@@ -235,8 +235,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                         </Alert>
                       </div>
 
-                      <div className='my-10 max-w-[75ch]'>
-                        {!_.isEmpty(errors) && (
+                      {!_.isEmpty(errors) && (
+                        <div className='my-10 max-w-[75ch]'>
                           <ErrorSummary
                             className='mt-3'
                             ref={errorSummaryRef}
@@ -246,8 +246,8 @@ export const SendTilRisikoeierGodkjenningPage = () => {
                               Oppsummere for risikoeier hvorfor det er aktuelt med godkjenning
                             </ErrorSummary.Item>
                           </ErrorSummary>
-                        )}
-                      </div>
+                        </div>
+                      )}
 
                       {saveSuccessfull && (
                         <div className='my-5 max-w-[75ch]'>

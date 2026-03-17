@@ -650,12 +650,14 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                   name='p360Recno'
                 />
 
-                <TextAreaField
-                  rows={1}
-                  noPlaceholder
-                  label='P360 saknummer  KUN I DEV OG ADMIN'
-                  name='p360CaseNumber'
-                />
+                <div className='mt-5'>
+                  <TextAreaField
+                    rows={1}
+                    noPlaceholder
+                    label='P360 saknummer  KUN I DEV OG ADMIN'
+                    name='p360CaseNumber'
+                  />
+                </div>
               </div>
             </>
           )}
