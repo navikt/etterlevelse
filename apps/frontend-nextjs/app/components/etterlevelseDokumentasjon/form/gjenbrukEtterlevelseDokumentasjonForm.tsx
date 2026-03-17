@@ -149,7 +149,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                 >
                   {!isInheritingFrom && (
                     <Radio value={ERelationType.ARVER}>
-                      Beholde relasjonen, og arve endringer på svar etter hvert som de kommer
+                      Beholde relasjonen, og arve endringer i veiledning skrevet av dokumenteieren
                     </Radio>
                   )}
                   <Radio value={ERelationType.ENGANGSKOPI}>
