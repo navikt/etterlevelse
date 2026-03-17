@@ -110,6 +110,7 @@ public class EtterlevelseDokumentasjonToDoc {
                     doc.addText("Fant ikke behandling med ID: " + behandlingId);
                 }
             });
+            doc.newLine();
         }
 
         if (etterlevelseDokumentasjon.getDpBehandlingIds() != null && !etterlevelseDokumentasjon.getDpBehandlingIds().isEmpty()) {
@@ -122,13 +123,25 @@ public class EtterlevelseDokumentasjonToDoc {
                     doc.addText("Fant ikke behandling med ID: " + dpBehandlingId);
                 }
             });
+            doc.newLine();
         }
+
 
         doc.addHeading3("Avdeling");
         if (etterlevelseDokumentasjon.getNomAvdelingId() == null || etterlevelseDokumentasjon.getNomAvdelingId().isEmpty()) {
             doc.addMarkdownText("Ingen avdeling satt");
         } else {
             doc.addMarkdownText(etterlevelseDokumentasjon.getAvdelingNavn());
+        }
+
+        doc.newLine();
+
+        if (!etterlevelseDokumentasjon.getSeksjoner().isEmpty()) {
+            doc.addHeading3("Seksjon");
+            etterlevelseDokumentasjon.getSeksjoner().forEach(seksjon -> {
+                doc.addText(seksjon.getNomSeksjonName());
+            });
+            doc.newLine();
         }
 
         doc.addHeading3("Team");
@@ -145,6 +158,8 @@ public class EtterlevelseDokumentasjonToDoc {
         } else {
             doc.addText("Ikke angitt");
         }
+
+        doc.newLine();
 
         doc.addHeading3("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
         if (etterlevelseDokumentasjon.getRisikovurderinger() != null && !etterlevelseDokumentasjon.getRisikovurderinger().isEmpty()) {
