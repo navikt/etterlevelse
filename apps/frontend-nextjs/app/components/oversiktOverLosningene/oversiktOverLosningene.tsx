@@ -1,12 +1,15 @@
 'use client'
 
-import VisHvorJegFinnerDigitalPVK from '@/components/omPvk/images/VisHvorJegFinnerDigitalPVK.png'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { BodyLong, Heading, Link, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'
+import KortOmLosningeneBehandlingskatalogen from './images/KortOmLosningeneBehandlingskatalogen.png'
+import KortOmLosningenDigitalPVK from './images/KortOmLosningeneDigitalPVK.png'
+import KortOmLosningenStotteTilEtterlevelse from './images/KortOmLosningeneStotteTilEtterlevelse.png'
+import KortOmLosningeneSammenhengenMellomVerktoyene from './images/SammenhengMellomVerktoyene.png'
 
-export const Oversikt = () => {
+export const OversiktOverLosningene = () => {
   const [activeStep, setActiveStep] = useState(0)
   return (
     <PageLayout
@@ -41,8 +44,8 @@ export const Oversikt = () => {
           <div className='flex my-6'>
             <Image
               className='mr-2.5 max-w-1/2'
-              src={VisHvorJegFinnerDigitalPVK}
-              alt={`"Skjermbilde fra Støtte til etterlevelse som viser inngangen til Digital PVK. Lenkene står øverst i etterlevelsesdokumentet deres, like etter 'Rediger dokumentegenskaper'. Her står det to lenker: Tegn behandlingens livsløp, og Vurder behov for PVK."`}
+              src={KortOmLosningeneBehandlingskatalogen}
+              alt='Skjermbilde fra Behandlingskatalogen.'
               aria-hidden
               aria-label=''
             />
@@ -54,14 +57,16 @@ export const Oversikt = () => {
                 Oversikt over alle behandlingsaktiviteter, behandlingsgrunnlag som brukes, systemer
                 personopplysningene behandles i, om det benyttes databehandler mv.
               </BodyLong>
-              <Link>Les mer om behandlingskatalogen</Link>
+              <Link href='/om-behandlingskatalogen' className='gap-1 flex  break-all'>
+                Les mer om behandlingskatalogen
+              </Link>
             </div>
           </div>
           <div className='flex my-6'>
             <Image
               className='mr-2.5 max-w-1/2'
-              src={VisHvorJegFinnerDigitalPVK}
-              alt={`"Skjermbilde fra Støtte til etterlevelse som viser inngangen til Digital PVK. Lenkene står øverst i etterlevelsesdokumentet deres, like etter 'Rediger dokumentegenskaper'. Her står det to lenker: Tegn behandlingens livsløp, og Vurder behov for PVK."`}
+              src={KortOmLosningenStotteTilEtterlevelse}
+              alt='Skjermbilde fra Støtte til etterlevelse.'
               aria-hidden
               aria-label=''
             />
@@ -72,14 +77,16 @@ export const Oversikt = () => {
               <BodyLong spacing>
                 Dokumentere hvordan vi etterlever generelt regelverk, og vurdere behov for PVK.
               </BodyLong>
-              <Link>Les mer om Støtte til etterlevelse</Link>
+              <Link href='/omstottetiletterlevelse' className='gap-1 flex  break-all'>
+                Les mer om Støtte til etterlevelse
+              </Link>
             </div>
           </div>
           <div className='flex my-6'>
             <Image
               className='mr-2.5 max-w-1/2'
-              src={VisHvorJegFinnerDigitalPVK}
-              alt={`"Skjermbilde fra Støtte til etterlevelse som viser inngangen til Digital PVK. Lenkene står øverst i etterlevelsesdokumentet deres, like etter 'Rediger dokumentegenskaper'. Her står det to lenker: Tegn behandlingens livsløp, og Vurder behov for PVK."`}
+              src={KortOmLosningenDigitalPVK}
+              alt='Skjermbilde fra Digital PVK.'
               aria-hidden
               aria-label=''
             />
@@ -91,7 +98,9 @@ export const Oversikt = () => {
                 Ved risiko for at den registrertes personvernrettigheter kan krenkes, dokumentere
                 risikoene og komme med tiltak.
               </BodyLong>
-              <Link>Les mer om Digital PVK</Link>
+              <Link href='/om-pvk' className='gap-1 flex  break-all'>
+                Les mer om Digital PVK
+              </Link>
             </div>
           </div>
 
@@ -105,8 +114,8 @@ export const Oversikt = () => {
           </BodyLong>
           <Image
             className='mr-2.5 mt-6'
-            src={VisHvorJegFinnerDigitalPVK}
-            alt={`"Skjermbilde fra Støtte til etterlevelse som viser inngangen til Digital PVK. Lenkene står øverst i etterlevelsesdokumentet deres, like etter 'Rediger dokumentegenskaper'. Her står det to lenker: Tegn behandlingens livsløp, og Vurder behov for PVK."`}
+            src={KortOmLosningeneSammenhengenMellomVerktoyene}
+            alt='Skjermbilde som viser sammenhengen mellom verktøyene Behandlingskatalogen, Støtte til Etterlevelse og Digital PVK.'
             aria-hidden
             aria-label=''
           />
