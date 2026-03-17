@@ -186,7 +186,9 @@ export const PvkDokumentPage = () => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
         if (![EPvkDokumentStatus.UNDERARBEID].includes(pvkDokument.status)) {
-          await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id).then(setPvoTilbakemelding)
+          await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
+            .then(setPvoTilbakemelding)
+            .catch(() => undefined)
         }
       }
     })()

@@ -195,19 +195,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 ].includes(submitedValues.status)
               ) {
                 const relevantMeldingTilPvo = updatedPvkDokument.meldingerTilPvo.filter(
-                  (melding) =>
-                    melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
-                    melding.etterlevelseDokumentVersjon ===
-                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+                  (melding) => melding.innsendingId === updatedPvkDokument.antallInnsendingTilPvo
                 )
 
                 if (relevantMeldingTilPvo.length !== 0) {
                   updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
-                    if (
-                      meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo &&
-                      meldingTilPvo.etterlevelseDokumentVersjon ===
-                        etterlevelseDokumentasjon.etterlevelseDokumentVersjon
-                    ) {
+                    if (meldingTilPvo.innsendingId === updatedPvkDokument.antallInnsendingTilPvo) {
                       meldingTilPvo.etterlevelseDokumentVersjon =
                         etterlevelseDokumentasjon.etterlevelseDokumentVersjon
                       meldingTilPvo.sendtTilPvoAv = user.getIdent() + ' - ' + user.getName()
