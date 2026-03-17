@@ -3,9 +3,13 @@ import { FunctionComponent } from 'react'
 
 type TProps = {
   setSavedSuccessful: (state: boolean) => void
+  customText?: string
 }
 
-export const SendInnLagringVellykketAlert: FunctionComponent<TProps> = ({ setSavedSuccessful }) => (
+export const SendInnLagringVellykketAlert: FunctionComponent<TProps> = ({
+  setSavedSuccessful,
+  customText,
+}) => (
   <Alert
     variant='success'
     closeButton
@@ -13,6 +17,6 @@ export const SendInnLagringVellykketAlert: FunctionComponent<TProps> = ({ setSav
       setSavedSuccessful(false)
     }}
   >
-    Lagring vellykket
+    {customText ? customText : 'Lagring vellykket'}
   </Alert>
 )
