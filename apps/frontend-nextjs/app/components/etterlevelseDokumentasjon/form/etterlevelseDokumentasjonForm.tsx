@@ -266,7 +266,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
           <Heading size='medium' level='1' spacing>
             {title}
           </Heading>
-
           {dokumentRelasjon && (
             <Alert contentMaxWidth={false} variant='info' className='mb-5'>
               <Label>Dette må du vite om gjenbruk</Label>
@@ -276,7 +275,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               </div>
             </Alert>
           )}
-
           <TextAreaField
             rows={2}
             noPlaceholder
@@ -284,7 +282,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
             name='title'
           />
-
           <div className='mt-5'>
             <TextAreaField
               height='150px'
@@ -294,7 +291,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               markdown
             />
           </div>
-
           {!dokumentRelasjon && (
             <FieldArray name='test'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -491,14 +487,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               )}
             </FieldArray>
           )}
-
           {/* DONT REMOVE */}
           {/* )} */}
-
           <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
             Velg behandlinger
           </Heading>
-
           <FieldWrapper>
             <FieldArray name='behandlinger'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -535,13 +528,10 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               )}
             </FieldArray>
           </FieldWrapper>
-
           <ROSEdit />
-
           <Heading level='2' size='small' spacing>
             Legg til minst et team og/eller en person
           </Heading>
-
           <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldArray name='teamsData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -581,7 +571,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             </FieldArray>
             <div className='flex-1' />
           </div>
-
           <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldArray name='resourcesData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -660,14 +649,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             </FieldArray>
             <div className='flex-1' />
           </div>
-
           {errors.teamsData && <Error message={errors.teamsData as string} />}
-
           <div id='varslingsadresser' className='mt-5'>
             <VarslingsadresserEdit fieldName='varslingsadresser' />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
-
           <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5'>
             <FieldWrapper marginTop full>
               <Field name='nomAvdelingId'>
@@ -705,7 +691,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
             <div className='flex-1' />
           </div>
-
           {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
             <div id='seksjon' className='flex flex-col lg:flex-row gap-5'>
               <FieldWrapper marginTop full>
@@ -753,7 +738,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               <div className='flex-1' />
             </div>
           )}
-
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => {
@@ -768,8 +752,8 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                       <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
                         <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                           <InfoCard.Title as='div'>
-                            Det er ikke mulig å endre risikoeier når Etterlevelse eller PVK er sendt
-                            til godkjenning hos risikoeier.
+                            Det er ikke mulig å endre risikoeier når etterlevelsesdokument eller PVK
+                            er sendt til godkjenning hos risikoeier.
                           </InfoCard.Title>
                         </InfoCard.Header>
                       </InfoCard>
@@ -870,7 +854,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
             <div className='flex-1' />
           </div>
-
           {env.isDev && user.isAdmin() && (
             <>
               <div className='mt-5'>
@@ -891,7 +874,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               </div>
             </>
           )}
-
           {user.isAdmin() && (
             <div className='mt-5'>
               <Select
@@ -928,7 +910,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               </CheckboxGroup>
             </div>
           )}
-
           {!_.isEmpty(errors) && (
             <ErrorSummary
               ref={errorSummaryRef}
@@ -943,7 +924,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                 ))}
             </ErrorSummary>
           )}
-
           <div className='button_container flex flex-col mt-40 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-white'>
             <div className='flex flex-row-reverse'>
               <Button
