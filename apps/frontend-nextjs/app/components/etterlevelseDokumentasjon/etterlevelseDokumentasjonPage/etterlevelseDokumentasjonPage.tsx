@@ -207,6 +207,8 @@ export const EtterlevelseDokumentasjonPage = () => {
                         <EtterlevelseDokumentasjonButtonGroup
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                          relasjonLoading={relasjonLoading}
+                          morDokumentRelasjon={morDokumentRelasjon}
                           pvkDokument={pvkDokument}
                           behandlingsLivslop={behandlingsLivslop}
                           behandlingensArtOgOmfang={artOgOmfang}

@@ -68,8 +68,6 @@ export const RelasjonsOversiktPage = () => {
     ),
   ]
 
-  console.debug(dokumentRelasjonBarn)
-
   return (
     <PageLayout
       pageTitle={'Dokumenter som gjenbruker ' + etterlevelseNavn}
