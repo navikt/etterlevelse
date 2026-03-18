@@ -19,12 +19,10 @@ type TProps = {
 function getTilstand(
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ): EEtterlevelseGjenbruk {
-  if (etterlevelseDokumentasjon == null) {
+  if (!etterlevelseDokumentasjon.forGjenbruk) {
     return EEtterlevelseGjenbruk.TILRETTELEGGING_FOR_GJENBRUK
-  }
-
-  if (
-    etterlevelseDokumentasjon.gjenbrukBeskrivelse &&
+  } else if (
+    ![null, undefined, ''].includes(etterlevelseDokumentasjon.gjenbrukBeskrivelse) &&
     etterlevelseDokumentasjon.tilgjengeligForGjenbruk
   ) {
     return EEtterlevelseGjenbruk.ENDRE_GJENBRUK
@@ -41,7 +39,7 @@ const TilstandGjenbruk: FunctionComponent<TProps> = ({
     case EEtterlevelseGjenbruk.TILRETTELEGGING_FOR_GJENBRUK:
       return (
         <TilretteleggForGjenbrukActionMenu etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
-          Tilrettelegging for Gjenbruk
+          Tilrettelegg for gjenbruk
         </TilretteleggForGjenbrukActionMenu>
       )
     case EEtterlevelseGjenbruk.SLA_PA_GJENBRUK:

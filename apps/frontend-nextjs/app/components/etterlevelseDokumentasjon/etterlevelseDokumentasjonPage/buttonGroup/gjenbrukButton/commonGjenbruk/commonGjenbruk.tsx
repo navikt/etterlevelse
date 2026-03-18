@@ -1,11 +1,11 @@
 'use client'
 
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import TillatGjenbrukModal from '../../../gjenbruk/TillatGjenbrukModal'
+import TilretteleggForGjenbrukModal from '../../../gjenbruk/TilretteleggForGjenbrukModal'
 
 type TProps = PropsWithChildren<{
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -26,21 +26,34 @@ const GjenbrukKnapp = () => (
 export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   children,
-}) => (
-  <>
-    <ActionMenu>
-      <GjenbrukKnapp />
-      <ActionMenu.Content>
-        <ActionMenu.Item
-          as='a'
-          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-        >
-          {children}
-        </ActionMenu.Item>
-      </ActionMenu.Content>
-    </ActionMenu>
-  </>
-)
+}) => {
+  const [isGjenbrukModalOpen, setIsGjenbrukModalOpen] = useState<boolean>(false)
+
+  return (
+    <>
+      <ActionMenu>
+        <GjenbrukKnapp />
+        <ActionMenu.Content>
+          <ActionMenu.Item
+            onSelect={() => setIsGjenbrukModalOpen(true)}
+            aria-haspopup='dialog'
+            aria-controls={isGjenbrukModalOpen ? 'dialog-popup-gjenbrukmodal' : undefined}
+          >
+            {children}
+          </ActionMenu.Item>
+        </ActionMenu.Content>
+      </ActionMenu>
+
+      {isGjenbrukModalOpen && (
+        <TilretteleggForGjenbrukModal
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          isGjenbrukModalOpen={isGjenbrukModalOpen}
+          setIsGjenbrukModalOpen={setIsGjenbrukModalOpen}
+        />
+      )}
+    </>
+  )
+}
 
 export const GjenbrukActionMenu: FunctionComponent<TGjenbrukProps> = ({
   etterlevelseDokumentasjon,
