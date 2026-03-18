@@ -160,14 +160,12 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
       )}
 
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
-      {env.isDev &&
-        etterlevelseDokumentasjon.forGjenbruk &&
-        (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
-          <GjenbrukButton
-            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-            setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-          />
-        )}
+      {env.isDev && (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+        <GjenbrukButton
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+        />
+      )}
     </>
   )
 }
