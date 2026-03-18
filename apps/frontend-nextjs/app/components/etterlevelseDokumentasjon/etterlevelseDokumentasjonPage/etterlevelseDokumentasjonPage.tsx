@@ -184,9 +184,10 @@ export const EtterlevelseDokumentasjonPage = () => {
                   )}
 
                   {etterlevelseDokumentasjon.forGjenbruk &&
-                    !etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
                     (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                      <GjenbrukAlert />
+                      <GjenbrukAlert
+                        defaultOpen={!etterlevelseDokumentasjon.tilgjengeligForGjenbruk}
+                      />
                     )}
 
                   <div className='flex mb-5'>
