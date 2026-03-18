@@ -38,7 +38,10 @@ const TilstandGjenbruk: FunctionComponent<TProps> = ({
   switch (getTilstand(etterlevelseDokumentasjon)) {
     case EEtterlevelseGjenbruk.TILRETTELEGGING_FOR_GJENBRUK:
       return (
-        <TilretteleggForGjenbrukActionMenu etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
+        <TilretteleggForGjenbrukActionMenu
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+        >
           Tilrettelegg for gjenbruk
         </TilretteleggForGjenbrukActionMenu>
       )

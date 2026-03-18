@@ -4,35 +4,44 @@ import {
   getEtterlevelseDokumentasjon,
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  IEtterlevelseDokumentasjon,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { BodyLong, Button, Dialog, List, LocalAlert } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
   isGjenbrukModalOpen: boolean
   setIsGjenbrukModalOpen: (state: boolean) => void
 }
 
 export const TilretteleggForGjenbrukModal: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
   isGjenbrukModalOpen,
   setIsGjenbrukModalOpen,
 }) => {
   const [successMessageOpen, setSuccessMessageOpen] = useState<boolean>(false)
 
   const submit = async () => {
-    await getEtterlevelseDokumentasjon(etterlevelseDokumentasjon.id).then(async (resp) => {
-      const updatedEtterlevelseDok: IEtterlevelseDokumentasjon = {
-        ...resp,
-        forGjenbruk: true,
-      } as IEtterlevelseDokumentasjon
+    await getEtterlevelseDokumentasjon(etterlevelseDokumentasjon.id).then(
+      async (resp: IEtterlevelseDokumentasjon) => {
+        const updatedEtterlevelseDok: IEtterlevelseDokumentasjon = {
+          ...resp,
+          forGjenbruk: true,
+        } as IEtterlevelseDokumentasjon
 
-      await updateEtterlevelseDokumentasjon(updatedEtterlevelseDok).then((response) => {
-        console.debug(response)
-        setSuccessMessageOpen(true)
-      })
-    })
+        await updateEtterlevelseDokumentasjon(updatedEtterlevelseDok).then(
+          (response: IEtterlevelseDokumentasjon) => {
+            setEtterlevelseDokumentasjon(response)
+            setSuccessMessageOpen(true)
+          }
+        )
+      }
+    )
   }
 
   return (

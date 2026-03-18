@@ -7,11 +7,8 @@ import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import TillatGjenbrukModal from '../../../gjenbruk/TillatGjenbrukModal'
 import TilretteleggForGjenbrukModal from '../../../gjenbruk/TilretteleggForGjenbrukModal'
 
-type TProps = PropsWithChildren<{
+interface TGjenbrukProps extends PropsWithChildren {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-}>
-
-interface TGjenbrukProps extends TProps {
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
 
@@ -23,8 +20,9 @@ const GjenbrukKnapp = () => (
   </ActionMenu.Trigger>
 )
 
-export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TProps> = ({
+export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TGjenbrukProps> = ({
   etterlevelseDokumentasjon,
+  setEtterlevelseDokumentasjon,
   children,
 }) => {
   const [isGjenbrukModalOpen, setIsGjenbrukModalOpen] = useState<boolean>(false)
@@ -47,6 +45,7 @@ export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TProps> = ({
       {isGjenbrukModalOpen && (
         <TilretteleggForGjenbrukModal
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
           isGjenbrukModalOpen={isGjenbrukModalOpen}
           setIsGjenbrukModalOpen={setIsGjenbrukModalOpen}
         />
