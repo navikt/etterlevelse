@@ -16,7 +16,7 @@ import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumen
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { Alert, BodyLong, BodyShort, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -35,27 +35,24 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   isPvkKravLoading,
   isChangesMadeSinceLastSubmission,
 }) => {
-  const [antallPvkKrav, setAntallPvkKrav] = useState<number>(0)
-  const [antallFerdigPvkKrav, setAntallFerdigPvkKrav] = useState<number>(0)
   const router = useRouter()
 
-  useEffect(() => {
-    if (!isPvkKravLoading && pvkKrav && pvkKrav.krav) {
-      setAntallPvkKrav(pvkKrav.krav.totalElements)
-
-      const pvkEtterlevelser: TEtterlevelseQL[] = []
-
-      pvkKrav.krav.content.forEach((krav) => {
-        pvkEtterlevelser.push(...krav.etterlevelser)
-      })
-
-      setAntallFerdigPvkKrav(
-        pvkEtterlevelser.filter(
-          (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
-        ).length
-      )
+  const { antallPvkKrav, antallFerdigPvkKrav } = useMemo(() => {
+    if (isPvkKravLoading || !pvkKrav?.krav) {
+      return { antallPvkKrav: 0, antallFerdigPvkKrav: 0 }
     }
-  }, [isPvkKravLoading])
+
+    const pvkEtterlevelser: TEtterlevelseQL[] = pvkKrav.krav.content.flatMap(
+      (krav) => krav.etterlevelser
+    )
+
+    return {
+      antallPvkKrav: pvkKrav.krav.totalElements,
+      antallFerdigPvkKrav: pvkEtterlevelser.filter(
+        (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+      ).length,
+    }
+  }, [isPvkKravLoading, pvkKrav])
 
   return (
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>

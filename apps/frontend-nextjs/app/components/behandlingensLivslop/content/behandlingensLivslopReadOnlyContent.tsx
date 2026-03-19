@@ -6,7 +6,7 @@ import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/c
 import { IBehandlingensLivslopRequest } from '@/constants/behandlingensLivslop/behandlingensLivslop'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 import BehandlingensLivsLopSidePanel from '../sidePanel/BehandlingensLivsLopSidePanel'
 import BehandlingensLivslopTextContent from './behandlingensLivslopTextContent'
 
@@ -25,17 +25,13 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
   noSidePanelContent,
   noHeader,
 }) => {
-  const [files, setFiles] = useState<FileObject[]>([])
-
-  useEffect(() => {
-    if (behandlingensLivslop.filer && behandlingensLivslop.filer.length > 0) {
-      const initialFiles: FileObject[] = []
-      behandlingensLivslop.filer.forEach((initialFile) => {
-        initialFiles.push({ file: initialFile, error: false })
-      })
-      setFiles(initialFiles)
+  const files = useMemo<FileObject[]>(() => {
+    if (!behandlingensLivslop.filer || behandlingensLivslop.filer.length === 0) {
+      return []
     }
-  }, [behandlingensLivslop])
+
+    return behandlingensLivslop.filer.map((initialFile) => ({ file: initialFile, error: false }))
+  }, [behandlingensLivslop.filer])
 
   return (
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>

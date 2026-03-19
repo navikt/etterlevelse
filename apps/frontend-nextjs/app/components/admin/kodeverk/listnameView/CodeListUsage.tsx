@@ -5,27 +5,19 @@ import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
-import { ChangeEvent, createRef, useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { ObjectLink } from '../../common/commonComponents'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
-  const [rows, setRows] = useState<any>(0)
   const { usage } = props
   const krav = !!usage.krav.length
   const etterlevelseDokumentasjoner = !!usage.etterlevelseDokumentasjoner.length
   const codelist = !!usage.codelist.length
-
-  useEffect(() => {
-    setRows(
-      usage
-        ? Math.max(
-            usage.krav.length,
-            usage.etterlevelseDokumentasjoner.length,
-            usage.codelist.length
-          )
-        : -1
-    )
-  }, [])
+  const rows = useMemo(
+    () =>
+      Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length),
+    [usage]
+  )
 
   return (
     <Table>
@@ -85,17 +77,19 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
 }
 
 export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
-  const [showReplace, setShowReplace] = useState(false)
+  const [showReplaceForUsage, setShowReplaceForUsage] = useState<string>()
   const [newValue, setNewValue] = useState<string>()
-  const ref = createRef<HTMLDivElement>()
+  const ref = useRef<HTMLDivElement>(null)
 
   const codelist = useContext(CodelistContext)
 
   const { usage, refresh } = props
+  const usageKey = usage ? `${usage.listName}:${usage.code}` : undefined
+  const showReplace = !!usageKey && showReplaceForUsage === usageKey
+
   useEffect(() => {
-    setShowReplace(false)
     setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
-  }, [usage])
+  }, [usageKey])
 
   const replace = async () => {
     if (newValue) {
@@ -108,7 +102,11 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
       <div className='flex justify-between mb-2'>
         <Label>Bruk</Label>
         {!!usage?.inUse && (
-          <Button type='button' variant='secondary' onClick={() => setShowReplace(!showReplace)}>
+          <Button
+            type='button'
+            variant='secondary'
+            onClick={() => setShowReplaceForUsage(showReplace ? undefined : usageKey)}
+          >
             Erstatt all bruk
           </Button>
         )}

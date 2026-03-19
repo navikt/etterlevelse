@@ -21,7 +21,7 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { Heading } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import PvkBehovForm from '../form/pvkBehovForm'
 import PvkBehovInfoContent from './pvkBehovInfoContent'
 import PvkBehovMetadata from './pvkBehovMetadata'
@@ -40,11 +40,6 @@ export const PvkBehovPage = () => {
     params.pvkDokumentId,
     params.etterlevelseDokumentasjonId
   )
-  const [profilering, setProfilering] = useState<boolean | null>(false)
-  const [automatiskBehandling, setAutomatiskBehandling] = useState<boolean | null>(false)
-  const [saerligKategorier, setSaerligKategorier] = useState<boolean>(false)
-  const [opplysningstyperMangler, setOpplysningstyperMangler] = useState<boolean>(false)
-  const [checkedYtterligereEgenskaper, setCheckedYtterligereEgenskaper] = useState<string[]>([])
 
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const breadcrumbPaths: IBreadCrumbPath[] = [
@@ -62,6 +57,64 @@ export const PvkBehovPage = () => {
     EListName.YTTERLIGERE_EGENSKAPER
   ) as ICode[]
 
+  const { profilering, automatiskBehandling, saerligKategorier, opplysningstyperMangler } =
+    useMemo(() => {
+      if (!etterlevelseDokumentasjon?.behandlinger) {
+        return {
+          profilering: false as boolean | null,
+          automatiskBehandling: false as boolean | null,
+          saerligKategorier: false,
+          opplysningstyperMangler: false,
+        }
+      }
+
+      const alleOpplysningstyper: IPolicy[] = []
+      const alleProfilering: any[] = []
+      const alleAutomatiskBehandling: any[] = []
+      let opplysningstyperMangler = false
+
+      etterlevelseDokumentasjon.behandlinger.forEach((behandling: IBehandling) => {
+        if (behandling.policies) {
+          if (behandling.policies.length === 0) {
+            opplysningstyperMangler = true
+          }
+          alleOpplysningstyper.push(...behandling.policies)
+        }
+        alleProfilering.push(behandling.profilering)
+        alleAutomatiskBehandling.push(behandling.automatiskBehandling)
+      })
+
+      let profilering: boolean | null = false
+      if (alleProfilering.includes(true)) {
+        profilering = true
+      } else if (alleProfilering.every((v) => v === false)) {
+        profilering = false
+      } else if (alleProfilering.includes(null)) {
+        profilering = null
+      }
+
+      let automatiskBehandling: boolean | null = false
+      if (alleAutomatiskBehandling.includes(true)) {
+        automatiskBehandling = true
+      } else if (alleAutomatiskBehandling.every((v) => v === false)) {
+        automatiskBehandling = false
+      } else if (alleAutomatiskBehandling.includes(null)) {
+        automatiskBehandling = null
+      }
+
+      const saerligKategorierOppsumert: IExternalCode[] = uniqBy(
+        alleOpplysningstyper.flatMap((opplysningstyper: IPolicy) => opplysningstyper.sensitivity),
+        'code'
+      ).filter((kategori: IExternalCode) => kategori.code === 'SAERLIGE')
+
+      return {
+        profilering,
+        automatiskBehandling,
+        saerligKategorier: saerligKategorierOppsumert.length > 0,
+        opplysningstyperMangler,
+      }
+    }, [etterlevelseDokumentasjon])
+
   useEffect(() => {
     ;(async () => {
       if (etterlevelseDokumentasjon) {
@@ -75,57 +128,6 @@ export const PvkBehovPage = () => {
       }
     })()
   }, [etterlevelseDokumentasjon])
-
-  useEffect(() => {
-    if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.behandlinger) {
-      const alleOpplysningstyper: IPolicy[] = []
-      const alleProfilering: any[] = []
-      const alleAutomatiskBehandling: any[] = []
-      etterlevelseDokumentasjon.behandlinger.forEach((behandling: IBehandling) => {
-        if (behandling.policies) {
-          if (behandling.policies.length === 0) {
-            setOpplysningstyperMangler(true)
-          }
-          alleOpplysningstyper.push(...behandling.policies)
-        }
-        alleProfilering.push(behandling.profilering)
-        alleAutomatiskBehandling.push(behandling.automatiskBehandling)
-      })
-
-      if (alleProfilering.includes(true)) {
-        setProfilering(true)
-      } else if (alleProfilering.every((v) => v === false)) {
-        setProfilering(false)
-      } else if (alleProfilering.includes(null)) {
-        setProfilering(null)
-      }
-
-      if (alleAutomatiskBehandling.includes(true)) {
-        setAutomatiskBehandling(true)
-      } else if (alleAutomatiskBehandling.every((v) => v === false)) {
-        setAutomatiskBehandling(false)
-      } else if (alleAutomatiskBehandling.includes(null)) {
-        setAutomatiskBehandling(null)
-      }
-
-      const saerligKategorierOppsumert: IExternalCode[] = uniqBy(
-        alleOpplysningstyper.flatMap((opplysningstyper: IPolicy) => opplysningstyper.sensitivity),
-        'code'
-      ).filter((kategori: IExternalCode) => kategori.code === 'SAERLIGE')
-
-      if (saerligKategorierOppsumert.length > 0) {
-        setSaerligKategorier(true)
-      }
-    }
-  }, [etterlevelseDokumentasjon])
-
-  useEffect(() => {
-    if (pvkDokument && pvkDokument.ytterligereEgenskaper.length > 0) {
-      setCheckedYtterligereEgenskaper(
-        pvkDokument.ytterligereEgenskaper.map((egenskap: ICode) => egenskap.code)
-      )
-    }
-  }, [pvkDokument])
 
   const isPvkBehovLock =
     pvkDokument &&
@@ -164,8 +166,6 @@ export const PvkBehovPage = () => {
                   profilering={profilering}
                   automatiskBehandling={automatiskBehandling}
                   saerligKategorier={saerligKategorier}
-                  checkedYtterligereEgenskaper={checkedYtterligereEgenskaper}
-                  setCheckedYtterligereEgenskaper={setCheckedYtterligereEgenskaper}
                   ytterligereEgenskaper={ytterligereEgenskaper}
                 />
               )}
