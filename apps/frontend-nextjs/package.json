@@ -8,7 +8,7 @@
     "build": "next build",
     "test": "yarn lint-staged",
     "start": "next start",
-    "lint": "prettier -c ./app && yarn run type-check",
+    "lint": "next . --ignore-path ../../.eslintignore && prettier -c . --ignore-path ../../.prettierignore lint",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write \"./app\"",
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
@@ -19,8 +19,23 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different --write",
+      "eslint --max-warnings 0",
       "bash -c 'yarn run type-check'"
     ]
+  },
+  "eslintConfig": {
+    "extends": "next",
+    "rules": {
+      "semi": [
+        "warn",
+        "never"
+      ],
+      "quotes": [
+        "warn",
+        "single"
+      ],
+      "react-hooks/exhaustive-deps": "off"
+    }
   },
   "dependencies": {
     "@apollo/client": "4.1.6",
@@ -67,7 +82,7 @@
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "8.57.1",
     "@typescript-eslint/parser": "8.57.1",
-    "eslint": "10.0.3",
+    "eslint": "9.39.4",
     "eslint-config-next": "16.1.7",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-jsx-a11y": "6.10.2",

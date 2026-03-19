@@ -898,7 +898,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                 )
               }}
             </FieldArray>
-
+            terst
             <div className='flex-1' />
           </div>
           {env.isDev && user.isAdmin() && (

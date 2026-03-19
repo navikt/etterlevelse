@@ -7,6 +7,8 @@ import prettierPlugin from 'eslint-plugin-prettier'
 const eslintConfig = [
   ...coreWebVitals,
   ...nextTypescript,
+  'plugin:react/recommended',
+  'plugin:react-hooks/recommended',
   {
     plugins: {
       prettier: prettierPlugin,
@@ -45,6 +47,10 @@ const eslintConfig = [
           },
         },
       ],
+      'react-hooks/exhaustive-deps': 'off',
+      'react/prop-types': 'off',
+      'react/jsx-uses-react': 'off',
+      'react/react-in-jsx-scope': 'off',
       'no-console': ['warn', { allow: ['warn', 'error', 'debug'] }],
       // no-extra-semi is added because there are places where the ; is necessary
       'no-extra-semi': 'off',
