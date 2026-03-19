@@ -8,7 +8,7 @@
     "build": "next build",
     "test": "yarn lint-staged",
     "start": "next start",
-    "lint": "next . --ignore-path ../../.eslintignore && prettier -c . --ignore-path ../../.prettierignore lint",
+    "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write \"./app\"",
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",

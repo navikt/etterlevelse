@@ -3,12 +3,14 @@ import nextTypescript from 'eslint-config-next/typescript'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import prettierPlugin from 'eslint-plugin-prettier'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
 
 const eslintConfig = [
   ...coreWebVitals,
   ...nextTypescript,
-  'plugin:react/recommended',
-  'plugin:react-hooks/recommended',
+  reactPlugin.configs.flat.recommended,
+  reactHooksPlugin.configs.flat.recommended,
   {
     plugins: {
       prettier: prettierPlugin,
@@ -48,6 +50,11 @@ const eslintConfig = [
         },
       ],
       'react-hooks/exhaustive-deps': 'off',
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/immutability': 'warn',
+      'react-hooks/preserve-manual-memoization': 'warn',
+      'react-hooks/globals': 'warn',
+      'react-hooks/refs': 'warn',
       'react/prop-types': 'off',
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',

@@ -36,8 +36,8 @@ export const InnsendingHistorikk: FunctionComponent<TProps> = ({
           }
 
           return (
-            <div className='mb-5'>
-              <Label key={'innsending_' + versjon}>Versjon {versjon}</Label>
+            <div className='mb-5' key={'innsending_' + versjon}>
+              <Label>Versjon {versjon}</Label>
               <List>
                 {meldingerTilPvoForVersjon.map((melding, index) => {
                   if (

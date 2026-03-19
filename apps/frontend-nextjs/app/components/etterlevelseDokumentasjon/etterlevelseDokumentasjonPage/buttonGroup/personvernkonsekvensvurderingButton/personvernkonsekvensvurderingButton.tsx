@@ -8,7 +8,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
+import { useRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import AdminRollePVK from './adminRollePVK/adminRollePVK'
 import EtterleverOgRisikoeierRollePVK from './etterleverOgRisikoeierRollePVK/etterleverOgRisikoeierRollePVK'
@@ -31,7 +31,7 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   behandlingensArtOgOmfang,
   pvoTilbakemelding,
 }) => {
-  switch (getRolle(etterlevelseDokumentasjon)) {
+  switch (useRolle(etterlevelseDokumentasjon)) {
     case EActionMenuRoles.Etterlever:
       return (
         <EtterleverRollePVK
