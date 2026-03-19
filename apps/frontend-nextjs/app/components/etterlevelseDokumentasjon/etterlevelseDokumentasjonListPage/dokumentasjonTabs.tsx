@@ -10,7 +10,7 @@ import { emptyPage } from '@/util/common/emptyPageUtil'
 import { useQuery } from '@apollo/client/react'
 import { Tabs } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { AlleEtterlevelsesDokumentasjoner } from './tabs/alleEtterlevelsesDokumentasjoner'
 import BehandlingSok from './tabs/behandlingSok'
 import MineEtterlevelseDokumentasjoner from './tabs/mineEtterlevelseDokumentasjoner'
@@ -32,10 +32,22 @@ export type TCustomTeamObject = IDokumentasjonCount & ITeam
 export const DokumentasjonTabs = () => {
   const router = useRouter()
   const queryParams = useSearchParams()
-  const [selectedTab, setSelectedTab] = useState<ETab>(ETab.MINE)
 
-  const [doneLoading, setDoneLoading] = useState(false)
-  const [variables, setVariables] = useState<TVariables>({})
+  const tabQuery = queryParams.get('tab')
+  const selectedTab: ETab =
+    tabQuery && Object.values(ETab).includes(tabQuery as ETab) ? (tabQuery as ETab) : ETab.MINE
+
+  const variables = useMemo<TVariables>(() => {
+    switch (selectedTab) {
+      case ETab.MINE:
+        return { mineEtterlevelseDokumentasjoner: true }
+      case ETab.SISTE:
+        return { sistRedigert: 20 }
+      default:
+        return {}
+    }
+  }, [selectedTab])
+
   const { data, loading: etterlevelseDokumentasjonLoading } = useQuery<
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
@@ -48,8 +60,6 @@ export const DokumentasjonTabs = () => {
   const etterlevelseDokumentasjoner = data?.etterlevelseDokumentasjoner || emptyPage
 
   const loading = teamsLoading || etterlevelseDokumentasjonLoading
-
-  const [sortedTeams, setSortedTeams] = useState<TCustomTeamObject[]>([])
 
   const sortTeams = (unSortedTeams: ITeam[]) => {
     return unSortedTeams
@@ -74,47 +84,27 @@ export const DokumentasjonTabs = () => {
       })
   }
 
-  useEffect(() => {
-    const tabQuery = queryParams.get('tab')
-
-    if (tabQuery) {
-      setSelectedTab(tabQuery as ETab)
-    }
-  }, [])
+  const sortedTeams = useMemo(() => sortTeams(teams), [teams, etterlevelseDokumentasjoner])
 
   useEffect(() => {
-    const tabQuery = queryParams.get('tab')
-    switch (selectedTab) {
-      case ETab.MINE:
-        setVariables({ mineEtterlevelseDokumentasjoner: true })
-        break
-      case ETab.SISTE:
-        setVariables({ sistRedigert: 20 })
-        break
-    }
-    if (selectedTab !== tabQuery) router.push(etterlevelseDokumentasjonerUrl(selectedTab))
-  }, [selectedTab])
-
-  useEffect(() => {
-    setSortedTeams(sortTeams(teams))
-  }, [teams])
-
-  useEffect(() => {
-    if (!doneLoading && selectedTab === ETab.ALLE) setDoneLoading(true)
-    if (!data || etterlevelseDokumentasjonLoading || doneLoading) return
+    if (!data || etterlevelseDokumentasjonLoading) return
     else if (selectedTab === ETab.MINE && !etterlevelseDokumentasjoner.totalElements)
-      setSelectedTab(ETab.SISTE)
+      router.push(etterlevelseDokumentasjonerUrl(ETab.SISTE))
     else if (selectedTab === ETab.SISTE && !etterlevelseDokumentasjoner.totalElements)
-      setSelectedTab(ETab.ALLE)
-    else setDoneLoading(true)
-  }, [etterlevelseDokumentasjoner, etterlevelseDokumentasjonLoading])
+      router.push(etterlevelseDokumentasjonerUrl(ETab.ALLE))
+  }, [
+    data,
+    etterlevelseDokumentasjonLoading,
+    selectedTab,
+    etterlevelseDokumentasjoner.totalElements,
+    router,
+  ])
 
   return (
     <Tabs
       defaultValue={ETab.MINE}
       value={selectedTab}
       onChange={(tabQuery: string) => {
-        setSelectedTab(tabQuery as ETab)
         router.push(`/dokumentasjoner?tab=${tabQuery}`)
       }}
     >

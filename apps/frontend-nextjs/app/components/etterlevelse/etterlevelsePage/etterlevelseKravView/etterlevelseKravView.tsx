@@ -30,6 +30,7 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -68,9 +69,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   )
 
   // const etterlevelserLoading: boolean = loading
-  const [krav, setKrav] = useState<TKravQL>()
   const [nyereKrav, setNyereKrav] = useState<IKrav>()
-  const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const etterlevelseFormRef: React.Ref<FormikProps<IEtterlevelse> | undefined> = useRef(undefined)
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
@@ -78,13 +77,36 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
 
   const [isSavingChanges, setIsSavingChanges] = useState<boolean>(false)
   const [isTabAlertActive, setIsTabAlertActive] = useState<boolean>(false)
-  const [isPrioritised, setIsPrioritised] = useState<boolean>(false)
+  const [isPrioritisedOverride, setIsPrioritisedOverride] = useState<boolean | null>(null)
   const [isPreview, setIsPreview] = useState<boolean>(false)
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
   const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
 
   const user = useContext(UserContext)
+
+  const krav = data?.kravById
+
+  const disableEdit = !!nyereKrav && !user.isAdmin()
+
+  const prioritisedFromDokumentasjon = useMemo(
+    () =>
+      !!(
+        etterlevelseDokumentasjon?.prioritertKravNummer &&
+        etterlevelseDokumentasjon.prioritertKravNummer.length > 0 &&
+        etterlevelseDokumentasjon.prioritertKravNummer.includes(etterlevelse.kravNummer.toString())
+      ),
+    [etterlevelseDokumentasjon, etterlevelse.kravNummer]
+  )
+
+  const isPrioritised = isPrioritisedOverride ?? prioritisedFromDokumentasjon
+
+  const setIsPrioritised: Dispatch<SetStateAction<boolean>> = (value) => {
+    setIsPrioritisedOverride((previousOverride) => {
+      const previousValue = previousOverride ?? prioritisedFromDokumentasjon
+      return typeof value === 'function' ? value(previousValue) : value
+    })
+  }
 
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
@@ -126,25 +148,11 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
           .catch(() => undefined)
       }
     })()
-
-    if (
-      etterlevelseDokumentasjon &&
-      etterlevelseDokumentasjon.prioritertKravNummer &&
-      etterlevelseDokumentasjon.prioritertKravNummer.length > 0
-    ) {
-      const priorityCheck = etterlevelseDokumentasjon.prioritertKravNummer.includes(
-        etterlevelse.kravNummer.toString()
-      )
-
-      setIsPrioritised(priorityCheck)
-    }
   }, [])
 
   useEffect(() => {
-    if (data?.kravById) {
-      setKrav(data.kravById)
-
-      getKravByKravNummer(data.kravById.kravNummer).then((resp) => {
+    if (krav) {
+      getKravByKravNummer(krav.kravNummer).then((resp) => {
         if (resp.content.length) {
           const alleVersjoner = resp.content
             .map((krav) => {
@@ -164,19 +172,14 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
             setAlleKravVersjoner(filteredVersjoner)
           }
 
-          const krav = resp.content.filter((k) => k.kravVersjon === data.kravById.kravVersjon + 1)
+          const nextKravVersjon = resp.content.filter((k) => k.kravVersjon === krav.kravVersjon + 1)
 
-          if (krav.length && krav[0].status === EKravStatus.AKTIV) setNyereKrav(krav[0])
+          if (nextKravVersjon.length && nextKravVersjon[0].status === EKravStatus.AKTIV)
+            setNyereKrav(nextKravVersjon[0])
         }
       })
     }
-  }, [data])
-
-  useEffect(() => {
-    if (nyereKrav && !user.isAdmin()) {
-      setDisableEdit(true)
-    }
-  }, [nyereKrav])
+  }, [krav])
 
   useEffect(() => {
     ;(async () => {
