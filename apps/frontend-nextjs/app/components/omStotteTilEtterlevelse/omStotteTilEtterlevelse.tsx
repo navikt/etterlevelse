@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import ForstesideStotteTilEtterlevelse from './images/ForstesidStotteTilEtterlevelse.png'
 import TemainndelingOgTemaoversiktReadmore from './images/TemainndelingOgTemaoversiktReadmore.png'
-import VisMegEnKravside from './images/VisMegEnKravside.png'
+import VisMegHvordanEnKravsideSerUt from './images/VisMegHvordanEnKravsideSerUt.png'
 
 const OmStotteTilEtterlevelse = () => {
   const [activeStep, setActiveStep] = useState(0)
@@ -167,7 +167,7 @@ const OmStotteTilEtterlevelse = () => {
           <ReadMore className='mt-3 mb-6' header='Vis meg hvordan en kravside ser ut'>
             <Image
               className='mr-2.5 mt-6 mb-12'
-              src={VisMegEnKravside}
+              src={VisMegHvordanEnKravsideSerUt}
               alt='Skjermbilde som viser en kravside'
               aria-hidden
               aria-label=''

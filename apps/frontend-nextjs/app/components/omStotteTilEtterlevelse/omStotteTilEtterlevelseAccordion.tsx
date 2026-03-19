@@ -11,6 +11,8 @@ import {
   List,
   ReadMore,
 } from '@navikt/ds-react'
+import Image from 'next/image'
+import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
 const OmStotteTilEtterlevelseAccordion = () => {
   return (
@@ -26,7 +28,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
             og filtrere krav.
           </BodyLong>
           <ReadMore header='Vis meg hvor jeg oppretter et etterlevelsesdokument' className='mb-6'>
-            skjermbilde mangler
+            <div className='my-6'>
+              <video
+                controls
+                src='videos/VisMegHvordanJegOppretterEtterlevelsesdokument.mov'
+              ></video>
+            </div>
           </ReadMore>
           <BodyLong spacing>
             Oppdatering av et eksisterende etterlevelsesdokument kan dere gjøre under Dokumentere
@@ -38,7 +45,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
             header='Vis meg hvor jeg finner og oppdaterer mine etterlevelsesdokumenter'
             className='mb-6'
           >
-            skjermbilde mangler
+            <div className='my-6'>
+              <video
+                controls
+                src='videos/VisMegHvorJegFinnerOgOppdatererEtterlevelsesdokument.mov'
+              ></video>
+            </div>
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
@@ -100,14 +112,22 @@ const OmStotteTilEtterlevelseAccordion = () => {
             header='Vis meg hvor jeg redigerer dokumentegenskaper etter at jeg har opprettet et nytt etterlevelsesdokument'
             className='mb-6'
           >
-            skjermbilde mangler
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegRedigererDokumentegenskaper.mov'></video>
+            </div>
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
         <Accordion.Header>Jobbe i temaoversikten</Accordion.Header>
         <Accordion.Content>
-          skjermbilde mangler
+          <Image
+            className='mr-2.5 mt-6 mb-12'
+            src={JobbeITemaoversikten}
+            alt='Skjermbilde som viser temaoversikten'
+            aria-hidden
+            aria-label=''
+          />
           <BodyLong spacing>
             Basert på hvilke egenskaper dere valgte som relevante for deres dokumentasjon, får dere
             en liste med etterlevelseskrav. Kravene presenteres i en arbeidsliste fordelt på tema.
@@ -124,7 +144,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
       <Accordion.Item>
         <Accordion.Header>Besvare etterlevelseskrav</Accordion.Header>
         <Accordion.Content>
-          skjermbilde mangler
+          <div className='my-6'>
+            <video controls src='videos/video-mangler'></video>
+          </div>
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
             for å etterleve kravet. Hvert kriterium inneholder også “Utfyllende om kravet” som
@@ -164,7 +186,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
       <Accordion.Item>
         <Accordion.Header>Få etterlevelsen godkjent av risikoeier</Accordion.Header>
         <Accordion.Content>
-          skjermbilde mangler
+          <div className='my-6'>
+            <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'></video>
+          </div>
           <BodyLong spacing>
             Etterlevelsesdokumenter kan godkjennes av risikoeieren til enhver tid, også uavhengig av
             godkjenning av PVK. TRENGER VI NOE HER OM HVA DET VIL VÆRE SOM TRIGGER EN NY
@@ -219,7 +243,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
       <Accordion.Item>
         <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
         <Accordion.Content>
-          skjermbilde mangler
+          <div className='my-6'>
+            <video controls src='videos/'></video>
+          </div>
           <BodyLong spacing>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
             menyen på dokumentets temaside. På siden “Godkjenn etterlevelsen” kan du gjøre følgende:
