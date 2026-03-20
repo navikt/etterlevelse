@@ -201,12 +201,10 @@ export const useMyTeams = () => {
           setLoading(false)
           console.error("couldn't find teams", error)
         })
-    } else {
-      setLoading(false)
     }
   }, [ident, productAreas])
 
-  return [data, loading] as [ITeam[], boolean]
+  return [data, ident ? loading : false] as [ITeam[], boolean]
 }
 
 export const useMyProductAreas = () => {
@@ -227,10 +225,10 @@ export const useMyProductAreas = () => {
           setLoading(false)
           console.error('couldn\t find product area', e)
         })
-    } else setLoading(false)
+    }
   }, [ident])
 
-  return [data, loading] as [IProductArea[], boolean]
+  return [data, ident ? loading : false] as [IProductArea[], boolean]
 }
 
 export const usePersonSearch = async (searchParam: string) => {

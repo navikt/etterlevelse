@@ -52,23 +52,22 @@ export const getAllKravPriorityList = async () => {
 
 export const useKravPriorityList = (temaCode: string) => {
   const [data, setData] = useState(kravPrioritingMapToFormValue({}))
-  const [loading, setLoading] = useState(false)
+  const [isDone, setIsDone] = useState(false)
 
-  const fetchData = () => {
-    setLoading(true)
-    getKravPriorityListByTemaCode(temaCode).then((response: IKravPriorityList | undefined) => {
-      if (response) {
-        setData(response)
-      }
-    })
-    setLoading(false)
+  const fetchData = async () => {
+    setIsDone(false)
+    const response = await getKravPriorityListByTemaCode(temaCode)
+    if (response) {
+      setData(response)
+    }
+    setIsDone(true)
   }
 
   useEffect(() => {
     fetchData()
   }, [temaCode])
 
-  return [data, loading, fetchData] as [IKravPriorityList, boolean, () => void]
+  return [data, !isDone, fetchData] as [IKravPriorityList, boolean, () => void]
 }
 
 function kravPrioriteringToDto(kravPrioriteringToDto: IKravPriorityList): IKravPriorityList {

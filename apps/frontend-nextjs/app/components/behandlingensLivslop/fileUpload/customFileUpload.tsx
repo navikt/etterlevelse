@@ -30,33 +30,25 @@ interface IProps {
 export const CustomFileUpload = (props: IProps) => {
   const ref = useRef<HTMLInputElement>(null)
   const { initialValues, rejectedFiles, setRejectedFiles, setFilesToUpload } = props
-  const [files, setFiles] = useState<FileObject[]>([])
+  const [files, setFiles] = useState<FileObject[]>(() =>
+    initialValues.map((initialFile) => ({ file: initialFile, error: false }))
+  )
   const acceptedFiles = files.filter((file) => !file.error)
   const [fileUploadAlert, setFileUploadAlert] = useState<boolean>(false)
   const [fileUploadError, setFileUploadError] = useState<boolean>(false)
   const [fileDeleteAlert, setFileDeleteAlert] = useState<boolean>(false)
 
-  useEffect(() => {
-    if (initialValues) {
-      const initialFiles: FileObject[] = []
-      initialValues.forEach((initialFile) => {
-        initialFiles.push({ file: initialFile, error: false })
-      })
-      setFiles(initialFiles)
-      setFilesToUpload(initialValues)
-    }
-  }, [initialValues])
-
-  useEffect(() => {
-    setRejectedFiles(files.filter((f): f is FileRejected => f.error))
-    if (files.filter((f): f is FileRejected => f.error).length !== 0) {
-      setFileUploadError(true)
-    }
-  }, [files])
+  const syncRejectedFiles = (nextFiles: FileObject[]) => {
+    const rejected = nextFiles.filter((f): f is FileRejected => f.error)
+    setRejectedFiles(rejected)
+    setFileUploadError(rejected.length !== 0)
+  }
 
   const removeFile = (fileToRemove: FileObject) => {
-    setFiles(files.filter((file) => file !== fileToRemove))
-    setFilesToUpload(files.filter((file) => file !== fileToRemove).map((file) => file.file))
+    const nextFiles = files.filter((file) => file !== fileToRemove)
+    setFiles(nextFiles)
+    setFilesToUpload(nextFiles.map((file) => file.file))
+    syncRejectedFiles(nextFiles)
     setFileDeleteAlert(true)
   }
 
@@ -94,11 +86,10 @@ export const CustomFileUpload = (props: IProps) => {
         }}
         onSelect={(newFiles: FileObject[]) => {
           setFileUploadAlert(false)
-          setFiles([...files, ...newFiles])
-          setFilesToUpload([
-            ...files.map((file) => file.file),
-            ...newFiles.map((newFile) => newFile.file),
-          ])
+          const nextFiles = [...files, ...newFiles]
+          setFiles(nextFiles)
+          setFilesToUpload(nextFiles.map((file) => file.file))
+          syncRejectedFiles(nextFiles)
           setFileUploadAlert(true)
         }}
       />

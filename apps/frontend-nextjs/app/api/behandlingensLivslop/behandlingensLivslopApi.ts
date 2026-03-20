@@ -126,18 +126,21 @@ export const useBehandlingensLivslop = (
   const [data, setData] = useState<IBehandlingensLivslop | undefined>(
     isCreateNew ? mapBehandlingensLivslopToFormValue({}) : undefined
   )
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isDone, setIsDone] = useState<boolean>(
+    !behandlingensLivslopId && !etterlevelseDokumentasjonId
+  )
 
   useEffect(() => {
-    setIsLoading(true)
     if (behandlingensLivslopId && !isCreateNew) {
+      setIsDone(false)
       ;(async () => {
         await getBehandlingensLivslop(behandlingensLivslopId).then(async (behandlingensLivslop) => {
           setData(behandlingensLivslop)
-          setIsLoading(false)
+          setIsDone(true)
         })
       })()
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
+      setIsDone(false)
       //double check that behandlingenslivslop doesnt not exist
       ;(async () => {
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
@@ -145,14 +148,14 @@ export const useBehandlingensLivslop = (
             if (behandlingensLivslop) {
               setData(behandlingensLivslop)
             }
-            setIsLoading(false)
+            setIsDone(true)
           })
-          .catch(() => undefined)
+          .catch(() => setIsDone(true))
       })()
     }
   }, [behandlingensLivslopId])
 
-  return [data, setData, isLoading] as [
+  return [data, setData, !isDone] as [
     IBehandlingensLivslop | undefined,
     (e: IBehandlingensLivslop) => void,
     boolean,

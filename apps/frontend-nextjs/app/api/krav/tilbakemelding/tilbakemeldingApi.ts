@@ -96,11 +96,11 @@ export const useTilbakemeldinger = (
   (tilbakemelding: ITilbakemelding) => void,
 ] => {
   const [data, setData] = useState<ITilbakemelding[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [isDone, setIsDone] = useState<boolean>(!kravNummer || !kravVersjon)
 
   useEffect(() => {
     if (kravNummer && kravVersjon) {
-      setLoading(true)
+      setIsDone(false)
       getTilbakemeldingForKravByKravNummer(kravNummer)
         .then((response: IPageResponse<ITilbakemelding>) => {
           setData(
@@ -110,11 +110,11 @@ export const useTilbakemeldinger = (
                 moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()
             )
           )
-          setLoading(false)
+          setIsDone(true)
         })
         .catch((error: any) => {
           setData([])
-          setLoading(false)
+          setIsDone(true)
           console.error("couldn't find krav", error)
         })
     }
@@ -150,7 +150,7 @@ export const useTilbakemeldinger = (
     }
   }
 
-  return [data, loading, add, replace, remove] as [
+  return [data, !isDone, add, replace, remove] as [
     ITilbakemelding[],
     boolean,
     (tilbakemelding: ITilbakemelding) => void,

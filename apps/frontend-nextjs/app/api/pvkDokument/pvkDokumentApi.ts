@@ -93,18 +93,19 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
   const [data, setData] = useState<IPvkDokument | undefined>(
     isCreateNew ? mapPvkDokumentToFormValue({}) : undefined
   )
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isDone, setIsDone] = useState<boolean>(!pvkDokumentId && !etterlevelseDokumentasjonId)
 
   useEffect(() => {
-    setIsLoading(true)
     if (pvkDokumentId && !isCreateNew) {
+      setIsDone(false)
       ;(async () => {
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument: IPvkDokument) => {
           setData(mapPvkDokumentToFormValue(pvkDokument))
-          setIsLoading(false)
+          setIsDone(true)
         })
       })()
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
+      setIsDone(false)
       //double check that pvkdokument doesnt not exist
       ;(async () => {
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
@@ -112,14 +113,14 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
             if (pvkDokument) {
               setData(mapPvkDokumentToFormValue(pvkDokument))
             }
-            setIsLoading(false)
+            setIsDone(true)
           }
         )
       })()
     }
   }, [pvkDokumentId])
 
-  return [data, setData, isLoading] as [
+  return [data, setData, !isDone] as [
     IPvkDokument | undefined,
     (pvkDokument: IPvkDokument) => void,
     boolean,

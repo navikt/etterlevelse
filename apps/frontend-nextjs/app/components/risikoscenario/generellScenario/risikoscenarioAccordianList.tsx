@@ -178,8 +178,9 @@ export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
         <LocalAlert status='success' className='mt-5 w-full max-w-[75ch] mx-auto'>
           <LocalAlert.Header>
             <LocalAlert.Title>
-              Risikoscenariet &quot;{movedRisikoscenarioAlert.risikoscenarioName}&quot; er flyttet
-              til følgende etterlevelseskrav:
+              {`Risikoscenariet "${movedRisikoscenarioAlert.risikoscenarioName}" er flyttet til`}
+              <br />
+              følgende etterlevelseskrav:
             </LocalAlert.Title>
             <LocalAlert.CloseButton onClick={() => setMovedRisikoscenarioAlert(null)} />
           </LocalAlert.Header>

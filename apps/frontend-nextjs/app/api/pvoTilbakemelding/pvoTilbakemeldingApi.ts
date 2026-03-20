@@ -51,11 +51,11 @@ export const getPvoTilbakemeldingByPvkDokumentId = async (
 
 export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
   const [data, setData] = useState<IPvoTilbakemelding>(mapPvoTilbakemeldingToFormValue({}))
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isDone, setIsDone] = useState<boolean>(!pvkDokumentId)
 
   useEffect(() => {
-    setIsLoading(true)
     if (pvkDokumentId) {
+      setIsDone(false)
       ;(async () => {
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument) => {
           const antallInnsending = pvkDokument.antallInnsendingTilPvo
@@ -79,17 +79,13 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
 
               setData(mapPvoTilbakemeldingToFormValue(formValuePvo))
             })
-            .finally(() => setIsLoading(false))
+            .finally(() => setIsDone(true))
         })
       })()
     }
   }, [pvkDokumentId])
 
-  return [data, setData, isLoading] as [
-    IPvoTilbakemelding,
-    (e: IPvoTilbakemelding) => void,
-    boolean,
-  ]
+  return [data, setData, !isDone] as [IPvoTilbakemelding, (e: IPvoTilbakemelding) => void, boolean]
 }
 
 export const createPvoTilbakemelding = async (pvoTilbakemelding: IPvoTilbakemelding) => {

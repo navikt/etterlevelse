@@ -13,7 +13,7 @@ import {
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { EListName, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
-import { EKravStatus, TKravId, TKravQL } from '@/constants/krav/kravConstants'
+import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { getKravMedPrioriteringOgEtterlevelseQuery } from '@/query/krav/kravQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
@@ -21,7 +21,7 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { sortKravListeByPriority, toKravId } from '@/util/krav/kravUtil'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { PageLayout } from '../../others/scaffold/scaffold'
 
 export const EtterlevelsePage = () => {
@@ -42,10 +42,10 @@ export const EtterlevelsePage = () => {
     params.etterlevelseDokumentasjonId
   )
   const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
-  const [loadingEtterlevelseData, setLoadingEtterlevelseData] = useState<boolean>(false)
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = useState<IEtterlevelse[]>()
-  const [nextKravToDocument, setNextKravToDocument] = useState<string>('')
-  const [kravId, setKravId] = useState<TKravId | undefined>()
+
+  const currentKravNummer = Number(params.kravNummer)
+  const currentKravVersjon = Number(params.kravVersjon)
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
     getKravMedPrioriteringOgEtterlevelseQuery,
@@ -70,14 +70,12 @@ export const EtterlevelsePage = () => {
   ]
 
   useEffect(() => {
-    setKravId({ kravNummer: Number(params.kravNummer), kravVersjon: Number(params.kravVersjon) })
     ;(async () => {
-      setLoadingEtterlevelseData(true)
       if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
-        const kravVersjon = parseInt(params.kravVersjon)
+        const kravVersjon = currentKravVersjon
         const etterlevelser = await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
           etterlevelseDokumentasjon.id,
-          parseInt(params.kravNummer)
+          currentKravNummer
         )
         const etterlevelserList = etterlevelser.content.sort((a, b) =>
           a.kravVersjon > b.kravVersjon ? -1 : 1
@@ -95,39 +93,42 @@ export const EtterlevelsePage = () => {
             mapEtterlevelseToFormValue({
               etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
               kravVersjon: kravVersjon,
-              kravNummer: parseInt(params.kravNummer),
+              kravNummer: currentKravNummer,
             })
           )
         }
       }
-      setLoadingEtterlevelseData(false)
     })()
-  }, [etterlevelseDokumentasjon])
+  }, [etterlevelseDokumentasjon, currentKravNummer, currentKravVersjon])
 
-  useEffect(() => {
-    if (data && !loading) {
-      const kravPriorityList: TKravQL[] = sortKravListeByPriority<TKravQL>(data?.krav.content)
-      const currentKravIndex: number = kravPriorityList.findIndex(
-        (krav: TKravQL) => krav.kravNummer === kravId?.kravNummer
-      )
-      if (currentKravIndex !== null && kravPriorityList.length - 1 !== currentKravIndex) {
-        const nextKravIndex = kravPriorityList.findIndex(
-          (krav: TKravQL, index: number) =>
-            index > currentKravIndex &&
-            (krav.etterlevelser.length === 0 ||
-              (krav.etterlevelser.length > 0 &&
-                ![
-                  EEtterlevelseStatus.FERDIG_DOKUMENTERT,
-                  EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
-                ].includes(krav.etterlevelser[0].status)))
-        )
-        const nextKrav: TKravQL = kravPriorityList[nextKravIndex]
-        if (nextKrav) {
-          setNextKravToDocument('/' + nextKrav.kravNummer + '/' + nextKrav.kravVersjon)
-        }
-      }
+  const nextKravToDocument = useMemo(() => {
+    if (!data || loading) {
+      return ''
     }
-  }, [data, loading, temaData, kravId])
+
+    const kravPriorityList: TKravQL[] = sortKravListeByPriority<TKravQL>(data.krav.content)
+    const currentKravIndex: number = kravPriorityList.findIndex(
+      (krav: TKravQL) => krav.kravNummer === currentKravNummer
+    )
+
+    if (currentKravIndex === -1 || kravPriorityList.length - 1 === currentKravIndex) {
+      return ''
+    }
+
+    const nextKravIndex = kravPriorityList.findIndex(
+      (krav: TKravQL, index: number) =>
+        index > currentKravIndex &&
+        (krav.etterlevelser.length === 0 ||
+          (krav.etterlevelser.length > 0 &&
+            ![
+              EEtterlevelseStatus.FERDIG_DOKUMENTERT,
+              EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT,
+            ].includes(krav.etterlevelser[0].status)))
+    )
+
+    const nextKrav: TKravQL = kravPriorityList[nextKravIndex]
+    return nextKrav ? `/${nextKrav.kravNummer}/${nextKrav.kravVersjon}` : ''
+  }, [data, loading, currentKravNummer])
 
   return (
     <PageLayout
@@ -137,8 +138,8 @@ export const EtterlevelsePage = () => {
     >
       {etterlevelseDokumentasjon && (
         <div className='w-full'>
-          {loadingEtterlevelseData && <CenteredLoader />}
-          {!loadingEtterlevelseData && etterlevelse && (
+          {!etterlevelse && <CenteredLoader />}
+          {etterlevelse && (
             <EtterlevelseKravView
               nextKravToDocument={nextKravToDocument}
               temaName={temaData?.shortName}

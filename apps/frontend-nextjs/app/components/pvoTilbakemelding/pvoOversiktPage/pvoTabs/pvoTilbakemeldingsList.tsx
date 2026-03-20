@@ -13,7 +13,7 @@ import {
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Label, List, Search, Select, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface IAnsvarligItem {
   key: string
@@ -25,10 +25,8 @@ export const PvoTilbakemeldingsList = () => {
   const [allPvoTilbakemelding, setAllPvoTilbakemelding] = useState<IPvoTilbakemelding[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('alle')
   const [ansvarligFilter, setAnsvarligFilter] = useState<string>('')
-  const [ansvarligList, setAnsvarligList] = useState<IAnsvarligItem[]>([])
   const [searchPvk, setSearchPvk] = useState<string>('')
 
-  const [filteredPvkDokument, setFilteredPvkDokuement] = useState<IPvkDokumentListItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -39,37 +37,37 @@ export const PvoTilbakemeldingsList = () => {
           (pvkDok: IPvkDokumentListItem) => pvkDok.status !== EPvkDokumentStatus.UNDERARBEID
         )
         setAllPvkDocumentListItem(filteredPvkDokument)
-        setFilteredPvkDokuement(filteredPvkDokument)
       })
 
       await getAllPvoTilbakemelding().then((response: IPvoTilbakemelding[]) => {
         setAllPvoTilbakemelding(response)
-        const list: IAnsvarligItem[] = []
-        response.forEach((tilbakemelding: IPvoTilbakemelding) => {
-          tilbakemelding.vurderinger.forEach((vurdering) => {
-            if (vurdering.ansvarligData && vurdering.ansvarligData.length !== 0) {
-              list.push(
-                ...vurdering.ansvarligData.map((data) => {
-                  return { key: data.navIdent, value: data.fullName }
-                })
-              )
-            }
-          })
-        })
-
-        setAnsvarligList(
-          list.filter(
-            (object, index, arr) =>
-              arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(object)) === index
-          )
-        )
       })
 
       setIsLoading(false)
     })()
   }, [])
 
-  useEffect(() => {
+  const ansvarligList = useMemo<IAnsvarligItem[]>(() => {
+    const list: IAnsvarligItem[] = []
+    allPvoTilbakemelding.forEach((tilbakemelding: IPvoTilbakemelding) => {
+      tilbakemelding.vurderinger.forEach((vurdering) => {
+        if (vurdering.ansvarligData && vurdering.ansvarligData.length !== 0) {
+          list.push(
+            ...vurdering.ansvarligData.map((data) => {
+              return { key: data.navIdent, value: data.fullName }
+            })
+          )
+        }
+      })
+    })
+
+    return list.filter(
+      (object, index, arr) =>
+        arr.findIndex((item) => JSON.stringify(item) === JSON.stringify(object)) === index
+    )
+  }, [allPvoTilbakemelding])
+
+  const sortedPvkDokument = useMemo(() => {
     const unsortedData: any = [
       ...allPvkDocumentListItem.map((pvk: IPvkDokumentListItem) => {
         const pvoTilbakemelding: IPvoTilbakemelding[] = allPvoTilbakemelding.filter(
@@ -107,7 +105,7 @@ export const PvoTilbakemeldingsList = () => {
       }),
     ]
 
-    const sortedPvk: IPvkDokumentListItem[] = unsortedData
+    return unsortedData
       .sort((a: any, b: any) => a.dateToCompare.localeCompare(b.dateToCompare))
       .map((data: any) => {
         return {
@@ -126,16 +124,14 @@ export const PvoTilbakemeldingsList = () => {
               : data.sendtTilPvoAv.split('-')[1],
         } as IPvkDokumentListItem
       })
-    setAllPvkDocumentListItem(sortedPvk)
-    setFilteredPvkDokuement(sortedPvk)
-  }, [allPvoTilbakemelding])
+  }, [allPvkDocumentListItem, allPvoTilbakemelding])
 
-  useEffect(() => {
-    let filteredData: IPvkDokumentListItem[] = allPvkDocumentListItem
+  const filteredPvkDokument = useMemo(() => {
+    let filteredData: IPvkDokumentListItem[] = sortedPvkDokument
 
     if (statusFilter !== 'alle') {
       if (statusFilter === EPvoTilbakemeldingStatus.IKKE_PABEGYNT) {
-        filteredData = allPvkDocumentListItem.filter(
+        filteredData = sortedPvkDokument.filter(
           (pvk: IPvkDokumentListItem) =>
             !allPvoTilbakemelding
               .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
@@ -146,22 +142,20 @@ export const PvoTilbakemeldingsList = () => {
               .includes(pvk.id)
         )
       } else if (statusFilter === 'avventer') {
-        filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
+        filteredData = sortedPvkDokument.filter((pvk: IPvkDokumentListItem) =>
           allPvoTilbakemelding
             .filter((pvo: IPvoTilbakemelding) => pvo.status === EPvoTilbakemeldingStatus.AVVENTER)
             .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
             .includes(pvk.id)
         )
       } else {
-        filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
+        filteredData = sortedPvkDokument.filter((pvk: IPvkDokumentListItem) =>
           allPvoTilbakemelding
             .filter((pvo: IPvoTilbakemelding) => pvo.status === statusFilter)
             .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
             .includes(pvk.id)
         )
       }
-    } else {
-      filteredData = allPvkDocumentListItem
     }
 
     if (!['', 'alle'].includes(ansvarligFilter)) {
@@ -191,8 +185,8 @@ export const PvoTilbakemeldingsList = () => {
       })
     }
 
-    setFilteredPvkDokuement(filteredData)
-  }, [statusFilter, ansvarligFilter, searchPvk])
+    return filteredData
+  }, [sortedPvkDokument, allPvoTilbakemelding, statusFilter, ansvarligFilter, searchPvk])
 
   const getLatestVurderingSendtDato = (pvoTilbakemelding: IPvoTilbakemelding) => {
     const sortedVurderinger = pvoTilbakemelding.vurderinger.sort(
