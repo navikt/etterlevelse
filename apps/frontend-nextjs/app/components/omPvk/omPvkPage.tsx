@@ -30,7 +30,7 @@ const OmPvkPage = () => {
               <Stepper.Step href='#behandlingens-livslop'>
                 Dokumentasjon av Behandlingens livsløp
               </Stepper.Step>
-              <Stepper.Step href='#behanlinges-art-og-omfang'>
+              <Stepper.Step href='#behandlinges-art-og-omfang'>
                 Dokumentasjon av behandlingens art og omfang
               </Stepper.Step>
               <Stepper.Step href='#bruk-av-den-nye-losningen'>
@@ -189,7 +189,7 @@ const OmPvkPage = () => {
             om det er nødvendig å gjennomføre PVK.
           </BodyLong>
 
-          <Heading level='2' size='medium' spacing id='behanlinges-art-og-omfang'>
+          <Heading level='2' size='medium' spacing id='behandlinges-art-og-omfang'>
             Dokumentasjon av behandlingens art og omfang
           </Heading>
           <BodyLong spacing>Behandlingens art og omfang handler om:</BodyLong>

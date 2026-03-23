@@ -116,7 +116,7 @@ export const Footer = () => {
               Om Behandlingskatalogen
             </Link>
             <Link className='text-white' href={dokumentasjonLink}>
-              Om Støtte til etterlevelse?
+              Om Støtte til etterlevelse
             </Link>
             <Link className='text-white' href='/om-pvk'>
               Om Digital PVK

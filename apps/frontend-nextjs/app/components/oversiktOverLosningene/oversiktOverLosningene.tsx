@@ -47,7 +47,7 @@ export const OversiktOverLosningene = () => {
 
           <div className='flex my-6'>
             <Image
-              className='mr-2.5 max-w-1/2'
+              className='mr-2.5 max-w-0.5'
               src={KortOmLosningeneBehandlingskatalogen}
               alt='Skjermbilde fra Behandlingskatalogen.'
             />
@@ -66,7 +66,7 @@ export const OversiktOverLosningene = () => {
           </div>
           <div className='flex my-12'>
             <Image
-              className='mr-2.5 max-w-1/2'
+              className='mr-2.5 max-w-0.5'
               src={KortOmLosningenStotteTilEtterlevelse}
               alt='Skjermbilde fra Støtte til etterlevelse.'
             />
@@ -84,7 +84,7 @@ export const OversiktOverLosningene = () => {
           </div>
           <div className='flex my-12'>
             <Image
-              className='mr-2.5 max-w-1/2'
+              className='mr-2.5 max-w-0.5'
               src={KortOmLosningenDigitalPVK}
               alt='Skjermbilde fra Digital PVK.'
             />

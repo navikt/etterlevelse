@@ -318,7 +318,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
                 <List.Item>etterlevelsen har samme formål.</List.Item>
                 <List.Item>
                   samme etterlevelse gjelder i flere sammenhenger i Nav, og det vil være
-                  uhensiktsmessig tidkrevende om alle måtte skreve hele dokumentasjonen sin fra
+                  uhensiktsmessig tidkrevende om alle måtte skrive hele dokumentasjonen sin fra
                   bunnen av.
                 </List.Item>
                 <List.Item>
@@ -596,7 +596,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
             gjenbrukskopi.
           </BodyLong>
           <InfoCard data-color='warning' className='mb-6'>
-            <InfoCard.Header icon={<ExclamationmarkTriangleIcon />} aria-hidden>
+            <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
               <InfoCard.Title>
                 Dere er ansvarlige for at deres etterlevelsesdokumentasjon stemmer
               </InfoCard.Title>
