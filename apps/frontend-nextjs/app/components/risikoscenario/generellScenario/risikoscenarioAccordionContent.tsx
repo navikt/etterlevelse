@@ -370,7 +370,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             </div>
           )}
 
-        {submitSuccess && !formRef.current.dirty && (
+        {submitSuccess && (
           <Alert
             className='mt-3'
             variant='success'

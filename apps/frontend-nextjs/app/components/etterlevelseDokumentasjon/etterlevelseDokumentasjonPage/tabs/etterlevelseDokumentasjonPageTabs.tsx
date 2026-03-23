@@ -56,6 +56,15 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   const pathname = usePathname()
   const [pvoTilbakemelding] = usePvoTilbakemelding(pvkDokument?.id)
   const [allTiltak, setAllTiltak] = useState<ITiltak[]>([])
+  const hasPrioritertKrav =
+    !!morDocumentRelation &&
+    morDocumentRelation.fromDocumentWithData.prioritertKravNummer.length > 0
+  const currentTabValue =
+    tabQuery && tabQuery === 'pvk'
+      ? 'pvkRelaterteKrav'
+      : hasPrioritertKrav
+        ? 'prioritertKravliste'
+        : tabValue
 
   const previousVurdering = useMemo(() => {
     if (!!pvoTilbakemelding && !!pvkDokument && pvkDokument.antallInnsendingTilPvo > 1) {
@@ -87,19 +96,10 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
     })()
   }, [previousVurdering, pvkDokument])
 
-  useEffect(() => {
-    if (
-      morDocumentRelation &&
-      morDocumentRelation.fromDocumentWithData.prioritertKravNummer.length > 0
-    ) {
-      setTabValue('prioritertKravliste')
-    }
-  }, [morDocumentRelation, pvkDokument])
-
   return (
     <Tabs
       defaultValue='alleKrav'
-      value={tabQuery && tabQuery === 'pvk' ? 'pvkRelaterteKrav' : tabValue}
+      value={currentTabValue}
       onChange={(newValue) => {
         setTabValue(newValue)
         router.push(pathname, { scroll: false })

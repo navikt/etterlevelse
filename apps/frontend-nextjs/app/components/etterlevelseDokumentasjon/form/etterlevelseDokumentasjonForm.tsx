@@ -111,7 +111,25 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
     EListName.RELEVANS
   )
   const router = useRouter()
-  const [selectedFilter, setSelectedFilter] = useState<number[]>([])
+  const [selectedFilter, setSelectedFilter] = useState<number[]>(() => {
+    if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.irrelevansFor.length) {
+      const irrelevansIndex = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) => {
+        return relevansOptions.findIndex(
+          (relevans: IGetParsedOptionsProps) => relevans.value === irrelevans.code
+        )
+      })
+
+      return relevansOptions
+        .map((_relevans: IGetParsedOptionsProps, index: number) => {
+          return index
+        })
+        .filter((index: number) => !irrelevansIndex.includes(index))
+    }
+
+    return relevansOptions.map((_relevans: IGetParsedOptionsProps, index: number) => {
+      return index
+    })
+  })
 
   const [dokumentRelasjon, setDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
@@ -146,29 +164,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
     : 'Navngi det nye dokumentet ditt'
-
-  useEffect(() => {
-    if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.irrelevansFor.length) {
-      const irrelevansIndex = etterlevelseDokumentasjon.irrelevansFor.map((irrelevans: ICode) => {
-        return relevansOptions.findIndex(
-          (relevans: IGetParsedOptionsProps) => relevans.value === irrelevans.code
-        )
-      })
-      setSelectedFilter(
-        relevansOptions
-          .map((_relevans: IGetParsedOptionsProps, index: number) => {
-            return index
-          })
-          .filter((index: number) => !irrelevansIndex.includes(index))
-      )
-    } else {
-      setSelectedFilter(
-        relevansOptions.map((_relevans: IGetParsedOptionsProps, index: number) => {
-          return index
-        })
-      )
-    }
-  }, [etterlevelseDokumentasjon, codelist.lists])
 
   useEffect(() => {
     ;(async () => {
