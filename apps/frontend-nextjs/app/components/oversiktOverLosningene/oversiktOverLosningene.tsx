@@ -18,7 +18,7 @@ export const OversiktOverLosningene = () => {
     >
       <div className='flex gap-7 mt-10'>
         <div className='sticky top-4 h-full'>
-          <div className='max-w-68.5'>
+          <div className='max-w-[274px]'>
             <Stepper
               aria-labelledby='stepper-heading'
               activeStep={activeStep}
@@ -33,7 +33,7 @@ export const OversiktOverLosningene = () => {
           </div>
         </div>
         <div className='max-w-[75ch]'>
-          <Heading size='large' level='1'>
+          <Heading id='stepper-heading' size='large' level='1'>
             Oversikt over Behandlingskatalogen, Støtte til etterlevelse og Digital PVK
           </Heading>
           <BodyLong className='mt-6'>
@@ -50,8 +50,6 @@ export const OversiktOverLosningene = () => {
               className='mr-2.5 max-w-1/2'
               src={KortOmLosningeneBehandlingskatalogen}
               alt='Skjermbilde fra Behandlingskatalogen.'
-              aria-hidden
-              aria-label=''
             />
             <div className='ml-6'>
               <Heading size='small' level='3' spacing>
@@ -71,8 +69,6 @@ export const OversiktOverLosningene = () => {
               className='mr-2.5 max-w-1/2'
               src={KortOmLosningenStotteTilEtterlevelse}
               alt='Skjermbilde fra Støtte til etterlevelse.'
-              aria-hidden
-              aria-label=''
             />
             <div className='ml-6'>
               <Heading size='small' level='3' spacing>
@@ -91,8 +87,6 @@ export const OversiktOverLosningene = () => {
               className='mr-2.5 max-w-1/2'
               src={KortOmLosningenDigitalPVK}
               alt='Skjermbilde fra Digital PVK.'
-              aria-hidden
-              aria-label=''
             />
             <div className='ml-6'>
               <Heading size='small' level='3' spacing>
@@ -120,8 +114,6 @@ export const OversiktOverLosningene = () => {
             className='mr-2.5 mt-6'
             src={KortOmLosningeneSammenhengenMellomVerktoyene}
             alt='Skjermbilde som viser sammenhengen mellom verktøyene Behandlingskatalogen, Støtte til Etterlevelse og Digital PVK.'
-            aria-hidden
-            aria-label=''
           />
           <ReadMore
             header='Forholdet mellom Støtte til etterlevelse og Behandlingskatalogen'
@@ -147,7 +139,7 @@ export const OversiktOverLosningene = () => {
             </BodyLong>
             <BodyLong spacing>
               PVK er en utvidelse av etterlevelsesdokumentet i tilfeller der dere behandler
-              personopplysinger og har vurdert at det er behov for PVK.
+              personopplysninger og har vurdert at det er behov for PVK.
             </BodyLong>
           </ReadMore>
           <ReadMore header='Forholdet mellom Behandlingskatalogen og Digital PVK' className='mt-6'>

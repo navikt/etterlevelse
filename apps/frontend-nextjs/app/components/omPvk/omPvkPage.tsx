@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 import SkjermbildePVK from './images/SkjermbildePVK.png'
+import VisHvorJegFinnerDigitalPVK from './images/VisHvorJegFinnerDigitalPVK.png'
 
 const OmPvkPage = () => {
   const [activeStep, setActiveStep] = useState(0)
@@ -40,7 +41,7 @@ const OmPvkPage = () => {
           </div>
         </div>
         <div className='max-w-[75ch]'>
-          <Heading spacing size='large' level='1'>
+          <Heading id='stepper-heading' spacing size='large' level='1'>
             Om Digital PVK
           </Heading>
           <BodyLong spacing>
@@ -51,8 +52,6 @@ const OmPvkPage = () => {
             className='mr-2.5 mt-6 mb-12'
             src={SkjermbildePVK}
             alt='Skjermbilde fra forsiden av vår digitale PVK-løsning.'
-            aria-hidden
-            aria-label=''
           />
           <Heading size='medium' level='2' spacing id='formaalet-med-pvk'>
             Hva er formålet med Personvernkonsekvensvurdering (PVK)?
@@ -83,7 +82,11 @@ const OmPvkPage = () => {
             etterlevelsesdokumentet.
           </BodyLong>
           <ReadMore header='Vis meg hvor jeg finner Digital PVK' className='mb-6'>
-            mangler
+            <Image
+              className='mr-2.5 mt-6 mb-12'
+              src={VisHvorJegFinnerDigitalPVK}
+              alt='Skjermbilde som viser hvor man finner Digital PVK'
+            />
           </ReadMore>
           <BodyLong spacing>
             Resten av denne siden beskriver i nærmere detalj hvordan man bruker Digital PVK til å

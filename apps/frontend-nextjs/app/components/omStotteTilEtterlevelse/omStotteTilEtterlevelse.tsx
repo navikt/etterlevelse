@@ -42,11 +42,11 @@ const OmStotteTilEtterlevelse = () => {
           </div>
         </div>
         <div className='max-w-[75ch]'>
-          <Heading spacing size='large' level='1'>
+          <Heading id='stepper-heading' spacing size='large' level='1'>
             Om Støtte til etterlevelse
           </Heading>
 
-          <Heading size='medium' level='2' spacing id='kort-om-stotte-til-etterlevelse'>
+          <Heading size='medium' level='2' spacing id='formaalet-med-stotte-til-etterlevelse'>
             Hva er formålet med Støtte til etterlevelse
           </Heading>
           <div className='my-6'>
@@ -105,8 +105,6 @@ const OmStotteTilEtterlevelse = () => {
             className='mr-2.5 mt-6 mb-12'
             src={ForstesideStotteTilEtterlevelse}
             alt='Skjermbilde fra forsiden til Støtte til etterlevelse'
-            aria-hidden
-            aria-label=''
           />
           <BodyLong spacing>Løsningen har tre hovedinnganger på førstesiden:</BodyLong>
           <List as='ul' className='mb-6'>
@@ -135,7 +133,7 @@ const OmStotteTilEtterlevelse = () => {
             øverst på siden.
           </BodyLong>
           <BodyLong spacing>
-            Nyttige lenker til mer informasjon om løsningen og bruk av denne, finner dere nedest på
+            Nyttige lenker til mer informasjon om løsningen og bruk av denne, finner dere nederst på
             forsiden.
           </BodyLong>
 
@@ -147,8 +145,6 @@ const OmStotteTilEtterlevelse = () => {
               className='mr-2.5 mt-6 mb-12'
               src={TemainndelingOgTemaoversiktReadmore}
               alt='Skjermbilde som viser temainndeling og temaoversikt'
-              aria-hidden
-              aria-label=''
             />
           </ReadMore>
           <BodyLong spacing>
@@ -169,8 +165,6 @@ const OmStotteTilEtterlevelse = () => {
               className='mr-2.5 mt-6 mb-12'
               src={VisMegHvordanEnKravsideSerUt}
               alt='Skjermbilde som viser en kravside'
-              aria-hidden
-              aria-label=''
             />
           </ReadMore>
           <BodyLong spacing>
@@ -201,7 +195,7 @@ const OmStotteTilEtterlevelse = () => {
               som er bakgrunnen for kravet.
             </List.Item>
             <List.Item title='Begreper'>
-              Her finner dere lenker til begreper i Begrepskatalalogen som benyttes i
+              Her finner dere lenker til begreper i Begrepskatalogen som benyttes i
               kravbeskrivelsen.
             </List.Item>
             <List.Item title='Tidligere versjoner og Dette er nytt siden forrige versjon'>

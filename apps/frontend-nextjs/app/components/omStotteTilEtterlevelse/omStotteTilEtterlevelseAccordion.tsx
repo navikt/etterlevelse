@@ -125,8 +125,6 @@ const OmStotteTilEtterlevelseAccordion = () => {
             className='mr-2.5 mt-6 mb-12'
             src={JobbeITemaoversikten}
             alt='Skjermbilde som viser temaoversikten'
-            aria-hidden
-            aria-label=''
           />
           <BodyLong spacing>
             Basert på hvilke egenskaper dere valgte som relevante for deres dokumentasjon, får dere

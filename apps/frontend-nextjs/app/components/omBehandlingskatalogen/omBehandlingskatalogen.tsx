@@ -14,7 +14,7 @@ export const OmBehandlingskatalogen = () => {
     <PageLayout pageTitle='Om behandlingskatalogen' currentPage='Behandlingskatalogen'>
       <div className='flex gap-7 mt-10'>
         <div className='sticky top-4 h-full'>
-          <div className='max-w-68.5'>
+          <div className='max-w-[274px]'>
             <Stepper
               aria-labelledby='stepper-heading'
               activeStep={activeStep}
@@ -31,15 +31,13 @@ export const OmBehandlingskatalogen = () => {
           </div>
         </div>
         <div className='max-w-[75ch]'>
-          <Heading size='large' level='2'>
+          <Heading id='stepper-heading' size='large' level='1'>
             Om Behandlingskatalogen
           </Heading>
           <Image
             className='mr-2.5 mt-6 mb-12'
             src={OmBehandlingskatalogenImage}
             alt='Skjermbilde fra Behandlingskatalogens forside.'
-            aria-hidden
-            aria-label=''
           />
           <Heading size='medium' level='2' spacing id='formaalet-med-behandlingskatalogen'>
             Hva er formålet med Behandlingskatalogen
@@ -74,7 +72,7 @@ export const OmBehandlingskatalogen = () => {
           </Heading>
           <BodyLong spacing>
             Seksjon for personvern og forvaltningsrett i Juridisk avdeling har laget en{' '}
-            <Link href='https://navikt.github.io/naka/behandlingskatalog'>veilder</Link> til
+            <Link href='https://navikt.github.io/naka/behandlingskatalog'>veileder</Link> til
             Behandlingskatalogen. Her finner dere blant annet{' '}
             <Link
               inlineText
@@ -85,7 +83,7 @@ export const OmBehandlingskatalogen = () => {
           </BodyLong>
 
           <ReadMore
-            header='Vis meg hvor i Behandlingskatalogen jeg finner lenken til veiledereren'
+            header='Vis meg hvor i Behandlingskatalogen jeg finner lenken til veilederen'
             className='mt-3 mb-6'
           >
             <video controls>
