@@ -21,7 +21,6 @@ import java.util.List;
 public class ArdoqClient {
 
     private final WebClient client;
-    private final RestTemplate restTemplate;
     private final ArdoqProperties properties;
 
 
@@ -30,17 +29,14 @@ public class ArdoqClient {
                 .baseUrl(properties.getBaseUrl())
                 .filter(new TraceHeaderFilter(true))
                 .build();
-        this.restTemplate = restTemplate;
         this.properties = properties;
     }
 
     public List<ArdoqSystem> getReport(String reportId) {
-        var url = properties.getBaseUrl() + "/api/v2/reports/" + reportId + "/run/objects";
+        var url = properties.getBaseUrl() + "/api/v2/reports/{id}/run/objects";
 
         try {
-            HttpHeaders headers = createHeadersWithAuth();
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            var response = get(url, ArdoqSystemData.class, entity);
+            var response = get(url, ArdoqSystemData.class, reportId);
             if (response.getValues() != null) {
                 log.info("Succesfully recieve ardoq system");
                 return response.getValues();
@@ -56,19 +52,12 @@ public class ArdoqClient {
     private <T> T get(String uri, Class<T> response, Object... params) {
         var res = client.get()
                 .uri(uri, params)
+                .header("Authorization", "Bearer " + properties.getBearerToken())
                 .retrieve()
                 .bodyToMono(response)
                 .block();
         Assert.isTrue(res != null, "response is null");
 
         return res;
-    }
-
-
-    private HttpHeaders createHeadersWithAuth () {
-        var headers = new HttpHeaders();
-        log.info("setting bearer token for ardoq");
-        headers.set("Authorization", "Bearer " + properties.getBearerToken());
-        return headers;
     }
 }
