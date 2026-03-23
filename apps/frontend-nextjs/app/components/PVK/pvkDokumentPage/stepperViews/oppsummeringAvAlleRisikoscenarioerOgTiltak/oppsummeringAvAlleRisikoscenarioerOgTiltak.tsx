@@ -122,6 +122,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
+  const [filteredRisikoscenarioOverride, setFilteredRisikosenarioOverride] = useState<
+    IRisikoscenario[] | undefined
+  >(undefined)
   const [tiltakFilter, setTiltakFilter] = useState<string>(tiltakFilterValues.alleTiltak)
   const [filteredTiltakList, setFilteredTiltakList] = useState<ITiltak[]>([])
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
@@ -179,7 +182,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         return risikoscenarioList
     }
   }, [effectiveRisikoscenarioFilter, risikoscenarioList])
-
+  const effectiveFilteredRisikoscenarioList =
+    filteredRisikoscenarioOverride || filteredRisikoscenarioList
+  const setFilteredRisikosenarioList = setFilteredRisikosenarioOverride
   useEffect(() => {
     ;(async () => {
       if (
@@ -200,6 +205,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
           (risikoscenarioer: IPageResponse<IRisikoscenario>) => {
             setRisikoscenarioList(risikoscenarioer.content)
+            setFilteredRisikosenarioOverride(undefined)
           }
         )
 
@@ -227,6 +233,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
   function onFilterChange(filter: string): void {
     const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
+    setFilteredRisikosenarioOverride(undefined)
 
     setNavigateUrl(pvkDokumentasjonTabFilterRisikoscenarioUrl(steg, tab, filter, risikoscenarioId))
     if (formRef.current?.dirty) {
@@ -401,11 +408,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       )}
 
                       {risikoscenarioList.length !== 0 &&
-                        filteredRisikoscenarioList.length === 0 &&
+                        effectiveFilteredRisikoscenarioList.length === 0 &&
                         visTomListeBeskrivelse(filterQuery)}
 
                       {risikoscenarioList.length !== 0 &&
-                        filteredRisikoscenarioList.length !== 0 && (
+                        effectiveFilteredRisikoscenarioList.length !== 0 && (
                           <div className='my-5'>
                             {pvkDokument &&
                               !isReadOnlyPvkStatus(pvkDokument.status) &&
@@ -413,7 +420,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               (user.isAdmin() ||
                                 etterlevelseDokumentasjon.hasCurrentUserAccess) && (
                                 <OppsumeringAccordianList
-                                  risikoscenarioList={filteredRisikoscenarioList}
+                                  risikoscenarioList={effectiveFilteredRisikoscenarioList}
                                   setRisikosenarioList={setFilteredRisikosenarioList}
                                   allRisikoscenarioList={risikoscenarioList}
                                   setAllRisikoscenarioList={setRisikoscenarioList}
@@ -433,7 +440,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                       user.getIdent()
                                     )))) && (
                                 <OppsumeringAccordianListReadOnlyView
-                                  risikoscenarioList={filteredRisikoscenarioList}
+                                  risikoscenarioList={effectiveFilteredRisikoscenarioList}
                                   allRisikoscenarioList={risikoscenarioList}
                                   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                   tiltakList={tiltakList}
@@ -444,7 +451,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             {pvkDokument &&
                               pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
                                 <OppsumeringAccordianListGodkjentView
-                                  risikoscenarioList={filteredRisikoscenarioList}
+                                  risikoscenarioList={effectiveFilteredRisikoscenarioList}
                                   allRisikoscenarioList={risikoscenarioList}
                                   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                   tiltakList={tiltakList}

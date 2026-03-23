@@ -18,7 +18,7 @@ import { kravNummerView, sortKravListeByPriority } from '@/util/krav/kravUtil'
 import { BodyShort, Detail, Heading, Label, LinkPanel, List } from '@navikt/ds-react'
 import _ from 'lodash'
 import { useParams } from 'next/navigation'
-import { FunctionComponent, useContext } from 'react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 
 export const TemaPage = () => {
   const params = useParams()
