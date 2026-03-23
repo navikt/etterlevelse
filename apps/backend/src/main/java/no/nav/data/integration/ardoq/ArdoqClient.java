@@ -22,9 +22,8 @@ public class ArdoqClient {
         this.properties = properties;
     }
 
-
     public void getReport(String reportId) {
-        var url = properties.getBaseUrl() + "/discover/report/reader/" + reportId;
+        var url = properties.getBaseUrl() + "/api/v2/reports/" + reportId + "/run/objects";
 
         try {
             HttpHeaders headers = createHeadersWithAuth();
@@ -34,7 +33,6 @@ public class ArdoqClient {
         } catch (RestClientException e) {
             log.error("Unable to connect to Ardoq, error: {}", String.valueOf(e));
         }
-
     }
 
 
