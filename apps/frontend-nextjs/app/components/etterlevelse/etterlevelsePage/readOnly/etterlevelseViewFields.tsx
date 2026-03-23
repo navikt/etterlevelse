@@ -157,23 +157,17 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
     suksesskriterieBegrunnelser,
     suksesskriterie
   )
-
-  const [changesMade, setChangesMade] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (previousEtterlevelse) {
-      const previousBegrunnelse = getSuksesskriterieBegrunnelse(
+  const previousBegrunnelse = previousEtterlevelse
+    ? getSuksesskriterieBegrunnelse(
         previousEtterlevelse.suksesskriterieBegrunnelser,
         suksesskriterie
       )
-
-      setChangesMade(
-        suksesskriterieBegrunnelse.suksesskriterieStatus !==
-          previousBegrunnelse.suksesskriterieStatus ||
-          suksesskriterieBegrunnelse.begrunnelse !== previousBegrunnelse.begrunnelse
-      )
-    }
-  }, [previousEtterlevelse])
+    : undefined
+  const changesMade =
+    !!previousBegrunnelse &&
+    (suksesskriterieBegrunnelse.suksesskriterieStatus !==
+      previousBegrunnelse.suksesskriterieStatus ||
+      suksesskriterieBegrunnelse.begrunnelse !== previousBegrunnelse.begrunnelse)
 
   return (
     <Box

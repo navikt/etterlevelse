@@ -48,8 +48,6 @@ export const EtterlevelseDokumentasjonPage = () => {
   const params: Readonly<{
     etterlevelseDokumentasjonId?: string
   }> = useParams<{ etterlevelseDokumentasjonId?: string }>()
-  const [etterlevelseNummer, setEtterlevelseNummer] = useState<string>('')
-  const [title, setTitle] = useState<string>('')
   const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const [relasjonLoading, setRelasjonLoading] = useState(false)
@@ -77,14 +75,14 @@ export const EtterlevelseDokumentasjonPage = () => {
   const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
   const [kravRisikoscenarioList, setKravRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [isRisikoscenarioLoading, setIsRisikoscenarioLoading] = useState<boolean>(false)
+  const etterlevelseNummer = etterlevelseDokumentasjon?.etterlevelseNummer?.toString() || ''
+  const title = etterlevelseDokumentasjon?.title || ''
 
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
   useEffect(() => {
     setTimeout(() => refetchRelevanteData(), 200)
     if (etterlevelseDokumentasjon) {
-      setEtterlevelseNummer(etterlevelseDokumentasjon.etterlevelseNummer.toString())
-      setTitle(etterlevelseDokumentasjon.title)
       ;(async () => {
         setRelasjonLoading(true)
         await getDocumentRelationByToIdAndRelationTypeWithData(

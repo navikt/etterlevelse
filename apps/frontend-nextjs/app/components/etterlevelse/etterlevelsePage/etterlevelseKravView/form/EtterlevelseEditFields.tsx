@@ -148,6 +148,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
           submitForm,
           errors,
           setFieldError,
+          setFieldValue,
           dirty,
         }: FormikProps<IEtterlevelse>) => (
           <div className='w-full'>
@@ -249,7 +250,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           type='button'
                           onClick={async () => {
                             setValidateOnBlur(true)
-                            values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
+                            await setFieldValue('status', EEtterlevelseStatus.FERDIG_DOKUMENTERT)
                             values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                               if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
                                 setFieldError(
@@ -286,14 +287,20 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                               type='button'
                               variant='secondary'
                               disabled={isSubmitting || disableEdit}
-                              onClick={() => {
+                              onClick={async () => {
                                 if (
                                   values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
                                   !isOppfylesSenere
                                 ) {
-                                  values.status = EEtterlevelseStatus.UNDER_REDIGERING
+                                  await setFieldValue(
+                                    'status',
+                                    EEtterlevelseStatus.UNDER_REDIGERING
+                                  )
                                 } else if (isOppfylesSenere) {
-                                  values.status = EEtterlevelseStatus.OPPFYLLES_SENERE
+                                  await setFieldValue(
+                                    'status',
+                                    EEtterlevelseStatus.OPPFYLLES_SENERE
+                                  )
                                 }
                                 submitForm()
                               }}

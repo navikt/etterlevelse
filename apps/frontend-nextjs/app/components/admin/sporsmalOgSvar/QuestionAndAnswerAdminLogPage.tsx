@@ -36,7 +36,7 @@ type TKravMessage = ITilbakemelding & TSporsmaalOgSvarKrav
 export const QuestionAndAnswerAdminLogPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [kravMessages, setKravMessages] = useState<TKravMessage[]>([])
-  const [isloading, setIsLoading] = useState<boolean>(false)
+  const [isloading, setIsLoading] = useState<boolean>(true)
   const user = useContext(UserContext)
 
   const [page, setPage] = useState(1)
@@ -92,19 +92,19 @@ export const QuestionAndAnswerAdminLogPage = () => {
   }, [])
 
   useEffect(() => {
-    setIsLoading(true)
-    const kravMessages: TKravMessage[] = []
-    const tilbakeMeldinger: ITilbakemelding[] = []
+    if (!tableContent.length) return
 
-    const getTilbakeMeldingerPromise: Promise<any>[] = []
-    tableContent.forEach((krav: IKrav) => {
-      getTilbakeMeldingerPromise.push(
-        (async () => await getTilbakemeldingForKrav(krav.kravNummer, krav.kravVersjon))()
-      )
-    })
+    const loadMessages = async () => {
+      const kravMessages: TKravMessage[] = []
+      const tilbakeMeldinger: ITilbakemelding[] = []
 
-    try {
-      Promise.all(getTilbakeMeldingerPromise).then((response: IPageResponse<ITilbakemelding>[]) => {
+      try {
+        const response: IPageResponse<ITilbakemelding>[] = await Promise.all(
+          tableContent.map((krav: IKrav) =>
+            getTilbakemeldingForKrav(krav.kravNummer, krav.kravVersjon)
+          )
+        )
+
         response.forEach((tilbakemelding: IPageResponse<ITilbakemelding>) => {
           if (tilbakemelding.content) {
             tilbakeMeldinger.push(...tilbakemelding.content)
@@ -138,11 +138,14 @@ export const QuestionAndAnswerAdminLogPage = () => {
           })
         })
         setKravMessages(kravMessages)
-      })
-    } catch (error: any) {
-      console.error(error)
+      } catch (error: any) {
+        console.error(error)
+      } finally {
+        setIsLoading(false)
+      }
     }
-    setIsLoading(false)
+
+    loadMessages()
   }, [tableContent])
 
   return (
