@@ -7,7 +7,7 @@ import {
 import { env } from '@/util/env/env'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '../pvkDokument/pvkDokumentApi'
 
 export const getAllPvoTilbakemelding = async () => {
@@ -52,36 +52,46 @@ export const getPvoTilbakemeldingByPvkDokumentId = async (
 export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
   const [data, setData] = useState<IPvoTilbakemelding>(mapPvoTilbakemeldingToFormValue({}))
   const [isDone, setIsDone] = useState<boolean>(!pvkDokumentId)
+  const abortedRef = useRef(false)
 
   useEffect(() => {
+    abortedRef.current = false
     if (pvkDokumentId) {
-      setIsDone(false)
       ;(async () => {
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument) => {
           const antallInnsending = pvkDokument.antallInnsendingTilPvo
 
           await getPvoTilbakemeldingByPvkDokumentId(pvkDokumentId)
             .then(async (pvoTilbakemelding) => {
-              const formValuePvo = pvoTilbakemelding
+              if (!abortedRef.current) {
+                const formValuePvo = pvoTilbakemelding
 
-              if (
-                pvoTilbakemelding.vurderinger.filter(
-                  (vurdering) => vurdering.innsendingId === antallInnsending
-                ).length === 0
-              ) {
-                formValuePvo.vurderinger.push(
-                  createNewPvoVurderning(
-                    antallInnsending,
-                    pvkDokument.currentEtterlevelseDokumentVersjon
+                if (
+                  pvoTilbakemelding.vurderinger.filter(
+                    (vurdering) => vurdering.innsendingId === antallInnsending
+                  ).length === 0
+                ) {
+                  formValuePvo.vurderinger.push(
+                    createNewPvoVurderning(
+                      antallInnsending,
+                      pvkDokument.currentEtterlevelseDokumentVersjon
+                    )
                   )
-                )
-              }
+                }
 
-              setData(mapPvoTilbakemeldingToFormValue(formValuePvo))
+                setData(mapPvoTilbakemeldingToFormValue(formValuePvo))
+              }
             })
-            .finally(() => setIsDone(true))
+            .finally(() => {
+              if (!abortedRef.current) {
+                setIsDone(true)
+              }
+            })
         })
       })()
+    }
+    return () => {
+      abortedRef.current = true
     }
   }, [pvkDokumentId])
 

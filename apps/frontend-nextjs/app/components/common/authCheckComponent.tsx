@@ -2,7 +2,7 @@
 
 import { UserContext } from '@/provider/user/userProvider'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, ReactNode, useContext, useEffect, useState } from 'react'
+import { FunctionComponent, ReactNode, useContext, useEffect } from 'react'
 import { CenteredLoader } from './centeredLoader/centeredLoader'
 
 type TProps = {
@@ -20,21 +20,20 @@ export const AuthCheckComponent: FunctionComponent<TProps> = ({
 }) => {
   const user = useContext(UserContext)
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  const isForbidden =
+    user.isLoaded() &&
+    ((adminPage && !user.isAdmin()) ||
+      (kraveierPage && !user.isAdmin() && !user.isKraveier()) ||
+      (pvoPage && !user.isAdmin() && !user.isPersonvernombud()))
+
+  const isLoading = !user.isLoaded() || isForbidden
 
   useEffect(() => {
-    if (user.isLoaded()) {
-      if (adminPage && !user.isAdmin()) {
-        router.push('/forbidden')
-      } else if (kraveierPage && !user.isAdmin() && !user.isKraveier()) {
-        router.push('/forbidden')
-      } else if (pvoPage && !user.isAdmin() && !user.isPersonvernombud()) {
-        router.push('/forbidden')
-      } else {
-        setIsLoading(false)
-      }
+    if (isForbidden) {
+      router.push('/forbidden')
     }
-  }, [user])
+  }, [isForbidden, router])
 
   return (
     <>

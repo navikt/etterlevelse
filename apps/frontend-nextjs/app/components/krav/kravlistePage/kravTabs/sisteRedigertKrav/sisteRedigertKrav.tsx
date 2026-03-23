@@ -4,14 +4,10 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { Alert, Label, Loader } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
-import { sortKrav } from '../../sortKrav/sortKrav'
+import { useMemo } from 'react'
 import { KravPanels } from './kravPanels/KravPanels'
 
 export const SistRedigertKrav = () => {
-  const [sorting] = useState('sist')
-  const [sortedKravList, setSortedKravList] = useState<TKravQL[]>([])
-
   const response = useKravFilter({
     sistRedigert: 10,
     gjeldendeKrav: false,
@@ -23,17 +19,13 @@ export const SistRedigertKrav = () => {
 
   const kravene = data?.krav || emptyPage
 
-  useEffect(() => {
-    let sortedData = [...kravene.content]
-    if (sorting === 'sist') {
-      sortedData.sort((a, b) =>
-        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
-      )
-    } else {
-      sortedData = sortKrav(sortedData)
-    }
-    setSortedKravList(sortedData)
-  }, [data])
+  const sortedKravList = useMemo<TKravQL[]>(() => {
+    const sortedData = [...kravene.content]
+    sortedData.sort((a, b) =>
+      a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
+    )
+    return sortedData
+  }, [kravene.content])
 
   return (
     <div>

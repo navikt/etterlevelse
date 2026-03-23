@@ -2,7 +2,7 @@ import { IPageResponse } from '@/constants/commonConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const getKravPriorityListPage = async (pageNumber: number, pageSize: number) => {
   return (
@@ -53,18 +53,29 @@ export const getAllKravPriorityList = async () => {
 export const useKravPriorityList = (temaCode: string) => {
   const [data, setData] = useState(kravPrioritingMapToFormValue({}))
   const [isDone, setIsDone] = useState(false)
+  const abortedRef = useRef(false)
 
   const fetchData = async () => {
-    setIsDone(false)
+    abortedRef.current = false
     const response = await getKravPriorityListByTemaCode(temaCode)
-    if (response) {
+    if (!abortedRef.current && response) {
       setData(response)
+      setIsDone(true)
     }
-    setIsDone(true)
   }
 
   useEffect(() => {
-    fetchData()
+    abortedRef.current = false
+    ;(async () => {
+      const response = await getKravPriorityListByTemaCode(temaCode)
+      if (!abortedRef.current && response) {
+        setData(response)
+        setIsDone(true)
+      }
+    })()
+    return () => {
+      abortedRef.current = true
+    }
   }, [temaCode])
 
   return [data, !isDone, fetchData] as [IKravPriorityList, boolean, () => void]

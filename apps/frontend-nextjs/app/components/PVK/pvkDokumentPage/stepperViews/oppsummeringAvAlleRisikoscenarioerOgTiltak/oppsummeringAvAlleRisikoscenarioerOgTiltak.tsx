@@ -216,12 +216,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     }
   }, [tiltakList])
 
-  useEffect(() => {
-    if (risikoscenarioList.length !== 0 && filterQuery) {
-      onFilterChange(filterQuery)
-    }
-  }, [filterQuery, risikoscenarioList])
-
   const onTabChange = (tab: string): void => {
     const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
     const paramQuery: string = tab === tabValues.risikoscenarioer ? filter : ''
@@ -234,7 +228,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     }
   }
 
-  const onFilterChange = (filter: string): void => {
+  function onFilterChange(filter: string): void {
     const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
 
     switch (filter) {
@@ -279,6 +273,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
       })
     }
   }
+
+  useEffect(() => {
+    if (risikoscenarioList.length !== 0 && filterQuery) {
+      onFilterChange(filterQuery)
+    }
+  }, [filterQuery, risikoscenarioList])
 
   const onTiltakFilterChange = (filter: string): void => {
     setTiltakFilter(filter)

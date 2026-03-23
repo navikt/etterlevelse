@@ -84,7 +84,7 @@ export const DokumentasjonTabs = () => {
       })
   }
 
-  const sortedTeams = useMemo(() => sortTeams(teams), [teams, etterlevelseDokumentasjoner])
+  const sortedTeams = sortTeams(teams)
 
   useEffect(() => {
     if (!data || etterlevelseDokumentasjonLoading) return

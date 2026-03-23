@@ -1,7 +1,7 @@
 'use client'
 
 import { Dropdown, InternalHeader, Link } from '@navikt/ds-react'
-import { FunctionComponent, ReactNode, isValidElement, useEffect, useState } from 'react'
+import { FunctionComponent, ReactNode, isValidElement, useMemo } from 'react'
 
 type TMenuItem = {
   label: ReactNode
@@ -17,20 +17,18 @@ type TMenuProps = {
 }
 
 export const Menu: FunctionComponent<TMenuProps> = ({ pages, title, icon }) => {
-  const [allPages, setAllPages] = useState<TMenuItem[]>([])
-
-  useEffect(() => {
-    if (pages.length !== 0) {
-      const formatedPages = pages
-        .filter((page) => page.length)
-        .reduce((previousValue, currentValue) => [
-          ...((previousValue as TMenuItem[]) || []),
-          { label: <Dropdown.Menu.Divider /> },
-          ...(currentValue as TMenuItem[]),
-        ])
-
-      setAllPages(formatedPages)
+  const allPages = useMemo<TMenuItem[]>(() => {
+    if (pages.length === 0) {
+      return []
     }
+
+    return pages
+      .filter((page) => page.length)
+      .reduce((previousValue, currentValue) => [
+        ...((previousValue as TMenuItem[]) || []),
+        { label: <Dropdown.Menu.Divider /> },
+        ...(currentValue as TMenuItem[]),
+      ])
   }, [pages])
 
   return (

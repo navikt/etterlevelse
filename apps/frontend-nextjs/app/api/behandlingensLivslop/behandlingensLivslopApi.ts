@@ -3,7 +3,7 @@ import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const getBehandlingensLivslopByEtterlevelseDokumentId = async (
   etterlevelseDokumentId: string
@@ -129,29 +129,46 @@ export const useBehandlingensLivslop = (
   const [isDone, setIsDone] = useState<boolean>(
     !behandlingensLivslopId && !etterlevelseDokumentasjonId
   )
+  const abortedRef = useRef(false)
 
   useEffect(() => {
+    abortedRef.current = false
     if (behandlingensLivslopId && !isCreateNew) {
-      setIsDone(false)
       ;(async () => {
+        if (!abortedRef.current) {
+          setIsDone(false)
+        }
         await getBehandlingensLivslop(behandlingensLivslopId).then(async (behandlingensLivslop) => {
-          setData(behandlingensLivslop)
-          setIsDone(true)
+          if (!abortedRef.current) {
+            setData(behandlingensLivslop)
+            setIsDone(true)
+          }
         })
       })()
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
-      setIsDone(false)
       //double check that behandlingenslivslop doesnt not exist
       ;(async () => {
+        if (!abortedRef.current) {
+          setIsDone(false)
+        }
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
           .then(async (behandlingensLivslop) => {
-            if (behandlingensLivslop) {
-              setData(behandlingensLivslop)
+            if (!abortedRef.current) {
+              if (behandlingensLivslop) {
+                setData(behandlingensLivslop)
+              }
+              setIsDone(true)
             }
-            setIsDone(true)
           })
-          .catch(() => setIsDone(true))
+          .catch(() => {
+            if (!abortedRef.current) {
+              setIsDone(true)
+            }
+          })
       })()
+    }
+    return () => {
+      abortedRef.current = true
     }
   }, [behandlingensLivslopId])
 

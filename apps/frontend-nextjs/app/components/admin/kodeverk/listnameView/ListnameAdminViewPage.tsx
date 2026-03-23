@@ -18,7 +18,7 @@ export const ListnameAdminViewPage = () => {
   const router = useRouter()
   const listname = params.listname as string
   const [selectedListname, setSelectedListname] = useState<string>(listname)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [createCodeListModal, setCreateCodeListModal] = useState(false)
   const [errorOnResponse, setErrorOnResponse] = useState(null)
   const forceUpdate = useForceUpdate()
@@ -26,6 +26,7 @@ export const ListnameAdminViewPage = () => {
 
   const lists = codelist.lists?.codelist
   const currentCodelist = lists && listname ? lists[listname] : undefined
+  const isLoading = isSubmitting || !(lists && listname && lists[listname])
 
   useEffect(() => {
     if (selectedListname && selectedListname !== listname) {
@@ -33,15 +34,8 @@ export const ListnameAdminViewPage = () => {
     }
   }, [selectedListname])
 
-  // Set isLoading to false when data is loaded
-  useEffect(() => {
-    if (lists && listname && lists[listname]) {
-      setIsLoading(false)
-    }
-  }, [lists, listname])
-
   const handleCreateCodelist = async (values: ICodeListFormValues) => {
-    setIsLoading(true)
+    setIsSubmitting(true)
     try {
       await createCodelist({ ...values } as ICode)
       await codelist.utils.fetchData(true)
@@ -50,7 +44,7 @@ export const ListnameAdminViewPage = () => {
       setCreateCodeListModal(true)
       setErrorOnResponse(error.message)
     }
-    setIsLoading(false)
+    setIsSubmitting(false)
   }
 
   const update = async () => {

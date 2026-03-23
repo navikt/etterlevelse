@@ -8,7 +8,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const getAllPvkDokument = async () => {
   const pageSize = 100
@@ -94,29 +94,36 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
     isCreateNew ? mapPvkDokumentToFormValue({}) : undefined
   )
   const [isDone, setIsDone] = useState<boolean>(!pvkDokumentId && !etterlevelseDokumentasjonId)
+  const abortedRef = useRef(false)
 
   useEffect(() => {
+    abortedRef.current = false
     if (pvkDokumentId && !isCreateNew) {
-      setIsDone(false)
       ;(async () => {
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument: IPvkDokument) => {
-          setData(mapPvkDokumentToFormValue(pvkDokument))
-          setIsDone(true)
+          if (!abortedRef.current) {
+            setData(mapPvkDokumentToFormValue(pvkDokument))
+            setIsDone(true)
+          }
         })
       })()
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
-      setIsDone(false)
       //double check that pvkdokument doesnt not exist
       ;(async () => {
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
           async (pvkDokument) => {
-            if (pvkDokument) {
-              setData(mapPvkDokumentToFormValue(pvkDokument))
+            if (!abortedRef.current) {
+              if (pvkDokument) {
+                setData(mapPvkDokumentToFormValue(pvkDokument))
+              }
+              setIsDone(true)
             }
-            setIsDone(true)
           }
         )
       })()
+    }
+    return () => {
+      abortedRef.current = true
     }
   }, [pvkDokumentId])
 

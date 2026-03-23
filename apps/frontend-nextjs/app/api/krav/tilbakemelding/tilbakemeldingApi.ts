@@ -8,7 +8,7 @@ import {
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
   return (
@@ -97,26 +97,34 @@ export const useTilbakemeldinger = (
 ] => {
   const [data, setData] = useState<ITilbakemelding[]>([])
   const [isDone, setIsDone] = useState<boolean>(!kravNummer || !kravVersjon)
+  const abortedRef = useRef(false)
 
   useEffect(() => {
+    abortedRef.current = false
     if (kravNummer && kravVersjon) {
-      setIsDone(false)
       getTilbakemeldingForKravByKravNummer(kravNummer)
         .then((response: IPageResponse<ITilbakemelding>) => {
-          setData(
-            response.content.sort(
-              (a: ITilbakemelding, b: ITilbakemelding) =>
-                moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() -
-                moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()
+          if (!abortedRef.current) {
+            setData(
+              response.content.sort(
+                (a: ITilbakemelding, b: ITilbakemelding) =>
+                  moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() -
+                  moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()
+              )
             )
-          )
-          setIsDone(true)
+            setIsDone(true)
+          }
         })
         .catch((error: any) => {
-          setData([])
-          setIsDone(true)
+          if (!abortedRef.current) {
+            setData([])
+            setIsDone(true)
+          }
           console.error("couldn't find krav", error)
         })
+    }
+    return () => {
+      abortedRef.current = true
     }
   }, [kravNummer, kravVersjon])
 

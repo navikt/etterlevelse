@@ -11,12 +11,10 @@ import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { InternalHeader, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { FunctionComponent, useContext, useEffect, useState } from 'react'
+import { FunctionComponent, useContext, useEffect, useRef, useState } from 'react'
 import { informationIcon, warningAlert } from '../../images/images'
 import { LoggedInHeader, LoginHeaderButton } from './login/login'
 import MainSearch from './mainSearch/mainSearch'
-
-let sourceReported = false
 
 type TProps = {
   noSearchBar?: boolean
@@ -27,12 +25,15 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
   const user = useContext(UserContext)
+  const sourceReportedRef = useRef(false)
 
   const source = useQueryParam('source')
-  if (!sourceReported) {
-    sourceReported = true
+
+  useEffect(() => {
+    if (sourceReportedRef.current) return
+    sourceReportedRef.current = true
     logApi('info', 'pageload', `pageload from ${source}`)
-  }
+  }, [source])
 
   useEffect(() => {
     ;(async () => {

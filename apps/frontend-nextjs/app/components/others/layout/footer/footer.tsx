@@ -32,26 +32,16 @@ import { etterlevelseLogoWhiteIcon } from '../../images/images'
 
 export const Footer = () => {
   const [showButtonToTop, setShowButtonToTop] = useState(false)
-  const [pageScroll, setPageScroll] = useState(0)
-
-  useEffect(() => {
-    setPageScroll(window.scrollY)
-  }, [])
 
   useEffect(() => {
     const checkScrollTop = () => {
-      setPageScroll(window.scrollY)
-      if (!showButtonToTop && window.scrollY > 100) {
-        setShowButtonToTop(true)
-      } else if (showButtonToTop && window.scrollY <= 100) {
-        setShowButtonToTop(false)
-      }
+      setShowButtonToTop(window.scrollY > 100)
     }
 
     window.addEventListener('scroll', checkScrollTop)
 
     return () => window.removeEventListener('scroll', checkScrollTop)
-  }, [pageScroll])
+  }, [])
 
   return (
     <div

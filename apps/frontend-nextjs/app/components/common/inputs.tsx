@@ -15,7 +15,7 @@ import {
   useDatepicker,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import React, { ChangeEvent, ReactNode, useContext, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, ReactNode, useContext, useMemo, useRef, useState } from 'react'
 import { FieldWrapper } from './fieldWrapper/fieldWrapper'
 import LabelWithTooltip from './labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from './modalSchema/formError/formError'
@@ -142,57 +142,51 @@ export const DateField = (props: IPropsDateField) => {
 
   const { datepickerProps, inputProps } = useDatepicker({})
   const [open, setOpen] = useState(false)
-  const [beforeMatcher, setBeforeMatcher] = useState<IBeforeMarcher>()
+  const beforeMatcher = useMemo<IBeforeMarcher>(() => ({ before: new Date() }), [])
   const datePickerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setBeforeMatcher({ before: new Date() })
-  }, [])
 
   return (
     <div ref={datePickerRef}>
-      {beforeMatcher && (
-        <FieldWrapper>
-          <Field name={name}>
-            {(fieldProps: FieldProps) => (
-              <DatePicker
-                {...datepickerProps}
-                dropdownCaption
-                fromDate={new Date(new Date().getFullYear(), 0, 1)}
-                toDate={new Date(2100, 11, 31)}
-                open={open}
-                onOpenToggle={() => {
-                  datePickerRef.current?.scrollIntoView({
-                    block: 'start',
-                    behavior: 'smooth',
-                  })
-                  setOpen(true)
-                }}
-                onClose={() => setOpen(false)}
-                onSelect={(date: any) => {
-                  const dateSingle: Date = Array.isArray(date) ? date[0] : date
-                  if (dateSingle) {
-                    const year = dateSingle.getFullYear()
-                    const month = dateSingle.getMonth() + 1
-                    const day = dateSingle.getDate()
-                    const date = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
-                    fieldProps.form.setFieldValue(name, date)
-                  } else fieldProps.form.setFieldValue(name, undefined)
-                  setOpen(false)
-                }}
-                disabled={[beforeMatcher]}
-              >
-                <DatePicker.Input
-                  {...inputProps}
-                  className='mb-2'
-                  value={fieldProps.form.values[name]}
-                  label={label ? label : 'Velg dato'}
-                />
-              </DatePicker>
-            )}
-          </Field>
-        </FieldWrapper>
-      )}
+      <FieldWrapper>
+        <Field name={name}>
+          {(fieldProps: FieldProps) => (
+            <DatePicker
+              {...datepickerProps}
+              dropdownCaption
+              fromDate={new Date(new Date().getFullYear(), 0, 1)}
+              toDate={new Date(2100, 11, 31)}
+              open={open}
+              onOpenToggle={() => {
+                datePickerRef.current?.scrollIntoView({
+                  block: 'start',
+                  behavior: 'smooth',
+                })
+                setOpen(true)
+              }}
+              onClose={() => setOpen(false)}
+              onSelect={(date: any) => {
+                const dateSingle: Date = Array.isArray(date) ? date[0] : date
+                if (dateSingle) {
+                  const year = dateSingle.getFullYear()
+                  const month = dateSingle.getMonth() + 1
+                  const day = dateSingle.getDate()
+                  const date = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+                  fieldProps.form.setFieldValue(name, date)
+                } else fieldProps.form.setFieldValue(name, undefined)
+                setOpen(false)
+              }}
+              disabled={[beforeMatcher]}
+            >
+              <DatePicker.Input
+                {...inputProps}
+                className='mb-2'
+                value={fieldProps.form.values[name]}
+                label={label ? label : 'Velg dato'}
+              />
+            </DatePicker>
+          )}
+        </Field>
+      </FieldWrapper>
     </div>
   )
 }

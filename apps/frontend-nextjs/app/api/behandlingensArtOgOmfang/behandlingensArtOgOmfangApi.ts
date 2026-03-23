@@ -2,7 +2,7 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const getAllBehandlingensArtOgOmfang = async () => {
   const pageSize = 100
@@ -85,19 +85,27 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
     mapBehandlingensArtOgOmfangToFormValue({})
   )
   const [isDone, setIsDone] = useState<boolean>(!etterlevelseDokumentasjonId)
+  const abortedRef = useRef(false)
 
   useEffect(() => {
+    abortedRef.current = false
     if (etterlevelseDokumentasjonId) {
-      setIsDone(false)
       ;(async () => {
         await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
           .then(async (artOfOmfang) => {
-            if (artOfOmfang) {
+            if (!abortedRef.current && artOfOmfang) {
               setData(artOfOmfang)
             }
           })
-          .finally(() => setIsDone(true))
+          .finally(() => {
+            if (!abortedRef.current) {
+              setIsDone(true)
+            }
+          })
       })()
+    }
+    return () => {
+      abortedRef.current = true
     }
   }, [etterlevelseDokumentasjonId])
 

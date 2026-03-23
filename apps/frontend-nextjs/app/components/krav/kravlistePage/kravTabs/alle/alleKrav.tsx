@@ -4,7 +4,7 @@ import { ETab, TKravFilter } from '@/constants/krav/kravlist/kravlistConstants'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { Alert, Loader } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { sortKrav } from '../../sortKrav/sortKrav'
 import { Krav } from './krav/krav'
 
@@ -48,11 +48,9 @@ export const AllKrav = () => {
     pageSize,
   })
 
-  const [sortedKravList, setSortedKravList] = useState<TKravQL[]>([])
-
   const loading: boolean = !data && gqlLoading
-
-  useEffect(() => {
+  const kravene: IPageResponse<TKravQL> = data?.krav || emptyPage
+  const sortedKravList = useMemo<TKravQL[]>(() => {
     let sortedData: TKravQL[] = [...kravene.content]
     if (sorting === ETab.SISTE) {
       sortedData.sort((a: TKravQL, b: TKravQL) =>
@@ -61,26 +59,12 @@ export const AllKrav = () => {
     } else {
       sortedData = sortKrav(sortedData)
     }
-    setSortedKravList(sortedData)
-  }, [data])
-
-  useEffect(() => {
-    let sortedData: TKravQL[] = [...kravene.content]
-    if (sorting === ETab.SISTE) {
-      sortedData.sort((a: TKravQL, b: TKravQL) =>
-        a.changeStamp.lastModifiedDate > b.changeStamp.lastModifiedDate ? -1 : 0
-      )
-    } else {
-      sortedData = sortKrav(sortedData)
-    }
-    setSortedKravList(sortedData)
-  }, [sorting])
+    return sortedData
+  }, [kravene.content, sorting])
 
   useEffect(() => {
     refetch()
   }, [filter])
-
-  const kravene: IPageResponse<TKravQL> = data?.krav || emptyPage
 
   return (
     <>
