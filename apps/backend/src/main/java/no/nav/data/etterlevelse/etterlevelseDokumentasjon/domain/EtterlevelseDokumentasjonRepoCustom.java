@@ -44,6 +44,13 @@ public class EtterlevelseDokumentasjonRepoCustom {
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 
+    public List<EtterlevelseDokumentasjon> findByDpBehandlingIds(List<String> ids) {
+        var query = "select id from etterlevelse_dokumentasjon where data -> 'dpBehandlingIds' ??| array[ :behandlingIds ]";
+        var par = new MapSqlParameterSource();
+        par.addValue("behandlingIds", ids);
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
     public List<EtterlevelseDokumentasjon> findByKravRelevans(List<String> kravRelevans) {
         var query = "select id from etterlevelse_dokumentasjon where not data -> 'irrelevansFor' @> to_jsonb(array[ :kravRelevans ])";
         var par = new MapSqlParameterSource();

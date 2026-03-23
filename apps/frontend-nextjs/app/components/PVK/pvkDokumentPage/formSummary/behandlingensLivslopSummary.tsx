@@ -18,13 +18,6 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
       <FormSummary.Heading level='2' id='behandlingensLivslop'>
         Tegn behandlingens livsløp
       </FormSummary.Heading>
-      <FormSummary.EditLink
-        className='cursor-pointer'
-        onClick={() => updateTitleUrlAndStep(2)}
-        href={window.location.pathname + '?steg=' + 2}
-      >
-        Endre svar
-      </FormSummary.EditLink>
     </FormSummary.Header>
     <FormSummary.Answers>
       <FormSummary.Answer>
@@ -83,6 +76,15 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
         </FormSummary.Value>
       </FormSummary.Answer>
     </FormSummary.Answers>
+    <FormSummary.Footer>
+      <FormSummary.EditLink
+        className='cursor-pointer'
+        onClick={() => updateTitleUrlAndStep(2)}
+        href={window.location.pathname + '?steg=' + 2}
+      >
+        Endre svar
+      </FormSummary.EditLink>
+    </FormSummary.Footer>
   </FormSummary>
 )
 

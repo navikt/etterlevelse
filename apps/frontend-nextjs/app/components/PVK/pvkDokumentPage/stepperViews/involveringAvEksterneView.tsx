@@ -418,18 +418,21 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
           relevantVurdering && (
             <div>
               <PvkSidePanelWrapper>
-                <PvoTilbakemeldingReadOnly
-                  relevantVurdering={relevantVurdering}
-                  tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
-                  sentDate={relevantVurdering.sendtDato}
-                />
+                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                  <PvoTilbakemeldingReadOnly
+                    relevantVurdering={relevantVurdering}
+                    tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
+                    sentDate={relevantVurdering.sendtDato}
+                  />
+                )}
 
                 {pvkDokument.antallInnsendingTilPvo > 1 && (
                   <div className='mt-10'>
                     <PvoTilbakemeldingsHistorikk
+                      pvkDokument={pvkDokument}
                       pvoTilbakemelding={pvoTilbakemelding}
                       fieldName='innvolveringAvEksterne'
-                      relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                      relevantVurdering={relevantVurdering}
                       forPvo={false}
                     />
                   </div>

@@ -24,6 +24,7 @@ public class EtterlevelseDokumentasjonFilter {
     private List<String> teams;
 
     private String behandlingId;
+    private String dpBehandlingId;
     private Boolean behandlerPersonopplysninger;
     private String sok;
 
@@ -35,6 +36,7 @@ public class EtterlevelseDokumentasjonFilter {
                 && getTeams().isEmpty()
                 && sistRedigert == null
                 && mineEtterlevelseDokumentasjoner == null
+                && dpBehandlingId == null
                 && behandlingId == null
                 && behandlerPersonopplysninger == null
                 ;

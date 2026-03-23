@@ -25,7 +25,10 @@ import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
-import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import {
+  IBehandling,
+  IDpBehandling,
+} from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { TOption } from '@/constants/commonConstants'
 import {
   ERelationType,
@@ -42,7 +45,7 @@ import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConst
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { behandlingName } from '@/util/behandling/behandlingUtil'
+import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
@@ -343,6 +346,35 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
             </FieldArray>
           </FieldWrapper>
 
+          <ReadMore
+            header='Dersom Nav er databehandler'
+            defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
+          >
+            <FieldArray name='dpBehandlinger'>
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='my-3'>
+                  <LabelWithDescription label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen' />
+
+                  <DataTextWrapper>
+                    {fieldArrayRenderProps.form.values.dpBehandlinger.length === 0 && (
+                      <BodyLong>Ingen behandlinger der Nav er databehandler</BodyLong>
+                    )}
+
+                    {fieldArrayRenderProps.form.values.dpBehandlinger.length !== 0 && (
+                      <List className='mt-2' as='ul'>
+                        {fieldArrayRenderProps.form.values.dpBehandlinger
+                          .map((dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling))
+                          .map((item: string, index: number) => (
+                            <List.Item key={`tags_${item}_${index}`}>{item}</List.Item>
+                          ))}
+                      </List>
+                    )}
+                  </DataTextWrapper>
+                </div>
+              )}
+            </FieldArray>
+          </ReadMore>
+
           <FieldWrapper marginBottom id='risikovurderinger'>
             <FieldArray name='risikovurderinger'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -612,8 +644,8 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                   <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
                     <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                       <InfoCard.Title as='div'>
-                        Det er ikke mulig å endre risikoeier når Etterlevelse eller PVK er sendt til
-                        godkjenning hos risikoeier.
+                        Det er ikke mulig å endre risikoeier når etterlevelsesdokument eller PVK er
+                        sendt til godkjenning hos risikoeier.
                       </InfoCard.Title>
                     </InfoCard.Header>
                   </InfoCard>
@@ -650,13 +682,14 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                   name='p360Recno'
                 />
 
-                <div className='mt-5'></div>
-                <TextAreaField
-                  rows={1}
-                  noPlaceholder
-                  label='P360 saknummer  KUN I DEV OG ADMIN'
-                  name='p360CaseNumber'
-                />
+                <div className='mt-5'>
+                  <TextAreaField
+                    rows={1}
+                    noPlaceholder
+                    label='P360 saknummer  KUN I DEV OG ADMIN'
+                    name='p360CaseNumber'
+                  />
+                </div>
               </div>
             </>
           )}

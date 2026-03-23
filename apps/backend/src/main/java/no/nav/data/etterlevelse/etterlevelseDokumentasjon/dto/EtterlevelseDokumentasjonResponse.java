@@ -11,6 +11,7 @@ import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -34,6 +35,7 @@ public class EtterlevelseDokumentasjonResponse {
     private Integer etterlevelseNummer;
     private String title;
     private List<String> behandlingIds;
+    private List<String> dpBehandlingIds;
     private String beskrivelse;
     private String gjenbrukBeskrivelse;
     private boolean tilgjengeligForGjenbruk;
@@ -56,6 +58,7 @@ public class EtterlevelseDokumentasjonResponse {
     private List<String> risikoeiere;
     private List<Resource> risikoeiereData;
     private List<Behandling> behandlinger;
+    private List<DpBehandling> dpBehandlinger;
 
     private String nomAvdelingId;
     private String avdelingNavn;
@@ -88,6 +91,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
                 .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
                 .behandlingIds(nullsafeCopyOf(eDokData.getBehandlingIds()))
+                .dpBehandlingIds(nullsafeCopyOf(eDokData.getDpBehandlingIds()))
                 .irrelevansFor(eDok.irrelevantForAsCodes())
                 .prioritertKravNummer(nullsafeCopyOf(eDokData.getPrioritertKravNummer()))
                 .forGjenbruk(eDokData.isForGjenbruk())

@@ -466,9 +466,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
             {pvkDokument.antallInnsendingTilPvo > 1 && (
               <div className='mt-10'>
                 <PvoTilbakemeldingsHistorikk
+                  pvkDokument={pvkDokument}
                   pvoTilbakemelding={pvoTilbakemelding}
                   fieldName='risikoscenarioEtterTiltakk'
-                  relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                  relevantVurdering={relevantVurdering}
                   forPvo={true}
                 />
               </div>

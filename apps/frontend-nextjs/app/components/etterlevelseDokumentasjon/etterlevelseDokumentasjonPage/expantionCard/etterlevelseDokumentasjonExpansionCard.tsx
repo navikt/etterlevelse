@@ -1,6 +1,7 @@
 'use client'
 
 import { BehandlingList } from '@/components/behandlingskatalog/behandlingList'
+import { DpBehandlingList } from '@/components/behandlingskatalog/dpBehandlingList'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { Teams } from '@/components/teamkatalog/teams'
@@ -38,7 +39,10 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
     EListName.RELEVANS
   )
 
-  const { behandlingIds, behandlinger, teams, irrelevansFor } = etterlevelseDokumentasjon
+  const { behandlingIds, behandlinger, dpBehandlingIds, dpBehandlinger, teams, irrelevansFor } =
+    etterlevelseDokumentasjon
+
+  console.debug(etterlevelseDokumentasjon)
 
   return (
     <div>
@@ -64,6 +68,12 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 
             <div className='max-w-[75ch]'>
               <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
+              {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
+                <DpBehandlingList
+                  dpBehandlingIds={dpBehandlingIds}
+                  dpBehandlinger={dpBehandlinger}
+                />
+              )}
 
               <div className='flex items-start gap-2 mb-2.5'>
                 <div className='mt-0.75'>

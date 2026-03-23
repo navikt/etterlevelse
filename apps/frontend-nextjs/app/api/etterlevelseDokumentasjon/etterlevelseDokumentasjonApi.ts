@@ -161,6 +161,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   gjenbrukBeskrivelse: etterlevelseDokumentasjon.gjenbrukBeskrivelse || '',
   tilgjengeligForGjenbruk: etterlevelseDokumentasjon.tilgjengeligForGjenbruk || false,
   behandlingIds: etterlevelseDokumentasjon.behandlingIds || [],
+  dpBehandlingIds: etterlevelseDokumentasjon.dpBehandlingIds || [],
   behandlerPersonopplysninger:
     etterlevelseDokumentasjon.behandlerPersonopplysninger !== undefined
       ? etterlevelseDokumentasjon.behandlerPersonopplysninger
@@ -179,6 +180,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   risikoeiereData: etterlevelseDokumentasjon.risikoeiereData || [],
   hasCurrentUserAccess: etterlevelseDokumentasjon.hasCurrentUserAccess || false,
   behandlinger: etterlevelseDokumentasjon.behandlinger || [],
+  dpBehandlinger: etterlevelseDokumentasjon.dpBehandlinger || [],
   varslingsadresser: etterlevelseDokumentasjon.varslingsadresser || [],
   forGjenbruk: etterlevelseDokumentasjon.forGjenbruk || false,
   risikovurderinger: etterlevelseDokumentasjon.risikovurderinger || [],
@@ -198,6 +200,9 @@ export const etterlevelseDokumentasjonToDomainToObject = (
     behandlingIds: etterlevelseDokumentasjon.behandlinger
       ? etterlevelseDokumentasjon.behandlinger.map((behandling) => behandling.id)
       : [],
+    dpBehandlingIds: etterlevelseDokumentasjon.dpBehandlinger
+      ? etterlevelseDokumentasjon.dpBehandlinger.map((dpBehandling) => dpBehandling.id)
+      : [],
     irrelevansFor: etterlevelseDokumentasjon.irrelevansFor.map((irrelevans) => irrelevans.code),
     teams: etterlevelseDokumentasjon.teamsData
       ? etterlevelseDokumentasjon.teamsData.map((team) => team.id)
@@ -214,6 +219,7 @@ export const etterlevelseDokumentasjonToDomainToObject = (
   delete domainToObject.teamsData
   delete domainToObject.resourcesData
   delete domainToObject.behandlinger
+  delete domainToObject.dpBehandlinger
   return domainToObject
 }
 

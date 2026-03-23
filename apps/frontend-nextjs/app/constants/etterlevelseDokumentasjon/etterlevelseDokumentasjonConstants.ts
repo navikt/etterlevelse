@@ -1,4 +1,4 @@
-import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
+import { IBehandling, IDpBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
 import { IChangeStamp, TReplace } from '../commonConstants'
 import { ICode } from '../kodeverk/kodeverkConstants'
 import { TKravQL } from '../krav/kravConstants'
@@ -21,6 +21,7 @@ export interface IEtterlevelseDokumentasjon {
   tilgjengeligForGjenbruk: boolean
   gjenbrukBeskrivelse: string
   behandlingIds: string[]
+  dpBehandlingIds: string[]
   irrelevansFor: ICode[]
   prioritertKravNummer: string[]
   etterlevelseNummer: number
@@ -35,6 +36,7 @@ export interface IEtterlevelseDokumentasjon {
   resourcesData?: ITeamResource[]
   risikoeiereData?: ITeamResource[]
   behandlinger?: IBehandling[]
+  dpBehandlinger?: IDpBehandling[]
   behandlerPersonopplysninger: boolean
   forGjenbruk: boolean
   varslingsadresser: IVarslingsadresse[]

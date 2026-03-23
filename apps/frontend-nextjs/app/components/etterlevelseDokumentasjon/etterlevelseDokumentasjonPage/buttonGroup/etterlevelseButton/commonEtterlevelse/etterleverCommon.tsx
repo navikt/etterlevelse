@@ -25,17 +25,17 @@ export const EtterleverUnderArbeidVariant: FunctionComponent<TProps> = ({
       <ActionMenu>
         <ActionMenuButtonEtterlevelse />
         <ActionMenu.Content>
-          <EtterlevelseTilGodkjenningActionMenuItem
-            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          >
-            Få etterlevelsen godkjent av risikoeier
-          </EtterlevelseTilGodkjenningActionMenuItem>
           <RedigerEgenskaperActionMenuItem etterlevelseDokumentasjon={etterlevelseDokumentasjon}>
             Rediger dokumentegenskaper
           </RedigerEgenskaperActionMenuItem>
           <ActionMenu.Item as='button' onSelect={() => setIsExportModalOpen(true)}>
             Eksporter til Word
           </ActionMenu.Item>
+          <EtterlevelseTilGodkjenningActionMenuItem
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          >
+            Få etterlevelsen godkjent av risikoeier
+          </EtterlevelseTilGodkjenningActionMenuItem>
         </ActionMenu.Content>
       </ActionMenu>
       <ExportEtterlevelseModal
@@ -84,7 +84,7 @@ export const EtterleverGodkjentVariant: FunctionComponent<TProps> = ({
 }) => {
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isNewVersionModalOpen, setIsNewVersionModalOpen] = useState<boolean>(false)
-  
+
   return (
     <>
       <ActionMenu>

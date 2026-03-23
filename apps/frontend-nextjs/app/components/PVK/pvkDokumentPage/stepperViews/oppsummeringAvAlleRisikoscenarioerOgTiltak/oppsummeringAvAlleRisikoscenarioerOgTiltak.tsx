@@ -597,18 +597,21 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
           {/* sidepanel */}
           {isPvoTilbakemeldingFerdig && relevantVurdering && (
             <PvkSidePanelWrapper>
-              <PvoTilbakemeldingReadOnly
-                relevantVurdering={relevantVurdering}
-                tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
-                sentDate={relevantVurdering.sendtDato}
-              />
+              {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
+                  tilbakemeldingsinnhold={relevantVurdering.risikoscenarioEtterTiltakk}
+                  sentDate={relevantVurdering.sendtDato}
+                />
+              )}
 
               {pvkDokument.antallInnsendingTilPvo > 1 && (
                 <div className='mt-10'>
                   <PvoTilbakemeldingsHistorikk
+                    pvkDokument={pvkDokument}
                     pvoTilbakemelding={pvoTilbakemelding}
                     fieldName='risikoscenarioEtterTiltakk'
-                    relevantVurderingsInnsendingId={relevantVurdering.innsendingId}
+                    relevantVurdering={relevantVurdering}
                     forPvo={false}
                   />
                 </div>
