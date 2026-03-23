@@ -7,6 +7,7 @@ import {
   FileRejectionReason,
   FileUpload,
   Heading,
+  LocalAlert,
   VStack,
 } from '@navikt/ds-react'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
@@ -120,16 +121,12 @@ export const CustomFileUpload = (props: IProps) => {
       )}
 
       {fileDeleteAlert && (
-        <Alert
-          role='status'
-          variant='success'
-          closeButton
-          onClose={() => {
-            setFileDeleteAlert(false)
-          }}
-        >
-          Filen din ble slettet.
-        </Alert>
+        <LocalAlert status='success'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>Filen din ble slettet.</LocalAlert.Title>
+            <LocalAlert.CloseButton onClick={() => setFileDeleteAlert(false)} />
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
 
       {acceptedFiles.length > 0 && (

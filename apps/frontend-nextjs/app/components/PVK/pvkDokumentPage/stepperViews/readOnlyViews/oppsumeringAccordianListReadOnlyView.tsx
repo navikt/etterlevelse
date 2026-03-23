@@ -17,7 +17,7 @@ import {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { Accordion, Alert, BodyLong, Label, ReadMore } from '@navikt/ds-react'
+import { Accordion, Alert, BodyLong, InlineMessage, Label, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
@@ -199,9 +199,9 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                           )}
 
                           {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
-                            <Alert variant='warning' inline className='mt-3'>
+                            <InlineMessage status='warning' className='mt-3'>
                               Dere må begrunne denne vurderingen av tiltakenes effekt.
-                            </Alert>
+                            </InlineMessage>
                           )}
                         </div>
                       )}
