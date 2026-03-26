@@ -13,7 +13,8 @@
 5. [API Endpoint Overview](#api-endpoint-overview)
 6. [EtterlevelseDokumentasjon Status State Machine](#etterlevelsedokumentasjon-status-state-machine)
 7. [PVK/PVO Status State Machine](#pvkpvo-status-state-machine)
-8. [Sequence Diagrams](#sequence-diagrams)
+8. [Action Menu Button State Machines](#action-menu-button-state-machines)
+9. [Sequence Diagrams](#sequence-diagrams)
 
 ---
 
@@ -127,13 +128,6 @@ graph TD
 | **Behandlingskatalogen** | External NAV service                              | Resolves `Behandling` and `DpBehandling`                |
 | **NOM**                  | External NAV service                              | Resolves organisational units (avdelinger)              |
 | **Slack**                | External Slack API                                | Resolves Slack channels and users for varslingsadresser |
-
-### Deployment
-
-| App             | Platform   | Config                                        |
-| --------------- | ---------- | --------------------------------------------- |
-| Backend         | NAIS / GCP | `apps/backend/nais/backend-gcp.yaml`          |
-| Frontend-NextJS | NAIS / GCP | `apps/frontend-nextjs/nais/frontend-gcp.yaml` |
 
 ---
 
@@ -358,6 +352,110 @@ stateDiagram-v2
     TRENGER_REVURDERING --> UNDERARBEID : PVO begynner igjen
     FERDIG --> [*]
 ```
+
+---
+
+## Action Menu Button State Machines
+
+The documentation page (`/dokumentasjon/:id`) renders two action menu buttons when conditions are met:
+
+- **Etterlevelse** – shown when `user.isAdmin() || hasCurrentUserAccess`
+- **Personvernkonsekvensvurdering (PVK)** – shown when `behandlerPersonopplysninger = true`
+
+Both buttons adapt their menu items based on the current user's **role** and the document's **status / tilstand**.
+
+---
+
+### Etterlevelse-knapp
+
+Role is determined by `getRolle(etterlevelseDokumentasjon)`:
+
+- `Admin` – user is system admin
+- `EtterleverOgRisikoeier` – user has access AND is listed as risikoeier
+- `Risikoeier` / `Personvernombud` – user is risikoeier or PVO (read-mostly)
+- `Etterlever` – user has access (default)
+
+#### State transitions
+
+```mermaid
+stateDiagram-v2
+    [*] --> UNDER_ARBEID
+
+    UNDER_ARBEID --> SENDT_TIL_GODKJENNING_TIL_RISIKOEIER : Etterlever / EtterleverOgRisikoeier / Admin
+    SENDT_TIL_GODKJENNING_TIL_RISIKOEIER --> GODKJENT_AV_RISIKOEIER : Risikoeier / EtterleverOgRisikoeier / Admin
+    GODKJENT_AV_RISIKOEIER --> UNDER_ARBEID : Etterlever / EtterleverOgRisikoeier / Admin
+    GODKJENT_AV_RISIKOEIER --> [*]
+```
+
+#### Menyelementer per rolle og status
+
+| Etterlevelse-status                  | Rolle                          | Menyelementer                                                                                                |
+| ------------------------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| UNDER_ARBEID                         | Etterlever                     | Rediger dokumentegenskaper · Eksporter til Word · **Få etterlevelsen godkjent av risikoeier**                |
+| UNDER_ARBEID                         | Risikoeier / Personvernombud   | Eksporter til Word                                                                                           |
+| UNDER_ARBEID                         | EtterleverOgRisikoeier / Admin | Rediger dokumentegenskaper · Eksporter til Word · **Få etterlevelsen godkjent av risikoeier**                |
+| SENDT_TIL_GODKJENNING_TIL_RISIKOEIER | Etterlever                     | Les innsending til risikoeier · Rediger dokumentegenskaper · Eksporter til Word                              |
+| SENDT_TIL_GODKJENNING_TIL_RISIKOEIER | Risikoeier / Personvernombud   | **Godkjenn etterlevelsen** · Eksporter til Word                                                              |
+| SENDT_TIL_GODKJENNING_TIL_RISIKOEIER | EtterleverOgRisikoeier / Admin | Les innsending til risikoeier · Rediger dokumentegenskaper · **Godkjenn etterlevelsen** · Eksporter til Word |
+| GODKJENT_AV_RISIKOEIER               | Etterlever                     | Rediger dokumentegenskaper · **Lås opp og oppdater dokumentasjon** · Eksporter til Word                      |
+| GODKJENT_AV_RISIKOEIER               | Risikoeier / Personvernombud   | Eksporter til Word                                                                                           |
+| GODKJENT_AV_RISIKOEIER               | EtterleverOgRisikoeier / Admin | Rediger dokumentegenskaper · **Lås opp og oppdater dokumentasjon** · Eksporter til Word                      |
+
+---
+
+### PVK-knapp (PVK Tilstand)
+
+The PVK button renders based on `EPVKTilstandStatus`, computed by `getPvkTilstand(pvkDokument, pvoTilbakemelding)`.
+
+Role priority: `Admin` > `Personvernombud` > `EtterleverOgRisikoeier` > `Risikoeier` > `Etterlever` > `Les`
+
+#### Tilstand flow
+
+```mermaid
+stateDiagram-v2
+    T1 : T1 – Behov for PVK ikke vurdert
+    T2 : T2 – Skal ikke gjøre PVK
+    T3 : T3 – Skal gjøre PVK, ikke påbegynt
+    T4 : T4 – PVK under arbeid (første gang)
+    T5 : T5 – PVK sendt til PVO
+    T6 : T6 – PVO har gitt tilbakemelding
+    T7 : T7 – Etterlever har sendt tilbake til PVO
+    T8 : T8 – Sendt til risikoeier
+    T9 : T9 – Godkjent av risikoeier
+    T10 : T10 – Etterlever har begynt nye endringer
+
+    [*] --> T1
+    T1 --> T2 : Etterlever - Skal ikke gjore PVK
+    T1 --> T3 : Etterlever - Skal gjore PVK
+    T2 --> T1 : Etterlever - Revurder behov for PVK
+    T2 --> T3 : Etterlever - Revurder, skal gjore PVK
+    T3 --> T4 : Etterlever - Pabegynn PVK
+    T4 --> T5 : Etterlever - Fullfør og send til PVO
+    T5 --> T6 : PVO - Gir tilbakemelding
+    T6 --> T7 : Etterlever - Sender tilbake til PVO
+    T7 --> T8 : Etterlever/PVO - Sender til risikoeier
+    T8 --> T9 : Risikoeier/Admin - Godkjenn PVK
+    T9 --> T10 : Etterlever - Begynner nye endringer
+    T10 --> T9 : Risikoeier - Godkjenn PVK ny versjon
+    T9 --> [*]
+```
+
+#### Primær knapp per rolle og tilstand
+
+Bold = action-triggering button. Italic = read-only navigation only.
+
+| Tilstand                           | Etterlever                 | Personvernombud        | Risikoeier               | EtterleverOgRisikoeier     | Admin                      |
+| ---------------------------------- | -------------------------- | ---------------------- | ------------------------ | -------------------------- | -------------------------- |
+| T1 – Behov ikke vurdert            | **Vurder behov for PVK**   | _navigasjon_           | _navigasjon_             | **Vurder behov for PVK**   | **Vurder behov for PVK**   |
+| T2 – Skal ikke gjøre PVK           | **Revurder behov for PVK** | _navigasjon_           | _navigasjon_             | **Revurder behov for PVK** | **Revurder behov for PVK** |
+| T3 – Skal gjøre PVK, ikke påbegynt | **Påbegynn PVK**           | _navigasjon_           | _navigasjon_             | **Påbegynn PVK**           | **Påbegynn PVK**           |
+| T4 – PVK under arbeid              | **Fullfør PVK**            | _Les PVK_              | _Les PVK_                | **Fullfør PVK**            | **Fullfør PVK**            |
+| T5 – PVK sendt til PVO             | _Les PVK_                  | **Vurder PVK**         | _Les PVK_                | _Les PVK_                  | **Vurder PVK**             |
+| T6 – PVO har gitt tilbakemelding   | _Les PVOs tilbakemelding_  | _Les PVK_              | _Les PVK_                | _Les PVOs tilbakemelding_  | _Les PVOs tilbakemelding_  |
+| T7 – Sendt tilbake til PVO         | _Les PVK_                  | **Vurder PVK**         | _Les PVK_                | _Les PVK_                  | **Vurder PVK**             |
+| T8 – Sendt til risikoeier          | _Les PVK_                  | _Les PVK_              | **Godkjenn PVK**         | **Godkjenn PVK**           | **Godkjenn PVK**           |
+| T9 – Godkjent av risikoeier        | **Les og oppdater PVK**    | _Les PVK_              | _Les PVK_                | _Les og oppdater PVK_      | _Les og oppdater PVK_      |
+| T10 – Ny versjon under arbeid      | **Fullfør PVK**            | **Vurder PVK (ny v.)** | **Godkjenn PVK (ny v.)** | **Fullfør PVK**            | **Fullfør PVK**            |
 
 ---
 
