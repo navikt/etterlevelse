@@ -4,6 +4,19 @@
 
 ---
 
+## Table of Contents
+
+1. [How to view Mermaid diagrams in VS Code](#how-to-view-mermaid-diagrams-in-vs-code)
+2. [System Architecture](#system-architecture)
+3. [System Architecture Overview](#system-architecture-overview)
+4. [Domain Model (Class Diagram)](#domain-model-class-diagram)
+5. [API Endpoint Overview](#api-endpoint-overview)
+6. [EtterlevelseDokumentasjon Status State Machine](#etterlevelsedokumentasjon-status-state-machine)
+7. [PVK/PVO Status State Machine](#pvkpvo-status-state-machine)
+8. [Sequence Diagrams](#sequence-diagrams)
+
+---
+
 ## How to view Mermaid diagrams in VS Code
 
 ### Install the extension
@@ -66,6 +79,7 @@ graph TD
             S_TL["TiltakService"]
             S_PVO["PvoTilbakemeldingService"]
             S_AOO["BehandlingensArtOgOmfangService"]
+            S_KPL["KravPriorityListService"]
         end
 
         subgraph Integrations["External Integrations"]
@@ -97,6 +111,29 @@ graph TD
     NX_API -->|GraphQL| GQL
     Services --> DB
 ```
+
+---
+
+## System Architecture Overview
+
+| Layer                    | Technology                                        | Role                                                    |
+| ------------------------ | ------------------------------------------------- | ------------------------------------------------------- |
+| **Frontend**             | Next.js 14 (App Router), TypeScript, Tailwind CSS | UI — pages, forms, navigation                           |
+| **API Client**           | axios (REST), Apollo Client (GraphQL)             | Communicates with backend                               |
+| **Backend**              | Spring Boot 3, Java, Spring GraphQL               | REST + GraphQL API, business logic                      |
+| **Auth**                 | NAV SSO / cookie-based                            | Authenticates users via `withCredentials`               |
+| **Database**             | PostgreSQL                                        | Stores all domain data as rows + JSONB                  |
+| **Teamcat**              | External NAV service                              | Resolves team and resource (person) data                |
+| **Behandlingskatalogen** | External NAV service                              | Resolves `Behandling` and `DpBehandling`                |
+| **NOM**                  | External NAV service                              | Resolves organisational units (avdelinger)              |
+| **Slack**                | External Slack API                                | Resolves Slack channels and users for varslingsadresser |
+
+### Deployment
+
+| App             | Platform   | Config                                        |
+| --------------- | ---------- | --------------------------------------------- |
+| Backend         | NAIS / GCP | `apps/backend/nais/backend-gcp.yaml`          |
+| Frontend-NextJS | NAIS / GCP | `apps/frontend-nextjs/nais/frontend-gcp.yaml` |
 
 ---
 
@@ -202,10 +239,34 @@ classDiagram
         +List~Melding~ meldinger
     }
 
+    class KravPriorityList {
+        +UUID id
+        +String temaId
+        +List~Integer~ priorityList
+    }
+
+    class EtterlevelseMetadata {
+        +UUID id
+        +UUID etterlevelseDokumentasjonId
+        +Integer kravNummer
+        +Integer kravVersjon
+        +List~String~ tildeltMed
+        +String notater
+    }
+
+    class DocumentRelation {
+        +UUID id
+        +UUID fromDocument
+        +UUID toDocument
+        +ERelationType RelationType
+    }
+
     EtterlevelseDokumentasjon "1" --> "0..1" PvkDokument : har
     EtterlevelseDokumentasjon "1" --> "0..*" Etterlevelse : dokumenterer
     EtterlevelseDokumentasjon "1" --> "0..1" BehandlingensLivslop : beskriver
     EtterlevelseDokumentasjon "1" --> "0..1" BehandlingensArtOgOmfang : beskriver
+    EtterlevelseDokumentasjon "1" --> "0..*" EtterlevelseMetadata : har metadata for
+    EtterlevelseDokumentasjon "0..*" --> "0..*" DocumentRelation : relatert via
     PvkDokument "1" --> "0..*" Risikoscenario : inneholder
     PvkDokument "1" --> "0..*" Tiltak : inneholder
     PvkDokument "1" --> "0..1" PvoTilbakemelding : mottatt fra
@@ -213,6 +274,7 @@ classDiagram
     Risikoscenario "0..*" --> "0..*" Krav : relevant for
     Krav "1" --> "0..*" Etterlevelse : etterlevd i
     Krav "1" --> "0..*" Tilbakemelding : mottar
+    Krav "0..*" --> "0..1" KravPriorityList : prioritert i
 ```
 
 ---
@@ -249,6 +311,53 @@ classDiagram
 | `krav(filter)` / `kravById`         |
 | `etterlevelseById`                  |
 | `pvoTilbakemelding(filter)`         |
+
+---
+
+## EtterlevelseDokumentasjon Status State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> UNDER_ARBEID : Dokument opprettet
+    UNDER_ARBEID --> SENDT_TIL_GODKJENNING_TIL_RISIKOEIER : Etterleverer sender til risikoeier
+    SENDT_TIL_GODKJENNING_TIL_RISIKOEIER --> GODKJENT_AV_RISIKOEIER : Risikoeier godkjenner
+    SENDT_TIL_GODKJENNING_TIL_RISIKOEIER --> UNDER_ARBEID : Risikoeier avviser
+    GODKJENT_AV_RISIKOEIER --> UNDER_ARBEID : Ny versjon opprettes
+    GODKJENT_AV_RISIKOEIER --> [*]
+```
+
+---
+
+## PVK/PVO Status State Machine
+
+### PvkDokument statuses
+
+```mermaid
+stateDiagram-v2
+    [*] --> UNDERARBEID : PVK opprettet
+    UNDERARBEID --> SENDT_TIL_PVO : Bruker sender til PVO
+    SENDT_TIL_PVO --> PVO_UNDERARBEID : PVO begynner arbeid
+    PVO_UNDERARBEID --> VURDERT_AV_PVO : PVO ferdigstiller (uten retur)
+    PVO_UNDERARBEID --> VURDERT_AV_PVO_TRENGER_MER_ARBEID : PVO ferdigstiller (med retur)
+    VURDERT_AV_PVO --> GODKJENT_AV_RISIKOEIER : Risikoeier godkjenner
+    VURDERT_AV_PVO_TRENGER_MER_ARBEID --> UNDERARBEID : Bruker tar tilbake og redigerer
+    VURDERT_AV_PVO_TRENGER_MER_ARBEID --> SENDT_TIL_PVO_FOR_REVURDERING : Bruker sender til revurdering
+    SENDT_TIL_PVO_FOR_REVURDERING --> PVO_UNDERARBEID : PVO begynner revurdering
+```
+
+### PvoTilbakemelding statuses
+
+```mermaid
+stateDiagram-v2
+    [*] --> IKKE_PABEGYNT : PVK sendt til PVO
+    IKKE_PABEGYNT --> UNDERARBEID : PVO begynner
+    UNDERARBEID --> SNART_FERDIG : PVO markerer nesten ferdig
+    SNART_FERDIG --> TIL_KONTROL : Sendt til kontroll
+    TIL_KONTROL --> FERDIG : Godkjent
+    FERDIG --> TRENGER_REVURDERING : PVK sendt til revurdering
+    TRENGER_REVURDERING --> UNDERARBEID : PVO begynner igjen
+    FERDIG --> [*]
+```
 
 ---
 
