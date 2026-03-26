@@ -86,13 +86,18 @@ export const newVersionEtterlevelseDokumentasjon = async (
 
 export const godkjennEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
-  kravTilstandHistorikk: IKravTilstandHistorikk[]
+  kravTilstandHistorikk: IKravTilstandHistorikk[],
+  onlyActiveKrav: boolean = true
 ) => {
   const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/godkjenning/${etterlevelseDokumentasjon.id}`,
-      { etterlevelseDokumentasjonRequest: dto, kravTilstandHistorikk: kravTilstandHistorikk }
+      {
+        etterlevelseDokumentasjonRequest: dto,
+        kravTilstandHistorikk: kravTilstandHistorikk,
+        onlyActiveKrav: onlyActiveKrav,
+      }
     )
   ).data
 }

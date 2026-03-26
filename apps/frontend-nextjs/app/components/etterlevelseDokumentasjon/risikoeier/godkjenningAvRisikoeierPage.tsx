@@ -8,7 +8,6 @@ import {
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
-import { arkiver } from '@/api/p360/p360Api'
 import {
   getPvkDokumentByEtterlevelseDokumentId,
   mapPvkDokumentToFormValue,
@@ -100,6 +99,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const hasAccess =
     etterlevelseDokumentasjon && etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
@@ -208,17 +208,21 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             setSaveSuccessfull(true)
           })
         } else {
+          setIsSubmitting(true)
           await godkjennEtterlevelseDokumentasjon(
             updatedEtterlevelseDokumentasjon,
-            kravTilstandsHistorikk
+            kravTilstandsHistorikk,
+            true
           )
-            .then(async (resp) => {
+            .then((resp) => {
               setEtterlevelseDokumentasjon(resp)
-              await arkiver(updatedEtterlevelseDokumentasjon.id, true, false, false, true)
               setSaveSuccessfull(true)
             })
             .catch((error) => {
-              setErrorMessage(error.message)
+              setErrorMessage(`Godkjenning og arkivering feilet: ${error.message}`)
+            })
+            .finally(() => {
+              setIsSubmitting(false)
             })
         }
       } else {
@@ -392,6 +396,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                           <Button
                             type='button'
                             variant='primary'
+                            loading={isSubmitting}
                             onClick={async () => {
                               await setFieldValue(
                                 'status',
