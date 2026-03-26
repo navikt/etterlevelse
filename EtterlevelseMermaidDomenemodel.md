@@ -249,3 +249,109 @@ classDiagram
 | `krav(filter)` / `kravById`         |
 | `etterlevelseById`                  |
 | `pvoTilbakemelding(filter)`         |
+
+---
+
+## Sequence Diagrams
+
+### 1. User loads an Etterlevelse documentation page
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant NextJS as Frontend-NextJS
+    participant Backend as Backend (Spring Boot)
+    participant TeamCat as Teamcat
+    participant DB as PostgreSQL
+
+    User->>NextJS: Navigate to /etterlevelsedokumentasjon/:id
+    NextJS->>Backend: GraphQL etterlevelseDokumentasjon(filter)
+    Backend->>DB: SELECT etterlevelse_dokumentasjon
+    DB-->>Backend: EtterlevelseDokumentasjon row
+    Backend->>TeamCat: getTeams(teamIds)
+    TeamCat-->>Backend: Team data
+    Backend->>DB: SELECT etterlevelse WHERE dok_id = ?
+    DB-->>Backend: Etterlevelse rows
+    Backend-->>NextJS: EtterlevelseDokumentasjonGraphQlResponse
+    NextJS-->>User: Render page with krav status, teams, etterlevelser
+```
+
+### 2. User submits a PVK document to PVO
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant NextJS as Frontend-NextJS
+    participant Backend as Backend (Spring Boot)
+    participant DB as PostgreSQL
+
+    User->>NextJS: Click "Send til PVO"
+    NextJS->>Backend: PUT /pvkdokument/:id (status=SENDT_TIL_PVO)
+    Backend->>DB: UPDATE pvk_dokument SET status
+    Backend->>DB: SELECT pvo_tilbakemelding WHERE pvk_dokument_id = ?
+    DB-->>Backend: PvoTilbakemelding
+    Backend->>DB: UPDATE pvo_tilbakemelding SET status=IKKE_PABEGYNT
+    DB-->>Backend: Updated PvoTilbakemelding
+    Backend-->>NextJS: PvkDokumentResponse
+    NextJS-->>User: Show confirmation, updated status
+```
+
+### 3. PVO registers feedback (Tilbakemelding)
+
+```mermaid
+sequenceDiagram
+    actor PVO
+    participant NextJS as Frontend-NextJS
+    participant Backend as Backend (Spring Boot)
+    participant DB as PostgreSQL
+
+    PVO->>NextJS: Fill in vurdering and click "Ferdigstill"
+    NextJS->>Backend: PUT /pvotilbakemelding/:id (status=FERDIG)
+    Backend->>DB: UPDATE pvo_tilbakemelding SET status, data
+    Backend->>DB: SELECT pvk_dokument WHERE id = ?
+    DB-->>Backend: PvkDokument
+    alt vilFaPvkIRetur = true
+        Backend->>DB: UPDATE pvk_dokument SET status=VURDERT_AV_PVO_TRENGER_MER_ARBEID
+    else
+        Backend->>DB: UPDATE pvk_dokument SET status=VURDERT_AV_PVO
+    end
+    Backend-->>NextJS: PvoTilbakemeldingResponse
+    NextJS-->>PVO: Show updated status
+```
+
+### 4. User creates a Risikoscenario linked to a Krav
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant NextJS as Frontend-NextJS
+    participant Backend as Backend (Spring Boot)
+    participant DB as PostgreSQL
+
+    User->>NextJS: Add risikoscenario for kravnummer K42
+    NextJS->>Backend: POST /risikoscenario/krav/42
+    Backend->>Backend: Validate krav is active (KravService)
+    Backend->>DB: INSERT risikoscenario
+    Backend->>DB: UPDATE risikoscenario_data SET relevanteKravNummer += 42
+    DB-->>Backend: Risikoscenario
+    Backend-->>NextJS: RisikoscenarioResponse
+    NextJS-->>User: Show new risikoscenario in list
+```
+
+### 5. Risikoeier approves PVK
+
+```mermaid
+sequenceDiagram
+    actor Risikoeier
+    participant NextJS as Frontend-NextJS
+    participant Backend as Backend (Spring Boot)
+    participant DB as PostgreSQL
+
+    Risikoeier->>NextJS: Click "Godkjenn"
+    NextJS->>Backend: PUT /pvkdokument/:id (status=GODKJENT_AV_RISIKOEIER)
+    Backend->>DB: UPDATE pvk_dokument SET status, godkjent_av_risikoeier_dato
+    Backend->>DB: SELECT all risikoscenario for pvk_dokument
+    Backend->>DB: SELECT all tiltak for pvk_dokument
+    Backend-->>NextJS: PvkDokumentResponse (hasPvkDocumentBeenUpdatedAfterApproval=false)
+    NextJS-->>Risikoeier: Show approved state
+```
