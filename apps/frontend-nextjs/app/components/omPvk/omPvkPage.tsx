@@ -22,7 +22,7 @@ const OmPvkPage = () => {
             >
               <Stepper.Step href='#formaalet-med-pvk'>Formålet med PVK</Stepper.Step>
               <Stepper.Step href='#hvordan-bruke-digital-pvk'>
-                Hvordan bruke Digital PVK
+                Hvordan bruke Digital PVK paul: legge til copybutton.
               </Stepper.Step>
               <Stepper.Step href='#beslutningsstotte'>
                 Beslutningsstøtte når dere vurderer behov for PVK
@@ -67,7 +67,7 @@ const OmPvkPage = () => {
           <Heading size='medium' level='2' spacing id='hvordan-bruke-digital-pvk'>
             Hvordan bruker man Digital PVK?
           </Heading>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Digital PVK utgjør en del av Støtte til etterlevelse. Når det er registrert at en viss
             etterlevelse inkluderer behandling av personopplysninger, vil alle med
             redigeringstilgang til etterlevelsesdokumentet kunne:
@@ -113,7 +113,7 @@ const OmPvkPage = () => {
             header='Hvilke egenskaper er aktuelle når man vurderer behov for PVK? '
             className='mb-6'
           >
-            <BodyLong spacing>
+            <BodyLong className='mb-3'>
               Følgende behandlingsegenskaper i innebærer høyere risiko, og gjør det mer sannsynlig
               at en PVK burde gjennomføres:
             </BodyLong>
@@ -141,7 +141,7 @@ const OmPvkPage = () => {
             header='Når er riktig tidspunkt å vurdere eller revurdere behov for PVK?'
             className='mb-6'
           >
-            <BodyLong spacing>Det er aktuelt å vurdere behov for PVK når:</BodyLong>
+            <BodyLong className='mb-3'>Det er aktuelt å vurdere behov for PVK når:</BodyLong>
             <List className='mb-6'>
               <List.Item>
                 Vi skal behandle personopplysninger i en ny kontekst, for eksempel bygge en ny
@@ -163,7 +163,7 @@ const OmPvkPage = () => {
             Dokumentasjon av Behandlingens livsløp
           </Heading>
           <ReadMore header='Hva er Behandlingens livsløp?' className='mb-6'>
-            <BodyLong spacing>
+            <BodyLong className='mb-3'>
               «Behandlingens livsløp» beskriver hvor og hvordan personopplysninger flyter når de
               behandles i deres kontekst. Hensikten med å tegne behandlingens livsløp er at dere
               blant annet må tenke på:
@@ -181,8 +181,8 @@ const OmPvkPage = () => {
           <BodyLong spacing>
             I den nye løsningen kan dere laste opp en eller flere tegninger av behandlingens livsløp
             og/eller lagre en skriftlig beskrivelse.
-            <br />
-            <br />
+          </BodyLong>
+          <BodyLong spacing>
             Selv om dokumentasjon av behandlingens livsløp kun er påkrevd når man gjør en PVK,
             anbefaler vi at alle tegner flyten. Dette vil være til hjelp når dere svarer ut
             etterlevelseskrav innen personvern og arkiv og dokumentasjon, og i selve vurderingen av
@@ -246,14 +246,14 @@ const OmPvkPage = () => {
             dere om det er behov for en ny innsending til Personvernombudet, eller om risikoeier
             skal godkjenne mindre endringer i PVK.
           </BodyLong>
-          <Heading level='2' size='small' className='mt-7' id='ta-kontakt'>
+          <Heading level='2' size='small' spacing className='mt-7' id='ta-kontakt'>
             Ta kontakt
           </Heading>
-          <BodyLong className='mt-3'>
+          <BodyLong spacing>
             Hvis dere har juridiske spørsmål knyttet til personvern, ta kontakt med Juridisk
             avdeling: nav.juridisk.avdeling@nav.no.
-            <br />
-            <br />
+          </BodyLong>
+          <BodyLong className='mb-3'>
             Hvis dere finner feil i løsningen eller har forslag til forbedringer, ta kontakt med
             Team Datajegerne:
           </BodyLong>

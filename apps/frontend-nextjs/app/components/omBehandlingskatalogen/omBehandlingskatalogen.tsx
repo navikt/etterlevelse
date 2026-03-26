@@ -1,7 +1,8 @@
 'use client'
 
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { BodyLong, Heading, Link, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import OmBehandlingskatalogenImage from './images/OmBehandlingskatalogenImage.png'
@@ -21,7 +22,7 @@ export const OmBehandlingskatalogen = () => {
               onStepChange={setActiveStep}
             >
               <Stepper.Step href='#formaalet-med-behandlingskatalogen'>
-                Formålet med Behandlingskatalogen
+                Hva er formålet med Behandlingskatalogen?
               </Stepper.Step>
               <Stepper.Step href='#hvordan-bruke-behandlingskatalogen'>
                 Hvordan bruke Behandlingskatalogen
@@ -40,7 +41,7 @@ export const OmBehandlingskatalogen = () => {
             alt='Skjermbilde fra Behandlingskatalogens forside.'
           />
           <Heading size='medium' level='2' spacing id='formaalet-med-behandlingskatalogen'>
-            Hva er formålet med Behandlingskatalogen
+            Hva er formålet med Behandlingskatalogen?
           </Heading>
           <BodyLong className='my-6'>
             Behandlingskatalogen er en oversikt over alle behandlinger av personopplysninger som
@@ -48,7 +49,9 @@ export const OmBehandlingskatalogen = () => {
             vi har etter personvernregelverket. Katalogen gir oss kontroll over behandlingene, og
             hjelper oss med å beskytte rettighetene til alle vi har opplysninger om.
           </BodyLong>
-          <BodyLong spacing>I Behandlingskatalogen har vi oversikt over blant annet:</BodyLong>
+          <BodyLong className='mb-3'>
+            I Behandlingskatalogen har vi oversikt over blant annet:
+          </BodyLong>
           <List as='ul' className='mb-6'>
             <List.Item>alle behandlingsaktiviteter som vi gjør</List.Item>
             <List.Item>hvilket behandlingsgrunnlag som brukes</List.Item>
@@ -72,14 +75,13 @@ export const OmBehandlingskatalogen = () => {
           </Heading>
           <BodyLong spacing>
             Seksjon for personvern og forvaltningsrett i Juridisk avdeling har laget en{' '}
-            <Link href='https://navikt.github.io/naka/behandlingskatalog'>veileder</Link> til
-            Behandlingskatalogen. Her finner dere blant annet{' '}
-            <Link
-              inlineText
-              href='https://navikt.github.io/naka/behandlingskatalog#3utfylling-av-feltene-i-behandlingskatalogen'
-            >
+            <ExternalLink href='https://navikt.github.io/naka/behandlingskatalog'>
+              veileder til Behandlingskatalogen.
+            </ExternalLink>{' '}
+            Her finner dere blant annet{' '}
+            <ExternalLink href='https://navikt.github.io/naka/behandlingskatalog#3utfylling-av-feltene-i-behandlingskatalogen'>
               hjelp til utfylling av de ulike feltene i Behandlingskatalogen.
-            </Link>
+            </ExternalLink>
           </BodyLong>
 
           <ReadMore
@@ -98,7 +100,7 @@ export const OmBehandlingskatalogen = () => {
             Hvis dere har behov for juridisk rådgivning ved utfylling av Behandlingskatalogen, ta
             kontakt med Juridisk avdeling: nav.juridisk.avdeling@nav.no.
           </BodyLong>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Hvis dere finner feil i løsningen eller har forslag til forbedringer, ta kontakt med
             Team Datajegerne:
           </BodyLong>

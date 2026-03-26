@@ -23,7 +23,7 @@ const OmStotteTilEtterlevelse = () => {
               onStepChange={setActiveStep}
             >
               <Stepper.Step href='#formaalet-med-stotte-til-etterlevelse'>
-                Formålet med Støtte til etterlevelse
+                Hva er formålet med Støtte til etterlevelse?
               </Stepper.Step>
               <Stepper.Step href='#forstesiden-i-stotte-til-etterlevelse'>
                 Førstesiden i Støtte til etterlevelse
@@ -47,7 +47,7 @@ const OmStotteTilEtterlevelse = () => {
           </Heading>
 
           <Heading size='medium' level='2' spacing id='formaalet-med-stotte-til-etterlevelse'>
-            Hva er formålet med Støtte til etterlevelse
+            Hva er formålet med Støtte til etterlevelse?
           </Heading>
           <div className='my-6'>
             <video controls src='videos/EtterlevelseskravMedTeksting.mp4'></video>
@@ -57,28 +57,28 @@ const OmStotteTilEtterlevelse = () => {
             generelt regelverk for ulike aktiviteter vi gjør i Nav. Løsningen erstatter det
             tidligere excelarket med etterlevelsekrav.
           </BodyLong>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Noen eksempler på aktiviteter hvor vi må dokumentere etterlevelse er:
           </BodyLong>
           <List as='ul' className='mb-6'>
             <List.Item>
-              Når vi skal utvikle saksbehandlingsløsninger eller digitale søknader
+              Når vi skal utvikle saksbehandlingsløsninger eller digitale søknader.
             </List.Item>
             <List.Item>
-              Der vi har videoovervåkning, for eksempel på Nav-kontor eller på Fyrstikkalléen{' '}
+              Der vi har videoovervåkning, for eksempel på Nav-kontor eller i Fyrstikkalléen.
             </List.Item>
-            <List.Item>Involvering av brukere i innsiktsarbeid</List.Item>
+            <List.Item>Involvering av brukere i innsiktsarbeid.</List.Item>
           </List>
           <BodyLong spacing>
             I løsningen er det generelle regelverket omdannet til såkalte etterlevelseskrav,
             gruppert etter tema. Verktøyet skal bidra til at det blir enkelt å forstå hvilke krav
             dere skal etterleve basert på type aktivitet.
           </BodyLong>
-          <BodyLong spacing>Støtte til etterlevelse skal bidra til å</BodyLong>
+          <BodyLong className='mb-3'>Støtte til etterlevelse skal bidra til å</BodyLong>
           <List as='ul' className='mb-6'>
             <List.Item>
               sikre den nødvendige, gjennomgående funksjonaliteten i løsningene som Nav forvalter og
-              utvikler
+              utvikler.
             </List.Item>
             <List.Item>
               sikre at den generelle rettsikkerheten for brukerne våre ivaretas.
@@ -91,7 +91,7 @@ const OmStotteTilEtterlevelse = () => {
           <BodyLong spacing>
             Hvem som er tolkningsansvarlige for de ulike regelverkene (såkalte “kraveiere”), følger
             av ansvarsdokumentet i Nav. Kraveierne har ansvaret for å tolke regelverket og publisere
-            etterlevelseskrav. De vil også oppdatere disse når det er behov for dette.
+            etterlevelseskrav. De vil også oppdatere disse når det er behov for det.
           </BodyLong>
           <BodyLong spacing>
             Avdelingene har ansvaret for at etterlevelsesdokumentasjon i Støtte til etterlevelse er
@@ -148,8 +148,9 @@ const OmStotteTilEtterlevelse = () => {
             />
           </ReadMore>
           <BodyLong spacing>
-            Kravene er delt inn i ulike regelverkstema. Hvert tema har en organisatorisk eier som er
-            ansvarlig for å tolke regelverket og skrive etterlevelseskrav for temaet.
+            Kravene er delt inn i ulike regelverkstema. Hvert tema har en organisatorisk eier
+            (såkalt "kraveier") som er ansvarlig for å tolke regelverket og skrive etterlevelseskrav
+            for temaet.
           </BodyLong>
           <BodyLong spacing>
             Hvilken enhet som er ansvarlig finner dere under nærmere beskrivelse om temaet. Hvis
@@ -227,7 +228,7 @@ const OmStotteTilEtterlevelse = () => {
             å komme i kontakt med kraveier.
           </BodyLong>
 
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Hvis dere finner feil i løsningen eller har forslag til forbedringer, ta kontakt med
             Team Datajegerne:
           </BodyLong>

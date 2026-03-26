@@ -1,9 +1,10 @@
 'use client'
 
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { BodyLong, Heading, Link, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'
+import { ExternalLink } from '../common/externalLink/externalLink'
 import KortOmLosningeneBehandlingskatalogen from './images/KortOmLosningeneBehandlingskatalogen.png'
 import KortOmLosningenDigitalPVK from './images/KortOmLosningeneDigitalPVK.png'
 import KortOmLosningenStotteTilEtterlevelse from './images/KortOmLosningeneStotteTilEtterlevelse.png'
@@ -47,7 +48,45 @@ export const OversiktOverLosningene = () => {
 
           <div className='flex my-6'>
             <Image
-              className='mr-2.5 max-w-0.5'
+              className='mr-2.5'
+              src={KortOmLosningenStotteTilEtterlevelse}
+              alt='Skjermbilde fra Støtte til etterlevelse.'
+            />
+            <div className='ml-6'>
+              <Heading size='small' level='3' spacing>
+                Støtte til etterlevelse
+              </Heading>
+              <BodyLong spacing>
+                Dokumentere hvordan vi etterlever generelt regelverk, og vurdere behov for PVK.
+              </BodyLong>
+              <ExternalLink href='/omstottetiletterlevelse' className='gap-1 flex  break-all'>
+                Les mer om Støtte til etterlevelse
+              </ExternalLink>
+            </div>
+          </div>
+          <div className='flex my-12'>
+            <Image
+              className='mr-2.5'
+              src={KortOmLosningenDigitalPVK}
+              alt='Skjermbilde fra Digital PVK.'
+            />
+            <div className='ml-6'>
+              <Heading size='small' level='3' spacing>
+                Digital Personvernkonsekvensvurdering (PVK)
+              </Heading>
+              <BodyLong spacing>
+                Gjennomføre en personvernkonsekvensvurdering og sette tiltak der behandling av
+                personopplysninger sannsynligvis vil medøre høy risiko for den registrertes
+                rettigheter og friheter.
+              </BodyLong>
+              <ExternalLink href='/om-pvk' className='gap-1 flex  break-all'>
+                Les mer om Digital PVK
+              </ExternalLink>
+            </div>
+          </div>
+          <div className='flex my-6'>
+            <Image
+              className='mr-2.5'
               src={KortOmLosningeneBehandlingskatalogen}
               alt='Skjermbilde fra Behandlingskatalogen.'
             />
@@ -59,46 +98,9 @@ export const OversiktOverLosningene = () => {
                 Oversikt over alle behandlingsaktiviteter, behandlingsgrunnlag som brukes, systemer
                 personopplysningene behandles i, om det benyttes databehandler mv.
               </BodyLong>
-              <Link href='/om-behandlingskatalogen' className='gap-1 flex  break-all'>
-                Les mer om behandlingskatalogen
-              </Link>
-            </div>
-          </div>
-          <div className='flex my-12'>
-            <Image
-              className='mr-2.5 max-w-0.5'
-              src={KortOmLosningenStotteTilEtterlevelse}
-              alt='Skjermbilde fra Støtte til etterlevelse.'
-            />
-            <div className='ml-6'>
-              <Heading size='small' level='3' spacing>
-                Støtte til etterlevelse
-              </Heading>
-              <BodyLong spacing>
-                Dokumentere hvordan vi etterlever generelt regelverk, og vurdere behov for PVK.
-              </BodyLong>
-              <Link href='/omstottetiletterlevelse' className='gap-1 flex  break-all'>
-                Les mer om Støtte til etterlevelse
-              </Link>
-            </div>
-          </div>
-          <div className='flex my-12'>
-            <Image
-              className='mr-2.5 max-w-0.5'
-              src={KortOmLosningenDigitalPVK}
-              alt='Skjermbilde fra Digital PVK.'
-            />
-            <div className='ml-6'>
-              <Heading size='small' level='3' spacing>
-                Digital Personvernkonsekvens-vurdering (PVK)
-              </Heading>
-              <BodyLong spacing>
-                Ved risiko for at den registrertes personvernrettigheter kan krenkes, dokumentere
-                risikoene og komme med tiltak.
-              </BodyLong>
-              <Link href='/om-pvk' className='gap-1 flex  break-all'>
-                Les mer om Digital PVK
-              </Link>
+              <ExternalLink href='/om-behandlingskatalogen' className='gap-1 flex  break-all'>
+                Les mer om Behandlingskatalogen
+              </ExternalLink>
             </div>
           </div>
 
@@ -115,40 +117,40 @@ export const OversiktOverLosningene = () => {
             src={KortOmLosningeneSammenhengenMellomVerktoyene}
             alt='Skjermbilde som viser sammenhengen mellom verktøyene Behandlingskatalogen, Støtte til Etterlevelse og Digital PVK.'
           />
-          <ReadMore
-            header='Forholdet mellom Støtte til etterlevelse og Behandlingskatalogen'
-            className='mt-6'
-          >
-            <BodyLong spacing>
-              Det er ikke et 1:1 forhold mellom behandlinger i Behandlingskatalogen og
-              etterlevelsesdokumenter i Støtte til etterlevelse. Derfor er det mulig å knytte mer
-              enn én behandling til ett etterlevelsesdokument.
-            </BodyLong>
-            <BodyLong spacing>
-              Dersom dere behandler personopplysninger er det også et krav om at dere legger til
-              minst én behandling til etterlevelsesdokumentet.
-            </BodyLong>
-          </ReadMore>
-          <ReadMore
-            header='Forholdet mellom Støtte til etterlevelse og Digital PVK'
-            className='mt-6'
-          >
-            <BodyLong spacing>
-              Det er et 1:1 forhold mellom et etterlevelsesdokument og PVK i Støtte til
-              etterlevelse.
-            </BodyLong>
-            <BodyLong spacing>
-              PVK er en utvidelse av etterlevelsesdokumentet i tilfeller der dere behandler
-              personopplysninger og har vurdert at det er behov for PVK.
-            </BodyLong>
-          </ReadMore>
-          <ReadMore header='Forholdet mellom Behandlingskatalogen og Digital PVK' className='mt-6'>
-            <BodyLong spacing>
-              Det er ikke et 1:1 forhold mellom behandlinger i Behandlingskatalogen og PVK. Det er
-              mulig å knytte mer enn én behandling til et etterlevelsesdokument, og derfor også PVK.
-              Det er et krav at dere legger til minst en behandling.
-            </BodyLong>
-          </ReadMore>
+          <Heading size='small' level='3' spacing>
+            Forholdet mellom Støtte til etterlevelse og Behandlingskatalogen
+          </Heading>
+
+          <BodyLong spacing>
+            Det er ikke et 1:1 forhold mellom behandlinger i Behandlingskatalogen og
+            etterlevelsesdokumenter i Støtte til etterlevelse. Derfor er det mulig å knytte mer enn
+            én behandling til ett etterlevelsesdokument.
+          </BodyLong>
+          <BodyLong spacing>
+            Dersom dere behandler personopplysninger er det også et krav om at dere legger til minst
+            én behandling til etterlevelsesdokumentet.
+          </BodyLong>
+
+          <Heading size='small' level='3' spacing>
+            Forholdet mellom Støtte til etterlevelse og Digital PVK
+          </Heading>
+          <BodyLong spacing>
+            Det er et 1:1 forhold mellom et etterlevelsesdokument og PVK i Støtte til etterlevelse.
+          </BodyLong>
+          <BodyLong spacing>
+            PVK er en utvidelse av etterlevelsesdokumentet i tilfeller der dere behandler
+            personopplysninger og har vurdert at det er behov for PVK.
+          </BodyLong>
+
+          <Heading size='small' level='3' spacing>
+            Forholdet mellom Behandlingskatalogen og Digital PVK
+          </Heading>
+          <BodyLong spacing>
+            Det er ikke et 1:1 forhold mellom behandlinger i Behandlingskatalogen og PVK. Det er
+            mulig å knytte mer enn én behandling til et etterlevelsesdokument, og derfor også PVK.
+            Det er et krav at dere legger til minst en behandling.
+          </BodyLong>
+
           <Heading className='my-6' size='medium' level='2' spacing id='måter-å-jobbe-på'>
             Måter å jobbe på
           </Heading>
@@ -160,7 +162,7 @@ export const OversiktOverLosningene = () => {
             <List as='ul'>
               <List.Item>Opprette et etterlevelsesdokument.</List.Item>
               <List.Item>
-                Legge til behandlingen fra Dokumentegenskaper i etterlevelsesdokumentet.
+                Legg så til behandlingen under Rediger dokumentegenskaper i etterlevelsesdokumentet.
               </List.Item>
             </List>
           </ReadMore>
@@ -177,7 +179,7 @@ export const OversiktOverLosningene = () => {
               </List.Item>
               <List.Item>
                 Dersom dere ikke behandler personopplysninger, er det ikke behov for å koble deres
-                etterlevelsesdokument til Behandlingskatalogen.
+                etterlevelsesdokument til en behandling i Behandlingskatalogen.
               </List.Item>
             </List>
           </ReadMore>
@@ -194,7 +196,7 @@ export const OversiktOverLosningene = () => {
               </List.Item>
               <List.Item>
                 Dersom dere ikke behandler personopplysninger, er det ikke behov for å koble deres
-                etterlevelsesdokument til Behandlingskatalogen.
+                etterlevelsesdokument til en behandling i Behandlingskatalogen.
               </List.Item>
             </List>
           </ReadMore>

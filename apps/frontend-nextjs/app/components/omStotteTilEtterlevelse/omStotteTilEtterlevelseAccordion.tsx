@@ -1,16 +1,7 @@
 'use client'
 
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import {
-  Accordion,
-  BodyLong,
-  Heading,
-  InfoCard,
-  InlineMessage,
-  List,
-  ReadMore,
-} from '@navikt/ds-react'
+import { Accordion, BodyLong, List, ReadMore } from '@navikt/ds-react'
 import Image from 'next/image'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
@@ -147,11 +138,11 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </div>
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
-            for å etterleve kravet. Hvert kriterium inneholder også “Utfyllende om kravet” som
+            for å etterleve kravet. Hvert kriterium inneholder også en nærmere beskrivelse som
             hjelper dere med å forstå kriteriet. Dere skal ta stilling til, og bekrefte om,
             kriteriet er oppfylt, ikke oppfylt eller ikke relevant. Som regel vil det i tillegg bes
-            om besvarelse i fritekstfelt. Det er kraveier som avgjør om en fritekst besvarelse er
-            nødvendig eller ikke: hvis dere ikke ser et fritekstfelt for et kriterium, holder det å
+            om besvarelse i fritekstfelt. Det er kraveier som avgjør om en fritekstbesvarelse er
+            nødvendig eller ikke. Hvis dere ikke ser et fritekstfelt for et kriterium, holder det å
             huke av et av valgene nevnt over. Når dere har svart på alle suksesskriteriene, kan dere
             ferdigstille kravet. Det er fortsatt mulig å redigere besvarelsen selv om status er satt
             til ferdigstilt.
@@ -189,8 +180,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </div>
           <BodyLong spacing>
             Etterlevelsesdokumenter kan godkjennes av risikoeieren til enhver tid, også uavhengig av
-            godkjenning av PVK. TRENGER VI NOE HER OM HVA DET VIL VÆRE SOM TRIGGER EN NY
-            GODKJENNING, PÅ LIK LINJE MED TRIGGER FOR NY PVK?
+            godkjenning av PVK.
           </BodyLong>
           <BodyLong spacing>
             Før dere ber om godkjenning av etterlevelsesdokumentet, skal dere også vurdere (eller
@@ -201,23 +191,23 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <BodyLong spacing>
             Dere kan be risikoeier godkjenne etterlevelsen “som den er”, selv om ikke alle krav er
-            ferdig vurdert eller oppfylt, eller Vurder behov for PVK besvart. I så fall innebærer
+            ferdig vurdert eller oppfylt, eller "Vurder behov for PVK" besvart. I så fall innebærer
             godkjenning at risikoeieren aksepterer eventuell risiko ved å ikke ha dokumentert
             etterlevelse.
           </BodyLong>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Når dere er klare, velger dere “Få etterlevelsen godkjent” fra menyen. På siden “Få
             etterlevelsen godkjent av risikoeier” kan dere gjøre følgende:
           </BodyLong>
           <List as='ul' className='mb-6'>
-            <List.Item>skrive kommentar til risikoeieren som skal godkjenne. </List.Item>
-            <List.Item>sende etterlevelsesdokumentet.</List.Item>
+            <List.Item>skrive kommentar til risikoeier som skal godkjenne. </List.Item>
+            <List.Item>sende etterlevelsesdokumentet til risikoeier.</List.Item>
           </List>
           <BodyLong spacing>
             Etter at dere har sendt det til godkjenning, låses etterlevelsesdokumentet for
             redigering fram til at risikoeier har godkjent.
           </BodyLong>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Etter at risikoeieren har godkjent etterlevelsesdokumentet, arkiveres dokumentet i
             Public360.
           </BodyLong>
@@ -244,7 +234,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           <div className='my-6'>
             <video controls src='videos/'></video>
           </div>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
             menyen på dokumentets temaside. På siden “Godkjenn etterlevelsen” kan du gjøre følgende:
           </BodyLong>
@@ -254,21 +244,20 @@ const OmStotteTilEtterlevelseAccordion = () => {
             <List.Item>godkjenne etterlevelsen.</List.Item>
           </List>
           <BodyLong spacing>
-            Du kan godkjenne etterlevelsesdokumentasjon helt uavhengig av
-            personvernkonsekvensvurdering (PVK). Likevel når etterleveren skal sende
-            etterlevelsesdokument til deg for godkjenning, skal de også ha{' '}
+            Du kan godkjenne etterlevelsesdokumentasjon helt uavhengig av PVK. Når etterleveren skal
+            sende etterlevelsesdokument til deg for godkjenning, skal de også ha{' '}
             <ExternalLink href='/om-pvk#beslutningsstotte'>
-              vurdert behov for PVK, og dokumentert den beslutningen
+              vurdert behov for PVK, og dokumentert den beslutningen.
             </ExternalLink>{' '}
             Den vurderingen er også noe du godkjenner sammen med etterlevelsesdokumentet.
           </BodyLong>
           <BodyLong spacing>
             Du kan vurdere om du vil godkjenne etterlevelsen “som den er”, selv om ikke alle krav er
-            ferdig vurdert eller oppfylt, eller Vurder behov for PVK besvart. I så fall innebærer
+            ferdig vurdert eller oppfylt, eller "Vurder behov for PVK" besvart. I så fall innebærer
             godkjenning at du aksepterer eventuell risiko ved at etterlevelsen ikke er ferdig
             dokumentert.
           </BodyLong>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Idet du godkjenner etterlevelsen, vil hele etterlevelsesdokumentasjonen du godkjenner,
             automatisk arkiveres i Public360.
           </BodyLong>
@@ -285,13 +274,13 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </List>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
+      {/*      <Accordion.Item>
         <Accordion.Header>
           Under arbeid::::Oppdatere etterlevelsesdokumentasjon etter godkjenning
         </Accordion.Header>
         <Accordion.Content>innhold mangler</Accordion.Content>
-      </Accordion.Item>
-      <Accordion.Item>
+      </Accordion.Item>*/}
+      {/*<Accordion.Item>
         <Accordion.Header>Gjenbruk av etterlevelsesdokumentasjon </Accordion.Header>
         <Accordion.Content>
           <Heading size='small' level='3' spacing>
@@ -308,7 +297,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
             innhold kan redigeres fritt i datterdokumentet, og det er etterleverens ansvar å holde
             dokumentet oppdatert for sin egen etterlevelse.
           </BodyLong>
-          <InfoCard data-color='success' className='mb-6'>
+          <InfoCard size='small' data-color='success' className='mb-6'>
             <InfoCard.Header>
               <InfoCard.Title>Gjenbruk kan være aktuelt hvis</InfoCard.Title>
             </InfoCard.Header>
@@ -328,7 +317,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
               </List>
             </InfoCard.Content>
           </InfoCard>
-          <InfoCard data-color='danger' className='mb-6'>
+          <InfoCard size='small' data-color='danger' className='mb-6'>
             <InfoCard.Header>
               <InfoCard.Title>Gjenbruk er uegnet til</InfoCard.Title>
             </InfoCard.Header>
@@ -370,21 +359,18 @@ const OmStotteTilEtterlevelseAccordion = () => {
           Slik tilrettelegger dere for gjenbruk av deres eget etterlevelsesdokument
         </Accordion.Header>
         <Accordion.Content>
-          <ReadMore
-            header='Se hvordan dere tilrettelegger for gjenbruk av deres etterlevelsesdokument'
-            className='mb-6'
-          >
+          <ReadMore header='Se hvordan dere tilrettelegger for gjenbruk' className='mb-6'>
             skjermbilde mangler
           </ReadMore>
           <Heading size='small' level='4' spacing>
-            1. Velge “tilrettelegg for gjenbruk” fra menyen
+            1. Velg “tilrettelegg for gjenbruk” fra menyen
           </Heading>
           <BodyLong spacing>
             Etterlevelsesdokumentet er ikke ennå synlig for gjenbruk, men nå har dere låst opp for
             tilpasning av dokumentet før dere gjør det tilgjengelig for andre.
           </BodyLong>
           <Heading size='small' level='4' spacing>
-            2. Tilpasse eventuelt dokumentet
+            2. Tilpass eventuelt dokumentet
           </Heading>
           <List as='ul' className='mb-6'>
             <List.Item title='Vurdere dokumentegenskaper'>
@@ -401,11 +387,11 @@ const OmStotteTilEtterlevelseAccordion = () => {
             </List.Item>
             <List.Item title='Endre status på suksesskriterier'>
               Vurderingsstatusen til alle suksesskriterier arves som de er idet noen oppretter en
-              gjenbrukskopi. Hvis etterlevelsesdokumentet er til for å gjenbrukes, kan vurdere om
-              dere vil forskuttere noen vurderinger. Dere kunne for eksempel forhåndsbestemme at et
-              visst suksesskriterium ikke er relevant, eller indikere at et bestemt suksesskriterium
-              blir oppfylt enn så lenge den som gjenbruker, følger veiledningen som dere har
-              skrevet. Likevel er de som gjenbruker dokumentet ansvarlig for å vurdere egen
+              gjenbrukskopi. Hvis etterlevelsesdokumentet er til for å gjenbrukes, kan dere vurdere
+              om dere vil forskuttere noen vurderinger. Dere kunne for eksempel forhåndsbestemme at
+              et visst suksesskriterium ikke er relevant, eller indikere at et bestemt
+              suksesskriterium blir oppfylt enn så lenge den som gjenbruker, følger veiledningen som
+              dere har skrevet. Likevel er de som gjenbruker dokumentet ansvarlig for å vurdere egen
               etterlevelse og endre status i sitt dokument ved behov.
             </List.Item>
             <List.Item title='Kladde svar'>
@@ -419,12 +405,13 @@ const OmStotteTilEtterlevelseAccordion = () => {
             <List.Item title='Samle krav i Prioritert kravliste'>
               Det kan være nyttig for både dere og de som skal gjenbruke, å samle alle
               etterlevelseskrav med veiledning, endret status, og/eller kladdet svar, ett sted. Til
-              dette bruker dere Prioritert kravliste: på aktuelle kravsider, velg “Legg til dette
-              kravet i Prioritert kravliste”. Hvilke krav som skal stå i Prioritert kravliste, kan
-              også redigeres under sin egen fane på dokumentets temaside. Prioritert kravliste arves
-              som den er idet noen tar en gjenbrukskopi av dokumentet. Husk at alle krav, inkludert
-              veiledning, status, og innhold i besvarelsesfeltet, arves ved gjenbruk, uansett om
-              kravet står i Prioritert kravliste.
+              dette bruker dere Prioritert kravliste, som dere finner i en egen fane på kravsiden.
+              På aktuelle kravsider, velg “Legg til dette kravet i Prioritert kravliste”. Hvilke
+              krav som skal stå i Prioritert kravliste, kan også redigeres under sin egen fane på
+              dokumentets temaside. Prioritert kravliste arves som den er idet noen tar en
+              gjenbrukskopi av dokumentet. Husk at alle krav, inkludert veiledning, status, og
+              innhold i besvarelsesfeltet, arves ved gjenbruk, uansett om kravet står i Prioritert
+              kravliste.
             </List.Item>
           </List>
 
@@ -444,29 +431,21 @@ const OmStotteTilEtterlevelseAccordion = () => {
             skrevet, samt mulighet for å gjenbruke dokument. Informasjonen er synlig for alle.
           </BodyLong>
           <Heading size='small' level='4' spacing>
-            4. Redigere, skjule eller nullstille gjenbruk
+            4. Endre gjenbruk
           </Heading>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Etter at dere har slått på gjenbruk, har dere følgende muligheter i menyen på Temaside:
           </BodyLong>
           <List as='ul' className='mb-6'>
-            <List.Item title='Endre gjenbruk'>
+            <List.Item title='Redigere veiledning'>
               Her kan dere redigere deres overordnede veiledningstekst. Individuelle
               veiledningstekster som dere har skrevet på kravsider, blir fortsatt redigerbare der.
-              Under Endre gjenbruk kan dere også velge å skjule gjenbruksmuligheter for andre, varig
-              eller i en periode. Det blir alltid mulig å slå på gjenbruk igjen senere.
             </List.Item>
-            <List.Item title='Nullstill gjenbruk'>
-              Ved å nullstille gjenbruk, vil alle veiledningstekster som dere har skrevet, både
-              overordnet og kravspesifikke, slettes. Det blir ikke mulig å gjenopprette veiledning
-              etter nullstilling.
+            <List.Item title='Skjule gjenbruk'>
+              Dere kan også velge å skjule gjenbruksmuligheter for andre, varig eller i en periode.
+              Det blir alltid mulig å slå på gjenbruk igjen senere.
             </List.Item>
           </List>
-          <InlineMessage status='info'>
-            Etter at et etterlevelsesdokument har blitt gjenbrukt minst én gang, blir det ikke
-            lenger mulig å nullstille gjenbruksmulighet. Det blir dog fortsatt mulig å skjule
-            dokumentet for videre gjenbruk.
-          </InlineMessage>
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
@@ -483,7 +462,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
             som heter “Dette må du vite om gjenbruk”. Her finner dere veiledning om hvilke tilfeller
             som kan gjøre gjenbruk aktuell, samt mulighet for å opprette gjenbrukskopi.
           </BodyLong>
-          <InfoCard data-color='success' className='mb-6'>
+          <InfoCard size='small' data-color='success' className='mb-6'>
             <InfoCard.Header>
               <InfoCard.Title>Gjenbruk kan være aktuelt hvis</InfoCard.Title>
             </InfoCard.Header>
@@ -503,7 +482,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
               </List>
             </InfoCard.Content>
           </InfoCard>
-          <InfoCard data-color='danger' className='mb-6'>
+          <InfoCard size='small' data-color='danger' className='mb-6'>
             <InfoCard.Header>
               <InfoCard.Title>Gjenbruk er uegnet til</InfoCard.Title>
             </InfoCard.Header>
@@ -520,13 +499,14 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </InfoCard>
           <BodyLong spacing>
             Hvis dere er usikre på om det blir riktig å gjenbruke etterlevelsesdokumentet, hør med
-            de som eier dokumentet. Navn finner dere under Les mer om dette dokumentet.
+            de som eier dokumentet. Navnet til dokumenteieren finner dere under Les mer om dette
+            dokumentet.
           </BodyLong>
           <Heading size='small' level='4' spacing>
             1. Opprett datterdokument
           </Heading>
-          <BodyLong spacing>Dette må du vite om gjenbruk, velg “Gjenbruk dokument”.</BodyLong>
-          <BodyLong spacing>
+          <BodyLong spacing>Under Dette må du vite om gjenbruk, velg “Gjenbruk dokument”.</BodyLong>
+          <BodyLong className='mb-3'>
             Fyll ut skjemaet i tråd med{' '}
             <ExternalLink href='/'>Redigere dokumentegenskaper og filtrere krav </ExternalLink>{' '}
             Fordi dere gjenbruker, vil det være noen forskjeller fra oppretting av et vanlig
@@ -569,16 +549,17 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <List as='ul' className='mb-6'>
             <List.Item>
-              <ExternalLink href='/'>Jobbe i temaoversikt</ExternalLink>
+              paul: åpne riktig accordion title
+              <Link href='#hvordan-dokumentere-etterlevelse'>Jobbe i temaoversikt</Link>
             </List.Item>
             <List.Item>
-              <ExternalLink href='/'>Besvare etterlevelseskrav</ExternalLink>
+              <Link href='#hvordan-dokumentere-etterlevelse'>Besvare etterlevelseskrav</Link>
             </List.Item>
           </List>
           <Heading size='xsmall' level='5' spacing>
             Arving av veiledning og andre tilpasninger
           </Heading>
-          <BodyLong spacing>
+          <BodyLong className='mb-3'>
             Dokumenteiere som tillater gjenbruk, kan velge om de vil tilpasse
             etterlevelsesdokumentet som arves. Dette innebærer at de kan:
           </BodyLong>
@@ -586,16 +567,16 @@ const OmStotteTilEtterlevelseAccordion = () => {
             <List.Item>Skrive veiledning på kravsider, ved enkelte suksesskriterier.</List.Item>
             <List.Item>
               Forhåndsvurdere enkelte suksesskriterier for dere, for eksempel ved å sette noen til
-              “ikke relevant”
+              “ikke relevant”.
             </List.Item>
-            <List.Item>Kladde svar som dere skal skrive ferdig</List.Item>
+            <List.Item>Kladde svar som dere skal skrive ferdig.</List.Item>
           </List>
           <BodyLong spacing>
             Dokumenteierne velger også om de vil samle slike tilpassede krav på dokumentets forside,
             under Prioriterte krav. I så fall vil dere arve denne listen når dere har opprettet
             gjenbrukskopi.
           </BodyLong>
-          <InfoCard data-color='warning' className='mb-6'>
+          <InfoCard size='small' data-color='warning' className='mb-6'>
             <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
               <InfoCard.Title>
                 Dere er ansvarlige for at deres etterlevelsesdokumentasjon stemmer
@@ -613,7 +594,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
             </InfoCard.Content>
           </InfoCard>
         </Accordion.Content>
-      </Accordion.Item>
+      </Accordion.Item>*/}
     </Accordion>
   )
 }

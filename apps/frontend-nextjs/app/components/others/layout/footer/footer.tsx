@@ -112,14 +112,14 @@ export const Footer = () => {
             <Link className='text-white' href='/oversikt-over-losningene'>
               Oversikt over løsningene
             </Link>
-            <Link className='text-white' href='/om-behandlingskatalogen'>
-              Om Behandlingskatalogen
-            </Link>
             <Link className='text-white' href={dokumentasjonLink}>
               Om Støtte til etterlevelse
             </Link>
             <Link className='text-white' href='/om-pvk'>
               Om Digital PVK
+            </Link>
+            <Link className='text-white' href='/om-behandlingskatalogen'>
+              Om Behandlingskatalogen
             </Link>
           </div>
           <Spacer />
