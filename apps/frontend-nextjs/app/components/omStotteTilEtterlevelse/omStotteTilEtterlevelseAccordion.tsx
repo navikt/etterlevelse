@@ -20,10 +20,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <ReadMore header='Vis meg hvor jeg oppretter et etterlevelsesdokument' className='mb-6'>
             <div className='my-6'>
-              <video
-                controls
-                src='videos/VisMegHvordanJegOppretterEtterlevelsesdokument.mov'
-              ></video>
+              <video controls src='videos/VisMegHvordanJegOppretterEtterlevelsesdokument.mov'>
+                <track kind='captions' />
+              </video>
             </div>
           </ReadMore>
           <BodyLong spacing>
@@ -37,10 +36,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
             className='mb-6'
           >
             <div className='my-6'>
-              <video
-                controls
-                src='videos/VisMegHvorJegFinnerOgOppdatererEtterlevelsesdokument.mov'
-              ></video>
+              <video controls src='videos/VisMegHvorJegFinnerOgOppdatererEtterlevelsesdokument.mov'>
+                <track kind='captions' />
+              </video>
             </div>
           </ReadMore>
         </Accordion.Content>
@@ -104,7 +102,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
             className='mb-6'
           >
             <div className='my-6'>
-              <video controls src='videos/VisMegHvordanJegRedigererDokumentegenskaper.mov'></video>
+              <video controls src='videos/VisMegHvordanJegRedigererDokumentegenskaper.mov'>
+                <track kind='captions' />
+              </video>
             </div>
           </ReadMore>
         </Accordion.Content>
@@ -176,7 +176,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
         <Accordion.Header>Få etterlevelsen godkjent av risikoeier</Accordion.Header>
         <Accordion.Content>
           <div className='my-6'>
-            <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'></video>
+            <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'>
+              <track kind='captions' />
+            </video>
           </div>
           <BodyLong spacing>
             Etterlevelsesdokumenter kan godkjennes av risikoeieren til enhver tid, også uavhengig av
@@ -190,10 +192,10 @@ const OmStotteTilEtterlevelseAccordion = () => {
             </ExternalLink>
           </BodyLong>
           <BodyLong spacing>
-            Dere kan be risikoeier godkjenne etterlevelsen “som den er”, selv om ikke alle krav er
-            ferdig vurdert eller oppfylt, eller "Vurder behov for PVK" besvart. I så fall innebærer
-            godkjenning at risikoeieren aksepterer eventuell risiko ved å ikke ha dokumentert
-            etterlevelse.
+            Dere kan be risikoeier godkjenne etterlevelsen &ldquo;som den er&rdquo;, selv om ikke
+            alle krav er ferdig vurdert eller oppfylt, eller &ldquo;Vurder behov for PVK&rdquo;
+            besvart. I så fall innebærer godkjenning at risikoeieren aksepterer eventuell risiko ved
+            å ikke ha dokumentert etterlevelse.
           </BodyLong>
           <BodyLong className='mb-3'>
             Når dere er klare, velger dere “Få etterlevelsen godkjent” fra menyen. På siden “Få
@@ -252,10 +254,10 @@ const OmStotteTilEtterlevelseAccordion = () => {
             Den vurderingen er også noe du godkjenner sammen med etterlevelsesdokumentet.
           </BodyLong>
           <BodyLong spacing>
-            Du kan vurdere om du vil godkjenne etterlevelsen “som den er”, selv om ikke alle krav er
-            ferdig vurdert eller oppfylt, eller "Vurder behov for PVK" besvart. I så fall innebærer
-            godkjenning at du aksepterer eventuell risiko ved at etterlevelsen ikke er ferdig
-            dokumentert.
+            Du kan vurdere om du vil godkjenne etterlevelsen &ldquo;som den er&rdquo;, selv om ikke
+            alle krav er ferdig vurdert eller oppfylt, eller &ldquo;Vurder behov for PVK&rdquo;
+            besvart. I så fall innebærer godkjenning at du aksepterer eventuell risiko ved at
+            etterlevelsen ikke er ferdig dokumentert.
           </BodyLong>
           <BodyLong className='mb-3'>
             Idet du godkjenner etterlevelsen, vil hele etterlevelsesdokumentasjonen du godkjenner,

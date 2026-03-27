@@ -191,6 +191,7 @@ export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
     ;(async () => {
       await fetchUserInfo()
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -72,7 +72,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
         }
       }, 200)
     }
-  }, [])
+  }, [tiltakId])
 
   const handleAccordionChange = (tiltakId?: string): void => {
     if (tiltakId) {

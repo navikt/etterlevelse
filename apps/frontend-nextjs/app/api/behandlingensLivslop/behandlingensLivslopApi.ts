@@ -129,6 +129,7 @@ export const useBehandlingensLivslop = (
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true)
     if (behandlingensLivslopId && !isCreateNew) {
       ;(async () => {
@@ -150,7 +151,7 @@ export const useBehandlingensLivslop = (
           .catch(() => undefined)
       })()
     }
-  }, [behandlingensLivslopId])
+  }, [behandlingensLivslopId, etterlevelseDokumentasjonId, isCreateNew])
 
   return [data, setData, isLoading] as [
     IBehandlingensLivslop | undefined,

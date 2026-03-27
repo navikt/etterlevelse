@@ -66,7 +66,12 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
     } else {
       return false
     }
-  }, [artOgOmfang, pvkDokument, pvoTilbakemelding])
+  }, [
+    artOgOmfang,
+    pvkDokument,
+    pvoTilbakemelding,
+    etterlevelseDokumentasjon.etterlevelseDokumentVersjon,
+  ])
 
   return (
     <div className='w-full'>

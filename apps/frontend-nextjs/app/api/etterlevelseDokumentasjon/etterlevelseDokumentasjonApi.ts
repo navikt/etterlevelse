@@ -133,6 +133,7 @@ export const useEtterlevelseDokumentasjon = (etterlevelseDokumentasjonId?: strin
         )
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [

@@ -138,6 +138,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
 
       setIsPrioritised(priorityCheck)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -176,6 +177,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
     if (nyereKrav && !user.isAdmin()) {
       setDisableEdit(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nyereKrav])
 
   useEffect(() => {
@@ -192,7 +194,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
         }
       }
     })()
-  }, [user.isPersonvernombud(), pvkDokument])
+  }, [user.isPersonvernombud(), pvkDokument]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

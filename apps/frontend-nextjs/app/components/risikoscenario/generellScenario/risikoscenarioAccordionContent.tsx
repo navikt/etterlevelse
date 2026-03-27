@@ -184,7 +184,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     } else {
       setIsTiltakFormActive(false)
     }
-  }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive])
+  }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive, setIsTiltakFormActive])
 
   const activeFormButton = async (runFunction: () => void) => {
     await getPvkDokument(risikoscenario.pvkDokumentId).then((response) => {

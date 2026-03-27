@@ -7,7 +7,7 @@ import {
 import { UserContext } from '@/provider/user/userProvider'
 import { useContext } from 'react'
 
-export const getRolle = (
+export const useRolle = (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ): EActionMenuRoles => {
   const user = useContext(UserContext)

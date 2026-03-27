@@ -239,7 +239,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     if (isCreateTiltakFormActive || isAddExistingMode || isEditTiltakFormActive) {
       setIsTiltakFormActive(true)
     } else setIsTiltakFormActive(false)
-  }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive])
+  }, [isCreateTiltakFormActive, isAddExistingMode, isEditTiltakFormActive, setIsTiltakFormActive])
 
   return (
     <div>

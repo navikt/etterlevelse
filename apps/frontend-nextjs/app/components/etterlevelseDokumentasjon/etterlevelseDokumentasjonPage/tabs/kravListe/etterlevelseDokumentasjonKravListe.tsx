@@ -23,7 +23,7 @@ import {
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { BodyShort, Button, Label, Loader, Select, TextField } from '@navikt/ds-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from 'react'
 import { KravAccordionList } from './kravAccordionList'
 
 type TProps = {
@@ -55,39 +55,35 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
 }) => {
   const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const queryParams = useSearchParams()
-  const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
+
+  const getInitialAccordions = () => {
+    const tema = queryParams.get('tema')
+    if (tema === 'all-open' || defaultOpen) return temaListe.map(() => true)
+    if (tema === 'all-close') return temaListe.map(() => false)
+    if (tema) return temaListe.map((t) => t.code.toLocaleLowerCase() === tema.toLocaleLowerCase())
+    return temaListe.map(() => false)
+  }
+
+  const [openAccordions, setOpenAccordions] = useState<boolean[]>(getInitialAccordions)
   const [statusFilter, setStatusFilter] = useState<string>('ALLE')
   const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] = useState<string>('ALLE')
   const [searchKrav, setSearchKrav] = useState<string>('')
-  const [relevantKravList, setRelevantKravList] = useState<TKravQL[]>([])
-  const [utgaattKravList, setUtgaattKravList] = useState<TKravQL[]>([])
   const router = useRouter()
 
+  const prevDefaultOpenRef = useRef(defaultOpen)
   useEffect(() => {
-    if (queryParams.get('tema') === 'all-open') {
-      setOpenAccordions(temaListe.map(() => true))
-    } else if (queryParams.get('tema') === 'all-close') {
-      setOpenAccordions(temaListe.map(() => false))
-    } else {
-      setOpenAccordions(
-        temaListe.map((t) =>
-          t.code.toLocaleLowerCase() === queryParams.get('tema')?.toLocaleLowerCase() ? true : false
-        )
-      )
-    }
-  }, [temaListe])
-
-  useEffect(() => {
-    if (defaultOpen) {
+    if (defaultOpen && !prevDefaultOpenRef.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpenAccordions(temaListe.map(() => true))
       router.push(
         etterlevelseDokumentasjonAlleOpenUrl(params.etterlevelseDokumentasjonId) + '&tab=pvk',
         { scroll: false }
       )
     }
-  }, [defaultOpen])
+    prevDefaultOpenRef.current = defaultOpen
+  }, [defaultOpen, temaListe, params.etterlevelseDokumentasjonId, router])
 
-  useEffect(() => {
+  const { relevantKravList, utgaattKravList } = useMemo(() => {
     let relevanteStatusListe: TKravQL[] = relevanteStats
     let utgaattStatusListe: TKravQL[] = utgaattStats
     if (statusFilter !== 'ALLE') {
@@ -119,8 +115,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
       })
     }
 
-    setRelevantKravList(relevanteStatusListe)
-    setUtgaattKravList(utgaattStatusListe)
+    return { relevantKravList: relevanteStatusListe, utgaattKravList: utgaattStatusListe }
   }, [relevanteStats, utgaattStats, searchKrav, statusFilter, suksesskriterieStatusFilter])
 
   let antallFylttKrav = 0

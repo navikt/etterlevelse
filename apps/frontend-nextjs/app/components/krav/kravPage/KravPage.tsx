@@ -10,7 +10,7 @@ import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
 import { kravNummerView } from '@/util/krav/kravUtil'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
   if (params.kravNummer && !params.kravVersjon) {
@@ -26,8 +26,6 @@ const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) =>
 }
 export const KravPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
-  const [krav, setKrav] = useState<TKravQL | undefined>()
-  const [kravTema, setKravTema] = useState<TTemaCode>()
   const { loading: kravLoading, data: kravQuery } = useQuery<{ kravById: TKravQL }, TKravId>(
     getKravWithEtterlevelseQuery,
     {
@@ -36,12 +34,8 @@ export const KravPage = () => {
       fetchPolicy: 'no-cache',
     }
   )
-
-  useEffect(() => {
-    if (kravQuery?.kravById) {
-      setKrav(kravQuery.kravById)
-    }
-  }, [kravQuery])
+  const krav = kravQuery?.kravById
+  const [kravTema, setKravTema] = useState<TTemaCode>()
 
   return (
     <PageLayout

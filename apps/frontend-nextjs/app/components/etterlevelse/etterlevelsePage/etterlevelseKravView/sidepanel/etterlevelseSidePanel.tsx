@@ -73,17 +73,20 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
     ) {
       setActiveTab('pvkDokumentasjon')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pvkDokument])
 
   useEffect(() => {
     if (isPvkFormActive) {
       setIsPreview(true)
+
       setIsPvkTabActive(true)
     } else {
       setIsPreview(false)
+
       setIsPvkTabActive(false)
     }
-  }, [isPvkFormActive])
+  }, [isPvkFormActive, setIsPreview, setIsPvkTabActive])
 
   return (
     <div className='pl-4 border-l border-[#071a3636] w-full max-w-lg'>

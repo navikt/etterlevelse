@@ -187,7 +187,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       })
     }
     return tilstandHistorikk
-  }, [allKravPriority, temaListe, relevanteStats, utgaattStats])
+  }, [allKravPriority, temaListe, relevanteStats, utgaattStats, codelist])
 
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {
@@ -273,6 +273,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                 kravTilstandsHistorikk.map((kravHistorikk, index) => {
                   return (
                     <GodkjenningAvRisikoeierKravFormSummary
+                      key={index}
                       kravHistorikk={kravHistorikk}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       index={index}

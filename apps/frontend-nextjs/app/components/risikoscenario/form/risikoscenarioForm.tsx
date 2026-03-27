@@ -30,7 +30,7 @@ export const RisikoscenarioForm: FunctionComponent<TProps> = ({
     if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
-  }, [submitClick])
+  }, [submitClick, formRef])
 
   return (
     <div>

@@ -5,13 +5,13 @@ import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { BodyShort, Link } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
-interface TCustomizedProps {
+interface ICustomizedProps {
   paths?: IBreadCrumbPath[]
   currentPage?: string
   fontColor?: string
 }
 
-const CustomizedBreadcrumbs: FunctionComponent<TCustomizedProps> = ({ paths, currentPage }) => {
+const CustomizedBreadcrumbs: FunctionComponent<ICustomizedProps> = ({ paths, currentPage }) => {
   const getName = (pathName: string) =>
     pathName.length > 40 ? pathName.substring(0, 40) + '...' : pathName
 

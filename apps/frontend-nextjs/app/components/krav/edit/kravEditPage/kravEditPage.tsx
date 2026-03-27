@@ -62,7 +62,7 @@ export const KravEditPage = () => {
 
       setIsEditingUtgaattKrav(kravQuery.kravById.status === EKravStatus.UTGAATT ? true : false)
     }
-  }, [kravQuery])
+  }, [kravQuery, kravLoading])
 
   return (
     <>

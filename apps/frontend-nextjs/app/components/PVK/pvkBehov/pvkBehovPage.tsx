@@ -93,6 +93,7 @@ export const PvkBehovPage = () => {
       })
 
       if (alleProfilering.includes(true)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setProfilering(true)
       } else if (alleProfilering.every((v) => v === false)) {
         setProfilering(false)
@@ -121,6 +122,7 @@ export const PvkBehovPage = () => {
 
   useEffect(() => {
     if (pvkDokument && pvkDokument.ytterligereEgenskaper.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCheckedYtterligereEgenskaper(
         pvkDokument.ytterligereEgenskaper.map((egenskap: ICode) => egenskap.code)
       )

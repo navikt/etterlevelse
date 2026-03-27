@@ -55,6 +55,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
         ).length
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPvkKravLoading])
 
   return (

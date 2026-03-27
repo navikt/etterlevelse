@@ -89,7 +89,7 @@ export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
         setIsChangesMadeSinceLastSubmission(false)
       }
     })()
-  }, [pvkDokument, pvoTilbakemelding])
+  }, [pvkDokument, pvoTilbakemelding, etterlevelseDokumentasjon.etterlevelseDokumentVersjon])
 
   return (
     <div className='w-full'>

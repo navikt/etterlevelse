@@ -3,7 +3,7 @@ import { IKrav } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { sortKravListeByPriority } from '@/util/krav/kravUtil'
 import { Button, List } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { EditPriorityModal } from './editPriorityModal/editPriorityModal'
 import { KravTemaRowsWithLabel } from './kravTemaRowsWithLabel/kravTemaRowsWithLabel'
 
@@ -18,7 +18,6 @@ export const KravTemaList = (props: IKravTemaListProps) => {
   const { activeKravList, tema, temaCode, draftKrav } = props
   const [isEditPriorityModalOpen, setIsEditPriorityModalOpen] = useState(false)
   const [kravPriorityList, kravPriorityLoading, refresh] = useKravPriorityList(temaCode)
-  const [activeKravSortedWithPriority, setActiveKravSortedWithPriority] = useState<IKrav[]>([])
 
   const setPriorityToKravList = (kravList: IKrav[], priorityList: IKravPriorityList): IKrav[] => {
     return kravList.map((krav: IKrav) => {
@@ -28,10 +27,10 @@ export const KravTemaList = (props: IKravTemaListProps) => {
     })
   }
 
-  useEffect(() => {
+  const activeKravSortedWithPriority = useMemo(() => {
     const activeKravListWithPriorityId = setPriorityToKravList(activeKravList, kravPriorityList)
-    setActiveKravSortedWithPriority(sortKravListeByPriority(activeKravListWithPriorityId))
-  }, [kravPriorityList])
+    return sortKravListeByPriority(activeKravListWithPriorityId)
+  }, [kravPriorityList, activeKravList])
 
   return (
     <div className='flex flex-col gap-2'>

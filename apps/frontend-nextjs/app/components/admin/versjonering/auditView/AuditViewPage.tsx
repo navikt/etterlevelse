@@ -40,12 +40,14 @@ export const AuditViewPage = () => {
           .finally(() => setIsloading(false))
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (auditId && auditLog && refs[auditId] && auditId !== auditLog.audits[0].id) {
       refs[auditId].current!.scrollIntoView({ block: 'start' })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auditId, auditLog])
 
   return (

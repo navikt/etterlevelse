@@ -96,6 +96,7 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true)
     if (pvkDokumentId && !isCreateNew) {
       ;(async () => {
@@ -117,7 +118,7 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
         )
       })()
     }
-  }, [pvkDokumentId])
+  }, [pvkDokumentId, etterlevelseDokumentasjonId, isCreateNew])
 
   return [data, setData, isLoading] as [
     IPvkDokument | undefined,

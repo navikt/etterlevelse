@@ -48,14 +48,14 @@ export const EtterlevelseDokumentasjonPage = () => {
   const params: Readonly<{
     etterlevelseDokumentasjonId?: string
   }> = useParams<{ etterlevelseDokumentasjonId?: string }>()
-  const [etterlevelseNummer, setEtterlevelseNummer] = useState<string>('')
-  const [title, setTitle] = useState<string>('')
   const [morDokumentRelasjon, setMorDokumentRelasjon] =
     useState<IDocumentRelationWithEtterlevelseDokumetajson>()
   const [relasjonLoading, setRelasjonLoading] = useState(false)
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
   )
+  const etterlevelseNummer = etterlevelseDokumentasjon?.etterlevelseNummer?.toString() ?? ''
+  const title = etterlevelseDokumentasjon?.title ?? ''
   const variables: {
     etterlevelseDokumentasjonId: string | undefined
   } = { etterlevelseDokumentasjonId: params.etterlevelseDokumentasjonId }
@@ -81,47 +81,62 @@ export const EtterlevelseDokumentasjonPage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [dokumentasjonerBreadCrumbPath]
 
   useEffect(() => {
-    setTimeout(() => refetchRelevanteData(), 200)
-    if (etterlevelseDokumentasjon) {
-      setEtterlevelseNummer(etterlevelseDokumentasjon.etterlevelseNummer.toString())
-      setTitle(etterlevelseDokumentasjon.title)
-      ;(async () => {
-        setRelasjonLoading(true)
-        await getDocumentRelationByToIdAndRelationTypeWithData(
-          etterlevelseDokumentasjon?.id,
-          ERelationType.ARVER
-        ).then((response: IDocumentRelationWithEtterlevelseDokumetajson[]) => {
-          if (response.length > 0) setMorDokumentRelasjon(response[0])
-          setRelasjonLoading(false)
-        })
-        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
-          .then((pvkDokument: IPvkDokument) => {
-            if (pvkDokument) {
-              setPvkDokument(pvkDokument)
-              setIsRisikoscenarioLoading(true)
-              getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL)
-                .then((risikoscenario) => {
-                  setKravRisikoscenarioList(
-                    risikoscenario.content.filter(
-                      (r: IRisikoscenario) => r.generelScenario === false
-                    )
-                  )
-                })
-                .finally(() => setIsRisikoscenarioLoading(false))
-            }
-          })
-          .catch(() => undefined)
+    if (!etterlevelseDokumentasjon) return
 
-        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
-          .then((response: IBehandlingensLivslop) => {
-            if (response) {
-              setBehandlingsLivslop(response)
+    setTimeout(() => refetchRelevanteData(), 200)
+
+    let cancelled = false
+    const fetchData = async () => {
+      setRelasjonLoading(true)
+      const relations = await getDocumentRelationByToIdAndRelationTypeWithData(
+        etterlevelseDokumentasjon.id,
+        ERelationType.ARVER
+      )
+      if (cancelled) return
+      if (relations.length > 0) setMorDokumentRelasjon(relations[0])
+      setRelasjonLoading(false)
+
+      try {
+        const pvk = await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+        if (cancelled) return
+        if (pvk) {
+          setPvkDokument(pvk)
+          setIsRisikoscenarioLoading(true)
+          try {
+            const risikoscenario = await getRisikoscenarioByPvkDokumentId(
+              pvk.id,
+              ERisikoscenarioType.ALL
+            )
+            if (!cancelled) {
+              setKravRisikoscenarioList(
+                risikoscenario.content.filter((r: IRisikoscenario) => r.generelScenario === false)
+              )
             }
-          })
-          .catch(() => undefined)
-      })()
+          } finally {
+            if (!cancelled) setIsRisikoscenarioLoading(false)
+          }
+        }
+      } catch {
+        // ignore
+      }
+
+      try {
+        const livslop = await getBehandlingensLivslopByEtterlevelseDokumentId(
+          etterlevelseDokumentasjon.id
+        )
+        if (!cancelled && livslop) {
+          setBehandlingsLivslop(livslop)
+        }
+      } catch {
+        // ignore
+      }
     }
-  }, [etterlevelseDokumentasjon])
+
+    fetchData()
+    return () => {
+      cancelled = true
+    }
+  }, [etterlevelseDokumentasjon, refetchRelevanteData])
 
   return (
     <>

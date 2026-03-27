@@ -56,7 +56,7 @@ export const TiltakForm: FunctionComponent<TProps> = ({
     if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
-  }, [submitClick])
+  }, [submitClick, formRef])
 
   useEffect(() => {
     const formHeader = document.getElementById('tiltakFormHeader')

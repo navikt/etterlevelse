@@ -4,7 +4,7 @@ import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
+import { useRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import TilstandGjenbruk from './tilstandGjenbruk/tilstandGjenbruk'
 
@@ -17,7 +17,7 @@ const GjenbrukButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
 }) => {
-  switch (getRolle(etterlevelseDokumentasjon)) {
+  switch (useRolle(etterlevelseDokumentasjon)) {
     case EActionMenuRoles.Etterlever:
     case EActionMenuRoles.Admin:
       return (

@@ -93,6 +93,7 @@ export const OmBehandlingskatalogen = () => {
           >
             <video controls>
               <source src={HvordanBrukeBK} />
+              <track kind='captions' />
             </video>
           </ReadMore>
 

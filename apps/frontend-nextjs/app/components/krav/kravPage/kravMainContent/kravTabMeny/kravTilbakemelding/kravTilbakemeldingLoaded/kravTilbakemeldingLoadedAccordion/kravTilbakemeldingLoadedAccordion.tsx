@@ -61,7 +61,8 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
     if (!loading && focusNr) {
       setTimeout(() => refs[focusNr]?.current?.scrollIntoView(), 100)
     }
-  }, [loading])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, focusNr])
 
   return (
     <div className='flex flex-col'>

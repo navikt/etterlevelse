@@ -39,7 +39,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
       })()
     }
   }, [showUsage, selectedCode])
-  useEffect(() => setShowUsage(false), [tableData])
+  useEffect(() => setShowUsage(false), [tableData]) // eslint-disable-line react-hooks/set-state-in-effect
 
   const handleEditCodelist = async (values: ICodeListFormValues) => {
     try {

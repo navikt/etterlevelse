@@ -46,6 +46,7 @@ export const CustomFileUpload = (props: IProps) => {
       setFiles(initialFiles)
       setFilesToUpload(initialValues)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValues])
 
   useEffect(() => {
@@ -53,6 +54,7 @@ export const CustomFileUpload = (props: IProps) => {
     if (files.filter((f): f is FileRejected => f.error).length !== 0) {
       setFileUploadError(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files])
 
   const removeFile = (fileToRemove: FileObject) => {

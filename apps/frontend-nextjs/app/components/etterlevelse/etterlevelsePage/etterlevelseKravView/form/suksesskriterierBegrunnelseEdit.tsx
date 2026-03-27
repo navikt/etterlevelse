@@ -212,6 +212,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
       veiledningsTekst: veiledningTekst,
       veiledningsTekst2: veiledningTekst2,
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [begrunnelse, suksessKriterieStatus, veiledning, veiledningTekst, veiledningTekst2])
 
   const getBorderColor = () => {

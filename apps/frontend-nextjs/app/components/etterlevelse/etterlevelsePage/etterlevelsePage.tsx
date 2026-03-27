@@ -102,6 +102,7 @@ export const EtterlevelsePage = () => {
       }
       setLoadingEtterlevelseData(false)
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [etterlevelseDokumentasjon])
 
   useEffect(() => {

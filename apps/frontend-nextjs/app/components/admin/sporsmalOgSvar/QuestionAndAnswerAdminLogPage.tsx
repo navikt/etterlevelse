@@ -143,6 +143,7 @@ export const QuestionAndAnswerAdminLogPage = () => {
       console.error(error)
     }
     setIsLoading(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableContent])
 
   return (

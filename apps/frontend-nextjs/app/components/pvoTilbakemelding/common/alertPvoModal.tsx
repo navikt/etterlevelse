@@ -25,7 +25,7 @@ export const AlertPvoModal: FunctionComponent<TProps> = ({ isOpen, onClose, pvkD
         .then(setPvkDokument)
         .finally(() => setIsLoading(false))
     })()
-  }, [])
+  }, [pvkDokumentId])
 
   return (
     <Modal open={isOpen} onClose={() => onClose()} header={{ heading: 'Varsel' }}>

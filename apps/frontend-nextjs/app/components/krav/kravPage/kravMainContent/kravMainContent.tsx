@@ -65,6 +65,7 @@ export const KravMainContent: FunctionComponent<TProps> = ({
         )
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [krav])
 
   useEffect(() => {

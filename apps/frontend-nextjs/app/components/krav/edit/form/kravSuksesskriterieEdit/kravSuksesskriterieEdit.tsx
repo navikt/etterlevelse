@@ -10,7 +10,7 @@ import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Box, Button, Radio, RadioGroup, TextField, ToggleGroup, Tooltip } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import _ from 'lodash'
-import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
+import { ChangeEvent, FunctionComponent, useEffect, useRef, useState } from 'react'
 
 type TKravSuksesskriterieEditProps = {
   newVersion?: boolean
@@ -153,14 +153,20 @@ const Kriterie = ({
     fieldArrayRenderProps.insert(newIndex, suksesskriterieToMove)
   }
 
+  const updateRef = useRef(update)
+
   useEffect(() => {
-    update({
+    updateRef.current = update
+  }, [update])
+
+  useEffect(() => {
+    updateRef.current({
       id: suksesskriterium.id,
       navn,
       beskrivelse,
       behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
     })
-  }, [navn, beskrivelse, behovForBegrunnelse])
+  }, [suksesskriterium.id, navn, beskrivelse, behovForBegrunnelse])
 
   return (
     <Box padding='space-4' className='mb-4' background='neutral-soft' borderColor='neutral-strong'>

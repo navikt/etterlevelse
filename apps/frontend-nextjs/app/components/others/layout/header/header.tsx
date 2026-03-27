@@ -16,8 +16,6 @@ import { informationIcon, warningAlert } from '../../images/images'
 import { LoggedInHeader, LoginHeaderButton } from './login/login'
 import MainSearch from './mainSearch/mainSearch'
 
-let sourceReported = false
-
 type TProps = {
   noSearchBar?: boolean
   noLoginButton?: boolean
@@ -29,10 +27,12 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const user = useContext(UserContext)
 
   const source = useQueryParam('source')
-  if (!sourceReported) {
-    sourceReported = true
-    logApi('info', 'pageload', `pageload from ${source}`)
-  }
+
+  useEffect(() => {
+    if (source) {
+      logApi('info', 'pageload', `pageload from ${source}`)
+    }
+  }, [source])
 
   useEffect(() => {
     ;(async () => {

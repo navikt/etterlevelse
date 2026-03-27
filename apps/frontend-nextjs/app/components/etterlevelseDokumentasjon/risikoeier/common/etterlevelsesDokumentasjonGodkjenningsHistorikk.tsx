@@ -116,7 +116,7 @@ const GodkjenningsHistorikkContent: FunctionComponent<IGodkjenningsHistorikkCont
       )
       setIsLoading(false)
     })()
-  }, [])
+  }, [etterlevelseDokumentasjon.id, versjonHistorikk.godkjentAvRisikoierDato])
 
   return (
     <div>
@@ -134,6 +134,7 @@ const GodkjenningsHistorikkContent: FunctionComponent<IGodkjenningsHistorikkCont
                 versjonHistorikk.kravTilstandHistorikk.map((kravHistorikk, index) => {
                   return (
                     <GodkjenningAvRisikoeierKravFormSummary
+                      key={index}
                       kravHistorikk={kravHistorikk}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       index={index}

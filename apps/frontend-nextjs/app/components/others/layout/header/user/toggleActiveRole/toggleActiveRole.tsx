@@ -19,6 +19,7 @@ export const ToggleActiveRole = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onRoleChange = (group: EGroup, isChecked: boolean): void => {

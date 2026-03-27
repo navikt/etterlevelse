@@ -36,17 +36,17 @@ export const PvkDokumentAdminPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
 
+  const loadData = async () => {
+    const allPvkDokument = await getAllPvkDokument()
+    const mappedPvkDokument = allPvkDokument.map((pvkDokument) =>
+      mapPvkDokumentToFormValue(pvkDokument)
+    )
+    setTableContent(mappedPvkDokument)
+  }
+
   useEffect(() => {
     ;(async () => {
       await loadData()
-      // const ampliInstance = ampli()
-      // if (ampliInstance) {
-      //   ampliInstance.logEvent('sidevisning', {
-      //     side: 'Etterlevelse Pvk dokument admin side',
-      //     sidetittel: 'Administrere Pvk dokument',
-      //     ...userRoleEventProp,
-      //   })
-      // }
     })()
   }, [])
 
@@ -55,14 +55,6 @@ export const PvkDokumentAdminPage = () => {
       await loadData()
     })()
   }, [reloadTable])
-
-  const loadData = async () => {
-    const allPvkDokument = await getAllPvkDokument()
-    const mappedPvkDokument = allPvkDokument.map((pvkDokument) =>
-      mapPvkDokumentToFormValue(pvkDokument)
-    )
-    setTableContent(mappedPvkDokument)
-  }
 
   return (
     <PageLayout pageTitle='Administrer Pvk Dokument' currentPage='Administrer Pvk Dokument'>

@@ -16,6 +16,11 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
   const pageSize = 20
   const [pageNumber, setPage] = useState(0)
   const [sok, setSok] = useDebouncedState('', 300)
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(0)
+  }, [sok])
   const tooShort = !!sok.length && sok.trim().length < 3
   const {
     data,
@@ -51,10 +56,6 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
       },
     }).catch((e) => console.error(e))
   }
-
-  useEffect(() => {
-    if (sok && pageNumber !== 0) setPage(0)
-  }, [sok])
 
   const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {
     return etterlevelseDokumentasjoner.content.filter(

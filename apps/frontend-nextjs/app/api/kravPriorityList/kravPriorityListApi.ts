@@ -60,12 +60,13 @@ export const useKravPriorityList = (temaCode: string) => {
       if (response) {
         setData(response)
       }
+      setLoading(false)
     })
-    setLoading(false)
   }
 
   useEffect(() => {
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temaCode])
 
   return [data, loading, fetchData] as [IKravPriorityList, boolean, () => void]

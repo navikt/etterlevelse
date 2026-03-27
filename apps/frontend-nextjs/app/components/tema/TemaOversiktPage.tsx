@@ -22,16 +22,17 @@ export const TemaOversiktPage = () => {
 }
 
 export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
-  const [num] = useState<{ [t: string]: number[] }>({})
+  const [num, setNum] = useState<{ [t: string]: number[] }>({})
   const [kravAntall, setKravAntall] = useState<number>(0)
   const [temaListe, setTemaListe] = useState<TTemaCode[]>([])
   const codelist = useContext(CodelistContext)
 
   const updateNum = (tema: string, temaNum: number[]): void => {
-    num[tema] = temaNum
+    const updatedNum = { ...num, [tema]: temaNum }
+    setNum(updatedNum)
 
     const kravNummerArray: number[] = []
-    Object.keys(num).forEach((key: string) => kravNummerArray.push(...num[key]))
+    Object.keys(updatedNum).forEach((key: string) => kravNummerArray.push(...updatedNum[key]))
     setKravAntall(
       kravNummerArray.filter(
         (value: number, index: number, self: number[]) =>
@@ -48,6 +49,7 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
           a.shortName.localeCompare(b.shortName, 'nb')
         ) as TTemaCode[]
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codelist.lists])
 
   return (
@@ -91,7 +93,8 @@ export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
         tema.code,
         krav.map((krav: TKravQL) => krav.kravNummer)
       ),
-    [data]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, tema.code]
   )
 
   return (

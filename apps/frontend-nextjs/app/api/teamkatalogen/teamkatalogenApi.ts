@@ -202,6 +202,7 @@ export const useMyTeams = () => {
           console.error("couldn't find teams", error)
         })
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false)
     }
   }, [ident, productAreas])
@@ -227,7 +228,10 @@ export const useMyProductAreas = () => {
           setLoading(false)
           console.error('couldn\t find product area', e)
         })
-    } else setLoading(false)
+    } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLoading(false)
+    }
   }, [ident])
 
   return [data, loading] as [IProductArea[], boolean]

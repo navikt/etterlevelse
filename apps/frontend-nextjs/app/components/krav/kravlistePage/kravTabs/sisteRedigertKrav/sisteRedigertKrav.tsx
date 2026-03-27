@@ -1,16 +1,14 @@
 'use client'
 
-import { TKravQL } from '@/constants/krav/kravConstants'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { Alert, Label, Loader } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { sortKrav } from '../../sortKrav/sortKrav'
 import { KravPanels } from './kravPanels/KravPanels'
 
 export const SistRedigertKrav = () => {
-  const [sorting] = useState('sist')
-  const [sortedKravList, setSortedKravList] = useState<TKravQL[]>([])
+  const sorting = 'sist'
 
   const response = useKravFilter({
     sistRedigert: 10,
@@ -23,7 +21,7 @@ export const SistRedigertKrav = () => {
 
   const kravene = data?.krav || emptyPage
 
-  useEffect(() => {
+  const sortedKravList = useMemo(() => {
     let sortedData = [...kravene.content]
     if (sorting === 'sist') {
       sortedData.sort((a, b) =>
@@ -32,8 +30,8 @@ export const SistRedigertKrav = () => {
     } else {
       sortedData = sortKrav(sortedData)
     }
-    setSortedKravList(sortedData)
-  }, [data])
+    return sortedData
+  }, [sorting, kravene.content])
 
   return (
     <div>

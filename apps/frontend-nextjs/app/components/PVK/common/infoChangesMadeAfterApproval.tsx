@@ -111,10 +111,13 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
         setIsChangesMade(true)
         const godkjentDatoOgTid = pvkDokument.godkjentAvRisikoeierDato.split('T')
         const tid = godkjentDatoOgTid[1].split(':')
+
         setApprovedDate(godkjentDatoOgTid[0])
+
         setApprovedTime(tid[0] + ':' + tid[1])
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pvkDokument, behandlingensLivslop, alleRisikoscenario, alleTiltak])
 
   return (

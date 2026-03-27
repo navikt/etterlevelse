@@ -25,6 +25,7 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
           )
         : -1
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -95,6 +96,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   useEffect(() => {
     setShowReplace(false)
     setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [usage])
 
   const replace = async () => {

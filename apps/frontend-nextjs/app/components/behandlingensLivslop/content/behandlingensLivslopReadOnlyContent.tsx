@@ -33,6 +33,7 @@ export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
       behandlingensLivslop.filer.forEach((initialFile) => {
         initialFiles.push({ file: initialFile, error: false })
       })
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFiles(initialFiles)
     }
   }, [behandlingensLivslop])

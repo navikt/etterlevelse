@@ -22,7 +22,7 @@ export const PvoSendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoVurderingList,
 }) => {
-  let vurderingerForVersjon: IVurdering[] = []
+  const vurderingerForVersjon: IVurdering[] = []
   const versjoner = [
     ...new Set(
       pvoTilbakemelding.vurderinger.map((vurdering) => vurdering.etterlevelseDokumentVersjon)

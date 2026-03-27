@@ -102,7 +102,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
     if (!_.isEmpty(formRef?.current?.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
-  }, [submitClicked])
+  }, [submitClicked, formRef])
 
   return (
     <div className='pt-6 w-full'>

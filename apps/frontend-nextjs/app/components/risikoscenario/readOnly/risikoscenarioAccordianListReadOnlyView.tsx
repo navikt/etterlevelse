@@ -58,7 +58,7 @@ export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> 
         }
       }, 200)
     }
-  }, [])
+  }, [risikoscenarioId, tiltakId])
 
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {

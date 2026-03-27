@@ -59,6 +59,7 @@ export function useAwait<T>(promise: Promise<T>, setLoading?: Dispatch<SetStateA
         setLoading(false)
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
 
@@ -87,23 +88,21 @@ export const useSearch = <T>(searchFunction: (term: string) => Promise<T[]>) => 
   const [searchResult, setSearchResult] = useState<T[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
-  const beginSearch = async () => {
-    setLoading(true)
-    setSearchResult(await searchFunction(search))
-    setLoading(false)
-  }
-
   useEffect(() => {
     ;(async () => {
       if (search && search.match(/[a-zA-Z]\d/) && search.length > 3) {
-        beginSearch()
+        setLoading(true)
+        setSearchResult(await searchFunction(search))
+        setLoading(false)
       } else if (search && search.length > 2 && !search.match(/[a-zA-Z]\d/)) {
-        beginSearch()
+        setLoading(true)
+        setSearchResult(await searchFunction(search))
+        setLoading(false)
       } else {
         setSearchResult([])
       }
     })()
-  }, [search])
+  }, [search, searchFunction])
 
   return [searchResult, setSearch, loading, search] as [
     T[],

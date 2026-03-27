@@ -11,7 +11,7 @@ type TProps = PropsWithChildren<{
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }>
 
-interface TGjenbrukProps extends TProps {
+interface IGjenbrukProps extends TProps {
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
 
@@ -42,7 +42,7 @@ export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TProps> = ({
   </>
 )
 
-export const GjenbrukActionMenu: FunctionComponent<TGjenbrukProps> = ({
+export const GjenbrukActionMenu: FunctionComponent<IGjenbrukProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   children,

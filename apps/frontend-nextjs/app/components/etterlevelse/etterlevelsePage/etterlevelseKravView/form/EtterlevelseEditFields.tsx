@@ -90,6 +90,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
           }
         })
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -106,12 +107,14 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
         })
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [morDokumentRelasjon])
 
   useEffect(() => {
     if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitClick])
 
   return (
@@ -148,6 +151,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
           submitForm,
           errors,
           setFieldError,
+          setFieldValue,
           dirty,
         }: FormikProps<IEtterlevelse>) => (
           <div className='w-full'>
@@ -249,7 +253,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           type='button'
                           onClick={async () => {
                             setValidateOnBlur(true)
-                            values.status = EEtterlevelseStatus.FERDIG_DOKUMENTERT
+                            setFieldValue('status', EEtterlevelseStatus.FERDIG_DOKUMENTERT)
                             values.suksesskriterieBegrunnelser.forEach((skb, index) => {
                               if (skb.begrunnelse === '' || skb.begrunnelse === undefined) {
                                 setFieldError(
@@ -291,9 +295,9 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                                   values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
                                   !isOppfylesSenere
                                 ) {
-                                  values.status = EEtterlevelseStatus.UNDER_REDIGERING
+                                  setFieldValue('status', EEtterlevelseStatus.UNDER_REDIGERING)
                                 } else if (isOppfylesSenere) {
-                                  values.status = EEtterlevelseStatus.OPPFYLLES_SENERE
+                                  setFieldValue('status', EEtterlevelseStatus.OPPFYLLES_SENERE)
                                 }
                                 submitForm()
                               }}

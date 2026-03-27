@@ -100,6 +100,7 @@ export const useTilbakemeldinger = (
 
   useEffect(() => {
     if (kravNummer && kravVersjon) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(true)
       getTilbakemeldingForKravByKravNummer(kravNummer)
         .then((response: IPageResponse<ITilbakemelding>) => {

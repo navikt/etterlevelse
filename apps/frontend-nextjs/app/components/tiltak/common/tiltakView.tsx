@@ -103,12 +103,12 @@ export const TiltakView = (props: IProps) => {
   )
 }
 
-interface tilakViewWithIverksetting extends IProps {
+interface ITiltakViewWithIverksetting extends IProps {
   tiltakList: ITiltak[]
   setTiltakList: (state: ITiltak[]) => void
 }
 
-export const TiltakViewWithIverksetting: FunctionComponent<tilakViewWithIverksetting> = ({
+export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverksetting> = ({
   tiltak,
   risikoscenarioList,
   tiltakList,

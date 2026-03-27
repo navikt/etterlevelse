@@ -29,24 +29,18 @@ import {
 import { Button, InternalHeader, Link } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { usePathname, useRouter } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
 import { UserInfoView } from '../user/userInfoView/userInfoView'
 
 export const LoginHeaderButton = () => {
-  // updates window.location on navigation
   const pathname: string = usePathname()
-  const [fullUrl, setFullUrl] = useState<string>('')
-
-  useEffect(() => {
-    setFullUrl(window.location.href)
-  }, [])
 
   return (
     <InternalHeader.Button
       as={Link}
-      href={loginUrl(fullUrl, pathname)}
+      href={`/login?redirect_uri=${pathname}`}
       underline={false}
       style={{ color: '#cdd0d4' }}
     >

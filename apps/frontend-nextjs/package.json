@@ -19,6 +19,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different --write",
+      "eslint --max-warnings 0",
       "bash -c 'yarn run type-check'"
     ]
   },
@@ -67,7 +68,7 @@
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "8.57.1",
     "@typescript-eslint/parser": "8.57.1",
-    "eslint": "10.1.0",
+    "eslint": "^9.0.0",
     "eslint-config-next": "16.2.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-jsx-a11y": "6.10.2",

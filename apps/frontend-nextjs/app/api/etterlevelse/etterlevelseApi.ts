@@ -69,6 +69,7 @@ export const useEtterlevelse = (id?: string, behandlingId?: string, kravId?: TKr
     if (id && !isCreateNew) {
       getEtterlevelse(id).then(setData)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   return [data, setData] as [IEtterlevelse | undefined, (k: IEtterlevelse) => void]

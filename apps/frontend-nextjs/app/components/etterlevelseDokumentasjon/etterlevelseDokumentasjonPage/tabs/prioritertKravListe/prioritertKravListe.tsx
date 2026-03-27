@@ -68,7 +68,7 @@ export const PrioritertKravListe: FunctionComponent<TProps> = ({
         setIsLoading(false)
       }
     })()
-  }, [isEditMode])
+  }, [isEditMode, etterlevelseDokumentasjon.id])
 
   return (
     <div>

@@ -275,6 +275,7 @@ export const CodelistProvider: FunctionComponent<TProps> = ({ children }) => {
 
   useEffect(() => {
     ;(async () => await fetchData())()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

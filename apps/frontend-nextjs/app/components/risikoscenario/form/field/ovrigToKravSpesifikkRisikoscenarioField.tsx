@@ -22,7 +22,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 }) => {
   const [removedAllAlert, setRemovedAllAlert] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
-  const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | undefined>(undefined)
+  const menuPortalTargetRef = useRef<HTMLElement | undefined>(undefined)
 
   const removedAllAlertRef = useRef<HTMLDivElement>(null)
   const decoupledAlertRef = useRef<HTMLDivElement>(null)
@@ -193,6 +193,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       scrollKravSelectIntoView()
       deferScrollKravSelect()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [generelScenarioFormValue])
 
   useEffect(() => {
@@ -202,7 +203,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 
     const dialog = getDialogEl(rootEl)
 
-    setMenuPortalTarget(dialog ?? document.body)
+    menuPortalTargetRef.current = dialog ?? document.body
   }, [])
 
   return (
@@ -268,7 +269,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                     menuShouldBlockScroll={false}
                     captureMenuScroll={false}
                     menuPosition='fixed'
-                    menuPortalTarget={menuPortalTarget}
+                    menuPortalTarget={menuPortalTargetRef.current}
                     menuShouldScrollIntoView={false}
                     loadOptions={useSearchKravToOptionsPvk}
                     onMenuOpen={() => {

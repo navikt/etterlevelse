@@ -114,7 +114,7 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
         )
       )
     }
-  }, [risikoscenario])
+  }, [risikoscenario, kravnummer, tiltakList])
 
   return (
     <div>

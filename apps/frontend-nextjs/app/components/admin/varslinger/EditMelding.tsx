@@ -45,6 +45,7 @@ export const EditMelding: FunctionComponent<TProps> = ({
     if (!isLoading && melding) {
       setMeldingAlertType(melding.alertType)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const submit = async (melding: IMelding) => {

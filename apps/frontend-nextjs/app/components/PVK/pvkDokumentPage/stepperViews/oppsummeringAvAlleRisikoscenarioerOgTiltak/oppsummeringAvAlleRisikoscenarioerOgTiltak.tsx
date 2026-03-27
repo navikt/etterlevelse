@@ -37,7 +37,7 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { Alert, BodyLong, Heading, Loader, ReadMore, Tabs, ToggleGroup } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useCallback, useContext, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
@@ -171,6 +171,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
   useEffect(() => {
     if (risikoscenarioList.length !== 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAntallTiltakIkkeAktuelt(
         risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
           .length
@@ -198,6 +199,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   useEffect(() => {
     if (tiltakList.length !== 0) {
       const now = new Date()
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAntallUtenTiltakAnsvarlig(
         tiltakList.filter(
           (tiltak: ITiltak) =>
@@ -216,11 +218,68 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     }
   }, [tiltakList])
 
+  const onFilterChange = useCallback(
+    (filter: string): void => {
+      const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
+
+      switch (filter) {
+        case filterValues.alleRisikoscenarioer:
+          setFilteredRisikosenarioList(risikoscenarioList)
+          break
+        case filterValues.tiltakIkkeAktuelt:
+          setFilteredRisikosenarioList(
+            risikoscenarioList.filter(
+              (risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak
+            )
+          )
+          break
+        case filterValues.effektIkkeVurdert:
+          setFilteredRisikosenarioList(
+            risikoscenarioList.filter(
+              (risikoscenario: IRisikoscenario) =>
+                !risikoscenario.ingenTiltak &&
+                (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
+                  risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
+                  risikoscenario.nivaaBegrunnelseEtterTiltak === '')
+            )
+          )
+          break
+        case filterValues.hoyRisiko:
+          setFilteredRisikosenarioList(
+            risikoscenarioList.filter(
+              (risikoscenario: IRisikoscenario) =>
+                risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
+            )
+          )
+          break
+        default:
+          setFilteredRisikosenarioList(risikoscenarioList)
+          break
+      }
+
+      setNavigateUrl(
+        pvkDokumentasjonTabFilterRisikoscenarioUrl(steg, tab, filter, risikoscenarioId)
+      )
+      if (formRef.current?.dirty) {
+        setIsUnsaved(true)
+      } else {
+        router.push(
+          pvkDokumentasjonTabFilterRisikoscenarioUrl(steg, tab, filter, risikoscenarioId),
+          {
+            scroll: false,
+          }
+        )
+      }
+    },
+    [tabQuery, risikoscenarioList, steg, risikoscenarioId, formRef, router]
+  )
+
   useEffect(() => {
     if (risikoscenarioList.length !== 0 && filterQuery) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       onFilterChange(filterQuery)
     }
-  }, [filterQuery, risikoscenarioList])
+  }, [filterQuery, risikoscenarioList, onFilterChange])
 
   const onTabChange = (tab: string): void => {
     const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
@@ -231,52 +290,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
       setIsUnsaved(true)
     } else {
       router.push(pvkDokumentasjonTabFilterUrl(steg, tab, paramQuery), { scroll: false })
-    }
-  }
-
-  const onFilterChange = (filter: string): void => {
-    const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
-
-    switch (filter) {
-      case filterValues.alleRisikoscenarioer:
-        setFilteredRisikosenarioList(risikoscenarioList)
-        break
-      case filterValues.tiltakIkkeAktuelt:
-        setFilteredRisikosenarioList(
-          risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
-        )
-        break
-      case filterValues.effektIkkeVurdert:
-        setFilteredRisikosenarioList(
-          risikoscenarioList.filter(
-            (risikoscenario: IRisikoscenario) =>
-              !risikoscenario.ingenTiltak &&
-              (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
-                risikoscenario.sannsynlighetsNivaaEtterTiltak === 0 ||
-                risikoscenario.nivaaBegrunnelseEtterTiltak === '')
-          )
-        )
-        break
-      case filterValues.hoyRisiko:
-        setFilteredRisikosenarioList(
-          risikoscenarioList.filter(
-            (risikoscenario: IRisikoscenario) =>
-              risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
-          )
-        )
-        break
-      default:
-        setFilteredRisikosenarioList(risikoscenarioList)
-        break
-    }
-
-    setNavigateUrl(pvkDokumentasjonTabFilterRisikoscenarioUrl(steg, tab, filter, risikoscenarioId))
-    if (formRef.current?.dirty) {
-      setIsUnsaved(true)
-    } else {
-      router.push(pvkDokumentasjonTabFilterRisikoscenarioUrl(steg, tab, filter, risikoscenarioId), {
-        scroll: false,
-      })
     }
   }
 

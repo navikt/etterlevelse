@@ -196,9 +196,10 @@ export const VarslingsadresserTagList: FunctionComponent<TVarslingsadresserTagLi
           .map((slackChannel: IVarslingsadresse) => getSlackUserById(slackChannel.adresse))
       )
 
-      setSlackChannels([...slackChannels, ...channels, ...loadedChannels])
-      setSlackUsers([...slackUsers, ...users, ...loadedUsers])
+      setSlackChannels((prev) => [...prev, ...channels, ...loadedChannels])
+      setSlackUsers((prev) => [...prev, ...users, ...loadedUsers])
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [varslingsadresser])
 
   return (

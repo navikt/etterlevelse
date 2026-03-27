@@ -57,6 +57,7 @@ export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
         }
       }, 200)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAccordionChange = (risikoscenarioId?: string): void => {

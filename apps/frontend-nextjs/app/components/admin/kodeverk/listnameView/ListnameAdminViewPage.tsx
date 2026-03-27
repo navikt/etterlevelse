@@ -31,6 +31,7 @@ export const ListnameAdminViewPage = () => {
     if (selectedListname && selectedListname !== listname) {
       router.push(adminCodelist(selectedListname))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedListname])
 
   // Set isLoading to false when data is loaded

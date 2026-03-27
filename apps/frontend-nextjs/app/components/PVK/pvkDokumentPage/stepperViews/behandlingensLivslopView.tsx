@@ -105,6 +105,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
     if (!_.isEmpty(formRef?.current?.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitClick])
 
   const submit = async (submitedValues: any): Promise<void> => {

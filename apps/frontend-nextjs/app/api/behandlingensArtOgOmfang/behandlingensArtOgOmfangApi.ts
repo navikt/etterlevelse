@@ -88,6 +88,7 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
 
   useEffect(() => {
     if (etterlevelseDokumentasjonId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true)
       ;(async () => {
         await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId)

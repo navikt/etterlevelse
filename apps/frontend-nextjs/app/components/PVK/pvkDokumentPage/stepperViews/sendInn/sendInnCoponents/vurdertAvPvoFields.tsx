@@ -54,6 +54,7 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
           melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pvkDokument])
 
   return (

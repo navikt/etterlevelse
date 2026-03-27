@@ -177,7 +177,7 @@ export const OversiktPvoView: FunctionComponent<TProps> = ({
         }
       })
     })()
-  }, [])
+  }, [pvkDokument.etterlevelseDokumentId])
 
   useEffect(() => {
     ;(async () => {

@@ -10,7 +10,7 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, ReadMore } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { RefObject, useEffect, useState } from 'react'
+import { RefObject, useMemo, useState } from 'react'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import TiltakView from './common/tiltakView'
 import SlettTiltakModal from './edit/slettTiltakModal'
@@ -48,16 +48,11 @@ export const TiltakReadMoreList = (props: IProps) => {
     customDelete,
     formRef,
   } = props
-  const [activeTiltak, setActiveTiltak] = useState<string>('')
   const [activeTiltakForm, setActiveTiltakForm] = useState<boolean>(false)
   const queryParams = useSearchParams()
   const tiltakId = queryParams.get('tiltak')
 
-  useEffect(() => {
-    if (tiltakId) {
-      setActiveTiltak(tiltakId)
-    }
-  }, [tiltakId])
+  const [activeTiltak, setActiveTiltak] = useState<string>(tiltakId ?? '')
 
   return (
     <div>
@@ -125,9 +120,6 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
-  const [risikoscenarioerConnectedToTiltak, setRisikoscenarioerConnectedToTiltak] = useState<
-    string[]
-  >([])
   const queryParams = useSearchParams()
   const tiltakId = queryParams.get('tiltak')
   const steg = queryParams.get('steg') || undefined
@@ -160,18 +152,15 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     })
   }
 
-  useEffect(() => {
+  const risikoscenarioerConnectedToTiltak = useMemo(() => {
     if (tiltak && tiltak.id === activeTiltak) {
       const risikoscenarioIds = tiltak.risikoscenarioIds.filter((id) => id !== risikoscenario.id)
-      const risikoscenarioNameList: string[] = []
-      risikoscenarioIds.forEach((id) => {
-        risikoscenarioNameList.push(
-          risikoscenarioList.filter((risikoscenario) => risikoscenario.id === id)[0].navn
-        )
-      })
-      setRisikoscenarioerConnectedToTiltak(risikoscenarioNameList)
+      return risikoscenarioIds.map(
+        (id) => risikoscenarioList.filter((r) => r.id === id)[0]?.navn ?? ''
+      )
     }
-  }, [activeTiltak])
+    return []
+  }, [activeTiltak, tiltak, risikoscenario.id, risikoscenarioList])
 
   return (
     <div key={risikoscenario.id + '_' + tiltak.id}>

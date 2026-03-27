@@ -55,6 +55,7 @@ export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
         )
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previousVurdering, etterlevelse])
 
   return (
@@ -173,6 +174,7 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
           suksesskriterieBegrunnelse.begrunnelse !== previousBegrunnelse.begrunnelse
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previousEtterlevelse])
 
   return (

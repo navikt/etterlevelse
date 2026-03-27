@@ -212,8 +212,10 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
       krav.tagger.includes('Personvernkonsekvensvurdering')
     ) {
       setIsPreview(true)
+
       setIsPvoUnderarbeidWarningActive(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [krav, pvkDokument])
 
   return (

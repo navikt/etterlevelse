@@ -74,7 +74,12 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
     } else {
       return false
     }
-  }, [behandlingensLivslop, pvkDokument, pvoTilbakemelding])
+  }, [
+    behandlingensLivslop,
+    pvkDokument,
+    pvoTilbakemelding,
+    etterlevelseDokumentasjon.etterlevelseDokumentVersjon,
+  ])
 
   useEffect(() => {
     ;(async () => {

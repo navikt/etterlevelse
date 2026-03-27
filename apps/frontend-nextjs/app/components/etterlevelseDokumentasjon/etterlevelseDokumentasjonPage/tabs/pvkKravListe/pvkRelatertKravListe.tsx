@@ -7,7 +7,7 @@ import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 import EtterlevelseDokumentasjonKravListe from '../kravListe/etterlevelseDokumentasjonKravListe'
 
 type TProps = {
@@ -32,18 +32,16 @@ export const PvkRelatertKravListe: FunctionComponent<TProps> = ({
   allTiltak,
   previousVurdering,
 }) => {
-  const [pvkRelevanteStats, setPvkRelevanteStats] = useState<TKravQL[]>([])
-
-  useEffect(() => {
-    setPvkRelevanteStats(
+  const pvkRelevanteStats = useMemo(
+    () =>
       relevanteStats.filter(
         (krav) =>
           krav.tagger &&
           krav.tagger.length > 0 &&
           krav.tagger.includes('Personvernkonsekvensvurdering')
-      )
-    )
-  }, [relevanteStats])
+      ),
+    [relevanteStats]
+  )
 
   return (
     <EtterlevelseDokumentasjonKravListe

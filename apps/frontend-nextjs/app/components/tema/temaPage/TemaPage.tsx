@@ -23,20 +23,13 @@ import { FunctionComponent, useContext, useEffect, useState } from 'react'
 export const TemaPage = () => {
   const params = useParams()
   const temaCode = params.temaCode as string
-  const [code, setCode] = useState<TTemaCode>()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const codelist = useContext(CodelistContext)
-
-  useEffect(() => {
-    setIsLoading(true)
-    setCode(codelist.utils.getCode(EListName.TEMA, temaCode) as TTemaCode)
-    setIsLoading(false)
-  }, [codelist.lists])
+  const code = codelist.utils.getCode(EListName.TEMA, temaCode) as TTemaCode | undefined
 
   return (
     <div>
-      {isLoading && <CenteredLoader />}
-      {!isLoading && code && <TemaView tema={code} />}
+      {!code && <CenteredLoader />}
+      {code && <TemaView tema={code} />}
     </div>
   )
 }
@@ -123,7 +116,7 @@ const TemaView: FunctionComponent<TTemaViewProps> = (props) => {
         setKravList(sortKravListeByPriority(kravListe))
       })()
     }
-  }, [data])
+  }, [data, tema.code])
 
   return (
     <PageLayout

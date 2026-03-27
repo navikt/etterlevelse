@@ -158,7 +158,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
     } else {
       setIsPvkFormActive(false)
     }
-  }, [isCreateMode, isLeggTilEksisterendeMode, isTiltakFormActive])
+  }, [isCreateMode, isLeggTilEksisterendeMode, isTiltakFormActive, setIsPvkFormActive])
 
   return (
     <div className='w-full'>

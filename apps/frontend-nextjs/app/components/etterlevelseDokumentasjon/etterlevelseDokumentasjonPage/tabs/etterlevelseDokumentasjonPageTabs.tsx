@@ -51,7 +51,11 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
   const queryParams = useSearchParams()
   const tabQuery = queryParams.get('tab')
-  const [tabValue, setTabValue] = useState('alleKrav')
+  const initialTab =
+    morDocumentRelation && morDocumentRelation.fromDocumentWithData.prioritertKravNummer.length > 0
+      ? 'prioritertKravliste'
+      : 'alleKrav'
+  const [tabValue, setTabValue] = useState(initialTab)
   const router = useRouter()
   const pathname = usePathname()
   const [pvoTilbakemelding] = usePvoTilbakemelding(pvkDokument?.id)
@@ -86,15 +90,6 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       }
     })()
   }, [previousVurdering, pvkDokument])
-
-  useEffect(() => {
-    if (
-      morDocumentRelation &&
-      morDocumentRelation.fromDocumentWithData.prioritertKravNummer.length > 0
-    ) {
-      setTabValue('prioritertKravliste')
-    }
-  }, [morDocumentRelation, pvkDokument])
 
   return (
     <Tabs

@@ -13,7 +13,7 @@ import {
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Label, List, Search, Select, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface IAnsvarligItem {
   key: string
@@ -28,7 +28,6 @@ export const PvoTilbakemeldingsList = () => {
   const [ansvarligList, setAnsvarligList] = useState<IAnsvarligItem[]>([])
   const [searchPvk, setSearchPvk] = useState<string>('')
 
-  const [filteredPvkDokument, setFilteredPvkDokuement] = useState<IPvkDokumentListItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -39,7 +38,6 @@ export const PvoTilbakemeldingsList = () => {
           (pvkDok: IPvkDokumentListItem) => pvkDok.status !== EPvkDokumentStatus.UNDERARBEID
         )
         setAllPvkDocumentListItem(filteredPvkDokument)
-        setFilteredPvkDokuement(filteredPvkDokument)
       })
 
       await getAllPvoTilbakemelding().then((response: IPvoTilbakemelding[]) => {
@@ -69,7 +67,7 @@ export const PvoTilbakemeldingsList = () => {
     })()
   }, [])
 
-  useEffect(() => {
+  const sortedPvkDocumentListItem = useMemo(() => {
     const unsortedData: any = [
       ...allPvkDocumentListItem.map((pvk: IPvkDokumentListItem) => {
         const pvoTilbakemelding: IPvoTilbakemelding[] = allPvoTilbakemelding.filter(
@@ -126,16 +124,15 @@ export const PvoTilbakemeldingsList = () => {
               : data.sendtTilPvoAv.split('-')[1],
         } as IPvkDokumentListItem
       })
-    setAllPvkDocumentListItem(sortedPvk)
-    setFilteredPvkDokuement(sortedPvk)
-  }, [allPvoTilbakemelding])
+    return sortedPvk
+  }, [allPvoTilbakemelding, allPvkDocumentListItem])
 
-  useEffect(() => {
-    let filteredData: IPvkDokumentListItem[] = allPvkDocumentListItem
+  const filteredPvkDokument = useMemo(() => {
+    let filteredData: IPvkDokumentListItem[] = sortedPvkDocumentListItem
 
     if (statusFilter !== 'alle') {
       if (statusFilter === EPvoTilbakemeldingStatus.IKKE_PABEGYNT) {
-        filteredData = allPvkDocumentListItem.filter(
+        filteredData = sortedPvkDocumentListItem.filter(
           (pvk: IPvkDokumentListItem) =>
             !allPvoTilbakemelding
               .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
@@ -146,14 +143,14 @@ export const PvoTilbakemeldingsList = () => {
               .includes(pvk.id)
         )
       } else if (statusFilter === 'avventer') {
-        filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
+        filteredData = sortedPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
           allPvoTilbakemelding
             .filter((pvo: IPvoTilbakemelding) => pvo.status === EPvoTilbakemeldingStatus.AVVENTER)
             .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
             .includes(pvk.id)
         )
       } else {
-        filteredData = allPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
+        filteredData = sortedPvkDocumentListItem.filter((pvk: IPvkDokumentListItem) =>
           allPvoTilbakemelding
             .filter((pvo: IPvoTilbakemelding) => pvo.status === statusFilter)
             .map((pvo: IPvoTilbakemelding) => pvo.pvkDokumentId)
@@ -161,7 +158,7 @@ export const PvoTilbakemeldingsList = () => {
         )
       }
     } else {
-      filteredData = allPvkDocumentListItem
+      filteredData = sortedPvkDocumentListItem
     }
 
     if (!['', 'alle'].includes(ansvarligFilter)) {
@@ -191,8 +188,8 @@ export const PvoTilbakemeldingsList = () => {
       })
     }
 
-    setFilteredPvkDokuement(filteredData)
-  }, [statusFilter, ansvarligFilter, searchPvk])
+    return filteredData
+  }, [statusFilter, ansvarligFilter, searchPvk, sortedPvkDocumentListItem, allPvoTilbakemelding])
 
   const getLatestVurderingSendtDato = (pvoTilbakemelding: IPvoTilbakemelding) => {
     const sortedVurderinger = pvoTilbakemelding.vurderinger.sort(

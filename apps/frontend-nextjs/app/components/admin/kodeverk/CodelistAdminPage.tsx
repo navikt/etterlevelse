@@ -16,6 +16,7 @@ const CodeListAdminPage = () => {
     if (listname) {
       router.push(adminCodelist(listname))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listname])
 
   return (

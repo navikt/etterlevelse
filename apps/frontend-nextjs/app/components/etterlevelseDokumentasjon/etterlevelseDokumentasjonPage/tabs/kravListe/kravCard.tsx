@@ -24,7 +24,7 @@ import {
 import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
 import moment from 'moment'
 import Image from 'next/image'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
 interface IProps {
   krav: TKravEtterlevelseData
@@ -54,14 +54,18 @@ export const KravCard = (props: IProps) => {
   const isVarslingStatus = !noVarsling && (isIngenEtterlevelse || isOppfyllesSenereEtterlevelse)
 
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
-  const [kravAge, setKravAge] = useState<number>(0)
+  const kravAge = getNumberOfDaysBetween(krav.aktivertDato, new Date())
   const [nyttInnholdFlag, setNyttInnholdFlag] = useState<boolean>(false)
 
-  const relevantRisikoscenarioForKravet = risikoscenarioList.filter(
-    (risikoscenario) =>
-      risikoscenario.relevanteKravNummer.filter(
-        (kravReference) => kravReference.kravNummer === krav.kravNummer
-      ).length > 0
+  const relevantRisikoscenarioForKravet = useMemo(
+    () =>
+      risikoscenarioList.filter(
+        (risikoscenario) =>
+          risikoscenario.relevanteKravNummer.filter(
+            (kravReference) => kravReference.kravNummer === krav.kravNummer
+          ).length > 0
+      ),
+    [risikoscenarioList, krav.kravNummer]
   )
 
   const isPvkKrav =
@@ -80,32 +84,26 @@ export const KravCard = (props: IProps) => {
     })
   )
 
-  const getEtterlevelseMetaData = () => {
-    getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(
-      etterlevelseDokumentasjonId,
-      krav.kravNummer,
-      krav.kravVersjon
-    ).then((resp) => {
-      if (resp.content.length) {
-        setEtterlevelseMetadata(resp.content[0])
-      } else {
-        setEtterlevelseMetadata(
-          mapEtterlevelseMetadataToFormValue({
-            id: 'ny',
-            etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
-            kravNummer: krav.kravNummer,
-            kravVersjon: krav.kravVersjon,
-          })
-        )
-      }
-    })
-  }
-
   useEffect(() => {
-    const today = new Date()
-    setKravAge(getNumberOfDaysBetween(krav.aktivertDato, today))
     ;(async () => {
-      getEtterlevelseMetaData()
+      getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(
+        etterlevelseDokumentasjonId,
+        krav.kravNummer,
+        krav.kravVersjon
+      ).then((resp) => {
+        if (resp.content.length) {
+          setEtterlevelseMetadata(resp.content[0])
+        } else {
+          setEtterlevelseMetadata(
+            mapEtterlevelseMetadataToFormValue({
+              id: 'ny',
+              etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+              kravNummer: krav.kravNummer,
+              kravVersjon: krav.kravVersjon,
+            })
+          )
+        }
+      })
       if (krav.kravVersjon > 1 && (isIngenEtterlevelse || isOppfyllesSenereEtterlevelse)) {
         setNyVersionFlag(
           (
@@ -117,7 +115,13 @@ export const KravCard = (props: IProps) => {
         )
       }
     })()
-  }, [])
+  }, [
+    etterlevelseDokumentasjonId,
+    krav.kravNummer,
+    krav.kravVersjon,
+    isIngenEtterlevelse,
+    isOppfyllesSenereEtterlevelse,
+  ])
 
   useEffect(() => {
     ;(async () => {
@@ -149,7 +153,7 @@ export const KravCard = (props: IProps) => {
         }
       }
     })()
-  }, [previousVurdering, risikoscenarioList, allTiltak, krav])
+  }, [previousVurdering, relevantRisikoscenarioForKravet, allTiltak, krav])
 
   return (
     <LinkPanel

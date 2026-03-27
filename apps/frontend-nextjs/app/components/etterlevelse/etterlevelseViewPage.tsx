@@ -65,6 +65,7 @@ export const EtterlevelseViewPage = () => {
         }
       )
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [etterlevelse])
 
   const getBreadcrumPaths = (): IBreadCrumbPath[] => {

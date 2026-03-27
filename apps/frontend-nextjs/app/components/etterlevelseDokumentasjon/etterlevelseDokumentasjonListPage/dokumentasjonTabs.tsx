@@ -80,6 +80,7 @@ export const DokumentasjonTabs = () => {
     if (tabQuery) {
       setSelectedTab(tabQuery as ETab)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -93,10 +94,12 @@ export const DokumentasjonTabs = () => {
         break
     }
     if (selectedTab !== tabQuery) router.push(etterlevelseDokumentasjonerUrl(selectedTab))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab])
 
   useEffect(() => {
     setSortedTeams(sortTeams(teams))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teams])
 
   useEffect(() => {
@@ -107,6 +110,7 @@ export const DokumentasjonTabs = () => {
     else if (selectedTab === ETab.SISTE && !etterlevelseDokumentasjoner.totalElements)
       setSelectedTab(ETab.ALLE)
     else setDoneLoading(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [etterlevelseDokumentasjoner, etterlevelseDokumentasjonLoading])
 
   return (
