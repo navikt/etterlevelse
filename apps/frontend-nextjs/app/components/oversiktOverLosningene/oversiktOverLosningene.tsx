@@ -158,7 +158,7 @@ export const OversiktOverLosningene = () => {
             header='Hvis dere har en behandling men ikke et etterlevelsesdokument'
             className='mt-3'
           >
-            <BodyLong spacing>Da gjør dere dette:</BodyLong>
+            <BodyLong className='mb-3'>Da gjør dere dette:</BodyLong>
             <List as='ul'>
               <List.Item>Opprette et etterlevelsesdokument.</List.Item>
               <List.Item>
@@ -170,7 +170,7 @@ export const OversiktOverLosningene = () => {
             header='Hvis dere har et etterlevelsesdokument men ikke en behandling'
             className='mt-6'
           >
-            <BodyLong spacing>Da gjør dere dette: </BodyLong>
+            <BodyLong className='mb-3'>Da gjør dere dette: </BodyLong>
 
             <List as='ul'>
               <List.Item>
@@ -187,7 +187,7 @@ export const OversiktOverLosningene = () => {
             header='Hvis dere verken har en behandling eller et etterlevelsesdokument'
             className='mt-6'
           >
-            <BodyLong spacing>Da gjør dere dette:</BodyLong>
+            <BodyLong className='mb-3'>Da gjør dere dette:</BodyLong>
             <List as='ul'>
               <List.Item>Opprette et etterlevelsesdokument.</List.Item>
               <List.Item>

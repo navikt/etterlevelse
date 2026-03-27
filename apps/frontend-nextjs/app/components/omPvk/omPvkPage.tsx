@@ -192,7 +192,7 @@ const OmPvkPage = () => {
           <Heading level='2' size='medium' spacing id='behandlinges-art-og-omfang'>
             Dokumentasjon av behandlingens art og omfang
           </Heading>
-          <BodyLong spacing>Behandlingens art og omfang handler om:</BodyLong>
+          <BodyLong className='mb-3'>Behandlingens art og omfang handler om:</BodyLong>
           <List className='mb-6'>
             <List.Item>Hvilke personkategorier vi behandler</List.Item>
             <List.Item>Hvor mange personer vi behandler personopplysninger om</List.Item>

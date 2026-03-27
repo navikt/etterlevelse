@@ -133,9 +133,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
       <Accordion.Item>
         <Accordion.Header>Besvare etterlevelseskrav</Accordion.Header>
         <Accordion.Content>
-          <div className='my-6'>
+          {/*          <div className='my-6'>
             <video controls src='videos/video-mangler'></video>
-          </div>
+          </div>*/}
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
             for å etterleve kravet. Hvert kriterium inneholder også en nærmere beskrivelse som
@@ -231,9 +231,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
       <Accordion.Item>
         <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
         <Accordion.Content>
-          <div className='my-6'>
-            <video controls src='videos/'></video>
-          </div>
+          {/*          <div className='my-6'>
+            <video controls src='videos/mangler'></video>
+          </div>*/}
           <BodyLong className='mb-3'>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
             menyen på dokumentets temaside. På siden “Godkjenn etterlevelsen” kan du gjøre følgende:
