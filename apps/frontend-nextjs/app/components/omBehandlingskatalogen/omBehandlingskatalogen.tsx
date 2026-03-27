@@ -2,8 +2,10 @@
 
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import OmBehandlingskatalogenImage from './images/OmBehandlingskatalogenImage.png'
 
@@ -11,6 +13,7 @@ const HvordanBrukeBK = '/videos/HvordanBrukeBK.mov'
 
 export const OmBehandlingskatalogen = () => {
   const [activeStep, setActiveStep] = useState(0)
+  const router = useRouter()
   return (
     <PageLayout pageTitle='Om behandlingskatalogen' currentPage='Behandlingskatalogen'>
       <div className='flex gap-7 mt-10'>
@@ -108,6 +111,34 @@ export const OmBehandlingskatalogen = () => {
             <List.Item>Bli med på #behandlingskatalogen på Slack </List.Item>
             <List.Item>Send mail til: teamdatajegerne@nav.no </List.Item>
           </List>
+        </div>
+      </div>
+      <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
+        <div className='w-full max-w-7xl py-4 px-4 border-t-2 z-2'>
+          <div className='flex w-full flex-row-reverse justify-evenly gap-2 items-end'>
+            <Button
+              icon={<ChevronRightIcon aria-hidden />}
+              iconPosition='right'
+              type='button'
+              variant={'tertiary'}
+              onClick={() => {
+                router.push('/')
+              }}
+            >
+              Fortsett til Forsiden
+            </Button>
+
+            <Button
+              icon={<ChevronLeftIcon aria-hidden />}
+              type='button'
+              variant='tertiary'
+              onClick={() => {
+                router.push('/om-pvk')
+              }}
+            >
+              Tilbake til Om Digital PVK
+            </Button>
+          </div>
         </div>
       </div>
     </PageLayout>

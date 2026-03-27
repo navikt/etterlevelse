@@ -1,8 +1,10 @@
 'use client'
 
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { ExternalLink } from '../common/externalLink/externalLink'
 import KortOmLosningeneBehandlingskatalogen from './images/KortOmLosningeneBehandlingskatalogen.png'
@@ -12,6 +14,7 @@ import KortOmLosningeneSammenhengenMellomVerktoyene from './images/SammenhengMel
 
 export const OversiktOverLosningene = () => {
   const [activeStep, setActiveStep] = useState(0)
+  const router = useRouter()
   return (
     <PageLayout
       pageTitle='Oversikt over Løsningene'
@@ -213,6 +216,34 @@ export const OversiktOverLosningene = () => {
             På følgende sider kan du lese mer om hva som er formålet med hver løsning, og hvordan de
             kan brukes.
           </BodyLong>
+        </div>
+      </div>
+      <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
+        <div className='w-full max-w-7xl py-4 px-4 border-t-2 z-2'>
+          <div className='flex w-full flex-row-reverse justify-evenly gap-2 items-end'>
+            <Button
+              icon={<ChevronRightIcon aria-hidden />}
+              iconPosition='right'
+              type='button'
+              variant={'tertiary'}
+              onClick={() => {
+                router.push('/omstottetiletterlevelse')
+              }}
+            >
+              Fortsett til Om Støtte til etterlevelse
+            </Button>
+
+            <Button
+              icon={<ChevronLeftIcon aria-hidden />}
+              type='button'
+              variant='tertiary'
+              onClick={() => {
+                router.push('/')
+              }}
+            >
+              Tilbake til Forsiden
+            </Button>
+          </div>
         </div>
       </div>
     </PageLayout>
