@@ -1,23 +1,25 @@
-import coreWebVitals from 'eslint-config-next/core-web-vitals'
-import nextTypescript from 'eslint-config-next/typescript'
+import nextPlugin from '@next/eslint-plugin-next'
+import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import prettierPlugin from 'eslint-plugin-prettier'
-import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 
 const eslintConfig = [
-  ...coreWebVitals,
-  ...nextTypescript,
-  reactPlugin.configs.flat.recommended,
+  {
+    ignores: ['.next/**', 'node_modules/**', 'build/**'],
+  },
+  ...typescriptEslint.configs['flat/recommended'],
   reactHooksPlugin.configs.flat.recommended,
+  jsxA11y.flatConfigs.recommended,
+  nextPlugin.configs.recommended,
+  nextPlugin.configs['core-web-vitals'],
   {
     plugins: {
       prettier: prettierPlugin,
     },
     rules: {
       ...eslintConfigPrettier.rules,
-      ...jsxA11y.flatConfigs.recommended.rules,
       '@typescript-eslint/ban-ts-ignore': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -55,9 +57,6 @@ const eslintConfig = [
       'react-hooks/preserve-manual-memoization': 'warn',
       'react-hooks/globals': 'warn',
       'react-hooks/refs': 'warn',
-      'react/prop-types': 'off',
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
       'no-console': ['warn', { allow: ['warn', 'error', 'debug'] }],
       // no-extra-semi is added because there are places where the ; is necessary
       'no-extra-semi': 'off',
