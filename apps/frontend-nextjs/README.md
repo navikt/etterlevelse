@@ -2,11 +2,15 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-### Requires node 17
+### Requires Node 20.19+
 
 ### Install deps
 
 `yarn install`
+
+If you use `nvm`:
+
+`nvm use`
 
 ### Login with Google Cloud with @nav.no user
 
@@ -30,6 +34,8 @@ Remember to flush sockets when you can't login
 
 1. `brew install yarn`
 2. `brew install node`
+
+Use Node `20.19` or newer.
 
 ## Common errors
 
