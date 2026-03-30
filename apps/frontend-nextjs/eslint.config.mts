@@ -5,11 +5,13 @@ import jsxA11y from 'eslint-plugin-jsx-a11y'
 import prettierPlugin from 'eslint-plugin-prettier'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 
+const tsRecommended = typescriptEslint.configs['flat/recommended']
+
 const eslintConfig = [
   {
     ignores: ['.next/**', 'node_modules/**', 'build/**'],
   },
-  ...typescriptEslint.configs['flat/recommended'],
+  ...(Array.isArray(tsRecommended) ? tsRecommended : [tsRecommended]),
   reactHooksPlugin.configs.flat.recommended,
   jsxA11y.flatConfigs.recommended,
   nextPlugin.configs.recommended,
