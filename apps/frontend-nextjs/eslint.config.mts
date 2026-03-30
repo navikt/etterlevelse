@@ -9,7 +9,7 @@ const tsRecommended = typescriptEslint.configs['flat/recommended']
 
 const eslintConfig = [
   {
-    ignores: ['.next/**', 'node_modules/**', 'build/**'],
+    ignores: ['.next/**', 'node_modules/**', 'build/**', 'next-env.d.ts'],
   },
   ...(Array.isArray(tsRecommended) ? tsRecommended : [tsRecommended]),
   reactHooksPlugin.configs.flat.recommended,
