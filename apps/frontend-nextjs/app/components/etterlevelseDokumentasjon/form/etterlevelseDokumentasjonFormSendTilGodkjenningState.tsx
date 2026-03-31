@@ -25,7 +25,10 @@ import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
-import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import {
+  IBehandling,
+  IDpBehandling,
+} from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { TOption } from '@/constants/commonConstants'
 import {
   ERelationType,
@@ -42,7 +45,7 @@ import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConst
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { behandlingName } from '@/util/behandling/behandlingUtil'
+import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
@@ -342,6 +345,35 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
               )}
             </FieldArray>
           </FieldWrapper>
+
+          <ReadMore
+            header='Dersom Nav er databehandler'
+            defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
+          >
+            <FieldArray name='dpBehandlinger'>
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='my-3'>
+                  <LabelWithDescription label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen' />
+
+                  <DataTextWrapper>
+                    {fieldArrayRenderProps.form.values.dpBehandlinger.length === 0 && (
+                      <BodyLong>Ingen behandlinger der Nav er databehandler</BodyLong>
+                    )}
+
+                    {fieldArrayRenderProps.form.values.dpBehandlinger.length !== 0 && (
+                      <List className='mt-2' as='ul'>
+                        {fieldArrayRenderProps.form.values.dpBehandlinger
+                          .map((dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling))
+                          .map((item: string, index: number) => (
+                            <List.Item key={`tags_${item}_${index}`}>{item}</List.Item>
+                          ))}
+                      </List>
+                    )}
+                  </DataTextWrapper>
+                </div>
+              )}
+            </FieldArray>
+          </ReadMore>
 
           <FieldWrapper marginBottom id='risikovurderinger'>
             <FieldArray name='risikovurderinger'>

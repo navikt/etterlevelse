@@ -21,6 +21,8 @@ public class EtterlevelseDokumentasjonData {
 
     @Builder.Default
     private List<String> behandlingIds = new ArrayList<>();
+    @Builder.Default
+    private List<String> dpBehandlingIds = new ArrayList<>();
     private String beskrivelse;
     private String gjenbrukBeskrivelse;
 

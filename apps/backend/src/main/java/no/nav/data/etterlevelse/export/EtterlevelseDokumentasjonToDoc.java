@@ -28,10 +28,10 @@ import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.integration.begrep.BegrepService;
 import no.nav.data.integration.begrep.dto.BegrepResponse;
 import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.integration.dpBehandling.DpBehandlingService;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import org.docx4j.jaxb.Context;
 import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,7 @@ public class EtterlevelseDokumentasjonToDoc {
     private final PvkDokumentService pvkDokumentService;
     private final KravService kravService;
     private final BehandlingService behandlingService;
+    private final DpBehandlingService dpBehandlingService;
 
     private final TeamcatTeamClient teamService;
 
@@ -100,7 +101,7 @@ public class EtterlevelseDokumentasjonToDoc {
         doc.newLine();
 
         if (etterlevelseDokumentasjon.getBehandlingIds() != null && !etterlevelseDokumentasjon.getBehandlingIds().isEmpty()) {
-            doc.addHeading3("Knyttet behandling");
+            doc.addHeading3("Knyttet behandlinger");
             etterlevelseDokumentasjon.getBehandlingIds().forEach(behandlingId -> {
                 try {
                     var behandling = behandlingService.getBehandling(behandlingId);
@@ -109,13 +110,38 @@ public class EtterlevelseDokumentasjonToDoc {
                     doc.addText("Fant ikke behandling med ID: " + behandlingId);
                 }
             });
+            doc.newLine();
         }
+
+        if (etterlevelseDokumentasjon.getDpBehandlingIds() != null && !etterlevelseDokumentasjon.getDpBehandlingIds().isEmpty()) {
+            doc.addHeading3("Knyttet behandlinger der Nav er databehandler");
+            etterlevelseDokumentasjon.getDpBehandlingIds().forEach(dpBehandlingId -> {
+                try {
+                    var dpBehandling = dpBehandlingService.getDpBehandling(dpBehandlingId);
+                    doc.addText("D" + dpBehandling.getNummer() + ": " + dpBehandling.getNavn());
+                } catch (WebClientResponseException.NotFound e) {
+                    doc.addText("Fant ikke behandling med ID: " + dpBehandlingId);
+                }
+            });
+            doc.newLine();
+        }
+
 
         doc.addHeading3("Avdeling");
         if (etterlevelseDokumentasjon.getNomAvdelingId() == null || etterlevelseDokumentasjon.getNomAvdelingId().isEmpty()) {
             doc.addMarkdownText("Ingen avdeling satt");
         } else {
             doc.addMarkdownText(etterlevelseDokumentasjon.getAvdelingNavn());
+        }
+
+        doc.newLine();
+
+        if (!etterlevelseDokumentasjon.getSeksjoner().isEmpty()) {
+            doc.addHeading3("Seksjon");
+            etterlevelseDokumentasjon.getSeksjoner().forEach(seksjon -> {
+                doc.addText(seksjon.getNomSeksjonName());
+            });
+            doc.newLine();
         }
 
         doc.addHeading3("Team");
@@ -132,6 +158,8 @@ public class EtterlevelseDokumentasjonToDoc {
         } else {
             doc.addText("Ikke angitt");
         }
+
+        doc.newLine();
 
         doc.addHeading3("Følgende dokumenter er lagt inn under Dokumentegenskaper:");
         if (etterlevelseDokumentasjon.getRisikovurderinger() != null && !etterlevelseDokumentasjon.getRisikovurderinger().isEmpty()) {
@@ -180,7 +208,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelse.getEtterlevelseDokumentasjonId());
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         var doc = new EtterlevelseDocumentBuilder();
 
@@ -215,7 +243,7 @@ public class EtterlevelseDokumentasjonToDoc {
 
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
-        etterlevelseDokumentasjonService.addBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
+        etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
         List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA).stream()
                 .sorted(Comparator.comparing(CodeUsage::getShortName)).toList();

@@ -1,4 +1,7 @@
-import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import {
+  IBehandling,
+  IDpBehandling,
+} from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { env } from '../env/env'
 
 export const behandlingName = (behandling?: IBehandling): string => {
@@ -17,6 +20,21 @@ export const behandlingName = (behandling?: IBehandling): string => {
   }
 
   return behandlingName
+}
+
+export const dpBehandlingName = (dpBehandling?: IDpBehandling): string => {
+  let dpBehandlingName = ''
+
+  if (dpBehandling) {
+    if (dpBehandling.nummer) {
+      dpBehandlingName += 'D' + dpBehandling.nummer + ': '
+    }
+    if (dpBehandling.navn) {
+      dpBehandlingName += dpBehandling.navn
+    }
+  }
+
+  return dpBehandlingName
 }
 
 export const getPollyBaseUrl = () => {

@@ -1,4 +1,4 @@
-import { Alert } from '@navikt/ds-react'
+import { LocalAlert } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -10,13 +10,10 @@ export const SendInnLagringVellykketAlert: FunctionComponent<TProps> = ({
   setSavedSuccessful,
   customText,
 }) => (
-  <Alert
-    variant='success'
-    closeButton
-    onClose={() => {
-      setSavedSuccessful(false)
-    }}
-  >
-    {customText ? customText : 'Lagring vellykket'}
-  </Alert>
+  <LocalAlert status='success'>
+    <LocalAlert.Header>
+      <LocalAlert.Title> {customText ? customText : 'Lagring vellykket'}</LocalAlert.Title>
+      <LocalAlert.CloseButton onClick={() => setSavedSuccessful(false)} />
+    </LocalAlert.Header>
+  </LocalAlert>
 )

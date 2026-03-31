@@ -35,6 +35,12 @@ export interface IBehandling {
   profilering: boolean
 }
 
+export interface IDpBehandling {
+  id: string
+  navn: string
+  nummer: number
+}
+
 export interface IBegrep {
   id: string
   navn: string

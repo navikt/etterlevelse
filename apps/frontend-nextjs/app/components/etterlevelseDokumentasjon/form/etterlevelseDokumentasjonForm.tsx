@@ -2,7 +2,10 @@
 
 import { getBehandlingensArtOgOmfangByEtterlevelseDokumentId } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
-import { searchBehandlingOptions } from '@/api/behandlingskatalog/behandlingskatalogApi'
+import {
+  searchBehandlingOptions,
+  searchDpBehandlingOptions,
+} from '@/api/behandlingskatalog/behandlingskatalogApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import {
   createEtterlevelseDokumentasjon,
@@ -29,7 +32,10 @@ import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
-import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import {
+  IBehandling,
+  IDpBehandling,
+} from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { TOption } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -51,7 +57,7 @@ import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConst
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { behandlingName } from '@/util/behandling/behandlingUtil'
+import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
@@ -528,6 +534,47 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
               )}
             </FieldArray>
           </FieldWrapper>
+
+          <ReadMore
+            header='Dersom Nav er databehandler'
+            defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
+          >
+            <FieldArray name='dpBehandlinger'>
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='my-3'>
+                  <LabelWithDescription
+                    label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen'
+                    description='Skriv minst 3 tegn for å søke'
+                  />
+                  <div className='w-full'>
+                    <AsyncSelect
+                      aria-label='Søk etter behandlinger'
+                      placeholder=''
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={searchDpBehandlingOptions}
+                      onChange={(value: any) => {
+                        if (value) {
+                          fieldArrayRenderProps.push(value)
+                        }
+                      }}
+                      styles={selectOverrides}
+                    />
+                  </div>
+                  <RenderTagList
+                    list={fieldArrayRenderProps.form.values.dpBehandlinger.map(
+                      (dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling)
+                    )}
+                    onRemove={fieldArrayRenderProps.remove}
+                  />
+                </div>
+              )}
+            </FieldArray>
+          </ReadMore>
+
           <ROSEdit />
           <Heading level='2' size='small' spacing>
             Legg til minst et team og/eller en person

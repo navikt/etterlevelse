@@ -38,6 +38,7 @@ import {
   CopyButton,
   Link,
   List,
+  LocalAlert,
   Radio,
   RadioGroup,
   ReadMore,
@@ -287,25 +288,23 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
               )}
 
             {savedAlert && !dirty && (
-              <Alert
-                className='mt-5'
-                variant='success'
-                closeButton
-                onClose={() => setSavedAlert(false)}
-              >
-                Lagring vellykket
-              </Alert>
+              <LocalAlert className='mt-5' status='success'>
+                <LocalAlert.Header>
+                  <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                  <LocalAlert.CloseButton onClick={() => setSavedAlert(false)} />
+                </LocalAlert.Header>
+              </LocalAlert>
             )}
 
             {errorAlert && (
-              <Alert
-                className='mt-5'
-                variant='error'
-                closeButton
-                onClose={() => setErrorAlert(false)}
-              >
-                Kan ikke oppdatere vurderingen fordi personvernkonsekvensevurderingen pågår.
-              </Alert>
+              <LocalAlert className='mt-5' status='error'>
+                <LocalAlert.Header>
+                  <LocalAlert.Title>
+                    Kan ikke oppdatere vurderingen fordi personvernkonsekvensevurderingen pågår.
+                  </LocalAlert.Title>
+                  <LocalAlert.CloseButton onClick={() => setErrorAlert(false)} />
+                </LocalAlert.Header>
+              </LocalAlert>
             )}
 
             <div className='flex items-center mt-5 gap-2'>

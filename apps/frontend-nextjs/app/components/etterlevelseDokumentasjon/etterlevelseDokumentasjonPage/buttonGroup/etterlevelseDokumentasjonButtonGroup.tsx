@@ -146,7 +146,9 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         )} */}
       </>
 
-      {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+      {(user.isAdmin() ||
+        etterlevelseDokumentasjon.hasCurrentUserAccess ||
+        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
         <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
       )}
       {behandlerPersonopplysninger && (

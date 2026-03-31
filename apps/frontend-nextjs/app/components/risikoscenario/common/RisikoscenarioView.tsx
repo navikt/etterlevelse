@@ -10,7 +10,7 @@ import {
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { LinkIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
+import { BodyLong, CopyButton, InlineMessage, List, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import RisikoscenarioTag from './risikoscenarioTag'
 
@@ -108,7 +108,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
 
       {(!risikoscenario.sannsynlighetsNivaaBegrunnelse ||
         risikoscenario.sannsynlighetsNivaa === 0) && (
-        <Alert inline className='mt-5' variant='warning'>
+        <InlineMessage className='mt-5' status='warning'>
           {risikoscenario.sannsynlighetsNivaa === 0 &&
             !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
             'Dere må gjøre sannsynlighetsvurdering'}
@@ -118,7 +118,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
           {risikoscenario.sannsynlighetsNivaaBegrunnelse &&
             risikoscenario.sannsynlighetsNivaa === 0 &&
             'Dere må velge sannsynlighetsnivå'}
-        </Alert>
+        </InlineMessage>
       )}
 
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
@@ -135,7 +135,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
-        <Alert inline className='mt-5' variant='warning'>
+        <InlineMessage className='mt-5' status='warning'>
           {risikoscenario.konsekvensNivaa === 0 &&
             !risikoscenario.konsekvensNivaaBegrunnelse &&
             'Dere må gjøre konsekvensvurdering'}
@@ -145,7 +145,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
           {risikoscenario.konsekvensNivaaBegrunnelse &&
             risikoscenario.konsekvensNivaa === 0 &&
             'Dere må velge konsekensnivå'}
-        </Alert>
+        </InlineMessage>
       )}
       {risikoscenario.konsekvensNivaaBegrunnelse && (
         <BodyLong className='mt-5'>{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>

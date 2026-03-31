@@ -41,7 +41,7 @@ const KravTabMenyContent: FunctionComponent<TProps> = ({
         <Tabs.List>
           <Tabs.Tab value='krav' label='Hvordan etterleve?' />
           <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
-          <Tabs.Tab value='tilbakemeldinger' label='Spørsmål og svar' />
+          <Tabs.Tab value='tilbakemeldinger' label='Spør kraveier' />
         </Tabs.List>
         <Tabs.Panel value='krav'>
           <KravView krav={krav} />
