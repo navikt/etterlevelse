@@ -88,7 +88,7 @@ public class ArdoqClient {
     }
 
     @SchedulerLock(name = "ArdoqTokenRefresh")
-    @Scheduled(cron = "0 30 6 * * ?")
+    @Scheduled(cron = "0 30 6 * * MON")
     public void ardoqTokenRefesh() {
         log.info("Refreshing Ardoq token");
         getArdoqSystemsResponse();
