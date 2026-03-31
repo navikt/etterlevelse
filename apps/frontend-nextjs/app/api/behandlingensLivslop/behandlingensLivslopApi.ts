@@ -126,7 +126,7 @@ export const useBehandlingensLivslop = (
   const [data, setData] = useState<IBehandlingensLivslop | undefined>(
     isCreateNew ? mapBehandlingensLivslopToFormValue({}) : undefined
   )
-  const [isDone, setIsDone] = useState<boolean>(
+  const [isLoading, setIsLoading] = useState<boolean>(
     !behandlingensLivslopId && !etterlevelseDokumentasjonId
   )
   const abortedRef = useRef(false)
@@ -136,12 +136,12 @@ export const useBehandlingensLivslop = (
     if (behandlingensLivslopId && !isCreateNew) {
       ;(async () => {
         if (!abortedRef.current) {
-          setIsDone(false)
+          setIsLoading(false)
         }
         await getBehandlingensLivslop(behandlingensLivslopId).then(async (behandlingensLivslop) => {
           if (!abortedRef.current) {
             setData(behandlingensLivslop)
-            setIsDone(true)
+            setIsLoading(true)
           }
         })
       })()
@@ -149,7 +149,7 @@ export const useBehandlingensLivslop = (
       //double check that behandlingenslivslop doesnt not exist
       ;(async () => {
         if (!abortedRef.current) {
-          setIsDone(false)
+          setIsLoading(false)
         }
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
           .then(async (behandlingensLivslop) => {
@@ -157,12 +157,12 @@ export const useBehandlingensLivslop = (
               if (behandlingensLivslop) {
                 setData(behandlingensLivslop)
               }
-              setIsDone(true)
+              setIsLoading(true)
             }
           })
           .catch(() => {
             if (!abortedRef.current) {
-              setIsDone(true)
+              setIsLoading(true)
             }
           })
       })()
@@ -172,7 +172,7 @@ export const useBehandlingensLivslop = (
     }
   }, [behandlingensLivslopId])
 
-  return [data, setData, !isDone] as [
+  return [data, setData, isLoading] as [
     IBehandlingensLivslop | undefined,
     (e: IBehandlingensLivslop) => void,
     boolean,

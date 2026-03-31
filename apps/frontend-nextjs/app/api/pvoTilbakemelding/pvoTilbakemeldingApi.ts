@@ -51,7 +51,7 @@ export const getPvoTilbakemeldingByPvkDokumentId = async (
 
 export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
   const [data, setData] = useState<IPvoTilbakemelding>(mapPvoTilbakemeldingToFormValue({}))
-  const [isDone, setIsDone] = useState<boolean>(!pvkDokumentId)
+  const [isLoading, setIsLoading] = useState<boolean>(!pvkDokumentId)
   const abortedRef = useRef(false)
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
             })
             .finally(() => {
               if (!abortedRef.current) {
-                setIsDone(true)
+                setIsLoading(true)
               }
             })
         })
@@ -95,7 +95,11 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
     }
   }, [pvkDokumentId])
 
-  return [data, setData, !isDone] as [IPvoTilbakemelding, (e: IPvoTilbakemelding) => void, boolean]
+  return [data, setData, isLoading] as [
+    IPvoTilbakemelding,
+    (e: IPvoTilbakemelding) => void,
+    boolean,
+  ]
 }
 
 export const createPvoTilbakemelding = async (pvoTilbakemelding: IPvoTilbakemelding) => {

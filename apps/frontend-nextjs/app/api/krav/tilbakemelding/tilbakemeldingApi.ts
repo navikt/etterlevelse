@@ -96,7 +96,7 @@ export const useTilbakemeldinger = (
   (tilbakemelding: ITilbakemelding) => void,
 ] => {
   const [data, setData] = useState<ITilbakemelding[]>([])
-  const [isDone, setIsDone] = useState<boolean>(!kravNummer || !kravVersjon)
+  const [isLoading, setIsLoading] = useState<boolean>(!kravNummer || !kravVersjon)
   const abortedRef = useRef(false)
 
   useEffect(() => {
@@ -112,13 +112,13 @@ export const useTilbakemeldinger = (
                   moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()
               )
             )
-            setIsDone(true)
+            setIsLoading(true)
           }
         })
         .catch((error: any) => {
           if (!abortedRef.current) {
             setData([])
-            setIsDone(true)
+            setIsLoading(true)
           }
           console.error("couldn't find krav", error)
         })
@@ -158,7 +158,7 @@ export const useTilbakemeldinger = (
     }
   }
 
-  return [data, !isDone, add, replace, remove] as [
+  return [data, isLoading, add, replace, remove] as [
     ITilbakemelding[],
     boolean,
     (tilbakemelding: ITilbakemelding) => void,
