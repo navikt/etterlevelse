@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent, ReactNode, createContext, useEffect, useState } from 'react'
 
-interface IUserContext {
+export interface IUserContext {
   isLoggedIn: () => boolean
   getIdent: () => string
   getEmail: () => string
