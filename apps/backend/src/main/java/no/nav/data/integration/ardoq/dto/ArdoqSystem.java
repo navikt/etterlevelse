@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArdoqSystem {
     @JsonProperty("Ardoq OID")
-    private String Ardoq_OID;
+    private String ardoqOID;
     @JsonProperty("Ardoq ID")
-    private String Ardoq_ID;
+    private String ardoqID;
     @JsonProperty("Name")
-    private String Name;
+    private String name;
     @JsonProperty("Alias")
-    private String Alias;
+    private String alias;
     @JsonProperty("Lifecycle Phase")
-    private String Lifecycle_Phase;
+    private String lifecyclePhase;
     @JsonProperty("Description")
-    private String Description;
+    private String description;
 }
