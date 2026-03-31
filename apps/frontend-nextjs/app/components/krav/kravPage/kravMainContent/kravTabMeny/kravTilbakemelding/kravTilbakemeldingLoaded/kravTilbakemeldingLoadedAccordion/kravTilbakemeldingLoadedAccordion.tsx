@@ -50,7 +50,7 @@ export const KravTilbakemeldingLoadedAccordion: FunctionComponent<TProps> = ({
   const setFocus = (id: string): void => {
     setFocusNr(id)
     if (pathname.split('/')[1] === 'krav')
-      router.push(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon, id))
+      router.push(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon, id), { scroll: false })
   }
 
   const refs: TRefs<HTMLDivElement> = useRefs<HTMLDivElement>(

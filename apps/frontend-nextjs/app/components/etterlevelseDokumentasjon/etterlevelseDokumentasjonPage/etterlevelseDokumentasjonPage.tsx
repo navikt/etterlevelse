@@ -184,9 +184,10 @@ export const EtterlevelseDokumentasjonPage = () => {
                   )}
 
                   {etterlevelseDokumentasjon.forGjenbruk &&
-                    !etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
                     (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                      <GjenbrukAlert />
+                      <GjenbrukAlert
+                        defaultOpen={!etterlevelseDokumentasjon.tilgjengeligForGjenbruk}
+                      />
                     )}
 
                   <div className='flex mb-5'>
@@ -207,6 +208,8 @@ export const EtterlevelseDokumentasjonPage = () => {
                         <EtterlevelseDokumentasjonButtonGroup
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                          relasjonLoading={relasjonLoading}
+                          morDokumentRelasjon={morDokumentRelasjon}
                           pvkDokument={pvkDokument}
                           behandlingsLivslop={behandlingsLivslop}
                           behandlingensArtOgOmfang={artOgOmfang}

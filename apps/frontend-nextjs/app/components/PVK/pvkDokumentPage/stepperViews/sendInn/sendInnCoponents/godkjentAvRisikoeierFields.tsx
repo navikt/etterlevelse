@@ -35,6 +35,7 @@ type TProps = {
   errorSummaryComponent: ReactNode
   setAngretAvRisikoeier: (state: boolean) => void
   pvoVurderingList: ICode[]
+  savedAlert: ReactNode
 }
 
 export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
@@ -47,6 +48,7 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   errorSummaryComponent,
   setAngretAvRisikoeier,
   pvoVurderingList,
+  savedAlert,
 }) => {
   const user = useContext(UserContext)
   const isRisikoeierCheck: boolean =
@@ -83,6 +85,8 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
           Status: {pvkDokumentStatusToText(pvkDokument.status)}
         </Alert>
       </div>
+
+      <div>{savedAlert}</div>
 
       {isRisikoeierCheck && (
         <div className='mt-5 flex gap-2 items-center'>

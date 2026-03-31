@@ -3,7 +3,17 @@
 import { arkiver } from '@/api/p360/p360Api'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { p360Url } from '@/routes/p360/p360Routes'
-import { Alert, BodyLong, Button, Link, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Link,
+  Loader,
+  LocalAlert,
+  Modal,
+  Radio,
+  RadioGroup,
+} from '@navikt/ds-react'
 import { useState } from 'react'
 
 type TArkiveringModalProps = {
@@ -73,9 +83,12 @@ export const ArkiveringModal = ({
         )}
 
         {successMessageOpen && (
-          <Alert variant='success' closeButton onClose={() => setSuccessMessageOpen(false)}>
-            Arkivering vellykket
-          </Alert>
+          <LocalAlert status='success'>
+            <LocalAlert.Header>
+              <LocalAlert.Title>Arkivering vellykket</LocalAlert.Title>
+              <LocalAlert.CloseButton onClick={() => setSuccessMessageOpen(false)} />
+            </LocalAlert.Header>
+          </LocalAlert>
         )}
 
         {errorMessageOpen && (

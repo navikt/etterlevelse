@@ -3,7 +3,7 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Alert, Button, Heading } from '@navikt/ds-react'
+import { Alert, Button, Heading, InlineMessage } from '@navikt/ds-react'
 import { FieldProps } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
@@ -37,9 +37,9 @@ export const SendTilPvo: FunctionComponent<TProps> = ({
         />
 
         {fieldProps.form.getFieldMeta(`meldingerTilPvo[${relevantIndex}].merknadTilPvo`).error && (
-          <Alert variant='error' inline className='mt-3'>
+          <InlineMessage status='error' className='mt-3'>
             Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
-          </Alert>
+          </InlineMessage>
         )}
       </div>
       <div className='mt-8 mb-3'>
@@ -53,9 +53,9 @@ export const SendTilPvo: FunctionComponent<TProps> = ({
         />
 
         {fieldProps.form.getFieldMeta(`meldingerTilPvo[${relevantIndex}].endringsNotat`).error && (
-          <Alert variant='error' inline className='mt-3'>
+          <InlineMessage status='error' className='mt-3'>
             Beskriv hvilke endringer som er gjort.
-          </Alert>
+          </InlineMessage>
         )}
         <Alert variant='info' inline className='my-8'>
           Når dere sender inn PVK, vil hele dokumentasjonen, inkludert etterlevelsesdokumentasjon

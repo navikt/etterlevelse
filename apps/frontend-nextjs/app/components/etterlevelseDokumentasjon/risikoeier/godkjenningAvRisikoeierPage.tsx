@@ -42,7 +42,16 @@ import {
   getKravForTema,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
-import { Alert, BodyLong, Button, FormSummary, Heading, Label, List } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  FormSummary,
+  Heading,
+  Label,
+  List,
+  LocalAlert,
+} from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -344,14 +353,12 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                       <div>
                         {saveSuccessfull && (
                           <div className='my-5'>
-                            <Alert
-                              size='small'
-                              variant='success'
-                              closeButton
-                              onClose={() => setSaveSuccessfull(false)}
-                            >
-                              Lagring vellykket
-                            </Alert>
+                            <LocalAlert size='small' status='success'>
+                              <LocalAlert.Header>
+                                <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                                <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
+                              </LocalAlert.Header>
+                            </LocalAlert>
                           </div>
                         )}
 
@@ -433,14 +440,12 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
                   {saveSuccessfull && (
                     <div className='my-5'>
-                      <Alert
-                        size='small'
-                        variant='success'
-                        closeButton
-                        onClose={() => setSaveSuccessfull(false)}
-                      >
-                        Godkjent og arkivert i Public 360
-                      </Alert>
+                      <LocalAlert size='small' status='success'>
+                        <LocalAlert.Header>
+                          <LocalAlert.Title>Godkjent og arkivert i Public 360</LocalAlert.Title>
+                          <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
+                        </LocalAlert.Header>
+                      </LocalAlert>
                     </div>
                   )}
                 </div>
