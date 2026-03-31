@@ -84,7 +84,7 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
   const [data, setData] = useState<IBehandlingensArtOgOmfang>(
     mapBehandlingensArtOgOmfangToFormValue({})
   )
-  const [isDone, setIsDone] = useState<boolean>(!etterlevelseDokumentasjonId)
+  const [isLoading, setIsLoading] = useState<boolean>(!etterlevelseDokumentasjonId)
   const abortedRef = useRef(false)
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
           })
           .finally(() => {
             if (!abortedRef.current) {
-              setIsDone(true)
+              setIsLoading(true)
             }
           })
       })()
@@ -109,7 +109,7 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
     }
   }, [etterlevelseDokumentasjonId])
 
-  return [data, setData, !isDone] as [
+  return [data, setData, isLoading] as [
     IBehandlingensArtOgOmfang,
     (artOfOmfang: IBehandlingensArtOgOmfang) => void,
     boolean,
