@@ -3,17 +3,16 @@ package no.nav.data.integration.ardoq;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.integration.ardoq.dto.ArdoqSystem;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemData;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
-import no.nav.data.integration.team.domain.Team;
-import no.nav.data.integration.team.teamcat.TeamKatTeam;
-import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +22,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.requireNonNull;
 import static no.nav.data.common.utils.StreamUtils.safeStream;
 
 
@@ -87,6 +85,13 @@ public class ArdoqClient {
 
         return safeStream(ardoqSystems)
                 .collect(Collectors.toMap(ArdoqSystemResponse::getArdoqID, Function.identity()));
+    }
+
+    @SchedulerLock(name = "ArdoqTokenRefresh")
+    @Scheduled(cron = "0 30 6 * * ?")
+    public void ardoqTokenRefesh() {
+        log.info("Refreshing Ardoq token");
+        getArdoqSystemsResponse();
     }
 
     private HttpHeaders createHeadersWithAuth () {
