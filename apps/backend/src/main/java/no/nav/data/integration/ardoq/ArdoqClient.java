@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -55,7 +56,13 @@ public class ArdoqClient {
     private HttpHeaders createHeadersWithAuth () {
         var headers = new HttpHeaders();
         log.info("setting bearer token for ardoq");
-        headers.set("Authorization", "Bearer " + properties.getBearerToken());
+
+        String token = Optional.ofNullable(properties.getBearerToken())
+                .orElse("")
+                .replaceAll("[\\r\\n\\t]", "")
+                .trim();
+
+        headers.setBearerAuth(token);
         return headers;
     }
 
