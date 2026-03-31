@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,7 +50,7 @@ public class ArdoqClient {
             }
         } catch (RestClientException e) {
             log.error("Unable to connect to Ardoq, error: {}", String.valueOf(e));
-            return null;
+            return List.of();
         }
     }
 
@@ -63,6 +64,8 @@ public class ArdoqClient {
                 .trim();
 
         headers.setBearerAuth(token);
+        log.debug("Bearer token set for ardoq: {}", token);
+        log.debug(headers.toString());
         return headers;
     }
 
