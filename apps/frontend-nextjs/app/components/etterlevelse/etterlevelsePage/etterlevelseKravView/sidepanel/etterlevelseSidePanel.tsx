@@ -55,7 +55,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
 }) => {
   const user = useContext(UserContext)
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
-  const [activeTab, setActiveTab] = useState<string>('')
+  const [activeTab, setActiveTab] = useState<string>('mer')
   const [selectedTab, setSelectedTab] = useState<string>('')
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
@@ -65,11 +65,17 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
     return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
   }
 
-  const shouldAutoOpenPvkTab =
-    pvkDokument &&
-    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
-    krav.tagger.includes('Personvernkonsekvensvurdering')
-  const currentTab = activeTab || (shouldAutoOpenPvkTab ? 'pvkDokumentasjon' : 'mer')
+  useEffect(() => {
+    ;(async () => {
+      if (
+        pvkDokument &&
+        pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+        krav.tagger.includes('Personvernkonsekvensvurdering')
+      ) {
+        setActiveTab('pvkDokumentasjon')
+      }
+    })()
+  }, [pvkDokument])
 
   useEffect(() => {
     if (isPvkFormActive) {
@@ -86,7 +92,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
       <div className='sticky top-4'>
         <Tabs
           defaultValue='mer'
-          value={currentTab}
+          value={activeTab}
           size='small'
           onChange={(tabValue) => {
             if (formRef.current?.dirty) {

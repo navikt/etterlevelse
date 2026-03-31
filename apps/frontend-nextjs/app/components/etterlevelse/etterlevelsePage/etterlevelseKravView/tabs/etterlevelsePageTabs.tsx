@@ -30,7 +30,15 @@ import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@nav
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
 import { useParams } from 'next/navigation'
-import { Dispatch, FunctionComponent, RefObject, SetStateAction, useContext, useState } from 'react'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
 import { EtterlevelseEditFields } from '../form/EtterlevelseEditFields'
 import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'
@@ -94,15 +102,8 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   const [hasNextKrav, setHasNextKrav] = useState<boolean>(true)
   const [editedEtterlevelse, setEditedEtterlevelse] = useState<IEtterlevelse>()
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [isPvoUnderarbeidWarningActive, setIsPvoUnderarbeidWarningActive] = useState<boolean>(false)
   const [etterlevelseDokStatusAlert, setEtterlevelseDokStatusAlert] = useState<boolean>(false)
-  const isPvoUnderarbeidWarningActive =
-    !!pvkDokument &&
-    [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-      pvkDokument.status
-    ) &&
-    !!krav &&
-    krav.tagger.includes('Personvernkonsekvensvurdering')
-  const effectiveIsPreview = isPvoUnderarbeidWarningActive || isPreview
 
   const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
 
@@ -201,6 +202,22 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     }
   }
 
+  useEffect(() => {
+    ;(async () => {
+      if (
+        pvkDokument &&
+        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+          pvkDokument.status
+        ) &&
+        krav &&
+        krav.tagger.includes('Personvernkonsekvensvurdering')
+      ) {
+        setIsPreview(true)
+        setIsPvoUnderarbeidWarningActive(true)
+      }
+    })()
+  }, [krav, pvkDokument])
+
   return (
     <>
       {isTabAlertActive && (
@@ -281,7 +298,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
               <ToggleGroup
                 className='mt-6'
                 defaultValue='OFF'
-                value={effectiveIsPreview ? 'ON' : 'OFF'}
+                value={isPreview ? 'ON' : 'OFF'}
                 onChange={(value) => setIsPreview(value === 'ON' ? true : false)}
               >
                 <ToggleGroup.Item value='OFF' label='Redigeringsvisning' />
@@ -304,7 +321,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
             etterlevelseDokumentasjon?.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
             !isPvoUnderarbeidWarningActive && (
               <div className='mt-2'>
-                {!effectiveIsPreview && (
+                {!isPreview && (
                   <CheckboxGroup
                     legend='Legg til i Prioritert kravliste'
                     hideLegend
@@ -329,7 +346,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                 )}
 
                 <EtterlevelseEditFields
-                  isPreview={effectiveIsPreview}
+                  isPreview={isPreview}
                   krav={krav}
                   etterlevelse={etterlevelse}
                   submit={submit}

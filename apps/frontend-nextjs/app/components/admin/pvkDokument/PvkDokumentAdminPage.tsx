@@ -36,7 +36,7 @@ export const PvkDokumentAdminPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
 
-  async function loadData() {
+  const loadData = async () => {
     const allPvkDokument = await getAllPvkDokument()
     const mappedPvkDokument = allPvkDokument.map((pvkDokument) =>
       mapPvkDokumentToFormValue(pvkDokument)

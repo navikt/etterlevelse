@@ -15,7 +15,7 @@ import {
   useDatepicker,
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import React, { ChangeEvent, ReactNode, useContext, useMemo, useRef, useState } from 'react'
+import React, { ChangeEvent, ReactNode, useContext, useRef, useState } from 'react'
 import { FieldWrapper } from './fieldWrapper/fieldWrapper'
 import LabelWithTooltip from './labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from './modalSchema/formError/formError'
@@ -142,7 +142,7 @@ export const DateField = (props: IPropsDateField) => {
 
   const { datepickerProps, inputProps } = useDatepicker({})
   const [open, setOpen] = useState(false)
-  const beforeMatcher = useMemo<IBeforeMarcher>(() => ({ before: new Date() }), [])
+  const beforeMatcher: IBeforeMarcher = { before: new Date() }
   const datePickerRef = useRef<HTMLDivElement>(null)
 
   return (

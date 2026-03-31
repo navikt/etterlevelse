@@ -22,18 +22,13 @@ type TTableCodelistProps = {
 
 const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
   const [selectedCode, setSelectedCode] = React.useState<ICode>()
-  const [showUsageState, setShowUsage] = React.useState(false)
+  const [showUsage, setShowUsage] = React.useState(false)
   const [showEditModal, setShowEditModal] = React.useState(false)
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const [errorOnResponse, setErrorOnResponse] = React.useState(null)
   const [usage, setUsage] = useState<ICodeUsage>()
 
   const [sort, setSort] = useState<SortState>()
-
-  const showUsage =
-    showUsageState &&
-    !!selectedCode &&
-    tableData.some((code) => code.list === selectedCode.list && code.code === selectedCode.code)
 
   useEffect(() => {
     if (showUsage && selectedCode) {
@@ -44,6 +39,12 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
       })()
     }
   }, [showUsage, selectedCode])
+
+  useEffect(() => {
+    ;(async () => {
+      setShowUsage(false)
+    })()
+  }, [tableData])
 
   const handleEditCodelist = async (values: ICodeListFormValues) => {
     try {

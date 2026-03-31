@@ -77,19 +77,20 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
 }
 
 export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
-  const [showReplaceForUsage, setShowReplaceForUsage] = useState<string>()
+  const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
   const ref = useRef<HTMLDivElement>(null)
 
   const codelist = useContext(CodelistContext)
 
   const { usage, refresh } = props
-  const usageKey = usage ? `${usage.listName}:${usage.code}` : undefined
-  const showReplace = !!usageKey && showReplaceForUsage === usageKey
 
   useEffect(() => {
+    ;(async () => {
+      setShowReplace(false)
+    })()
     setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
-  }, [usageKey])
+  }, [usage])
 
   const replace = async () => {
     if (newValue) {
@@ -102,11 +103,7 @@ export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
       <div className='flex justify-between mb-2'>
         <Label>Bruk</Label>
         {!!usage?.inUse && (
-          <Button
-            type='button'
-            variant='secondary'
-            onClick={() => setShowReplaceForUsage(showReplace ? undefined : usageKey)}
-          >
+          <Button type='button' variant='secondary' onClick={() => setShowReplace(!showReplace)}>
             Erstatt all bruk
           </Button>
         )}

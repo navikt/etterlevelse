@@ -36,7 +36,7 @@ type TKravMessage = ITilbakemelding & TSporsmaalOgSvarKrav
 export const QuestionAndAnswerAdminLogPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [kravMessages, setKravMessages] = useState<TKravMessage[]>([])
-  const [isloading, setIsLoading] = useState<boolean>(true)
+  const [isloading, setIsLoading] = useState<boolean>(false)
   const user = useContext(UserContext)
 
   const [page, setPage] = useState(1)
@@ -92,60 +92,61 @@ export const QuestionAndAnswerAdminLogPage = () => {
   }, [])
 
   useEffect(() => {
-    if (!tableContent.length) return
-
-    const loadMessages = async () => {
+    ;(async () => {
+      setIsLoading(true)
       const kravMessages: TKravMessage[] = []
       const tilbakeMeldinger: ITilbakemelding[] = []
 
-      try {
-        const response: IPageResponse<ITilbakemelding>[] = await Promise.all(
-          tableContent.map((krav: IKrav) =>
-            getTilbakemeldingForKrav(krav.kravNummer, krav.kravVersjon)
-          )
+      const getTilbakeMeldingerPromise: Promise<any>[] = []
+      tableContent.forEach((krav: IKrav) => {
+        getTilbakeMeldingerPromise.push(
+          (async () => await getTilbakemeldingForKrav(krav.kravNummer, krav.kravVersjon))()
         )
+      })
 
-        response.forEach((tilbakemelding: IPageResponse<ITilbakemelding>) => {
-          if (tilbakemelding.content) {
-            tilbakeMeldinger.push(...tilbakemelding.content)
+      try {
+        Promise.all(getTilbakeMeldingerPromise).then(
+          (response: IPageResponse<ITilbakemelding>[]) => {
+            response.forEach((tilbakemelding: IPageResponse<ITilbakemelding>) => {
+              if (tilbakemelding.content) {
+                tilbakeMeldinger.push(...tilbakemelding.content)
+              }
+            })
+
+            tilbakeMeldinger.forEach((tilbakemelding: ITilbakemelding) => {
+              const kravNavn: string = tableContent.filter(
+                (krav: IKrav) =>
+                  krav.kravNummer === tilbakemelding.kravNummer &&
+                  krav.kravVersjon === tilbakemelding.kravVersjon
+              )[0].navn
+              const kravTema: string | undefined = tableContent.filter(
+                (krav: IKrav) =>
+                  krav.kravNummer === tilbakemelding.kravNummer &&
+                  krav.kravVersjon === tilbakemelding.kravVersjon
+              )[0].tema
+              const { status, sistMelding } = getMelderInfo(
+                tilbakemelding,
+                user.getIdent(),
+                user.isKraveier()
+              )
+              kravMessages.push({
+                ...tilbakemelding,
+                kravNavn: kravNavn,
+                tidForSporsmaal: tilbakemelding.meldinger[0].tid,
+                tidForSvar:
+                  status === ETilbakemeldingMeldingStatus.UBESVART ? undefined : sistMelding.tid,
+                melderNavn: <PersonName ident={tilbakemelding.melderIdent} />,
+                tema: kravTema,
+              })
+            })
+            setKravMessages(kravMessages)
           }
-        })
-
-        tilbakeMeldinger.forEach((tilbakemelding: ITilbakemelding) => {
-          const kravNavn: string = tableContent.filter(
-            (krav: IKrav) =>
-              krav.kravNummer === tilbakemelding.kravNummer &&
-              krav.kravVersjon === tilbakemelding.kravVersjon
-          )[0].navn
-          const kravTema: string | undefined = tableContent.filter(
-            (krav: IKrav) =>
-              krav.kravNummer === tilbakemelding.kravNummer &&
-              krav.kravVersjon === tilbakemelding.kravVersjon
-          )[0].tema
-          const { status, sistMelding } = getMelderInfo(
-            tilbakemelding,
-            user.getIdent(),
-            user.isKraveier()
-          )
-          kravMessages.push({
-            ...tilbakemelding,
-            kravNavn: kravNavn,
-            tidForSporsmaal: tilbakemelding.meldinger[0].tid,
-            tidForSvar:
-              status === ETilbakemeldingMeldingStatus.UBESVART ? undefined : sistMelding.tid,
-            melderNavn: <PersonName ident={tilbakemelding.melderIdent} />,
-            tema: kravTema,
-          })
-        })
-        setKravMessages(kravMessages)
+        )
       } catch (error: any) {
         console.error(error)
-      } finally {
-        setIsLoading(false)
       }
-    }
-
-    loadMessages()
+      setIsLoading(false)
+    })()
   }, [tableContent])
 
   return (
