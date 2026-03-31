@@ -8,6 +8,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { IUserContext } from '@/provider/user/userProvider'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import AdminRollePVK from './adminRollePVK/adminRollePVK'
@@ -18,6 +19,7 @@ import RisikoeierRollePVK from './risikoeierRollePVK/risikoeierRollePVK'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  user: IUserContext
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
   pvkDokument?: IPvkDokument
@@ -26,12 +28,13 @@ type TProps = {
 
 export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
+  user,
   pvkDokument,
   behandlingsLivslop,
   behandlingensArtOgOmfang,
   pvoTilbakemelding,
 }) => {
-  switch (getRolle(etterlevelseDokumentasjon)) {
+  switch (getRolle(etterlevelseDokumentasjon, user)) {
     case EActionMenuRoles.Etterlever:
       return (
         <EtterleverRollePVK

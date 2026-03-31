@@ -4,6 +4,7 @@ import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IUserContext } from '@/provider/user/userProvider'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import AdminRolle from './adminRolle/adminRolle'
@@ -12,10 +13,14 @@ import RisikoeierRolle, { RisikoeierOgEtterleverRolle } from './risikoeierRolle/
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  user: IUserContext
 }
 
-export const EtterlevelseButton: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
-  switch (getRolle(etterlevelseDokumentasjon)) {
+export const EtterlevelseButton: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  user,
+}) => {
+  switch (getRolle(etterlevelseDokumentasjon, user)) {
     case EActionMenuRoles.Etterlever:
       return <EtterleverRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     case EActionMenuRoles.Personvernombud:

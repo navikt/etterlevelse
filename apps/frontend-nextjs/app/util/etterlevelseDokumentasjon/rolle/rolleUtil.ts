@@ -4,14 +4,12 @@ import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { UserContext } from '@/provider/user/userProvider'
-import { useContext } from 'react'
+import { IUserContext } from '@/provider/user/userProvider'
 
 export const getRolle = (
-  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
+  user: IUserContext
 ): EActionMenuRoles => {
-  const user = useContext(UserContext)
-
   if (user.isAdmin()) {
     return EActionMenuRoles.Admin
   } else if (

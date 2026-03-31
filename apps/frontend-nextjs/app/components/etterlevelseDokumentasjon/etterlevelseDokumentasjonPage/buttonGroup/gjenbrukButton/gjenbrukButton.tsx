@@ -4,6 +4,7 @@ import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IUserContext } from '@/provider/user/userProvider'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import TilstandGjenbruk from './tilstandGjenbruk/tilstandGjenbruk'
@@ -11,13 +12,15 @@ import TilstandGjenbruk from './tilstandGjenbruk/tilstandGjenbruk'
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
+  user: IUserContext
 }
 
 const GjenbrukButton: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
+  user,
 }) => {
-  switch (getRolle(etterlevelseDokumentasjon)) {
+  switch (getRolle(etterlevelseDokumentasjon, user)) {
     case EActionMenuRoles.Etterlever:
     case EActionMenuRoles.EtterleverOgRisikoeier:
     case EActionMenuRoles.Admin:

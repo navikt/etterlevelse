@@ -7,7 +7,7 @@ import { FunctionComponent, PropsWithChildren, useState } from 'react'
 import TillatGjenbrukModal from '../../../gjenbruk/TillatGjenbrukModal'
 import TilretteleggForGjenbrukModal from '../../../gjenbruk/TilretteleggForGjenbrukModal'
 
-interface TGjenbrukProps extends PropsWithChildren {
+interface IGjenbrukProps extends PropsWithChildren {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
 }
@@ -54,7 +54,7 @@ export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TGjenbrukProps
   )
 }
 
-export const GjenbrukActionMenu: FunctionComponent<TGjenbrukProps> = ({
+export const GjenbrukActionMenu: FunctionComponent<IGjenbrukProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   children,

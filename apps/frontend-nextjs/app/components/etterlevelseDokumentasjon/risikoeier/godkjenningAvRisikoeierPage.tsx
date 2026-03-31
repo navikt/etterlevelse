@@ -273,6 +273,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                 kravTilstandsHistorikk.map((kravHistorikk, index) => {
                   return (
                     <GodkjenningAvRisikoeierKravFormSummary
+                      key={`krav_historikk_${index}`}
                       kravHistorikk={kravHistorikk}
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       index={index}

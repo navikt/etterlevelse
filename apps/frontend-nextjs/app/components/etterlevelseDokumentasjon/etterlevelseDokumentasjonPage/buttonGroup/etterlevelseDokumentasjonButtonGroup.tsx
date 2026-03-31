@@ -155,7 +155,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
       {(user.isAdmin() ||
         etterlevelseDokumentasjon.hasCurrentUserAccess ||
         etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
-        <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+        <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} user={user} />
       )}
       {behandlerPersonopplysninger && (
         <PersonvernkonsekvensvurderingButton
@@ -164,6 +164,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           behandlingsLivslop={behandlingsLivslop}
           pvkDokument={pvkDokument}
           pvoTilbakemelding={pvoTilbakemelding}
+          user={user}
         />
       )}
 
@@ -179,6 +180,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
           <GjenbrukButton
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+            user={user}
           />
         )}
     </>

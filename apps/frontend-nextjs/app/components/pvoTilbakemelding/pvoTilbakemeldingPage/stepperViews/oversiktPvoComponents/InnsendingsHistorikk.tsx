@@ -105,7 +105,7 @@ const InnsendingHistorikkContent: FunctionComponent<IInnsendingHistroikkProps> =
   }
 
   return (
-    <div className='mb-5'>
+    <div className='mb-5' key={'innsending_' + versjon}>
       <Label>Versjon {versjon}</Label>
       <List>
         {meldingerTilPvoForVersjon.map((melding, index) => {
@@ -119,10 +119,13 @@ const InnsendingHistorikkContent: FunctionComponent<IInnsendingHistroikkProps> =
             const vurdering = vurderinger.filter(
               (vurdering) =>
                 vurdering.innsendingId === melding.innsendingId &&
-                vurdering.etterlevelseDokumentVersjon === melding.etterlevelseDokumentVersjon
+                vurdering.etterlevelseDokumentVersjon ===
+                  melding.etterlevelseDokumentVersjon
             )
             const sendtAvPvo =
-              vurdering.length !== 0 && vurdering[0].sendtAv !== '' && vurdering[0].sendtAv !== null
+              vurdering.length !== 0 &&
+              vurdering[0].sendtAv !== '' &&
+              vurdering[0].sendtAv !== null
                 ? vurdering[0].sendtAv.split(' - ')[1]
                 : 'Personvernombudet'
 
