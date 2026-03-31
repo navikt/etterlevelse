@@ -7,7 +7,7 @@ import {
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Button, List, Modal } from '@navikt/ds-react'
+import { Button, InlineMessage, List, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { FunctionComponent, useState } from 'react'
 import { gjenbrukDokumentasjonSchema } from './form/gjenbrukSchema'
@@ -77,7 +77,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
           onClose={() => setIsOpen(false)}
           header={{
             heading: etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-              ? 'Rediger gjenbruk av dette dokumentet'
+              ? 'Endre gjenbruk av dette dokumentet'
               : 'Slå på gjenbruk av dette dokumentet',
             // icon: <FilesIcon title="header-ikon" />,
             closeButton: false,
@@ -115,6 +115,15 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       <>Hvem skal gjenbruke? Ved hvilken type arbeid blir gjenbruk passende?</>
                     }
                   />
+
+                  {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+                    <InlineMessage status='info' className='mt-5'>
+                      Det er alltid mulig å skjule gjenbruk for andre. Veiledning som dere har
+                      skrevet, vil fortsatt synes for dere og de som allerede gjenbruker dokumentet.
+                      Gjenbruksmulighet skjules for alle andre. Etter hvert kan dere velge om dere
+                      vil slå på gjenbruk på nytt.
+                    </InlineMessage>
+                  )}
                 </Modal.Body>
                 <Modal.Footer>
                   <Button
@@ -127,9 +136,25 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                     }}
                   >
                     {etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-                      ? 'Lagre veiledning'
+                      ? 'Lagre endringene'
                       : 'Slå på gjenbruk'}
                   </Button>
+
+                  {initialValues.tilgjengeligForGjenbruk &&
+                    initialValues.gjenbrukBeskrivelse.length > 0 && (
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          setFieldValue('tilgjengeligForGjenbruk', false)
+                          submitForm()
+                        }}
+                      >
+                        Slå av gjenbruk
+                      </Button>
+                    )}
+
                   <Button
                     type='button'
                     disabled={isSubmitting}
@@ -138,20 +163,6 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                   >
                     Avbryt
                   </Button>
-                  {initialValues.tilgjengeligForGjenbruk &&
-                    initialValues.gjenbrukBeskrivelse.length > 0 && (
-                      <Button
-                        type='button'
-                        variant='danger'
-                        disabled={isSubmitting}
-                        onClick={() => {
-                          setFieldValue('tilgjengeligForGjenbruk', false)
-                          submitForm()
-                        }}
-                      >
-                        Slutt å tillate gjenbruk
-                      </Button>
-                    )}
                 </Modal.Footer>
               </Form>
             )}

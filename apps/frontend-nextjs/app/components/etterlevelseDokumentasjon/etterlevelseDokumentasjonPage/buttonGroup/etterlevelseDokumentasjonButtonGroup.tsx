@@ -3,11 +3,13 @@
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
+import { Loader } from '@navikt/ds-react'
 import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
@@ -17,6 +19,8 @@ import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurde
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   setEtterlevelseDokumentasjon: (state: TEtterlevelseDokumentasjonQL) => void
+  relasjonLoading: boolean
+  morDokumentRelasjon?: IDocumentRelationWithEtterlevelseDokumetajson
   behandlingsLivslop?: IBehandlingensLivslop
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   pvkDokument?: IPvkDokument
@@ -25,6 +29,8 @@ type TProps = {
 export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
+  relasjonLoading,
+  morDokumentRelasjon,
   behandlingsLivslop,
   behandlingensArtOgOmfang,
   pvkDokument,
@@ -161,10 +167,15 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         />
       )}
 
+      {env.isDev &&
+        (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
+        relasjonLoading && <Loader />}
+
       {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
       {env.isDev &&
-        etterlevelseDokumentasjon.forGjenbruk &&
-        (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
+        (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
+        !relasjonLoading &&
+        !morDokumentRelasjon && (
           <GjenbrukButton
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}

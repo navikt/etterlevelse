@@ -42,8 +42,6 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
   const { behandlingIds, behandlinger, dpBehandlingIds, dpBehandlinger, teams, irrelevansFor } =
     etterlevelseDokumentasjon
 
-  console.debug(etterlevelseDokumentasjon)
-
   return (
     <div>
       <div>
