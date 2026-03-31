@@ -23,4 +23,16 @@ public class ArdoqSystem {
     private String lifecyclePhase;
     @JsonProperty("Description")
     private String description;
+
+
+    public ArdoqSystemResponse convertToResponse(){
+        return ArdoqSystemResponse.builder()
+                .ardoqUrlId(ardoqOID)
+                .ardoqID(ardoqID)
+                .navn(name)
+                .alias(alias)
+                .livsfase(lifecyclePhase)
+                .beskrivelse(description)
+                .build();
+    };
 }

@@ -3,12 +3,12 @@ package no.nav.data.integration.ardoq;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.integration.ardoq.dto.ArdoqSystem;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemData;
+import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,7 +29,7 @@ public class ArdoqClient {
         this.properties = properties;
     }
 
-    public List<ArdoqSystem> getReport(String reportId) {
+    public List<ArdoqSystemResponse> getReport(String reportId) {
         var url = properties.getBaseUrl() + "/api/v2/reports/{id}/run/objects";
 
         try {
@@ -46,7 +46,7 @@ public class ArdoqClient {
             } else {
                 log.info("Succesfully recieve ardoq system");
                 log.debug(response.getBody().getValues().toString());
-                return body.getValues();
+                return body.getValues().stream().map(ArdoqSystem::convertToResponse).toList();
             }
         } catch (RestClientException e) {
             log.error("Unable to connect to Ardoq, error: {}", String.valueOf(e));
