@@ -165,11 +165,11 @@ export const useTeam = () => {
 }
 
 export const useMyTeams = () => {
-  const [productAreas] = useMyProductAreas()
-  const [data, setData] = useState<ITeam[]>([])
-  const [loading, setLoading] = useState(true)
   const user = useContext(UserContext)
   const ident = user.getIdent()
+  const [productAreas] = useMyProductAreas()
+  const [data, setData] = useState<ITeam[]>([])
+  const [loading, setLoading] = useState(!!ident)
 
   useEffect(() => {
     if (ident) {
@@ -204,14 +204,14 @@ export const useMyTeams = () => {
     }
   }, [ident, productAreas])
 
-  return [data, ident ? loading : false] as [ITeam[], boolean]
+  return [data, loading] as [ITeam[], boolean]
 }
 
 export const useMyProductAreas = () => {
-  const [data, setData] = useState<IProductArea[]>([])
-  const [loading, setLoading] = useState(true)
   const user = useContext(UserContext)
   const ident = user.getIdent()
+  const [data, setData] = useState<IProductArea[]>([])
+  const [loading, setLoading] = useState(!!ident)
 
   useEffect(() => {
     if (ident) {
@@ -228,7 +228,7 @@ export const useMyProductAreas = () => {
     }
   }, [ident])
 
-  return [data, ident ? loading : false] as [IProductArea[], boolean]
+  return [data, loading] as [IProductArea[], boolean]
 }
 
 export const usePersonSearch = async (searchParam: string) => {
