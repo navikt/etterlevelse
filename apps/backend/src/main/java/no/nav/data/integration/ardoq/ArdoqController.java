@@ -29,6 +29,6 @@ public class ArdoqController {
     @GetMapping("/{reportId}")
     public List<ArdoqSystem> getReportById(@PathVariable String reportId) {
         log.info("Getting report from ardoq with id: {}", reportId);
-        return ardoqClient.getReport(reportId);
+        return ardoqClient.getReportv1(reportId);
     }
 }

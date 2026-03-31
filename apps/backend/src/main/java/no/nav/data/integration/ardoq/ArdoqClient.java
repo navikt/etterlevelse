@@ -20,11 +20,13 @@ import java.util.List;
 @Service
 public class ArdoqClient {
 
+    private final RestTemplate restTemplate;
     private final WebClient client;
     private final ArdoqProperties properties;
 
 
-    public ArdoqClient(WebClient.Builder webClientBuilder, RestTemplate restTemplate, ArdoqProperties properties) {
+    public ArdoqClient(RestTemplate restTemplate, WebClient.Builder webClientBuilder, ArdoqProperties properties) {
+        this.restTemplate = restTemplate;
         this.client = webClientBuilder
                 .baseUrl(properties.getBaseUrl())
                 .filter(new TraceHeaderFilter(true))
@@ -49,6 +51,22 @@ public class ArdoqClient {
         }
     }
 
+    public List<ArdoqSystem> getReportv1(String reportId) {
+        var url = properties.getBaseUrl() + "/api/v2/reports/" + reportId + "/run/objects";
+
+        try {
+            HttpHeaders headers = createHeadersWithAuth();
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+            var response = restTemplate.getForEntity(url, ArdoqSystemData.class, entity);
+            assert response.getBody() != null;
+            return response.getBody().getValues();
+        } catch (RestClientException e) {
+            log.error("Unable to connect to Ardoq, error: {}", String.valueOf(e));
+            return null;
+        }
+
+    }
+
     private <T> T get(String uri, Class<T> response, Object... params) {
         var res = client.get()
                 .uri(uri, params)
@@ -59,5 +77,12 @@ public class ArdoqClient {
         Assert.isTrue(res != null, "response is null");
 
         return res;
+    }
+
+    private HttpHeaders createHeadersWithAuth () {
+        var headers = new HttpHeaders();
+        log.info("setting bearer token for ardoq");
+        headers.set("Authorization", "Bearer " + properties.getBearerToken());
+        return headers;
     }
 }
