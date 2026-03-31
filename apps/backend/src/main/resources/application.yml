@@ -133,6 +133,7 @@ client:
   ardoq:
     base-url: https://navit.ardoq.com
     bearer-token: ${ARDOQ_BEARER_TOKEN:token}
+    report-id: ${ARDOQ_REPORT_ID:reportId}
   nom:
     graphql:
       url: https://nom/graphql

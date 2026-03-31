@@ -6,14 +6,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.integration.ardoq.dto.ArdoqSystem;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -25,11 +29,23 @@ public class ArdoqController {
     private final ArdoqClient ardoqClient;
 
 
-    @Operation(summary = "Get report by id")
-    @ApiResponses(value = {@ApiResponse(description = "Report fetched")})
-    @GetMapping("/{reportId}")
-    public List<ArdoqSystemResponse> getReportById(@PathVariable String reportId) {
-        log.info("Getting report from ardoq with id: {}", reportId);
-        return ardoqClient.getReport(reportId);
+    @Operation(summary = "Get all ardoq system")
+    @ApiResponses(value = {@ApiResponse(description = "Systems fetched")})
+    @GetMapping("/system")
+    public ResponseEntity<List<ArdoqSystemResponse>> getAllSystem() {
+        log.info("Getting all system from ardoq");
+        return new ResponseEntity<>(ardoqClient.getAllArdoqSystems(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get Ardoq system by id")
+    @ApiResponses(value = {@ApiResponse(description = "System fetched")})
+    @GetMapping("/{ardoqId}")
+    public ResponseEntity<ArdoqSystemResponse> getArdoqSystemById(@PathVariable String ardoqId) {
+        log.info("Getting system from ardoq with id: {}", ardoqId);
+        Optional<ArdoqSystemResponse> ardoqSystem = ardoqClient.getArdoqSystemById(ardoqId);
+        if (ardoqSystem.isEmpty()) {
+            throw new NotFoundException("Couldn't find system " + ardoqId);
+        }
+        return new ResponseEntity<>(ardoqSystem.get(), HttpStatus.OK);
     }
 }

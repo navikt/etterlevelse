@@ -10,4 +10,5 @@ import org.springframework.context.annotation.Configuration;
 public class ArdoqProperties {
     private String baseUrl;
     private String bearerToken;
+    private String reportId;
 }
