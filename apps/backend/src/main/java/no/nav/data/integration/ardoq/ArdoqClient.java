@@ -64,8 +64,6 @@ public class ArdoqClient {
                 .trim();
 
         headers.setBearerAuth(token);
-        log.debug("Bearer token set for ardoq: {}", token);
-        log.debug(headers.toString());
         return headers;
     }
 

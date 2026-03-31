@@ -132,7 +132,7 @@ client:
     token-url: https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/token
   ardoq:
     base-url: https://navit.ardoq.com
-    bearer-token: ${ARDOQ_TOKEN:token}
+    bearer-token: ${ARDOQ_BEARER_TOKEN:token}
   nom:
     graphql:
       url: https://nom/graphql
