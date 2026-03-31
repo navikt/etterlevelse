@@ -1,9 +1,6 @@
 package no.nav.data.integration.ardoq.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,5 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArdoqSystemData {
+
+    @Singular
     private List<ArdoqSystem> values;
 }
