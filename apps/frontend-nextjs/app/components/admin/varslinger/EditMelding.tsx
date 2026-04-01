@@ -91,6 +91,7 @@ export const EditMelding: FunctionComponent<TProps> = ({
                       value={meldingAlertType}
                       onChange={(event) => {
                         fieldProps.form.setFieldValue('alertType', event)
+                        setMeldingAlertType(event)
                       }}
                     >
                       {Object.values(EAlertType).map((id) => {
