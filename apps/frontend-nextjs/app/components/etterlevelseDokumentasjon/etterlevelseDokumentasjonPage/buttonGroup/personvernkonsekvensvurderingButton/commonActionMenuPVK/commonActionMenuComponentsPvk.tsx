@@ -51,7 +51,7 @@ export const ArtOgOmfangActionMenuItem: FunctionComponent<
     as='a'
     href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
       etterlevelseDokumentasjon.id,
-      behandlingensArtOgOmfang ? behandlingensArtOgOmfang.id : 'ny'
+      behandlingensArtOgOmfang && behandlingensArtOgOmfang.id ? behandlingensArtOgOmfang.id : 'ny'
     )}
   >
     {children}
