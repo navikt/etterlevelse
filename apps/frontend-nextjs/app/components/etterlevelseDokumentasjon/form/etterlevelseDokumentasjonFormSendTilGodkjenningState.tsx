@@ -641,14 +641,6 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className='flex-1'>
                   <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
-                  <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
-                    <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-                      <InfoCard.Title as='div'>
-                        Det er ikke mulig å endre risikoeier når etterlevelsesdokument eller PVK er
-                        sendt til godkjenning hos risikoeier.
-                      </InfoCard.Title>
-                    </InfoCard.Header>
-                  </InfoCard>
                   <div>
                     <DataTextWrapper>
                       {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
