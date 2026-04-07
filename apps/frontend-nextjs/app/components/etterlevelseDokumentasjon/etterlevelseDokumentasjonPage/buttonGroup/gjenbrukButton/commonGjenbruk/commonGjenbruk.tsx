@@ -20,7 +20,7 @@ const GjenbrukKnapp = () => (
   </ActionMenu.Trigger>
 )
 
-export const TilretteleggForGjenbrukActionMenu: FunctionComponent<TGjenbrukProps> = ({
+export const TilretteleggForGjenbrukActionMenu: FunctionComponent<IGjenbrukProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   children,
