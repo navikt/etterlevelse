@@ -1,6 +1,7 @@
 'use client'
 
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { EKravTab } from '@/constants/krav/kravConstants'
 import { Accordion, BodyLong, List, ReadMore } from '@navikt/ds-react'
 import Image from 'next/image'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
@@ -148,8 +149,8 @@ const OmStotteTilEtterlevelseAccordion = () => {
             til ferdigstilt.
           </BodyLong>
           <BodyLong spacing>
-            Det er mulig å innhente inspirasjon fra andre. I fanen “Hvordan har andre gjort det?”
-            kan dere enkelt se hvordan andre har dokumentert etterlevelse for samme krav.
+            Det er mulig å innhente inspirasjon fra andre. I fanen “{EKravTab.ETTERLEVER}” kan dere
+            enkelt se hvordan andre har dokumentert etterlevelse for samme krav.
           </BodyLong>
           <BodyLong spacing>
             Hvis kravet er uklart og dere har spørsmål til hvordan kravet skal forstås, kan dere
