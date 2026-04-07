@@ -427,7 +427,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
             bekrefter dere at dere vil slå på gjenbruk.
           </BodyLong>
           <BodyLong spacing>
-            Etter at dere har slått på gjenbruk, vil seksjon “Dette må du vite om gjenbruk” dukke
+            Etter at dere har slått på gjenbruk, vil seksjon “Du kan gjenbruke dette etterlevelsesdokumentet” dukke
             opp på dokumentets temaside. Her finner dere den overordnede veiledningsteksten dere har
             skrevet, samt mulighet for å gjenbruke dokument. Informasjonen er synlig for alle.
           </BodyLong>
@@ -460,7 +460,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
           <BodyLong spacing>
             Etterlevelsesdokumenter hvor det er tillatt gjenbruk, har en egen seksjon på temaside
-            som heter “Dette må du vite om gjenbruk”. Her finner dere veiledning om hvilke tilfeller
+            som heter “Du kan gjenbruke dette etterlevelsesdokumentet”. Her finner dere veiledning om hvilke tilfeller
             som kan gjøre gjenbruk aktuell, samt mulighet for å opprette gjenbrukskopi.
           </BodyLong>
           <InfoCard size='small' data-color='success' className='mb-6'>
@@ -506,7 +506,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           <Heading size='small' level='4' spacing>
             1. Opprett datterdokument
           </Heading>
-          <BodyLong spacing>Under Dette må du vite om gjenbruk, velg “Gjenbruk dokument”.</BodyLong>
+          <BodyLong spacing>Under Du kan gjenbruke dette etterlevelsesdokumentet, velg “Gjenbruk dokument”.</BodyLong>
           <BodyLong className='mb-3'>
             Fyll ut skjemaet i tråd med{' '}
             <ExternalLink href='/'>Redigere dokumentegenskaper og filtrere krav </ExternalLink>{' '}

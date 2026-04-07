@@ -274,7 +274,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
           </Heading>
           {dokumentRelasjon && (
             <Alert contentMaxWidth={false} variant='info' className='mb-5'>
-              <Label>Dette må du vite om gjenbruk</Label>
+              <Label>Du kan gjenbruke dette etterlevelsesdokumentet</Label>
 
               <div className='mb-5'>
                 <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
