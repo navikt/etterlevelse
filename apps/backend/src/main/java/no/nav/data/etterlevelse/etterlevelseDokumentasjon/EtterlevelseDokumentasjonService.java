@@ -205,7 +205,11 @@ public class EtterlevelseDokumentasjonService {
 
         var saved = etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
 
-        p360ArkiveringService.archive(saved, request.isOnlyActiveKrav(), false, false, true);
+        try {
+            p360ArkiveringService.archive(saved, request.isOnlyActiveKrav(), false, false, true);
+        } catch (Exception e) {
+            log.error("Failed to archive etterlevelse dokumentasjon with id {}", saved.getId(), e);
+        }
 
         return saved;
     }
