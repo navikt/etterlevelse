@@ -84,7 +84,7 @@ export const newVersionEtterlevelseDokumentasjon = async (
   ).data
 }
 
-export const godkjennEtterlevelseDokumentasjon = async (
+export const godkjennEtterlevelseDokumentasjonOgArkiver = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
   kravTilstandHistorikk: IKravTilstandHistorikk[],
   onlyActiveKrav: boolean = true

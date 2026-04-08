@@ -3,7 +3,7 @@
 import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
-  godkjennEtterlevelseDokumentasjon,
+  godkjennEtterlevelseDokumentasjonOgArkiver,
   updateEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
@@ -209,7 +209,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
           })
         } else {
           setIsSubmitting(true)
-          await godkjennEtterlevelseDokumentasjon(
+          await godkjennEtterlevelseDokumentasjonOgArkiver(
             updatedEtterlevelseDokumentasjon,
             kravTilstandsHistorikk,
             true
