@@ -53,7 +53,9 @@ const OmStotteTilEtterlevelse = () => {
             Hva er formålet med Støtte til etterlevelse?
           </Heading>
           <div className='my-6'>
-            <video controls src='videos/EtterlevelseskravMedTeksting.mp4'></video>
+            <video controls src='videos/EtterlevelseskravMedTeksting.mp4'>
+              <track kind='captions' />
+            </video>
           </div>
           <BodyLong spacing>
             Støtte til etterlevelse er et digital verktøy hvor vi dokumenterer hvordan vi oppfyller

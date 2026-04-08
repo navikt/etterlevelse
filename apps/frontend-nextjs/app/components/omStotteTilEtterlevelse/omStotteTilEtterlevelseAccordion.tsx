@@ -21,10 +21,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <ReadMore header='Vis meg hvor jeg oppretter et etterlevelsesdokument' className='mb-6'>
             <div className='my-6'>
-              <video
-                controls
-                src='videos/VisMegHvordanJegOppretterEtterlevelsesdokument.mov'
-              ></video>
+              <video controls src='videos/VisMegHvordanJegOppretterEtterlevelsesdokument.mov'>
+                <track kind='captions' />
+              </video>
             </div>
           </ReadMore>
           <BodyLong spacing>
@@ -38,10 +37,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
             className='mb-6'
           >
             <div className='my-6'>
-              <video
-                controls
-                src='videos/VisMegHvorJegFinnerOgOppdatererEtterlevelsesdokument.mov'
-              ></video>
+              <video controls src='videos/VisMegHvorJegFinnerOgOppdatererEtterlevelsesdokument.mov'>
+                <track kind='captions' />
+              </video>
             </div>
           </ReadMore>
         </Accordion.Content>
@@ -105,7 +103,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
             className='mb-6'
           >
             <div className='my-6'>
-              <video controls src='videos/VisMegHvordanJegRedigererDokumentegenskaper.mov'></video>
+              <video controls src='videos/VisMegHvordanJegRedigererDokumentegenskaper.mov'>
+                <track kind='captions' />
+              </video>
             </div>
           </ReadMore>
         </Accordion.Content>
@@ -135,7 +135,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
         <Accordion.Header>Besvare etterlevelseskrav</Accordion.Header>
         <Accordion.Content>
           {/*          <div className='my-6'>
-            <video controls src='videos/video-mangler'></video>
+            <video controls src='videos/video-mangler'> <track kind='captions' /></video>
           </div>*/}
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
@@ -177,7 +177,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
         <Accordion.Header>Få etterlevelsen godkjent av risikoeier</Accordion.Header>
         <Accordion.Content>
           <div className='my-6'>
-            <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'></video>
+            <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'>
+              <track kind='captions' />
+            </video>
           </div>
           <BodyLong spacing>
             Etterlevelsesdokumenter kan godkjennes av risikoeieren til enhver tid, også uavhengig av
@@ -233,7 +235,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
         <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
         <Accordion.Content>
           {/*          <div className='my-6'>
-            <video controls src='videos/mangler'></video>
+            <video controls src='videos/mangler'> <track kind='captions' /></video>
           </div>*/}
           <BodyLong className='mb-3'>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
