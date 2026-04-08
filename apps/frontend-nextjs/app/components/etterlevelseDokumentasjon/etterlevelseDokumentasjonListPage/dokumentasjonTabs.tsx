@@ -37,7 +37,7 @@ export const DokumentasjonTabs = () => {
   const selectedTab: ETab =
     tabQuery && Object.values(ETab).includes(tabQuery as ETab) ? (tabQuery as ETab) : ETab.MINE
 
-  const variables = useMemo<TVariables>(() => {
+  const activeQueryVariables = useMemo<TVariables>(() => {
     switch (selectedTab) {
       case ETab.MINE:
         return { mineEtterlevelseDokumentasjoner: true }
@@ -52,7 +52,7 @@ export const DokumentasjonTabs = () => {
     { etterlevelseDokumentasjoner: IPageResponse<TEtterlevelseDokumentasjonQL> },
     TVariables
   >(getEtterlevelseDokumentasjonListQuery, {
-    variables,
+    variables: activeQueryVariables,
   })
 
   const [teams, teamsLoading] = useMyTeams()

@@ -8,7 +8,7 @@ import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { useQuery } from '@apollo/client/react'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Loader, Search } from '@navikt/ds-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TVariables } from '../dokumentasjonTabs'
 import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
 
@@ -52,6 +52,12 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
     }).catch((e) => console.error(e))
   }
 
+  useEffect(() => {
+    ;(async () => {
+      if (sok && pageNumber !== 0) setPage(0)
+    })()
+  }, [sok])
+
   const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {
     return etterlevelseDokumentasjoner.content.filter(
       (value, index, self) =>
@@ -67,10 +73,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
           label='Søk i alle dokumentasjoner'
           variant='secondary'
           placeholder='Søk'
-          onChange={(inputValue) => {
-            setPage(0)
-            setSok(inputValue)
-          }}
+          onChange={(inputValue) => setSok(inputValue)}
           clearButton
         />
         {tooShort && <Label>Minimum 3 tegn</Label>}
