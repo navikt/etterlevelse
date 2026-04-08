@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -80,7 +82,10 @@ public class EtterlevelseDokumentasjonService {
     private final BehandlingensArtOgOmfangService behandlingensArtOgOmfangService;
     private final PvkDokumentService pvkDokumentService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
-    private final P360ArkiveringService p360ArkiveringService;
+
+    @Autowired
+    @Lazy
+    private P360ArkiveringService p360ArkiveringService;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
