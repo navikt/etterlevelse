@@ -22,7 +22,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 }) => {
   const [removedAllAlert, setRemovedAllAlert] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
-  const menuPortalTarget = typeof document === 'undefined' ? undefined : document.body
+  const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | undefined>(undefined)
 
   const removedAllAlertRef = useRef<HTMLDivElement>(null)
   const decoupledAlertRef = useRef<HTMLDivElement>(null)
@@ -194,6 +194,18 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       deferScrollKravSelect()
     }
   }, [generelScenarioFormValue])
+
+  useEffect(() => {
+    ;(async () => {
+      if (typeof window === 'undefined') return
+      const rootEl = rootRef.current
+      if (!rootEl) return
+
+      const dialog = getDialogEl(rootEl)
+
+      setMenuPortalTarget(dialog ?? document.body)
+    })()
+  }, [])
 
   return (
     <div ref={rootRef} className='my-5'>
