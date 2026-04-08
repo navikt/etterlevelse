@@ -10,8 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -83,10 +81,6 @@ public class EtterlevelseDokumentasjonService {
     private final PvkDokumentService pvkDokumentService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
 
-    @Autowired
-    @Lazy
-    private P360ArkiveringService p360ArkiveringService;
-
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
         if (uuid == null) {
@@ -118,10 +112,7 @@ public class EtterlevelseDokumentasjonService {
     public List<EtterlevelseDokumentasjon> getByFilter(EtterlevelseDokumentasjonFilter filter) {
         if (!StringUtils.isBlank(filter.getId())) {
             var etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(UUID.fromString(filter.getId()));
-            if (!etterlevelseDokumentasjon.isEmpty()) {
-                return List.of(etterlevelseDokumentasjon.get());
-            }
-            return List.of();
+            return etterlevelseDokumentasjon.map(List::of).orElseGet(List::of);
         } else if (filter.isGetMineEtterlevelseDokumentasjoner()) {
             filter.setTeams(convert(teamcatTeamClient.getMyTeams(), Team::getId));
         }
@@ -203,15 +194,7 @@ public class EtterlevelseDokumentasjonService {
             historikk.setKravTilstandHistorikk(request.getKravTilstandHistorikk());
         }
 
-        var saved = etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
-
-        try {
-            p360ArkiveringService.archive(saved, request.isOnlyActiveKrav(), false, false, true);
-        } catch (Exception e) {
-            log.error("Failed to archive etterlevelse dokumentasjon with id {}", saved.getId(), e);
-        }
-
-        return saved;
+        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
 
 

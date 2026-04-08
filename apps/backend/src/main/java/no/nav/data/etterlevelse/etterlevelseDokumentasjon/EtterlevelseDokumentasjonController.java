@@ -15,12 +15,15 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
+import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.integration.team.dto.MemberResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ import java.util.UUID;
 public class EtterlevelseDokumentasjonController {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final P360ArkiveringService p360ArkiveringService;
     private final TeamcatTeamClient teamcatTeamClient;
 
     @Operation(summary = "Get All Etterlevelse Dokumentasjon")
@@ -152,13 +156,22 @@ public class EtterlevelseDokumentasjonController {
     @Operation(summary = "Godkjenning av Etterlevelse Dokumentasjon")
     @ApiResponse(description = "Etterlevelse Dokumentasjon Godkjent")
     @PutMapping("/godkjenning/{id}")
-    public ResponseEntity<EtterlevelseDokumentasjonResponse> updateEtterlevelseDokumentasjonAndApprove(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonGodkjenningsRequest request) {
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> updateEtterlevelseDokumentasjonApproveAndArchive(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonGodkjenningsRequest request) {
         log.debug("Godkjenning av Etterlevelse Dokumentasjon id={}", id);
         if (!Objects.equals(id, request.getEtterlevelseDokumentasjonRequest().getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getEtterlevelseDokumentasjonRequest().getId(), id));
         }
+        var saved = etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request);
+        var response = EtterlevelseDokumentasjonResponse.buildFrom(saved);
 
-        var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.approvedOfRisikoeierAndSave(request));
+        try {
+            p360ArkiveringService.archive(saved, request.isOnlyActiveKrav(), false, false, true);
+        } catch (Exception e) {
+            log.error("Failed to archive etterlevelse dokumentasjon with id {}", saved.getId(), e);
+            throw new ValidationException("Failed to archive etterlevelse dokumentasjon with id " + saved.getId() + " error stack: " + e);
+        }
+
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);

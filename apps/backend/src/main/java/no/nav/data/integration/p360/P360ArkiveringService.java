@@ -7,12 +7,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopRepo;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
@@ -22,7 +23,8 @@ import no.nav.data.integration.p360.dto.P360Case;
 import no.nav.data.integration.p360.dto.P360CaseRequest;
 import no.nav.data.integration.p360.dto.P360DocumentCreateRequest;
 import no.nav.data.integration.p360.dto.P360File;
-import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -32,11 +34,12 @@ public class P360ArkiveringService {
     private final P360Service p360Service;
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonToDoc etterlevelseDokumentasjonToDoc;
-    private final BehandlingensLivslopService behandlingensLivslopService;
-    private final PvkDokumentService pvkDokumentService;
+    private final BehandlingensLivslopRepo behandlingensLivslopRepo;
+    private final PvkDokumentRepo pvkDokumentRepo;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void archive(EtterlevelseDokumentasjon eDok, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean risikoeier, boolean godkjenning) {
-        var pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(eDok.getId());
+        var pvkDokument = pvkDokumentRepo.findByEtterlevelseDokumensjon(eDok.getId());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
         SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
@@ -81,7 +84,7 @@ public class P360ArkiveringService {
 
         byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, (pvoTilbakemelding || risikoeier || godkjenning));
 
-        var behandlingenslivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(eDok.getId()).orElse(new BehandlingensLivslop());
+        var behandlingenslivslop = behandlingensLivslopRepo.findByEtterlevelseDokumentasjonId(eDok.getId()).orElse(new BehandlingensLivslop());
         List<BehandlingensLivslopFil> BLLFiler = behandlingenslivslop.getBehandlingensLivslopData().getFiler();
 
         List<P360File> filer = new ArrayList<>();

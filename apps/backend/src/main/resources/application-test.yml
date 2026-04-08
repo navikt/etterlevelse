@@ -3,6 +3,12 @@ client:
       base-url: http://localhost:${wiremock.server.port:8080}/bkat
     teamcat:
       url: http://localhost:${wiremock.server.port:8080}/teamcat
+    p360:
+      case-url: http://localhost:${wiremock.server.port:8080}/p360/CaseService
+      token-url: http://localhost:${wiremock.server.port:8080}/oauth2/token
+      client-id: test-client
+      client-secret: test-secret
+      auth-key: test-auth-key
     slack:
       base-url: http://localhost:${wiremock.server.port:8080}/slack
     devmail:

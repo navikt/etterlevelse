@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import no.nav.data.integration.begrep.BegrepMocks;
 import no.nav.data.integration.behandling.BkatMocks;
+import no.nav.data.integration.p360.P360Mocks;
 import no.nav.data.integration.slack.SlackMocks;
 import no.nav.data.integration.team.TeamcatMocks;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -40,6 +41,7 @@ public class WiremockExtension implements Extension, BeforeAllCallback, BeforeEa
         TeamcatMocks.mock();
         BkatMocks.mock();
         SlackMocks.mock();
+        P360Mocks.mock();
         BegrepMocks.mock();
     }
 
