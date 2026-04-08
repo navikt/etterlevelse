@@ -95,6 +95,6 @@
     "postcss": "8.5.8",
     "prettier": "3.8.1",
     "react-select": "5.10.2",
-    "typescript": "5.9.3"
+    "typescript": "6.0.2"
   }
 }
