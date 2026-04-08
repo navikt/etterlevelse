@@ -251,7 +251,7 @@ public class PvkDokumentToDoc {
         } else {
             var latestMeldingTilPvo = pvkDokument.getPvkDokumentData()
                     .getMeldingerTilPvo().stream()
-                    .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId && meldingTilPvo.getEtterlevelseDokumentVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())).toList().getFirst();
+                    .filter(meldingTilPvo -> meldingTilPvo.getInnsendingId() == innsendingId).toList().getFirst();
             doc.addText(latestMeldingTilPvo.getSendtTilPvoAv() + ", " + doc.dateToString(latestMeldingTilPvo.getSendtTilPvoDato().toLocalDate()));
         }
         doc.newLine();
