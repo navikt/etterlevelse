@@ -207,10 +207,11 @@ public class PvkDokumentToDoc {
         BehandlingensArtOgOmfang behandlingensArtOgOmfang = behandlingensArtOgOmfangService.getByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId()).orElse(new BehandlingensArtOgOmfang());
         BehandlingensLivslop behandlingensLivslop = getBehandlingensLivslop(etterlevelseDokumentasjon.getId());
         PvoTilbakemelding pvoTilbakemelding = getPvoTilbakemelding(pvkDokument.getId(), pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo());
+
         Vurdering pvoVurdering = pvoTilbakemelding.getPvoTilbakemeldingData().getVurderinger()
-                .stream().filter(vurdering -> vurdering.getInnsendingId() == pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo()
-                        && vurdering.getEtterlevelseDokumentVersjon().equals(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
-                ).toList().getFirst();
+                .stream().filter(vurdering -> vurdering.getInnsendingId() == pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())
+                .toList().getFirst();
+
         EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
 
