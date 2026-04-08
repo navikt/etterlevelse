@@ -80,13 +80,13 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   useEffect(() => {
     ;(async () => {
       if (
-        morDocumentRelation &&
-        morDocumentRelation.fromDocumentWithData.prioritertKravNummer.length > 0
+        morDokumentRelasjon &&
+        morDokumentRelasjon.fromDocumentWithData.prioritertKravNummer.length > 0
       ) {
         setTabValue('prioritertKravliste')
       }
     })()
-  }, [morDocumentRelation, pvkDokument])
+  }, [morDokumentRelasjon, pvkDokument])
 
   useEffect(() => {
     ;(async () => {
