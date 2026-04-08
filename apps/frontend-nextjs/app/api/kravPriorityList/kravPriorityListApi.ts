@@ -57,20 +57,22 @@ export const useKravPriorityList = (temaCode: string) => {
 
   const fetchData = async () => {
     abortedRef.current = false
+    setIsLoading(true)
     const response = await getKravPriorityListByTemaCode(temaCode)
     if (!abortedRef.current && response) {
       setData(response)
-      setIsLoading(true)
+      setIsLoading(false)
     }
   }
 
   useEffect(() => {
     abortedRef.current = false
     ;(async () => {
+      setIsLoading(true)
       const response = await getKravPriorityListByTemaCode(temaCode)
       if (!abortedRef.current && response) {
         setData(response)
-        setIsLoading(true)
+        setIsLoading(false)
       }
     })()
     return () => {

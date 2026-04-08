@@ -14,17 +14,13 @@ export const TemaList = () => {
   const [allDraftKrav, setAllDraftKrav] = useState<IKrav[]>([])
   const codelist = useContext(CodelistContext)
 
-  function fetchKrav(): void {
+  useEffect(() => {
     ;(async () => {
       const kraver: IKrav[] = await getAllKrav()
 
       setAllActiveKrav(kraver.filter((krav: IKrav) => krav.status === EKravStatus.AKTIV))
       setAllDraftKrav(kraver.filter((krav: IKrav) => krav.status === EKravStatus.UTKAST))
     })()
-  }
-
-  useEffect(() => {
-    fetchKrav()
   }, [])
 
   return (
