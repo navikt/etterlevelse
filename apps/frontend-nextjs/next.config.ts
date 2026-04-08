@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
         ? 'http://etterlevelse-backend'
         : 'http://localhost:8080'
     return [
-      // Block /api/internal (handled in middleware, not rewrites)
+      // Block /api/internal (handled in proxy, not rewrites)
       // Proxy /api (except /api/internal) to backend, stripping /api
       {
         source: '/api/:path((?!internal).*)',
