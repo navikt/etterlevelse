@@ -38,21 +38,25 @@ export const CustomFileUpload = (props: IProps) => {
   const [fileDeleteAlert, setFileDeleteAlert] = useState<boolean>(false)
 
   useEffect(() => {
-    if (initialValues) {
-      const initialFiles: FileObject[] = []
-      initialValues.forEach((initialFile) => {
-        initialFiles.push({ file: initialFile, error: false })
-      })
-      setFiles(initialFiles)
-      setFilesToUpload(initialValues)
-    }
+    ;(async () => {
+      if (initialValues) {
+        const initialFiles: FileObject[] = []
+        initialValues.forEach((initialFile) => {
+          initialFiles.push({ file: initialFile, error: false })
+        })
+        setFiles(initialFiles)
+        setFilesToUpload(initialValues)
+      }
+    })()
   }, [initialValues])
 
   useEffect(() => {
-    setRejectedFiles(files.filter((f): f is FileRejected => f.error))
-    if (files.filter((f): f is FileRejected => f.error).length !== 0) {
-      setFileUploadError(true)
-    }
+    ;(async () => {
+      setRejectedFiles(files.filter((f): f is FileRejected => f.error))
+      if (files.filter((f): f is FileRejected => f.error).length !== 0) {
+        setFileUploadError(true)
+      }
+    })()
   }, [files])
 
   const removeFile = (fileToRemove: FileObject) => {

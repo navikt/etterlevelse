@@ -42,9 +42,11 @@ export const EditMelding: FunctionComponent<TProps> = ({
   const [meldingAlertType, setMeldingAlertType] = useState<string>(EAlertType.WARNING)
 
   useEffect(() => {
-    if (!isLoading && melding) {
-      setMeldingAlertType(melding.alertType)
-    }
+    ;(async () => {
+      if (!isLoading && melding) {
+        setMeldingAlertType(melding.alertType)
+      }
+    })()
   }, [isLoading])
 
   const submit = async (melding: IMelding) => {

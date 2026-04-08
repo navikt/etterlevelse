@@ -5,27 +5,19 @@ import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
-import { ChangeEvent, createRef, useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { ObjectLink } from '../../common/commonComponents'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {
-  const [rows, setRows] = useState<any>(0)
   const { usage } = props
   const krav = !!usage.krav.length
   const etterlevelseDokumentasjoner = !!usage.etterlevelseDokumentasjoner.length
   const codelist = !!usage.codelist.length
-
-  useEffect(() => {
-    setRows(
-      usage
-        ? Math.max(
-            usage.krav.length,
-            usage.etterlevelseDokumentasjoner.length,
-            usage.codelist.length
-          )
-        : -1
-    )
-  }, [])
+  const rows = useMemo(
+    () =>
+      Math.max(usage.krav.length, usage.etterlevelseDokumentasjoner.length, usage.codelist.length),
+    [usage]
+  )
 
   return (
     <Table>
@@ -87,13 +79,16 @@ const UsageTable = (props: { usage: ICodeUsage }) => {
 export const Usage = (props: { usage?: ICodeUsage; refresh: () => void }) => {
   const [showReplace, setShowReplace] = useState(false)
   const [newValue, setNewValue] = useState<string>()
-  const ref = createRef<HTMLDivElement>()
+  const ref = useRef<HTMLDivElement>(null)
 
   const codelist = useContext(CodelistContext)
 
   const { usage, refresh } = props
+
   useEffect(() => {
-    setShowReplace(false)
+    ;(async () => {
+      setShowReplace(false)
+    })()
     setTimeout(() => ref.current && window.scrollTo({ top: ref.current.offsetTop }), 200)
   }, [usage])
 

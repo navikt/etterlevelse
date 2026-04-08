@@ -35,9 +35,11 @@ export const ListnameAdminViewPage = () => {
 
   // Set isLoading to false when data is loaded
   useEffect(() => {
-    if (lists && listname && lists[listname]) {
-      setIsLoading(false)
-    }
+    ;(async () => {
+      if (lists && listname && lists[listname]) {
+        setIsLoading(false)
+      }
+    })()
   }, [lists, listname])
 
   const handleCreateCodelist = async (values: ICodeListFormValues) => {

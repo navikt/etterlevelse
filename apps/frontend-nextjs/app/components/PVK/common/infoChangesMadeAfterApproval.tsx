@@ -11,7 +11,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { InfoCard } from '@navikt/ds-react'
 import moment from 'moment'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -28,105 +28,97 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   behandlingensLivslop,
   behandlingensArtOgOmfang,
 }) => {
-  const [isChangesMade, setIsChangesMade] = useState<boolean>(false)
-  const [approvedDate, setApprovedDate] = useState<string>('')
-  const [approvedTime, setApprovedTime] = useState<string>('')
+  const approvalInfo = useMemo(() => {
+    if (!pvkDokument.godkjentAvRisikoeierDato) {
+      return { isChangesMade: false, approvedDate: '', approvedTime: '' }
+    }
 
-  useEffect(() => {
+    let lastModifiedDate = moment(pvkDokument.changeStamp.lastModifiedDate)
+      .seconds(0)
+      .milliseconds(0)
+
     if (
-      pvkDokument.godkjentAvRisikoeierDato !== '' &&
-      pvkDokument.godkjentAvRisikoeierDato !== null &&
-      pvkDokument.godkjentAvRisikoeierDato !== undefined
-    ) {
-      let lastModifiedDate = moment(pvkDokument.changeStamp.lastModifiedDate)
+      behandlingensLivslop?.changeStamp &&
+      moment(behandlingensLivslop.changeStamp.lastModifiedDate)
         .seconds(0)
         .milliseconds(0)
+        .isAfter(lastModifiedDate)
+    ) {
+      lastModifiedDate = moment(behandlingensLivslop.changeStamp.lastModifiedDate)
+        .seconds(0)
+        .milliseconds(0)
+    }
+
+    if (
+      behandlingensArtOgOmfang?.changeStamp &&
+      moment(behandlingensArtOgOmfang.changeStamp.lastModifiedDate)
+        .seconds(0)
+        .milliseconds(0)
+        .isAfter(lastModifiedDate)
+    ) {
+      lastModifiedDate = moment(behandlingensArtOgOmfang.changeStamp.lastModifiedDate)
+        .seconds(0)
+        .milliseconds(0)
+    }
+
+    if (alleRisikoscenario && alleRisikoscenario.length !== 0) {
+      const sortedRisikoscenario = [...alleRisikoscenario].sort((a, b) =>
+        b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
+      )
 
       if (
-        behandlingensLivslop &&
-        behandlingensLivslop.changeStamp &&
-        moment(behandlingensLivslop.changeStamp.lastModifiedDate)
+        moment(sortedRisikoscenario[0].changeStamp.lastModifiedDate)
           .seconds(0)
           .milliseconds(0)
           .isAfter(lastModifiedDate)
       ) {
-        lastModifiedDate = moment(behandlingensLivslop.changeStamp.lastModifiedDate)
+        lastModifiedDate = moment(sortedRisikoscenario[0].changeStamp.lastModifiedDate)
           .seconds(0)
           .milliseconds(0)
       }
+    }
+
+    if (alleTiltak && alleTiltak.length !== 0) {
+      const sortedTitlak = [...alleTiltak].sort((a, b) =>
+        b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
+      )
 
       if (
-        behandlingensArtOgOmfang &&
-        behandlingensArtOgOmfang.changeStamp &&
-        moment(behandlingensArtOgOmfang.changeStamp.lastModifiedDate)
+        moment(sortedTitlak[0].changeStamp.lastModifiedDate)
           .seconds(0)
           .milliseconds(0)
           .isAfter(lastModifiedDate)
       ) {
-        lastModifiedDate = moment(behandlingensArtOgOmfang.changeStamp.lastModifiedDate)
+        lastModifiedDate = moment(sortedTitlak[0].changeStamp.lastModifiedDate)
           .seconds(0)
           .milliseconds(0)
       }
+    }
 
-      if (alleRisikoscenario && alleRisikoscenario.length !== 0) {
-        const sortedRisikoscenario = alleRisikoscenario.sort((a, b) =>
-          b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
-        )
+    const godkjentDatoOgTid = pvkDokument.godkjentAvRisikoeierDato.split('T')
+    const tid = godkjentDatoOgTid[1].split(':')
 
-        if (
-          moment(sortedRisikoscenario[0].changeStamp.lastModifiedDate)
-            .seconds(0)
-            .milliseconds(0)
-            .isAfter(lastModifiedDate)
-        ) {
-          lastModifiedDate = moment(sortedRisikoscenario[0].changeStamp.lastModifiedDate)
-            .seconds(0)
-            .milliseconds(0)
-        }
-      }
-
-      if (alleTiltak && alleTiltak.length !== 0) {
-        const sortedTitlak = alleTiltak.sort((a, b) =>
-          b.changeStamp.lastModifiedDate.localeCompare(a.changeStamp.lastModifiedDate)
-        )
-
-        if (
-          moment(sortedTitlak[0].changeStamp.lastModifiedDate)
-            .seconds(0)
-            .milliseconds(0)
-            .isAfter(lastModifiedDate)
-        ) {
-          lastModifiedDate = moment(sortedTitlak[0].changeStamp.lastModifiedDate)
-            .seconds(0)
-            .milliseconds(0)
-        }
-      }
-
-      if (
+    return {
+      isChangesMade:
         pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
         lastModifiedDate.isAfter(
           moment(pvkDokument.godkjentAvRisikoeierDato).seconds(0).milliseconds(0)
-        )
-      ) {
-        setIsChangesMade(true)
-        const godkjentDatoOgTid = pvkDokument.godkjentAvRisikoeierDato.split('T')
-        const tid = godkjentDatoOgTid[1].split(':')
-        setApprovedDate(godkjentDatoOgTid[0])
-        setApprovedTime(tid[0] + ':' + tid[1])
-      }
+        ),
+      approvedDate: godkjentDatoOgTid[0],
+      approvedTime: tid[0] + ':' + tid[1],
     }
-  }, [pvkDokument, behandlingensLivslop, alleRisikoscenario, alleTiltak])
+  }, [pvkDokument, behandlingensLivslop, behandlingensArtOgOmfang, alleRisikoscenario, alleTiltak])
 
   return (
     <>
-      {isChangesMade && (
+      {approvalInfo.isChangesMade && (
         <div>
           <InfoCard data-color='info' className='my-5 max-w-[75ch]' size='small'>
             <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
               <InfoCard.Title>
                 Denne PVK-en har blitt endret siden den ble godkjent og arkivert av risikoeieren{' '}
                 <strong>
-                  {moment(approvedDate).format('LL')} kl. {approvedTime}
+                  {moment(approvalInfo.approvedDate).format('LL')} kl. {approvalInfo.approvedTime}
                 </strong>
               </InfoCard.Title>
             </InfoCard.Header>

@@ -66,7 +66,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       fetchPolicy: 'no-cache',
     }
   )
-
   // const etterlevelserLoading: boolean = loading
   const [krav, setKrav] = useState<TKravQL>()
   const [nyereKrav, setNyereKrav] = useState<IKrav>()
@@ -125,57 +124,60 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
           })
           .catch(() => undefined)
       }
+
+      if (
+        etterlevelseDokumentasjon &&
+        etterlevelseDokumentasjon.prioritertKravNummer &&
+        etterlevelseDokumentasjon.prioritertKravNummer.length > 0
+      ) {
+        const priorityCheck = etterlevelseDokumentasjon.prioritertKravNummer.includes(
+          etterlevelse.kravNummer.toString()
+        )
+
+        setIsPrioritised(priorityCheck)
+      }
     })()
-
-    if (
-      etterlevelseDokumentasjon &&
-      etterlevelseDokumentasjon.prioritertKravNummer &&
-      etterlevelseDokumentasjon.prioritertKravNummer.length > 0
-    ) {
-      const priorityCheck = etterlevelseDokumentasjon.prioritertKravNummer.includes(
-        etterlevelse.kravNummer.toString()
-      )
-
-      setIsPrioritised(priorityCheck)
-    }
   }, [])
 
   useEffect(() => {
-    if (data?.kravById) {
-      setKrav(data.kravById)
+    ;(async () => {
+      if (data?.kravById) {
+        setKrav(data.kravById)
+        getKravByKravNummer(data.kravById.kravNummer).then((resp) => {
+          if (resp.content.length) {
+            const alleVersjoner = resp.content
+              .map((krav) => {
+                return {
+                  kravVersjon: krav.kravVersjon,
+                  kravNummer: krav.kravNummer,
+                  kravStatus: krav.status,
+                }
+              })
+              .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
 
-      getKravByKravNummer(data.kravById.kravNummer).then((resp) => {
-        if (resp.content.length) {
-          const alleVersjoner = resp.content
-            .map((krav) => {
-              return {
-                kravVersjon: krav.kravVersjon,
-                kravNummer: krav.kravNummer,
-                kravStatus: krav.status,
-              }
-            })
-            .sort((a, b) => (a.kravVersjon > b.kravVersjon ? -1 : 1))
+            const filteredVersjoner = alleVersjoner.filter(
+              (krav) => krav.kravStatus !== EKravStatus.UTKAST
+            )
 
-          const filteredVersjoner = alleVersjoner.filter(
-            (krav) => krav.kravStatus !== EKravStatus.UTKAST
-          )
+            if (filteredVersjoner.length) {
+              setAlleKravVersjoner(filteredVersjoner)
+            }
 
-          if (filteredVersjoner.length) {
-            setAlleKravVersjoner(filteredVersjoner)
+            const krav = resp.content.filter((k) => k.kravVersjon === data.kravById.kravVersjon + 1)
+
+            if (krav.length && krav[0].status === EKravStatus.AKTIV) setNyereKrav(krav[0])
           }
-
-          const krav = resp.content.filter((k) => k.kravVersjon === data.kravById.kravVersjon + 1)
-
-          if (krav.length && krav[0].status === EKravStatus.AKTIV) setNyereKrav(krav[0])
-        }
-      })
-    }
+        })
+      }
+    })()
   }, [data])
 
   useEffect(() => {
-    if (nyereKrav && !user.isAdmin()) {
-      setDisableEdit(true)
-    }
+    ;(async () => {
+      if (nyereKrav && !user.isAdmin()) {
+        setDisableEdit(true)
+      }
+    })()
   }, [nyereKrav])
 
   useEffect(() => {

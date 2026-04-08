@@ -8,7 +8,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const getAllPvkDokument = async () => {
   const pageSize = 100
@@ -93,15 +93,20 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
   const [data, setData] = useState<IPvkDokument | undefined>(
     isCreateNew ? mapPvkDokumentToFormValue({}) : undefined
   )
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(
+    !pvkDokumentId && !etterlevelseDokumentasjonId
+  )
+  const abortedRef = useRef(false)
 
   useEffect(() => {
-    setIsLoading(true)
+    abortedRef.current = false
     if (pvkDokumentId && !isCreateNew) {
       ;(async () => {
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument: IPvkDokument) => {
-          setData(mapPvkDokumentToFormValue(pvkDokument))
-          setIsLoading(false)
+          if (!abortedRef.current) {
+            setData(mapPvkDokumentToFormValue(pvkDokument))
+            setIsLoading(true)
+          }
         })
       })()
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
@@ -109,13 +114,18 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
       ;(async () => {
         await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
           async (pvkDokument) => {
-            if (pvkDokument) {
-              setData(mapPvkDokumentToFormValue(pvkDokument))
+            if (!abortedRef.current) {
+              if (pvkDokument) {
+                setData(mapPvkDokumentToFormValue(pvkDokument))
+              }
+              setIsLoading(true)
             }
-            setIsLoading(false)
           }
         )
       })()
+    }
+    return () => {
+      abortedRef.current = true
     }
   }, [pvkDokumentId])
 

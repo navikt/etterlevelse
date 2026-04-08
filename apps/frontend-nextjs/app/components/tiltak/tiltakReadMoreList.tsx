@@ -10,7 +10,7 @@ import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokumen
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, ReadMore } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { RefObject, useEffect, useState } from 'react'
+import { RefObject, useMemo, useState } from 'react'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import TiltakView from './common/tiltakView'
 import SlettTiltakModal from './edit/slettTiltakModal'
@@ -48,16 +48,10 @@ export const TiltakReadMoreList = (props: IProps) => {
     customDelete,
     formRef,
   } = props
-  const [activeTiltak, setActiveTiltak] = useState<string>('')
   const [activeTiltakForm, setActiveTiltakForm] = useState<boolean>(false)
   const queryParams = useSearchParams()
   const tiltakId = queryParams.get('tiltak')
-
-  useEffect(() => {
-    if (tiltakId) {
-      setActiveTiltak(tiltakId)
-    }
-  }, [tiltakId])
+  const activeTiltak = tiltakId || ''
 
   return (
     <div>
@@ -68,7 +62,6 @@ export const TiltakReadMoreList = (props: IProps) => {
             <div className='mt-3' key={risikoscenario.id + '_' + tiltak.id + '_' + index}>
               <TiltakListContent
                 activeTiltak={activeTiltak}
-                setActiveTiltak={setActiveTiltak}
                 risikoscenario={risikoscenario}
                 setRisikoscenario={setRirikoscenario}
                 tiltak={tiltak}
@@ -95,7 +88,6 @@ export const TiltakReadMoreList = (props: IProps) => {
 
 interface ITiltakListContentProps extends IProps {
   activeTiltak: string
-  setActiveTiltak: (state: string) => void
   tiltak: ITiltak
   activeTiltakForm: boolean
   setActiveTiltakForm: (state: boolean) => void
@@ -104,7 +96,6 @@ interface ITiltakListContentProps extends IProps {
 const TiltakListContent = (props: ITiltakListContentProps) => {
   const {
     activeTiltak,
-    setActiveTiltak,
     risikoscenario,
     setRisikoscenario,
     tiltak,
@@ -125,13 +116,20 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
-  const [risikoscenarioerConnectedToTiltak, setRisikoscenarioerConnectedToTiltak] = useState<
-    string[]
-  >([])
   const queryParams = useSearchParams()
   const tiltakId = queryParams.get('tiltak')
   const steg = queryParams.get('steg') || undefined
   const router = useRouter()
+  const risikoscenarioerConnectedToTiltak = useMemo(() => {
+    if (!tiltak || tiltak.id !== activeTiltak) {
+      return []
+    }
+
+    return tiltak.risikoscenarioIds
+      .filter((id) => id !== risikoscenario.id)
+      .map((id) => risikoscenarioList.find((risikoscenario) => risikoscenario.id === id)?.navn)
+      .filter((navn): navn is string => !!navn)
+  }, [tiltak, activeTiltak, risikoscenario.id, risikoscenarioList])
 
   const submit = async (submitedValues: ITiltak) => {
     await updateTiltak(submitedValues).then((response) => {
@@ -160,19 +158,6 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     })
   }
 
-  useEffect(() => {
-    if (tiltak && tiltak.id === activeTiltak) {
-      const risikoscenarioIds = tiltak.risikoscenarioIds.filter((id) => id !== risikoscenario.id)
-      const risikoscenarioNameList: string[] = []
-      risikoscenarioIds.forEach((id) => {
-        risikoscenarioNameList.push(
-          risikoscenarioList.filter((risikoscenario) => risikoscenario.id === id)[0].navn
-        )
-      })
-      setRisikoscenarioerConnectedToTiltak(risikoscenarioNameList)
-    }
-  }, [activeTiltak])
-
   return (
     <div key={risikoscenario.id + '_' + tiltak.id}>
       {!isEditMode && (
@@ -182,12 +167,10 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
           className='mb-3'
           onOpenChange={(open) => {
             if (open) {
-              setActiveTiltak(tiltak.id)
               router.push(risikoscenarioTiltakUrl(risikoscenario.id, tiltak.id, steg), {
                 scroll: false,
               })
             } else {
-              setActiveTiltak('')
               router.push(risikoscenarioUrl(risikoscenario.id, steg), { scroll: false })
             }
           }}

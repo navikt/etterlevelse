@@ -23,17 +23,19 @@ export const AuthCheckComponent: FunctionComponent<TProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    if (user.isLoaded()) {
-      if (adminPage && !user.isAdmin()) {
-        router.push('/forbidden')
-      } else if (kraveierPage && !user.isAdmin() && !user.isKraveier()) {
-        router.push('/forbidden')
-      } else if (pvoPage && !user.isAdmin() && !user.isPersonvernombud()) {
-        router.push('/forbidden')
-      } else {
-        setIsLoading(false)
+    ;(async () => {
+      if (user.isLoaded()) {
+        if (adminPage && !user.isAdmin()) {
+          router.push('/forbidden')
+        } else if (kraveierPage && !user.isAdmin() && !user.isKraveier()) {
+          router.push('/forbidden')
+        } else if (pvoPage && !user.isAdmin() && !user.isPersonvernombud()) {
+          router.push('/forbidden')
+        } else {
+          setIsLoading(false)
+        }
       }
-    }
+    })()
   }, [user])
 
   return (

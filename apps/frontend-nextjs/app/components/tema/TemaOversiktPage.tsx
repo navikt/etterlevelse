@@ -6,7 +6,7 @@ import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt/ds-react'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 
 export const TemaOversiktPage = () => {
@@ -22,16 +22,22 @@ export const TemaOversiktPage = () => {
 }
 
 export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
-  const [num] = useState<{ [t: string]: number[] }>({})
+  const numRef = useRef<{ [t: string]: number[] }>({})
   const [kravAntall, setKravAntall] = useState<number>(0)
-  const [temaListe, setTemaListe] = useState<TTemaCode[]>([])
   const codelist = useContext(CodelistContext)
+  const temaListe = codelist.utils
+    .getCodes(EListName.TEMA)
+    .sort((a: TTemaCode, b: TTemaCode) =>
+      a.shortName.localeCompare(b.shortName, 'nb')
+    ) as TTemaCode[]
 
   const updateNum = (tema: string, temaNum: number[]): void => {
-    num[tema] = temaNum
+    numRef.current[tema] = temaNum
 
     const kravNummerArray: number[] = []
-    Object.keys(num).forEach((key: string) => kravNummerArray.push(...num[key]))
+    Object.keys(numRef.current).forEach((key: string) => {
+      kravNummerArray.push(...numRef.current[key])
+    })
     setKravAntall(
       kravNummerArray.filter(
         (value: number, index: number, self: number[]) =>
@@ -39,16 +45,6 @@ export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
       ).length
     )
   }
-
-  useEffect(() => {
-    setTemaListe(
-      codelist.utils
-        .getCodes(EListName.TEMA)
-        .sort((a: TTemaCode, b: TTemaCode) =>
-          a.shortName.localeCompare(b.shortName, 'nb')
-        ) as TTemaCode[]
-    )
-  }, [codelist.lists])
 
   return (
     <div>

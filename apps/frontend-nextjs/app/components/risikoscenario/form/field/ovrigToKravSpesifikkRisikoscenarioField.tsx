@@ -196,13 +196,15 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
   }, [generelScenarioFormValue])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const rootEl = rootRef.current
-    if (!rootEl) return
+    ;(async () => {
+      if (typeof window === 'undefined') return
+      const rootEl = rootRef.current
+      if (!rootEl) return
 
-    const dialog = getDialogEl(rootEl)
+      const dialog = getDialogEl(rootEl)
 
-    setMenuPortalTarget(dialog ?? document.body)
+      setMenuPortalTarget(dialog ?? document.body)
+    })()
   }, [])
 
   return (

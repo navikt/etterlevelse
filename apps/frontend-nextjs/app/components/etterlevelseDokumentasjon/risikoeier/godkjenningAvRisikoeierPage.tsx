@@ -187,7 +187,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
       })
     }
     return tilstandHistorikk
-  }, [allKravPriority, temaListe, relevanteStats, utgaattStats])
+  }, [allKravPriority, temaListe, relevanteStats, utgaattStats, codelist])
 
   const submit = async (submitValues: IEtterlevelseDokumentasjon) => {
     await getEtterlevelseDokumentasjon(submitValues.id).then(async (response) => {

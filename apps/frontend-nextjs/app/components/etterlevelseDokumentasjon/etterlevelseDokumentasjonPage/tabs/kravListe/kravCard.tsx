@@ -54,7 +54,7 @@ export const KravCard = (props: IProps) => {
   const isVarslingStatus = !noVarsling && (isIngenEtterlevelse || isOppfyllesSenereEtterlevelse)
 
   const [nyVersionFlag, setNyVersionFlag] = useState<boolean>(false)
-  const [kravAge, setKravAge] = useState<number>(0)
+  const kravAge = getNumberOfDaysBetween(krav.aktivertDato, new Date())
   const [nyttInnholdFlag, setNyttInnholdFlag] = useState<boolean>(false)
 
   const relevantRisikoscenarioForKravet = risikoscenarioList.filter(
@@ -102,8 +102,6 @@ export const KravCard = (props: IProps) => {
   }
 
   useEffect(() => {
-    const today = new Date()
-    setKravAge(getNumberOfDaysBetween(krav.aktivertDato, today))
     ;(async () => {
       getEtterlevelseMetaData()
       if (krav.kravVersjon > 1 && (isIngenEtterlevelse || isOppfyllesSenereEtterlevelse)) {

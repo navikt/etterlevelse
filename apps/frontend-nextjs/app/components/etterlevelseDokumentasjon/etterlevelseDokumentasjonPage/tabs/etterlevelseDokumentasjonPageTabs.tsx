@@ -79,6 +79,17 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     ;(async () => {
+      if (
+        morDokumentRelasjon &&
+        morDokumentRelasjon.fromDocumentWithData.prioritertKravNummer.length > 0
+      ) {
+        setTabValue('prioritertKravliste')
+      }
+    })()
+  }, [morDokumentRelasjon, pvkDokument])
+
+  useEffect(() => {
+    ;(async () => {
       if (!!previousVurdering && !!pvkDokument) {
         await getTiltakByPvkDokumentId(pvkDokument.id).then((pagedTiltak) =>
           setAllTiltak(pagedTiltak.content)
@@ -86,15 +97,6 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       }
     })()
   }, [previousVurdering, pvkDokument])
-
-  useEffect(() => {
-    if (
-      morDokumentRelasjon &&
-      morDokumentRelasjon.fromDocumentWithData.prioritertKravNummer.length > 0
-    ) {
-      setTabValue('prioritertKravliste')
-    }
-  }, [morDokumentRelasjon, pvkDokument])
 
   return (
     <Tabs

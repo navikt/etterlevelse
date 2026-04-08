@@ -53,7 +53,9 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
   }
 
   useEffect(() => {
-    if (sok && pageNumber !== 0) setPage(0)
+    ;(async () => {
+      if (sok && pageNumber !== 0) setPage(0)
+    })()
   }, [sok])
 
   const getEtterlevelseDokumentasjonerWithoutDuplicates = () => {

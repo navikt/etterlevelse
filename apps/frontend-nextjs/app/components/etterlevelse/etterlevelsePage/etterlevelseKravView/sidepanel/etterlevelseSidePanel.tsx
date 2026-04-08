@@ -66,13 +66,15 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   }
 
   useEffect(() => {
-    if (
-      pvkDokument &&
-      pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
-      krav.tagger.includes('Personvernkonsekvensvurdering')
-    ) {
-      setActiveTab('pvkDokumentasjon')
-    }
+    ;(async () => {
+      if (
+        pvkDokument &&
+        pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+        krav.tagger.includes('Personvernkonsekvensvurdering')
+      ) {
+        setActiveTab('pvkDokumentasjon')
+      }
+    })()
   }, [pvkDokument])
 
   useEffect(() => {

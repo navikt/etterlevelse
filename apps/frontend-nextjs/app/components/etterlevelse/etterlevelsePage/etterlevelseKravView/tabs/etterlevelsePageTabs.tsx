@@ -203,17 +203,19 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   }
 
   useEffect(() => {
-    if (
-      pvkDokument &&
-      [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
-        pvkDokument.status
-      ) &&
-      krav &&
-      krav.tagger.includes('Personvernkonsekvensvurdering')
-    ) {
-      setIsPreview(true)
-      setIsPvoUnderarbeidWarningActive(true)
-    }
+    ;(async () => {
+      if (
+        pvkDokument &&
+        [EPvkDokumentStatus.PVO_UNDERARBEID, EPvkDokumentStatus.SENDT_TIL_PVO].includes(
+          pvkDokument.status
+        ) &&
+        krav &&
+        krav.tagger.includes('Personvernkonsekvensvurdering')
+      ) {
+        setIsPreview(true)
+        setIsPvoUnderarbeidWarningActive(true)
+      }
+    })()
   }, [krav, pvkDokument])
 
   return (

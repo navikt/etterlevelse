@@ -14,7 +14,7 @@ import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokum
 import { useQuery } from '@apollo/client/react'
 import { Label, List } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 
 export const PvoSistRedigertView = () => {
   const { data, loading: isLoading } = useQuery<
@@ -24,18 +24,15 @@ export const PvoSistRedigertView = () => {
     variables: { sistRedigert: 20, pageSize: 200 },
   })
 
-  const [sortedPvoTilbakemelding, setSortedPvoTilbakemelding] = useState<TPvoTilbakemeldingQL[]>([])
-
-  useEffect(() => {
-    if (!isLoading && data && data.pvoTilbakemeldinger.numberOfElements !== 0) {
-      //sort wont work without spread copy for some wierd reason
-      setSortedPvoTilbakemelding(
-        [...data.pvoTilbakemeldinger.content].sort(
-          (a: TPvoTilbakemeldingQL, b: TPvoTilbakemeldingQL) =>
-            b.sistEndretAvMeg.localeCompare(a.sistEndretAvMeg)
-        )
-      )
+  const sortedPvoTilbakemelding = useMemo<TPvoTilbakemeldingQL[]>(() => {
+    if (isLoading || !data || data.pvoTilbakemeldinger.numberOfElements === 0) {
+      return []
     }
+
+    return [...data.pvoTilbakemeldinger.content].sort(
+      (a: TPvoTilbakemeldingQL, b: TPvoTilbakemeldingQL) =>
+        b.sistEndretAvMeg.localeCompare(a.sistEndretAvMeg)
+    )
   }, [isLoading, data])
 
   return (
