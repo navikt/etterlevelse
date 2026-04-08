@@ -10,6 +10,13 @@ import {
   TVarslingsadresseQL,
 } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 
+export enum EKravTab {
+  KRAV = 'Hvordan å etterleve?',
+  DOKUMENTASJON = 'Dokumentasjon',
+  ETTERLEVER = 'Hvordan har andre gjort det?',
+  TILBAKEMELDINGER = 'Spør kraveier',
+}
+
 export enum EKravStatus {
   UTKAST = 'UTKAST',
   AKTIV = 'AKTIV',

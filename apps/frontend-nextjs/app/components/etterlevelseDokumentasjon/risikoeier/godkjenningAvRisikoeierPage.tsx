@@ -3,12 +3,11 @@
 import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
-  godkjennEtterlevelseDokumentasjon,
+  godkjennEtterlevelseDokumentasjonOgArkiver,
   updateEtterlevelseDokumentasjon,
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
-import { arkiver } from '@/api/p360/p360Api'
 import {
   getPvkDokumentByEtterlevelseDokumentId,
   mapPvkDokumentToFormValue,
@@ -42,7 +41,16 @@ import {
   getKravForTema,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
-import { Alert, BodyLong, Button, FormSummary, Heading, Label, List } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  FormSummary,
+  Heading,
+  Label,
+  List,
+  LocalAlert,
+} from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -91,6 +99,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const hasAccess =
     etterlevelseDokumentasjon && etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
@@ -199,17 +208,21 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
             setSaveSuccessfull(true)
           })
         } else {
-          await godkjennEtterlevelseDokumentasjon(
+          setIsSubmitting(true)
+          await godkjennEtterlevelseDokumentasjonOgArkiver(
             updatedEtterlevelseDokumentasjon,
-            kravTilstandsHistorikk
+            kravTilstandsHistorikk,
+            true
           )
-            .then(async (resp) => {
+            .then((resp) => {
               setEtterlevelseDokumentasjon(resp)
-              await arkiver(updatedEtterlevelseDokumentasjon.id, true, false, false, true)
               setSaveSuccessfull(true)
             })
             .catch((error) => {
-              setErrorMessage(error.message)
+              setErrorMessage(`Godkjenning og arkivering feilet: ${error.message}`)
+            })
+            .finally(() => {
+              setIsSubmitting(false)
             })
         }
       } else {
@@ -344,14 +357,12 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                       <div>
                         {saveSuccessfull && (
                           <div className='my-5'>
-                            <Alert
-                              size='small'
-                              variant='success'
-                              closeButton
-                              onClose={() => setSaveSuccessfull(false)}
-                            >
-                              Lagring vellykket
-                            </Alert>
+                            <LocalAlert size='small' status='success'>
+                              <LocalAlert.Header>
+                                <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                                <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
+                              </LocalAlert.Header>
+                            </LocalAlert>
                           </div>
                         )}
 
@@ -386,6 +397,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                           <Button
                             type='button'
                             variant='primary'
+                            loading={isSubmitting}
                             onClick={async () => {
                               await setFieldValue(
                                 'status',
@@ -433,14 +445,12 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
                   {saveSuccessfull && (
                     <div className='my-5'>
-                      <Alert
-                        size='small'
-                        variant='success'
-                        closeButton
-                        onClose={() => setSaveSuccessfull(false)}
-                      >
-                        Godkjent og arkivert i Public 360
-                      </Alert>
+                      <LocalAlert size='small' status='success'>
+                        <LocalAlert.Header>
+                          <LocalAlert.Title>Godkjent og arkivert i Public 360</LocalAlert.Title>
+                          <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
+                        </LocalAlert.Header>
+                      </LocalAlert>
                     </div>
                   )}
                 </div>

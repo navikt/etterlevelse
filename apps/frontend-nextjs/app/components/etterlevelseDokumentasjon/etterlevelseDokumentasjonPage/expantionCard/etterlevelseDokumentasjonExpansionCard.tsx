@@ -42,8 +42,6 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
   const { behandlingIds, behandlinger, dpBehandlingIds, dpBehandlinger, teams, irrelevansFor } =
     etterlevelseDokumentasjon
 
-  console.debug(etterlevelseDokumentasjon)
-
   return (
     <div>
       <div>
@@ -221,7 +219,7 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
       </div>
       {!relasjonLoading && etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
         <div className='mt-5'>
-          <ReadMore header='Dette må du vite om gjenbruk'>
+          <ReadMore header='Du kan gjenbruke dette etterlevelsesdokumentet'>
             {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
               <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
             )}

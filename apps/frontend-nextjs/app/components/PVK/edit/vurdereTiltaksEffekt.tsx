@@ -19,7 +19,17 @@ import {
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, Heading, Label, Radio, RadioGroup } from '@navikt/ds-react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Heading,
+  InlineMessage,
+  Label,
+  LocalAlert,
+  Radio,
+  RadioGroup,
+} from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { PVKFieldWrapper, TopBottomWrapper } from '../common/stylingLayout'
@@ -134,9 +144,9 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
             )}
 
             {revurdertEffektCheck && (
-              <Alert inline className='mt-3' variant='warning'>
+              <InlineMessage className='mt-3' status='warning'>
                 Dere må vurdere tiltakenes effekt
-              </Alert>
+              </InlineMessage>
             )}
 
             {!revurdertEffektCheck && (
@@ -158,9 +168,9 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                 )}
 
                 {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
-                  <Alert variant='warning' inline className='mt-3'>
+                  <InlineMessage status='warning' className='mt-3'>
                     Dere må begrunne denne vurderingen av tiltakenes effekt.
-                  </Alert>
+                  </InlineMessage>
                 )}
               </div>
             )}
@@ -232,14 +242,12 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
       </div>
 
       {lagringVellykket && (
-        <Alert
-          variant='success'
-          className='my-5'
-          closeButton
-          onClose={() => setLagringVellykket(false)}
-        >
-          Lagring vellykket
-        </Alert>
+        <LocalAlert status='success' className='my-5'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+            <LocalAlert.CloseButton onClick={() => setLagringVellykket(false)} />
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
 
       {isFormActive && (

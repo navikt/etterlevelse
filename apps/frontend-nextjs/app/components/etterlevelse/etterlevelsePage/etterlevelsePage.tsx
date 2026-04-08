@@ -64,7 +64,7 @@ export const EtterlevelsePage = () => {
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
-      pathName: 'Temaoversikt',
+      pathName: etterlevelseDokumentasjon?.title || 'Temaoversikt',
       href: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id),
     },
   ]

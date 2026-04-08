@@ -22,11 +22,11 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { EKravTab, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import { Alert, Checkbox, CheckboxGroup, Heading, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
 import { useParams } from 'next/navigation'
@@ -265,30 +265,9 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         }}
       >
         <Tabs.List>
-          <Tabs.Tab
-            value='dokumentasjon'
-            label={
-              <Heading level='2' size='small'>
-                Dokumentasjon
-              </Heading>
-            }
-          />
-          <Tabs.Tab
-            value='etterlevelser'
-            label={
-              <Heading level='2' size='small'>
-                Hvordan har andre gjort det?
-              </Heading>
-            }
-          />
-          <Tabs.Tab
-            value='tilbakemeldinger'
-            label={
-              <Heading level='2' size='small'>
-                Spørsmål og svar
-              </Heading>
-            }
-          />
+          <Tabs.Tab value='dokumentasjon' label={EKravTab.DOKUMENTASJON} />
+          <Tabs.Tab value='etterlevelser' label={EKravTab.ETTERLEVER} />
+          <Tabs.Tab value='tilbakemeldinger' label={EKravTab.TILBAKEMELDINGER} />
         </Tabs.List>
         <Tabs.Panel value='dokumentasjon'>
           {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&

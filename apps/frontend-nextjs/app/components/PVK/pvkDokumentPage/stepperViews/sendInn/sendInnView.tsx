@@ -853,6 +853,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               errorSummaryRef={errorSummaryRef}
                             />
                           }
+                          savedAlert={
+                            <div>
+                              {savedSuccess && (
+                                <SendInnLagringVellykketAlert
+                                  setSavedSuccessful={setSavedSuccess}
+                                  customText='Etterlevelsen er godkjent og arkivert i Public360.'
+                                />
+                              )}
+                            </div>
+                          }
                         />
                       )}
                   </div>

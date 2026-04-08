@@ -48,7 +48,7 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
@@ -248,7 +248,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
 
           {dokumentRelasjon && (
             <Alert contentMaxWidth={false} variant='info' className='mb-5'>
-              <Label>Dette må du vite om gjenbruk</Label>
+              <Label>Du kan gjenbruke dette etterlevelsesdokumentet</Label>
 
               <div className='mb-5'>
                 <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
@@ -643,14 +643,6 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                 <div className='flex-1'>
                   <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
-                  <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
-                    <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-                      <InfoCard.Title as='div'>
-                        Det er ikke mulig å endre risikoeier når etterlevelsesdokument eller PVK er
-                        sendt til godkjenning hos risikoeier.
-                      </InfoCard.Title>
-                    </InfoCard.Header>
-                  </InfoCard>
                   <div>
                     <DataTextWrapper>
                       {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
@@ -674,63 +666,74 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
             <div className='flex-1' />
           </div>
 
-          {env.isDev && user.isAdmin() && (
-            <>
-              <div className='mt-5'>
-                <TextAreaField
-                  rows={1}
-                  noPlaceholder
-                  label='P360 recnummer KUN I DEV OG ADMIN'
-                  name='p360Recno'
-                />
+          {user.isAdmin() && (
+            <InfoCard data-color='meta-purple' className='my-7'>
+              <InfoCard.Header>
+                <InfoCard.Title>ADMIN STUFFSSSS</InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
+                {env.isDev && (
+                  <>
+                    <div className='mt-5'>
+                      <TextAreaField
+                        rows={1}
+                        noPlaceholder
+                        label='P360 recnummer KUN I DEV'
+                        name='p360Recno'
+                      />
+
+                      <div className='mt-5'>
+                        <TextAreaField
+                          rows={1}
+                          noPlaceholder
+                          label='P360 saknummer  KUN I DEV'
+                          name='p360CaseNumber'
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 <div className='mt-5'>
-                  <TextAreaField
-                    rows={1}
-                    noPlaceholder
-                    label='P360 saknummer  KUN I DEV OG ADMIN'
-                    name='p360CaseNumber'
-                  />
+                  <Select
+                    label='Oppdater status'
+                    value={values.status}
+                    onChange={(event) => {
+                      if (event.target.value) {
+                        setFieldValue('status', event.target.value)
+                      }
+                    }}
+                  >
+                    <option value={EEtterlevelseDokumentasjonStatus.UNDER_ARBEID}>
+                      under arbeid
+                    </option>
+                    <option
+                      value={EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER}
+                    >
+                      Sendt til godkjenning til risikoeier
+                    </option>
+                    <option value={EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER}>
+                      Godkjent av risikoeier
+                    </option>
+                  </Select>
                 </div>
-              </div>
-            </>
-          )}
 
-          {user.isAdmin() && (
-            <div className='mt-5'>
-              <Select
-                label='Oppdater status KUN ADMIN'
-                value={values.status}
-                onChange={(event) => {
-                  if (event.target.value) {
-                    setFieldValue('status', event.target.value)
-                  }
-                }}
-              >
-                <option value={EEtterlevelseDokumentasjonStatus.UNDER_ARBEID}>under arbeid</option>
-                <option
-                  value={EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER}
-                >
-                  Sendt til godkjenning til risikoeier
-                </option>
-                <option value={EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER}>
-                  Godkjent av risikoeier
-                </option>
-              </Select>
-            </div>
-          )}
-
-          {!dokumentRelasjon && (
-            <div className='mt-5'>
-              <CheckboxGroup
-                legend='Skal dette dokumentet kunne gjenbrukes av andre?'
-                onChange={(value: boolean[]) => setFieldValue('forGjenbruk', value.length !== 0)}
-                value={[values.forGjenbruk]}
-                description='Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk.'
-              >
-                <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
-              </CheckboxGroup>
-            </div>
+                {!dokumentRelasjon && (
+                  <div className='mt-5'>
+                    <CheckboxGroup
+                      legend='Skal dette dokumentet kunne gjenbrukes av andre?'
+                      onChange={(value: boolean[]) =>
+                        setFieldValue('forGjenbruk', value.length !== 0)
+                      }
+                      value={[values.forGjenbruk]}
+                      description='Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk.'
+                    >
+                      <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
+                    </CheckboxGroup>
+                  </div>
+                )}
+              </InfoCard.Content>
+            </InfoCard>
           )}
 
           {!_.isEmpty(errors) && (

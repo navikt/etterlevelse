@@ -15,7 +15,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
-import { Alert, Button } from '@navikt/ds-react'
+import { Button, LocalAlert } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
@@ -78,14 +78,19 @@ export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
           <CopyLinkPvoButton />
 
           {sucessSubmit && (
-            <Alert variant='success' closeButton onClose={() => setSuccessSubmit(false)}>
-              Lagring velykket
-            </Alert>
+            <LocalAlert status='success'>
+              <LocalAlert.Header>
+                <LocalAlert.Title>Lagring velykket</LocalAlert.Title>
+                <LocalAlert.CloseButton onClick={() => setSuccessSubmit(false)} />
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
 
-          <Alert variant='success' className='my-5'>
-            Tilbakemelding er sendt
-          </Alert>
+          <LocalAlert status='success' className='my-5'>
+            <LocalAlert.Header>
+              <LocalAlert.Title>Tilbakemelding er sendt</LocalAlert.Title>
+            </LocalAlert.Header>
+          </LocalAlert>
         </div>
       </div>
 

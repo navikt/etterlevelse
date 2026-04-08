@@ -121,6 +121,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                         .etterlevelseDokumentasjonData(
                                 EtterlevelseDokumentasjonData.builder()
                                         .title("test")
+                                        .etterlevelseNummer(101)
                                         .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
                                         .etterlevelseDokumentVersjon(1)
                                         .risikoeiere(List.of("A123456"))
@@ -133,6 +134,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 .id(eDok.getId())
                 .update(true)
                 .title(eDok.getTitle())
+                .etterlevelseNummer(101)
                 .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
                 .meldingRisikoeierTilEtterleveler("test")
                 .build();

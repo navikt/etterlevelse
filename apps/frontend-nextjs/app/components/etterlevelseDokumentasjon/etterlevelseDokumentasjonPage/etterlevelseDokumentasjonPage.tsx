@@ -30,7 +30,7 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { filterEtterlevelseDokumentasjonStatsData } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { BodyShort, Heading, InfoCard, Link, ReadMore } from '@navikt/ds-react'
+import { BodyShort, Heading, InfoCard, Link } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
@@ -182,9 +182,10 @@ export const EtterlevelseDokumentasjonPage = () => {
                   )}
 
                   {etterlevelseDokumentasjon.forGjenbruk &&
-                    !etterlevelseDokumentasjon.tilgjengeligForGjenbruk &&
                     (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                      <GjenbrukAlert />
+                      <GjenbrukAlert
+                        defaultOpen={!etterlevelseDokumentasjon.tilgjengeligForGjenbruk}
+                      />
                     )}
 
                   <div className='flex mb-5'>
@@ -205,6 +206,8 @@ export const EtterlevelseDokumentasjonPage = () => {
                         <EtterlevelseDokumentasjonButtonGroup
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                           setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                          relasjonLoading={relasjonLoading}
+                          morDokumentRelasjon={morDokumentRelasjon}
                           pvkDokument={pvkDokument}
                           behandlingsLivslop={behandlingsLivslop}
                           behandlingensArtOgOmfang={artOgOmfang}
@@ -221,14 +224,6 @@ export const EtterlevelseDokumentasjonPage = () => {
             Temaoversikt
           </Heading>
 
-          {morDokumentRelasjon && (
-            <ReadMore header='Slik bruker du disse vurderingene' className='my-5'>
-              Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
-              suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du
-              kan gjenbruke vurderingene. De øvrige suksesskriteriene må du ta stilling til. Noen av
-              disse inneholder veiledning til hvordan du skal svare ut spørsmålene.
-            </ReadMore>
-          )}
           <EtterlevelseDokumentasjonPageTabs
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
@@ -236,7 +231,7 @@ export const EtterlevelseDokumentasjonPage = () => {
             relevanteStats={relevanteStats}
             utgaattStats={utgaattStats}
             loading={loading}
-            morDocumentRelation={morDokumentRelasjon}
+            morDokumentRelasjon={morDokumentRelasjon}
             pvkDokument={pvkDokument}
             risikoscenarioList={kravRisikoscenarioList}
             isRisikoscenarioLoading={isRisikoscenarioLoading}

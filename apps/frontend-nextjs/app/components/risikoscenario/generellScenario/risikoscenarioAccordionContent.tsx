@@ -21,7 +21,7 @@ import { IKravReference } from '@/constants/krav/kravConstants'
 import { risikoscenarioTiltakUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, Button } from '@navikt/ds-react'
+import { Button, InlineMessage, LocalAlert } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
@@ -279,9 +279,9 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             {risikoscenario.tiltakIds.length === 0 &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive && (
-                <Alert inline className='mt-5 mb-9' variant='warning'>
+                <InlineMessage className='mt-5 mb-9' status='warning'>
                   Dere har ikke lagt inn tiltak
-                </Alert>
+                </InlineMessage>
               )}
 
             {risikoscenario.tiltakIds.length !== 0 && (
@@ -370,15 +370,13 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
             </div>
           )}
 
-        {submitSuccess && (
-          <Alert
-            className='mt-3'
-            variant='success'
-            onClose={() => setSubmitSuccess(false)}
-            closeButton
-          >
-            Lagring vellykket.
-          </Alert>
+        {submitSuccess && !isIngenTilgangFormDirty && (
+          <LocalAlert className='mt-3' status='success'>
+            <LocalAlert.Header>
+              <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+              <LocalAlert.CloseButton onClick={() => setSubmitSuccess(false)} />
+            </LocalAlert.Header>
+          </LocalAlert>
         )}
       </div>
 

@@ -2,7 +2,7 @@
 
 import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
 import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
-import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { EKravTab, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
 import { Tabs } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
@@ -39,9 +39,9 @@ const KravTabMenyContent: FunctionComponent<TProps> = ({
     <div className='w-full'>
       <Tabs defaultValue={tab} onChange={(section: string) => setTab(section as TSection)}>
         <Tabs.List>
-          <Tabs.Tab value='krav' label='Hvordan etterleve?' />
-          <Tabs.Tab value='etterlevelser' label='Hvordan har andre gjort det?' />
-          <Tabs.Tab value='tilbakemeldinger' label='Spør kraveier' />
+          <Tabs.Tab value='krav' label={EKravTab.KRAV} />
+          <Tabs.Tab value='etterlevelser' label={EKravTab.ETTERLEVER} />
+          <Tabs.Tab value='tilbakemeldinger' label={EKravTab.TILBAKEMELDINGER} />
         </Tabs.List>
         <Tabs.Panel value='krav'>
           <KravView krav={krav} />

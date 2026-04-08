@@ -15,7 +15,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
-import { Button, Tabs } from '@navikt/ds-react'
+import { Button, ReadMore, Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { ArkiveringModal } from '../arkivering/arkiveringModal'
@@ -29,7 +29,7 @@ type TProps = {
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
   loading: boolean
-  morDocumentRelation?: IDocumentRelationWithEtterlevelseDokumetajson
+  morDokumentRelasjon?: IDocumentRelationWithEtterlevelseDokumetajson
   pvkDokument?: IPvkDokument
   risikoscenarioList: IRisikoscenario[]
   isRisikoscenarioLoading: boolean
@@ -42,7 +42,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   relevanteStats,
   utgaattStats,
   loading,
-  morDocumentRelation,
+  morDokumentRelasjon,
   pvkDokument,
   risikoscenarioList,
   isRisikoscenarioLoading,
@@ -114,6 +114,7 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
           <Tabs.Tab value='pvkRelaterteKrav' label='PVK-relaterte krav' />
         )}
       </Tabs.List>
+
       <Tabs.Panel value='alleKrav'>
         <div className='pt-4 flex flex-col gap-4'>
           <EtterlevelseDokumentasjonKravListe
@@ -146,6 +147,14 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       </Tabs.Panel>
       <Tabs.Panel value='prioritertKravliste'>
         <div className='pt-4 flex flex-col gap-4'>
+          {morDokumentRelasjon && (
+            <ReadMore header='Slik bruker du disse vurderingene' className='my-1'>
+              Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
+              suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du
+              kan gjenbruke vurderingene. De øvrige suksesskriteriene må du ta stilling til. Noen av
+              disse inneholder veiledning til hvordan du skal svare ut spørsmålene.
+            </ReadMore>
+          )}
           <PrioritertKravListe
             loading={loading}
             allKravPriority={allKravPriority}
