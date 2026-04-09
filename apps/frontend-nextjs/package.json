@@ -52,7 +52,7 @@
     "@navikt/ds-react": "8.9.0",
     "@navikt/ds-tailwind": "8.9.0",
     "@tailwindcss/postcss": "4.2.2",
-    "axios": "1.14.0",
+    "axios": "1.15.0",
     "draft-js": "0.11.7",
     "graphql": "16.13.2",
     "json-diff-kit": "1.0.35",
