@@ -346,15 +346,17 @@ const OmStotteTilEtterlevelseAccordion = () => {
             oppdateringer kan så kreve at Nav-kontor revurderer deler av etterlevelsesdokumentasjon
             sin.
           </ReadMore>
-          <ReadMore header='Eksempel: bruk av Fyrstikkalléens testlab' className='mb-6'>
-            Når de ansatte skal teste digitale løsninger med brukere, er det flere etterlevelseskrav
-            som Testlabbens oppsett og rutiner tar seg av, for eksempel hvordan personopplysninger
-            tas opp og lagres. Når det gjøres likt, skal det også dokumenteres likt. Testlab-brukere
-            kan opprette en datter av Testlabbens egen etterlevelsesdokument og bruke det som
-            utgangspunkt for sin egen dokumentasjon. Testlabbens mordokument inneholder veiledning
-            skrevet av ResearchOps (som driver Testlabben) om hvordan noen suksesskriterier skal
-            fylles ut.
-          </ReadMore>
+      <ReadMore header='Eksempel: bruk av Umami til måling av brukeratferd' className='mb-6'>
+        Flere team i Nav bruker verktøyet Umami til å måle brukeratferd i digitale løsninger. Umami
+        forvaltes av Team ResearchOps, som har lagd et sentralt etterlevelsesdokument hvor de har
+        gjort noen vurderinger som vil gjelde uansett hvor og hvordan man bruker Umami. Ved enkelte
+        etterlevelseskrav har ResearchOps skrevet veiledning som er spesielt tilpasset bruk av
+        Umami, og kladdet noen svar. Kravene med veiledning og kladd har de samlet under Prioritert
+        kravliste. Enkelte team som skal bruke Umami tar en gjenbrukskopi av
+        etterlevelsesdokumentet. I gjenbrukskopien arver de Prioritert kravliste med sine tilpassede
+        etterlevelseskrav. Teamet dokumenterer etterlevelse ved både disse og alle resterende
+        etterlevelseskrav i dokumentet.
+      </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
