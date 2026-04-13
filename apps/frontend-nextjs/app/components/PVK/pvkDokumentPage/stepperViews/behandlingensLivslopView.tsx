@@ -322,7 +322,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                       sentDate={relevantVurdering.sendtDato}
                     />
                   )}
-                  {pvkDokument.antallInnsendingTilPvo > 1 && (
+                  {pvkDokument.antallInnsendingTilPvo >= 1 && (
                     <div className='mt-10'>
                       <PvoTilbakemeldingsHistorikk
                         pvkDokument={pvkDokument}

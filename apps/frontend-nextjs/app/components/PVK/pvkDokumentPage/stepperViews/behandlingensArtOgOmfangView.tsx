@@ -106,7 +106,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {pvkDokument.antallInnsendingTilPvo > 1 && (
+                {pvkDokument.antallInnsendingTilPvo >= 1 && (
                   <div className='mt-10'>
                     <PvoTilbakemeldingsHistorikk
                       pvkDokument={pvkDokument}

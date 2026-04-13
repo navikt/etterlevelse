@@ -633,7 +633,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                 />
               )}
 
-              {pvkDokument.antallInnsendingTilPvo > 1 && (
+              {pvkDokument.antallInnsendingTilPvo >= 1 && (
                 <div className='mt-10'>
                   <PvoTilbakemeldingsHistorikk
                     pvkDokument={pvkDokument}

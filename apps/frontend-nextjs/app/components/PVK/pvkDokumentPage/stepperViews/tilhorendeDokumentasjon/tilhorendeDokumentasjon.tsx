@@ -64,7 +64,7 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {pvkDokument.antallInnsendingTilPvo > 1 && (
+                {pvkDokument.antallInnsendingTilPvo >= 1 && (
                   <div className='mt-10'>
                     <PvoTilhorendeDokTilbakemeldingsHistorikk
                       pvoTilbakemelding={pvoTilbakemelding}
