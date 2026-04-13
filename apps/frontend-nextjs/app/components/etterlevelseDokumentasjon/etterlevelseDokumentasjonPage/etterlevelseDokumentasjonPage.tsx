@@ -12,10 +12,7 @@ import {
   ERelationType,
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
-import {
-  EEtterlevelseDokumentasjonStatus,
-  IEtterlevelseDokumentasjonStats,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IEtterlevelseDokumentasjonStats } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
@@ -29,16 +26,14 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { filterEtterlevelseDokumentasjonStatsData } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { BodyShort, Heading, InfoCard, Link } from '@navikt/ds-react'
+import { BodyShort, Heading, Link } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
 import { ContentLayout } from '../../others/layout/content/content'
 import { PageLayout } from '../../others/scaffold/scaffold'
-import { GjenbrukAlert } from './alert/GjenbrukAlert'
 import EtterlevelseDokumentasjonButtonGroup from './buttonGroup/etterlevelseDokumentasjonButtonGroup'
-import EtterlevelseDokumentasjonExpansionCard from './expantionCard/etterlevelseDokumentasjonExpansionCard'
+import { ReadmoreEtterlevelsePVK } from './readmore/readmoreEtterlevelsePVK'
 import EtterlevelseDokumentasjonPageTabs from './tabs/etterlevelseDokumentasjonPageTabs'
 
 export const EtterlevelseDokumentasjonPage = () => {
@@ -166,32 +161,11 @@ export const EtterlevelseDokumentasjonPage = () => {
               )}
 
               <ContentLayout>
-                <div className='max-w-5xl flex-1'>
-                  {etterlevelseDokumentasjon.status ===
-                    EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
-                    <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
-                      <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-                        <InfoCard.Title>
-                          Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,
-                          vil det ikke være mulig å redigere kravdokumentasjon fram til at
-                          dokumentet er godkjent.
-                        </InfoCard.Title>
-                      </InfoCard.Header>
-                    </InfoCard>
-                  )}
-                  <div className='flex mb-5'>
-                    <EtterlevelseDokumentasjonExpansionCard
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      relasjonLoading={relasjonLoading}
-                    />
-                  </div>
-                  {etterlevelseDokumentasjon.forGjenbruk &&
-                    (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                      <GjenbrukAlert
-                        defaultOpen={!etterlevelseDokumentasjon.tilgjengeligForGjenbruk}
-                      />
-                    )}
-                </div>
+                <ReadmoreEtterlevelsePVK
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  relasjonLoading={relasjonLoading}
+                  user={user}
+                />
 
                 <div className='flex justify-end'>
                   {etterlevelseDokumentasjon && (
