@@ -127,9 +127,7 @@ export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps>
 
         {pvkDokument &&
           (isReadOnlyPvkStatus(pvkDokument.status) ||
-            (!user.isAdmin() &&
-              (user.isPersonvernombud() ||
-                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) && (
+            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
             <div className='w-full my-5'>
               <RisikoscenarioAccordianListReadOnlyView
                 risikoscenarioList={risikoscenarioList}

@@ -301,9 +301,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             )}
 
           {((pvkDokument && isReadOnlyPvkStatus(pvkDokument.status)) ||
-            ((user.isPersonvernombud() ||
-              etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) &&
-              !user.isAdmin())) && (
+            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
             <BehandlingensLivslopReadOnlyContent
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}

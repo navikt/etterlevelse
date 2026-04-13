@@ -401,9 +401,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
         {pvkDokument &&
           (isReadOnlyPvkStatus(pvkDokument.status) ||
             pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
-            (!user.isAdmin() &&
-              (user.isPersonvernombud() ||
-                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) && (
+            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
             <InvolveringAvEksterneReadOnlyContent
               personkategorier={personkategorier}
               databehandlere={databehandlere}

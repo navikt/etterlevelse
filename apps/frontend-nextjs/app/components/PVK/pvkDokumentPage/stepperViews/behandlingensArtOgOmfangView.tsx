@@ -85,9 +85,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
         {!loading &&
           artOgOmfang &&
           (isReadOnlyPvkStatus(pvkDokument.status) ||
-            (!user.isAdmin() &&
-              (user.isPersonvernombud() ||
-                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) && (
+            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
             <ArtOgOmfangReadOnlyContent
               artOgOmfang={artOgOmfang}
               personkategorier={personkategorier}
