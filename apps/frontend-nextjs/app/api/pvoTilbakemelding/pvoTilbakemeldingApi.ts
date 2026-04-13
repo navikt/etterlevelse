@@ -6,7 +6,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '../pvkDokument/pvkDokumentApi'
 
@@ -80,6 +80,11 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
                 }
 
                 setData(mapPvoTilbakemeldingToFormValue(formValuePvo))
+              }
+            })
+            .catch(async (error: AxiosError) => {
+              if (error.status === 404) {
+                setData(mapPvoTilbakemeldingToFormValue({}))
               }
             })
             .finally(() => {
