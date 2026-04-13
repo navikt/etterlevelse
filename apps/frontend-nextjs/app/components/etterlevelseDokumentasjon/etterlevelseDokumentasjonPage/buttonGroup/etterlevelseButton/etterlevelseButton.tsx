@@ -8,6 +8,7 @@ import { IUserContext } from '@/provider/user/userProvider'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
 import AdminRolle from './adminRolle/adminRolle'
+import { EtterlevelseReadOnlyActionMenuVariant } from './commonEtterlevelse/commonEtterlevelse'
 import EtterleverRolle from './etterleverRolle/etterleverRolle'
 import RisikoeierRolle, { RisikoeierOgEtterleverRolle } from './risikoeierRolle/risikoeierRolle'
 
@@ -31,6 +32,10 @@ export const EtterlevelseButton: FunctionComponent<TProps> = ({
     case EActionMenuRoles.Admin:
       return <AdminRolle etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
     default:
-      return <>Feilmelding: Denne rollen finnes ikke</>
+      return (
+        <EtterlevelseReadOnlyActionMenuVariant
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        />
+      )
   }
 }

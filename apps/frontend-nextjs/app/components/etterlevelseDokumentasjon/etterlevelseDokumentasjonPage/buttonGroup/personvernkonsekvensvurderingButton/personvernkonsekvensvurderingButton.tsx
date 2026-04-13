@@ -86,6 +86,6 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
         />
       )
     default:
-      return <>Feilmelding: Denne rollen finnes ikke</>
+      return undefined
   }
 }
