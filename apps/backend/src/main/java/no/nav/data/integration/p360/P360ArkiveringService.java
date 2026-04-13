@@ -1,11 +1,7 @@
 package no.nav.data.integration.p360;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
@@ -38,7 +34,8 @@ public class P360ArkiveringService {
     private final PvkDokumentRepo pvkDokumentRepo;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void archive(EtterlevelseDokumentasjon eDok, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean risikoeier, boolean godkjenning) {
+    public void archive(UUID eDokId, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean risikoeier, boolean godkjenning) {
+        var eDok = etterlevelseDokumentasjonRepo.getReferenceById(eDokId);
         var pvkDokument = pvkDokumentRepo.findByEtterlevelseDokumensjon(eDok.getId());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");

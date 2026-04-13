@@ -8,6 +8,7 @@ import {
 import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import {
   getPvkDokument,
+  godkjenOgArkiverPvkDokument,
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '@/api/pvkDokument/pvkDokumentApi'
@@ -160,7 +161,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     ) {
       await getEtterlevelseDokumentasjon(etterlevelseDokumentasjon.id).then(async (edok) => {
         if (edok.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID) {
-          await getPvkDokument(submitedValues.id).then((response: IPvkDokument) => {
+          await getPvkDokument(submitedValues.id).then(async (response: IPvkDokument) => {
             if ([EPvkDokumentStatus.PVO_UNDERARBEID].includes(response.status)) {
               setIsPvoAlertModalOpen(true)
             } else {
@@ -222,11 +223,21 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 })
               }
 
-              updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
-                setPvkDokument(savedResponse)
-                setAngretAvRisikoeier(false)
-                setSavedSuccess(true)
-              })
+              if (submitedValues.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                await godkjenOgArkiverPvkDokument(updatedPvkDokument).then(
+                  (savedResponse: IPvkDokument) => {
+                    setPvkDokument(savedResponse)
+                    setAngretAvRisikoeier(false)
+                    setSavedSuccess(true)
+                  }
+                )
+              } else {
+                await updatePvkDokument(updatedPvkDokument).then((savedResponse: IPvkDokument) => {
+                  setPvkDokument(savedResponse)
+                  setAngretAvRisikoeier(false)
+                  setSavedSuccess(true)
+                })
+              }
             }
           })
         } else {

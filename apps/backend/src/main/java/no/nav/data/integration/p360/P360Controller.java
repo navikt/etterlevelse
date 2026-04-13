@@ -71,7 +71,7 @@ public class P360Controller {
         var eDok = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
 
         try {
-            p360ArkiveringService.archive(eDok, onlyActiveKrav, pvoTilbakemelding, risikoeier, godkjenning);
+            p360ArkiveringService.archive(eDok.getId(), onlyActiveKrav, pvoTilbakemelding, risikoeier, godkjenning);
             return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(eDok));
         } catch (Exception e) {
             log.error(e.getMessage(), e);

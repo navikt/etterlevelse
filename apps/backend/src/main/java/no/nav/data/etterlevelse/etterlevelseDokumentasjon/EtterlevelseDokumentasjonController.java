@@ -166,7 +166,7 @@ public class EtterlevelseDokumentasjonController {
         var response = EtterlevelseDokumentasjonResponse.buildFrom(saved);
 
         try {
-            p360ArkiveringService.archive(saved, request.isOnlyActiveKrav(), false, false, true);
+            p360ArkiveringService.archive(saved.getId(), request.isOnlyActiveKrav(), false, false, true);
         } catch (Exception e) {
             log.error("Failed to archive etterlevelse dokumentasjon with id {}", saved.getId(), e);
             throw new ValidationException("Failed to archive etterlevelse dokumentasjon with id " + saved.getId() + " error stack: " + e);
