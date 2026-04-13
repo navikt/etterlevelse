@@ -11,7 +11,6 @@ import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
 import { Loader } from '@navikt/ds-react'
 import { FunctionComponent, useContext, useEffect, useState } from 'react'
-import TillatGjenbrukModal from '../gjenbruk/TillatGjenbrukModal'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
 import GjenbrukButton from './gjenbrukButton/gjenbrukButton'
 import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurderingButton/personvernkonsekvensvurderingButton'
@@ -59,99 +58,6 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
 
   return (
     <>
-      <>
-        {/* {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
-          <Button
-            onClick={() => {
-              router.push(etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id))
-            }}
-            size='small'
-            variant='tertiary'
-            className='whitespace-nowrap w-full justify-center'
-          >
-            Rediger dokumentegenskaper
-          </Button>
-        )} */}
-        {etterlevelseDokumentasjon.forGjenbruk &&
-          etterlevelseDokumentasjon.hasCurrentUserAccess && (
-            <TillatGjenbrukModal
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-            />
-          )}
-
-        {/* {behandlerPersonopplysninger && (
-          <Button
-            onClick={() => {
-              router.push(
-                pvkDokumentasjonBehandlingsenLivslopUrl(
-                  etterlevelseDokumentasjon.id,
-                  behandlingsLivslop ? behandlingsLivslop.id : 'ny'
-                )
-              )
-            }}
-            size='small'
-            variant={getVariantForBLLButton(behandlingsLivslop)}
-            className='whitespace-nowrap'
-          >
-            Tegn behandlingens livsløp
-          </Button>
-        )}
-
-         {behandlerPersonopplysninger && (
-          <Button
-            onClick={() => {
-              router.push(
-                pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-                  etterlevelseDokumentasjon.id,
-                  artOgOmfang.id ? artOgOmfang.id : 'ny'
-                )
-              )
-            }}
-            size='small'
-            variant={getVariantForBAOButton(artOgOmfang)}
-            className='whitespace-nowrap'
-          >
-            Beskriv art og omfang
-          </Button>
-        )}
-
-        {behandlerPersonopplysninger &&
-          pvkDokument &&
-          pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
-            <Button
-              onClick={() => {
-                router.push(
-                  pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                )
-              }}
-              size='small'
-              variant={getVariantForPVKButton(pvkDokument, behandlingsLivslop)}
-              className='whitespace-nowrap'
-            >
-              {getPvkButtonText(pvkDokument, risikoscenarioList, isRisikoeier)}
-            </Button>
-          )}
-
-        {behandlerPersonopplysninger && (
-          <Button
-            onClick={() => {
-              router.push(
-                pvkDokumentasjonPvkBehovUrl(
-                  etterlevelseDokumentasjon.id,
-                  pvkDokument ? pvkDokument.id : 'ny'
-                )
-              )
-            }}
-            size='small'
-            variant={getVariantForPVKBehovButton(pvkDokument, behandlingsLivslop)}
-            className='whitespace-nowrap'
-          >
-            {isPvkDokumentVurdert(pvkDokument) ? 'Revurder behov for PVK' : 'Vurder behov for PVK'}
-          </Button>
-        )} */}
-      </>
-
       <EtterlevelseButton etterlevelseDokumentasjon={etterlevelseDokumentasjon} user={user} />
 
       {behandlerPersonopplysninger && (
@@ -169,9 +75,7 @@ export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = (
         (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
         relasjonLoading && <Loader />}
 
-      {/** KUN synlig i dev da den ikke er klar til å bli prodsatt ennå  */}
-      {env.isDev &&
-        (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
+      {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
         !relasjonLoading &&
         !morDokumentRelasjon && (
           <GjenbrukButton
