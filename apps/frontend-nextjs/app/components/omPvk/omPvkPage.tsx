@@ -25,7 +25,7 @@ const OmPvkPage = () => {
             >
               <Stepper.Step href='#formaalet-med-pvk'>Formålet med PVK</Stepper.Step>
               <Stepper.Step href='#hvordan-bruke-digital-pvk'>
-                Hvordan bruke Digital PVK paul: legge til copybutton.
+                Hvordan bruke Digital PVK
               </Stepper.Step>
               <Stepper.Step href='#beslutningsstotte'>
                 Beslutningsstøtte når dere vurderer behov for PVK
