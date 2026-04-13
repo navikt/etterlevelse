@@ -72,13 +72,15 @@ export const GjenbrukActionMenu: FunctionComponent<IGjenbrukProps> = ({
         </ActionMenu.Content>
       </ActionMenu>
 
-      <TillatGjenbrukModal
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-        isOpen={isTillatGjenbrukOpen}
-        setIsOpen={setIsTillatGjenbrukOpen}
-        renderTrigger={false}
-      />
+      {isTillatGjenbrukOpen && (
+        <TillatGjenbrukModal
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+          isOpen={isTillatGjenbrukOpen}
+          setIsOpen={setIsTillatGjenbrukOpen}
+          renderTrigger={false}
+        />
+      )}
     </>
   )
 }
