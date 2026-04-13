@@ -1,15 +1,8 @@
 'use client'
 
 import { List, ReadMore } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
 
-type TProps = {
-  defaultOpen: boolean
-}
-
-export const GjenbrukAlert: FunctionComponent<TProps> = ({ defaultOpen }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen)
-
+export const GjenbrukAlert = () => {
   return (
     <div className='max-w-5xl mb-5'>
       <ReadMore
@@ -17,9 +10,7 @@ export const GjenbrukAlert: FunctionComponent<TProps> = ({ defaultOpen }) => {
         // variant="moderate"
         header='Tilrettelegging for gjenbruk: slik gjør dere nå'
         size='large'
-        defaultOpen={defaultOpen}
-        open={isOpen}
-        onClick={() => setIsOpen(!isOpen)}
+        defaultOpen={true}
       >
         <List>
           <List.Item>

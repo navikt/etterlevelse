@@ -12,7 +12,10 @@ import {
   ERelationType,
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
-import { IEtterlevelseDokumentasjonStats } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  IEtterlevelseDokumentasjonStats,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
@@ -26,7 +29,8 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { filterEtterlevelseDokumentasjonStatsData } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useQuery } from '@apollo/client/react'
-import { BodyShort, Heading, Link } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { BodyShort, Heading, InfoCard, Link } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
@@ -161,6 +165,19 @@ export const EtterlevelseDokumentasjonPage = () => {
               )}
 
               <ContentLayout>
+                {etterlevelseDokumentasjon.status ===
+                  EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
+                  <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
+                    <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                      <InfoCard.Title>
+                        Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,
+                        vil det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet
+                        er godkjent.
+                      </InfoCard.Title>
+                    </InfoCard.Header>
+                  </InfoCard>
+                )}
+
                 <ReadmoreEtterlevelsePVK
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   relasjonLoading={relasjonLoading}
