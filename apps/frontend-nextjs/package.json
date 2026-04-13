@@ -80,7 +80,7 @@
     "formik": "2.4.9",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
-    "postcss": "8.5.8",
+    "postcss": "8.5.9",
     "prettier": "3.8.1",
     "react-select": "5.10.2",
     "typescript": "5.9.3"
