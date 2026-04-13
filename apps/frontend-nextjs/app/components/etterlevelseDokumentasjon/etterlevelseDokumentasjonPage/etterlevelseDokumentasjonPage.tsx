@@ -150,7 +150,6 @@ export const EtterlevelseDokumentasjonPage = () => {
                 E{etterlevelseNummer.toString()}.
                 {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} {title}
               </Heading>
-
               {morDokumentRelasjon && (
                 <BodyShort className='my-5'>
                   Dette dokumentet er et arv fra{' '}
@@ -180,20 +179,18 @@ export const EtterlevelseDokumentasjonPage = () => {
                       </InfoCard.Header>
                     </InfoCard>
                   )}
-
-                  {etterlevelseDokumentasjon.forGjenbruk &&
-                    (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                      <GjenbrukAlert
-                        defaultOpen={!etterlevelseDokumentasjon.tilgjengeligForGjenbruk}
-                      />
-                    )}
-
                   <div className='flex mb-5'>
                     <EtterlevelseDokumentasjonExpansionCard
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                       relasjonLoading={relasjonLoading}
                     />
                   </div>
+                  {etterlevelseDokumentasjon.forGjenbruk &&
+                    (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+                      <GjenbrukAlert
+                        defaultOpen={!etterlevelseDokumentasjon.tilgjengeligForGjenbruk}
+                      />
+                    )}
                 </div>
 
                 <div className='flex justify-end'>
