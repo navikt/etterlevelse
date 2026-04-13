@@ -199,20 +199,15 @@ export const EtterlevelseDokumentasjonPage = () => {
                 <div className='flex justify-end'>
                   {etterlevelseDokumentasjon && (
                     <div className='gap-4 ml-5 flex flex-col '>
-                      {(etterlevelseDokumentasjon.hasCurrentUserAccess ||
-                        user.isAdmin() ||
-                        user.isPersonvernombud() ||
-                        etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) && (
-                        <EtterlevelseDokumentasjonButtonGroup
-                          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                          setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-                          relasjonLoading={relasjonLoading}
-                          morDokumentRelasjon={morDokumentRelasjon}
-                          pvkDokument={pvkDokument}
-                          behandlingsLivslop={behandlingsLivslop}
-                          behandlingensArtOgOmfang={artOgOmfang}
-                        />
-                      )}
+                      <EtterlevelseDokumentasjonButtonGroup
+                        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                        setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
+                        relasjonLoading={relasjonLoading}
+                        morDokumentRelasjon={morDokumentRelasjon}
+                        pvkDokument={pvkDokument}
+                        behandlingsLivslop={behandlingsLivslop}
+                        behandlingensArtOgOmfang={artOgOmfang}
+                      />
                     </div>
                   )}
                 </div>

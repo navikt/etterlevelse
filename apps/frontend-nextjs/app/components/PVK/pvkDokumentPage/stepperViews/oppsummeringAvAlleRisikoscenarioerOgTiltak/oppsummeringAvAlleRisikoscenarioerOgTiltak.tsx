@@ -499,11 +499,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               )}
                             {pvkDokument &&
                               (isReadOnlyPvkStatus(pvkDokument.status) ||
-                                (!user.isAdmin() &&
-                                  (user.isPersonvernombud() ||
-                                    etterlevelseDokumentasjon.risikoeiere.includes(
-                                      user.getIdent()
-                                    )))) && (
+                                !(
+                                  user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess
+                                )) && (
                                 <OppsumeringAccordianListReadOnlyView
                                   risikoscenarioList={filteredRisikoscenarioList}
                                   allRisikoscenarioList={risikoscenarioList}
@@ -635,7 +633,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                 />
               )}
 
-              {pvkDokument.antallInnsendingTilPvo > 1 && (
+              {pvkDokument.antallInnsendingTilPvo >= 1 && (
                 <div className='mt-10'>
                   <PvoTilbakemeldingsHistorikk
                     pvkDokument={pvkDokument}

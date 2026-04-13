@@ -301,9 +301,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             )}
 
           {((pvkDokument && isReadOnlyPvkStatus(pvkDokument.status)) ||
-            ((user.isPersonvernombud() ||
-              etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())) &&
-              !user.isAdmin())) && (
+            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
             <BehandlingensLivslopReadOnlyContent
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
@@ -324,7 +322,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                       sentDate={relevantVurdering.sendtDato}
                     />
                   )}
-                  {pvkDokument.antallInnsendingTilPvo > 1 && (
+                  {pvkDokument.antallInnsendingTilPvo >= 1 && (
                     <div className='mt-10'>
                       <PvoTilbakemeldingsHistorikk
                         pvkDokument={pvkDokument}

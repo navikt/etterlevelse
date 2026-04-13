@@ -329,7 +329,8 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
                       if (
                         harLagretInnholdSomPaavirkesAvEgenskap &&
-                        selected.includes(behandlerPvkIndex[0])
+                        selected.includes(behandlerPvkIndex[0]) &&
+                        !selectedFilter.includes(behandlerPvkIndex[0])
                       ) {
                         setShowBehandlerPersonopplysningerInfoCard(true)
                       }

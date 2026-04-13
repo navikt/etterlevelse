@@ -208,7 +208,8 @@ public class EtterlevelseDokumentasjonService {
             var team = teamcatTeamClient.getTeam(teamId);
             team.ifPresent(value -> teamMembers.addAll(convert(value.getMembers(), Member::getNavIdent)));
         });
-        if (!teamMembers.contains(SecurityUtils.getCurrentIdent()) && !etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getResources().contains(SecurityUtils.getCurrentIdent())) {
+        if (!teamMembers.contains(SecurityUtils.getCurrentIdent()) && !etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getResources().contains(SecurityUtils.getCurrentIdent())
+            && !SecurityUtils.isAdmin()) {
             throw new ValidationException("Kan ikke øke versjon fordi brukeren ikke er medlem av Etterlvelses dokument. ");
         }
 

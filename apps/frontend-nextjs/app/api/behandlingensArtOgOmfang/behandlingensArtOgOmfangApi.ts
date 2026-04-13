@@ -1,7 +1,7 @@
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 
 export const getAllBehandlingensArtOgOmfang = async () => {
@@ -84,22 +84,28 @@ export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string
   const [data, setData] = useState<IBehandlingensArtOgOmfang>(
     mapBehandlingensArtOgOmfangToFormValue({})
   )
-  const [isLoading, setIsLoading] = useState<boolean>(!etterlevelseDokumentasjonId)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const abortedRef = useRef(false)
 
   useEffect(() => {
     abortedRef.current = false
     if (etterlevelseDokumentasjonId) {
       ;(async () => {
+        setIsLoading(true)
         await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
           .then(async (artOfOmfang) => {
             if (!abortedRef.current && artOfOmfang) {
               setData(artOfOmfang)
             }
           })
+          .catch(async (error: AxiosError) => {
+            if (error.status === 404) {
+              setData(mapBehandlingensArtOgOmfangToFormValue({}))
+            }
+          })
           .finally(() => {
             if (!abortedRef.current) {
-              setIsLoading(true)
+              setIsLoading(false)
             }
           })
       })()

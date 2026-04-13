@@ -85,9 +85,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
         {!loading &&
           artOgOmfang &&
           (isReadOnlyPvkStatus(pvkDokument.status) ||
-            (!user.isAdmin() &&
-              (user.isPersonvernombud() ||
-                etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())))) && (
+            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
             <ArtOgOmfangReadOnlyContent
               artOgOmfang={artOgOmfang}
               personkategorier={personkategorier}
@@ -108,7 +106,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                   />
                 )}
 
-                {pvkDokument.antallInnsendingTilPvo > 1 && (
+                {pvkDokument.antallInnsendingTilPvo >= 1 && (
                   <div className='mt-10'>
                     <PvoTilbakemeldingsHistorikk
                       pvkDokument={pvkDokument}
