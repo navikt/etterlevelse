@@ -22,7 +22,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different --write",
-      "eslint --max-warnings 0",
+      "eslint --cache",
       "bash -c 'yarn run type-check'"
     ]
   },
