@@ -210,6 +210,24 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
   }, [])
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash
+
+      if (hash) {
+        const targetId = decodeURIComponent(hash.slice(1))
+        const target = document.getElementById(targetId)
+
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          if (target instanceof HTMLElement) {
+            target.focus({ preventScroll: true })
+          }
+        }
+      }
+    }
+  }, [pathName])
+
+  useEffect(() => {
     if (!_.isEmpty(formRef.current.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
