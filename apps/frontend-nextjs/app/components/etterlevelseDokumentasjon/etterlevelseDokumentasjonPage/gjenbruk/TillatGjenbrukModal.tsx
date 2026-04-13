@@ -118,10 +118,10 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
 
                   {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                     <InlineMessage status='info' className='mt-5'>
-                      Det er alltid mulig å skjule gjenbruk for andre. Veiledning som dere har
-                      skrevet, vil fortsatt synes for dere og de som allerede gjenbruker dokumentet.
-                      Gjenbruksmulighet skjules for alle andre. Etter hvert kan dere velge om dere
-                      vil slå på gjenbruk på nytt.
+                      Det er alltid mulig ả slä av gjenbruk slik at muligheten ikke vises lenger.
+                      Veiledning som dere har skrevet, vil fortsatt synes for dere og de som
+                      allerede gjenbruker dokumentet. Etter hvert kan dere velge om dere vil slá pả
+                      gjenbruk pả nytt.
                     </InlineMessage>
                   )}
                 </Modal.Body>
