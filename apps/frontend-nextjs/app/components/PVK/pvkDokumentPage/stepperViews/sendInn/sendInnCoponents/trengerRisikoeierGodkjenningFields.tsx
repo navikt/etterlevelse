@@ -1,6 +1,5 @@
 'use client'
 
-import { arkiver } from '@/api/p360/p360Api'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import BeskjedTilRisikoeierReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilRisikoeierReadOnly'
@@ -17,7 +16,6 @@ import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import _ from 'lodash'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 
@@ -48,7 +46,6 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   initialStatus,
   errorSummaryComponent,
   pvoVurderingList,
-  errors,
   savedAlert,
 }) => {
   const user = useContext(UserContext)
@@ -145,11 +142,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
                     'godkjentAvRisikoeier',
                     user.getIdent() + ' - ' + user.getName()
                   )
-                  await submitForm().then(async () => {
-                    if (_.isEmpty(errors)) {
-                      await arkiver(etterlevelseDokumentasjon.id, true, false, true, false)
-                    }
-                  })
+                  await submitForm()
                 }}
               >
                 Aksepter restrisiko og arkiver i Public 360

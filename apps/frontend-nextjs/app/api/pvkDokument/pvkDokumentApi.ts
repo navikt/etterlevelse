@@ -85,6 +85,18 @@ export const updatePvkDokument = async (pvkDokument: IPvkDokument): Promise<IPvk
     .data
 }
 
+export const godkjenOgArkiverPvkDokument = async (
+  pvkDokument: IPvkDokument
+): Promise<IPvkDokument> => {
+  const dto = pvkDokumentToPvkDokumentDto(pvkDokument)
+  return (
+    await axios.put<IPvkDokument>(
+      `${env.backendBaseUrl}/pvkdokument/godkjenning/${pvkDokument.id}`,
+      dto
+    )
+  ).data
+}
+
 export const deletePvkDokument = async (id: string): Promise<IPvkDokument> =>
   (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
 

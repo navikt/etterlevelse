@@ -10,6 +10,7 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentListItemResponse;
@@ -23,6 +24,8 @@ import no.nav.data.pvk.tiltak.TiltakService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -38,6 +41,7 @@ public class PvkDokumentController {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final RisikoscenarioService risikoscenarioService;
+    private final P360ArkiveringService p360ArkiveringService;
     private final TiltakService tiltakService;
 
     @Operation(summary = "Get All Pvk Document")
@@ -166,6 +170,42 @@ public class PvkDokumentController {
             checkIfPvkDocumentBeenUpdatedAfterApproval(response);
             return ResponseEntity.ok(response);
         }
+    }
+
+    @Operation(summary = "Update Pvk Document")
+    @ApiResponse(description = "Pvk Document updated")
+    @PutMapping("/godkjenning/{id}")
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ResponseEntity<PvkDokumentResponse> risikoeierApproveAndArchivePvkDokument(@PathVariable UUID id, @Valid @RequestBody PvkDokumentRequest request) {
+        log.info("Approving and archiving Pvk Document id={}", id);
+
+        if (!Objects.equals(id, request.getId())) {
+            throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        var pvkDokumentToUpdate = pvkDokumentService.get(id);
+
+        if(pvkDokumentToUpdate == null) {
+            throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
+        }
+
+        request.mergeInto(pvkDokumentToUpdate);
+        var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
+        updatePvoTilbakemeldingStatus(pvkDokument);
+
+        try {
+            p360ArkiveringService.archive(pvkDokument.getEtterlevelseDokumentId(), true, false, true, true);
+        } catch (Exception e) {
+            log.error("Failed to archive etterlevelse dokumentasjon with id {}", pvkDokument.getEtterlevelseDokumentId(), e);
+            throw new ValidationException("Failed to archive etterlevelse dokumentasjon with id " + pvkDokument.getEtterlevelseDokumentId() + " error stack: " + e);
+        }
+
+
+        var response = PvkDokumentResponse.buildFrom(pvkDokument);
+        addEtterlevelseDokumentasjonVersjon(response);
+        checkIfPvkDocumentationHasStarted(response);
+        checkIfPvkDocumentBeenUpdatedAfterApproval(response);
+        return ResponseEntity.ok(response);
     }
 
     private void updatePvoTilbakemeldingStatus(PvkDokument pvkDokument) {
