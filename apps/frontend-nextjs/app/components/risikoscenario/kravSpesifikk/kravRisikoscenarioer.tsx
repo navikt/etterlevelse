@@ -116,6 +116,20 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   }, [krav, pvkDokument])
 
   useEffect(() => {
+    ;(async () => {
+      if (risikoscenarioId) {
+        setTimeout(() => {
+          const accordionItem = document.getElementById(risikoscenarioId)
+          if (accordionItem) {
+            accordionItem.scrollIntoView({ behavior: 'smooth' })
+            accordionItem.focus()
+          }
+        }, 200)
+      }
+    })()
+  }, [risikoscenarioId])
+
+  useEffect(() => {
     // One-shot success message set by the edit flow when a scenario is removed from this krav.
     if (!pvkDokument?.etterlevelseDokumentId || !krav?.kravNummer || !krav?.kravVersjon) return
     const storageKey = `pvk:removed-risikoscenario-from-krav:${pvkDokument.etterlevelseDokumentId}:${krav.kravNummer}:${krav.kravVersjon}`
@@ -139,7 +153,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
       } else {
         setIsTiltakFormActive(false)
         setActiveRisikoscenarioId(risikoscenarioId)
-        router.push(risikoscenarioUrl(risikoscenarioId))
+        router.push(risikoscenarioUrl(risikoscenarioId), { scroll: false })
       }
     } else {
       if (formRef.current?.dirty && !isCreateMode) {
@@ -147,7 +161,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
       } else {
         setIsTiltakFormActive(false)
         setActiveRisikoscenarioId('')
-        router.push(pathName)
+        router.push(pathName, { scroll: false })
       }
     }
   }

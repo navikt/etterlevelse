@@ -74,11 +74,16 @@ export const KravRisikoscenarioGodkjentAccordianList: FunctionComponent<TProps> 
 
   useEffect(() => {
     ;(async () => {
-      console.debug('TRIGGER')
-
       if (risikoscenarioId && !openAccordion.includes(risikoscenarioId)) {
-        console.debug('TRIGGER')
         setOpenAccordion([...openAccordion, risikoscenarioId])
+
+        setTimeout(() => {
+          const accordionItem = document.getElementById(risikoscenarioId)
+          if (accordionItem) {
+            accordionItem.scrollIntoView({ behavior: 'smooth' })
+            accordionItem.focus()
+          }
+        }, 200)
       }
     })()
   }, [risikoscenarioId])
@@ -123,10 +128,10 @@ export const KravRisikoscenarioGodkjentAccordianList: FunctionComponent<TProps> 
                   onOpenChange={(open: boolean) => {
                     if (open) {
                       setOpenAccordion([...openAccordion, risikoscenario.id])
-                      router.push(risikoscenarioUrl(risikoscenario.id))
+                      router.push(risikoscenarioUrl(risikoscenario.id), { scroll: false })
                     } else {
                       setOpenAccordion(openAccordion.filter((id) => id !== risikoscenario.id))
-                      router.push(pathName)
+                      router.push(pathName, { scroll: false })
                     }
                   }}
                 >
