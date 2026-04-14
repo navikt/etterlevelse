@@ -1,4 +1,4 @@
-import { EObjectType } from '@/constants/admin/audit/auditConstants'
+import { EAuditAction, EObjectType } from '@/constants/admin/audit/auditConstants'
 
 export const objectTypeToOptions = (
   objectType: EObjectType | string
@@ -54,6 +54,21 @@ export const objectTypeToOptions = (
         label: 'EtterlevelseArkiv (Old data)',
       }
 
+    default:
+      return { value: 'NULL', label: 'NULL' }
+  }
+}
+
+export const actionToOptions = (
+  actionType: EAuditAction | string
+): { value: string; label: string } => {
+  switch (actionType) {
+    case EAuditAction.CREATE:
+      return { value: EAuditAction.CREATE, label: 'Create' }
+    case EAuditAction.UPDATE:
+      return { value: EAuditAction.UPDATE, label: 'Update' }
+    case EAuditAction.DELETE:
+      return { value: EAuditAction.DELETE, label: 'Delete' }
     default:
       return { value: 'NULL', label: 'NULL' }
   }

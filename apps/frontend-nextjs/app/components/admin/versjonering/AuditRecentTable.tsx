@@ -1,9 +1,9 @@
 'use client'
 
 import { getAudits, getAuditsByTableId } from '@/api/audit/auditApi'
-import { EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
+import { EAuditAction, EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
-import { objectTypeToOptions } from '@/util/auditUtils/auditUtils'
+import { actionToOptions, objectTypeToOptions } from '@/util/auditUtils/auditUtils'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import {
@@ -73,8 +73,11 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const [limit, setLimit] = useState(20)
   const length = getInitialLength()
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
+  const [action, setAction] = useState<EAuditAction | undefined>()
   const [page, setPage] = useState(1)
   const [idInput, setIdInput] = useDebouncedState('', 400)
+
+  console.debug(action)
 
   useEffect(() => {
     ;(async () => {
@@ -112,6 +115,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   }
 
   const tableOptions = Object.keys(EObjectType).map((ot) => objectTypeToOptions(ot as EObjectType))
+  const actionOptions = Object.keys(EAuditAction).map((oa) => actionToOptions(oa as EAuditAction))
 
   return (
     <div>
@@ -132,26 +136,50 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
           Siste endringer
         </Heading>
         {!props.tableType && (
-          <div className='w-98 flex justify-between items-center'>
-            <Label className='mr-2'>Tabell:</Label>
-            <Select
-              label='Velg type for versjonering'
-              hideLabel
-              onChange={(e) => {
-                if (e.target.value === 'Codelist') {
-                  setTable(e.target.value.toUpperCase() as EObjectType)
-                } else {
-                  setTable(e.target.value as EObjectType)
-                }
-              }}
-            >
-              <option value=''>Velg type for versjonering</option>
-              {tableOptions.map((tableOption, index) => (
-                <option key={index + '_' + tableOption.label} value={tableOption.value}>
-                  {tableOption.label}
-                </option>
-              ))}
-            </Select>
+          <div>
+            <div className='w-98 flex justify-between items-center mb-5'>
+              <Label className='mr-2'>Tabell:</Label>
+              <Select
+                label='Velg type for versjonering'
+                hideLabel
+                onChange={(e) => {
+                  if (e.target.value === 'Codelist') {
+                    setTable(e.target.value.toUpperCase() as EObjectType)
+                  } else {
+                    setTable(e.target.value as EObjectType)
+                  }
+                }}
+              >
+                <option value=''>Velg type for versjonering</option>
+                {tableOptions.map((tableOption, index) => (
+                  <option key={index + '_' + tableOption.label} value={tableOption.value}>
+                    {tableOption.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+
+            {!props.tableType && (
+              <div className='w-98 flex justify-between items-center mb-5'>
+                <Label className='mr-2'>Action:</Label>
+                <Select
+                  label='Velg action for versjonering'
+                  hideLabel
+                  onChange={(e) => {
+                    if (e.target.value === 'Codelist') {
+                      setAction(e.target.value.toUpperCase() as EAuditAction)
+                    }
+                  }}
+                >
+                  <option value=''>Velg action for versjonering</option>
+                  {actionOptions.map((actionOption, index) => (
+                    <option key={index + '_' + actionOption.label} value={actionOption.value}>
+                      {actionOption.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            )}
           </div>
         )}
       </div>

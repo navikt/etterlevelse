@@ -114,10 +114,12 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
     abortedRef.current = false
     if (pvkDokumentId && !isCreateNew) {
       ;(async () => {
+        setIsLoading(true)
+
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument: IPvkDokument) => {
           if (!abortedRef.current) {
             setData(mapPvkDokumentToFormValue(pvkDokument))
-            setIsLoading(true)
+            setIsLoading(false)
           }
         })
       })()
@@ -130,7 +132,7 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
               if (pvkDokument) {
                 setData(mapPvkDokumentToFormValue(pvkDokument))
               }
-              setIsLoading(true)
+              setIsLoading(false)
             }
           }
         )

@@ -58,6 +58,7 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
     abortedRef.current = false
     if (pvkDokumentId) {
       ;(async () => {
+        setIsLoading(true)
         await getPvkDokument(pvkDokumentId).then(async (pvkDokument) => {
           const antallInnsending = pvkDokument.antallInnsendingTilPvo
 
@@ -89,7 +90,7 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
             })
             .finally(() => {
               if (!abortedRef.current) {
-                setIsLoading(true)
+                setIsLoading(false)
               }
             })
         })
