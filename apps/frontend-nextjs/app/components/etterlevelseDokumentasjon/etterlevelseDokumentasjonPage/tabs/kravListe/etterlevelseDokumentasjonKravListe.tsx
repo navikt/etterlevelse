@@ -178,10 +178,16 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => true))
-              router.push(
-                etterlevelseDokumentasjonAlleOpenUrl(params.etterlevelseDokumentasjonId),
-                { scroll: false }
-              )
+
+              const tabQuery = queryParams.get('tab')
+
+              let url = etterlevelseDokumentasjonAlleOpenUrl(params.etterlevelseDokumentasjonId)
+
+              if (![null, undefined, ''].includes(tabQuery)) {
+                url += '&tab=' + tabQuery
+              }
+
+              router.push(url, { scroll: false })
             }}
           >
             Åpne alle tema
@@ -191,10 +197,16 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
             size='xsmall'
             onClick={() => {
               setOpenAccordions(temaListe.map(() => false))
-              router.push(
-                etterlevelseDokumentasjonAlleClosedUrl(params.etterlevelseDokumentasjonId),
-                { scroll: false }
-              )
+
+              const tabQuery = queryParams.get('tab')
+
+              let url = etterlevelseDokumentasjonAlleClosedUrl(params.etterlevelseDokumentasjonId)
+
+              if (![null, undefined, ''].includes(tabQuery)) {
+                url += '&tab=' + tabQuery
+              }
+
+              router.push(url, { scroll: false })
             }}
           >
             Lukk alle tema
