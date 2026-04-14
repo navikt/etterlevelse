@@ -48,10 +48,7 @@ export const EtterlevelseDokumentasjonReadmore: FunctionComponent<TProps> = ({
           EReadmoreTilstand.GJENBRUK_PA && (
           <div className='mt-5'>
             <ReadMore header='Du kan gjenbruke dette etterlevelsesdokumentet'>
-              {readmoreTilstandUtil(etterlevelseDokumentasjon, relasjonLoading) ===
-                EReadmoreTilstand.TIlGJENGELIG_FOR_GJENBRUK && (
-                <TilgjengeligForGjenbruk etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
-              )}
+              <TilgjengeligForGjenbruk etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
             </ReadMore>
           </div>
         )}
