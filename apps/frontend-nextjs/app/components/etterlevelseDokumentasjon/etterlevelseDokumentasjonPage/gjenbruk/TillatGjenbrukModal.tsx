@@ -7,9 +7,10 @@ import {
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Button, InlineMessage, List, Modal } from '@navikt/ds-react'
+import { Button, ErrorSummary, InlineMessage, List, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, useState } from 'react'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { gjenbrukDokumentasjonSchema } from './form/gjenbrukSchema'
 
 type TProps = {
@@ -28,6 +29,10 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
   renderTrigger = true,
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const [submitClick, setSubmitClick] = useState<boolean>(false)
+
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const formRef: RefObject<any> = useRef(undefined)
 
   const isOpen = controlledIsOpen ?? internalIsOpen
   const setIsOpen = controlledSetIsOpen ?? setInternalIsOpen
@@ -48,6 +53,12 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
     )
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    if (!_.isEmpty(formRef.current.errors) && errorSummaryRef.current) {
+      errorSummaryRef.current.focus()
+    }
+  }, [submitClick])
 
   if (!renderTrigger && !isOpen) {
     return null
@@ -88,11 +99,12 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
               etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {}
             )}
             onSubmit={submit}
+            innerRef={formRef}
             validationSchema={gjenbrukDokumentasjonSchema()}
             validateOnChange={false}
             validateOnBlur={false}
           >
-            {({ setFieldValue, submitForm, isSubmitting, initialValues }) => (
+            {({ setFieldValue, submitForm, isSubmitting, initialValues, errors }) => (
               <Form>
                 <Modal.Body>
                   <List as='ul' className='mb-5'>
@@ -118,11 +130,41 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
 
                   {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                     <InlineMessage status='info' className='mt-5'>
-                      Det er alltid mulig å skjule gjenbruk for andre. Veiledning som dere har
-                      skrevet, vil fortsatt synes for dere og de som allerede gjenbruker dokumentet.
-                      Gjenbruksmulighet skjules for alle andre. Etter hvert kan dere velge om dere
-                      vil slå på gjenbruk på nytt.
+                      Det er alltid mulig ả slä av gjenbruk slik at muligheten ikke vises lenger.
+                      Veiledning som dere har skrevet, vil fortsatt synes for dere og de som
+                      allerede gjenbruker dokumentet. Etter hvert kan dere velge om dere vil slá pả
+                      gjenbruk pả nytt.
                     </InlineMessage>
+                  )}
+
+                  {(errors.title ||
+                    errors.beskrivelse ||
+                    errors.varslingsadresser ||
+                    errors.teamsData ||
+                    errors.resourcesData ||
+                    errors.nomAvdelingId) && (
+                    <ErrorSummary
+                      ref={errorSummaryRef}
+                      className='mt-5'
+                      heading='Du må rette disse feilene under dokumentegenskap før du kan slå på gjenbruk'
+                    >
+                      {Object.entries(errors)
+                        .filter(([, error]) => error)
+                        .map(([key, error]) => {
+                          if (key !== 'gjenbrukBeskrivelse') {
+                            return (
+                              <ErrorSummary.Item
+                                href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#${key}`}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                key={key}
+                              >
+                                {error as string} (åpner i en ny fane)
+                              </ErrorSummary.Item>
+                            )
+                          }
+                        })}
+                    </ErrorSummary>
                   )}
                 </Modal.Body>
                 <Modal.Footer>
@@ -130,9 +172,10 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                     type='submit'
                     variant='primary'
                     disabled={isSubmitting}
-                    onClick={() => {
-                      setFieldValue('tilgjengeligForGjenbruk', true)
-                      submitForm()
+                    onClick={async () => {
+                      setSubmitClick(!submitClick)
+                      await setFieldValue('tilgjengeligForGjenbruk', true)
+                      await submitForm()
                     }}
                   >
                     {etterlevelseDokumentasjon.tilgjengeligForGjenbruk
@@ -146,9 +189,10 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                         type='button'
                         variant='secondary'
                         disabled={isSubmitting}
-                        onClick={() => {
-                          setFieldValue('tilgjengeligForGjenbruk', false)
-                          submitForm()
+                        onClick={async () => {
+                          setSubmitClick(!submitClick)
+                          await setFieldValue('tilgjengeligForGjenbruk', false)
+                          await submitForm()
                         }}
                       >
                         Slå av gjenbruk

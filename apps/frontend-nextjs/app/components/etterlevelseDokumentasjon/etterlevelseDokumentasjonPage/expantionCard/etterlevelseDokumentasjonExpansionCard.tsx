@@ -10,28 +10,20 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
-import {
-  etterlevelseDokumentasjonGjenbrukIdUrl,
-  etterlevelseDokumentasjonRelasjonUrl,
-  etterlevelsesDokumentasjonEditUrl,
-} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { p360Url } from '@/routes/p360/p360Routes'
 import { ettlevColors } from '@/util/theme/theme'
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
+import { BodyLong, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  relasjonLoading?: boolean
 }
 
 export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  relasjonLoading,
 }) => {
-  const router = useRouter()
   const codelist = useContext(CodelistContext)
   const user = useContext(UserContext)
 
@@ -44,213 +36,171 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 
   return (
     <div>
-      <div>
-        <ReadMore
-          header='Les mer om dette dokumentet'
-          aria-label='Les mer om dette dokumentet'
-          className='w-full'
-        >
-          <div>
-            {etterlevelseDokumentasjon.beskrivelse && (
-              <div className='mb-5'>
-                <Heading className='mb-3' level='2' size='small'>
-                  Dokumentbeskrivelse
-                </Heading>
-                <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
-              </div>
+      <ReadMore
+        header='Les mer om dette dokumentet'
+        aria-label='Les mer om dette dokumentet'
+        className='w-full'
+      >
+        <div>
+          {etterlevelseDokumentasjon.beskrivelse && (
+            <div className='mb-5'>
+              <Heading className='mb-3' level='2' size='small'>
+                Dokumentbeskrivelse
+              </Heading>
+              <Markdown source={etterlevelseDokumentasjon.beskrivelse} />
+            </div>
+          )}
+
+          <Heading className='mb-3' level='2' size='small'>
+            Dokumentegenskaper
+          </Heading>
+
+          <div className='max-w-[75ch]'>
+            <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
+            {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
+              <DpBehandlingList dpBehandlingIds={dpBehandlingIds} dpBehandlinger={dpBehandlinger} />
             )}
 
-            <Heading className='mb-3' level='2' size='small'>
-              Dokumentegenskaper
-            </Heading>
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div className='mt-0.75'>
+                <Label size='medium'>Egenskaper:</Label>
+              </div>
 
-            <div className='max-w-[75ch]'>
-              <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
-              {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
-                <DpBehandlingList
-                  dpBehandlingIds={dpBehandlingIds}
-                  dpBehandlinger={dpBehandlinger}
-                />
+              <RelevansView
+                relevansCodeList={relevansCodeList}
+                irrelevans={irrelevansFor}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+              />
+            </div>
+
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div>
+                <Label size='medium'>Dokumentasjon:</Label>
+              </div>
+              <BodyLong size='medium'>
+                {etterlevelseDokumentasjon.risikovurderinger.length !== 0 &&
+                  etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
+                    const rosReg = /\[(.+)]\((.+)\)/i
+                    const rosParts = vurdering.match(rosReg)
+                    if (rosParts)
+                      return (
+                        <ExternalLink key={vurdering} className='flex' href={rosParts[2]}>
+                          {rosParts[1]}
+                        </ExternalLink>
+                      )
+                    return (
+                      <span className='flex' key={vurdering}>
+                        {vurdering}
+                      </span>
+                    )
+                  })}
+
+                {etterlevelseDokumentasjon.risikovurderinger.length === 0 && 'Ikke angitt'}
+              </BodyLong>
+            </div>
+
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div>
+                <Label size='medium'>Saksnummer i Public 360:</Label>
+              </div>
+              {etterlevelseDokumentasjon.p360CaseNumber !== '' && (
+                <Link
+                  href={p360Url(etterlevelseDokumentasjon.p360Recno)}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  {etterlevelseDokumentasjon.p360CaseNumber} (åpner i en ny fane)
+                </Link>
               )}
 
-              <div className='flex items-start gap-2 mb-2.5'>
-                <div className='mt-0.75'>
-                  <Label size='medium'>Egenskaper:</Label>
-                </div>
+              {etterlevelseDokumentasjon.p360CaseNumber === '' && (
+                <BodyLong>Ingen saksnummer</BodyLong>
+              )}
+            </div>
 
-                <RelevansView
-                  relevansCodeList={relevansCodeList}
-                  irrelevans={irrelevansFor}
-                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                />
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div>
+                <Label size='medium'>Avdeling:</Label>
               </div>
+              <BodyLong size='medium'>
+                {etterlevelseDokumentasjon.nomAvdelingId && etterlevelseDokumentasjon.avdelingNavn}
+                {!etterlevelseDokumentasjon.nomAvdelingId && 'Ikke angitt'}
+              </BodyLong>
+            </div>
 
-              <div className='flex items-start gap-2 mb-2.5'>
-                <div>
-                  <Label size='medium'>Dokumentasjon:</Label>
-                </div>
-                <BodyLong size='medium'>
-                  {etterlevelseDokumentasjon.risikovurderinger.length !== 0 &&
-                    etterlevelseDokumentasjon.risikovurderinger.map((vurdering) => {
-                      const rosReg = /\[(.+)]\((.+)\)/i
-                      const rosParts = vurdering.match(rosReg)
-                      if (rosParts)
-                        return (
-                          <ExternalLink key={vurdering} className='flex' href={rosParts[2]}>
-                            {rosParts[1]}
-                          </ExternalLink>
-                        )
-                      return (
-                        <span className='flex' key={vurdering}>
-                          {vurdering}
-                        </span>
-                      )
-                    })}
-
-                  {etterlevelseDokumentasjon.risikovurderinger.length === 0 && 'Ikke angitt'}
-                </BodyLong>
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div>
+                <Label size='medium'>Seksjon:</Label>
               </div>
-
-              <div className='flex items-start gap-2 mb-2.5'>
-                <div>
-                  <Label size='medium'>Saksnummer i Public 360:</Label>
-                </div>
-                {etterlevelseDokumentasjon.p360CaseNumber !== '' && (
-                  <Link
-                    href={p360Url(etterlevelseDokumentasjon.p360Recno)}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    {etterlevelseDokumentasjon.p360CaseNumber} (åpner i en ny fane)
-                  </Link>
-                )}
-
-                {etterlevelseDokumentasjon.p360CaseNumber === '' && (
-                  <BodyLong>Ingen saksnummer</BodyLong>
-                )}
-              </div>
-
-              <div className='flex items-start gap-2 mb-2.5'>
-                <div>
-                  <Label size='medium'>Avdeling:</Label>
-                </div>
-                <BodyLong size='medium'>
-                  {etterlevelseDokumentasjon.nomAvdelingId &&
-                    etterlevelseDokumentasjon.avdelingNavn}
-                  {!etterlevelseDokumentasjon.nomAvdelingId && 'Ikke angitt'}
-                </BodyLong>
-              </div>
-
-              <div className='flex items-start gap-2 mb-2.5'>
-                <div>
-                  <Label size='medium'>Seksjon:</Label>
-                </div>
-                <BodyLong as='div' size='medium'>
-                  {etterlevelseDokumentasjon.seksjoner.length !== 0 && (
-                    <div className='flex flex-wrap tri'>
-                      <BodyLong size='medium'>
-                        {etterlevelseDokumentasjon.seksjoner
-                          .map((seksjon) => seksjon.nomSeksjonName)
-                          .join(', ')}
-                      </BodyLong>
-                    </div>
-                  )}
-                  {etterlevelseDokumentasjon.seksjoner.length === 0 && 'Ikke angitt'}
-                </BodyLong>
-              </div>
-
-              <div className='mb-2.5'>
-                {teams.length > 0 && <Teams teams={teams} link />}
-                {teams.length === 0 && (
-                  <div className='flex flex-wrap gap-2 items-center'>
-                    <Label size='medium'>Team:</Label>
-                    <BodyLong size='medium'>Ikke angitt</BodyLong>
+              <BodyLong as='div' size='medium'>
+                {etterlevelseDokumentasjon.seksjoner.length !== 0 && (
+                  <div className='flex flex-wrap tri'>
+                    <BodyLong size='medium'>
+                      {etterlevelseDokumentasjon.seksjoner
+                        .map((seksjon) => seksjon.nomSeksjonName)
+                        .join(', ')}
+                    </BodyLong>
                   </div>
                 )}
-              </div>
+                {etterlevelseDokumentasjon.seksjoner.length === 0 && 'Ikke angitt'}
+              </BodyLong>
+            </div>
 
-              <div className='mb-2.5'>
-                {etterlevelseDokumentasjon.resourcesData &&
-                  etterlevelseDokumentasjon.resourcesData.length > 0 && (
-                    <div className='flex gap-2 items-start'>
-                      <Label size='medium'>Personer:</Label>
-                      <div className='flex flex-wrap tri'>
-                        <BodyLong size='medium'>
-                          {etterlevelseDokumentasjon.resourcesData
-                            .map((r) => r.fullName)
-                            .join(', ')}
-                        </BodyLong>
-                      </div>
-                    </div>
-                  )}
-
-                {etterlevelseDokumentasjon.resourcesData &&
-                  etterlevelseDokumentasjon.resourcesData.length === 0 && (
-                    <div className='flex flex-wrap gap-2 items-center'>
-                      <Label size='medium'>Personer:</Label>
-                      <BodyLong size='medium'>Ikke angitt</BodyLong>
-                    </div>
-                  )}
-              </div>
-
-              {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                <div className='flex items-start gap-2'>
-                  <div>
-                    <Label size='medium'>Varslingsadresser:</Label>
-                  </div>
-                  <div>
-                    {etterlevelseDokumentasjon.varslingsadresser && (
-                      <VarslingsadresserView
-                        varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
-                      />
-                    )}
-                  </div>
+            <div className='mb-2.5'>
+              {teams.length > 0 && <Teams teams={teams} link />}
+              {teams.length === 0 && (
+                <div className='flex flex-wrap gap-2 items-center'>
+                  <Label size='medium'>Team:</Label>
+                  <BodyLong size='medium'>Ikke angitt</BodyLong>
                 </div>
               )}
             </div>
-          </div>
-          {!(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-            <BodyLong>
-              Trenger du tilgang til å redigere dette dokumentet? I så fall ta kontakt med de som er
-              nevnt under Team eller Personer.
-            </BodyLong>
-          )}
-        </ReadMore>
-      </div>
-      {!relasjonLoading && etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-        <div className='mt-5'>
-          <ReadMore header='Du kan gjenbruke dette etterlevelsesdokumentet'>
-            {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-              <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />
-            )}
 
-            {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-              <>
-                <div className='mt-5'>
-                  <Button
-                    onClick={() => {
-                      router.push(
-                        etterlevelseDokumentasjonGjenbrukIdUrl(etterlevelseDokumentasjon.id)
-                      )
-                    }}
-                    size='small'
-                    variant='secondary'
-                    className='whitespace-nowrap mt-3'
-                    type='button'
-                  >
-                    Gjenbruk dokumentet
-                  </Button>
+            <div className='mb-2.5'>
+              {etterlevelseDokumentasjon.resourcesData &&
+                etterlevelseDokumentasjon.resourcesData.length > 0 && (
+                  <div className='flex gap-2 items-start'>
+                    <Label size='medium'>Personer:</Label>
+                    <div className='flex flex-wrap tri'>
+                      <BodyLong size='medium'>
+                        {etterlevelseDokumentasjon.resourcesData.map((r) => r.fullName).join(', ')}
+                      </BodyLong>
+                    </div>
+                  </div>
+                )}
+
+              {etterlevelseDokumentasjon.resourcesData &&
+                etterlevelseDokumentasjon.resourcesData.length === 0 && (
+                  <div className='flex flex-wrap gap-2 items-center'>
+                    <Label size='medium'>Personer:</Label>
+                    <BodyLong size='medium'>Ikke angitt</BodyLong>
+                  </div>
+                )}
+            </div>
+
+            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+              <div className='flex items-start gap-2'>
+                <div>
+                  <Label size='medium'>Varslingsadresser:</Label>
                 </div>
-                <div className='mt-5'>
-                  <Link href={etterlevelseDokumentasjonRelasjonUrl(etterlevelseDokumentasjon.id)}>
-                    Se hvilke etterlevelser som allerede gjenbruker dette dokumentet
-                  </Link>
+                <div>
+                  {etterlevelseDokumentasjon.varslingsadresser && (
+                    <VarslingsadresserView
+                      varslingsadresser={etterlevelseDokumentasjon.varslingsadresser}
+                    />
+                  )}
                 </div>
-              </>
+              </div>
             )}
-          </ReadMore>
+          </div>
         </div>
-      )}
+        {!(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+          <BodyLong>
+            Trenger du tilgang til å redigere dette dokumentet? I så fall ta kontakt med de som er
+            nevnt under Team eller Personer.
+          </BodyLong>
+        )}
+      </ReadMore>
     </div>
   )
 }

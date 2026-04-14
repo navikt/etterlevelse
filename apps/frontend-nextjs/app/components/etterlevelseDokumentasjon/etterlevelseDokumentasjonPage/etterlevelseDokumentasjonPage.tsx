@@ -23,7 +23,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -36,13 +35,11 @@ import { useContext, useEffect, useState } from 'react'
 import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonComponent'
 import { ContentLayout } from '../../others/layout/content/content'
 import { PageLayout } from '../../others/scaffold/scaffold'
-import { GjenbrukAlert } from './alert/GjenbrukAlert'
 import EtterlevelseDokumentasjonButtonGroup from './buttonGroup/etterlevelseDokumentasjonButtonGroup'
-import EtterlevelseDokumentasjonExpansionCard from './expantionCard/etterlevelseDokumentasjonExpansionCard'
+import { EtterlevelseDokumentasjonReadmore } from './readmore/readmore'
 import EtterlevelseDokumentasjonPageTabs from './tabs/etterlevelseDokumentasjonPageTabs'
 
 export const EtterlevelseDokumentasjonPage = () => {
-  const user = useContext(UserContext)
   const codelist = useContext(CodelistContext)
   const temaListe: TTemaCode[] = codelist.utils.getCodes(EListName.TEMA) as TTemaCode[]
   const params: Readonly<{
@@ -150,7 +147,6 @@ export const EtterlevelseDokumentasjonPage = () => {
                 E{etterlevelseNummer.toString()}.
                 {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} {title}
               </Heading>
-
               {morDokumentRelasjon && (
                 <BodyShort className='my-5'>
                   Dette dokumentet er et arv fra{' '}
@@ -167,34 +163,23 @@ export const EtterlevelseDokumentasjonPage = () => {
               )}
 
               <ContentLayout>
-                <div className='max-w-5xl flex-1'>
-                  {etterlevelseDokumentasjon.status ===
-                    EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
-                    <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
-                      <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-                        <InfoCard.Title>
-                          Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,
-                          vil det ikke være mulig å redigere kravdokumentasjon fram til at
-                          dokumentet er godkjent.
-                        </InfoCard.Title>
-                      </InfoCard.Header>
-                    </InfoCard>
-                  )}
+                {etterlevelseDokumentasjon.status ===
+                  EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
+                  <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
+                    <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                      <InfoCard.Title>
+                        Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,
+                        vil det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet
+                        er godkjent.
+                      </InfoCard.Title>
+                    </InfoCard.Header>
+                  </InfoCard>
+                )}
 
-                  {etterlevelseDokumentasjon.forGjenbruk &&
-                    (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                      <GjenbrukAlert
-                        defaultOpen={!etterlevelseDokumentasjon.tilgjengeligForGjenbruk}
-                      />
-                    )}
-
-                  <div className='flex mb-5'>
-                    <EtterlevelseDokumentasjonExpansionCard
-                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                      relasjonLoading={relasjonLoading}
-                    />
-                  </div>
-                </div>
+                <EtterlevelseDokumentasjonReadmore
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  relasjonLoading={relasjonLoading}
+                />
 
                 <div className='flex justify-end'>
                   {etterlevelseDokumentasjon && (
