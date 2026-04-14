@@ -19,6 +19,7 @@ export const SlackChannelSearch: FunctionComponent<TProps> = ({ add, close }) =>
   <AsyncSelect
     aria-label='Søk etter slack-kanal'
     placeholder='Søk etter slack-kanal'
+    tabSelectsValue={false}
     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
     controlShouldRenderValue={false}
     loadingMessage={() => 'Søker...'}

@@ -262,6 +262,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                   <AsyncSelect
                     aria-label='Søk etter etterlevelseskrav'
                     placeholder=''
+                    tabSelectsValue={false}
                     components={{ DropdownIndicator }}
                     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                     controlShouldRenderValue={false}

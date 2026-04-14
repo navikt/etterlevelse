@@ -111,6 +111,7 @@ export const BehandlingSok = () => {
           components={{ DropdownIndicator }}
           noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
           controlShouldRenderValue={false}
+          tabSelectsValue={false}
           loadingMessage={() => 'Søker...'}
           isClearable={false}
           loadOptions={searchBehandlingOptions}
