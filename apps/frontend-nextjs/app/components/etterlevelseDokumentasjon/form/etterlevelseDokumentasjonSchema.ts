@@ -1,13 +1,26 @@
 import * as yup from 'yup'
 
-export const titleCheck = yup.string().required('Etterlevelsesdokumentasjon trenger en tittel')
+enum EPaKrevd {
+  PAKREVD = 'Påkrevd minst 1 team eller 1 person',
+}
+
+export enum EEtterlevelseDokumentSchemaMelding {
+  TITLE = 'Etterlevelsesdokumentasjon trenger en tittel',
+  BESKRIVELSE = 'Etterlevelsesdokumentasjon trenger en beskrivelse',
+  VARSLINGSADRESSER = 'Påkrevd minst 1 varslingsadresse',
+  TEAMDATA = EPaKrevd.PAKREVD,
+  RESOURCEDATA = EPaKrevd.PAKREVD,
+  NOM_AVDELING_ID = 'Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen',
+}
+
+export const titleCheck = yup.string().required(EEtterlevelseDokumentSchemaMelding.TITLE)
 export const beskrivelseCheck = yup
   .string()
-  .required('Etterlevelsesdokumentasjon trenger en beskrivelse')
+  .required(EEtterlevelseDokumentSchemaMelding.BESKRIVELSE)
 
 export const varslingsadresserCheck = yup.array().test({
   name: 'varslingsadresserCheck',
-  message: 'Påkrevd minst 1 varslingsadresse',
+  message: EEtterlevelseDokumentSchemaMelding.VARSLINGSADRESSER,
   test: function (varslingsadresser) {
     return varslingsadresser && varslingsadresser.length > 0 ? true : false
   },
@@ -15,7 +28,7 @@ export const varslingsadresserCheck = yup.array().test({
 
 export const teamsDataCheck = yup.array().test({
   name: 'teamsDataCheck',
-  message: 'Påkrevd minst 1 team eller 1 person',
+  message: EEtterlevelseDokumentSchemaMelding.TEAMDATA,
   test: function (teamsData) {
     const { parent } = this
     return (teamsData && teamsData.length > 0) ||
@@ -27,7 +40,7 @@ export const teamsDataCheck = yup.array().test({
 
 export const resourcesDataCheck = yup.array().test({
   name: 'resourcesDataCheck',
-  message: 'Påkrevd minst 1 team eller 1 person',
+  message: EEtterlevelseDokumentSchemaMelding.RESOURCEDATA,
   test: function (resourcesData) {
     const { parent } = this
     return (resourcesData && resourcesData.length > 0) ||
@@ -44,9 +57,7 @@ export const etterlevelseDokumentasjonSchema = () =>
     varslingsadresser: varslingsadresserCheck,
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
-    nomAvdelingId: yup
-      .string()
-      .required('Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen'),
+    nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
   })
 
 export const etterlevelseDokumentasjonWithRelationSchema = () =>
@@ -58,7 +69,5 @@ export const etterlevelseDokumentasjonWithRelationSchema = () =>
       .required('Du må velge hvordan du ønsker å gjenbruke dette dokumentet'),
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
-    nomAvdelingId: yup
-      .string()
-      .required('Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen'),
+    nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
   })

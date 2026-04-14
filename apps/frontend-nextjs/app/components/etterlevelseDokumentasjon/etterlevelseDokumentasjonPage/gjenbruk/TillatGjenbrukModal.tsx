@@ -7,11 +7,11 @@ import {
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Button, InfoCard, InlineMessage, Link, List, Modal } from '@navikt/ds-react'
+import { Button, InlineMessage, List, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { GjenbrukFeilmelding } from './feilmelding/feilmelding'
 import { gjenbrukDokumentasjonSchema } from './form/gjenbrukSchema'
 
 type TProps = {
@@ -105,44 +105,12 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
             validateOnChange={false}
             validateOnBlur={false}
           >
-            {({ setFieldValue, submitForm, isSubmitting, initialValues, errors }) => (
+            {({ setFieldValue, submitForm, isSubmitting, initialValues, values }) => (
               <Form>
-                {(errors.title ||
-                  errors.beskrivelse ||
-                  errors.varslingsadresser ||
-                  errors.teamsData ||
-                  errors.resourcesData ||
-                  errors.nomAvdelingId) && (
-                  <InfoCard data-color='warning'>
-                    <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-                      <InfoCard.Title>
-                        Dere må oppdatere følgende felt i dokumentegenskaper før dere kan slå på
-                        gjenbruk.
-                      </InfoCard.Title>
-                    </InfoCard.Header>
-                    <InfoCard.Content>
-                      <List>
-                        {Object.entries(errors)
-                          .filter(([, error]) => error)
-                          .map(([key, error]) => {
-                            if (key !== 'gjenbrukBeskrivelse') {
-                              return (
-                                <List.Item key={key}>
-                                  <Link
-                                    href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#${key}`}
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                  >
-                                    {error as string} (åpner i en ny fane)
-                                  </Link>
-                                </List.Item>
-                              )
-                            }
-                          })}
-                      </List>
-                    </InfoCard.Content>
-                  </InfoCard>
-                )}
+                <GjenbrukFeilmelding
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  values={values}
+                />
 
                 <Modal.Body>
                   <List as='ul' className='mb-5'>
@@ -207,7 +175,15 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       </Button>
                     )}
 
-                  <Button type='button' variant='secondary' onClick={() => {}}>
+                  <Button
+                    type='submit'
+                    variant='secondary'
+                    disabled={isSubmitting}
+                    onClick={async () => {
+                      setSubmitClick(!submitClick)
+                      await submitForm()
+                    }}
+                  >
                     Lagre til senere
                   </Button>
 
