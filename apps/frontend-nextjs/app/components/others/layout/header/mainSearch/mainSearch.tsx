@@ -88,6 +88,7 @@ const MainSearch = () => {
         controlShouldRenderValue={false}
         loadingMessage={() => 'Søker...'}
         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+        tabSelectsValue={false}
         isClearable={false}
         loadOptions={useMainSearch}
         onChange={(selectedOption) => selectedOption && router.push([selectedOption].flat()[0].url)}
