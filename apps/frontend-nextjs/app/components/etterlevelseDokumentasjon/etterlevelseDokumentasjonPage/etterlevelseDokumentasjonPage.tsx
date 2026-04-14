@@ -23,7 +23,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { EListName, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
@@ -37,11 +36,10 @@ import { LoadingSkeleton } from '../../common/loadingSkeleton/loadingSkeletonCom
 import { ContentLayout } from '../../others/layout/content/content'
 import { PageLayout } from '../../others/scaffold/scaffold'
 import EtterlevelseDokumentasjonButtonGroup from './buttonGroup/etterlevelseDokumentasjonButtonGroup'
-import { ReadmoreEtterlevelsePVK } from './readmore/readmoreEtterlevelsePVK'
+import { EtterlevelseDokumentasjonReadmore } from './readmore/readmore'
 import EtterlevelseDokumentasjonPageTabs from './tabs/etterlevelseDokumentasjonPageTabs'
 
 export const EtterlevelseDokumentasjonPage = () => {
-  const user = useContext(UserContext)
   const codelist = useContext(CodelistContext)
   const temaListe: TTemaCode[] = codelist.utils.getCodes(EListName.TEMA) as TTemaCode[]
   const params: Readonly<{
@@ -178,10 +176,9 @@ export const EtterlevelseDokumentasjonPage = () => {
                   </InfoCard>
                 )}
 
-                <ReadmoreEtterlevelsePVK
+                <EtterlevelseDokumentasjonReadmore
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   relasjonLoading={relasjonLoading}
-                  user={user}
                 />
 
                 <div className='flex justify-end'>
