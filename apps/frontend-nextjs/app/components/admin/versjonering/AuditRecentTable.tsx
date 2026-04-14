@@ -82,20 +82,11 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
         if (idInput.length > 2) {
           setAudits(await getAuditsByTableId(page - 1, limit, idInput))
         } else {
-          setAudits(await getAudits(page - 1, limit, table))
+          setAudits(await getAudits(page - 1, limit, table, action))
         }
       }
     })()
-  }, [page, limit, props.show, table, idInput])
-
-  useEffect(() => {
-    ;(async () => {
-      if (action !== undefined) {
-        const filteredAudit = audits.content.filter((audit) => audit.action === action)
-        setAudits({ ...audits, content: filteredAudit })
-      }
-    })()
-  }, [action])
+  }, [page, limit, props.show, table, idInput, action])
 
   const handlePageChange = (nextPage: number) => {
     if (nextPage < 1) {
