@@ -15,6 +15,10 @@ public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID
 
     Page<AuditVersion> findByTable(String table, Pageable pageable);
 
+    Page<AuditVersion> findByAction(Action action, Pageable pageable);
+
+    Page<AuditVersion> findByTableAndAction(String table, Action action, Pageable pageable);
+
     Page<AuditVersion> findByTableId(String tableId, Pageable pageable);
 
     List<AuditVersion> findByTableIdOrderByTimeDesc(String tableId);

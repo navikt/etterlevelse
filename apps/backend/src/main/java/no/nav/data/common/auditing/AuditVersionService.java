@@ -3,10 +3,7 @@ package no.nav.data.common.auditing;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.auditing.domain.AuditVersion;
-import no.nav.data.common.auditing.domain.AuditVersionCustomRepo;
-import no.nav.data.common.auditing.domain.AuditVersionRepository;
-import no.nav.data.common.auditing.domain.MailLogRepository;
+import no.nav.data.common.auditing.domain.*;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -34,6 +31,14 @@ public class AuditVersionService {
 
     public Page<AuditVersion> findByTable(String table, Pageable pageable) {
         return repository.findByTable(table, pageable);
+    }
+
+    public Page<AuditVersion> findByAction(String action, Pageable pageable) {
+        return repository.findByAction(Enum.valueOf(Action.class, action), pageable);
+    }
+
+    public Page<AuditVersion> findByTableAndAction(String table, String action, Pageable pageable) {
+        return repository.findByTableAndAction(table, Enum.valueOf(Action.class, action), pageable);
     }
 
     public Page<AuditVersion> findByTableId(String tableId, Pageable pageable) {

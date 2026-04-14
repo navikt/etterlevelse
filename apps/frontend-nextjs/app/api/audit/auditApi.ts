@@ -1,4 +1,5 @@
 import {
+  EAuditAction,
   EObjectType,
   IAuditItem,
   IAuditLog,
@@ -15,11 +16,17 @@ export const getAuditLog = async (id: string) => {
   return auditLog
 }
 
-export const getAudits = async (page: number, count: number, table?: EObjectType) => {
+export const getAudits = async (
+  page: number,
+  count: number,
+  table?: EObjectType,
+  action?: EAuditAction
+) => {
   return (
     await axios.get<IPageResponse<IAuditItem>>(
       `${env.backendBaseUrl}/audit?pageNumber=${page}&pageSize=${count}` +
-        (table ? `&table=${table}` : '')
+        (table ? `&table=${table}` : '') +
+        (action ? `&action=${action}` : '')
     )
   ).data
 }

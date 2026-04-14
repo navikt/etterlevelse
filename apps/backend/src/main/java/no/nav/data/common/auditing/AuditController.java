@@ -36,15 +36,21 @@ public class AuditController {
     @Operation(summary = "Get Audit log")
     @ApiResponse(description = "Audit log fetched")
     @GetMapping
-    public ResponseEntity<RestResponsePage<AuditResponse>> getAll(PageParameters paging, @RequestParam(required = false) String table) {
+    public ResponseEntity<RestResponsePage<AuditResponse>> getAll(PageParameters paging, @RequestParam(required = false) String table, @RequestParam(required = false) String action) {
         log.info("Received request for Audit {} table {}", paging, table);
         Pageable pageable = paging.createSortedPageByFieldDescending(AuditVersion.Fields.time);
         Page<AuditResponse> page;
-        if (table != null) {
+
+        if (table != null && action != null) {
+            page = service.findByTableAndAction(table, action, pageable).map(AuditVersion::toResponse);
+        } else if (table != null) {
             page = service.findByTable(table, pageable).map(AuditVersion::toResponse);
+        } else if (action != null) {
+            page = service.findByAction(action, pageable).map(AuditVersion::toResponse);
         } else {
             page = service.findAll(pageable).map(AuditVersion::toResponse);
         }
+        
         return new ResponseEntity<>(new RestResponsePage<>(page), HttpStatus.OK);
     }
 

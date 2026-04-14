@@ -5,7 +5,6 @@ import { EAuditAction, EObjectType, IAuditItem } from '@/constants/admin/audit/a
 import { IPageResponse } from '@/constants/commonConstants'
 import { actionToOptions, objectTypeToOptions } from '@/util/auditUtils/auditUtils'
 import { emptyPage } from '@/util/common/emptyPageUtil'
-import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import {
   BodyShort,
   Button,
@@ -75,9 +74,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
   const [table, setTable] = useState<EObjectType | undefined>(props.tableType)
   const [action, setAction] = useState<EAuditAction | undefined>()
   const [page, setPage] = useState(1)
-  const [idInput, setIdInput] = useDebouncedState('', 400)
-
-  console.debug(action)
+  const [idInput, setIdInput] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
@@ -90,6 +87,15 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
       }
     })()
   }, [page, limit, props.show, table, idInput])
+
+  useEffect(() => {
+    ;(async () => {
+      if (action !== undefined) {
+        const filteredAudit = audits.content.filter((audit) => audit.action === action)
+        setAudits({ ...audits, content: filteredAudit })
+      }
+    })()
+  }, [action])
 
   const handlePageChange = (nextPage: number) => {
     if (nextPage < 1) {
@@ -166,9 +172,7 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
                   label='Velg action for versjonering'
                   hideLabel
                   onChange={(e) => {
-                    if (e.target.value === 'Codelist') {
-                      setAction(e.target.value.toUpperCase() as EAuditAction)
-                    }
+                    setAction(e.target.value.toUpperCase() as EAuditAction)
                   }}
                 >
                   <option value=''>Velg action for versjonering</option>
