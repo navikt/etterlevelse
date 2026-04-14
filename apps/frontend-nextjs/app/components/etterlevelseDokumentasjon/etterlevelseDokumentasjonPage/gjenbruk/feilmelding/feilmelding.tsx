@@ -9,6 +9,13 @@ type TProps = {
   values: TEtterlevelseDokumentasjonQL
 }
 
+const etterlevelseDokumentasjonUrl = (
+  etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
+  type: string
+): string => {
+  return `/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#${type}`
+}
+
 export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   values,
@@ -31,7 +38,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
             {[null, undefined, ''].includes(values.title) && (
               <List.Item>
                 <Link
-                  href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#title`}
+                  href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'title')}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
@@ -53,7 +60,10 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
             {[null, undefined, ''].includes(values.varslingsadresser) && (
               <List.Item>
                 <Link
-                  href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#varslingsadresser`}
+                  href={etterlevelseDokumentasjonUrl(
+                    etterlevelseDokumentasjon,
+                    'varslingsadresser'
+                  )}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
@@ -64,7 +74,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
             {[null, undefined, ''].includes(values.teamsData) && (
               <List.Item>
                 <Link
-                  href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#teamsData`}
+                  href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'teamsData')}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
@@ -75,7 +85,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
             {[null, undefined, ''].includes(values.resourcesData) && (
               <List.Item>
                 <Link
-                  href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#resourcesData`}
+                  href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'resourcesData')}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
@@ -86,7 +96,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
             {[null, undefined, ''].includes(values.nomAvdelingId) && (
               <List.Item>
                 <Link
-                  href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#nomAvdelingId`}
+                  href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'nomAvdelingId')}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
