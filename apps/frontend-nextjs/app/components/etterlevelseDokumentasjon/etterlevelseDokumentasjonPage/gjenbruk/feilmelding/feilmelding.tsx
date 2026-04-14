@@ -21,6 +21,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
   values,
 }) => (
   <>
+    {values.varslingsadresser.toString()}
     {(values.title ||
       values.beskrivelse ||
       values.varslingsadresser ||
@@ -49,7 +50,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
             {[null, undefined, ''].includes(values.beskrivelse) && (
               <List.Item>
                 <Link
-                  href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#beskrivelse`}
+                  href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'beskrivelse')}
                   target='_blank'
                   rel='noopener noreferrer'
                 >
