@@ -51,6 +51,7 @@ public class EtterlevelseDokumentasjonData {
     private List<String> prioritertKravNummer;
     private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
+    private List<String> ardoqSystemIds;
 
     //Url id for p360
     private Integer P360Recno;

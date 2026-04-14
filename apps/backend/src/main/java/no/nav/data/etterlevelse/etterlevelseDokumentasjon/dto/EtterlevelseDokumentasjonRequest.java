@@ -55,6 +55,8 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private Integer P360Recno;
     private String P360CaseNumber;
 
+    private List<String> ardoqSystemIds;
+
     private String nomAvdelingId;
     private String avdelingNavn;
     private List<NomSeksjon> seksjoner;
@@ -78,6 +80,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setTeams(formatList(teams));
         setResources(formatList(resources));
         setRisikoeiere(formatList(risikoeiere));
+        setArdoqSystemIds(copyOf(ardoqSystemIds));
         setVarslingsadresser(copyOf(varslingsadresser));
         setNomAvdelingId(nomAvdelingId);
         setAvdelingNavn(avdelingNavn);
@@ -112,6 +115,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setRisikoeiere(copyOf(risikoeiere));
         eDokData.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
         eDokData.setForGjenbruk(forGjenbruk);
+        eDokData.setArdoqSystemIds(copyOf(ardoqSystemIds));
         eDokData.setNomAvdelingId(nomAvdelingId);
         eDokData.setAvdelingNavn(avdelingNavn);
         eDokData.setSeksjoner(copyOf(seksjoner));

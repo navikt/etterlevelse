@@ -15,6 +15,8 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
+import no.nav.data.integration.ardoq.ArdoqClient;
+import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.integration.team.dto.MemberResponse;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
@@ -40,7 +42,7 @@ public class EtterlevelseDokumentasjonController {
 
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final P360ArkiveringService p360ArkiveringService;
-    private final TeamcatTeamClient teamcatTeamClient;
+    private final ArdoqClient ardoqClient;
 
     @Operation(summary = "Get All Etterlevelse Dokumentasjon")
     @ApiResponse(description = "ok")
@@ -58,6 +60,7 @@ public class EtterlevelseDokumentasjonController {
         log.info("Get Etterlevelse Dokumentasjon By Id Id={}", id);
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.get(id));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        setArdoqSystemer(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -135,6 +138,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        setArdoqSystemer(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -149,6 +153,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateAndIncreaseVersion(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        setArdoqSystemer(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -173,6 +178,7 @@ public class EtterlevelseDokumentasjonController {
         }
 
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        setArdoqSystemer(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -187,6 +193,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateKravPriority(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        setArdoqSystemer(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -205,6 +212,7 @@ public class EtterlevelseDokumentasjonController {
         var newEtterlevelseDokumentasjon = etterlevelseDokumentasjonService.saveAndCreateRelationWithEtterlevelseAndBehandlingenslivslopCopy(fromDocumentId ,request);
         var response = EtterlevelseDokumentasjonResponse.buildFrom(newEtterlevelseDokumentasjon);
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
+        setArdoqSystemer(response);
         setHasCurrentUserAccess(response);
         return ResponseEntity.ok(response);
     }
@@ -223,6 +231,21 @@ public class EtterlevelseDokumentasjonController {
     }
 
     static class EtterlevelseDokumentasjonPage extends RestResponsePage<EtterlevelseDokumentasjonResponse> {
+    }
+
+    private void setArdoqSystemer(EtterlevelseDokumentasjonResponse response) {
+        boolean ardoqSystemIsEmpty = response.getArdoqSystemIds() == null || response.getArdoqSystemIds().isEmpty();
+
+        if (!ardoqSystemIsEmpty) {
+            response.getArdoqSystemIds().forEach(ardoqId -> {
+                try {
+                    var ardoqSystem = ardoqClient.getArdoqSystemById(ardoqId);
+                    ardoqSystem.ifPresent(system -> response.getArdoqSystemData().add(system));
+                } catch (Exception e) {
+                    log.error("Failed to fetch ardoq system with id {}", ardoqId, e);
+                }
+            });
+        }
     }
 
     private void setHasCurrentUserAccess(EtterlevelseDokumentasjonResponse response) {

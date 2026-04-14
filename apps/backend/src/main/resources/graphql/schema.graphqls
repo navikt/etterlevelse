@@ -281,6 +281,8 @@ type EtterlevelseDokumentasjon {
     sistEndretEtterlevelseAvMeg: DateTime
     sistEndretDokumentasjon: DateTime
     sistEndretDokumentasjonAvMeg: DateTime
+    ardoqSystemIds: [String!]!
+    ardoqSystemData: [AdresseType!]!
     stats: EtterlevelseDokumentasjonStats!
     varslingsadresser: [Varslingsadresse!]!
     nomAvdelingId: String
@@ -300,6 +302,15 @@ type EtterlevelseVersjonHistorikk {
 type NomSeksjon {
     nomSeksjontId: String!
     nomSeksjonName: String!
+}
+
+type ArdoqSystem {
+    ardoqUrlId: String!
+    ardoqID: String!
+    navn:  String!
+    alias: String
+    livsfase: String
+    beskrivelse: String
 }
 
 type PvoTilbakemelding {

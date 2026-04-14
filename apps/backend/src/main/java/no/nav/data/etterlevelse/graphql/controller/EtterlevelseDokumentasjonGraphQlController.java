@@ -21,6 +21,8 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.dto.KravGraphQlResponse;
+import no.nav.data.integration.ardoq.ArdoqClient;
+import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.team.domain.Team;
@@ -51,6 +53,7 @@ public class EtterlevelseDokumentasjonGraphQlController {
     private final BehandlingService behandlingService;
     private final EtterlevelseService etterlevelseService;
     private final AuditVersionService auditVersionService;
+    private final ArdoqClient ardoqClient;
 
     @QueryMapping
     public RestResponsePage<EtterlevelseDokumentasjonGraphQlResponse> etterlevelseDokumentasjon(
@@ -90,6 +93,24 @@ public class EtterlevelseDokumentasjonGraphQlController {
     public List<Resource> resourcesData(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
         var resources = resourceService.getResources(etterlevelseDokumentasjonResponse.getResources());
         return new ArrayList<>(resources.values());
+    }
+
+    @SchemaMapping(typeName = "EtterlevelseDokumentasjon")
+    public List<ArdoqSystemResponse> ardoqSystemData(EtterlevelseDokumentasjonGraphQlResponse etterlevelseDokumentasjonResponse) {
+        boolean ardoqSystemIsEmpty = etterlevelseDokumentasjonResponse.getArdoqSystemIds() == null || etterlevelseDokumentasjonResponse.getArdoqSystemIds().isEmpty();
+        List<ArdoqSystemResponse> systemer = new ArrayList<>();
+        if (!ardoqSystemIsEmpty) {
+            etterlevelseDokumentasjonResponse.getArdoqSystemIds().forEach(ardoqId -> {
+                try {
+                    var ardoqSystem = ardoqClient.getArdoqSystemById(ardoqId);
+                    ardoqSystem.ifPresent(systemer::add);
+                } catch (Exception e) {
+                    log.error("Failed to fetch ardoq system with id {}", ardoqId, e);
+                }
+            });
+        }
+
+        return systemer;
     }
 
     @SchemaMapping(typeName = "EtterlevelseDokumentasjon")

@@ -10,6 +10,7 @@ import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
@@ -60,6 +61,9 @@ public class EtterlevelseDokumentasjonResponse {
     private List<Behandling> behandlinger;
     private List<DpBehandling> dpBehandlinger;
 
+    private List<String> ardoqSystemIds;
+    private List<ArdoqSystemResponse> ardoqSystemData;
+
     private String nomAvdelingId;
     private String avdelingNavn;
     private List<NomSeksjon> seksjoner;
@@ -106,6 +110,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .risikovurderinger(eDokData.getRisikovurderinger())
                 .P360Recno(eDokData.getP360Recno())
                 .P360CaseNumber(eDokData.getP360CaseNumber())
+                .ardoqSystemIds(eDokData.getArdoqSystemIds())
                 .etterlevelseDokumentVersjon(eDokData.getEtterlevelseDokumentVersjon())
                 .versjonHistorikk(copyOf(eDokData.getVersjonHistorikk()))
                 .build();
