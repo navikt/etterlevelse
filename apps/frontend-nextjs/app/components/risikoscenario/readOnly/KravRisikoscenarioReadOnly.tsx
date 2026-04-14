@@ -12,8 +12,10 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { IKravReference, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { Accordion, Alert } from '@navikt/ds-react'
 import moment from 'moment'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import NyttInnholdTag from '../common/NyttInnholdTag'
 import { KravRisikoscenarioOvrigeRisikoscenarierLink } from '../common/kravRisikoscenarioOvrigeRisikoscenarierLink'
@@ -35,7 +37,13 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
   const [risikoscenarioForKrav, setRisikoscenarioForKrav] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
 
+  const [openAccordion, setOpenAccordion] = useState<string[]>([])
+  const queryParams = useSearchParams()
+  const risikoscenarioId: string | null = queryParams.get('risikoscenario')
+
+  const pathName = usePathname()
   const user = useContext(UserContext)
+  const router = useRouter()
 
   useEffect(() => {
     ;(async () => {
@@ -64,6 +72,14 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
       }
     })()
   }, [krav, pvkDokument])
+
+  useEffect(() => {
+    ;(async () => {
+      if (risikoscenarioId && !openAccordion.includes(risikoscenarioId)) {
+        setOpenAccordion([...openAccordion, risikoscenarioId])
+      }
+    })()
+  }, [risikoscenarioId])
 
   return (
     <div className='w-full'>
@@ -98,7 +114,20 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
               const hasNewContent = hasNewScenarioContent || hasNewTiltakContent
 
               return (
-                <Accordion.Item id={risikoscenario.id} key={`${index}_${risikoscenario.navn}`}>
+                <Accordion.Item
+                  open={openAccordion.includes(risikoscenario.id)}
+                  id={risikoscenario.id}
+                  key={`${index}_${risikoscenario.navn}`}
+                  onOpenChange={(open: boolean) => {
+                    if (open) {
+                      setOpenAccordion([...openAccordion, risikoscenario.id])
+                      router.push(risikoscenarioUrl(risikoscenario.id))
+                    } else {
+                      setOpenAccordion(openAccordion.filter((id) => id !== risikoscenario.id))
+                      router.push(pathName)
+                    }
+                  }}
+                >
                   <Accordion.Header id={risikoscenario.id}>
                     <div>{risikoscenario.navn}</div>
                     {hasNewContent && (

@@ -166,7 +166,6 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                       previousVurdering={previousVurdering}
                     />
                   )}
-
                 {(!userHasAccess() || (pvkDokument && isReadOnlyPvkStatus(pvkDokument.status))) && (
                   <KravRisikoscenarioReadOnly
                     krav={krav}
