@@ -165,6 +165,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                       <AsyncSelect
                         aria-label='Søk etter person'
                         placeholder=''
+                        tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => {
                           return noOptionMessage(inputValue)

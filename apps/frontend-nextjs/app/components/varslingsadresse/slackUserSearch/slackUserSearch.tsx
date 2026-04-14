@@ -49,6 +49,7 @@ export const SlackUserSearch: FunctionComponent<TProps> = ({ add, close }) => {
           <AsyncSelect
             aria-label='Søk etter slack-bruker'
             placeholder='Søk etter slack-bruker'
+            tabSelectsValue={false}
             noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}
             loadingMessage={() => 'Søker...'}

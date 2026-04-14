@@ -235,6 +235,7 @@ export const SlackChannelSearch: FunctionComponent<TAddVarslingsadresseProps> = 
   <AsyncSelect
     aria-label='Søk etter slack-kanal'
     placeholder='Søk etter slack-kanal'
+    tabSelectsValue={false}
     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
     controlShouldRenderValue={false}
     loadingMessage={() => 'Søker...'}
@@ -280,6 +281,7 @@ export const SlackUserSearch: FunctionComponent<TAddVarslingsadresseProps> = ({ 
           <AsyncSelect
             aria-label='Søk etter slack-bruker'
             placeholder='Søk etter slack-bruker'
+            tabSelectsValue={false}
             noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}
             loadingMessage={() => 'Søker...'}

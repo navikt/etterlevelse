@@ -82,6 +82,7 @@ export const AddSlackUserModal = (props: IProps) => {
                   <AsyncSelect
                     aria-label='Søk etter slack-bruker'
                     placeholder=''
+                    tabSelectsValue={false}
                     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                     loadingMessage={() => 'Søker...'}
                     isClearable={false}

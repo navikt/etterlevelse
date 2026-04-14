@@ -46,6 +46,7 @@ export const AddSlackChannelModal: FunctionComponent<TProps> = ({ isOpen, close,
         <AsyncSelect
           aria-label='Søk etter slack-kanal'
           placeholder=''
+          tabSelectsValue={false}
           noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
           loadingMessage={() => 'Søker...'}
           isClearable={false}

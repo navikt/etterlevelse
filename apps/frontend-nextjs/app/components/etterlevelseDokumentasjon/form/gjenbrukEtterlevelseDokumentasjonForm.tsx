@@ -195,6 +195,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                     <AsyncSelect
                       aria-label='Søk etter behandlinger'
                       placeholder=''
+                      tabSelectsValue={false}
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
@@ -235,6 +236,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                     <AsyncSelect
                       aria-label='Søk etter behandlinger'
                       placeholder=''
+                      tabSelectsValue={false}
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
@@ -275,6 +277,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                     <AsyncSelect
                       aria-label='Søk etter team'
                       placeholder=''
+                      tabSelectsValue={false}
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
@@ -314,6 +317,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                     <AsyncSelect
                       aria-label='Søk etter person'
                       placeholder=''
+                      tabSelectsValue={false}
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
                         return noOptionMessage(inputValue)
@@ -450,6 +454,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                     <AsyncSelect
                       aria-label='Søk etter risikoeier'
                       placeholder=''
+                      tabSelectsValue={false}
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
                         return noOptionMessage(inputValue)

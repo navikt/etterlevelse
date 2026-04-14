@@ -20,6 +20,7 @@ export const KravEditRelasjoner = () => (
           <AsyncSelect
             aria-label='Søk etter krav'
             placeholder='Søk etter krav'
+            tabSelectsValue={false}
             components={{ DropdownIndicator }}
             noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}

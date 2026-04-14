@@ -435,6 +435,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                     <AsyncSelect
                       aria-label='Søk etter team'
                       placeholder=''
+                      tabSelectsValue={false}
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                       controlShouldRenderValue={false}
@@ -475,6 +476,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                     <AsyncSelect
                       aria-label='Søk etter person'
                       placeholder=''
+                      tabSelectsValue={false}
                       components={{ DropdownIndicator }}
                       noOptionsMessage={({ inputValue }) => {
                         return noOptionMessage(inputValue)
