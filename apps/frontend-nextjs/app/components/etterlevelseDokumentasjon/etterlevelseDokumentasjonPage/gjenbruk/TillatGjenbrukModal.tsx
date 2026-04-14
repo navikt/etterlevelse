@@ -207,10 +207,14 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       </Button>
                     )}
 
+                  <Button type='button' variant='secondary' onClick={() => {}}>
+                    Lagre til senere
+                  </Button>
+
                   <Button
                     type='button'
                     disabled={isSubmitting}
-                    variant='secondary'
+                    variant='tertiary'
                     onClick={() => setIsOpen(false)}
                   >
                     Avbryt
