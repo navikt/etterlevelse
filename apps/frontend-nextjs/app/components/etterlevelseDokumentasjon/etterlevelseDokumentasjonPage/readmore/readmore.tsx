@@ -19,7 +19,7 @@ enum EReadmoreTilstand {
 const readmoreTilstandUtil = (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL,
   relasjonLoading: boolean
-) => {
+): EReadmoreTilstand | undefined => {
   if (etterlevelseDokumentasjon.forGjenbruk && !etterlevelseDokumentasjon.tilgjengeligForGjenbruk) {
     return EReadmoreTilstand.GJENBRUK_AV
   }
