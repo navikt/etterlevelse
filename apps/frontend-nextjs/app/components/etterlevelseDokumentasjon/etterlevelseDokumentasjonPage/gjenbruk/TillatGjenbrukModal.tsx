@@ -7,7 +7,8 @@ import {
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Button, ErrorSummary, InlineMessage, List, Modal } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { Button, InfoCard, InlineMessage, Link, List, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
@@ -106,6 +107,43 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
           >
             {({ setFieldValue, submitForm, isSubmitting, initialValues, errors }) => (
               <Form>
+                {(errors.title ||
+                  errors.beskrivelse ||
+                  errors.varslingsadresser ||
+                  errors.teamsData ||
+                  errors.resourcesData ||
+                  errors.nomAvdelingId) && (
+                  <InfoCard data-color='warning'>
+                    <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                      <InfoCard.Title>
+                        Dere må oppdatere følgende felt i dokumentegenskaper før dere kan slå på
+                        gjenbruk.
+                      </InfoCard.Title>
+                    </InfoCard.Header>
+                    <InfoCard.Content>
+                      <List>
+                        {Object.entries(errors)
+                          .filter(([, error]) => error)
+                          .map(([key, error]) => {
+                            if (key !== 'gjenbrukBeskrivelse') {
+                              return (
+                                <List.Item key={key}>
+                                  <Link
+                                    href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#${key}`}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                  >
+                                    {error as string} (åpner i en ny fane)
+                                  </Link>
+                                </List.Item>
+                              )
+                            }
+                          })}
+                      </List>
+                    </InfoCard.Content>
+                  </InfoCard>
+                )}
+
                 <Modal.Body>
                   <List as='ul' className='mb-5'>
                     <List.Item>
@@ -135,36 +173,6 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       allerede gjenbruker dokumentet. Etter hvert kan dere velge om dere vil slá pả
                       gjenbruk pả nytt.
                     </InlineMessage>
-                  )}
-
-                  {(errors.title ||
-                    errors.beskrivelse ||
-                    errors.varslingsadresser ||
-                    errors.teamsData ||
-                    errors.resourcesData ||
-                    errors.nomAvdelingId) && (
-                    <ErrorSummary
-                      ref={errorSummaryRef}
-                      className='mt-5'
-                      heading='Du må rette disse feilene under dokumentegenskap før du kan slå på gjenbruk'
-                    >
-                      {Object.entries(errors)
-                        .filter(([, error]) => error)
-                        .map(([key, error]) => {
-                          if (key !== 'gjenbrukBeskrivelse') {
-                            return (
-                              <ErrorSummary.Item
-                                href={`/dokumentasjon/edit/${etterlevelseDokumentasjon.id}#${key}`}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                key={key}
-                              >
-                                {error as string} (åpner i en ny fane)
-                              </ErrorSummary.Item>
-                            )
-                          }
-                        })}
-                    </ErrorSummary>
                   )}
                 </Modal.Body>
                 <Modal.Footer>
