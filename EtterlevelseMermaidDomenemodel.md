@@ -1,6 +1,7 @@
 # Etterlevelse – UML Architecture & Domain Model
 
 **Date created:** 26 March 2026
+**Last updated:** 15 April 2026
 
 ---
 
@@ -89,6 +90,7 @@ graph TD
             INT_B["BehandlingService"]
             INT_S["SlackClient"]
             INT_NOM["NOM API"]
+            INT_A["ArdoqClient"]
         end
 
         REST --> Services
@@ -128,6 +130,7 @@ graph TD
 | **Behandlingskatalogen** | External NAV service                              | Resolves `Behandling` and `DpBehandling`                |
 | **NOM**                  | External NAV service                              | Resolves organisational units (avdelinger)              |
 | **Slack**                | External Slack API                                | Resolves Slack channels and users for varslingsadresser |
+| **Ardoq**                | External Ardoq API                                | Resolves system metadata (`ardoqSystemIds`) for EtterlevelseDokumentasjon |
 
 ---
 
@@ -146,6 +149,7 @@ classDiagram
         +Boolean behandlerPersonopplysninger
         +List~IrrelevansFor~ irrelevansFor
         +Integer etterlevelseNummer
+        +List~String~ ardoqSystemIds
     }
 
     class Krav {
@@ -294,6 +298,7 @@ classDiagram
 | `/codelist`                    | GET, POST, PUT, DELETE |
 | `/melding`                     | GET, POST, PUT, DELETE |
 | `/audit`                       | GET                    |
+| `/audit/search/{searchTerm}/table/{table}` | GET         |
 | `/userinfo`                    | GET                    |
 | `/nom`                         | GET                    |
 
@@ -357,12 +362,13 @@ stateDiagram-v2
 
 ## Action Menu Button State Machines
 
-The documentation page (`/dokumentasjon/:id`) renders two action menu buttons when conditions are met:
+The documentation page (`/dokumentasjon/:id`) renders up to three action menu buttons when conditions are met:
 
 - **Etterlevelse** – shown when `user.isAdmin() || hasCurrentUserAccess`
 - **Personvernkonsekvensvurdering (PVK)** – shown when `behandlerPersonopplysninger = true`
+- **Gjenbruk** – shown when `forGjenbruk && (user.isAdmin() || hasCurrentUserAccess) && !morDokumentRelasjon` (previously dev-only, now available in all environments)
 
-Both buttons adapt their menu items based on the current user's **role** and the document's **status / tilstand**.
+All buttons adapt their menu items based on the current user's **role** and the document's **status / tilstand**.
 
 ---
 
