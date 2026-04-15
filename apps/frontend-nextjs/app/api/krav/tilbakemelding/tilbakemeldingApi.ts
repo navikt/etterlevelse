@@ -100,32 +100,35 @@ export const useTilbakemeldinger = (
   const abortedRef = useRef(false)
 
   useEffect(() => {
-    abortedRef.current = false
-    if (kravNummer && kravVersjon) {
-      getTilbakemeldingForKravByKravNummer(kravNummer)
-        .then((response: IPageResponse<ITilbakemelding>) => {
-          if (!abortedRef.current) {
-            setData(
-              response.content.sort(
-                (a: ITilbakemelding, b: ITilbakemelding) =>
-                  moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() -
-                  moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()
+    ;(async () => {
+      abortedRef.current = false
+      if (kravNummer && kravVersjon) {
+        setIsLoading(true)
+        getTilbakemeldingForKravByKravNummer(kravNummer)
+          .then((response: IPageResponse<ITilbakemelding>) => {
+            if (!abortedRef.current) {
+              setData(
+                response.content.sort(
+                  (a: ITilbakemelding, b: ITilbakemelding) =>
+                    moment(b.meldinger[b.meldinger.length - 1].tid).valueOf() -
+                    moment(a.meldinger[a.meldinger.length - 1].tid).valueOf()
+                )
               )
-            )
-            setIsLoading(true)
-          }
-        })
-        .catch((error: any) => {
-          if (!abortedRef.current) {
-            setData([])
-            setIsLoading(true)
-          }
-          console.error("couldn't find krav", error)
-        })
-    }
-    return () => {
-      abortedRef.current = true
-    }
+              setIsLoading(false)
+            }
+          })
+          .catch((error: any) => {
+            if (!abortedRef.current) {
+              setData([])
+              setIsLoading(false)
+            }
+            console.error("couldn't find krav", error)
+          })
+      }
+      return () => {
+        abortedRef.current = true
+      }
+    })()
   }, [kravNummer, kravVersjon])
 
   const add = (tilbakemelding: ITilbakemelding) => {

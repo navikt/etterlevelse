@@ -136,12 +136,12 @@ export const useBehandlingensLivslop = (
     if (behandlingensLivslopId && !isCreateNew) {
       ;(async () => {
         if (!abortedRef.current) {
-          setIsLoading(false)
+          setIsLoading(true)
         }
         await getBehandlingensLivslop(behandlingensLivslopId).then(async (behandlingensLivslop) => {
           if (!abortedRef.current) {
             setData(behandlingensLivslop)
-            setIsLoading(true)
+            setIsLoading(false)
           }
         })
       })()
@@ -149,7 +149,7 @@ export const useBehandlingensLivslop = (
       //double check that behandlingenslivslop doesnt not exist
       ;(async () => {
         if (!abortedRef.current) {
-          setIsLoading(false)
+          setIsLoading(true)
         }
         await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
           .then(async (behandlingensLivslop) => {
@@ -157,12 +157,12 @@ export const useBehandlingensLivslop = (
               if (behandlingensLivslop) {
                 setData(behandlingensLivslop)
               }
-              setIsLoading(true)
+              setIsLoading(false)
             }
           })
           .catch(() => {
             if (!abortedRef.current) {
-              setIsLoading(true)
+              setIsLoading(false)
             }
           })
       })()

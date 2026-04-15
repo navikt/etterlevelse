@@ -25,7 +25,7 @@ export const SearchAuditModal = () => {
       <Dialog.Popup>
         <Dialog.Header>
           <Dialog.Title>Søk uuid for data type</Dialog.Title>
-          <Dialog.Description>Velg data type og søk</Dialog.Description>
+          <Dialog.Description>Velg data type først deretter søk</Dialog.Description>
         </Dialog.Header>
         <Dialog.Body>
           <div className='flex gap-5 my-5'>
@@ -51,12 +51,13 @@ export const SearchAuditModal = () => {
               hideLabel
               disabled={[null, undefined, ''].includes(selectedDataType)}
               value={searchTerm}
-              placeholder='Søk'
+              placeholder='Skriv minst 3 tegn'
               onChange={(e) => setSearchTerm((e.target as HTMLInputElement).value)}
               className='w-72'
             />
 
             <Button
+              disabled={[null, undefined, ''].includes(selectedDataType)}
               onClick={async () => {
                 if (searchTerm.length < 3) {
                   setError('Skriv minst 3 tegn for å søke')
