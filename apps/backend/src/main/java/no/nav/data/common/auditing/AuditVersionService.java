@@ -57,6 +57,7 @@ public class AuditVersionService {
         if (table == SearchTypes.KRAV) {
            return distinctData.stream().filter(auditVersion -> {
                Krav data = JsonUtils.toObject(auditVersion.getData(), Krav.class);
+               log.debug("KRAV SEARCH result: {}", data);
                String kravNavn = "K" + data.getKravNummer() + "." + data.getKravVersjon() + " " + data.getNavn();
                 return kravNavn.toLowerCase().contains(search.toLowerCase());
            }).toList();
