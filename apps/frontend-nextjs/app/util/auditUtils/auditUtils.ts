@@ -1,4 +1,4 @@
-import { EAuditAction, EObjectType } from '@/constants/admin/audit/auditConstants'
+import { EAuditAction, EObjectType, ESearchDataType } from '@/constants/admin/audit/auditConstants'
 
 export const objectTypeToOptions = (
   objectType: EObjectType | string
@@ -69,6 +69,29 @@ export const actionToOptions = (
       return { value: EAuditAction.UPDATE, label: 'Update' }
     case EAuditAction.DELETE:
       return { value: EAuditAction.DELETE, label: 'Delete' }
+    default:
+      return { value: 'NULL', label: 'NULL' }
+  }
+}
+
+export const searchDataTypeToOptions = (
+  actionType: ESearchDataType | string
+): { value: string; label: string } => {
+  switch (actionType) {
+    case ESearchDataType.KRAV:
+      return { value: ESearchDataType.KRAV, label: 'Krav' }
+    case ESearchDataType.ETTERLEVELSE_DOKUMENTASJON:
+      return {
+        value: ESearchDataType.ETTERLEVELSE_DOKUMENTASJON,
+        label: 'Etterlevelse dokumentasjon',
+      }
+    case ESearchDataType.Krav:
+      return { value: ESearchDataType.Krav, label: 'Krav (Old)' }
+    case ESearchDataType.EtterlevelseDokumentasjon:
+      return {
+        value: ESearchDataType.EtterlevelseDokumentasjon,
+        label: 'Etterlevelse dokumentasjon (Old)',
+      }
     default:
       return { value: 'NULL', label: 'NULL' }
   }

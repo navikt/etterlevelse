@@ -22,6 +22,7 @@ import * as _ from 'lodash'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { JsonView } from 'react-json-view-lite'
+import SearchAuditModal from './SearchAuditModal'
 import { AuditActionIcon } from './common/AuditActionIcon'
 import { AuditButton } from './common/AuditButton'
 import { AuditLabel } from './common/AuditLabel'
@@ -177,6 +178,10 @@ export const AuditRecentTable = (props: { show: boolean; tableType?: EObjectType
             )}
           </div>
         )}
+      </div>
+
+      <div className='my-5'>
+        <SearchAuditModal />
       </div>
 
       <Table size='large' zebraStripes>

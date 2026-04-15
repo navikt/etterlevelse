@@ -23,7 +23,7 @@ public interface AuditVersionRepository extends JpaRepository<AuditVersion, UUID
 
     List<AuditVersion> findByTableIdOrderByTimeDesc(String tableId);
 
-    @Query(value = "select distinct table_id as tableId,  table_name as tableName, data from audit_version where table_name = ?1", nativeQuery = true)
+    @Query(value = "select audit_id, ACTION, distinct table_id as tableId, table_name as tableName, data from audit_version where table_name = ?1", nativeQuery = true)
     List<AuditVersion> getByTable(String table);
 
     @Query(value = "select cast(audit_id as text) as id, time, action, table_name as tableName, table_id as tableId "
