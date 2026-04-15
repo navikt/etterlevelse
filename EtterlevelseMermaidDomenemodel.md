@@ -119,17 +119,17 @@ graph TD
 
 ## System Architecture Overview
 
-| Layer                    | Technology                                        | Role                                                    |
-| ------------------------ | ------------------------------------------------- | ------------------------------------------------------- |
-| **Frontend**             | Next.js 14 (App Router), TypeScript, Tailwind CSS | UI — pages, forms, navigation                           |
-| **API Client**           | axios (REST), Apollo Client (GraphQL)             | Communicates with backend                               |
-| **Backend**              | Spring Boot 3, Java, Spring GraphQL               | REST + GraphQL API, business logic                      |
-| **Auth**                 | NAV SSO / cookie-based                            | Authenticates users via `withCredentials`               |
-| **Database**             | PostgreSQL                                        | Stores all domain data as rows + JSONB                  |
-| **Teamcat**              | External NAV service                              | Resolves team and resource (person) data                |
-| **Behandlingskatalogen** | External NAV service                              | Resolves `Behandling` and `DpBehandling`                |
-| **NOM**                  | External NAV service                              | Resolves organisational units (avdelinger)              |
-| **Slack**                | External Slack API                                | Resolves Slack channels and users for varslingsadresser |
+| Layer                    | Technology                                        | Role                                                                      |
+| ------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Frontend**             | Next.js 14 (App Router), TypeScript, Tailwind CSS | UI — pages, forms, navigation                                             |
+| **API Client**           | axios (REST), Apollo Client (GraphQL)             | Communicates with backend                                                 |
+| **Backend**              | Spring Boot 3, Java, Spring GraphQL               | REST + GraphQL API, business logic                                        |
+| **Auth**                 | NAV SSO / cookie-based                            | Authenticates users via `withCredentials`                                 |
+| **Database**             | PostgreSQL                                        | Stores all domain data as rows + JSONB                                    |
+| **Teamcat**              | External NAV service                              | Resolves team and resource (person) data                                  |
+| **Behandlingskatalogen** | External NAV service                              | Resolves `Behandling` and `DpBehandling`                                  |
+| **NOM**                  | External NAV service                              | Resolves organisational units (avdelinger)                                |
+| **Slack**                | External Slack API                                | Resolves Slack channels and users for varslingsadresser                   |
 | **Ardoq**                | External Ardoq API                                | Resolves system metadata (`ardoqSystemIds`) for EtterlevelseDokumentasjon |
 
 ---
@@ -281,26 +281,26 @@ classDiagram
 
 ### REST API
 
-| Endpoint                       | Methods                |
-| ------------------------------ | ---------------------- |
-| `/etterlevelsedokumentasjon`   | GET, POST, PUT, DELETE |
-| `/krav`                        | GET, POST, PUT, DELETE |
-| `/etterlevelse`                | GET, POST, PUT, DELETE |
-| `/pvkdokument`                 | GET, POST, PUT, DELETE |
-| `/risikoscenario`              | GET, POST, PUT, DELETE |
-| `/tiltak`                      | GET, POST, PUT, DELETE |
-| `/pvotilbakemelding`           | GET, POST, PUT, DELETE |
-| `/behandlingens-art-og-omfang` | GET, POST, PUT, DELETE |
-| `/behandlingenslivslop`        | GET, POST, PUT, DELETE |
-| `/tilbakemelding`              | GET, POST, DELETE      |
-| `/team`                        | GET                    |
-| `/behandling`                  | GET                    |
-| `/codelist`                    | GET, POST, PUT, DELETE |
-| `/melding`                     | GET, POST, PUT, DELETE |
-| `/audit`                       | GET                    |
-| `/audit/search/{searchTerm}/table/{table}` | GET         |
-| `/userinfo`                    | GET                    |
-| `/nom`                         | GET                    |
+| Endpoint                                   | Methods                |
+| ------------------------------------------ | ---------------------- |
+| `/etterlevelsedokumentasjon`               | GET, POST, PUT, DELETE |
+| `/krav`                                    | GET, POST, PUT, DELETE |
+| `/etterlevelse`                            | GET, POST, PUT, DELETE |
+| `/pvkdokument`                             | GET, POST, PUT, DELETE |
+| `/risikoscenario`                          | GET, POST, PUT, DELETE |
+| `/tiltak`                                  | GET, POST, PUT, DELETE |
+| `/pvotilbakemelding`                       | GET, POST, PUT, DELETE |
+| `/behandlingens-art-og-omfang`             | GET, POST, PUT, DELETE |
+| `/behandlingenslivslop`                    | GET, POST, PUT, DELETE |
+| `/tilbakemelding`                          | GET, POST, DELETE      |
+| `/team`                                    | GET                    |
+| `/behandling`                              | GET                    |
+| `/codelist`                                | GET, POST, PUT, DELETE |
+| `/melding`                                 | GET, POST, PUT, DELETE |
+| `/audit`                                   | GET                    |
+| `/audit/search/{searchTerm}/table/{table}` | GET                    |
+| `/userinfo`                                | GET                    |
+| `/nom`                                     | GET                    |
 
 ### GraphQL API (`/graphql`)
 
