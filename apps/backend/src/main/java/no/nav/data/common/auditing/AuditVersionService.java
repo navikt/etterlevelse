@@ -58,14 +58,12 @@ public class AuditVersionService {
            return distinctData.stream().filter(auditVersion -> {
                Krav data = JsonUtils.toObject(auditVersion.getData(), Krav.class);
                String kravNavn = "K" + data.getKravNummer() + "." + data.getKravVersjon() + " " + data.getNavn();
-               log.debug("Checking if {} contains {}", kravNavn.toLowerCase(), search.toLowerCase());
                return kravNavn.toLowerCase().contains(search.toLowerCase());
            }).toList();
         } else if (table == SearchTypes.ETTERLEVELSE_DOKUMENTASJON) {
             return distinctData.stream().filter(auditVersion -> {
                 EtterlevelseDokumentasjon data = JsonUtils.toObject(auditVersion.getData(), EtterlevelseDokumentasjon.class);
                 String eDokNavn = "E" + data.getEtterlevelseNummer() + "." + data.getEtterlevelseDokumentVersjon() + " " + data.getTitle();
-                log.debug("Checking if {} contains {}", eDokNavn.toLowerCase(), search.toLowerCase());
                 return eDokNavn.toLowerCase().contains(search.toLowerCase());
             }).toList();
         } else if (table == SearchTypes.Krav) {
