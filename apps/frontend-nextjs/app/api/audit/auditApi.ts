@@ -1,6 +1,7 @@
 import {
   EAuditAction,
   EObjectType,
+  ESearchDataType,
   IAuditItem,
   IAuditLog,
   IMailLog,
@@ -36,6 +37,15 @@ export const getAuditsByTableId = async (page: number, count: number, tableId: s
     await axios.get<IPageResponse<IAuditItem>>(
       `${env.backendBaseUrl}/audit/tableid/${tableId}?pageNumber=${page}&pageSize=${count}`
     )
+  ).data
+}
+
+export const searchAuditsByTableAndSearchTerm = async (
+  searchTerm: string,
+  table: ESearchDataType
+) => {
+  return (
+    await axios.get<IAuditItem[]>(`${env.backendBaseUrl}/audit/search/${searchTerm}/table/${table}`)
   ).data
 }
 

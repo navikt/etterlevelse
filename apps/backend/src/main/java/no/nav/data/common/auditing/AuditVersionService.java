@@ -1,12 +1,18 @@
 package no.nav.data.common.auditing;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.*;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
+import no.nav.data.common.utils.JsonUtils;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,6 +49,44 @@ public class AuditVersionService {
 
     public Page<AuditVersion> findByTableId(String tableId, Pageable pageable) {
         return repository.findByTableId(tableId, pageable);
+    }
+
+    public List<AuditVersion> getByTableAndSearch(SearchTypes table, String search) {
+        List<AuditVersion> distinctData = repository.getByTable(table.name());
+
+        if (table == SearchTypes.KRAV) {
+           return distinctData.stream().filter(auditVersion -> {
+               Krav data = JsonUtils.toObject(auditVersion.getData(), Krav.class);
+               String kravNavn = "K" + data.getKravNummer() + "." + data.getKravVersjon() + " " + data.getNavn();
+                return kravNavn.toLowerCase().contains(search.toLowerCase());
+           }).toList();
+        } else if (table == SearchTypes.ETTERLEVELSE_DOKUMENTASJON) {
+            return distinctData.stream().filter(auditVersion -> {
+                EtterlevelseDokumentasjon data = JsonUtils.toObject(auditVersion.getData(), EtterlevelseDokumentasjon.class);
+                String eDokNavn = "E" + data.getEtterlevelseNummer() + "." + data.getEtterlevelseDokumentVersjon() + " " + data.getTitle();
+                return eDokNavn.toLowerCase().contains(search.toLowerCase());
+            }).toList();
+        } else if (table == SearchTypes.Krav) {
+            return distinctData.stream().filter(auditVersion -> {
+                try {
+                    JsonNode data = new ObjectMapper().readTree(auditVersion.getData());
+                    String kravOldNavn = "K" + data.get("data").get("kravNummer") + "." + data.get("data").get("kravVersjon") + " " + data.get("data").get("navn");
+                    return kravOldNavn.toLowerCase().contains(search.toLowerCase());
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }).toList();
+        } else {
+            return distinctData.stream().filter(auditVersion -> {
+                try {
+                    JsonNode data = new ObjectMapper().readTree(auditVersion.getData());
+                    String eDokOldNavn = "E" + data.get("data").get("etterlevelseNummer") + " " + data.get("data").get("title");
+                    return eDokOldNavn.toLowerCase().contains(search.toLowerCase());
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }).toList();
+        }
     }
 
     public Page<AuditVersion> findAll(Pageable pageable) {

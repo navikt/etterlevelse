@@ -23,6 +23,13 @@ export enum EObjectType {
   EtterlevelseArkiv = 'EtterlevelseArkiv',
 }
 
+export enum ESearchDataType {
+  KRAV = 'KRAV',
+  ETTERLEVELSE_DOKUMENTASJON = 'ETTERLEVELSE_DOKUMENTASJON',
+  Krav = 'Krav',
+  EtterlevelseDokumentasjon = 'EtterlevelseDokumentasjon',
+}
+
 export interface IAuditLog {
   id: string
   audits: IAuditItem[]

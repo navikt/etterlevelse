@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.auditing.domain.SearchTypes;
 import no.nav.data.common.auditing.dto.AuditLogResponse;
 import no.nav.data.common.auditing.dto.AuditResponse;
 import no.nav.data.common.auditing.dto.MailLogResponse;
+import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.azure.support.MailLog;
@@ -63,6 +65,22 @@ public class AuditController {
         Page<AuditResponse> page = service.findByTableId(id.toString(), pageable).map(AuditVersion::toResponse);
         return new ResponseEntity<>(new RestResponsePage<>(page), HttpStatus.OK);
     }
+
+    @Operation(summary = "Search Audit log")
+    @ApiResponse(description = "Audit log fetched")
+    @GetMapping("/search/{searchTerm}/table/{table}")
+    public ResponseEntity<List<AuditResponse>> searchByTerm(@PathVariable String searchTerm, @PathVariable SearchTypes table) {
+        log.info("Received request search for Audit, search term {} on table {}", searchTerm, table);
+
+        if (searchTerm.length() < 3) {
+            throw new ValidationException("Search term must be at least 3 characters");
+        }
+        List<AuditVersion> data = service.getByTableAndSearch(table, searchTerm);
+        List<AuditResponse> response = data.stream().map(AuditVersion::toResponse).toList();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 
     @Operation(summary = "Get Audit log for object")
     @ApiResponse(description = "Audit log fetched")

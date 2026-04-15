@@ -51,6 +51,10 @@ public class EtterlevelseDokumentasjon extends Auditable  {
         return etterlevelseDokumentasjonData.getEtterlevelseNummer();
     }
 
+    public int getEtterlevelseDokumentVersjon() {
+        return etterlevelseDokumentasjonData.getEtterlevelseDokumentVersjon();
+    }
+
     public void setEtterlevelseNummer(int nextEtterlevelseDokumentasjonNummer) {
         etterlevelseDokumentasjonData.setEtterlevelseNummer(nextEtterlevelseDokumentasjonNummer);
     }
