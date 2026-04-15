@@ -2,7 +2,7 @@
 
 ## Dato
 
-09.03.2026
+15.04.2026
 
 ## Kontekst
 
@@ -47,7 +47,7 @@ Etterlevelsesdokumentet har følgende statuser knyttet til versjonssyklusen:
 1. Kun **risikoeier** (en person registrert i `risikoeiere`-feltet) kan godkjenne dokumentet. Godkjenning er bare mulig når status er `SENDT_TIL_GODKJENNING_TIL_RISIKOEIER`.
 2. Dersom dokumentet har en PVK med `SKAL_UTFORE`, **må** PVK-dokumentet også ha status `GODKJENT_AV_RISIKOEIER` før etterlevelsesdokumentet kan godkjennes.
 3. Ved godkjenning lagres risikoeiers navn, tidspunkt og et kravstatussnapshot (`kravTilstandHistorikk`) i `versjonHistorikk` for gjeldende versjonsnummer.
-4. Kun **teammedlemmer eller registrerte ressurser** på dokumentet kan opprette en ny versjon.
+4. Kun **teammedlemmer, registrerte ressurser** på dokumentet, eller **administratorer** kan opprette en ny versjon.
 5. Ny versjon kan bare opprettes når status er `GODKJENT_AV_RISIKOEIER` — og hvis PVK er `SKAL_UTFORE`, må PVK også være `GODKJENT_AV_RISIKOEIER`.
 6. Når ny versjon opprettes, økes `etterlevelseDokumentVersjon` med 1, status settes tilbake til `UNDER_ARBEID`, og et nytt tomt `EtterlevelseVersjonHistorikk`-element legges til i `versjonHistorikk`. Tidspunktet for ny versjon settes på det forrige historikkelementet.
 
