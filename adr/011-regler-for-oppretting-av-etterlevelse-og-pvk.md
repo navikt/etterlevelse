@@ -2,7 +2,7 @@
 
 ## Dato
 
-09.03.2026
+15.04.2026
 
 ## Kontekst
 
@@ -42,16 +42,15 @@ Systemet støtter i dag følgende PVK-vurderinger:
    - Det er lagt inn en kommentar til PVO.
 7. Når PVO har vurdert PVK-en, gir de én av følgende tilbakemeldinger. Etterlever **skal** lese tilbakemeldingen, ta stilling til kommentarene og gjøre nødvendige endringer før PVK-en sendes videre til risikoeier for godkjenning. Dersom PVO mener PVK-en trenger mer arbeid (`VURDERT_AV_PVO_TRENGER_MER_ARBEID`), skal etterlever sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`) — og PVK-en kan ikke gå videre til risikoeier uten at PVO er fornøyd.
 
-   | PVOs vurdering | Hva etterlever skal gjøre |
-   |---|---|
-   | **Dette er en god PVK** | Les og ta stilling til tilbakemeldinger, gjør eventuelle endringer – send deretter PVK-en til risikoeier for godkjenning. |
-   | **PVK-en er stort sett bra** | Les og ta stilling til tilbakemeldinger, gjør eventuelle endringer – send deretter PVK-en til risikoeier for godkjenning. |
-   | **PVK-en har noen mangler** | Ta stilling til kommentarene og gjør endringer. PVO forutsetter at endringene er gjort før PVK-en sendes til risikoeier. |
-   | **PVK-en har en hel del mangler** | Ta stilling til kommentarene og gjør nødvendige endringer. Det anbefales at behandlingen ikke starter, eller stoppes, inntil endringene er utført og PVK-en er sendt til risikoeier. |
+   | PVOs vurdering                       | Hva etterlever skal gjøre                                                                                                                                                                                                               |
+   | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | **Dette er en god PVK**              | Les og ta stilling til tilbakemeldinger, gjør eventuelle endringer – send deretter PVK-en til risikoeier for godkjenning.                                                                                                               |
+   | **PVK-en er stort sett bra**         | Les og ta stilling til tilbakemeldinger, gjør eventuelle endringer – send deretter PVK-en til risikoeier for godkjenning.                                                                                                               |
+   | **PVK-en har noen mangler**          | Ta stilling til kommentarene og gjør endringer. PVO forutsetter at endringene er gjort før PVK-en sendes til risikoeier.                                                                                                                |
+   | **PVK-en har en hel del mangler**    | Ta stilling til kommentarene og gjør nødvendige endringer. Det anbefales at behandlingen ikke starter, eller stoppes, inntil endringene er utført og PVK-en er sendt til risikoeier.                                                    |
    | **PVK-en har grunnleggende mangler** | Ta stilling til kommentarene og gjør nødvendige endringer. Behandlingen bør stoppes inntil endringene er utført. PVO ber om at risikoeier ikke godkjenner PVK-en før dette er gjort. PVO kan eskalere saken til nødvendig ledelsesnivå. |
 
    PVO kan i tillegg angi om de vil følge opp endringene etterlever gjør, eller om de ønsker å få PVK-en i retur etter at etterlever har gjennomgått tilbakemeldingene.
-
 
 ### Statusflyt for PVK
 
@@ -61,42 +60,28 @@ PVK-dokumentet følger denne statusflyten:
 2. `SENDT_TIL_PVO` – PVK er sendt til personvernombudet (PVO) for vurdering
 3. `PVO_UNDERARBEID` – PVO behandler innsendt PVK
 4. `VURDERT_AV_PVO` – PVO har gitt tilbakemelding
-5. `VURDERT_AV_PVO_TRENGER_MER_ARBEID` – PVO mener PVK trenger mer arbeid
+5. `VURDERT_AV_PVO_TRENGER_MER_ARBEID` – PVO ønsker å få PVK-en i retur for ytterligere gjennomgang
 6. `SENDT_TIL_PVO_FOR_REVURDERING` – Etterlever sender revidert PVK tilbake til PVO
 7. `TRENGER_GODKJENNING` – Klar for risikoeiers godkjenning
 8. `GODKJENT_AV_RISIKOEIER` – Risikoeier har godkjent restrisiko og PVK er ferdigstilt
 
 **Merknader til statusflyten:**
 
-- Dersom PVO setter status til `VURDERT_AV_PVO_TRENGER_MER_ARBEID`, **skal** etterlever gjennomgå tilbakemeldingen, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`).
+- Statusen `VURDERT_AV_PVO_TRENGER_MER_ARBEID` settes når PVO markerer at de ønsker PVK-en i retur (`vilFaPvkIRetur = true`). I dette tilfellet **skal** etterlever gjennomgå tilbakemeldingen, gjøre nødvendige endringer og sende PVK-en tilbake til PVO for revurdering (`SENDT_TIL_PVO_FOR_REVURDERING`). PVK-en kan ikke gå videre til `TRENGER_GODKJENNING` uten at PVO har kvittert ut revurderingen. Merk: det er `vilFaPvkIRetur`-flagget — ikke selve vurderingsteksten — som avgjør om PVO vil ha PVK-en i retur.
 
-// **Vi har valgt et dårlig navn:** I koden, betyr "VURDERT_AV_PVO_TRENGER_MER_ARBEID" "PVO vil få i retur"? Tror det. Men "trenger mer arbeid" er et upresist/feil navn, da det det kan være tilfellet at PVO ikke vil få i retur, samtidig som de likevel mener at mer arbeid trenges. Bør vi endre på navnet?
-  
-PVK-en kan ikke gå videre til `TRENGER_GODKJENNING` uten at PVO er fornøyd med arbeidet.
-
-// **Upresist:** Hvis PVO har bedt om å få i retur, tvinger systemet at de skal få i retur. Men "fornøyd" er ikke et godt begrep (se punktet over). 
-
-- Dersom etterlevelsesdokumentasjonen er på **versjon 2 eller høyere** og PVK allerede er godkjent av risikoeier (`GODKJENT_AV_RISIKOEIER`), kan etterlever sende oppdateringer direkte til risikoeier for godkjenning — uten at PVK-en må innom PVO på nytt. Dersom endringene er av en slik karakter at det er faglig behov for ny PVO-vurdering, **kan** etterlever likevel velge å sende PVK-en til PVO før den sendes til risikoeier.
-
-// **Forslag til omskrivning, CJA sine endringer _i kursiv_:** Dersom etterlevelsesdokumentasjonen er på **versjon 2 eller høyere**, _noe som innebærer at_ PVK allerede er godkjent av risikoeier (`GODKJENT_AV_RISIKOEIER`), kan etterlever sende oppdateringer direkte til risikoeier for godkjenning — uten at PVK-en må innom PVO på nytt. Dersom endringene er av en slik karakter at det er faglig behov for ny PVO-vurdering, **skal** etterlever likevel velge å sende PVK-en til PVO _til en ny vurdering_ .
+- Dersom etterlevelsesdokumentasjonen er på **versjon 2 eller høyere**, noe som innebærer at PVK allerede er godkjent av risikoeier (`GODKJENT_AV_RISIKOEIER`), kan etterlever sende oppdateringer direkte til risikoeier for godkjenning — uten at PVK-en må innom PVO på nytt. Dersom endringene er av en slik karakter at det er faglig behov for ny PVO-vurdering, **skal** etterlever likevel sende PVK-en til PVO til en ny vurdering.
 
 ### Ansvar
 
-| Rolle                                  | Ansvar                                                        |
-| -------------------------------------- | ------------------------------------------------------------- |
-| Etterlever (behandlingsansvarlig team) | Opprette etterlevelsesdokument, fylle ut og sende PVK til PVO |
-| Personvernombudet (PVO)                | Gi tilbakemelding på PVK                                      |
-| Risikoeier                             | Godkjenne restrisiko og ferdigstille PVK                      |
-
-// **Savner et ansvar:** Etterlever er også ansvarlig for å ta stilling til PVOs tilbakemelding og gjøre eventuelle endringer.
-
-// **Utydelig hva som legges i 'ferdigstille PVK':** Ikke arkivering i P360, da dette skjer automatisk. 
+| Rolle                                  | Ansvar                                                                                                                           |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Etterlever (behandlingsansvarlig team) | Opprette etterlevelsesdokument, fylle ut og sende PVK til PVO, ta stilling til PVOs tilbakemelding og gjøre nødvendige endringer |
+| Personvernombudet (PVO)                | Gi tilbakemelding på PVK                                                                                                         |
+| Risikoeier                             | Godkjenne restrisiko og PVK                                                                                                      |
 
 ## Status
 
-Under arbeid / til beslutning i teamet.
-
-// **Forstår ikke hva dette skal bety** Er dette status på selve ADR-en?
+Besluttet og implementert.
 
 ## Konsekvenser
 
