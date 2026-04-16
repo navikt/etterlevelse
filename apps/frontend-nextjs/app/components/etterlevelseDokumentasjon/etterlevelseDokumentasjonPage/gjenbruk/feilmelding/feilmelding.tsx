@@ -58,7 +58,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
                 </Link>
               </List.Item>
             )}
-            {[null, undefined, ''].includes(values.varslingsadresser) && (
+            {(!values.varslingsadresser || values.varslingsadresser.length === 0) && (
               <List.Item>
                 <Link
                   href={etterlevelseDokumentasjonUrl(
@@ -72,7 +72,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
                 </Link>
               </List.Item>
             )}
-            {[null, undefined, ''].includes(values.teamsData) && (
+            {(!values.teamsData || values.teamsData.length === 0) && (
               <List.Item>
                 <Link
                   href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'teamsData')}
@@ -83,7 +83,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
                 </Link>
               </List.Item>
             )}
-            {[null, undefined, ''].includes(values.resourcesData) && (
+            {(!values.resourcesData || values.resourcesData.length === 0) && (
               <List.Item>
                 <Link
                   href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'resourcesData')}
