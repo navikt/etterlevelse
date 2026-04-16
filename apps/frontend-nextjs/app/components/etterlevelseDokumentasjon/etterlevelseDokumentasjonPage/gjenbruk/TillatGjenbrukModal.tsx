@@ -149,7 +149,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                     variant='primary'
                     disabled={isSubmitting}
                     onClick={async () => {
-                      setSubmitClick(!submitClick)
+                      setSubmitClick((prev) => !prev)
                       await setFieldValue('tilgjengeligForGjenbruk', true)
                       await submitForm()
                     }}
@@ -166,7 +166,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                         variant='secondary'
                         disabled={isSubmitting}
                         onClick={async () => {
-                          setSubmitClick(!submitClick)
+                          setSubmitClick((prev) => !prev)
                           await setFieldValue('tilgjengeligForGjenbruk', false)
                           await submitForm()
                         }}
