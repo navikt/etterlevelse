@@ -84,7 +84,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
 
       {isOpen && (
         <Modal
-          className='min-w-[1000px] px-5 py-5'
+          className='min-w-250 px-5 py-5'
           open={isOpen}
           onClose={() => setIsOpen(false)}
           header={{
