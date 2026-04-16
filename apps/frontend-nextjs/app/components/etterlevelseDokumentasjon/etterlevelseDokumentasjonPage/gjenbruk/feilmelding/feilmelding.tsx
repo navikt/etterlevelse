@@ -1,5 +1,6 @@
 import { EEtterlevelseDokumentSchemaMelding } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { isEmptyArray, isMissingText } from '@/util/common/validationUtils'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import { InfoCard, Link, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
@@ -20,13 +21,12 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   values,
 }) => {
-  const missingTitle = [null, undefined, ''].includes(values.title)
-  const missingBeskrivelse = [null, undefined, ''].includes(values.beskrivelse)
-  const missingVarslingsadresser =
-    !values.varslingsadresser || values.varslingsadresser.length === 0
-  const missingTeamsData = !values.teamsData || values.teamsData.length === 0
-  const missingResourcesData = !values.resourcesData || values.resourcesData.length === 0
-  const missingNomAvdelingId = [null, undefined, ''].includes(values.nomAvdelingId)
+  const missingTitle = isMissingText(values.title)
+  const missingBeskrivelse = isMissingText(values.beskrivelse)
+  const missingVarslingsadresser = isEmptyArray(values.varslingsadresser)
+  const missingTeamsData = isEmptyArray(values.teamsData)
+  const missingResourcesData = isEmptyArray(values.resourcesData)
+  const missingNomAvdelingId = isMissingText(values.nomAvdelingId)
 
   const hasMissingRequiredField =
     missingTitle ||
