@@ -176,12 +176,12 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                     )}
 
                   <Button
-                    type='submit'
+                    type='button'
                     variant='secondary'
                     disabled={isSubmitting}
                     onClick={async () => {
-                      setSubmitClick(!submitClick)
-                      await submitForm()
+                      setSubmitClick((prev) => !prev)
+                      await submit(values)
                     }}
                   >
                     Lagre til senere
