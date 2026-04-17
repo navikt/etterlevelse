@@ -68,6 +68,7 @@ type TProps = {
 
 export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
   const pathname: string = usePathname()
+  const isE2ERoute = pathname?.startsWith('/e2e')
   const [loaded, setLoaded] = useState<boolean>(false)
   const [userInfo, setUserInfo] = useState<IUserInfo>({ loggedIn: false, groups: [] })
   const [currentGroups, setCurrentGroups] = useState<EGroup[]>([EGroup.READ])
@@ -82,6 +83,9 @@ export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
       if (response.data.loggedIn) {
         setUserInfo({ ...response.data, groups })
         setCurrentGroups(groups)
+      } else if (isE2ERoute && process.env.NODE_ENV !== 'production') {
+        setUserInfo({ loggedIn: false, groups: [EGroup.READ] })
+        setCurrentGroups([EGroup.READ])
       } else {
         window.location.href = loginUrl(window.location.href, pathname)
       }
