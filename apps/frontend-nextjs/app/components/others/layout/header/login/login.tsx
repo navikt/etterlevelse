@@ -27,8 +27,7 @@ import {
   ReceiptIcon,
 } from '@navikt/aksel-icons'
 import { Button, InternalHeader, Link } from '@navikt/ds-react'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useContext } from 'react'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
@@ -37,12 +36,11 @@ import { UserInfoView } from '../user/userInfoView/userInfoView'
 export const LoginHeaderButton = () => {
   // updates window.location on navigation
   const pathname: string = usePathname()
-  const fullUrl = typeof window !== 'undefined' ? window.location.href : ''
 
   return (
     <InternalHeader.Button
       as={Link}
-      href={loginUrl(fullUrl, pathname)}
+      href={loginUrl('', pathname)}
       underline={false}
       style={{ color: '#cdd0d4' }}
     >
@@ -143,12 +141,10 @@ export const LoggedInHeader = () => {
 }
 
 export const LoginButton = () => {
-  // updates window.location on navigation
-  const router: AppRouterInstance = useRouter()
   const pathname: string = usePathname()
 
   return (
-    <Button as={Link} href={loginUrl(router.toString(), pathname)} underline={false}>
+    <Button as={Link} href={loginUrl('', pathname)} underline={false}>
       Logg inn
     </Button>
   )

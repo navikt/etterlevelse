@@ -24,6 +24,8 @@ type TProps = {
 const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   const [systemVarsel, setSystemVarsel] = useState<IMelding>()
   const pathname: string = usePathname()
+  const isE2ERoute =
+    pathname?.startsWith('/e2e') && process.env.NEXT_PUBLIC_ENABLE_E2E_PAGES === 'true'
   const user = useContext(UserContext)
   const sourceReportedRef = useRef(false)
 
@@ -53,7 +55,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
           <div className='max-w-7xl flex w-full'>
             <InternalHeader.Title href='/'>Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
-            {!noSearchBar && (
+            {!noSearchBar && !isE2ERoute && (
               <div
                 className='hidden lg:flex w-full max-w-xl justify-center items-center'
                 role='search'
@@ -62,7 +64,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
               </div>
             )}
             <Spacer />
-            {!noLoginButton && (
+            {!noLoginButton && !isE2ERoute && (
               <div className='flex'>
                 {!user.isLoggedIn() && <LoginHeaderButton />}
                 {user.isLoggedIn() && <LoggedInHeader />}
@@ -71,14 +73,16 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
           </div>
         </InternalHeader>
       </div>
-      <div
-        className='flex lg:hidden bg-gray-900 py-1 px-1 w-full justify-center items-center'
-        role='search'
-      >
-        <div className=' max-w-xl w-full '>
-          <MainSearch />
+      {!isE2ERoute && (
+        <div
+          className='flex lg:hidden bg-gray-900 py-1 px-1 w-full justify-center items-center'
+          role='search'
+        >
+          <div className=' max-w-xl w-full '>
+            <MainSearch />
+          </div>
         </div>
-      </div>
+      )}
       {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
         <div className='w-full flex justify-center'>
           <div

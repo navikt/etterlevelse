@@ -68,7 +68,8 @@ type TProps = {
 
 export const UserProvider: FunctionComponent<TProps> = ({ children }) => {
   const pathname: string = usePathname()
-  const isE2ERoute = pathname?.startsWith('/e2e')
+  const isE2ERoute =
+    pathname?.startsWith('/e2e') && process.env.NEXT_PUBLIC_ENABLE_E2E_PAGES === 'true'
   const [loaded, setLoaded] = useState<boolean>(false)
   const [userInfo, setUserInfo] = useState<IUserInfo>({ loggedIn: false, groups: [] })
   const [currentGroups, setCurrentGroups] = useState<EGroup[]>([EGroup.READ])

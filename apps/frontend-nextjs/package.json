@@ -26,6 +26,9 @@
       "prettier --list-different --write",
       "eslint --cache",
       "bash -c 'yarn run type-check'"
+    ],
+    "{app,playwright}/**/*.{js,jsx,ts,tsx}": [
+      "node scripts/run-playwright-lintstaged.mjs"
     ]
   },
   "dependencies": {
