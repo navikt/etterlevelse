@@ -106,7 +106,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
             validateOnChange={false}
             validateOnBlur={false}
           >
-            {({ setFieldValue, submitForm, isSubmitting, initialValues, values }) => {
+            {({ setFieldValue, submitForm, validateForm, isSubmitting, initialValues, values }) => {
               const hasMissingRequiredField =
                 isMissingText(values.title) ||
                 isMissingText(values.beskrivelse) ||
@@ -124,6 +124,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       setIsOpen={setIsOpen}
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
+                      validateForm={validateForm}
                       isSubmitting={isSubmitting}
                       hasMissingRequiredField={hasMissingRequiredField}
                       setSubmitClick={setSubmitClick}
@@ -138,6 +139,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       setIsOpen={setIsOpen}
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
+                      validateForm={validateForm}
                       isSubmitting={isSubmitting}
                       hasMissingRequiredField={hasMissingRequiredField}
                       setSubmitClick={setSubmitClick}

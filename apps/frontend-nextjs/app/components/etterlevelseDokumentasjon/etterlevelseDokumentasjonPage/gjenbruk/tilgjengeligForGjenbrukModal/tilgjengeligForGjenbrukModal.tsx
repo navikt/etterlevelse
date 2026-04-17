@@ -19,6 +19,7 @@ type TProps = {
   hasMissingRequiredField: boolean
   setSubmitClick: Dispatch<SetStateAction<boolean>>
   submitForm: (() => Promise<void>) & (() => Promise<any>)
+  validateForm: () => Promise<FormikErrors<TEtterlevelseDokumentasjonQL>>
   submit: (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => Promise<void>
   initialValues: TEtterlevelseDokumentasjonQL
 }
@@ -32,6 +33,7 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
   hasMissingRequiredField,
   setSubmitClick,
   submitForm,
+  validateForm,
   submit,
   initialValues,
 }) => (
@@ -53,6 +55,8 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         variant='primary'
         disabled={isSubmitting || hasMissingRequiredField}
         onClick={async () => {
+          const errors = await validateForm()
+          if (Object.keys(errors).length > 0) return
           setSubmitClick((prev) => !prev)
           await setFieldValue('tilgjengeligForGjenbruk', true)
           await submitForm()
