@@ -58,7 +58,7 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
           const errors = await validateForm()
           if (Object.keys(errors).length > 0) return
           setSubmitClick((prev) => !prev)
-          await setFieldValue('tilgjengeligForGjenbruk', true)
+          await setFieldValue('tilgjengeligForGjenbruk', false)
           await submitForm()
         }}
       >
