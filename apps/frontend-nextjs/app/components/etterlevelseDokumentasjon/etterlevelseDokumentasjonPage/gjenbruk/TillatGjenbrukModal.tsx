@@ -96,6 +96,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
             closeButton: false,
           }}
         >
+          ager
           <Formik
             initialValues={etterlevelseDokumentasjonMapToFormVal(
               etterlevelseDokumentasjon ? etterlevelseDokumentasjon : {}
