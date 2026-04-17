@@ -3,7 +3,7 @@ import { Button, Modal } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { BeskrivelseAvGjenbruk } from '../beskrivelseAvGjenbruk/beskrivelseAvGjenbruk'
-import { AvbrytKnapp } from '../common/avbrytKnapp'
+import { AvbrytKnapp, LagreTilSenereKnapp } from '../common/knapper'
 import { GjenbrukFeilmelding } from '../feilmelding/feilmelding'
 
 type TProps = {
@@ -45,7 +45,6 @@ export const IkkeTilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         variant='primary'
         disabled={isSubmitting || hasMissingRequiredField}
         onClick={async () => {
-          if (hasMissingRequiredField) return
           setSubmitClick((prev) => !prev)
           await setFieldValue('tilgjengeligForGjenbruk', true)
           await submitForm()
@@ -54,17 +53,12 @@ export const IkkeTilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         Slå på gjenbruk
       </Button>
 
-      <Button
-        type='button'
-        variant='secondary'
-        disabled={isSubmitting}
-        onClick={async () => {
-          setSubmitClick((prev) => !prev)
-          await submit(values)
-        }}
-      >
-        Lagre til senere
-      </Button>
+      <LagreTilSenereKnapp
+        isSubmitting={isSubmitting}
+        setSubmitClick={setSubmitClick}
+        submit={submit}
+        values={values}
+      />
 
       <AvbrytKnapp isSubmitting={isSubmitting} setIsOpen={setIsOpen} />
     </Modal.Footer>
