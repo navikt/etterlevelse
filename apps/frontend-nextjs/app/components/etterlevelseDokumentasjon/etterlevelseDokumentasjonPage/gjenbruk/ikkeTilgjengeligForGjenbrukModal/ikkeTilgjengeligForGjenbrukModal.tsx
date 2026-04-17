@@ -3,6 +3,7 @@ import { Button, Modal } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { BeskrivelseAvGjenbruk } from '../beskrivelseAvGjenbruk/beskrivelseAvGjenbruk'
+import { AvbrytKnapp } from '../common/avbrytKnapp'
 import { GjenbrukFeilmelding } from '../feilmelding/feilmelding'
 
 type TProps = {
@@ -64,14 +65,7 @@ export const IkkeTilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         Lagre til senere
       </Button>
 
-      <Button
-        type='button'
-        disabled={isSubmitting}
-        variant='tertiary'
-        onClick={() => setIsOpen(false)}
-      >
-        Avbryt
-      </Button>
+      <AvbrytKnapp isSubmitting={isSubmitting} setIsOpen={setIsOpen} />
     </Modal.Footer>
   </>
 )

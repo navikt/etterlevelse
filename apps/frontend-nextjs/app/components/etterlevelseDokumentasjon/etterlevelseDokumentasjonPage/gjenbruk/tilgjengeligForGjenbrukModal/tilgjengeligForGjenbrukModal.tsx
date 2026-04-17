@@ -3,6 +3,7 @@ import { Button, InlineMessage, Modal } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { BeskrivelseAvGjenbruk } from '../beskrivelseAvGjenbruk/beskrivelseAvGjenbruk'
+import { AvbrytKnapp } from '../common/avbrytKnapp'
 import { GjenbrukFeilmelding } from '../feilmelding/feilmelding'
 
 type TProps = {
@@ -15,10 +16,9 @@ type TProps = {
     shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<TEtterlevelseDokumentasjonQL>>
   isSubmitting: boolean
-  hasMissingRequiredField: boolean
   setSubmitClick: Dispatch<SetStateAction<boolean>>
   submitForm: (() => Promise<void>) & (() => Promise<any>)
-  submit: (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => Promise<void>
+  initialValues: TEtterlevelseDokumentasjonQL
 }
 
 export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
@@ -27,10 +27,9 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
   setIsOpen,
   setFieldValue,
   isSubmitting,
-  hasMissingRequiredField,
   setSubmitClick,
   submitForm,
-  submit,
+  initialValues,
 }) => (
   <>
     <GjenbrukFeilmelding etterlevelseDokumentasjon={etterlevelseDokumentasjon} values={values} />
@@ -48,7 +47,7 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
       <Button
         type='submit'
         variant='primary'
-        disabled={isSubmitting || hasMissingRequiredField}
+        disabled={isSubmitting}
         onClick={async () => {
           setSubmitClick((prev) => !prev)
           await setFieldValue('tilgjengeligForGjenbruk', true)
@@ -58,39 +57,22 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         Lagre endringene
       </Button>
 
-      <Button
-        type='button'
-        variant='secondary'
-        disabled={isSubmitting}
-        onClick={async () => {
-          setSubmitClick((prev) => !prev)
-          await setFieldValue('tilgjengeligForGjenbruk', false)
-          await submitForm()
-        }}
-      >
-        Slå av gjenbruk
-      </Button>
+      {initialValues.tilgjengeligForGjenbruk && initialValues.gjenbrukBeskrivelse.length > 0 && (
+        <Button
+          type='button'
+          variant='secondary'
+          disabled={isSubmitting}
+          onClick={async () => {
+            setSubmitClick((prev) => !prev)
+            await setFieldValue('tilgjengeligForGjenbruk', false)
+            await submitForm()
+          }}
+        >
+          Slå av gjenbruk
+        </Button>
+      )}
 
-      <Button
-        type='button'
-        variant='secondary'
-        disabled={isSubmitting}
-        onClick={async () => {
-          setSubmitClick((prev) => !prev)
-          await submit(values)
-        }}
-      >
-        Lagre til senere
-      </Button>
-
-      <Button
-        type='button'
-        disabled={isSubmitting}
-        variant='tertiary'
-        onClick={() => setIsOpen(false)}
-      >
-        Avbryt
-      </Button>
+      <AvbrytKnapp isSubmitting={isSubmitting} setIsOpen={setIsOpen} />
     </Modal.Footer>
   </>
 )
