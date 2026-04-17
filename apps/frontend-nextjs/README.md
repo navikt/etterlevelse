@@ -106,13 +106,23 @@ This app has a gated e2e-only route used for local Playwright regression tests.
 - It is blocked in production
 - Playwright sets the required env vars automatically via [playwright.config.ts](playwright.config.ts)
 
-Run the targeted regression spec with:
+Run all Playwright tests with:
+
+```bash
+yarn run e2e --workers=1
+```
+
+To run only the gjenbruk regression spec:
 
 ```bash
 yarn run e2e playwright/tests/tillat-gjenbruk-modal.spec.ts --workers=1
 ```
 
-`lint-staged` also runs this targeted Playwright spec for changed JS/TS files.
+`lint-staged` also runs Playwright only for relevant staged files:
+
+- staged files in `playwright/tests` run the matching staged spec files
+- staged edits in the gjenbruk/e2e-related app code trigger the gjenbruk regression spec
+- unrelated staged files skip Playwright
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
