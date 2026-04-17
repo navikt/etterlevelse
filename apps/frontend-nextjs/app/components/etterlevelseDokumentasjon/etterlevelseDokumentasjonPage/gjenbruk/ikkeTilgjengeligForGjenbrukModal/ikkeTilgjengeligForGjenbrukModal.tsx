@@ -45,6 +45,7 @@ export const IkkeTilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         variant='primary'
         disabled={isSubmitting || hasMissingRequiredField}
         onClick={async () => {
+          if (hasMissingRequiredField) return
           setSubmitClick((prev) => !prev)
           await setFieldValue('tilgjengeligForGjenbruk', true)
           await submitForm()

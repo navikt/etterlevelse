@@ -125,6 +125,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       setFieldValue={setFieldValue}
                       submitForm={submitForm}
                       isSubmitting={isSubmitting}
+                      hasMissingRequiredField={hasMissingRequiredField}
                       setSubmitClick={setSubmitClick}
                       initialValues={initialValues}
                     />

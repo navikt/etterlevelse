@@ -16,6 +16,7 @@ type TProps = {
     shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<TEtterlevelseDokumentasjonQL>>
   isSubmitting: boolean
+  hasMissingRequiredField: boolean
   setSubmitClick: Dispatch<SetStateAction<boolean>>
   submitForm: (() => Promise<void>) & (() => Promise<any>)
   initialValues: TEtterlevelseDokumentasjonQL
@@ -27,6 +28,7 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
   setIsOpen,
   setFieldValue,
   isSubmitting,
+  hasMissingRequiredField,
   setSubmitClick,
   submitForm,
   initialValues,
@@ -47,8 +49,9 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
       <Button
         type='submit'
         variant='primary'
-        disabled={isSubmitting}
+        disabled={isSubmitting || hasMissingRequiredField}
         onClick={async () => {
+          if (hasMissingRequiredField) return
           setSubmitClick((prev) => !prev)
           await setFieldValue('tilgjengeligForGjenbruk', true)
           await submitForm()
