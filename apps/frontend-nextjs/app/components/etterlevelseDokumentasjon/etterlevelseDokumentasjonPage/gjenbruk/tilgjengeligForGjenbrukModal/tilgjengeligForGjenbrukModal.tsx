@@ -58,27 +58,12 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
           const errors = await validateForm()
           if (Object.keys(errors).length > 0) return
           setSubmitClick((prev) => !prev)
-          await setFieldValue('tilgjengeligForGjenbruk', false)
+          await setFieldValue('tilgjengeligForGjenbruk', true)
           await submitForm()
         }}
       >
         Lagre endringene
       </Button>
-
-      {initialValues.tilgjengeligForGjenbruk && initialValues.gjenbrukBeskrivelse.length > 0 && (
-        <Button
-          type='button'
-          variant='secondary'
-          disabled={isSubmitting || hasMissingRequiredField}
-          onClick={async () => {
-            setSubmitClick((prev) => !prev)
-            await setFieldValue('tilgjengeligForGjenbruk', false)
-            await submitForm()
-          }}
-        >
-          Slå av gjenbruk
-        </Button>
-      )}
 
       {initialValues.tilgjengeligForGjenbruk && initialValues.gjenbrukBeskrivelse.length === 0 && (
         <LagreTilSenereKnapp
