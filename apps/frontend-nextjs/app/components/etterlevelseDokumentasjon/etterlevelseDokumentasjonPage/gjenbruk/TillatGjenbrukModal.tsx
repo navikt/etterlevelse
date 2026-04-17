@@ -5,14 +5,15 @@ import {
   getEtterlevelseDokumentasjon,
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Button, InlineMessage, List, Modal } from '@navikt/ds-react'
+import { isEmptyArray, isMissingText } from '@/util/common/validationUtils'
+import { Button, Modal } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
-import { GjenbrukFeilmelding } from './feilmelding/feilmelding'
 import { gjenbrukDokumentasjonSchema } from './form/gjenbrukSchema'
+import { IkkeTilgjengeligForGjenbrukModal } from './ikkeTilgjengeligForGjenbrukModal/ikkeTilgjengeligForGjenbrukModal'
+import { TilgjengeligForGjenbrukModal } from './tilgjengeligForGjenbrukModal/tilgjengeligForGjenbrukModal'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -105,99 +106,46 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
             validateOnChange={false}
             validateOnBlur={false}
           >
-            {({ setFieldValue, submitForm, isSubmitting, initialValues, values }) => (
-              <Form>
-                <GjenbrukFeilmelding
-                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  values={values}
-                />
+            {({ setFieldValue, submitForm, isSubmitting, initialValues, values }) => {
+              const hasMissingRequiredField =
+                isMissingText(values.title) ||
+                isMissingText(values.beskrivelse) ||
+                isEmptyArray(values.varslingsadresser) ||
+                isEmptyArray(values.teamsData) ||
+                isEmptyArray(values.resourcesData) ||
+                isMissingText(values.nomAvdelingId)
 
-                <Modal.Body>
-                  <List as='ul' className='mb-5'>
-                    <List.Item>
-                      Når du tillater gjenbruk av dokumentet ditt, vil de som gjenbruker kunne arve
-                      både veilending og svar, og bruke disse som utgangspunkt for sin egen
-                      dokumentasjon.
-                    </List.Item>
-                    <List.Item>
-                      De som gjenbruker er likevel ansvarlig for at etterlevelsen blir riktig.
-                    </List.Item>
-                  </List>
-                  <TextAreaField
-                    name='gjenbrukBeskrivelse'
-                    label='Skriv veiledning som hjelper andre å forstå om de skal gjenbruke dette dokumentet'
-                    height='150px'
-                    markdown
-                    noPlaceholder
-                    caption={
-                      <>Hvem skal gjenbruke? Ved hvilken type arbeid blir gjenbruk passende?</>
-                    }
-                  />
-
+              return (
+                <Form>
                   {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
-                    <InlineMessage status='info' className='mt-5'>
-                      Det er alltid mulig å slå av gjenbruk slik at muligheten ikke vises lenger.
-                      Veiledning som dere har skrevet, vil fortsatt synes for dere og de som
-                      allerede gjenbruker dokumentet. Etter hvert kan dere velge om dere vil slá pả
-                      gjenbruk pả nytt.
-                    </InlineMessage>
+                    <TilgjengeligForGjenbrukModal
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      values={values}
+                      setIsOpen={setIsOpen}
+                      setFieldValue={setFieldValue}
+                      submitForm={submitForm}
+                      isSubmitting={isSubmitting}
+                      hasMissingRequiredField={hasMissingRequiredField}
+                      setSubmitClick={setSubmitClick}
+                      submit={submit}
+                    />
                   )}
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    type='submit'
-                    variant='primary'
-                    disabled={isSubmitting}
-                    onClick={async () => {
-                      setSubmitClick((prev) => !prev)
-                      await setFieldValue('tilgjengeligForGjenbruk', true)
-                      await submitForm()
-                    }}
-                  >
-                    {etterlevelseDokumentasjon.tilgjengeligForGjenbruk
-                      ? 'Lagre endringene'
-                      : 'Slå på gjenbruk'}
-                  </Button>
-
-                  {initialValues.tilgjengeligForGjenbruk &&
-                    initialValues.gjenbrukBeskrivelse.length > 0 && (
-                      <Button
-                        type='button'
-                        variant='secondary'
-                        disabled={isSubmitting}
-                        onClick={async () => {
-                          setSubmitClick((prev) => !prev)
-                          await setFieldValue('tilgjengeligForGjenbruk', false)
-                          await submitForm()
-                        }}
-                      >
-                        Slå av gjenbruk
-                      </Button>
-                    )}
-
-                  <Button
-                    type='button'
-                    variant='secondary'
-                    disabled={isSubmitting}
-                    onClick={async () => {
-                      setSubmitClick((prev) => !prev)
-                      await submit(values)
-                    }}
-                  >
-                    Lagre til senere
-                  </Button>
-
-                  <Button
-                    type='button'
-                    disabled={isSubmitting}
-                    variant='tertiary'
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Avbryt
-                  </Button>
-                </Modal.Footer>
-              </Form>
-            )}
+                  {!etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
+                    <IkkeTilgjengeligForGjenbrukModal
+                      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                      values={values}
+                      setIsOpen={setIsOpen}
+                      setFieldValue={setFieldValue}
+                      submitForm={submitForm}
+                      isSubmitting={isSubmitting}
+                      hasMissingRequiredField={hasMissingRequiredField}
+                      setSubmitClick={setSubmitClick}
+                      submit={submit}
+                    />
+                  )}
+                </Form>
+              )
+            }}
           </Formik>
         </Modal>
       )}
