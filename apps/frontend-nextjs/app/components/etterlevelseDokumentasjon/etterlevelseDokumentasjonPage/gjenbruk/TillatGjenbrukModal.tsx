@@ -111,8 +111,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                 isMissingText(values.title) ||
                 isMissingText(values.beskrivelse) ||
                 isEmptyArray(values.varslingsadresser) ||
-                isEmptyArray(values.teamsData) ||
-                isEmptyArray(values.resourcesData) ||
+                (isEmptyArray(values.teamsData) && isEmptyArray(values.resourcesData)) ||
                 isMissingText(values.nomAvdelingId)
 
               return (

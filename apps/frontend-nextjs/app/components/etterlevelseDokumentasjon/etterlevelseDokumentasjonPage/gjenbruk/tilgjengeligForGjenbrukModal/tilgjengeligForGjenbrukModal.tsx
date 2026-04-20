@@ -65,7 +65,7 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         Lagre endringene
       </Button>
 
-      {initialValues.tilgjengeligForGjenbruk && initialValues.gjenbrukBeskrivelse.length > 0 && (
+      {initialValues.gjenbrukBeskrivelse.length > 0 && (
         <Button
           type='button'
           variant='secondary'
@@ -80,16 +80,7 @@ export const TilgjengeligForGjenbrukModal: FunctionComponent<TProps> = ({
         </Button>
       )}
 
-      {initialValues.tilgjengeligForGjenbruk && initialValues.gjenbrukBeskrivelse.length === 0 && (
-        <LagreTilSenereKnapp
-          isSubmitting={isSubmitting}
-          setSubmitClick={setSubmitClick}
-          submit={submit}
-          values={values}
-        />
-      )}
-
-      {initialValues.tilgjengeligForGjenbruk && initialValues.gjenbrukBeskrivelse.length > 0 && (
+      {hasMissingRequiredField && (
         <LagreTilSenereKnapp
           isSubmitting={isSubmitting}
           setSubmitClick={setSubmitClick}

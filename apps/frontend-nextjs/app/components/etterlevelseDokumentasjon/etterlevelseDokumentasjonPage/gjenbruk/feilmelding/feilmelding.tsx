@@ -1,4 +1,7 @@
-import { EEtterlevelseDokumentSchemaMelding } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
+import {
+  EEtterlevelseDokumentSchemaMelding,
+  EPaKrevdMember,
+} from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { isEmptyArray, isMissingText } from '@/util/common/validationUtils'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
@@ -32,8 +35,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
     missingTitle ||
     missingBeskrivelse ||
     missingVarslingsadresser ||
-    missingTeamsData ||
-    missingResourcesData ||
+    (missingTeamsData && missingResourcesData) ||
     missingNomAvdelingId
 
   return (
@@ -83,25 +85,14 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
                   </Link>
                 </List.Item>
               )}
-              {missingTeamsData && (
+              {missingTeamsData && missingResourcesData && (
                 <List.Item>
                   <Link
                     href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'teamsData')}
                     target='_blank'
                     rel='noopener noreferrer'
                   >
-                    {EEtterlevelseDokumentSchemaMelding.TEAMDATA} (åpner i en ny fane)
-                  </Link>
-                </List.Item>
-              )}
-              {missingResourcesData && (
-                <List.Item>
-                  <Link
-                    href={etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon, 'resourcesData')}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    {EEtterlevelseDokumentSchemaMelding.RESOURCEDATA} (åpner i en ny fane)
+                    {EPaKrevdMember.PAKREVD} (åpner i en ny fane)
                   </Link>
                 </List.Item>
               )}

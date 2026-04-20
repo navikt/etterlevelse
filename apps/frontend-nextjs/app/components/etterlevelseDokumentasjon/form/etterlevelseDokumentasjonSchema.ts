@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-enum EPaKrevd {
+export enum EPaKrevdMember {
   PAKREVD = 'Påkrevd minst 1 team eller 1 person',
 }
 
@@ -8,8 +8,8 @@ export enum EEtterlevelseDokumentSchemaMelding {
   TITLE = 'Etterlevelsesdokumentasjon trenger en tittel',
   BESKRIVELSE = 'Etterlevelsesdokumentasjon trenger en beskrivelse',
   VARSLINGSADRESSER = 'Påkrevd minst 1 varslingsadresse',
-  TEAMDATA = EPaKrevd.PAKREVD,
-  RESOURCEDATA = EPaKrevd.PAKREVD,
+  TEAMDATA = EPaKrevdMember.PAKREVD,
+  RESOURCEDATA = EPaKrevdMember.PAKREVD,
   NOM_AVDELING_ID = 'Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen',
 }
 
