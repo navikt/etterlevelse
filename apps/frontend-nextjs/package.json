@@ -61,6 +61,7 @@
     "yup": "1.7.1"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "16.2.4",
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
     "@types/draft-js": "0.11.20",
     "@types/lodash": "4.17.24",
@@ -68,7 +69,6 @@
     "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@next/eslint-plugin-next": "16.2.4",
     "@typescript-eslint/eslint-plugin": "8.58.2",
     "@typescript-eslint/parser": "8.58.2",
     "eslint": "10.2.1",
