@@ -34,8 +34,11 @@
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
+    "*.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "proxy.ts",
+    "next.config.ts",
     ".next/types/**/*.ts",
     ".next/types/**/*.tsx",
     "app/api/begrep",
@@ -44,6 +47,7 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
+    ".next/dev",
     "node_modules"
   ]
 }
