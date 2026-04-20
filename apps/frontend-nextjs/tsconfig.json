@@ -42,7 +42,7 @@
     ".next/types/**/*.ts",
     ".next/types/**/*.tsx",
     "app/api/begrep",
-    "next-env.ts6-audit.d.ts",
+    "next-env.d.ts",
     "build/types/**/*.ts"
   ],
   "exclude": [
