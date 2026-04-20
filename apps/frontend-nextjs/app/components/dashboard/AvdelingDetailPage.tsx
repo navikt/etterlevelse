@@ -81,19 +81,21 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </div>
       </div>
 
-      <Select
-        label='Velg seksjon'
-        className='mt-4 w-64'
-        value={selectedSeksjon}
-        onChange={(e) => setSelectedSeksjon(e.target.value)}
-      >
-        <option value=''>Alle seksjoner</option>
-        {data.seksjoner.map((s) => (
-          <option key={s.id} value={s.id}>
-            {s.navn}
-          </option>
-        ))}
-      </Select>
+      {data.seksjoner.length > 0 && (
+        <Select
+          label='Velg seksjon'
+          className='mt-4 w-64'
+          value={selectedSeksjon}
+          onChange={(e) => setSelectedSeksjon(e.target.value)}
+        >
+          <option value=''>Alle seksjoner</option>
+          {data.seksjoner.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.navn}
+            </option>
+          ))}
+        </Select>
+      )}
 
       <Tabs value={activeTab} onChange={setActiveTab} className='mt-4'>
         <Tabs.List>

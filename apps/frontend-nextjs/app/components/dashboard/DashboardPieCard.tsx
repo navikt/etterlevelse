@@ -160,19 +160,21 @@ const PieWithLegend = ({ data, hasData }: { data: IPieSlice[]; hasData: boolean 
           <BodyShort className='text-gray-500'>Ingen data</BodyShort>
         )}
       </div>
-      <div style={{ marginTop: '8px' }}>
-        {data.map((s) => (
-          <LegendItem
-            key={s.name}
-            color={s.color}
-            label={s.name}
-            isHighlighted={highlighted === s.name}
-            isDimmed={highlighted !== null && highlighted !== s.name}
-            onMouseEnter={() => setHighlighted(s.name)}
-            onMouseLeave={() => setHighlighted(null)}
-          />
-        ))}
-      </div>
+      {hasData && (
+        <div style={{ marginTop: '8px' }}>
+          {data.map((s) => (
+            <LegendItem
+              key={s.name}
+              color={s.color}
+              label={s.name}
+              isHighlighted={highlighted === s.name}
+              isDimmed={highlighted !== null && highlighted !== s.name}
+              onMouseEnter={() => setHighlighted(s.name)}
+              onMouseLeave={() => setHighlighted(null)}
+            />
+          ))}
+        </div>
+      )}
     </>
   )
 }
