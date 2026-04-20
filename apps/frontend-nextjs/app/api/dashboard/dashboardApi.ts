@@ -92,10 +92,9 @@ export const getDashboardStats = async (): Promise<IAvdelingDashboardStats[]> =>
   for (const dok of dokumentasjoner) {
     const id = dok.nomAvdelingId
     if (!id) continue
-    if (!avdelingMap.has(id)) {
-      avdelingMap.set(id, { navn: dok.avdelingNavn || id, doks: [], stats: [] })
+    if (avdelingMap.has(id)) {
+      avdelingMap.get(id)!.doks.push(dok)
     }
-    avdelingMap.get(id)!.doks.push(dok)
   }
 
   for (const stat of behandlingStats) {
