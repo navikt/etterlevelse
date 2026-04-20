@@ -370,6 +370,8 @@ export interface IAvdelingDetailData {
   seksjoner: ISeksjonOption[]
   totalStats: IAvdelingDashboardStats
   statsBySeksjon: Map<string, IAvdelingDashboardStats>
+  dokumentasjoner: IEtterlevelseDokumentasjon[]
+  pvkByDokId: Map<string, IPvkDokument>
 }
 
 export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdelingDetailData> => {
@@ -421,5 +423,7 @@ export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdel
     seksjoner: seksjoner.map((s) => ({ id: s.id, navn: s.navn })),
     totalStats,
     statsBySeksjon,
+    dokumentasjoner: avdelingDoks,
+    pvkByDokId: pvkByEtterlevelseDokId,
   }
 }
