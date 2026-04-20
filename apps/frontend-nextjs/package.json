@@ -16,7 +16,7 @@
     "format": "prettier --write \"./app\"",
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
     "prettier": "prettier --write \"./app\"",
-    "type-check:ts6-audit": "tsc --project tsconfig.ts6-audit.json --noEmit --skipLibCheck false",
+    "type-check:ts6-audit": "tsc --project tsconfig.json --noEmit --skipLibCheck false --incremental false",
     "type-check": "tsc --project tsconfig.json",
     "postinstall": "patch-package && husky"
   },
