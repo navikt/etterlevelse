@@ -364,6 +364,14 @@ const computeStats = (
   }
 }
 
+export interface IDokKravStats {
+  totalKrav: number
+  ferdigDokumentert: number
+  underArbeid: number
+  ikkePaabegynt: number
+  behandlinger: { id: string; navn: string; nummer: number }[]
+}
+
 export interface IAvdelingDetailData {
   avdelingId: string
   avdelingNavn: string
@@ -372,6 +380,7 @@ export interface IAvdelingDetailData {
   statsBySeksjon: Map<string, IAvdelingDashboardStats>
   dokumentasjoner: IEtterlevelseDokumentasjon[]
   pvkByDokId: Map<string, IPvkDokument>
+  kravStatsByDokId: Map<string, IDokKravStats>
 }
 
 export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdelingDetailData> => {
@@ -417,6 +426,39 @@ export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdel
     statsBySeksjon.set(seksjon.id, seksjonStats)
   }
 
+  const avdelingDokIds = new Set(avdelingDoks.map((d) => d.id))
+
+  const kravStatsByDokId = new Map<string, IDokKravStats>()
+  for (const stat of behandlingStats) {
+    if (!avdelingDokIds.has(stat.etterlevelseDokumentasjonsId)) continue
+    const existing = kravStatsByDokId.get(stat.etterlevelseDokumentasjonsId)
+    if (existing) {
+      existing.totalKrav += stat.totalKrav || 0
+      existing.ferdigDokumentert += stat.antallFerdigDokumentert || 0
+      existing.underArbeid += stat.antallUnderArbeid || 0
+      existing.ikkePaabegynt += stat.antallIkkePaabegynt || 0
+      existing.behandlinger.push({
+        id: stat.behandlingId,
+        navn: stat.behandlingNavn,
+        nummer: parseInt(stat.behandlingId.replace(/\D/g, '')) || 0,
+      })
+    } else {
+      kravStatsByDokId.set(stat.etterlevelseDokumentasjonsId, {
+        totalKrav: stat.totalKrav || 0,
+        ferdigDokumentert: stat.antallFerdigDokumentert || 0,
+        underArbeid: stat.antallUnderArbeid || 0,
+        ikkePaabegynt: stat.antallIkkePaabegynt || 0,
+        behandlinger: [
+          {
+            id: stat.behandlingId,
+            navn: stat.behandlingNavn,
+            nummer: parseInt(stat.behandlingId.replace(/\D/g, '')) || 0,
+          },
+        ],
+      })
+    }
+  }
+
   return {
     avdelingId,
     avdelingNavn,
@@ -425,5 +467,6 @@ export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdel
     statsBySeksjon,
     dokumentasjoner: avdelingDoks,
     pvkByDokId: pvkByEtterlevelseDokId,
+    kravStatsByDokId,
   }
 }

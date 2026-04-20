@@ -55,6 +55,36 @@ const getPvkStatusText = (pvk?: IPvkDokument): string => {
   return 'Under arbeid'
 }
 
+const getKravTrafficColor = (ferdig: number, total: number): string => {
+  if (total === 0) return '#C6C2BF'
+  const pct = (ferdig / total) * 100
+  if (pct >= 100) return '#06893A'
+  if (pct >= 50) return '#E67E22'
+  return '#C30000'
+}
+
+const getOppfyltTrafficColor = (ferdig: number, total: number): string => {
+  if (total === 0) return '#C6C2BF'
+  const pct = (ferdig / total) * 100
+  if (pct >= 90) return '#06893A'
+  if (pct >= 70) return '#E67E22'
+  return '#C30000'
+}
+
+const TrafficDot = ({ color }: { color: string }) => (
+  <span
+    style={{
+      display: 'inline-block',
+      width: 12,
+      height: 12,
+      borderRadius: '50%',
+      backgroundColor: color,
+      marginRight: 6,
+      verticalAlign: 'middle',
+    }}
+  />
+)
+
 const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [data, setData] = useState<IAvdelingDetailData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -185,6 +215,88 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                   </Table.DataCell>
                   <Table.DataCell>{getEtterlevelseStatusText(dok.status)}</Table.DataCell>
                   <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
+                  <Table.DataCell>
+                    {dok.changeStamp?.lastModifiedDate
+                      ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
+                      : '-'}
+                  </Table.DataCell>
+                </Table.Row>
+              )
+            })}
+          </Table.Body>
+        </Table>
+      )}
+
+      {tableTab === 'krav' && (
+        <Table className='mt-4' size='small'>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader sortable sortKey='dok'>
+                Etterlevelsesdokument
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='team'>
+                Team
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>Risikoeier</Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='person'>
+                Person
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='behandlinger'>
+                Behandlinger
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='krav'>
+                Etterlevelseskrav
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='oppfylt'>
+                Oppfylt
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='dato'>
+                Sist oppdatert
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {filteredDoks.map((dok) => {
+              const kravStats = data.kravStatsByDokId.get(dok.id)
+              const ferdig = kravStats?.ferdigDokumentert || 0
+              const totalKrav = kravStats?.totalKrav || 0
+              const oppfyltPct = totalKrav > 0 ? Math.round((ferdig / totalKrav) * 100) : 0
+              return (
+                <Table.Row key={dok.id}>
+                  <Table.DataCell>
+                    <AkselLink href={`/dokumentasjon/${dok.id}`}>
+                      E{dok.etterlevelseNummer} {dok.title}
+                    </AkselLink>
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {dok.teamsData?.map((t) => t.name).join(', ') || '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {dok.risikoeiereData?.map((r) => r.fullName).join(', ') || '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {dok.resourcesData?.map((r) => r.fullName).join(', ') || '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {kravStats?.behandlinger.map((b) => (
+                      <div key={b.id}>
+                        <AkselLink
+                          href={`https://behandlingskatalog.intern.nav.no/process/purpose/NAV/${b.id}`}
+                          target='_blank'
+                        >
+                          B{b.nummer} {b.navn}
+                        </AkselLink>
+                      </div>
+                    )) || '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    <TrafficDot color={getKravTrafficColor(ferdig, totalKrav)} />
+                    {ferdig} av {totalKrav}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    <TrafficDot color={getOppfyltTrafficColor(ferdig, totalKrav)} />
+                    {totalKrav > 0 ? `${oppfyltPct}%` : '-'}
+                  </Table.DataCell>
                   <Table.DataCell>
                     {dok.changeStamp?.lastModifiedDate
                       ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
