@@ -8,7 +8,7 @@ import {
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardPieCard } from '@/components/dashboard/DashboardPieCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { BodyShort, Heading, Loader, Select, Tabs } from '@navikt/ds-react'
+import { Heading, Loader, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 
 interface IProps {
@@ -48,9 +48,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       ? data.statsBySeksjon.get(selectedSeksjon)!
       : data.totalStats
 
-  const vurdertBehov =
-    currentStats.behovForPvk.totalMedPersonopplysninger - currentStats.behovForPvk.ikkeVurdertBehov
-
   return (
     <PageLayout
       pageTitle={data.avdelingNavn}
@@ -60,25 +57,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         { href: '/dashboard', pathName: 'Dashboard' },
       ]}
     >
-      <div className='flex justify-between items-start mt-4'>
+      <div className='mt-4'>
         <Heading size='large' level='1'>
           {data.avdelingNavn}
         </Heading>
-        <div
-          style={{
-            padding: '12px 16px',
-            border: '1px solid #e0e0e0',
-            borderRadius: '8px',
-            backgroundColor: 'white',
-          }}
-        >
-          <BodyShort>
-            Vurdert behov for PVK{' '}
-            <span className='font-bold'>
-              {vurdertBehov} av {currentStats.behovForPvk.totalMedPersonopplysninger}
-            </span>
-          </BodyShort>
-        </div>
       </div>
 
       {data.seksjoner.length > 0 && (
