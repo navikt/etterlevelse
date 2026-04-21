@@ -116,7 +116,7 @@ const legalBasisLinkProcessor = (
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
-          href={`${env.lovdataRettskildeBaseUrl.replace('%23', '#').replace(/\/#document.*/, '')}/#document/${result[2]}${result[3] ? '/' + result[3] : ''}`}
+          href={`${env.lovdataRettskildeBaseUrl.replace(/%23/g, '#').replace(/\/#document.*/, '')}/#document/${result[2]}${result[3] ? '/' + result[3] : ''}`}
           target={openOnSamePage ? '_self' : '_blank'}
           rel='noopener noreferrer'
         >
