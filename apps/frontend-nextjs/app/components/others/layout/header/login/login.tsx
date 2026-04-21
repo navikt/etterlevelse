@@ -35,16 +35,16 @@ import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
 import { UserInfoView } from '../user/userInfoView/userInfoView'
 
 export const LoginHeaderButton = () => {
-  // updates window.location on navigation
   const pathname: string = usePathname()
-  const fullUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const origin = typeof window !== 'undefined' ? window.location.origin : ''
 
   return (
     <InternalHeader.Button
       as={Link}
-      href={loginUrl(fullUrl, pathname)}
+      href={`/login?redirect_uri=${origin}${pathname}`}
       underline={false}
       style={{ color: '#cdd0d4' }}
+      suppressHydrationWarning
     >
       Logg inn
     </InternalHeader.Button>
