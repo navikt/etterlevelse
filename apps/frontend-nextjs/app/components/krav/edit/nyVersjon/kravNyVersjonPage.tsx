@@ -60,14 +60,16 @@ export const KravNyVersjonPage = () => {
   }
 
   useEffect(() => {
-    if (kravQuery?.kravById)
-      setKrav({
-        ...kravQuery.kravById,
-        id: '',
-        kravVersjon: kravQuery.kravById.kravVersjon + 1,
-        nyKravVersjon: true,
-        status: EKravStatus.UTKAST,
-      })
+    ;(async () => {
+      if (kravQuery?.kravById)
+        setKrav({
+          ...kravQuery.kravById,
+          id: '',
+          kravVersjon: kravQuery.kravById.kravVersjon + 1,
+          nyKravVersjon: true,
+          status: EKravStatus.UTKAST,
+        })
+    })()
   }, [kravQuery])
 
   return (

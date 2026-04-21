@@ -185,27 +185,6 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
     }
   }, [pvkDokument])
 
-  useEffect(() => {
-    if (risikoscenarioList.length !== 0 && filterQuery) {
-      onFilterChange(filterQuery)
-    }
-  }, [filterQuery, risikoscenarioList])
-
-  const onTabChange = (tabQuery: string): void => {
-    const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
-    const paramQuery: string = tabQuery === tabValues.risikoscenarioer ? filter : ''
-
-    setNavigateUrl(pvkDokumentasjonTabFilterUrl(stegQuery, tabQuery, paramQuery))
-
-    if (formRef.current?.dirty) {
-      setIsUnsaved(true)
-    } else {
-      router.push(pvkDokumentasjonTabFilterUrl(stegQuery, tabQuery, paramQuery), {
-        scroll: false,
-      })
-    }
-  }
-
   const onFilterChange = (filter: string): void => {
     const tab: string = tabQuery ? tabQuery : tabValues.risikoscenarioer
 
@@ -254,6 +233,29 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
         pvkDokumentasjonTabFilterRisikoscenarioUrl(stegQuery, tab, filter, risikoscenarioId),
         { scroll: false }
       )
+    }
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      if (risikoscenarioList.length !== 0 && filterQuery) {
+        onFilterChange(filterQuery)
+      }
+    })()
+  }, [filterQuery, risikoscenarioList])
+
+  const onTabChange = (tabQuery: string): void => {
+    const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
+    const paramQuery: string = tabQuery === tabValues.risikoscenarioer ? filter : ''
+
+    setNavigateUrl(pvkDokumentasjonTabFilterUrl(stegQuery, tabQuery, paramQuery))
+
+    if (formRef.current?.dirty) {
+      setIsUnsaved(true)
+    } else {
+      router.push(pvkDokumentasjonTabFilterUrl(stegQuery, tabQuery, paramQuery), {
+        scroll: false,
+      })
     }
   }
 

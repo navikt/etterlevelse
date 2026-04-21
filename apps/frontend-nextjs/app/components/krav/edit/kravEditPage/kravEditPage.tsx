@@ -56,12 +56,14 @@ export const KravEditPage = () => {
   }, [krav])
 
   useEffect(() => {
-    if (!kravLoading && kravQuery?.kravById) {
-      setKrav(kravQuery.kravById)
-      setLoading(false)
+    ;(async () => {
+      if (!kravLoading && kravQuery?.kravById) {
+        setKrav(kravQuery.kravById)
+        setLoading(false)
 
-      setIsEditingUtgaattKrav(kravQuery.kravById.status === EKravStatus.UTGAATT ? true : false)
-    }
+        setIsEditingUtgaattKrav(kravQuery.kravById.status === EKravStatus.UTGAATT ? true : false)
+      }
+    })()
   }, [kravQuery])
 
   return (
