@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.statistikk;
+package no.nav.data.etterlevelse.dashboard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import no.nav.data.etterlevelse.dashboard.dto.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,6 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
-import no.nav.data.etterlevelse.statistikk.dto.DashboardResponse;
 import no.nav.data.integration.nom.NomGraphClient;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
@@ -101,8 +101,8 @@ public class DashboardService {
         var seksjonerFromNom = nomGraphClient.getAllSeksjonForAvdeling(avdelingId);
 
         var seksjonOptions = seksjonerFromNom.stream()
-                .map(s -> DashboardResponse.SeksjonOption.builder().id(s.getId()).navn(s.getNavn()).build())
-                .sorted(Comparator.comparing(DashboardResponse.SeksjonOption::getNavn))
+                .map(s -> SeksjonOption.builder().id(s.getId()).navn(s.getNavn()).build())
+                .sorted(Comparator.comparing(SeksjonOption::getNavn))
                 .toList();
 
         Map<String, DashboardResponse> statsBySeksjon = new LinkedHashMap<>();
@@ -245,25 +245,25 @@ public class DashboardService {
         return DashboardResponse.builder()
                 .avdelingId(avdelingId)
                 .avdelingNavn(avdelingNavn)
-                .dokumenter(DashboardResponse.DokumenterStats.builder()
+                .dokumenter(DokumenterStats.builder()
                         .total(totalDokumenter)
                         .underArbeid(dokUnderArbeid)
                         .sendtTilGodkjenning(dokSendtTilGodkjenning)
                         .godkjentAvRisikoeier(dokGodkjent)
                         .build())
-                .suksesskriterier(DashboardResponse.SuksesskriterierStats.builder()
+                .suksesskriterier(SuksesskriterierStats.builder()
                         .underArbeidProsent(underArbeidProsent)
                         .oppfyltProsent(oppfyltProsent)
                         .ikkeOppfyltProsent(ikkeOppfyltProsent)
                         .ikkeRelevantProsent(ikkeRelevantProsent)
                         .build())
-                .behovForPvk(DashboardResponse.BehovForPvkStats.builder()
+                .behovForPvk(BehovForPvkStats.builder()
                         .totalMedPersonopplysninger(totalMedPO)
                         .ikkeVurdertBehov(ikkeVurdertBehov)
                         .vurdertIkkeBehov(vurdertIkkeBehov)
                         .behovIkkePaabegynt(behovIkkePaabegynt)
                         .build())
-                .pvk(DashboardResponse.PvkStats.builder()
+                .pvk(PvkStats.builder()
                         .total(pvkTotal)
                         .underArbeid(pvkUnderArbeid)
                         .tilBehandlingHosPvo(pvkTilBehandlingPvo)
