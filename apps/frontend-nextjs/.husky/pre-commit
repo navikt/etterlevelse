@@ -14,5 +14,8 @@ fi
 
 cd "$APP_DIR"
 
+STAGED_FILES=$(git diff --cached --name-only)
+export PRECOMMIT_STAGED_FILES="$STAGED_FILES"
+
 run_yarn run lint-staged
 run_yarn run pre-commit:deps-check
