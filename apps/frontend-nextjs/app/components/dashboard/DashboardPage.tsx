@@ -37,7 +37,7 @@ const DashboardPage = () => {
 
       <Select
         label='Velg avdeling'
-        className='mt-4 w-64'
+        className='mt-4 w-fit min-w-64'
         value={selectedAvdeling}
         onChange={(e) => setSelectedAvdeling(e.target.value)}
       >

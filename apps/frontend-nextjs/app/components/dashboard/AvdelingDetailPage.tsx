@@ -143,7 +143,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       {data.seksjoner.length > 0 && (
         <Select
           label='Velg seksjon'
-          className='mt-4 w-64'
+          className='mt-4 w-fit min-w-64'
           value={selectedSeksjon}
           onChange={(e) => setSelectedSeksjon(e.target.value)}
         >
