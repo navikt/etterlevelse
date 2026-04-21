@@ -14,17 +14,19 @@ import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { handleSort } from '@/util/handleTableSort'
 import {
   Link as AkselLink,
   Heading,
   Loader,
   LocalAlert,
   Select,
+  SortState,
   Table,
   Tabs,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface IProps {
   avdelingId: string
@@ -47,19 +49,16 @@ const getPvkStatusText = (pvk?: IPvkDokument): string => {
   if (!pvk) return 'Ikke vurdert behov'
   if (pvk.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'Vurdert: ikke behov'
   if (pvk.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) return 'PVK i Word'
-  if (!pvk.hasPvkDocumentationStarted) return 'Vurdert: behov – ikke påbegynt'
+  if (!pvk.hasPvkDocumentationStarted) return 'Ikke påbegynt'
   if (pvk.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) return 'Godkjent av risikoeier'
+  if (pvk.status === EPvkDokumentStatus.TRENGER_GODKJENNING) return 'Sendt til risikoeier'
   if (
     pvk.status === EPvkDokumentStatus.SENDT_TIL_PVO ||
     pvk.status === EPvkDokumentStatus.PVO_UNDERARBEID ||
     pvk.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
   )
     return 'Sendt til PVO'
-  if (
-    pvk.status === EPvkDokumentStatus.VURDERT_AV_PVO ||
-    pvk.status === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
-  )
-    return 'Fått tilbakemelding fra PVO'
+  if (pvk.status === EPvkDokumentStatus.VURDERT_AV_PVO) return 'Fått tilbakemelding fra PVO'
   return 'Under arbeid'
 }
 
@@ -99,12 +98,79 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
   const [activeTab, setActiveTab] = useState('figurer')
   const [tableTab, setTableTab] = useState('dok_pvk')
+  const [sort, setSort] = useState<SortState | undefined>()
 
   useEffect(() => {
     getAvdelingDetailStats(avdelingId)
       .then(setData)
       .finally(() => setIsLoading(false))
   }, [avdelingId])
+
+  const filteredDoks = data
+    ? selectedSeksjon
+      ? data.dokumentasjoner.filter((d) =>
+          d.seksjoner?.some((s) => s.nomSeksjonId === selectedSeksjon)
+        )
+      : data.dokumentasjoner
+    : []
+
+  const sortedDoks = useMemo(() => {
+    if (!sort || !data) return filteredDoks
+    const dir = sort.direction === 'ascending' ? 1 : -1
+    return [...filteredDoks].sort((a, b) => {
+      const getValue = (dok: typeof a): string | number => {
+        switch (sort.orderBy) {
+          case 'dok':
+            return `E${dok.etterlevelseNummer} ${dok.title}`
+          case 'team':
+            return dok.teamsData?.map((t) => t.name).join(', ') || ''
+          case 'person':
+            return dok.resourcesData?.map((r) => r.fullName).join(', ') || ''
+          case 'risikoeier':
+            return dok.risikoeiereData?.map((r) => r.fullName).join(', ') || ''
+          case 'etterlevelse':
+            return getEtterlevelseStatusText(dok.status)
+          case 'pvk':
+            return getPvkStatusText(data.pvkByDokId.get(dok.id))
+          case 'dato':
+            return dok.changeStamp?.lastModifiedDate || ''
+          case 'behandlinger':
+            return (
+              data.kravStatsByDokId
+                .get(dok.id)
+                ?.behandlinger.map((b) => b.navn)
+                .join(', ') || ''
+            )
+          case 'krav':
+            return data.kravStatsByDokId.get(dok.id)?.ferdigDokumentert || 0
+          case 'oppfylt': {
+            const stats = data.kravStatsByDokId.get(dok.id)
+            return stats && stats.totalKrav > 0
+              ? Math.round((stats.ferdigDokumentert / stats.totalKrav) * 100)
+              : 0
+          }
+          case 'pvkStatus':
+            return getPvkStatusText(data.pvkByDokId.get(dok.id))
+          case 'antallScenarioer':
+            return data.pvkStatsByDokId.get(dok.id)?.antallScenarioer || 0
+          case 'hoyRisiko':
+            return data.pvkStatsByDokId.get(dok.id)?.hoyRisikoScenarioer || 0
+          case 'hoyRisikoEtterTiltak':
+            return data.pvkStatsByDokId.get(dok.id)?.hoyRisikoEtterTiltak || 0
+          case 'ikkeIverksatte':
+            return data.pvkStatsByDokId.get(dok.id)?.ikkeIverksatteTiltak || 0
+          case 'fristPassert':
+            return data.pvkStatsByDokId.get(dok.id)?.tiltakFristPassert || 0
+          default:
+            return ''
+        }
+      }
+      const aVal = getValue(a)
+      const bVal = getValue(b)
+      if (typeof aVal === 'number' && typeof bVal === 'number') return (aVal - bVal) * dir
+      return String(aVal).localeCompare(String(bVal)) * dir
+    })
+  }, [filteredDoks, sort, data])
 
   if (isLoading) {
     return (
@@ -126,12 +192,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     selectedSeksjon && data.statsBySeksjon.get(selectedSeksjon)
       ? data.statsBySeksjon.get(selectedSeksjon)!
       : data.totalStats
-
-  const filteredDoks = selectedSeksjon
-    ? data.dokumentasjoner.filter((d) =>
-        d.seksjoner?.some((s) => s.nomSeksjonId === selectedSeksjon)
-      )
-    : data.dokumentasjoner
 
   return (
     <PageLayout
@@ -193,7 +253,14 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </div>
       )}
 
-      <Tabs value={tableTab} onChange={setTableTab} className='mt-10'>
+      <Tabs
+        value={tableTab}
+        onChange={(val) => {
+          setTableTab(val)
+          setSort(undefined)
+        }}
+        className='mt-10'
+      >
         <Tabs.List>
           <Tabs.Tab value='dok_pvk' label='Etterlevelsesdokumentasjon og PVK-er' />
           <Tabs.Tab value='krav' label='Krav og suksesskriterier' />
@@ -202,20 +269,39 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       </Tabs>
 
       {tableTab === 'dok_pvk' && (
-        <Table className='mt-4' size='small'>
+        <Table
+          className='mt-4 dashboard-table'
+          size='small'
+          sort={sort}
+          onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+        >
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>Etterlevelsesdokument</Table.ColumnHeader>
-              <Table.ColumnHeader>Team</Table.ColumnHeader>
-              <Table.ColumnHeader>Person</Table.ColumnHeader>
-              <Table.ColumnHeader>Risikoeier</Table.ColumnHeader>
-              <Table.ColumnHeader>Etterlevelse</Table.ColumnHeader>
-              <Table.ColumnHeader>PVK</Table.ColumnHeader>
-              <Table.ColumnHeader>Sist oppdatert</Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='dok'>
+                Etterlevelsesdokument
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='team'>
+                Team
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='person'>
+                Person
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='risikoeier'>
+                Risikoeier
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='etterlevelse'>
+                Etterlevelse
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='pvk'>
+                PVK
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='dato'>
+                Sist oppdatert
+              </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {filteredDoks.map((dok) => {
+            {sortedDoks.map((dok) => {
               const pvk = data.pvkByDokId.get(dok.id)
               return (
                 <Table.Row key={dok.id}>
@@ -248,7 +334,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       )}
 
       {tableTab === 'krav' && (
-        <Table className='mt-4' size='small'>
+        <Table
+          className='mt-4 dashboard-table'
+          size='small'
+          sort={sort}
+          onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+        >
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader sortable sortKey='dok'>
@@ -260,7 +351,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               <Table.ColumnHeader sortable sortKey='person'>
                 Person
               </Table.ColumnHeader>
-              <Table.ColumnHeader>Risikoeier</Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='risikoeier'>
+                Risikoeier
+              </Table.ColumnHeader>
               <Table.ColumnHeader sortable sortKey='behandlinger'>
                 Behandlinger
               </Table.ColumnHeader>
@@ -276,7 +369,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {filteredDoks.map((dok) => {
+            {sortedDoks.map((dok) => {
               const kravStats = data.kravStatsByDokId.get(dok.id)
               const ferdig = kravStats?.ferdigDokumentert || 0
               const totalKrav = kravStats?.totalKrav || 0
@@ -316,6 +409,119 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                   <Table.DataCell>
                     <TrafficDot color={getOppfyltTrafficColor(ferdig, totalKrav)} />
                     {totalKrav > 0 ? `${oppfyltPct}%` : '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {dok.changeStamp?.lastModifiedDate
+                      ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
+                      : '-'}
+                  </Table.DataCell>
+                </Table.Row>
+              )
+            })}
+          </Table.Body>
+        </Table>
+      )}
+
+      {tableTab === 'pvk' && (
+        <Table
+          className='mt-4 dashboard-table'
+          size='small'
+          sort={sort}
+          onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+        >
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader sortable sortKey='dok'>
+                Etterlevelsesdokument
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='team'>
+                Team
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='person'>
+                Person
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='risikoeier'>
+                Risikoeier
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='pvkStatus'>
+                PVK-status
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='antallScenarioer'>
+                Antall risikoscenarioer
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='hoyRisiko'>
+                Høy risiko scenarioer
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='hoyRisikoEtterTiltak'>
+                Høy risiko etter tiltak
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='ikkeIverksatte'>
+                Ikke iverksatte tiltak
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='fristPassert'>
+                Tiltaksfrist passert
+              </Table.ColumnHeader>
+              <Table.ColumnHeader sortable sortKey='dato'>
+                Sist oppdatert
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {sortedDoks.map((dok) => {
+              const pvk = data.pvkByDokId.get(dok.id)
+              const pvkStats = data.pvkStatsByDokId.get(dok.id)
+              return (
+                <Table.Row key={dok.id}>
+                  <Table.DataCell>
+                    <AkselLink href={`/dokumentasjon/${dok.id}`}>
+                      E{dok.etterlevelseNummer} {dok.title}
+                    </AkselLink>
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {dok.teamsData?.map((t) => t.name).join(', ') || '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {dok.resourcesData?.map((r) => r.fullName).join(', ') || '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {dok.risikoeiereData?.map((r) => r.fullName).join(', ') || '-'}
+                  </Table.DataCell>
+                  <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
+                  <Table.DataCell>{pvkStats ? pvkStats.antallScenarioer : '-'}</Table.DataCell>
+                  <Table.DataCell>
+                    {pvkStats && pvkStats.hoyRisikoScenarioer > 0 ? (
+                      <span className='inline-flex items-center'>
+                        <TrafficDot color='#C30000' />
+                        {pvkStats.hoyRisikoScenarioer}
+                      </span>
+                    ) : (
+                      '-'
+                    )}
+                  </Table.DataCell>
+                  <Table.DataCell>
+                    {pvkStats && pvkStats.hoyRisikoEtterTiltak > 0 ? (
+                      <span className='inline-flex items-center'>
+                        <TrafficDot color='#C30000' />
+                        {pvkStats.hoyRisikoEtterTiltak}
+                      </span>
+                    ) : pvkStats ? (
+                      '0'
+                    ) : (
+                      '-'
+                    )}
+                  </Table.DataCell>
+                  <Table.DataCell>{pvkStats ? pvkStats.ikkeIverksatteTiltak : '-'}</Table.DataCell>
+                  <Table.DataCell>
+                    {pvkStats && pvkStats.tiltakFristPassert > 0 ? (
+                      <span className='inline-flex items-center'>
+                        <TrafficDot color='#C30000' />
+                        {pvkStats.tiltakFristPassert}
+                      </span>
+                    ) : pvkStats ? (
+                      '0'
+                    ) : (
+                      '-'
+                    )}
                   </Table.DataCell>
                   <Table.DataCell>
                     {dok.changeStamp?.lastModifiedDate

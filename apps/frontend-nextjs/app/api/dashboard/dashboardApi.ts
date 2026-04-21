@@ -1,10 +1,14 @@
 'use client'
 
 import { getAllPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
+import { getAllRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import { getAllBehandlingStatistikk } from '@/api/statistikk/statistikkApi'
+import { getAllTiltak } from '@/api/tiltak/tiltakApi'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
@@ -73,6 +77,14 @@ export interface IDokKravStats {
   behandlinger: { id: string; navn: string; nummer: number }[]
 }
 
+export interface IDokPvkStats {
+  antallScenarioer: number
+  hoyRisikoScenarioer: number
+  hoyRisikoEtterTiltak: number
+  ikkeIverksatteTiltak: number
+  tiltakFristPassert: number
+}
+
 export interface IAvdelingDetailData {
   avdelingId: string
   avdelingNavn: string
@@ -82,6 +94,7 @@ export interface IAvdelingDetailData {
   dokumentasjoner: IEtterlevelseDokumentasjon[]
   pvkByDokId: Map<string, IPvkDokument>
   kravStatsByDokId: Map<string, IDokKravStats>
+  pvkStatsByDokId: Map<string, IDokPvkStats>
 }
 
 interface IDashboardDetailResponse extends IAvdelingDashboardStats {
@@ -90,13 +103,22 @@ interface IDashboardDetailResponse extends IAvdelingDashboardStats {
 }
 
 export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdelingDetailData> => {
-  const [dashboardResponse, behandlingStats, dokumentasjoner, pvkDokumenter] = await Promise.all([
+  const [
+    dashboardResponse,
+    behandlingStats,
+    dokumentasjoner,
+    pvkDokumenter,
+    risikoscenarioer,
+    tiltak,
+  ] = await Promise.all([
     axios
       .get<IDashboardDetailResponse>(`${env.backendBaseUrl}/dashboard/${avdelingId}`)
       .then((r) => r.data),
     getAllBehandlingStatistikk(),
     fetchAllPages<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon`),
     getAllPvkDokument(),
+    getAllRisikoscenario(),
+    getAllTiltak(),
   ])
 
   const pvkByEtterlevelseDokId = new Map<string, IPvkDokument>()
@@ -146,6 +168,47 @@ export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdel
     }
   }
 
+  const isHoyRisiko = (s: number, k: number): boolean =>
+    k >= 5 || s >= 5 || (k >= 4 && s >= 3) || (k >= 3 && s >= 4)
+
+  const scenarioerByPvkId = new Map<string, IRisikoscenario[]>()
+  for (const scenario of risikoscenarioer) {
+    const list = scenarioerByPvkId.get(scenario.pvkDokumentId) || []
+    list.push(scenario)
+    scenarioerByPvkId.set(scenario.pvkDokumentId, list)
+  }
+
+  const tiltakByPvkId = new Map<string, ITiltak[]>()
+  for (const t of tiltak) {
+    const list = tiltakByPvkId.get(t.pvkDokumentId) || []
+    list.push(t)
+    tiltakByPvkId.set(t.pvkDokumentId, list)
+  }
+
+  const now = new Date()
+  const pvkStatsByDokId = new Map<string, IDokPvkStats>()
+  for (const dok of avdelingDoks) {
+    const pvk = pvkByEtterlevelseDokId.get(dok.id)
+    if (!pvk) continue
+
+    const scenarios = scenarioerByPvkId.get(pvk.id) || []
+    const pvkTiltak = tiltakByPvkId.get(pvk.id) || []
+
+    pvkStatsByDokId.set(dok.id, {
+      antallScenarioer: scenarios.length,
+      hoyRisikoScenarioer: scenarios.filter((s) =>
+        isHoyRisiko(s.sannsynlighetsNivaa, s.konsekvensNivaa)
+      ).length,
+      hoyRisikoEtterTiltak: scenarios.filter((s) =>
+        isHoyRisiko(s.sannsynlighetsNivaaEtterTiltak, s.konsekvensNivaaEtterTiltak)
+      ).length,
+      ikkeIverksatteTiltak: pvkTiltak.filter((t) => !t.iverksatt).length,
+      tiltakFristPassert: pvkTiltak.filter(
+        (t) => !t.iverksatt && t.frist && new Date(t.frist) < now
+      ).length,
+    })
+  }
+
   return {
     avdelingId,
     avdelingNavn: dashboardResponse.avdelingNavn,
@@ -155,5 +218,6 @@ export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdel
     dokumentasjoner: avdelingDoks,
     pvkByDokId: pvkByEtterlevelseDokId,
     kravStatsByDokId,
+    pvkStatsByDokId,
   }
 }

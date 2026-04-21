@@ -26,6 +26,11 @@ iframe#webpack-dev-server-client-overlay {
   display: none !important;
 }
 
+.dashboard-table .navds-table__sort-button,
+.dashboard-table .aksel-table__sort-button {
+  color: inherit;
+}
+
 /* Locked "Behandler personopplysninger" checkbox: custom marker colors (no padlock overlay) */
 .behandler-personopplysninger--locked.aksel-checkbox--readonly
   .aksel-checkbox__input:where(:checked, :indeterminate) {
