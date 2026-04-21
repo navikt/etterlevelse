@@ -89,5 +89,6 @@
     "prettier": "3.8.3",
     "react-select": "5.10.2",
     "typescript": "5.9.3"
-  }
+  },
+  "packageManager": "yarn@4.14.1"
 }
