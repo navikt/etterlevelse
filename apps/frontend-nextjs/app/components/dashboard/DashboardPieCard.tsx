@@ -289,12 +289,16 @@ export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
         }}
       >
         <div>
-          <BodyShort weight='semibold'>Etterlevelsesdokumenter</BodyShort>
+          <BodyShort weight='semibold'>
+            Etterlevelsesdokumenter ({stats.dokumenter.total})
+          </BodyShort>
           <PieWithLegend data={dokSlices} hasData={hasDokData} />
         </div>
 
         <div>
-          <BodyShort weight='semibold'>Behov for PVK</BodyShort>
+          <BodyShort weight='semibold'>
+            Behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
+          </BodyShort>
           <PieWithLegend data={behovSlices} hasData={hasBehovData} />
         </div>
 
