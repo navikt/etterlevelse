@@ -1,13 +1,16 @@
 'use client'
 
 import { getAllPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import { getAllRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
+import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getAllBehandlingStatistikk } from '@/api/statistikk/statistikkApi'
-import { getAllTiltak } from '@/api/tiltak/tiltakApi'
+import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import {
+  ERisikoscenarioType,
+  IRisikoscenario,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
@@ -112,17 +115,37 @@ export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdel
     getAllPvkDokument(),
   ])
 
-  const [risikoscenarioer, tiltak] = await Promise.all([
-    getAllRisikoscenario().catch(() => [] as IRisikoscenario[]),
-    getAllTiltak().catch(() => [] as ITiltak[]),
-  ])
-
   const pvkByEtterlevelseDokId = new Map<string, IPvkDokument>()
   for (const pvk of pvkDokumenter) {
     pvkByEtterlevelseDokId.set(pvk.etterlevelseDokumentId, pvk)
   }
 
   const avdelingDoks = dokumentasjoner.filter((d) => d.nomAvdelingId === avdelingId)
+
+  const relevantPvkIds = avdelingDoks
+    .map((d) => pvkByEtterlevelseDokId.get(d.id))
+    .filter((pvk): pvk is IPvkDokument => !!pvk)
+    .map((pvk) => pvk.id)
+
+  const [scenarioResults, tiltakResults] = await Promise.all([
+    Promise.all(
+      relevantPvkIds.map((pvkId) =>
+        getRisikoscenarioByPvkDokumentId(pvkId, ERisikoscenarioType.ALL)
+          .then((r) => r.content)
+          .catch(() => [] as IRisikoscenario[])
+      )
+    ),
+    Promise.all(
+      relevantPvkIds.map((pvkId) =>
+        getTiltakByPvkDokumentId(pvkId)
+          .then((r) => r.content)
+          .catch(() => [] as ITiltak[])
+      )
+    ),
+  ])
+
+  const risikoscenarioer = scenarioResults.flat()
+  const tiltak = tiltakResults.flat()
 
   const statsBySeksjon = new Map<string, IAvdelingDashboardStats>()
   if (dashboardResponse.statsBySeksjon) {
