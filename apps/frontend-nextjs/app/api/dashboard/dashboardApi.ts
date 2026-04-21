@@ -103,22 +103,18 @@ interface IDashboardDetailResponse extends IAvdelingDashboardStats {
 }
 
 export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdelingDetailData> => {
-  const [
-    dashboardResponse,
-    behandlingStats,
-    dokumentasjoner,
-    pvkDokumenter,
-    risikoscenarioer,
-    tiltak,
-  ] = await Promise.all([
+  const [dashboardResponse, behandlingStats, dokumentasjoner, pvkDokumenter] = await Promise.all([
     axios
       .get<IDashboardDetailResponse>(`${env.backendBaseUrl}/dashboard/${avdelingId}`)
       .then((r) => r.data),
     getAllBehandlingStatistikk(),
     fetchAllPages<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon`),
     getAllPvkDokument(),
-    getAllRisikoscenario(),
-    getAllTiltak(),
+  ])
+
+  const [risikoscenarioer, tiltak] = await Promise.all([
+    getAllRisikoscenario().catch(() => [] as IRisikoscenario[]),
+    getAllTiltak().catch(() => [] as ITiltak[]),
   ])
 
   const pvkByEtterlevelseDokId = new Map<string, IPvkDokument>()
