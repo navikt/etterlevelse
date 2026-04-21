@@ -20,7 +20,9 @@ export const RearrangeButtons: FunctionComponent<TProps> = ({
   const [plassering, setPlassering] = useState<string>((index + 1).toString())
 
   useEffect(() => {
-    setPlassering((index + 1).toString())
+    ;(async () => {
+      setPlassering((index + 1).toString())
+    })()
   }, [index])
 
   return (

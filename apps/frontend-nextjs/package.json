@@ -11,13 +11,17 @@
     "build": "next build",
     "test": "yarn lint-staged",
     "start": "next start",
+    "prettier:check": "prettier -c ./app",
+    "eslint:check": "eslint . --cache --max-warnings=0",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run build",
+    "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write \"./app\"",
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
     "prettier": "prettier --write \"./app\"",
-    "type-check": "tsc --project tsconfig.json",
-    "postinstall": "husky"
+    "type-check": "tsc --project tsconfig.json --noEmit --skipLibCheck false --incremental false",
+    "postinstall": "patch-package && husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -33,11 +37,11 @@
     "@fortawesome/free-brands-svg-icons": "7.2.0",
     "@fortawesome/free-solid-svg-icons": "7.2.0",
     "@fortawesome/react-fontawesome": "3.3.1",
-    "@navikt/aksel-icons": "8.9.1",
-    "@navikt/ds-css": "8.9.1",
-    "@navikt/ds-react": "8.9.1",
-    "@navikt/ds-tailwind": "8.9.1",
-    "@tailwindcss/postcss": "4.2.2",
+    "@navikt/aksel-icons": "8.10.1",
+    "@navikt/ds-css": "8.10.1",
+    "@navikt/ds-react": "8.10.1",
+    "@navikt/ds-tailwind": "8.10.1",
+    "@tailwindcss/postcss": "4.2.3",
     "axios": "1.15.1",
     "draft-js": "0.11.7",
     "graphql": "16.13.2",
@@ -57,7 +61,7 @@
     "rehype-raw": "7.0.0",
     "remark-gfm": "4.0.1",
     "rxjs": "7.8.2",
-    "tailwindcss": "4.2.2",
+    "tailwindcss": "4.2.3",
     "yup": "1.7.1"
   },
   "devDependencies": {
@@ -80,6 +84,7 @@
     "formik": "2.4.9",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
+    "patch-package": "^8.0.1",
     "postcss": "8.5.10",
     "prettier": "3.8.3",
     "react-select": "5.10.2",

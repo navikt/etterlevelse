@@ -1,2 +1,6 @@
+#!/usr/bin/env sh
+set -e
+
 cd apps/frontend-nextjs
 yarn lint-staged
+yarn run pre-commit:deps-check

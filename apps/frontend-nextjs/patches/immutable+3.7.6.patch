@@ -1,0 +1,182 @@
+diff --git a/node_modules/immutable/dist/immutable.d.ts b/node_modules/immutable/dist/immutable.d.ts
+index f8eb1c6..70084e8 100644
+--- a/node_modules/immutable/dist/immutable.d.ts
++++ b/node_modules/immutable/dist/immutable.d.ts
+@@ -28,7 +28,7 @@
+  * [ES6]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla
+  */
+ 
+-declare module Immutable {
++declare namespace Immutable {
+ 
+   /**
+    * Deeply converts plain JS objects and arrays to Immutable Maps and Lists.
+@@ -123,7 +123,7 @@ declare module Immutable {
+    * "unset" index and an index set to `undefined`. `List#forEach` visits all
+    * indices from 0 to size, regardless of if they were explicitly defined.
+    */
+-  export module List {
++  export namespace List {
+ 
+     /**
+      * True if the provided value is a List
+@@ -414,7 +414,7 @@ declare module Immutable {
+    *
+    * Implemented by a hash-array mapped trie.
+    */
+-  export module Map {
++  export namespace Map {
+ 
+     /**
+      * True if the provided value is a Map
+@@ -736,7 +736,7 @@ declare module Immutable {
+    * stable.
+    */
+ 
+-  export module OrderedMap {
++  export namespace OrderedMap {
+ 
+     /**
+      * True if the provided value is an OrderedMap.
+@@ -779,7 +779,7 @@ declare module Immutable {
+    * `Immutable.is`, enabling Sets to uniquely include other Immutable
+    * collections, custom value types, and NaN.
+    */
+-  export module Set {
++  export namespace Set {
+ 
+     /**
+      * True if the provided value is a Set
+@@ -891,7 +891,7 @@ declare module Immutable {
+    * consume more memory. `OrderedSet#add` is amortized O(log32 N), but not
+    * stable.
+    */
+-  export module OrderedSet {
++  export namespace OrderedSet {
+ 
+     /**
+      * True if the provided value is an OrderedSet.
+@@ -939,7 +939,7 @@ declare module Immutable {
+    *
+    * Stack is implemented with a Single-Linked List.
+    */
+-  export module Stack {
++  export namespace Stack {
+ 
+     /**
+      * True if the provided value is a Stack
+@@ -1125,7 +1125,7 @@ declare module Immutable {
+    *     myRecord.getAB() // 4
+    *
+    */
+-  export module Record {
++  export namespace Record {
+     interface Class {
+       new (): Map<string, any>;
+       new (values: {[key: string]: any}): Map<string, any>;
+@@ -1190,7 +1190,7 @@ declare module Immutable {
+    *     // { x: 0, y: 2, z: 4 }
+    */
+ 
+-  export module Seq {
++  export namespace Seq {
+     /**
+      * True if `maybeSeq` is a Seq, it is not backed by a concrete
+      * structure such as Map, List, or Set.
+@@ -1206,7 +1206,7 @@ declare module Immutable {
+     /**
+      * `Seq` which represents key-value pairs.
+      */
+-    export module Keyed {}
++    export namespace Keyed {}
+ 
+     /**
+      * Always returns a Seq.Keyed, if input is not keyed, expects an
+@@ -1232,7 +1232,7 @@ declare module Immutable {
+     /**
+      * `Seq` which represents an ordered indexed list of values.
+      */
+-    module Indexed {
++    namespace Indexed {
+ 
+       /**
+        * Provides an Seq.Indexed of the values provided.
+@@ -1267,7 +1267,7 @@ declare module Immutable {
+      * Because `Seq` are often lazy, `Seq.Set` does not provide the same guarantee
+      * of value uniqueness as the concrete `Set`.
+      */
+-    export module Set {
++    export namespace Set {
+ 
+       /**
+        * Returns a Seq.Set of the provided values
+@@ -1365,7 +1365,7 @@ declare module Immutable {
+    * Note: An iterable is always iterated in the same order, however that order
+    * may not always be well defined, as is the case for the `Map` and `Set`.
+    */
+-  export module Iterable {
++  export namespace Iterable {
+     /**
+      * True if `maybeIterable` is an Iterable, or any of its subclasses.
+      */
+@@ -1400,7 +1400,7 @@ declare module Immutable {
+      * tuple, in other words, `Iterable#entries` is the default iterator for
+      * Keyed Iterables.
+      */
+-    export module Keyed {}
++    export namespace Keyed {}
+ 
+     /**
+      * Creates an Iterable.Keyed
+@@ -1515,7 +1515,7 @@ declare module Immutable {
+      * preserve indices, using them as keys, convert to a Iterable.Keyed by
+      * calling `toKeyedSeq`.
+      */
+-    export module Indexed {}
++    export namespace Indexed {}
+ 
+     /**
+      * Creates a new Iterable.Indexed.
+@@ -1685,7 +1685,7 @@ declare module Immutable {
+      *     assert.equal(seq.every((v, k) => v === k), true);
+      *
+      */
+-    export module Set {}
++    export namespace Set {}
+ 
+     /**
+      * Similar to `Iterable()`, but always returns a Iterable.Set.
+@@ -2452,13 +2452,13 @@ declare module Immutable {
+    * Implementations should extend one of the subclasses, `Collection.Keyed`,
+    * `Collection.Indexed`, or `Collection.Set`.
+    */
+-  export module Collection {
++  export namespace Collection {
+ 
+ 
+     /**
+      * `Collection` which represents key-value pairs.
+      */
+-    export module Keyed {}
++    export namespace Keyed {}
+ 
+     export interface Keyed<K, V> extends Collection<K, V>, Iterable.Keyed<K, V> {
+ 
+@@ -2473,7 +2473,7 @@ declare module Immutable {
+     /**
+      * `Collection` which represents ordered indexed values.
+      */
+-    export module Indexed {}
++    export namespace Indexed {}
+ 
+     export interface Indexed<T> extends Collection<number, T>, Iterable.Indexed<T> {
+ 
+@@ -2490,7 +2490,7 @@ declare module Immutable {
+      *
+      * `Collection.Set` implementations should guarantee value uniqueness.
+      */
+-    export module Set {}
++    export namespace Set {}
+ 
+     export interface Set<T> extends Collection<T, T>, Iterable.Set<T> {
+ 
