@@ -182,13 +182,13 @@ const PieWithLegend = ({ data, hasData }: { data: IPieSlice[]; hasData: boolean 
 export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
   const dokSlices: IPieSlice[] = [
     {
-      name: `Ikke påbegynt (${stats.dokumenter.ikkePaabegynt})`,
-      value: stats.dokumenter.ikkePaabegynt,
+      name: `Under arbeid (${stats.dokumenter.underArbeid})`,
+      value: stats.dokumenter.underArbeid,
       color: DOK_COLORS[0],
     },
     {
-      name: `Under arbeid (${stats.dokumenter.underArbeid})`,
-      value: stats.dokumenter.underArbeid,
+      name: `Sendt til godkjenning (${stats.dokumenter.sendtTilGodkjenning})`,
+      value: stats.dokumenter.sendtTilGodkjenning,
       color: DOK_COLORS[1],
     },
     {

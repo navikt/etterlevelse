@@ -5,6 +5,7 @@ import {
   IAvdelingDetailData,
   getAvdelingDetailStats,
 } from '@/api/dashboard/dashboardApi'
+import { usePersonName, useTeam } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardPieCard } from '@/components/dashboard/DashboardPieCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
@@ -35,7 +36,7 @@ interface IProps {
 const getEtterlevelseStatusText = (status: EEtterlevelseDokumentasjonStatus): string => {
   switch (status) {
     case EEtterlevelseDokumentasjonStatus.UNDER_ARBEID:
-      return 'Ikke påbegynt'
+      return 'Under arbeid'
     case EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER:
       return 'Sendt til godkjenning'
     case EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER:
@@ -99,6 +100,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [activeTab, setActiveTab] = useState('figurer')
   const [tableTab, setTableTab] = useState('dok_pvk')
   const [sort, setSort] = useState<SortState | undefined>()
+  const getTeamName = useTeam()
+  const getPersonName = usePersonName()
 
   useEffect(() => {
     getAvdelingDetailStats(avdelingId)
@@ -123,11 +126,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           case 'dok':
             return `E${dok.etterlevelseNummer} ${dok.title}`
           case 'team':
-            return dok.teamsData?.map((t) => t.name).join(', ') || ''
+            return dok.teams?.map((id) => getTeamName(id)[0]).join(', ') || ''
           case 'person':
-            return dok.resourcesData?.map((r) => r.fullName).join(', ') || ''
+            return dok.resources?.map((id) => getPersonName(id)).join(', ') || ''
           case 'risikoeier':
-            return dok.risikoeiereData?.map((r) => r.fullName).join(', ') || ''
+            return dok.risikoeiere?.map((id) => getPersonName(id)).join(', ') || ''
           case 'etterlevelse':
             return getEtterlevelseStatusText(dok.status)
           case 'pvk':
@@ -306,18 +309,22 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               return (
                 <Table.Row key={dok.id}>
                   <Table.DataCell>
-                    <AkselLink href={`/dokumentasjon/${dok.id}`}>
+                    <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
                       E{dok.etterlevelseNummer} {dok.title}
                     </AkselLink>
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.teamsData?.map((t) => t.name).join(', ') || '-'}
+                    {dok.teams?.length ? dok.teams.map((id) => getTeamName(id)[0]).join(', ') : '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.resourcesData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.resources?.length
+                      ? dok.resources.map((id) => getPersonName(id)).join(', ')
+                      : '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.risikoeiereData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.risikoeiere?.length
+                      ? dok.risikoeiere.map((id) => getPersonName(id)).join(', ')
+                      : '-'}
                   </Table.DataCell>
                   <Table.DataCell>{getEtterlevelseStatusText(dok.status)}</Table.DataCell>
                   <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
@@ -377,18 +384,22 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               return (
                 <Table.Row key={dok.id}>
                   <Table.DataCell>
-                    <AkselLink href={`/dokumentasjon/${dok.id}`}>
+                    <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
                       E{dok.etterlevelseNummer} {dok.title}
                     </AkselLink>
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.teamsData?.map((t) => t.name).join(', ') || '-'}
+                    {dok.teams?.length ? dok.teams.map((id) => getTeamName(id)[0]).join(', ') : '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.resourcesData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.resources?.length
+                      ? dok.resources.map((id) => getPersonName(id)).join(', ')
+                      : '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.risikoeiereData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.risikoeiere?.length
+                      ? dok.risikoeiere.map((id) => getPersonName(id)).join(', ')
+                      : '-'}
                   </Table.DataCell>
                   <Table.DataCell>
                     {kravStats?.behandlinger.map((b) => (
@@ -473,18 +484,22 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               return (
                 <Table.Row key={dok.id}>
                   <Table.DataCell>
-                    <AkselLink href={`/dokumentasjon/${dok.id}`}>
+                    <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
                       E{dok.etterlevelseNummer} {dok.title}
                     </AkselLink>
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.teamsData?.map((t) => t.name).join(', ') || '-'}
+                    {dok.teams?.length ? dok.teams.map((id) => getTeamName(id)[0]).join(', ') : '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.resourcesData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.resources?.length
+                      ? dok.resources.map((id) => getPersonName(id)).join(', ')
+                      : '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.risikoeiereData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.risikoeiere?.length
+                      ? dok.risikoeiere.map((id) => getPersonName(id)).join(', ')
+                      : '-'}
                   </Table.DataCell>
                   <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
                   <Table.DataCell>{pvkStats ? pvkStats.antallScenarioer : '-'}</Table.DataCell>

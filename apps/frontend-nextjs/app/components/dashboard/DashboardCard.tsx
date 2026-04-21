@@ -32,10 +32,11 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </BodyShort>
           <BodyShort>
-            Ikke påbegynt <span className='font-bold'>{stats.dokumenter.ikkePaabegynt}</span>
+            Under arbeid <span className='font-bold'>{stats.dokumenter.underArbeid}</span>
           </BodyShort>
           <BodyShort>
-            Under arbeid <span className='font-bold'>{stats.dokumenter.underArbeid}</span>
+            Sendt til godkjenning{' '}
+            <span className='font-bold'>{stats.dokumenter.sendtTilGodkjenning}</span>
           </BodyShort>
           <BodyShort>
             Godkjent av risikoeier{' '}

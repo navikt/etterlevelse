@@ -29,8 +29,8 @@ public class DashboardResponse {
     @NoArgsConstructor
     public static class DokumenterStats {
         private int total;
-        private int ikkePaabegynt;
         private int underArbeid;
+        private int sendtTilGodkjenning;
         private int godkjentAvRisikoeier;
     }
 

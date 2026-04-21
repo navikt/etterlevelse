@@ -131,14 +131,14 @@ public class DashboardService {
             Map<UUID, List<Etterlevelse>> etterlevelseByDokId
     ) {
         int totalDokumenter = doks.size();
-        int dokIkkePaabegynt = 0;
         int dokUnderArbeid = 0;
+        int dokSendtTilGodkjenning = 0;
         int dokGodkjent = 0;
 
         for (var dok : doks) {
             var status = dok.getEtterlevelseDokumentasjonData().getStatus();
-            if (status == EtterlevelseDokumentasjonStatus.UNDER_ARBEID) dokIkkePaabegynt++;
-            else if (status == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) dokUnderArbeid++;
+            if (status == EtterlevelseDokumentasjonStatus.UNDER_ARBEID) dokUnderArbeid++;
+            else if (status == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) dokSendtTilGodkjenning++;
             else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
         }
 
@@ -247,8 +247,8 @@ public class DashboardService {
                 .avdelingNavn(avdelingNavn)
                 .dokumenter(DashboardResponse.DokumenterStats.builder()
                         .total(totalDokumenter)
-                        .ikkePaabegynt(dokIkkePaabegynt)
                         .underArbeid(dokUnderArbeid)
+                        .sendtTilGodkjenning(dokSendtTilGodkjenning)
                         .godkjentAvRisikoeier(dokGodkjent)
                         .build())
                 .suksesskriterier(DashboardResponse.SuksesskriterierStats.builder()

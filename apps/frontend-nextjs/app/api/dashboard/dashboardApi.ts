@@ -20,8 +20,8 @@ export interface IAvdelingDashboardStats {
   avdelingNavn: string
   dokumenter: {
     total: number
-    ikkePaabegynt: number
     underArbeid: number
+    sendtTilGodkjenning: number
     godkjentAvRisikoeier: number
   }
   suksesskriterier: {
