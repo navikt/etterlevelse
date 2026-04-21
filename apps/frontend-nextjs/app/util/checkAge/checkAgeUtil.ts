@@ -11,5 +11,3 @@ export const getNumberOfMonthsBetween = (startDate: string, endDate: Date) => {
   const diff = Math.abs(startDateTime - endDate.getTime())
   return diff / (1000 * 60 * 60 * 24 * 31)
 }
-
-// test
