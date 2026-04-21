@@ -29,6 +29,38 @@ iframe#webpack-dev-server-client-overlay {
 .dashboard-table .navds-table__sort-button,
 .dashboard-table .aksel-table__sort-button {
   color: inherit;
+  white-space: nowrap;
+}
+
+.dashboard-table-wrapper {
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+}
+
+.dashboard-table-wrapper::-webkit-scrollbar {
+  height: 12px;
+  -webkit-appearance: none;
+}
+
+.dashboard-table-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  border: 2px solid white;
+}
+
+.dashboard-table-wrapper::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
+.dashboard-table th,
+.dashboard-table .navds-table__column-header,
+.dashboard-table .aksel-table__column-header {
+  white-space: nowrap;
+}
+
+.dashboard-table td {
+  white-space: nowrap;
 }
 
 /* Locked "Behandler personopplysninger" checkbox: custom marker colors (no padlock overlay) */
