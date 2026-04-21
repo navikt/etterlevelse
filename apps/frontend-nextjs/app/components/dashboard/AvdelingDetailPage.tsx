@@ -266,7 +266,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           className='mt-10'
         >
           <Tabs.List>
-            <Tabs.Tab value='dok_pvk' label='Etterlevelsesdokumentasjon og PVK-er' />
+            <Tabs.Tab value='dok_pvk' label='Dokumentasjonsoversikt' />
             <Tabs.Tab value='krav' label='Krav og suksesskriterier' />
             <Tabs.Tab value='pvk' label='PVK' />
           </Tabs.List>
