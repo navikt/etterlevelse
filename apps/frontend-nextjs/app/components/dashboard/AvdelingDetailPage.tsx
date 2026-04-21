@@ -300,6 +300,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 <Table.ColumnHeader sortable sortKey='pvk'>
                   PVK
                 </Table.ColumnHeader>
+                <Table.ColumnHeader sortable sortKey='behandlinger'>
+                  Behandlinger
+                </Table.ColumnHeader>
                 <Table.ColumnHeader sortable sortKey='dato'>
                   Sist oppdatert
                 </Table.ColumnHeader>
@@ -308,6 +311,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             <Table.Body>
               {sortedDoks.map((dok) => {
                 const pvk = data.pvkByDokId.get(dok.id)
+                const kravStats = data.kravStatsByDokId.get(dok.id)
                 return (
                   <Table.Row key={dok.id}>
                     <Table.DataCell>
@@ -332,6 +336,18 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     </Table.DataCell>
                     <Table.DataCell>{getEtterlevelseStatusText(dok.status)}</Table.DataCell>
                     <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
+                    <Table.DataCell>
+                      {kravStats?.behandlinger.map((b) => (
+                        <div key={b.id}>
+                          <AkselLink
+                            href={`https://behandlingskatalog.intern.nav.no/process/purpose/NAV/${b.id}`}
+                            target='_blank'
+                          >
+                            B{b.nummer} {b.navn}
+                          </AkselLink>
+                        </div>
+                      )) || '-'}
+                    </Table.DataCell>
                     <Table.DataCell>
                       {dok.changeStamp?.lastModifiedDate
                         ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
@@ -367,9 +383,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 </Table.ColumnHeader>
                 <Table.ColumnHeader sortable sortKey='risikoeier'>
                   Risikoeier
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='behandlinger'>
-                  Behandlinger
                 </Table.ColumnHeader>
                 <Table.ColumnHeader sortable sortKey='krav' align='center'>
                   Etterlevelseskrav
@@ -409,18 +422,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       {dok.risikoeiere?.length
                         ? dok.risikoeiere.map((id) => <div key={id}>{getPersonName(id)}</div>)
                         : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {kravStats?.behandlinger.map((b) => (
-                        <div key={b.id}>
-                          <AkselLink
-                            href={`https://behandlingskatalog.intern.nav.no/process/purpose/NAV/${b.id}`}
-                            target='_blank'
-                          >
-                            B{b.nummer} {b.navn}
-                          </AkselLink>
-                        </div>
-                      )) || '-'}
                     </Table.DataCell>
                     <Table.DataCell align='center'>
                       <TrafficDot color={getKravTrafficColor(ferdig, totalKrav)} />
