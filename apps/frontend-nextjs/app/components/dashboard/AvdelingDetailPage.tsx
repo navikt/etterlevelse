@@ -304,9 +304,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                   <Table.ColumnHeader sortable sortKey='behandlinger'>
                     Behandlinger
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader sortable sortKey='dato'>
-                    Sist oppdatert
-                  </Table.ColumnHeader>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -348,11 +345,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             </AkselLink>
                           </div>
                         )) || '-'}
-                      </Table.DataCell>
-                      <Table.DataCell>
-                        {dok.changeStamp?.lastModifiedDate
-                          ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
-                          : '-'}
                       </Table.DataCell>
                     </Table.Row>
                   )
