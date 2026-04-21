@@ -11,6 +11,10 @@
     "build": "next build",
     "test": "yarn lint-staged",
     "start": "next start",
+    "prettier:check": "prettier -c ./app",
+    "eslint:check": "eslint . --cache --max-warnings=0",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run build",
+    "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write \"./app\"",
@@ -33,11 +37,11 @@
     "@fortawesome/free-brands-svg-icons": "7.2.0",
     "@fortawesome/free-solid-svg-icons": "7.2.0",
     "@fortawesome/react-fontawesome": "3.3.1",
-    "@navikt/aksel-icons": "8.9.1",
-    "@navikt/ds-css": "8.9.1",
-    "@navikt/ds-react": "8.9.1",
-    "@navikt/ds-tailwind": "8.9.1",
-    "@tailwindcss/postcss": "4.2.2",
+    "@navikt/aksel-icons": "8.10.1",
+    "@navikt/ds-css": "8.10.1",
+    "@navikt/ds-react": "8.10.1",
+    "@navikt/ds-tailwind": "8.10.1",
+    "@tailwindcss/postcss": "4.2.3",
     "axios": "1.15.1",
     "draft-js": "0.11.7",
     "graphql": "16.13.2",
@@ -57,7 +61,7 @@
     "rehype-raw": "7.0.0",
     "remark-gfm": "4.0.1",
     "rxjs": "7.8.2",
-    "tailwindcss": "4.2.2",
+    "tailwindcss": "4.2.3",
     "yup": "1.7.1"
   },
   "devDependencies": {
@@ -69,8 +73,8 @@
     "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@typescript-eslint/eslint-plugin": "8.58.2",
-    "@typescript-eslint/parser": "8.58.2",
+    "@typescript-eslint/eslint-plugin": "8.59.0",
+    "@typescript-eslint/parser": "8.59.0",
     "eslint": "10.2.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-jsx-a11y": "6.10.2",
@@ -84,6 +88,6 @@
     "postcss": "8.5.10",
     "prettier": "3.8.3",
     "react-select": "5.10.2",
-    "typescript": "6.0.3"
+    "typescript": "5.9.3"
   }
 }

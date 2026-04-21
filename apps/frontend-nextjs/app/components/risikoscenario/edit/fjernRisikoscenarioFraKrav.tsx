@@ -101,19 +101,21 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
   }
 
   useEffect(() => {
-    if (risikoscenario) {
-      setConnectedKravToRisikoscenario(
-        risikoscenario.relevanteKravNummer.filter((krav) => krav.kravNummer !== kravnummer)
-      )
-
-      setUniqueTiltak(
-        tiltakList.filter(
-          (tiltak) =>
-            tiltak.risikoscenarioIds.length === 1 &&
-            tiltak.risikoscenarioIds.includes(risikoscenario.id)
+    ;(async () => {
+      if (risikoscenario) {
+        setConnectedKravToRisikoscenario(
+          risikoscenario.relevanteKravNummer.filter((krav) => krav.kravNummer !== kravnummer)
         )
-      )
-    }
+
+        setUniqueTiltak(
+          tiltakList.filter(
+            (tiltak) =>
+              tiltak.risikoscenarioIds.length === 1 &&
+              tiltak.risikoscenarioIds.includes(risikoscenario.id)
+          )
+        )
+      }
+    })()
   }, [risikoscenario])
 
   return (
