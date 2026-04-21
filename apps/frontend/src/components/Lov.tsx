@@ -93,7 +93,7 @@ const legalBasisLinkProcessor = (
     },
     {
       // triple '§§§' is hidden, used as a trick in combination with rule 1 above
-      regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?) ?([aA-zZ]?)( *\([0-9]*\))*/g,
+      regex: /(.*) §(§§)?(§)?\s*(\d+(-\d+)?) ?([A-Za-z]?)( *\([0-9]*\))*/g,
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
@@ -107,7 +107,7 @@ const legalBasisLinkProcessor = (
       ),
     },
     {
-      regex: /(.*) kap(ittel)?\s*(\d+) ?([aA-zZ]?)( *\([0-9]*\))*/gi,
+      regex: /(.*) kap(ittel)?\s*(\d+) ?([A-Za-z]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
@@ -121,7 +121,7 @@ const legalBasisLinkProcessor = (
       ),
     },
     {
-      regex: /(.*) art(ikkel)?\s*(\d+) ?([aA-zZ]?)( *\([0-9]*\))*/gi,
+      regex: /(.*) art(ikkel)?\s*(\d+) ?([A-Za-z]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
