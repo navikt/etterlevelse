@@ -257,10 +257,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               <Table.ColumnHeader sortable sortKey='team'>
                 Team
               </Table.ColumnHeader>
-              <Table.ColumnHeader>Risikoeier</Table.ColumnHeader>
               <Table.ColumnHeader sortable sortKey='person'>
                 Person
               </Table.ColumnHeader>
+              <Table.ColumnHeader>Risikoeier</Table.ColumnHeader>
               <Table.ColumnHeader sortable sortKey='behandlinger'>
                 Behandlinger
               </Table.ColumnHeader>
@@ -292,10 +292,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     {dok.teamsData?.map((t) => t.name).join(', ') || '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.risikoeiereData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.resourcesData?.map((r) => r.fullName).join(', ') || '-'}
                   </Table.DataCell>
                   <Table.DataCell>
-                    {dok.resourcesData?.map((r) => r.fullName).join(', ') || '-'}
+                    {dok.risikoeiereData?.map((r) => r.fullName).join(', ') || '-'}
                   </Table.DataCell>
                   <Table.DataCell>
                     {kravStats?.behandlinger.map((b) => (
