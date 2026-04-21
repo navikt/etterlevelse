@@ -1,6 +1,18 @@
 #!/usr/bin/env sh
 set -e
 
-cd apps/frontend-nextjs
-yarn lint-staged
-yarn run pre-commit:deps-check
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+APP_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+
+run_yarn() {
+if command -v corepack >/dev/null 2>&1; then
+corepack yarn "$@"
+else
+yarn "$@"
+fi
+}
+
+cd "$APP_DIR"
+
+run_yarn run lint-staged
+run_yarn run pre-commit:deps-check
