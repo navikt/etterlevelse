@@ -296,9 +296,7 @@ export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>
-            Behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
-          </BodyShort>
+          <BodyShort weight='semibold'>Behov for PVK</BodyShort>
           <PieWithLegend data={behovSlices} hasData={hasBehovData} />
         </div>
 
