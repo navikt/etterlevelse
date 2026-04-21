@@ -32,6 +32,14 @@ iframe#webpack-dev-server-client-overlay {
   white-space: nowrap;
 }
 
+.dashboard-full-width-breakout {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  padding: 0 1rem;
+}
+
 .dashboard-table-wrapper {
   overflow-x: auto;
   scrollbar-gutter: stable;

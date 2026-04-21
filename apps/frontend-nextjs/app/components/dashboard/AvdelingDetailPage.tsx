@@ -256,319 +256,321 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </div>
       )}
 
-      <Tabs
-        value={tableTab}
-        onChange={(val) => {
-          setTableTab(val)
-          setSort(undefined)
-        }}
-        className='mt-10'
-      >
-        <Tabs.List>
-          <Tabs.Tab value='dok_pvk' label='Etterlevelsesdokumentasjon og PVK-er' />
-          <Tabs.Tab value='krav' label='Krav og suksesskriterier' />
-          <Tabs.Tab value='pvk' label='PVK' />
-        </Tabs.List>
-      </Tabs>
+      <div className='dashboard-full-width-breakout'>
+        <Tabs
+          value={tableTab}
+          onChange={(val) => {
+            setTableTab(val)
+            setSort(undefined)
+          }}
+          className='mt-10'
+        >
+          <Tabs.List>
+            <Tabs.Tab value='dok_pvk' label='Etterlevelsesdokumentasjon og PVK-er' />
+            <Tabs.Tab value='krav' label='Krav og suksesskriterier' />
+            <Tabs.Tab value='pvk' label='PVK' />
+          </Tabs.List>
+        </Tabs>
 
-      {tableTab === 'dok_pvk' && (
-        <div className='dashboard-table-wrapper'>
-          <Table
-            className='mt-4 dashboard-table'
-            size='small'
-            zebraStripes
-            sort={sort}
-            onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
-          >
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader sortable sortKey='dok'>
-                  Etterlevelsesdokument
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='team'>
-                  Team
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='person'>
-                  Person
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='risikoeier'>
-                  Risikoeier
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='etterlevelse'>
-                  Etterlevelse
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='pvk'>
-                  PVK
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='behandlinger'>
-                  Behandlinger
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='dato'>
-                  Sist oppdatert
-                </Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {sortedDoks.map((dok) => {
-                const pvk = data.pvkByDokId.get(dok.id)
-                const kravStats = data.kravStatsByDokId.get(dok.id)
-                return (
-                  <Table.Row key={dok.id}>
-                    <Table.DataCell>
-                      <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
-                        E{dok.etterlevelseNummer} {dok.title}
-                      </AkselLink>
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.teams?.length
-                        ? dok.teams.map((id) => getTeamName(id)[0]).join(', ')
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.resources?.length
-                        ? dok.resources.map((id) => <div key={id}>{getPersonName(id)}</div>)
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.risikoeiere?.length
-                        ? dok.risikoeiere.map((id) => <div key={id}>{getPersonName(id)}</div>)
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>{getEtterlevelseStatusText(dok.status)}</Table.DataCell>
-                    <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
-                    <Table.DataCell>
-                      {kravStats?.behandlinger.map((b) => (
-                        <div key={b.id}>
-                          <AkselLink
-                            href={`https://behandlingskatalog.intern.nav.no/process/purpose/NAV/${b.id}`}
-                            target='_blank'
-                          >
-                            B{b.nummer} {b.navn}
-                          </AkselLink>
-                        </div>
-                      )) || '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.changeStamp?.lastModifiedDate
-                        ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
-                        : '-'}
-                    </Table.DataCell>
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-          </Table>
-        </div>
-      )}
+        {tableTab === 'dok_pvk' && (
+          <div className='dashboard-table-wrapper'>
+            <Table
+              className='mt-4 dashboard-table'
+              size='small'
+              zebraStripes
+              sort={sort}
+              onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+            >
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeader sortable sortKey='dok'>
+                    Etterlevelsesdokument
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='team'>
+                    Team
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='person'>
+                    Person
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='risikoeier'>
+                    Risikoeier
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='etterlevelse'>
+                    Etterlevelse
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='pvk'>
+                    PVK
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='behandlinger'>
+                    Behandlinger
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='dato'>
+                    Sist oppdatert
+                  </Table.ColumnHeader>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {sortedDoks.map((dok) => {
+                  const pvk = data.pvkByDokId.get(dok.id)
+                  const kravStats = data.kravStatsByDokId.get(dok.id)
+                  return (
+                    <Table.Row key={dok.id}>
+                      <Table.DataCell>
+                        <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
+                          E{dok.etterlevelseNummer} {dok.title}
+                        </AkselLink>
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.teams?.length
+                          ? dok.teams.map((id) => getTeamName(id)[0]).join(', ')
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.resources?.length
+                          ? dok.resources.map((id) => <div key={id}>{getPersonName(id)}</div>)
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.risikoeiere?.length
+                          ? dok.risikoeiere.map((id) => <div key={id}>{getPersonName(id)}</div>)
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>{getEtterlevelseStatusText(dok.status)}</Table.DataCell>
+                      <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
+                      <Table.DataCell>
+                        {kravStats?.behandlinger.map((b) => (
+                          <div key={b.id}>
+                            <AkselLink
+                              href={`https://behandlingskatalog.intern.nav.no/process/purpose/NAV/${b.id}`}
+                              target='_blank'
+                            >
+                              B{b.nummer} {b.navn}
+                            </AkselLink>
+                          </div>
+                        )) || '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.changeStamp?.lastModifiedDate
+                          ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
+                          : '-'}
+                      </Table.DataCell>
+                    </Table.Row>
+                  )
+                })}
+              </Table.Body>
+            </Table>
+          </div>
+        )}
 
-      {tableTab === 'krav' && (
-        <div className='dashboard-table-wrapper'>
-          <Table
-            className='mt-4 dashboard-table'
-            size='small'
-            zebraStripes
-            sort={sort}
-            onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
-          >
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader sortable sortKey='dok'>
-                  Etterlevelsesdokument
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='team'>
-                  Team
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='person'>
-                  Person
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='risikoeier'>
-                  Risikoeier
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='krav' align='center'>
-                  Etterlevelseskrav
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='oppfylt' align='center'>
-                  Oppfylt
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='dato'>
-                  Sist oppdatert
-                </Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {sortedDoks.map((dok) => {
-                const kravStats = data.kravStatsByDokId.get(dok.id)
-                const ferdig = kravStats?.ferdigDokumentert || 0
-                const totalKrav = kravStats?.totalKrav || 0
-                const oppfyltPct = totalKrav > 0 ? Math.round((ferdig / totalKrav) * 100) : 0
-                return (
-                  <Table.Row key={dok.id}>
-                    <Table.DataCell>
-                      <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
-                        E{dok.etterlevelseNummer} {dok.title}
-                      </AkselLink>
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.teams?.length
-                        ? dok.teams.map((id) => getTeamName(id)[0]).join(', ')
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.resources?.length
-                        ? dok.resources.map((id) => <div key={id}>{getPersonName(id)}</div>)
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.risikoeiere?.length
-                        ? dok.risikoeiere.map((id) => <div key={id}>{getPersonName(id)}</div>)
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell align='center'>
-                      <TrafficDot color={getKravTrafficColor(ferdig, totalKrav)} />
-                      {ferdig} av {totalKrav}
-                    </Table.DataCell>
-                    <Table.DataCell align='center'>
-                      <TrafficDot color={getOppfyltTrafficColor(ferdig, totalKrav)} />
-                      {totalKrav > 0 ? `${oppfyltPct}%` : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.changeStamp?.lastModifiedDate
-                        ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
-                        : '-'}
-                    </Table.DataCell>
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-          </Table>
-        </div>
-      )}
+        {tableTab === 'krav' && (
+          <div className='dashboard-table-wrapper'>
+            <Table
+              className='mt-4 dashboard-table'
+              size='small'
+              zebraStripes
+              sort={sort}
+              onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+            >
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeader sortable sortKey='dok'>
+                    Etterlevelsesdokument
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='team'>
+                    Team
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='person'>
+                    Person
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='risikoeier'>
+                    Risikoeier
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='krav' align='center'>
+                    Etterlevelseskrav
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='oppfylt' align='center'>
+                    Oppfylt
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='dato'>
+                    Sist oppdatert
+                  </Table.ColumnHeader>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {sortedDoks.map((dok) => {
+                  const kravStats = data.kravStatsByDokId.get(dok.id)
+                  const ferdig = kravStats?.ferdigDokumentert || 0
+                  const totalKrav = kravStats?.totalKrav || 0
+                  const oppfyltPct = totalKrav > 0 ? Math.round((ferdig / totalKrav) * 100) : 0
+                  return (
+                    <Table.Row key={dok.id}>
+                      <Table.DataCell>
+                        <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
+                          E{dok.etterlevelseNummer} {dok.title}
+                        </AkselLink>
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.teams?.length
+                          ? dok.teams.map((id) => getTeamName(id)[0]).join(', ')
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.resources?.length
+                          ? dok.resources.map((id) => <div key={id}>{getPersonName(id)}</div>)
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.risikoeiere?.length
+                          ? dok.risikoeiere.map((id) => <div key={id}>{getPersonName(id)}</div>)
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell align='center'>
+                        <TrafficDot color={getKravTrafficColor(ferdig, totalKrav)} />
+                        {ferdig} av {totalKrav}
+                      </Table.DataCell>
+                      <Table.DataCell align='center'>
+                        <TrafficDot color={getOppfyltTrafficColor(ferdig, totalKrav)} />
+                        {totalKrav > 0 ? `${oppfyltPct}%` : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.changeStamp?.lastModifiedDate
+                          ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
+                          : '-'}
+                      </Table.DataCell>
+                    </Table.Row>
+                  )
+                })}
+              </Table.Body>
+            </Table>
+          </div>
+        )}
 
-      {tableTab === 'pvk' && (
-        <div className='dashboard-table-wrapper'>
-          <Table
-            className='mt-4 dashboard-table'
-            size='small'
-            zebraStripes
-            sort={sort}
-            onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
-          >
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader sortable sortKey='dok'>
-                  Etterlevelsesdokument
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='team'>
-                  Team
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='person'>
-                  Person
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='risikoeier'>
-                  Risikoeier
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='pvkStatus'>
-                  PVK-status
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='antallScenarioer' align='center'>
-                  Antall risikoscenarioer
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='hoyRisiko' align='center'>
-                  Høy risiko scenarioer
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='hoyRisikoEtterTiltak' align='center'>
-                  Høy risiko etter tiltak
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='ikkeIverksatte' align='center'>
-                  Ikke iverksatte tiltak
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='fristPassert' align='center'>
-                  Tiltaksfrist passert
-                </Table.ColumnHeader>
-                <Table.ColumnHeader sortable sortKey='dato'>
-                  Sist oppdatert
-                </Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {sortedDoks.map((dok) => {
-                const pvk = data.pvkByDokId.get(dok.id)
-                const pvkStats = data.pvkStatsByDokId.get(dok.id)
-                return (
-                  <Table.Row key={dok.id}>
-                    <Table.DataCell>
-                      <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
-                        E{dok.etterlevelseNummer} {dok.title}
-                      </AkselLink>
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.teams?.length
-                        ? dok.teams.map((id) => getTeamName(id)[0]).join(', ')
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.resources?.length
-                        ? dok.resources.map((id) => <div key={id}>{getPersonName(id)}</div>)
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.risikoeiere?.length
-                        ? dok.risikoeiere.map((id) => <div key={id}>{getPersonName(id)}</div>)
-                        : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
-                    <Table.DataCell align='center'>
-                      {pvkStats ? pvkStats.antallScenarioer : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell align='center'>
-                      {pvkStats && pvkStats.hoyRisikoScenarioer > 0 ? (
-                        <span className='inline-flex items-center'>
-                          <TrafficDot color='#C30000' />
-                          {pvkStats.hoyRisikoScenarioer}
-                        </span>
-                      ) : (
-                        '-'
-                      )}
-                    </Table.DataCell>
-                    <Table.DataCell align='center'>
-                      {pvkStats && pvkStats.hoyRisikoEtterTiltak > 0 ? (
-                        <span className='inline-flex items-center'>
-                          <TrafficDot color='#C30000' />
-                          {pvkStats.hoyRisikoEtterTiltak}
-                        </span>
-                      ) : pvkStats ? (
-                        '0'
-                      ) : (
-                        '-'
-                      )}
-                    </Table.DataCell>
-                    <Table.DataCell align='center'>
-                      {pvkStats ? pvkStats.ikkeIverksatteTiltak : '-'}
-                    </Table.DataCell>
-                    <Table.DataCell align='center'>
-                      {pvkStats && pvkStats.tiltakFristPassert > 0 ? (
-                        <span className='inline-flex items-center'>
-                          <TrafficDot color='#C30000' />
-                          {pvkStats.tiltakFristPassert}
-                        </span>
-                      ) : pvkStats ? (
-                        '0'
-                      ) : (
-                        '-'
-                      )}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {dok.changeStamp?.lastModifiedDate
-                        ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
-                        : '-'}
-                    </Table.DataCell>
-                  </Table.Row>
-                )
-              })}
-            </Table.Body>
-          </Table>
-        </div>
-      )}
+        {tableTab === 'pvk' && (
+          <div className='dashboard-table-wrapper'>
+            <Table
+              className='mt-4 dashboard-table'
+              size='small'
+              zebraStripes
+              sort={sort}
+              onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
+            >
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeader sortable sortKey='dok'>
+                    Etterlevelsesdokument
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='team'>
+                    Team
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='person'>
+                    Person
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='risikoeier'>
+                    Risikoeier
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='pvkStatus'>
+                    PVK-status
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='antallScenarioer' align='center'>
+                    Antall risikoscenarioer
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='hoyRisiko' align='center'>
+                    Høy risiko scenarioer
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='hoyRisikoEtterTiltak' align='center'>
+                    Høy risiko etter tiltak
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='ikkeIverksatte' align='center'>
+                    Ikke iverksatte tiltak
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='fristPassert' align='center'>
+                    Tiltaksfrist passert
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader sortable sortKey='dato'>
+                    Sist oppdatert
+                  </Table.ColumnHeader>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {sortedDoks.map((dok) => {
+                  const pvk = data.pvkByDokId.get(dok.id)
+                  const pvkStats = data.pvkStatsByDokId.get(dok.id)
+                  return (
+                    <Table.Row key={dok.id}>
+                      <Table.DataCell>
+                        <AkselLink href={`/dokumentasjon/${dok.id}`} target='_blank'>
+                          E{dok.etterlevelseNummer} {dok.title}
+                        </AkselLink>
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.teams?.length
+                          ? dok.teams.map((id) => getTeamName(id)[0]).join(', ')
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.resources?.length
+                          ? dok.resources.map((id) => <div key={id}>{getPersonName(id)}</div>)
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.risikoeiere?.length
+                          ? dok.risikoeiere.map((id) => <div key={id}>{getPersonName(id)}</div>)
+                          : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell>{getPvkStatusText(pvk)}</Table.DataCell>
+                      <Table.DataCell align='center'>
+                        {pvkStats ? pvkStats.antallScenarioer : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell align='center'>
+                        {pvkStats && pvkStats.hoyRisikoScenarioer > 0 ? (
+                          <span className='inline-flex items-center'>
+                            <TrafficDot color='#C30000' />
+                            {pvkStats.hoyRisikoScenarioer}
+                          </span>
+                        ) : (
+                          '-'
+                        )}
+                      </Table.DataCell>
+                      <Table.DataCell align='center'>
+                        {pvkStats && pvkStats.hoyRisikoEtterTiltak > 0 ? (
+                          <span className='inline-flex items-center'>
+                            <TrafficDot color='#C30000' />
+                            {pvkStats.hoyRisikoEtterTiltak}
+                          </span>
+                        ) : pvkStats ? (
+                          '0'
+                        ) : (
+                          '-'
+                        )}
+                      </Table.DataCell>
+                      <Table.DataCell align='center'>
+                        {pvkStats ? pvkStats.ikkeIverksatteTiltak : '-'}
+                      </Table.DataCell>
+                      <Table.DataCell align='center'>
+                        {pvkStats && pvkStats.tiltakFristPassert > 0 ? (
+                          <span className='inline-flex items-center'>
+                            <TrafficDot color='#C30000' />
+                            {pvkStats.tiltakFristPassert}
+                          </span>
+                        ) : pvkStats ? (
+                          '0'
+                        ) : (
+                          '-'
+                        )}
+                      </Table.DataCell>
+                      <Table.DataCell>
+                        {dok.changeStamp?.lastModifiedDate
+                          ? moment(dok.changeStamp.lastModifiedDate).format('D. MMMM YYYY')
+                          : '-'}
+                      </Table.DataCell>
+                    </Table.Row>
+                  )
+                })}
+              </Table.Body>
+            </Table>
+          </div>
+        )}
+      </div>
     </PageLayout>
   )
 }
