@@ -276,6 +276,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           <Table
             className='mt-4 dashboard-table'
             size='small'
+            zebraStripes
             sort={sort}
             onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
           >
@@ -349,6 +350,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           <Table
             className='mt-4 dashboard-table'
             size='small'
+            zebraStripes
             sort={sort}
             onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
           >
@@ -446,6 +448,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           <Table
             className='mt-4 dashboard-table'
             size='small'
+            zebraStripes
             sort={sort}
             onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
           >
