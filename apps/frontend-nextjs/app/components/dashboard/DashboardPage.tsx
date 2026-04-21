@@ -4,7 +4,7 @@ import { IAvdelingDashboardStats, getDashboardStats } from '@/api/dashboard/dash
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardPieCard } from '@/components/dashboard/DashboardPieCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { Heading, Loader, Select, Tabs } from '@navikt/ds-react'
+import { Heading, Loader, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 
 const DashboardPage = () => {
@@ -34,6 +34,18 @@ const DashboardPage = () => {
           Status i organisasjon
         </Heading>
       </div>
+
+      <LocalAlert status='announcement' className='mt-4'>
+        <LocalAlert.Header>
+          <LocalAlert.Title as='h2'>
+            Obs! Disse sidene er fortsatt under utvikling.
+          </LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          Dersom dere finner feil eller har forslag til forbedringer, ta kontakt på #etterlevelse på
+          slack.
+        </LocalAlert.Content>
+      </LocalAlert>
 
       <Select
         label='Velg avdeling'

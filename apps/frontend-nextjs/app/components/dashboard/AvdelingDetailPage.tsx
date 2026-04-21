@@ -14,7 +14,15 @@ import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Link as AkselLink, Heading, Loader, Select, Table, Tabs } from '@navikt/ds-react'
+import {
+  Link as AkselLink,
+  Heading,
+  Loader,
+  LocalAlert,
+  Select,
+  Table,
+  Tabs,
+} from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 
@@ -139,6 +147,18 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           {data.avdelingNavn}
         </Heading>
       </div>
+
+      <LocalAlert status='announcement' className='mt-4'>
+        <LocalAlert.Header>
+          <LocalAlert.Title as='h2'>
+            Obs! Disse sidene er fortsatt under utvikling.
+          </LocalAlert.Title>
+        </LocalAlert.Header>
+        <LocalAlert.Content>
+          Dersom dere finner feil eller har forslag til forbedringer, ta kontakt på #etterlevelse på
+          slack.
+        </LocalAlert.Content>
+      </LocalAlert>
 
       {data.seksjoner.length > 0 && (
         <Select
