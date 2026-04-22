@@ -36,14 +36,14 @@ public class DashboardController {
     @ApiResponse(description = "ok")
     @GetMapping("/{avdelingId}")
     public ResponseEntity<DashboardResponse> getAvdelingStatsDEPRECATED(@PathVariable String avdelingId) {
-        return ResponseEntity.ok(dashboardService.getAvdelingStatsOLD(avdelingId));
+        return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
     }
 
 
     @Operation(summary = "Get dashboard stats for a single avdeling")
     @ApiResponse(description = "ok")
     @GetMapping("/avdeling/{avdelingId}")
-    public ResponseEntity<AvdelingDashBoardResponse> getAvdelingStats(@PathVariable String avdelingId) {
+    public ResponseEntity<DashboardResponse> getAvdelingStats(@PathVariable String avdelingId) {
         return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
     }
 }
