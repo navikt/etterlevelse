@@ -170,30 +170,30 @@ public class DashboardService {
             List<PvkDokument> pvk = pvkDokumenter.stream().filter(p -> p.getEtterlevelseDokumentId().equals(dok.getId())).toList();
             if (pvk.isEmpty()) {
                 ikkeVurdertBehov++;
-            }
-
-            var vurdering = pvk.getFirst().getPvkDokumentData().getPvkVurdering();
-            if (vurdering == PvkVurdering.SKAL_IKKE_UTFORE) {
-                vurdertIkkeBehov++;
-            } else if (vurdering == PvkVurdering.ALLEREDE_UTFORT) {
-                pvkIWord++;
-                pvkTotal++;
-            } else if (vurdering == null || vurdering == PvkVurdering.UNDEFINED) {
-                ikkeVurdertBehov++;
             } else {
-                pvkTotal++;
-                var pvkStatus = pvk.getFirst().getStatus();
-                if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
-                    pvkGodkjent++;
-                } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
-                        || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
-                        || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-                    pvkTilBehandlingPvo++;
-                } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
-                        || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
-                    pvkTilbakemeldingPvo++;
+                var vurdering = pvk.getFirst().getPvkDokumentData().getPvkVurdering();
+                if (vurdering == PvkVurdering.SKAL_IKKE_UTFORE) {
+                    vurdertIkkeBehov++;
+                } else if (vurdering == PvkVurdering.ALLEREDE_UTFORT) {
+                    pvkIWord++;
+                    pvkTotal++;
+                } else if (vurdering == null || vurdering == PvkVurdering.UNDEFINED) {
+                    ikkeVurdertBehov++;
                 } else {
-                    pvkUnderArbeid++;
+                    pvkTotal++;
+                    var pvkStatus = pvk.getFirst().getStatus();
+                    if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                        pvkGodkjent++;
+                    } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
+                            || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
+                            || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+                        pvkTilBehandlingPvo++;
+                    } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
+                            || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
+                        pvkTilbakemeldingPvo++;
+                    } else {
+                        pvkUnderArbeid++;
+                    }
                 }
             }
         }
