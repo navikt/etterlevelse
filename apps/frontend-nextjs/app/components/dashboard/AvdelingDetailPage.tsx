@@ -196,7 +196,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           {data.avdelingNavn}
         </Heading>
       </div>
-      {data.seksjoner.length > 0 && (
+
+      {data.seksjoner && data.seksjoner.length > 0 && (
         <Select
           label='Velg seksjon'
           className='mt-4 w-fit min-w-64'
@@ -211,6 +212,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           ))}
         </Select>
       )}
+
       <Tabs className='mt-4' defaultValue='figurer'>
         <Tabs.List>
           <Tabs.Tab value='figurer' label='Vis figurer' />
