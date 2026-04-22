@@ -1,5 +1,15 @@
-import { IEtterlevelseDokumentasjon } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '../etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  IEtterlevelseDokumentasjon,
+  INomSeksjon,
+} from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  EPvkVurdering,
+  IPvkDokument,
+} from '../etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
 
 export interface IDokKravStats {
   totalKrav: number
@@ -17,6 +27,11 @@ export interface IDokPvkStats {
   tiltakFristPassert: number
 }
 
+export interface ISeksjonOption {
+  id: string
+  navn: string
+}
+
 export interface IAvdelingDetailData {
   avdelingId: string
   avdelingNavn: string
@@ -31,12 +46,40 @@ export interface IAvdelingDetailData {
 
 export interface IDashboardDetailResponse extends IAvdelingDashboardStats {
   seksjoner: ISeksjonOption[]
-  statsBySeksjon: Record<string, IAvdelingDashboardStats>
+  statsBySeksjon: Map<string, IAvdelingDashboardStats>
 }
 
-export interface ISeksjonOption {
-  id: string
-  navn: string
+export interface IDashboardTable {
+  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjonTittel: string
+  etterlevelseNummer: number
+  etterlevelseDokumentVersjon: number
+  etterlevelseDokumentasjonStatus: EEtterlevelseDokumentasjonStatus
+  teams: string[]
+  teamsData?: ITeam[]
+  resources: string[]
+  resourcesData?: ITeamResource[]
+  risikoeiere: string[]
+  risikoeiereData?: ITeamResource[]
+  behandlinger?: IBehandling[]
+  nomAvdelingId?: string
+  avdelingNavn?: string
+  seksjoner: INomSeksjon[]
+
+  antallKrav?: number
+  antallOppfyltKrav?: number
+  oppfyltKravProsent?: number
+  sistOppdatertEtterlevelse: string
+
+  hasPvkDocumentationStarted: boolean
+  pvkVurdering: EPvkVurdering
+  pvkDokumentStatus: EPvkDokumentStatus
+  antallRisikoscenario?: number
+  antallHoyRisikoscenario?: number
+  antallHoyRisikoEtterTiltak?: number
+  antallIkkeIverksattTiltak?: number
+  antallTiltakFristPassert?: number
+  sistOppdatertPvk: string
 }
 
 export interface IAvdelingDashboardStats {

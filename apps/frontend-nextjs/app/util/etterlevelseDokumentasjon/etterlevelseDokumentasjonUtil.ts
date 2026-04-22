@@ -7,6 +7,7 @@ import {
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
+  EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
   IEtterlevelseDokumentasjonStats,
   TEtterlevelseDokumentasjonQL,
@@ -330,3 +331,18 @@ export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   etterlevelseChangeStamp: etterlevelse?.changeStamp,
   gammelVersjon: false,
 })
+
+export const getEtterlevelseDokumentStatusText = (
+  status: EEtterlevelseDokumentasjonStatus
+): string => {
+  switch (status) {
+    case EEtterlevelseDokumentasjonStatus.UNDER_ARBEID:
+      return 'Under arbeid'
+    case EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER:
+      return 'Sendt til godkjenning'
+    case EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER:
+      return 'Godkjent'
+    default:
+      return 'Ukjent'
+  }
+}

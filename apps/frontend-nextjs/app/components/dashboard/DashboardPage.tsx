@@ -13,7 +13,6 @@ import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 const DashboardPage = () => {
   const [stats, setStats] = useState<IAvdelingDashboardStats[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('figurer')
   const router = useRouter()
 
   useEffect(() => {
@@ -64,7 +63,7 @@ const DashboardPage = () => {
       {isLoading && <CenteredLoader />}
 
       {!isLoading && (
-        <Tabs value={activeTab} onChange={setActiveTab} className='mt-4'>
+        <Tabs className='mt-4' defaultValue='figurer'>
           <Tabs.List>
             <Tabs.Tab value='figurer' label='Vis figurer' />
             <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
