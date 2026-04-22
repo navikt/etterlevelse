@@ -159,11 +159,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
   if (isLoading || data == null) {
     return (
-      <PageLayout
-        pageTitle='Dashboard'
-        currentPage='Dashboard'
-        breadcrumbPaths={[{ href: '/', pathName: 'Forsiden' }]}
-      >
+      <PageLayout pageTitle='Dashboard' currentPage='Dashboard' breadcrumbPaths={[]}>
         <CenteredLoader />
       </PageLayout>
     )
