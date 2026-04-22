@@ -1,4 +1,4 @@
-package no.nav.data.etterlevelse.statistikk;
+package no.nav.data.etterlevelse.dashboard;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.etterlevelse.statistikk.dto.DashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
 
 @Slf4j
 @RestController
@@ -34,6 +34,14 @@ public class DashboardController {
     @Operation(summary = "Get dashboard stats for a single avdeling")
     @ApiResponse(description = "ok")
     @GetMapping("/{avdelingId}")
+    public ResponseEntity<DashboardResponse> getAvdelingStatsDEPRECATED(@PathVariable String avdelingId) {
+        return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
+    }
+
+
+    @Operation(summary = "Get dashboard stats for a single avdeling")
+    @ApiResponse(description = "ok")
+    @GetMapping("/avdeling/{avdelingId}")
     public ResponseEntity<DashboardResponse> getAvdelingStats(@PathVariable String avdelingId) {
         return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
     }

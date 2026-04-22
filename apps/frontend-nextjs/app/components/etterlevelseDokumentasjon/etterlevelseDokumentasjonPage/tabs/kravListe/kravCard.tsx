@@ -1,4 +1,4 @@
-'use effect'
+'use client'
 
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '@/api/etterlevelse/etterlevelseApi'
 import {
