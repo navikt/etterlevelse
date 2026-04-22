@@ -68,7 +68,7 @@ public class DashboardService {
         List<DashboardTableResponse> tableResponses = allEdoksWithAvdeling.stream()
                 .map(dok -> {
                     List<Etterlevelse> etterlevelserForDok = etterlevelseService.getByEtterlevelseDokumentasjon(dok.getId());
-                    List<Krav> kravForEdok = aktivKrav.stream().filter(k -> new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
+                    List<Krav> kravForEdok = aktivKrav.stream().filter(k -> !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
                     var etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(dok);
                     etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
                     var dashboardTableResponse = DashboardTableResponse.buildFrom(etterlevelseDokumentasjonResponse);
@@ -179,7 +179,8 @@ public class DashboardService {
 
                     dashboardTableResponse.setAntallKrav(kravForEdok.size());
                     dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
-                    dashboardTableResponse.setOppfyltKravProsent( (oppfyltEtterlevelseList.size() / kravForEdok.size()) * 100 );
+                    double prosent = !kravForEdok.isEmpty() ? ((double) oppfyltEtterlevelseList.size() / kravForEdok.size()) * 100 : 0;
+                    dashboardTableResponse.setOppfyltKravProsent( (int) Math.round(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
 
                     return dashboardTableResponse;
@@ -287,7 +288,7 @@ public class DashboardService {
             else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
 
             var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
-            List<Krav> kravForEdok = aktivKrav.stream().filter(k -> new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
+            List<Krav> kravForEdok = aktivKrav.stream().filter(k -> !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
             var aktivEtterlevelseList = etterlevelseList.stream()
                     .filter(e -> kravForEdok.stream().anyMatch(k ->
                             k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
