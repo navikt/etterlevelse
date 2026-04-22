@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import no.nav.data.etterlevelse.dashboard.dto.*;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
+import no.nav.data.integration.nom.domain.OrgEnhet;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,12 +47,13 @@ public class DashboardService {
     private final NomGraphClient nomGraphClient;
 
     public List<DashboardResponse> getDashboardStats() {
-        var avdelinger = nomGraphClient.getAllAvdelinger();
+        var avdelinger = nomGraphClient.getAllAvdelinger().stream().sorted(Comparator.comparing(OrgEnhet::getNavn)).toList();
         var result = new ArrayList<DashboardResponse>();
         for (var avdeling : avdelinger) {
             var stats = getAvdelingStats(avdeling.getId());
             result.add(stats);
         }
+        getStatsForEtterlevelsesDokumentWithNoAvdeling(result);
         return result;
     }
 
@@ -74,12 +76,14 @@ public class DashboardService {
 
         var result = createAvdelingDashBoardResponse(avdelingId, avdelingNavn, allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
 
-        var seksjonerFromNom = nomGraphClient.getAllSeksjonForAvdeling(avdelingId);
+        var seksjonerFromNom = nomGraphClient.getAllSeksjonForAvdeling(avdelingId).stream().sorted(Comparator.comparing(OrgEnhet::getNavn)).toList();
 
-        var seksjonOptions = seksjonerFromNom.stream()
+        List<SeksjonOption> seksjonOptions = new ArrayList<>();
+
+        seksjonerFromNom.stream()
                 .map(s -> SeksjonOption.builder().id(s.getId()).navn(s.getNavn()).build())
                 .sorted(Comparator.comparing(SeksjonOption::getNavn))
-                .toList();
+                .forEach(seksjonOptions::add);
 
         Map<String, DashboardResponse> statsBySeksjon = new LinkedHashMap<>();
         for (var seksjon : seksjonerFromNom) {
@@ -92,11 +96,40 @@ public class DashboardService {
             statsBySeksjon.put(seksjon.getId(), seksjonStats);
         }
 
+        List<EtterlevelseDokumentasjon> eDoksWithNoSeksjon = allDoks.stream().filter(eDok ->
+                eDok.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
+                eDok.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
+        ).toList();
+
+        if(!eDoksWithNoSeksjon.isEmpty()) {
+            seksjonOptions.add(SeksjonOption.builder().id("ingen-seksjon").navn("Seksjon ikke valgt").build());
+            var seksjonStats = createAvdelingDashBoardResponse("ingen-seksjon", "Seksjon ikke valgt", eDoksWithNoSeksjon, pvkByDokId, aktivKrav, etterlevelseByDokId);
+            statsBySeksjon.put("ingen-seksjon", seksjonStats);
+        }
+
         result.setSeksjoner(seksjonOptions);
         result.setStatsBySeksjon(statsBySeksjon);
 
         return result;
+    }
 
+
+    private void getStatsForEtterlevelsesDokumentWithNoAvdeling (List<DashboardResponse> dashboardStats) {
+        List<EtterlevelseDokumentasjon> allDoks = etterlevelseDokumentasjonService.getByAvdeling("");
+        if(!allDoks.isEmpty()) {
+            List<PvkDokument> pvkByDokId = new ArrayList<>();
+            allDoks.forEach((eDok) -> {
+                pvkDokumentService.getByEtterlevelseDokumentasjon(eDok.getId()).ifPresent(pvkByDokId::add);
+            });
+
+            var aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
+
+            var dokIds = allDoks.stream().map(EtterlevelseDokumentasjon::getId).toList();
+            var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
+
+            var result = createAvdelingDashBoardResponse("ingen-avdeling", "Avdeling ikke valgt", allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
+            dashboardStats.add(result);
+        }
     }
 
     private DashboardResponse createAvdelingDashBoardResponse(
