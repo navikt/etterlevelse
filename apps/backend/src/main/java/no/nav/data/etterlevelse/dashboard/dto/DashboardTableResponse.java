@@ -15,6 +15,7 @@ import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -69,8 +70,8 @@ public class DashboardTableResponse {
                 .risikoeiere(etterlevelseDokumentasjonResponse.getRisikoeiere())
                 .risikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiereData())
                 .behandlinger(etterlevelseDokumentasjonResponse.getBehandlinger())
-                .nomAvdelingId(etterlevelseDokumentasjonResponse.getNomAvdelingId())
-                .avdelingNavn(etterlevelseDokumentasjonResponse.getAvdelingNavn())
+                .nomAvdelingId(Objects.equals(etterlevelseDokumentasjonResponse.getNomAvdelingId(), "") ? "ingen-avdeling" : etterlevelseDokumentasjonResponse.getNomAvdelingId())
+                .avdelingNavn(Objects.equals(etterlevelseDokumentasjonResponse.getAvdelingNavn(), "") ? "Ikke valgt avdeling" : etterlevelseDokumentasjonResponse.getAvdelingNavn())
                 .seksjoner(etterlevelseDokumentasjonResponse.getSeksjoner())
                 .build();
     }

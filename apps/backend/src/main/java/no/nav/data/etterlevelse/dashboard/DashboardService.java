@@ -57,7 +57,11 @@ public class DashboardService {
             var stats = getAvdelingStats(avdeling.getId());
             result.add(stats);
         }
-        getStatsForEtterlevelsesDokumentWithNoAvdeling(result);
+
+        var eDokWithNoAvdeling = getStatsForEtterlevelsesDokumentWithNoAvdeling();
+        if(eDokWithNoAvdeling != null){
+            result.add(eDokWithNoAvdeling);
+        }
         return result;
     }
 
@@ -115,7 +119,7 @@ public class DashboardService {
                                  } else if (scenarioData.getSannsynlighetsNivaaEtterTiltak() == 5 && scenarioData.getKonsekvensNivaaEtterTiltak() == 3) {
                                      antallHoyRisikoEtterTiltak = (antallHoyRisikoEtterTiltak == null) ? 1 : antallHoyRisikoEtterTiltak  + 1;
                                  }
-                             } else if (scenarioData.getIngenTiltak() == true && scenarioData.getSannsynlighetsNivaa() != null && scenarioData.getKonsekvensNivaa() != null) {
+                             } else if (scenarioData.getIngenTiltak() != null && scenarioData.getIngenTiltak() && scenarioData.getSannsynlighetsNivaa() != null && scenarioData.getKonsekvensNivaa() != null) {
                                  antallRisikoscenario = (antallRisikoscenario == null) ? 1 : antallRisikoscenario  + 1;
                                  if (scenarioData.getSannsynlighetsNivaa() >= 4 && scenarioData.getKonsekvensNivaa() >= 4) {
                                      antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
@@ -259,7 +263,7 @@ public class DashboardService {
     }
 
 
-    private void getStatsForEtterlevelsesDokumentWithNoAvdeling (List<DashboardResponse> dashboardStats) {
+    public DashboardResponse getStatsForEtterlevelsesDokumentWithNoAvdeling () {
         List<EtterlevelseDokumentasjon> allDoks = etterlevelseDokumentasjonService.getByAvdeling("");
         if(!allDoks.isEmpty()) {
             List<PvkDokument> pvkByDokId = new ArrayList<>();
@@ -272,8 +276,9 @@ public class DashboardService {
             var dokIds = allDoks.stream().map(EtterlevelseDokumentasjon::getId).toList();
             var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
 
-            var result = createAvdelingDashBoardResponse("ingen-avdeling", "Ikke valgt avdeling", allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
-            dashboardStats.add(result);
+            return createAvdelingDashBoardResponse("ingen-avdeling", "Ikke valgt avdeling", allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
+        } else {
+            return null;
         }
     }
 
