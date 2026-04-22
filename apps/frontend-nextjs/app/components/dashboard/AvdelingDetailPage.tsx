@@ -1,14 +1,14 @@
 'use client'
 
-import {
-  IAvdelingDashboardStats,
-  IAvdelingDetailData,
-  getAvdelingDetailStats,
-} from '@/api/dashboard/dashboardApi'
+import { getAvdelingDetailStats } from '@/api/dashboard/dashboardApi'
 import { usePersonName, useTeam } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardPieCard } from '@/components/dashboard/DashboardPieCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
+import {
+  IAvdelingDashboardStats,
+  IAvdelingDetailData,
+} from '@/constants/dashboard/dashboardConstants'
 import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,

@@ -1,6 +1,6 @@
 'use client'
 
-import { IAvdelingDashboardStats } from '@/api/dashboard/dashboardApi'
+import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
 import { useState } from 'react'
 

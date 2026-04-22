@@ -5,6 +5,13 @@ import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikosce
 import { getAllBehandlingStatistikk } from '@/api/statistikk/statistikkApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import { IPageResponse } from '@/constants/commonConstants'
+import {
+  IAvdelingDashboardStats,
+  IAvdelingDetailData,
+  IDashboardDetailResponse,
+  IDokKravStats,
+  IDokPvkStats,
+} from '@/constants/dashboard/dashboardConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -15,47 +22,12 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
-export interface IAvdelingDashboardStats {
-  avdelingId: string
-  avdelingNavn: string
-  dokumenter: {
-    total: number
-    underArbeid: number
-    sendtTilGodkjenning: number
-    godkjentAvRisikoeier: number
-  }
-  suksesskriterier: {
-    underArbeidProsent: number
-    oppfyltProsent: number
-    ikkeOppfyltProsent: number
-    ikkeRelevantProsent: number
-  }
-  behovForPvk: {
-    totalMedPersonopplysninger: number
-    ikkeVurdertBehov: number
-    vurdertIkkeBehov: number
-    behovIkkePaabegynt: number
-  }
-  pvk: {
-    total: number
-    underArbeid: number
-    tilBehandlingHosPvo: number
-    tilbakemeldingFraPvo: number
-    godkjentAvRisikoeier: number
-    pvkIWord: number
-  }
-}
-
 export const getDashboardStats = async (): Promise<IAvdelingDashboardStats[]> => {
   const response = await axios.get<IAvdelingDashboardStats[]>(`${env.backendBaseUrl}/dashboard`)
   return response.data
 }
 
-export interface ISeksjonOption {
-  id: string
-  navn: string
-}
-
+// Slettes når backend har endepunkt
 const fetchAllPages = async <T>(url: string): Promise<T[]> => {
   const pageSize = 500
   const firstPage = (await axios.get<IPageResponse<T>>(`${url}?pageNumber=0&pageSize=${pageSize}`))
@@ -72,43 +44,11 @@ const fetchAllPages = async <T>(url: string): Promise<T[]> => {
   return all
 }
 
-export interface IDokKravStats {
-  totalKrav: number
-  ferdigDokumentert: number
-  underArbeid: number
-  ikkePaabegynt: number
-  behandlinger: { id: string; navn: string; nummer: number }[]
-}
-
-export interface IDokPvkStats {
-  antallScenarioer: number
-  hoyRisikoScenarioer: number
-  hoyRisikoEtterTiltak: number
-  ikkeIverksatteTiltak: number
-  tiltakFristPassert: number
-}
-
-export interface IAvdelingDetailData {
-  avdelingId: string
-  avdelingNavn: string
-  seksjoner: ISeksjonOption[]
-  totalStats: IAvdelingDashboardStats
-  statsBySeksjon: Map<string, IAvdelingDashboardStats>
-  dokumentasjoner: IEtterlevelseDokumentasjon[]
-  pvkByDokId: Map<string, IPvkDokument>
-  kravStatsByDokId: Map<string, IDokKravStats>
-  pvkStatsByDokId: Map<string, IDokPvkStats>
-}
-
-interface IDashboardDetailResponse extends IAvdelingDashboardStats {
-  seksjoner: ISeksjonOption[]
-  statsBySeksjon: Record<string, IAvdelingDashboardStats>
-}
-
+// Slettes når backend har endepunkt
 export const getAvdelingDetailStats = async (avdelingId: string): Promise<IAvdelingDetailData> => {
   const [dashboardResponse, behandlingStats, dokumentasjoner, pvkDokumenter] = await Promise.all([
     axios
-      .get<IDashboardDetailResponse>(`${env.backendBaseUrl}/dashboard/${avdelingId}`)
+      .get<IDashboardDetailResponse>(`${env.backendBaseUrl}/dashboard/avdeling/${avdelingId}`)
       .then((r) => r.data),
     getAllBehandlingStatistikk(),
     fetchAllPages<IEtterlevelseDokumentasjon>(`${env.backendBaseUrl}/etterlevelsedokumentasjon`),

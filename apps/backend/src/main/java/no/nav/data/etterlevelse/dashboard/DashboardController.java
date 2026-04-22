@@ -2,7 +2,6 @@ package no.nav.data.etterlevelse.dashboard;
 
 import java.util.List;
 
-import no.nav.data.etterlevelse.dashboard.dto.AvdelingDashBoardResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
