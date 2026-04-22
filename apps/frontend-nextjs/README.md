@@ -4,6 +4,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ### Requires Node 20.19+
 
+### Git Setup (Monorepo Hooks)
+
+This project uses Git hooks from a monorepo structure. Configure Git to find them:
+
+```bash
+git config core.hooksPath apps/frontend-nextjs/.husky
+```
+
+This tells Git where to find pre-commit hooks (dependency verification, linting, type-checking).
+
 ### Install deps
 
 `yarn install`
