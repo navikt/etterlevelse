@@ -7,32 +7,8 @@ const run = (command, args, stdio = 'inherit') =>
     encoding: 'utf8',
   })
 
-const runYarn = (args) => {
-  const corepackCommand = process.platform === 'win32' ? 'corepack.cmd' : 'corepack'
-  const corepackResult = run(corepackCommand, ['yarn', ...args])
-
-  if (!corepackResult.error) {
-    return corepackResult
-  }
-
-  if (corepackResult.error.code !== 'ENOENT') {
-    return corepackResult
-  }
-
-  const yarnCommand = process.platform === 'win32' ? 'yarn.cmd' : 'yarn'
-  return run(yarnCommand, args)
-}
-
 const gitCommand = process.platform === 'win32' ? 'git.exe' : 'git'
-const stagedFromHook = (process.env.PRECOMMIT_STAGED_FILES || '')
-  .split('\n')
-  .map((file) => file.trim())
-  .filter(Boolean)
-
-const staged =
-  stagedFromHook.length > 0
-    ? { status: 0, stdout: stagedFromHook.join('\n') }
-    : run(gitCommand, ['diff', '--cached', '--name-only'], 'pipe')
+const staged = run(gitCommand, ['diff', '--cached', '--name-only'], 'pipe')
 
 if (staged.error) {
   process.stderr.write(`${staged.error.message}\n`)
@@ -69,7 +45,8 @@ process.stdout.write(
   'Dependency manifest changes detected. Running prettier, eslint, and build...\n'
 )
 
-const verification = runYarn(['run', 'verify:deps-upgrade'])
+const yarnCommand = process.platform === 'win32' ? 'yarn.cmd' : 'yarn'
+const verification = run(yarnCommand, ['run', 'verify:deps-upgrade'])
 
 if (verification.error) {
   process.stderr.write(`${verification.error.message}\n`)

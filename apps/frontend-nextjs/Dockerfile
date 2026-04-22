@@ -3,21 +3,16 @@ FROM node:25.9.0-alpine AS builder
 
 WORKDIR /usr/app
 
-RUN npm install -g corepack --force && corepack enable
-
 COPY package.json .
 COPY yarn.lock .
-COPY .yarnrc.yml .
-COPY .yarn .yarn
 
 # Install dependencies
-RUN yarn install --immutable
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
-ENV NODE_ENV=production
+ENV NODE_ENV=productionz
 
-RUN yarn run pre-commit:deps-check
 RUN yarn run build
 
 CMD ["yarn", "run", "start"] 
