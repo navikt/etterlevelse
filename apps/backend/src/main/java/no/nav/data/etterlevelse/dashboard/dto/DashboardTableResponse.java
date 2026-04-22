@@ -45,6 +45,7 @@ public class DashboardTableResponse {
     private LocalDateTime sistOppdatertEtterlevelse;
 
     //pvk
+    private boolean hasPvkDocumentationStarted;
     private PvkVurdering pvkVurdering;
     private PvkDokumentStatus pvkStatus;
     private Integer antallRisikoscenario;

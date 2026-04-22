@@ -129,6 +129,29 @@ public class DashboardService {
                              }
                          }
 
+
+
+                        var relevantMeldingTilPvo = pvkDokument.get().getPvkDokumentData().getMeldingerTilPvo().stream()
+                                .filter(melding -> melding.getInnsendingId() == pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo())
+                                .toList();
+
+                        if (!alleRisikoscenarioer.isEmpty()) {
+                            dashboardTableResponse.setHasPvkDocumentationStarted(true);
+                        }
+                        if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
+                            dashboardTableResponse.setHasPvkDocumentationStarted(true);
+                        }
+                        if (pvkDokument.get().getPvkDokumentData().getHarInvolvertRepresentant() != null || pvkDokument.get().getPvkDokumentData().getHarDatabehandlerRepresentantInvolvering() != null ||
+                                (pvkDokument.get().getPvkDokumentData().getRepresentantInvolveringsBeskrivelse() != null &&
+                                        !Objects.equals(pvkDokument.get().getPvkDokumentData().getRepresentantInvolveringsBeskrivelse(), "")) ||
+                                (pvkDokument.get().getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse() != null &&
+                                        !Objects.equals(pvkDokument.get().getPvkDokumentData().getDataBehandlerRepresentantInvolveringBeskrivelse(), ""))
+                        ) {
+                            dashboardTableResponse.setHasPvkDocumentationStarted(true);
+                        } else {
+                            dashboardTableResponse.setHasPvkDocumentationStarted(false);
+                        }
+
                          dashboardTableResponse.setAntallRisikoscenario(antallRisikoscenario);
                          dashboardTableResponse.setAntallHoyRisikoscenario(antallHoyRisikoscenario);
                          dashboardTableResponse.setAntallHoyRisikoEtterTiltak(antallHoyRisikoEtterTiltak);
