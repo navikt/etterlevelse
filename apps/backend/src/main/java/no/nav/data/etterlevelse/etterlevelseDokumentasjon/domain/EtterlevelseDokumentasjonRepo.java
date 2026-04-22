@@ -28,8 +28,13 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<Etterlevels
     @Query(value = "select * from etterlevelse_dokumentasjon", nativeQuery = true )
     List<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjoner();
 
+    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'nomAvdelingId' = ?1", nativeQuery = true )
+    List<EtterlevelseDokumentasjon> getByAvdelingId(String avdelingId);
+
+
     @Query(value = "select * from etterlevelse_dokumentasjon where data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
             countQuery = "select count(1) from etterlevelse_dokumentasjon where data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
             nativeQuery = true)
     Page<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjonWithValidBehandling(Pageable pageable);
+
 }
