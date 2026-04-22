@@ -68,7 +68,9 @@ public class DashboardService {
         List<DashboardTableResponse> tableResponses = allEdoksWithAvdeling.stream()
                 .map(dok -> {
                     List<Etterlevelse> etterlevelserForDok = etterlevelseService.getByEtterlevelseDokumentasjon(dok.getId());
-                    List<Krav> kravForEdok = aktivKrav.stream().filter(k -> !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
+                    List<Krav> kravForEdok = aktivKrav.stream().filter(k ->
+                            !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
+                    ).toList();
                     var etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(dok);
                     etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
                     var dashboardTableResponse = DashboardTableResponse.buildFrom(etterlevelseDokumentasjonResponse);
@@ -98,7 +100,6 @@ public class DashboardService {
 
                              if(scenarioData.getKonsekvensNivaaEtterTiltak() != null && scenarioData.getSannsynlighetsNivaaEtterTiltak() != null && scenarioData.getNivaaBegrunnelseEtterTiltak() != null && !scenarioData.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
                                   antallRisikoscenario = (antallRisikoscenario == null) ? 1 : antallRisikoscenario  + 1;
-
                                   if (scenarioData.getSannsynlighetsNivaa() >= 4 && scenarioData.getKonsekvensNivaa() >= 4) {
                                       antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
                                   } else if (scenarioData.getSannsynlighetsNivaa() == 3 && scenarioData.getKonsekvensNivaa() == 5) {
@@ -114,7 +115,17 @@ public class DashboardService {
                                  } else if (scenarioData.getSannsynlighetsNivaaEtterTiltak() == 5 && scenarioData.getKonsekvensNivaaEtterTiltak() == 3) {
                                      antallHoyRisikoEtterTiltak = (antallHoyRisikoEtterTiltak == null) ? 1 : antallHoyRisikoEtterTiltak  + 1;
                                  }
+                             } else if (scenarioData.getIngenTiltak() == true && scenarioData.getSannsynlighetsNivaa() != null && scenarioData.getKonsekvensNivaa() != null) {
+                                 antallRisikoscenario = (antallRisikoscenario == null) ? 1 : antallRisikoscenario  + 1;
+                                 if (scenarioData.getSannsynlighetsNivaa() >= 4 && scenarioData.getKonsekvensNivaa() >= 4) {
+                                     antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
+                                 } else if (scenarioData.getSannsynlighetsNivaa() == 3 && scenarioData.getKonsekvensNivaa() == 5) {
+                                     antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
+                                 } else if (scenarioData.getSannsynlighetsNivaa() == 5 && scenarioData.getKonsekvensNivaa() == 3) {
+                                     antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
+
                              }
+                           }
                          }
 
                          for (Tiltak tiltak : alleTiltak) {
@@ -288,7 +299,9 @@ public class DashboardService {
             else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
 
             var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
-            List<Krav> kravForEdok = aktivKrav.stream().filter(k -> !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
+            List<Krav> kravForEdok = aktivKrav.stream().filter(k ->
+                    !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
+            ).toList();
             var aktivEtterlevelseList = etterlevelseList.stream()
                     .filter(e -> kravForEdok.stream().anyMatch(k ->
                             k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
