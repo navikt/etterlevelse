@@ -11,7 +11,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-ENV NODE_ENV=productionz
+ENV NODE_ENV=production
 
 RUN yarn run build
 
