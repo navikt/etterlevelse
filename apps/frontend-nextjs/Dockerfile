@@ -3,7 +3,7 @@ FROM node:25.9.0-alpine AS builder
 
 WORKDIR /usr/app
 
-RUN corepack enable
+RUN npm install -g corepack && corepack enable
 
 COPY package.json .
 COPY yarn.lock .
