@@ -66,7 +66,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   useEffect(() => {
     ;(async () => {
       await getDashboardAvdelingStats(avdelingId)
-        .then(setData)
+        .then((response) => {
+          response.statsBySeksjon = new Map(Object.entries(response.statsBySeksjon ?? {}))
+          setData(response)
+        })
         .finally(() => setIsLoading(false))
 
       await getDashboardTableByAvdeling(avdelingId)
@@ -152,7 +155,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         return String(aVal).localeCompare(String(bVal)) * dir
       })
     }
-  }, [sort, tableData])
+  }, [sort, tableData, selectedSeksjon])
 
   if (isLoading || data == null) {
     return (
@@ -173,7 +176,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       return data
     }
   }
-  console.debug(tableData)
 
   return (
     <PageLayout
