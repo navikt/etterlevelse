@@ -7,9 +7,11 @@ RUN npm install -g corepack --force && corepack enable
 
 COPY package.json .
 COPY yarn.lock .
+COPY .yarnrc.yml .
+COPY .yarn .yarn
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 COPY . .
 
