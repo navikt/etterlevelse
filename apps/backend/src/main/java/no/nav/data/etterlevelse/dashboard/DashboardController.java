@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.dashboard;
 
 import java.util.List;
 
+import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,16 +34,15 @@ public class DashboardController {
 
     @Operation(summary = "Get dashboard stats for a single avdeling")
     @ApiResponse(description = "ok")
-    @GetMapping("/{avdelingId}")
-    public ResponseEntity<DashboardResponse> getAvdelingStatsDEPRECATED(@PathVariable String avdelingId) {
-        return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
-    }
-
-
-    @Operation(summary = "Get dashboard stats for a single avdeling")
-    @ApiResponse(description = "ok")
     @GetMapping("/avdeling/{avdelingId}")
     public ResponseEntity<DashboardResponse> getAvdelingStats(@PathVariable String avdelingId) {
         return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
+    }
+
+    @Operation(summary = "Get dashboard stats for a single avdeling")
+    @ApiResponse(description = "ok")
+    @GetMapping("/table/avdeling/{avdelingId}")
+    public ResponseEntity<List<DashboardTableResponse>> getTableDashboardForAvdeling(@PathVariable String avdelingId) {
+        return ResponseEntity.ok(dashboardService.getDashboardTable(avdelingId));
     }
 }

@@ -1,19 +1,21 @@
 package no.nav.data.etterlevelse.dashboard;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import no.nav.data.etterlevelse.dashboard.dto.*;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.integration.nom.domain.OrgEnhet;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.tiltak.TiltakService;
+import no.nav.data.pvk.tiltak.domain.Tiltak;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,8 @@ public class DashboardService {
     private final KravService kravService;
     private final PvkDokumentService pvkDokumentService;
     private final NomGraphClient nomGraphClient;
+    private final RisikoscenarioService risikoscenarioService;
+    private final TiltakService tiltakService;
 
     public List<DashboardResponse> getDashboardStats() {
         var avdelinger = nomGraphClient.getAllAvdelinger().stream().sorted(Comparator.comparing(OrgEnhet::getNavn)).toList();
@@ -55,6 +59,112 @@ public class DashboardService {
         }
         getStatsForEtterlevelsesDokumentWithNoAvdeling(result);
         return result;
+    }
+
+    public List<DashboardTableResponse> getDashboardTable(String avdelingId) {
+        List<EtterlevelseDokumentasjon> allEdoksWithAvdeling = etterlevelseDokumentasjonService.getByAvdeling(avdelingId);
+        List<Krav> aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
+        LocalDate now = LocalDate.now();
+        List<DashboardTableResponse> tableResponses = allEdoksWithAvdeling.stream()
+                .map(dok -> {
+                    List<Etterlevelse> etterlevelserForDok = etterlevelseService.getByEtterlevelseDokumentasjon(dok.getId());
+                    List<Krav> kravForEdok = aktivKrav.stream().filter(k -> new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
+                    var etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(dok);
+                    etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
+                    var dashboardTableResponse = DashboardTableResponse.buildFrom(etterlevelseDokumentasjonResponse);
+
+                    Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(dok.getId());
+
+                    //setting up pvkstats
+                    if(pvkDokument.isPresent()) {
+                        LocalDateTime lastModifiedDate = pvkDokument.get().getLastModifiedDate();
+                        dashboardTableResponse.setPvkStatus(pvkDokument.get().getStatus());
+                        dashboardTableResponse.setPvkVurdering(pvkDokument.get().getPvkDokumentData().getPvkVurdering());
+
+                        List<Risikoscenario> alleRisikoscenarioer = risikoscenarioService.getByPvkDokument(pvkDokument.get().getId().toString(), RisikoscenarioType.ALL);
+                        List<Tiltak> alleTiltak = tiltakService.getByPvkDokument(pvkDokument.get().getId());
+
+                         Integer antallRisikoscenario = null;
+                         Integer antallHoyRisikoscenario = null;
+                         Integer antallHoyRisikoEtterTiltak = null;
+                         Integer antallIkkeIverksattTiltak = null;
+                         Integer antallTiltakFristPassert = null;
+
+                         for (Risikoscenario scenario : alleRisikoscenarioer)   {
+                             var scenarioData = scenario.getRisikoscenarioData();
+                             if (scenario.getLastModifiedDate().isAfter(lastModifiedDate)) {
+                                 lastModifiedDate = scenario.getLastModifiedDate();
+                             }
+
+                             if(scenarioData.getKonsekvensNivaaEtterTiltak() != null && scenarioData.getSannsynlighetsNivaaEtterTiltak() != null && scenarioData.getNivaaBegrunnelseEtterTiltak() != null && !scenarioData.getNivaaBegrunnelseEtterTiltak().isEmpty()) {
+                                  antallRisikoscenario = (antallRisikoscenario == null) ? 1 : antallRisikoscenario  + 1;
+
+                                  if (scenarioData.getSannsynlighetsNivaa() >= 4 && scenarioData.getKonsekvensNivaa() >= 4) {
+                                      antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
+                                  } else if (scenarioData.getSannsynlighetsNivaa() == 3 && scenarioData.getKonsekvensNivaa() == 5) {
+                                      antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
+                                  } else if (scenarioData.getSannsynlighetsNivaa() == 5 && scenarioData.getKonsekvensNivaa() == 3) {
+                                      antallHoyRisikoscenario = (antallHoyRisikoscenario == null) ? 1 : antallHoyRisikoscenario  + 1;
+                                  }
+
+                                 if (scenarioData.getSannsynlighetsNivaaEtterTiltak() >= 4 && scenarioData.getKonsekvensNivaaEtterTiltak() >= 4) {
+                                     antallHoyRisikoEtterTiltak = (antallHoyRisikoEtterTiltak == null) ? 1 : antallHoyRisikoEtterTiltak  + 1;
+                                 } else if (scenarioData.getSannsynlighetsNivaaEtterTiltak() == 3 && scenarioData.getKonsekvensNivaaEtterTiltak() == 5) {
+                                     antallHoyRisikoEtterTiltak = (antallHoyRisikoEtterTiltak == null) ? 1 : antallHoyRisikoEtterTiltak  + 1;
+                                 } else if (scenarioData.getSannsynlighetsNivaaEtterTiltak() == 5 && scenarioData.getKonsekvensNivaaEtterTiltak() == 3) {
+                                     antallHoyRisikoEtterTiltak = (antallHoyRisikoEtterTiltak == null) ? 1 : antallHoyRisikoEtterTiltak  + 1;
+                                 }
+                             }
+                         }
+
+                         for (Tiltak tiltak : alleTiltak) {
+                             if (tiltak.getLastModifiedDate().isAfter(lastModifiedDate)) {
+                                 lastModifiedDate = tiltak.getLastModifiedDate();
+                             }
+                             if(!tiltak.getTiltakData().isIverksatt()) {
+                                 antallIkkeIverksattTiltak = (antallIkkeIverksattTiltak == null) ? 1 : antallIkkeIverksattTiltak  + 1;
+                                 if (tiltak.getTiltakData().getFrist() != null && tiltak.getTiltakData().getFrist().isBefore(now)) {
+                                     antallTiltakFristPassert = (antallTiltakFristPassert == null) ? 1 : antallTiltakFristPassert  + 1;
+                                 }
+                             }
+                         }
+
+                         dashboardTableResponse.setAntallRisikoscenario(antallRisikoscenario);
+                         dashboardTableResponse.setAntallHoyRisikoscenario(antallHoyRisikoscenario);
+                         dashboardTableResponse.setAntallHoyRisikoEtterTiltak(antallHoyRisikoEtterTiltak);
+                         dashboardTableResponse.setAntallIkkeIverksattTiltak(antallIkkeIverksattTiltak);
+                         dashboardTableResponse.setAntallTiltakFristPassert(antallTiltakFristPassert);
+                         dashboardTableResponse.setSistOppdatertPvk(lastModifiedDate);
+                    }
+
+
+                    //etterlevelseStats
+
+                    LocalDateTime sistOppdatertEtterlevelse = LocalDateTime.of(2000, 1, 1, 0, 0);
+
+                    var oppfyltEtterlevelseList = etterlevelserForDok.stream()
+                            .filter(e -> kravForEdok.stream().anyMatch(k ->
+                                    k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon()))
+                            && (e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+                            .toList();
+
+                    for (Etterlevelse etterlevelse : etterlevelserForDok) {
+                        if(etterlevelse.getLastModifiedDate().isAfter(sistOppdatertEtterlevelse)) {
+                            sistOppdatertEtterlevelse = etterlevelse.getLastModifiedDate();
+                        }
+                    }
+
+                    dashboardTableResponse.setAntallKrav(kravForEdok.size());
+                    dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
+                    dashboardTableResponse.setOppfyltKravProsent( (oppfyltEtterlevelseList.size() / kravForEdok.size()) * 100 );
+                    dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
+
+                    return dashboardTableResponse;
+                })
+                .sorted(Comparator.comparing(DashboardTableResponse::getEtterlevelseNummer))
+                .collect(Collectors.toList());
+
+        return tableResponses;
     }
 
     public DashboardResponse getAvdelingStats(String avdelingId) {
@@ -102,7 +212,7 @@ public class DashboardService {
         ).toList();
 
         if(!eDoksWithNoSeksjon.isEmpty()) {
-            seksjonOptions.add(SeksjonOption.builder().id("ingen-seksjon").navn("Seksjon ikke valgt").build());
+            seksjonOptions.add(SeksjonOption.builder().id("ingen-seksjon").navn("Ikke valgt seksjon").build());
             var seksjonStats = createAvdelingDashBoardResponse("ingen-seksjon", "Seksjon ikke valgt", eDoksWithNoSeksjon, pvkByDokId, aktivKrav, etterlevelseByDokId);
             statsBySeksjon.put("ingen-seksjon", seksjonStats);
         }
@@ -127,7 +237,7 @@ public class DashboardService {
             var dokIds = allDoks.stream().map(EtterlevelseDokumentasjon::getId).toList();
             var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
 
-            var result = createAvdelingDashBoardResponse("ingen-avdeling", "Avdeling ikke valgt", allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
+            var result = createAvdelingDashBoardResponse("ingen-avdeling", "Ikke valgt avdeling", allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
             dashboardStats.add(result);
         }
     }
@@ -154,8 +264,9 @@ public class DashboardService {
             else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
 
             var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
+            List<Krav> kravForEdok = aktivKrav.stream().filter(k -> new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor())).toList();
             var aktivEtterlevelseList = etterlevelseList.stream()
-                    .filter(e -> aktivKrav.stream().anyMatch(k ->
+                    .filter(e -> kravForEdok.stream().anyMatch(k ->
                             k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
                     .toList();
 
