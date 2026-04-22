@@ -200,10 +200,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     <PageLayout
       pageTitle={data.avdelingNavn}
       currentPage={data.avdelingNavn}
-      breadcrumbPaths={[
-        { href: '/', pathName: 'Forsiden' },
-        { href: '/dashboard', pathName: 'Dashboard' },
-      ]}
+      breadcrumbPaths={[{ href: '/dashboard', pathName: 'Dashboard' }]}
     >
       <div className='mt-4'>
         <Heading size='large' level='1'>
