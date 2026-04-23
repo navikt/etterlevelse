@@ -13,6 +13,7 @@ COPY . .
 
 ENV NODE_ENV=production
 
+RUN yarn run pre-commit:deps-check
 RUN yarn run build
 
 CMD ["yarn", "run", "start"] 
