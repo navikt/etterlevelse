@@ -471,10 +471,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           </Table.DataCell>
                           <Table.DataCell align='center'>
                             <TrafficDot
-                              color={getOppfyltTrafficColor(
-                                dok.antallOppfyltKrav || 0,
-                                dok.antallKrav || 0
-                              )}
+                              color={
+                                dok.oppfyltKravProsent != null && dok.oppfyltKravProsent > 0
+                                  ? getOppfyltTrafficColor(dok.oppfyltKravProsent, 100)
+                                  : '#C6C2BF'
+                              }
                             />
                             {dok.oppfyltKravProsent && dok.oppfyltKravProsent > 0
                               ? `${dok.oppfyltKravProsent}%`

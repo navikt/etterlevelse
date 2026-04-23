@@ -195,8 +195,21 @@ public class DashboardService {
                     var oppfyltEtterlevelseList = etterlevelserForDok.stream()
                             .filter(e -> kravForEdok.stream().anyMatch(k ->
                                     k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon()))
-                            && (e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+                            && e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT)
                             .toList();
+
+                    long ikkeRelevantCount = etterlevelserForDok.stream()
+                            .filter(e -> kravForEdok.stream().anyMatch(k ->
+                                    k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon()))
+                            && (e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+                            .count();
+
+                    long besvartCount = etterlevelserForDok.stream()
+                            .filter(e -> kravForEdok.stream().anyMatch(k ->
+                                    k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
+                            .count();
+
+                    long ikkeBesvartCount = kravForEdok.size() - besvartCount;
 
                     for (Etterlevelse etterlevelse : etterlevelserForDok) {
                         if(etterlevelse.getLastModifiedDate().isAfter(sistOppdatertEtterlevelse)) {
@@ -206,7 +219,8 @@ public class DashboardService {
 
                     dashboardTableResponse.setAntallKrav(kravForEdok.size());
                     dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
-                    double prosent = !kravForEdok.isEmpty() ? ((double) oppfyltEtterlevelseList.size() / kravForEdok.size()) * 100 : 0;
+                    long oppfyltDenominator = kravForEdok.size() - ikkeBesvartCount - ikkeRelevantCount;
+                    double prosent = oppfyltDenominator > 0 ? ((double) oppfyltEtterlevelseList.size() / oppfyltDenominator) * 100 : 0;
                     dashboardTableResponse.setOppfyltKravProsent( (int) Math.round(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
 
