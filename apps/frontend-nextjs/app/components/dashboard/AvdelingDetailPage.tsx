@@ -328,7 +328,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     {sortedDoks.map((dok) => {
                       return (
                         <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                          <Table.DataCell>
+                          <Table.DataCell className='dashboard-cell-wide'>
                             <Link
                               href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
                               target='_blank'
@@ -374,7 +374,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               dok.hasPvkDocumentationStarted
                             )}
                           </Table.DataCell>
-                          <Table.DataCell>
+                          <Table.DataCell className='dashboard-cell-wide'>
                             {dok.behandlinger?.map((b) => (
                               <div key={b.id}>
                                 <Link
@@ -432,7 +432,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     {sortedDoks.map((dok) => {
                       return (
                         <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                          <Table.DataCell>
+                          <Table.DataCell className='dashboard-cell-wide'>
                             <Link
                               href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
                               target='_blank'
@@ -544,7 +544,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     {sortedDoks.map((dok) => {
                       return (
                         <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                          <Table.DataCell>
+                          <Table.DataCell className='dashboard-cell-wide'>
                             <Link
                               href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
                               target='_blank'

@@ -72,6 +72,12 @@ iframe#webpack-dev-server-client-overlay {
   white-space: nowrap;
 }
 
+.dashboard-table td.dashboard-cell-wide {
+  white-space: normal;
+  min-width: 75ch;
+  word-break: break-word;
+}
+
 /* Locked "Behandler personopplysninger" checkbox: custom marker colors (no padlock overlay) */
 .behandler-personopplysninger--locked.aksel-checkbox--readonly
   .aksel-checkbox__input:where(:checked, :indeterminate) {
