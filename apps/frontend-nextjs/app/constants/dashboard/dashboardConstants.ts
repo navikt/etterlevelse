@@ -105,6 +105,7 @@ export interface IAvdelingDashboardStats {
   }
   pvk: {
     total: number
+    ikkePaabegynt: number
     underArbeid: number
     tilBehandlingHosPvo: number
     tilbakemeldingFraPvo: number

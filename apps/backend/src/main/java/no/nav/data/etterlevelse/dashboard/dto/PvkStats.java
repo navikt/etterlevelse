@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PvkStats {
     private int total;
+    private int ikkePaabegynt;
     private int underArbeid;
     private int tilBehandlingHosPvo;
     private int tilbakemeldingFraPvo;
