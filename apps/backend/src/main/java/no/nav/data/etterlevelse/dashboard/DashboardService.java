@@ -400,12 +400,20 @@ public class DashboardService {
                     var relevantMeldingTilPvo = pvkDokData.getMeldingerTilPvo().stream()
                             .filter(melding -> melding.getInnsendingId() == pvkDokData.getAntallInnsendingTilPvo())
                             .toList();
-                    boolean hasPvkStarted = !risikoscenarioer.isEmpty()
-                            || (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), ""))
-                            || pvkDokData.getHarInvolvertRepresentant() != null
-                            || pvkDokData.getHarDatabehandlerRepresentantInvolvering() != null
-                            || (pvkDokData.getRepresentantInvolveringsBeskrivelse() != null && !Objects.equals(pvkDokData.getRepresentantInvolveringsBeskrivelse(), ""))
-                            || (pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse() != null && !Objects.equals(pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""));
+                    boolean hasPvkStarted = false;
+                    if (!risikoscenarioer.isEmpty()) {
+                        hasPvkStarted = true;
+                    }
+                    if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
+                        hasPvkStarted = true;
+                    }
+                    if (pvkDokData.getHarInvolvertRepresentant() != null || pvkDokData.getHarDatabehandlerRepresentantInvolvering() != null ||
+                            (pvkDokData.getRepresentantInvolveringsBeskrivelse() != null && !Objects.equals(pvkDokData.getRepresentantInvolveringsBeskrivelse(), "")) ||
+                            (pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse() != null && !Objects.equals(pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""))) {
+                        hasPvkStarted = true;
+                    } else {
+                        hasPvkStarted = false;
+                    }
                     if (!hasPvkStarted) {
                         pvkIkkePaabegynt++;
                     } else {
