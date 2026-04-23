@@ -1,9 +1,6 @@
 [![CodeQL](https://github.com/navikt/etterlevelse/actions/workflows/github-code-scanning/codeql/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/github-code-scanning/codeql)
 
 [![Dependabot Updates](https://github.com/navikt/etterlevelse/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/dependabot/dependabot-updates)
-[![Dependabot Alerts](https://github.com/navikt/etterlevelse/security/dependabot/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/security/dependabot)
-[![Code Scanning](https://github.com/navikt/etterlevelse/security/code-scanning/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/security/code-scanning)
-[![Standard Finding](https://github.com/navikt/etterlevelse/security/quality/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/security/quality)
 
 [![Backend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-backend.yml/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-backend.yml)
 [![Frontend](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml/badge.svg)](https://github.com/navikt/etterlevelse/actions/workflows/etterlevelse-frontend-nextjs.yml)
