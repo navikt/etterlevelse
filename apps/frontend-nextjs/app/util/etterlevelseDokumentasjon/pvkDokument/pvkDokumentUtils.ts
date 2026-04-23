@@ -143,6 +143,38 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
   }
 }
 
+export const getPvkStatusText = (
+  pvkVurdering: EPvkVurdering,
+  pvkStatus: EPvkDokumentStatus,
+  hasPvkDocumentationStarted: boolean
+): string => {
+  if (!pvkVurdering && !pvkStatus) {
+    return 'Ikke vurdert behov'
+  } else {
+    if (pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) {
+      return 'Vurdert: ikke behov'
+    } else if (pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) {
+      return 'PVK i Word'
+    } else if (!hasPvkDocumentationStarted) {
+      return 'Ikke påbegynt'
+    } else if (pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+      return 'Godkjent av risikoeier'
+    } else if (pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING) {
+      return 'Sendt til risikoeier'
+    } else if (
+      pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
+      pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
+      pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+    )
+      return 'Sendt til PVO'
+    else if (pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO) {
+      return 'Fått tilbakemelding fra PVO'
+    } else {
+      return 'Under arbeid'
+    }
+  }
+}
+
 export const addNewMeldingTilPvo = (
   pvkDokument: IPvkDokument,
   innsendingId: number,

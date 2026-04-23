@@ -372,6 +372,10 @@ public class EtterlevelseDokumentasjonService {
         return etterlevelseDokumentasjonRepoCustom.findByKravRelevans(kravRelevans);
     }
 
+    public List<EtterlevelseDokumentasjon> getByAvdeling(String nomAvdelingId) {
+        return etterlevelseDokumentasjonRepo.getByAvdelingId(nomAvdelingId);
+    }
+
     // Does not update DB
     // TODO: Skal ikke være avhengighet til dto i service
     public void addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {

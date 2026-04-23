@@ -1,7 +1,8 @@
-package no.nav.data.etterlevelse.statistikk;
+package no.nav.data.etterlevelse.dashboard;
 
 import java.util.List;
 
+import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.etterlevelse.statistikk.dto.DashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
 
 @Slf4j
 @RestController
@@ -28,13 +29,31 @@ public class DashboardController {
     @ApiResponse(description = "ok")
     @GetMapping
     public ResponseEntity<List<DashboardResponse>> getDashboardStats() {
+        log.info("Getting dashboard for all avdeling");
         return ResponseEntity.ok(dashboardService.getDashboardStats());
     }
 
     @Operation(summary = "Get dashboard stats for a single avdeling")
     @ApiResponse(description = "ok")
-    @GetMapping("/{avdelingId}")
+    @GetMapping("/avdeling/{avdelingId}")
     public ResponseEntity<DashboardResponse> getAvdelingStats(@PathVariable String avdelingId) {
-        return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
+        log.info("Getting dashboard for avdeling with id={}", avdelingId);
+        if (avdelingId.isEmpty() || avdelingId.equals("ingen-avdeling")) {
+            return ResponseEntity.ok(dashboardService.getStatsForEtterlevelsesDokumentWithNoAvdeling());
+        } else {
+            return ResponseEntity.ok(dashboardService.getAvdelingStats(avdelingId));
+        }
+    }
+
+    @Operation(summary = "Get dashboard stats for a single avdeling")
+    @ApiResponse(description = "ok")
+    @GetMapping("/table/avdeling/{avdelingId}")
+    public ResponseEntity<List<DashboardTableResponse>> getTableDashboardForAvdeling(@PathVariable String avdelingId) {
+        log.info("Getting dashboard table for avdeling with id={}", avdelingId);
+        if (avdelingId.isEmpty() || avdelingId.equals("ingen-avdeling")) {
+            return ResponseEntity.ok(dashboardService.getDashboardTable(""));
+        } else {
+            return ResponseEntity.ok(dashboardService.getDashboardTable(avdelingId));
+        }
     }
 }

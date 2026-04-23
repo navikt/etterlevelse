@@ -1,6 +1,6 @@
 'use client'
 
-import { IAvdelingDashboardStats } from '@/api/dashboard/dashboardApi'
+import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
 import { useState } from 'react'
 
@@ -182,13 +182,13 @@ const PieWithLegend = ({ data, hasData }: { data: IPieSlice[]; hasData: boolean 
 export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
   const dokSlices: IPieSlice[] = [
     {
-      name: `Ikke påbegynt (${stats.dokumenter.ikkePaabegynt})`,
-      value: stats.dokumenter.ikkePaabegynt,
+      name: `Under arbeid (${stats.dokumenter.underArbeid})`,
+      value: stats.dokumenter.underArbeid,
       color: DOK_COLORS[0],
     },
     {
-      name: `Under arbeid (${stats.dokumenter.underArbeid})`,
-      value: stats.dokumenter.underArbeid,
+      name: `Sendt til godkjenning (${stats.dokumenter.sendtTilGodkjenning})`,
+      value: stats.dokumenter.sendtTilGodkjenning,
       color: DOK_COLORS[1],
     },
     {
@@ -296,9 +296,7 @@ export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>
-            Behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
-          </BodyShort>
+          <BodyShort weight='semibold'>Behov for PVK</BodyShort>
           <PieWithLegend data={behovSlices} hasData={hasBehovData} />
         </div>
 
