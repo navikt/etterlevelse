@@ -2,40 +2,52 @@ package no.nav.data.etterlevelse.dashboard;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import no.nav.data.etterlevelse.dashboard.dto.*;
-import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
-import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.integration.nom.domain.OrgEnhet;
-import no.nav.data.pvk.pvkdokument.PvkDokumentService;
-import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
-import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
-import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
-import no.nav.data.pvk.tiltak.TiltakService;
-import no.nav.data.pvk.tiltak.domain.Tiltak;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.etterlevelse.dashboard.dto.BehovForPvkStats;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DokumenterStats;
+import no.nav.data.etterlevelse.dashboard.dto.PvkStats;
+import no.nav.data.etterlevelse.dashboard.dto.SeksjonOption;
+import no.nav.data.etterlevelse.dashboard.dto.SuksesskriterierStats;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieBegrunnelse;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.integration.nom.NomGraphClient;
+import no.nav.data.integration.nom.domain.OrgEnhet;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
+import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
+import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
+import no.nav.data.pvk.tiltak.TiltakService;
+import no.nav.data.pvk.tiltak.domain.Tiltak;
 
 @Slf4j
 @Service
@@ -366,6 +378,7 @@ public class DashboardService {
                 } else if (vurdering == null || vurdering == PvkVurdering.UNDEFINED) {
                     ikkeVurdertBehov++;
                 } else {
+                    behovIkkePaabegynt++;
                     pvkTotal++;
                     var pvkStatus = pvk.getFirst().getStatus();
                     if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {

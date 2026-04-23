@@ -12,6 +12,10 @@ import {
   IDashboardDetailResponse,
   IDashboardTable,
 } from '@/constants/dashboard/dashboardConstants'
+import {
+  EPvkDokumentStatus,
+  EPvkVurdering,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { getPvkStatusText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { handleSort } from '@/util/handleTableSort'
@@ -22,6 +26,35 @@ import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 interface IProps {
   avdelingId: string
+}
+
+const getBehovForPvkText = (pvkVurdering: EPvkVurdering): string => {
+  if (!pvkVurdering || pvkVurdering === EPvkVurdering.UNDEFINED) return 'Ikke vurdert behov'
+  if (pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'Skal ikke gjennomføre PVK'
+  if (pvkVurdering === EPvkVurdering.SKAL_UTFORE) return 'Skal gjennomføre PVK'
+  if (pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) return 'PVK i Word'
+  return 'Ikke vurdert behov'
+}
+
+const getPvkOnlyStatusText = (
+  pvkVurdering: EPvkVurdering,
+  pvkStatus: EPvkDokumentStatus,
+  hasPvkDocumentationStarted: boolean
+): string => {
+  if (!pvkVurdering || pvkVurdering === EPvkVurdering.UNDEFINED) return '-'
+  if (pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return '-'
+  if (pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) return '-'
+  if (!hasPvkDocumentationStarted) return 'Ikke påbegynt'
+  if (pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) return 'Godkjent av risikoeier'
+  if (pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING) return 'Sendt til risikoeier'
+  if (
+    pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
+    pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
+    pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+  )
+    return 'Sendt til PVO'
+  if (pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO) return 'Fått tilbakemelding fra PVO'
+  return 'Under arbeid'
 }
 
 const getKravTrafficColor = (ferdig: number, total: number): string => {
@@ -112,8 +145,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               return dok.seksjoner?.map((s) => s.nomSeksjonName).join(', ') || ''
             case 'etterlevelse':
               return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
-            case 'pvk':
-              return getPvkStatusText(
+            case 'behovForPvk':
+              return getBehovForPvkText(dok.pvkVurdering)
+            case 'pvkStatus':
+              return getPvkOnlyStatusText(
                 dok.pvkVurdering,
                 dok.pvkDokumentStatus,
                 dok.hasPvkDocumentationStarted
@@ -278,8 +313,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       <Table.ColumnHeader sortable sortKey='etterlevelse'>
                         Etterlevelse
                       </Table.ColumnHeader>
-                      <Table.ColumnHeader sortable sortKey='pvk'>
-                        PVK
+                      <Table.ColumnHeader sortable sortKey='behovForPvk'>
+                        Behov for PVK
+                      </Table.ColumnHeader>
+                      <Table.ColumnHeader sortable sortKey='pvkStatus'>
+                        PVK status
                       </Table.ColumnHeader>
                       <Table.ColumnHeader sortable sortKey='behandlinger'>
                         Behandlinger
@@ -328,8 +366,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           <Table.DataCell>
                             {getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)}
                           </Table.DataCell>
+                          <Table.DataCell>{getBehovForPvkText(dok.pvkVurdering)}</Table.DataCell>
                           <Table.DataCell>
-                            {getPvkStatusText(
+                            {getPvkOnlyStatusText(
                               dok.pvkVurdering,
                               dok.pvkDokumentStatus,
                               dok.hasPvkDocumentationStarted

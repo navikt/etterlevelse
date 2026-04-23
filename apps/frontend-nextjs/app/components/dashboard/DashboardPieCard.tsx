@@ -223,17 +223,17 @@ export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
 
   const behovSlices: IPieSlice[] = [
     {
-      name: `Ikke ennå vurdert behov (${stats.behovForPvk.ikkeVurdertBehov})`,
+      name: `Ikke vurdert behov (${stats.behovForPvk.ikkeVurdertBehov})`,
       value: stats.behovForPvk.ikkeVurdertBehov,
       color: BEHOV_COLORS[0],
     },
     {
-      name: `Vurdert, ikke behov (${stats.behovForPvk.vurdertIkkeBehov})`,
+      name: `Skal ikke gjennomføre PVK (${stats.behovForPvk.vurdertIkkeBehov})`,
       value: stats.behovForPvk.vurdertIkkeBehov,
       color: BEHOV_COLORS[1],
     },
     {
-      name: `Behov, ikke påbegynt (${stats.behovForPvk.behovIkkePaabegynt})`,
+      name: `Skal gjennomføre PVK (${stats.behovForPvk.behovIkkePaabegynt})`,
       value: stats.behovForPvk.behovIkkePaabegynt,
       color: BEHOV_COLORS[2],
     },
@@ -306,7 +306,7 @@ export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>PVK ({stats.pvk.total})</BodyShort>
+          <BodyShort weight='semibold'>PVK status ({stats.pvk.total})</BodyShort>
           <PieWithLegend data={pvkSlices} hasData={hasPvkData} />
         </div>
       </div>
