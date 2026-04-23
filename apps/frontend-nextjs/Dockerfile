@@ -7,7 +7,7 @@ COPY package.json .
 COPY yarn.lock .
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+ENV YARN_VERSION=4.14.1
 
 COPY . .
 
