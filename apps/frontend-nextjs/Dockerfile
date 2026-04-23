@@ -7,7 +7,7 @@ COPY package.json .
 COPY yarn.lock .
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 COPY . .
 
