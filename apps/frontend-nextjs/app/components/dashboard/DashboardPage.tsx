@@ -1,8 +1,8 @@
 'use client'
 
 import { getDashboardStats } from '@/api/dashboard/dashboardApi'
+import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
-import { DashboardPieCard } from '@/components/dashboard/DashboardPieCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
@@ -72,7 +72,7 @@ const DashboardPage = () => {
           <Tabs.Panel value='figurer'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
               {stats.map((avdelingStats) => (
-                <DashboardPieCard key={avdelingStats.avdelingId} stats={avdelingStats} />
+                <DashboardBarCard key={avdelingStats.avdelingId} stats={avdelingStats} />
               ))}
             </div>
           </Tabs.Panel>
