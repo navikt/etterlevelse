@@ -231,6 +231,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </LocalAlert.Content>
       </LocalAlert>
 
+      <div className='mt-4'>
+        <Heading size='large' level='1'>
+          {data.avdelingNavn}
+        </Heading>
+      </div>
+
       {avdelingId === 'ingen-avdeling' && (
         <LocalAlert status='warning' className='mt-4'>
           <LocalAlert.Header>
@@ -243,12 +249,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           </LocalAlert.Content>
         </LocalAlert>
       )}
-
-      <div className='mt-4'>
-        <Heading size='large' level='1'>
-          {data.avdelingNavn}
-        </Heading>
-      </div>
 
       {data.seksjoner && data.seksjoner.length > 0 && (
         <Select
