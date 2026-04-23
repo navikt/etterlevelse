@@ -19,7 +19,7 @@ const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
 const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
 const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4']
 
-const StackedBar = ({ data }: { data: IBarSegment[] }) => {
+const StackedBar = ({ data, isPercentage }: { data: IBarSegment[]; isPercentage?: boolean }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
   const hasData = total > 0
 
@@ -56,7 +56,7 @@ const StackedBar = ({ data }: { data: IBarSegment[] }) => {
               }}
             />
             <BodyShort size='small'>
-              {d.name} ({d.value})
+              {d.name} {isPercentage ? `${d.value}%` : `(${d.value})`}
             </BodyShort>
           </div>
         ))}
@@ -164,7 +164,7 @@ export const DashboardBarCard = ({ stats, hideHeader }: IProps) => {
           <Heading size='xsmall' level='3'>
             Suksesskriterier (etterlevelseskrav)
           </Heading>
-          <StackedBar data={suksessData} />
+          <StackedBar data={suksessData} isPercentage />
         </div>
 
         <div>
