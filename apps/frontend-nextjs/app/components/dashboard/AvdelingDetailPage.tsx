@@ -108,6 +108,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               return dok.resourcesData?.map((resource) => resource.fullName).join(', ') || ''
             case 'risikoeier':
               return dok.risikoeiereData?.map((risikoeier) => risikoeier.fullName).join(', ') || ''
+            case 'seksjon':
+              return dok.seksjoner?.map((s) => s.nomSeksjonName).join(', ') || ''
             case 'etterlevelse':
               return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
             case 'pvk':
@@ -270,6 +272,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       <Table.ColumnHeader sortable sortKey='risikoeier'>
                         Risikoeier
                       </Table.ColumnHeader>
+                      <Table.ColumnHeader sortable sortKey='seksjon'>
+                        Seksjon
+                      </Table.ColumnHeader>
                       <Table.ColumnHeader sortable sortKey='etterlevelse'>
                         Etterlevelse
                       </Table.ColumnHeader>
@@ -310,6 +315,13 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             {dok.risikoeiereData && dok.risikoeiereData.length > 0
                               ? dok.risikoeiereData.map((risikoeier) => (
                                   <div key={risikoeier.navIdent}>{risikoeier.fullName}</div>
+                                ))
+                              : '-'}
+                          </Table.DataCell>
+                          <Table.DataCell>
+                            {dok.seksjoner?.length
+                              ? dok.seksjoner.map((s) => (
+                                  <div key={s.nomSeksjonId}>{s.nomSeksjonName}</div>
                                 ))
                               : '-'}
                           </Table.DataCell>
