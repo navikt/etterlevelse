@@ -39,27 +39,26 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
             <span className='font-bold'>{stats.dokumenter.sendtTilGodkjenning}</span>
           </BodyShort>
           <BodyShort>
-            Godkjent av risikoeier{' '}
-            <span className='font-bold'>{stats.dokumenter.godkjentAvRisikoeier}</span>
+            Godkjent <span className='font-bold'>{stats.dokumenter.godkjentAvRisikoeier}</span>
           </BodyShort>
         </div>
 
         <div>
           <BodyShort weight='semibold'>Behov for PVK</BodyShort>
           <BodyShort>
-            Ikke ennå vurdert behov{' '}
+            Ikke vurdert behov{' '}
             <span className='font-bold'>
               {stats.behovForPvk.ikkeVurdertBehov} av {stats.behovForPvk.totalMedPersonopplysninger}
             </span>
           </BodyShort>
           <BodyShort>
-            Vurdert, ikke behov{' '}
+            Skal ikke gjennomføre PVK{' '}
             <span className='font-bold'>
               {stats.behovForPvk.vurdertIkkeBehov} av {stats.behovForPvk.totalMedPersonopplysninger}
             </span>
           </BodyShort>
           <BodyShort>
-            Behov, ikke påbegynt{' '}
+            Skal gjennomføre PVK{' '}
             <span className='font-bold'>
               {stats.behovForPvk.behovIkkePaabegynt} av{' '}
               {stats.behovForPvk.totalMedPersonopplysninger}
@@ -71,7 +70,7 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>Etterlevelse: suksesskriterier</BodyShort>
+          <BodyShort weight='semibold'>Suksesskriterier (etterlevelseskrav)</BodyShort>
           <BodyShort>
             Under arbeid{' '}
             <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
@@ -90,7 +89,10 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>PVK ({stats.pvk.total})</BodyShort>
+          <BodyShort weight='semibold'>PVK-status ({stats.pvk.total})</BodyShort>
+          <BodyShort>
+            Ikke påbegynt <span className='font-bold'>{stats.pvk.ikkePaabegynt}</span>
+          </BodyShort>
           <BodyShort>
             Under arbeid <span className='font-bold'>{stats.pvk.underArbeid}</span>
           </BodyShort>
