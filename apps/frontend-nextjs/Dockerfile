@@ -9,9 +9,6 @@ COPY yarn.lock .
 # Install dependencies
 ENV YARN_VERSION=4.14.1
 
-RUN yarn set version from sources
-RUN yarn install --frozen-lockfile
-
 COPY . .
 
 ENV NODE_ENV=production
