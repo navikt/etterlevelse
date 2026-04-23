@@ -129,7 +129,7 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                     (risikoeier) => risikoeier.fullName
                   )}
                 {etterlevelseDokumentasjon.risikoeiere.length === 0 &&
-                  etterlevelseDokumentasjon.risikoeiereData === undefined &&
+                  etterlevelseDokumentasjon.risikoeiereData?.length === 0 &&
                   'Ikke angitt'}
               </BodyLong>
             </div>
