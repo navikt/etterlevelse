@@ -17,7 +17,7 @@ interface IBarSegment {
 const DOK_COLORS = ['#fa4d56', '#9f1853', '#005d5d']
 const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
 const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
-const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4']
+const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']
 
 const StackedBar = ({ data, isPercentage }: { data: IBarSegment[]; isPercentage?: boolean }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
@@ -169,7 +169,7 @@ export const DashboardBarCard = ({ stats, hideHeader }: IProps) => {
 
         <div>
           <Heading size='xsmall' level='3'>
-            PVK-status ({stats.pvk.total})
+            PVK-status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
           <StackedBar data={pvkData} />
         </div>
