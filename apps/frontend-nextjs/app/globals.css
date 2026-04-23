@@ -75,6 +75,7 @@ iframe#webpack-dev-server-client-overlay {
 .dashboard-table td.dashboard-cell-wide {
   white-space: normal;
   min-width: 75ch;
+  max-width: 75ch;
   word-break: break-word;
 }
 
