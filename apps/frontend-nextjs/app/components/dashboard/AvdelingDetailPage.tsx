@@ -4,8 +4,8 @@ import {
   getDashboardAvdelingStats,
   getDashboardTableByAvdeling,
 } from '@/api/dashboard/dashboardApi'
+import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
-import { DashboardPieCard } from '@/components/dashboard/DashboardPieCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
@@ -231,6 +231,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </LocalAlert.Content>
       </LocalAlert>
 
+      {avdelingId === 'ingen-avdeling' && (
+        <LocalAlert status='warning' className='mt-4'>
+          <LocalAlert.Header>
+            <LocalAlert.Title as='h2'>
+              Disse etterlevelsesdokumentene har ikke valgt avdeling.
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>
+            Kontakt ansvarlig for dokumentet for å knytte det til riktig avdeling.
+          </LocalAlert.Content>
+        </LocalAlert>
+      )}
+
       <div className='mt-4'>
         <Heading size='large' level='1'>
           {data.avdelingNavn}
@@ -253,6 +266,23 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Select>
       )}
 
+      {selectedSeksjon === 'ingen-seksjon' && (
+        <LocalAlert status='warning' className='mt-4'>
+          <LocalAlert.Header>
+            <LocalAlert.Title as='h2'>
+              Disse etterlevelsesdokumentene har ikke valgt seksjon.
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>
+            Kontakt ansvarlig for dokumentet for å knytte det til riktig seksjon.
+          </LocalAlert.Content>
+        </LocalAlert>
+      )}
+
+      <Heading size='medium' level='2' className='mt-4'>
+        Oversikt
+      </Heading>
+
       <Tabs className='mt-4' defaultValue='figurer'>
         <Tabs.List>
           <Tabs.Tab value='figurer' label='Vis figurer' />
@@ -260,7 +290,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Tabs.List>
         <Tabs.Panel value='figurer'>
           <div className='mt-6'>
-            <DashboardPieCard stats={getCurrentStats()} hideHeader />
+            <DashboardBarCard stats={getCurrentStats()} hideHeader />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='nokkeltall'>
