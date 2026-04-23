@@ -112,7 +112,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
   const getFilteredDoks = (): IDashboardTable[] => {
     if (tableData) {
-      if (selectedSeksjon) {
+      if (selectedSeksjon === 'ingen-seksjon') {
+        return tableData.filter(
+          (etterlevelseDokTableValue) => !etterlevelseDokTableValue.seksjoner?.length
+        )
+      } else if (selectedSeksjon) {
         return tableData.filter((etterlevelseDokTableValue) =>
           etterlevelseDokTableValue.seksjoner.map((s) => s.nomSeksjonId).includes(selectedSeksjon)
         )
