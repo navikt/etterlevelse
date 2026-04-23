@@ -120,6 +120,22 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 
             <div className='flex items-start gap-2 mb-2.5'>
               <div>
+                <Label size='medium'>Risikoeier:</Label>
+              </div>
+              <BodyLong size='medium'>
+                {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
+                  etterlevelseDokumentasjon.risikoeiereData !== undefined &&
+                  etterlevelseDokumentasjon.risikoeiereData.map(
+                    (risikoeier) => risikoeier.fullName
+                  )}
+                {etterlevelseDokumentasjon.risikoeiere.length === 0 &&
+                  etterlevelseDokumentasjon.risikoeiereData === undefined &&
+                  'Ikke angitt'}
+              </BodyLong>
+            </div>
+
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div>
                 <Label size='medium'>Avdeling:</Label>
               </div>
               <BodyLong size='medium'>
