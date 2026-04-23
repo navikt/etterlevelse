@@ -378,15 +378,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.resourcesData && dok.resourcesData.length > 0
-                              ? dok.resourcesData.map((resource) => (
-                                  <div key={resource.navIdent}>{resource.fullName}</div>
+                              ? dok.resourcesData.map((resource, index) => (
+                                  <div key={`${resource.navIdent}-${index}`}>
+                                    {resource.fullName}
+                                  </div>
                                 ))
                               : '-'}
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.risikoeiereData && dok.risikoeiereData.length > 0
-                              ? dok.risikoeiereData.map((risikoeier) => (
-                                  <div key={risikoeier.navIdent}>{risikoeier.fullName}</div>
+                              ? dok.risikoeiereData.map((risikoeier, index) => (
+                                  <div key={`${risikoeier.navIdent}-${index}`}>
+                                    {risikoeier.fullName}
+                                  </div>
                                 ))
                               : '-'}
                           </Table.DataCell>
@@ -482,15 +486,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.resourcesData && dok.resourcesData.length > 0
-                              ? dok.resourcesData.map((resource) => (
-                                  <div key={resource.navIdent}>{resource.fullName}</div>
+                              ? dok.resourcesData.map((resource, index) => (
+                                  <div key={`${resource.navIdent}-${index}`}>
+                                    {resource.fullName}
+                                  </div>
                                 ))
                               : '-'}
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.risikoeiereData && dok.risikoeiereData.length > 0
-                              ? dok.risikoeiereData.map((risikoeier) => (
-                                  <div key={risikoeier.navIdent}>{risikoeier.fullName}</div>
+                              ? dok.risikoeiereData.map((risikoeier, index) => (
+                                  <div key={`${risikoeier.navIdent}-${index}`}>
+                                    {risikoeier.fullName}
+                                  </div>
                                 ))
                               : '-'}
                           </Table.DataCell>
@@ -594,15 +602,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.resourcesData && dok.resourcesData.length > 0
-                              ? dok.resourcesData.map((resource) => (
-                                  <div key={resource.navIdent}>{resource.fullName}</div>
+                              ? dok.resourcesData.map((resource, index) => (
+                                  <div key={`${resource.navIdent}-${index}`}>
+                                    {resource.fullName}
+                                  </div>
                                 ))
                               : '-'}
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.risikoeiereData && dok.risikoeiereData.length > 0
-                              ? dok.risikoeiereData.map((risikoeier) => (
-                                  <div key={risikoeier.navIdent}>{risikoeier.fullName}</div>
+                              ? dok.risikoeiereData.map((risikoeier, index) => (
+                                  <div key={`${risikoeier.navIdent}-${index}`}>
+                                    {risikoeier.fullName}
+                                  </div>
                                 ))
                               : '-'}
                           </Table.DataCell>
