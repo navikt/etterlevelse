@@ -246,6 +246,11 @@ export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
 
   const pvkSlices: IPieSlice[] = [
     {
+      name: `Ikke påbegynt (${stats.pvk.ikkePaabegynt ?? 0})`,
+      value: stats.pvk.ikkePaabegynt ?? 0,
+      color: '#C6C2BF',
+    },
+    {
       name: `Under arbeid (${stats.pvk.underArbeid})`,
       value: stats.pvk.underArbeid,
       color: PVK_COLORS[0],
@@ -306,7 +311,7 @@ export const DashboardPieCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>PVK status ({stats.pvk.total})</BodyShort>
+          <BodyShort weight='semibold'>PVK-status ({stats.pvk.total})</BodyShort>
           <PieWithLegend data={pvkSlices} hasData={hasPvkData} />
         </div>
       </div>

@@ -372,6 +372,7 @@ public class DashboardService {
         int behovIkkePaabegynt = 0;
 
         int pvkTotal = 0;
+        int pvkIkkePaabegynt = 0;
         int pvkUnderArbeid = 0;
         int pvkTilBehandlingPvo = 0;
         int pvkTilbakemeldingPvo = 0;
@@ -394,18 +395,33 @@ public class DashboardService {
                 } else {
                     behovIkkePaabegynt++;
                     pvkTotal++;
-                    var pvkStatus = pvk.getFirst().getStatus();
-                    if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
-                        pvkGodkjent++;
-                    } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
-                            || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
-                            || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-                        pvkTilBehandlingPvo++;
-                    } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
-                            || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
-                        pvkTilbakemeldingPvo++;
+                    var pvkDokData = pvk.getFirst().getPvkDokumentData();
+                    List<Risikoscenario> risikoscenarioer = risikoscenarioService.getByPvkDokument(pvk.getFirst().getId().toString(), RisikoscenarioType.ALL);
+                    var relevantMeldingTilPvo = pvkDokData.getMeldingerTilPvo().stream()
+                            .filter(melding -> melding.getInnsendingId() == pvkDokData.getAntallInnsendingTilPvo())
+                            .toList();
+                    boolean hasPvkStarted = !risikoscenarioer.isEmpty()
+                            || (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), ""))
+                            || pvkDokData.getHarInvolvertRepresentant() != null
+                            || pvkDokData.getHarDatabehandlerRepresentantInvolvering() != null
+                            || (pvkDokData.getRepresentantInvolveringsBeskrivelse() != null && !Objects.equals(pvkDokData.getRepresentantInvolveringsBeskrivelse(), ""))
+                            || (pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse() != null && !Objects.equals(pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""));
+                    if (!hasPvkStarted) {
+                        pvkIkkePaabegynt++;
                     } else {
-                        pvkUnderArbeid++;
+                        var pvkStatus = pvk.getFirst().getStatus();
+                        if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                            pvkGodkjent++;
+                        } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
+                                || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
+                                || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+                            pvkTilBehandlingPvo++;
+                        } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
+                                || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
+                            pvkTilbakemeldingPvo++;
+                        } else {
+                            pvkUnderArbeid++;
+                        }
                     }
                 }
             }
@@ -420,6 +436,7 @@ public class DashboardService {
 
         avdelingResponse.setPvk(PvkStats.builder()
                 .total(pvkTotal)
+                .ikkePaabegynt(pvkIkkePaabegynt)
                 .underArbeid(pvkUnderArbeid)
                 .tilBehandlingHosPvo(pvkTilBehandlingPvo)
                 .tilbakemeldingFraPvo(pvkTilbakemeldingPvo)

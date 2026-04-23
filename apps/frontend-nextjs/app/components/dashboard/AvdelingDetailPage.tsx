@@ -17,7 +17,6 @@ import {
   EPvkVurdering,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { getPvkStatusText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { handleSort } from '@/util/handleTableSort'
 import { Heading, Link, LocalAlert, Select, SortState, Table, Tabs } from '@navikt/ds-react'
 import moment from 'moment'
@@ -167,7 +166,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 : 0
             }
             case 'pvkStatus':
-              return getPvkStatusText(
+              return getPvkOnlyStatusText(
                 dok.pvkVurdering,
                 dok.pvkDokumentStatus,
                 dok.hasPvkDocumentationStarted
@@ -317,7 +316,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         Behov for PVK
                       </Table.ColumnHeader>
                       <Table.ColumnHeader sortable sortKey='pvkStatus'>
-                        PVK status
+                        PVK-status
                       </Table.ColumnHeader>
                       <Table.ColumnHeader sortable sortKey='behandlinger'>
                         Behandlinger
@@ -573,7 +572,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               : '-'}
                           </Table.DataCell>
                           <Table.DataCell>
-                            {getPvkStatusText(
+                            {getPvkOnlyStatusText(
                               dok.pvkVurdering,
                               dok.pvkDokumentStatus,
                               dok.hasPvkDocumentationStarted
