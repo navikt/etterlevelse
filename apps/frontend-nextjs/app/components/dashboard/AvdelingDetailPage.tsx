@@ -339,7 +339,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.teamsData && dok.teamsData.length > 0
-                              ? dok.teamsData.map((team) => team.name).join(', ')
+                              ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
                               : '-'}
                           </Table.DataCell>
                           <Table.DataCell>
@@ -443,7 +443,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.teamsData && dok.teamsData.length > 0
-                              ? dok.teamsData.map((team) => team.name).join(', ')
+                              ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
                               : '-'}
                           </Table.DataCell>
                           <Table.DataCell>
@@ -555,7 +555,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           </Table.DataCell>
                           <Table.DataCell>
                             {dok.teamsData && dok.teamsData.length > 0
-                              ? dok.teamsData.map((team) => team.name).join(', ')
+                              ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
                               : '-'}
                           </Table.DataCell>
                           <Table.DataCell>
