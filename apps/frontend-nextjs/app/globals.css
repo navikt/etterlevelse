@@ -41,7 +41,7 @@ iframe#webpack-dev-server-client-overlay {
 }
 
 .dashboard-table-wrapper {
-  overflow: scroll;
+  overflow: auto;
   scrollbar-gutter: stable;
   max-height: 80vh;
 }
