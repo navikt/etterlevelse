@@ -78,8 +78,7 @@ export const StickyHorizontalScroll = ({ children, className }: IStickyHorizonta
       <div
         ref={scrollRef}
         onScroll={handleScrollContent}
-        className='dashboard-table-scroll-y'
-        style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '80vh' }}
+        style={{ overflow: 'auto', maxHeight: '80vh' }}
       >
         {children}
       </div>
