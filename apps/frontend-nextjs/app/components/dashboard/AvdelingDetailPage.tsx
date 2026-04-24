@@ -241,11 +241,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         <LocalAlert status='warning' className='mt-4'>
           <LocalAlert.Header>
             <LocalAlert.Title as='h2'>
-              Disse etterlevelsesdokumentene har ikke valgt avdeling.
+              Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
             </LocalAlert.Title>
           </LocalAlert.Header>
           <LocalAlert.Content>
-            Kontakt ansvarlig for dokumentet for å knytte det til riktig avdeling.
+            <ul>
+              <li>
+                Det er viktig at alle oppdaterer informasjon om avdeling og seksjon i
+                etterlevelsesdokumentene sine.
+              </li>
+              <li>
+                Dersom du oppdager etterlevelsesdokumenter som ikke er aktuelle lenger, ta kontakt
+                med Team Datajegerne på #etterlevelse på slack.
+              </li>
+            </ul>
           </LocalAlert.Content>
         </LocalAlert>
       )}
@@ -272,11 +281,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         <LocalAlert status='warning' className='mt-4'>
           <LocalAlert.Header>
             <LocalAlert.Title as='h2'>
-              Disse etterlevelsesdokumentene har ikke valgt seksjon.
+              Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
             </LocalAlert.Title>
           </LocalAlert.Header>
           <LocalAlert.Content>
-            Kontakt ansvarlig for dokumentet for å knytte det til riktig seksjon.
+            <ul>
+              <li>
+                Det er viktig at alle oppdaterer informasjon om avdeling og seksjon i
+                etterlevelsesdokumentene sine.
+              </li>
+              <li>
+                Dersom du oppdager etterlevelsesdokumenter som ikke er aktuelle lenger, ta kontakt
+                med Team Datajegerne på #etterlevelse på slack.
+              </li>
+            </ul>
           </LocalAlert.Content>
         </LocalAlert>
       )}
