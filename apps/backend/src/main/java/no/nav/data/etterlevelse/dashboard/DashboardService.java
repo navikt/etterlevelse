@@ -220,7 +220,7 @@ public class DashboardService {
 
                     dashboardTableResponse.setAntallKrav(kravForEdok.size());
                     dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
-                    long oppfyltDenominator = kravForEdok.size() - ikkeBesvartCount - ikkeRelevantCount;
+                    long oppfyltDenominator = kravForEdok.size() - ikkeRelevantCount;
                     double prosent = oppfyltDenominator > 0 ? ((double) oppfyltEtterlevelseList.size() / oppfyltDenominator) * 100 : 0;
                     dashboardTableResponse.setOppfyltKravProsent( (int) Math.floor(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
