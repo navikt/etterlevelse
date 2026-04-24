@@ -27,7 +27,11 @@ interface IProps {
   avdelingId: string
 }
 
-const getBehovForPvkText = (pvkVurdering: EPvkVurdering): string => {
+const getBehovForPvkText = (
+  pvkVurdering: EPvkVurdering,
+  behandlerPersonopplysninger: boolean
+): string => {
+  if (!behandlerPersonopplysninger) return 'Behandler ikke personopplysninger'
   if (!pvkVurdering || pvkVurdering === EPvkVurdering.UNDEFINED) return 'Ikke vurdert behov'
   if (pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'Skal ikke gjennomføre PVK'
   if (pvkVurdering === EPvkVurdering.SKAL_UTFORE) return 'Skal gjennomføre PVK'
@@ -149,7 +153,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             case 'etterlevelse':
               return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
             case 'behovForPvk':
-              return getBehovForPvkText(dok.pvkVurdering)
+              return getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger)
             case 'pvkStatus':
               return getPvkOnlyStatusText(
                 dok.pvkVurdering,
@@ -424,7 +428,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           <Table.DataCell>
                             {getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)}
                           </Table.DataCell>
-                          <Table.DataCell>{getBehovForPvkText(dok.pvkVurdering)}</Table.DataCell>
+                          <Table.DataCell>
+                            {getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger)}
+                          </Table.DataCell>
                           <Table.DataCell>
                             {getPvkOnlyStatusText(
                               dok.pvkVurdering,
