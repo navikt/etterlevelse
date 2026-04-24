@@ -6,6 +6,7 @@ import {
 } from '@/api/dashboard/dashboardApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
+import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
@@ -346,7 +347,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 <Tabs.Tab value='pvk' label='PVK' />
               </Tabs.List>
               <Tabs.Panel value='dok_pvk'>
-                <div className='dashboard-table-wrapper'>
+                <StickyHorizontalScroll>
                   <Table
                     className='mt-4 dashboard-table'
                     size='small'
@@ -464,11 +465,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       })}
                     </Table.Body>
                   </Table>
-                </div>
+                </StickyHorizontalScroll>
               </Tabs.Panel>
 
               <Tabs.Panel value='krav'>
-                <div className='dashboard-table-wrapper'>
+                <StickyHorizontalScroll>
                   <Table
                     className='mt-4 dashboard-table'
                     size='small'
@@ -568,11 +569,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       })}
                     </Table.Body>
                   </Table>
-                </div>
+                </StickyHorizontalScroll>
               </Tabs.Panel>
 
               <Tabs.Panel value='pvk'>
-                <div className='dashboard-table-wrapper'>
+                <StickyHorizontalScroll>
                   <Table
                     className='mt-4 dashboard-table'
                     size='small'
@@ -706,7 +707,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       })}
                     </Table.Body>
                   </Table>
-                </div>
+                </StickyHorizontalScroll>
               </Tabs.Panel>
             </Tabs>
           </>
