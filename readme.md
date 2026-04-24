@@ -21,4 +21,3 @@ Løsingen brukes kun internt i NAV og har disse rollene:
 - Admin: Full tilgang til oppdatering og oppretting av kodeverk, krav, etterlevelse dokumentasjon, meldinger og info til bruker.
 - Kraveier: Tilgang til å opprette og oppdatere krav og etterlevelse dokumentasjon.
 - Bruker: Tilgang til å dokumentere etterlevelse.
-
