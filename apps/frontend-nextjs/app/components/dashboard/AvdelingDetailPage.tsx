@@ -258,11 +258,13 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           onChange={(e) => setSelectedSeksjon(e.target.value)}
         >
           <option value=''>Alle seksjoner</option>
-          {data.seksjoner.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.navn}
-            </option>
-          ))}
+          {data.seksjoner
+            .filter((s) => s.navn !== data.avdelingNavn)
+            .map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.navn}
+              </option>
+            ))}
         </Select>
       )}
 
