@@ -65,6 +65,7 @@ export interface IDashboardTable {
   nomAvdelingId?: string
   avdelingNavn?: string
   seksjoner: INomSeksjon[]
+  behandlerPersonopplysninger: boolean
 
   antallKrav?: number
   antallOppfyltKrav?: number

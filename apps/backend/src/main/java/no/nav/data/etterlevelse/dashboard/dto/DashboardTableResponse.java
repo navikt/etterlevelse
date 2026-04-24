@@ -1,5 +1,10 @@
 package no.nav.data.etterlevelse.dashboard.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +17,6 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -38,6 +38,7 @@ public class DashboardTableResponse {
     private String nomAvdelingId;
     private String avdelingNavn;
     private List<NomSeksjon> seksjoner;
+    private boolean behandlerPersonopplysninger;
 
     //etterlevelse
     private Integer antallKrav;
@@ -73,6 +74,7 @@ public class DashboardTableResponse {
                 .nomAvdelingId(Objects.equals(etterlevelseDokumentasjonResponse.getNomAvdelingId(), "") ? "ingen-avdeling" : etterlevelseDokumentasjonResponse.getNomAvdelingId())
                 .avdelingNavn(Objects.equals(etterlevelseDokumentasjonResponse.getAvdelingNavn(), "") ? "Ikke valgt avdeling" : etterlevelseDokumentasjonResponse.getAvdelingNavn())
                 .seksjoner(etterlevelseDokumentasjonResponse.getSeksjoner())
+                .behandlerPersonopplysninger(etterlevelseDokumentasjonResponse.isBehandlerPersonopplysninger())
                 .build();
     }
 }
