@@ -74,7 +74,7 @@ public class DashboardTableResponse {
                 .nomAvdelingId(Objects.equals(etterlevelseDokumentasjonResponse.getNomAvdelingId(), "") ? "ingen-avdeling" : etterlevelseDokumentasjonResponse.getNomAvdelingId())
                 .avdelingNavn(Objects.equals(etterlevelseDokumentasjonResponse.getAvdelingNavn(), "") ? "Ikke valgt avdeling" : etterlevelseDokumentasjonResponse.getAvdelingNavn())
                 .seksjoner(etterlevelseDokumentasjonResponse.getSeksjoner())
-                .behandlerPersonopplysninger(etterlevelseDokumentasjonResponse.isBehandlerPersonopplysninger())
+                .behandlerPersonopplysninger(etterlevelseDokumentasjonResponse.getIrrelevansFor().stream().noneMatch(c -> "PERSONOPPLYSNINGER".equals(c.getCode())))
                 .build();
     }
 }
