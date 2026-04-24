@@ -195,7 +195,8 @@ public class DashboardService {
                     var oppfyltEtterlevelseList = etterlevelserForDok.stream()
                             .filter(e -> kravForEdok.stream().anyMatch(k ->
                                     k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon()))
-                            && e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT)
+                            && e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT
+                            && e.getSuksesskriterieBegrunnelser().stream().noneMatch(sb -> sb.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT))
                             .toList();
 
                     long ikkeRelevantCount = etterlevelserForDok.stream()
