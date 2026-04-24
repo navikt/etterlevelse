@@ -6,6 +6,7 @@ import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
 interface IProps {
   stats: IAvdelingDashboardStats
   hideHeader?: boolean
+  singleRow?: boolean
 }
 
 interface IBarSegment {
@@ -19,14 +20,22 @@ const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
 const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
 const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']
 
-const StackedBar = ({ data, isPercentage }: { data: IBarSegment[]; isPercentage?: boolean }) => {
+const StackedBar = ({
+  data,
+  isPercentage,
+  maxWidth,
+}: {
+  data: IBarSegment[]
+  isPercentage?: boolean
+  maxWidth?: string
+}) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
   const hasData = total > 0
 
   if (!hasData) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
 
   return (
-    <div style={{ marginTop: '12px' }}>
+    <div style={{ marginTop: '12px', maxWidth }}>
       <div style={{ display: 'flex', height: 32, borderRadius: 4, overflow: 'hidden' }}>
         {data
           .filter((d) => d.value > 0)
@@ -65,7 +74,7 @@ const StackedBar = ({ data, isPercentage }: { data: IBarSegment[]; isPercentage?
   )
 }
 
-export const DashboardBarCard = ({ stats, hideHeader }: IProps) => {
+export const DashboardBarCard = ({ stats, hideHeader, singleRow }: IProps) => {
   const dokData: IBarSegment[] = [
     { name: 'Under arbeid', value: stats.dokumenter.underArbeid, color: DOK_COLORS[0] },
     {
@@ -139,39 +148,64 @@ export const DashboardBarCard = ({ stats, hideHeader }: IProps) => {
       )}
 
       <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '24px',
-          marginTop: '16px',
-        }}
+        className={singleRow ? 'grid grid-cols-2 lg:grid-cols-4 gap-6 mt-4' : ''}
+        style={
+          !singleRow
+            ? {
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '24px',
+                marginTop: '16px',
+              }
+            : undefined
+        }
       >
         <div>
           <Heading size='xsmall' level='3'>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
-          <StackedBar data={dokData} />
+          <StackedBar data={dokData} maxWidth='200px' />
         </div>
 
-        <div>
-          <Heading size='xsmall' level='3'>
-            Behov for PVK
-          </Heading>
-          <StackedBar data={behovData} />
-        </div>
+        {singleRow ? (
+          <>
+            <div>
+              <Heading size='xsmall' level='3'>
+                Suksesskriterier (etterlevelseskrav)
+              </Heading>
+              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
+            </div>
 
-        <div>
-          <Heading size='xsmall' level='3'>
-            Suksesskriterier (etterlevelseskrav)
-          </Heading>
-          <StackedBar data={suksessData} isPercentage />
-        </div>
+            <div>
+              <Heading size='xsmall' level='3'>
+                Behov for PVK
+              </Heading>
+              <StackedBar data={behovData} maxWidth='200px' />
+            </div>
+          </>
+        ) : (
+          <>
+            <div>
+              <Heading size='xsmall' level='3'>
+                Behov for PVK
+              </Heading>
+              <StackedBar data={behovData} maxWidth='200px' />
+            </div>
+
+            <div>
+              <Heading size='xsmall' level='3'>
+                Suksesskriterier (etterlevelseskrav)
+              </Heading>
+              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
+            </div>
+          </>
+        )}
 
         <div>
           <Heading size='xsmall' level='3'>
             PVK-status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
-          <StackedBar data={pvkData} />
+          <StackedBar data={pvkData} maxWidth='200px' />
         </div>
       </div>
     </div>

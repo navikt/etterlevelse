@@ -6,14 +6,13 @@ import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 const DashboardPage = () => {
   const [stats, setStats] = useState<IAvdelingDashboardStats[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+  const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
@@ -22,6 +21,10 @@ const DashboardPage = () => {
         .finally(() => setIsLoading(false))
     })()
   }, [])
+
+  const filteredStats = selectedAvdeling
+    ? stats.filter((s) => s.avdelingId === selectedAvdeling)
+    : stats
 
   return (
     <PageLayout pageTitle='Dashboard' currentPage='Dashboard' breadcrumbPaths={[]}>
@@ -46,11 +49,8 @@ const DashboardPage = () => {
       <Select
         label='Velg avdeling'
         className='mt-4 w-fit min-w-64'
-        onChange={(e) => {
-          if (e.target.value !== '') {
-            router.push(`/dashboard/${e.target.value}`)
-          }
-        }}
+        value={selectedAvdeling}
+        onChange={(e) => setSelectedAvdeling(e.target.value)}
       >
         <option value=''>Alle avdelinger</option>
         {stats.map((s) => (
@@ -71,14 +71,14 @@ const DashboardPage = () => {
 
           <Tabs.Panel value='figurer'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
-              {stats.map((avdelingStats) => (
+              {filteredStats.map((avdelingStats) => (
                 <DashboardBarCard key={avdelingStats.avdelingId} stats={avdelingStats} />
               ))}
             </div>
           </Tabs.Panel>
           <Tabs.Panel value='nokkeltall'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
-              {stats.map((avdelingStats) => (
+              {filteredStats.map((avdelingStats) => (
                 <DashboardCard key={avdelingStats.avdelingId} stats={avdelingStats} />
               ))}
             </div>
