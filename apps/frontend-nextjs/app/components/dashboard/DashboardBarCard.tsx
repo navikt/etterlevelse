@@ -167,19 +167,39 @@ export const DashboardBarCard = ({ stats, hideHeader, singleRow }: IProps) => {
           <StackedBar data={dokData} maxWidth='200px' />
         </div>
 
-        <div>
-          <Heading size='xsmall' level='3'>
-            Behov for PVK
-          </Heading>
-          <StackedBar data={behovData} maxWidth='200px' />
-        </div>
+        {singleRow ? (
+          <>
+            <div>
+              <Heading size='xsmall' level='3'>
+                Suksesskriterier (etterlevelseskrav)
+              </Heading>
+              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
+            </div>
 
-        <div>
-          <Heading size='xsmall' level='3'>
-            Suksesskriterier (etterlevelseskrav)
-          </Heading>
-          <StackedBar data={suksessData} isPercentage maxWidth='200px' />
-        </div>
+            <div>
+              <Heading size='xsmall' level='3'>
+                Behov for PVK
+              </Heading>
+              <StackedBar data={behovData} maxWidth='200px' />
+            </div>
+          </>
+        ) : (
+          <>
+            <div>
+              <Heading size='xsmall' level='3'>
+                Behov for PVK
+              </Heading>
+              <StackedBar data={behovData} maxWidth='200px' />
+            </div>
+
+            <div>
+              <Heading size='xsmall' level='3'>
+                Suksesskriterier (etterlevelseskrav)
+              </Heading>
+              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
+            </div>
+          </>
+        )}
 
         <div>
           <Heading size='xsmall' level='3'>
