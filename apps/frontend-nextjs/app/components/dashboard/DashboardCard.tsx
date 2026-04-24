@@ -89,7 +89,9 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>PVK-status ({stats.pvk.total})</BodyShort>
+          <BodyShort weight='semibold'>
+            PVK-status ({stats.pvk.total - stats.pvk.pvkIWord})
+          </BodyShort>
           <BodyShort>
             Ikke påbegynt <span className='font-bold'>{stats.pvk.ikkePaabegynt}</span>
           </BodyShort>
