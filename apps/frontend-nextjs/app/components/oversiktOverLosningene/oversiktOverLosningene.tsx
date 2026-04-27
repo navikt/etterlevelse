@@ -49,7 +49,7 @@ export const OversiktOverLosningene = () => {
             Kort om løsningene
           </Heading>
 
-          <div className='flex my-6'>
+          <div className='flex items-start my-6'>
             <Image
               className='mr-2.5'
               src={KortOmLosningenStotteTilEtterlevelse}
@@ -67,7 +67,7 @@ export const OversiktOverLosningene = () => {
               </ExternalLink>
             </div>
           </div>
-          <div className='flex my-12'>
+          <div className='flex items-start my-12'>
             <Image
               className='mr-2.5'
               src={KortOmLosningenDigitalPVK}
@@ -87,7 +87,7 @@ export const OversiktOverLosningene = () => {
               </ExternalLink>
             </div>
           </div>
-          <div className='flex my-6'>
+          <div className='flex items-start my-6'>
             <Image
               className='mr-2.5'
               src={KortOmLosningeneBehandlingskatalogen}
