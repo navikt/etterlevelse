@@ -35,6 +35,6 @@ export const LagreTilSenereKnapp: FunctionComponent<TProps> = ({
       await submit(values)
     }}
   >
-    Lagre til senere
+    Lagre og fortsett senere
   </Button>
 )
