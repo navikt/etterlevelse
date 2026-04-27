@@ -230,7 +230,11 @@ export const getPvkTilstand = (
   ) {
     if (pvkDokument.antallInnsendingTilPvo === 0) {
       return EPVKTilstandStatus.TILSTAND_STATUS_FOUR
-    } else if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO) {
+    } else if (
+      [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.PVO_UNDERARBEID].includes(
+        pvkDokument.status
+      )
+    ) {
       return EPVKTilstandStatus.TILSTAND_STATUS_FIVE
     } else if (
       [
