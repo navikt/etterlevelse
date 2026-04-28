@@ -4,6 +4,7 @@ import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjo
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonReadOnlyStepUrl,
@@ -24,17 +25,25 @@ export const PvkActionMenuTrigger = () => (
 type TBehandlingensLivslopActionMenuItemProp = PropsWithChildren<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   behandlingensLivslop?: IBehandlingensLivslop
+  readOnlyUrl?: boolean
 }>
 
 export const BehandlingensLivslopActionMenuItem: FunctionComponent<
   TBehandlingensLivslopActionMenuItemProp
-> = ({ etterlevelseDokumentasjon, behandlingensLivslop, children }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensLivslop, children, readOnlyUrl }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonBehandlingsenLivslopUrl(
-      etterlevelseDokumentasjon.id,
-      behandlingensLivslop ? behandlingensLivslop.id : 'ny'
-    )}
+    href={
+      readOnlyUrl
+        ? pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensLivslop ? behandlingensLivslop.id : 'ny'
+          )
+        : pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensLivslop ? behandlingensLivslop.id : 'ny'
+          )
+    }
   >
     {children}
   </ActionMenu.Item>

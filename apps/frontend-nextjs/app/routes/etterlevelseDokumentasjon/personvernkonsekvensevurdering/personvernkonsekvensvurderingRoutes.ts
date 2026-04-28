@@ -65,6 +65,12 @@ export const pvkDokumentasjonBehandlingsenLivslopUrl = (
 ): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslopId}`
 
+export const pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl = (
+  etterlevelseDokumentId: string,
+  behandlingensLivslopId?: string
+): string =>
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent/behandlingens-livslop/${behandlingensLivslopId}`
+
 export const pvkDokumentasjonBehandlingsenArtOgOmfangUrl = (
   etterlevelseDokumentId: string,
   behandlingensArtOgOmfangId: string
