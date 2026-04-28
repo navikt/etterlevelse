@@ -136,7 +136,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
 
               {pvkDokument && <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />}
 
-              <Heading level='2' size='medium' className='mb-5'>
+              <Heading level='2' size='small' className='mb-5'>
                 Personkategorier
               </Heading>
 
@@ -179,7 +179,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 )}
               </Field>
 
-              <Heading level='2' size='medium' className='mb-5'>
+              <Heading level='2' size='small' className='mb-5'>
                 Behandlingens omfang
               </Heading>
 

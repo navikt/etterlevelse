@@ -180,7 +180,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           </InfoCard.Message>
                         </InfoCard>
 
-                        <Heading level='2' size='medium' className='my-3'>
+                        <Heading level='2' size='small' className='my-3'>
                           Personkategorier
                         </Heading>
 
