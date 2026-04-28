@@ -2,15 +2,19 @@
 
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { EKravTab } from '@/constants/krav/kravConstants'
-import { Accordion, BodyLong, List, ReadMore } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { Accordion, BodyLong, Heading, InfoCard, List, ReadMore } from '@navikt/ds-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
 const OmStotteTilEtterlevelseAccordion = () => {
   return (
     <Accordion className='my-6'>
       <Accordion.Item>
-        <Accordion.Header>Opprette eller oppdatere et etterlevelsesdokument</Accordion.Header>
+        <Accordion.Header>
+          <h3>Opprette eller oppdatere et etterlevelsesdokument</h3>
+        </Accordion.Header>
         <Accordion.Content>
           <BodyLong spacing>
             Dersom dere ikke allerede har et etterlevelsesdokument dere skal oppdatere, må dere
@@ -45,7 +49,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
-        <Accordion.Header>Redigere dokumentegenskaper og filtrere krav</Accordion.Header>
+        <Accordion.Header>
+          <h3>Redigere dokumentegenskaper og filtrere krav</h3>
+        </Accordion.Header>
         <Accordion.Content>
           <BodyLong spacing>
             Når dere skal opprette eller oppdatere et etterlevelsesdokument, må dere fylle
@@ -111,7 +117,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
-        <Accordion.Header>Jobbe i temaoversikten</Accordion.Header>
+        <Accordion.Header>
+          <h3>Jobbe i temaoversikten</h3>
+        </Accordion.Header>
         <Accordion.Content>
           <Image
             className='mr-2.5 mt-6 mb-12'
@@ -132,11 +140,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
-        <Accordion.Header>Besvare etterlevelseskrav</Accordion.Header>
+        <Accordion.Header>
+          <h3>Besvare etterlevelseskrav</h3>
+        </Accordion.Header>
         <Accordion.Content>
-          {/*          <div className='my-6'>
-            <video controls src='videos/video-mangler'> <track kind='captions' /></video>
-          </div>*/}
+          <div className='my-6'>
+            <video controls src='videos/VisMegHvordanJegBesvarerEtterlevelseskrav.mov'>
+              <track kind='captions' />
+            </video>
+          </div>
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
             for å etterleve kravet. Hvert kriterium inneholder også en nærmere beskrivelse som
@@ -174,7 +186,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
-        <Accordion.Header>Få etterlevelsen godkjent av risikoeier</Accordion.Header>
+        <Accordion.Header>
+          <h3>Få etterlevelsen godkjent av risikoeier</h3>
+        </Accordion.Header>
         <Accordion.Content>
           <div className='my-6'>
             <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'>
@@ -231,12 +245,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
+      {/*      <Accordion.Item>
         <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
         <Accordion.Content>
-          {/*          <div className='my-6'>
+                    <div className='my-6'>
             <video controls src='videos/mangler'> <track kind='captions' /></video>
-          </div>*/}
+          </div>
           <BodyLong className='mb-3'>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
             menyen på dokumentets temaside. På siden “Godkjenn etterlevelsen” kan du gjøre følgende:
@@ -276,17 +290,41 @@ const OmStotteTilEtterlevelseAccordion = () => {
             </List.Item>
           </List>
         </Accordion.Content>
-      </Accordion.Item>
-      {/*      <Accordion.Item>
-        <Accordion.Header>
-          Under arbeid::::Oppdatere etterlevelsesdokumentasjon etter godkjenning
-        </Accordion.Header>
-        <Accordion.Content>innhold mangler</Accordion.Content>
       </Accordion.Item>*/}
-      {/*<Accordion.Item>
-        <Accordion.Header>Gjenbruk av etterlevelsesdokumentasjon </Accordion.Header>
+      <Accordion.Item>
+        <Accordion.Header>
+          <h3>Oppdatere etterlevelsesdokumentasjon etter godkjenning</h3>
+        </Accordion.Header>
         <Accordion.Content>
-          <Heading size='small' level='3' spacing>
+          <ReadMore
+            header='Vis meg hvordan jeg oppdaterer et etterlevelsesdokument etter godkjenning'
+            className='mb-6'
+          >
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegOppdatererEtterGodkjenning.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
+          <BodyLong spacing>
+            Etter at dere har fått etterlevelsesdokumentasjon godkjent av risikoeier, vil
+            dokumentasjonen være låst fram til at dere velger å oppdatere den. Når dere vil
+            oppdatere etterlevelsesdokumentet, velger dere “Oppdater etterlevelsen” fra menyen på
+            temaside. Så kan dere fylle ut.
+          </BodyLong>
+          <BodyLong spacing>
+            Versjonering av etterlevelsesdokumentasjon vises med punkt: eksempelvis vil E123.1 være
+            versjon 1 av dokumentet, og så etter godkjenning og oppdatering vil dokumentet hete
+            E123.2.
+          </BodyLong>
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item>
+        <Accordion.Header>
+          <h3>Gjenbruk av etterlevelsesdokumentasjon</h3>
+        </Accordion.Header>
+        <Accordion.Content>
+          <Heading size='small' level='4' spacing>
             Generelt om gjenbruk
           </Heading>
           <BodyLong spacing>
@@ -302,7 +340,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <InfoCard size='small' data-color='success' className='mb-6'>
             <InfoCard.Header>
-              <InfoCard.Title>Gjenbruk kan være aktuelt hvis</InfoCard.Title>
+              <InfoCard.Title as='h4'>Gjenbruk kan være aktuelt hvis</InfoCard.Title>
             </InfoCard.Header>
             <InfoCard.Content>
               <List as='ul'>
@@ -322,7 +360,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </InfoCard>
           <InfoCard size='small' data-color='danger' className='mb-6'>
             <InfoCard.Header>
-              <InfoCard.Title>Gjenbruk er uegnet til</InfoCard.Title>
+              <InfoCard.Title as='h4'>Gjenbruk er uegnet til</InfoCard.Title>
             </InfoCard.Header>
             <InfoCard.Content>
               <List as='ul'>
@@ -335,7 +373,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
               </List>
             </InfoCard.Content>
           </InfoCard>
-          <Heading size='small' level='3' spacing>
+          <Heading size='small' level='4' spacing>
             Eksempler på når gjenbruk kan være relevant
           </Heading>
           <ReadMore header='Eksempel: kameraovervåkning på landets Nav-kontor. ' className='mb-6'>
@@ -346,26 +384,33 @@ const OmStotteTilEtterlevelseAccordion = () => {
             oppdateringer kan så kreve at Nav-kontor revurderer deler av etterlevelsesdokumentasjon
             sin.
           </ReadMore>
-      <ReadMore header='Eksempel: bruk av Umami til måling av brukeratferd' className='mb-6'>
-        Flere team i Nav bruker verktøyet Umami til å måle brukeratferd i digitale løsninger. Umami
-        forvaltes av Team ResearchOps, som har lagd et sentralt etterlevelsesdokument hvor de har
-        gjort noen vurderinger som vil gjelde uansett hvor og hvordan man bruker Umami. Ved enkelte
-        etterlevelseskrav har ResearchOps skrevet veiledning som er spesielt tilpasset bruk av
-        Umami, og kladdet noen svar. Kravene med veiledning og kladd har de samlet under Prioritert
-        kravliste. Enkelte team som skal bruke Umami tar en gjenbrukskopi av
-        etterlevelsesdokumentet. I gjenbrukskopien arver de Prioritert kravliste med sine tilpassede
-        etterlevelseskrav. Teamet dokumenterer etterlevelse ved både disse og alle resterende
-        etterlevelseskrav i dokumentet.
-      </ReadMore>
+          <ReadMore header='Eksempel: bruk av Umami til måling av brukeratferd' className='mb-6'>
+            Flere team i Nav bruker verktøyet Umami til å måle brukeratferd i digitale løsninger.
+            Umami forvaltes av Team ResearchOps, som har lagd et sentralt etterlevelsesdokument hvor
+            de har gjort noen vurderinger som vil gjelde uansett hvor og hvordan man bruker Umami.
+            Ved enkelte etterlevelseskrav har ResearchOps skrevet veiledning som er spesielt
+            tilpasset bruk av Umami, og kladdet noen svar. Kravene med veiledning og kladd har de
+            samlet under Prioritert kravliste. Enkelte team som skal bruke Umami tar en
+            gjenbrukskopi av etterlevelsesdokumentet. I gjenbrukskopien arver de Prioritert
+            kravliste med sine tilpassede etterlevelseskrav. Teamet dokumenterer etterlevelse ved
+            både disse og alle resterende etterlevelseskrav i dokumentet.
+          </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
         <Accordion.Header>
-          Slik tilrettelegger dere for gjenbruk av deres eget etterlevelsesdokument
+          <h3>Slik tilrettelegger dere for gjenbruk av deres eget etterlevelsesdokument</h3>
         </Accordion.Header>
         <Accordion.Content>
-          <ReadMore header='Se hvordan dere tilrettelegger for gjenbruk' className='mb-6'>
-            skjermbilde mangler
+          <ReadMore
+            header='Vis meg hvordan jeg tilrettelegger for gjenbruk av etterlevelsesdokument mitt'
+            className='mb-6'
+          >
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegTilretteleggerForGjenbruk.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
           </ReadMore>
           <Heading size='small' level='4' spacing>
             1. Velg “tilrettelegg for gjenbruk” fra menyen
@@ -431,45 +476,74 @@ const OmStotteTilEtterlevelseAccordion = () => {
             bekrefter dere at dere vil slå på gjenbruk.
           </BodyLong>
           <BodyLong spacing>
-            Etter at dere har slått på gjenbruk, vil seksjon “Du kan gjenbruke dette etterlevelsesdokumentet” dukke
-            opp på dokumentets temaside. Her finner dere den overordnede veiledningsteksten dere har
-            skrevet, samt mulighet for å gjenbruke dokument. Informasjonen er synlig for alle.
+            Etter at dere har slått på gjenbruk, vil seksjon “Du kan gjenbruke dette
+            etterlevelsesdokumentet” dukke opp på dokumentets temaside. Her finner dere den
+            overordnede veiledningsteksten dere har skrevet, samt mulighet for å gjenbruke dokument.
+            Informasjonen er synlig for alle.
           </BodyLong>
+          <ReadMore header='Vis meg hvordan jeg slår på gjenbruk' className='mb-6'>
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegSlaarPaaGjenbruk.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
           <Heading size='small' level='4' spacing>
-            4. Endre gjenbruk
+            4. Redigere eller slå av gjenbruk
           </Heading>
           <BodyLong className='mb-3'>
-            Etter at dere har slått på gjenbruk, har dere følgende muligheter i menyen på Temaside:
+            Etter at dere har slått på gjenbruk, kan dere endre den i menyen på Temaside. Her får
+            dere to muligheter:
           </BodyLong>
           <List as='ul' className='mb-6'>
-            <List.Item title='Redigere veiledning'>
-              Her kan dere redigere deres overordnede veiledningstekst. Individuelle
-              veiledningstekster som dere har skrevet på kravsider, blir fortsatt redigerbare der.
+            <List.Item title='Redigere gjenbruksteksten'>
+              Her kan dere redigere den overordnede veiledningsteksten som dere skrev da dere først
+              slo på gjenbruk.
             </List.Item>
-            <List.Item title='Skjule gjenbruk'>
-              Dere kan også velge å skjule gjenbruksmuligheter for andre, varig eller i en periode.
-              Det blir alltid mulig å slå på gjenbruk igjen senere.
+            <List.Item title='Slå av gjenbruk'>
+              Under Endre gjenbruk kan dere også velge å slå av gjenbruk, enten varig eller i en
+              periode. Det å slå av gjenbruk innebærer at “Du kan gjenbruke dette
+              etterlevelsesdokumentet” skjules for andre. Det blir alltid mulig å slå på gjenbruk
+              igjen senere. Merk at når dere slår av gjenbruk, tilbakestilles statusen til
+              “Tilrettelegging for gjenbruk”.
             </List.Item>
           </List>
+          <ReadMore
+            header='Vis meg hvordan jeg redigerer gjenbrukstekst eller slår av gjenbruk'
+            className='mb-6'
+          >
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegRedigererEllerSlaarAvGjenbruk.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
-        <Accordion.Header>Slik gjenbruker du et etterlevelsesdokument</Accordion.Header>
+        <Accordion.Header>
+          <h3>Slik gjenbruker du et etterlevelsesdokument</h3>
+        </Accordion.Header>
         <Accordion.Content>
           <ReadMore
-            header='Vis meg hvordan jeg gjenbruker et etterlevelsesdokument'
+            header='Vis meg hvordan jeg tar gjenbrukskopi av et etterlevelsesdokument'
             className='mb-6'
           >
-            skjermbilde mangler
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegTarGjenbrukskopiAvEtDokument.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
           </ReadMore>
           <BodyLong spacing>
             Etterlevelsesdokumenter hvor det er tillatt gjenbruk, har en egen seksjon på temaside
-            som heter “Du kan gjenbruke dette etterlevelsesdokumentet”. Her finner dere veiledning om hvilke tilfeller
-            som kan gjøre gjenbruk aktuell, samt mulighet for å opprette gjenbrukskopi.
+            som heter “Du kan gjenbruke dette etterlevelsesdokumentet”. Her finner dere veiledning
+            om hvilke tilfeller som kan gjøre gjenbruk aktuell, samt mulighet for å opprette
+            gjenbrukskopi.
           </BodyLong>
           <InfoCard size='small' data-color='success' className='mb-6'>
             <InfoCard.Header>
-              <InfoCard.Title>Gjenbruk kan være aktuelt hvis</InfoCard.Title>
+              <InfoCard.Title as='h4'>Gjenbruk kan være aktuelt hvis</InfoCard.Title>
             </InfoCard.Header>
             <InfoCard.Content>
               <List as='ul'>
@@ -489,7 +563,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </InfoCard>
           <InfoCard size='small' data-color='danger' className='mb-6'>
             <InfoCard.Header>
-              <InfoCard.Title>Gjenbruk er uegnet til</InfoCard.Title>
+              <InfoCard.Title as='h4'>Gjenbruk er uegnet</InfoCard.Title>
             </InfoCard.Header>
             <InfoCard.Content>
               <List as='ul'>
@@ -510,7 +584,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           <Heading size='small' level='4' spacing>
             1. Opprett datterdokument
           </Heading>
-          <BodyLong spacing>Under Du kan gjenbruke dette etterlevelsesdokumentet, velg “Gjenbruk dokument”.</BodyLong>
+          <BodyLong spacing>Under Dette må du vite om gjenbruk, velg “Gjenbruk dokument”.</BodyLong>
           <BodyLong className='mb-3'>
             Fyll ut skjemaet i tråd med{' '}
             <ExternalLink href='/'>Redigere dokumentegenskaper og filtrere krav </ExternalLink>{' '}
@@ -554,7 +628,6 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <List as='ul' className='mb-6'>
             <List.Item>
-              paul: åpne riktig accordion title
               <Link href='#hvordan-dokumentere-etterlevelse'>Jobbe i temaoversikt</Link>
             </List.Item>
             <List.Item>
@@ -583,7 +656,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <InfoCard size='small' data-color='warning' className='mb-6'>
             <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-              <InfoCard.Title>
+              <InfoCard.Title as='h4'>
                 Dere er ansvarlige for at deres etterlevelsesdokumentasjon stemmer
               </InfoCard.Title>
             </InfoCard.Header>
@@ -599,7 +672,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
             </InfoCard.Content>
           </InfoCard>
         </Accordion.Content>
-      </Accordion.Item>*/}
+      </Accordion.Item>
     </Accordion>
   )
 }
