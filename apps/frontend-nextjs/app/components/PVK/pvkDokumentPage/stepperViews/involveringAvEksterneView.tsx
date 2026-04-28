@@ -131,7 +131,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           registrerte&quot;.
                         </BodyLong>
 
-                        <Heading level='2' size='medium' className='mb-3'>
+                        <Heading level='2' size='small' className='mb-3 mt-7'>
                           Representanter for de registrerte
                         </Heading>
 
@@ -140,7 +140,9 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                           {personkategorier.length > 0 &&
                             personkategorier.map((personkategori) => (
-                              <List.Item key={personkategori}>{personkategori}</List.Item>
+                              <List.Item key={personkategori} className='pt-1'>
+                                {personkategori}
+                              </List.Item>
                             ))}
                         </List>
 
@@ -170,7 +172,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           personkategorier, kan det være til hjelp å se på behandlingens livsløp.
                         </BodyLong>
 
-                        <InfoCard data-color='info' size='small' className='my-5'>
+                        <InfoCard data-color='info' size='small' className='mb-7 mt-5'>
                           <InfoCard.Message
                             icon={
                               <LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />
@@ -179,10 +181,6 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                             Husk å ikke legge inn personopplysninger når dere svarer.
                           </InfoCard.Message>
                         </InfoCard>
-
-                        <Heading level='2' size='small' className='my-3'>
-                          Personkategorier
-                        </Heading>
 
                         {/* <ReadMore
                     className="my-8 max-w-[75ch]"

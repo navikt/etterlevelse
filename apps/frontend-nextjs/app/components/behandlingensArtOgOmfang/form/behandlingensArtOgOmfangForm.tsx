@@ -130,7 +130,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
         <Form>
           <div className='flex justify-center'>
             <div className='max-w-[75ch] w-full'>
-              <Heading level='1' size='medium' className='mb-5'>
+              <Heading level='1' size='medium' className='mb-7'>
                 Behandlingens art og omfang
               </Heading>
 
@@ -140,7 +140,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 Personkategorier
               </Heading>
 
-              <List>
+              <List as='ul' className='mb-5'>
                 <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
                 {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
                 {personkategorier.length > 0 &&
@@ -179,12 +179,12 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 )}
               </Field>
 
-              <Heading level='2' size='small' className='mb-5'>
+              <Heading level='2' size='small' className='mb-5 mt-7'>
                 Behandlingens omfang
               </Heading>
 
               <ReadMore
-                className='mt-5'
+                className='my-5'
                 header='Hvordan kan vi komme med gode estimater på art og omfang?'
               >
                 Art og omfang skal hjelpe oss å vurdere risiko. Det er ofte vanskelig å gi presise
