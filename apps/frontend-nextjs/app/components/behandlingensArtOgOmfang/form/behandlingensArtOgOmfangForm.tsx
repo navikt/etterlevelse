@@ -17,12 +17,13 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { ExclamationmarkTriangleIcon, LightBulbIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   BodyLong,
   Button,
   Heading,
+  InfoCard,
   Label,
   Link,
   List,
@@ -135,6 +136,10 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
 
               {pvkDokument && <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />}
 
+              <Heading level='2' size='medium' className='mb-5'>
+                Personkategorier
+              </Heading>
+
               <List>
                 <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
                 {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
@@ -174,6 +179,10 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 )}
               </Field>
 
+              <Heading level='2' size='medium' className='mb-5'>
+                Behandlingens omfang
+              </Heading>
+
               <ReadMore
                 className='mt-5'
                 header='Hvordan kan vi komme med gode estimater på art og omfang?'
@@ -186,6 +195,14 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                 å estimere. På spørsmålet om hvem som har tilgang må hele behandlingsløpet vurderes,
                 inkludert f.eks. utviklere av applikasjonen og eventuelle underleverandører.
               </ReadMore>
+
+              <InfoCard data-color='info' size='small'>
+                <InfoCard.Message
+                  icon={<LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />}
+                >
+                  Husk å ikke legge inn personopplysninger når dere svarer.
+                </InfoCard.Message>
+              </InfoCard>
 
               <div className='mt-5'>
                 <TextAreaField

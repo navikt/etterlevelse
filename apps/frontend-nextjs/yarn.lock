@@ -635,10 +635,15 @@
   dependencies:
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@8.10.2", "@navikt/aksel-icons@^8.10.2":
+"@navikt/aksel-icons@8.10.2":
   version "8.10.2"
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-8.10.2.tgz#001cf489c9e029902c38f7a52e34eee5c2d82a82"
   integrity sha512-zp5izWHDYyKDF7wFKyE5mziU6Hq/rk729bk2gDtTyni0gjIpimKiL+WbaPTjPivRofGt0JR16ZvLZCPVHKjuww==
+
+"@navikt/aksel-icons@^8.10.2":
+  version "8.10.3"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-8.10.3.tgz#a30f1c596de7423acbdd2347a32355aea772a366"
+  integrity sha512-csrNBbiluUNWP/Ha33g1hZFHqmA7ofusGt3d0TtDe29+tdRYf5Cu7tmrTv1HWlbBe6wiRT8gYiDKv84t35xqwg==
 
 "@navikt/ds-css@8.10.2":
   version "8.10.2"
@@ -663,9 +668,9 @@
   integrity sha512-DilnVw2mDVORaovcPFnxuPHrUc9isGpms4YkuTBvXTo4tUKorjASjQ5W9xx/QVkLyUH5wAEs/47mE3R/DNEE/Q==
 
 "@navikt/ds-tokens@^8.10.2":
-  version "8.10.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-8.10.2.tgz#8e24eb9d5b3b087d8d95cf5f4c06b96076da04c2"
-  integrity sha512-/yn3qMlQx43659pwOUfH2Gqy6GsQxGmst9sfx5MEJkAAvr2WlD6h1NJ8yQ4xnzUHSMOIg+hwxckPT/go8vWEBQ==
+  version "8.10.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-8.10.3.tgz#1c8cb263d04f4002c5a1f40b8c5d68366b4613b9"
+  integrity sha512-b35JJxZS3KbxQfKCHAK/AwAsCQsUr8CD+CuKFbEfJtZ02kjejt+n+RbUGM6ej30Jle7Myto7gU0r+kpCrS+NJA==
 
 "@next/env@16.2.4":
   version "16.2.4"

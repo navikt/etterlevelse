@@ -28,10 +28,12 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { LightBulbIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
   Button,
   Heading,
+  InfoCard,
   Label,
   List,
   LocalAlert,
@@ -129,7 +131,7 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           registrerte&quot;.
                         </BodyLong>
 
-                        <Heading level='2' size='small' className='mb-3'>
+                        <Heading level='2' size='medium' className='mb-3'>
                           Representanter for de registrerte
                         </Heading>
 
@@ -167,6 +169,20 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           Hvis dere er usikre på om behandlingene treffer flere eller færre
                           personkategorier, kan det være til hjelp å se på behandlingens livsløp.
                         </BodyLong>
+
+                        <InfoCard data-color='info' size='small' className='my-5'>
+                          <InfoCard.Message
+                            icon={
+                              <LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />
+                            }
+                          >
+                            Husk å ikke legge inn personopplysninger når dere svarer.
+                          </InfoCard.Message>
+                        </InfoCard>
+
+                        <Heading level='2' size='medium' className='my-3'>
+                          Personkategorier
+                        </Heading>
 
                         {/* <ReadMore
                     className="my-8 max-w-[75ch]"
