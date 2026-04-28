@@ -1,5 +1,6 @@
 'use client'
 
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import {
   createBehandlingensLivslop,
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -14,7 +15,6 @@ import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   EPvkDokumentStatus,
-  EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
@@ -22,7 +22,7 @@ import {
   dokumentasjonUrl,
   etterlevelseDokumentasjonIdUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { pvkDokumentasjonPvkTypeStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { pvkDokumentasjonBehandlingsenArtOgOmfangUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
@@ -69,6 +69,7 @@ export const BehandlingensLivslopPage = () => {
     params.behandlingensLivslopId,
     params.etterlevelseDokumentasjonId
   )
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(params.etterlevelseDokumentasjonId)
 
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [filesToUpload, setFilesToUpload] = useState<File[]>([])
@@ -170,20 +171,6 @@ export const BehandlingensLivslopPage = () => {
         }
       }
     }
-  }
-
-  const getPvkLink = (etterlevelseDokumentasjonId: string) => {
-    const pvkDokumentLink: 'pvkdokument' | 'pvkbehov' =
-      pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE
-        ? 'pvkdokument'
-        : 'pvkbehov'
-
-    return pvkDokumentasjonPvkTypeStepUrl(
-      etterlevelseDokumentasjonId,
-      pvkDokumentLink,
-      pvkDokument ? pvkDokument.id : 'ny',
-      pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE ? '1' : ''
-    )
   }
 
   return (
@@ -363,15 +350,19 @@ export const BehandlingensLivslopPage = () => {
                         type='button'
                         variant={'tertiary'}
                         onClick={() => {
+                          const artOgOmfangUrl = pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+                            etterlevelseDokumentasjon.id,
+                            artOgOmfang.id || 'ny'
+                          )
                           if (formRef.current.dirty) {
                             setIsUnsavedModalOpen(true)
-                            setUrlToNavigate(getPvkLink(etterlevelseDokumentasjon.id))
+                            setUrlToNavigate(artOgOmfangUrl)
                           } else {
-                            router.push(getPvkLink(etterlevelseDokumentasjon.id))
+                            router.push(artOgOmfangUrl)
                           }
                         }}
                       >
-                        {pvkDokument ? 'PVK-Oversikt' : 'Vurder behov for PVK'}
+                        Behandlingens art og omfang
                       </Button>
                     )}
                   </StickyFooterButtonLayout>
