@@ -77,6 +77,12 @@ export const pvkDokumentasjonBehandlingsenArtOgOmfangUrl = (
 ): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
 
+export const pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl = (
+  etterlevelseDokumentId: string,
+  behandlingensArtOgOmfangId: string
+): string =>
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
+
 export const pvkDokumentasjonPvkBehovUrl = (
   etterlevelseDokumentId: string,
   pvkId: string

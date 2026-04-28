@@ -152,6 +152,7 @@ export const PvkGodkjentReadOnlyActionMenuVariant: FunctionComponent<TProps> = (
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+        readOnlyUrl={true}
       >
         Les behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>

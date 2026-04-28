@@ -3,6 +3,7 @@ import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/beh
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl,
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
@@ -52,17 +53,29 @@ export const BehandlingensLivslopActionMenuItem: FunctionComponent<
 type TBehandlingensArtOgOmfangActionMenuItemProp = PropsWithChildren<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
+  readOnlyUrl?: boolean
 }>
 
 export const ArtOgOmfangActionMenuItem: FunctionComponent<
   TBehandlingensArtOgOmfangActionMenuItemProp
-> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, children }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, children, readOnlyUrl }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-      etterlevelseDokumentasjon.id,
-      behandlingensArtOgOmfang && behandlingensArtOgOmfang.id ? behandlingensArtOgOmfang.id : 'ny'
-    )}
+    href={
+      readOnlyUrl
+        ? pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang && behandlingensArtOgOmfang.id
+              ? behandlingensArtOgOmfang.id
+              : 'ny'
+          )
+        : pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang && behandlingensArtOgOmfang.id
+              ? behandlingensArtOgOmfang.id
+              : 'ny'
+          )
+    }
   >
     {children}
   </ActionMenu.Item>
