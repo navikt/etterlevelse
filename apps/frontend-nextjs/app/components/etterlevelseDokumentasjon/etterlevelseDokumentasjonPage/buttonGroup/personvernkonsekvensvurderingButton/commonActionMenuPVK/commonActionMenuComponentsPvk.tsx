@@ -6,6 +6,7 @@ import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonReadOnlyStepUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
@@ -78,14 +79,23 @@ export const PvkDokumentActionMenuItem: FunctionComponent<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   children: string
   pvkDokument?: IPvkDokument
-}> = ({ etterlevelseDokumentasjon, pvkDokument, children }) => (
+  readOnlyUrl?: boolean
+}> = ({ etterlevelseDokumentasjon, pvkDokument, children, readOnlyUrl }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonStepUrl(
-      etterlevelseDokumentasjon.id,
-      pvkDokument ? pvkDokument.id : 'ny',
-      1
-    )}
+    href={
+      readOnlyUrl
+        ? pvkDokumentasjonReadOnlyStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            1
+          )
+        : pvkDokumentasjonStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            1
+          )
+    }
   >
     {children}
   </ActionMenu.Item>

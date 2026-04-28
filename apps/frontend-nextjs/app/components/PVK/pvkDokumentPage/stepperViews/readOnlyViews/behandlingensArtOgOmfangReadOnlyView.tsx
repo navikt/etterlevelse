@@ -1,13 +1,15 @@
+'use client'
+
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
-import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
+import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/artOgOmfangReadOnlyContent'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
-import PvoTilhorendeDokTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilhorendeDokTilbakemeldingsHistorikk'
-import TilhorendeDokumentasjonTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
-import { IPageResponse } from '@/constants/commonConstants'
+import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
+import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -16,43 +18,39 @@ import {
 import { FunctionComponent } from 'react'
 
 type TProps = {
+  personkategorier: string[]
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  pvkDokument: IPvkDokument
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
-  pvkDokument: IPvkDokument
-  pvkKrav:
-    | {
-        krav: IPageResponse<TKravQL>
-      }
-    | undefined
-  isPvkKravLoading: boolean
   pvoTilbakemelding?: IPvoTilbakemelding
   relevantVurdering?: IVurdering
-  readOnly?: boolean
 }
 
-export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
+export const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = ({
+  personkategorier,
   etterlevelseDokumentasjon,
-  activeStep,
   pvkDokument,
+  activeStep,
   setActiveStep,
   setSelectedStep,
-  pvkKrav,
-  isPvkKravLoading,
   pvoTilbakemelding,
   relevantVurdering,
-  readOnly,
 }) => {
+  const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
+
   return (
     <div className='w-full'>
       <ContentLayout>
-        <TilhorendeDokumentasjonContent
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          pvkKrav={pvkKrav}
-          isPvkKravLoading={isPvkKravLoading}
-          readOnly={readOnly}
-        />
+        {loading && <CenteredLoader />}
+
+        {!loading && artOgOmfang && (
+          <ArtOgOmfangReadOnlyContent
+            artOgOmfang={artOgOmfang}
+            personkategorier={personkategorier}
+          />
+        )}
 
         {/* sidepanel */}
         {pvoTilbakemelding &&
@@ -61,17 +59,19 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
             <div>
               <PvkSidePanelWrapper>
                 {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                  <TilhorendeDokumentasjonTilbakemeldingReadOnly
-                    tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
+                  <PvoTilbakemeldingReadOnly
+                    relevantVurdering={relevantVurdering}
+                    tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
                     sentDate={relevantVurdering.sendtDato}
                   />
                 )}
 
                 {pvkDokument.antallInnsendingTilPvo >= 1 && (
                   <div className='mt-10'>
-                    <PvoTilhorendeDokTilbakemeldingsHistorikk
-                      pvoTilbakemelding={pvoTilbakemelding}
+                    <PvoTilbakemeldingsHistorikk
                       pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      fieldName='behandlingensArtOgOmfang'
                       relevantVurdering={relevantVurdering}
                       forPvo={false}
                     />
@@ -91,4 +91,4 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   )
 }
 
-export default TilhorendeDokumentasjon
+export default BehandlingensArtOgOmfangReadOnlyView

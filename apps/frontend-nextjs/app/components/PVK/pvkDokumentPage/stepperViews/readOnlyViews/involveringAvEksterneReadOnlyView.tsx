@@ -1,13 +1,13 @@
+'use client'
+
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
-import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
+import InvolveringAvEksterneReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/involveringAvEksterneReadOnlyContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
-import PvoTilhorendeDokTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilhorendeDokTilbakemeldingsHistorikk'
-import TilhorendeDokumentasjonTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
-import { IPageResponse } from '@/constants/commonConstants'
+import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
+import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -16,62 +16,60 @@ import {
 import { FunctionComponent } from 'react'
 
 type TProps = {
+  personkategorier: string[]
+  databehandlere: string[]
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
+  pvkDokument: IPvkDokument
   activeStep: number
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
-  pvkDokument: IPvkDokument
-  pvkKrav:
-    | {
-        krav: IPageResponse<TKravQL>
-      }
-    | undefined
-  isPvkKravLoading: boolean
   pvoTilbakemelding?: IPvoTilbakemelding
   relevantVurdering?: IVurdering
-  readOnly?: boolean
 }
 
-export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
+export const InvolveringAvEksterneReadOnlyView: FunctionComponent<TProps> = ({
+  personkategorier,
+  databehandlere,
   etterlevelseDokumentasjon,
-  activeStep,
   pvkDokument,
+  activeStep,
   setActiveStep,
   setSelectedStep,
-  pvkKrav,
-  isPvkKravLoading,
   pvoTilbakemelding,
   relevantVurdering,
-  readOnly,
 }) => {
   return (
     <div className='w-full'>
       <ContentLayout>
-        <TilhorendeDokumentasjonContent
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          pvkKrav={pvkKrav}
-          isPvkKravLoading={isPvkKravLoading}
-          readOnly={readOnly}
-        />
+        {pvkDokument && (
+          <InvolveringAvEksterneReadOnlyContent
+            personkategorier={personkategorier}
+            databehandlere={databehandlere}
+            pvkDokument={pvkDokument}
+          />
+        )}
 
         {/* sidepanel */}
+
         {pvoTilbakemelding &&
           pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
           relevantVurdering && (
             <div>
               <PvkSidePanelWrapper>
                 {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                  <TilhorendeDokumentasjonTilbakemeldingReadOnly
-                    tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
+                  <PvoTilbakemeldingReadOnly
+                    relevantVurdering={relevantVurdering}
+                    tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
                     sentDate={relevantVurdering.sendtDato}
                   />
                 )}
 
                 {pvkDokument.antallInnsendingTilPvo >= 1 && (
                   <div className='mt-10'>
-                    <PvoTilhorendeDokTilbakemeldingsHistorikk
-                      pvoTilbakemelding={pvoTilbakemelding}
+                    <PvoTilbakemeldingsHistorikk
                       pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      fieldName='innvolveringAvEksterne'
                       relevantVurdering={relevantVurdering}
                       forPvo={false}
                     />
@@ -91,4 +89,4 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   )
 }
 
-export default TilhorendeDokumentasjon
+export default InvolveringAvEksterneReadOnlyView

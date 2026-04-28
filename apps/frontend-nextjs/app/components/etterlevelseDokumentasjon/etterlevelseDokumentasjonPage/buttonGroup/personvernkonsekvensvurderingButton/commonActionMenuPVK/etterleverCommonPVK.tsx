@@ -131,3 +131,28 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
     </ActionMenu.Content>
   </ActionMenu>
 )
+
+export const PvkGodkjentReadOnlyActionMenuVariant: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  pvkDokument,
+}) => (
+  <ActionMenu>
+    <PvkActionMenuTrigger />
+    <ActionMenu.Content>
+      <PvkDokumentActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+        readOnlyUrl={true}
+      >
+        Les PVK
+      </PvkDokumentActionMenuItem>
+
+      <PvkBehovActionMenuItem
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkDokument={pvkDokument}
+      >
+        Les om behov for PVK
+      </PvkBehovActionMenuItem>
+    </ActionMenu.Content>
+  </ActionMenu>
+)

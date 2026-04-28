@@ -27,6 +27,7 @@ type TProps = {
     | undefined
   isPvkKravLoading: boolean
   isChangesMadeSinceLastSubmission?: boolean
+  readOnly?: boolean
 }
 
 export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
@@ -34,6 +35,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   pvkKrav,
   isPvkKravLoading,
   isChangesMadeSinceLastSubmission,
+  readOnly,
 }) => {
   const router = useRouter()
 
@@ -210,7 +212,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
             vil også se på ROS ved vurdering av PVK.
           </ReadMore>
 
-          {etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
+          {!readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
             <Alert variant='info' className='my-5'>
               <BodyLong>
                 Dere har ikke lagt ved noen tilhørende dokumenter. Dette kan dere gjøre under{' '}
@@ -223,6 +225,12 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                   Rediger dokumentegenskaper (åpner i en ny fane).
                 </Link>
               </BodyLong>
+            </Alert>
+          )}
+
+          {readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
+            <Alert variant='info' className='my-5'>
+              <BodyLong>Det er ikke lagt til noen dokumenter</BodyLong>
             </Alert>
           )}
         </div>
