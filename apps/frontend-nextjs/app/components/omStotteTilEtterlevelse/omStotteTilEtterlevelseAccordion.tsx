@@ -141,7 +141,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
       </Accordion.Item>
       <Accordion.Item>
         <Accordion.Header>
-          <h3>Besvare etterlevelseskrav¨</h3>
+          <h3>Besvare etterlevelseskrav</h3>
         </Accordion.Header>
         <Accordion.Content>
           <div className='my-6'>
@@ -403,7 +403,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
-            header='Vis meg hvordan jeg tilrettelegger for gjenbruk etterlevelsesdokument mitt'
+            header='Vis meg hvordan jeg tilrettelegger for gjenbruk av etterlevelsesdokument mitt'
             className='mb-6'
           >
             <div className='my-6'>
