@@ -1,3 +1,4 @@
+import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
@@ -42,6 +43,7 @@ export const PvkBehovPage = () => {
   )
 
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
+  const [artOgOmfang] = useBehandlingensArtOgOmfang(params.etterlevelseDokumentasjonId)
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
     {
@@ -155,6 +157,7 @@ export const PvkBehovPage = () => {
               opplysningstyperMangler={opplysningstyperMangler}
               saerligKategorier={saerligKategorier}
               behandlingensLivslop={behandlingensLivslop}
+              artOgOmfangId={artOgOmfang?.id}
             />
             {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
               !isReadOnlyPvkStatus(pvkDokument.status) &&

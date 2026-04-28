@@ -3,7 +3,10 @@ import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/beh
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { pvkDokumentasjonBehandlingsenLivslopUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
@@ -15,11 +18,13 @@ type TProps = {
   opplysningstyperMangler: boolean
   saerligKategorier: boolean
   behandlingensLivslop?: IBehandlingensLivslop
+  artOgOmfangId?: string
 }
 
 export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingensLivslop,
+  artOgOmfangId,
   profilering,
   opplysningstyperMangler,
   saerligKategorier,
@@ -78,7 +83,19 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
               aria-label='redigere etterlevelsesdokumentasjon'
               className='inline'
             >
-              dere har tegnet behandlingens livsløp (åpner i en ny fane).
+              dere har tegnet behandlingens livsløp (åpner i en ny fane)
+            </Link>{' '}
+            og{' '}
+            <Link
+              href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+                etterlevelseDokumentasjon.id,
+                artOgOmfangId || 'ny'
+              )}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline'
+            >
+              vurdert behandlingens art og omfang (åpner i en ny fane).
             </Link>
           </BodyShort>
         )}
