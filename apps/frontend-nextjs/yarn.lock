@@ -640,7 +640,7 @@
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-8.10.2.tgz#001cf489c9e029902c38f7a52e34eee5c2d82a82"
   integrity sha512-zp5izWHDYyKDF7wFKyE5mziU6Hq/rk729bk2gDtTyni0gjIpimKiL+WbaPTjPivRofGt0JR16ZvLZCPVHKjuww==
 
-"@navikt/aksel-icons@^8.10.2":
+"@navikt/aksel-icons@^8.10.3":
   version "8.10.3"
   resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-8.10.3.tgz#a30f1c596de7423acbdd2347a32355aea772a366"
   integrity sha512-csrNBbiluUNWP/Ha33g1hZFHqmA7ofusGt3d0TtDe29+tdRYf5Cu7tmrTv1HWlbBe6wiRT8gYiDKv84t35xqwg==
@@ -650,15 +650,15 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-css/-/ds-css-8.10.2.tgz#238deffb1f06db4dcb70c9cc048d0edd187958e3"
   integrity sha512-q0g9fn50dxuPWZp4bPLvMzAqc40ihlcjZlB8h4P3V/lh65/1tg18yAB6ocF3MVODKClH9ePwZ3DGJCDmFubFmw==
 
-"@navikt/ds-react@8.10.2":
-  version "8.10.2"
-  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-8.10.2.tgz#c55b2d11aa9b12d071e9c9e8fb9ef53756e29825"
-  integrity sha512-VKcv00IF5P0S2+ch8J6PSZxfnTJfCh9rA1DWLBM1EKDbbJxfXbDMEzJGBTVD30zN560cc9TvOXxxwO7Bb73jbQ==
+"@navikt/ds-react@8.10.3":
+  version "8.10.3"
+  resolved "https://registry.yarnpkg.com/@navikt/ds-react/-/ds-react-8.10.3.tgz#d1b215fcd6beef57205dfc7350b5cc7e7104ebff"
+  integrity sha512-ZKFEUx2mmhHjsykKziL0i38tIVBc/dO1bynpnvPUL7RYsd4q5HQ/NpdvrRLHh1WNdN9b/jKI4MuLPrcB3ZiJng==
   dependencies:
     "@floating-ui/react" "0.27.8"
     "@floating-ui/react-dom" "^2.1.8"
-    "@navikt/aksel-icons" "^8.10.2"
-    "@navikt/ds-tokens" "^8.10.2"
+    "@navikt/aksel-icons" "^8.10.3"
+    "@navikt/ds-tokens" "^8.10.3"
     date-fns "^4.0.0"
     react-day-picker "9.14.0"
 
@@ -667,7 +667,7 @@
   resolved "https://registry.yarnpkg.com/@navikt/ds-tailwind/-/ds-tailwind-8.10.2.tgz#c48320e0057fdf0ceda4a883d9a4d2afb194aa93"
   integrity sha512-DilnVw2mDVORaovcPFnxuPHrUc9isGpms4YkuTBvXTo4tUKorjASjQ5W9xx/QVkLyUH5wAEs/47mE3R/DNEE/Q==
 
-"@navikt/ds-tokens@^8.10.2":
+"@navikt/ds-tokens@^8.10.3":
   version "8.10.3"
   resolved "https://registry.yarnpkg.com/@navikt/ds-tokens/-/ds-tokens-8.10.3.tgz#1c8cb263d04f4002c5a1f40b8c5d68366b4613b9"
   integrity sha512-b35JJxZS3KbxQfKCHAK/AwAsCQsUr8CD+CuKFbEfJtZ02kjejt+n+RbUGM6ej30Jle7Myto7gU0r+kpCrS+NJA==
