@@ -15,6 +15,7 @@ import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokument
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { Alert, BodyLong, BodyShort, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useMemo } from 'react'
 
@@ -35,7 +36,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   isPvkKravLoading,
   isChangesMadeSinceLastSubmission,
 }) => {
-  const router = useRouter()
+  const router: AppRouterInstance = useRouter()
 
   const { antallPvkKrav, antallFerdigPvkKrav } = useMemo(() => {
     if (isPvkKravLoading || !pvkKrav?.krav) {
@@ -43,13 +44,14 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
     }
 
     const pvkEtterlevelser: TEtterlevelseQL[] = pvkKrav.krav.content.flatMap(
-      (krav) => krav.etterlevelser
+      (krav: TKravQL) => krav.etterlevelser
     )
 
     return {
       antallPvkKrav: pvkKrav.krav.totalElements,
       antallFerdigPvkKrav: pvkEtterlevelser.filter(
-        (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+        (etterlevelse: TEtterlevelseQL) =>
+          etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
       ).length,
     }
   }, [isPvkKravLoading, pvkKrav])
@@ -125,7 +127,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           </BodyLong>
 
           {!isPvkKravLoading && (
-            <List as='ul'>
+            <List as='ul' className='mb-1'>
               <List.Item>
                 {antallFerdigPvkKrav} av {antallPvkKrav} krav er ferdig utfylt.
               </List.Item>
