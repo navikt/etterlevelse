@@ -81,11 +81,13 @@ export const TiltakView = (props: IProps) => {
             isVisible={tiltak.risikoscenarioIds.length === 1}
           />
 
-          {tiltak.risikoscenarioIds.length > 1 && risikoscenarioList && (
+          {risikoscenarioList && (
             <List as='ul'>
               {risikoscenarioList
-                .filter((risikoscenario) => tiltak.risikoscenarioIds.includes(risikoscenario.id))
-                .map((risikoscenario) => (
+                .filter((risikoscenario: IRisikoscenario) =>
+                  tiltak.risikoscenarioIds.includes(risikoscenario.id)
+                )
+                .map((risikoscenario: IRisikoscenario) => (
                   <List.Item key={risikoscenario.id}>{risikoscenario.navn}</List.Item>
                 ))}
             </List>
