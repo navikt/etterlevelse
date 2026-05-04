@@ -127,7 +127,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           </BodyLong>
 
           {!isPvkKravLoading && (
-            <List as='ul' className='mb-1'>
+            <List as='ul'>
               <List.Item>
                 {antallFerdigPvkKrav} av {antallPvkKrav} krav er ferdig utfylt.
               </List.Item>
@@ -137,7 +137,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
           {isPvkKravLoading && <CenteredLoader />}
 
           {antallFerdigPvkKrav !== antallPvkKrav && (
-            <Alert variant='warning'>
+            <Alert variant='warning' className='mt-1'>
               Dere må fullføre dokumentering av personvernkrav før dere kan sende inn PVK.
             </Alert>
           )}

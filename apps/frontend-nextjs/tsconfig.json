@@ -40,5 +40,5 @@
     "build/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [".next/dev", "node_modules"]
+  "exclude": ["node_modules", ".next/dev"]
 }
