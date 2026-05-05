@@ -5,11 +5,13 @@ COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 # Runtime stage
-FROM ghcr.io/navikt/baseimages/temurin:21
+FROM eclipse-temurin:21-jre
 
 ENV MAIN_CLASS=org.springframework.boot.loader.launch.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
                -Djava.security.egd=file:/dev/./urandom"
+
+WORKDIR /app
 COPY run-java.sh /
 
 COPY --from=builder /application/dependencies/ ./
@@ -19,3 +21,5 @@ RUN true
 COPY --from=builder /application/spring-boot-loader/ ./
 RUN true
 COPY --from=builder /application/application/ ./
+
+CMD ["/run-java.sh"]
