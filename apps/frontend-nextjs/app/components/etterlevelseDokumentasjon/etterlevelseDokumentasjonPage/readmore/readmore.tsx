@@ -1,5 +1,9 @@
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { ReadMore } from '@navikt/ds-react'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { InfoCard, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import GjenbrukAlert from '../alert/GjenbrukAlert'
 import EtterlevelseDokumentasjonExpansionCard from '../expantionCard/etterlevelseDokumentasjonExpansionCard'
@@ -38,6 +42,18 @@ export const EtterlevelseDokumentasjonReadmore: FunctionComponent<TProps> = ({
   relasjonLoading,
 }) => (
   <div className='max-w-5xl flex-1'>
+    {etterlevelseDokumentasjon.status ===
+      EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
+      <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
+        <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+          <InfoCard.Title>
+            Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det ikke
+            være mulig å redigere kravdokumentasjon fram til at dokumentet er godkjent.
+          </InfoCard.Title>
+        </InfoCard.Header>
+      </InfoCard>
+    )}
+
     <div className='flex mb-5'>
       <div>
         <EtterlevelseDokumentasjonExpansionCard
