@@ -1,12 +1,13 @@
 import { BodyShort, Label } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 
-interface IProps {
+type TProps = {
   label: string
   description: string
   className?: string
 }
 
-export const ReadOnlyField = ({ label, description, className }: IProps) => {
+export const ReadOnlyField: FunctionComponent<TProps> = ({ label, description, className }) => {
   const displayInline: boolean = description.length <= 26
   const displayBlock: boolean = description.length >= 27
 
@@ -30,19 +31,19 @@ export const ReadOnlyField = ({ label, description, className }: IProps) => {
   )
 }
 
-interface IPropsReadOnlyFieldBool extends IProps {
+interface IPropsReadOnlyFieldBool extends TProps {
   description: string
   descriptionFalse?: string
   isFalse?: boolean
 }
 
-export const ReadOnlyFieldBool = ({
+export const ReadOnlyFieldBool: FunctionComponent<IPropsReadOnlyFieldBool> = ({
   label,
   description,
   className,
   isFalse,
   descriptionFalse,
-}: IPropsReadOnlyFieldBool) => (
+}) => (
   <div className={className}>
     <Label>{label}</Label>
     <BodyShort>
@@ -52,16 +53,13 @@ export const ReadOnlyFieldBool = ({
   </div>
 )
 
-interface IPropsReadOnlyFieldDescriptionOptional extends IProps {
+interface IPropsReadOnlyFieldDescriptionOptional extends TProps {
   isVisible: boolean
 }
 
-export const ReadOnlyFieldDescriptionOptional = ({
-  label,
-  description,
-  className,
-  isVisible,
-}: IPropsReadOnlyFieldDescriptionOptional) => (
+export const ReadOnlyFieldDescriptionOptional: FunctionComponent<
+  IPropsReadOnlyFieldDescriptionOptional
+> = ({ label, description, className, isVisible }) => (
   <div className={className}>
     <Label>{label}</Label>
     {isVisible && <BodyShort>{description}</BodyShort>}
