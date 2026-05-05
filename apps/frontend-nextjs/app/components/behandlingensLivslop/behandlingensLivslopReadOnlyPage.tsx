@@ -90,13 +90,10 @@ export const BehandlingensLivslopReadOnlyPage = () => {
           </MainPanelLayout>
 
           {/* right side */}
-          {etterlevelseDokumentasjon && (
-            <SidePanelLayout>
-              <BehandlingensLivsLopSidePanel
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              />
-            </SidePanelLayout>
-          )}
+
+          <SidePanelLayout>
+            <BehandlingensLivsLopSidePanel etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+          </SidePanelLayout>
         </ContentLayout>
       )}
     </PageLayout>
