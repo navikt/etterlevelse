@@ -40,7 +40,7 @@
     "@navikt/aksel-icons": "^8.10.3",
     "@navikt/ds-css": "^8.10.3",
     "@navikt/ds-react": "^8.10.3",
-    "@navikt/ds-tailwind": "^8.10.3",
+    "@navikt/ds-tailwind": "^8.10.4",
     "@tailwindcss/postcss": "^4.2.4",
     "axios": "^1.16.0",
     "draft-js": "^0.11.7",
