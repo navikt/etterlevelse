@@ -3,9 +3,12 @@ import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/beh
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl,
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonReadOnlyStepUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
@@ -23,17 +26,25 @@ export const PvkActionMenuTrigger = () => (
 type TBehandlingensLivslopActionMenuItemProp = PropsWithChildren<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   behandlingensLivslop?: IBehandlingensLivslop
+  readOnlyUrl?: boolean
 }>
 
 export const BehandlingensLivslopActionMenuItem: FunctionComponent<
   TBehandlingensLivslopActionMenuItemProp
-> = ({ etterlevelseDokumentasjon, behandlingensLivslop, children }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensLivslop, children, readOnlyUrl }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonBehandlingsenLivslopUrl(
-      etterlevelseDokumentasjon.id,
-      behandlingensLivslop ? behandlingensLivslop.id : 'ny'
-    )}
+    href={
+      readOnlyUrl
+        ? pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensLivslop ? behandlingensLivslop.id : 'ny'
+          )
+        : pvkDokumentasjonBehandlingsenLivslopUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensLivslop ? behandlingensLivslop.id : 'ny'
+          )
+    }
   >
     {children}
   </ActionMenu.Item>
@@ -42,17 +53,29 @@ export const BehandlingensLivslopActionMenuItem: FunctionComponent<
 type TBehandlingensArtOgOmfangActionMenuItemProp = PropsWithChildren<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
+  readOnlyUrl?: boolean
 }>
 
 export const ArtOgOmfangActionMenuItem: FunctionComponent<
   TBehandlingensArtOgOmfangActionMenuItemProp
-> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, children }) => (
+> = ({ etterlevelseDokumentasjon, behandlingensArtOgOmfang, children, readOnlyUrl }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-      etterlevelseDokumentasjon.id,
-      behandlingensArtOgOmfang && behandlingensArtOgOmfang.id ? behandlingensArtOgOmfang.id : 'ny'
-    )}
+    href={
+      readOnlyUrl
+        ? pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang && behandlingensArtOgOmfang.id
+              ? behandlingensArtOgOmfang.id
+              : 'ny'
+          )
+        : pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+            etterlevelseDokumentasjon.id,
+            behandlingensArtOgOmfang && behandlingensArtOgOmfang.id
+              ? behandlingensArtOgOmfang.id
+              : 'ny'
+          )
+    }
   >
     {children}
   </ActionMenu.Item>
@@ -78,14 +101,23 @@ export const PvkDokumentActionMenuItem: FunctionComponent<{
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   children: string
   pvkDokument?: IPvkDokument
-}> = ({ etterlevelseDokumentasjon, pvkDokument, children }) => (
+  readOnlyUrl?: boolean
+}> = ({ etterlevelseDokumentasjon, pvkDokument, children, readOnlyUrl }) => (
   <ActionMenu.Item
     as='a'
-    href={pvkDokumentasjonStepUrl(
-      etterlevelseDokumentasjon.id,
-      pvkDokument ? pvkDokument.id : 'ny',
-      1
-    )}
+    href={
+      readOnlyUrl
+        ? pvkDokumentasjonReadOnlyStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            1
+          )
+        : pvkDokumentasjonStepUrl(
+            etterlevelseDokumentasjon.id,
+            pvkDokument ? pvkDokument.id : 'ny',
+            1
+          )
+    }
   >
     {children}
   </ActionMenu.Item>
