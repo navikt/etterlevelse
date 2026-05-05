@@ -674,7 +674,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     />
                     <RenderTagList
                       list={fieldArrayRenderProps.form.values.resourcesData.map(
-                        (resource: ITeamResource) => resource.fullName
+                        (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                       )}
                       onRemove={fieldArrayRenderProps.remove}
                     />
@@ -710,7 +710,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                       </div>
                       <RenderTagList
                         list={fieldArrayRenderProps.form.values.resourcesData.map(
-                          (resource: ITeamResource) => resource.fullName
+                          (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                         )}
                         onRemove={fieldArrayRenderProps.remove}
                       />
@@ -859,7 +859,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         <RenderTagList
                           list={fieldArrayRenderProps.form.values.risikoeiereData.map(
                             (resource: ITeamResource) =>
-                              resource.fullName + ' (' + resource.navIdent + ')'
+                              `${resource.fullName} (${resource.navIdent})`
                           )}
                           onRemove={fieldArrayRenderProps.remove}
                         />
@@ -915,7 +915,8 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         </div>
                         <RenderTagList
                           list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                            (resource: ITeamResource) => resource.fullName
+                            (resource: ITeamResource) =>
+                              `${resource.fullName} (${resource.navIdent})`
                           )}
                           onRemove={fieldArrayRenderProps.remove}
                         />

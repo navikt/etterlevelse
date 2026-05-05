@@ -188,7 +188,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                       />
                       <RenderTagList
                         list={fieldArrayRenderProps.form.values.ansvarligData.map(
-                          (resource: ITeamResource) => resource.fullName
+                          (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                         )}
                         onRemove={fieldArrayRenderProps.remove}
                       />
@@ -224,7 +224,8 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                         </div>
                         <RenderTagList
                           list={fieldArrayRenderProps.form.values.ansvarligData.map(
-                            (resource: ITeamResource) => resource.fullName
+                            (resource: ITeamResource) =>
+                              `${resource.fullName} (${resource.navIdent})`
                           )}
                           onRemove={fieldArrayRenderProps.remove}
                         />

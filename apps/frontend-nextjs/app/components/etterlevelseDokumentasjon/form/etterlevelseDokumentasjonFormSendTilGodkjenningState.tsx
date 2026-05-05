@@ -499,7 +499,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                     />
                     <RenderTagList
                       list={fieldArrayRenderProps.form.values.resourcesData.map(
-                        (resource: ITeamResource) => resource.fullName
+                        (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                       )}
                       onRemove={fieldArrayRenderProps.remove}
                     />
@@ -535,7 +535,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                       </div>
                       <RenderTagList
                         list={fieldArrayRenderProps.form.values.resourcesData.map(
-                          (resource: ITeamResource) => resource.fullName
+                          (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                         )}
                         onRemove={fieldArrayRenderProps.remove}
                       />

@@ -169,7 +169,9 @@ export const TiltakForm: FunctionComponent<TProps> = ({
                     styles={selectOverrides}
                   />
                   <RenderTagList
-                    list={[fieldRenderProps.form.values.ansvarlig.fullName]}
+                    list={[
+                      `${fieldRenderProps.form.values.ansvarlig.fullName} (${fieldRenderProps.form.values.ansvarlig.navIdent})`,
+                    ]}
                     onRemove={() => {
                       fieldRenderProps.form.setFieldValue('ansvarlig', {})
                     }}
@@ -205,7 +207,9 @@ export const TiltakForm: FunctionComponent<TProps> = ({
                       </div>
                     </div>
                     <RenderTagList
-                      list={[fieldRenderProps.form.values.ansvarlig.fullName]}
+                      list={[
+                        `${fieldRenderProps.form.values.ansvarlig.fullName} (${fieldRenderProps.form.values.ansvarlig.navIdent})`,
+                      ]}
                       onRemove={() => {
                         fieldRenderProps.form.setFieldValue('ansvarlig', {})
                       }}
