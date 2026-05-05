@@ -107,8 +107,7 @@ export const BehandlingensLivslopReadOnlyView: FunctionComponent<TProps> = ({
               )}
 
             {(!pvoTilbakemelding ||
-              (pvoTilbakemelding &&
-                pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) && (
+              pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG) && (
               // Don't remove this div. Sticky will not work without it.
               <div>
                 <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
