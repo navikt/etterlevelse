@@ -127,7 +127,7 @@ export const InvolveringSummaryReadOnly: FunctionComponent<TProps> = ({
           className='cursor-pointer'
           href={`${pathName}?steg=${customStepNumber ? customStepNumber : 5}`}
         >
-          {'Les detaljer'}
+          Les detaljer
         </FormSummary.EditLink>
       </FormSummary.Footer>
     </FormSummary>
