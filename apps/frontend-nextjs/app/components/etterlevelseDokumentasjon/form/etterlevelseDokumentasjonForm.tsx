@@ -859,7 +859,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                         <RenderTagList
                           list={fieldArrayRenderProps.form.values.risikoeiereData.map(
                             (resource: ITeamResource) =>
-                              resource.fullName + ' (' + resource.navIdent + ')'
+                              resource.fullName + '(' + resource.navIdent + ')'
                           )}
                           onRemove={fieldArrayRenderProps.remove}
                         />
