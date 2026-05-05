@@ -11,6 +11,7 @@ import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeld
 import { IUserContext } from '@/provider/user/userProvider'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
 import { FunctionComponent } from 'react'
+import LesRollePvk from './LesRollePvk/LesRollePvk'
 import AdminRollePVK from './adminRollePVK/adminRollePVK'
 import EtterleverOgRisikoeierRollePVK from './etterleverOgRisikoeierRollePVK/etterleverOgRisikoeierRollePVK'
 import EtterleverRollePVK from './etterleverRollePVK/etterleverRollePVK'
@@ -83,6 +84,13 @@ export const PersonvernkonsekvensvurderingButton: FunctionComponent<TProps> = ({
           behandlingensArtOgOmfang={behandlingensArtOgOmfang}
           behandlingsLivslop={behandlingsLivslop}
           pvoTilbakemelding={pvoTilbakemelding}
+        />
+      )
+    case EActionMenuRoles.Les:
+      return (
+        <LesRollePvk
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
         />
       )
     default:

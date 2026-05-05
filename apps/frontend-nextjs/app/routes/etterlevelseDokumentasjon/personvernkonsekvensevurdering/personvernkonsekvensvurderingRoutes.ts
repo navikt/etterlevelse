@@ -22,6 +22,21 @@ export const pvkDokumentasjonStepUrl = (
   return url
 }
 
+export const pvkDokumentasjonReadOnlyStepUrl = (
+  etterlevelseDokumentId: string | undefined,
+  pvkDokumentId: number | string | undefined,
+  step: number | string,
+  filter?: string
+): string => {
+  const url: string = `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent${personvernKonsekvensvurderingUrl}/${pvkDokumentId}?steg=${step}`
+
+  if (filter) {
+    return `${url}${filter}`
+  }
+
+  return url
+}
+
 export const pvkDokumentasjonPvkTypeStepUrl = (
   etterlevelseDokumentId: string,
   pvkType: string,
@@ -50,11 +65,23 @@ export const pvkDokumentasjonBehandlingsenLivslopUrl = (
 ): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslopId}`
 
+export const pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl = (
+  etterlevelseDokumentId: string,
+  behandlingensLivslopId?: string
+): string =>
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent/behandlingens-livslop/${behandlingensLivslopId}`
+
 export const pvkDokumentasjonBehandlingsenArtOgOmfangUrl = (
   etterlevelseDokumentId: string,
   behandlingensArtOgOmfangId: string
 ): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
+
+export const pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl = (
+  etterlevelseDokumentId: string,
+  behandlingensArtOgOmfangId: string
+): string =>
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
 
 export const pvkDokumentasjonPvkBehovUrl = (
   etterlevelseDokumentId: string,

@@ -29,6 +29,7 @@ type TProps = {
   isPvkKravLoading: boolean
   pvoTilbakemelding?: IPvoTilbakemelding
   relevantVurdering?: IVurdering
+  readOnly?: boolean
 }
 
 export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
@@ -41,51 +42,51 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   isPvkKravLoading,
   pvoTilbakemelding,
   relevantVurdering,
-}) => {
-  return (
-    <div className='w-full'>
-      <ContentLayout>
-        <TilhorendeDokumentasjonContent
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          pvkKrav={pvkKrav}
-          isPvkKravLoading={isPvkKravLoading}
-        />
-
-        {/* sidepanel */}
-        {pvoTilbakemelding &&
-          pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
-          relevantVurdering && (
-            <div>
-              <PvkSidePanelWrapper>
-                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                  <TilhorendeDokumentasjonTilbakemeldingReadOnly
-                    tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
-                    sentDate={relevantVurdering.sendtDato}
-                  />
-                )}
-
-                {pvkDokument.antallInnsendingTilPvo >= 1 && (
-                  <div className='mt-10'>
-                    <PvoTilhorendeDokTilbakemeldingsHistorikk
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      pvkDokument={pvkDokument}
-                      relevantVurdering={relevantVurdering}
-                      forPvo={false}
-                    />
-                  </div>
-                )}
-              </PvkSidePanelWrapper>
-            </div>
-          )}
-      </ContentLayout>
-      <FormButtons
-        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-        activeStep={activeStep}
-        setActiveStep={setActiveStep}
-        setSelectedStep={setSelectedStep}
+  readOnly,
+}) => (
+  <div className='w-full'>
+    <ContentLayout>
+      <TilhorendeDokumentasjonContent
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        pvkKrav={pvkKrav}
+        isPvkKravLoading={isPvkKravLoading}
+        readOnly={readOnly}
       />
-    </div>
-  )
-}
+
+      {/* sidepanel */}
+      {pvoTilbakemelding &&
+        pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+        relevantVurdering && (
+          <div>
+            <PvkSidePanelWrapper>
+              {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                <TilhorendeDokumentasjonTilbakemeldingReadOnly
+                  tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
+                  sentDate={relevantVurdering.sendtDato}
+                />
+              )}
+
+              {pvkDokument.antallInnsendingTilPvo >= 1 && (
+                <div className='mt-10'>
+                  <PvoTilhorendeDokTilbakemeldingsHistorikk
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    pvkDokument={pvkDokument}
+                    relevantVurdering={relevantVurdering}
+                    forPvo={false}
+                  />
+                </div>
+              )}
+            </PvkSidePanelWrapper>
+          </div>
+        )}
+    </ContentLayout>
+    <FormButtons
+      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+      activeStep={activeStep}
+      setActiveStep={setActiveStep}
+      setSelectedStep={setSelectedStep}
+    />
+  </div>
+)
 
 export default TilhorendeDokumentasjon

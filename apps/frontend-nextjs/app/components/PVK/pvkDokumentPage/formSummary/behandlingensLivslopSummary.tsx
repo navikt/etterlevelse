@@ -7,11 +7,13 @@ type TProps = {
   behandlingensLivslop?: IBehandlingensLivslop
   updateTitleUrlAndStep: (step: number) => void
   behandlingensLivslopError: boolean
+  customLinkText?: string
 }
 export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
   behandlingensLivslop,
   updateTitleUrlAndStep,
   behandlingensLivslopError,
+  customLinkText,
 }) => (
   <FormSummary className='my-3'>
     <FormSummary.Header>
@@ -82,7 +84,7 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
         onClick={() => updateTitleUrlAndStep(2)}
         href={window.location.pathname + '?steg=' + 2}
       >
-        Endre svar
+        {customLinkText ? customLinkText : 'Endre svar'}
       </FormSummary.EditLink>
     </FormSummary.Footer>
   </FormSummary>
