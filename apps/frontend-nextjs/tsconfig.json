@@ -33,12 +33,15 @@
     "app/**/*.tsx",
     "proxy.ts",
     "next.config.ts",
-    ".next/types/**/*.ts",
-    ".next/types/**/*.tsx",
     "app/api/begrep",
-    "next-env.d.ts",
-    "build/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    "next-env.d.ts"
   ],
-  "exclude": ["node_modules", ".next/dev"]
+  "exclude": [
+    "node_modules",
+    ".next/dev",
+    "build/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    ".next/types/**/*.ts",
+    ".next/types/**/*.tsx"
+  ]
 }
