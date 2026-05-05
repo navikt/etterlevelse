@@ -245,12 +245,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      {/*      <Accordion.Item>
+      <Accordion.Item>
         <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
         <Accordion.Content>
-                    <div className='my-6'>
-            <video controls src='videos/mangler'> <track kind='captions' /></video>
-          </div>
+          {/*          <div className='my-6'>
+            <video controls src='videos/mangler'>
+              {' '}
+              <track kind='captions' />
+            </video>
+          </div>*/}
           <BodyLong className='mb-3'>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
             menyen på dokumentets temaside. På siden “Godkjenn etterlevelsen” kan du gjøre følgende:
@@ -290,7 +293,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
             </List.Item>
           </List>
         </Accordion.Content>
-      </Accordion.Item>*/}
+      </Accordion.Item>
       <Accordion.Item>
         <Accordion.Header>
           <h3>Oppdatere etterlevelsesdokumentasjon etter godkjenning</h3>
