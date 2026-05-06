@@ -5,7 +5,7 @@ COPY target/app-exec.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 # Runtime stage
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 
 ENV MAIN_CLASS=org.springframework.boot.loader.launch.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
