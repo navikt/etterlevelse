@@ -7,7 +7,7 @@ import {
 } from '@/api/statistikk/statistikkApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
+import { IAvdelingDashboardStats, IDashboardTable } from '@/constants/dashboard/dashboardConstants'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { DownloadIcon } from '@navikt/aksel-icons'
@@ -326,10 +326,11 @@ const exportToCsv = (stats: ITemaStats[]) => {
 const TemaDashboardPage = () => {
   const [statistikk, setStatistikk] = useState<IEtterlevelseStatistikk[]>([])
   const [avdelinger, setAvdelinger] = useState<IAvdelingDashboardStats[]>([])
-  const [avdelingDokIds, setAvdelingDokIds] = useState<Set<string> | null>(null)
+  const [avdelingTables, setAvdelingTables] = useState<IDashboardTable[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTema, setSelectedTema] = useState<string>('')
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
+  const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
 
   const { utils } = useContext(CodelistContext)
 
@@ -346,25 +347,41 @@ const TemaDashboardPage = () => {
 
   useEffect(() => {
     if (selectedAvdeling) {
-      getDashboardTableByAvdeling(selectedAvdeling).then((tables) => {
-        const ids = new Set(tables.map((t) => t.etterlevelseDokumentasjonId))
-        setAvdelingDokIds(ids)
-      })
+      getDashboardTableByAvdeling(selectedAvdeling).then(setAvdelingTables)
     } else {
-      setAvdelingDokIds(null)
+      setAvdelingTables([])
+      setSelectedSeksjon('')
     }
   }, [selectedAvdeling])
 
+  const seksjoner = useMemo(() => {
+    const map = new Map<string, string>()
+    avdelingTables.forEach((t) =>
+      t.seksjoner?.forEach((s) => map.set(s.nomSeksjonId, s.nomSeksjonName))
+    )
+    return Array.from(map, ([id, navn]) => ({ id, navn })).sort((a, b) =>
+      a.navn.localeCompare(b.navn, 'nb')
+    )
+  }, [avdelingTables])
+
   const filteredStatistikk = useMemo(() => {
     let data = statistikk
-    if (avdelingDokIds) {
-      data = data.filter((s) => avdelingDokIds.has(s.etterlevelseDokumentasjonId))
+    if (selectedAvdeling && avdelingTables.length > 0) {
+      let tables = avdelingTables
+      if (selectedSeksjon) {
+        tables = tables.filter((t) => t.seksjoner?.some((s) => s.nomSeksjonId === selectedSeksjon))
+      }
+      const dokIds = new Set(tables.map((t) => t.etterlevelseDokumentasjonId))
+      data = data.filter((s) => dokIds.has(s.etterlevelseDokumentasjonId))
     }
     return data
-  }, [statistikk, avdelingDokIds])
+  }, [statistikk, selectedAvdeling, avdelingTables, selectedSeksjon])
 
   const temaStats = useMemo(
-    () => computeTemaStats(filteredStatistikk, (code) => utils.getShortname(EListName.TEMA, code)),
+    () =>
+      computeTemaStats(filteredStatistikk, (code) =>
+        code === 'Ingen' ? 'Uten tema' : utils.getShortname(EListName.TEMA, code)
+      ),
     [filteredStatistikk, utils]
   )
 
@@ -419,7 +436,10 @@ const TemaDashboardPage = () => {
           label='Filtrer etter avdeling'
           className='w-fit min-w-64'
           value={selectedAvdeling}
-          onChange={(e) => setSelectedAvdeling(e.target.value)}
+          onChange={(e) => {
+            setSelectedAvdeling(e.target.value)
+            setSelectedSeksjon('')
+          }}
         >
           <option value=''>Alle avdelinger</option>
           {avdelinger.map((a) => (
@@ -428,6 +448,22 @@ const TemaDashboardPage = () => {
             </option>
           ))}
         </Select>
+
+        {selectedAvdeling && seksjoner.length > 0 && (
+          <Select
+            label='Filtrer etter seksjon'
+            className='w-fit min-w-64'
+            value={selectedSeksjon}
+            onChange={(e) => setSelectedSeksjon(e.target.value)}
+          >
+            <option value=''>Alle seksjoner</option>
+            {seksjoner.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.navn}
+              </option>
+            ))}
+          </Select>
+        )}
 
         <Button
           variant='tertiary'
