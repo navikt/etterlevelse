@@ -13,4 +13,5 @@ export const env = {
   lovdataRundskrivBaseUrl: process.env.NEXT_PUBLIC_LOVDATA_RUNDSKRIV_BASE_URL!,
   lovdataRettskildeBaseUrl: process.env.NEXT_PUBLIC_LOVDATA_RETTSKILDE_BASE_URL!,
   p360BaseUrl: process.env.NEXT_PUBLIC_P360_BASE_URL!,
+  ardoqSystemUrl: process.env.NEXT_PUBLIC_ARDOQ_SYSTEM_URL!,
 }

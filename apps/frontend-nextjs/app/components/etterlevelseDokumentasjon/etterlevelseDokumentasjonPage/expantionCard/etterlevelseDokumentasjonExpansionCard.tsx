@@ -1,5 +1,6 @@
 'use client'
 
+import ArdoqSystemerView from '@/components/ardoq/ardoqSystemerView'
 import { BehandlingList } from '@/components/behandlingskatalog/behandlingList'
 import { DpBehandlingList } from '@/components/behandlingskatalog/dpBehandlingList'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
@@ -31,8 +32,15 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
     EListName.RELEVANS
   )
 
-  const { behandlingIds, behandlinger, dpBehandlingIds, dpBehandlinger, teams, irrelevansFor } =
-    etterlevelseDokumentasjon
+  const {
+    behandlingIds,
+    behandlinger,
+    dpBehandlingIds,
+    dpBehandlinger,
+    teams,
+    irrelevansFor,
+    ardoqSystemData,
+  } = etterlevelseDokumentasjon
 
   return (
     <div>
@@ -160,6 +168,18 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 )}
                 {etterlevelseDokumentasjon.seksjoner.length === 0 && 'Ikke angitt'}
               </BodyLong>
+            </div>
+
+            <div className='mb-2.5'>
+              {ardoqSystemData.length > 0 && (
+                <ArdoqSystemerView ardoqSystemData={ardoqSystemData} link />
+              )}
+              {ardoqSystemData.length === 0 && (
+                <div className='flex flex-wrap gap-2 items-center'>
+                  <Label size='medium'>Team:</Label>
+                  <BodyLong size='medium'>Ikke angitt</BodyLong>
+                </div>
+              )}
             </div>
 
             <div className='mb-2.5'>

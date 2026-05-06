@@ -1,6 +1,6 @@
 import { useTeam } from '@/api/teamkatalogen/teamkatalogenApi'
 import { teamKatTeamLink } from '@/util/config/config'
-import { Label, Link } from '@navikt/ds-react'
+import { Label, Link, List } from '@navikt/ds-react'
 
 interface IPropsTeamName {
   id: string
@@ -38,13 +38,17 @@ export const Teams = (props: IPropsTeams) => {
 
   return (
     <div className='flex gap-2 items-start'>
-      <div>
+      <div className='min-w-16'>
         <Label size='medium'>Team:</Label>
       </div>
       <div>
-        {teams.map((team, index) => (
-          <TeamName key={`team_${index}`} id={team} link={link} big={big} />
-        ))}
+        <List>
+          {teams.map((team, index) => (
+            <List.Item key={`team_${index}`}>
+              <TeamName id={team} link={link} big={big} />
+            </List.Item>
+          ))}
+        </List>
       </div>
     </div>
   )
