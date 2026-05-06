@@ -35,6 +35,20 @@ interface IBarSegment {
   color: string
 }
 
+const roundedPercentages = (values: number[]): number[] => {
+  const total = values.reduce((s, v) => s + v, 0)
+  if (total === 0) return values.map(() => 0)
+  const exact = values.map((v) => (v / total) * 100)
+  const floored = exact.map((v) => Math.floor(v))
+  const remainder = 100 - floored.reduce((s, v) => s + v, 0)
+  const diffs = exact.map((v, i) => ({ i, diff: v - floored[i] }))
+  diffs.sort((a, b) => b.diff - a.diff)
+  for (let j = 0; j < remainder; j++) {
+    floored[diffs[j].i] += 1
+  }
+  return floored
+}
+
 const RechartsStackedBar = ({
   data,
   showPercentage,
@@ -45,6 +59,8 @@ const RechartsStackedBar = ({
   const total = data.reduce((sum, d) => sum + d.value, 0)
 
   if (total === 0) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
+
+  const pcts = roundedPercentages(data.map((d) => d.value))
 
   const chartData = [
     data.reduce((acc, d) => ({ ...acc, [d.name]: d.value }), {} as Record<string, number>),
@@ -61,10 +77,11 @@ const RechartsStackedBar = ({
           <XAxis type='number' hide />
           <YAxis type='category' hide />
           <Tooltip
-            formatter={(value, name) => [
-              `${Number(value)} (${Math.round((Number(value) / total) * 100)}%)`,
-              String(name),
-            ]}
+            labelFormatter={() => ''}
+            formatter={(value, name) => {
+              const idx = data.findIndex((d) => d.name === String(name))
+              return [`${Number(value)} (${pcts[idx] ?? 0}%)`, String(name)]
+            }}
           />
           {data
             .filter((d) => d.value > 0)
@@ -74,8 +91,8 @@ const RechartsStackedBar = ({
         </BarChart>
       </ResponsiveContainer>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
-        {data.map((d) => (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
+        {data.map((d, i) => (
           <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span
               style={{
@@ -91,7 +108,7 @@ const RechartsStackedBar = ({
               {d.name}{' '}
               <strong>
                 {d.value}
-                {showPercentage ? ` (${Math.round((d.value / total) * 100)}%)` : ''}
+                {showPercentage ? ` (${pcts[i]}%)` : ''}
               </strong>
             </BodyShort>
           </div>
@@ -148,7 +165,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
       >
         <div>
           <Heading size='xsmall' level='3'>
-            Gjennomføringsstatus (krav) ({stats.kravTotal})
+            Gjennomføringsstatus: krav ({stats.kravTotal})
           </Heading>
           <RechartsStackedBar data={kravData} showPercentage />
         </div>
@@ -157,7 +174,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
           <Heading size='xsmall' level='3'>
             Etterlevelse (suksesskriterier) ({totalSuksess})
           </Heading>
-          <RechartsStackedBar data={suksessData} />
+          <RechartsStackedBar data={suksessData} showPercentage />
         </div>
       </div>
     </div>
@@ -188,29 +205,61 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         }}
       >
         <div>
-          <BodyShort weight='semibold'>Gjennomføringsstatus (krav) ({stats.kravTotal})</BodyShort>
-          <BodyShort>
-            Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
-          </BodyShort>
-          <BodyShort>
-            Ferdig vurdert <span className='font-bold'>{stats.kravFerdigVurdert}</span>
-          </BodyShort>
+          {(() => {
+            const kravPcts = roundedPercentages([stats.kravUnderArbeid, stats.kravFerdigVurdert])
+            return (
+              <>
+                <BodyShort weight='semibold'>
+                  Gjennomføringsstatus: krav ({stats.kravTotal})
+                </BodyShort>
+                <BodyShort>
+                  Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
+                  {stats.kravTotal > 0 && ` (${kravPcts[0]}%)`}
+                </BodyShort>
+                <BodyShort>
+                  Ferdig vurdert <span className='font-bold'>{stats.kravFerdigVurdert}</span>
+                  {stats.kravTotal > 0 && ` (${kravPcts[1]}%)`}
+                </BodyShort>
+              </>
+            )
+          })()}
         </div>
 
         <div>
-          <BodyShort weight='semibold'>Etterlevelse (suksesskriterier) ({totalSuksess})</BodyShort>
-          <BodyShort>
-            Under arbeid <span className='font-bold'>{stats.suksesskriterierUnderArbeid}</span>
-          </BodyShort>
-          <BodyShort>
-            Oppfylt <span className='font-bold'>{stats.suksesskriterierOppfylt}</span>
-          </BodyShort>
-          <BodyShort>
-            Ikke oppfylt <span className='font-bold'>{stats.suksesskriterierIkkeOppfylt}</span>
-          </BodyShort>
-          <BodyShort>
-            Ikke relevant <span className='font-bold'>{stats.suksesskriterierIkkeRelevant}</span>
-          </BodyShort>
+          {(() => {
+            const sukPcts = roundedPercentages([
+              stats.suksesskriterierUnderArbeid,
+              stats.suksesskriterierOppfylt,
+              stats.suksesskriterierIkkeOppfylt,
+              stats.suksesskriterierIkkeRelevant,
+            ])
+            return (
+              <>
+                <BodyShort weight='semibold'>
+                  Etterlevelse (suksesskriterier) ({totalSuksess})
+                </BodyShort>
+                <BodyShort>
+                  Under arbeid{' '}
+                  <span className='font-bold'>{stats.suksesskriterierUnderArbeid}</span>
+                  {totalSuksess > 0 && ` (${sukPcts[0]}%)`}
+                </BodyShort>
+                <BodyShort>
+                  Oppfylt <span className='font-bold'>{stats.suksesskriterierOppfylt}</span>
+                  {totalSuksess > 0 && ` (${sukPcts[1]}%)`}
+                </BodyShort>
+                <BodyShort>
+                  Ikke oppfylt{' '}
+                  <span className='font-bold'>{stats.suksesskriterierIkkeOppfylt}</span>
+                  {totalSuksess > 0 && ` (${sukPcts[2]}%)`}
+                </BodyShort>
+                <BodyShort>
+                  Ikke relevant{' '}
+                  <span className='font-bold'>{stats.suksesskriterierIkkeRelevant}</span>
+                  {totalSuksess > 0 && ` (${sukPcts[3]}%)`}
+                </BodyShort>
+              </>
+            )
+          })()}
         </div>
       </div>
     </div>
