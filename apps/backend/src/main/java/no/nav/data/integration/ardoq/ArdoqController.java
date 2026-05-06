@@ -64,13 +64,13 @@ public class ArdoqController {
     @Operation(summary = "Search Systems")
     @ApiResponse(description = "Systems fetched")
     @GetMapping("/search/{name}")
-    public ResponseEntity<RestResponsePage<ArdoqSystemResponse>> searchSystemByName(@PathVariable String name) {
+    public ResponseEntity<List<ArdoqSystemResponse>> searchSystemByName(@PathVariable String name) {
         log.info("Received request for Ardoq system with the name like {}", name);
         validateLen(name);
         var systems = filter(ardoqClient.getAllArdoqSystems(), system -> containsIgnoreCase(system.getNavn() + " - " + system.getAlias(), name));
         systems.sort(comparing(ArdoqSystemResponse::getNavn, startsWith(name)));
         log.info("Returned {} systems", systems.size());
-        return new ResponseEntity<>(new RestResponsePage<>(systems), HttpStatus.OK);
+        return ResponseEntity.ok(systems);
     }
 
 
