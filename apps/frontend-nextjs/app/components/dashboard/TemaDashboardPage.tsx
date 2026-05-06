@@ -422,6 +422,7 @@ const TemaDashboardPage = () => {
           icon={<DownloadIcon aria-hidden />}
           onClick={() => exportToCsv(filteredTemaStats)}
           disabled={isLoading || filteredTemaStats.length === 0}
+          className='ml-auto pr-4'
         >
           Last ned CSV
         </Button>
