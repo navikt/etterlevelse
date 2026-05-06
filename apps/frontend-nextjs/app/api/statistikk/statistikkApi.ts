@@ -56,10 +56,20 @@ const fetchAllPages = async <T>(url: string): Promise<T[]> => {
   return all
 }
 
+let etterlevelseCache: { data: IEtterlevelseStatistikk[]; timestamp: number } | null = null
+const CACHE_TTL_MS = 5 * 60 * 1000
+
 export const getAllBehandlingStatistikk = async (): Promise<IBehandlingStatistikk[]> => {
   return fetchAllPages<IBehandlingStatistikk>(`${env.backendBaseUrl}/statistikk/behandling`)
 }
 
 export const getAllEtterlevelseStatistikk = async (): Promise<IEtterlevelseStatistikk[]> => {
-  return fetchAllPages<IEtterlevelseStatistikk>(`${env.backendBaseUrl}/statistikk/etterlevelse`)
+  if (etterlevelseCache && Date.now() - etterlevelseCache.timestamp < CACHE_TTL_MS) {
+    return etterlevelseCache.data
+  }
+  const data = await fetchAllPages<IEtterlevelseStatistikk>(
+    `${env.backendBaseUrl}/statistikk/etterlevelse`
+  )
+  etterlevelseCache = { data, timestamp: Date.now() }
+  return data
 }
