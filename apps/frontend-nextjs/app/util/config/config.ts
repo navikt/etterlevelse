@@ -3,7 +3,7 @@ import { env } from '../env/env'
 export const navSlackTeamId = 'T5LNAMWNA'
 
 export const ardoqSystemLink = (ardoqSystemId: string) =>
-  `${env.ardoqSystemUrl}/discover/overview/${ardoqSystemId}`
+  `${env.ardoqSystemUrl}discover/overview/${ardoqSystemId}`
 export const teamKatPersonLink = (navIdent: string) => `${env.teamKatBaseUrl}resource/${navIdent}`
 export const teamKatTeamLink = (id: string) => `${env.teamKatBaseUrl}team/${id}`
 export const slackLink = (channelId: string) =>
