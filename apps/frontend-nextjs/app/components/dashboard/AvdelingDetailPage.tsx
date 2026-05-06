@@ -224,6 +224,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       currentPage={data ? data.avdelingNavn : ''}
       breadcrumbPaths={[{ href: '/dashboard', pathName: 'Dashboard' }]}
     >
+      <div className='mt-4'>
+        <Heading size='large' level='1'>
+          {data.avdelingNavn}
+        </Heading>
+      </div>
+
       <LocalAlert status='announcement' className='mt-4'>
         <LocalAlert.Header>
           <LocalAlert.Title as='h2'>
@@ -235,12 +241,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           slack.
         </LocalAlert.Content>
       </LocalAlert>
-
-      <div className='mt-4'>
-        <Heading size='large' level='1'>
-          {data.avdelingNavn}
-        </Heading>
-      </div>
 
       {avdelingId === 'ingen-avdeling' && (
         <LocalAlert status='warning' className='mt-4'>
@@ -263,6 +263,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           </LocalAlert.Content>
         </LocalAlert>
       )}
+
+      <Heading size='medium' level='2' className='mt-4'>
+        Oversikt
+      </Heading>
 
       {data.seksjoner && data.seksjoner.length > 0 && (
         <Select
@@ -303,10 +307,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           </LocalAlert.Content>
         </LocalAlert>
       )}
-
-      <Heading size='medium' level='2' className='mt-4'>
-        Oversikt
-      </Heading>
 
       <Tabs className='mt-4' defaultValue='figurer'>
         <Tabs.List>
