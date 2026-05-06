@@ -813,48 +813,50 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             </div>
           )}
 
-          <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldArray name='ardoqSystemData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter system'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        return noOptionMessage(inputValue)
-                      }}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={useArdoqSearch}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.ardoqSystemData.filter(
-                            (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
-                        (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
-                    />
+          {env.isDev && (
+            <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldArray name='ardoqSystemData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter system'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => {
+                          return noOptionMessage(inputValue)
+                        }}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={useArdoqSearch}
+                        onChange={(value: any) => {
+                          if (
+                            value &&
+                            fieldArrayRenderProps.form.values.ardoqSystemData.filter(
+                              (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                            ).length === 0
+                          ) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
+                          (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
-            </FieldArray>
-            <div className='flex-1' />
-          </div>
+                )}
+              </FieldArray>
+              <div className='flex-1' />
+            </div>
+          )}
 
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>

@@ -48,6 +48,7 @@ import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kod
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
+import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
@@ -70,7 +71,6 @@ import {
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
-import { env } from 'process'
 import {
   ChangeEvent,
   FunctionComponent,
@@ -642,48 +642,50 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
             </div>
           )}
 
-          <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldArray name='ardoqSystemData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter system'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        return noOptionMessage(inputValue)
-                      }}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={useArdoqSearch}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.ardoqSystemData.filter(
-                            (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
-                        (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
-                    />
+          {env.isDev && (
+            <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldArray name='ardoqSystemData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter system'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => {
+                          return noOptionMessage(inputValue)
+                        }}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={useArdoqSearch}
+                        onChange={(value: any) => {
+                          if (
+                            value &&
+                            fieldArrayRenderProps.form.values.ardoqSystemData.filter(
+                              (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                            ).length === 0
+                          ) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
+                          (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
-            </FieldArray>
-            <div className='flex-1' />
-          </div>
+                )}
+              </FieldArray>
+              <div className='flex-1' />
+            </div>
+          )}
 
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
