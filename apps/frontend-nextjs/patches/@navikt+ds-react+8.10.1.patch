@@ -1,0 +1,13 @@
+diff --git a/node_modules/@navikt/ds-react/esm/types/theme.d.ts b/node_modules/@navikt/ds-react/esm/types/theme.d.ts
+index ae2650d..8e4344d 100644
+--- a/node_modules/@navikt/ds-react/esm/types/theme.d.ts
++++ b/node_modules/@navikt/ds-react/esm/types/theme.d.ts
+@@ -8,7 +8,7 @@ export type AkselColor = AkselColorRole | keyof CustomAkselColor;
+ 
+ declare global {
+   namespace React {
+-    interface HTMLAttributes {
++    interface HTMLAttributes<T> {
+       "data-color"?: AkselColor;
+     }
+   }
