@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.dashboard.dto.BehovForPvkStats;
 import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
 import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
@@ -24,6 +27,7 @@ import no.nav.data.etterlevelse.dashboard.dto.DokumenterStats;
 import no.nav.data.etterlevelse.dashboard.dto.PvkStats;
 import no.nav.data.etterlevelse.dashboard.dto.SeksjonOption;
 import no.nav.data.etterlevelse.dashboard.dto.SuksesskriterierStats;
+import no.nav.data.etterlevelse.dashboard.dto.TemaDashboardResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
@@ -498,5 +502,103 @@ public class DashboardService {
                 .ikkeOppfyltProsent(totalSuksesskriterier > 0 ? Math.round((float) ikkeOppfyltAntall / totalSuksesskriterier * 100) : 0)
                 .ikkeRelevantProsent(totalSuksesskriterier > 0 ? Math.round((float) ikkeRelevantAntall / totalSuksesskriterier * 100) : 0)
                 .build();
+    }
+
+    public List<TemaDashboardResponse> getTemaDashboardStats(String avdelingId, String seksjonId) {
+        List<Etterlevelse> etterlevelseList;
+
+        if (avdelingId != null && !avdelingId.isEmpty()) {
+            List<EtterlevelseDokumentasjon> doks = etterlevelseDokumentasjonService.getByAvdeling(avdelingId);
+
+            if (seksjonId != null && !seksjonId.isEmpty()) {
+                if (seksjonId.equals("ingen-seksjon")) {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
+                    ).toList();
+                } else {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner() != null &&
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
+                                    .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
+                    ).toList();
+                }
+            }
+
+            var dokIds = doks.stream().map(EtterlevelseDokumentasjon::getId).toList();
+            etterlevelseList = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds)
+                    .values().stream().flatMap(List::stream).toList();
+        } else {
+            etterlevelseList = etterlevelseService.getAllEtterlevelseStatistics(org.springframework.data.domain.Pageable.unpaged()).getContent();
+        }
+
+        var aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
+        List<Krav> utgaattKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.UTGAATT.name())).build());
+        List<Krav> utgaatKravUtenNyVersjon = utgaattKrav.stream()
+                .filter(uk -> aktivKrav.stream().noneMatch(ak -> ak.getKravNummer().equals(uk.getKravNummer())))
+                .toList();
+
+        var gyldigeKrav = new HashSet<String>();
+        aktivKrav.forEach(k -> gyldigeKrav.add(k.getKravNummer() + "_" + k.getKravVersjon()));
+        utgaatKravUtenNyVersjon.forEach(k -> gyldigeKrav.add(k.getKravNummer() + "_" + k.getKravVersjon()));
+
+        Map<String, String> temaByKravKey = new HashMap<>();
+        Map<String, TemaDashboardResponse> statsMap = new LinkedHashMap<>();
+
+        for (var etterlevelse : etterlevelseList) {
+            String kravKey = etterlevelse.getKravNummer() + "_" + etterlevelse.getKravVersjon();
+
+            if (!gyldigeKrav.contains(kravKey)) continue;
+
+            String temaCode = temaByKravKey.computeIfAbsent(kravKey, k -> resolveTemaCode(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()));
+
+            var stats = statsMap.computeIfAbsent(temaCode, tc -> {
+                if ("UTEN_TEMA".equals(tc)) {
+                    return TemaDashboardResponse.builder().temaCode(tc).temaName("Uten tema").build();
+                }
+                var temaData = CodelistService.getCodelist(ListName.TEMA, tc);
+                String temaName = temaData != null ? temaData.getShortName() : tc;
+                return TemaDashboardResponse.builder().temaCode(tc).temaName(temaName).build();
+            });
+
+            boolean isFerdig = etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT
+                    || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT;
+
+            stats.setKravTotal(stats.getKravTotal() + 1);
+            if (isFerdig) {
+                stats.setKravFerdigVurdert(stats.getKravFerdigVurdert() + 1);
+            } else {
+                stats.setKravUnderArbeid(stats.getKravUnderArbeid() + 1);
+            }
+
+            for (var sb : etterlevelse.getSuksesskriterieBegrunnelser()) {
+                switch (sb.getSuksesskriterieStatus()) {
+                    case UNDER_ARBEID -> stats.setSuksesskriterierUnderArbeid(stats.getSuksesskriterierUnderArbeid() + 1);
+                    case OPPFYLT -> stats.setSuksesskriterierOppfylt(stats.getSuksesskriterierOppfylt() + 1);
+                    case IKKE_OPPFYLT -> stats.setSuksesskriterierIkkeOppfylt(stats.getSuksesskriterierIkkeOppfylt() + 1);
+                    case IKKE_RELEVANT -> stats.setSuksesskriterierIkkeRelevant(stats.getSuksesskriterierIkkeRelevant() + 1);
+                }
+            }
+        }
+
+        return statsMap.values().stream()
+                .sorted(Comparator.comparing(TemaDashboardResponse::getTemaName))
+                .toList();
+    }
+
+    private String resolveTemaCode(int kravNummer, int kravVersjon) {
+        var krav = kravService.getByKravNummer(kravNummer, kravVersjon);
+        if (krav.isEmpty()) return "UTEN_TEMA";
+
+        var regelverk = krav.get().getRegelverk();
+        if (regelverk == null || regelverk.isEmpty()) return "UTEN_TEMA";
+
+        String lovCode = regelverk.get(0).getLov();
+        if (lovCode == null) return "UTEN_TEMA";
+
+        var lovData = CodelistService.getCodelist(ListName.LOV, lovCode);
+        if (lovData == null || lovData.getData() == null || lovData.getData().get("tema") == null) return "UTEN_TEMA";
+
+        return lovData.getData().get("tema").textValue();
     }
 }

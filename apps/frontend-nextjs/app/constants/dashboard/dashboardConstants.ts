@@ -32,6 +32,18 @@ export interface ISeksjonOption {
   navn: string
 }
 
+export interface ITemaDashboardStats {
+  temaCode: string
+  temaName: string
+  kravTotal: number
+  kravUnderArbeid: number
+  kravFerdigVurdert: number
+  suksesskriterierUnderArbeid: number
+  suksesskriterierOppfylt: number
+  suksesskriterierIkkeOppfylt: number
+  suksesskriterierIkkeRelevant: number
+}
+
 export interface IAvdelingDetailData {
   avdelingId: string
   avdelingNavn: string

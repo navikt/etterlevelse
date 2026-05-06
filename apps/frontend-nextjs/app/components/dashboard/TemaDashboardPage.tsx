@@ -1,18 +1,20 @@
 'use client'
 
-import { getDashboardStats, getDashboardTableByAvdeling } from '@/api/dashboard/dashboardApi'
 import {
-  IEtterlevelseStatistikk,
-  getAllEtterlevelseStatistikk,
-} from '@/api/statistikk/statistikkApi'
+  getDashboardAvdelingStats,
+  getDashboardStats,
+  getTemaDashboardStats,
+} from '@/api/dashboard/dashboardApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { IAvdelingDashboardStats, IDashboardTable } from '@/constants/dashboard/dashboardConstants'
-import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import {
+  IAvdelingDashboardStats,
+  ISeksjonOption,
+  ITemaDashboardStats,
+} from '@/constants/dashboard/dashboardConstants'
 import { DownloadIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const KRAV_COLORS = {
@@ -25,78 +27,6 @@ const SUKSESS_COLORS = {
   oppfylt: '#005d5d',
   ikkeOppfylt: '#fa4d56',
   ikkeRelevant: '#9f1853',
-}
-
-interface ITemaStats {
-  temaCode: string
-  temaName: string
-  krav: {
-    total: number
-    underArbeid: number
-    ferdigVurdert: number
-  }
-  suksesskriterier: {
-    underArbeid: number
-    oppfylt: number
-    ikkeOppfylt: number
-    ikkeRelevant: number
-  }
-}
-
-const computeTemaStats = (
-  data: IEtterlevelseStatistikk[],
-  getTemaName: (code: string) => string
-): ITemaStats[] => {
-  const grouped = new Map<string, IEtterlevelseStatistikk[]>()
-
-  data.forEach((record) => {
-    if (!record.tema) return
-    const existing = grouped.get(record.tema) || []
-    existing.push(record)
-    grouped.set(record.tema, existing)
-  })
-
-  const stats: ITemaStats[] = []
-
-  grouped.forEach((records, temaCode) => {
-    let underArbeid = 0
-    let ferdigVurdert = 0
-    let sUnderArbeid = 0
-    let sOppfylt = 0
-    let sIkkeOppfylt = 0
-    let sIkkeRelevant = 0
-
-    records.forEach((r) => {
-      if (r.status === 'FERDIG_DOKUMENTERT' || r.status === 'IKKE_RELEVANT_FERDIG_DOKUMENTERT') {
-        ferdigVurdert++
-      } else {
-        underArbeid++
-      }
-
-      sUnderArbeid += r.underArbeidSuksesskriterieIder.length
-      sOppfylt += r.oppfyltSuksesskriterieIder.length
-      sIkkeOppfylt += r.ikkeOppfyltSuksesskriterieIder.length
-      sIkkeRelevant += r.ikkeRelevantSuksesskriterieIder.length
-    })
-
-    stats.push({
-      temaCode,
-      temaName: getTemaName(temaCode),
-      krav: {
-        total: underArbeid + ferdigVurdert,
-        underArbeid,
-        ferdigVurdert,
-      },
-      suksesskriterier: {
-        underArbeid: sUnderArbeid,
-        oppfylt: sOppfylt,
-        ikkeOppfylt: sIkkeOppfylt,
-        ikkeRelevant: sIkkeRelevant,
-      },
-    })
-  })
-
-  return stats.sort((a, b) => a.temaName.localeCompare(b.temaName, 'nb'))
 }
 
 interface IBarSegment {
@@ -171,36 +101,36 @@ const RechartsStackedBar = ({
   )
 }
 
-const TemaStatsCard = ({ stats }: { stats: ITemaStats }) => {
+const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const kravData: IBarSegment[] = [
-    { name: 'Under arbeid', value: stats.krav.underArbeid, color: KRAV_COLORS.underArbeid },
-    { name: 'Ferdig vurdert', value: stats.krav.ferdigVurdert, color: KRAV_COLORS.ferdigVurdert },
+    { name: 'Under arbeid', value: stats.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
+    { name: 'Ferdig vurdert', value: stats.kravFerdigVurdert, color: KRAV_COLORS.ferdigVurdert },
   ]
 
   const suksessData: IBarSegment[] = [
     {
       name: 'Under arbeid',
-      value: stats.suksesskriterier.underArbeid,
+      value: stats.suksesskriterierUnderArbeid,
       color: SUKSESS_COLORS.underArbeid,
     },
-    { name: 'Oppfylt', value: stats.suksesskriterier.oppfylt, color: SUKSESS_COLORS.oppfylt },
+    { name: 'Oppfylt', value: stats.suksesskriterierOppfylt, color: SUKSESS_COLORS.oppfylt },
     {
       name: 'Ikke oppfylt',
-      value: stats.suksesskriterier.ikkeOppfylt,
+      value: stats.suksesskriterierIkkeOppfylt,
       color: SUKSESS_COLORS.ikkeOppfylt,
     },
     {
       name: 'Ikke relevant',
-      value: stats.suksesskriterier.ikkeRelevant,
+      value: stats.suksesskriterierIkkeRelevant,
       color: SUKSESS_COLORS.ikkeRelevant,
     },
   ]
 
   const totalSuksess =
-    stats.suksesskriterier.underArbeid +
-    stats.suksesskriterier.oppfylt +
-    stats.suksesskriterier.ikkeOppfylt +
-    stats.suksesskriterier.ikkeRelevant
+    stats.suksesskriterierUnderArbeid +
+    stats.suksesskriterierOppfylt +
+    stats.suksesskriterierIkkeOppfylt +
+    stats.suksesskriterierIkkeRelevant
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
@@ -218,7 +148,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaStats }) => {
       >
         <div>
           <Heading size='xsmall' level='3'>
-            Gjennomføringsstatus (krav) ({stats.krav.total})
+            Gjennomføringsstatus (krav) ({stats.kravTotal})
           </Heading>
           <RechartsStackedBar data={kravData} showPercentage />
         </div>
@@ -234,12 +164,12 @@ const TemaStatsCard = ({ stats }: { stats: ITemaStats }) => {
   )
 }
 
-const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaStats }) => {
+const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
   const totalSuksess =
-    stats.suksesskriterier.underArbeid +
-    stats.suksesskriterier.oppfylt +
-    stats.suksesskriterier.ikkeOppfylt +
-    stats.suksesskriterier.ikkeRelevant
+    stats.suksesskriterierUnderArbeid +
+    stats.suksesskriterierOppfylt +
+    stats.suksesskriterierIkkeOppfylt +
+    stats.suksesskriterierIkkeRelevant
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
@@ -258,28 +188,28 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaStats }) => {
         }}
       >
         <div>
-          <BodyShort weight='semibold'>Gjennomføringsstatus (krav) ({stats.krav.total})</BodyShort>
+          <BodyShort weight='semibold'>Gjennomføringsstatus (krav) ({stats.kravTotal})</BodyShort>
           <BodyShort>
-            Under arbeid <span className='font-bold'>{stats.krav.underArbeid}</span>
+            Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
           </BodyShort>
           <BodyShort>
-            Ferdig vurdert <span className='font-bold'>{stats.krav.ferdigVurdert}</span>
+            Ferdig vurdert <span className='font-bold'>{stats.kravFerdigVurdert}</span>
           </BodyShort>
         </div>
 
         <div>
           <BodyShort weight='semibold'>Etterlevelse (suksesskriterier) ({totalSuksess})</BodyShort>
           <BodyShort>
-            Under arbeid <span className='font-bold'>{stats.suksesskriterier.underArbeid}</span>
+            Under arbeid <span className='font-bold'>{stats.suksesskriterierUnderArbeid}</span>
           </BodyShort>
           <BodyShort>
-            Oppfylt <span className='font-bold'>{stats.suksesskriterier.oppfylt}</span>
+            Oppfylt <span className='font-bold'>{stats.suksesskriterierOppfylt}</span>
           </BodyShort>
           <BodyShort>
-            Ikke oppfylt <span className='font-bold'>{stats.suksesskriterier.ikkeOppfylt}</span>
+            Ikke oppfylt <span className='font-bold'>{stats.suksesskriterierIkkeOppfylt}</span>
           </BodyShort>
           <BodyShort>
-            Ikke relevant <span className='font-bold'>{stats.suksesskriterier.ikkeRelevant}</span>
+            Ikke relevant <span className='font-bold'>{stats.suksesskriterierIkkeRelevant}</span>
           </BodyShort>
         </div>
       </div>
@@ -287,7 +217,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaStats }) => {
   )
 }
 
-const exportToCsv = (stats: ITemaStats[]) => {
+const exportToCsv = (stats: ITemaDashboardStats[]) => {
   const BOM = '\uFEFF'
   const header = [
     'Tema',
@@ -303,13 +233,13 @@ const exportToCsv = (stats: ITemaStats[]) => {
   const rows = stats.map((s) =>
     [
       s.temaName,
-      s.krav.total,
-      s.krav.underArbeid,
-      s.krav.ferdigVurdert,
-      s.suksesskriterier.underArbeid,
-      s.suksesskriterier.oppfylt,
-      s.suksesskriterier.ikkeOppfylt,
-      s.suksesskriterier.ikkeRelevant,
+      s.kravTotal,
+      s.kravUnderArbeid,
+      s.kravFerdigVurdert,
+      s.suksesskriterierUnderArbeid,
+      s.suksesskriterierOppfylt,
+      s.suksesskriterierIkkeOppfylt,
+      s.suksesskriterierIkkeRelevant,
     ].join(';')
   )
 
@@ -324,66 +254,38 @@ const exportToCsv = (stats: ITemaStats[]) => {
 }
 
 const TemaDashboardPage = () => {
-  const [statistikk, setStatistikk] = useState<IEtterlevelseStatistikk[]>([])
+  const [temaStats, setTemaStats] = useState<ITemaDashboardStats[]>([])
   const [avdelinger, setAvdelinger] = useState<IAvdelingDashboardStats[]>([])
-  const [avdelingTables, setAvdelingTables] = useState<IDashboardTable[]>([])
+  const [seksjoner, setSeksjoner] = useState<ISeksjonOption[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTema, setSelectedTema] = useState<string>('')
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
 
-  const { utils } = useContext(CodelistContext)
-
   useEffect(() => {
     getDashboardStats()
       .then(setAvdelinger)
       .catch((err) => console.error('Failed to fetch avdelinger:', err))
-
-    getAllEtterlevelseStatistikk()
-      .then(setStatistikk)
-      .catch((err) => console.error('Failed to fetch etterlevelse statistics:', err))
-      .finally(() => setIsLoading(false))
   }, [])
 
   useEffect(() => {
+    setIsLoading(true)
+    getTemaDashboardStats(selectedAvdeling || undefined, selectedSeksjon || undefined)
+      .then(setTemaStats)
+      .catch((err) => console.error('Failed to fetch tema stats:', err))
+      .finally(() => setIsLoading(false))
+  }, [selectedAvdeling, selectedSeksjon])
+
+  useEffect(() => {
     if (selectedAvdeling) {
-      getDashboardTableByAvdeling(selectedAvdeling).then(setAvdelingTables)
+      getDashboardAvdelingStats(selectedAvdeling)
+        .then((data) => setSeksjoner(data.seksjoner || []))
+        .catch(() => setSeksjoner([]))
     } else {
-      setAvdelingTables([])
+      setSeksjoner([])
       setSelectedSeksjon('')
     }
   }, [selectedAvdeling])
-
-  const seksjoner = useMemo(() => {
-    const map = new Map<string, string>()
-    avdelingTables.forEach((t) =>
-      t.seksjoner?.forEach((s) => map.set(s.nomSeksjonId, s.nomSeksjonName))
-    )
-    return Array.from(map, ([id, navn]) => ({ id, navn })).sort((a, b) =>
-      a.navn.localeCompare(b.navn, 'nb')
-    )
-  }, [avdelingTables])
-
-  const filteredStatistikk = useMemo(() => {
-    let data = statistikk
-    if (selectedAvdeling && avdelingTables.length > 0) {
-      let tables = avdelingTables
-      if (selectedSeksjon) {
-        tables = tables.filter((t) => t.seksjoner?.some((s) => s.nomSeksjonId === selectedSeksjon))
-      }
-      const dokIds = new Set(tables.map((t) => t.etterlevelseDokumentasjonId))
-      data = data.filter((s) => dokIds.has(s.etterlevelseDokumentasjonId))
-    }
-    return data
-  }, [statistikk, selectedAvdeling, avdelingTables, selectedSeksjon])
-
-  const temaStats = useMemo(
-    () =>
-      computeTemaStats(filteredStatistikk, (code) =>
-        code === 'Ingen' ? 'Uten tema' : utils.getShortname(EListName.TEMA, code)
-      ),
-    [filteredStatistikk, utils]
-  )
 
   const filteredTemaStats = selectedTema
     ? temaStats.filter((s) => s.temaCode === selectedTema)
@@ -391,13 +293,13 @@ const TemaDashboardPage = () => {
 
   return (
     <PageLayout
-      pageTitle='Status pr. tema'
-      currentPage='Status pr. tema'
+      pageTitle='Etterlevelsestema'
+      currentPage='Etterlevelsestema'
       breadcrumbPaths={[{ href: '/dashboard', pathName: 'Dashboard' }]}
     >
       <div className='flex justify-between items-center mt-4'>
         <Heading size='large' level='1'>
-          Status pr. tema
+          Etterlevelsestema
         </Heading>
       </div>
 
@@ -479,9 +381,6 @@ const TemaDashboardPage = () => {
       {isLoading && (
         <div className='mt-8'>
           <CenteredLoader />
-          <BodyShort className='text-center text-gray-500 mt-2'>
-            Henter statistikk, dette kan ta litt tid...
-          </BodyShort>
         </div>
       )}
 
