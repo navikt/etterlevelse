@@ -13,3 +13,13 @@ export const getAlleArdoqSystemer = async () => {
 export const getSeachArdoqSystemerBySearchParam = async (searchParam: string) => {
   return (await axios.get<IArdoqSystem[]>(`${env.backendBaseUrl}/ardoq/search/${searchParam}`)).data
 }
+
+export const useArdoqSearch = async (searchParam: string) => {
+  if (searchParam && searchParam.replace(/ /g, '').length > 2) {
+    const searchResult = await getSeachArdoqSystemerBySearchParam(searchParam)
+    return searchResult.map((system) => {
+      return { value: system.ardoqID, label: system.navn, ...system }
+    })
+  }
+  return []
+}

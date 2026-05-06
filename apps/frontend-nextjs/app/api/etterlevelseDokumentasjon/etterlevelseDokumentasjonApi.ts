@@ -195,6 +195,8 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   versjonHistorikk: etterlevelseDokumentasjon.versjonHistorikk || [
     { versjon: 1, kravTilstandHistorikk: [] },
   ],
+  ardoqSystemIds: etterlevelseDokumentasjon.ardoqSystemIds || [],
+  ardoqSystemData: etterlevelseDokumentasjon.ardoqSystemData || [],
 })
 
 export const etterlevelseDokumentasjonToDomainToObject = (
@@ -218,6 +220,9 @@ export const etterlevelseDokumentasjonToDomainToObject = (
     risikoeiere: etterlevelseDokumentasjon.risikoeiereData
       ? etterlevelseDokumentasjon.risikoeiereData.map((resource) => resource.navIdent)
       : [],
+    ardoqSystemIds: etterlevelseDokumentasjon.ardoqSystemData
+      ? etterlevelseDokumentasjon.ardoqSystemData.map((system) => system.ardoqID)
+      : [],
   } as any
   delete domainToObject.changeStamp
   delete domainToObject.version
@@ -225,6 +230,7 @@ export const etterlevelseDokumentasjonToDomainToObject = (
   delete domainToObject.resourcesData
   delete domainToObject.behandlinger
   delete domainToObject.dpBehandlinger
+  delete domainToObject.ardoqSystemData
   return domainToObject
 }
 

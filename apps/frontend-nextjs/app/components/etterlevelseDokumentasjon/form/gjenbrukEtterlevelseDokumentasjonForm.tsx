@@ -1,5 +1,6 @@
 'use client'
 
+import { useArdoqSearch } from '@/api/ardoq/ardoqApi'
 import {
   searchBehandlingOptions,
   searchDpBehandlingOptions,
@@ -23,6 +24,7 @@ import { Error, FormError } from '@/components/common/modalSchema/formError/form
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
+import { IArdoqSystem } from '@/constants/ardoqSystem/ardoqSystemConstants'
 import {
   IBehandling,
   IDpBehandling,
@@ -308,6 +310,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             </FieldArray>
             <div className='flex-1' />
           </div>
+
           <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldArray name='resourcesData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -358,7 +361,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
-          <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5'>
+          <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldWrapper>
               <Field name='nomAvdelingId'>
                 {(fieldProps: FieldProps) => (
@@ -398,7 +401,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
           </div>
 
           {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
-            <div id='seksjon' className='flex flex-col lg:flex-row gap-5'>
+            <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
               <FieldWrapper marginTop full>
                 <FieldArray name='seksjoner'>
                   {(fieldProps: FieldArrayRenderProps) => (
@@ -444,6 +447,49 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
               <div className='flex-1' />
             </div>
           )}
+
+          <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+            <FieldArray name='ardoqSystemData'>
+              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                <div className='flex-1'>
+                  <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                  <div className='w-full'>
+                    <AsyncSelect
+                      aria-label='Søk etter system'
+                      placeholder=''
+                      tabSelectsValue={false}
+                      components={{ DropdownIndicator }}
+                      noOptionsMessage={({ inputValue }) => {
+                        return noOptionMessage(inputValue)
+                      }}
+                      controlShouldRenderValue={false}
+                      loadingMessage={() => 'Søker...'}
+                      isClearable={false}
+                      loadOptions={useArdoqSearch}
+                      onChange={(value: any) => {
+                        if (
+                          value &&
+                          fieldArrayRenderProps.form.values.ardoqSystemData.filter(
+                            (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                          ).length === 0
+                        ) {
+                          fieldArrayRenderProps.push(value)
+                        }
+                      }}
+                      styles={selectOverrides}
+                    />
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
+                        (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                      )}
+                      onRemove={fieldArrayRenderProps.remove}
+                    />
+                  </div>
+                </div>
+              )}
+            </FieldArray>
+            <div className='flex-1' />
+          </div>
 
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>

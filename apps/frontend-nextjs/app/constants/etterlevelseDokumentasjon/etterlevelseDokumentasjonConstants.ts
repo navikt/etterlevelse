@@ -1,3 +1,4 @@
+import { IArdoqSystem } from '../ardoqSystem/ardoqSystemConstants'
 import { IBehandling, IDpBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
 import { IChangeStamp, TReplace } from '../commonConstants'
 import { ICode } from '../kodeverk/kodeverkConstants'
@@ -46,6 +47,8 @@ export interface IEtterlevelseDokumentasjon {
   p360CaseNumber: string
   etterlevelseDokumentVersjon: number
   versjonHistorikk: IEtterlevelseVersjonHistorikk[]
+  ardoqSystemIds: string[]
+  ardoqSystemData: IArdoqSystem[]
 }
 
 export interface IEtterlevelseVersjonHistorikk {
