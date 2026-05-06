@@ -236,15 +236,18 @@ public class EtterlevelseDokumentasjonController {
     private void setArdoqSystemer(EtterlevelseDokumentasjonResponse response) {
         boolean ardoqSystemIsEmpty = response.getArdoqSystemIds() == null || response.getArdoqSystemIds().isEmpty();
 
+        List<ArdoqSystemResponse> ardoqSystemResponses = new ArrayList<>();
+
         if (!ardoqSystemIsEmpty) {
             response.getArdoqSystemIds().forEach(ardoqId -> {
                 try {
                     var ardoqSystem = ardoqClient.getArdoqSystemById(ardoqId);
-                    ardoqSystem.ifPresent(system -> response.getArdoqSystemData().add(system));
+                    ardoqSystem.ifPresent(ardoqSystemResponses::add);
                 } catch (Exception e) {
                     log.error("Failed to fetch ardoq system with id {}", ardoqId, e);
                 }
             });
+            response.setArdoqSystemData(ardoqSystemResponses);
         }
     }
 
