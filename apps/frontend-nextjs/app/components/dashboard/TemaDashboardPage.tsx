@@ -172,7 +172,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
         <div>
           <Heading size='xsmall' level='3'>
-            Etterlevelse (suksesskriterier) ({totalSuksess})
+            Etterlevelse: suksesskriterier ({totalSuksess})
           </Heading>
           <RechartsStackedBar data={suksessData} showPercentage />
         </div>
@@ -236,7 +236,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             return (
               <>
                 <BodyShort weight='semibold'>
-                  Etterlevelse (suksesskriterier) ({totalSuksess})
+                  Etterlevelse: suksesskriterier ({totalSuksess})
                 </BodyShort>
                 <BodyShort>
                   Under arbeid{' '}
