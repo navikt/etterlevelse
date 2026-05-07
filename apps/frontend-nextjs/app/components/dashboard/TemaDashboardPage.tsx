@@ -237,14 +237,14 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
           <RechartsStackedBar data={suksessData} showPercentage />
         </div>
 
-        <div>
+        <div style={{ marginTop: '16px' }}>
           <Heading size='xsmall' level='3'>
             Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
           </Heading>
           <RechartsStackedBar data={ferdigSuksessData} showPercentage />
         </div>
 
-        <div>
+        <div style={{ marginTop: '16px' }}>
           <Heading size='xsmall' level='3'>
             Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
           </Heading>
