@@ -365,12 +365,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='dok'>
                           Etterlevelsesdokument
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='team'>
-                          Team
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='person'>
-                          Person
-                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='risikoeier'>
                           Risikoeier
                         </Table.ColumnHeader>
@@ -389,6 +383,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='behandlinger'>
                           Behandlinger
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='team'>
+                          Team
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='person'>
+                          Person
+                        </Table.ColumnHeader>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -403,20 +403,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
                                 {dok.etterlevelseDokumentasjonTittel}
                               </Link>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
-                                : '-'}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.resourcesData && dok.resourcesData.length > 0
-                                ? dok.resourcesData.map((resource, index) => (
-                                    <div key={`${resource.navIdent}-${index}`}>
-                                      {resource.fullName}
-                                    </div>
-                                  ))
-                                : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.risikoeiereData && dok.risikoeiereData.length > 0
@@ -464,6 +450,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 </div>
                               )) || '-'}
                             </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.teamsData && dok.teamsData.length > 0
+                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.resourcesData && dok.resourcesData.length > 0
+                                ? dok.resourcesData.map((resource, index) => (
+                                    <div key={`${resource.navIdent}-${index}`}>
+                                      {resource.fullName}
+                                    </div>
+                                  ))
+                                : '-'}
+                            </Table.DataCell>
                           </Table.Row>
                         )
                       })}
@@ -487,12 +487,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='dok'>
                           Etterlevelsesdokument
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='team'>
-                          Team
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='person'>
-                          Person
-                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='risikoeier'>
                           Risikoeier
                         </Table.ColumnHeader>
@@ -504,6 +498,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='dato_etterlvelse'>
                           Sist oppdatert
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='team'>
+                          Team
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='person'>
+                          Person
                         </Table.ColumnHeader>
                       </Table.Row>
                     </Table.Header>
@@ -519,20 +519,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
                                 {dok.etterlevelseDokumentasjonTittel}
                               </Link>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
-                                : '-'}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.resourcesData && dok.resourcesData.length > 0
-                                ? dok.resourcesData.map((resource, index) => (
-                                    <div key={`${resource.navIdent}-${index}`}>
-                                      {resource.fullName}
-                                    </div>
-                                  ))
-                                : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.risikoeiereData && dok.risikoeiereData.length > 0
@@ -569,6 +555,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 ? moment(dok.sistOppdatertEtterlevelse).format('D. MMMM YYYY')
                                 : '-'}
                             </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.teamsData && dok.teamsData.length > 0
+                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.resourcesData && dok.resourcesData.length > 0
+                                ? dok.resourcesData.map((resource, index) => (
+                                    <div key={`${resource.navIdent}-${index}`}>
+                                      {resource.fullName}
+                                    </div>
+                                  ))
+                                : '-'}
+                            </Table.DataCell>
                           </Table.Row>
                         )
                       })}
@@ -591,12 +591,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       <Table.Row>
                         <Table.ColumnHeader sortable sortKey='dok'>
                           Etterlevelsesdokument
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='team'>
-                          Team
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='person'>
-                          Person
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='risikoeier'>
                           Risikoeier
@@ -625,6 +619,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='dato_pvk'>
                           Sist oppdatert
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='team'>
+                          Team
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='person'>
+                          Person
+                        </Table.ColumnHeader>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -639,20 +639,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
                                 {dok.etterlevelseDokumentasjonTittel}
                               </Link>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
-                                : '-'}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.resourcesData && dok.resourcesData.length > 0
-                                ? dok.resourcesData.map((resource, index) => (
-                                    <div key={`${resource.navIdent}-${index}`}>
-                                      {resource.fullName}
-                                    </div>
-                                  ))
-                                : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.risikoeiereData && dok.risikoeiereData.length > 0
@@ -715,6 +701,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {dok.sistOppdatertPvk
                                 ? moment(dok.sistOppdatertPvk).format('D. MMMM YYYY')
+                                : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.teamsData && dok.teamsData.length > 0
+                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.resourcesData && dok.resourcesData.length > 0
+                                ? dok.resourcesData.map((resource, index) => (
+                                    <div key={`${resource.navIdent}-${index}`}>
+                                      {resource.fullName}
+                                    </div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                           </Table.Row>
