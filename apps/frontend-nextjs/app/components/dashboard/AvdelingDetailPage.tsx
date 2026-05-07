@@ -601,6 +601,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='risikoeier'>
                           Risikoeier
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='behovForPvk'>
+                          Behov for PVK
+                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='pvkStatus'>
                           PVK-status
                         </Table.ColumnHeader>
@@ -659,6 +662,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                     </div>
                                   ))
                                 : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {getBehovForPvkText(
+                                dok.pvkVurdering,
+                                dok.behandlerPersonopplysninger
+                              )}
                             </Table.DataCell>
                             <Table.DataCell>
                               {getPvkOnlyStatusText(
