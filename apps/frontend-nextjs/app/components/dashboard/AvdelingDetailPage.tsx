@@ -148,7 +148,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             case 'dok':
               return `E${dok.etterlevelseNummer} ${dok.etterlevelseDokumentasjonTittel}`
             case 'team':
-              return dok.teamsData?.map((teamsData) => teamsData.name[0]).join(', ') || ''
+              return dok.teamsData?.map((teamsData) => teamsData.name).join(', ') || ''
             case 'person':
               return dok.resourcesData?.map((resource) => resource.fullName).join(', ') || ''
             case 'risikoeier':
