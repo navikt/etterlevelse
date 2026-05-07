@@ -511,7 +511,6 @@ const TemaDashboardPage = () => {
   }, [])
 
   useEffect(() => {
-    setIsLoading(true)
     getTemaDashboardStats(selectedAvdeling || undefined, selectedSeksjon || undefined)
       .then((data) => {
         setTemaStats(data)
@@ -526,9 +525,6 @@ const TemaDashboardPage = () => {
       getDashboardAvdelingStats(selectedAvdeling)
         .then((data) => setSeksjoner(data.seksjoner || []))
         .catch(() => setSeksjoner([]))
-    } else {
-      setSeksjoner([])
-      setSelectedSeksjon('')
     }
   }, [selectedAvdeling])
 
@@ -586,6 +582,10 @@ const TemaDashboardPage = () => {
           onChange={(e) => {
             setSelectedAvdeling(e.target.value)
             setSelectedSeksjon('')
+            setIsLoading(true)
+            if (!e.target.value) {
+              setSeksjoner([])
+            }
           }}
         >
           <option value=''>Alle avdelinger</option>
@@ -601,7 +601,10 @@ const TemaDashboardPage = () => {
             label='Filtrer etter seksjon'
             className='w-fit min-w-64'
             value={selectedSeksjon}
-            onChange={(e) => setSelectedSeksjon(e.target.value)}
+            onChange={(e) => {
+              setSelectedSeksjon(e.target.value)
+              setIsLoading(true)
+            }}
           >
             <option value=''>Alle seksjoner</option>
             {seksjoner.map((s) => (
