@@ -46,6 +46,10 @@ const DashboardPage = () => {
         </LocalAlert.Content>
       </LocalAlert>
 
+      <Heading size='medium' level='2' className='mt-4'>
+        Avdelingoversikt
+      </Heading>
+
       <Select
         label='Velg avdeling'
         className='mt-4 w-fit min-w-64'
@@ -72,14 +76,22 @@ const DashboardPage = () => {
           <Tabs.Panel value='figurer'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
               {filteredStats.map((avdelingStats) => (
-                <DashboardBarCard key={avdelingStats.avdelingId} stats={avdelingStats} />
+                <DashboardBarCard
+                  key={avdelingStats.avdelingId}
+                  stats={avdelingStats}
+                  subHeadingLevel='4'
+                />
               ))}
             </div>
           </Tabs.Panel>
           <Tabs.Panel value='nokkeltall'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
               {filteredStats.map((avdelingStats) => (
-                <DashboardCard key={avdelingStats.avdelingId} stats={avdelingStats} />
+                <DashboardCard
+                  key={avdelingStats.avdelingId}
+                  stats={avdelingStats}
+                  subHeadingLevel='4'
+                />
               ))}
             </div>
           </Tabs.Panel>

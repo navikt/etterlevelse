@@ -6,9 +6,10 @@ import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
 interface IProps {
   stats: IAvdelingDashboardStats
   hideHeader?: boolean
+  subHeadingLevel?: '3' | '4'
 }
 
-export const DashboardCard = ({ stats, hideHeader }: IProps) => {
+export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IProps) => {
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
       {!hideHeader && (
@@ -28,9 +29,9 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
         }}
       >
         <div>
-          <BodyShort weight='semibold'>
+          <Heading size='xsmall' level={subHeadingLevel}>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
-          </BodyShort>
+          </Heading>
           <BodyShort>
             Under arbeid <span className='font-bold'>{stats.dokumenter.underArbeid}</span>
           </BodyShort>
@@ -44,7 +45,9 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>Behov for PVK</BodyShort>
+          <Heading size='xsmall' level={subHeadingLevel}>
+            Vurdere behov for PVK
+          </Heading>
           <BodyShort>
             Ikke vurdert behov{' '}
             <span className='font-bold'>
@@ -70,7 +73,9 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>Suksesskriterier (etterlevelseskrav)</BodyShort>
+          <Heading size='xsmall' level={subHeadingLevel}>
+            Suksesskriterier (etterlevelseskrav)
+          </Heading>
           <BodyShort>
             Under arbeid{' '}
             <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
@@ -89,9 +94,9 @@ export const DashboardCard = ({ stats, hideHeader }: IProps) => {
         </div>
 
         <div>
-          <BodyShort weight='semibold'>
+          <Heading size='xsmall' level={subHeadingLevel}>
             PVK-status ({stats.pvk.total - stats.pvk.pvkIWord})
-          </BodyShort>
+          </Heading>
           <BodyShort>
             Ikke påbegynt <span className='font-bold'>{stats.pvk.ikkePaabegynt}</span>
           </BodyShort>

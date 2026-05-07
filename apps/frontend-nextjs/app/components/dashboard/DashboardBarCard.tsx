@@ -7,6 +7,7 @@ interface IProps {
   stats: IAvdelingDashboardStats
   hideHeader?: boolean
   singleRow?: boolean
+  subHeadingLevel?: '3' | '4'
 }
 
 interface IBarSegment {
@@ -74,7 +75,12 @@ const StackedBar = ({
   )
 }
 
-export const DashboardBarCard = ({ stats, hideHeader, singleRow }: IProps) => {
+export const DashboardBarCard = ({
+  stats,
+  hideHeader,
+  singleRow,
+  subHeadingLevel = '3',
+}: IProps) => {
   const dokData: IBarSegment[] = [
     { name: 'Under arbeid', value: stats.dokumenter.underArbeid, color: DOK_COLORS[0] },
     {
@@ -161,7 +167,7 @@ export const DashboardBarCard = ({ stats, hideHeader, singleRow }: IProps) => {
         }
       >
         <div>
-          <Heading size='xsmall' level='3'>
+          <Heading size='xsmall' level={subHeadingLevel}>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
           <StackedBar data={dokData} maxWidth='200px' />
@@ -170,15 +176,15 @@ export const DashboardBarCard = ({ stats, hideHeader, singleRow }: IProps) => {
         {singleRow ? (
           <>
             <div>
-              <Heading size='xsmall' level='3'>
+              <Heading size='xsmall' level={subHeadingLevel}>
                 Suksesskriterier (etterlevelseskrav)
               </Heading>
               <StackedBar data={suksessData} isPercentage maxWidth='200px' />
             </div>
 
             <div>
-              <Heading size='xsmall' level='3'>
-                Behov for PVK
+              <Heading size='xsmall' level={subHeadingLevel}>
+                Vurdere behov for PVK
               </Heading>
               <StackedBar data={behovData} maxWidth='200px' />
             </div>
@@ -186,14 +192,14 @@ export const DashboardBarCard = ({ stats, hideHeader, singleRow }: IProps) => {
         ) : (
           <>
             <div>
-              <Heading size='xsmall' level='3'>
-                Behov for PVK
+              <Heading size='xsmall' level={subHeadingLevel}>
+                Vurdere behov for PVK
               </Heading>
               <StackedBar data={behovData} maxWidth='200px' />
             </div>
 
             <div>
-              <Heading size='xsmall' level='3'>
+              <Heading size='xsmall' level={subHeadingLevel}>
                 Suksesskriterier (etterlevelseskrav)
               </Heading>
               <StackedBar data={suksessData} isPercentage maxWidth='200px' />
@@ -202,7 +208,7 @@ export const DashboardBarCard = ({ stats, hideHeader, singleRow }: IProps) => {
         )}
 
         <div>
-          <Heading size='xsmall' level='3'>
+          <Heading size='xsmall' level={subHeadingLevel}>
             PVK-status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
           <StackedBar data={pvkData} maxWidth='200px' />

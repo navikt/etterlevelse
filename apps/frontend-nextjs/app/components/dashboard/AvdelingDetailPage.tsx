@@ -381,7 +381,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Etterlevelse
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='behovForPvk'>
-                          Behov for PVK
+                          Vurdere behov for PVK
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='pvkStatus'>
                           PVK-status
@@ -602,7 +602,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Risikoeier
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='behovForPvk'>
-                          Behov for PVK
+                          Vurdere behov for PVK
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='pvkStatus'>
                           PVK-status
