@@ -234,7 +234,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Heading>
       </div>
 
-      <LocalAlert status='announcement' className='mt-4'>
+      <LocalAlert status='announcement' className='mt-4' aria-live='off'>
         <LocalAlert.Header>
           <LocalAlert.Title as='h2'>
             Obs! Disse sidene er fortsatt under utvikling.
@@ -247,7 +247,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       </LocalAlert>
 
       {avdelingId === 'ingen-avdeling' && (
-        <LocalAlert status='warning' className='mt-4'>
+        <LocalAlert status='warning' className='mt-4' aria-live='off'>
           <LocalAlert.Header>
             <LocalAlert.Title as='h2'>
               Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
@@ -291,7 +291,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       )}
 
       {selectedSeksjon === 'ingen-seksjon' && (
-        <LocalAlert status='warning' className='mt-4'>
+        <LocalAlert status='warning' className='mt-4' aria-live='off'>
           <LocalAlert.Header>
             <LocalAlert.Title as='h2'>
               Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon

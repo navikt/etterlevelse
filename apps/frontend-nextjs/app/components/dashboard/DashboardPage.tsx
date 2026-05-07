@@ -34,7 +34,7 @@ const DashboardPage = () => {
         </Heading>
       </div>
 
-      <LocalAlert status='announcement' className='mt-4'>
+      <LocalAlert status='announcement' className='mt-4' aria-live='off'>
         <LocalAlert.Header>
           <LocalAlert.Title as='h2'>
             Obs! Disse sidene er fortsatt under utvikling.
