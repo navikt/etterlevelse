@@ -95,7 +95,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
 
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
-            PVK-status ({stats.pvk.total - stats.pvk.pvkIWord})
+            Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
           <BodyShort>
             Ikke påbegynt <span className='font-bold'>{stats.pvk.ikkePaabegynt}</span>

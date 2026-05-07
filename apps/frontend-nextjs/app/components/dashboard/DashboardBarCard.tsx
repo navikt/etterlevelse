@@ -209,7 +209,7 @@ export const DashboardBarCard = ({
 
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
-            PVK-status ({stats.pvk.total - stats.pvk.pvkIWord})
+            Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
           <StackedBar data={pvkData} maxWidth='200px' />
         </div>
