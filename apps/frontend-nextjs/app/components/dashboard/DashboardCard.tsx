@@ -46,6 +46,27 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
 
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
+            Suksesskriterier (etterlevelseskrav)
+          </Heading>
+          <BodyShort>
+            Under arbeid{' '}
+            <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
+          </BodyShort>
+          <BodyShort>
+            Oppfylt <span className='font-bold'>{stats.suksesskriterier.oppfyltProsent}%</span>
+          </BodyShort>
+          <BodyShort>
+            Ikke oppfylt{' '}
+            <span className='font-bold'>{stats.suksesskriterier.ikkeOppfyltProsent}%</span>
+          </BodyShort>
+          <BodyShort>
+            Ikke relevant{' '}
+            <span className='font-bold'>{stats.suksesskriterier.ikkeRelevantProsent}%</span>
+          </BodyShort>
+        </div>
+
+        <div>
+          <Heading size='xsmall' level={subHeadingLevel}>
             Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
           <BodyShort>
@@ -69,27 +90,6 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
           <BodyShort>
             PVK i Word <span className='font-bold'>{stats.pvk.pvkIWord}</span>
-          </BodyShort>
-        </div>
-
-        <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
-            Suksesskriterier (etterlevelseskrav)
-          </Heading>
-          <BodyShort>
-            Under arbeid{' '}
-            <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
-          </BodyShort>
-          <BodyShort>
-            Oppfylt <span className='font-bold'>{stats.suksesskriterier.oppfyltProsent}%</span>
-          </BodyShort>
-          <BodyShort>
-            Ikke oppfylt{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkeOppfyltProsent}%</span>
-          </BodyShort>
-          <BodyShort>
-            Ikke relevant{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkeRelevantProsent}%</span>
           </BodyShort>
         </div>
 

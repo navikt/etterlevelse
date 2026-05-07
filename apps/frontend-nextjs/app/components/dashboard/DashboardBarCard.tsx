@@ -193,16 +193,16 @@ export const DashboardBarCard = ({
           <>
             <div>
               <Heading size='xsmall' level={subHeadingLevel}>
-                Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
+                Suksesskriterier (etterlevelseskrav)
               </Heading>
-              <StackedBar data={behovData} maxWidth='200px' />
+              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
             </div>
 
             <div>
               <Heading size='xsmall' level={subHeadingLevel}>
-                Suksesskriterier (etterlevelseskrav)
+                Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
               </Heading>
-              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
+              <StackedBar data={behovData} maxWidth='200px' />
             </div>
           </>
         )}
