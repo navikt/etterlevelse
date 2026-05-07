@@ -427,7 +427,7 @@ const TemaDashboardPage = () => {
           disabled={isLoading || filteredTemaStats.length === 0}
           className='ml-auto pr-4'
         >
-          Last ned CSV
+          Last ned utvalg som CSV
         </Button>
       </div>
 
