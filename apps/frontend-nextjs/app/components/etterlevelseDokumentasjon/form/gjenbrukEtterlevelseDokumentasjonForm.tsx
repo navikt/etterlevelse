@@ -344,7 +344,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                     />
                     <RenderTagList
                       list={fieldArrayRenderProps.form.values.resourcesData.map(
-                        (resource: ITeamResource) => resource.fullName
+                        (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                       )}
                       onRemove={fieldArrayRenderProps.remove}
                     />
@@ -526,7 +526,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                     />
                     <RenderTagList
                       list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                        (resource: ITeamResource) => resource.fullName
+                        (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                       )}
                       onRemove={fieldArrayRenderProps.remove}
                     />

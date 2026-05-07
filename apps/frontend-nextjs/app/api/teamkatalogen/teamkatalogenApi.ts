@@ -28,7 +28,7 @@ export const searchResourceByNameOptions = async (searchParam: string) => {
       return resources.map((resource) => {
         return {
           value: resource.navIdent,
-          label: resource.fullName,
+          label: `${resource.fullName} (${resource.navIdent})`,
           ...resource,
         }
       })
