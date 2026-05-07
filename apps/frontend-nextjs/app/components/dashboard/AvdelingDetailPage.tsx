@@ -56,8 +56,12 @@ const getPvkOnlyStatusText = (
     pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
     pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
   )
-    return 'Sendt til PVO'
-  if (pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO) return 'Fått tilbakemelding fra PVO'
+    return 'Til behandling hos PVO'
+  if (
+    pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
+    pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
+  )
+    return 'Tilbakemelding fra PVO'
   return 'Under arbeid'
 }
 
@@ -158,7 +162,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             case 'pvkStatus':
               return getPvkOnlyStatusText(
                 dok.pvkVurdering,
-                dok.pvkDokumentStatus,
+                dok.pvkStatus,
                 dok.hasPvkDocumentationStarted
               )
             case 'dato_etterlvelse':
@@ -177,7 +181,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             case 'pvkStatus':
               return getPvkOnlyStatusText(
                 dok.pvkVurdering,
-                dok.pvkDokumentStatus,
+                dok.pvkStatus,
                 dok.hasPvkDocumentationStarted
               )
             case 'antallScenarioer':
@@ -444,7 +448,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {getPvkOnlyStatusText(
                                 dok.pvkVurdering,
-                                dok.pvkDokumentStatus,
+                                dok.pvkStatus,
                                 dok.hasPvkDocumentationStarted
                               )}
                             </Table.DataCell>
@@ -659,7 +663,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {getPvkOnlyStatusText(
                                 dok.pvkVurdering,
-                                dok.pvkDokumentStatus,
+                                dok.pvkStatus,
                                 dok.hasPvkDocumentationStarted
                               )}
                             </Table.DataCell>

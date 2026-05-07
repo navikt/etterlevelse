@@ -89,7 +89,7 @@ export interface IDashboardTable {
 
   hasPvkDocumentationStarted: boolean
   pvkVurdering: EPvkVurdering
-  pvkDokumentStatus: EPvkDokumentStatus
+  pvkStatus: EPvkDokumentStatus
   antallRisikoscenario?: number
   antallHoyRisikoscenario?: number
   antallHoyRisikoEtterTiltak?: number

@@ -166,9 +166,12 @@ export const getPvkStatusText = (
       pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
       pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
     )
-      return 'Sendt til PVO'
-    else if (pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO) {
-      return 'Fått tilbakemelding fra PVO'
+      return 'Til behandling hos PVO'
+    else if (
+      pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
+      pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
+    ) {
+      return 'Tilbakemelding fra PVO'
     } else {
       return 'Under arbeid'
     }
