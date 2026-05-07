@@ -348,7 +348,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               <Tabs.List>
                 <Tabs.Tab value='dok_pvk' label='Dokumentasjonsoversikt' />
                 <Tabs.Tab value='krav' label='Etterlevelseskrav' />
-                <Tabs.Tab value='pvk' label='PVK' />
+                <Tabs.Tab value='pvk' label='Digital PVK' />
               </Tabs.List>
               <Tabs.Panel value='dok_pvk'>
                 <StickyHorizontalScroll>
@@ -605,7 +605,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Antall risikoscenarioer
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='hoyRisiko' align='center'>
-                          Høy risiko scenarioer
+                          Høy risiko før tiltak
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='hoyRisikoEtterTiltak' align='center'>
                           Høy risiko etter tiltak
