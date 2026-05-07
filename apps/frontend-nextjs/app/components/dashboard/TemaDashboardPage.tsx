@@ -616,31 +616,32 @@ const TemaDashboardPage = () => {
           ))}
         </Select>
 
-        {selectedAvdeling && seksjoner.length > 0 && (
-          <Select
-            label='Filtrer etter seksjon'
-            className='w-fit min-w-64'
-            value={selectedSeksjon}
-            onChange={(e) => {
-              setSelectedSeksjon(e.target.value)
-              setIsLoading(true)
-            }}
-          >
-            <option value=''>Alle seksjoner</option>
-            {seksjoner
-              .filter((s) => {
-                const avdelingNavn = avdelinger.find(
-                  (a) => a.avdelingId === selectedAvdeling
-                )?.avdelingNavn
-                return s.navn !== avdelingNavn
-              })
-              .map((s) => (
+        {(() => {
+          const avdelingNavn = avdelinger.find(
+            (a) => a.avdelingId === selectedAvdeling
+          )?.avdelingNavn
+          const filteredSeksjoner = seksjoner.filter(
+            (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
+          )
+          return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+            <Select
+              label='Filtrer etter seksjon'
+              className='w-fit min-w-64'
+              value={selectedSeksjon}
+              onChange={(e) => {
+                setSelectedSeksjon(e.target.value)
+                setIsLoading(true)
+              }}
+            >
+              <option value=''>Alle seksjoner</option>
+              {filteredSeksjoner.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.navn}
                 </option>
               ))}
-          </Select>
-        )}
+            </Select>
+          ) : null
+        })()}
 
         <Button
           variant='tertiary'
