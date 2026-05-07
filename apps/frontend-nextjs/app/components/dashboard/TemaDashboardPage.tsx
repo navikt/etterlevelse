@@ -320,7 +320,10 @@ const TemaDashboardPage = () => {
   useEffect(() => {
     setIsLoading(true)
     getTemaDashboardStats(selectedAvdeling || undefined, selectedSeksjon || undefined)
-      .then(setTemaStats)
+      .then((data) => {
+        setTemaStats(data)
+        setSelectedTema((prev) => (prev && !data.some((d) => d.temaCode === prev) ? '' : prev))
+      })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
       .finally(() => setIsLoading(false))
   }, [selectedAvdeling, selectedSeksjon])
