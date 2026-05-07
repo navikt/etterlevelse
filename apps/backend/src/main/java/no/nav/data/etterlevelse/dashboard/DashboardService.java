@@ -607,8 +607,9 @@ public class DashboardService {
         if (lovCode == null) return "UTEN_TEMA";
 
         var lovData = CodelistService.getCodelist(ListName.LOV, lovCode);
-        if (lovData == null || lovData.getData() == null || lovData.getData().get("tema") == null) return "UTEN_TEMA";
+        if (lovData == null) return "UTEN_TEMA";
 
-        return lovData.getData().get("tema").textValue();
+        String tema = lovData.getValueFromKeyData("tema");
+        return tema != null && !tema.isBlank() ? tema : "UTEN_TEMA";
     }
 }
