@@ -596,6 +596,15 @@ public class DashboardService {
                         case IKKE_OPPFYLT -> stats.setSuksesskriterierIkkeOppfylt(stats.getSuksesskriterierIkkeOppfylt() + 1);
                         case IKKE_RELEVANT -> stats.setSuksesskriterierIkkeRelevant(stats.getSuksesskriterierIkkeRelevant() + 1);
                     }
+
+                    if (isFerdig) {
+                        switch (sb.getSuksesskriterieStatus()) {
+                            case UNDER_ARBEID -> stats.setFerdigUnderArbeid(stats.getFerdigUnderArbeid() + 1);
+                            case OPPFYLT -> stats.setFerdigOppfylt(stats.getFerdigOppfylt() + 1);
+                            case IKKE_OPPFYLT -> stats.setFerdigIkkeOppfylt(stats.getFerdigIkkeOppfylt() + 1);
+                            case IKKE_RELEVANT -> stats.setFerdigIkkeRelevant(stats.getFerdigIkkeRelevant() + 1);
+                        }
+                    }
                 }
             }
         }
