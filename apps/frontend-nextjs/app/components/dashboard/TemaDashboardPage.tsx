@@ -35,6 +35,11 @@ interface IBarSegment {
   color: string
 }
 
+const formatPct = (pct: number, value: number): string => {
+  if (value > 0 && pct === 0) return '<1'
+  return `${pct}`
+}
+
 const roundedPercentages = (values: number[]): number[] => {
   const total = values.reduce((s, v) => s + v, 0)
   if (total === 0) return values.map(() => 0)
@@ -80,7 +85,10 @@ const RechartsStackedBar = ({
             labelFormatter={() => ''}
             formatter={(value, name) => {
               const idx = data.findIndex((d) => d.name === String(name))
-              return [`${Number(value)} (${pcts[idx] ?? 0}%)`, String(name)]
+              return [
+                `${Number(value)} (${formatPct(pcts[idx] ?? 0, Number(value))}%)`,
+                String(name),
+              ]
             }}
           />
           {data
@@ -108,7 +116,7 @@ const RechartsStackedBar = ({
               {d.name}{' '}
               <strong>
                 {d.value}
-                {showPercentage ? ` (${pcts[i]}%)` : ''}
+                {showPercentage ? ` (${formatPct(pcts[i], d.value)}%)` : ''}
               </strong>
             </BodyShort>
           </div>
@@ -305,11 +313,11 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
                 </BodyShort>
                 <BodyShort>
                   Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
-                  {stats.kravTotal > 0 && ` (${kravPcts[0]}%)`}
+                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[0], stats.kravUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ferdig vurdert <span className='font-bold'>{stats.kravFerdigVurdert}</span>
-                  {stats.kravTotal > 0 && ` (${kravPcts[1]}%)`}
+                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[1], stats.kravFerdigVurdert)}%)`}
                 </BodyShort>
               </>
             )
@@ -332,21 +340,25 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
                 <BodyShort>
                   Under arbeid{' '}
                   <span className='font-bold'>{stats.suksesskriterierUnderArbeid}</span>
-                  {totalSuksess > 0 && ` (${sukPcts[0]}%)`}
+                  {totalSuksess > 0 &&
+                    ` (${formatPct(sukPcts[0], stats.suksesskriterierUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Oppfylt <span className='font-bold'>{stats.suksesskriterierOppfylt}</span>
-                  {totalSuksess > 0 && ` (${sukPcts[1]}%)`}
+                  {totalSuksess > 0 &&
+                    ` (${formatPct(sukPcts[1], stats.suksesskriterierOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke oppfylt{' '}
                   <span className='font-bold'>{stats.suksesskriterierIkkeOppfylt}</span>
-                  {totalSuksess > 0 && ` (${sukPcts[2]}%)`}
+                  {totalSuksess > 0 &&
+                    ` (${formatPct(sukPcts[2], stats.suksesskriterierIkkeOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke relevant{' '}
                   <span className='font-bold'>{stats.suksesskriterierIkkeRelevant}</span>
-                  {totalSuksess > 0 && ` (${sukPcts[3]}%)`}
+                  {totalSuksess > 0 &&
+                    ` (${formatPct(sukPcts[3], stats.suksesskriterierIkkeRelevant)}%)`}
                 </BodyShort>
               </>
             )
@@ -371,28 +383,32 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
                   <span className='font-bold'>
                     {stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0}
                   </span>
-                  {totalFerdigSuksess > 0 && ` (${ferdigPcts[0]}%)`}
+                  {totalFerdigSuksess > 0 &&
+                    ` (${formatPct(ferdigPcts[0], stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Oppfylt{' '}
                   <span className='font-bold'>
                     {stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0}
                   </span>
-                  {totalFerdigSuksess > 0 && ` (${ferdigPcts[1]}%)`}
+                  {totalFerdigSuksess > 0 &&
+                    ` (${formatPct(ferdigPcts[1], stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke oppfylt{' '}
                   <span className='font-bold'>
                     {stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0}
                   </span>
-                  {totalFerdigSuksess > 0 && ` (${ferdigPcts[2]}%)`}
+                  {totalFerdigSuksess > 0 &&
+                    ` (${formatPct(ferdigPcts[2], stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke relevant{' '}
                   <span className='font-bold'>
                     {stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0}
                   </span>
-                  {totalFerdigSuksess > 0 && ` (${ferdigPcts[3]}%)`}
+                  {totalFerdigSuksess > 0 &&
+                    ` (${formatPct(ferdigPcts[3], stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0)}%)`}
                 </BodyShort>
               </>
             )
@@ -414,19 +430,23 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
                 </BodyShort>
                 <BodyShort>
                   Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
-                  {totalIkkeFerdigSuksess > 0 && ` (${ikkeFerdigPcts[0]}%)`}
+                  {totalIkkeFerdigSuksess > 0 &&
+                    ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Oppfylt <span className='font-bold'>{ikkeFerdigOppfylt}</span>
-                  {totalIkkeFerdigSuksess > 0 && ` (${ikkeFerdigPcts[1]}%)`}
+                  {totalIkkeFerdigSuksess > 0 &&
+                    ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke oppfylt <span className='font-bold'>{ikkeFerdigIkkeOppfylt}</span>
-                  {totalIkkeFerdigSuksess > 0 && ` (${ikkeFerdigPcts[2]}%)`}
+                  {totalIkkeFerdigSuksess > 0 &&
+                    ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigIkkeOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke relevant <span className='font-bold'>{ikkeFerdigIkkeRelevant}</span>
-                  {totalIkkeFerdigSuksess > 0 && ` (${ikkeFerdigPcts[3]}%)`}
+                  {totalIkkeFerdigSuksess > 0 &&
+                    ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeRelevant)}%)`}
                 </BodyShort>
               </>
             )
