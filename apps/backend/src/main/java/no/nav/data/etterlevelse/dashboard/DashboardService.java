@@ -538,6 +538,15 @@ public class DashboardService {
                 .toList();
 
         Map<String, String> temaByKravKey = new HashMap<>();
+        for (var krav : aktivKrav) {
+            String key = krav.getKravNummer() + "_" + krav.getKravVersjon();
+            temaByKravKey.put(key, resolveTemaCodeFromKrav(krav));
+        }
+        for (var krav : utgaatKravUtenNyVersjon) {
+            String key = krav.getKravNummer() + "_" + krav.getKravVersjon();
+            temaByKravKey.put(key, resolveTemaCodeFromKrav(krav));
+        }
+
         Map<String, TemaDashboardResponse> statsMap = new LinkedHashMap<>();
 
         for (var dok : doks) {
@@ -559,7 +568,7 @@ public class DashboardService {
 
                 if (!gyldigeKravKeys.contains(kravKey)) continue;
 
-                String temaCode = temaByKravKey.computeIfAbsent(kravKey, k -> resolveTemaCode(etterlevelse.getKravNummer(), etterlevelse.getKravVersjon()));
+                String temaCode = temaByKravKey.getOrDefault(kravKey, "UTEN_TEMA");
 
                 var stats = statsMap.computeIfAbsent(temaCode, tc -> {
                     if ("UTEN_TEMA".equals(tc)) {
@@ -596,11 +605,8 @@ public class DashboardService {
                 .toList();
     }
 
-    private String resolveTemaCode(int kravNummer, int kravVersjon) {
-        var krav = kravService.getByKravNummer(kravNummer, kravVersjon);
-        if (krav.isEmpty()) return "UTEN_TEMA";
-
-        var regelverk = krav.get().getRegelverk();
+    private String resolveTemaCodeFromKrav(Krav krav) {
+        var regelverk = krav.getRegelverk();
         if (regelverk == null || regelverk.isEmpty()) return "UTEN_TEMA";
 
         String lovCode = regelverk.get(0).getLov();
