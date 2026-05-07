@@ -508,7 +508,8 @@ public class DashboardService {
         List<EtterlevelseDokumentasjon> doks;
 
         if (avdelingId != null && !avdelingId.isEmpty()) {
-            doks = etterlevelseDokumentasjonService.getByAvdeling(avdelingId);
+            String effectiveAvdelingId = "ingen-avdeling".equals(avdelingId) ? "" : avdelingId;
+            doks = etterlevelseDokumentasjonService.getByAvdeling(effectiveAvdelingId);
 
             if (seksjonId != null && !seksjonId.isEmpty()) {
                 if (seksjonId.equals("ingen-seksjon")) {
