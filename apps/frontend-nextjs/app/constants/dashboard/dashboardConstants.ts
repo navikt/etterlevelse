@@ -42,7 +42,6 @@ export interface ITemaDashboardStats {
   suksesskriterierOppfylt: number
   suksesskriterierIkkeOppfylt: number
   suksesskriterierIkkeRelevant: number
-  ferdigUtfyltKravSuksesskriterierUnderArbeid?: number
   ferdigUtfyltKravSuksesskriterierOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeRelevant?: number

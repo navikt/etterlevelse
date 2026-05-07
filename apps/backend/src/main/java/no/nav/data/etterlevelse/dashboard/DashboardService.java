@@ -600,7 +600,7 @@ public class DashboardService {
 
                     if (isFerdig) {
                         switch (sb.getSuksesskriterieStatus()) {
-                            case UNDER_ARBEID -> stats.setFerdigUtfyltKravSuksesskriterierUnderArbeid(stats.getFerdigUtfyltKravSuksesskriterierUnderArbeid() + 1);
+                            case UNDER_ARBEID -> {}
                             case OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierOppfylt(stats.getFerdigUtfyltKravSuksesskriterierOppfylt() + 1);
                             case IKKE_OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierIkkeOppfylt(stats.getFerdigUtfyltKravSuksesskriterierIkkeOppfylt() + 1);
                             case IKKE_RELEVANT -> stats.setFerdigUtfyltKravSuksesskriterierIkkeRelevant(stats.getFerdigUtfyltKravSuksesskriterierIkkeRelevant() + 1);
