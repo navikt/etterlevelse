@@ -42,10 +42,10 @@ export interface ITemaDashboardStats {
   suksesskriterierOppfylt: number
   suksesskriterierIkkeOppfylt: number
   suksesskriterierIkkeRelevant: number
-  ferdigUtfyltKravSuksesskriterierUnderArbeid: number
-  ferdigUtfyltKravSuksesskriterierOppfylt: number
-  ferdigUtfyltKravSuksesskriterierIkkeOppfylt: number
-  ferdigUtfyltKravSuksesskriterierIkkeRelevant: number
+  ferdigUtfyltKravSuksesskriterierUnderArbeid?: number
+  ferdigUtfyltKravSuksesskriterierOppfylt?: number
+  ferdigUtfyltKravSuksesskriterierIkkeOppfylt?: number
+  ferdigUtfyltKravSuksesskriterierIkkeRelevant?: number
 }
 
 export interface IAvdelingDetailData {
