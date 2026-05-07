@@ -46,7 +46,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
 
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
-            Vurdere behov for PVK
+            Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
           <BodyShort>
             Ikke vurdert behov{' '}
