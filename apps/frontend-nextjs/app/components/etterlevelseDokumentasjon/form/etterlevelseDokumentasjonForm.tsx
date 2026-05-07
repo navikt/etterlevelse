@@ -765,53 +765,64 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
             <div className='flex-1' />
           </div>
-          {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
-            <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
-              <FieldWrapper marginTop full>
-                <FieldArray name='seksjoner'>
-                  {(fieldProps: FieldArrayRenderProps) => (
-                    <div>
-                      <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
-                      <OptionList
-                        label='Seksjon'
-                        options={seksjonerByAvdeling}
-                        onChange={async (value: any) => {
-                          if (value) {
-                            const selectedSeksjon = seksjonerByAvdeling.filter(
-                              (seksjon) => seksjon.value === value
-                            )[0]
+          {selectedAvdeling !== '' &&
+            selectedAvdeling !== undefined &&
+            (() => {
+              const selectedAvdelingName = alleAvdelingOptions.find(
+                (a) => a.value === selectedAvdeling
+              )?.label
+              const filteredSeksjoner = seksjonerByAvdeling.filter(
+                (s) => s.label !== selectedAvdelingName
+              )
+              if (filteredSeksjoner.length === 0) return null
+              return (
+                <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
+                  <FieldWrapper marginTop full>
+                    <FieldArray name='seksjoner'>
+                      {(fieldProps: FieldArrayRenderProps) => (
+                        <div>
+                          <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
+                          <OptionList
+                            label='Seksjon'
+                            options={filteredSeksjoner}
+                            onChange={async (value: any) => {
+                              if (value) {
+                                const selectedSeksjon = seksjonerByAvdeling.filter(
+                                  (seksjon) => seksjon.value === value
+                                )[0]
 
-                            const ikkeFinnesAlleredeIListe =
-                              fieldProps.form.values.seksjoner.filter(
-                                (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
-                              ).length === 0
+                                const ikkeFinnesAlleredeIListe =
+                                  fieldProps.form.values.seksjoner.filter(
+                                    (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
+                                  ).length === 0
 
-                            if (ikkeFinnesAlleredeIListe) {
-                              await fieldProps.form.setFieldValue('seksjoner', [
-                                ...fieldProps.form.values.seksjoner,
-                                {
-                                  nomSeksjonId: selectedSeksjon.value,
-                                  nomSeksjonName: selectedSeksjon.label,
-                                },
-                              ])
-                            }
-                          }
-                        }}
-                      />
-                      <RenderTagList
-                        list={fieldProps.form.values.seksjoner.map(
-                          (seksjon: INomSeksjon) => seksjon.nomSeksjonName
-                        )}
-                        onRemove={fieldProps.remove}
-                      />
-                    </div>
-                  )}
-                </FieldArray>
-              </FieldWrapper>
+                                if (ikkeFinnesAlleredeIListe) {
+                                  await fieldProps.form.setFieldValue('seksjoner', [
+                                    ...fieldProps.form.values.seksjoner,
+                                    {
+                                      nomSeksjonId: selectedSeksjon.value,
+                                      nomSeksjonName: selectedSeksjon.label,
+                                    },
+                                  ])
+                                }
+                              }
+                            }}
+                          />
+                          <RenderTagList
+                            list={fieldProps.form.values.seksjoner.map(
+                              (seksjon: INomSeksjon) => seksjon.nomSeksjonName
+                            )}
+                            onRemove={fieldProps.remove}
+                          />
+                        </div>
+                      )}
+                    </FieldArray>
+                  </FieldWrapper>
 
-              <div className='flex-1' />
-            </div>
-          )}
+                  <div className='flex-1' />
+                </div>
+              )
+            })()}
 
           {env.isDev && (
             <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
