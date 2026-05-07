@@ -1,5 +1,5 @@
 # Stage 1: Build the Next.js application
-FROM node:25.9.0-alpine AS builder
+FROM node:26.0.0-alpine AS builder
 
 WORKDIR /usr/app
 
