@@ -607,11 +607,18 @@ const TemaDashboardPage = () => {
             }}
           >
             <option value=''>Alle seksjoner</option>
-            {seksjoner.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.navn}
-              </option>
-            ))}
+            {seksjoner
+              .filter((s) => {
+                const avdelingNavn = avdelinger.find(
+                  (a) => a.avdelingId === selectedAvdeling
+                )?.avdelingNavn
+                return s.navn !== avdelingNavn
+              })
+              .map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.navn}
+                </option>
+              ))}
           </Select>
         )}
 
