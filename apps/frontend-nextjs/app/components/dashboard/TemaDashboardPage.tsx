@@ -266,8 +266,22 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
   )
 }
 
-const exportToCsv = (stats: ITemaDashboardStats[]) => {
+interface IExportFilters {
+  tema?: string
+  avdeling?: string
+  seksjon?: string
+}
+
+const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
   const BOM = '\uFEFF'
+
+  const filterLines = [
+    `Tema;${filters.tema || 'Alle temaer'}`,
+    `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
+    `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
+    '',
+  ]
+
   const header = [
     'Tema',
     'Krav totalt',
@@ -292,7 +306,7 @@ const exportToCsv = (stats: ITemaDashboardStats[]) => {
     ].join(';')
   )
 
-  const csv = BOM + [header, ...rows].join('\n')
+  const csv = BOM + [...filterLines, header, ...rows].join('\n')
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
@@ -423,7 +437,13 @@ const TemaDashboardPage = () => {
           variant='tertiary'
           size='small'
           icon={<DownloadIcon aria-hidden />}
-          onClick={() => exportToCsv(filteredTemaStats)}
+          onClick={() =>
+            exportToCsv(filteredTemaStats, {
+              tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
+              avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
+              seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+            })
+          }
           disabled={isLoading || filteredTemaStats.length === 0}
           className='ml-auto pr-4'
         >
