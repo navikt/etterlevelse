@@ -599,10 +599,10 @@ public class DashboardService {
 
                     if (isFerdig) {
                         switch (sb.getSuksesskriterieStatus()) {
-                            case UNDER_ARBEID -> stats.setFerdigUnderArbeid(stats.getFerdigUnderArbeid() + 1);
-                            case OPPFYLT -> stats.setFerdigOppfylt(stats.getFerdigOppfylt() + 1);
-                            case IKKE_OPPFYLT -> stats.setFerdigIkkeOppfylt(stats.getFerdigIkkeOppfylt() + 1);
-                            case IKKE_RELEVANT -> stats.setFerdigIkkeRelevant(stats.getFerdigIkkeRelevant() + 1);
+                            case UNDER_ARBEID -> stats.setFerdigUtfyltKravSuksesskriterierUnderArbeid(stats.getFerdigUtfyltKravSuksesskriterierUnderArbeid() + 1);
+                            case OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierOppfylt(stats.getFerdigUtfyltKravSuksesskriterierOppfylt() + 1);
+                            case IKKE_OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierIkkeOppfylt(stats.getFerdigUtfyltKravSuksesskriterierIkkeOppfylt() + 1);
+                            case IKKE_RELEVANT -> stats.setFerdigUtfyltKravSuksesskriterierIkkeRelevant(stats.getFerdigUtfyltKravSuksesskriterierIkkeRelevant() + 1);
                         }
                     }
                 }

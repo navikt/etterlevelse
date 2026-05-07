@@ -21,9 +21,9 @@ public class TemaDashboardResponse {
     private int suksesskriterierIkkeOppfylt;
     private int suksesskriterierIkkeRelevant;
 
-    private int ferdigUnderArbeid;
-    private int ferdigOppfylt;
-    private int ferdigIkkeOppfylt;
-    private int ferdigIkkeRelevant;
+    private int ferdigUtfyltKravSuksesskriterierUnderArbeid;
+    private int ferdigUtfyltKravSuksesskriterierOppfylt;
+    private int ferdigUtfyltKravSuksesskriterierIkkeOppfylt;
+    private int ferdigUtfyltKravSuksesskriterierIkkeRelevant;
 
 }

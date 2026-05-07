@@ -146,18 +146,22 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const ferdigSuksessData: IBarSegment[] = [
     {
       name: 'Under arbeid',
-      value: stats.ferdigUnderArbeid ?? 0,
+      value: stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0,
       color: SUKSESS_COLORS.underArbeid,
     },
-    { name: 'Oppfylt', value: stats.ferdigOppfylt ?? 0, color: SUKSESS_COLORS.oppfylt },
+    {
+      name: 'Oppfylt',
+      value: stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
+      color: SUKSESS_COLORS.oppfylt,
+    },
     {
       name: 'Ikke oppfylt',
-      value: stats.ferdigIkkeOppfylt ?? 0,
+      value: stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
       color: SUKSESS_COLORS.ikkeOppfylt,
     },
     {
       name: 'Ikke relevant',
-      value: stats.ferdigIkkeRelevant ?? 0,
+      value: stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
       color: SUKSESS_COLORS.ikkeRelevant,
     },
   ]
@@ -165,22 +169,28 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const ikkeFerdigSuksessData: IBarSegment[] = [
     {
       name: 'Under arbeid',
-      value: stats.suksesskriterierUnderArbeid - (stats.ferdigUnderArbeid ?? 0),
+      value:
+        stats.suksesskriterierUnderArbeid -
+        (stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0),
       color: SUKSESS_COLORS.underArbeid,
     },
     {
       name: 'Oppfylt',
-      value: stats.suksesskriterierOppfylt - (stats.ferdigOppfylt ?? 0),
+      value: stats.suksesskriterierOppfylt - (stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
       color: SUKSESS_COLORS.oppfylt,
     },
     {
       name: 'Ikke oppfylt',
-      value: stats.suksesskriterierIkkeOppfylt - (stats.ferdigIkkeOppfylt ?? 0),
+      value:
+        stats.suksesskriterierIkkeOppfylt -
+        (stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
       color: SUKSESS_COLORS.ikkeOppfylt,
     },
     {
       name: 'Ikke relevant',
-      value: stats.suksesskriterierIkkeRelevant - (stats.ferdigIkkeRelevant ?? 0),
+      value:
+        stats.suksesskriterierIkkeRelevant -
+        (stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
       color: SUKSESS_COLORS.ikkeRelevant,
     },
   ]
@@ -192,10 +202,10 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
     stats.suksesskriterierIkkeRelevant
 
   const totalFerdigSuksess =
-    (stats.ferdigUnderArbeid ?? 0) +
-    (stats.ferdigOppfylt ?? 0) +
-    (stats.ferdigIkkeOppfylt ?? 0) +
-    (stats.ferdigIkkeRelevant ?? 0)
+    (stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0) +
+    (stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0) +
+    (stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0) +
+    (stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0)
 
   const totalIkkeFerdigSuksess = totalSuksess - totalFerdigSuksess
 
@@ -253,18 +263,21 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
     stats.suksesskriterierIkkeRelevant
 
   const totalFerdigSuksess =
-    (stats.ferdigUnderArbeid ?? 0) +
-    (stats.ferdigOppfylt ?? 0) +
-    (stats.ferdigIkkeOppfylt ?? 0) +
-    (stats.ferdigIkkeRelevant ?? 0)
+    (stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0) +
+    (stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0) +
+    (stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0) +
+    (stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0)
 
   const totalIkkeFerdigSuksess = totalSuksess - totalFerdigSuksess
 
-  const ikkeFerdigUnderArbeid = stats.suksesskriterierUnderArbeid - (stats.ferdigUnderArbeid ?? 0)
-  const ikkeFerdigOppfylt = stats.suksesskriterierOppfylt - (stats.ferdigOppfylt ?? 0)
-  const ikkeFerdigIkkeOppfylt = stats.suksesskriterierIkkeOppfylt - (stats.ferdigIkkeOppfylt ?? 0)
+  const ikkeFerdigUnderArbeid =
+    stats.suksesskriterierUnderArbeid - (stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0)
+  const ikkeFerdigOppfylt =
+    stats.suksesskriterierOppfylt - (stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0)
+  const ikkeFerdigIkkeOppfylt =
+    stats.suksesskriterierIkkeOppfylt - (stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0)
   const ikkeFerdigIkkeRelevant =
-    stats.suksesskriterierIkkeRelevant - (stats.ferdigIkkeRelevant ?? 0)
+    stats.suksesskriterierIkkeRelevant - (stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0)
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
@@ -343,10 +356,10 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         <div>
           {(() => {
             const ferdigPcts = roundedPercentages([
-              stats.ferdigUnderArbeid ?? 0,
-              stats.ferdigOppfylt ?? 0,
-              stats.ferdigIkkeOppfylt ?? 0,
-              stats.ferdigIkkeRelevant ?? 0,
+              stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0,
+              stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
+              stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
+              stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
             ])
             return (
               <>
@@ -354,19 +367,31 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
                   Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
                 </BodyShort>
                 <BodyShort>
-                  Under arbeid <span className='font-bold'>{stats.ferdigUnderArbeid ?? 0}</span>
+                  Under arbeid{' '}
+                  <span className='font-bold'>
+                    {stats.ferdigUtfyltKravSuksesskriterierUnderArbeid ?? 0}
+                  </span>
                   {totalFerdigSuksess > 0 && ` (${ferdigPcts[0]}%)`}
                 </BodyShort>
                 <BodyShort>
-                  Oppfylt <span className='font-bold'>{stats.ferdigOppfylt ?? 0}</span>
+                  Oppfylt{' '}
+                  <span className='font-bold'>
+                    {stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0}
+                  </span>
                   {totalFerdigSuksess > 0 && ` (${ferdigPcts[1]}%)`}
                 </BodyShort>
                 <BodyShort>
-                  Ikke oppfylt <span className='font-bold'>{stats.ferdigIkkeOppfylt ?? 0}</span>
+                  Ikke oppfylt{' '}
+                  <span className='font-bold'>
+                    {stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0}
+                  </span>
                   {totalFerdigSuksess > 0 && ` (${ferdigPcts[2]}%)`}
                 </BodyShort>
                 <BodyShort>
-                  Ikke relevant <span className='font-bold'>{stats.ferdigIkkeRelevant ?? 0}</span>
+                  Ikke relevant{' '}
+                  <span className='font-bold'>
+                    {stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0}
+                  </span>
                   {totalFerdigSuksess > 0 && ` (${ferdigPcts[3]}%)`}
                 </BodyShort>
               </>
@@ -453,10 +478,10 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
       s.suksesskriterierOppfylt,
       s.suksesskriterierIkkeOppfylt,
       s.suksesskriterierIkkeRelevant,
-      s.ferdigUnderArbeid,
-      s.ferdigOppfylt,
-      s.ferdigIkkeOppfylt,
-      s.ferdigIkkeRelevant,
+      s.ferdigUtfyltKravSuksesskriterierUnderArbeid,
+      s.ferdigUtfyltKravSuksesskriterierOppfylt,
+      s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt,
+      s.ferdigUtfyltKravSuksesskriterierIkkeRelevant,
     ].join(';')
   )
 
