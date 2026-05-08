@@ -97,7 +97,7 @@ const RechartsStackedBar = ({
 }
 
 const TemaDokumentCount = ({ count }: { count?: number }) => (
-  <Detail uppercase className='mt-2'>
+  <Detail uppercase className='mt-2 mb-4'>
     {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
   </Detail>
 )
