@@ -42,7 +42,7 @@ const RechartsStackedBar = ({
   ]
 
   return (
-    <div style={{ marginTop: '12px', maxWidth: '300px' }}>
+    <div style={{ marginTop: '12px' }}>
       <ResponsiveContainer width='100%' height={32}>
         <BarChart
           layout='vertical'
@@ -193,14 +193,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
       <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '24px',
-          marginTop: '16px',
-        }}
-      >
+      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level='3'>
             Gjennomføringsstatus: krav ({stats.kravTotal})
@@ -215,14 +208,14 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
           <RechartsStackedBar data={suksessData} showPercentage />
         </div>
 
-        <div style={{ marginTop: '16px' }}>
+        <div>
           <Heading size='xsmall' level='3'>
             Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
           </Heading>
           <RechartsStackedBar data={ferdigSuksessData} showPercentage />
         </div>
 
-        <div style={{ marginTop: '16px' }}>
+        <div>
           <Heading size='xsmall' level='3'>
             Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
           </Heading>
@@ -263,16 +256,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
 
       <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          columnGap: '32px',
-          rowGap: '16px',
-          marginTop: '16px',
-          whiteSpace: 'nowrap',
-        }}
-      >
+      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
         <div>
           {(() => {
             const kravPcts = roundedPercentages([stats.kravUnderArbeid, stats.kravFerdigVurdert])
