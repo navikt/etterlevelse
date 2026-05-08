@@ -12,15 +12,17 @@ const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198
 
 const OverviewStackedBar = ({
   data,
-  showPercentage,
+  isPercentage,
 }: {
   data: IBarSegment[]
-  showPercentage?: boolean
+  isPercentage?: boolean
 }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
   if (total === 0) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
 
-  const pcts = roundedPercentages(data.map((d) => d.value))
+  const pcts = isPercentage
+    ? data.map((d) => d.value)
+    : roundedPercentages(data.map((d) => d.value))
   const chartData = [
     data.reduce((acc, d) => ({ ...acc, [d.name]: d.value }), {} as Record<string, number>),
   ]
@@ -40,7 +42,9 @@ const OverviewStackedBar = ({
             formatter={(value, name) => {
               const idx = data.findIndex((d) => d.name === String(name))
               return [
-                `${Number(value)} (${formatPct(pcts[idx] ?? 0, Number(value))}%)`,
+                isPercentage
+                  ? `${Number(value)}%`
+                  : `${Number(value)} (${formatPct(pcts[idx] ?? 0, Number(value))}%)`,
                 String(name),
               ]
             }}
@@ -54,7 +58,7 @@ const OverviewStackedBar = ({
       </ResponsiveContainer>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-        {data.map((d, i) => (
+        {data.map((d) => (
           <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span
               style={{
@@ -67,11 +71,7 @@ const OverviewStackedBar = ({
               }}
             />
             <BodyShort size='small'>
-              {d.name}{' '}
-              <strong>
-                {d.value}
-                {showPercentage ? ` (${formatPct(pcts[i], d.value)}%)` : ''}
-              </strong>
+              {d.name} <strong>{isPercentage ? `${d.value}%` : d.value}</strong>
             </BodyShort>
           </div>
         ))}
@@ -83,26 +83,20 @@ const OverviewStackedBar = ({
 const OverviewKeyMetrics = ({
   data,
   title,
-  showPercentage,
+  isPercentage,
 }: {
   data: IBarSegment[]
   title: string
-  showPercentage?: boolean
+  isPercentage?: boolean
 }) => {
-  const pcts = roundedPercentages(data.map((d) => d.value))
-
   return (
     <div>
       <BodyShort weight='semibold' className='mb-2'>
         {title}
       </BodyShort>
-      {data.map((d, i) => (
+      {data.map((d) => (
         <BodyShort key={d.name}>
-          {d.name}{' '}
-          <span className='font-bold'>
-            {d.value}
-            {showPercentage ? ` (${formatPct(pcts[i], d.value)}%)` : ''}
-          </span>
+          {d.name} <span className='font-bold'>{isPercentage ? `${d.value}%` : d.value}</span>
         </BodyShort>
       ))}
     </div>
@@ -246,7 +240,7 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
             <Heading size='xsmall' level='3'>
               Suksesskriterier (etterlevelseskrav)
             </Heading>
-            <OverviewStackedBar data={suksessData} showPercentage />
+            <OverviewStackedBar data={suksessData} isPercentage />
           </div>
 
           <div>
@@ -269,7 +263,7 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
           <OverviewKeyMetrics
             title='Suksesskriterier (etterlevelseskrav)'
             data={suksessData}
-            showPercentage
+            isPercentage
           />
           <OverviewKeyMetrics
             title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}

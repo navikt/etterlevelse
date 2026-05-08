@@ -13,6 +13,7 @@ import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 const DashboardPage = () => {
   const [stats, setStats] = useState<IAvdelingDashboardStats[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
 
   useEffect(() => {
@@ -20,11 +21,15 @@ const DashboardPage = () => {
       try {
         const result = await getDashboardStats()
         setStats(result)
+      } catch {
+        setError('Kunne ikke hente dashboard-data. Prøv igjen senere.')
       } finally {
         setIsLoading(false)
       }
     })()
   }, [])
+
+  const totalDokumenter = stats.reduce((sum, s) => sum + s.dokumenter.total, 0)
 
   const filteredStats = selectedAvdeling
     ? stats.filter((s) => s.avdelingId === selectedAvdeling)
@@ -50,7 +55,16 @@ const DashboardPage = () => {
         </LocalAlert.Content>
       </LocalAlert>
 
-      {!isLoading && (
+      {error && (
+        <LocalAlert status='error' className='mt-4'>
+          <LocalAlert.Header>
+            <LocalAlert.Title as='h2'>Feil</LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>{error}</LocalAlert.Content>
+        </LocalAlert>
+      )}
+
+      {!isLoading && !error && (
         <>
           <Heading size='medium' level='2' className='mt-8'>
             Oversikt i Nav
@@ -66,7 +80,7 @@ const DashboardPage = () => {
               <div className='mt-6'>
                 <DashboardOverviewCard
                   stats={stats}
-                  totalDokumenter={stats.reduce((sum, s) => sum + s.dokumenter.total, 0)}
+                  totalDokumenter={totalDokumenter}
                   view='figurer'
                 />
               </div>
@@ -75,7 +89,7 @@ const DashboardPage = () => {
               <div className='mt-6'>
                 <DashboardOverviewCard
                   stats={stats}
-                  totalDokumenter={stats.reduce((sum, s) => sum + s.dokumenter.total, 0)}
+                  totalDokumenter={totalDokumenter}
                   view='nokkeltall'
                 />
               </div>
