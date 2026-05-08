@@ -108,6 +108,11 @@ export interface IAvdelingDashboardStats {
     godkjentAvRisikoeier: number
   }
   suksesskriterier: {
+    total: number
+    underArbeidAntall: number
+    oppfyltAntall: number
+    ikkeOppfyltAntall: number
+    ikkeRelevantAntall: number
     underArbeidProsent: number
     oppfyltProsent: number
     ikkeOppfyltProsent: number

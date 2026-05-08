@@ -10,19 +10,11 @@ const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
 const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
 const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']
 
-const OverviewStackedBar = ({
-  data,
-  isPercentage,
-}: {
-  data: IBarSegment[]
-  isPercentage?: boolean
-}) => {
+const OverviewStackedBar = ({ data }: { data: IBarSegment[] }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
   if (total === 0) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
 
-  const pcts = isPercentage
-    ? data.map((d) => d.value)
-    : roundedPercentages(data.map((d) => d.value))
+  const pcts = roundedPercentages(data.map((d) => d.value))
   const chartData = [
     data.reduce((acc, d) => ({ ...acc, [d.name]: d.value }), {} as Record<string, number>),
   ]
@@ -42,9 +34,7 @@ const OverviewStackedBar = ({
             formatter={(value, name) => {
               const idx = data.findIndex((d) => d.name === String(name))
               return [
-                isPercentage
-                  ? `${Number(value)}%`
-                  : `${Number(value)} (${formatPct(pcts[idx] ?? 0, Number(value))}%)`,
+                `${Number(value)} (${formatPct(pcts[idx] ?? 0, Number(value))}%)`,
                 String(name),
               ]
             }}
@@ -71,7 +61,7 @@ const OverviewStackedBar = ({
               }}
             />
             <BodyShort size='small'>
-              {d.name} <strong>{isPercentage ? `${d.value}%` : d.value}</strong>
+              {d.name} <strong>{d.value}</strong>
             </BodyShort>
           </div>
         ))}
@@ -80,15 +70,7 @@ const OverviewStackedBar = ({
   )
 }
 
-const OverviewKeyMetrics = ({
-  data,
-  title,
-  isPercentage,
-}: {
-  data: IBarSegment[]
-  title: string
-  isPercentage?: boolean
-}) => {
+const OverviewKeyMetrics = ({ data, title }: { data: IBarSegment[]; title: string }) => {
   return (
     <div>
       <BodyShort weight='semibold' className='mb-2'>
@@ -96,7 +78,7 @@ const OverviewKeyMetrics = ({
       </BodyShort>
       {data.map((d) => (
         <BodyShort key={d.name}>
-          {d.name} <span className='font-bold'>{isPercentage ? `${d.value}%` : d.value}</span>
+          {d.name} <span className='font-bold'>{d.value}</span>
         </BodyShort>
       ))}
     </div>
@@ -120,21 +102,16 @@ const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
     { total: 0, underArbeid: 0, sendtTilGodkjenning: 0, godkjentAvRisikoeier: 0 }
   )
 
-  const n = stats.length || 1
-  const suksess = {
-    underArbeidProsent: Math.round(
-      stats.reduce((s, a) => s + a.suksesskriterier.underArbeidProsent, 0) / n
-    ),
-    oppfyltProsent: Math.round(
-      stats.reduce((s, a) => s + a.suksesskriterier.oppfyltProsent, 0) / n
-    ),
-    ikkeOppfyltProsent: Math.round(
-      stats.reduce((s, a) => s + a.suksesskriterier.ikkeOppfyltProsent, 0) / n
-    ),
-    ikkeRelevantProsent: Math.round(
-      stats.reduce((s, a) => s + a.suksesskriterier.ikkeRelevantProsent, 0) / n
-    ),
-  }
+  const suksess = stats.reduce(
+    (acc, s) => ({
+      total: acc.total + s.suksesskriterier.total,
+      underArbeid: acc.underArbeid + s.suksesskriterier.underArbeidAntall,
+      oppfylt: acc.oppfylt + s.suksesskriterier.oppfyltAntall,
+      ikkeOppfylt: acc.ikkeOppfylt + s.suksesskriterier.ikkeOppfyltAntall,
+      ikkeRelevant: acc.ikkeRelevant + s.suksesskriterier.ikkeRelevantAntall,
+    }),
+    { total: 0, underArbeid: 0, oppfylt: 0, ikkeOppfylt: 0, ikkeRelevant: 0 }
+  )
 
   const behov = stats.reduce(
     (acc, s) => ({
@@ -186,10 +163,10 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
   ]
 
   const suksessData: IBarSegment[] = [
-    { name: 'Under arbeid', value: agg.suksess.underArbeidProsent, color: SUKSESS_COLORS[0] },
-    { name: 'Oppfylt', value: agg.suksess.oppfyltProsent, color: SUKSESS_COLORS[1] },
-    { name: 'Ikke oppfylt', value: agg.suksess.ikkeOppfyltProsent, color: SUKSESS_COLORS[2] },
-    { name: 'Ikke relevant', value: agg.suksess.ikkeRelevantProsent, color: SUKSESS_COLORS[3] },
+    { name: 'Under arbeid', value: agg.suksess.underArbeid, color: SUKSESS_COLORS[0] },
+    { name: 'Oppfylt', value: agg.suksess.oppfylt, color: SUKSESS_COLORS[1] },
+    { name: 'Ikke oppfylt', value: agg.suksess.ikkeOppfylt, color: SUKSESS_COLORS[2] },
+    { name: 'Ikke relevant', value: agg.suksess.ikkeRelevant, color: SUKSESS_COLORS[3] },
   ]
 
   const behovData: IBarSegment[] = [
@@ -240,7 +217,7 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
             <Heading size='xsmall' level='3'>
               Suksesskriterier (etterlevelseskrav)
             </Heading>
-            <OverviewStackedBar data={suksessData} isPercentage />
+            <OverviewStackedBar data={suksessData} />
           </div>
 
           <div>
@@ -260,11 +237,7 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
           <OverviewKeyMetrics title={`Etterlevelsesdokumenter (${agg.dok.total})`} data={dokData} />
-          <OverviewKeyMetrics
-            title='Suksesskriterier (etterlevelseskrav)'
-            data={suksessData}
-            isPercentage
-          />
+          <OverviewKeyMetrics title='Suksesskriterier (etterlevelseskrav)' data={suksessData} />
           <OverviewKeyMetrics
             title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}
             data={behovData}
