@@ -64,6 +64,8 @@ const DashboardPage = () => {
         </LocalAlert>
       )}
 
+      {isLoading && <CenteredLoader />}
+
       {!isLoading && !error && (
         <>
           <Heading size='medium' level='2' className='mt-8'>
@@ -95,59 +97,55 @@ const DashboardPage = () => {
               </div>
             </Tabs.Panel>
           </Tabs>
+
+          <Heading size='medium' level='2' className='mt-8'>
+            Avdelingoversikt
+          </Heading>
+
+          <Select
+            label='Velg avdeling'
+            className='mt-4 w-fit min-w-64'
+            value={selectedAvdeling}
+            onChange={(e) => setSelectedAvdeling(e.target.value)}
+          >
+            <option value=''>Alle avdelinger</option>
+            {stats.map((s) => (
+              <option key={s.avdelingId} value={s.avdelingId}>
+                {s.avdelingNavn}
+              </option>
+            ))}
+          </Select>
+
+          <Tabs className='mt-4' defaultValue='figurer'>
+            <Tabs.List>
+              <Tabs.Tab value='figurer' label='Vis figurer' />
+              <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+            </Tabs.List>
+
+            <Tabs.Panel value='figurer'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+                {filteredStats.map((avdelingStats) => (
+                  <DashboardBarCard
+                    key={avdelingStats.avdelingId}
+                    stats={avdelingStats}
+                    subHeadingLevel='4'
+                  />
+                ))}
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value='nokkeltall'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+                {filteredStats.map((avdelingStats) => (
+                  <DashboardCard
+                    key={avdelingStats.avdelingId}
+                    stats={avdelingStats}
+                    subHeadingLevel='4'
+                  />
+                ))}
+              </div>
+            </Tabs.Panel>
+          </Tabs>
         </>
-      )}
-
-      <Heading size='medium' level='2' className='mt-8'>
-        Avdelingoversikt
-      </Heading>
-
-      <Select
-        label='Velg avdeling'
-        className='mt-4 w-fit min-w-64'
-        value={selectedAvdeling}
-        onChange={(e) => setSelectedAvdeling(e.target.value)}
-      >
-        <option value=''>Alle avdelinger</option>
-        {stats.map((s) => (
-          <option key={s.avdelingId} value={s.avdelingId}>
-            {s.avdelingNavn}
-          </option>
-        ))}
-      </Select>
-
-      {isLoading && <CenteredLoader />}
-
-      {!isLoading && (
-        <Tabs className='mt-4' defaultValue='figurer'>
-          <Tabs.List>
-            <Tabs.Tab value='figurer' label='Vis figurer' />
-            <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-          </Tabs.List>
-
-          <Tabs.Panel value='figurer'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
-              {filteredStats.map((avdelingStats) => (
-                <DashboardBarCard
-                  key={avdelingStats.avdelingId}
-                  stats={avdelingStats}
-                  subHeadingLevel='4'
-                />
-              ))}
-            </div>
-          </Tabs.Panel>
-          <Tabs.Panel value='nokkeltall'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
-              {filteredStats.map((avdelingStats) => (
-                <DashboardCard
-                  key={avdelingStats.avdelingId}
-                  stats={avdelingStats}
-                  subHeadingLevel='4'
-                />
-              ))}
-            </div>
-          </Tabs.Panel>
-        </Tabs>
       )}
     </PageLayout>
   )

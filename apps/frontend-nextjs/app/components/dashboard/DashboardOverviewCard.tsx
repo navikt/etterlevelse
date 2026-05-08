@@ -3,12 +3,15 @@
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { IBarSegment, formatPct, roundedPercentages } from './chartUtils'
-
-const DOK_COLORS = ['#fa4d56', '#9f1853', '#005d5d']
-const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
-const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
-const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']
+import {
+  AVDELING_SUKSESS_COLORS,
+  BEHOV_COLORS,
+  DOK_COLORS,
+  IBarSegment,
+  PVK_COLORS,
+  formatPct,
+  roundedPercentages,
+} from './chartUtils'
 
 const OverviewStackedBar = ({ data }: { data: IBarSegment[] }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
@@ -132,7 +135,7 @@ const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
   const pvk = stats.reduce(
     (acc, s) => ({
       total: acc.total + s.pvk.total,
-      ikkePaabegynt: acc.ikkePaabegynt + (s.pvk.ikkePaabegynt ?? 0),
+      ikkePaabegynt: acc.ikkePaabegynt + s.pvk.ikkePaabegynt,
       underArbeid: acc.underArbeid + s.pvk.underArbeid,
       tilBehandlingHosPvo: acc.tilBehandlingHosPvo + s.pvk.tilBehandlingHosPvo,
       tilbakemeldingFraPvo: acc.tilbakemeldingFraPvo + s.pvk.tilbakemeldingFraPvo,
@@ -163,10 +166,10 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
   ]
 
   const suksessData: IBarSegment[] = [
-    { name: 'Under arbeid', value: agg.suksess.underArbeid, color: SUKSESS_COLORS[0] },
-    { name: 'Oppfylt', value: agg.suksess.oppfylt, color: SUKSESS_COLORS[1] },
-    { name: 'Ikke oppfylt', value: agg.suksess.ikkeOppfylt, color: SUKSESS_COLORS[2] },
-    { name: 'Ikke relevant', value: agg.suksess.ikkeRelevant, color: SUKSESS_COLORS[3] },
+    { name: 'Under arbeid', value: agg.suksess.underArbeid, color: AVDELING_SUKSESS_COLORS[0] },
+    { name: 'Oppfylt', value: agg.suksess.oppfylt, color: AVDELING_SUKSESS_COLORS[1] },
+    { name: 'Ikke oppfylt', value: agg.suksess.ikkeOppfylt, color: AVDELING_SUKSESS_COLORS[2] },
+    { name: 'Ikke relevant', value: agg.suksess.ikkeRelevant, color: AVDELING_SUKSESS_COLORS[3] },
   ]
 
   const behovData: IBarSegment[] = [

@@ -34,3 +34,8 @@ export const formatPct = (pct: number, value: number): string => {
   if (value > 0 && pct === 0) return '<1'
   return `${pct}`
 }
+
+export const DOK_COLORS = ['#fa4d56', '#9f1853', '#005d5d']
+export const AVDELING_SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
+export const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
+export const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']

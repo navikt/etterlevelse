@@ -2,6 +2,13 @@
 
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
+import {
+  AVDELING_SUKSESS_COLORS,
+  BEHOV_COLORS,
+  DOK_COLORS,
+  IBarSegment,
+  PVK_COLORS,
+} from './chartUtils'
 
 interface IProps {
   stats: IAvdelingDashboardStats
@@ -9,17 +16,6 @@ interface IProps {
   singleRow?: boolean
   subHeadingLevel?: '3' | '4'
 }
-
-interface IBarSegment {
-  name: string
-  value: number
-  color: string
-}
-
-const DOK_COLORS = ['#fa4d56', '#9f1853', '#005d5d']
-const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
-const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
-const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']
 
 const StackedBar = ({
   data,
@@ -95,18 +91,22 @@ export const DashboardBarCard = ({
     {
       name: 'Under arbeid',
       value: stats.suksesskriterier.underArbeidProsent,
-      color: SUKSESS_COLORS[0],
+      color: AVDELING_SUKSESS_COLORS[0],
     },
-    { name: 'Oppfylt', value: stats.suksesskriterier.oppfyltProsent, color: SUKSESS_COLORS[1] },
+    {
+      name: 'Oppfylt',
+      value: stats.suksesskriterier.oppfyltProsent,
+      color: AVDELING_SUKSESS_COLORS[1],
+    },
     {
       name: 'Ikke oppfylt',
       value: stats.suksesskriterier.ikkeOppfyltProsent,
-      color: SUKSESS_COLORS[2],
+      color: AVDELING_SUKSESS_COLORS[2],
     },
     {
       name: 'Ikke relevant',
       value: stats.suksesskriterier.ikkeRelevantProsent,
-      color: SUKSESS_COLORS[3],
+      color: AVDELING_SUKSESS_COLORS[3],
     },
   ]
 
@@ -130,7 +130,7 @@ export const DashboardBarCard = ({
   ]
 
   const pvkData: IBarSegment[] = [
-    { name: 'Ikke påbegynt', value: stats.pvk.ikkePaabegynt ?? 0, color: PVK_COLORS[0] },
+    { name: 'Ikke påbegynt', value: stats.pvk.ikkePaabegynt, color: PVK_COLORS[0] },
     { name: 'Under arbeid', value: stats.pvk.underArbeid, color: PVK_COLORS[1] },
     { name: 'Til behandling hos PVO', value: stats.pvk.tilBehandlingHosPvo, color: PVK_COLORS[2] },
     {
