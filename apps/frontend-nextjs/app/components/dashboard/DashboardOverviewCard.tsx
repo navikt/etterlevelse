@@ -94,7 +94,9 @@ const OverviewKeyMetrics = ({
 
   return (
     <div>
-      <BodyShort weight='semibold'>{title}</BodyShort>
+      <BodyShort weight='semibold' className='mb-2'>
+        {title}
+      </BodyShort>
       {data.map((d, i) => (
         <BodyShort key={d.name}>
           {d.name}{' '}
