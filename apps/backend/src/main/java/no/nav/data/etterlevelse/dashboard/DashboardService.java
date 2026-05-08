@@ -550,7 +550,7 @@ public class DashboardService {
         }
 
         Map<String, TemaDashboardResponse> statsMap = new LinkedHashMap<>();
-        Map<String, Set<java.util.UUID>> dokIdsByTema = new HashMap<>();
+        Map<String, Set<UUID>> dokIdsByTema = new HashMap<>();
 
         for (var dok : doks) {
             List<Krav> kravForEdok = new ArrayList<>(aktivKrav.stream().filter(k ->
@@ -615,8 +615,8 @@ public class DashboardService {
         }
 
         statsMap.forEach((temaCode, stats) -> {
-            var dokIds2 = dokIdsByTema.getOrDefault(temaCode, Set.of());
-            stats.setEtterlevelseDokumentCount(dokIds2.size());
+            var dokIdsForTema = dokIdsByTema.getOrDefault(temaCode, Set.of());
+            stats.setEtterlevelseDokumentCount(dokIdsForTema.size());
         });
 
         return statsMap.values().stream()

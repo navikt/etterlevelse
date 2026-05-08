@@ -126,6 +126,12 @@ const RechartsStackedBar = ({
   )
 }
 
+const TemaDokumentCount = ({ count }: { count?: number }) => (
+  <Detail uppercase className='mt-2'>
+    {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+  </Detail>
+)
+
 const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const kravData: IBarSegment[] = [
     { name: 'Under arbeid', value: stats.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
@@ -215,9 +221,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
         {stats.temaName}
       </Heading>
 
-      <Detail uppercase className='mt-2'>
-        {(stats.etterlevelseDokumentCount ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
-      </Detail>
+      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
 
       <div
         style={{
@@ -287,9 +291,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         {stats.temaName}
       </Heading>
 
-      <Detail uppercase className='mt-2'>
-        {(stats.etterlevelseDokumentCount ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
-      </Detail>
+      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
 
       <div
         style={{
