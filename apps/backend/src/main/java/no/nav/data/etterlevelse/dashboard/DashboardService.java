@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -554,6 +555,7 @@ public class DashboardService {
         }
 
         Map<String, TemaDashboardResponse> statsMap = new LinkedHashMap<>();
+        Map<String, Set<UUID>> dokIdsByTema = new HashMap<>();
 
         for (var dok : doks) {
             List<Krav> kravForEdok = new ArrayList<>(aktivKrav.stream().filter(k ->
@@ -585,6 +587,8 @@ public class DashboardService {
                     return TemaDashboardResponse.builder().temaCode(tc).temaName(temaName).build();
                 });
 
+                dokIdsByTema.computeIfAbsent(temaCode, k -> new HashSet<>()).add(dok.getId());
+
                 boolean isFerdig = etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT
                         || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT;
 
@@ -614,6 +618,11 @@ public class DashboardService {
                 }
             }
         }
+
+        statsMap.forEach((temaCode, stats) -> {
+            var dokIdsForTema = dokIdsByTema.getOrDefault(temaCode, Set.of());
+            stats.setEtterlevelseDokumentCount(dokIdsForTema.size());
+        });
 
         return statsMap.values().stream()
                 .sorted(Comparator.comparing(TemaDashboardResponse::getTemaName))

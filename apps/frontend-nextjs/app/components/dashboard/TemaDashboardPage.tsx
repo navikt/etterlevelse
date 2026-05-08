@@ -13,7 +13,7 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { DownloadIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
+import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import {
@@ -95,6 +95,12 @@ const RechartsStackedBar = ({
     </div>
   )
 }
+
+const TemaDokumentCount = ({ count }: { count?: number }) => (
+  <Detail uppercase className='mt-2'>
+    {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+  </Detail>
+)
 
 const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const kravData: IBarSegment[] = [
@@ -185,6 +191,8 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
         {stats.temaName}
       </Heading>
 
+      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
+
       <div
         style={{
           display: 'grid',
@@ -252,6 +260,8 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
       <Heading size='small' level='2'>
         {stats.temaName}
       </Heading>
+
+      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
 
       <div
         style={{
