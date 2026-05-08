@@ -3,6 +3,7 @@
 import { getDashboardStats } from '@/api/dashboard/dashboardApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
+import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
@@ -12,15 +13,23 @@ import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 const DashboardPage = () => {
   const [stats, setStats] = useState<IAvdelingDashboardStats[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
-      await getDashboardStats()
-        .then(setStats)
-        .finally(() => setIsLoading(false))
+      try {
+        const result = await getDashboardStats()
+        setStats(result)
+      } catch {
+        setError('Kunne ikke hente dashboard-data. Prøv igjen senere.')
+      } finally {
+        setIsLoading(false)
+      }
     })()
   }, [])
+
+  const totalDokumenter = stats.reduce((sum, s) => sum + s.dokumenter.total, 0)
 
   const filteredStats = selectedAvdeling
     ? stats.filter((s) => s.avdelingId === selectedAvdeling)
@@ -46,56 +55,97 @@ const DashboardPage = () => {
         </LocalAlert.Content>
       </LocalAlert>
 
-      <Heading size='medium' level='2' className='mt-4'>
-        Avdelingoversikt
-      </Heading>
-
-      <Select
-        label='Velg avdeling'
-        className='mt-4 w-fit min-w-64'
-        value={selectedAvdeling}
-        onChange={(e) => setSelectedAvdeling(e.target.value)}
-      >
-        <option value=''>Alle avdelinger</option>
-        {stats.map((s) => (
-          <option key={s.avdelingId} value={s.avdelingId}>
-            {s.avdelingNavn}
-          </option>
-        ))}
-      </Select>
+      {error && (
+        <LocalAlert status='error' className='mt-4'>
+          <LocalAlert.Header>
+            <LocalAlert.Title as='h2'>Feil</LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>{error}</LocalAlert.Content>
+        </LocalAlert>
+      )}
 
       {isLoading && <CenteredLoader />}
 
-      {!isLoading && (
-        <Tabs className='mt-4' defaultValue='figurer'>
-          <Tabs.List>
-            <Tabs.Tab value='figurer' label='Vis figurer' />
-            <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-          </Tabs.List>
+      {!isLoading && !error && (
+        <>
+          <Heading size='medium' level='2' className='mt-8'>
+            Oversikt i Nav
+          </Heading>
 
-          <Tabs.Panel value='figurer'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
-              {filteredStats.map((avdelingStats) => (
-                <DashboardBarCard
-                  key={avdelingStats.avdelingId}
-                  stats={avdelingStats}
-                  subHeadingLevel='4'
+          <Tabs className='mt-4' defaultValue='figurer-overview'>
+            <Tabs.List>
+              <Tabs.Tab value='figurer-overview' label='Vis figurer' />
+              <Tabs.Tab value='nokkeltall-overview' label='Vis nøkkeltall' />
+            </Tabs.List>
+
+            <Tabs.Panel value='figurer-overview'>
+              <div className='mt-6'>
+                <DashboardOverviewCard
+                  stats={stats}
+                  totalDokumenter={totalDokumenter}
+                  view='figurer'
                 />
-              ))}
-            </div>
-          </Tabs.Panel>
-          <Tabs.Panel value='nokkeltall'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
-              {filteredStats.map((avdelingStats) => (
-                <DashboardCard
-                  key={avdelingStats.avdelingId}
-                  stats={avdelingStats}
-                  subHeadingLevel='4'
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value='nokkeltall-overview'>
+              <div className='mt-6'>
+                <DashboardOverviewCard
+                  stats={stats}
+                  totalDokumenter={totalDokumenter}
+                  view='nokkeltall'
                 />
-              ))}
-            </div>
-          </Tabs.Panel>
-        </Tabs>
+              </div>
+            </Tabs.Panel>
+          </Tabs>
+
+          <Heading size='medium' level='2' className='mt-8'>
+            Avdelingoversikt
+          </Heading>
+
+          <Select
+            label='Velg avdeling'
+            className='mt-4 w-fit min-w-64'
+            value={selectedAvdeling}
+            onChange={(e) => setSelectedAvdeling(e.target.value)}
+          >
+            <option value=''>Alle avdelinger</option>
+            {stats.map((s) => (
+              <option key={s.avdelingId} value={s.avdelingId}>
+                {s.avdelingNavn}
+              </option>
+            ))}
+          </Select>
+
+          <Tabs className='mt-4' defaultValue='figurer'>
+            <Tabs.List>
+              <Tabs.Tab value='figurer' label='Vis figurer' />
+              <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+            </Tabs.List>
+
+            <Tabs.Panel value='figurer'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+                {filteredStats.map((avdelingStats) => (
+                  <DashboardBarCard
+                    key={avdelingStats.avdelingId}
+                    stats={avdelingStats}
+                    subHeadingLevel='4'
+                  />
+                ))}
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value='nokkeltall'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+                {filteredStats.map((avdelingStats) => (
+                  <DashboardCard
+                    key={avdelingStats.avdelingId}
+                    stats={avdelingStats}
+                    subHeadingLevel='4'
+                  />
+                ))}
+              </div>
+            </Tabs.Panel>
+          </Tabs>
+        </>
       )}
     </PageLayout>
   )

@@ -10,6 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SuksesskriterierStats {
+    private int total;
+    private int underArbeidAntall;
+    private int oppfyltAntall;
+    private int ikkeOppfyltAntall;
+    private int ikkeRelevantAntall;
     private int underArbeidProsent;
     private int oppfyltProsent;
     private int ikkeOppfyltProsent;

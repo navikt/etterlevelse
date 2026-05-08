@@ -497,6 +497,11 @@ public class DashboardService {
         }
 
         return SuksesskriterierStats.builder()
+                .total(totalSuksesskriterier)
+                .underArbeidAntall(underArbeidAntall)
+                .oppfyltAntall(oppfyltAntall)
+                .ikkeOppfyltAntall(ikkeOppfyltAntall)
+                .ikkeRelevantAntall(ikkeRelevantAntall)
                 .underArbeidProsent(totalSuksesskriterier > 0 ? Math.round((float) underArbeidAntall / totalSuksesskriterier * 100) : 0)
                 .oppfyltProsent(totalSuksesskriterier > 0 ? Math.round((float) oppfyltAntall / totalSuksesskriterier * 100) : 0)
                 .ikkeOppfyltProsent(totalSuksesskriterier > 0 ? Math.round((float) ikkeOppfyltAntall / totalSuksesskriterier * 100) : 0)
