@@ -1,13 +1,14 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import no.nav.data.etterlevelse.common.domain.KravId;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-import java.util.UUID;
+import no.nav.data.etterlevelse.common.domain.KravId;
 
 public interface EtterlevelseDokumentasjonRepo extends JpaRepository<EtterlevelseDokumentasjon, UUID> {
 
@@ -28,7 +29,7 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<Etterlevels
     @Query(value = "select * from etterlevelse_dokumentasjon", nativeQuery = true )
     List<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjoner();
 
-    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'nomAvdelingId' = ?1", nativeQuery = true )
+    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'nomAvdelingId' = ?1 or (?1 = '' and (data ->> 'nomAvdelingId' is null or data ->> 'nomAvdelingId' = ''))", nativeQuery = true )
     List<EtterlevelseDokumentasjon> getByAvdelingId(String avdelingId);
 
 
