@@ -597,11 +597,8 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
           {selectedAvdeling !== '' &&
             selectedAvdeling !== undefined &&
             (() => {
-              const selectedAvdelingName = alleAvdelingOptions.find(
-                (a) => a.value === selectedAvdeling
-              )?.label
               const filteredSeksjoner = seksjonerByAvdeling.filter(
-                (s) => s.label !== selectedAvdelingName
+                (s) => s.value !== selectedAvdeling
               )
               if (filteredSeksjoner.length === 0) return null
               return (
@@ -616,9 +613,11 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                             options={filteredSeksjoner}
                             onChange={async (value: any) => {
                               if (value) {
-                                const selectedSeksjon = seksjonerByAvdeling.filter(
+                                const selectedSeksjon = filteredSeksjoner.find(
                                   (seksjon) => seksjon.value === value
-                                )[0]
+                                )
+
+                                if (!selectedSeksjon) return
 
                                 const ikkeFinnesAlleredeIListe =
                                   fieldProps.form.values.seksjoner.filter(
