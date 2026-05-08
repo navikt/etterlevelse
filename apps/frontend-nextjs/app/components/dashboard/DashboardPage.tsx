@@ -21,10 +21,17 @@ const DashboardPage = () => {
 
   useEffect(() => {
     ;(async () => {
-      await Promise.all([
-        getDashboardStats().then(setStats),
-        getTemaDashboardStats().then(setTemaStats),
-      ]).finally(() => setIsLoading(false))
+      try {
+        const [dashboardStatsResult, temaDashboardStatsResult] = await Promise.allSettled([
+          getDashboardStats(),
+          getTemaDashboardStats(),
+        ])
+        if (dashboardStatsResult.status === 'fulfilled') setStats(dashboardStatsResult.value)
+        if (temaDashboardStatsResult.status === 'fulfilled')
+          setTemaStats(temaDashboardStatsResult.value)
+      } finally {
+        setIsLoading(false)
+      }
     })()
   }, [])
 
