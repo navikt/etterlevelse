@@ -13,7 +13,13 @@ import {
   roundedPercentages,
 } from './chartUtils'
 
-const OverviewStackedBar = ({ data }: { data: IBarSegment[] }) => {
+const OverviewStackedBar = ({
+  data,
+  isPercentage,
+}: {
+  data: IBarSegment[]
+  isPercentage?: boolean
+}) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
   if (total === 0) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
 
@@ -64,7 +70,7 @@ const OverviewStackedBar = ({ data }: { data: IBarSegment[] }) => {
               }}
             />
             <BodyShort size='small'>
-              {d.name} <strong>{d.value}</strong>
+              {d.name} <strong>{isPercentage ? `${d.value}%` : d.value}</strong>
             </BodyShort>
           </div>
         ))}
@@ -73,7 +79,15 @@ const OverviewStackedBar = ({ data }: { data: IBarSegment[] }) => {
   )
 }
 
-const OverviewKeyMetrics = ({ data, title }: { data: IBarSegment[]; title: string }) => {
+const OverviewKeyMetrics = ({
+  data,
+  title,
+  isPercentage,
+}: {
+  data: IBarSegment[]
+  title: string
+  isPercentage?: boolean
+}) => {
   return (
     <div>
       <BodyShort weight='semibold' className='mb-2'>
@@ -81,7 +95,7 @@ const OverviewKeyMetrics = ({ data, title }: { data: IBarSegment[]; title: strin
       </BodyShort>
       {data.map((d) => (
         <BodyShort key={d.name}>
-          {d.name} <span className='font-bold'>{d.value}</span>
+          {d.name} <span className='font-bold'>{isPercentage ? `${d.value}%` : d.value}</span>
         </BodyShort>
       ))}
     </div>
@@ -165,11 +179,26 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
     { name: 'Godkjent', value: agg.dok.godkjentAvRisikoeier, color: DOK_COLORS[2] },
   ]
 
+  const suksessTotal =
+    agg.suksess.underArbeid +
+    agg.suksess.oppfylt +
+    agg.suksess.ikkeOppfylt +
+    agg.suksess.ikkeRelevant
+  const suksessPcts =
+    suksessTotal > 0
+      ? roundedPercentages([
+          agg.suksess.underArbeid,
+          agg.suksess.oppfylt,
+          agg.suksess.ikkeOppfylt,
+          agg.suksess.ikkeRelevant,
+        ])
+      : [0, 0, 0, 0]
+
   const suksessData: IBarSegment[] = [
-    { name: 'Under arbeid', value: agg.suksess.underArbeid, color: AVDELING_SUKSESS_COLORS[0] },
-    { name: 'Oppfylt', value: agg.suksess.oppfylt, color: AVDELING_SUKSESS_COLORS[1] },
-    { name: 'Ikke oppfylt', value: agg.suksess.ikkeOppfylt, color: AVDELING_SUKSESS_COLORS[2] },
-    { name: 'Ikke relevant', value: agg.suksess.ikkeRelevant, color: AVDELING_SUKSESS_COLORS[3] },
+    { name: 'Under arbeid', value: suksessPcts[0], color: AVDELING_SUKSESS_COLORS[0] },
+    { name: 'Oppfylt', value: suksessPcts[1], color: AVDELING_SUKSESS_COLORS[1] },
+    { name: 'Ikke oppfylt', value: suksessPcts[2], color: AVDELING_SUKSESS_COLORS[2] },
+    { name: 'Ikke relevant', value: suksessPcts[3], color: AVDELING_SUKSESS_COLORS[3] },
   ]
 
   const behovData: IBarSegment[] = [
@@ -220,7 +249,7 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
             <Heading size='xsmall' level='3'>
               Suksesskriterier (etterlevelseskrav)
             </Heading>
-            <OverviewStackedBar data={suksessData} />
+            <OverviewStackedBar data={suksessData} isPercentage />
           </div>
 
           <div>
@@ -240,7 +269,11 @@ export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) 
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
           <OverviewKeyMetrics title={`Etterlevelsesdokumenter (${agg.dok.total})`} data={dokData} />
-          <OverviewKeyMetrics title='Suksesskriterier (etterlevelseskrav)' data={suksessData} />
+          <OverviewKeyMetrics
+            title='Suksesskriterier (etterlevelseskrav)'
+            data={suksessData}
+            isPercentage
+          />
           <OverviewKeyMetrics
             title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}
             data={behovData}
