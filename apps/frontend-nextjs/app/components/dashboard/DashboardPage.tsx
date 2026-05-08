@@ -1,34 +1,25 @@
 'use client'
 
-import { getDashboardStats, getTemaDashboardStats } from '@/api/dashboard/dashboardApi'
+import { getDashboardStats } from '@/api/dashboard/dashboardApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import {
-  IAvdelingDashboardStats,
-  ITemaDashboardStats,
-} from '@/constants/dashboard/dashboardConstants'
+import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 const DashboardPage = () => {
   const [stats, setStats] = useState<IAvdelingDashboardStats[]>([])
-  const [temaStats, setTemaStats] = useState<ITemaDashboardStats[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
       try {
-        const [dashboardStatsResult, temaDashboardStatsResult] = await Promise.allSettled([
-          getDashboardStats(),
-          getTemaDashboardStats(),
-        ])
-        if (dashboardStatsResult.status === 'fulfilled') setStats(dashboardStatsResult.value)
-        if (temaDashboardStatsResult.status === 'fulfilled')
-          setTemaStats(temaDashboardStatsResult.value)
+        const result = await getDashboardStats()
+        setStats(result)
       } finally {
         setIsLoading(false)
       }
@@ -74,7 +65,7 @@ const DashboardPage = () => {
             <Tabs.Panel value='figurer-overview'>
               <div className='mt-6'>
                 <DashboardOverviewCard
-                  temaStats={temaStats}
+                  stats={stats}
                   totalDokumenter={stats.reduce((sum, s) => sum + s.dokumenter.total, 0)}
                   view='figurer'
                 />
@@ -83,7 +74,7 @@ const DashboardPage = () => {
             <Tabs.Panel value='nokkeltall-overview'>
               <div className='mt-6'>
                 <DashboardOverviewCard
-                  temaStats={temaStats}
+                  stats={stats}
                   totalDokumenter={stats.reduce((sum, s) => sum + s.dokumenter.total, 0)}
                   view='nokkeltall'
                 />

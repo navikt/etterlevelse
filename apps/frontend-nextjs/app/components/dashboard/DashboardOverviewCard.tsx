@@ -1,15 +1,14 @@
 'use client'
 
-import { ITemaDashboardStats } from '@/constants/dashboard/dashboardConstants'
+import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import {
-  IBarSegment,
-  KRAV_COLORS,
-  SUKSESS_COLORS,
-  formatPct,
-  roundedPercentages,
-} from './chartUtils'
+import { IBarSegment, formatPct, roundedPercentages } from './chartUtils'
+
+const DOK_COLORS = ['#fa4d56', '#9f1853', '#005d5d']
+const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
+const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
+const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']
 
 const OverviewStackedBar = ({
   data,
@@ -111,104 +110,122 @@ const OverviewKeyMetrics = ({
 }
 
 interface IProps {
-  temaStats: ITemaDashboardStats[]
+  stats: IAvdelingDashboardStats[]
   totalDokumenter: number
   view: 'figurer' | 'nokkeltall'
 }
 
-const aggregateTemaStats = (stats: ITemaDashboardStats[]) =>
-  stats.reduce(
+const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
+  const dok = stats.reduce(
     (acc, s) => ({
-      kravTotal: acc.kravTotal + s.kravTotal,
-      kravUnderArbeid: acc.kravUnderArbeid + s.kravUnderArbeid,
-      kravFerdigVurdert: acc.kravFerdigVurdert + s.kravFerdigVurdert,
-      suksesskriterierUnderArbeid: acc.suksesskriterierUnderArbeid + s.suksesskriterierUnderArbeid,
-      suksesskriterierOppfylt: acc.suksesskriterierOppfylt + s.suksesskriterierOppfylt,
-      suksesskriterierIkkeOppfylt: acc.suksesskriterierIkkeOppfylt + s.suksesskriterierIkkeOppfylt,
-      suksesskriterierIkkeRelevant:
-        acc.suksesskriterierIkkeRelevant + s.suksesskriterierIkkeRelevant,
-      ferdigOppfylt: acc.ferdigOppfylt + (s.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
-      ferdigIkkeOppfylt:
-        acc.ferdigIkkeOppfylt + (s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
-      ferdigIkkeRelevant:
-        acc.ferdigIkkeRelevant + (s.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
+      total: acc.total + s.dokumenter.total,
+      underArbeid: acc.underArbeid + s.dokumenter.underArbeid,
+      sendtTilGodkjenning: acc.sendtTilGodkjenning + s.dokumenter.sendtTilGodkjenning,
+      godkjentAvRisikoeier: acc.godkjentAvRisikoeier + s.dokumenter.godkjentAvRisikoeier,
+    }),
+    { total: 0, underArbeid: 0, sendtTilGodkjenning: 0, godkjentAvRisikoeier: 0 }
+  )
+
+  const n = stats.length || 1
+  const suksess = {
+    underArbeidProsent: Math.round(
+      stats.reduce((s, a) => s + a.suksesskriterier.underArbeidProsent, 0) / n
+    ),
+    oppfyltProsent: Math.round(
+      stats.reduce((s, a) => s + a.suksesskriterier.oppfyltProsent, 0) / n
+    ),
+    ikkeOppfyltProsent: Math.round(
+      stats.reduce((s, a) => s + a.suksesskriterier.ikkeOppfyltProsent, 0) / n
+    ),
+    ikkeRelevantProsent: Math.round(
+      stats.reduce((s, a) => s + a.suksesskriterier.ikkeRelevantProsent, 0) / n
+    ),
+  }
+
+  const behov = stats.reduce(
+    (acc, s) => ({
+      totalMedPersonopplysninger:
+        acc.totalMedPersonopplysninger + s.behovForPvk.totalMedPersonopplysninger,
+      ikkeVurdertBehov: acc.ikkeVurdertBehov + s.behovForPvk.ikkeVurdertBehov,
+      vurdertIkkeBehov: acc.vurdertIkkeBehov + s.behovForPvk.vurdertIkkeBehov,
+      behovIkkePaabegynt: acc.behovIkkePaabegynt + s.behovForPvk.behovIkkePaabegynt,
     }),
     {
-      kravTotal: 0,
-      kravUnderArbeid: 0,
-      kravFerdigVurdert: 0,
-      suksesskriterierUnderArbeid: 0,
-      suksesskriterierOppfylt: 0,
-      suksesskriterierIkkeOppfylt: 0,
-      suksesskriterierIkkeRelevant: 0,
-      ferdigOppfylt: 0,
-      ferdigIkkeOppfylt: 0,
-      ferdigIkkeRelevant: 0,
+      totalMedPersonopplysninger: 0,
+      ikkeVurdertBehov: 0,
+      vurdertIkkeBehov: 0,
+      behovIkkePaabegynt: 0,
     }
   )
 
-export const DashboardOverviewCard = ({ temaStats, totalDokumenter, view }: IProps) => {
-  const agg = aggregateTemaStats(temaStats)
+  const pvk = stats.reduce(
+    (acc, s) => ({
+      total: acc.total + s.pvk.total,
+      ikkePaabegynt: acc.ikkePaabegynt + (s.pvk.ikkePaabegynt ?? 0),
+      underArbeid: acc.underArbeid + s.pvk.underArbeid,
+      tilBehandlingHosPvo: acc.tilBehandlingHosPvo + s.pvk.tilBehandlingHosPvo,
+      tilbakemeldingFraPvo: acc.tilbakemeldingFraPvo + s.pvk.tilbakemeldingFraPvo,
+      godkjentAvRisikoeier: acc.godkjentAvRisikoeier + s.pvk.godkjentAvRisikoeier,
+      pvkIWord: acc.pvkIWord + s.pvk.pvkIWord,
+    }),
+    {
+      total: 0,
+      ikkePaabegynt: 0,
+      underArbeid: 0,
+      tilBehandlingHosPvo: 0,
+      tilbakemeldingFraPvo: 0,
+      godkjentAvRisikoeier: 0,
+      pvkIWord: 0,
+    }
+  )
 
-  const totalSuksess =
-    agg.suksesskriterierUnderArbeid +
-    agg.suksesskriterierOppfylt +
-    agg.suksesskriterierIkkeOppfylt +
-    agg.suksesskriterierIkkeRelevant
+  return { dok, suksess, behov, pvk }
+}
 
-  const totalFerdigSuksess = agg.ferdigOppfylt + agg.ferdigIkkeOppfylt + agg.ferdigIkkeRelevant
-  const totalIkkeFerdigSuksess = totalSuksess - totalFerdigSuksess
+export const DashboardOverviewCard = ({ stats, totalDokumenter, view }: IProps) => {
+  const agg = aggregateAvdelingStats(stats)
 
-  const kravData: IBarSegment[] = [
-    { name: 'Under arbeid', value: agg.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
-    { name: 'Ferdig vurdert', value: agg.kravFerdigVurdert, color: KRAV_COLORS.ferdigVurdert },
+  const dokData: IBarSegment[] = [
+    { name: 'Under arbeid', value: agg.dok.underArbeid, color: DOK_COLORS[0] },
+    { name: 'Sendt til godkjenning', value: agg.dok.sendtTilGodkjenning, color: DOK_COLORS[1] },
+    { name: 'Godkjent', value: agg.dok.godkjentAvRisikoeier, color: DOK_COLORS[2] },
   ]
 
   const suksessData: IBarSegment[] = [
-    {
-      name: 'Under arbeid',
-      value: agg.suksesskriterierUnderArbeid,
-      color: SUKSESS_COLORS.underArbeid,
-    },
-    { name: 'Oppfylt', value: agg.suksesskriterierOppfylt, color: SUKSESS_COLORS.oppfylt },
-    {
-      name: 'Ikke oppfylt',
-      value: agg.suksesskriterierIkkeOppfylt,
-      color: SUKSESS_COLORS.ikkeOppfylt,
-    },
-    {
-      name: 'Ikke relevant',
-      value: agg.suksesskriterierIkkeRelevant,
-      color: SUKSESS_COLORS.ikkeRelevant,
-    },
+    { name: 'Under arbeid', value: agg.suksess.underArbeidProsent, color: SUKSESS_COLORS[0] },
+    { name: 'Oppfylt', value: agg.suksess.oppfyltProsent, color: SUKSESS_COLORS[1] },
+    { name: 'Ikke oppfylt', value: agg.suksess.ikkeOppfyltProsent, color: SUKSESS_COLORS[2] },
+    { name: 'Ikke relevant', value: agg.suksess.ikkeRelevantProsent, color: SUKSESS_COLORS[3] },
   ]
 
-  const ferdigSuksessData: IBarSegment[] = [
-    { name: 'Oppfylt', value: agg.ferdigOppfylt, color: SUKSESS_COLORS.oppfylt },
-    { name: 'Ikke oppfylt', value: agg.ferdigIkkeOppfylt, color: SUKSESS_COLORS.ikkeOppfylt },
-    { name: 'Ikke relevant', value: agg.ferdigIkkeRelevant, color: SUKSESS_COLORS.ikkeRelevant },
+  const behovData: IBarSegment[] = [
+    { name: 'Ikke vurdert behov', value: agg.behov.ikkeVurdertBehov, color: BEHOV_COLORS[0] },
+    {
+      name: 'Skal ikke gjennomføre PVK',
+      value: agg.behov.vurdertIkkeBehov,
+      color: BEHOV_COLORS[1],
+    },
+    {
+      name: 'Skal gjennomføre PVK',
+      value: agg.behov.behovIkkePaabegynt,
+      color: BEHOV_COLORS[2],
+    },
+    { name: 'PVK i Word', value: agg.pvk.pvkIWord, color: BEHOV_COLORS[3] },
   ]
 
-  const ikkeFerdigSuksessData: IBarSegment[] = [
+  const pvkData: IBarSegment[] = [
+    { name: 'Ikke påbegynt', value: agg.pvk.ikkePaabegynt, color: PVK_COLORS[0] },
+    { name: 'Under arbeid', value: agg.pvk.underArbeid, color: PVK_COLORS[1] },
+    { name: 'Til behandling hos PVO', value: agg.pvk.tilBehandlingHosPvo, color: PVK_COLORS[2] },
     {
-      name: 'Under arbeid',
-      value: agg.suksesskriterierUnderArbeid,
-      color: SUKSESS_COLORS.underArbeid,
+      name: 'Tilbakemelding fra PVO',
+      value: agg.pvk.tilbakemeldingFraPvo,
+      color: PVK_COLORS[3],
     },
     {
-      name: 'Oppfylt',
-      value: agg.suksesskriterierOppfylt - agg.ferdigOppfylt,
-      color: SUKSESS_COLORS.oppfylt,
-    },
-    {
-      name: 'Ikke oppfylt',
-      value: agg.suksesskriterierIkkeOppfylt - agg.ferdigIkkeOppfylt,
-      color: SUKSESS_COLORS.ikkeOppfylt,
-    },
-    {
-      name: 'Ikke relevant',
-      value: agg.suksesskriterierIkkeRelevant - agg.ferdigIkkeRelevant,
-      color: SUKSESS_COLORS.ikkeRelevant,
+      name: 'Godkjent av risikoeier',
+      value: agg.pvk.godkjentAvRisikoeier,
+      color: PVK_COLORS[4],
     },
   ]
 
@@ -220,53 +237,47 @@ export const DashboardOverviewCard = ({ temaStats, totalDokumenter, view }: IPro
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
           <div>
             <Heading size='xsmall' level='3'>
-              Gjennomføringsstatus (krav) ({agg.kravTotal})
+              Etterlevelsesdokumenter ({agg.dok.total})
             </Heading>
-            <OverviewStackedBar data={kravData} showPercentage />
+            <OverviewStackedBar data={dokData} />
           </div>
 
           <div>
             <Heading size='xsmall' level='3'>
-              Etterlevelse (suksesskriterier)
+              Suksesskriterier (etterlevelseskrav)
             </Heading>
             <OverviewStackedBar data={suksessData} showPercentage />
           </div>
 
           <div>
             <Heading size='xsmall' level='3'>
-              Suksesskriterier der kravet er ferdig utfylt
+              Vurdere behov for PVK ({agg.behov.totalMedPersonopplysninger})
             </Heading>
-            <OverviewStackedBar data={ferdigSuksessData} showPercentage />
+            <OverviewStackedBar data={behovData} />
           </div>
 
           <div>
             <Heading size='xsmall' level='3'>
-              Suksesskriterier der kravet ikke er ferdig utfylt
+              Digital PVK status ({agg.pvk.total - agg.pvk.pvkIWord})
             </Heading>
-            <OverviewStackedBar data={ikkeFerdigSuksessData} showPercentage />
+            <OverviewStackedBar data={pvkData} />
           </div>
         </div>
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
+          <OverviewKeyMetrics title={`Etterlevelsesdokumenter (${agg.dok.total})`} data={dokData} />
           <OverviewKeyMetrics
-            title={`Gjennomføringsstatus (krav) (${agg.kravTotal})`}
-            data={kravData}
-            showPercentage
-          />
-          <OverviewKeyMetrics
-            title='Etterlevelse (suksesskriterier)'
+            title='Suksesskriterier (etterlevelseskrav)'
             data={suksessData}
             showPercentage
           />
           <OverviewKeyMetrics
-            title={`Suksesskriterier der kravet er ferdig utfylt (${totalFerdigSuksess})`}
-            data={ferdigSuksessData}
-            showPercentage
+            title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}
+            data={behovData}
           />
           <OverviewKeyMetrics
-            title={`Suksesskriterier der kravet ikke er ferdig utfylt (${totalIkkeFerdigSuksess})`}
-            data={ikkeFerdigSuksessData}
-            showPercentage
+            title={`Digital PVK status (${agg.pvk.total - agg.pvk.pvkIWord})`}
+            data={pvkData}
           />
         </div>
       )}
