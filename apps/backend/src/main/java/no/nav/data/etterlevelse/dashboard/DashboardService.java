@@ -75,7 +75,8 @@ public class DashboardService {
             result.add(stats);
         }
 
-        var eDokWithNoAvdeling = getStatsForEtterlevelsesDokumentWithNoAvdeling();
+        var knownAvdelingIds = avdelinger.stream().map(OrgEnhet::getId).toList();
+        var eDokWithNoAvdeling = getStatsForEtterlevelsesDokumentWithNoAvdeling(knownAvdelingIds);
         if(eDokWithNoAvdeling != null){
             result.add(eDokWithNoAvdeling);
         }
@@ -302,11 +303,24 @@ public class DashboardService {
     }
 
 
-    public DashboardResponse getStatsForEtterlevelsesDokumentWithNoAvdeling () {
-        List<EtterlevelseDokumentasjon> allDoks = etterlevelseDokumentasjonService.getByAvdeling("");
-        if(!allDoks.isEmpty()) {
+    public DashboardResponse getStatsForEtterlevelsesDokumentWithNoAvdeling() {
+        var knownAvdelingIds = nomGraphClient.getAllAvdelinger().stream().map(OrgEnhet::getId).toList();
+        return getStatsForEtterlevelsesDokumentWithNoAvdeling(knownAvdelingIds);
+    }
+
+    public DashboardResponse getStatsForEtterlevelsesDokumentWithNoAvdeling (List<String> knownAvdelingIds) {
+        List<EtterlevelseDokumentasjon> allDoks = etterlevelseDokumentasjonService.getAll(org.springframework.data.domain.Pageable.unpaged()).getContent();
+        var knownIds = new HashSet<>(knownAvdelingIds);
+        List<EtterlevelseDokumentasjon> orphanedDoks = allDoks.stream()
+                .filter(d -> {
+                    String avdId = d.getEtterlevelseDokumentasjonData().getNomAvdelingId();
+                    return avdId == null || avdId.isEmpty() || !knownIds.contains(avdId);
+                })
+                .toList();
+
+        if(!orphanedDoks.isEmpty()) {
             List<PvkDokument> pvkByDokId = new ArrayList<>();
-            allDoks.forEach((eDok) -> {
+            orphanedDoks.forEach((eDok) -> {
                 pvkDokumentService.getByEtterlevelseDokumentasjon(eDok.getId()).ifPresent(pvkByDokId::add);
             });
 
@@ -314,10 +328,10 @@ public class DashboardService {
             List<Krav> utgaattKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.UTGAATT.name())).build());
             List<Krav> utgaatKravUtenNyVersjon = utgaattKrav.stream().filter(uk -> !aktivKrav.stream().map(Krav::getKravNummer).toList().contains(uk.getKravNummer()) ).toList();
 
-            var dokIds = allDoks.stream().map(EtterlevelseDokumentasjon::getId).toList();
+            var dokIds = orphanedDoks.stream().map(EtterlevelseDokumentasjon::getId).toList();
             var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
 
-            return createAvdelingDashBoardResponse("ingen-avdeling", "Ikke valgt avdeling", allDoks, pvkByDokId, aktivKrav, utgaatKravUtenNyVersjon, etterlevelseByDokId);
+            return createAvdelingDashBoardResponse("ingen-avdeling", "Ikke valgt avdeling", orphanedDoks, pvkByDokId, aktivKrav, utgaatKravUtenNyVersjon, etterlevelseByDokId);
         } else {
             return null;
         }
