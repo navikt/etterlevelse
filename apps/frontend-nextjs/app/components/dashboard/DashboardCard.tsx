@@ -1,7 +1,7 @@
 'use client'
 
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
-import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
+import { Link as AkselLink, BodyShort, Detail, Heading } from '@navikt/ds-react'
 
 interface IProps {
   stats: IAvdelingDashboardStats
@@ -17,6 +17,10 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           <AkselLink href={`/dashboard/${stats.avdelingId}`}>{stats.avdelingNavn}</AkselLink>
         </Heading>
       )}
+
+      <Detail uppercase className='mt-2'>
+        {stats.dokumenter.total} ETTERLEVELSESDOKUMENTER
+      </Detail>
 
       <div
         style={{

@@ -1,24 +1,30 @@
 'use client'
 
-import { getDashboardStats } from '@/api/dashboard/dashboardApi'
+import { getDashboardStats, getTemaDashboardStats } from '@/api/dashboard/dashboardApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
+import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
+import {
+  IAvdelingDashboardStats,
+  ITemaDashboardStats,
+} from '@/constants/dashboard/dashboardConstants'
 import { Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 const DashboardPage = () => {
   const [stats, setStats] = useState<IAvdelingDashboardStats[]>([])
+  const [temaStats, setTemaStats] = useState<ITemaDashboardStats[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
-      await getDashboardStats()
-        .then(setStats)
-        .finally(() => setIsLoading(false))
+      await Promise.all([
+        getDashboardStats().then(setStats),
+        getTemaDashboardStats().then(setTemaStats),
+      ]).finally(() => setIsLoading(false))
     })()
   }, [])
 
@@ -46,7 +52,41 @@ const DashboardPage = () => {
         </LocalAlert.Content>
       </LocalAlert>
 
-      <Heading size='medium' level='2' className='mt-4'>
+      {!isLoading && (
+        <>
+          <Heading size='medium' level='2' className='mt-8'>
+            Oversikt i Nav
+          </Heading>
+
+          <Tabs className='mt-4' defaultValue='figurer-overview'>
+            <Tabs.List>
+              <Tabs.Tab value='figurer-overview' label='Vis figurer' />
+              <Tabs.Tab value='nokkeltall-overview' label='Vis nøkkeltall' />
+            </Tabs.List>
+
+            <Tabs.Panel value='figurer-overview'>
+              <div className='mt-6'>
+                <DashboardOverviewCard
+                  temaStats={temaStats}
+                  totalDokumenter={stats.reduce((sum, s) => sum + s.dokumenter.total, 0)}
+                  view='figurer'
+                />
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value='nokkeltall-overview'>
+              <div className='mt-6'>
+                <DashboardOverviewCard
+                  temaStats={temaStats}
+                  totalDokumenter={stats.reduce((sum, s) => sum + s.dokumenter.total, 0)}
+                  view='nokkeltall'
+                />
+              </div>
+            </Tabs.Panel>
+          </Tabs>
+        </>
+      )}
+
+      <Heading size='medium' level='2' className='mt-8'>
         Avdelingoversikt
       </Heading>
 
