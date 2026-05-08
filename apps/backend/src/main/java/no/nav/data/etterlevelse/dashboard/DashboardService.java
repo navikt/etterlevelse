@@ -549,6 +549,7 @@ public class DashboardService {
         }
 
         Map<String, TemaDashboardResponse> statsMap = new LinkedHashMap<>();
+        Map<String, Set<java.util.UUID>> dokIdsByTema = new HashMap<>();
 
         for (var dok : doks) {
             List<Krav> kravForEdok = new ArrayList<>(aktivKrav.stream().filter(k ->
@@ -580,6 +581,8 @@ public class DashboardService {
                     return TemaDashboardResponse.builder().temaCode(tc).temaName(temaName).build();
                 });
 
+                dokIdsByTema.computeIfAbsent(temaCode, k -> new HashSet<>()).add(dok.getId());
+
                 boolean isFerdig = etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT
                         || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT;
 
@@ -609,6 +612,11 @@ public class DashboardService {
                 }
             }
         }
+
+        statsMap.forEach((temaCode, stats) -> {
+            var dokIds2 = dokIdsByTema.getOrDefault(temaCode, Set.of());
+            stats.setEtterlevelseDokumentCount(dokIds2.size());
+        });
 
         return statsMap.values().stream()
                 .sorted(Comparator.comparing(TemaDashboardResponse::getTemaName))

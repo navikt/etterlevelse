@@ -45,6 +45,7 @@ export interface ITemaDashboardStats {
   ferdigUtfyltKravSuksesskriterierOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeRelevant?: number
+  etterlevelseDokumentCount?: number
 }
 
 export interface IAvdelingDetailData {

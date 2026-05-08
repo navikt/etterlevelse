@@ -25,4 +25,6 @@ public class TemaDashboardResponse {
     private int ferdigUtfyltKravSuksesskriterierIkkeOppfylt;
     private int ferdigUtfyltKravSuksesskriterierIkkeRelevant;
 
+    private int etterlevelseDokumentCount;
+
 }
