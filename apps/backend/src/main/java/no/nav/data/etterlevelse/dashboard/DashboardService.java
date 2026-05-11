@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -532,7 +533,7 @@ public class DashboardService {
                 }
             }
         } else {
-            doks = etterlevelseDokumentasjonService.getAll(org.springframework.data.domain.Pageable.unpaged()).getContent();
+            doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
         }
 
         var dokIds = doks.stream().map(EtterlevelseDokumentasjon::getId).toList();
