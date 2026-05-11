@@ -41,7 +41,7 @@
     "@navikt/ds-css": "^8.10.5",
     "@navikt/ds-react": "^8.10.5",
     "@navikt/ds-tailwind": "^8.10.5",
-    "@tailwindcss/postcss": "^4.2.4",
+    "@tailwindcss/postcss": "^4.3.0",
     "axios": "^1.16.0",
     "draft-js": "^0.11.7",
     "graphql": "^16.14.0",
