@@ -497,13 +497,13 @@ const TemaDashboardPage = () => {
 
   return (
     <PageLayout
-      pageTitle='Etterlevelsestema'
-      currentPage='Etterlevelsestema'
+      pageTitle='Status pr. tema'
+      currentPage='Tema'
       breadcrumbPaths={[{ href: '/dashboard', pathName: 'Dashboard' }]}
     >
       <div className='flex justify-between items-center mt-4'>
         <Heading size='large' level='1'>
-          Etterlevelsestema
+          Status pr. tema
         </Heading>
       </div>
 
