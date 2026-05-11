@@ -29,7 +29,7 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<Etterlevels
     @Query(value = "select * from etterlevelse_dokumentasjon", nativeQuery = true )
     List<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjoner();
 
-    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'nomAvdelingId' = ?1 or (?1 = '' and data -> 'nomAvdelingId' is null)", nativeQuery = true )
+    @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'nomAvdelingId' = ?1 or (?1 = '' and (data -> 'nomAvdelingId' is null or (data -> 'nomAvdelingId' IS NOT NULL AND data ->> 'nomAvdelingId' IS NULL)))", nativeQuery = true )
     List<EtterlevelseDokumentasjon> getByAvdelingId(String avdelingId);
 
 
