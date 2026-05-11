@@ -577,6 +577,7 @@ public class DashboardService {
 
                 if (!gyldigeKravKeys.contains(kravKey)) continue;
 
+                //Filtering krav for tema
                 String temaCode = temaByKravKey.getOrDefault(kravKey, "UTEN_TEMA");
 
                 var stats = statsMap.computeIfAbsent(temaCode, tc -> {
