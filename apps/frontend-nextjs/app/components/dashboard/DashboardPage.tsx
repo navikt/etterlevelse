@@ -29,8 +29,6 @@ const DashboardPage = () => {
     })()
   }, [])
 
-  const totalDokumenter = stats.reduce((sum, s) => sum + s.dokumenter.total, 0)
-
   const filteredStats = selectedAvdeling
     ? stats.filter((s) => s.avdelingId === selectedAvdeling)
     : stats
@@ -80,20 +78,12 @@ const DashboardPage = () => {
 
             <Tabs.Panel value='figurer-overview'>
               <div className='mt-6'>
-                <DashboardOverviewCard
-                  stats={stats}
-                  totalDokumenter={totalDokumenter}
-                  view='figurer'
-                />
+                <DashboardOverviewCard stats={stats} view='figurer' />
               </div>
             </Tabs.Panel>
             <Tabs.Panel value='nokkeltall-overview'>
               <div className='mt-6'>
-                <DashboardOverviewCard
-                  stats={stats}
-                  totalDokumenter={totalDokumenter}
-                  view='nokkeltall'
-                />
+                <DashboardOverviewCard stats={stats} view='nokkeltall' />
               </div>
             </Tabs.Panel>
           </Tabs>
