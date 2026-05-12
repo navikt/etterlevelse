@@ -15,7 +15,7 @@ import {
 import { DownloadIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import {
   IBarSegment,
   KRAV_COLORS,
@@ -53,16 +53,6 @@ const RechartsStackedBar = ({
         >
           <XAxis type='number' hide />
           <YAxis type='category' hide />
-          <Tooltip
-            labelFormatter={() => ''}
-            formatter={(value, name) => {
-              const idx = data.findIndex((d) => d.name === String(name))
-              return [
-                `${Number(value)} (${formatPct(pcts[idx] ?? 0, Number(value))}%)`,
-                String(name),
-              ]
-            }}
-          />
           {data
             .filter((d) => d.value > 0)
             .map((d) => (

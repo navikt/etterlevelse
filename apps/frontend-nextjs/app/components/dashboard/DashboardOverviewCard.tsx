@@ -2,14 +2,13 @@
 
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { BodyShort, Detail, Heading } from '@navikt/ds-react'
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import {
   AVDELING_SUKSESS_COLORS,
   BEHOV_COLORS,
   DOK_COLORS,
   IBarSegment,
   PVK_COLORS,
-  formatPct,
   roundedPercentages,
 } from './chartUtils'
 
@@ -23,7 +22,6 @@ const OverviewStackedBar = ({
   const total = data.reduce((sum, d) => sum + d.value, 0)
   if (total === 0) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
 
-  const pcts = roundedPercentages(data.map((d) => d.value))
   const chartData = [
     data.reduce((acc, d) => ({ ...acc, [d.name]: d.value }), {} as Record<string, number>),
   ]
@@ -38,16 +36,6 @@ const OverviewStackedBar = ({
         >
           <XAxis type='number' hide />
           <YAxis type='category' hide />
-          <Tooltip
-            labelFormatter={() => ''}
-            formatter={(value, name) => {
-              const idx = data.findIndex((d) => d.name === String(name))
-              return [
-                `${Number(value)} (${formatPct(pcts[idx] ?? 0, Number(value))}%)`,
-                String(name),
-              ]
-            }}
-          />
           {data
             .filter((d) => d.value > 0)
             .map((d) => (

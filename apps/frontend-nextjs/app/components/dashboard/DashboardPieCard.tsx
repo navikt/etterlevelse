@@ -33,7 +33,6 @@ const StackedBar = ({ data }: { data: IBarSegment[] }) => {
           .map((d) => (
             <div
               key={d.name}
-              title={`${d.name}: ${d.value}`}
               style={{
                 width: `${(d.value / total) * 100}%`,
                 backgroundColor: d.color,
