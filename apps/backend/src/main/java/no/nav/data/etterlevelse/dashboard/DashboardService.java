@@ -532,15 +532,28 @@ public class DashboardService {
         Map<String, Set<UUID>> dokIdsByTema = new HashMap<>();
 
         for (var dok : doks) {
+            var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
+
             List<Krav> kravForEdok = new ArrayList<>(aktivKrav.stream().filter(k ->
                     !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
             ).toList());
 
+            var aktivEtterlevelseList = etterlevelseList.stream()
+                    .filter(e -> aktivKrav.stream().anyMatch(k ->
+                            k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
+                    .toList();
+
+            List<Etterlevelse> etterlevelserNotInKravForEdok = aktivEtterlevelseList.stream()
+                    .filter(e -> kravForEdok.stream().noneMatch(k ->
+                            k.getKravNummer().equals(e.getKravNummer()) &&
+                                    k.getKravVersjon().equals(e.getKravVersjon())
+                    ))
+                    .toList();
+
 
             var gyldigeKravKeys = new HashSet<String>();
             kravForEdok.forEach(k -> gyldigeKravKeys.add(k.getKravNummer() + "_" + k.getKravVersjon()));
-
-            var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
+            etterlevelserNotInKravForEdok.forEach(e -> gyldigeKravKeys.add(e.getKravNummer() + "_" + e.getKravVersjon()));
 
             for (var etterlevelse : etterlevelseList) {
                 String kravKey = etterlevelse.getKravNummer() + "_" + etterlevelse.getKravVersjon();
