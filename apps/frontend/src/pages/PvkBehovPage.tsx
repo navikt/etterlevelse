@@ -146,7 +146,9 @@ export const PvkBehovPage = () => {
               saerligKategorier={saerligKategorier}
               behandlingensLivslop={behandlingensLivslop}
             />
-            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+            {etterlevelseDokumentasjon.behandlinger &&
+              etterlevelseDokumentasjon.behandlinger.length > 0 &&
+              (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
               !isReadOnlyPvkStatus(pvkdokument.status) && (
                 <PvkBehovForm
                   pvkDokument={pvkdokument}

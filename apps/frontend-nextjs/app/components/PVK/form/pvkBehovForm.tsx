@@ -157,30 +157,33 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
 
           return (
             <Form>
-              <div id='ytterligere-egenskaper'>
-                <FieldArray name='ytterligereEgenskaper'>
-                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                    <CheckboxGroup
-                      legend='Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:'
-                      value={checkedYtterligereEgenskaper}
-                      onChange={(selected: string[]) => {
-                        fieldArrayRenderProps.form.setFieldValue(
-                          'ytterligereEgenskaper',
-                          selected.map((egenskapId: string) =>
-                            codelist.utils.getCode(EListName.YTTERLIGERE_EGENSKAPER, egenskapId)
-                          )
-                        )
-                      }}
-                    >
-                      {ytterligereEgenskaper.map((egenskap: ICode) => (
-                        <Checkbox key={egenskap.code} value={egenskap.code}>
-                          {egenskap.shortName}
-                        </Checkbox>
-                      ))}
-                    </CheckboxGroup>
-                  )}
-                </FieldArray>
-              </div>
+              {etterlevelseDokumentasjon.behandlinger &&
+                etterlevelseDokumentasjon.behandlinger.length > 0 && (
+                  <div id='ytterligere-egenskaper'>
+                    <FieldArray name='ytterligereEgenskaper'>
+                      {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                        <CheckboxGroup
+                          legend='Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:'
+                          value={checkedYtterligereEgenskaper}
+                          onChange={(selected: string[]) => {
+                            fieldArrayRenderProps.form.setFieldValue(
+                              'ytterligereEgenskaper',
+                              selected.map((egenskapId: string) =>
+                                codelist.utils.getCode(EListName.YTTERLIGERE_EGENSKAPER, egenskapId)
+                              )
+                            )
+                          }}
+                        >
+                          {ytterligereEgenskaper.map((egenskap: ICode) => (
+                            <Checkbox key={egenskap.code} value={egenskap.code}>
+                              {egenskap.shortName}
+                            </Checkbox>
+                          ))}
+                        </CheckboxGroup>
+                      )}
+                    </FieldArray>
+                  </div>
+                )}
 
               {(checkedYtterligereEgenskaper.length > 0 ||
                 profilering ||

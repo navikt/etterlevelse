@@ -49,7 +49,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
             >
               Dokumentegenskaper
             </ExternalLink>
-            . Det anbefales at dere gjør dette før dere vurderer behov for PVK.
+            . Det må legges til behandlinger før dere vurderer behov for PVK.
           </Alert>
         )}
 
@@ -62,6 +62,8 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
     )}
 
     {etterlevelseDokumentasjon &&
+      etterlevelseDokumentasjon.behandlinger &&
+      etterlevelseDokumentasjon.behandlinger.length > 0 &&
       (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
         <BodyShort>
           Disse egenskapene blir enklere å vurdere hvis{' '}
@@ -80,48 +82,53 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
         </BodyShort>
       )}
 
-    <List className='py-5'>
-      <div className='pb-3'>
-        <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
-      </div>
-      {profilering !== null && (
-        <List.Item>
-          <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering
-        </List.Item>
-      )}
+    {etterlevelseDokumentasjon.behandlinger &&
+      etterlevelseDokumentasjon.behandlinger.length > 0 && (
+        <>
+          <List className='py-5'>
+            <div className='pb-3'>
+              <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+            </div>
+            {profilering !== null && (
+              <List.Item>
+                <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering
+              </List.Item>
+            )}
 
-      {automatiskBehandling !== null && (
-        <List.Item>
-          <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong> automatisert
-          behandling
-        </List.Item>
-      )}
+            {automatiskBehandling !== null && (
+              <List.Item>
+                <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong>{' '}
+                automatisert behandling
+              </List.Item>
+            )}
 
-      {!opplysningstyperMangler && (
-        <List.Item>
-          <strong>Det {saerligKategorier ? 'gjelder' : 'gjelder ikke'}</strong> særlige kategorier
-          av personopplysninger
-        </List.Item>
-      )}
-    </List>
+            {!opplysningstyperMangler && (
+              <List.Item>
+                <strong>Det {saerligKategorier ? 'gjelder' : 'gjelder ikke'}</strong> særlige
+                kategorier av personopplysninger
+              </List.Item>
+            )}
+          </List>
 
-    {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
-      <Alert variant='warning'>
-        Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
-        <List>
-          {profilering === null && <List.Item>Profilering</List.Item>}
-          {automatiskBehandling === null && <List.Item>Automatisert behandling</List.Item>}
-          {opplysningstyperMangler && (
-            <List.Item>Særlige kategorier av personopplysninger</List.Item>
+          {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
+            <Alert variant='warning'>
+              Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
+              <List>
+                {profilering === null && <List.Item>Profilering</List.Item>}
+                {automatiskBehandling === null && <List.Item>Automatisert behandling</List.Item>}
+                {opplysningstyperMangler && (
+                  <List.Item>Særlige kategorier av personopplysninger</List.Item>
+                )}
+              </List>
+              Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
+              <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
+                Behandlingskatalogen
+              </ExternalLink>{' '}
+              før dere vurderer behov for PVK.
+            </Alert>
           )}
-        </List>
-        Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
-        <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
-          Behandlingskatalogen
-        </ExternalLink>{' '}
-        før dere vurderer behov for PVK.
-      </Alert>
-    )}
+        </>
+      )}
   </>
 )
 
