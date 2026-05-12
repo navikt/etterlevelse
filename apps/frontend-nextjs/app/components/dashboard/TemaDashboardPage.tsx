@@ -198,28 +198,28 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
-          <Heading size='xsmall' level='3'>
+          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
             Vurdering av etterlevelseskrav
           </Heading>
           <RechartsStackedBar data={kravData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3'>
+          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
             Etterlevelse: suksesskriterier ({totalSuksess})
           </Heading>
           <RechartsStackedBar data={suksessData} showPercentage />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3'>
+          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
             Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
           </Heading>
           <RechartsStackedBar data={ferdigSuksessData} showPercentage />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3'>
+          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
             Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
           </Heading>
           <RechartsStackedBar data={ikkeFerdigSuksessData} showPercentage />
