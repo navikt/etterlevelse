@@ -29,23 +29,15 @@ export const PvkBehovVarsel: FunctionComponent<TProps> = ({ etterlevelseDokument
 
   useEffect(() => {
     ;(async () => {
-      try {
-        const pvk = await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
-        setPvkDokument(pvk)
-      } catch {}
-      try {
-        const livslop = await getBehandlingensLivslopByEtterlevelseDokumentId(
-          etterlevelseDokumentasjonId
-        )
-        setBehandlingsLivslop(livslop)
-      } catch {}
-
-      try {
-        const ao = await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(
-          etterlevelseDokumentasjonId
-        )
-        setArtOgOmfang(ao)
-      } catch {}
+      await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+        .then((response: IPvkDokument) => setPvkDokument(response))
+        .catch((error) => console.debug(error))
+      await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+        .then((response: IBehandlingensLivslop) => setBehandlingsLivslop(response))
+        .catch((error) => console.debug(error))
+      await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+        .then((response: IBehandlingensArtOgOmfang) => setArtOgOmfang(response))
+        .catch((error) => console.debug(error))
     })()
   }, [etterlevelseDokumentasjonId])
 
