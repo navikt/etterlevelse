@@ -300,7 +300,7 @@ type EtterlevelseVersjonHistorikk {
 }
 
 type NomSeksjon {
-    nomSeksjontId: String!
+    nomSeksjonId: String!
     nomSeksjonName: String!
 }
 
