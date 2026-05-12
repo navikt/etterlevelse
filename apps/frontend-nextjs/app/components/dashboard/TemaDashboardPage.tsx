@@ -27,9 +27,11 @@ import {
 const RechartsStackedBar = ({
   data,
   showPercentage,
+  percentageOnly,
 }: {
   data: IBarSegment[]
   showPercentage?: boolean
+  percentageOnly?: boolean
 }) => {
   const total = data.reduce((sum, d) => sum + d.value, 0)
 
@@ -85,8 +87,9 @@ const RechartsStackedBar = ({
             <BodyShort size='small'>
               {d.name}{' '}
               <strong>
-                {d.value}
-                {showPercentage ? ` (${formatPct(pcts[i], d.value)}%)` : ''}
+                {percentageOnly
+                  ? `${formatPct(pcts[i], d.value)}%`
+                  : `${d.value}${showPercentage ? ` (${formatPct(pcts[i], d.value)}%)` : ''}`}
               </strong>
             </BodyShort>
           </div>
@@ -196,9 +199,9 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level='3'>
-            Gjennomføringsstatus: krav ({stats.kravTotal})
+            Vurdering av etterlevelseskrav
           </Heading>
-          <RechartsStackedBar data={kravData} showPercentage />
+          <RechartsStackedBar data={kravData} percentageOnly />
         </div>
 
         <div>

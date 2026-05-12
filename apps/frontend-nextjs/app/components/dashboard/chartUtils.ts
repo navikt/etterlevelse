@@ -5,7 +5,7 @@ export interface IBarSegment {
 }
 
 export const KRAV_COLORS = {
-  underArbeid: '#fa4d56',
+  underArbeid: '#1192e8',
   ferdigVurdert: '#005d5d',
 }
 
