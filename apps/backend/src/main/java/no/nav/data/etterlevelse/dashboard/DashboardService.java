@@ -86,8 +86,6 @@ public class DashboardService {
     public List<DashboardTableResponse> getDashboardTable(String avdelingId) {
         List<EtterlevelseDokumentasjon> allEdoksWithAvdeling = etterlevelseDokumentasjonService.getByAvdeling(avdelingId);
         List<Krav> aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
-        List<Krav> utgaattKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.UTGAATT.name())).build());
-        List<Krav> utgaatKravUtenNyVersjon = utgaattKrav.stream().filter(uk -> !aktivKrav.stream().map(Krav::getKravNummer).toList().contains(uk.getKravNummer()) ).toList();
 
         LocalDate now = LocalDate.now();
         return allEdoksWithAvdeling.stream()
@@ -97,9 +95,15 @@ public class DashboardService {
                             !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
                     ).toList());
 
-                    kravForEdok.addAll(utgaatKravUtenNyVersjon.stream().filter(k ->
-                            !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
-                    ).toList());
+                    List<Etterlevelse> aktivEtterlevelserForDok = etterlevelserForDok.stream().filter(e ->  aktivKrav.stream().anyMatch(k ->
+                            k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon()))).toList();
+
+                    long etterlevelseNotInKravForEdok = aktivEtterlevelserForDok.stream()
+                            .filter(e -> kravForEdok.stream().noneMatch(k ->
+                                    k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
+                            .count();
+
+                    int totalKravForEdok = kravForEdok.size() + (int) etterlevelseNotInKravForEdok;
 
                     var etterlevelseDokumentasjonResponse = EtterlevelseDokumentasjonResponse.buildFrom(dok);
                     etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(etterlevelseDokumentasjonResponse);
@@ -206,24 +210,13 @@ public class DashboardService {
 
                     LocalDateTime sistOppdatertEtterlevelse = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-                    var oppfyltEtterlevelseList = etterlevelserForDok.stream()
-                            .filter(e -> kravForEdok.stream().anyMatch(k ->
-                                                        k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon()))
-                            && e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT)
+                    var oppfyltEtterlevelseList = aktivEtterlevelserForDok.stream()
+                            .filter(e -> e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT)
                             .toList();
 
-                    long ikkeRelevantCount = etterlevelserForDok.stream()
-                            .filter(e -> kravForEdok.stream().anyMatch(k ->
-                                    k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon()))
-                            && (e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT))
+                    long ikkeRelevantCount = aktivEtterlevelserForDok.stream()
+                            .filter(e -> e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
                             .count();
-
-                    long besvartCount = etterlevelserForDok.stream()
-                            .filter(e -> kravForEdok.stream().anyMatch(k ->
-                                    k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
-                            .count();
-
-                    long ikkeBesvartCount = kravForEdok.size() - besvartCount;
 
                     for (Etterlevelse etterlevelse : etterlevelserForDok) {
                         if(etterlevelse.getLastModifiedDate().isAfter(sistOppdatertEtterlevelse)) {
@@ -231,9 +224,9 @@ public class DashboardService {
                         }
                     }
 
-                    dashboardTableResponse.setAntallKrav(kravForEdok.size());
+                    dashboardTableResponse.setAntallKrav(totalKravForEdok);
                     dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
-                    long oppfyltDenominator = kravForEdok.size() - ikkeRelevantCount;
+                    long oppfyltDenominator = totalKravForEdok - ikkeRelevantCount;
                     double prosent = oppfyltDenominator > 0 ? ((double) oppfyltEtterlevelseList.size() / oppfyltDenominator) * 100 : 0;
                     dashboardTableResponse.setOppfyltKravProsent( (int) Math.floor(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
@@ -257,13 +250,11 @@ public class DashboardService {
         });
 
         var aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
-        List<Krav> utgaattKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.UTGAATT.name())).build());
-        List<Krav> utgaatKravUtenNyVersjon = utgaattKrav.stream().filter(uk -> !aktivKrav.stream().map(Krav::getKravNummer).toList().contains(uk.getKravNummer()) ).toList();
 
         var dokIds = allDoks.stream().map(EtterlevelseDokumentasjon::getId).toList();
         var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
 
-        var result = createAvdelingDashBoardResponse(avdelingId, avdelingNavn, allDoks, pvkByDokId, aktivKrav, utgaatKravUtenNyVersjon, etterlevelseByDokId);
+        var result = createAvdelingDashBoardResponse(avdelingId, avdelingNavn, allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
 
         var seksjonerFromNom = nomGraphClient.getAllSeksjonForAvdeling(avdelingId).stream().sorted(Comparator.comparing(OrgEnhet::getNavn)).toList();
 
@@ -281,7 +272,7 @@ public class DashboardService {
                             && d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
                             .anyMatch(ns -> seksjon.getId().equals(ns.getNomSeksjonId())))
                     .toList();
-            var seksjonStats = createAvdelingDashBoardResponse(seksjon.getId(), seksjon.getNavn(), seksjonDoks, pvkByDokId, aktivKrav,utgaatKravUtenNyVersjon, etterlevelseByDokId);
+            var seksjonStats = createAvdelingDashBoardResponse(seksjon.getId(), seksjon.getNavn(), seksjonDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
             statsBySeksjon.put(seksjon.getId(), seksjonStats);
         }
 
@@ -292,7 +283,7 @@ public class DashboardService {
 
         if(!eDoksWithNoSeksjon.isEmpty()) {
             seksjonOptions.add(SeksjonOption.builder().id("ingen-seksjon").navn("Ikke valgt seksjon").build());
-            var seksjonStats = createAvdelingDashBoardResponse("ingen-seksjon", "Seksjon ikke valgt", eDoksWithNoSeksjon, pvkByDokId, aktivKrav, utgaatKravUtenNyVersjon, etterlevelseByDokId);
+            var seksjonStats = createAvdelingDashBoardResponse("ingen-seksjon", "Seksjon ikke valgt", eDoksWithNoSeksjon, pvkByDokId, aktivKrav, etterlevelseByDokId);
             statsBySeksjon.put("ingen-seksjon", seksjonStats);
         }
 
@@ -312,13 +303,11 @@ public class DashboardService {
             });
 
             var aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
-            List<Krav> utgaattKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.UTGAATT.name())).build());
-            List<Krav> utgaatKravUtenNyVersjon = utgaattKrav.stream().filter(uk -> !aktivKrav.stream().map(Krav::getKravNummer).toList().contains(uk.getKravNummer()) ).toList();
 
             var dokIds = allDoks.stream().map(EtterlevelseDokumentasjon::getId).toList();
             var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
 
-            return createAvdelingDashBoardResponse("ingen-avdeling", "Ikke valgt avdeling", allDoks, pvkByDokId, aktivKrav, utgaatKravUtenNyVersjon, etterlevelseByDokId);
+            return createAvdelingDashBoardResponse("ingen-avdeling", "Ikke valgt avdeling", allDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
         } else {
             return null;
         }
@@ -330,7 +319,6 @@ public class DashboardService {
             List<EtterlevelseDokumentasjon> doks,
             List<PvkDokument> pvkDokumenter,
             List<Krav> aktivKrav,
-            List<Krav> utgaatKravUtenNyVersjon,
             Map<UUID, List<Etterlevelse>> etterlevelseByDokId
     ) {
         int totalDokumenter = doks.size();
@@ -347,16 +335,9 @@ public class DashboardService {
             else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
 
             var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
-            List<Krav> kravForEdok = new ArrayList<>(aktivKrav.stream().filter(k ->
-                    !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
-            ).toList());
-
-            kravForEdok.addAll(utgaatKravUtenNyVersjon.stream().filter(k ->
-                    !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
-            ).toList());
 
             var aktivEtterlevelseList = etterlevelseList.stream()
-                    .filter(e -> kravForEdok.stream().anyMatch(k ->
+                    .filter(e -> aktivKrav.stream().anyMatch(k ->
                             k.getKravNummer().equals(e.getKravNummer()) && k.getKravVersjon().equals(e.getKravVersjon())))
                     .toList();
 
@@ -540,17 +521,9 @@ public class DashboardService {
         var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
 
         var aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
-        List<Krav> utgaattKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.UTGAATT.name())).build());
-        List<Krav> utgaatKravUtenNyVersjon = utgaattKrav.stream()
-                .filter(uk -> aktivKrav.stream().noneMatch(ak -> ak.getKravNummer().equals(uk.getKravNummer())))
-                .toList();
 
         Map<String, String> temaByKravKey = new HashMap<>();
         for (var krav : aktivKrav) {
-            String key = krav.getKravNummer() + "_" + krav.getKravVersjon();
-            temaByKravKey.put(key, resolveTemaCodeFromKrav(krav));
-        }
-        for (var krav : utgaatKravUtenNyVersjon) {
             String key = krav.getKravNummer() + "_" + krav.getKravVersjon();
             temaByKravKey.put(key, resolveTemaCodeFromKrav(krav));
         }
@@ -563,9 +536,6 @@ public class DashboardService {
                     !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
             ).toList());
 
-            kravForEdok.addAll(utgaatKravUtenNyVersjon.stream().filter(k ->
-                    !new HashSet<>(dok.getIrrelevansFor()).containsAll(k.getRelevansFor()) || k.getRelevansFor().isEmpty()
-            ).toList());
 
             var gyldigeKravKeys = new HashSet<String>();
             kravForEdok.forEach(k -> gyldigeKravKeys.add(k.getKravNummer() + "_" + k.getKravVersjon()));
