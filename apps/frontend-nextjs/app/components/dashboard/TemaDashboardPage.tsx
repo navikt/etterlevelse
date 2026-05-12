@@ -175,19 +175,6 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
     },
   ]
 
-  const totalSuksess =
-    stats.suksesskriterierUnderArbeid +
-    stats.suksesskriterierOppfylt +
-    stats.suksesskriterierIkkeOppfylt +
-    stats.suksesskriterierIkkeRelevant
-
-  const totalFerdigSuksess =
-    (stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0) +
-    (stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0) +
-    (stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0)
-
-  const totalIkkeFerdigSuksess = totalSuksess - totalFerdigSuksess
-
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
       <Heading size='small' level='2'>
@@ -206,23 +193,23 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
         <div>
           <Heading size='xsmall' level='3' className='min-h-[3rem]'>
-            Etterlevelse: suksesskriterier ({totalSuksess})
+            Etterlevelse: suksesskriterier
           </Heading>
-          <RechartsStackedBar data={suksessData} showPercentage />
+          <RechartsStackedBar data={suksessData} percentageOnly />
         </div>
 
         <div>
           <Heading size='xsmall' level='3' className='min-h-[3rem]'>
-            Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
+            Suksesskriterier der kravet er ferdig utfylt
           </Heading>
-          <RechartsStackedBar data={ferdigSuksessData} showPercentage />
+          <RechartsStackedBar data={ferdigSuksessData} percentageOnly />
         </div>
 
         <div>
           <Heading size='xsmall' level='3' className='min-h-[3rem]'>
-            Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
+            Suksesskriterier der kravet ikke er ferdig utfylt
           </Heading>
-          <RechartsStackedBar data={ikkeFerdigSuksessData} showPercentage />
+          <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
         </div>
       </div>
     </div>
