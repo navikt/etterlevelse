@@ -133,7 +133,9 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                   <Accordion.Content>
                     <div className='flex flex-col gap-6'>
                       {tema.code === 'PERSONVERN' && (
-                        <PvkBehovVarsel etterlevelseDokumentasjonId={etterlevelseDokumentasjonId} />
+                        <PvkBehovVarsel
+                          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                        />
                       )}
                       <div>
                         <Link href={`${temaUrl}/${tema.code}`} target='_blank'>
