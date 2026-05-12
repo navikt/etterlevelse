@@ -319,7 +319,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Tabs.List>
         <Tabs.Panel value='figurer'>
           <div className='mt-6'>
-            <DashboardBarCard stats={getCurrentStats()} hideHeader singleRow />
+            <DashboardBarCard stats={getCurrentStats()} hideHeader />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='nokkeltall'>

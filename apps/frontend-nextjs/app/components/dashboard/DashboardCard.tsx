@@ -1,7 +1,7 @@
 'use client'
 
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
-import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
+import { Link as AkselLink, BodyShort, Detail, Heading } from '@navikt/ds-react'
 
 interface IProps {
   stats: IAvdelingDashboardStats
@@ -14,22 +14,17 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
       {!hideHeader && (
         <Heading size='small' level='3'>
-          <AkselLink href={`/dashboard/${stats.avdelingId}`}>{stats.avdelingNavn}</AkselLink>
+          {stats.avdelingNavn}
         </Heading>
       )}
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          columnGap: '32px',
-          rowGap: '16px',
-          marginTop: '16px',
-          whiteSpace: 'nowrap',
-        }}
-      >
+      <Detail uppercase className='mt-2'>
+        {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+      </Detail>
+
+      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4' style={{ whiteSpace: 'nowrap' }}>
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
           <BodyShort>
@@ -45,7 +40,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         </div>
 
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Suksesskriterier (etterlevelseskrav)
           </Heading>
           <BodyShort>
@@ -66,7 +61,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         </div>
 
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
           <BodyShort>
@@ -94,7 +89,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         </div>
 
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
           <BodyShort>
@@ -117,6 +112,12 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
         </div>
       </div>
+
+      {!hideHeader && (
+        <AkselLink href={`/dashboard/${stats.avdelingId}`} className='mt-4 inline-block'>
+          Les mer om {stats.avdelingNavn}
+        </AkselLink>
+      )}
     </div>
   )
 }

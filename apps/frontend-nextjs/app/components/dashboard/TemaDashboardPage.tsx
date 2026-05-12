@@ -262,7 +262,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             const kravPcts = roundedPercentages([stats.kravUnderArbeid, stats.kravFerdigVurdert])
             return (
               <>
-                <BodyShort weight='semibold'>
+                <BodyShort weight='semibold' className='mb-2'>
                   Gjennomføringsstatus: krav ({stats.kravTotal})
                 </BodyShort>
                 <BodyShort>
@@ -288,7 +288,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold'>
+                <BodyShort weight='semibold' className='mb-2'>
                   Etterlevelse: suksesskriterier ({totalSuksess})
                 </BodyShort>
                 <BodyShort>
@@ -328,7 +328,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold'>
+                <BodyShort weight='semibold' className='mb-2'>
                   Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
                 </BodyShort>
                 <BodyShort>
@@ -370,7 +370,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold'>
+                <BodyShort weight='semibold' className='mb-2'>
                   Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
                 </BodyShort>
                 <BodyShort>
