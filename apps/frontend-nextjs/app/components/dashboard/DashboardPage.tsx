@@ -113,7 +113,7 @@ const DashboardPage = () => {
             </Tabs.List>
 
             <Tabs.Panel value='figurer'>
-              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+              <div className='flex flex-col gap-6 mt-6'>
                 {filteredStats.map((avdelingStats) => (
                   <DashboardBarCard
                     key={avdelingStats.avdelingId}
@@ -124,7 +124,7 @@ const DashboardPage = () => {
               </div>
             </Tabs.Panel>
             <Tabs.Panel value='nokkeltall'>
-              <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6'>
+              <div className='flex flex-col gap-6 mt-6'>
                 {filteredStats.map((avdelingStats) => (
                   <DashboardCard
                     key={avdelingStats.avdelingId}

@@ -1,7 +1,7 @@
 'use client'
 
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
-import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
+import { Link as AkselLink, BodyShort, Detail, Heading } from '@navikt/ds-react'
 
 interface IProps {
   stats: IAvdelingDashboardStats
@@ -18,16 +18,11 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         </Heading>
       )}
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          columnGap: '32px',
-          rowGap: '16px',
-          marginTop: '16px',
-          whiteSpace: 'nowrap',
-        }}
-      >
+      <Detail uppercase className='mt-2'>
+        {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+      </Detail>
+
+      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4' style={{ whiteSpace: 'nowrap' }}>
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
             Etterlevelsesdokumenter ({stats.dokumenter.total})

@@ -13,7 +13,6 @@ import {
 interface IProps {
   stats: IAvdelingDashboardStats
   hideHeader?: boolean
-  singleRow?: boolean
   subHeadingLevel?: '3' | '4'
 }
 
@@ -71,12 +70,7 @@ const StackedBar = ({
   )
 }
 
-export const DashboardBarCard = ({
-  stats,
-  hideHeader,
-  singleRow,
-  subHeadingLevel = '3',
-}: IProps) => {
+export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IProps) => {
   const dokData: IBarSegment[] = [
     { name: 'Under arbeid', value: stats.dokumenter.underArbeid, color: DOK_COLORS[0] },
     {
@@ -157,19 +151,7 @@ export const DashboardBarCard = ({
         {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
       </Detail>
 
-      <div
-        className={singleRow ? 'grid grid-cols-2 lg:grid-cols-4 gap-6 mt-4' : ''}
-        style={
-          !singleRow
-            ? {
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '24px',
-                marginTop: '16px',
-              }
-            : undefined
-        }
-      >
+      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
@@ -177,39 +159,19 @@ export const DashboardBarCard = ({
           <StackedBar data={dokData} maxWidth='200px' />
         </div>
 
-        {singleRow ? (
-          <>
-            <div>
-              <Heading size='xsmall' level={subHeadingLevel}>
-                Suksesskriterier (etterlevelseskrav)
-              </Heading>
-              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
-            </div>
+        <div>
+          <Heading size='xsmall' level={subHeadingLevel}>
+            Suksesskriterier (etterlevelseskrav)
+          </Heading>
+          <StackedBar data={suksessData} isPercentage maxWidth='200px' />
+        </div>
 
-            <div>
-              <Heading size='xsmall' level={subHeadingLevel}>
-                Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
-              </Heading>
-              <StackedBar data={behovData} maxWidth='200px' />
-            </div>
-          </>
-        ) : (
-          <>
-            <div>
-              <Heading size='xsmall' level={subHeadingLevel}>
-                Suksesskriterier (etterlevelseskrav)
-              </Heading>
-              <StackedBar data={suksessData} isPercentage maxWidth='200px' />
-            </div>
-
-            <div>
-              <Heading size='xsmall' level={subHeadingLevel}>
-                Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
-              </Heading>
-              <StackedBar data={behovData} maxWidth='200px' />
-            </div>
-          </>
-        )}
+        <div>
+          <Heading size='xsmall' level={subHeadingLevel}>
+            Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
+          </Heading>
+          <StackedBar data={behovData} maxWidth='200px' />
+        </div>
 
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
