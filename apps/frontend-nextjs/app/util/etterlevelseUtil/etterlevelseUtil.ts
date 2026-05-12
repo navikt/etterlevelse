@@ -5,6 +5,7 @@ import {
   ISuksesskriterieBegrunnelse,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { INomSeksjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import _ from 'lodash'
@@ -40,29 +41,15 @@ export const etterlevelserSorted = (krav: TKravQL): TEtterlevelseQL[] => {
 
   etterlevelser.map((etterlevelse: TEtterlevelseQL) => {
     if (
-      !etterlevelse.etterlevelseDokumentasjon.teamsData ||
-      etterlevelse.etterlevelseDokumentasjon.teamsData.length === 0
+      !etterlevelse.etterlevelseDokumentasjon.seksjoner ||
+      etterlevelse.etterlevelseDokumentasjon.seksjoner.length === 0
     ) {
-      etterlevelse.etterlevelseDokumentasjon.teamsData = [
+      etterlevelse.etterlevelseDokumentasjon.seksjoner = [
         {
-          id: 'INGEN_TEAM',
-          name: 'Ingen team',
-          description: 'ingen',
-          tags: [],
-          members: [],
-          productAreaId: 'INGEN_PO',
-          productAreaName: 'Ingen produktområde',
+          nomSeksjonId: 'INGEN_SEKSJON',
+          nomSeksjonName: 'Ingen seksjon',
         },
       ]
-    }
-    if (etterlevelse.etterlevelseDokumentasjon.teamsData) {
-      etterlevelse.etterlevelseDokumentasjon.teamsData.forEach((teamData: ITeam) => {
-        if (!teamData.productAreaId && !teamData.productAreaName) {
-          teamData.productAreaId = 'INGEN_PO'
-          teamData.productAreaName = 'Ingen produktområde'
-        }
-      })
-      return etterlevelse
     }
   })
 
@@ -112,23 +99,20 @@ export const filteredEtterlevelseSorted = (krav: TKravQL, filter: string): TEtte
   return filteredEtterlevelse
 }
 
-export const produktOmradeSorted = (krav: TKravQL, filter: string) => {
-  const produktOmrade: ITeam[] = _.sortedUniqBy(
+export const seksjonerSorted = (krav: TKravQL, filter: string) => {
+  const seksjoner: INomSeksjon[] = _.sortedUniqBy(
     filteredEtterlevelseSorted(krav, filter)
-      .map(
-        (etterlevelse: TEtterlevelseQL) =>
-          etterlevelse.etterlevelseDokumentasjon.teamsData &&
-          etterlevelse.etterlevelseDokumentasjon.teamsData
-      )
+      .map((etterlevelse: TEtterlevelseQL) => etterlevelse.etterlevelseDokumentasjon.seksjoner)
       .flat()
-      .sort((a: ITeam | undefined, b: ITeam | undefined) =>
-        (a?.productAreaName || '').localeCompare(b?.productAreaName || '')
-      )
-      .filter((team: ITeam | undefined) => !!team) || [],
-    (a: ITeam) => a?.productAreaId
+      .sort((a: INomSeksjon, b: INomSeksjon) => {
+        if (a.nomSeksjonId === 'INGEN_SEKSJON') return 1
+        if (b.nomSeksjonId === 'INGEN_SEKSJON') return -1
+        return a.nomSeksjonName.localeCompare(b.nomSeksjonName)
+      }),
+    (a: INomSeksjon) => a.nomSeksjonId
   )
 
-  return produktOmrade
+  return seksjoner
 }
 
 export const etterlevelseTeamNavnId = (etterlevelse: TEtterlevelseQL): string => {

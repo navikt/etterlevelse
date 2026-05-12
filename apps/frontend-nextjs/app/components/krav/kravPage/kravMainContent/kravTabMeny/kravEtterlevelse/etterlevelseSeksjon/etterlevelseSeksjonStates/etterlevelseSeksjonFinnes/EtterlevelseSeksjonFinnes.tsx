@@ -1,9 +1,9 @@
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { INomSeksjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import {
   filteredEtterlevelseSorted,
-  produktOmradeSorted,
+  seksjonerSorted,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Accordion } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
@@ -17,18 +17,8 @@ type TProps = {
   filter: string
 }
 
-const getProduktOmrade = (produktOmradeTeam: ITeam) => {
-  if (produktOmradeTeam.productAreaName) {
-    return produktOmradeTeam.productAreaName
-  } else if (produktOmradeTeam.productAreaId) {
-    return produktOmradeTeam.productAreaId
-  } else {
-    return ''
-  }
-}
-
-const produktOmradeEtterlevelser = (
-  produktOmradeTeam: ITeam,
+const seksjonEtterlevelser = (
+  seksjon: INomSeksjon,
   krav: TKravQL,
   filter: string
 ): TEtterlevelseQL[] => {
@@ -36,35 +26,35 @@ const produktOmradeEtterlevelser = (
 
   const newFilteredEtterlevelse: TEtterlevelseQL[] = filteredEtterlevelse?.filter(
     (etterlevelse: TEtterlevelseQL) =>
-      etterlevelse.etterlevelseDokumentasjon.teamsData &&
-      produktOmradeTeam &&
-      etterlevelse.etterlevelseDokumentasjon.teamsData.filter(
-        (team: ITeam) => produktOmradeTeam.productAreaId === team.productAreaId
+      etterlevelse.etterlevelseDokumentasjon.seksjoner &&
+      seksjon &&
+      etterlevelse.etterlevelseDokumentasjon.seksjoner.filter(
+        (seksjonItem: INomSeksjon) => seksjonItem.nomSeksjonId === seksjon.nomSeksjonId
       ).length > 0
   )
 
   return newFilteredEtterlevelse
 }
 
-export const EtterlevelseProduktOmradeFinnes: FunctionComponent<TProps> = ({
+export const EtterlevelseSeksjonFinnes: FunctionComponent<TProps> = ({
   krav,
   modalVersion,
   setOpenEtterlevelse,
   setIsModalOpen,
   filter,
 }) => {
-  const produktOmrade: ITeam[] = produktOmradeSorted(krav, filter)
+  const seksjoner: INomSeksjon[] = seksjonerSorted(krav, filter)
 
   return (
     <>
-      {produktOmrade.length > 0 && (
+      {seksjoner.length > 0 && (
         <Accordion>
-          {produktOmrade.map((produktOmradeTeam: ITeam) => (
-            <Accordion.Item key={produktOmradeTeam && produktOmradeTeam.productAreaId}>
-              <Accordion.Header>{getProduktOmrade(produktOmradeTeam)}</Accordion.Header>
+          {seksjoner.map((seksjon: INomSeksjon) => (
+            <Accordion.Item key={seksjon.nomSeksjonId}>
+              <Accordion.Header>{seksjon.nomSeksjonName}</Accordion.Header>
               <Accordion.Content>
                 <div className='flex flex-col gap-2'>
-                  {produktOmradeEtterlevelser(produktOmradeTeam, krav, filter).map(
+                  {seksjonEtterlevelser(seksjon, krav, filter).map(
                     (etterlevelse: TEtterlevelseQL, index: number) => (
                       <EtterlevelseLinkPanel
                         key={`${etterlevelse}-${index}`}

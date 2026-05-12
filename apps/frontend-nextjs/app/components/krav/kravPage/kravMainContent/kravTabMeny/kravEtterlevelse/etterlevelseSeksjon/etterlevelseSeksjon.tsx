@@ -1,8 +1,8 @@
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
-import { EtterlevelseProduktOmradeFinnes } from './etterlevelseProduktOmradeFinnes/EtterlevelseProduktOmradeFinnes'
-import { EtterlevelseProduktOmradeIngen } from './etterlevelseProduktOmradeIngen/etterlevelseProduktOmradeIngen'
+import { EtterlevelseIngenSeksjon } from './etterlevelseSeksjonStates/etterlevelseIngenSeksjon'
+import { EtterlevelseSeksjonFinnes } from './etterlevelseSeksjonStates/etterlevelseSeksjonFinnes/EtterlevelseSeksjonFinnes'
 
 type TProps = {
   krav: TKravQL
@@ -12,7 +12,7 @@ type TProps = {
   filter: string
 }
 
-export const EtterlevelseProduktOmrade: FunctionComponent<TProps> = ({
+export const EtterlevelseSeksjon: FunctionComponent<TProps> = ({
   krav,
   modalVersion,
   setOpenEtterlevelse,
@@ -20,13 +20,13 @@ export const EtterlevelseProduktOmrade: FunctionComponent<TProps> = ({
   filter,
 }) => (
   <>
-    <EtterlevelseProduktOmradeFinnes
+    <EtterlevelseSeksjonFinnes
       krav={krav}
       modalVersion={modalVersion}
       setOpenEtterlevelse={setOpenEtterlevelse}
       setIsModalOpen={setIsModalOpen}
       filter={filter}
     />
-    <EtterlevelseProduktOmradeIngen krav={krav} filter={filter} />
+    <EtterlevelseIngenSeksjon krav={krav} filter={filter} />
   </>
 )

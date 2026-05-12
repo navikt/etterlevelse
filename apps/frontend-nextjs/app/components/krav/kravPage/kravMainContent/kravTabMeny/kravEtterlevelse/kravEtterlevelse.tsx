@@ -1,6 +1,6 @@
 import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
 import EtterlevelseModal from '@/components/etterlevelse/etterlevelseModal/etterlevelseModal'
-import { EtterlevelseProduktOmrade } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/etterlevelseProduktOmrade/etterlevelseProduktOmrade'
+import { EtterlevelseSeksjon } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/etterlevelseSeksjon/etterlevelseSeksjon'
 import { sadFolderIcon } from '@/components/others/images/images'
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
@@ -21,7 +21,6 @@ export const KravEtterlevelser: FunctionComponent<TProps> = ({ loading, krav, mo
   const [filter, setFilter] = useState<string>('ALLE')
 
   const etterlevelser: TEtterlevelseQL[] = etterlevelserSorted(krav)
-
   return (
     <div>
       {!loading && etterlevelser.length > 0 && (
@@ -63,7 +62,7 @@ export const KravEtterlevelser: FunctionComponent<TProps> = ({ loading, krav, mo
         />
       )}
 
-      <EtterlevelseProduktOmrade
+      <EtterlevelseSeksjon
         krav={krav}
         modalVersion={modalVersion}
         setOpenEtterlevelse={setOpenEtterlevelse}

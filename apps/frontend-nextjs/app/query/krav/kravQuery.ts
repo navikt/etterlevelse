@@ -132,7 +132,12 @@ export const getKravWithEtterlevelseQuery = gql`
         etterlevelseDokumentasjon {
           id
           etterlevelseNummer
+          etterlevelseDokumentVersjon
           title
+          seksjoner {
+            nomSeksjonId
+            nomSeksjonName
+          }
           teamsData {
             id
             name
