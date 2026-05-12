@@ -24,7 +24,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
 
       <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4' style={{ whiteSpace: 'nowrap' }}>
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
           <BodyShort>
@@ -40,7 +40,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         </div>
 
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Suksesskriterier (etterlevelseskrav)
           </Heading>
           <BodyShort>
@@ -61,7 +61,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         </div>
 
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
           <BodyShort>
@@ -89,7 +89,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         </div>
 
         <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
           <BodyShort>
