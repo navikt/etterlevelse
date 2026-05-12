@@ -1,5 +1,4 @@
 'use client'
-
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -16,6 +15,7 @@ import { Accordion, Link, List, Loader, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent, useContext } from 'react'
 import { KravCard } from './kravCard'
+import { PvkBehovVarsel } from './pvkBehovVarsel'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -132,6 +132,9 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                   </Accordion.Header>
                   <Accordion.Content>
                     <div className='flex flex-col gap-6'>
+                      {tema.code === 'PERSONVERN' && (
+                        <PvkBehovVarsel etterlevelseDokumentasjonId={etterlevelseDokumentasjonId} />
+                      )}
                       <div>
                         <Link href={`${temaUrl}/${tema.code}`} target='_blank'>
                           Lær mer om {tema.shortName} (åpner i en ny fane)
