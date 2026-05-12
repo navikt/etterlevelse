@@ -82,7 +82,12 @@ export const PvkBehovVarsel: FunctionComponent<TProps> = ({ etterlevelseDokument
             </ExternalLink>
           </List.Item>
           <List.Item>
-            <ExternalLink href={pvkDokumentasjonPvkBehovUrl(etterlevelseDokumentasjonId, 'ny')}>
+            <ExternalLink
+              href={pvkDokumentasjonPvkBehovUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokument?.id ?? 'ny'
+              )}
+            >
               Registrer om dere skal gjøre PVK
             </ExternalLink>
           </List.Item>
