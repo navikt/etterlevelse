@@ -176,7 +176,7 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               )}
               {ardoqSystemData.length === 0 && (
                 <div className='flex flex-wrap gap-2 items-center'>
-                  <Label size='medium'>Team:</Label>
+                  <Label size='medium'>System:</Label>
                   <BodyLong size='medium'>Ikke angitt</BodyLong>
                 </div>
               )}
