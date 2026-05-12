@@ -1,7 +1,7 @@
 'use client'
 
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
-import { Link as AkselLink, BodyShort, Heading } from '@navikt/ds-react'
+import { Link as AkselLink, BodyShort, Detail, Heading } from '@navikt/ds-react'
 import {
   AVDELING_SUKSESS_COLORS,
   BEHOV_COLORS,
@@ -152,6 +152,10 @@ export const DashboardBarCard = ({
           <AkselLink href={`/dashboard/${stats.avdelingId}`}>{stats.avdelingNavn}</AkselLink>
         </Heading>
       )}
+
+      <Detail uppercase className='mt-2'>
+        {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+      </Detail>
 
       <div
         className={singleRow ? 'grid grid-cols-2 lg:grid-cols-4 gap-6 mt-4' : ''}

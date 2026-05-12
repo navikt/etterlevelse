@@ -1,7 +1,7 @@
 'use client'
 
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
-import { BodyShort, Heading } from '@navikt/ds-react'
+import { BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import {
   AVDELING_SUKSESS_COLORS,
@@ -233,6 +233,10 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
+      <Detail uppercase className='mt-2 mb-4'>
+        {agg.dok.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+      </Detail>
+
       {view === 'figurer' ? (
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
           <div>
