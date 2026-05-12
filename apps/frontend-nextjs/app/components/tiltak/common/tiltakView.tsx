@@ -44,11 +44,33 @@ export const TiltakView = (props: IProps) => {
   }, [tiltak])
 
   return (
-    <div className='mb-5'>
+    <div className='mb-5 mt-3'>
+      {tiltak.risikoscenarioIds.length > 0 && (
+        <div className='mb-3'>
+          <ReadOnlyFieldDescriptionOptional
+            label='Tiltaket er brukt ved følgende scenarioer:'
+            description=''
+            isVisible={tiltak.risikoscenarioIds.length === 1}
+          />
+
+          {risikoscenarioList && (
+            <List as='ul'>
+              {risikoscenarioList
+                .filter((risikoscenario: IRisikoscenario) =>
+                  tiltak.risikoscenarioIds.includes(risikoscenario.id)
+                )
+                .map((risikoscenario: IRisikoscenario) => (
+                  <List.Item key={risikoscenario.id}>{risikoscenario.navn}</List.Item>
+                ))}
+            </List>
+          )}
+        </div>
+      )}
+
       <ReadOnlyField
         label='Tiltaksbeskrivelse:'
         description={tiltak.beskrivelse}
-        className='my-3 flex gap-2'
+        className='mb-3 flex gap-2'
       />
 
       <ReadOnlyFieldBool
@@ -73,27 +95,6 @@ export const TiltakView = (props: IProps) => {
         />
       )}
 
-      {tiltak.risikoscenarioIds.length > 1 && (
-        <div className='mt-3'>
-          <ReadOnlyFieldDescriptionOptional
-            label='Tiltaket er gjenbrukt ved følgende scenarioer:'
-            description='Tiltaket er ikke gjenbrukt ved andre risikoscenarioer'
-            isVisible={tiltak.risikoscenarioIds.length === 1}
-          />
-
-          {risikoscenarioList && (
-            <List as='ul'>
-              {risikoscenarioList
-                .filter((risikoscenario: IRisikoscenario) =>
-                  tiltak.risikoscenarioIds.includes(risikoscenario.id)
-                )
-                .map((risikoscenario: IRisikoscenario) => (
-                  <List.Item key={risikoscenario.id}>{risikoscenario.navn}</List.Item>
-                ))}
-            </List>
-          )}
-        </div>
-      )}
       <div className='mt-3 mb-5'>
         {tiltak.iverksatt && (
           <Alert variant='success' inline>
