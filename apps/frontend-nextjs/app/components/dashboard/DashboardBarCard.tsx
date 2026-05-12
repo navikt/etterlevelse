@@ -143,7 +143,7 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
       {!hideHeader && (
         <Heading size='small' level='3'>
-          <AkselLink href={`/dashboard/${stats.avdelingId}`}>{stats.avdelingNavn}</AkselLink>
+          {stats.avdelingNavn}
         </Heading>
       )}
 
@@ -180,6 +180,12 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
           <StackedBar data={pvkData} maxWidth='200px' />
         </div>
       </div>
+
+      {!hideHeader && (
+        <AkselLink href={`/dashboard/${stats.avdelingId}`} className='mt-4 inline-block'>
+          Les mer om {stats.avdelingNavn}
+        </AkselLink>
+      )}
     </div>
   )
 }
