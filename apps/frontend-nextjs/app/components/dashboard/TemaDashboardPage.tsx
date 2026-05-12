@@ -15,7 +15,6 @@ import {
 import { DownloadIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import {
   IBarSegment,
   KRAV_COLORS,
@@ -39,27 +38,22 @@ const RechartsStackedBar = ({
 
   const pcts = roundedPercentages(data.map((d) => d.value))
 
-  const chartData = [
-    data.reduce((acc, d) => ({ ...acc, [d.name]: d.value }), {} as Record<string, number>),
-  ]
-
   return (
-    <div style={{ marginTop: '12px' }}>
-      <ResponsiveContainer width='100%' height={32}>
-        <BarChart
-          layout='vertical'
-          data={chartData}
-          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-        >
-          <XAxis type='number' hide />
-          <YAxis type='category' hide />
-          {data
-            .filter((d) => d.value > 0)
-            .map((d) => (
-              <Bar key={d.name} dataKey={d.name} stackId='stack' fill={d.color} />
-            ))}
-        </BarChart>
-      </ResponsiveContainer>
+    <div style={{ marginTop: '12px', maxWidth: '500px' }}>
+      <div style={{ display: 'flex', height: 32, borderRadius: 4, overflow: 'hidden' }}>
+        {data
+          .filter((d) => d.value > 0)
+          .map((d) => (
+            <div
+              key={d.name}
+              style={{
+                width: `${(d.value / total) * 100}%`,
+                backgroundColor: d.color,
+                transition: 'width 0.3s',
+              }}
+            />
+          ))}
+      </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
         {data.map((d, i) => (
