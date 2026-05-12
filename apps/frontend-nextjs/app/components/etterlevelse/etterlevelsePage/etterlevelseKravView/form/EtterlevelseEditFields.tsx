@@ -149,6 +149,7 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
           errors,
           setFieldError,
           setFieldValue,
+          resetForm,
           dirty,
         }: FormikProps<IEtterlevelse>) => (
           <div className='w-full'>
@@ -361,8 +362,11 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         </Modal.Body>
                         <Modal.Footer>
                           <Button
-                            onClick={() => {
-                              close()
+                            onClick={async () => {
+                              await resetForm({})
+                              router.push(
+                                `/dokumentasjon/${etterlevelse.etterlevelseDokumentasjonId}`
+                              )
                             }}
                             type='button'
                           >
