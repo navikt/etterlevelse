@@ -159,7 +159,9 @@ export const PvkBehovPage = () => {
               behandlingensLivslop={behandlingensLivslop}
               artOgOmfangId={artOgOmfang?.id}
             />
-            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+            {etterlevelseDokumentasjon.behandlinger &&
+              etterlevelseDokumentasjon.behandlinger.length > 0 &&
+              (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
               !isReadOnlyPvkStatus(pvkDokument.status) &&
               !isPvkBehovLock && (
                 <PvkBehovForm
