@@ -497,10 +497,11 @@ const TemaDashboardPage = () => {
         Tema
       </Heading>
 
-      <div className='flex gap-4 mt-4 items-end'>
+      <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
         <Select
           label='Velg tema'
-          className='w-fit min-w-64'
+          className='sm:w-fit sm:min-w-64'
+          style={{ width: '100%' }}
           value={selectedTema}
           onChange={(e) => setSelectedTema(e.target.value)}
         >
@@ -514,7 +515,8 @@ const TemaDashboardPage = () => {
 
         <Select
           label='Filtrer etter avdeling'
-          className='w-fit min-w-64'
+          className='sm:w-fit sm:min-w-64'
+          style={{ width: '100%' }}
           value={selectedAvdeling}
           onChange={(e) => {
             setSelectedAvdeling(e.target.value)
@@ -543,7 +545,8 @@ const TemaDashboardPage = () => {
           return selectedAvdeling && filteredSeksjoner.length > 0 ? (
             <Select
               label='Filtrer etter seksjon'
-              className='w-fit min-w-64'
+              className='sm:w-fit sm:min-w-64'
+              style={{ width: '100%' }}
               value={selectedSeksjon}
               onChange={(e) => {
                 setSelectedSeksjon(e.target.value)
