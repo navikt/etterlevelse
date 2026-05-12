@@ -1,6 +1,7 @@
 'use client'
 
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
@@ -12,11 +13,12 @@ import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { getNumberOfDaysBetween } from '@/util/checkAge/checkAgeUtil'
 import { getKravForTema } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { Accordion, Link, List, Loader, Tag } from '@navikt/ds-react'
+import moment from 'moment'
 import { FunctionComponent, useContext } from 'react'
 import { KravCard } from './kravCard'
 
 type TProps = {
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
   temaListe: TTemaCode[]
@@ -30,7 +32,7 @@ type TProps = {
 }
 
 export const KravAccordionList: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjonId,
+  etterlevelseDokumentasjon,
   relevanteStats,
   utgaattStats,
   temaListe,
@@ -62,9 +64,28 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
             temaListe.map((tema, index) => {
               const relevantStatsKravnummer = relevanteStats.map((k) => k.kravNummer)
 
-              const filteredUtgaatKrav = utgaattStats.filter(
-                ({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer)
-              )
+              const filteredUtgaatKrav = utgaattStats
+                .filter(({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer))
+                .filter((krav) => {
+                  if (etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1) {
+                    const currentVersjon = etterlevelseDokumentasjon.versjonHistorikk.filter(
+                      (historikk) =>
+                        historikk.versjon ===
+                        etterlevelseDokumentasjon.etterlevelseDokumentVersjon - 1
+                    )[0]
+                    if (
+                      moment(krav.changeStamp.lastModifiedDate).isAfter(
+                        currentVersjon.nyVersjonOpprettetDato
+                      )
+                    ) {
+                      return krav
+                    } else {
+                      return null
+                    }
+                  } else {
+                    return krav
+                  }
+                })
 
               const kravliste = getKravForTema({
                 tema,
@@ -123,7 +144,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                               risikoscenarioList={risikoscenarioList}
                               allTiltak={allTiltak}
                               krav={krav}
-                              etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                               temaCode={tema.code}
                               previousVurdering={previousVurdering}
                             />
