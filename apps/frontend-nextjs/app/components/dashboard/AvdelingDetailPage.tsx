@@ -691,7 +691,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               )}
                             </Table.DataCell>
                             <Table.DataCell align='center'>
-                              {dok.antallTiltak ? dok.antallTiltak : '-'}
+                              {dok.antallTiltak ?? '-'}
                             </Table.DataCell>
                             <Table.DataCell align='center'>
                               {dok.antallIkkeIverksattTiltak ? dok.antallIkkeIverksattTiltak : '-'}
