@@ -94,6 +94,7 @@ export interface IDashboardTable {
   antallRisikoscenario?: number
   antallHoyRisikoscenario?: number
   antallHoyRisikoEtterTiltak?: number
+  antallTiltak?: number
   antallIkkeIverksattTiltak?: number
   antallTiltakFristPassert?: number
   sistOppdatertPvk: string
