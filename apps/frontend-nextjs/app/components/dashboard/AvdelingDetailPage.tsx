@@ -190,6 +190,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               return dok.antallHoyRisikoscenario || 0
             case 'hoyRisikoEtterTiltak':
               return dok.antallHoyRisikoEtterTiltak || 0
+            case 'antallTiltak':
+              return dok.antallTiltak || 0
             case 'ikkeIverksatte':
               return dok.antallIkkeIverksattTiltak || 0
             case 'fristPassert':
@@ -610,6 +612,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='hoyRisikoEtterTiltak' align='center'>
                           Høy risiko etter tiltak
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='antallTiltak' align='center'>
+                          Antall tiltak
+                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='ikkeIverksatte' align='center'>
                           Ikke iverksatte tiltak
                         </Table.ColumnHeader>
@@ -684,6 +689,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               ) : (
                                 '-'
                               )}
+                            </Table.DataCell>
+                            <Table.DataCell align='center'>
+                              {dok.antallTiltak ? dok.antallTiltak : '-'}
                             </Table.DataCell>
                             <Table.DataCell align='center'>
                               {dok.antallIkkeIverksattTiltak ? dok.antallIkkeIverksattTiltak : '-'}
