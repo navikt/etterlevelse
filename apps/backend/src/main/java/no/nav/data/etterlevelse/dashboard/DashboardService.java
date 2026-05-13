@@ -200,7 +200,7 @@ public class DashboardService {
                          dashboardTableResponse.setAntallRisikoscenario(antallRisikoscenario);
                          dashboardTableResponse.setAntallHoyRisikoscenario(antallHoyRisikoscenario);
                          dashboardTableResponse.setAntallHoyRisikoEtterTiltak(antallHoyRisikoEtterTiltak);
-                         dashboardTableResponse.setAntallTiltak(alleTiltak.size());
+                         dashboardTableResponse.setAntallTiltak(alleTiltak.isEmpty() ? null : alleTiltak.size());
                          dashboardTableResponse.setAntallIkkeIverksattTiltak(antallIkkeIverksattTiltak);
                          dashboardTableResponse.setAntallTiltakFristPassert(antallTiltakFristPassert);
                          dashboardTableResponse.setSistOppdatertPvk(lastModifiedDate);
