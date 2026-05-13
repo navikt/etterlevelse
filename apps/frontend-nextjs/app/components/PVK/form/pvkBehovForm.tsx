@@ -28,14 +28,20 @@ import {
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ChevronLeftIcon, ChevronRightIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EnvelopeClosedIcon,
+  ExclamationmarkTriangleIcon,
+  InformationSquareIcon,
+} from '@navikt/aksel-icons'
+import {
   BodyLong,
   Button,
   Checkbox,
   CheckboxGroup,
   CopyButton,
+  InfoCard,
   Link,
   List,
   LocalAlert,
@@ -186,10 +192,12 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 profilering ||
                 automatiskBehandling ||
                 saerligKategorier) && (
-                <Alert className='mb-5 mt-10' variant='info'>
-                  Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være
-                  behov for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
-                </Alert>
+                <InfoCard className='mb-5 mt-10' data-color='info' size='medium' as='section'>
+                  <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                    Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være
+                    behov for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
+                  </InfoCard.Message>
+                </InfoCard>
               )}
 
               <ReadMore
@@ -247,31 +255,36 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                   </List>
 
                   {etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
-                    <Alert variant='info' className='mt-5'>
-                      Dersom dokumentene over ikke inkluderer deres PVK, skal dere legge den inn på{' '}
-                      <Link
-                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        aria-label='redigere etterlevelsesdokumentasjon'
-                      >
-                        Rediger dokumentegenskaper (åpner i en ny fane).
-                      </Link>
-                    </Alert>
+                    <InfoCard data-color='info' className='mt-5'>
+                      <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                        Dersom dokumentene over ikke inkluderer deres PVK, skal dere legge den inn
+                        på{' '}
+                        <Link
+                          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          aria-label='redigere etterlevelsesdokumentasjon'
+                        >
+                          Rediger dokumentegenskaper (åpner i en ny fane).
+                        </Link>
+                      </InfoCard.Message>
+                    </InfoCard>
                   )}
 
                   {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
-                    <Alert variant='warning' className='mt-5'>
-                      Dere må legge inn lenke til deres PVK i Public360 under{' '}
-                      <Link
-                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        aria-label='redigere etterlevelsesdokumentasjon'
-                      >
-                        Rediger dokumentegenskaper (åpner i en ny fane).
-                      </Link>
-                    </Alert>
+                    <InfoCard data-color='warning' className='mt-5'>
+                      <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                        Dere må legge inn lenke til deres PVK i Public360 under{' '}
+                        <Link
+                          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          aria-label='redigere etterlevelsesdokumentasjon'
+                        >
+                          Rediger dokumentegenskaper (åpner i en ny fane).
+                        </Link>
+                      </InfoCard.Message>
+                    </InfoCard>
                   )}
                 </div>
               )}
