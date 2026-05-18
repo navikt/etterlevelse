@@ -34,10 +34,12 @@ export const getDashboardAvdelingStats = async (
 }
 
 export const getTemaDashboardStats = async (
+  temaCode?: string,
   avdelingId?: string,
   seksjonId?: string
 ): Promise<ITemaDashboardStats[]> => {
   const params = new URLSearchParams()
+  if (temaCode) params.set('temaCode', temaCode)
   if (avdelingId) params.set('avdelingId', avdelingId)
   if (seksjonId) params.set('seksjonId', seksjonId)
   const query = params.toString()

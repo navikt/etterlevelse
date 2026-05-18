@@ -461,7 +461,7 @@ const TemaDashboardPage = () => {
   }, [])
 
   useEffect(() => {
-    getTemaDashboardStats(selectedAvdeling || undefined, selectedSeksjon || undefined)
+    getTemaDashboardStats(undefined, selectedAvdeling || undefined, selectedSeksjon || undefined)
       .then((data) => {
         setTemaStats(data)
         setSelectedTema((prev) => (prev && !data.some((d) => d.temaCode === prev) ? '' : prev))

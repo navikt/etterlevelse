@@ -28,6 +28,7 @@ import {
   SortState,
   Table,
   Tabs,
+  Tag,
 } from '@navikt/ds-react'
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -178,6 +179,13 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
       <Heading size='small' level='3'>
         {krav.kravNavn}
       </Heading>
+      {krav.kravStatus === 'UTGAATT' && (
+        <div className='mt-1'>
+          <Tag variant='error' className='h-fit'>
+            <Detail className='whitespace-nowrap'>Utgått uten ny versjon</Detail>
+          </Tag>
+        </div>
+      )}
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
@@ -257,7 +265,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [isKravLoading, setIsKravLoading] = useState(true)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
-  const [selectedKrav, setSelectedKrav] = useState<string>('')
+  const [selectedKrav] = useState<string>('')
   const [sort, setSort] = useState<SortState | undefined>()
 
   useEffect(() => {
@@ -268,10 +276,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
   useEffect(() => {
     setIsLoading(true)
-    getTemaDashboardStats(selectedAvdeling || undefined, selectedSeksjon || undefined)
+    getTemaDashboardStats(temaCode, selectedAvdeling || undefined, selectedSeksjon || undefined)
       .then((data) => {
-        const tema = data.find((t) => t.temaCode === temaCode)
-        setTemaStats(tema || null)
+        setTemaStats(data[0] || null)
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
       .finally(() => setIsLoading(false))
@@ -738,7 +745,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
       </Heading>
 
       <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
-        <Select
+        {/* ToDo This Select is used to selct krav and filter by krav. Waiting for user feedback */}
+        {/* <Select
           label='Velg krav'
           className='sm:w-fit sm:min-w-64'
           style={{ width: '100%' }}
@@ -751,7 +759,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               {k.kravNavn}
             </option>
           ))}
-        </Select>
+        </Select> */}
 
         <Select
           label='Filtrer etter avdeling'
