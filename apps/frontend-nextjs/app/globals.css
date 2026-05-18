@@ -28,7 +28,6 @@ iframe#webpack-dev-server-client-overlay {
 
 .dashboard-table .navds-table__sort-button,
 .dashboard-table .aksel-table__sort-button {
-  color: inherit;
   white-space: nowrap;
 }
 
