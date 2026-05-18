@@ -2,6 +2,10 @@ package no.nav.data.etterlevelse.dashboard;
 
 import java.util.List;
 
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.dashboard.dto.KravDashboardResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,5 +71,21 @@ public class DashboardController {
             @RequestParam(required = false) String seksjonId) {
         log.info("Getting tema dashboard stats avdelingId={} seksjonId={}", avdelingId, seksjonId);
         return ResponseEntity.ok(dashboardService.getTemaDashboardStats(avdelingId, seksjonId));
+    }
+
+    @Operation(summary = "Get tema dashboard stats")
+    @ApiResponse(description = "ok")
+    @GetMapping("/krav/{temaCode}")
+    public ResponseEntity<List<KravDashboardResponse>> getTemaDashboardStats(
+            @PathVariable String temaCode,
+            @RequestParam(required = false) String avdelingId,
+            @RequestParam(required = false) String seksjonId) {
+        log.info("Getting krav dashboard stats by tema={} avdelingId={} seksjonId={}", temaCode, avdelingId, seksjonId);
+        var tema = CodelistService.getCodelist(ListName.TEMA, temaCode);
+        if (tema == null) {
+            throw new ValidationException( "Invalid temaCode: " + temaCode);
+        }
+
+        return ResponseEntity.ok(dashboardService.getKravDashboardStats(temaCode, avdelingId, seksjonId));
     }
 }
