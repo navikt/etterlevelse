@@ -7,7 +7,6 @@ import {
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
-import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
@@ -15,21 +14,8 @@ import {
   ISeksjonOption,
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
-import { handleSort } from '@/util/handleTableSort'
 import { DownloadIcon } from '@navikt/aksel-icons'
-import {
-  BodyShort,
-  Button,
-  Detail,
-  Heading,
-  Link,
-  LocalAlert,
-  Select,
-  SortState,
-  Table,
-  Tabs,
-  Tag,
-} from '@navikt/ds-react'
+import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs, Tag } from '@navikt/ds-react'
 import { useEffect, useMemo, useState } from 'react'
 import {
   IBarSegment,
@@ -266,7 +252,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
   const [selectedKrav] = useState<string>('')
-  const [sort, setSort] = useState<SortState | undefined>()
 
   useEffect(() => {
     getDashboardStats()
@@ -309,36 +294,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   }, [kravStats, selectedKrav])
 
   const sortedKrav = useMemo(() => {
-    if (!sort || !filteredKrav) return filteredKrav
-
-    const dir = sort.direction === 'ascending' ? 1 : -1
-    return [...filteredKrav].sort((a, b) => {
-      const getValue = (krav: IKravDashboardStats): string | number => {
-        switch (sort.orderBy) {
-          case 'krav':
-            return krav.kravNavn
-          case 'etterlevelse':
-            return krav.etterlevelseTotal
-          case 'underArbeid':
-            return krav.antallUnderArbeid
-          case 'ferdigVurdert':
-            return krav.antallFerdigVurdert
-          case 'suksessOppfylt':
-            return krav.antallSuksesskriterierOppfylt
-          case 'suksessIkkeOppfylt':
-            return krav.antallSuksesskriterierIkkeOppfylt
-          case 'suksessIkkeRelevant':
-            return krav.antallSuksesskriterierIkkeRelevant
-          default:
-            return ''
-        }
-      }
-      const aVal = getValue(a)
-      const bVal = getValue(b)
-      if (typeof aVal === 'number' && typeof bVal === 'number') return (aVal - bVal) * dir
-      return String(aVal).localeCompare(String(bVal)) * dir
-    })
-  }, [sort, filteredKrav])
+    if (!filteredKrav) return []
+    return filteredKrav
+  }, [filteredKrav])
 
   if (isLoading && !temaStats) {
     return (
@@ -838,57 +796,180 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             </div>
           </Tabs.Panel>
           <Tabs.Panel value='nokkeltall'>
-            <StickyHorizontalScroll>
-              <Table
-                className='mt-4 dashboard-table'
-                size='small'
-                zebraStripes
-                stickyHeader
-                sort={sort}
-                onSortChange={(sortKey) => handleSort(sort, setSort, sortKey)}
-              >
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader sortable sortKey='krav'>
-                      <span className='flex flex-col'>
-                        <span>Krav</span>
-                        <span className='font-normal'>(Lenker åpnes i ny fane)</span>
-                      </span>
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader sortable sortKey='etterlevelse' align='center'>
-                      Gjennomføringsstatus (krav)
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader sortable sortKey='underArbeid' align='center'>
-                      Under arbeid
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader sortable sortKey='ferdigVurdert' align='center'>
-                      Ferdig vurdert
-                    </Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {sortedKrav.map((krav) => (
-                    <Table.Row key={krav.kravId}>
-                      <Table.DataCell className='dashboard-cell-wide'>
-                        <Link href={`/krav/${krav.kravNummer}/${krav.kravVersjon}`} target='_blank'>
-                          {krav.kravNavn}
-                        </Link>
-                      </Table.DataCell>
-                      <Table.DataCell align='center'>{krav.etterlevelseTotal}</Table.DataCell>
-                      <Table.DataCell align='center'>{krav.antallUnderArbeid}</Table.DataCell>
-                      <Table.DataCell align='center'>{krav.antallFerdigVurdert}</Table.DataCell>
-                    </Table.Row>
-                  ))}
-                  {sortedKrav.length === 0 && (
-                    <Table.Row>
-                      <Table.DataCell colSpan={4}>
-                        <BodyShort className='text-gray-500'>Ingen krav for dette temaet</BodyShort>
-                      </Table.DataCell>
-                    </Table.Row>
-                  )}
-                </Table.Body>
-              </Table>
-            </StickyHorizontalScroll>
+            <div className='flex flex-col gap-6 mt-6'>
+              {sortedKrav.map((krav) => {
+                const kravTotal = krav.antallUnderArbeid + krav.antallFerdigVurdert
+                const kravPcts = roundedPercentages([
+                  krav.antallUnderArbeid,
+                  krav.antallFerdigVurdert,
+                ])
+                const totalSuksess =
+                  krav.antallSuksesskriterierUnderArbeid +
+                  krav.antallSuksesskriterierOppfylt +
+                  krav.antallSuksesskriterierIkkeOppfylt +
+                  krav.antallSuksesskriterierIkkeRelevant
+                const sukPcts = roundedPercentages([
+                  krav.antallSuksesskriterierUnderArbeid,
+                  krav.antallSuksesskriterierOppfylt,
+                  krav.antallSuksesskriterierIkkeOppfylt,
+                  krav.antallSuksesskriterierIkkeRelevant,
+                ])
+                const totalFerdig =
+                  krav.antallFerdigUtfyltKravSuksesskriterierOppfylt +
+                  krav.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt +
+                  krav.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant
+                const ferdigPcts = roundedPercentages([
+                  krav.antallFerdigUtfyltKravSuksesskriterierOppfylt,
+                  krav.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt,
+                  krav.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant,
+                ])
+                const ikkeFerdigUnderArbeid = krav.antallSuksesskriterierUnderArbeid
+                const ikkeFerdigOppfylt =
+                  krav.antallSuksesskriterierOppfylt -
+                  krav.antallFerdigUtfyltKravSuksesskriterierOppfylt
+                const ikkeFerdigIkkeOppfylt =
+                  krav.antallSuksesskriterierIkkeOppfylt -
+                  krav.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt
+                const ikkeFerdigIkkeRelevant =
+                  krav.antallSuksesskriterierIkkeRelevant -
+                  krav.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant
+                const totalIkkeFerdig =
+                  ikkeFerdigUnderArbeid +
+                  ikkeFerdigOppfylt +
+                  ikkeFerdigIkkeOppfylt +
+                  ikkeFerdigIkkeRelevant
+                const ikkeFerdigPcts = roundedPercentages([
+                  ikkeFerdigUnderArbeid,
+                  ikkeFerdigOppfylt,
+                  ikkeFerdigIkkeOppfylt,
+                  ikkeFerdigIkkeRelevant,
+                ])
+
+                return (
+                  <div key={krav.kravId} className='border border-gray-300 rounded-lg p-6 bg-white'>
+                    <Heading size='small' level='3'>
+                      {krav.kravNavn}
+                    </Heading>
+                    {krav.kravStatus === 'UTGAATT' && (
+                      <div className='mt-1'>
+                        <Tag variant='error' className='h-fit'>
+                          <Detail className='whitespace-nowrap'>Utgått uten ny versjon</Detail>
+                        </Tag>
+                      </div>
+                    )}
+                    <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
+                      <div>
+                        <BodyShort weight='semibold' className='mb-2'>
+                          Gjennomføringsstatus: krav ({kravTotal})
+                        </BodyShort>
+                        <BodyShort>
+                          Under arbeid <span className='font-bold'>{krav.antallUnderArbeid}</span>
+                          {kravTotal > 0 && ` (${formatPct(kravPcts[0], krav.antallUnderArbeid)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Ferdig vurdert{' '}
+                          <span className='font-bold'>{krav.antallFerdigVurdert}</span>
+                          {kravTotal > 0 &&
+                            ` (${formatPct(kravPcts[1], krav.antallFerdigVurdert)}%)`}
+                        </BodyShort>
+                      </div>
+                      <div>
+                        <BodyShort weight='semibold' className='mb-2'>
+                          Etterlevelse: suksesskriterier ({totalSuksess})
+                        </BodyShort>
+                        <BodyShort>
+                          Under arbeid{' '}
+                          <span className='font-bold'>
+                            {krav.antallSuksesskriterierUnderArbeid}
+                          </span>
+                          {totalSuksess > 0 &&
+                            ` (${formatPct(sukPcts[0], krav.antallSuksesskriterierUnderArbeid)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Oppfylt{' '}
+                          <span className='font-bold'>{krav.antallSuksesskriterierOppfylt}</span>
+                          {totalSuksess > 0 &&
+                            ` (${formatPct(sukPcts[1], krav.antallSuksesskriterierOppfylt)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Ikke oppfylt{' '}
+                          <span className='font-bold'>
+                            {krav.antallSuksesskriterierIkkeOppfylt}
+                          </span>
+                          {totalSuksess > 0 &&
+                            ` (${formatPct(sukPcts[2], krav.antallSuksesskriterierIkkeOppfylt)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Ikke relevant{' '}
+                          <span className='font-bold'>
+                            {krav.antallSuksesskriterierIkkeRelevant}
+                          </span>
+                          {totalSuksess > 0 &&
+                            ` (${formatPct(sukPcts[3], krav.antallSuksesskriterierIkkeRelevant)}%)`}
+                        </BodyShort>
+                      </div>
+                      <div>
+                        <BodyShort weight='semibold' className='mb-2'>
+                          Suksesskriterier der kravet er ferdig utfylt ({totalFerdig})
+                        </BodyShort>
+                        <BodyShort>
+                          Oppfylt{' '}
+                          <span className='font-bold'>
+                            {krav.antallFerdigUtfyltKravSuksesskriterierOppfylt}
+                          </span>
+                          {totalFerdig > 0 &&
+                            ` (${formatPct(ferdigPcts[0], krav.antallFerdigUtfyltKravSuksesskriterierOppfylt)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Ikke oppfylt{' '}
+                          <span className='font-bold'>
+                            {krav.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt}
+                          </span>
+                          {totalFerdig > 0 &&
+                            ` (${formatPct(ferdigPcts[1], krav.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Ikke relevant{' '}
+                          <span className='font-bold'>
+                            {krav.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant}
+                          </span>
+                          {totalFerdig > 0 &&
+                            ` (${formatPct(ferdigPcts[2], krav.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant)}%)`}
+                        </BodyShort>
+                      </div>
+                      <div>
+                        <BodyShort weight='semibold' className='mb-2'>
+                          Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdig})
+                        </BodyShort>
+                        <BodyShort>
+                          Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
+                          {totalIkkeFerdig > 0 &&
+                            ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigUnderArbeid)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Oppfylt <span className='font-bold'>{ikkeFerdigOppfylt}</span>
+                          {totalIkkeFerdig > 0 &&
+                            ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigOppfylt)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Ikke oppfylt <span className='font-bold'>{ikkeFerdigIkkeOppfylt}</span>
+                          {totalIkkeFerdig > 0 &&
+                            ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigIkkeOppfylt)}%)`}
+                        </BodyShort>
+                        <BodyShort>
+                          Ikke relevant <span className='font-bold'>{ikkeFerdigIkkeRelevant}</span>
+                          {totalIkkeFerdig > 0 &&
+                            ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeRelevant)}%)`}
+                        </BodyShort>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+              {sortedKrav.length === 0 && (
+                <BodyShort className='text-gray-500'>Ingen krav for dette temaet</BodyShort>
+              )}
+            </div>
           </Tabs.Panel>
         </Tabs>
       )}
