@@ -13,6 +13,7 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { ISuksesskriterie } from '@/constants/krav/kravConstants'
+import { env } from '@/util/env/env'
 import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
@@ -407,7 +408,9 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                 )}
               </div>
               <div className='block lg:flex lg:gap-6'>
-                <Radio value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</Radio>
+                {env.isDev && (
+                  <Radio value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</Radio>
+                )}
                 <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
                 <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
                 <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>

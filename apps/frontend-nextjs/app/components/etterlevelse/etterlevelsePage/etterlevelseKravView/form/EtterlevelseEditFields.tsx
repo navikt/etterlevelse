@@ -19,6 +19,7 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { env } from '@/util/env/env'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '@navikt/ds-react'
 import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
@@ -289,7 +290,35 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                               variant='secondary'
                               disabled={isSubmitting || disableEdit}
                               onClick={async () => {
-                                if (dirty) {
+                                if (env.isDev) {
+                                  if (dirty) {
+                                    if (
+                                      values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                                      !isOppfylesSenere
+                                    ) {
+                                      await setFieldValue(
+                                        'status',
+                                        EEtterlevelseStatus.UNDER_REDIGERING
+                                      )
+                                    } else if (isOppfylesSenere) {
+                                      await setFieldValue(
+                                        'status',
+                                        EEtterlevelseStatus.OPPFYLLES_SENERE
+                                      )
+                                    }
+                                    submitForm()
+                                  } else {
+                                    setTimeout(
+                                      () =>
+                                        router.push(
+                                          etterlevelseDokumentasjonIdUrl(
+                                            etterlevelseDokumentasjon?.id
+                                          )
+                                        ),
+                                      1
+                                    )
+                                  }
+                                } else {
                                   if (
                                     values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
                                     !isOppfylesSenere
@@ -305,16 +334,6 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                                     )
                                   }
                                   submitForm()
-                                } else {
-                                  setTimeout(
-                                    () =>
-                                      router.push(
-                                        etterlevelseDokumentasjonIdUrl(
-                                          etterlevelseDokumentasjon?.id
-                                        )
-                                      ),
-                                    1
-                                  )
                                 }
                               }}
                             >
