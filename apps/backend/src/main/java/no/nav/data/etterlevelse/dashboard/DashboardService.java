@@ -169,8 +169,6 @@ public class DashboardService {
                              }
                          }
 
-
-
                         var relevantMeldingTilPvo = pvkDokument.get().getPvkDokumentData().getMeldingerTilPvo().stream()
                                 .filter(melding -> melding.getInnsendingId() == pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo())
                                 .toList();
@@ -201,9 +199,7 @@ public class DashboardService {
                          dashboardTableResponse.setSistOppdatertPvk(lastModifiedDate);
                     }
 
-
                     //etterlevelseStats
-
                     LocalDateTime sistOppdatertEtterlevelse = LocalDateTime.of(2000, 1, 1, 0, 0);
 
                     var oppfyltEtterlevelseList = aktivEtterlevelserForDok.stream()
@@ -649,10 +645,17 @@ public class DashboardService {
                 .status(List.of(KravStatus.UTGAATT.name()))
                 .build());
 
-       List<Krav> utgaatKravUtenNyVersjon = utgaatKravList.stream().filter(utgaatKrav -> aktivKravList.stream().noneMatch(aktivKrav ->
-               aktivKrav.getKravNummer().equals(utgaatKrav.getKravNummer()) &&
-               aktivKrav.getKravVersjon().equals(utgaatKrav.getKravVersjon())
-       )).toList();
+        List<Krav> utgaatKravUtenNyVersjon = utgaatKravList.stream()
+                .filter(utgaatKrav -> aktivKravList.stream().noneMatch(aktivKrav ->
+                        aktivKrav.getKravNummer().equals(utgaatKrav.getKravNummer())
+                ))
+                .collect(Collectors.toMap(
+                        Krav::getKravNummer,
+                        k -> k,
+                        (olderKrav, newerKrav) -> newerKrav.getKravVersjon() >= olderKrav.getKravVersjon() ? newerKrav : olderKrav
+                ))
+                .values().stream()
+                .toList();
 
        List<KravDashboardResponse> kravDashboardStats = new ArrayList<>();
         List<Etterlevelse> alleEtterlevelse = new ArrayList<>();
@@ -673,6 +676,7 @@ public class DashboardService {
         kravList.forEach(krav -> {
             KravDashboardResponse kravDashboardResponse = KravDashboardResponse.builder()
                     .kravId(krav.getId())
+                    .kravStatus(krav.getStatus())
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
                     .kravNavn("K" +  krav.getKravNummer() + "." + krav.getKravVersjon() + " " + krav.getNavn())

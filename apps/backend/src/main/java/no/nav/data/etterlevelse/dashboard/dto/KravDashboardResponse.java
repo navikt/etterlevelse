@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
 
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class KravDashboardResponse {
     private UUID kravId;
     private String kravNavn;
+    private KravStatus kravStatus;
     private Integer kravNummer;
     private Integer kravVersjon;
 
