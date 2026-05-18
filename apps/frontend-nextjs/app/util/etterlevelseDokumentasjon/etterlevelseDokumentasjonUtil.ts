@@ -215,6 +215,10 @@ export const filterSuksesskriterieStatus = (
       return dataToFilter.filter((krav) =>
         suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.UNDER_ARBEID)
       )
+    case ESuksesskriterieStatus.IKKE_PAABEGYNT:
+      return dataToFilter.filter((krav) =>
+        suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.IKKE_PAABEGYNT)
+      )
     default:
       return dataToFilter
   }

@@ -44,4 +44,5 @@ export enum ESuksesskriterieStatus {
   OPPFYLT = 'OPPFYLT',
   IKKE_RELEVANT = 'IKKE_RELEVANT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+  IKKE_PAABEGYNT = 'IKKE_PAABEGYNT',
 }

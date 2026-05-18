@@ -289,21 +289,33 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                               variant='secondary'
                               disabled={isSubmitting || disableEdit}
                               onClick={async () => {
-                                if (
-                                  values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
-                                  !isOppfylesSenere
-                                ) {
-                                  await setFieldValue(
-                                    'status',
-                                    EEtterlevelseStatus.UNDER_REDIGERING
-                                  )
-                                } else if (isOppfylesSenere) {
-                                  await setFieldValue(
-                                    'status',
-                                    EEtterlevelseStatus.OPPFYLLES_SENERE
+                                if (dirty) {
+                                  if (
+                                    values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                                    !isOppfylesSenere
+                                  ) {
+                                    await setFieldValue(
+                                      'status',
+                                      EEtterlevelseStatus.UNDER_REDIGERING
+                                    )
+                                  } else if (isOppfylesSenere) {
+                                    await setFieldValue(
+                                      'status',
+                                      EEtterlevelseStatus.OPPFYLLES_SENERE
+                                    )
+                                  }
+                                  submitForm()
+                                } else {
+                                  setTimeout(
+                                    () =>
+                                      router.push(
+                                        etterlevelseDokumentasjonIdUrl(
+                                          etterlevelseDokumentasjon?.id
+                                        )
+                                      ),
+                                    1
                                   )
                                 }
-                                submitForm()
                               }}
                             >
                               {/* Lagre og fortsett til neste krav */}
