@@ -250,7 +250,6 @@ const OmStotteTilEtterlevelseAccordion = () => {
         <Accordion.Content>
           <div className='my-6'>
             <video controls src='videos/VisMegHvordanJegGodkjennerEtterlevelse.mov'>
-              {' '}
               <track kind='captions' />
             </video>
           </div>
