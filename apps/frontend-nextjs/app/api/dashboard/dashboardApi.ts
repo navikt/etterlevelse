@@ -4,6 +4,7 @@ import {
   IAvdelingDashboardStats,
   IDashboardDetailResponse,
   IDashboardTable,
+  IKravDashboardStats,
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { env } from '@/util/env/env'
@@ -42,6 +43,21 @@ export const getTemaDashboardStats = async (
   const query = params.toString()
   const response = await axios.get<ITemaDashboardStats[]>(
     `${env.backendBaseUrl}/dashboard/tema${query ? `?${query}` : ''}`
+  )
+  return response.data
+}
+
+export const getKravDashboardStats = async (
+  temaCode: string,
+  avdelingId?: string,
+  seksjonId?: string
+): Promise<IKravDashboardStats[]> => {
+  const params = new URLSearchParams()
+  if (avdelingId) params.set('avdelingId', avdelingId)
+  if (seksjonId) params.set('seksjonId', seksjonId)
+  const query = params.toString()
+  const response = await axios.get<IKravDashboardStats[]>(
+    `${env.backendBaseUrl}/dashboard/krav/${encodeURIComponent(temaCode)}${query ? `?${query}` : ''}`
   )
   return response.data
 }

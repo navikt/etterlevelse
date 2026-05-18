@@ -48,6 +48,24 @@ export interface ITemaDashboardStats {
   etterlevelseDokumentCount?: number
 }
 
+export interface IKravDashboardStats {
+  kravId: string
+  kravNavn: string
+  kravStatus: string
+  kravNummer: number
+  kravVersjon: number
+  etterlevelseTotal: number
+  antallUnderArbeid: number
+  antallFerdigVurdert: number
+  antallSuksesskriterierUnderArbeid: number
+  antallSuksesskriterierOppfylt: number
+  antallSuksesskriterierIkkeOppfylt: number
+  antallSuksesskriterierIkkeRelevant: number
+  antallFerdigUtfyltKravSuksesskriterierOppfylt: number
+  antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt: number
+  antallFerdigUtfyltKravSuksesskriterierIkkeRelevant: number
+}
+
 export interface IAvdelingDetailData {
   avdelingId: string
   avdelingNavn: string

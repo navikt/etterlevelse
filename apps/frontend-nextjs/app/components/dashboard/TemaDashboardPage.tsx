@@ -13,7 +13,16 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { DownloadIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
+import {
+  Link as AkselLink,
+  BodyShort,
+  Button,
+  Detail,
+  Heading,
+  LocalAlert,
+  Select,
+  Tabs,
+} from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import {
   IBarSegment,
@@ -196,6 +205,10 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
         </div>
       </div>
+
+      <AkselLink href={`/dashboard/tema/${stats.temaCode}`} className='mt-4 inline-block'>
+        Les mer om {stats.temaName}
+      </AkselLink>
     </div>
   )
 }
