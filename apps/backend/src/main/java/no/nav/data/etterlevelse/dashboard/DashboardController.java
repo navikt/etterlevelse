@@ -67,16 +67,25 @@ public class DashboardController {
     @ApiResponse(description = "ok")
     @GetMapping("/tema")
     public ResponseEntity<List<TemaDashboardResponse>> getTemaDashboardStats(
+            @RequestParam(required = false) String temaCode,
             @RequestParam(required = false) String avdelingId,
             @RequestParam(required = false) String seksjonId) {
         log.info("Getting tema dashboard stats avdelingId={} seksjonId={}", avdelingId, seksjonId);
-        return ResponseEntity.ok(dashboardService.getTemaDashboardStats(avdelingId, seksjonId));
+
+        if (temaCode != null && temaCode.isEmpty()) {
+            var tema = CodelistService.getCodelist(ListName.TEMA, temaCode);
+            if (tema == null) {
+                throw new ValidationException( "Invalid temaCode: " + temaCode);
+            }
+        }
+
+        return ResponseEntity.ok(dashboardService.getTemaDashboardStats(temaCode, avdelingId, seksjonId));
     }
 
     @Operation(summary = "Get tema dashboard stats")
     @ApiResponse(description = "ok")
     @GetMapping("/krav/{temaCode}")
-    public ResponseEntity<List<KravDashboardResponse>> getTemaDashboardStats(
+    public ResponseEntity<List<KravDashboardResponse>> getKravDashboardStats(
             @PathVariable String temaCode,
             @RequestParam(required = false) String avdelingId,
             @RequestParam(required = false) String seksjonId) {

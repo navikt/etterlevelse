@@ -484,7 +484,7 @@ public class DashboardService {
                 .build();
     }
 
-    public List<TemaDashboardResponse> getTemaDashboardStats(String avdelingId, String seksjonId) {
+    public List<TemaDashboardResponse> getTemaDashboardStats(String temaId ,String avdelingId, String seksjonId) {
         List<EtterlevelseDokumentasjon> doks;
 
         if (avdelingId != null && !avdelingId.isEmpty()) {
@@ -512,7 +512,16 @@ public class DashboardService {
         var dokIds = doks.stream().map(EtterlevelseDokumentasjon::getId).toList();
         var etterlevelseByDokId = etterlevelseService.getByEtterlevelseDokumentasjoner(dokIds);
 
-        var aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
+        List<Krav> aktivKrav;
+        if (temaId != null && !temaId.isEmpty()) {
+            var lovCodeForTema = CodelistService.getCodelist(ListName.LOV)
+                    .stream().filter(lov -> lov.getValueFromKeyData("tema").equals(temaId))
+                    .map(Codelist::getCode).toList();
+
+             aktivKrav = kravService.getByFilter(KravFilter.builder().lover(lovCodeForTema).status(List.of(KravStatus.AKTIV.name())).build());
+        } else {
+             aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
+        }
 
         Map<String, String> temaByKravKey = new HashMap<>();
         for (var krav : aktivKrav) {
