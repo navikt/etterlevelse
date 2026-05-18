@@ -663,31 +663,25 @@ public class DashboardService {
                 }
         );
 
-        aktivKravList.forEach(krav -> {
-              KravDashboardResponse kravDashboardResponse = KravDashboardResponse.builder()
-                     .kravNummer(krav.getKravNummer())
-                     .kravVersjon(krav.getKravVersjon())
-                     .kravNavn("K" +  krav.getKravNummer() + "." + krav.getKravVersjon() + " " + krav.getNavn())
-                     .build();
-
-              getKravStats(kravDashboardResponse, alleEtterlevelse);
-
-              kravDashboardStats.add(kravDashboardResponse);
-       });
-
-       utgaatKravUtenNyVersjon.forEach(krav -> {
-           KravDashboardResponse kravDashboardResponse = KravDashboardResponse.builder()
-                   .kravNummer(krav.getKravNummer())
-                   .kravVersjon(krav.getKravVersjon())
-                   .kravNavn("K" +  krav.getKravNummer() + "." + krav.getKravVersjon() + " " + krav.getNavn())
-                   .build();
-
-           getKravStats(kravDashboardResponse, alleEtterlevelse);
-
-           kravDashboardStats.add(kravDashboardResponse);
-       });
+        createKravDashboardCount(aktivKravList, kravDashboardStats, alleEtterlevelse);
+        createKravDashboardCount(utgaatKravUtenNyVersjon, kravDashboardStats, alleEtterlevelse);
 
        return kravDashboardStats;
+    }
+
+    private void createKravDashboardCount (List<Krav> kravList, List<KravDashboardResponse> kravDashboardStats, List<Etterlevelse> alleEtterlevelse) {
+        kravList.forEach(krav -> {
+            KravDashboardResponse kravDashboardResponse = KravDashboardResponse.builder()
+                    .kravId(krav.getId())
+                    .kravNummer(krav.getKravNummer())
+                    .kravVersjon(krav.getKravVersjon())
+                    .kravNavn("K" +  krav.getKravNummer() + "." + krav.getKravVersjon() + " " + krav.getNavn())
+                    .build();
+
+            getKravStats(kravDashboardResponse, alleEtterlevelse);
+
+            kravDashboardStats.add(kravDashboardResponse);
+        });
     }
 
     private void getKravStats (KravDashboardResponse kravDashboardResponse, List<Etterlevelse> alleEtterlevelse) {
