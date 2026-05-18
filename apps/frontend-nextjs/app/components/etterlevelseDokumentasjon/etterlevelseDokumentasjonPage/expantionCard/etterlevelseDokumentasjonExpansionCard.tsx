@@ -13,6 +13,7 @@ import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kod
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { p360Url } from '@/routes/p360/p360Routes'
+import { env } from '@/util/env/env'
 import { ettlevColors } from '@/util/theme/theme'
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
 import { BodyLong, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
@@ -170,17 +171,19 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               </BodyLong>
             </div>
 
-            <div className='mb-2.5'>
-              {ardoqSystemData.length > 0 && (
-                <ArdoqSystemerView ardoqSystemData={ardoqSystemData} link />
-              )}
-              {ardoqSystemData.length === 0 && (
-                <div className='flex flex-wrap gap-2 items-center'>
-                  <Label size='medium'>System:</Label>
-                  <BodyLong size='medium'>Ikke angitt</BodyLong>
-                </div>
-              )}
-            </div>
+            {env.isDev && (
+              <div className='mb-2.5'>
+                {ardoqSystemData.length > 0 && (
+                  <ArdoqSystemerView ardoqSystemData={ardoqSystemData} link />
+                )}
+                {ardoqSystemData.length === 0 && (
+                  <div className='flex flex-wrap gap-2 items-center'>
+                    <Label size='medium'>System:</Label>
+                    <BodyLong size='medium'>Ikke angitt</BodyLong>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className='mb-2.5'>
               {teams.length > 0 && <Teams teams={teams} link />}
