@@ -688,7 +688,7 @@ public class DashboardService {
                     .kravStatus(krav.getStatus())
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())
-                    .kravNavn("K" +  krav.getKravNummer() + "." + krav.getKravVersjon() + " " + krav.getNavn())
+                    .kravNavn(krav.getNavn())
                     .build();
 
             getKravStats(kravDashboardResponse, alleEtterlevelse);
