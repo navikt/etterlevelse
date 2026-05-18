@@ -53,6 +53,7 @@ public class DashboardTableResponse {
     private Integer antallRisikoscenario;
     private Integer antallHoyRisikoscenario;
     private Integer antallHoyRisikoEtterTiltak;
+    private Integer antallTiltak;
     private Integer antallIkkeIverksattTiltak;
     private Integer antallTiltakFristPassert;
     private LocalDateTime sistOppdatertPvk;

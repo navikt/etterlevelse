@@ -59,137 +59,174 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   }, [isPvkKravLoading, pvkKrav])
 
   return (
-    <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+    <div className='flex flex-1 flex-col gap-4 col-span-8'>
       <div className='flex justify-center'>
         <div className='max-w-[75ch]'>
-          <Heading level='1' size='medium' className='mb-5'>
-            Tilhørende dokumentasjon
-          </Heading>
+          <div>
+            <Heading level='1' size='medium' className='mb-5'>
+              Tilhørende dokumentasjon
+            </Heading>
 
-          {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+            {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+          </div>
+          <div className='mb-6'>
+            <Heading level='2' size='small' className='mb-1'>
+              Behandlinger i Behandlingskatalogen
+            </Heading>
 
-          <Heading level='2' size='small' className='mb-3'>
-            Behandlinger i Behandlingskatalogen
-          </Heading>
-
-          <BodyLong>
-            Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
-          </BodyLong>
-          {etterlevelseDokumentasjon.behandlinger &&
-            etterlevelseDokumentasjon.behandlinger.length !== 0 && (
-              <List as='ul'>
-                {etterlevelseDokumentasjon.behandlinger.map((behandling) => (
-                  <List.Item key={behandling.id}>
-                    <ExternalLink
-                      className='text-medium'
-                      href={behandlingskatalogenProcessUrl(getPollyBaseUrl(), behandling.id)}
-                    >
-                      {behandlingName(behandling)}
-                    </ExternalLink>
-                  </List.Item>
-                ))}
-              </List>
+            <BodyLong className='mb-2'>
+              Dere har koblet følgende behandlinger på denne etterlevelsesdokumentasjonen:
+            </BodyLong>
+            <div className='mb-2'>
+              {etterlevelseDokumentasjon.behandlinger &&
+                etterlevelseDokumentasjon.behandlinger.length !== 0 && (
+                  <List as='ul'>
+                    {etterlevelseDokumentasjon.behandlinger.map((behandling) => (
+                      <List.Item key={behandling.id}>
+                        <ExternalLink
+                          className='text-medium'
+                          href={behandlingskatalogenProcessUrl(getPollyBaseUrl(), behandling.id)}
+                        >
+                          {behandlingName(behandling)}
+                        </ExternalLink>
+                      </List.Item>
+                    ))}
+                  </List>
+                )}
+            </div>
+            {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
+              <Alert variant='warning' id='behandling-error' className='mb-2'>
+                Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere gjøre
+                under{' '}
+                <Link
+                  href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#behandling`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label='redigere etterlevelsesdokumentasjon'
+                >
+                  Rediger dokumentegenskaper (åpner i en ny fane)
+                </Link>
+              </Alert>
             )}
-          {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
-            <Alert variant='warning' id='behandling-error' className='my-5'>
-              Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere gjøre
-              under{' '}
-              <Link
-                href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#behandling`}
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label='redigere etterlevelsesdokumentasjon'
-              >
-                Rediger dokumentegenskaper (åpner i en ny fane)
-              </Link>
-            </Alert>
-          )}
 
-          {etterlevelseDokumentasjon.behandlinger?.length !== 0 && (
-            <BodyShort className='inline-block my-3 max-w-[75ch]'>
-              Dere kan redigere hvilke behandlinger som gjelder i{' '}
-              <Link
-                href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label='redigere etterlevelsesdokumentasjon'
-              >
-                Rediger dokumentegenskaper (åpner i en ny fane).
-              </Link>
-            </BodyShort>
-          )}
+            {etterlevelseDokumentasjon.behandlinger?.length !== 0 && (
+              <BodyShort className='inline-block max-w-[75ch]'>
+                Dere kan redigere hvilke behandlinger som gjelder i{' '}
+                <Link
+                  href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label='redigere etterlevelsesdokumentasjon'
+                >
+                  Rediger dokumentegenskaper (åpner i en ny fane).
+                </Link>
+              </BodyShort>
+            )}
+          </div>
 
-          <Heading level='2' size='small' className='mb-3 mt-5'>
-            PVK-relaterte etterlevelseskrav
-          </Heading>
+          <div className='mb-6'>
+            <Heading level='2' size='small' className='mb-1'>
+              PVK-relaterte etterlevelseskrav
+            </Heading>
 
-          <BodyLong>
-            Personvernkonsekvensvurdering forutsetter at dere har dokumentert etterlevelse ved alle
-            personvernkrav. Så langt har dere:
-          </BodyLong>
+            <BodyLong className='mb-2'>
+              Personvernkonsekvensvurdering forutsetter at dere har dokumentert etterlevelse ved
+              alle personvernkrav. Så langt har dere:
+            </BodyLong>
 
-          {!isPvkKravLoading && (
-            <List as='ul'>
-              <List.Item>
-                {antallFerdigPvkKrav} av {antallPvkKrav} krav er ferdig utfylt.
-              </List.Item>
-            </List>
-          )}
-
-          {isPvkKravLoading && <CenteredLoader />}
-
-          {antallFerdigPvkKrav !== antallPvkKrav && (
-            <Alert variant='warning' className='mt-1'>
-              Dere må fullføre dokumentering av personvernkrav før dere kan sende inn PVK.
-            </Alert>
-          )}
-
-          <Button
-            variant='secondary'
-            type='button'
-            className='my-5'
-            onClick={() => {
-              if (etterlevelseDokumentasjon)
-                router.push(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjon.id))
-            }}
-          >
-            Gå til PVK-relaterte krav
-          </Button>
-
-          <Heading level='2' size='small' className='mb-3 mt-5'>
-            Risiko- og sårbarhetsvurdering (ROS)
-          </Heading>
-
-          <BodyLong className='inline-block mb-5'>
-            Dersom dere har gjennomført en eller flere ROS, skal disse legges ved
-            etterlevelsesdokumentasjonen.
-          </BodyLong>
-
-          {etterlevelseDokumentasjon.risikovurderinger &&
-            etterlevelseDokumentasjon.risikovurderinger.length !== 0 && (
-              <div>
-                <BodyLong>Dere har koblet følgende dokumenter på dette dokumentet:</BodyLong>
-
-                <List>
-                  {etterlevelseDokumentasjon.risikovurderinger.map((ros: string) => {
-                    const rosReg: RegExp = /\[(.+)]\((.+)\)/i
-                    const rosParts: RegExpMatchArray | null = ros.match(rosReg)
-                    if (rosParts)
-                      return (
-                        <List.Item key={ros}>
-                          <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
-                        </List.Item>
-                      )
-                    return (
-                      <span className='flex' key={ros}>
-                        {ros}
-                      </span>
-                    )
-                  })}
+            <div className='mb-2'>
+              {!isPvkKravLoading && (
+                <List as='ul'>
+                  <List.Item>
+                    {antallFerdigPvkKrav} av {antallPvkKrav} krav er ferdig utfylt.
+                  </List.Item>
                 </List>
+              )}
+            </div>
 
-                <BodyLong className='mt-3 inline-block max-w-[75ch]'>
-                  Dere kan redigere hvilke risikovurderinger og dokumenter som gjelder i{' '}
+            {isPvkKravLoading && <CenteredLoader />}
+
+            {antallFerdigPvkKrav !== antallPvkKrav && (
+              <Alert variant='warning' className='mb-4'>
+                Dere må fullføre dokumentering av personvernkrav før dere kan sende inn PVK.
+              </Alert>
+            )}
+
+            <Button
+              variant='secondary'
+              type='button'
+              onClick={() => {
+                if (etterlevelseDokumentasjon)
+                  router.push(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjon.id))
+              }}
+            >
+              Gå til PVK-relaterte krav
+            </Button>
+          </div>
+
+          <div className='mb-6'>
+            <Heading level='2' size='small' className='mb-1'>
+              Risiko- og sårbarhetsvurdering (ROS)
+            </Heading>
+
+            <BodyLong className='mb-2 inline-block'>
+              Dersom dere har gjennomført en eller flere ROS, skal disse legges ved
+              etterlevelsesdokumentasjonen.
+            </BodyLong>
+
+            {etterlevelseDokumentasjon.risikovurderinger &&
+              etterlevelseDokumentasjon.risikovurderinger.length !== 0 && (
+                <div>
+                  <BodyLong>Dere har koblet følgende dokumenter på dette dokumentet:</BodyLong>
+
+                  <List>
+                    {etterlevelseDokumentasjon.risikovurderinger.map((ros: string) => {
+                      const rosReg: RegExp = /\[(.+)]\((.+)\)/i
+                      const rosParts: RegExpMatchArray | null = ros.match(rosReg)
+                      if (rosParts)
+                        return (
+                          <List.Item key={ros}>
+                            <ExternalLink href={rosParts[2]}>{rosParts[1]}</ExternalLink>
+                          </List.Item>
+                        )
+                      return (
+                        <span className='flex' key={ros}>
+                          {ros}
+                        </span>
+                      )
+                    })}
+                  </List>
+
+                  <BodyLong className='mb-2 inline-block max-w-[75ch]'>
+                    Dere kan redigere hvilke risikovurderinger og dokumenter som gjelder i{' '}
+                    <Link
+                      href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='redigere etterlevelsesdokumentasjon'
+                    >
+                      Rediger dokumentegenskaper (åpner i en ny fane).
+                    </Link>
+                  </BodyLong>
+                </div>
+              )}
+
+            <ReadMore
+              className='mb-3'
+              header='Må vi dokumentere samme risikoscenarioer i PVK som vi gjør i ROS?'
+            >
+              ROS skal identifisere risiko og sårbarhet knyttet til virksomheten og gjøres ofte på
+              systemnivå, mens PVK er risiko knyttet til personvern for den/de vi behandler
+              personopplysninger om. Overlapp vil da kunne skje når det gjelder risiko knyttet til
+              personopplysningssikkerhet. Det vil da holde å legge inn disse scenariene i ROS og så
+              legge inn lenke til ROS i eget felt for dette i etterlevelses-/PVK-dokumentasjonen.
+              PVO vil også se på ROS ved vurdering av PVK.
+            </ReadMore>
+
+            {!readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
+              <Alert variant='info'>
+                <BodyLong>
+                  Dere har ikke lagt ved noen tilhørende dokumenter. Dette kan dere gjøre under{' '}
                   <Link
                     href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
                     target='_blank'
@@ -199,42 +236,15 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                     Rediger dokumentegenskaper (åpner i en ny fane).
                   </Link>
                 </BodyLong>
-              </div>
+              </Alert>
             )}
 
-          <ReadMore
-            className='mt-3'
-            header='Må vi dokumentere samme risikoscenarioer i PVK som vi gjør i ROS?'
-          >
-            ROS skal identifisere risiko og sårbarhet knyttet til virksomheten og gjøres ofte på
-            systemnivå, mens PVK er risiko knyttet til personvern for den/de vi behandler
-            personopplysninger om. Overlapp vil da kunne skje når det gjelder risiko knyttet til
-            personopplysningssikkerhet. Det vil da holde å legge inn disse scenariene i ROS og så
-            legge inn lenke til ROS i eget felt for dette i etterlevelses-/PVK-dokumentasjonen. PVO
-            vil også se på ROS ved vurdering av PVK.
-          </ReadMore>
-
-          {!readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
-            <Alert variant='info' className='my-5'>
-              <BodyLong>
-                Dere har ikke lagt ved noen tilhørende dokumenter. Dette kan dere gjøre under{' '}
-                <Link
-                  href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='redigere etterlevelsesdokumentasjon'
-                >
-                  Rediger dokumentegenskaper (åpner i en ny fane).
-                </Link>
-              </BodyLong>
-            </Alert>
-          )}
-
-          {readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
-            <Alert variant='info' className='my-5'>
-              <BodyLong>Det er ikke lagt til noen dokumenter</BodyLong>
-            </Alert>
-          )}
+            {readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
+              <Alert variant='info'>
+                <BodyLong>Det er ikke lagt til noen dokumenter</BodyLong>
+              </Alert>
+            )}
+          </div>
         </div>
       </div>
     </div>

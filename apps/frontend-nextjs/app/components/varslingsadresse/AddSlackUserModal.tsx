@@ -66,9 +66,7 @@ export const AddSlackUserModal = (props: IProps) => {
           className='w-full'
         >
           <Radio value='meg'>Meg ({user.getName()})</Radio>
-          <Radio value='slack' className='w-full'>
-            Noen andre
-          </Radio>
+          <Radio value='slack'>Noen andre</Radio>
         </RadioGroup>
         {radioValue === 'slack' && (
           <div className='pl-8 w-full'>
