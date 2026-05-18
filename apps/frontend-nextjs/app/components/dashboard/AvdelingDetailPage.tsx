@@ -365,7 +365,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     <Table.Header>
                       <Table.Row>
                         <Table.ColumnHeader sortable sortKey='dok'>
-                          Etterlevelsesdokument
+                          <span className='flex flex-col'>
+                            <span>Etterlevelsesdokument</span>
+                            <span className='font-normal'>(Lenker åpnes i ny fane)</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='risikoeier'>
                           Risikoeier
@@ -383,7 +386,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Digital PVK status
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='behandlinger'>
-                          Behandlinger
+                          <span className='flex flex-col'>
+                            <span>Behandlinger</span>
+                            <span className='font-normal'>(Lenker åpnes i ny fane)</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='team'>
                           Team
@@ -487,7 +493,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     <Table.Header>
                       <Table.Row>
                         <Table.ColumnHeader sortable sortKey='dok'>
-                          Etterlevelsesdokument
+                          <span className='flex flex-col'>
+                            <span>Etterlevelsesdokument</span>
+                            <span className='font-normal'>(Lenker åpnes i ny fane)</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='risikoeier'>
                           Risikoeier
@@ -592,7 +601,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     <Table.Header>
                       <Table.Row>
                         <Table.ColumnHeader sortable sortKey='dok'>
-                          Etterlevelsesdokument
+                          <span className='flex flex-col'>
+                            <span>Etterlevelsesdokument</span>
+                            <span className='font-normal'>(Lenker åpnes i ny fane)</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='risikoeier'>
                           Risikoeier
