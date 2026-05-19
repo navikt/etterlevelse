@@ -278,8 +278,13 @@ export const getPvkTilstand = (
 }
 
 export const harBehandlinger = (ed: TEtterlevelseDokumentasjonQL) => {
+  return ed.behandlinger && ed.behandlinger.length > 0
+}
+
+export const harKunDpBehandlinger = (ed: TEtterlevelseDokumentasjonQL) => {
   return (
-    (ed.behandlinger && ed.behandlinger.length > 0) ||
-    (ed.dpBehandlinger && ed.dpBehandlinger.length > 0)
+    ((ed.behandlinger && ed.behandlinger.length === 0) || !ed.behandlinger) &&
+    ed.dpBehandlinger &&
+    ed.dpBehandlinger.length > 0
   )
 }
