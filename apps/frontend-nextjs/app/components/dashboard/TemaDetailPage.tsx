@@ -16,7 +16,7 @@ import {
 } from '@/constants/dashboard/dashboardConstants'
 import { DownloadIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs, Tag } from '@navikt/ds-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
   IBarSegment,
@@ -176,10 +176,18 @@ const exportKravToCsv = (
     'Ferdig utfylt krav suksesskriterier - ikke relevant',
   ].join(';')
 
+  const escapeCsvField = (field: string | number) => {
+    const str = String(field)
+    if (str.includes(';') || str.includes('"') || str.includes('\n')) {
+      return `"${str.replace(/"/g, '""')}"`
+    }
+    return str
+  }
+
   const rows = kravStats.map((k) =>
     [
-      k.kravNavn,
-      k.kravStatus,
+      escapeCsvField(k.kravNavn),
+      escapeCsvField(k.kravStatus),
       k.etterlevelseTotal,
       k.antallUnderArbeid,
       k.antallFerdigVurdert,
@@ -208,11 +216,18 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [kravStats, setKravStats] = useState<IKravDashboardStats[]>([])
   const [avdelinger, setAvdelinger] = useState<IAvdelingDashboardStats[]>([])
   const [seksjoner, setSeksjoner] = useState<ISeksjonOption[]>([])
+  const [kravSeksjoner, setKravSeksjoner] = useState<ISeksjonOption[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isKravLoading, setIsKravLoading] = useState(true)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
+  const [selectedKravAvdeling, setSelectedKravAvdeling] = useState<string>('')
+  const [selectedKravSeksjon, setSelectedKravSeksjon] = useState<string>('')
   const [selectedKrav] = useState<string>('')
+  const temaRequestId = useRef(0)
+  const kravRequestId = useRef(0)
+  const seksjonRequestId = useRef(0)
+  const kravSeksjonRequestId = useRef(0)
 
   useEffect(() => {
     getDashboardStats()
@@ -221,32 +236,80 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   }, [])
 
   useEffect(() => {
+    const requestId = ++temaRequestId.current
     setIsLoading(true)
     getTemaDashboardStats(temaCode, selectedAvdeling || undefined, selectedSeksjon || undefined)
       .then((data) => {
-        setTemaStats(data[0] || null)
+        if (requestId === temaRequestId.current) {
+          setTemaStats(data[0] || null)
+        }
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
-      .finally(() => setIsLoading(false))
+      .finally(() => {
+        if (requestId === temaRequestId.current) {
+          setIsLoading(false)
+        }
+      })
   }, [temaCode, selectedAvdeling, selectedSeksjon])
 
   useEffect(() => {
+    const requestId = ++kravRequestId.current
     setIsKravLoading(true)
-    getKravDashboardStats(temaCode, selectedAvdeling || undefined, selectedSeksjon || undefined)
-      .then(setKravStats)
+    getKravDashboardStats(
+      temaCode,
+      selectedKravAvdeling || undefined,
+      selectedKravSeksjon || undefined
+    )
+      .then((data) => {
+        if (requestId === kravRequestId.current) {
+          setKravStats(data)
+        }
+      })
       .catch((err) => console.error('Failed to fetch krav stats:', err))
-      .finally(() => setIsKravLoading(false))
-  }, [temaCode, selectedAvdeling, selectedSeksjon])
+      .finally(() => {
+        if (requestId === kravRequestId.current) {
+          setIsKravLoading(false)
+        }
+      })
+  }, [temaCode, selectedKravAvdeling, selectedKravSeksjon])
 
   useEffect(() => {
+    const requestId = ++seksjonRequestId.current
     if (selectedAvdeling) {
       getDashboardAvdelingStats(selectedAvdeling)
-        .then((data) => setSeksjoner(data.seksjoner || []))
-        .catch(() => setSeksjoner([]))
+        .then((data) => {
+          if (requestId === seksjonRequestId.current) {
+            setSeksjoner(data.seksjoner || [])
+          }
+        })
+        .catch(() => {
+          if (requestId === seksjonRequestId.current) {
+            setSeksjoner([])
+          }
+        })
     } else {
       setSeksjoner([])
     }
   }, [selectedAvdeling])
+
+  useEffect(() => {
+    const requestId = ++kravSeksjonRequestId.current
+    if (selectedKravAvdeling) {
+      getDashboardAvdelingStats(selectedKravAvdeling)
+        .then((data) => {
+          if (requestId === kravSeksjonRequestId.current) {
+            setKravSeksjoner(data.seksjoner || [])
+          }
+        })
+        .catch(() => {
+          if (requestId === kravSeksjonRequestId.current) {
+            setKravSeksjoner([])
+          }
+        })
+    } else {
+      setKravSeksjoner([])
+    }
+  }, [selectedKravAvdeling])
 
   const filteredKrav = useMemo(() => {
     if (!kravStats) return []
@@ -684,12 +747,12 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           label='Filtrer etter avdeling'
           className='sm:w-fit sm:min-w-64'
           style={{ width: '100%' }}
-          value={selectedAvdeling}
+          value={selectedKravAvdeling}
           onChange={(e) => {
-            setSelectedAvdeling(e.target.value)
-            setSelectedSeksjon('')
+            setSelectedKravAvdeling(e.target.value)
+            setSelectedKravSeksjon('')
             if (!e.target.value) {
-              setSeksjoner([])
+              setKravSeksjoner([])
             }
           }}
         >
@@ -703,18 +766,18 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
         {(() => {
           const avdelingNavn = avdelinger.find(
-            (a) => a.avdelingId === selectedAvdeling
+            (a) => a.avdelingId === selectedKravAvdeling
           )?.avdelingNavn
-          const filteredSeksjoner = seksjoner.filter(
+          const filteredSeksjoner = kravSeksjoner.filter(
             (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
           )
-          return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+          return selectedKravAvdeling && filteredSeksjoner.length > 0 ? (
             <Select
               label='Filtrer etter seksjon'
               className='sm:w-fit sm:min-w-64'
               style={{ width: '100%' }}
-              value={selectedSeksjon}
-              onChange={(e) => setSelectedSeksjon(e.target.value)}
+              value={selectedKravSeksjon}
+              onChange={(e) => setSelectedKravSeksjon(e.target.value)}
             >
               <option value=''>Alle seksjoner</option>
               {filteredSeksjoner.map((s) => (
@@ -732,8 +795,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           icon={<DownloadIcon aria-hidden />}
           onClick={() =>
             exportKravToCsv(filteredKrav, temaName, {
-              avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
-              seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+              avdeling: avdelinger.find((a) => a.avdelingId === selectedKravAvdeling)?.avdelingNavn,
+              seksjon: kravSeksjoner.find((s) => s.id === selectedKravSeksjon)?.navn,
             })
           }
           disabled={isKravLoading || filteredKrav.length === 0}
