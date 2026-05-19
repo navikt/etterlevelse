@@ -171,7 +171,17 @@ export const filterKravEtterlevelseStatus = (
           krav.etterlevelser[0].status === EEtterlevelseStatus.OPPFYLLES_SENERE
       )
     case '':
-      return dataToFilter.filter((krav) => krav.etterlevelser.length === 0)
+      return dataToFilter.filter(
+        (krav) =>
+          krav.etterlevelser.length === 0 ||
+          (krav.etterlevelser.length !== 0 &&
+            krav.etterlevelser[0].suksesskriterieBegrunnelser.length !== 0 &&
+            krav.etterlevelser[0].suksesskriterieBegrunnelser.every(
+              (suksesskriterieBegrunnelse) =>
+                suksesskriterieBegrunnelse.suksesskriterieStatus ===
+                ESuksesskriterieStatus.IKKE_PAABEGYNT
+            ))
+      )
     case EEtterlevelseStatus.FERDIG_DOKUMENTERT:
       return dataToFilter.filter(
         (krav) =>
