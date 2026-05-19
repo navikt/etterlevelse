@@ -245,7 +245,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
   useEffect(() => {
     const requestId = ++temaRequestId.current
-    setIsLoading(true)
     getTemaDashboardStats(temaCode, selectedAvdeling || undefined, selectedSeksjon || undefined)
       .then((data) => {
         if (requestId === temaRequestId.current) {
@@ -262,7 +261,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
   useEffect(() => {
     const requestId = ++kravRequestId.current
-    setIsKravLoading(true)
     getKravDashboardStats(
       temaCode,
       selectedKravAvdeling || undefined,
@@ -295,8 +293,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             setSeksjoner([])
           }
         })
-    } else {
-      setSeksjoner([])
     }
   }, [selectedAvdeling])
 
@@ -314,8 +310,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             setKravSeksjoner([])
           }
         })
-    } else {
-      setKravSeksjoner([])
     }
   }, [selectedKravAvdeling])
 
@@ -467,6 +461,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           onChange={(e) => {
             setSelectedAvdeling(e.target.value)
             setSelectedSeksjon('')
+            setIsLoading(true)
             if (!e.target.value) {
               setSeksjoner([])
             }
@@ -493,7 +488,10 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               className='sm:w-fit sm:min-w-64'
               style={{ width: '100%' }}
               value={selectedSeksjon}
-              onChange={(e) => setSelectedSeksjon(e.target.value)}
+              onChange={(e) => {
+                setSelectedSeksjon(e.target.value)
+                setIsLoading(true)
+              }}
             >
               <option value=''>Alle seksjoner</option>
               {filteredSeksjoner.map((s) => (
@@ -759,6 +757,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           onChange={(e) => {
             setSelectedKravAvdeling(e.target.value)
             setSelectedKravSeksjon('')
+            setIsKravLoading(true)
             if (!e.target.value) {
               setKravSeksjoner([])
             }
@@ -785,7 +784,10 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               className='sm:w-fit sm:min-w-64'
               style={{ width: '100%' }}
               value={selectedKravSeksjon}
-              onChange={(e) => setSelectedKravSeksjon(e.target.value)}
+              onChange={(e) => {
+                setSelectedKravSeksjon(e.target.value)
+                setIsKravLoading(true)
+              }}
             >
               <option value=''>Alle seksjoner</option>
               {filteredSeksjoner.map((s) => (
