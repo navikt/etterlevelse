@@ -105,9 +105,7 @@ export const mapEtterlevelseToFormValue = (
           suksesskriterieId: suksesskriterium.id,
           behovForBegrunnelse: suksesskriterium.behovForBegrunnelse,
           begrunnelse: '',
-          suksesskriterieStatus: env.isDev
-            ? ESuksesskriterieStatus.IKKE_PAABEGYNT
-            : ESuksesskriterieStatus.UNDER_ARBEID,
+          suksesskriterieStatus: ESuksesskriterieStatus.IKKE_PAABEGYNT,
           veiledning: false,
           veiledningsTekst: '',
           veiledningsTekst2: '',
