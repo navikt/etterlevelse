@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.dashboard.dto.*;
+import no.nav.data.etterlevelse.kravprioritylist.KravPriorityListService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,7 @@ public class DashboardService {
     private final NomGraphClient nomGraphClient;
     private final RisikoscenarioService risikoscenarioService;
     private final TiltakService tiltakService;
+    private final KravPriorityListService kravPriorityListService;
 
     public List<DashboardResponse> getDashboardStats() {
         var avdelinger = nomGraphClient.getAllAvdelinger().stream().sorted(Comparator.comparing(OrgEnhet::getNavn)).toList();
@@ -644,18 +646,38 @@ public class DashboardService {
                 .stream().filter(lov -> lov.getValueFromKeyData("tema").equals(temaCode))
                 .map(Codelist::getCode).toList();
 
-       List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder()
+
+        var priorityList = kravPriorityListService.getByTema(temaCode);
+
+        List<Integer> prioritizedKrav;
+
+        if (priorityList.isPresent()) {
+            prioritizedKrav = priorityList.get().getPriorityList();
+        } else {
+            prioritizedKrav = new ArrayList<>();
+        }
+
+        List<Krav> aktivKravList = kravService.getByFilter(KravFilter.builder()
                .lover(lovCodeForTema)
                .status(List.of(KravStatus.AKTIV.name()))
                .build());
+
+        if (!prioritizedKrav.isEmpty()) {
+            aktivKravList = aktivKravList.stream()
+                    .sorted(Comparator
+                            .comparingInt((Krav k) -> prioritizedKrav.indexOf(k.getKravNummer()))
+                            .thenComparingInt(Krav::getKravNummer))
+                    .toList();
+        }
 
        List<Krav> utgaatKravList = kravService.getByFilter(KravFilter.builder()
                 .lover(lovCodeForTema)
                 .status(List.of(KravStatus.UTGAATT.name()))
                 .build());
 
+        List<Krav> finalAktivKravList = aktivKravList;
         List<Krav> utgaatKravUtenNyVersjon = utgaatKravList.stream()
-                .filter(utgaatKrav -> aktivKravList.stream().noneMatch(aktivKrav ->
+                .filter(utgaatKrav -> finalAktivKravList.stream().noneMatch(aktivKrav ->
                         aktivKrav.getKravNummer().equals(utgaatKrav.getKravNummer())
                 ))
                 .collect(Collectors.toMap(
