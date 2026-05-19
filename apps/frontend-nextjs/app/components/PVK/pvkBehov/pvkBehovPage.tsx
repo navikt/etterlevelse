@@ -18,7 +18,10 @@ import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import {
+  harBehandlinger,
+  isReadOnlyPvkStatus,
+} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Heading } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams } from 'next/navigation'
@@ -159,8 +162,7 @@ export const PvkBehovPage = () => {
               behandlingensLivslop={behandlingensLivslop}
               artOgOmfangId={artOgOmfang?.id}
             />
-            {etterlevelseDokumentasjon.behandlinger &&
-              etterlevelseDokumentasjon.behandlinger.length > 0 &&
+            {harBehandlinger(etterlevelseDokumentasjon) &&
               (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
               !isReadOnlyPvkStatus(pvkDokument.status) &&
               !isPvkBehovLock && (

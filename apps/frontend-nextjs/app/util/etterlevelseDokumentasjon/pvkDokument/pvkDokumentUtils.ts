@@ -1,4 +1,5 @@
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
   EPvkDokumentStatus,
@@ -274,4 +275,11 @@ export const getPvkTilstand = (
   } else {
     return ''
   }
+}
+
+export const harBehandlinger = (ed: TEtterlevelseDokumentasjonQL) => {
+  return (
+    (ed.behandlinger && ed.behandlinger.length > 0) ||
+    (ed.dpBehandlinger && ed.dpBehandlinger.length > 0)
+  )
 }

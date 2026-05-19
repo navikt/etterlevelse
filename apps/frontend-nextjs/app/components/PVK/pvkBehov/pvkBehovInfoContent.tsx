@@ -8,6 +8,7 @@ import {
   pvkDokumentasjonBehandlingsenLivslopUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
+import { harBehandlinger } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
 
@@ -45,8 +46,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
         </Heading>
       )}
 
-      {(!etterlevelseDokumentasjon.behandlinger ||
-        etterlevelseDokumentasjon.behandlinger.length === 0) && (
+      {!harBehandlinger(etterlevelseDokumentasjon) && (
         <div>
           {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
             <Alert variant='warning' className='mb-5'>
@@ -70,8 +70,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
       )}
 
       {etterlevelseDokumentasjon &&
-        etterlevelseDokumentasjon.behandlinger &&
-        etterlevelseDokumentasjon.behandlinger.length > 0 &&
+        harBehandlinger(etterlevelseDokumentasjon) &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <BodyShort>
             Disse egenskapene blir enklere å vurdere hvis{' '}
@@ -102,55 +101,52 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           </BodyShort>
         )}
 
-      {etterlevelseDokumentasjon.behandlinger &&
-        etterlevelseDokumentasjon.behandlinger.length > 0 && (
-          <>
-            <List className='py-5'>
-              <div className='pb-3'>
-                <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
-              </div>
-              {profilering !== null && (
-                <List.Item>
-                  <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering
-                </List.Item>
-              )}
-
-              {automatiskBehandling !== null && (
-                <List.Item>
-                  <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong>{' '}
-                  helautomatisert behandling
-                </List.Item>
-              )}
-
-              {!opplysningstyperMangler && (
-                <List.Item>
-                  <strong>Det {saerligKategorier ? 'gjelder' : 'gjelder ikke'}</strong> særlige
-                  kategorier av personopplysninger
-                </List.Item>
-              )}
-            </List>
-
-            {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
-              <Alert variant='warning'>
-                Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
-                <List>
-                  {profilering === null && <List.Item>Profilering</List.Item>}
-                  {automatiskBehandling === null && (
-                    <List.Item>Helautomatisert behandling</List.Item>
-                  )}
-                  {opplysningstyperMangler && (
-                    <List.Item>Særlige kategorier av personopplysninger</List.Item>
-                  )}
-                </List>
-                Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
-                <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
-                  Behandlingskatalogen
-                </ExternalLink>{' '}
-                før dere vurderer behov for PVK.
-              </Alert>
+      {harBehandlinger(etterlevelseDokumentasjon) && (
+        <>
+          <List className='py-5'>
+            <div className='pb-3'>
+              <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+            </div>
+            {profilering !== null && (
+              <List.Item>
+                <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering
+              </List.Item>
             )}
-          </>
-        )}
+
+            {automatiskBehandling !== null && (
+              <List.Item>
+                <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong>{' '}
+                helautomatisert behandling
+              </List.Item>
+            )}
+
+            {!opplysningstyperMangler && (
+              <List.Item>
+                <strong>Det {saerligKategorier ? 'gjelder' : 'gjelder ikke'}</strong> særlige
+                kategorier av personopplysninger
+              </List.Item>
+            )}
+          </List>
+
+          {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
+            <Alert variant='warning'>
+              Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
+              <List>
+                {profilering === null && <List.Item>Profilering</List.Item>}
+                {automatiskBehandling === null && <List.Item>Helautomatisert behandling</List.Item>}
+                {opplysningstyperMangler && (
+                  <List.Item>Særlige kategorier av personopplysninger</List.Item>
+                )}
+              </List>
+              Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
+              <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
+                Behandlingskatalogen
+              </ExternalLink>{' '}
+              før dere vurderer behov for PVK.
+            </Alert>
+          )}
+        </>
+      )}
     </>
   )
 }
