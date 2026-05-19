@@ -6,7 +6,7 @@ import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
-import { Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
+import { Heading, LinkCard, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
@@ -87,6 +87,14 @@ const DashboardPage = () => {
               </div>
             </Tabs.Panel>
           </Tabs>
+
+          <LinkCard className='mt-8 max-w-md' data-color='accent'>
+            <LinkCard.Title>
+              <LinkCard.Anchor href='/dashboard/tema'>
+                Se etterlevelse inndelt etter tema
+              </LinkCard.Anchor>
+            </LinkCard.Title>
+          </LinkCard>
 
           <Heading size='medium' level='2' className='mt-8'>
             Avdelingoversikt

@@ -13,8 +13,18 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { DownloadIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
+import {
+  Link as AkselLink,
+  BodyShort,
+  Button,
+  Detail,
+  Heading,
+  LocalAlert,
+  Select,
+  Tabs,
+} from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import { RechartsStackedBar } from './RechartsStackedBar'
 import {
   IBarSegment,
   KRAV_COLORS,
@@ -22,66 +32,6 @@ import {
   formatPct,
   roundedPercentages,
 } from './chartUtils'
-
-const RechartsStackedBar = ({
-  data,
-  showPercentage,
-  percentageOnly,
-}: {
-  data: IBarSegment[]
-  showPercentage?: boolean
-  percentageOnly?: boolean
-}) => {
-  const total = data.reduce((sum, d) => sum + d.value, 0)
-
-  if (total === 0) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
-
-  const pcts = roundedPercentages(data.map((d) => d.value))
-
-  return (
-    <div style={{ marginTop: '12px', maxWidth: '500px' }}>
-      <div style={{ display: 'flex', height: 32, borderRadius: 4, overflow: 'hidden' }}>
-        {data
-          .filter((d) => d.value > 0)
-          .map((d) => (
-            <div
-              key={d.name}
-              style={{
-                width: `${(d.value / total) * 100}%`,
-                backgroundColor: d.color,
-                transition: 'width 0.3s',
-              }}
-            />
-          ))}
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-        {data.map((d, i) => (
-          <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span
-              style={{
-                display: 'inline-block',
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                backgroundColor: d.color,
-                flexShrink: 0,
-              }}
-            />
-            <BodyShort size='small'>
-              {d.name}{' '}
-              <strong>
-                {percentageOnly
-                  ? `${formatPct(pcts[i], d.value)}%`
-                  : `${d.value}${showPercentage ? ` (${formatPct(pcts[i], d.value)}%)` : ''}`}
-              </strong>
-            </BodyShort>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 const TemaDokumentCount = ({ count }: { count?: number }) => (
   <Detail uppercase className='mt-2 mb-4'>
@@ -196,6 +146,10 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
         </div>
       </div>
+
+      <AkselLink href={`/dashboard/tema/${stats.temaCode}`} className='mt-4 inline-block'>
+        Les mer om {stats.temaName}
+      </AkselLink>
     </div>
   )
 }
@@ -404,6 +358,10 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     'Ferdig utfylt krav - suksesskriterier oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke relevant',
+    'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
+    'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
   ].join(';')
 
   const rows = stats.map((s) =>
@@ -419,6 +377,10 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
       s.ferdigUtfyltKravSuksesskriterierOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeRelevant,
+      s.suksesskriterierUnderArbeid,
+      s.suksesskriterierOppfylt - (s.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
+      s.suksesskriterierIkkeOppfylt - (s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
+      s.suksesskriterierIkkeRelevant - (s.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
     ].join(';')
   )
 
@@ -448,7 +410,7 @@ const TemaDashboardPage = () => {
   }, [])
 
   useEffect(() => {
-    getTemaDashboardStats(selectedAvdeling || undefined, selectedSeksjon || undefined)
+    getTemaDashboardStats(undefined, selectedAvdeling || undefined, selectedSeksjon || undefined)
       .then((data) => {
         setTemaStats(data)
         setSelectedTema((prev) => (prev && !data.some((d) => d.temaCode === prev) ? '' : prev))
