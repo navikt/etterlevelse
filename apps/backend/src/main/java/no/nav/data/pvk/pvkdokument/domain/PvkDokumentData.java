@@ -19,6 +19,8 @@ public class PvkDokumentData {
 
     @Builder.Default
     private Integer antallInnsendingTilPvo = 0;
+    private boolean dpProfilering;
+    private boolean dpHelautomatiskBehandling;
     private List<String> ytterligereEgenskaper;
 
     @Enumerated(EnumType.STRING)

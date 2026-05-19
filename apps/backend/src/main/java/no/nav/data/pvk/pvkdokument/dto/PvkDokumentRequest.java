@@ -30,6 +30,8 @@ public class PvkDokumentRequest implements RequestElement {
     private UUID etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
+    private boolean dpProfilering;
+    private boolean dpHelautomatiskBehandling;
     private List<String> ytterligereEgenskaper;
 
     private PvkVurdering pvkVurdering;
@@ -84,6 +86,8 @@ public class PvkDokumentRequest implements RequestElement {
 
     public PvkDokument convertToPvkDokument() {
         var pkvDokumentData = PvkDokumentData.builder()
+                .dpProfilering(dpProfilering)
+                .dpHelautomatiskBehandling(dpHelautomatiskBehandling)
                 .ytterligereEgenskaper(copyOf(ytterligereEgenskaper))
                 .pvkVurdering(pvkVurdering)
                 .pvkVurderingsBegrunnelse(pvkVurderingsBegrunnelse)
@@ -111,6 +115,8 @@ public class PvkDokumentRequest implements RequestElement {
     public void mergeInto(PvkDokument pvkDokumentToMerge) {
         pvkDokumentToMerge.setEtterlevelseDokumentId(etterlevelseDokumentId);
         pvkDokumentToMerge.setStatus(status);
+        pvkDokumentToMerge.getPvkDokumentData().setDpProfilering(dpProfilering);
+        pvkDokumentToMerge.getPvkDokumentData().setDpHelautomatiskBehandling(dpHelautomatiskBehandling);
         pvkDokumentToMerge.getPvkDokumentData().setYtterligereEgenskaper(copyOf(ytterligereEgenskaper));
         pvkDokumentToMerge.getPvkDokumentData().setPvkVurdering(pvkVurdering);
         pvkDokumentToMerge.getPvkDokumentData().setBerOmNyVurderingFraPvo(berOmNyVurderingFraPvo);
