@@ -502,6 +502,69 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               </Select>
             ) : null
           })()}
+
+          <Button
+            variant='tertiary'
+            size='small'
+            icon={<DownloadIcon aria-hidden />}
+            onClick={() => {
+              if (!temaStats) return
+              const BOM = '\uFEFF'
+              const filterLines = [
+                `Tema;${temaName}`,
+                `Avdeling;${avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn || 'Alle avdelinger'}`,
+                `Seksjon;${seksjoner.find((s) => s.id === selectedSeksjon)?.navn || 'Alle seksjoner'}`,
+                '',
+              ]
+              const header = [
+                'Krav totalt',
+                'Krav under arbeid',
+                'Krav ferdig vurdert',
+                'Suksesskriterier under arbeid',
+                'Suksesskriterier oppfylt',
+                'Suksesskriterier ikke oppfylt',
+                'Suksesskriterier ikke relevant',
+                'Ferdig utfylt krav - suksesskriterier oppfylt',
+                'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
+                'Ferdig utfylt krav - suksesskriterier ikke relevant',
+                'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
+                'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
+                'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
+                'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
+              ].join(';')
+              const row = [
+                temaStats.kravTotal,
+                temaStats.kravUnderArbeid,
+                temaStats.kravFerdigVurdert,
+                temaStats.suksesskriterierUnderArbeid,
+                temaStats.suksesskriterierOppfylt,
+                temaStats.suksesskriterierIkkeOppfylt,
+                temaStats.suksesskriterierIkkeRelevant,
+                temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
+                temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
+                temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
+                temaStats.suksesskriterierUnderArbeid,
+                temaStats.suksesskriterierOppfylt -
+                  (temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
+                temaStats.suksesskriterierIkkeOppfylt -
+                  (temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
+                temaStats.suksesskriterierIkkeRelevant -
+                  (temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
+              ].join(';')
+              const csv = BOM + [...filterLines, header, row].join('\n')
+              const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+              const url = URL.createObjectURL(blob)
+              const link = document.createElement('a')
+              link.href = url
+              link.download = `overordnet-${temaName}-${new Date().toISOString().slice(0, 10)}.csv`
+              link.click()
+              URL.revokeObjectURL(url)
+            }}
+            disabled={isLoading || !temaStats}
+            className='pr-4'
+          >
+            Last ned utvalg som CSV
+          </Button>
         </div>
 
         {temaStats && (
