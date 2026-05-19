@@ -150,19 +150,28 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
 const exportKravToCsv = (kravStats: IKravDashboardStats[], temaName: string) => {
   const BOM = '\uFEFF'
   const header = [
-    'Krav',
-    'Gjennomføringsstatus (krav)',
-    'Under arbeid',
-    'Ferdig vurdert',
-    'Suksesskriterier under arbeid',
-    'Suksesskriterier oppfylt',
-    'Suksesskriterier ikke oppfylt',
-    'Suksesskriterier ikke relevant',
+    'Kravnummer',
+    'Versjon',
+    'Kravnavn',
+    'Status',
+    'Antall etterlevelser totalt',
+    'Etterlevelser under arbeid',
+    'Etterlevelser ferdig vurdert',
+    'Alle suksesskriterier - under arbeid',
+    'Alle suksesskriterier - oppfylt',
+    'Alle suksesskriterier - ikke oppfylt',
+    'Alle suksesskriterier - ikke relevant',
+    'Ferdig utfylt krav suksesskriterier - oppfylt',
+    'Ferdig utfylt krav suksesskriterier - ikke oppfylt',
+    'Ferdig utfylt krav suksesskriterier - ikke relevant',
   ].join(';')
 
   const rows = kravStats.map((k) =>
     [
+      k.kravNummer,
+      k.kravVersjon,
       k.kravNavn,
+      k.kravStatus,
       k.etterlevelseTotal,
       k.antallUnderArbeid,
       k.antallFerdigVurdert,
@@ -170,6 +179,9 @@ const exportKravToCsv = (kravStats: IKravDashboardStats[], temaName: string) => 
       k.antallSuksesskriterierOppfylt,
       k.antallSuksesskriterierIkkeOppfylt,
       k.antallSuksesskriterierIkkeRelevant,
+      k.antallFerdigUtfyltKravSuksesskriterierOppfylt,
+      k.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt,
+      k.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant,
     ].join(';')
   )
 
