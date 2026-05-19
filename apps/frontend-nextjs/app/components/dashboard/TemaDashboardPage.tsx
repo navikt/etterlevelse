@@ -358,6 +358,10 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     'Ferdig utfylt krav - suksesskriterier oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke relevant',
+    'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
+    'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
   ].join(';')
 
   const rows = stats.map((s) =>
@@ -373,6 +377,10 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
       s.ferdigUtfyltKravSuksesskriterierOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeRelevant,
+      s.suksesskriterierUnderArbeid,
+      s.suksesskriterierOppfylt - (s.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
+      s.suksesskriterierIkkeOppfylt - (s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
+      s.suksesskriterierIkkeRelevant - (s.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
     ].join(';')
   )
 

@@ -174,6 +174,10 @@ const exportKravToCsv = (
     'Ferdig utfylt krav suksesskriterier - oppfylt',
     'Ferdig utfylt krav suksesskriterier - ikke oppfylt',
     'Ferdig utfylt krav suksesskriterier - ikke relevant',
+    'Ikke ferdig utfylt krav suksesskriterier - under arbeid',
+    'Ikke ferdig utfylt krav suksesskriterier - oppfylt',
+    'Ikke ferdig utfylt krav suksesskriterier - ikke oppfylt',
+    'Ikke ferdig utfylt krav suksesskriterier - ikke relevant',
   ].join(';')
 
   const escapeCsvField = (field: string | number) => {
@@ -198,6 +202,10 @@ const exportKravToCsv = (
       k.antallFerdigUtfyltKravSuksesskriterierOppfylt,
       k.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt,
       k.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant,
+      k.antallSuksesskriterierUnderArbeid,
+      k.antallSuksesskriterierOppfylt - k.antallFerdigUtfyltKravSuksesskriterierOppfylt,
+      k.antallSuksesskriterierIkkeOppfylt - k.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt,
+      k.antallSuksesskriterierIkkeRelevant - k.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant,
     ].join(';')
   )
 
