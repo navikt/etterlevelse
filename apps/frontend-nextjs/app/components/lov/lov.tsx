@@ -201,7 +201,7 @@ export const lovdataBase = (
   } else if (codelist.utils.isRundskriv(nationalLaw)) {
     return env.lovdataRundskrivBaseUrl + lovId
   } else if (codelist.utils.isRettskilde(nationalLaw)) {
-    const base = env.lovdataRettskildeBaseUrl.replace('%23', '#').replace(/\/#document.*/, '')
+    const base = env.lovdataRettskildeBaseUrl.replace(/%23/g, '#').replace(/\/#document.*/, '')
     return `${base}/#document/${lovId}`
   } else {
     return env.lovdataLovBaseUrl + lovId
