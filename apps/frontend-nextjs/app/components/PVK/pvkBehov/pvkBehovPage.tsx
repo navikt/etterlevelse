@@ -112,10 +112,22 @@ export const PvkBehovPage = () => {
         'code'
       ).filter((kategori: IExternalCode) => kategori.code === 'SAERLIGE')
 
+      let dpBehandlingSaerligKategorier = false
+
+      if (
+        etterlevelseDokumentasjon.dpBehandlinger &&
+        etterlevelseDokumentasjon.dpBehandlinger.length > 0
+      ) {
+        etterlevelseDokumentasjon.dpBehandlinger.forEach((dpBehandling) => {
+          if (dpBehandling.art9) {
+            dpBehandlingSaerligKategorier = true
+          }
+        })
+      }
       return {
         profilering,
         automatiskBehandling,
-        saerligKategorier: saerligKategorierOppsumert.length > 0,
+        saerligKategorier: saerligKategorierOppsumert.length > 0 || dpBehandlingSaerligKategorier,
         opplysningstyperMangler,
       }
     }, [etterlevelseDokumentasjon])
