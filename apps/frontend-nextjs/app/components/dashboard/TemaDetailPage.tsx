@@ -162,8 +162,6 @@ const exportKravToCsv = (
   ]
 
   const header = [
-    'Kravnummer',
-    'Versjon',
     'Kravnavn',
     'Status',
     'Antall etterlevelser totalt',
@@ -180,8 +178,6 @@ const exportKravToCsv = (
 
   const rows = kravStats.map((k) =>
     [
-      k.kravNummer,
-      k.kravVersjon,
       k.kravNavn,
       k.kravStatus,
       k.etterlevelseTotal,
