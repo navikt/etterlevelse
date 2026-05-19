@@ -88,7 +88,11 @@ const DashboardPage = () => {
             </Tabs.Panel>
           </Tabs>
 
-          <LinkCard className='mt-8 max-w-md' data-color='accent'>
+          <LinkCard
+            className='mt-8 max-w-md'
+            data-color='accent'
+            style={{ color: 'var(--ax-text-subtle)' }}
+          >
             <LinkCard.Title>
               <LinkCard.Anchor href='/dashboard/tema'>
                 Se etterlevelse inndelt etter tema

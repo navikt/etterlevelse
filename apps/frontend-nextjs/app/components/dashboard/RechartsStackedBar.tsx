@@ -18,7 +18,10 @@ export const RechartsStackedBar = ({
 
   return (
     <div style={{ marginTop: '12px', maxWidth: '500px' }}>
-      <div style={{ display: 'flex', height: 32, borderRadius: 4, overflow: 'hidden' }}>
+      <div
+        style={{ display: 'flex', height: 32, borderRadius: 4, overflow: 'hidden' }}
+        aria-hidden='true'
+      >
         {data
           .filter((d) => d.value > 0)
           .map((d) => (

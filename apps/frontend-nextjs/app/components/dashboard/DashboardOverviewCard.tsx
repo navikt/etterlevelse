@@ -33,13 +33,14 @@ const OverviewStackedBar = ({
           layout='vertical'
           data={chartData}
           margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          tabIndex={-1}
         >
           <XAxis type='number' hide />
           <YAxis type='category' hide />
           {data
             .filter((d) => d.value > 0)
             .map((d) => (
-              <Bar key={d.name} dataKey={d.name} stackId='stack' fill={d.color} />
+              <Bar key={d.name} dataKey={d.name} stackId='stack' fill={d.color} tabIndex={-1} />
             ))}
         </BarChart>
       </ResponsiveContainer>

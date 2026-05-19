@@ -103,6 +103,11 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
+      <Detail>
+        <strong>
+          K{krav.kravNummer}.{krav.kravVersjon}
+        </strong>
+      </Detail>
       <Heading size='small' level='3'>
         {krav.kravNavn}
       </Heading>
@@ -450,7 +455,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
-          Overordnet for temaet
+          Overordnet for {temaName}
         </Heading>
         <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
           <Select
@@ -502,6 +507,69 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               </Select>
             ) : null
           })()}
+
+          <Button
+            variant='tertiary'
+            size='small'
+            icon={<DownloadIcon aria-hidden />}
+            onClick={() => {
+              if (!temaStats) return
+              const BOM = '\uFEFF'
+              const filterLines = [
+                `Tema;${temaName}`,
+                `Avdeling;${avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn || 'Alle avdelinger'}`,
+                `Seksjon;${seksjoner.find((s) => s.id === selectedSeksjon)?.navn || 'Alle seksjoner'}`,
+                '',
+              ]
+              const header = [
+                'Krav totalt',
+                'Krav under arbeid',
+                'Krav ferdig vurdert',
+                'Suksesskriterier under arbeid',
+                'Suksesskriterier oppfylt',
+                'Suksesskriterier ikke oppfylt',
+                'Suksesskriterier ikke relevant',
+                'Ferdig utfylt krav - suksesskriterier oppfylt',
+                'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
+                'Ferdig utfylt krav - suksesskriterier ikke relevant',
+                'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
+                'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
+                'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
+                'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
+              ].join(';')
+              const row = [
+                temaStats.kravTotal,
+                temaStats.kravUnderArbeid,
+                temaStats.kravFerdigVurdert,
+                temaStats.suksesskriterierUnderArbeid,
+                temaStats.suksesskriterierOppfylt,
+                temaStats.suksesskriterierIkkeOppfylt,
+                temaStats.suksesskriterierIkkeRelevant,
+                temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
+                temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
+                temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
+                temaStats.suksesskriterierUnderArbeid,
+                temaStats.suksesskriterierOppfylt -
+                  (temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
+                temaStats.suksesskriterierIkkeOppfylt -
+                  (temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
+                temaStats.suksesskriterierIkkeRelevant -
+                  (temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
+              ].join(';')
+              const csv = BOM + [...filterLines, header, row].join('\n')
+              const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+              const url = URL.createObjectURL(blob)
+              const link = document.createElement('a')
+              link.href = url
+              link.download = `overordnet-${temaName}-${new Date().toISOString().slice(0, 10)}.csv`
+              link.click()
+              URL.revokeObjectURL(url)
+            }}
+            disabled={isLoading || !temaStats}
+            className='pr-4'
+          >
+            Last ned utvalg som CSV
+          </Button>
         </div>
 
         {temaStats && (
@@ -734,7 +802,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
         )}
       </div>
 
-      <div className='rounded-lg p-6 mt-12' style={{ backgroundColor: '#e3eff7' }}>
+      <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
           Krav tilknyttet {temaName}
         </Heading>
@@ -817,7 +885,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               })
             }
             disabled={isKravLoading || filteredKrav.length === 0}
-            className='ml-auto pr-4'
+            className='pr-4'
           >
             Last ned utvalg som CSV
           </Button>
@@ -896,6 +964,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       key={krav.kravId}
                       className='border border-gray-300 rounded-lg p-6 bg-white'
                     >
+                      <Detail>
+                        <strong>
+                          K{krav.kravNummer}.{krav.kravVersjon}
+                        </strong>
+                      </Detail>
                       <Heading size='small' level='3'>
                         {krav.kravNavn}
                       </Heading>
