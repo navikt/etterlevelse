@@ -103,6 +103,11 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
+      <Detail>
+        <strong>
+          K{krav.kravNummer}.{krav.kravVersjon}
+        </strong>
+      </Detail>
       <Heading size='small' level='3'>
         {krav.kravNavn}
       </Heading>
@@ -959,6 +964,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       key={krav.kravId}
                       className='border border-gray-300 rounded-lg p-6 bg-white'
                     >
+                      <Detail>
+                        <strong>
+                          K{krav.kravNummer}.{krav.kravVersjon}
+                        </strong>
+                      </Detail>
                       <Heading size='small' level='3'>
                         {krav.kravNavn}
                       </Heading>
