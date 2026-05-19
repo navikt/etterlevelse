@@ -147,8 +147,20 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
   )
 }
 
-const exportKravToCsv = (kravStats: IKravDashboardStats[], temaName: string) => {
+const exportKravToCsv = (
+  kravStats: IKravDashboardStats[],
+  temaName: string,
+  filters: { avdeling?: string; seksjon?: string }
+) => {
   const BOM = '\uFEFF'
+
+  const filterLines = [
+    `Tema;${temaName}`,
+    `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
+    `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
+    '',
+  ]
+
   const header = [
     'Kravnummer',
     'Versjon',
@@ -185,7 +197,7 @@ const exportKravToCsv = (kravStats: IKravDashboardStats[], temaName: string) => 
     ].join(';')
   )
 
-  const csv = BOM + [header, ...rows].join('\n')
+  const csv = BOM + [...filterLines, header, ...rows].join('\n')
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
@@ -722,7 +734,12 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           variant='tertiary'
           size='small'
           icon={<DownloadIcon aria-hidden />}
-          onClick={() => exportKravToCsv(filteredKrav, temaName)}
+          onClick={() =>
+            exportKravToCsv(filteredKrav, temaName, {
+              avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
+              seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+            })
+          }
           disabled={isKravLoading || filteredKrav.length === 0}
           className='ml-auto pr-4'
         >
