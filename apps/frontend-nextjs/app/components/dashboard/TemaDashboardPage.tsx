@@ -455,130 +455,132 @@ const TemaDashboardPage = () => {
         </LocalAlert.Content>
       </LocalAlert>
 
-      <Heading size='medium' level='2' className='mt-6'>
-        Tema
-      </Heading>
+      <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
+        <Heading size='medium' level='2'>
+          Tema
+        </Heading>
 
-      <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
-        <Select
-          label='Velg tema'
-          className='sm:w-fit sm:min-w-64'
-          style={{ width: '100%' }}
-          value={selectedTema}
-          onChange={(e) => setSelectedTema(e.target.value)}
-        >
-          <option value=''>Alle temaer</option>
-          {temaStats.map((t) => (
-            <option key={t.temaCode} value={t.temaCode}>
-              {t.temaName}
-            </option>
-          ))}
-        </Select>
+        <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
+          <Select
+            label='Velg tema'
+            className='sm:w-fit sm:min-w-64'
+            style={{ width: '100%' }}
+            value={selectedTema}
+            onChange={(e) => setSelectedTema(e.target.value)}
+          >
+            <option value=''>Alle temaer</option>
+            {temaStats.map((t) => (
+              <option key={t.temaCode} value={t.temaCode}>
+                {t.temaName}
+              </option>
+            ))}
+          </Select>
 
-        <Select
-          label='Filtrer etter avdeling'
-          className='sm:w-fit sm:min-w-64'
-          style={{ width: '100%' }}
-          value={selectedAvdeling}
-          onChange={(e) => {
-            setSelectedAvdeling(e.target.value)
-            setSelectedSeksjon('')
-            setIsLoading(true)
-            if (!e.target.value) {
-              setSeksjoner([])
+          <Select
+            label='Filtrer etter avdeling'
+            className='sm:w-fit sm:min-w-64'
+            style={{ width: '100%' }}
+            value={selectedAvdeling}
+            onChange={(e) => {
+              setSelectedAvdeling(e.target.value)
+              setSelectedSeksjon('')
+              setIsLoading(true)
+              if (!e.target.value) {
+                setSeksjoner([])
+              }
+            }}
+          >
+            <option value=''>Alle avdelinger</option>
+            {avdelinger.map((a) => (
+              <option key={a.avdelingId} value={a.avdelingId}>
+                {a.avdelingNavn}
+              </option>
+            ))}
+          </Select>
+
+          {(() => {
+            const avdelingNavn = avdelinger.find(
+              (a) => a.avdelingId === selectedAvdeling
+            )?.avdelingNavn
+            const filteredSeksjoner = seksjoner.filter(
+              (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
+            )
+            return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+              <Select
+                label='Filtrer etter seksjon'
+                className='sm:w-fit sm:min-w-64'
+                style={{ width: '100%' }}
+                value={selectedSeksjon}
+                onChange={(e) => {
+                  setSelectedSeksjon(e.target.value)
+                  setIsLoading(true)
+                }}
+              >
+                <option value=''>Alle seksjoner</option>
+                {filteredSeksjoner.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.navn}
+                  </option>
+                ))}
+              </Select>
+            ) : null
+          })()}
+
+          <Button
+            variant='tertiary'
+            size='small'
+            icon={<DownloadIcon aria-hidden />}
+            onClick={() =>
+              exportToCsv(filteredTemaStats, {
+                tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
+                avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
+                seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+              })
             }
-          }}
-        >
-          <option value=''>Alle avdelinger</option>
-          {avdelinger.map((a) => (
-            <option key={a.avdelingId} value={a.avdelingId}>
-              {a.avdelingNavn}
-            </option>
-          ))}
-        </Select>
-
-        {(() => {
-          const avdelingNavn = avdelinger.find(
-            (a) => a.avdelingId === selectedAvdeling
-          )?.avdelingNavn
-          const filteredSeksjoner = seksjoner.filter(
-            (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
-          )
-          return selectedAvdeling && filteredSeksjoner.length > 0 ? (
-            <Select
-              label='Filtrer etter seksjon'
-              className='sm:w-fit sm:min-w-64'
-              style={{ width: '100%' }}
-              value={selectedSeksjon}
-              onChange={(e) => {
-                setSelectedSeksjon(e.target.value)
-                setIsLoading(true)
-              }}
-            >
-              <option value=''>Alle seksjoner</option>
-              {filteredSeksjoner.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.navn}
-                </option>
-              ))}
-            </Select>
-          ) : null
-        })()}
-
-        <Button
-          variant='tertiary'
-          size='small'
-          icon={<DownloadIcon aria-hidden />}
-          onClick={() =>
-            exportToCsv(filteredTemaStats, {
-              tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
-              avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
-              seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
-            })
-          }
-          disabled={isLoading || filteredTemaStats.length === 0}
-          className='ml-auto pr-4'
-        >
-          Last ned utvalg som CSV
-        </Button>
-      </div>
-
-      {isLoading && (
-        <div className='mt-8'>
-          <CenteredLoader />
+            disabled={isLoading || filteredTemaStats.length === 0}
+            className='pr-4'
+          >
+            Last ned utvalg som CSV
+          </Button>
         </div>
-      )}
 
-      {!isLoading && (
-        <Tabs className='mt-4' defaultValue='figurer'>
-          <Tabs.List>
-            <Tabs.Tab value='figurer' label='Vis figurer' />
-            <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-          </Tabs.List>
+        {isLoading && (
+          <div className='mt-8'>
+            <CenteredLoader />
+          </div>
+        )}
 
-          <Tabs.Panel value='figurer'>
-            <div className='flex flex-col gap-6 mt-6'>
-              {filteredTemaStats.map((stats) => (
-                <TemaStatsCard key={stats.temaCode} stats={stats} />
-              ))}
-              {filteredTemaStats.length === 0 && (
-                <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
-              )}
-            </div>
-          </Tabs.Panel>
+        {!isLoading && (
+          <Tabs className='mt-4' defaultValue='figurer'>
+            <Tabs.List>
+              <Tabs.Tab value='figurer' label='Vis figurer' />
+              <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+            </Tabs.List>
 
-          <Tabs.Panel value='nokkeltall'>
-            <div className='flex flex-col gap-6 mt-6'>
-              {filteredTemaStats.map((stats) => (
-                <TemaStatsKeyMetrics key={stats.temaCode} stats={stats} />
-              ))}
-              {filteredTemaStats.length === 0 && (
-                <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
-              )}
-            </div>
-          </Tabs.Panel>
-        </Tabs>
-      )}
+            <Tabs.Panel value='figurer'>
+              <div className='flex flex-col gap-6 mt-6'>
+                {filteredTemaStats.map((stats) => (
+                  <TemaStatsCard key={stats.temaCode} stats={stats} />
+                ))}
+                {filteredTemaStats.length === 0 && (
+                  <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
+                )}
+              </div>
+            </Tabs.Panel>
+
+            <Tabs.Panel value='nokkeltall'>
+              <div className='flex flex-col gap-6 mt-6'>
+                {filteredTemaStats.map((stats) => (
+                  <TemaStatsKeyMetrics key={stats.temaCode} stats={stats} />
+                ))}
+                {filteredTemaStats.length === 0 && (
+                  <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
+                )}
+              </div>
+            </Tabs.Panel>
+          </Tabs>
+        )}
+      </div>
     </PageLayout>
   )
 }

@@ -734,7 +734,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
         )}
       </div>
 
-      <div className='rounded-lg p-6 mt-12' style={{ backgroundColor: '#e3eff7' }}>
+      <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
           Krav tilknyttet {temaName}
         </Heading>
@@ -817,7 +817,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               })
             }
             disabled={isKravLoading || filteredKrav.length === 0}
-            className='ml-auto pr-4'
+            className='pr-4'
           >
             Last ned utvalg som CSV
           </Button>
