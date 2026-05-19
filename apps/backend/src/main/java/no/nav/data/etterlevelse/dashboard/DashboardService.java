@@ -704,7 +704,6 @@ public class DashboardService {
         ).toList();
 
         for (var etterlevelse : etterlevelseList) {
-
             boolean isFerdig = etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT
                     || etterlevelse.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT;
 
