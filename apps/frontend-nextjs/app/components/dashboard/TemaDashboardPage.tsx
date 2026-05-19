@@ -340,7 +340,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
   const BOM = '\uFEFF'
 
   const filterLines = [
-    `Tema;${filters.tema || 'Alle temaer'}`,
+    `Tema;${filters.tema || 'Alle tema'}`,
     `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
     `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
     '',
@@ -468,7 +468,7 @@ const TemaDashboardPage = () => {
             value={selectedTema}
             onChange={(e) => setSelectedTema(e.target.value)}
           >
-            <option value=''>Alle temaer</option>
+            <option value=''>Alle tema</option>
             {temaStats.map((t) => (
               <option key={t.temaCode} value={t.temaCode}>
                 {t.temaName}
