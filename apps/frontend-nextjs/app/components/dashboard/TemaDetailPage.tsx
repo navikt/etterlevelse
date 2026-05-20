@@ -195,7 +195,7 @@ const exportKravToCsv = (
 
   const rows = kravStats.map((k) =>
     [
-      escapeCsvField(k.kravNavn),
+      escapeCsvField(`K${k.kravNummer} ${k.kravNavn}`),
       escapeCsvField(k.kravStatus),
       k.etterlevelseTotal,
       k.antallUnderArbeid,
