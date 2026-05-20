@@ -77,8 +77,12 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [savedAlert, setSavedAlert] = useState<boolean>(false)
   const [errorAlert, setErrorAlert] = useState<boolean>(false)
-  const [helautomatisk, setHelautomatisk] = useState<boolean>(false)
-  const [profilering, setProfilering] = useState<boolean>(false)
+  const [helautomatisk, setHelautomatisk] = useState<boolean>(
+    pvkDokument.dpProcessProfilering || false
+  )
+  const [profilering, setProfilering] = useState<boolean>(
+    pvkDokument.dpProcessHelautomatiskBehandling || false
+  )
 
   const codelist = useContext(CodelistContext)
 
@@ -162,21 +166,25 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                     <CheckboxGroup
                       legend='Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:'
                       value={checkedYtterligereEgenskaper}
-                      onChange={(selected: string[]) => {
+                      onChange={async (selected: string[]) => {
                         if (
                           selected.includes('profilering') ||
                           selected.includes('helautomatisk')
                         ) {
                           if (selected.includes('profilering')) {
                             setProfilering(true)
+                            await setFieldValue('dpProcessProfilering', true)
                           } else {
                             setProfilering(false)
+                            await setFieldValue('dpProcessProfilering', false)
                           }
 
                           if (selected.includes('helautomatisk')) {
                             setHelautomatisk(true)
+                            await setFieldValue('dpProcessHelautomatiskBehandling', true)
                           } else {
                             setHelautomatisk(false)
+                            await setFieldValue('dpProcessHelautomatiskBehandling', false)
                           }
 
                           const egenskaper = selected.filter(
