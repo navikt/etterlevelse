@@ -32,8 +32,8 @@ public class PvkDokumentResponse {
     private UUID etterlevelseDokumentId;
     private PvkDokumentStatus status;
 
-    private boolean dpProfilering;
-    private boolean dpHelautomatiskBehandling;
+    private boolean dpProcessProfilering;
+    private boolean dpProcessHelautomatiskBehandling;
     private List<CodelistResponse> ytterligereEgenskaper;
 
     private PvkVurdering pvkVurdering;
@@ -72,8 +72,8 @@ public class PvkDokumentResponse {
                 .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
                 .status(pvkDokument.getStatus())
 
-                .dpProfilering(pvkDokument.getPvkDokumentData().isDpProfilering())
-                .dpHelautomatiskBehandling(pvkDokument.getPvkDokumentData().isDpHelautomatiskBehandling())
+                .dpProcessProfilering(pvkDokument.getPvkDokumentData().isDpProcessProfilering())
+                .dpProcessHelautomatiskBehandling(pvkDokument.getPvkDokumentData().isDpProcessHelautomatiskBehandling())
                 .ytterligereEgenskaper(pvkDokument.getPvkDokumentData().ytterligereEgenskaperAsCodes())
                 .pvkVurdering(pvkDokument.getPvkDokumentData().getPvkVurdering())
                 .pvkVurderingsBegrunnelse(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse())
