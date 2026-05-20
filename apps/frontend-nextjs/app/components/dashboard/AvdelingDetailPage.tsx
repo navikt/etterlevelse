@@ -17,6 +17,7 @@ import {
   EPvkDokumentStatus,
   EPvkVurdering,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
 import { Heading, Link, LocalAlert, Select, SortState, Table, Tabs } from '@navikt/ds-react'
@@ -450,7 +451,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               {dok.behandlinger?.map((b) => (
                                 <div key={b.id}>
                                   <Link
-                                    href={`https://behandlingskatalog.intern.nav.no/process/purpose/NAV/${b.id}`}
+                                    href={`${getPollyBaseUrl()}process/${b.id}`}
                                     target='_blank'
                                   >
                                     B{b.nummer} {b.navn}
