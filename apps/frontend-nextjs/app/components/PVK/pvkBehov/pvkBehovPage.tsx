@@ -209,6 +209,7 @@ export const PvkBehovPage = () => {
               isPvkBehovLock) && (
               <PvkBehovReadOnly
                 pvkDokument={pvkDokument}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 ytterligereEgenskaper={ytterligereEgenskaper}
               />
             )}
