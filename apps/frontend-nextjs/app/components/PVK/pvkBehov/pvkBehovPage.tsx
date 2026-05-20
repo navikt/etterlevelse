@@ -3,9 +3,7 @@ import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlin
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import PvkBehovDpForm from '@/components/PVK/form/pvkBehovDpForm'
-import PvkBehovDpInfoContent from '@/components/PVK/pvkBehov/pvkBehovDpInfoContent'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
-import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
@@ -19,17 +17,14 @@ import { EPvkVurdering } from '@/constants/etterlevelseDokumentasjon/personvernk
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
-import {
-  etterlevelseDokumentasjonIdUrl,
-  etterlevelsesDokumentasjonEditUrl,
-} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import {
   harBehandlinger,
   harKunDpBehandlinger,
   isReadOnlyPvkStatus,
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, BodyLong, Heading } from '@navikt/ds-react'
+import { Heading } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -172,60 +167,15 @@ export const PvkBehovPage = () => {
       {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && pvkDokument && (
         <ContentLayout>
           <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
-            <BodyLong>
-              En PVK skal gjennomføres når vi ønsker å starte eller endre en behandling av
-              personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes
-              rettigheter og friheter.
-            </BodyLong>
-
-            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-              <Heading level='2' size='small' className='mb-5'>
-                Egenskaper som gjelder for behandlingene deres
-              </Heading>
-            )}
-
-            {!harBehandlinger(etterlevelseDokumentasjon) &&
-              !harKunDpBehandlinger(etterlevelseDokumentasjon) && (
-                <div>
-                  {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-                    <Alert variant='warning' className='mb-5'>
-                      Dere har ikke ennå lagt til behandlinger under{' '}
-                      <ExternalLink
-                        className='text-medium'
-                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                      >
-                        Dokumentegenskaper
-                      </ExternalLink>
-                      . Det må legges til behandlinger før dere vurderer behov for PVK.
-                    </Alert>
-                  )}
-
-                  {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
-                    <Alert variant='warning' className='mb-5'>
-                      Det har ikke blitt lagt til behandlinger under dokumentegenskaper.
-                    </Alert>
-                  )}
-                </div>
-              )}
-
-            {harBehandlinger(etterlevelseDokumentasjon) && (
-              <PvkBehovInfoContent
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                profilering={profilering}
-                automatiskBehandling={automatiskBehandling}
-                opplysningstyperMangler={opplysningstyperMangler}
-                saerligKategorier={saerligKategorier}
-                behandlingensLivslop={behandlingensLivslop}
-                artOgOmfangId={artOgOmfang?.id}
-              />
-            )}
-            {harKunDpBehandlinger(etterlevelseDokumentasjon) && (
-              <PvkBehovDpInfoContent
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                behandlingensLivslop={behandlingensLivslop}
-                artOgOmfangId={artOgOmfang?.id}
-              />
-            )}
+            <PvkBehovInfoContent
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              profilering={profilering}
+              automatiskBehandling={automatiskBehandling}
+              opplysningstyperMangler={opplysningstyperMangler}
+              saerligKategorier={saerligKategorier}
+              behandlingensLivslop={behandlingensLivslop}
+              artOgOmfangId={artOgOmfang?.id}
+            />
 
             {harBehandlinger(etterlevelseDokumentasjon) &&
               (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&

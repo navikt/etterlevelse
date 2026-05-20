@@ -2,13 +2,17 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
   pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
   pvkDokumentasjonBehandlingsenLivslopUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { harBehandlinger } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, BodyShort, Label, Link, List } from '@navikt/ds-react'
+import {
+  harBehandlinger,
+  harKunDpBehandlinger,
+} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
@@ -33,8 +37,45 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
   return (
     <>
+      <BodyLong>
+        En PVK skal gjennomføres når vi ønsker å starte eller endre en behandling av
+        personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes rettigheter
+        og friheter.
+      </BodyLong>
+
+      {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+        <Heading level='2' size='small' className='mb-5'>
+          Egenskaper som gjelder for behandlingene deres
+        </Heading>
+      )}
+
+      {!harBehandlinger(etterlevelseDokumentasjon) &&
+        !harKunDpBehandlinger(etterlevelseDokumentasjon) && (
+          <div>
+            {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
+              <Alert variant='warning' className='mb-5'>
+                Dere har ikke ennå lagt til behandlinger under{' '}
+                <ExternalLink
+                  className='text-medium'
+                  href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                >
+                  Dokumentegenskaper
+                </ExternalLink>
+                . Det må legges til behandlinger før dere vurderer behov for PVK.
+              </Alert>
+            )}
+
+            {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
+              <Alert variant='warning' className='mb-5'>
+                Det har ikke blitt lagt til behandlinger under dokumentegenskaper.
+              </Alert>
+            )}
+          </div>
+        )}
+
       {etterlevelseDokumentasjon &&
-        harBehandlinger(etterlevelseDokumentasjon) &&
+        (harBehandlinger(etterlevelseDokumentasjon) ||
+          harKunDpBehandlinger(etterlevelseDokumentasjon)) &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
           <BodyShort>
             Disse egenskapene blir enklere å vurdere hvis{' '}
@@ -109,6 +150,26 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
               før dere vurderer behov for PVK.
             </Alert>
           )}
+        </>
+      )}
+
+      {harKunDpBehandlinger(etterlevelseDokumentasjon) && (
+        <>
+          <List className='py-5'>
+            <div className='pb-3'>
+              <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+            </div>
+            <List.Item>
+              <strong>
+                Det{' '}
+                {etterlevelseDokumentasjon.dpBehandlinger &&
+                etterlevelseDokumentasjon.dpBehandlinger.some((dp) => dp.art9)
+                  ? 'gjelder'
+                  : 'gjelder ikke'}
+              </strong>{' '}
+              særlige kategorier av personopplysninger
+            </List.Item>
+          </List>
         </>
       )}
     </>
