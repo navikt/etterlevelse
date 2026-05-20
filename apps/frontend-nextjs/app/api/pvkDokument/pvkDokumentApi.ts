@@ -240,10 +240,11 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     hasPvkDocumentBeenUpdatedAfterApproval:
       pvkDokument.hasPvkDocumentBeenUpdatedAfterApproval || false,
 
-    dpProfilering: pvkDokument.dpProfilering === undefined ? false : pvkDokument.dpProfilering,
-    dpHelautomatiskBehandling:
-      pvkDokument.dpHelautomatiskBehandling === undefined
+    dpProcessProfilering:
+      pvkDokument.dpProcessProfilering === undefined ? false : pvkDokument.dpProcessProfilering,
+    dpProcessHelautomatiskBehandling:
+      pvkDokument.dpProcessHelautomatiskBehandling === undefined
         ? false
-        : pvkDokument.dpHelautomatiskBehandling,
+        : pvkDokument.dpProcessHelautomatiskBehandling,
   }
 }

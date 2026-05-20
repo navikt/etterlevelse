@@ -33,8 +33,8 @@ export interface IPvkDokument {
   hasPvkDocumentationStarted: boolean
   hasPvkDocumentBeenUpdatedAfterApproval: boolean
 
-  dpProfilering: boolean
-  dpHelautomatiskBehandling: boolean
+  dpProcessProfilering: boolean
+  dpProcessHelautomatiskBehandling: boolean
 }
 
 export interface IMeldingTilPvo {
