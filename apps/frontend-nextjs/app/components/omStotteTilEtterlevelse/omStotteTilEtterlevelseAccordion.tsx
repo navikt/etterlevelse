@@ -144,11 +144,13 @@ const OmStotteTilEtterlevelseAccordion = () => {
           <h3>Besvare etterlevelseskrav</h3>
         </Accordion.Header>
         <Accordion.Content>
-          <div className='my-6'>
-            <video controls src='videos/VisMegHvordanJegBesvarerEtterlevelseskrav.mov'>
-              <track kind='captions' />
-            </video>
-          </div>
+          <ReadMore header='Vis meg hvordan jeg besvarer etterlevelseskrav' className='mb-6'>
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegBesvarerEtterlevelseskrav.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
             for å etterleve kravet. Hvert kriterium inneholder også en nærmere beskrivelse som
@@ -190,11 +192,16 @@ const OmStotteTilEtterlevelseAccordion = () => {
           <h3>Få etterlevelsen godkjent av risikoeier</h3>
         </Accordion.Header>
         <Accordion.Content>
-          <div className='my-6'>
-            <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'>
-              <track kind='captions' />
-            </video>
-          </div>
+          <ReadMore
+            header={'Vis meg hvordan jeg får etterlevelsen godkjent av risikoeier'}
+            className='mb-6'
+          >
+            <div className='my-6'>
+              <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
           <BodyLong spacing>
             Etterlevelsesdokumenter kan godkjennes av risikoeieren til enhver tid, også uavhengig av
             godkjenning av PVK.
@@ -248,11 +255,16 @@ const OmStotteTilEtterlevelseAccordion = () => {
       <Accordion.Item>
         <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
         <Accordion.Content>
-          <div className='my-6'>
-            <video controls src='videos/VisMegHvordanJegGodkjennerEtterlevelse.mov'>
-              <track kind='captions' />
-            </video>
-          </div>
+          <ReadMore
+            header={'Vis meg hvordan jeg som risikoeier godkjenner et etterlevelsesdokument'}
+            className='mb-6'
+          >
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegGodkjennerEtterlevelse.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
           <BodyLong className='mb-3'>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
             menyen på dokumentets temaside. På siden “Godkjenn etterlevelsen” kan du gjøre følgende:
