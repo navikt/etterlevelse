@@ -137,11 +137,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const getSearchableText = (dok: IDashboardTable): string => {
     return [
       `E${dok.etterlevelseNummer} ${dok.etterlevelseDokumentasjonTittel}`,
-      dok.teamsData?.map((t) => t.name).join(' '),
-      dok.resourcesData?.map((r) => r.fullName).join(' '),
-      dok.risikoeiereData?.map((r) => r.fullName).join(' '),
-      dok.seksjoner?.map((s) => s.nomSeksjonName).join(' '),
-      dok.behandlinger?.map((b) => `B${b.nummer} ${b.navn}`).join(' '),
+      dok.teamsData?.map((t) => t.name)?.join(' ') ?? '',
+      dok.resourcesData?.map((r) => r.fullName)?.join(' ') ?? '',
+      dok.risikoeiereData?.map((r) => r.fullName)?.join(' ') ?? '',
+      dok.seksjoner?.map((s) => s.nomSeksjonName)?.join(' ') ?? '',
+      dok.behandlinger?.map((b) => `B${b.nummer} ${b.navn}`)?.join(' ') ?? '',
       getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
       getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger),
       getPvkOnlyStatusText(dok.pvkVurdering, dok.pvkStatus, dok.hasPvkDocumentationStarted),
@@ -230,12 +230,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           case 'oppfylt': {
             return dok.oppfyltKravProsent && dok.oppfyltKravProsent > 0 ? dok.oppfyltKravProsent : 0
           }
-          case 'pvkStatus':
-            return getPvkOnlyStatusText(
-              dok.pvkVurdering,
-              dok.pvkStatus,
-              dok.hasPvkDocumentationStarted
-            )
           case 'antallScenarioer':
             return dok.antallRisikoscenario || 0
           case 'hoyRisiko':
