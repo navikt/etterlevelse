@@ -111,7 +111,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
-      <Heading size='small' level='2'>
+      <Heading size='small' level='3'>
         {stats.temaName}
       </Heading>
 
@@ -119,28 +119,28 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
             Vurdering av etterlevelseskrav
           </Heading>
           <RechartsStackedBar data={kravData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
             Etterlevelse: suksesskriterier
           </Heading>
           <RechartsStackedBar data={suksessData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
             Suksesskriterier der kravet er ferdig utfylt
           </Heading>
           <RechartsStackedBar data={ferdigSuksessData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
             Suksesskriterier der kravet ikke er ferdig utfylt
           </Heading>
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
@@ -178,7 +178,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
-      <Heading size='small' level='2'>
+      <Heading size='small' level='3'>
         {stats.temaName}
       </Heading>
 
