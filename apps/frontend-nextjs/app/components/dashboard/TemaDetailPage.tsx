@@ -628,9 +628,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       ])
                       return (
                         <>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='3' className='mb-2'>
                             Gjennomføringsstatus: krav ({temaStats.kravTotal})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Under arbeid{' '}
                             <span className='font-bold'>{temaStats.kravUnderArbeid}</span>
@@ -662,9 +662,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       ])
                       return (
                         <>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='3' className='mb-2'>
                             Etterlevelse: suksesskriterier ({totalSuksess})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Under arbeid{' '}
                             <span className='font-bold'>
@@ -712,9 +712,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       ])
                       return (
                         <>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='3' className='mb-2'>
                             Suksesskriterier der kravet er ferdig utfylt ({totalFerdig})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Oppfylt{' '}
                             <span className='font-bold'>
@@ -768,9 +768,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       ])
                       return (
                         <>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='3' className='mb-2'>
                             Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdig})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
                             {totalIkkeFerdig > 0 &&
@@ -982,9 +982,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       )}
                       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
                         <div>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='4' className='mb-2'>
                             Gjennomføringsstatus: krav ({kravTotal})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Under arbeid <span className='font-bold'>{krav.antallUnderArbeid}</span>
                             {kravTotal > 0 &&
@@ -998,9 +998,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                           </BodyShort>
                         </div>
                         <div>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='4' className='mb-2'>
                             Etterlevelse: suksesskriterier ({totalSuksess})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Under arbeid{' '}
                             <span className='font-bold'>
@@ -1033,9 +1033,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                           </BodyShort>
                         </div>
                         <div>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='4' className='mb-2'>
                             Suksesskriterier der kravet er ferdig utfylt ({totalFerdig})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Oppfylt{' '}
                             <span className='font-bold'>
@@ -1062,9 +1062,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                           </BodyShort>
                         </div>
                         <div>
-                          <BodyShort weight='semibold' className='mb-2'>
+                          <Heading size='xsmall' level='4' className='mb-2'>
                             Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdig})
-                          </BodyShort>
+                          </Heading>
                           <BodyShort>
                             Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
                             {totalIkkeFerdig > 0 &&
