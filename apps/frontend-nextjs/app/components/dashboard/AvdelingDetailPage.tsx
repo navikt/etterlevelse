@@ -13,6 +13,7 @@ import {
   IDashboardDetailResponse,
   IDashboardTable,
 } from '@/constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   EPvkVurdering,
@@ -274,6 +275,96 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     }
   }
 
+  const computeStatsFromDoks = (doks: IDashboardTable[]): IAvdelingDashboardStats => {
+    const total = doks.length
+    const underArbeid = doks.filter(
+      (d) => d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+    ).length
+    const sendtTilGodkjenning = doks.filter(
+      (d) =>
+        d.etterlevelseDokumentasjonStatus ===
+        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+    ).length
+    const godkjent = doks.filter(
+      (d) =>
+        d.etterlevelseDokumentasjonStatus ===
+        EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
+    ).length
+
+    const medPersonopplysninger = doks.filter((d) => d.behandlerPersonopplysninger)
+    const ikkeVurdertBehov = medPersonopplysninger.filter(
+      (d) => !d.pvkVurdering || d.pvkVurdering === EPvkVurdering.UNDEFINED
+    ).length
+    const vurdertIkkeBehov = medPersonopplysninger.filter(
+      (d) => d.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE
+    ).length
+    const behovIkkePaabegynt = medPersonopplysninger.filter(
+      (d) => d.pvkVurdering === EPvkVurdering.SKAL_UTFORE
+    ).length
+    const pvkIWord = medPersonopplysninger.filter(
+      (d) => d.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT
+    ).length
+
+    const skalUtfore = doks.filter((d) => d.pvkVurdering === EPvkVurdering.SKAL_UTFORE)
+    const pvkIkkePaabegynt = skalUtfore.filter((d) => !d.hasPvkDocumentationStarted).length
+    const pvkGodkjent = skalUtfore.filter(
+      (d) =>
+        d.hasPvkDocumentationStarted && d.pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+    ).length
+    const pvkTilBehandling = skalUtfore.filter(
+      (d) =>
+        d.hasPvkDocumentationStarted &&
+        (d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
+          d.pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
+          d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+    ).length
+    const pvkTilbakemelding = skalUtfore.filter(
+      (d) =>
+        d.hasPvkDocumentationStarted &&
+        (d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
+          d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+    ).length
+    const pvkUnderArbeid =
+      skalUtfore.filter((d) => d.hasPvkDocumentationStarted).length -
+      pvkGodkjent -
+      pvkTilBehandling -
+      pvkTilbakemelding
+
+    const baseStats = getCurrentStats()
+
+    return {
+      ...baseStats,
+      dokumenter: {
+        total,
+        underArbeid,
+        sendtTilGodkjenning,
+        godkjentAvRisikoeier: godkjent,
+      },
+      behovForPvk: {
+        totalMedPersonopplysninger: medPersonopplysninger.length,
+        ikkeVurdertBehov,
+        vurdertIkkeBehov,
+        behovIkkePaabegynt,
+      },
+      pvk: {
+        total: skalUtfore.length + pvkIWord,
+        ikkePaabegynt: pvkIkkePaabegynt,
+        underArbeid: pvkUnderArbeid,
+        tilBehandlingHosPvo: pvkTilBehandling,
+        tilbakemeldingFraPvo: pvkTilbakemelding,
+        godkjentAvRisikoeier: pvkGodkjent,
+        pvkIWord,
+      },
+    }
+  }
+
+  const getDisplayStats = (): IAvdelingDashboardStats => {
+    if (searchFilters.length > 0) {
+      return computeStatsFromDoks(sortedDoks)
+    }
+    return getCurrentStats()
+  }
+
   return (
     <PageLayout
       pageTitle={data ? data.avdelingNavn : ''}
@@ -286,7 +377,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Heading>
       </div>
 
-      <LocalAlert status='announcement' className='mt-4' aria-live='off'>
+      <LocalAlert status='announcement' className='mt-4 mb-6' aria-live='off'>
         <LocalAlert.Header>
           <LocalAlert.Title as='h2'>
             Obs! Disse sidene er fortsatt under utvikling.
@@ -320,7 +411,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </LocalAlert>
       )}
 
-      <Heading size='medium' level='2' className='mt-4'>
+      <Heading size='medium' level='2' className='mt-4 mb-6'>
         Oversikt
       </Heading>
 
@@ -340,6 +431,35 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               </option>
             ))}
         </Select>
+      )}
+
+      <form
+        className='mt-6'
+        onSubmit={(e) => {
+          e.preventDefault()
+          addSearchFilter(searchInput)
+        }}
+      >
+        <Search
+          label='Søk etter team, seksjon, person, dokument m.m. Trykk enter for å legge til filter.'
+          hideLabel={false}
+          variant='secondary'
+          value={searchInput}
+          onChange={setSearchInput}
+          onClear={() => setSearchInput('')}
+          ref={searchRef}
+          className='max-w-2xl'
+        />
+      </form>
+
+      {searchFilters.length > 0 && (
+        <Chips className='mt-4 mb-8'>
+          {searchFilters.map((filter) => (
+            <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
+              {filter}
+            </Chips.Removable>
+          ))}
+        </Chips>
       )}
 
       {selectedSeksjon === 'ingen-seksjon' && (
@@ -371,12 +491,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Tabs.List>
         <Tabs.Panel value='figurer'>
           <div className='mt-6'>
-            <DashboardBarCard stats={getCurrentStats()} hideHeader />
+            <DashboardBarCard stats={getDisplayStats()} hideHeader />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='nokkeltall'>
           <div className='mt-6'>
-            <DashboardCard stats={getCurrentStats()} hideHeader />
+            <DashboardCard stats={getDisplayStats()} hideHeader />
           </div>
         </Tabs.Panel>
       </Tabs>
@@ -386,35 +506,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           <Heading size='medium' level='2' className='mt-10'>
             Detaljert om etterlevelse
           </Heading>
-
-          <form
-            className='mt-4'
-            onSubmit={(e) => {
-              e.preventDefault()
-              addSearchFilter(searchInput)
-            }}
-          >
-            <Search
-              label='Søk etter team, seksjon, person, dokument m.m. Trykk enter for å legge til filter.'
-              hideLabel={false}
-              variant='secondary'
-              value={searchInput}
-              onChange={setSearchInput}
-              onClear={() => setSearchInput('')}
-              ref={searchRef}
-              className='max-w-2xl'
-            />
-          </form>
-
-          {searchFilters.length > 0 && (
-            <Chips className='mt-2'>
-              {searchFilters.map((filter) => (
-                <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
-                  {filter}
-                </Chips.Removable>
-              ))}
-            </Chips>
-          )}
         </>
       )}
 
