@@ -13,6 +13,7 @@ import {
   IDashboardDetailResponse,
   IDashboardTable,
 } from '@/constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   EPvkVurdering,
@@ -20,9 +21,19 @@ import {
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
-import { Heading, Link, LocalAlert, Select, SortState, Table, Tabs } from '@navikt/ds-react'
+import {
+  Chips,
+  Heading,
+  Link,
+  LocalAlert,
+  Search,
+  Select,
+  SortState,
+  Table,
+  Tabs,
+} from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 interface IProps {
@@ -104,6 +115,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
   const [tableTab, setTableTab] = useState('dok_pvk')
   const [sort, setSort] = useState<SortState | undefined>()
+  const [searchInput, setSearchInput] = useState('')
+  const [searchFilters, setSearchFilters] = useState<string[]>([])
+  const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -119,6 +133,35 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         .finally(() => setIsTableLoading(false))
     })()
   }, [avdelingId])
+
+  const getSearchableText = (dok: IDashboardTable): string => {
+    return [
+      `E${dok.etterlevelseNummer} ${dok.etterlevelseDokumentasjonTittel}`,
+      dok.teamsData?.map((t) => t.name)?.join(' ') ?? '',
+      dok.resourcesData?.map((r) => r.fullName)?.join(' ') ?? '',
+      dok.risikoeiereData?.map((r) => r.fullName)?.join(' ') ?? '',
+      dok.seksjoner?.map((s) => s.nomSeksjonName)?.join(' ') ?? '',
+      dok.behandlinger?.map((b) => `B${b.nummer} ${b.navn}`)?.join(' ') ?? '',
+      getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
+      getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger),
+      getPvkOnlyStatusText(dok.pvkVurdering, dok.pvkStatus, dok.hasPvkDocumentationStarted),
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+  }
+
+  const addSearchFilter = (term: string) => {
+    const trimmed = term.trim()
+    if (trimmed && !searchFilters.includes(trimmed)) {
+      setSearchFilters((prev) => [...prev, trimmed])
+    }
+    setSearchInput('')
+  }
+
+  const removeSearchFilter = (term: string) => {
+    setSearchFilters((prev) => prev.filter((f) => f !== term))
+  }
 
   const getFilteredDoks = (): IDashboardTable[] => {
     if (tableData) {
@@ -139,75 +182,76 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   }
 
   const sortedDoks = useMemo(() => {
-    if (!sort || !tableData) {
-      return getFilteredDoks()
-    } else {
-      const dir = sort.direction === 'ascending' ? 1 : -1
-      return [...getFilteredDoks()].sort((a, b) => {
-        const getValue = (dok: typeof a): string | number => {
-          switch (sort.orderBy) {
-            case 'dok':
-              return `E${dok.etterlevelseNummer} ${dok.etterlevelseDokumentasjonTittel}`
-            case 'team':
-              return dok.teamsData?.map((teamsData) => teamsData.name).join(', ') || ''
-            case 'person':
-              return dok.resourcesData?.map((resource) => resource.fullName).join(', ') || ''
-            case 'risikoeier':
-              return dok.risikoeiereData?.map((risikoeier) => risikoeier.fullName).join(', ') || ''
-            case 'seksjon':
-              return dok.seksjoner?.map((s) => s.nomSeksjonName).join(', ') || ''
-            case 'etterlevelse':
-              return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
-            case 'behovForPvk':
-              return getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger)
-            case 'pvkStatus':
-              return getPvkOnlyStatusText(
-                dok.pvkVurdering,
-                dok.pvkStatus,
-                dok.hasPvkDocumentationStarted
-              )
-            case 'dato_etterlvelse':
-              return dok.sistOppdatertEtterlevelse || ''
-            case 'dato_pvk':
-              return dok.sistOppdatertPvk || ''
-            case 'behandlinger':
-              return dok.behandlinger?.map((b) => b.navn).join(', ') || ''
-            case 'krav':
-              return dok.antallOppfyltKrav || 0
-            case 'oppfylt': {
-              return dok.oppfyltKravProsent && dok.oppfyltKravProsent > 0
-                ? dok.oppfyltKravProsent
-                : 0
-            }
-            case 'pvkStatus':
-              return getPvkOnlyStatusText(
-                dok.pvkVurdering,
-                dok.pvkStatus,
-                dok.hasPvkDocumentationStarted
-              )
-            case 'antallScenarioer':
-              return dok.antallRisikoscenario || 0
-            case 'hoyRisiko':
-              return dok.antallHoyRisikoscenario || 0
-            case 'hoyRisikoEtterTiltak':
-              return dok.antallHoyRisikoEtterTiltak || 0
-            case 'antallTiltak':
-              return dok.antallTiltak || 0
-            case 'ikkeIverksatte':
-              return dok.antallIkkeIverksattTiltak || 0
-            case 'fristPassert':
-              return dok.antallTiltakFristPassert || 0
-            default:
-              return ''
-          }
-        }
-        const aVal = getValue(a)
-        const bVal = getValue(b)
-        if (typeof aVal === 'number' && typeof bVal === 'number') return (aVal - bVal) * dir
-        return String(aVal).localeCompare(String(bVal)) * dir
+    let filtered = getFilteredDoks()
+
+    if (searchFilters.length > 0) {
+      filtered = filtered.filter((dok) => {
+        const text = getSearchableText(dok)
+        return searchFilters.every((filter) => text.includes(filter.toLowerCase()))
       })
     }
-  }, [sort, tableData, selectedSeksjon])
+
+    if (!sort) {
+      return filtered
+    }
+
+    const dir = sort.direction === 'ascending' ? 1 : -1
+    return [...filtered].sort((a, b) => {
+      const getValue = (dok: typeof a): string | number => {
+        switch (sort.orderBy) {
+          case 'dok':
+            return `E${dok.etterlevelseNummer} ${dok.etterlevelseDokumentasjonTittel}`
+          case 'team':
+            return dok.teamsData?.map((teamsData) => teamsData.name).join(', ') || ''
+          case 'person':
+            return dok.resourcesData?.map((resource) => resource.fullName).join(', ') || ''
+          case 'risikoeier':
+            return dok.risikoeiereData?.map((risikoeier) => risikoeier.fullName).join(', ') || ''
+          case 'seksjon':
+            return dok.seksjoner?.map((s) => s.nomSeksjonName).join(', ') || ''
+          case 'etterlevelse':
+            return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
+          case 'behovForPvk':
+            return getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger)
+          case 'pvkStatus':
+            return getPvkOnlyStatusText(
+              dok.pvkVurdering,
+              dok.pvkStatus,
+              dok.hasPvkDocumentationStarted
+            )
+          case 'dato_etterlvelse':
+            return dok.sistOppdatertEtterlevelse || ''
+          case 'dato_pvk':
+            return dok.sistOppdatertPvk || ''
+          case 'behandlinger':
+            return dok.behandlinger?.map((b) => b.navn).join(', ') || ''
+          case 'krav':
+            return dok.antallOppfyltKrav || 0
+          case 'oppfylt': {
+            return dok.oppfyltKravProsent && dok.oppfyltKravProsent > 0 ? dok.oppfyltKravProsent : 0
+          }
+          case 'antallScenarioer':
+            return dok.antallRisikoscenario || 0
+          case 'hoyRisiko':
+            return dok.antallHoyRisikoscenario || 0
+          case 'hoyRisikoEtterTiltak':
+            return dok.antallHoyRisikoEtterTiltak || 0
+          case 'antallTiltak':
+            return dok.antallTiltak || 0
+          case 'ikkeIverksatte':
+            return dok.antallIkkeIverksattTiltak || 0
+          case 'fristPassert':
+            return dok.antallTiltakFristPassert || 0
+          default:
+            return ''
+        }
+      }
+      const aVal = getValue(a)
+      const bVal = getValue(b)
+      if (typeof aVal === 'number' && typeof bVal === 'number') return (aVal - bVal) * dir
+      return String(aVal).localeCompare(String(bVal)) * dir
+    })
+  }, [sort, tableData, selectedSeksjon, searchFilters])
 
   if (isLoading || data == null) {
     return (
@@ -225,6 +269,96 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     }
   }
 
+  const computeStatsFromDoks = (doks: IDashboardTable[]): IAvdelingDashboardStats => {
+    const total = doks.length
+    const underArbeid = doks.filter(
+      (d) => d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+    ).length
+    const sendtTilGodkjenning = doks.filter(
+      (d) =>
+        d.etterlevelseDokumentasjonStatus ===
+        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+    ).length
+    const godkjent = doks.filter(
+      (d) =>
+        d.etterlevelseDokumentasjonStatus ===
+        EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
+    ).length
+
+    const medPersonopplysninger = doks.filter((d) => d.behandlerPersonopplysninger)
+    const ikkeVurdertBehov = medPersonopplysninger.filter(
+      (d) => !d.pvkVurdering || d.pvkVurdering === EPvkVurdering.UNDEFINED
+    ).length
+    const vurdertIkkeBehov = medPersonopplysninger.filter(
+      (d) => d.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE
+    ).length
+    const behovIkkePaabegynt = medPersonopplysninger.filter(
+      (d) => d.pvkVurdering === EPvkVurdering.SKAL_UTFORE
+    ).length
+    const pvkIWord = medPersonopplysninger.filter(
+      (d) => d.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT
+    ).length
+
+    const skalUtfore = doks.filter((d) => d.pvkVurdering === EPvkVurdering.SKAL_UTFORE)
+    const pvkIkkePaabegynt = skalUtfore.filter((d) => !d.hasPvkDocumentationStarted).length
+    const pvkGodkjent = skalUtfore.filter(
+      (d) =>
+        d.hasPvkDocumentationStarted && d.pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+    ).length
+    const pvkTilBehandling = skalUtfore.filter(
+      (d) =>
+        d.hasPvkDocumentationStarted &&
+        (d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
+          d.pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
+          d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+    ).length
+    const pvkTilbakemelding = skalUtfore.filter(
+      (d) =>
+        d.hasPvkDocumentationStarted &&
+        (d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
+          d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
+    ).length
+    const pvkUnderArbeid =
+      skalUtfore.filter((d) => d.hasPvkDocumentationStarted).length -
+      pvkGodkjent -
+      pvkTilBehandling -
+      pvkTilbakemelding
+
+    const baseStats = getCurrentStats()
+
+    return {
+      ...baseStats,
+      dokumenter: {
+        total,
+        underArbeid,
+        sendtTilGodkjenning,
+        godkjentAvRisikoeier: godkjent,
+      },
+      behovForPvk: {
+        totalMedPersonopplysninger: medPersonopplysninger.length,
+        ikkeVurdertBehov,
+        vurdertIkkeBehov,
+        behovIkkePaabegynt,
+      },
+      pvk: {
+        total: skalUtfore.length + pvkIWord,
+        ikkePaabegynt: pvkIkkePaabegynt,
+        underArbeid: pvkUnderArbeid,
+        tilBehandlingHosPvo: pvkTilBehandling,
+        tilbakemeldingFraPvo: pvkTilbakemelding,
+        godkjentAvRisikoeier: pvkGodkjent,
+        pvkIWord,
+      },
+    }
+  }
+
+  const getDisplayStats = (): IAvdelingDashboardStats => {
+    if (searchFilters.length > 0) {
+      return computeStatsFromDoks(sortedDoks)
+    }
+    return getCurrentStats()
+  }
+
   return (
     <PageLayout
       pageTitle={data ? data.avdelingNavn : ''}
@@ -237,7 +371,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Heading>
       </div>
 
-      <LocalAlert status='announcement' className='mt-4' aria-live='off'>
+      <LocalAlert status='announcement' className='mt-4 mb-6' aria-live='off'>
         <LocalAlert.Header>
           <LocalAlert.Title as='h2'>
             Obs! Disse sidene er fortsatt under utvikling.
@@ -271,7 +405,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </LocalAlert>
       )}
 
-      <Heading size='medium' level='2' className='mt-4'>
+      <Heading size='medium' level='2' className='mt-4 mb-6'>
         Oversikt
       </Heading>
 
@@ -291,6 +425,35 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               </option>
             ))}
         </Select>
+      )}
+
+      <form
+        className='mt-6'
+        onSubmit={(e) => {
+          e.preventDefault()
+          addSearchFilter(searchInput)
+        }}
+      >
+        <Search
+          label='Søk etter team, seksjon, person, dokument m.m. Trykk enter for å legge til filter.'
+          hideLabel={false}
+          variant='secondary'
+          value={searchInput}
+          onChange={setSearchInput}
+          onClear={() => setSearchInput('')}
+          ref={searchRef}
+          className='max-w-2xl'
+        />
+      </form>
+
+      {searchFilters.length > 0 && (
+        <Chips className='mt-4 mb-8'>
+          {searchFilters.map((filter) => (
+            <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
+              {filter}
+            </Chips.Removable>
+          ))}
+        </Chips>
       )}
 
       {selectedSeksjon === 'ingen-seksjon' && (
@@ -322,24 +485,29 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Tabs.List>
         <Tabs.Panel value='figurer'>
           <div className='mt-6'>
-            <DashboardBarCard stats={getCurrentStats()} hideHeader />
+            <DashboardBarCard stats={getDisplayStats()} hideHeader />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='nokkeltall'>
           <div className='mt-6'>
-            <DashboardCard stats={getCurrentStats()} hideHeader />
+            <DashboardCard stats={getDisplayStats()} hideHeader />
           </div>
         </Tabs.Panel>
       </Tabs>
+
+      {!isTableLoading && tableData && (
+        <>
+          <Heading size='medium' level='2' className='mt-10'>
+            Detaljert om etterlevelse
+          </Heading>
+        </>
+      )}
 
       <div className='dashboard-full-width-breakout'>
         {isTableLoading && <CenteredLoader />}
 
         {!isTableLoading && tableData && (
           <>
-            <Heading size='medium' level='2' className='mt-10'>
-              Detaljert om etterlevelse
-            </Heading>
             <Tabs
               value={tableTab}
               onChange={(val) => {
