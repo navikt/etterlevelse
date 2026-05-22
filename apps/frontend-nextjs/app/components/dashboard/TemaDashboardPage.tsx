@@ -190,9 +190,9 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             const kravPcts = roundedPercentages([stats.kravUnderArbeid, stats.kravFerdigVurdert])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
+                <Heading size='xsmall' level='4' className='mb-2'>
                   Gjennomføringsstatus: krav ({stats.kravTotal})
-                </BodyShort>
+                </Heading>
                 <BodyShort>
                   Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
                   {stats.kravTotal > 0 && ` (${formatPct(kravPcts[0], stats.kravUnderArbeid)}%)`}
@@ -216,9 +216,9 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
+                <Heading size='xsmall' level='4' className='mb-2'>
                   Etterlevelse: suksesskriterier ({totalSuksess})
-                </BodyShort>
+                </Heading>
                 <BodyShort>
                   Under arbeid{' '}
                   <span className='font-bold'>{stats.suksesskriterierUnderArbeid}</span>
@@ -256,9 +256,9 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
+                <Heading size='xsmall' level='4' className='mb-2'>
                   Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
-                </BodyShort>
+                </Heading>
                 <BodyShort>
                   Oppfylt{' '}
                   <span className='font-bold'>
@@ -298,9 +298,9 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
+                <Heading size='xsmall' level='4' className='mb-2'>
                   Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
-                </BodyShort>
+                </Heading>
                 <BodyShort>
                   Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
                   {totalIkkeFerdigSuksess > 0 &&
