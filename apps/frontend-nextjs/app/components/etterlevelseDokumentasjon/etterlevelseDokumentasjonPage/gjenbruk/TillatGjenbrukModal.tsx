@@ -8,7 +8,7 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { isEmptyArray, isMissingText } from '@/util/common/validationUtils'
 import { Button, Modal } from '@navikt/ds-react'
-import { Form, Formik } from 'formik'
+import { Formik } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { gjenbrukDokumentasjonSchema } from './form/gjenbrukSchema'
@@ -115,7 +115,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                 isMissingText(values.nomAvdelingId)
 
               return (
-                <Form>
+                <>
                   {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
                     <TilgjengeligForGjenbrukModal
                       etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -145,7 +145,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                       submit={submit}
                     />
                   )}
-                </Form>
+                </>
               )
             }}
           </Formik>
