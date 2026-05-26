@@ -44,7 +44,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
         <InfoCard data-color='warning'>
           <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
             <InfoCard.Title>
-              Dere må oppdatere følgende felt i dokumentegenskaper før dere kan slå på gjenbruk.
+              Dere må oppdatere følgende felt i dokumentegenskaper før dere kan gå videre.
             </InfoCard.Title>
           </InfoCard.Header>
           <InfoCard.Content>
