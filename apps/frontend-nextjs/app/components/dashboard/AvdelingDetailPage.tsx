@@ -518,7 +518,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             >
               <Tabs.List>
                 <Tabs.Tab value='dok_pvk' label='Dokumentasjonsoversikt' />
-                <Tabs.Tab value='krav' label='Etterlevelseskrav' />
+                <Tabs.Tab value='krav' label='Etterlevelse' />
                 <Tabs.Tab value='pvk' label='Digital PVK' />
               </Tabs.List>
               <Tabs.Panel value='dok_pvk'>
