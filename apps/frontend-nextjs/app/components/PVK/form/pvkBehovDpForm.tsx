@@ -78,11 +78,9 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   const [savedAlert, setSavedAlert] = useState<boolean>(false)
   const [errorAlert, setErrorAlert] = useState<boolean>(false)
   const [helautomatisk, setHelautomatisk] = useState<boolean>(
-    pvkDokument.dpProcessProfilering || false
-  )
-  const [profilering, setProfilering] = useState<boolean>(
     pvkDokument.dpProcessHelautomatiskBehandling || false
   )
+  const [profilering, setProfilering] = useState<boolean>(pvkDokument.dpProcessProfilering || false)
 
   const codelist = useContext(CodelistContext)
 
