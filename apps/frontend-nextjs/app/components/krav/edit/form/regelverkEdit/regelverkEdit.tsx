@@ -32,7 +32,9 @@ export const RegelverkEdit = () => {
     value: string
     label: string
     description: string
-  }[] = codelist.utils.getParsedOptionsForLov()
+  }[] = codelist.utils
+    .getParsedOptionsForLov()
+    .filter((option) => !option.label.includes('(opphevet)'))
 
   return (
     <FieldWrapper marginBottom id='regelverk'>
