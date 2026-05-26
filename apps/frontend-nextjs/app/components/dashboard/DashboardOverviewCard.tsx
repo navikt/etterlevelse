@@ -110,12 +110,13 @@ const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
   const suksess = stats.reduce(
     (acc, s) => ({
       total: acc.total + s.suksesskriterier.total,
+      ikkePaabegynt: acc.ikkePaabegynt + s.suksesskriterier.ikkePaabegyntAntall,
       underArbeid: acc.underArbeid + s.suksesskriterier.underArbeidAntall,
       oppfylt: acc.oppfylt + s.suksesskriterier.oppfyltAntall,
       ikkeOppfylt: acc.ikkeOppfylt + s.suksesskriterier.ikkeOppfyltAntall,
       ikkeRelevant: acc.ikkeRelevant + s.suksesskriterier.ikkeRelevantAntall,
     }),
-    { total: 0, underArbeid: 0, oppfylt: 0, ikkeOppfylt: 0, ikkeRelevant: 0 }
+    { total: 0, ikkePaabegynt: 0, underArbeid: 0, oppfylt: 0, ikkeOppfylt: 0, ikkeRelevant: 0 }
   )
 
   const behov = stats.reduce(
@@ -168,6 +169,7 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
   ]
 
   const suksessTotal =
+    agg.suksess.ikkePaabegynt +
     agg.suksess.underArbeid +
     agg.suksess.oppfylt +
     agg.suksess.ikkeOppfylt +
@@ -175,18 +177,20 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
   const suksessPcts =
     suksessTotal > 0
       ? roundedPercentages([
+          agg.suksess.ikkePaabegynt,
           agg.suksess.underArbeid,
           agg.suksess.oppfylt,
           agg.suksess.ikkeOppfylt,
           agg.suksess.ikkeRelevant,
         ])
-      : [0, 0, 0, 0]
+      : [0, 0, 0, 0, 0]
 
   const suksessData: IBarSegment[] = [
-    { name: 'Under arbeid', value: suksessPcts[0], color: AVDELING_SUKSESS_COLORS[0] },
-    { name: 'Oppfylt', value: suksessPcts[1], color: AVDELING_SUKSESS_COLORS[1] },
-    { name: 'Ikke oppfylt', value: suksessPcts[2], color: AVDELING_SUKSESS_COLORS[2] },
-    { name: 'Ikke relevant', value: suksessPcts[3], color: AVDELING_SUKSESS_COLORS[3] },
+    { name: 'Ikke påbegynt', value: suksessPcts[0], color: AVDELING_SUKSESS_COLORS[0] },
+    { name: 'Under arbeid', value: suksessPcts[1], color: AVDELING_SUKSESS_COLORS[1] },
+    { name: 'Oppfylt', value: suksessPcts[2], color: AVDELING_SUKSESS_COLORS[2] },
+    { name: 'Ikke oppfylt', value: suksessPcts[3], color: AVDELING_SUKSESS_COLORS[3] },
+    { name: 'Ikke relevant', value: suksessPcts[4], color: AVDELING_SUKSESS_COLORS[4] },
   ]
 
   const behovData: IBarSegment[] = [

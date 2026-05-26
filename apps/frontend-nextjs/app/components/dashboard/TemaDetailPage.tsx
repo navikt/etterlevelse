@@ -38,6 +38,11 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
 
   const suksessData: IBarSegment[] = [
     {
+      name: 'Ikke påbegynt',
+      value: krav.antallSuksesskriterierIkkePaabegynt,
+      color: SUKSESS_COLORS.ikkePaabegynt,
+    },
+    {
       name: 'Under arbeid',
       value: krav.antallSuksesskriterierUnderArbeid,
       color: SUKSESS_COLORS.underArbeid,
@@ -74,6 +79,11 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
   ]
 
   const ikkeFerdigSuksessData: IBarSegment[] = [
+    {
+      name: 'Ikke påbegynt',
+      value: krav.antallSuksesskriterierIkkePaabegynt,
+      color: SUKSESS_COLORS.ikkePaabegynt,
+    },
     {
       name: 'Under arbeid',
       value: krav.antallSuksesskriterierUnderArbeid,
@@ -173,6 +183,7 @@ const exportKravToCsv = (
     'Antall etterlevelser totalt',
     'Etterlevelser under arbeid',
     'Etterlevelser ferdig vurdert',
+    'Alle suksesskriterier - ikke påbegynt',
     'Alle suksesskriterier - under arbeid',
     'Alle suksesskriterier - oppfylt',
     'Alle suksesskriterier - ikke oppfylt',
@@ -180,6 +191,7 @@ const exportKravToCsv = (
     'Ferdig utfylt krav suksesskriterier - oppfylt',
     'Ferdig utfylt krav suksesskriterier - ikke oppfylt',
     'Ferdig utfylt krav suksesskriterier - ikke relevant',
+    'Ikke ferdig utfylt krav suksesskriterier - ikke påbegynt',
     'Ikke ferdig utfylt krav suksesskriterier - under arbeid',
     'Ikke ferdig utfylt krav suksesskriterier - oppfylt',
     'Ikke ferdig utfylt krav suksesskriterier - ikke oppfylt',
@@ -201,6 +213,7 @@ const exportKravToCsv = (
       k.etterlevelseTotal,
       k.antallUnderArbeid,
       k.antallFerdigVurdert,
+      k.antallSuksesskriterierIkkePaabegynt,
       k.antallSuksesskriterierUnderArbeid,
       k.antallSuksesskriterierOppfylt,
       k.antallSuksesskriterierIkkeOppfylt,
@@ -208,6 +221,7 @@ const exportKravToCsv = (
       k.antallFerdigUtfyltKravSuksesskriterierOppfylt,
       k.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt,
       k.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant,
+      k.antallSuksesskriterierIkkePaabegynt,
       k.antallSuksesskriterierUnderArbeid,
       k.antallSuksesskriterierOppfylt - k.antallFerdigUtfyltKravSuksesskriterierOppfylt,
       k.antallSuksesskriterierIkkeOppfylt - k.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt,
@@ -354,6 +368,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const suksessData: IBarSegment[] = temaStats
     ? [
         {
+          name: 'Ikke påbegynt',
+          value: temaStats.suksesskriterierIkkePaabegynt,
+          color: SUKSESS_COLORS.ikkePaabegynt,
+        },
+        {
           name: 'Under arbeid',
           value: temaStats.suksesskriterierUnderArbeid,
           color: SUKSESS_COLORS.underArbeid,
@@ -398,6 +417,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
   const ikkeFerdigSuksessData: IBarSegment[] = temaStats
     ? [
+        {
+          name: 'Ikke påbegynt',
+          value: temaStats.suksesskriterierIkkePaabegynt,
+          color: SUKSESS_COLORS.ikkePaabegynt,
+        },
         {
           name: 'Under arbeid',
           value: temaStats.suksesskriterierUnderArbeid,
@@ -526,6 +550,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 'Krav totalt',
                 'Krav under arbeid',
                 'Krav ferdig vurdert',
+                'Suksesskriterier ikke påbegynt',
                 'Suksesskriterier under arbeid',
                 'Suksesskriterier oppfylt',
                 'Suksesskriterier ikke oppfylt',
@@ -533,6 +558,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 'Ferdig utfylt krav - suksesskriterier oppfylt',
                 'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
                 'Ferdig utfylt krav - suksesskriterier ikke relevant',
+                'Ikke ferdig utfylt krav - suksesskriterier ikke påbegynt',
                 'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
                 'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
                 'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
@@ -542,6 +568,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 temaStats.kravTotal,
                 temaStats.kravUnderArbeid,
                 temaStats.kravFerdigVurdert,
+                temaStats.suksesskriterierIkkePaabegynt,
                 temaStats.suksesskriterierUnderArbeid,
                 temaStats.suksesskriterierOppfylt,
                 temaStats.suksesskriterierIkkeOppfylt,
@@ -549,6 +576,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
                 temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
                 temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
+                temaStats.suksesskriterierIkkePaabegynt,
                 temaStats.suksesskriterierUnderArbeid,
                 temaStats.suksesskriterierOppfylt -
                   (temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
@@ -650,11 +678,13 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   <div>
                     {(() => {
                       const totalSuksess =
+                        temaStats.suksesskriterierIkkePaabegynt +
                         temaStats.suksesskriterierUnderArbeid +
                         temaStats.suksesskriterierOppfylt +
                         temaStats.suksesskriterierIkkeOppfylt +
                         temaStats.suksesskriterierIkkeRelevant
                       const sukPcts = roundedPercentages([
+                        temaStats.suksesskriterierIkkePaabegynt,
                         temaStats.suksesskriterierUnderArbeid,
                         temaStats.suksesskriterierOppfylt,
                         temaStats.suksesskriterierIkkeOppfylt,
@@ -666,18 +696,26 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                             Etterlevelse: suksesskriterier ({totalSuksess})
                           </Heading>
                           <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>
+                              {temaStats.suksesskriterierIkkePaabegynt}
+                            </span>
+                            {totalSuksess > 0 &&
+                              ` (${formatPct(sukPcts[0], temaStats.suksesskriterierIkkePaabegynt)}%)`}
+                          </BodyShort>
+                          <BodyShort>
                             Under arbeid{' '}
                             <span className='font-bold'>
                               {temaStats.suksesskriterierUnderArbeid}
                             </span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[0], temaStats.suksesskriterierUnderArbeid)}%)`}
+                              ` (${formatPct(sukPcts[1], temaStats.suksesskriterierUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Oppfylt{' '}
                             <span className='font-bold'>{temaStats.suksesskriterierOppfylt}</span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[1], temaStats.suksesskriterierOppfylt)}%)`}
+                              ` (${formatPct(sukPcts[2], temaStats.suksesskriterierOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke oppfylt{' '}
@@ -685,7 +723,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                               {temaStats.suksesskriterierIkkeOppfylt}
                             </span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[2], temaStats.suksesskriterierIkkeOppfylt)}%)`}
+                              ` (${formatPct(sukPcts[3], temaStats.suksesskriterierIkkeOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke relevant{' '}
@@ -693,7 +731,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                               {temaStats.suksesskriterierIkkeRelevant}
                             </span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[3], temaStats.suksesskriterierIkkeRelevant)}%)`}
+                              ` (${formatPct(sukPcts[4], temaStats.suksesskriterierIkkeRelevant)}%)`}
                           </BodyShort>
                         </>
                       )
@@ -746,6 +784,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   <div>
                     {(() => {
                       const ikkeFerdigUnderArbeid = temaStats.suksesskriterierUnderArbeid
+                      const ikkeFerdigIkkePaabegynt = temaStats.suksesskriterierIkkePaabegynt
                       const ikkeFerdigOppfylt =
                         temaStats.suksesskriterierOppfylt -
                         (temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0)
@@ -756,11 +795,13 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                         temaStats.suksesskriterierIkkeRelevant -
                         (temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0)
                       const totalIkkeFerdig =
+                        ikkeFerdigIkkePaabegynt +
                         ikkeFerdigUnderArbeid +
                         ikkeFerdigOppfylt +
                         ikkeFerdigIkkeOppfylt +
                         ikkeFerdigIkkeRelevant
                       const ikkeFerdigPcts = roundedPercentages([
+                        ikkeFerdigIkkePaabegynt,
                         ikkeFerdigUnderArbeid,
                         ikkeFerdigOppfylt,
                         ikkeFerdigIkkeOppfylt,
@@ -772,25 +813,31 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                             Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdig})
                           </Heading>
                           <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>{ikkeFerdigIkkePaabegynt}</span>
+                            {totalIkkeFerdig > 0 &&
+                              ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigIkkePaabegynt)}%)`}
+                          </BodyShort>
+                          <BodyShort>
                             Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigUnderArbeid)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Oppfylt <span className='font-bold'>{ikkeFerdigOppfylt}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigOppfylt)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke oppfylt <span className='font-bold'>{ikkeFerdigIkkeOppfylt}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigIkkeOppfylt)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke relevant{' '}
                             <span className='font-bold'>{ikkeFerdigIkkeRelevant}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeRelevant)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[4], ikkeFerdigIkkeRelevant)}%)`}
                           </BodyShort>
                         </>
                       )

@@ -20,6 +20,7 @@ public class TemaDashboardResponse {
     private int suksesskriterierOppfylt;
     private int suksesskriterierIkkeOppfylt;
     private int suksesskriterierIkkeRelevant;
+    private int suksesskriterierIkkePaabegynt;
 
     private int ferdigUtfyltKravSuksesskriterierOppfylt;
     private int ferdigUtfyltKravSuksesskriterierIkkeOppfylt;

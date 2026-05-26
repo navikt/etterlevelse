@@ -15,17 +15,23 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.etterlevelse.codelist.domain.Codelist;
-import no.nav.data.etterlevelse.dashboard.dto.*;
-import no.nav.data.etterlevelse.kravprioritylist.KravPriorityListService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import no.nav.data.etterlevelse.dashboard.dto.BehovForPvkStats;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DokumenterStats;
+import no.nav.data.etterlevelse.dashboard.dto.KravDashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.PvkStats;
+import no.nav.data.etterlevelse.dashboard.dto.SeksjonOption;
+import no.nav.data.etterlevelse.dashboard.dto.SuksesskriterierStats;
+import no.nav.data.etterlevelse.dashboard.dto.TemaDashboardResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
@@ -39,6 +45,7 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
+import no.nav.data.etterlevelse.kravprioritylist.KravPriorityListService;
 import no.nav.data.integration.nom.NomGraphClient;
 import no.nav.data.integration.nom.domain.OrgEnhet;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
@@ -452,6 +459,7 @@ public class DashboardService {
 
     private SuksesskriterierStats getSuksesskriterierStats(List<Etterlevelse> etterlevelser) {
         int totalSuksesskriterier = 0;
+        int ikkePaabegyntAntall = 0;
         int underArbeidAntall = 0;
         int oppfyltAntall = 0;
         int ikkeOppfyltAntall = 0;
@@ -461,7 +469,9 @@ public class DashboardService {
             totalSuksesskriterier += etterlevelse.getSuksesskriterieBegrunnelser().size();
 
             for (SuksesskriterieBegrunnelse suksesskriterieBegrunnelse : etterlevelse.getSuksesskriterieBegrunnelser()) {
-                if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.UNDER_ARBEID) {
+                if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_PAABEGYNT) {
+                    ikkePaabegyntAntall += 1;
+                } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.UNDER_ARBEID) {
                     underArbeidAntall += 1;
                 } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
                     oppfyltAntall += 1;
@@ -475,10 +485,12 @@ public class DashboardService {
 
         return SuksesskriterierStats.builder()
                 .total(totalSuksesskriterier)
+                .ikkePaabegyntAntall(ikkePaabegyntAntall)
                 .underArbeidAntall(underArbeidAntall)
                 .oppfyltAntall(oppfyltAntall)
                 .ikkeOppfyltAntall(ikkeOppfyltAntall)
                 .ikkeRelevantAntall(ikkeRelevantAntall)
+                .ikkePaabegyntProsent(totalSuksesskriterier > 0 ? Math.round((float) ikkePaabegyntAntall / totalSuksesskriterier * 100) : 0)
                 .underArbeidProsent(totalSuksesskriterier > 0 ? Math.round((float) underArbeidAntall / totalSuksesskriterier * 100) : 0)
                 .oppfyltProsent(totalSuksesskriterier > 0 ? Math.round((float) oppfyltAntall / totalSuksesskriterier * 100) : 0)
                 .ikkeOppfyltProsent(totalSuksesskriterier > 0 ? Math.round((float) ikkeOppfyltAntall / totalSuksesskriterier * 100) : 0)
@@ -589,6 +601,7 @@ public class DashboardService {
 
                 for (var sb : etterlevelse.getSuksesskriterieBegrunnelser()) {
                     switch (sb.getSuksesskriterieStatus()) {
+                        case IKKE_PAABEGYNT -> stats.setSuksesskriterierIkkePaabegynt(stats.getSuksesskriterierIkkePaabegynt() + 1);
                         case UNDER_ARBEID -> stats.setSuksesskriterierUnderArbeid(stats.getSuksesskriterierUnderArbeid() + 1);
                         case OPPFYLT -> stats.setSuksesskriterierOppfylt(stats.getSuksesskriterierOppfylt() + 1);
                         case IKKE_OPPFYLT -> stats.setSuksesskriterierIkkeOppfylt(stats.getSuksesskriterierIkkeOppfylt() + 1);
@@ -739,6 +752,7 @@ public class DashboardService {
 
             for (var sb : etterlevelse.getSuksesskriterieBegrunnelser()) {
                 switch (sb.getSuksesskriterieStatus()) {
+                    case IKKE_PAABEGYNT -> kravDashboardResponse.setAntallSuksesskriterierIkkePaabegynt(kravDashboardResponse.getAntallSuksesskriterierIkkePaabegynt() + 1);
                     case UNDER_ARBEID -> kravDashboardResponse.setAntallSuksesskriterierUnderArbeid(kravDashboardResponse.getAntallSuksesskriterierUnderArbeid() + 1);
                     case OPPFYLT -> kravDashboardResponse.setAntallSuksesskriterierOppfylt(kravDashboardResponse.getAntallSuksesskriterierOppfylt() + 1);
                     case IKKE_OPPFYLT -> kravDashboardResponse.setAntallSuksesskriterierIkkeOppfylt(kravDashboardResponse.getAntallSuksesskriterierIkkeOppfylt() + 1);

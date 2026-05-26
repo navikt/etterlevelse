@@ -1,12 +1,12 @@
 package no.nav.data.etterlevelse.dashboard.dto;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
-
-import java.util.UUID;
 
 @Data
 @Builder
@@ -26,6 +26,7 @@ public class KravDashboardResponse {
     private int antallSuksesskriterierOppfylt;
     private int antallSuksesskriterierIkkeOppfylt;
     private int antallSuksesskriterierIkkeRelevant;
+    private int antallSuksesskriterierIkkePaabegynt;
 
     private int antallFerdigUtfyltKravSuksesskriterierOppfylt;
     private int antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt;

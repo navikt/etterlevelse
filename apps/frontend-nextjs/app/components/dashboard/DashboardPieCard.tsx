@@ -15,7 +15,7 @@ interface IBarSegment {
 }
 
 const DOK_COLORS = ['#fa4d56', '#9f1853', '#005d5d']
-const SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
+const SUKSESS_COLORS = ['#8a3ffc', '#1192e8', '#005d5d', '#fa4d56', '#9f1853']
 const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
 const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4']
 
@@ -77,20 +77,25 @@ export const DashboardBarCard = ({ stats, hideHeader }: IProps) => {
 
   const suksessData: IBarSegment[] = [
     {
-      name: 'Under arbeid',
-      value: stats.suksesskriterier.underArbeidProsent,
+      name: 'Ikke påbegynt',
+      value: stats.suksesskriterier.ikkePaabegyntProsent,
       color: SUKSESS_COLORS[0],
     },
-    { name: 'Oppfylt', value: stats.suksesskriterier.oppfyltProsent, color: SUKSESS_COLORS[1] },
+    {
+      name: 'Under arbeid',
+      value: stats.suksesskriterier.underArbeidProsent,
+      color: SUKSESS_COLORS[1],
+    },
+    { name: 'Oppfylt', value: stats.suksesskriterier.oppfyltProsent, color: SUKSESS_COLORS[2] },
     {
       name: 'Ikke oppfylt',
       value: stats.suksesskriterier.ikkeOppfyltProsent,
-      color: SUKSESS_COLORS[2],
+      color: SUKSESS_COLORS[3],
     },
     {
       name: 'Ikke relevant',
       value: stats.suksesskriterier.ikkeRelevantProsent,
-      color: SUKSESS_COLORS[3],
+      color: SUKSESS_COLORS[4],
     },
   ]
 

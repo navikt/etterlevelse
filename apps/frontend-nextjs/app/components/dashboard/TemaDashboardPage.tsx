@@ -47,6 +47,11 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
   const suksessData: IBarSegment[] = [
     {
+      name: 'Ikke påbegynt',
+      value: stats.suksesskriterierIkkePaabegynt,
+      color: SUKSESS_COLORS.ikkePaabegynt,
+    },
+    {
       name: 'Under arbeid',
       value: stats.suksesskriterierUnderArbeid,
       color: SUKSESS_COLORS.underArbeid,
@@ -83,6 +88,11 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   ]
 
   const ikkeFerdigSuksessData: IBarSegment[] = [
+    {
+      name: 'Ikke påbegynt',
+      value: stats.suksesskriterierIkkePaabegynt,
+      color: SUKSESS_COLORS.ikkePaabegynt,
+    },
     {
       name: 'Under arbeid',
       value: stats.suksesskriterierUnderArbeid,
@@ -156,6 +166,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
 const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
   const totalSuksess =
+    stats.suksesskriterierIkkePaabegynt +
     stats.suksesskriterierUnderArbeid +
     stats.suksesskriterierOppfylt +
     stats.suksesskriterierIkkeOppfylt +
@@ -169,6 +180,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
   const totalIkkeFerdigSuksess = totalSuksess - totalFerdigSuksess
 
   const ikkeFerdigUnderArbeid = stats.suksesskriterierUnderArbeid
+  const ikkeFerdigIkkePaabegynt = stats.suksesskriterierIkkePaabegynt
   const ikkeFerdigOppfylt =
     stats.suksesskriterierOppfylt - (stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0)
   const ikkeFerdigIkkeOppfylt =
@@ -209,6 +221,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         <div>
           {(() => {
             const sukPcts = roundedPercentages([
+              stats.suksesskriterierIkkePaabegynt,
               stats.suksesskriterierUnderArbeid,
               stats.suksesskriterierOppfylt,
               stats.suksesskriterierIkkeOppfylt,
@@ -220,27 +233,33 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
                   Etterlevelse: suksesskriterier ({totalSuksess})
                 </Heading>
                 <BodyShort>
+                  Ikke påbegynt{' '}
+                  <span className='font-bold'>{stats.suksesskriterierIkkePaabegynt}</span>
+                  {totalSuksess > 0 &&
+                    ` (${formatPct(sukPcts[0], stats.suksesskriterierIkkePaabegynt)}%)`}
+                </BodyShort>
+                <BodyShort>
                   Under arbeid{' '}
                   <span className='font-bold'>{stats.suksesskriterierUnderArbeid}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[0], stats.suksesskriterierUnderArbeid)}%)`}
+                    ` (${formatPct(sukPcts[1], stats.suksesskriterierUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Oppfylt <span className='font-bold'>{stats.suksesskriterierOppfylt}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[1], stats.suksesskriterierOppfylt)}%)`}
+                    ` (${formatPct(sukPcts[2], stats.suksesskriterierOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke oppfylt{' '}
                   <span className='font-bold'>{stats.suksesskriterierIkkeOppfylt}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[2], stats.suksesskriterierIkkeOppfylt)}%)`}
+                    ` (${formatPct(sukPcts[3], stats.suksesskriterierIkkeOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke relevant{' '}
                   <span className='font-bold'>{stats.suksesskriterierIkkeRelevant}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[3], stats.suksesskriterierIkkeRelevant)}%)`}
+                    ` (${formatPct(sukPcts[4], stats.suksesskriterierIkkeRelevant)}%)`}
                 </BodyShort>
               </>
             )
@@ -291,6 +310,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         <div>
           {(() => {
             const ikkeFerdigPcts = roundedPercentages([
+              ikkeFerdigIkkePaabegynt,
               ikkeFerdigUnderArbeid,
               ikkeFerdigOppfylt,
               ikkeFerdigIkkeOppfylt,
@@ -302,24 +322,29 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
                   Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
                 </Heading>
                 <BodyShort>
+                  Ikke påbegynt <span className='font-bold'>{ikkeFerdigIkkePaabegynt}</span>
+                  {totalIkkeFerdigSuksess > 0 &&
+                    ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigIkkePaabegynt)}%)`}
+                </BodyShort>
+                <BodyShort>
                   Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigUnderArbeid)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Oppfylt <span className='font-bold'>{ikkeFerdigOppfylt}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigOppfylt)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke oppfylt <span className='font-bold'>{ikkeFerdigIkkeOppfylt}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigIkkeOppfylt)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke relevant <span className='font-bold'>{ikkeFerdigIkkeRelevant}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeRelevant)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[4], ikkeFerdigIkkeRelevant)}%)`}
                 </BodyShort>
               </>
             )
@@ -351,6 +376,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     'Krav totalt',
     'Krav under arbeid',
     'Krav ferdig vurdert',
+    'Suksesskriterier ikke påbegynt',
     'Suksesskriterier under arbeid',
     'Suksesskriterier oppfylt',
     'Suksesskriterier ikke oppfylt',
@@ -358,6 +384,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     'Ferdig utfylt krav - suksesskriterier oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke relevant',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke påbegynt',
     'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
     'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
     'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
@@ -370,6 +397,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
       s.kravTotal,
       s.kravUnderArbeid,
       s.kravFerdigVurdert,
+      s.suksesskriterierIkkePaabegynt,
       s.suksesskriterierUnderArbeid,
       s.suksesskriterierOppfylt,
       s.suksesskriterierIkkeOppfylt,
@@ -377,6 +405,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
       s.ferdigUtfyltKravSuksesskriterierOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeRelevant,
+      s.suksesskriterierIkkePaabegynt,
       s.suksesskriterierUnderArbeid,
       s.suksesskriterierOppfylt - (s.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
       s.suksesskriterierIkkeOppfylt - (s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
