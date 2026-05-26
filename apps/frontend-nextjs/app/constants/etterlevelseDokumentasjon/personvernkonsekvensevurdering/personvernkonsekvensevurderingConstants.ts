@@ -32,6 +32,9 @@ export interface IPvkDokument {
   currentEtterlevelseDokumentVersjon: number
   hasPvkDocumentationStarted: boolean
   hasPvkDocumentBeenUpdatedAfterApproval: boolean
+
+  dpProcessProfilering: boolean
+  dpProcessHelautomatiskBehandling: boolean
 }
 
 export interface IMeldingTilPvo {

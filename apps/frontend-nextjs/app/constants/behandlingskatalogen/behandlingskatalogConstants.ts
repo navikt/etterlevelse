@@ -39,6 +39,7 @@ export interface IDpBehandling {
   id: string
   navn: string
   nummer: number
+  art9: boolean
 }
 
 export interface IBegrep {

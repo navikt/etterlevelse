@@ -1,0 +1,440 @@
+'use client'
+
+import {
+  createPvkDokument,
+  getPvkDokumentByEtterlevelseDokumentId,
+  mapPvkDokumentToFormValue,
+  updatePvkDokument,
+} from '@/api/pvkDokument/pvkDokumentApi'
+import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
+import { Markdown } from '@/components/common/markdown/markdown'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
+import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import {
+  etterlevelseDokumentasjonIdUrl,
+  etterlevelsesDokumentasjonEditUrl,
+} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import {
+  pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonStepUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { ChevronLeftIcon, ChevronRightIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  CopyButton,
+  Link,
+  List,
+  LocalAlert,
+  Radio,
+  RadioGroup,
+  ReadMore,
+} from '@navikt/ds-react'
+import {
+  Field,
+  FieldArray,
+  FieldArrayRenderProps,
+  FieldProps,
+  Form,
+  Formik,
+  FormikHelpers,
+} from 'formik'
+import { useRouter } from 'next/navigation'
+import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
+import { pvkBehovSchema } from './pvkBehovSchema'
+
+type TProps = {
+  pvkDokument: IPvkDokument
+  setPvkDokument: (state: IPvkDokument) => void
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
+  ytterligereEgenskaper: ICode[]
+}
+
+export const PvkBehovForm: FunctionComponent<TProps> = ({
+  pvkDokument,
+  setPvkDokument,
+  etterlevelseDokumentasjon,
+  ytterligereEgenskaper,
+}) => {
+  const router = useRouter()
+  const formRef: RefObject<any> = useRef(undefined)
+
+  const [isUnsavedModalOpen, setIsUnsavedModalOpen] = useState<boolean>(false)
+  const [urlToNavigate, setUrlToNavigate] = useState<string>('')
+  const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const [savedAlert, setSavedAlert] = useState<boolean>(false)
+  const [errorAlert, setErrorAlert] = useState<boolean>(false)
+  const [helautomatisk, setHelautomatisk] = useState<boolean>(
+    pvkDokument.dpProcessHelautomatiskBehandling || false
+  )
+  const [profilering, setProfilering] = useState<boolean>(pvkDokument.dpProcessProfilering || false)
+
+  const codelist = useContext(CodelistContext)
+
+  const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
+    if (etterlevelseDokumentasjon) {
+      const mutatedPvkDokument: IPvkDokument = {
+        ...pvkDokument,
+        etterlevelseDokumentId: etterlevelseDokumentasjon.id,
+      } as IPvkDokument
+
+      //double check if etterlevelse already exist before submitting
+      let existingPvkDokumentId: string = ''
+      if (etterlevelseDokumentasjon) {
+        const pvkDokument = await getPvkDokumentByEtterlevelseDokumentId(
+          etterlevelseDokumentasjon.id
+        ).catch(() => undefined)
+        if (pvkDokument) {
+          existingPvkDokumentId = pvkDokument.id
+          mutatedPvkDokument.id = pvkDokument.id
+        }
+      }
+
+      if (pvkDokument.id || existingPvkDokumentId) {
+        if (isReadOnlyPvkStatus(pvkDokument.status)) {
+          setIsPvoAlertModalOpen(true)
+        } else if (
+          pvkDokument &&
+          pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+          pvkDokument.hasPvkDocumentationStarted === true
+        ) {
+          setErrorAlert(true)
+        } else {
+          await updatePvkDokument(mutatedPvkDokument)
+            .then((response: IPvkDokument) => {
+              setPvkDokument(response)
+            })
+            .finally(() => setSavedAlert(true))
+        }
+      } else {
+        await createPvkDokument(mutatedPvkDokument)
+          .then((response: IPvkDokument) => {
+            setPvkDokument(response)
+            window.history.pushState(
+              { savedAlert: true, pvkDokument: response },
+              '',
+              pvkDokumentasjonPvkBehovUrl(response.etterlevelseDokumentId, response.id)
+            )
+          })
+          .finally(() => setSavedAlert(true))
+      }
+    }
+  }
+
+  return (
+    <>
+      <Formik
+        validateOnChange={false}
+        validateOnBlur={false}
+        validationSchema={pvkBehovSchema}
+        onSubmit={async (values: IPvkDokument, formikHelpers: FormikHelpers<IPvkDokument>) => {
+          await submit(values).then(() => {
+            formikHelpers.resetForm({ values })
+          })
+        }}
+        initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+        innerRef={formRef}
+      >
+        {({ setFieldValue, values, submitForm, dirty, resetForm }) => {
+          const checkedYtterligereEgenskaper = values.ytterligereEgenskaper.map(
+            (egenskap) => egenskap.code
+          )
+
+          if (profilering) checkedYtterligereEgenskaper.push('profilering')
+          if (helautomatisk) checkedYtterligereEgenskaper.push('helautomatisk')
+
+          return (
+            <Form>
+              <div id='ytterligere-egenskaper'>
+                <FieldArray name='ytterligereEgenskaper'>
+                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                    <CheckboxGroup
+                      legend='Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:'
+                      value={checkedYtterligereEgenskaper}
+                      onChange={async (selected: string[]) => {
+                        if (
+                          selected.includes('profilering') ||
+                          selected.includes('helautomatisk')
+                        ) {
+                          if (selected.includes('profilering')) {
+                            setProfilering(true)
+                            await setFieldValue('dpProcessProfilering', true)
+                          } else {
+                            setProfilering(false)
+                            await setFieldValue('dpProcessProfilering', false)
+                          }
+
+                          if (selected.includes('helautomatisk')) {
+                            setHelautomatisk(true)
+                            await setFieldValue('dpProcessHelautomatiskBehandling', true)
+                          } else {
+                            setHelautomatisk(false)
+                            await setFieldValue('dpProcessHelautomatiskBehandling', false)
+                          }
+
+                          const egenskaper = selected.filter(
+                            (value) => !['profilering', 'helautomatisk'].includes(value)
+                          )
+                          fieldArrayRenderProps.form.setFieldValue(
+                            'ytterligereEgenskaper',
+                            egenskaper.map((egenskapId: string) =>
+                              codelist.utils.getCode(EListName.YTTERLIGERE_EGENSKAPER, egenskapId)
+                            )
+                          )
+                        } else {
+                          fieldArrayRenderProps.form.setFieldValue(
+                            'ytterligereEgenskaper',
+                            selected.map((egenskapId: string) =>
+                              codelist.utils.getCode(EListName.YTTERLIGERE_EGENSKAPER, egenskapId)
+                            )
+                          )
+                          setHelautomatisk(false)
+                          setProfilering(false)
+                        }
+                      }}
+                    >
+                      <Checkbox value='profilering'>Benyttes profilering</Checkbox>
+                      <Checkbox value='helautomatisk'>Behandlingen er helautomatisk</Checkbox>
+                      {ytterligereEgenskaper.map((egenskap: ICode) => (
+                        <Checkbox key={egenskap.code} value={egenskap.code}>
+                          {egenskap.shortName}
+                        </Checkbox>
+                      ))}
+                    </CheckboxGroup>
+                  )}
+                </FieldArray>
+              </div>
+
+              {(checkedYtterligereEgenskaper.length > 0 ||
+                etterlevelseDokumentasjon.dpBehandlinger?.some((dp) => dp.art9)) && (
+                <Alert className='mb-5 mt-10' variant='info'>
+                  Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være
+                  behov for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
+                </Alert>
+              )}
+
+              <ReadMore
+                className='mt-10 mb-4'
+                header='Lurer dere fortsatt på om det er behov for PVK?'
+              >
+                Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK. Ta
+                kontakt via mail.
+                <CopyButton
+                  className='mt-3 border-2 border-solid'
+                  variant='action'
+                  copyText='pvk@nav.no'
+                  text='Kopier PVO sin e-postadresse'
+                  activeText='E-postadressen er kopiert'
+                  icon={<EnvelopeClosedIcon aria-hidden />}
+                />
+              </ReadMore>
+
+              <FieldWrapper marginBottom marginTop>
+                <Field name='pvkVurdering'>
+                  {(fieldProps: FieldProps) => (
+                    <RadioGroup
+                      legend='Hvilken vurdering har dere kommet fram til?'
+                      value={fieldProps.field.value}
+                      onChange={(value) => {
+                        fieldProps.form.setFieldValue('pvkVurdering', value)
+                      }}
+                    >
+                      <Radio value={EPvkVurdering.SKAL_UTFORE}>Vi skal gjennomføre en PVK</Radio>
+                      <Radio value={EPvkVurdering.SKAL_IKKE_UTFORE}>
+                        Vi skal ikke gjennomføre PVK
+                      </Radio>
+                      <Radio value={EPvkVurdering.ALLEREDE_UTFORT}>
+                        Vi har en PVK i Word som ikke trenger en ny vurdering
+                      </Radio>
+                    </RadioGroup>
+                  )}
+                </Field>
+              </FieldWrapper>
+
+              {values.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT && (
+                <div className='my-5'>
+                  <BodyLong>Følgende dokumenter er lagt inn under Dokumentegenskaper:</BodyLong>
+                  <List as='ul'>
+                    {etterlevelseDokumentasjon.risikovurderinger.length > 0 &&
+                      etterlevelseDokumentasjon.risikovurderinger.map((vurdering, index) => (
+                        <List.Item key={`${index}_vurdering`}>
+                          <Markdown source={vurdering} />
+                        </List.Item>
+                      ))}
+
+                    {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
+                      <List.Item>ingen dokumenter funnet</List.Item>
+                    )}
+                  </List>
+
+                  {etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
+                    <Alert variant='info' className='mt-5'>
+                      Dersom dokumentene over ikke inkluderer deres PVK, skal dere legge den inn på{' '}
+                      <Link
+                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label='redigere etterlevelsesdokumentasjon'
+                      >
+                        Rediger dokumentegenskaper (åpner i en ny fane).
+                      </Link>
+                    </Alert>
+                  )}
+
+                  {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
+                    <Alert variant='warning' className='mt-5'>
+                      Dere må legge inn lenke til deres PVK i Public360 under{' '}
+                      <Link
+                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        aria-label='redigere etterlevelsesdokumentasjon'
+                      >
+                        Rediger dokumentegenskaper (åpner i en ny fane).
+                      </Link>
+                    </Alert>
+                  )}
+                </div>
+              )}
+
+              {values.pvkVurdering !== EPvkVurdering.UNDEFINED &&
+                values.pvkVurdering !== EPvkVurdering.SKAL_UTFORE && (
+                  <TextAreaField
+                    rows={5}
+                    noPlaceholder
+                    label='Begrunn vurderingen deres'
+                    name='pvkVurderingsBegrunnelse'
+                  />
+                )}
+
+              {savedAlert && !dirty && (
+                <LocalAlert className='mt-5' status='success'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                    <LocalAlert.CloseButton onClick={() => setSavedAlert(false)} />
+                  </LocalAlert.Header>
+                </LocalAlert>
+              )}
+
+              {errorAlert && (
+                <LocalAlert className='mt-5' status='error'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>
+                      Kan ikke oppdatere vurderingen fordi personvernkonsekvensevurderingen pågår.
+                    </LocalAlert.Title>
+                    <LocalAlert.CloseButton onClick={() => setErrorAlert(false)} />
+                  </LocalAlert.Header>
+                </LocalAlert>
+              )}
+
+              <div className='flex items-center mt-5 gap-2'>
+                <Button
+                  type='button'
+                  variant='primary'
+                  onClick={async () => {
+                    await submitForm()
+                  }}
+                >
+                  Lagre
+                </Button>
+
+                <Button
+                  type='button'
+                  variant='secondary'
+                  onClick={() => {
+                    resetForm()
+                  }}
+                >
+                  Forkast endringer
+                </Button>
+
+                <Button
+                  type='button'
+                  variant='tertiary'
+                  onClick={() => {
+                    setFieldValue('pvkVurdering', EPvkVurdering.UNDEFINED)
+                    setFieldValue('pvkVurderingsBegrunnelse', '')
+                    setFieldValue('ytterligereEgenskaper', [])
+                  }}
+                >
+                  Nullstill alle svar
+                </Button>
+              </div>
+
+              <StickyFooterButtonLayout>
+                <Button
+                  icon={<ChevronLeftIcon aria-hidden />}
+                  iconPosition='left'
+                  type='button'
+                  variant='tertiary'
+                  onClick={() => {
+                    if (dirty) {
+                      setIsUnsavedModalOpen(true)
+                      setUrlToNavigate(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                    } else {
+                      router.push(etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id))
+                    }
+                  }}
+                >
+                  Gå til Temaoversikt
+                </Button>
+                {pvkDokument &&
+                  pvkDokument.id &&
+                  values.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+                    <Button
+                      icon={<ChevronRightIcon aria-hidden />}
+                      iconPosition='right'
+                      type='button'
+                      variant={'tertiary'}
+                      onClick={() => {
+                        if (dirty) {
+                          setIsUnsavedModalOpen(true)
+                          setUrlToNavigate(
+                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                          )
+                        } else {
+                          router.push(
+                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                          )
+                        }
+                      }}
+                    >
+                      Gå til PVK
+                    </Button>
+                  )}
+              </StickyFooterButtonLayout>
+            </Form>
+          )
+        }}
+      </Formik>
+
+      <AlertPvoUnderArbeidModal
+        isOpen={isPvoAlertModalOpen}
+        onClose={() => setIsPvoAlertModalOpen(false)}
+        pvkDokumentId={pvkDokument.id}
+      />
+
+      <UnsavedModalAlert
+        isOpen={isUnsavedModalOpen}
+        setIsOpen={setIsUnsavedModalOpen}
+        urlToNavigate={urlToNavigate}
+        formRef={formRef}
+      />
+    </>
+  )
+}
+
+export default PvkBehovForm

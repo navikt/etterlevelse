@@ -248,7 +248,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const manglerBehandlingErrorCheck = () => {
-    if (etterlevelseDokumentasjon.behandlingIds.length === 0) {
+    if (
+      etterlevelseDokumentasjon.behandlingIds.length === 0 &&
+      etterlevelseDokumentasjon.dpBehandlingIds.length === 0
+    ) {
       setManglerBehandlingError(true)
     } else {
       setManglerBehandlingError(false)

@@ -239,5 +239,12 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
     hasPvkDocumentationStarted: pvkDokument.hasPvkDocumentationStarted || false,
     hasPvkDocumentBeenUpdatedAfterApproval:
       pvkDokument.hasPvkDocumentBeenUpdatedAfterApproval || false,
+
+    dpProcessProfilering:
+      pvkDokument.dpProcessProfilering === undefined ? false : pvkDokument.dpProcessProfilering,
+    dpProcessHelautomatiskBehandling:
+      pvkDokument.dpProcessHelautomatiskBehandling === undefined
+        ? false
+        : pvkDokument.dpProcessHelautomatiskBehandling,
   }
 }

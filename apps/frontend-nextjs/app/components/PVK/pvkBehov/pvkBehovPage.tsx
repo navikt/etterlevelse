@@ -2,6 +2,7 @@ import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/beha
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
+import PvkBehovDpForm from '@/components/PVK/form/pvkBehovDpForm'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
@@ -18,7 +19,11 @@ import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import {
+  harBehandlinger,
+  harKunDpBehandlinger,
+  isReadOnlyPvkStatus,
+} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Heading } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams } from 'next/navigation'
@@ -109,10 +114,22 @@ export const PvkBehovPage = () => {
         'code'
       ).filter((kategori: IExternalCode) => kategori.code === 'SAERLIGE')
 
+      let dpBehandlingSaerligKategorier = false
+
+      if (
+        etterlevelseDokumentasjon.dpBehandlinger &&
+        etterlevelseDokumentasjon.dpBehandlinger.length > 0
+      ) {
+        etterlevelseDokumentasjon.dpBehandlinger.forEach((dpBehandling) => {
+          if (dpBehandling.art9) {
+            dpBehandlingSaerligKategorier = true
+          }
+        })
+      }
       return {
         profilering,
         automatiskBehandling,
-        saerligKategorier: saerligKategorierOppsumert.length > 0,
+        saerligKategorier: saerligKategorierOppsumert.length > 0 || dpBehandlingSaerligKategorier,
         opplysningstyperMangler,
       }
     }, [etterlevelseDokumentasjon])
@@ -159,8 +176,8 @@ export const PvkBehovPage = () => {
               behandlingensLivslop={behandlingensLivslop}
               artOgOmfangId={artOgOmfang?.id}
             />
-            {etterlevelseDokumentasjon.behandlinger &&
-              etterlevelseDokumentasjon.behandlinger.length > 0 &&
+
+            {harBehandlinger(etterlevelseDokumentasjon) &&
               (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
               !isReadOnlyPvkStatus(pvkDokument.status) &&
               !isPvkBehovLock && (
@@ -175,11 +192,24 @@ export const PvkBehovPage = () => {
                 />
               )}
 
+            {harKunDpBehandlinger(etterlevelseDokumentasjon) &&
+              (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) &&
+              !isReadOnlyPvkStatus(pvkDokument.status) &&
+              !isPvkBehovLock && (
+                <PvkBehovDpForm
+                  pvkDokument={pvkDokument}
+                  setPvkDokument={setPvkDokument}
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  ytterligereEgenskaper={ytterligereEgenskaper}
+                />
+              )}
+
             {((!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin()) ||
               isReadOnlyPvkStatus(pvkDokument.status) ||
               isPvkBehovLock) && (
               <PvkBehovReadOnly
                 pvkDokument={pvkDokument}
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 ytterligereEgenskaper={ytterligereEgenskaper}
               />
             )}
