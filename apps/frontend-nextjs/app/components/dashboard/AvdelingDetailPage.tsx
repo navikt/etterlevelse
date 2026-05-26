@@ -671,10 +671,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Risikoeier
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='krav' align='center'>
-                          Etterlevelseskrav
+                          Antall krav ferdig utfylt
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='oppfylt' align='center'>
-                          Oppfylt
+                          Oppfylt der kravet er ferdig vurdert
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='dato_etterlvelse'>
                           Sist oppdatert
