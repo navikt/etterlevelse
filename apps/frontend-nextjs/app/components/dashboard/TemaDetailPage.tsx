@@ -966,11 +966,13 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                     krav.antallFerdigVurdert,
                   ])
                   const totalSuksess =
+                    krav.antallSuksesskriterierIkkePaabegynt +
                     krav.antallSuksesskriterierUnderArbeid +
                     krav.antallSuksesskriterierOppfylt +
                     krav.antallSuksesskriterierIkkeOppfylt +
                     krav.antallSuksesskriterierIkkeRelevant
                   const sukPcts = roundedPercentages([
+                    krav.antallSuksesskriterierIkkePaabegynt,
                     krav.antallSuksesskriterierUnderArbeid,
                     krav.antallSuksesskriterierOppfylt,
                     krav.antallSuksesskriterierIkkeOppfylt,
@@ -985,6 +987,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                     krav.antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt,
                     krav.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant,
                   ])
+                  const ikkeFerdigIkkePaabegynt = krav.antallSuksesskriterierIkkePaabegynt
                   const ikkeFerdigUnderArbeid = krav.antallSuksesskriterierUnderArbeid
                   const ikkeFerdigOppfylt =
                     krav.antallSuksesskriterierOppfylt -
@@ -996,11 +999,13 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                     krav.antallSuksesskriterierIkkeRelevant -
                     krav.antallFerdigUtfyltKravSuksesskriterierIkkeRelevant
                   const totalIkkeFerdig =
+                    ikkeFerdigIkkePaabegynt +
                     ikkeFerdigUnderArbeid +
                     ikkeFerdigOppfylt +
                     ikkeFerdigIkkeOppfylt +
                     ikkeFerdigIkkeRelevant
                   const ikkeFerdigPcts = roundedPercentages([
+                    ikkeFerdigIkkePaabegynt,
                     ikkeFerdigUnderArbeid,
                     ikkeFerdigOppfylt,
                     ikkeFerdigIkkeOppfylt,
@@ -1049,18 +1054,26 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                             Etterlevelse: suksesskriterier ({totalSuksess})
                           </Heading>
                           <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>
+                              {krav.antallSuksesskriterierIkkePaabegynt}
+                            </span>
+                            {totalSuksess > 0 &&
+                              ` (${formatPct(sukPcts[0], krav.antallSuksesskriterierIkkePaabegynt)}%)`}
+                          </BodyShort>
+                          <BodyShort>
                             Under arbeid{' '}
                             <span className='font-bold'>
                               {krav.antallSuksesskriterierUnderArbeid}
                             </span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[0], krav.antallSuksesskriterierUnderArbeid)}%)`}
+                              ` (${formatPct(sukPcts[1], krav.antallSuksesskriterierUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Oppfylt{' '}
                             <span className='font-bold'>{krav.antallSuksesskriterierOppfylt}</span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[1], krav.antallSuksesskriterierOppfylt)}%)`}
+                              ` (${formatPct(sukPcts[2], krav.antallSuksesskriterierOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke oppfylt{' '}
@@ -1068,7 +1081,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                               {krav.antallSuksesskriterierIkkeOppfylt}
                             </span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[2], krav.antallSuksesskriterierIkkeOppfylt)}%)`}
+                              ` (${formatPct(sukPcts[3], krav.antallSuksesskriterierIkkeOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke relevant{' '}
@@ -1076,7 +1089,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                               {krav.antallSuksesskriterierIkkeRelevant}
                             </span>
                             {totalSuksess > 0 &&
-                              ` (${formatPct(sukPcts[3], krav.antallSuksesskriterierIkkeRelevant)}%)`}
+                              ` (${formatPct(sukPcts[4], krav.antallSuksesskriterierIkkeRelevant)}%)`}
                           </BodyShort>
                         </div>
                         <div>
@@ -1113,25 +1126,31 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                             Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdig})
                           </Heading>
                           <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>{ikkeFerdigIkkePaabegynt}</span>
+                            {totalIkkeFerdig > 0 &&
+                              ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigIkkePaabegynt)}%)`}
+                          </BodyShort>
+                          <BodyShort>
                             Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigUnderArbeid)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Oppfylt <span className='font-bold'>{ikkeFerdigOppfylt}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigOppfylt)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke oppfylt <span className='font-bold'>{ikkeFerdigIkkeOppfylt}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigIkkeOppfylt)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeOppfylt)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ikke relevant{' '}
                             <span className='font-bold'>{ikkeFerdigIkkeRelevant}</span>
                             {totalIkkeFerdig > 0 &&
-                              ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeRelevant)}%)`}
+                              ` (${formatPct(ikkeFerdigPcts[4], ikkeFerdigIkkeRelevant)}%)`}
                           </BodyShort>
                         </div>
                       </div>
