@@ -66,87 +66,91 @@ const DashboardPage = () => {
 
       {!isLoading && !error && (
         <>
-          <Heading size='medium' level='2' className='mt-8'>
-            Oversikt i Nav
-          </Heading>
+          <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
+            <Heading size='medium' level='2'>
+              Oversikt i Nav
+            </Heading>
 
-          <Tabs className='mt-4' defaultValue='figurer-overview'>
-            <Tabs.List>
-              <Tabs.Tab value='figurer-overview' label='Vis figurer' />
-              <Tabs.Tab value='nokkeltall-overview' label='Vis nøkkeltall' />
-            </Tabs.List>
+            <Tabs className='mt-4' defaultValue='figurer-overview'>
+              <Tabs.List>
+                <Tabs.Tab value='figurer-overview' label='Vis figurer' />
+                <Tabs.Tab value='nokkeltall-overview' label='Vis nøkkeltall' />
+              </Tabs.List>
 
-            <Tabs.Panel value='figurer-overview'>
-              <div className='mt-6'>
-                <DashboardOverviewCard stats={stats} view='figurer' />
-              </div>
-            </Tabs.Panel>
-            <Tabs.Panel value='nokkeltall-overview'>
-              <div className='mt-6'>
-                <DashboardOverviewCard stats={stats} view='nokkeltall' />
-              </div>
-            </Tabs.Panel>
-          </Tabs>
+              <Tabs.Panel value='figurer-overview'>
+                <div className='mt-6'>
+                  <DashboardOverviewCard stats={stats} view='figurer' />
+                </div>
+              </Tabs.Panel>
+              <Tabs.Panel value='nokkeltall-overview'>
+                <div className='mt-6'>
+                  <DashboardOverviewCard stats={stats} view='nokkeltall' />
+                </div>
+              </Tabs.Panel>
+            </Tabs>
 
-          <LinkCard
-            className='mt-8 max-w-md'
-            data-color='accent'
-            style={{ color: 'var(--ax-text-subtle)' }}
-          >
-            <LinkCard.Title>
-              <LinkCard.Anchor href='/dashboard/tema'>
-                Se etterlevelse inndelt etter tema
-              </LinkCard.Anchor>
-            </LinkCard.Title>
-          </LinkCard>
+            <LinkCard
+              className='mt-8 max-w-md'
+              data-color='accent'
+              style={{ color: 'var(--ax-text-subtle)' }}
+            >
+              <LinkCard.Title>
+                <LinkCard.Anchor href='/dashboard/tema'>
+                  Se etterlevelse inndelt etter tema
+                </LinkCard.Anchor>
+              </LinkCard.Title>
+            </LinkCard>
+          </div>
 
-          <Heading size='medium' level='2' className='mt-8'>
-            Avdelingoversikt
-          </Heading>
+          <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
+            <Heading size='medium' level='2'>
+              Avdelingoversikt
+            </Heading>
 
-          <Select
-            label='Velg avdeling'
-            className='mt-4 w-fit min-w-64'
-            value={selectedAvdeling}
-            onChange={(e) => setSelectedAvdeling(e.target.value)}
-          >
-            <option value=''>Alle avdelinger</option>
-            {stats.map((s) => (
-              <option key={s.avdelingId} value={s.avdelingId}>
-                {s.avdelingNavn}
-              </option>
-            ))}
-          </Select>
+            <Select
+              label='Velg avdeling'
+              className='mt-4 w-fit min-w-64'
+              value={selectedAvdeling}
+              onChange={(e) => setSelectedAvdeling(e.target.value)}
+            >
+              <option value=''>Alle avdelinger</option>
+              {stats.map((s) => (
+                <option key={s.avdelingId} value={s.avdelingId}>
+                  {s.avdelingNavn}
+                </option>
+              ))}
+            </Select>
 
-          <Tabs className='mt-4' defaultValue='figurer'>
-            <Tabs.List>
-              <Tabs.Tab value='figurer' label='Vis figurer' />
-              <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-            </Tabs.List>
+            <Tabs className='mt-4' defaultValue='figurer'>
+              <Tabs.List>
+                <Tabs.Tab value='figurer' label='Vis figurer' />
+                <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+              </Tabs.List>
 
-            <Tabs.Panel value='figurer'>
-              <div className='flex flex-col gap-6 mt-6'>
-                {filteredStats.map((avdelingStats) => (
-                  <DashboardBarCard
-                    key={avdelingStats.avdelingId}
-                    stats={avdelingStats}
-                    subHeadingLevel='4'
-                  />
-                ))}
-              </div>
-            </Tabs.Panel>
-            <Tabs.Panel value='nokkeltall'>
-              <div className='flex flex-col gap-6 mt-6'>
-                {filteredStats.map((avdelingStats) => (
-                  <DashboardCard
-                    key={avdelingStats.avdelingId}
-                    stats={avdelingStats}
-                    subHeadingLevel='4'
-                  />
-                ))}
-              </div>
-            </Tabs.Panel>
-          </Tabs>
+              <Tabs.Panel value='figurer'>
+                <div className='flex flex-col gap-6 mt-6'>
+                  {filteredStats.map((avdelingStats) => (
+                    <DashboardBarCard
+                      key={avdelingStats.avdelingId}
+                      stats={avdelingStats}
+                      subHeadingLevel='4'
+                    />
+                  ))}
+                </div>
+              </Tabs.Panel>
+              <Tabs.Panel value='nokkeltall'>
+                <div className='flex flex-col gap-6 mt-6'>
+                  {filteredStats.map((avdelingStats) => (
+                    <DashboardCard
+                      key={avdelingStats.avdelingId}
+                      stats={avdelingStats}
+                      subHeadingLevel='4'
+                    />
+                  ))}
+                </div>
+              </Tabs.Panel>
+            </Tabs>
+          </div>
         </>
       )}
     </PageLayout>
