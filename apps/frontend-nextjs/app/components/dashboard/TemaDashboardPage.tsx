@@ -540,7 +540,7 @@ const TemaDashboardPage = () => {
             disabled={isLoading || filteredTemaStats.length === 0}
             className='pr-4'
           >
-            Last ned utvalg som CSV
+            Last ned nøkkeltall utvalg som CSV
           </Button>
         </div>
 

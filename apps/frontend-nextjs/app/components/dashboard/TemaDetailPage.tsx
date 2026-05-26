@@ -569,7 +569,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             disabled={isLoading || !temaStats}
             className='pr-4'
           >
-            Last ned utvalg som CSV
+            Last ned nøkkeltall utvalg som CSV
           </Button>
         </div>
 
@@ -888,7 +888,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             disabled={isKravLoading || filteredKrav.length === 0}
             className='pr-4'
           >
-            Last ned utvalg som CSV
+            Last ned nøkkeltall utvalg som CSV
           </Button>
         </div>
 
