@@ -311,77 +311,66 @@ public class NomGraphClient {
 
     private List<OrgEnhet> getDevEnheter(String seksjonId) {
         return switch (seksjonId) {
-            case "arbeidsavdelingen" -> List.of(
-                    createDevOrganisering("arb_sek_1", "Seksjon for arbeid og helse"),
-                    createDevOrganisering("arb_sek_2", "Seksjon for arbeidsgivertjenester"),
-                    createDevOrganisering("arb_sek_3", "Seksjon for arbeidsmarkedstiltak"),
-                    createDevOrganisering("arb_sek_4", "Seksjon for arbeidsoppfølging"),
-                    createDevOrganisering("arb_sek_5", "Styringsseksjon for Arbeidsavdelingen")
+            case "arb_sek_1" -> List.of(
+                    createDevOrganisering("arb_sek_1_enhet_1", "Fagdirektør arbeid og helse"),
+                    createDevOrganisering("arb_sek_1_enhet_2", "Kompetansemiljø arbeid og helse")
             );
-            case "brukeropplevelser" -> List.of(
-                    createDevOrganisering("bru_sek_1", "Designseksjonen"),
-                    createDevOrganisering("bru_sek_2", "Seksjon for brukerflater"),
-                    createDevOrganisering("bru_sek_3", "Seksjon for brukerinnsikt")
+            case "arb_sek_2" -> List.of(
+                    createDevOrganisering("arb_sek_2_enhet_1", "Fagdirektør arbeidsgivertjenester"),
+                    createDevOrganisering("arb_sek_2_enhet_2", "Kompetansemiljø arbeidsgivertjenester")
             );
-            case "mennesker_og_organisasjon" -> List.of(
-                    createDevOrganisering("mo_sek_1", "Arbeidsgiverseksjonen"),
-                    createDevOrganisering("mo_sek_2", "Avdeling for mennesker og organisasjon"),
-                    createDevOrganisering("mo_sek_3", "HMS- og styringsseksjonen"),
-                    createDevOrganisering("mo_sek_4", "Seksjon for kompetanseutvikling"),
-                    createDevOrganisering("mo_sek_5", "Seksjon for leder- og teamutvikling")
+            case  "arb_sek_3"-> List.of(
+                    createDevOrganisering("arb_sek_3_enhet_1", "Fagdirektør arbeidsmarkedstiltak"),
+                    createDevOrganisering("arb_sek_3_enhet_2", "Kompetansemiljø arbeidsmarkedstiltak")
             );
-            case "juridisk_avdeling" -> List.of(
-                    createDevOrganisering("jur_sek_1", "Seksjon for personvern og forvaltningsrett"),
-                    createDevOrganisering("jur_sek_2", "Seksjon for rettsavklaring"),
-                    createDevOrganisering("jur_sek_3", "Styringsseksjon for Juridisk avdeling")
+            case "arb_sek_4" -> List.of(
+                    createDevOrganisering("arb_sek_4_enhet_1", "Fagdirektør arbeidsoppfølging"),
+                    createDevOrganisering("arb_sek_4_enhet_2", "Kompetansemiljø arbeidsoppfølging")
             );
-            case "klageinstans" -> List.of(
-                    createDevOrganisering("kla_sek_1", "Klageinstans Bergen"),
-                    createDevOrganisering("kla_sek_2", "Klageinstans Kristiansand"),
-                    createDevOrganisering("kla_sek_3", "Klageinstans Oslo"),
-                    createDevOrganisering("kla_sek_4", "Klageinstans styringsenhet"),
-                    createDevOrganisering("kla_sek_5", "Klageinstans Tromsø"),
-                    createDevOrganisering("kla_sek_6", "Klageinstans Trondheim"),
-                    createDevOrganisering("kla_sek_7", "Klageinstans Tønsberg")
+            case "arb_sek_5" -> List.of(
+                    createDevOrganisering("arb_sek_5_enhet_1", "Kompetansemiljø styring for Arbeidsavdelingen")
             );
-            case "kommunikasjonsavdelingen" -> List.of(
-                    createDevOrganisering("kom_sek_1", "Seksjon for endringskommunikasjon"),
-                    createDevOrganisering("kom_sek_2", "Seksjon for identitet og formidling"),
-                    createDevOrganisering("kom_sek_3", "Seksjon for samfunnskontakt"),
-                    createDevOrganisering("kom_sek_4", "Seksjon for virksomhetskommunikasjon")
+
+            case "tek_sek_1" -> List.of(
+                    createDevOrganisering("tek_sek_1_enhet_1", "Grunndata og datadeling"),
+                    createDevOrganisering("tek_sek_1_enhet_2", "Kompetansemiljø innsikt og informasjon"),
+                    createDevOrganisering("tek_sek_1_enhet_3", "Informasjonsstyring og etterlevelse"),
+                    createDevOrganisering("tek_sek_1_enhet_4", "Innsikt og KI")
             );
-            case "kunnskapsavdelingen" -> List.of(
-                    createDevOrganisering("kun_sek_1", "Forskningsseksjonen"),
-                    createDevOrganisering("kun_sek_2", "FOU-seksjonen"),
-                    createDevOrganisering("kun_sek_3", "Prognoseseksjonen"),
-                    createDevOrganisering("kun_sek_4", "Seksjon for kunnskapsbasert læring"),
-                    createDevOrganisering("kun_sek_5", "Statistikkseksjonen"),
-                    createDevOrganisering("kun_sek_6", "Styringsseksjon for Kunnskapsavdelingen")
+
+            case  "tek_sek_2"-> List.of(
+                    createDevOrganisering("tek_sek_2_enhet_1", "Digital arbeidsplass"),
+                    createDevOrganisering("tek_sek_2_enhet_2", "Brukerstøtte"),
+                    createDevOrganisering("tek_sek_2_enhet_3", "Virksomhetsteknologi")
             );
-            case "teknologiavdelingen" -> List.of(
-                    createDevOrganisering("tek_sek_1", "Data og informasjonsforvaltning"),
-                    createDevOrganisering("tek_sek_2", "Digital ansattopplevelse"),
-                    createDevOrganisering("tek_sek_3", "Digital sikkerhet"),
-                    createDevOrganisering("tek_sek_4", "Organisasjon og styring"),
-                    createDevOrganisering("tek_sek_5", "Plattform og infrastruktur"),
-                    createDevOrganisering("tek_sek_6", "Produktutvikling"),
-                    createDevOrganisering("tek_sek_7", "Utvikling")
+            case"tek_sek_3" -> List.of(
+                    createDevOrganisering("tek_sek_3_enhet_1", "Digital sikkerhetsarkitektur og -risikostyring"),
+                    createDevOrganisering("tek_sek_3_enhet_2", "Kompetansemiljø digital sikkerhet"),
+                    createDevOrganisering("tek_sek_3_enhet_3", "Digitalt forsvar")
             );
-            case "velferdsavdelingen" -> List.of(
-                    createDevOrganisering("vel_sek_1", "Seksjon for hjelpemidler og tilrettelegging"),
-                    createDevOrganisering("vel_sek_2", "Seksjon for sosiale tjenester"),
-                    createDevOrganisering("vel_sek_3", "Styringsseksjon for Velferdsavdelingen")
+            case  "tek_sek_4" -> List.of(
+                    createDevOrganisering("tek_sek_4_enhet_1", "Økonomistyring"),
+                    createDevOrganisering("tek_sek_4_enhet_2", "Organisasjonsutvikling"),
+                    createDevOrganisering("tek_sek_4_enhet_3", "IT-avtaler og leverandørstyring")
             );
-            case "ytelsesavdelingen" -> List.of(
-                    createDevOrganisering("yt_sek_1", "Seksjon for arbeidsavklaringspenger"),
-                    createDevOrganisering("yt_sek_2", "Seksjon for arbeidsytelser"),
-                    createDevOrganisering("yt_sek_3", "Seksjon for familieytelser"),
-                    createDevOrganisering("yt_sek_4", "Seksjon for helseytelser"),
-                    createDevOrganisering("yt_sek_5", "Seksjon for kontroll og internasjonalt"),
-                    createDevOrganisering("yt_sek_6", "Seksjon for pensjon og uføretrygd"),
-                    createDevOrganisering("yt_sek_7", "Styringsseksjon for Ytelsesavdelingen")
+            case  "tek_sek_5" -> List.of(
+                    createDevOrganisering("tek_sek_5_enhet_1", "Styring av sky"),
+                    createDevOrganisering("tek_sek_5_enhet_2", "Plattform"),
+                    createDevOrganisering("tek_sek_5_enhet_3", "Infrastruktur")
+            );
+            case "tek_sek_6" -> List.of(
+                    createDevOrganisering("tek_sek_6_enhet_1", "Produktutviklingsmetodikk"),
+                    createDevOrganisering("tek_sek_6_enhet_2", "Leveranseledelse"),
+                    createDevOrganisering("tek_sek_6_enhet_3", "Produktledelse")
+            );
+            case "tek_sek_7" -> List.of(
+                    createDevOrganisering("tek_sek_7_enhet_1", "Arkitektur og teknologiledelse"),
+                    createDevOrganisering("tek_sek_7_enhet_2", "Utvikling 1"),
+                    createDevOrganisering("tek_sek_7_enhet_2", "Utvikling 2"),
+                    createDevOrganisering("tek_sek_7_enhet_3", "Utvikling 3")
             );
             default -> List.of();
         };
     }
+
 }
