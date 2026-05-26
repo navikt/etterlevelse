@@ -664,9 +664,10 @@ public class DashboardService {
 
         if (!prioritizedKrav.isEmpty()) {
             aktivKravList = aktivKravList.stream()
-                    .sorted(Comparator
-                            .comparingInt((Krav k) -> prioritizedKrav.indexOf(k.getKravNummer()))
-                            .thenComparingInt(Krav::getKravNummer))
+                    .sorted(Comparator.comparingInt(k -> {
+                        int index = prioritizedKrav.indexOf(k.getKravNummer());
+                        return index == -1 ? Integer.MAX_VALUE : index;
+                    }))
                     .toList();
         }
 
