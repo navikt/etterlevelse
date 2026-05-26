@@ -1,0 +1,14 @@
+query alleOverOrganiseringer($id: String){
+    orgEnhet(where: {id: $id}) {
+        id
+        navn
+        organiseringer(retning: over) {
+            orgEnhet {
+                id
+                navn
+                orgEnhetsType
+                nomNivaa
+            }
+        }
+    }
+}

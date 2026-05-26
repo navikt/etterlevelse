@@ -54,6 +54,15 @@ public class NomController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Get enhet by seksjon id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/enhet/seksjon/{id}")
+    public ResponseEntity<List<OrgEnhet>> getEnhetBySeksjonId(@PathVariable String id) {
+        log.info("Get enhter by seksjon id");
+        var response = nomGraphClient.getAllEnhetForSeksjon(id);
+        return ResponseEntity.ok(response);
+    }
+
     @Operation(summary = "Get by id")
     @ApiResponse(description = "ok")
     @GetMapping("/{id}")
