@@ -148,6 +148,7 @@ public class NomGraphClient {
                         if (avdelingCheckForSeksjon.isEmpty()) {
                             throw new ValidationException("Invalid seksjon id: " + seksjonId + ", no avdeling found for seksjon");
                         } else {
+                            var seksjon = getById(seksjonId);
                             var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", seksjonId));
                             var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
 
@@ -160,8 +161,8 @@ public class NomGraphClient {
                                 return List.of();
                             }
 
-                            return response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
-
+                            return response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet)
+                                    .filter(enhet -> !enhet.getNavn().equals(seksjon.getNavn())).toList();
                         }
                     }
             }
