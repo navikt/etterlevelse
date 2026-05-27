@@ -77,7 +77,7 @@ export const TiltakForm: FunctionComponent<TProps> = ({
       })}
       innerRef={formRef}
     >
-      {({ resetForm, submitForm, errors }) => (
+      {({ values, resetForm, submitForm, errors }) => (
         <Form>
           {title && (
             <div className='mb-5 border-t-2 mt-5'>
@@ -242,6 +242,16 @@ export const TiltakForm: FunctionComponent<TProps> = ({
               )}
             </Field>
           </div>
+
+          {values.iverksatt && (
+            <TextAreaField
+              label='Beskriv nærmere hvordan tiltaket er iverksatt (valgfritt)'
+              name='iverksettingsKommentar'
+              rows={3}
+              noPlaceholder
+              marginBottom
+            />
+          )}
 
           {!_.isEmpty(errors) && (
             <ErrorSummary

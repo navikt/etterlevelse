@@ -5,6 +5,7 @@ import ReadOnlyField, {
   ReadOnlyFieldBool,
   ReadOnlyFieldDescriptionOptional,
 } from '@/components/common/readOnlyFields'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { PencilIcon } from '@navikt/aksel-icons'
@@ -16,10 +17,11 @@ import { FunctionComponent, useEffect, useState } from 'react'
 interface IProps {
   tiltak: ITiltak
   risikoscenarioList: IRisikoscenario[]
+  noIverksattKommentar?: boolean
 }
 
 export const TiltakView = (props: IProps) => {
-  const { tiltak, risikoscenarioList } = props
+  const { tiltak, risikoscenarioList, noIverksattKommentar } = props
   const [ansvarligView, setAnsvarligView] = useState<string>('')
 
   useEffect(() => {
@@ -102,6 +104,18 @@ export const TiltakView = (props: IProps) => {
           </Alert>
         )}
       </div>
+
+      {!noIverksattKommentar && (
+        <div className='mt-3 mb-5'>
+          {tiltak.iverksatt && (
+            <ReadOnlyField
+              label='Hvordan er tiltaket iverksatt :'
+              description={tiltak.iverksettingsKommentar || 'Ikke lagt til kommentar'}
+              className='mb-3 flex gap-2'
+            />
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -163,7 +177,7 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
                 pvkDokumentId: tiltak.pvkDokumentId,
               })}
             >
-              {({ resetForm, submitForm }) => (
+              {({ values, resetForm, submitForm }) => (
                 <Form>
                   <Modal.Body>
                     <ReadOnlyField
@@ -191,6 +205,16 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
                         )}
                       </Field>
                     </div>
+
+                    {values.iverksatt && (
+                      <TextAreaField
+                        label='Beskriv nærmere hvordan tiltaket er iverksatt (valgfritt)'
+                        name='iverksettingsKommentar'
+                        rows={3}
+                        noPlaceholder
+                        marginBottom
+                      />
+                    )}
                   </Modal.Body>
                   <Modal.Footer>
                     <Button
