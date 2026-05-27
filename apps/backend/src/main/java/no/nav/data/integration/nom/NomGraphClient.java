@@ -134,38 +134,39 @@ public class NomGraphClient {
 
 
     public List<OrgEnhet> getAllEnhetForSeksjon(String seksjonId) {
-        var avdeling = getOverOrganisering(seksjonId);
-        if (avdeling.isEmpty()) {
-            throw new ValidationException("Invalid seksjon id: " + seksjonId + ", no avdeling found");
-        } else {
-            var avdelingForSeksjon = avdeling.getFirst();
-            //Check if id is a valid avdelingID
-            var avdelingCheckForSeksjon = getAvdelingById(avdelingForSeksjon.getId());
-
-            if (avdelingCheckForSeksjon.isEmpty()) {
-                throw new ValidationException("Invalid seksjon id: " + seksjonId + ", no avdeling found for seksjon");
-            } else {
                 if (securityProperties.isDev()) {
                     return getDevEnheter(seksjonId);
                 } else {
-                    var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", seksjonId));
-                    var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
+                    var avdeling = getOverOrganisering(seksjonId);
+                    if (avdeling.isEmpty()) {
+                        throw new ValidationException("Invalid seksjon id: " + seksjonId + ", no avdeling found");
+                    } else {
+                        var avdelingForSeksjon = avdeling.getFirst();
+                        //Check if id is a valid avdelingID
+                        var avdelingCheckForSeksjon = getAvdelingById(avdelingForSeksjon.getId());
 
-                    assert res.getBody() != null;
-                    assert res.getBody().getData() != null;
+                        if (avdelingCheckForSeksjon.isEmpty()) {
+                            throw new ValidationException("Invalid seksjon id: " + seksjonId + ", no avdeling found for seksjon");
+                        } else {
+                            var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", seksjonId));
+                            var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
 
-                    var response = res.getBody().getData();
+                            assert res.getBody() != null;
+                            assert res.getBody().getData() != null;
 
-                    if (response.getOrgEnhet() == null) {
-                        return List.of();
+                            var response = res.getBody().getData();
+
+                            if (response.getOrgEnhet() == null) {
+                                return List.of();
+                            }
+
+                            return response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
+
+                        }
                     }
-
-                    return response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
-
-                }
             }
         }
-    }
+
 
     private List<OrgEnhet> getOverOrganisering(String nomId) {
         var request = new GraphQLRequest(getOverOrganiseringerQuery, Map.of("id", nomId));
