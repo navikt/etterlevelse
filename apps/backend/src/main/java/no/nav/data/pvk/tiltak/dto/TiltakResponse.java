@@ -33,6 +33,7 @@ public class TiltakResponse {
     private List<UUID> risikoscenarioIds; // Merk: Settes ikke i buildFrom
     private boolean iverksatt;
     private LocalDate iverksattDato;
+    private String iverksettingsKommentar;
 
     private ChangeStampResponse changeStamp;
     private Integer version;
@@ -55,6 +56,7 @@ public class TiltakResponse {
                 .frist(td.getFrist())
                 .iverksatt(td.isIverksatt())
                 .iverksattDato(td.getIverksattDato())
+                .iverksettingsKommentar(td.getIverksettingsKommentar())
                 .build();
     }
     

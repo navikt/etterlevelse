@@ -23,4 +23,5 @@ public class TiltakData {
     @Builder.Default
     private boolean iverksatt = false;
     private LocalDate iverksattDato;
+    private String iverksettingsKommentar;
 }

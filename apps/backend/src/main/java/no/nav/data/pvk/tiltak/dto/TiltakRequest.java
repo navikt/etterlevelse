@@ -31,6 +31,7 @@ public class TiltakRequest implements RequestElement {
     private String ansvarligTeam;
     private boolean iverksatt;
     private LocalDate iverksattDato;
+    private String iverksettingsKommentar;
     
     private Boolean update;
 
@@ -40,6 +41,7 @@ public class TiltakRequest implements RequestElement {
         setNavn(trimToNull(navn));
         setBeskrivelse(trimToNull(beskrivelse));
         setAnsvarlig(trimToNull(ansvarlig));
+        setIverksettingsKommentar(trimToNull(iverksettingsKommentar));
     }
 
     @Override
@@ -60,6 +62,7 @@ public class TiltakRequest implements RequestElement {
                         .frist(frist)
                         .iverksatt(iverksatt)
                         .iverksattDato(iverksattDato)
+                        .iverksettingsKommentar(iverksettingsKommentar)
                         .build())
                 .build();
     }
@@ -73,5 +76,6 @@ public class TiltakRequest implements RequestElement {
         tiltakToMerge.getTiltakData().setFrist(frist);
         tiltakToMerge.getTiltakData().setIverksatt(iverksatt);
         tiltakToMerge.getTiltakData().setIverksattDato(iverksattDato);
+        tiltakToMerge.getTiltakData().setIverksettingsKommentar(iverksettingsKommentar);
     }
 }
