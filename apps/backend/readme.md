@@ -16,6 +16,7 @@ For å bygge lokalt i Windows må man ha Docker desktop. Husk å legge til bruke
 
 ### Azure bruker trenger tilgang til
 
+
 #### Azure scopes:
 - Mail.Send - Delegated
 #### Epostbruker
