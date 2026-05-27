@@ -60,6 +60,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private String nomAvdelingId;
     private String avdelingNavn;
     private List<NomSeksjon> seksjoner;
+    private List<NomEnhet> enheter;
 
     private List<Varslingsadresse> varslingsadresser;
 
@@ -119,6 +120,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setNomAvdelingId(nomAvdelingId);
         eDokData.setAvdelingNavn(avdelingNavn);
         eDokData.setSeksjoner(copyOf(seksjoner));
+        eDokData.setEnheter(copyOf(enheter));
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));

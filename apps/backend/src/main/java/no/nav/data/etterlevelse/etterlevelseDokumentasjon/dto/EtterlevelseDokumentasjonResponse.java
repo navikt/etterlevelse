@@ -67,6 +67,7 @@ public class EtterlevelseDokumentasjonResponse {
     private String nomAvdelingId;
     private String avdelingNavn;
     private List<NomSeksjon> seksjoner;
+    private List<NomEnhet> enheter;
 
     private ProductAreaResponse produktOmradetData;
     private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
@@ -106,6 +107,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .nomAvdelingId(eDokData.getNomAvdelingId())
                 .avdelingNavn(eDokData.getAvdelingNavn())
                 .seksjoner(nullsafeCopyOf(eDokData.getSeksjoner()))
+                .enheter(nullsafeCopyOf(eDokData.getEnheter()))
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
                 .risikovurderinger(eDokData.getRisikovurderinger())
                 .P360Recno(eDokData.getP360Recno())
