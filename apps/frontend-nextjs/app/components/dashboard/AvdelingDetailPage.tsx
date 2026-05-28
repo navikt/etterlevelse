@@ -379,7 +379,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   }
 
   const getDisplayStats = (): IAvdelingDashboardStats => {
-    if (searchFilters.length > 0) {
+    if (searchFilters.length > 0 || selectedEnhet) {
       return computeStatsFromDoks(sortedDoks)
     }
     return getCurrentStats()
