@@ -82,24 +82,29 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
 
   const suksessData: IBarSegment[] = [
     {
+      name: 'Ikke påbegynt',
+      value: stats.suksesskriterier.ikkePaabegyntProsent,
+      color: AVDELING_SUKSESS_COLORS[0],
+    },
+    {
       name: 'Under arbeid',
       value: stats.suksesskriterier.underArbeidProsent,
-      color: AVDELING_SUKSESS_COLORS[0],
+      color: AVDELING_SUKSESS_COLORS[1],
     },
     {
       name: 'Oppfylt',
       value: stats.suksesskriterier.oppfyltProsent,
-      color: AVDELING_SUKSESS_COLORS[1],
+      color: AVDELING_SUKSESS_COLORS[2],
     },
     {
       name: 'Ikke oppfylt',
       value: stats.suksesskriterier.ikkeOppfyltProsent,
-      color: AVDELING_SUKSESS_COLORS[2],
+      color: AVDELING_SUKSESS_COLORS[3],
     },
     {
       name: 'Ikke relevant',
       value: stats.suksesskriterier.ikkeRelevantProsent,
-      color: AVDELING_SUKSESS_COLORS[3],
+      color: AVDELING_SUKSESS_COLORS[4],
     },
   ]
 

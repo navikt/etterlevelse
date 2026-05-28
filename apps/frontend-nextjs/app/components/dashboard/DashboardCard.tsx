@@ -44,6 +44,10 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
             Suksesskriterier (etterlevelseskrav)
           </Heading>
           <BodyShort>
+            Ikke påbegynt{' '}
+            <span className='font-bold'>{stats.suksesskriterier.ikkePaabegyntProsent}%</span>
+          </BodyShort>
+          <BodyShort>
             Under arbeid{' '}
             <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
           </BodyShort>

@@ -42,6 +42,7 @@ export interface ITemaDashboardStats {
   suksesskriterierOppfylt: number
   suksesskriterierIkkeOppfylt: number
   suksesskriterierIkkeRelevant: number
+  suksesskriterierIkkePaabegynt: number
   ferdigUtfyltKravSuksesskriterierOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeRelevant?: number
@@ -61,6 +62,7 @@ export interface IKravDashboardStats {
   antallSuksesskriterierOppfylt: number
   antallSuksesskriterierIkkeOppfylt: number
   antallSuksesskriterierIkkeRelevant: number
+  antallSuksesskriterierIkkePaabegynt: number
   antallFerdigUtfyltKravSuksesskriterierOppfylt: number
   antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt: number
   antallFerdigUtfyltKravSuksesskriterierIkkeRelevant: number
@@ -129,10 +131,12 @@ export interface IAvdelingDashboardStats {
   }
   suksesskriterier: {
     total: number
+    ikkePaabegyntAntall: number
     underArbeidAntall: number
     oppfyltAntall: number
     ikkeOppfyltAntall: number
     ikkeRelevantAntall: number
+    ikkePaabegyntProsent: number
     underArbeidProsent: number
     oppfyltProsent: number
     ikkeOppfyltProsent: number
