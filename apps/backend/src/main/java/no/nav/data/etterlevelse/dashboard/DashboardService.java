@@ -498,7 +498,7 @@ public class DashboardService {
                 .build();
     }
 
-    public List<TemaDashboardResponse> getTemaDashboardStats(String temaId ,String avdelingId, String seksjonId) {
+    public List<TemaDashboardResponse> getTemaDashboardStats(String temaId ,String avdelingId, String seksjonId, String enhetId) {
         List<EtterlevelseDokumentasjon> doks;
 
         if (avdelingId != null && !avdelingId.isEmpty()) {
@@ -518,6 +518,14 @@ public class DashboardService {
                                     .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
                     ).toList();
                 }
+            }
+
+            if (enhetId != null && !enhetId.isEmpty()) {
+                doks = doks.stream().filter(d ->
+                        d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
+                        d.getEtterlevelseDokumentasjonData().getEnheter().stream()
+                                .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
+                ).toList();
             }
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
@@ -630,7 +638,7 @@ public class DashboardService {
                 .toList();
     }
 
-    public List<KravDashboardResponse> getKravDashboardStats(String temaCode, String avdelingId, String seksjonId) {
+    public List<KravDashboardResponse> getKravDashboardStats(String temaCode, String avdelingId, String seksjonId, String enhetId) {
         List<EtterlevelseDokumentasjon> doks;
 
         if (avdelingId != null && !avdelingId.isEmpty()) {
@@ -650,6 +658,14 @@ public class DashboardService {
                                             .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
                     ).toList();
                 }
+            }
+
+            if (enhetId != null && !enhetId.isEmpty()) {
+                doks = doks.stream().filter(d ->
+                        d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
+                        d.getEtterlevelseDokumentasjonData().getEnheter().stream()
+                                .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
+                ).toList();
             }
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();

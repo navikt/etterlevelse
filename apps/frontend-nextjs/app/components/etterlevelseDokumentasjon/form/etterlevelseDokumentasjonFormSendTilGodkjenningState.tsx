@@ -7,7 +7,11 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { getAvdelingOptions, getSeksjonOptionsByAvdelingId } from '@/api/nom/nomApi'
+import {
+  getAvdelingOptions,
+  getEnheterBySeksjonId,
+  getSeksjonOptionsByAvdelingId,
+} from '@/api/nom/nomApi'
 import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
@@ -39,6 +43,7 @@ import {
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
+  INomEnhet,
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -116,6 +121,7 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
       : ''
   )
   const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
+  const [enheterBySeksjon, setEnheterBySeksjon] = useState<Map<string, TOption[]>>(new Map())
   const labelNavngiDokument: string = isForRedigering
     ? 'Navngi dokumentet ditt'
     : 'Navngi det nye dokumentet ditt'
@@ -177,6 +183,27 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
       }
     })()
   }, [selectedAvdeling])
+
+  useEffect(() => {
+    if (etterlevelseDokumentasjon?.seksjoner?.length) {
+      etterlevelseDokumentasjon.seksjoner.forEach((seksjon) => {
+        getEnheterBySeksjonId(seksjon.nomSeksjonId)
+          .then((enheter) => {
+            if (enheter.length > 0) {
+              setEnheterBySeksjon((prev) => {
+                const next = new Map(prev)
+                next.set(
+                  seksjon.nomSeksjonId,
+                  enheter.map((e) => ({ value: e.id, label: e.navn }))
+                )
+                return next
+              })
+            }
+          })
+          .catch(() => {})
+      })
+    }
+  }, [etterlevelseDokumentasjon?.seksjoner])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL): Promise<void> => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
@@ -571,6 +598,8 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
 
                         if (value !== fieldProps.form.values.nomAvdelingId) {
                           await fieldProps.form.setFieldValue('seksjoner', [])
+                          await fieldProps.form.setFieldValue('enheter', [])
+                          setEnheterBySeksjon(new Map())
                         }
 
                         await fieldProps.form.setFieldValue('nomAvdelingId', value)
@@ -632,6 +661,21 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                                       nomSeksjonName: selectedSeksjon.label,
                                     },
                                   ])
+
+                                  getEnheterBySeksjonId(String(selectedSeksjon.value))
+                                    .then((enheter) => {
+                                      if (enheter.length > 0) {
+                                        setEnheterBySeksjon((prev) => {
+                                          const next = new Map(prev)
+                                          next.set(
+                                            String(selectedSeksjon.value),
+                                            enheter.map((e) => ({ value: e.id, label: e.navn }))
+                                          )
+                                          return next
+                                        })
+                                      }
+                                    })
+                                    .catch(() => {})
                                 }
                               }
                             }}
@@ -640,7 +684,31 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                             list={fieldProps.form.values.seksjoner.map(
                               (seksjon: INomSeksjon) => seksjon.nomSeksjonName
                             )}
-                            onRemove={fieldProps.remove}
+                            onRemove={(index: number) => {
+                              const removedSeksjon = fieldProps.form.values.seksjoner[index]
+                              fieldProps.remove(index)
+                              const removedEnheter = fieldProps.form.values.enheter.filter(
+                                (e: INomEnhet) => {
+                                  const enhetOptions = enheterBySeksjon.get(
+                                    removedSeksjon.nomSeksjonId
+                                  )
+                                  return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
+                                }
+                              )
+                              if (removedEnheter.length > 0) {
+                                fieldProps.form.setFieldValue(
+                                  'enheter',
+                                  fieldProps.form.values.enheter.filter(
+                                    (e: INomEnhet) => !removedEnheter.includes(e)
+                                  )
+                                )
+                              }
+                              setEnheterBySeksjon((prev) => {
+                                const next = new Map(prev)
+                                next.delete(removedSeksjon.nomSeksjonId)
+                                return next
+                              })
+                            }}
                           />
                         </div>
                       )}
@@ -651,6 +719,56 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                 </div>
               )
             })()}
+
+          {(() => {
+            const allEnhetOptions = Array.from(enheterBySeksjon.values()).flat()
+            if (allEnhetOptions.length === 0) return null
+            return (
+              <div id='enhet' className='flex flex-col lg:flex-row gap-5 mb-5'>
+                <FieldWrapper marginTop full>
+                  <FieldArray name='enheter'>
+                    {(fieldProps: FieldArrayRenderProps) => (
+                      <div>
+                        <LabelWithDescription label='Angi hvilken enhet som er ansvarlig for etterlevelsen' />
+                        <OptionList
+                          label='Enhet'
+                          options={allEnhetOptions}
+                          onChange={async (value: any) => {
+                            if (value) {
+                              const selectedEnhet = allEnhetOptions.find(
+                                (enhet) => enhet.value === value
+                              )
+                              if (!selectedEnhet) return
+                              const ikkeFinnesAlleredeIListe =
+                                fieldProps.form.values.enheter.filter(
+                                  (enhet: INomEnhet) => enhet.nomEnhetId === value
+                                ).length === 0
+                              if (ikkeFinnesAlleredeIListe) {
+                                await fieldProps.form.setFieldValue('enheter', [
+                                  ...fieldProps.form.values.enheter,
+                                  {
+                                    nomEnhetId: selectedEnhet.value,
+                                    nomEnhetName: selectedEnhet.label,
+                                  },
+                                ])
+                              }
+                            }
+                          }}
+                        />
+                        <RenderTagList
+                          list={fieldProps.form.values.enheter.map(
+                            (enhet: INomEnhet) => enhet.nomEnhetName
+                          )}
+                          onRemove={fieldProps.remove}
+                        />
+                      </div>
+                    )}
+                  </FieldArray>
+                </FieldWrapper>
+                <div className='flex-1' />
+              </div>
+            )
+          })()}
 
           {env.isDev && (
             <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>

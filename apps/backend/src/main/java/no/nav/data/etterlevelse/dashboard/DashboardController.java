@@ -2,10 +2,6 @@ package no.nav.data.etterlevelse.dashboard;
 
 import java.util.List;
 
-import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.etterlevelse.codelist.CodelistService;
-import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.dashboard.dto.KravDashboardResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +14,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.etterlevelse.codelist.CodelistService;
+import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
 import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
+import no.nav.data.etterlevelse.dashboard.dto.KravDashboardResponse;
 import no.nav.data.etterlevelse.dashboard.dto.TemaDashboardResponse;
 
 @Slf4j
@@ -69,8 +69,9 @@ public class DashboardController {
     public ResponseEntity<List<TemaDashboardResponse>> getTemaDashboardStats(
             @RequestParam(required = false) String temaCode,
             @RequestParam(required = false) String avdelingId,
-            @RequestParam(required = false) String seksjonId) {
-        log.info("Getting tema dashboard stats avdelingId={} seksjonId={}", avdelingId, seksjonId);
+            @RequestParam(required = false) String seksjonId,
+            @RequestParam(required = false) String enhetId) {
+        log.info("Getting tema dashboard stats avdelingId={} seksjonId={} enhetId={}", avdelingId, seksjonId, enhetId);
 
         if (temaCode != null && temaCode.isEmpty()) {
             var tema = CodelistService.getCodelist(ListName.TEMA, temaCode);
@@ -79,7 +80,7 @@ public class DashboardController {
             }
         }
 
-        return ResponseEntity.ok(dashboardService.getTemaDashboardStats(temaCode, avdelingId, seksjonId));
+        return ResponseEntity.ok(dashboardService.getTemaDashboardStats(temaCode, avdelingId, seksjonId, enhetId));
     }
 
     @Operation(summary = "Get tema dashboard stats")
@@ -88,13 +89,14 @@ public class DashboardController {
     public ResponseEntity<List<KravDashboardResponse>> getKravDashboardStats(
             @PathVariable String temaCode,
             @RequestParam(required = false) String avdelingId,
-            @RequestParam(required = false) String seksjonId) {
-        log.info("Getting krav dashboard stats by tema={} avdelingId={} seksjonId={}", temaCode, avdelingId, seksjonId);
+            @RequestParam(required = false) String seksjonId,
+            @RequestParam(required = false) String enhetId) {
+        log.info("Getting krav dashboard stats by tema={} avdelingId={} seksjonId={} enhetId={}", temaCode, avdelingId, seksjonId, enhetId);
         var tema = CodelistService.getCodelist(ListName.TEMA, temaCode);
         if (tema == null) {
             throw new ValidationException( "Invalid temaCode: " + temaCode);
         }
 
-        return ResponseEntity.ok(dashboardService.getKravDashboardStats(temaCode, avdelingId, seksjonId));
+        return ResponseEntity.ok(dashboardService.getKravDashboardStats(temaCode, avdelingId, seksjonId, enhetId));
     }
 }

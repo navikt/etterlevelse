@@ -26,6 +26,10 @@ export const getSeksjonByAvdelingId = async (avdelingId: string) => {
     .data
 }
 
+export const getEnheterBySeksjonId = async (seksjonId: string) => {
+  return (await axios.get<IOrgEnhet[]>(`${env.backendBaseUrl}/nom/enhet/seksjon/${seksjonId}`)).data
+}
+
 export const getSeksjonOptionsByAvdelingId = async (avdelingId: string) => {
   const seksjoner = await getSeksjonByAvdelingId(avdelingId)
   if (seksjoner && seksjoner.length) {

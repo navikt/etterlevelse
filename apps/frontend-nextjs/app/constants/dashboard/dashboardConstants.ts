@@ -2,6 +2,7 @@ import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
+  INomEnhet,
   INomSeksjon,
 } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -101,6 +102,7 @@ export interface IDashboardTable {
   nomAvdelingId?: string
   avdelingNavn?: string
   seksjoner: INomSeksjon[]
+  enheter: INomEnhet[]
   behandlerPersonopplysninger: boolean
 
   antallKrav?: number
