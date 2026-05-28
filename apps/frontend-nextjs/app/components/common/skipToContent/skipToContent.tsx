@@ -2,12 +2,16 @@ import { Link } from '@navikt/ds-react'
 
 const SkipToContent = () => (
   <>
-    <Link className='p-2 absolute -top-10 left-0 focus:top-0' href='#content'>
-      Hovedinnhold
-    </Link>
-    <Link className='p-2 absolute -top-10 left-0 focus:top-0' href='#react-select-2-input'>
-      Søk
-    </Link>
+    <div className='focus-within:w-32 bg-gray-900'>
+      <Link className='p-2 absolute -top-10 left-0 focus:top-0 text-white' href='#content'>
+        Hovedinnhold
+      </Link>
+    </div>
+    <div className='focus-within:w-10 bg-gray-900'>
+      <Link className='p-2 absolute -top-10 left-0 focus:top-0 text-white' href='#search'>
+        Søk
+      </Link>
+    </div>
   </>
 )
 
