@@ -140,9 +140,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
   useEffect(() => {
     if (selectedSeksjon && selectedSeksjon !== 'ingen-seksjon') {
-      getEnheterBySeksjonId(selectedSeksjon).then((enheter) => {
-        setEnhetOptions(enheter)
-      })
+      getEnheterBySeksjonId(selectedSeksjon)
+        .then(setEnhetOptions)
+        .catch(() => setEnhetOptions([]))
     } else {
       setEnhetOptions([])
     }
@@ -461,7 +461,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               onChange={(e) => setSelectedEnhet(e.target.value)}
             >
               <option value=''>Alle enheter</option>
-              {enhetOptions
+              {[...enhetOptions]
                 .sort((a, b) => a.navn.localeCompare(b.navn))
                 .map((e) => (
                   <option key={e.id} value={e.id}>

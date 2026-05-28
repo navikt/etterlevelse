@@ -187,21 +187,23 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
   useEffect(() => {
     if (etterlevelseDokumentasjon?.seksjoner?.length) {
       etterlevelseDokumentasjon.seksjoner.forEach((seksjon) => {
-        getEnheterBySeksjonId(seksjon.nomSeksjonId).then((enheter) => {
-          if (enheter.length > 0) {
-            setEnheterBySeksjon((prev) => {
-              const next = new Map(prev)
-              next.set(
-                seksjon.nomSeksjonId,
-                enheter.map((e) => ({ value: e.id, label: e.navn }))
-              )
-              return next
-            })
-          }
-        })
+        getEnheterBySeksjonId(seksjon.nomSeksjonId)
+          .then((enheter) => {
+            if (enheter.length > 0) {
+              setEnheterBySeksjon((prev) => {
+                const next = new Map(prev)
+                next.set(
+                  seksjon.nomSeksjonId,
+                  enheter.map((e) => ({ value: e.id, label: e.navn }))
+                )
+                return next
+              })
+            }
+          })
+          .catch(() => {})
       })
     }
-  }, [])
+  }, [etterlevelseDokumentasjon?.seksjoner])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL): Promise<void> => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
@@ -660,8 +662,8 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                                     },
                                   ])
 
-                                  getEnheterBySeksjonId(String(selectedSeksjon.value)).then(
-                                    (enheter) => {
+                                  getEnheterBySeksjonId(String(selectedSeksjon.value))
+                                    .then((enheter) => {
                                       if (enheter.length > 0) {
                                         setEnheterBySeksjon((prev) => {
                                           const next = new Map(prev)
@@ -672,8 +674,8 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                                           return next
                                         })
                                       }
-                                    }
-                                  )
+                                    })
+                                    .catch(() => {})
                                 }
                               }
                             }}
