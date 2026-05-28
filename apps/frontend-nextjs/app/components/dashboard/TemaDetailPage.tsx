@@ -661,6 +661,12 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           </Button>
         </div>
 
+        {isLoading && <CenteredLoader />}
+
+        {!isLoading && !temaStats && (
+          <BodyShort className='text-gray-500 mt-6'>Ingen data for valgt filter</BodyShort>
+        )}
+
         {temaStats && (
           <Tabs className='mt-6' defaultValue='figurer'>
             <Tabs.List>
@@ -1027,7 +1033,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
         {isKravLoading && <CenteredLoader />}
 
-        {!isKravLoading && (
+        {!isKravLoading && filteredKrav.length === 0 && (
+          <BodyShort className='text-gray-500 mt-6'>Ingen data for valgt filter</BodyShort>
+        )}
+
+        {!isKravLoading && filteredKrav.length > 0 && (
           <Tabs className='mt-6' defaultValue='figurer'>
             <Tabs.List>
               <Tabs.Tab value='figurer' label='Vis figurer' />
