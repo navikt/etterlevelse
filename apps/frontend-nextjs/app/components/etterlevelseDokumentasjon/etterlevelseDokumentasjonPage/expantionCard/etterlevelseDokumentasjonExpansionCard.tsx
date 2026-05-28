@@ -171,6 +171,23 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               </BodyLong>
             </div>
 
+            {etterlevelseDokumentasjon.enheter && etterlevelseDokumentasjon.enheter.length > 0 && (
+              <div className='flex items-start gap-2 mb-2.5'>
+                <div>
+                  <Label size='medium'>Enhet:</Label>
+                </div>
+                <BodyLong as='div' size='medium'>
+                  <div className='flex flex-wrap tri'>
+                    <BodyLong size='medium'>
+                      {etterlevelseDokumentasjon.enheter
+                        .map((enhet) => enhet.nomEnhetName)
+                        .join(', ')}
+                    </BodyLong>
+                  </div>
+                </BodyLong>
+              </div>
+            )}
+
             {env.isDev && (
               <div className='mb-2.5'>
                 {ardoqSystemData.length > 0 && (

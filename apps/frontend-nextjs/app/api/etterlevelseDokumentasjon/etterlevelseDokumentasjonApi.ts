@@ -180,6 +180,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   nomAvdelingId: etterlevelseDokumentasjon.nomAvdelingId || '',
   avdelingNavn: etterlevelseDokumentasjon.avdelingNavn || '',
   seksjoner: etterlevelseDokumentasjon.seksjoner || [],
+  enheter: etterlevelseDokumentasjon.enheter || [],
   teamsData: etterlevelseDokumentasjon.teamsData || [],
   resourcesData: etterlevelseDokumentasjon.resourcesData || [],
   risikoeiereData: etterlevelseDokumentasjon.risikoeiereData || [],

@@ -4,6 +4,7 @@ import {
   getDashboardAvdelingStats,
   getDashboardTableByAvdeling,
 } from '@/api/dashboard/dashboardApi'
+import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
@@ -18,6 +19,7 @@ import {
   EPvkDokumentStatus,
   EPvkVurdering,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
@@ -113,6 +115,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isTableLoading, setIsTableLoading] = useState(true)
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
+  const [selectedEnhet, setSelectedEnhet] = useState<string>('')
+  const [enhetOptions, setEnhetOptions] = useState<IOrgEnhet[]>([])
   const [tableTab, setTableTab] = useState('dok_pvk')
   const [sort, setSort] = useState<SortState | undefined>()
   const [searchInput, setSearchInput] = useState('')
@@ -133,6 +137,17 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         .finally(() => setIsTableLoading(false))
     })()
   }, [avdelingId])
+
+  useEffect(() => {
+    if (selectedSeksjon && selectedSeksjon !== 'ingen-seksjon') {
+      getEnheterBySeksjonId(selectedSeksjon).then((enheter) => {
+        setEnhetOptions(enheter)
+      })
+    } else {
+      setEnhetOptions([])
+    }
+    setSelectedEnhet('')
+  }, [selectedSeksjon])
 
   const getSearchableText = (dok: IDashboardTable): string => {
     return [
@@ -165,17 +180,26 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
   const getFilteredDoks = (): IDashboardTable[] => {
     if (tableData) {
+      let filtered: IDashboardTable[]
       if (selectedSeksjon === 'ingen-seksjon') {
-        return tableData.filter(
+        filtered = tableData.filter(
           (etterlevelseDokTableValue) => !etterlevelseDokTableValue.seksjoner?.length
         )
       } else if (selectedSeksjon) {
-        return tableData.filter((etterlevelseDokTableValue) =>
+        filtered = tableData.filter((etterlevelseDokTableValue) =>
           etterlevelseDokTableValue.seksjoner.map((s) => s.nomSeksjonId).includes(selectedSeksjon)
         )
       } else {
-        return tableData
+        filtered = tableData
       }
+
+      if (selectedEnhet) {
+        filtered = filtered.filter((dok) =>
+          dok.enheter?.some((e) => e.nomEnhetId === selectedEnhet)
+        )
+      }
+
+      return filtered
     } else {
       return []
     }
@@ -209,6 +233,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             return dok.risikoeiereData?.map((risikoeier) => risikoeier.fullName).join(', ') || ''
           case 'seksjon':
             return dok.seksjoner?.map((s) => s.nomSeksjonName).join(', ') || ''
+          case 'enhet':
+            return dok.enheter?.map((e) => e.nomEnhetName).join(', ') || ''
           case 'etterlevelse':
             return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
           case 'behovForPvk':
@@ -251,7 +277,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       if (typeof aVal === 'number' && typeof bVal === 'number') return (aVal - bVal) * dir
       return String(aVal).localeCompare(String(bVal)) * dir
     })
-  }, [sort, tableData, selectedSeksjon, searchFilters])
+  }, [sort, tableData, selectedSeksjon, selectedEnhet, searchFilters])
 
   if (isLoading || data == null) {
     return (
@@ -410,21 +436,41 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       </Heading>
 
       {data.seksjoner && data.seksjoner.length > 0 && (
-        <Select
-          label='Velg seksjon'
-          className='mt-4 w-fit min-w-64'
-          value={selectedSeksjon}
-          onChange={(e) => setSelectedSeksjon(e.target.value)}
-        >
-          <option value=''>Alle seksjoner</option>
-          {data.seksjoner
-            .filter((s) => s.navn !== data.avdelingNavn)
-            .map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.navn}
-              </option>
-            ))}
-        </Select>
+        <div className='flex gap-4 flex-wrap'>
+          <Select
+            label='Velg seksjon'
+            className='mt-4 w-fit min-w-64'
+            value={selectedSeksjon}
+            onChange={(e) => setSelectedSeksjon(e.target.value)}
+          >
+            <option value=''>Alle seksjoner</option>
+            {data.seksjoner
+              .filter((s) => s.navn !== data.avdelingNavn)
+              .map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.navn}
+                </option>
+              ))}
+          </Select>
+
+          {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enhetOptions.length > 0 && (
+            <Select
+              label='Velg enhet'
+              className='mt-4 w-fit min-w-64'
+              value={selectedEnhet}
+              onChange={(e) => setSelectedEnhet(e.target.value)}
+            >
+              <option value=''>Alle enheter</option>
+              {enhetOptions
+                .sort((a, b) => a.navn.localeCompare(b.navn))
+                .map((e) => (
+                  <option key={e.id} value={e.id}>
+                    {e.navn}
+                  </option>
+                ))}
+            </Select>
+          )}
+        </div>
       )}
 
       <form
@@ -435,7 +481,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         }}
       >
         <Search
-          label='Søk etter team, seksjon, person, dokument m.m. Trykk enter for å legge til filter.'
+          label='Søk etter team, seksjon, person, dokument, enhet m.m. Trykk enter for å legge til filter.'
           hideLabel={false}
           variant='secondary'
           value={searchInput}
@@ -545,6 +591,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='seksjon'>
                           Seksjon
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='enhet'>
+                          Enhet
+                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='etterlevelse'>
                           Etterlevelse
                         </Table.ColumnHeader>
@@ -594,6 +643,13 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               {dok.seksjoner?.length
                                 ? dok.seksjoner.map((s) => (
                                     <div key={s.nomSeksjonId}>{s.nomSeksjonName}</div>
+                                  ))
+                                : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.enheter?.length
+                                ? dok.enheter.map((e) => (
+                                    <div key={e.nomEnhetId}>{e.nomEnhetName}</div>
                                   ))
                                 : '-'}
                             </Table.DataCell>

@@ -32,6 +32,7 @@ export interface IEtterlevelseDokumentasjon {
   nomAvdelingId?: string
   avdelingNavn?: string
   seksjoner: INomSeksjon[]
+  enheter: INomEnhet[]
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]
@@ -105,6 +106,11 @@ export interface ILovStats {
 export interface INomSeksjon {
   nomSeksjonId: string
   nomSeksjonName: string
+}
+
+export interface INomEnhet {
+  nomEnhetId: string
+  nomEnhetName: string
 }
 
 export enum EActionMenuRoles {
