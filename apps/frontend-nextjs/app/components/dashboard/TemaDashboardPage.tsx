@@ -5,6 +5,7 @@ import {
   getDashboardStats,
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
+import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
@@ -12,6 +13,7 @@ import {
   ISeksjonOption,
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
+import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { DownloadIcon } from '@navikt/aksel-icons'
 import {
   Link as AkselLink,
@@ -359,6 +361,7 @@ interface IExportFilters {
   tema?: string
   avdeling?: string
   seksjon?: string
+  enhet?: string
 }
 
 const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
@@ -368,6 +371,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     `Tema;${filters.tema || 'Alle tema'}`,
     `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
     `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
+    ...(filters.enhet ? [`Enhet;${filters.enhet}`] : []),
     '',
   ]
 
@@ -431,6 +435,8 @@ const TemaDashboardPage = () => {
   const [selectedTema, setSelectedTema] = useState<string>('')
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
+  const [selectedEnhet, setSelectedEnhet] = useState<string>('')
+  const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
 
   useEffect(() => {
     getDashboardStats()
@@ -439,14 +445,19 @@ const TemaDashboardPage = () => {
   }, [])
 
   useEffect(() => {
-    getTemaDashboardStats(undefined, selectedAvdeling || undefined, selectedSeksjon || undefined)
+    getTemaDashboardStats(
+      undefined,
+      selectedAvdeling || undefined,
+      selectedSeksjon || undefined,
+      selectedEnhet || undefined
+    )
       .then((data) => {
         setTemaStats(data)
         setSelectedTema((prev) => (prev && !data.some((d) => d.temaCode === prev) ? '' : prev))
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
       .finally(() => setIsLoading(false))
-  }, [selectedAvdeling, selectedSeksjon])
+  }, [selectedAvdeling, selectedSeksjon, selectedEnhet])
 
   useEffect(() => {
     if (selectedAvdeling) {
@@ -455,6 +466,17 @@ const TemaDashboardPage = () => {
         .catch(() => setSeksjoner([]))
     }
   }, [selectedAvdeling])
+
+  useEffect(() => {
+    if (selectedSeksjon && selectedSeksjon !== 'ingen-seksjon') {
+      getEnheterBySeksjonId(selectedSeksjon)
+        .then(setEnheter)
+        .catch(() => setEnheter([]))
+    } else {
+      setEnheter([])
+      setSelectedEnhet('')
+    }
+  }, [selectedSeksjon])
 
   const filteredTemaStats = selectedTema
     ? temaStats.filter((s) => s.temaCode === selectedTema)
@@ -513,6 +535,8 @@ const TemaDashboardPage = () => {
             onChange={(e) => {
               setSelectedAvdeling(e.target.value)
               setSelectedSeksjon('')
+              setSelectedEnhet('')
+              setEnheter([])
               setIsLoading(true)
               if (!e.target.value) {
                 setSeksjoner([])
@@ -542,6 +566,7 @@ const TemaDashboardPage = () => {
                 value={selectedSeksjon}
                 onChange={(e) => {
                   setSelectedSeksjon(e.target.value)
+                  setSelectedEnhet('')
                   setIsLoading(true)
                 }}
               >
@@ -555,6 +580,26 @@ const TemaDashboardPage = () => {
             ) : null
           })()}
 
+          {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enheter.length > 0 && (
+            <Select
+              label='Filtrer etter enhet'
+              className='sm:w-fit sm:min-w-64'
+              style={{ width: '100%' }}
+              value={selectedEnhet}
+              onChange={(e) => {
+                setSelectedEnhet(e.target.value)
+                setIsLoading(true)
+              }}
+            >
+              <option value=''>Alle enheter</option>
+              {enheter.map((en) => (
+                <option key={en.id} value={en.id}>
+                  {en.navn}
+                </option>
+              ))}
+            </Select>
+          )}
+
           <Button
             variant='tertiary'
             size='small'
@@ -564,6 +609,7 @@ const TemaDashboardPage = () => {
                 tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
                 avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
                 seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+                enhet: enheter.find((e) => e.id === selectedEnhet)?.navn,
               })
             }
             disabled={isLoading || filteredTemaStats.length === 0}

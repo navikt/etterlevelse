@@ -168,7 +168,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
 const exportKravToCsv = (
   kravStats: IKravDashboardStats[],
   temaName: string,
-  filters: { avdeling?: string; seksjon?: string }
+  filters: { avdeling?: string; seksjon?: string; enhet?: string }
 ) => {
   const BOM = '\uFEFF'
 
@@ -176,6 +176,7 @@ const exportKravToCsv = (
     `Tema;${temaName}`,
     `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
     `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
+    ...(filters.enhet ? [`Enhet;${filters.enhet}`] : []),
     '',
   ]
 
@@ -597,10 +598,12 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             onClick={() => {
               if (!temaStats) return
               const BOM = '\uFEFF'
+              const enhetNavn = enheter.find((e) => e.id === selectedEnhet)?.navn
               const filterLines = [
                 `Tema;${temaName}`,
                 `Avdeling;${avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn || 'Alle avdelinger'}`,
                 `Seksjon;${seksjoner.find((s) => s.id === selectedSeksjon)?.navn || 'Alle seksjoner'}`,
+                ...(enhetNavn ? [`Enhet;${enhetNavn}`] : []),
                 '',
               ]
               const header = [
@@ -1012,6 +1015,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 avdeling: avdelinger.find((a) => a.avdelingId === selectedKravAvdeling)
                   ?.avdelingNavn,
                 seksjon: kravSeksjoner.find((s) => s.id === selectedKravSeksjon)?.navn,
+                enhet: kravEnheter.find((e) => e.id === selectedKravEnhet)?.navn,
               })
             }
             disabled={isKravLoading || filteredKrav.length === 0}
