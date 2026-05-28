@@ -156,6 +156,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       dok.resourcesData?.map((r) => r.fullName)?.join(' ') ?? '',
       dok.risikoeiereData?.map((r) => r.fullName)?.join(' ') ?? '',
       dok.seksjoner?.map((s) => s.nomSeksjonName)?.join(' ') ?? '',
+      dok.enheter?.map((e) => e.nomEnhetName)?.join(' ') ?? '',
       dok.behandlinger?.map((b) => `B${b.nummer} ${b.navn}`)?.join(' ') ?? '',
       getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
       getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger),
