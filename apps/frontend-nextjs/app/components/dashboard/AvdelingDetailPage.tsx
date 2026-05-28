@@ -279,6 +279,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     })
   }, [sort, tableData, selectedSeksjon, selectedEnhet, searchFilters])
 
+  const hasEnheter = useMemo(() => {
+    return tableData?.some((dok) => dok.enheter && dok.enheter.length > 0) ?? false
+  }, [tableData])
+
   if (isLoading || data == null) {
     return (
       <PageLayout pageTitle='Dashboard' currentPage='Dashboard' breadcrumbPaths={[]}>
@@ -591,9 +595,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='seksjon'>
                           Seksjon
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='enhet'>
-                          Enhet
-                        </Table.ColumnHeader>
+                        {hasEnheter && (
+                          <Table.ColumnHeader sortable sortKey='enhet'>
+                            Enhet
+                          </Table.ColumnHeader>
+                        )}
                         <Table.ColumnHeader sortable sortKey='etterlevelse'>
                           Etterlevelse
                         </Table.ColumnHeader>
@@ -646,13 +652,15 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                   ))
                                 : '-'}
                             </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.enheter?.length
-                                ? dok.enheter.map((e) => (
-                                    <div key={e.nomEnhetId}>{e.nomEnhetName}</div>
-                                  ))
-                                : '-'}
-                            </Table.DataCell>
+                            {hasEnheter && (
+                              <Table.DataCell>
+                                {dok.enheter?.length
+                                  ? dok.enheter.map((e) => (
+                                      <div key={e.nomEnhetId}>{e.nomEnhetName}</div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                            )}
                             <Table.DataCell>
                               {getEtterlevelseDokumentStatusText(
                                 dok.etterlevelseDokumentasjonStatus
