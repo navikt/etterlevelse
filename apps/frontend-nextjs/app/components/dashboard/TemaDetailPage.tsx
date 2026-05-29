@@ -168,7 +168,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
 const exportKravToCsv = (
   kravStats: IKravDashboardStats[],
   temaName: string,
-  filters: { avdeling?: string; seksjon?: string; enhet?: string }
+  filters: { avdeling?: string; seksjon?: string; enhet?: string; krav?: string }
 ) => {
   const BOM = '\uFEFF'
 
@@ -177,6 +177,7 @@ const exportKravToCsv = (
     `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
     `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
     ...(filters.enhet ? [`Enhet;${filters.enhet}`] : []),
+    ...(filters.krav ? [`Krav;${filters.krav}`] : []),
     '',
   ]
 
@@ -258,7 +259,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [selectedKravEnhet, setSelectedKravEnhet] = useState<string>('')
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
   const [kravEnheter, setKravEnheter] = useState<IOrgEnhet[]>([])
-  const [selectedKrav] = useState<string>('')
+  const [selectedKrav, setSelectedKrav] = useState<string>('')
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
   const seksjonRequestId = useRef(0)
@@ -367,6 +368,12 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
       setSelectedKravEnhet('')
     }
   }, [selectedKravSeksjon])
+
+  useEffect(() => {
+    if (selectedKrav && kravStats.length > 0 && !kravStats.some((k) => k.kravId === selectedKrav)) {
+      setSelectedKrav('')
+    }
+  }, [kravStats, selectedKrav])
 
   const filteredKrav = useMemo(() => {
     if (!kravStats) return []
@@ -921,21 +928,20 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           Krav tilknyttet {temaName}
         </Heading>
         <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
-          {/* ToDo This Select is used to selct krav and filter by krav. Waiting for user feedback */}
-          {/* <Select
-          label='Velg krav'
-          className='sm:w-fit sm:min-w-64'
-          style={{ width: '100%' }}
-          value={selectedKrav}
-          onChange={(e) => setSelectedKrav(e.target.value)}
-        >
-          <option value=''>Alle krav</option>
-          {kravStats.map((k) => (
-            <option key={k.kravId} value={k.kravId}>
-              {k.kravNavn}
-            </option>
-          ))}
-        </Select> */}
+          <Select
+            label='Filtrer etter krav'
+            className='sm:w-fit sm:min-w-64'
+            style={{ width: '100%' }}
+            value={selectedKrav}
+            onChange={(e) => setSelectedKrav(e.target.value)}
+          >
+            <option value=''>Alle krav</option>
+            {kravStats.map((k) => (
+              <option key={k.kravId} value={k.kravId}>
+                K{k.kravNummer}.{k.kravVersjon} {k.kravNavn}
+              </option>
+            ))}
+          </Select>
 
           <Select
             label='Filtrer etter avdeling'
@@ -946,6 +952,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               setSelectedKravAvdeling(e.target.value)
               setSelectedKravSeksjon('')
               setSelectedKravEnhet('')
+              setSelectedKrav('')
               setKravEnheter([])
               setIsKravLoading(true)
               if (!e.target.value) {
@@ -977,6 +984,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 onChange={(e) => {
                   setSelectedKravSeksjon(e.target.value)
                   setSelectedKravEnhet('')
+                  setSelectedKrav('')
                   setIsKravLoading(true)
                 }}
               >
@@ -1000,6 +1008,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 value={selectedKravEnhet}
                 onChange={(e) => {
                   setSelectedKravEnhet(e.target.value)
+                  setSelectedKrav('')
                   setIsKravLoading(true)
                 }}
               >
@@ -1022,6 +1031,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   ?.avdelingNavn,
                 seksjon: kravSeksjoner.find((s) => s.id === selectedKravSeksjon)?.navn,
                 enhet: kravEnheter.find((e) => e.id === selectedKravEnhet)?.navn,
+                krav: kravStats.find((k) => k.kravId === selectedKrav)?.kravNavn,
               })
             }
             disabled={isKravLoading || filteredKrav.length === 0}
