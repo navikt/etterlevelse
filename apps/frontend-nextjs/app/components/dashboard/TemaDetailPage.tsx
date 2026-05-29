@@ -258,7 +258,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [selectedKravEnhet, setSelectedKravEnhet] = useState<string>('')
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
   const [kravEnheter, setKravEnheter] = useState<IOrgEnhet[]>([])
-  const [selectedKrav] = useState<string>('')
+  const [selectedKrav, setSelectedKrav] = useState<string>('')
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
   const seksjonRequestId = useRef(0)
@@ -921,21 +921,20 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           Krav tilknyttet {temaName}
         </Heading>
         <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
-          {/* ToDo This Select is used to selct krav and filter by krav. Waiting for user feedback */}
-          {/* <Select
-          label='Velg krav'
-          className='sm:w-fit sm:min-w-64'
-          style={{ width: '100%' }}
-          value={selectedKrav}
-          onChange={(e) => setSelectedKrav(e.target.value)}
-        >
-          <option value=''>Alle krav</option>
-          {kravStats.map((k) => (
-            <option key={k.kravId} value={k.kravId}>
-              {k.kravNavn}
-            </option>
-          ))}
-        </Select> */}
+          <Select
+            label='Filtrer etter krav'
+            className='sm:w-fit sm:min-w-64'
+            style={{ width: '100%' }}
+            value={selectedKrav}
+            onChange={(e) => setSelectedKrav(e.target.value)}
+          >
+            <option value=''>Alle krav</option>
+            {kravStats.map((k) => (
+              <option key={k.kravId} value={k.kravId}>
+                K{k.kravNummer}.{k.kravVersjon} {k.kravNavn}
+              </option>
+            ))}
+          </Select>
 
           <Select
             label='Filtrer etter avdeling'
