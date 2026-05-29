@@ -553,9 +553,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             const avdelingNavn = avdelinger.find(
               (a) => a.avdelingId === selectedAvdeling
             )?.avdelingNavn
-            const filteredSeksjoner = seksjoner.filter(
-              (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
-            )
+            const filteredSeksjoner = seksjoner.filter((s) => s.navn !== avdelingNavn)
             return selectedAvdeling && filteredSeksjoner.length > 0 ? (
               <Select
                 label='Filtrer etter seksjon'
@@ -590,6 +588,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               }}
             >
               <option value=''>Alle enheter</option>
+              <option value='ingen-enhet'>Ikke valgt enhet</option>
               {enheter.map((en) => (
                 <option key={en.id} value={en.id}>
                   {en.navn}
@@ -971,9 +970,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             const avdelingNavn = avdelinger.find(
               (a) => a.avdelingId === selectedKravAvdeling
             )?.avdelingNavn
-            const filteredSeksjoner = kravSeksjoner.filter(
-              (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
-            )
+            const filteredSeksjoner = kravSeksjoner.filter((s) => s.navn !== avdelingNavn)
             return selectedKravAvdeling && filteredSeksjoner.length > 0 ? (
               <Select
                 label='Filtrer etter seksjon'
@@ -1010,6 +1007,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 }}
               >
                 <option value=''>Alle enheter</option>
+                <option value='ingen-enhet'>Ikke valgt enhet</option>
                 {kravEnheter.map((en) => (
                   <option key={en.id} value={en.id}>
                     {en.navn}

@@ -521,11 +521,18 @@ public class DashboardService {
             }
 
             if (enhetId != null && !enhetId.isEmpty()) {
-                doks = doks.stream().filter(d ->
-                        d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
-                        d.getEtterlevelseDokumentasjonData().getEnheter().stream()
-                                .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
-                ).toList();
+                if (enhetId.equals("ingen-enhet")) {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() == null ||
+                            d.getEtterlevelseDokumentasjonData().getEnheter().isEmpty()
+                    ).toList();
+                } else {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
+                            d.getEtterlevelseDokumentasjonData().getEnheter().stream()
+                                    .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
+                    ).toList();
+                }
             }
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
@@ -661,11 +668,18 @@ public class DashboardService {
             }
 
             if (enhetId != null && !enhetId.isEmpty()) {
-                doks = doks.stream().filter(d ->
-                        d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
-                        d.getEtterlevelseDokumentasjonData().getEnheter().stream()
-                                .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
-                ).toList();
+                if (enhetId.equals("ingen-enhet")) {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() == null ||
+                            d.getEtterlevelseDokumentasjonData().getEnheter().isEmpty()
+                    ).toList();
+                } else {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
+                            d.getEtterlevelseDokumentasjonData().getEnheter().stream()
+                                    .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
+                    ).toList();
+                }
             }
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
