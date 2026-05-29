@@ -1,5 +1,6 @@
 'use client'
 
+import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import ArdoqSystemerView from '@/components/ardoq/ardoqSystemerView'
 import { BehandlingList } from '@/components/behandlingskatalog/behandlingList'
 import { DpBehandlingList } from '@/components/behandlingskatalog/dpBehandlingList'
@@ -17,7 +18,7 @@ import { env } from '@/util/env/env'
 import { ettlevColors } from '@/util/theme/theme'
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
 import { BodyLong, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
-import { FunctionComponent, useContext } from 'react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -28,6 +29,21 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 }) => {
   const codelist = useContext(CodelistContext)
   const user = useContext(UserContext)
+  const [seksjonerHaveEnheter, setSeksjonerHaveEnheter] = useState(false)
+
+  useEffect(() => {
+    if (etterlevelseDokumentasjon.seksjoner.length > 0) {
+      Promise.all(
+        etterlevelseDokumentasjon.seksjoner.map((seksjon) =>
+          getEnheterBySeksjonId(seksjon.nomSeksjonId)
+        )
+      ).then((results) => {
+        setSeksjonerHaveEnheter(results.some((enheter) => enheter.length > 0))
+      })
+    } else {
+      setSeksjonerHaveEnheter(false)
+    }
+  }, [etterlevelseDokumentasjon.seksjoner])
 
   const relevansCodeList: IGetParsedOptionsProps[] = codelist.utils.getParsedOptions(
     EListName.RELEVANS
@@ -171,19 +187,25 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               </BodyLong>
             </div>
 
-            {etterlevelseDokumentasjon.enheter && etterlevelseDokumentasjon.enheter.length > 0 && (
+            {seksjonerHaveEnheter && (
               <div className='flex items-start gap-2 mb-2.5'>
                 <div>
                   <Label size='medium'>Enhet:</Label>
                 </div>
                 <BodyLong as='div' size='medium'>
-                  <div className='flex flex-wrap tri'>
-                    <BodyLong size='medium'>
-                      {etterlevelseDokumentasjon.enheter
-                        .map((enhet) => enhet.nomEnhetName)
-                        .join(', ')}
-                    </BodyLong>
-                  </div>
+                  {etterlevelseDokumentasjon.enheter &&
+                    etterlevelseDokumentasjon.enheter.length > 0 && (
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {etterlevelseDokumentasjon.enheter
+                            .map((enhet) => enhet.nomEnhetName)
+                            .join(', ')}
+                        </BodyLong>
+                      </div>
+                    )}
+                  {(!etterlevelseDokumentasjon.enheter ||
+                    etterlevelseDokumentasjon.enheter.length === 0) &&
+                    'Ikke angitt'}
                 </BodyLong>
               </div>
             )}
