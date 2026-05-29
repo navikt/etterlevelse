@@ -168,7 +168,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
 const exportKravToCsv = (
   kravStats: IKravDashboardStats[],
   temaName: string,
-  filters: { avdeling?: string; seksjon?: string; enhet?: string }
+  filters: { avdeling?: string; seksjon?: string; enhet?: string; krav?: string }
 ) => {
   const BOM = '\uFEFF'
 
@@ -177,6 +177,7 @@ const exportKravToCsv = (
     `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
     `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
     ...(filters.enhet ? [`Enhet;${filters.enhet}`] : []),
+    ...(filters.krav ? [`Krav;${filters.krav}`] : []),
     '',
   ]
 
@@ -367,6 +368,12 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
       setSelectedKravEnhet('')
     }
   }, [selectedKravSeksjon])
+
+  useEffect(() => {
+    if (selectedKrav && kravStats.length > 0 && !kravStats.some((k) => k.kravId === selectedKrav)) {
+      setSelectedKrav('')
+    }
+  }, [kravStats, selectedKrav])
 
   const filteredKrav = useMemo(() => {
     if (!kravStats) return []
@@ -945,6 +952,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               setSelectedKravAvdeling(e.target.value)
               setSelectedKravSeksjon('')
               setSelectedKravEnhet('')
+              setSelectedKrav('')
               setKravEnheter([])
               setIsKravLoading(true)
               if (!e.target.value) {
@@ -976,6 +984,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 onChange={(e) => {
                   setSelectedKravSeksjon(e.target.value)
                   setSelectedKravEnhet('')
+                  setSelectedKrav('')
                   setIsKravLoading(true)
                 }}
               >
@@ -999,6 +1008,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 value={selectedKravEnhet}
                 onChange={(e) => {
                   setSelectedKravEnhet(e.target.value)
+                  setSelectedKrav('')
                   setIsKravLoading(true)
                 }}
               >
@@ -1021,6 +1031,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   ?.avdelingNavn,
                 seksjon: kravSeksjoner.find((s) => s.id === selectedKravSeksjon)?.navn,
                 enhet: kravEnheter.find((e) => e.id === selectedKravEnhet)?.navn,
+                krav: kravStats.find((k) => k.kravId === selectedKrav)?.kravNavn,
               })
             }
             disabled={isKravLoading || filteredKrav.length === 0}
