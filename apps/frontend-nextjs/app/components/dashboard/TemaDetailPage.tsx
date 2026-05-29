@@ -952,7 +952,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               setSelectedKravAvdeling(e.target.value)
               setSelectedKravSeksjon('')
               setSelectedKravEnhet('')
-              setSelectedKrav('')
               setKravEnheter([])
               setIsKravLoading(true)
               if (!e.target.value) {
@@ -984,7 +983,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 onChange={(e) => {
                   setSelectedKravSeksjon(e.target.value)
                   setSelectedKravEnhet('')
-                  setSelectedKrav('')
                   setIsKravLoading(true)
                 }}
               >
@@ -1008,7 +1006,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 value={selectedKravEnhet}
                 onChange={(e) => {
                   setSelectedKravEnhet(e.target.value)
-                  setSelectedKrav('')
                   setIsKravLoading(true)
                 }}
               >
