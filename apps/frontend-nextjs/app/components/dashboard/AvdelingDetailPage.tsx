@@ -470,6 +470,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               onChange={(e) => setSelectedEnhet(e.target.value)}
             >
               <option value=''>Alle enheter</option>
+              <option value='ingen-enhet'>Ikke valgt enhet</option>
               {[...enhetOptions]
                 .sort((a, b) => a.navn.localeCompare(b.navn))
                 .map((e) => (

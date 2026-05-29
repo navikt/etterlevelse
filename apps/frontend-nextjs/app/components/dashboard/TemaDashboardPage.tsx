@@ -362,6 +362,7 @@ interface IExportFilters {
   avdeling?: string
   seksjon?: string
   enhet?: string
+  hasEnheter?: boolean
 }
 
 const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
@@ -371,7 +372,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     `Tema;${filters.tema || 'Alle tema'}`,
     `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
     `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
-    ...(filters.enhet ? [`Enhet;${filters.enhet}`] : []),
+    ...(filters.hasEnheter ? [`Enhet;${filters.enhet || 'Alle enheter'}`] : []),
     '',
   ]
 
@@ -555,9 +556,7 @@ const TemaDashboardPage = () => {
             const avdelingNavn = avdelinger.find(
               (a) => a.avdelingId === selectedAvdeling
             )?.avdelingNavn
-            const filteredSeksjoner = seksjoner.filter(
-              (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
-            )
+            const filteredSeksjoner = seksjoner.filter((s) => s.navn !== avdelingNavn)
             return selectedAvdeling && filteredSeksjoner.length > 0 ? (
               <Select
                 label='Filtrer etter seksjon'
@@ -592,6 +591,7 @@ const TemaDashboardPage = () => {
               }}
             >
               <option value=''>Alle enheter</option>
+              <option value='ingen-enhet'>Ikke valgt enhet</option>
               {enheter.map((en) => (
                 <option key={en.id} value={en.id}>
                   {en.navn}
@@ -608,8 +608,15 @@ const TemaDashboardPage = () => {
               exportToCsv(filteredTemaStats, {
                 tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
                 avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
-                seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
-                enhet: enheter.find((e) => e.id === selectedEnhet)?.navn,
+                seksjon:
+                  selectedSeksjon === 'ingen-seksjon'
+                    ? 'Ikke valgt seksjon'
+                    : seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+                enhet:
+                  selectedEnhet === 'ingen-enhet'
+                    ? 'Ikke valgt enhet'
+                    : enheter.find((e) => e.id === selectedEnhet)?.navn,
+                hasEnheter: enheter.length > 0,
               })
             }
             disabled={isLoading || filteredTemaStats.length === 0}
