@@ -522,7 +522,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
-          Overordnet for {temaName}
+          Overordnet for alle krav under {temaName}
         </Heading>
         <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
           <Select
@@ -924,7 +924,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
-          Krav tilknyttet {temaName}
+          Enkelte krav tilknyttet {temaName}
         </Heading>
         <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
           <Select
