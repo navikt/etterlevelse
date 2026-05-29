@@ -109,6 +109,7 @@ export interface IDashboardTable {
   antallOppfyltKrav?: number
   oppfyltKravProsent?: number
   sistOppdatertEtterlevelse: string
+  sistGodkjentEtterlevelse?: string
 
   hasPvkDocumentationStarted: boolean
   pvkVurdering: EPvkVurdering
@@ -120,6 +121,7 @@ export interface IDashboardTable {
   antallIkkeIverksattTiltak?: number
   antallTiltakFristPassert?: number
   sistOppdatertPvk: string
+  sistGodkjentPvk?: string
 }
 
 export interface IAvdelingDashboardStats {

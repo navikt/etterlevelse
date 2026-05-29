@@ -248,8 +248,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             )
           case 'dato_etterlvelse':
             return dok.sistOppdatertEtterlevelse || ''
+          case 'dato_godkjent':
+            return dok.sistGodkjentEtterlevelse || ''
           case 'dato_pvk':
             return dok.sistOppdatertPvk || ''
+          case 'dato_godkjent_pvk':
+            return dok.sistGodkjentPvk || ''
           case 'behandlinger':
             return dok.behandlinger?.map((b) => b.navn).join(', ') || ''
           case 'krav':
@@ -590,17 +594,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <span className='font-normal'>(Lenker åpnes i ny fane)</span>
                           </span>
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='risikoeier'>
-                          Risikoeier
-                        </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='seksjon'>
-                          Seksjon
-                        </Table.ColumnHeader>
-                        {hasEnheter && (
-                          <Table.ColumnHeader sortable sortKey='enhet'>
-                            Enhet
-                          </Table.ColumnHeader>
-                        )}
                         <Table.ColumnHeader sortable sortKey='etterlevelse'>
                           Etterlevelse
                         </Table.ColumnHeader>
@@ -615,6 +608,17 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <span>Behandlinger</span>
                             <span className='font-normal'>(Lenker åpnes i ny fane)</span>
                           </span>
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='seksjon'>
+                          Seksjon
+                        </Table.ColumnHeader>
+                        {hasEnheter && (
+                          <Table.ColumnHeader sortable sortKey='enhet'>
+                            Enhet
+                          </Table.ColumnHeader>
+                        )}
+                        <Table.ColumnHeader sortable sortKey='risikoeier'>
+                          Risikoeier
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='team'>
                           Team
@@ -637,31 +641,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 {dok.etterlevelseDokumentasjonTittel}
                               </Link>
                             </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.risikoeiereData && dok.risikoeiereData.length > 0
-                                ? dok.risikoeiereData.map((risikoeier, index) => (
-                                    <div key={`${risikoeier.navIdent}-${index}`}>
-                                      {risikoeier.fullName}
-                                    </div>
-                                  ))
-                                : '-'}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.seksjoner?.length
-                                ? dok.seksjoner.map((s) => (
-                                    <div key={s.nomSeksjonId}>{s.nomSeksjonName}</div>
-                                  ))
-                                : '-'}
-                            </Table.DataCell>
-                            {hasEnheter && (
-                              <Table.DataCell>
-                                {dok.enheter?.length
-                                  ? dok.enheter.map((e) => (
-                                      <div key={e.nomEnhetId}>{e.nomEnhetName}</div>
-                                    ))
-                                  : '-'}
-                              </Table.DataCell>
-                            )}
                             <Table.DataCell>
                               {getEtterlevelseDokumentStatusText(
                                 dok.etterlevelseDokumentasjonStatus
@@ -691,6 +670,31 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                   </Link>
                                 </div>
                               )) || '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.seksjoner?.length
+                                ? dok.seksjoner.map((s) => (
+                                    <div key={s.nomSeksjonId}>{s.nomSeksjonName}</div>
+                                  ))
+                                : '-'}
+                            </Table.DataCell>
+                            {hasEnheter && (
+                              <Table.DataCell>
+                                {dok.enheter?.length
+                                  ? dok.enheter.map((e) => (
+                                      <div key={e.nomEnhetId}>{e.nomEnhetName}</div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                            )}
+                            <Table.DataCell>
+                              {dok.risikoeiereData && dok.risikoeiereData.length > 0
+                                ? dok.risikoeiereData.map((risikoeier, index) => (
+                                    <div key={`${risikoeier.navIdent}-${index}`}>
+                                      {risikoeier.fullName}
+                                    </div>
+                                  ))
+                                : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.teamsData && dok.teamsData.length > 0
@@ -732,9 +736,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <span className='font-normal'>(Lenker åpnes i ny fane)</span>
                           </span>
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='risikoeier'>
-                          Risikoeier
-                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='krav' align='center'>
                           Antall krav ferdig utfylt
                         </Table.ColumnHeader>
@@ -743,6 +744,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='dato_etterlvelse'>
                           Sist oppdatert
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='dato_godkjent'>
+                          Sist godkjent
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='risikoeier'>
+                          Risikoeier
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='team'>
                           Team
@@ -764,15 +771,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
                                 {dok.etterlevelseDokumentasjonTittel}
                               </Link>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.risikoeiereData && dok.risikoeiereData.length > 0
-                                ? dok.risikoeiereData.map((risikoeier, index) => (
-                                    <div key={`${risikoeier.navIdent}-${index}`}>
-                                      {risikoeier.fullName}
-                                    </div>
-                                  ))
-                                : '-'}
                             </Table.DataCell>
                             <Table.DataCell align='center'>
                               <TrafficDot
@@ -798,6 +796,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {dok.sistOppdatertEtterlevelse
                                 ? moment(dok.sistOppdatertEtterlevelse).format('D. MMMM YYYY')
+                                : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.sistGodkjentEtterlevelse
+                                ? moment(dok.sistGodkjentEtterlevelse).format('D. MMMM YYYY')
+                                : 'Aldri godkjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.risikoeiereData && dok.risikoeiereData.length > 0
+                                ? dok.risikoeiereData.map((risikoeier, index) => (
+                                    <div key={`${risikoeier.navIdent}-${index}`}>
+                                      {risikoeier.fullName}
+                                    </div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
@@ -840,9 +852,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <span className='font-normal'>(Lenker åpnes i ny fane)</span>
                           </span>
                         </Table.ColumnHeader>
-                        <Table.ColumnHeader sortable sortKey='risikoeier'>
-                          Risikoeier
-                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='behovForPvk'>
                           Vurdere behov for PVK
                         </Table.ColumnHeader>
@@ -870,6 +879,12 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <Table.ColumnHeader sortable sortKey='dato_pvk'>
                           Sist oppdatert
                         </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='dato_godkjent_pvk'>
+                          Sist godkjent
+                        </Table.ColumnHeader>
+                        <Table.ColumnHeader sortable sortKey='risikoeier'>
+                          Risikoeier
+                        </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='team'>
                           Team
                         </Table.ColumnHeader>
@@ -890,15 +905,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                                 E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
                                 {dok.etterlevelseDokumentasjonTittel}
                               </Link>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                              {dok.risikoeiereData && dok.risikoeiereData.length > 0
-                                ? dok.risikoeiereData.map((risikoeier, index) => (
-                                    <div key={`${risikoeier.navIdent}-${index}`}>
-                                      {risikoeier.fullName}
-                                    </div>
-                                  ))
-                                : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
                               {getBehovForPvkText(
@@ -955,6 +961,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {dok.sistOppdatertPvk
                                 ? moment(dok.sistOppdatertPvk).format('D. MMMM YYYY')
+                                : '-'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.sistGodkjentPvk
+                                ? moment(dok.sistGodkjentPvk).format('D. MMMM YYYY')
+                                : 'Aldri godkjent'}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                              {dok.risikoeiereData && dok.risikoeiereData.length > 0
+                                ? dok.risikoeiereData.map((risikoeier, index) => (
+                                    <div key={`${risikoeier.navIdent}-${index}`}>
+                                      {risikoeier.fullName}
+                                    </div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
