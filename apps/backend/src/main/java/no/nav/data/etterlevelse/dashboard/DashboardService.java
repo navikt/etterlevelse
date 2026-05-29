@@ -40,6 +40,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -206,6 +207,7 @@ public class DashboardService {
                          dashboardTableResponse.setAntallIkkeIverksattTiltak(antallIkkeIverksattTiltak);
                          dashboardTableResponse.setAntallTiltakFristPassert(antallTiltakFristPassert);
                          dashboardTableResponse.setSistOppdatertPvk(lastModifiedDate);
+                         dashboardTableResponse.setSistGodkjentPvk(pvkDokument.get().getPvkDokumentData().getGodkjentAvRisikoeierDato());
                     }
 
                     //etterlevelseStats
@@ -231,6 +233,15 @@ public class DashboardService {
                     double prosent = oppfyltDenominator > 0 ? ((double) oppfyltEtterlevelseList.size() / oppfyltDenominator) * 100 : 0;
                     dashboardTableResponse.setOppfyltKravProsent( (int) Math.floor(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
+
+                    var versjonHistorikk = dok.getEtterlevelseDokumentasjonData().getVersjonHistorikk();
+                    if (versjonHistorikk != null) {
+                        versjonHistorikk.stream()
+                                .map(EtterlevelseVersjonHistorikk::getGodkjentAvRisikoierDato)
+                                .filter(Objects::nonNull)
+                                .max(LocalDateTime::compareTo)
+                                .ifPresent(dashboardTableResponse::setSistGodkjentEtterlevelse);
+                    }
 
                     return dashboardTableResponse;
                 })

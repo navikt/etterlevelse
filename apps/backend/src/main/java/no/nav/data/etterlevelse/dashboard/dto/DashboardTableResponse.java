@@ -47,6 +47,7 @@ public class DashboardTableResponse {
     private Integer antallOppfyltKrav;
     private Integer oppfyltKravProsent;
     private LocalDateTime sistOppdatertEtterlevelse;
+    private LocalDateTime sistGodkjentEtterlevelse;
 
     //pvk
     private boolean hasPvkDocumentationStarted;
@@ -59,6 +60,7 @@ public class DashboardTableResponse {
     private Integer antallIkkeIverksattTiltak;
     private Integer antallTiltakFristPassert;
     private LocalDateTime sistOppdatertPvk;
+    private LocalDateTime sistGodkjentPvk;
 
     public static DashboardTableResponse buildFrom(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){
         return DashboardTableResponse.builder()
