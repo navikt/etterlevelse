@@ -22,8 +22,11 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
       </Detail>
 
-      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4' style={{ whiteSpace: 'nowrap' }}>
-        <div>
+      <div
+        className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'
+        style={{ whiteSpace: 'nowrap' }}
+      >
+        <div className='md:order-1 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
@@ -39,7 +42,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
         </div>
 
-        <div>
+        <div className='md:order-3 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Suksesskriterier (etterlevelseskrav)
           </Heading>
@@ -64,7 +67,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
         </div>
 
-        <div>
+        <div className='md:order-2 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
@@ -92,7 +95,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
         </div>
 
-        <div>
+        <div className='md:order-4 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>

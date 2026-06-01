@@ -232,28 +232,28 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
 
       {view === 'figurer' ? (
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
-          <div>
+          <div className='md:order-1 xl:order-none'>
             <Heading size='xsmall' level='3'>
               Etterlevelsesdokumenter ({agg.dok.total})
             </Heading>
             <OverviewStackedBar data={dokData} />
           </div>
 
-          <div>
+          <div className='md:order-3 xl:order-none'>
             <Heading size='xsmall' level='3'>
               Suksesskriterier (etterlevelseskrav)
             </Heading>
             <OverviewStackedBar data={suksessData} isPercentage />
           </div>
 
-          <div>
+          <div className='md:order-2 xl:order-none'>
             <Heading size='xsmall' level='3'>
               Vurdere behov for PVK ({agg.behov.totalMedPersonopplysninger})
             </Heading>
             <OverviewStackedBar data={behovData} />
           </div>
 
-          <div>
+          <div className='md:order-4 xl:order-none'>
             <Heading size='xsmall' level='3'>
               Digital PVK status ({agg.pvk.total - agg.pvk.pvkIWord})
             </Heading>
@@ -262,20 +262,31 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
         </div>
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
-          <OverviewKeyMetrics title={`Etterlevelsesdokumenter (${agg.dok.total})`} data={dokData} />
-          <OverviewKeyMetrics
-            title='Suksesskriterier (etterlevelseskrav)'
-            data={suksessData}
-            isPercentage
-          />
-          <OverviewKeyMetrics
-            title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}
-            data={behovData}
-          />
-          <OverviewKeyMetrics
-            title={`Digital PVK status (${agg.pvk.total - agg.pvk.pvkIWord})`}
-            data={pvkData}
-          />
+          <div className='md:order-1 xl:order-none'>
+            <OverviewKeyMetrics
+              title={`Etterlevelsesdokumenter (${agg.dok.total})`}
+              data={dokData}
+            />
+          </div>
+          <div className='md:order-3 xl:order-none'>
+            <OverviewKeyMetrics
+              title='Suksesskriterier (etterlevelseskrav)'
+              data={suksessData}
+              isPercentage
+            />
+          </div>
+          <div className='md:order-2 xl:order-none'>
+            <OverviewKeyMetrics
+              title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}
+              data={behovData}
+            />
+          </div>
+          <div className='md:order-4 xl:order-none'>
+            <OverviewKeyMetrics
+              title={`Digital PVK status (${agg.pvk.total - agg.pvk.pvkIWord})`}
+              data={pvkData}
+            />
+          </div>
         </div>
       )}
     </div>
