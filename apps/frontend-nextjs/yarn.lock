@@ -635,10 +635,10 @@
   dependencies:
     "@tybys/wasm-util" "^0.10.1"
 
-"@navikt/aksel-icons@^8.11.0":
-  version "8.11.0"
-  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-8.11.0.tgz#964e1e0e34af7007f43b4522246daea582e44952"
-  integrity sha512-enprSpDl7j4yDEAtVtp/BPby2McZKtgXIgarTVDeZ0pmiqnYbXFyCTgzl/ZMg2/EV+hd2DXpLsKzU73PDljpmw==
+"@navikt/aksel-icons@^8.11.0", "@navikt/aksel-icons@^8.11.1":
+  version "8.11.1"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-8.11.1.tgz#3e09f9941a2cb819aaa2fe83771ab061b0a13456"
+  integrity sha512-hXvm/5T8s7fcSlZpg2RWrs870PkH2SeCSQBMmDgI4rm+t5gsw+nDa4qOSCrQQJLiNjMx3jbCO10rL4po9QtfdQ==
 
 "@navikt/ds-css@^8.11.0":
   version "8.11.0"
