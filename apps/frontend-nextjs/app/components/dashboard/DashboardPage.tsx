@@ -6,7 +6,8 @@ import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
-import { Heading, LinkCard, LocalAlert, Select, Tabs } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { Heading, InfoCard, Link, LinkCard, LocalAlert, Select, Tabs } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
@@ -40,18 +41,6 @@ const DashboardPage = () => {
           Status i organisasjon
         </Heading>
       </div>
-
-      <LocalAlert status='announcement' className='mt-4' aria-live='off'>
-        <LocalAlert.Header>
-          <LocalAlert.Title as='h2'>
-            Obs! Disse sidene er fortsatt under utvikling.
-          </LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          Dersom dere finner feil eller har forslag til forbedringer, ta kontakt på #etterlevelse på
-          slack.
-        </LocalAlert.Content>
-      </LocalAlert>
 
       {error && (
         <LocalAlert status='error' className='mt-4'>
@@ -153,6 +142,24 @@ const DashboardPage = () => {
           </div>
         </>
       )}
+
+      <InfoCard data-color='info' className='mt-8'>
+        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+          <InfoCard.Title as='h2'>
+            Savner du noe, eller har du tilbakemelding til oss?
+          </InfoCard.Title>
+        </InfoCard.Header>
+        <InfoCard.Content>
+          Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt i
+          søkefeltet, eller se{' '}
+          <Link href='/dashboard/ingen-avdeling' target='_blank'>
+            listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
+            fane)
+          </Link>
+          . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
+          eller send mail til teamdatajegerne@nav.no.
+        </InfoCard.Content>
+      </InfoCard>
     </PageLayout>
   )
 }

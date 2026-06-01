@@ -23,9 +23,11 @@ import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Chips,
   Heading,
+  InfoCard,
   Link,
   LocalAlert,
   Search,
@@ -405,18 +407,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           {data.avdelingNavn}
         </Heading>
       </div>
-
-      <LocalAlert status='announcement' className='mt-4 mb-6' aria-live='off'>
-        <LocalAlert.Header>
-          <LocalAlert.Title as='h2'>
-            Obs! Disse sidene er fortsatt under utvikling.
-          </LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          Dersom dere finner feil eller har forslag til forbedringer, ta kontakt på #etterlevelse på
-          slack.
-        </LocalAlert.Content>
-      </LocalAlert>
 
       {avdelingId === 'ingen-avdeling' && (
         <LocalAlert status='warning' className='mt-4' aria-live='off'>
@@ -1003,6 +993,24 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           </>
         )}
       </div>
+
+      <InfoCard data-color='info' className='mt-8'>
+        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+          <InfoCard.Title as='h2'>
+            Savner du noe, eller har du tilbakemelding til oss?
+          </InfoCard.Title>
+        </InfoCard.Header>
+        <InfoCard.Content>
+          Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt i
+          søkefeltet, eller se{' '}
+          <Link href='/dashboard/ingen-avdeling' target='_blank'>
+            listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
+            fane)
+          </Link>
+          . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
+          eller send mail til teamdatajegerne@nav.no.
+        </InfoCard.Content>
+      </InfoCard>
     </PageLayout>
   )
 }

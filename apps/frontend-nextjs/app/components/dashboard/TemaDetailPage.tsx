@@ -16,8 +16,18 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { DownloadIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs, Tag } from '@navikt/ds-react'
+import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  Link as AkselLink,
+  BodyShort,
+  Button,
+  Detail,
+  Heading,
+  InfoCard,
+  Select,
+  Tabs,
+  Tag,
+} from '@navikt/ds-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
@@ -513,18 +523,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           Tema: {temaName}
         </Heading>
       </div>
-
-      <LocalAlert status='announcement' className='mt-4' aria-live='off'>
-        <LocalAlert.Header>
-          <LocalAlert.Title as='h2'>
-            Obs! Disse sidene er fortsatt under utvikling.
-          </LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          Dersom dere finner feil eller har forslag til forbedringer, ta kontakt på #etterlevelse på
-          slack.
-        </LocalAlert.Content>
-      </LocalAlert>
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
@@ -1286,6 +1284,24 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           </Tabs>
         )}
       </div>
+
+      <InfoCard data-color='info' className='mt-8'>
+        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+          <InfoCard.Title as='h2'>
+            Savner du noe, eller har du tilbakemelding til oss?
+          </InfoCard.Title>
+        </InfoCard.Header>
+        <InfoCard.Content>
+          Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt i
+          søkefeltet, eller se{' '}
+          <AkselLink href='/dashboard/ingen-avdeling' target='_blank'>
+            listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
+            fane)
+          </AkselLink>
+          . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
+          eller send mail til teamdatajegerne@nav.no.
+        </InfoCard.Content>
+      </InfoCard>
     </PageLayout>
   )
 }
