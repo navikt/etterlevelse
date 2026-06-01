@@ -25,6 +25,7 @@ import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentas
 import { handleSort } from '@/util/handleTableSort'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
+  BodyShort,
   Chips,
   Heading,
   InfoCard,
@@ -214,7 +215,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     if (searchFilters.length > 0) {
       filtered = filtered.filter((dok) => {
         const text = getSearchableText(dok)
-        return searchFilters.every((filter) => text.includes(filter.toLowerCase()))
+        return searchFilters.some((filter) => text.includes(filter.toLowerCase()))
       })
     }
 
@@ -481,7 +482,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         }}
       >
         <Search
-          label='Søk etter team, seksjon, person, dokument, enhet m.m. Trykk enter for å legge til filter.'
+          label='Søk etter team, person, dokument m.m. Trykk enter for å legge til filter.'
           hideLabel={false}
           variant='secondary'
           value={searchInput}
@@ -707,6 +708,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     </Table.Body>
                   </Table>
                 </StickyHorizontalScroll>
+                {sortedDoks.length === 0 && (
+                  <BodyShort className='mt-4 text-gray-500'>Ingen treff på valgte filtre</BodyShort>
+                )}
               </Tabs.Panel>
 
               <Tabs.Panel value='krav'>
@@ -823,6 +827,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     </Table.Body>
                   </Table>
                 </StickyHorizontalScroll>
+                {sortedDoks.length === 0 && (
+                  <BodyShort className='mt-4 text-gray-500'>Ingen treff på valgte filtre</BodyShort>
+                )}
               </Tabs.Panel>
 
               <Tabs.Panel value='pvk'>
@@ -988,6 +995,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                     </Table.Body>
                   </Table>
                 </StickyHorizontalScroll>
+                {sortedDoks.length === 0 && (
+                  <BodyShort className='mt-4 text-gray-500'>Ingen treff på valgte filtre</BodyShort>
+                )}
               </Tabs.Panel>
             </Tabs>
           </>
