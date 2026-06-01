@@ -145,7 +145,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level='4' className='min-h-12'>
-            Gjennomføringsstatus (krav) ({krav.etterlevelseTotal})
+            Vurdering av etterlevelseskrav
           </Heading>
           <RechartsStackedBar data={kravData} showPercentage />
         </div>
