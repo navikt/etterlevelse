@@ -594,12 +594,14 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               }}
             >
               <option value=''>Alle enheter</option>
+              {[...enheter]
+                .sort((a, b) => a.navn.localeCompare(b.navn))
+                .map((en) => (
+                  <option key={en.id} value={en.id}>
+                    {en.navn}
+                  </option>
+                ))}
               <option value='ingen-enhet'>Ikke valgt enhet</option>
-              {enheter.map((en) => (
-                <option key={en.id} value={en.id}>
-                  {en.navn}
-                </option>
-              ))}
             </Select>
           )}
 
@@ -1016,12 +1018,14 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 }}
               >
                 <option value=''>Alle enheter</option>
+                {[...kravEnheter]
+                  .sort((a, b) => a.navn.localeCompare(b.navn))
+                  .map((en) => (
+                    <option key={en.id} value={en.id}>
+                      {en.navn}
+                    </option>
+                  ))}
                 <option value='ingen-enhet'>Ikke valgt enhet</option>
-                {kravEnheter.map((en) => (
-                  <option key={en.id} value={en.id}>
-                    {en.navn}
-                  </option>
-                ))}
               </Select>
             )}
 
