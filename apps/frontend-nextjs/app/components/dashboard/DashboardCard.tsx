@@ -22,7 +22,10 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
       </Detail>
 
-      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4' style={{ whiteSpace: 'nowrap' }}>
+      <div
+        className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'
+        style={{ whiteSpace: 'nowrap' }}
+      >
         <div>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
@@ -36,31 +39,6 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
           <BodyShort>
             Godkjent <span className='font-bold'>{stats.dokumenter.godkjentAvRisikoeier}</span>
-          </BodyShort>
-        </div>
-
-        <div>
-          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
-            Suksesskriterier (etterlevelseskrav)
-          </Heading>
-          <BodyShort>
-            Ikke påbegynt{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkePaabegyntProsent}%</span>
-          </BodyShort>
-          <BodyShort>
-            Under arbeid{' '}
-            <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
-          </BodyShort>
-          <BodyShort>
-            Oppfylt <span className='font-bold'>{stats.suksesskriterier.oppfyltProsent}%</span>
-          </BodyShort>
-          <BodyShort>
-            Ikke oppfylt{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkeOppfyltProsent}%</span>
-          </BodyShort>
-          <BodyShort>
-            Ikke relevant{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkeRelevantProsent}%</span>
           </BodyShort>
         </div>
 
@@ -89,6 +67,31 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
           <BodyShort>
             PVK i Word <span className='font-bold'>{stats.pvk.pvkIWord}</span>
+          </BodyShort>
+        </div>
+
+        <div>
+          <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
+            Suksesskriterier (etterlevelseskrav)
+          </Heading>
+          <BodyShort>
+            Ikke påbegynt{' '}
+            <span className='font-bold'>{stats.suksesskriterier.ikkePaabegyntProsent}%</span>
+          </BodyShort>
+          <BodyShort>
+            Under arbeid{' '}
+            <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
+          </BodyShort>
+          <BodyShort>
+            Oppfylt <span className='font-bold'>{stats.suksesskriterier.oppfyltProsent}%</span>
+          </BodyShort>
+          <BodyShort>
+            Ikke oppfylt{' '}
+            <span className='font-bold'>{stats.suksesskriterier.ikkeOppfyltProsent}%</span>
+          </BodyShort>
+          <BodyShort>
+            Ikke relevant{' '}
+            <span className='font-bold'>{stats.suksesskriterier.ikkeRelevantProsent}%</span>
           </BodyShort>
         </div>
 

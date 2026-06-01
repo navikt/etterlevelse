@@ -155,7 +155,7 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
         {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
       </Detail>
 
-      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
+      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
@@ -165,16 +165,16 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
 
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
-            Suksesskriterier (etterlevelseskrav)
+            Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
-          <StackedBar data={suksessData} isPercentage maxWidth='200px' />
+          <StackedBar data={behovData} maxWidth='200px' />
         </div>
 
         <div>
           <Heading size='xsmall' level={subHeadingLevel}>
-            Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
+            Suksesskriterier (etterlevelseskrav)
           </Heading>
-          <StackedBar data={behovData} maxWidth='200px' />
+          <StackedBar data={suksessData} isPercentage maxWidth='200px' />
         </div>
 
         <div>
