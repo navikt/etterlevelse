@@ -1,13 +1,11 @@
 'use client'
 
 import { getDashboardStats } from '@/api/dashboard/dashboardApi'
-import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
-import { DashboardCard } from '@/components/dashboard/DashboardCard'
 import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
-import { Heading, InfoCard, Link, LinkCard, LocalAlert, Select, Tabs } from '@navikt/ds-react'
+import { Heading, InfoCard, Link, LinkCard, LocalAlert, Tabs, Tag } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
@@ -15,7 +13,6 @@ const DashboardPage = () => {
   const [stats, setStats] = useState<IAvdelingDashboardStats[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
@@ -29,10 +26,6 @@ const DashboardPage = () => {
       }
     })()
   }, [])
-
-  const filteredStats = selectedAvdeling
-    ? stats.filter((s) => s.avdelingId === selectedAvdeling)
-    : stats
 
   return (
     <PageLayout pageTitle='Dashboard' currentPage='Dashboard' breadcrumbPaths={[]}>
@@ -93,52 +86,36 @@ const DashboardPage = () => {
 
           <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
             <Heading size='medium' level='2'>
-              Avdelingoversikt
+              Avdelinger i Nav
             </Heading>
 
-            <Select
-              label='Velg avdeling'
-              className='mt-4 w-fit min-w-64'
-              value={selectedAvdeling}
-              onChange={(e) => setSelectedAvdeling(e.target.value)}
-            >
-              <option value=''>Alle avdelinger</option>
-              {stats.map((s) => (
-                <option key={s.avdelingId} value={s.avdelingId}>
-                  {s.avdelingNavn}
-                </option>
+            <ul className='flex flex-col gap-4 mt-4 list-none p-0'>
+              {stats.map((avdelingStats) => (
+                <li key={avdelingStats.avdelingId}>
+                  <LinkCard data-color='accent' style={{ color: 'var(--ax-text-subtle)' }}>
+                    <LinkCard.Title>
+                      <LinkCard.Anchor href={`/dashboard/${avdelingStats.avdelingId}`}>
+                        {avdelingStats.avdelingNavn}
+                      </LinkCard.Anchor>
+                    </LinkCard.Title>
+                    <LinkCard.Footer>
+                      <div className='flex gap-2'>
+                        <Tag
+                          size='small'
+                          variant='neutral'
+                          style={{ backgroundColor: '#d5f6db', color: '#000' }}
+                        >
+                          {avdelingStats.dokumenter.total} etterlevelsesdokumenter
+                        </Tag>
+                        <Tag size='small' variant='info-filled'>
+                          {avdelingStats.pvk.total} Personvernkonsekvensvurderinger
+                        </Tag>
+                      </div>
+                    </LinkCard.Footer>
+                  </LinkCard>
+                </li>
               ))}
-            </Select>
-
-            <Tabs className='mt-4' defaultValue='figurer'>
-              <Tabs.List>
-                <Tabs.Tab value='figurer' label='Vis figurer' />
-                <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-              </Tabs.List>
-
-              <Tabs.Panel value='figurer'>
-                <div className='flex flex-col gap-6 mt-6'>
-                  {filteredStats.map((avdelingStats) => (
-                    <DashboardBarCard
-                      key={avdelingStats.avdelingId}
-                      stats={avdelingStats}
-                      subHeadingLevel='4'
-                    />
-                  ))}
-                </div>
-              </Tabs.Panel>
-              <Tabs.Panel value='nokkeltall'>
-                <div className='flex flex-col gap-6 mt-6'>
-                  {filteredStats.map((avdelingStats) => (
-                    <DashboardCard
-                      key={avdelingStats.avdelingId}
-                      stats={avdelingStats}
-                      subHeadingLevel='4'
-                    />
-                  ))}
-                </div>
-              </Tabs.Panel>
-            </Tabs>
+            </ul>
           </div>
         </>
       )}
