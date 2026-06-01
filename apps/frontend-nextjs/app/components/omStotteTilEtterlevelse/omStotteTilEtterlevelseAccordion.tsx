@@ -3,7 +3,15 @@
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { EKravTab } from '@/constants/krav/kravConstants'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Accordion, BodyLong, Heading, InfoCard, List, ReadMore } from '@navikt/ds-react'
+import {
+  Accordion,
+  BodyLong,
+  CopyButton,
+  Heading,
+  InfoCard,
+  List,
+  ReadMore,
+} from '@navikt/ds-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
@@ -253,7 +261,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item>
-        <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
+        <Accordion.Header>
+          <h3>For risikoeiere: slik godkjenner du etterlevelsen</h3>
+        </Accordion.Header>
         <Accordion.Content>
           <ReadMore
             header={'Vis meg hvordan jeg som risikoeier godkjenner et etterlevelsesdokument'}
@@ -305,9 +315,18 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </List>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
+      <Accordion.Item id='oppdatere-etterlevelsesdokumentasjon-etter-godkjenning'>
         <Accordion.Header>
-          <h3>Oppdatere etterlevelsesdokumentasjon etter godkjenning</h3>
+          <div className='flex flex-row'>
+            <h3>Oppdatere etterlevelsesdokumentasjon etter godkjenning </h3>
+            <CopyButton
+              className='ml-3'
+              data-color='accent'
+              size='xsmall'
+              copyText={`${window.location.origin}/omstottetiletterlevelse#oppdatere-etterlevelsesdokumentasjon-etter-godkjenning`}
+              text='Kopier lenke'
+            />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
