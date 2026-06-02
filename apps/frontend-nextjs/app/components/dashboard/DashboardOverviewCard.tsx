@@ -241,16 +241,16 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
 
           <div>
             <Heading size='xsmall' level='3'>
-              Vurdere behov for PVK ({agg.behov.totalMedPersonopplysninger})
+              Suksesskriterier (etterlevelseskrav)
             </Heading>
-            <OverviewStackedBar data={behovData} />
+            <OverviewStackedBar data={suksessData} isPercentage />
           </div>
 
           <div>
             <Heading size='xsmall' level='3'>
-              Suksesskriterier (etterlevelseskrav)
+              Vurdere behov for PVK ({agg.behov.totalMedPersonopplysninger})
             </Heading>
-            <OverviewStackedBar data={suksessData} isPercentage />
+            <OverviewStackedBar data={behovData} />
           </div>
 
           <div>
@@ -270,15 +270,15 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
           </div>
           <div>
             <OverviewKeyMetrics
-              title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}
-              data={behovData}
+              title='Suksesskriterier (etterlevelseskrav)'
+              data={suksessData}
+              isPercentage
             />
           </div>
           <div>
             <OverviewKeyMetrics
-              title='Suksesskriterier (etterlevelseskrav)'
-              data={suksessData}
-              isPercentage
+              title={`Vurdere behov for PVK (${agg.behov.totalMedPersonopplysninger})`}
+              data={behovData}
             />
           </div>
           <div>
