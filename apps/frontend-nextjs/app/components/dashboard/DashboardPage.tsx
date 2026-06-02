@@ -204,7 +204,8 @@ const DashboardPage = () => {
                             lineHeight: '24px',
                           }}
                         >
-                          {avdelingStats.dokumenter.total} etterlevelsesdokumenter
+                          {avdelingStats.dokumenter.total.toLocaleString('nb-NO')}{' '}
+                          etterlevelsesdokumenter
                         </Tag>
                         <Tag
                           size='small'
@@ -216,7 +217,8 @@ const DashboardPage = () => {
                             lineHeight: '24px',
                           }}
                         >
-                          {avdelingStats.pvk.total} Personvernkonsekvensvurderinger
+                          {avdelingStats.pvk.total.toLocaleString('nb-NO')}{' '}
+                          Personvernkonsekvensvurderinger
                         </Tag>
                       </div>
                     </LinkCard.Footer>
