@@ -129,7 +129,7 @@ const DashboardPage = () => {
 
       <ReadMore header='Hvordan bruker jeg denne siden?' className='mt-4 max-w-[75ch]'>
         <p>På denne siden kan du:</p>
-        <List>
+        <List className='mt-4'>
           <List.Item>
             Få oversikt over etterlevelse i hele Nav ved å se figurer og lese nøkkeltall om
             etterlevelse og personvernkonsekvensvurderinger (PVK)
