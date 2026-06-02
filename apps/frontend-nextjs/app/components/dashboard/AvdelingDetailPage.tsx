@@ -451,7 +451,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       </ReadMore>
 
       {avdelingId === 'ingen-avdeling' && (
-        <LocalAlert status='warning' className='mt-4' aria-live='off'>
+        <LocalAlert status='warning' className='mt-4 mb-4' aria-live='off'>
           <LocalAlert.Header>
             <LocalAlert.Title as='h2'>
               Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
