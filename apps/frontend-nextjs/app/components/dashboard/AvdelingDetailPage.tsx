@@ -24,9 +24,11 @@ import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
-import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   BodyShort,
+  Button,
+  Chips,
   Heading,
   InfoCard,
   Link,
@@ -467,60 +469,155 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       )}
 
       <div className='rounded-lg px-6 py-4' style={{ backgroundColor: '#e3eff7' }}>
-        {data.seksjoner && data.seksjoner.length > 0 && (
-          <div className='flex gap-4 flex-wrap'>
-            <Select
-              label='Velg seksjon'
-              className='mt-4 w-fit min-w-64'
-              value={selectedSeksjon}
-              onChange={(e) => setSelectedSeksjon(e.target.value)}
-            >
-              <option value=''>Alle seksjoner</option>
-              {data.seksjoner
-                .filter((s) => s.navn !== data.avdelingNavn)
-                .map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.navn}
-                  </option>
-                ))}
-            </Select>
-
-            {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enhetOptions.length > 0 && (
+        <div className='flex gap-4 flex-wrap'>
+          {data.seksjoner && data.seksjoner.length > 0 && (
+            <>
               <Select
-                label='Velg enhet'
+                label='Velg seksjon'
                 className='mt-4 w-fit min-w-64'
-                value={selectedEnhet}
-                onChange={(e) => setSelectedEnhet(e.target.value)}
+                value={selectedSeksjon}
+                onChange={(e) => setSelectedSeksjon(e.target.value)}
               >
-                <option value=''>Alle enheter</option>
-                {[...enhetOptions]
-                  .sort((a, b) => a.navn.localeCompare(b.navn))
-                  .map((e) => (
-                    <option key={e.id} value={e.id}>
-                      {e.navn}
+                <option value=''>Alle seksjoner</option>
+                {data.seksjoner
+                  .filter((s) => s.navn !== data.avdelingNavn)
+                  .map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.navn}
                     </option>
                   ))}
-                <option value='ingen-enhet'>Ikke valgt enhet</option>
               </Select>
-            )}
-          </div>
-        )}
 
-        <UNSAFE_Combobox
-          label='Søk etter team, person og dokument.'
-          options={[]}
-          allowNewValues
-          isMultiSelect
-          selectedOptions={searchFilters}
-          onToggleSelected={(option, isSelected) => {
-            if (isSelected) {
-              addSearchFilter(option)
-            } else {
-              removeSearchFilter(option)
-            }
-          }}
-          className='mt-6 max-w-2xl'
-        />
+              {selectedSeksjon &&
+                selectedSeksjon !== 'ingen-seksjon' &&
+                enhetOptions.length > 0 && (
+                  <Select
+                    label='Velg enhet'
+                    className='mt-4 w-fit min-w-64'
+                    value={selectedEnhet}
+                    onChange={(e) => setSelectedEnhet(e.target.value)}
+                  >
+                    <option value=''>Alle enheter</option>
+                    {[...enhetOptions]
+                      .sort((a, b) => a.navn.localeCompare(b.navn))
+                      .map((e) => (
+                        <option key={e.id} value={e.id}>
+                          {e.navn}
+                        </option>
+                      ))}
+                    <option value='ingen-enhet'>Ikke valgt enhet</option>
+                  </Select>
+                )}
+            </>
+          )}
+
+          <div className='flex items-end gap-4 mt-4'>
+            <UNSAFE_Combobox
+              label='Søk etter team, person og dokument.'
+              options={[]}
+              allowNewValues
+              isMultiSelect
+              selectedOptions={searchFilters}
+              shouldShowSelectedOptions={false}
+              onToggleSelected={(option, isSelected) => {
+                if (isSelected) {
+                  addSearchFilter(option)
+                } else {
+                  removeSearchFilter(option)
+                }
+              }}
+              className='w-fit min-w-64'
+            />
+            <Button
+              variant='tertiary'
+              size='small'
+              icon={<DownloadIcon aria-hidden />}
+              onClick={() => {
+                const stats = getDisplayStats()
+                const BOM = '\uFEFF'
+                const seksjonNavn =
+                  selectedSeksjon === 'ingen-seksjon'
+                    ? 'Ikke valgt seksjon'
+                    : data.seksjoner?.find((s) => s.id === selectedSeksjon)?.navn
+                const enhetNavn =
+                  selectedEnhet === 'ingen-enhet'
+                    ? 'Ikke valgt enhet'
+                    : enhetOptions.find((e) => e.id === selectedEnhet)?.navn
+                const filterLines = [
+                  `Avdeling;${data.avdelingNavn}`,
+                  `Seksjon;${seksjonNavn || 'Alle seksjoner'}`,
+                  ...(enhetOptions.length > 0 ? [`Enhet;${enhetNavn || 'Alle enheter'}`] : []),
+                  ...(searchFilters.length > 0 ? [`Søkefilter;${searchFilters.join(', ')}`] : []),
+                  '',
+                ]
+                const header = [
+                  'Etterlevelsesdokumenter totalt',
+                  'Under arbeid',
+                  'Sendt til godkjenning',
+                  'Godkjent',
+                  'Suksesskriterier - ikke påbegynt %',
+                  'Suksesskriterier - under arbeid %',
+                  'Suksesskriterier - oppfylt %',
+                  'Suksesskriterier - ikke oppfylt %',
+                  'Suksesskriterier - ikke relevant %',
+                  'Vurdere behov for PVK - totalt med personopplysninger',
+                  'Ikke vurdert behov',
+                  'Skal ikke gjennomføre PVK',
+                  'Skal gjennomføre PVK',
+                  'PVK i Word',
+                  'Digital PVK totalt',
+                  'Ikke påbegynt',
+                  'Under arbeid',
+                  'Til behandling hos PVO',
+                  'Tilbakemelding fra PVO',
+                  'Godkjent av risikoeier',
+                ].join(';')
+                const row = [
+                  stats.dokumenter.total,
+                  stats.dokumenter.underArbeid,
+                  stats.dokumenter.sendtTilGodkjenning,
+                  stats.dokumenter.godkjentAvRisikoeier,
+                  stats.suksesskriterier.ikkePaabegyntProsent,
+                  stats.suksesskriterier.underArbeidProsent,
+                  stats.suksesskriterier.oppfyltProsent,
+                  stats.suksesskriterier.ikkeOppfyltProsent,
+                  stats.suksesskriterier.ikkeRelevantProsent,
+                  stats.behovForPvk.totalMedPersonopplysninger,
+                  stats.behovForPvk.ikkeVurdertBehov,
+                  stats.behovForPvk.vurdertIkkeBehov,
+                  stats.behovForPvk.behovIkkePaabegynt,
+                  stats.pvk.pvkIWord,
+                  stats.pvk.total - stats.pvk.pvkIWord,
+                  stats.pvk.ikkePaabegynt,
+                  stats.pvk.underArbeid,
+                  stats.pvk.tilBehandlingHosPvo,
+                  stats.pvk.tilbakemeldingFraPvo,
+                  stats.pvk.godkjentAvRisikoeier,
+                ].join(';')
+                const csv = BOM + [...filterLines, header, row].join('\n')
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+                const url = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = `nokkeltall-${data.avdelingNavn}-${new Date().toISOString().slice(0, 10)}.csv`
+                link.click()
+                URL.revokeObjectURL(url)
+              }}
+            >
+              Last ned nøkkeltall som CSV
+            </Button>
+          </div>
+        </div>
+
+        {searchFilters.length > 0 && (
+          <Chips className='mt-4'>
+            {searchFilters.map((filter) => (
+              <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
+                {filter}
+              </Chips.Removable>
+            ))}
+          </Chips>
+        )}
 
         {selectedSeksjon === 'ingen-seksjon' && (
           <LocalAlert status='warning' className='mt-4' aria-live='off'>
