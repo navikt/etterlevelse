@@ -30,7 +30,9 @@ import {
   Heading,
   InfoCard,
   Link,
+  List,
   LocalAlert,
+  ReadMore,
   Search,
   Select,
   SortState,
@@ -413,6 +415,39 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           {data.avdelingNavn}
         </Heading>
       </div>
+
+      <ReadMore header='Hvordan bruker jeg denne siden?' className='mt-4 max-w-[75ch]'>
+        <p>På denne siden kan du:</p>
+        <List className='mt-4'>
+          <List.Item>
+            Se figurer og lese nøkkeltall om avdelingens nåværende etterlevelser og
+            personvernkonsekvensvurderinger (PVK-er).
+          </List.Item>
+          <List.Item>
+            Utforske nærmere i tabeller, hvilke etterlevelser og PVK-er som finnes, hvem de
+            tilhører, etterlevelsens nåværende tilstand, med mer.
+          </List.Item>
+          <List.Item>
+            Søke og filtrere i datasettet: du kan finne seksjon, team, risikoeier, dokumentnavn, med
+            flere. Du kan også sortere tabellene, for eksempel etter teamnavn.
+          </List.Item>
+        </List>
+        <p className='mt-4'>
+          For mer detaljer anbefaler vi informasjonssidene{' '}
+          <Link href='/omstottetiletterlevelse' target='_blank'>
+            Om Støtte til etterlevelse
+          </Link>
+          ,{' '}
+          <Link href='/om-pvk' target='_blank'>
+            Om Digital PVK
+          </Link>{' '}
+          og{' '}
+          <Link href='/om-behandlingskatalogen' target='_blank'>
+            Om Behandlingskatalogen
+          </Link>
+          .
+        </p>
+      </ReadMore>
 
       {avdelingId === 'ingen-avdeling' && (
         <LocalAlert status='warning' className='mt-4' aria-live='off'>
