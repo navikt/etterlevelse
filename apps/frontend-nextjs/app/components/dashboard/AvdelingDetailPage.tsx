@@ -469,7 +469,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       )}
 
       <div className='rounded-lg px-6 py-4' style={{ backgroundColor: '#e3eff7' }}>
-        <div className='flex gap-4 flex-wrap'>
+        <div className='flex gap-4 flex-wrap items-end'>
           {data.seksjoner && data.seksjoner.length > 0 && (
             <>
               <Select
@@ -510,103 +510,103 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 )}
             </>
           )}
+        </div>
 
-          <div className='flex items-end gap-4 mt-4'>
-            <UNSAFE_Combobox
-              label='Søk etter team, person og dokument.'
-              options={[]}
-              allowNewValues
-              isMultiSelect
-              selectedOptions={searchFilters}
-              shouldShowSelectedOptions={false}
-              onToggleSelected={(option, isSelected) => {
-                if (isSelected) {
-                  addSearchFilter(option)
-                } else {
-                  removeSearchFilter(option)
-                }
-              }}
-              className='w-fit min-w-64'
-            />
-            <Button
-              variant='tertiary'
-              size='small'
-              icon={<DownloadIcon aria-hidden />}
-              onClick={() => {
-                const stats = getDisplayStats()
-                const BOM = '\uFEFF'
-                const seksjonNavn =
-                  selectedSeksjon === 'ingen-seksjon'
-                    ? 'Ikke valgt seksjon'
-                    : data.seksjoner?.find((s) => s.id === selectedSeksjon)?.navn
-                const enhetNavn =
-                  selectedEnhet === 'ingen-enhet'
-                    ? 'Ikke valgt enhet'
-                    : enhetOptions.find((e) => e.id === selectedEnhet)?.navn
-                const filterLines = [
-                  `Avdeling;${data.avdelingNavn}`,
-                  `Seksjon;${seksjonNavn || 'Alle seksjoner'}`,
-                  ...(enhetOptions.length > 0 ? [`Enhet;${enhetNavn || 'Alle enheter'}`] : []),
-                  ...(searchFilters.length > 0 ? [`Søkefilter;${searchFilters.join(', ')}`] : []),
-                  '',
-                ]
-                const header = [
-                  'Etterlevelsesdokumenter totalt',
-                  'Under arbeid',
-                  'Sendt til godkjenning',
-                  'Godkjent',
-                  'Suksesskriterier - ikke påbegynt %',
-                  'Suksesskriterier - under arbeid %',
-                  'Suksesskriterier - oppfylt %',
-                  'Suksesskriterier - ikke oppfylt %',
-                  'Suksesskriterier - ikke relevant %',
-                  'Vurdere behov for PVK - totalt med personopplysninger',
-                  'Ikke vurdert behov',
-                  'Skal ikke gjennomføre PVK',
-                  'Skal gjennomføre PVK',
-                  'PVK i Word',
-                  'Digital PVK totalt',
-                  'Ikke påbegynt',
-                  'Under arbeid',
-                  'Til behandling hos PVO',
-                  'Tilbakemelding fra PVO',
-                  'Godkjent av risikoeier',
-                ].join(';')
-                const row = [
-                  stats.dokumenter.total,
-                  stats.dokumenter.underArbeid,
-                  stats.dokumenter.sendtTilGodkjenning,
-                  stats.dokumenter.godkjentAvRisikoeier,
-                  stats.suksesskriterier.ikkePaabegyntProsent,
-                  stats.suksesskriterier.underArbeidProsent,
-                  stats.suksesskriterier.oppfyltProsent,
-                  stats.suksesskriterier.ikkeOppfyltProsent,
-                  stats.suksesskriterier.ikkeRelevantProsent,
-                  stats.behovForPvk.totalMedPersonopplysninger,
-                  stats.behovForPvk.ikkeVurdertBehov,
-                  stats.behovForPvk.vurdertIkkeBehov,
-                  stats.behovForPvk.behovIkkePaabegynt,
-                  stats.pvk.pvkIWord,
-                  stats.pvk.total - stats.pvk.pvkIWord,
-                  stats.pvk.ikkePaabegynt,
-                  stats.pvk.underArbeid,
-                  stats.pvk.tilBehandlingHosPvo,
-                  stats.pvk.tilbakemeldingFraPvo,
-                  stats.pvk.godkjentAvRisikoeier,
-                ].join(';')
-                const csv = BOM + [...filterLines, header, row].join('\n')
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-                const url = URL.createObjectURL(blob)
-                const link = document.createElement('a')
-                link.href = url
-                link.download = `nokkeltall-${data.avdelingNavn}-${new Date().toISOString().slice(0, 10)}.csv`
-                link.click()
-                URL.revokeObjectURL(url)
-              }}
-            >
-              Last ned nøkkeltall som CSV
-            </Button>
-          </div>
+        <div className='flex flex-col md:flex-row md:items-end gap-4 mt-4'>
+          <UNSAFE_Combobox
+            label='Søk etter team, personer eller dokumentnavn'
+            options={[]}
+            allowNewValues
+            isMultiSelect
+            selectedOptions={searchFilters}
+            shouldShowSelectedOptions={false}
+            onToggleSelected={(option, isSelected) => {
+              if (isSelected) {
+                addSearchFilter(option)
+              } else {
+                removeSearchFilter(option)
+              }
+            }}
+            className='flex-1'
+          />
+          <Button
+            variant='tertiary'
+            size='small'
+            icon={<DownloadIcon aria-hidden />}
+            onClick={() => {
+              const stats = getDisplayStats()
+              const BOM = '\uFEFF'
+              const seksjonNavn =
+                selectedSeksjon === 'ingen-seksjon'
+                  ? 'Ikke valgt seksjon'
+                  : data.seksjoner?.find((s) => s.id === selectedSeksjon)?.navn
+              const enhetNavn =
+                selectedEnhet === 'ingen-enhet'
+                  ? 'Ikke valgt enhet'
+                  : enhetOptions.find((e) => e.id === selectedEnhet)?.navn
+              const filterLines = [
+                `Avdeling;${data.avdelingNavn}`,
+                `Seksjon;${seksjonNavn || 'Alle seksjoner'}`,
+                ...(enhetOptions.length > 0 ? [`Enhet;${enhetNavn || 'Alle enheter'}`] : []),
+                ...(searchFilters.length > 0 ? [`Søkefilter;${searchFilters.join(', ')}`] : []),
+                '',
+              ]
+              const header = [
+                'Etterlevelsesdokumenter totalt',
+                'Under arbeid',
+                'Sendt til godkjenning',
+                'Godkjent',
+                'Suksesskriterier - ikke påbegynt %',
+                'Suksesskriterier - under arbeid %',
+                'Suksesskriterier - oppfylt %',
+                'Suksesskriterier - ikke oppfylt %',
+                'Suksesskriterier - ikke relevant %',
+                'Vurdere behov for PVK - totalt med personopplysninger',
+                'Ikke vurdert behov',
+                'Skal ikke gjennomføre PVK',
+                'Skal gjennomføre PVK',
+                'PVK i Word',
+                'Digital PVK totalt',
+                'Ikke påbegynt',
+                'Under arbeid',
+                'Til behandling hos PVO',
+                'Tilbakemelding fra PVO',
+                'Godkjent av risikoeier',
+              ].join(';')
+              const row = [
+                stats.dokumenter.total,
+                stats.dokumenter.underArbeid,
+                stats.dokumenter.sendtTilGodkjenning,
+                stats.dokumenter.godkjentAvRisikoeier,
+                stats.suksesskriterier.ikkePaabegyntProsent,
+                stats.suksesskriterier.underArbeidProsent,
+                stats.suksesskriterier.oppfyltProsent,
+                stats.suksesskriterier.ikkeOppfyltProsent,
+                stats.suksesskriterier.ikkeRelevantProsent,
+                stats.behovForPvk.totalMedPersonopplysninger,
+                stats.behovForPvk.ikkeVurdertBehov,
+                stats.behovForPvk.vurdertIkkeBehov,
+                stats.behovForPvk.behovIkkePaabegynt,
+                stats.pvk.pvkIWord,
+                stats.pvk.total - stats.pvk.pvkIWord,
+                stats.pvk.ikkePaabegynt,
+                stats.pvk.underArbeid,
+                stats.pvk.tilBehandlingHosPvo,
+                stats.pvk.tilbakemeldingFraPvo,
+                stats.pvk.godkjentAvRisikoeier,
+              ].join(';')
+              const csv = BOM + [...filterLines, header, row].join('\n')
+              const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+              const url = URL.createObjectURL(blob)
+              const link = document.createElement('a')
+              link.href = url
+              link.download = `nokkeltall-${data.avdelingNavn}-${new Date().toISOString().slice(0, 10)}.csv`
+              link.click()
+              URL.revokeObjectURL(url)
+            }}
+          >
+            Last ned nøkkeltallutvalg som CSV
+          </Button>
         </div>
 
         {searchFilters.length > 0 && (
