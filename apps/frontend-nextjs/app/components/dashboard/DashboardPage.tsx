@@ -196,14 +196,24 @@ const DashboardPage = () => {
                         <Tag
                           size='small'
                           variant='neutral'
-                          style={{ backgroundColor: '#d5f6db', color: '#000' }}
+                          style={{
+                            backgroundColor: '#d5f6db',
+                            color: '#000',
+                            fontSize: '18px',
+                            lineHeight: '24px',
+                          }}
                         >
                           {avdelingStats.dokumenter.total} etterlevelsesdokumenter
                         </Tag>
                         <Tag
                           size='small'
                           variant='neutral'
-                          style={{ backgroundColor: '#7300FF14', color: '#360072' }}
+                          style={{
+                            backgroundColor: '#7300FF14',
+                            color: '#360072',
+                            fontSize: '18px',
+                            lineHeight: '24px',
+                          }}
                         >
                           {avdelingStats.pvk.total} Personvernkonsekvensvurderinger
                         </Tag>
