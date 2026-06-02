@@ -540,52 +540,52 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             ))}
           </Chips>
         )}
+
+        {selectedSeksjon === 'ingen-seksjon' && (
+          <LocalAlert status='warning' className='mt-4' aria-live='off'>
+            <LocalAlert.Header>
+              <LocalAlert.Title as='h2'>
+                Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
+              </LocalAlert.Title>
+            </LocalAlert.Header>
+            <LocalAlert.Content>
+              <ul>
+                <li>
+                  Det er viktig at alle oppdaterer informasjon om avdeling og seksjon i
+                  etterlevelsesdokumentene sine.
+                </li>
+                <li>
+                  Dersom du oppdager etterlevelsesdokumenter som ikke er aktuelle lenger, ta kontakt
+                  med Team Datajegerne på #etterlevelse på slack.
+                </li>
+              </ul>
+            </LocalAlert.Content>
+          </LocalAlert>
+        )}
+
+        <Heading size='medium' level='2' className='mt-6'>
+          Oversikt
+        </Heading>
+
+        <Tabs className='mt-4' defaultValue='figurer'>
+          <Tabs.List>
+            <Tabs.Tab value='figurer' label='Vis figurer' />
+            <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+          </Tabs.List>
+          <Tabs.Panel value='figurer'>
+            <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
+              <DashboardBarCard stats={getDisplayStats()} hideHeader />
+              <DashboardReadMore />
+            </div>
+          </Tabs.Panel>
+          <Tabs.Panel value='nokkeltall'>
+            <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
+              <DashboardCard stats={getDisplayStats()} hideHeader />
+              <DashboardReadMore />
+            </div>
+          </Tabs.Panel>
+        </Tabs>
       </div>
-
-      {selectedSeksjon === 'ingen-seksjon' && (
-        <LocalAlert status='warning' className='mt-4' aria-live='off'>
-          <LocalAlert.Header>
-            <LocalAlert.Title as='h2'>
-              Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
-            </LocalAlert.Title>
-          </LocalAlert.Header>
-          <LocalAlert.Content>
-            <ul>
-              <li>
-                Det er viktig at alle oppdaterer informasjon om avdeling og seksjon i
-                etterlevelsesdokumentene sine.
-              </li>
-              <li>
-                Dersom du oppdager etterlevelsesdokumenter som ikke er aktuelle lenger, ta kontakt
-                med Team Datajegerne på #etterlevelse på slack.
-              </li>
-            </ul>
-          </LocalAlert.Content>
-        </LocalAlert>
-      )}
-
-      <Heading size='medium' level='2' className='mt-4 mb-6'>
-        Oversikt
-      </Heading>
-
-      <Tabs className='mt-4' defaultValue='figurer'>
-        <Tabs.List>
-          <Tabs.Tab value='figurer' label='Vis figurer' />
-          <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-        </Tabs.List>
-        <Tabs.Panel value='figurer'>
-          <div className='mt-6'>
-            <DashboardBarCard stats={getDisplayStats()} hideHeader />
-            <DashboardReadMore />
-          </div>
-        </Tabs.Panel>
-        <Tabs.Panel value='nokkeltall'>
-          <div className='mt-6'>
-            <DashboardCard stats={getDisplayStats()} hideHeader />
-            <DashboardReadMore />
-          </div>
-        </Tabs.Panel>
-      </Tabs>
 
       {!isTableLoading && tableData && (
         <>

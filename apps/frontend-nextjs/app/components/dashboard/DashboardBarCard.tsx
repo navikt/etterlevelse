@@ -144,7 +144,7 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
   ]
 
   return (
-    <div className='border border-gray-300 rounded-lg p-6 bg-white'>
+    <div>
       {!hideHeader && (
         <Heading size='small' level='3'>
           {stats.avdelingNavn}
