@@ -7,6 +7,7 @@ import {
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
+import { DashboardReadMore } from '@/components/dashboard/DashboardReadMore'
 import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
@@ -575,11 +576,13 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         <Tabs.Panel value='figurer'>
           <div className='mt-6'>
             <DashboardBarCard stats={getDisplayStats()} hideHeader />
+            <DashboardReadMore />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='nokkeltall'>
           <div className='mt-6'>
             <DashboardCard stats={getDisplayStats()} hideHeader />
+            <DashboardReadMore />
           </div>
         </Tabs.Panel>
       </Tabs>
