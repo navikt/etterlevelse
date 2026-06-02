@@ -27,21 +27,20 @@ import { handleSort } from '@/util/handleTableSort'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   BodyShort,
-  Chips,
   Heading,
   InfoCard,
   Link,
   List,
   LocalAlert,
   ReadMore,
-  Search,
   Select,
   SortState,
   Table,
   Tabs,
+  UNSAFE_Combobox,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 interface IProps {
@@ -125,9 +124,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [enhetOptions, setEnhetOptions] = useState<IOrgEnhet[]>([])
   const [tableTab, setTableTab] = useState('dok_pvk')
   const [sort, setSort] = useState<SortState | undefined>()
-  const [searchInput, setSearchInput] = useState('')
   const [searchFilters, setSearchFilters] = useState<string[]>([])
-  const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -183,7 +180,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     if (trimmed && !searchFilters.includes(trimmed)) {
       setSearchFilters((prev) => [...prev, trimmed])
     }
-    setSearchInput('')
   }
 
   const removeSearchFilter = (term: string) => {
@@ -512,34 +508,21 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           </div>
         )}
 
-        <form
-          className='mt-6'
-          onSubmit={(e) => {
-            e.preventDefault()
-            addSearchFilter(searchInput)
+        <UNSAFE_Combobox
+          label='Søk etter team, person og dokument.'
+          options={[]}
+          allowNewValues
+          isMultiSelect
+          selectedOptions={searchFilters}
+          onToggleSelected={(option, isSelected) => {
+            if (isSelected) {
+              addSearchFilter(option)
+            } else {
+              removeSearchFilter(option)
+            }
           }}
-        >
-          <Search
-            label='Søk etter team, person, dokument m.m. Trykk enter for å legge til filter.'
-            hideLabel={false}
-            variant='secondary'
-            value={searchInput}
-            onChange={setSearchInput}
-            onClear={() => setSearchInput('')}
-            ref={searchRef}
-            className='max-w-2xl'
-          />
-        </form>
-
-        {searchFilters.length > 0 && (
-          <Chips className='mt-4 mb-8'>
-            {searchFilters.map((filter) => (
-              <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
-                {filter}
-              </Chips.Removable>
-            ))}
-          </Chips>
-        )}
+          className='mt-6 max-w-2xl'
+        />
 
         {selectedSeksjon === 'ingen-seksjon' && (
           <LocalAlert status='warning' className='mt-4' aria-live='off'>
