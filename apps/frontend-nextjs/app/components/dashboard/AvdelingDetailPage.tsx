@@ -1009,23 +1009,25 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         )}
       </div>
 
-      <InfoCard data-color='info' className='mt-8'>
-        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-          <InfoCard.Title as='h2'>
-            Savner du noe, eller har du tilbakemelding til oss?
-          </InfoCard.Title>
-        </InfoCard.Header>
-        <InfoCard.Content>
-          Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt i
-          søkefeltet, eller se{' '}
-          <Link href='/dashboard/ingen-avdeling' target='_blank'>
-            listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
-            fane)
-          </Link>
-          . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
-          eller send mail til teamdatajegerne@nav.no.
-        </InfoCard.Content>
-      </InfoCard>
+      {!isTableLoading && (
+        <InfoCard data-color='info' className='mt-8'>
+          <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+            <InfoCard.Title as='h2'>
+              Savner du noe, eller har du tilbakemelding til oss?
+            </InfoCard.Title>
+          </InfoCard.Header>
+          <InfoCard.Content>
+            Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt
+            i søkefeltet, eller se{' '}
+            <Link href='/dashboard/ingen-avdeling' target='_blank'>
+              listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
+              fane)
+            </Link>
+            . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
+            eller send mail til teamdatajegerne@nav.no.
+          </InfoCard.Content>
+        </InfoCard>
+      )}
     </PageLayout>
   )
 }

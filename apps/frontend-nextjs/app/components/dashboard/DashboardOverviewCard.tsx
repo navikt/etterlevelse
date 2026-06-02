@@ -225,7 +225,7 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
   ]
 
   return (
-    <div className='border border-gray-300 rounded-lg p-6 bg-white'>
+    <div>
       <Detail uppercase className='mt-2 mb-4'>
         {agg.dok.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
       </Detail>
