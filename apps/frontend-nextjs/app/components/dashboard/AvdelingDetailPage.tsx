@@ -471,77 +471,75 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </LocalAlert>
       )}
 
-      <Heading size='medium' level='2' className='mt-4 mb-6'>
-        Oversikt
-      </Heading>
-
-      {data.seksjoner && data.seksjoner.length > 0 && (
-        <div className='flex gap-4 flex-wrap'>
-          <Select
-            label='Velg seksjon'
-            className='mt-4 w-fit min-w-64'
-            value={selectedSeksjon}
-            onChange={(e) => setSelectedSeksjon(e.target.value)}
-          >
-            <option value=''>Alle seksjoner</option>
-            {data.seksjoner
-              .filter((s) => s.navn !== data.avdelingNavn)
-              .map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.navn}
-                </option>
-              ))}
-          </Select>
-
-          {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enhetOptions.length > 0 && (
+      <div className='rounded-lg px-6 py-4' style={{ backgroundColor: '#e3eff7' }}>
+        {data.seksjoner && data.seksjoner.length > 0 && (
+          <div className='flex gap-4 flex-wrap'>
             <Select
-              label='Velg enhet'
+              label='Velg seksjon'
               className='mt-4 w-fit min-w-64'
-              value={selectedEnhet}
-              onChange={(e) => setSelectedEnhet(e.target.value)}
+              value={selectedSeksjon}
+              onChange={(e) => setSelectedSeksjon(e.target.value)}
             >
-              <option value=''>Alle enheter</option>
-              {[...enhetOptions]
-                .sort((a, b) => a.navn.localeCompare(b.navn))
-                .map((e) => (
-                  <option key={e.id} value={e.id}>
-                    {e.navn}
+              <option value=''>Alle seksjoner</option>
+              {data.seksjoner
+                .filter((s) => s.navn !== data.avdelingNavn)
+                .map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.navn}
                   </option>
                 ))}
-              <option value='ingen-enhet'>Ikke valgt enhet</option>
             </Select>
-          )}
-        </div>
-      )}
 
-      <form
-        className='mt-6'
-        onSubmit={(e) => {
-          e.preventDefault()
-          addSearchFilter(searchInput)
-        }}
-      >
-        <Search
-          label='Søk etter team, person, dokument m.m. Trykk enter for å legge til filter.'
-          hideLabel={false}
-          variant='secondary'
-          value={searchInput}
-          onChange={setSearchInput}
-          onClear={() => setSearchInput('')}
-          ref={searchRef}
-          className='max-w-2xl'
-        />
-      </form>
+            {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enhetOptions.length > 0 && (
+              <Select
+                label='Velg enhet'
+                className='mt-4 w-fit min-w-64'
+                value={selectedEnhet}
+                onChange={(e) => setSelectedEnhet(e.target.value)}
+              >
+                <option value=''>Alle enheter</option>
+                {[...enhetOptions]
+                  .sort((a, b) => a.navn.localeCompare(b.navn))
+                  .map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {e.navn}
+                    </option>
+                  ))}
+                <option value='ingen-enhet'>Ikke valgt enhet</option>
+              </Select>
+            )}
+          </div>
+        )}
 
-      {searchFilters.length > 0 && (
-        <Chips className='mt-4 mb-8'>
-          {searchFilters.map((filter) => (
-            <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
-              {filter}
-            </Chips.Removable>
-          ))}
-        </Chips>
-      )}
+        <form
+          className='mt-6'
+          onSubmit={(e) => {
+            e.preventDefault()
+            addSearchFilter(searchInput)
+          }}
+        >
+          <Search
+            label='Søk etter team, person, dokument m.m. Trykk enter for å legge til filter.'
+            hideLabel={false}
+            variant='secondary'
+            value={searchInput}
+            onChange={setSearchInput}
+            onClear={() => setSearchInput('')}
+            ref={searchRef}
+            className='max-w-2xl'
+          />
+        </form>
+
+        {searchFilters.length > 0 && (
+          <Chips className='mt-4 mb-8'>
+            {searchFilters.map((filter) => (
+              <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
+                {filter}
+              </Chips.Removable>
+            ))}
+          </Chips>
+        )}
+      </div>
 
       {selectedSeksjon === 'ingen-seksjon' && (
         <LocalAlert status='warning' className='mt-4' aria-live='off'>
@@ -564,6 +562,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           </LocalAlert.Content>
         </LocalAlert>
       )}
+
+      <Heading size='medium' level='2' className='mt-4 mb-6'>
+        Oversikt
+      </Heading>
 
       <Tabs className='mt-4' defaultValue='figurer'>
         <Tabs.List>
