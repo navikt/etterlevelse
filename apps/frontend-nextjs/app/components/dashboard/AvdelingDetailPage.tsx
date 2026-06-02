@@ -759,6 +759,30 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               </Tabs.Panel>
 
               <Tabs.Panel value='krav'>
+                <div style={{ maxWidth: '75ch' }}>
+                  <ReadMore header='Hjelp til å tolke tabellen' className='mt-4 mb-4'>
+                    <List>
+                      <List.Item>
+                        <strong>Hvordan tolke &quot;Antall krav ferdig vurdert&quot;?</strong>
+                        <br />
+                        Første tall viser hvor mange etterlevelseskrav som etterleveren har satt til
+                        &quot;ferdig utfylt&quot;. Andre tall viser totalantall krav som
+                        etterleveren må besvare i sitt etterlevelsesdokument. Ulike
+                        etterlevelsesdokumenter inneholder ulike antall krav basert på hvilke
+                        egenskaper som gjelder for dokumentet.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hva viser &quot;Oppfylt der kravet er ferdig vurdert&quot;?</strong>
+                        <br />
+                        Alle etterlevelseskrav består av ett eller flere suksesskriterier. For hvert
+                        suksesskriterium, vurderer man om det er oppfylt, ikke oppfylt eller ikke
+                        relevant. Så lenge suksesskriteriet er under vurdering, brukes tilstanden
+                        &quot;under arbeid&quot;. Tabellen viser prosentandel suksesskriterier som
+                        er ferdig vurdert.
+                      </List.Item>
+                    </List>
+                  </ReadMore>
+                </div>
                 <StickyHorizontalScroll>
                   <Table
                     className='mt-4 dashboard-table'
