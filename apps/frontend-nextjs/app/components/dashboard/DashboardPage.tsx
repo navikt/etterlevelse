@@ -67,6 +67,7 @@ const DashboardReadMore = () => (
           </Link>
         </List.Item>
       </List>
+      <div className='mb-8' />
     </ReadMore>
     <ReadMore
       header='Hjelp til å tolke figurer og tall om personvernkonsekvensvurdering (PVK)'
