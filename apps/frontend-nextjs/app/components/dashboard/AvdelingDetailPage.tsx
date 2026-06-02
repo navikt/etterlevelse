@@ -515,6 +515,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         <div className='flex flex-col md:flex-row md:items-end gap-4 mt-4'>
           <UNSAFE_Combobox
             label='Søk etter team, personer eller dokumentnavn'
+            description='Trykk Enter for å legge til søkeord. Du kan velge flere.'
             options={[]}
             allowNewValues
             isMultiSelect
