@@ -127,6 +127,39 @@ const DashboardPage = () => {
         </Heading>
       </div>
 
+      <ReadMore header='Hvordan bruker jeg denne siden?' className='mt-4 max-w-[75ch]'>
+        <p>På denne siden kan du:</p>
+        <List className='mt-4'>
+          <List.Item>
+            Få oversikt over etterlevelse i hele Nav ved å se figurer og lese nøkkeltall om
+            etterlevelse og personvernkonsekvensvurderinger (PVK)
+          </List.Item>
+          <List.Item>
+            Navigere videre til etterlevelsesoversikt i Nav inndelt etter tema, eksempelvis arkiv og
+            dokumentasjon, personvern og økonomi.
+          </List.Item>
+          <List.Item>
+            Navigere til avdelingssider for å utforske nærmere hvordan status for etterlevelse og
+            PVK er for den enkelte avdeling, seksjon og enhet.
+          </List.Item>
+        </List>
+        <p className='mt-4'>
+          For mer detaljer anbefaler vi informasjonssidene{' '}
+          <Link href='/omstottetiletterlevelse' target='_blank'>
+            Om Støtte til etterlevelse
+          </Link>
+          ,{' '}
+          <Link href='/om-pvk' target='_blank'>
+            Om Digital PVK
+          </Link>{' '}
+          og{' '}
+          <Link href='/om-behandlingskatalogen' target='_blank'>
+            Om Behandlingskatalogen
+          </Link>
+          .
+        </p>
+      </ReadMore>
+
       {error && (
         <LocalAlert status='error' className='mt-4'>
           <LocalAlert.Header>
