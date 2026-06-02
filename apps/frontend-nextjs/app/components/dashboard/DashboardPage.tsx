@@ -143,7 +143,7 @@ const DashboardPage = () => {
             PVK er for den enkelte avdeling, seksjon og enhet.
           </List.Item>
         </List>
-        <p>
+        <p className='mt-4'>
           For mer detaljer anbefaler vi informasjonssidene{' '}
           <Link href='/omstottetiletterlevelse' target='_blank'>
             Om Støtte til etterlevelse
