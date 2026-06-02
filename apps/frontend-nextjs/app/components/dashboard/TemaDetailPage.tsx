@@ -364,30 +364,36 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   }, [selectedKravAvdeling])
 
   useEffect(() => {
-    if (selectedSeksjon && selectedSeksjon !== 'ingen-seksjon') {
-      getEnheterBySeksjonId(selectedSeksjon)
-        .then(setEnheter)
-        .catch(() => setEnheter([]))
-    } else {
-      setEnheter([])
-      setSelectedEnhet('')
-    }
+    const hasValidSeksjon = selectedSeksjon && selectedSeksjon !== 'ingen-seksjon'
+    const promise = hasValidSeksjon ? getEnheterBySeksjonId(selectedSeksjon) : Promise.resolve([])
+    promise
+      .then((result) => {
+        setEnheter(result)
+        if (!hasValidSeksjon) {
+          setSelectedEnhet('')
+        }
+      })
+      .catch(() => setEnheter([]))
   }, [selectedSeksjon])
 
   useEffect(() => {
-    if (selectedKravSeksjon && selectedKravSeksjon !== 'ingen-seksjon') {
-      getEnheterBySeksjonId(selectedKravSeksjon)
-        .then(setKravEnheter)
-        .catch(() => setKravEnheter([]))
-    } else {
-      setKravEnheter([])
-      setSelectedKravEnhet('')
-    }
+    const hasValidKravSeksjon = selectedKravSeksjon && selectedKravSeksjon !== 'ingen-seksjon'
+    const promise = hasValidKravSeksjon
+      ? getEnheterBySeksjonId(selectedKravSeksjon)
+      : Promise.resolve([])
+    promise
+      .then((result) => {
+        setKravEnheter(result)
+        if (!hasValidKravSeksjon) {
+          setSelectedKravEnhet('')
+        }
+      })
+      .catch(() => setKravEnheter([]))
   }, [selectedKravSeksjon])
 
   useEffect(() => {
     if (selectedKrav && kravStats.length > 0 && !kravStats.some((k) => k.kravId === selectedKrav)) {
-      setSelectedKrav('')
+      Promise.resolve().then(() => setSelectedKrav(''))
     }
   }, [kravStats, selectedKrav])
 

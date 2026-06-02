@@ -469,14 +469,16 @@ const TemaDashboardPage = () => {
   }, [selectedAvdeling])
 
   useEffect(() => {
-    if (selectedSeksjon && selectedSeksjon !== 'ingen-seksjon') {
-      getEnheterBySeksjonId(selectedSeksjon)
-        .then(setEnheter)
-        .catch(() => setEnheter([]))
-    } else {
-      setEnheter([])
-      setSelectedEnhet('')
-    }
+    const hasValidSeksjon = selectedSeksjon && selectedSeksjon !== 'ingen-seksjon'
+    const promise = hasValidSeksjon ? getEnheterBySeksjonId(selectedSeksjon) : Promise.resolve([])
+    promise
+      .then((result) => {
+        setEnheter(result)
+        if (!hasValidSeksjon) {
+          setSelectedEnhet('')
+        }
+      })
+      .catch(() => setEnheter([]))
   }, [selectedSeksjon])
 
   const filteredTemaStats = selectedTema

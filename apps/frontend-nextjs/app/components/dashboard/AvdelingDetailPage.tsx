@@ -142,14 +142,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   }, [avdelingId])
 
   useEffect(() => {
-    if (selectedSeksjon && selectedSeksjon !== 'ingen-seksjon') {
-      getEnheterBySeksjonId(selectedSeksjon)
-        .then(setEnhetOptions)
-        .catch(() => setEnhetOptions([]))
-    } else {
-      setEnhetOptions([])
-    }
-    setSelectedEnhet('')
+    const promise =
+      selectedSeksjon && selectedSeksjon !== 'ingen-seksjon'
+        ? getEnheterBySeksjonId(selectedSeksjon)
+        : Promise.resolve([])
+    promise
+      .then((result) => {
+        setEnhetOptions(result)
+        setSelectedEnhet('')
+      })
+      .catch(() => {
+        setEnhetOptions([])
+        setSelectedEnhet('')
+      })
   }, [selectedSeksjon])
 
   const getSearchableText = (dok: IDashboardTable): string => {

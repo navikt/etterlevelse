@@ -32,17 +32,15 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
   const [seksjonerHaveEnheter, setSeksjonerHaveEnheter] = useState(false)
 
   useEffect(() => {
-    if (etterlevelseDokumentasjon.seksjoner.length > 0) {
-      Promise.all(
-        etterlevelseDokumentasjon.seksjoner.map((seksjon) =>
-          getEnheterBySeksjonId(seksjon.nomSeksjonId)
-        )
-      ).then((results) => {
-        setSeksjonerHaveEnheter(results.some((enheter) => enheter.length > 0))
-      })
-    } else {
-      setSeksjonerHaveEnheter(false)
-    }
+    const promise =
+      etterlevelseDokumentasjon.seksjoner.length > 0
+        ? Promise.all(
+            etterlevelseDokumentasjon.seksjoner.map((seksjon) =>
+              getEnheterBySeksjonId(seksjon.nomSeksjonId)
+            )
+          ).then((results) => results.some((enheter) => enheter.length > 0))
+        : Promise.resolve(false)
+    promise.then(setSeksjonerHaveEnheter)
   }, [etterlevelseDokumentasjon.seksjoner])
 
   const relevansCodeList: IGetParsedOptionsProps[] = codelist.utils.getParsedOptions(
