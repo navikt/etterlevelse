@@ -417,7 +417,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Heading>
       </div>
 
-      <ReadMore header='Hvordan bruker jeg denne siden?' className='mt-4 max-w-[75ch]'>
+      <ReadMore header='Hvordan bruker jeg denne siden?' className='mt-4 mb-4 max-w-[75ch]'>
         <p>På denne siden kan du:</p>
         <List className='mt-4'>
           <List.Item>
