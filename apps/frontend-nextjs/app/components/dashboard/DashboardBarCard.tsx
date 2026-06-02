@@ -156,28 +156,28 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
       </Detail>
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
-        <div>
+        <div className='md:order-1 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel}>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
           <StackedBar data={dokData} maxWidth='200px' />
         </div>
 
-        <div>
-          <Heading size='xsmall' level={subHeadingLevel}>
-            Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
-          </Heading>
-          <StackedBar data={behovData} maxWidth='200px' />
-        </div>
-
-        <div>
+        <div className='md:order-3 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel}>
             Suksesskriterier (etterlevelseskrav)
           </Heading>
           <StackedBar data={suksessData} isPercentage maxWidth='200px' />
         </div>
 
-        <div>
+        <div className='md:order-2 xl:order-none'>
+          <Heading size='xsmall' level={subHeadingLevel}>
+            Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
+          </Heading>
+          <StackedBar data={behovData} maxWidth='200px' />
+        </div>
+
+        <div className='md:order-4 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel}>
             Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>
