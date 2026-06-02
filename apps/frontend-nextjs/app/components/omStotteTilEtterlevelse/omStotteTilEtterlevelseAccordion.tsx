@@ -2,6 +2,7 @@
 
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { EKravTab } from '@/constants/krav/kravConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import {
   Accordion,
@@ -14,14 +15,86 @@ import {
 } from '@navikt/ds-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useContext, useEffect, useState } from 'react'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
 const OmStotteTilEtterlevelseAccordion = () => {
+  const itemTitles = {
+    oppretteEllerOppdatere: 'Opprette eller oppdatere et etterlevelsesdokument',
+    redigereDokumentegenskaper: 'Redigere dokumentegenskaper og filtrere krav',
+    jobbeITemaoversikten: 'Jobbe i temaoversikten',
+    besvareEtterlevelseskrav: 'Besvare etterlevelseskrav',
+    faEtterlevelsenGodkjent: 'Få etterlevelsen godkjent av risikoeier',
+    forRisikoeiere: 'For risikoeiere: slik godkjenner du etterlevelsen',
+    oppdatereEtterGodkjenning: 'Oppdatere etterlevelsesdokumentasjon etter godkjenning',
+    gjenbruk: 'Gjenbruk av etterlevelsesdokumentasjon',
+    tilretteleggeForGjenbruk:
+      'Slik tilrettelegger dere for gjenbruk av deres eget etterlevelsesdokument',
+    slikGjenbrukerDu: 'Slik gjenbruker du et etterlevelsesdokument',
+  } as const
+
+  const itemIds = {
+    // Hard-coded, stable hash ids (avoid runtime slug generation and keep URLs stable).
+    oppretteEllerOppdatere: 'opprette-eller-oppdatere-et-etterlevelsesdokument',
+    redigereDokumentegenskaper: 'redigere-dokumentegenskaper-og-filtrere-krav',
+    jobbeITemaoversikten: 'jobbe-i-temaoversikten',
+    besvareEtterlevelseskrav: 'besvare-etterlevelseskrav',
+    faEtterlevelsenGodkjent: 'fa-etterlevelsen-godkjent-av-risikoeier',
+    forRisikoeiere: 'for-risikoeiere-slik-godkjenner-du-etterlevelsen',
+    oppdatereEtterGodkjenning: 'oppdatere-etterlevelsesdokumentasjon-etter-godkjenning',
+    gjenbruk: 'gjenbruk-av-etterlevelsesdokumentasjon',
+    tilretteleggeForGjenbruk:
+      'slik-tilrettelegger-dere-for-gjenbruk-av-deres-eget-etterlevelsesdokument',
+    slikGjenbrukerDu: 'slik-gjenbruker-du-et-etterlevelsesdokument',
+  } as const
+
+  const allItemIds = new Set<string>(Object.values(itemIds))
+
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(Object.values(itemIds).map((id) => [id, false]))
+  )
+
+  const toggle = (id: string) => {
+    setOpenItems((prev) => ({ ...prev, [id]: !prev[id] }))
+  }
+
+  useEffect(() => {
+    const onHash = () => {
+      const hash = decodeURIComponent(window.location.hash.replace(/^#/, ''))
+      if (!hash || !allItemIds.has(hash)) return
+
+      setOpenItems((prev) => ({ ...prev, [hash]: true }))
+
+      // If we arrive here through a deep link, the target might not be in the DOM yet
+      // (Suspense/hydration). Retry briefly to make scroll-to-hash reliable.
+      let attempts = 0
+      const tryScroll = () => {
+        const el = document.getElementById(hash)
+        if (el) {
+          el.scrollIntoView({ block: 'start' })
+          return
+        }
+        if (attempts++ < 10) window.setTimeout(tryScroll, 50)
+      }
+      tryScroll()
+    }
+
+    onHash() // handle initial load
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
   return (
     <Accordion className='my-6'>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Opprette eller oppdatere et etterlevelsesdokument</h3>
+      <Accordion.Item
+        id={itemIds.oppretteEllerOppdatere}
+        open={openItems[itemIds.oppretteEllerOppdatere]}
+      >
+        <Accordion.Header onClick={() => toggle(itemIds.oppretteEllerOppdatere)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.oppretteEllerOppdatere}</h3>
+            <CopyAccordionLinkButton id={itemIds.oppretteEllerOppdatere} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <BodyLong spacing>
@@ -56,9 +129,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Redigere dokumentegenskaper og filtrere krav</h3>
+      <Accordion.Item
+        id={itemIds.redigereDokumentegenskaper}
+        open={openItems[itemIds.redigereDokumentegenskaper]}
+      >
+        <Accordion.Header onClick={() => toggle(itemIds.redigereDokumentegenskaper)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.redigereDokumentegenskaper}</h3>
+            <CopyAccordionLinkButton id={itemIds.redigereDokumentegenskaper} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <BodyLong spacing>
@@ -124,9 +203,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Jobbe i temaoversikten</h3>
+      <Accordion.Item
+        id={itemIds.jobbeITemaoversikten}
+        open={openItems[itemIds.jobbeITemaoversikten]}
+      >
+        <Accordion.Header onClick={() => toggle(itemIds.jobbeITemaoversikten)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.jobbeITemaoversikten}</h3>
+            <CopyAccordionLinkButton id={itemIds.jobbeITemaoversikten} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <Image
@@ -147,9 +232,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Besvare etterlevelseskrav</h3>
+      <Accordion.Item
+        id={itemIds.besvareEtterlevelseskrav}
+        open={openItems[itemIds.besvareEtterlevelseskrav]}
+      >
+        <Accordion.Header onClick={() => toggle(itemIds.besvareEtterlevelseskrav)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.besvareEtterlevelseskrav}</h3>
+            <CopyAccordionLinkButton id={itemIds.besvareEtterlevelseskrav} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore header='Vis meg hvordan jeg besvarer etterlevelseskrav' className='mb-6'>
@@ -195,9 +286,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Få etterlevelsen godkjent av risikoeier</h3>
+      <Accordion.Item
+        id={itemIds.faEtterlevelsenGodkjent}
+        open={openItems[itemIds.faEtterlevelsenGodkjent]}
+      >
+        <Accordion.Header onClick={() => toggle(itemIds.faEtterlevelsenGodkjent)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.faEtterlevelsenGodkjent}</h3>
+            <CopyAccordionLinkButton id={itemIds.faEtterlevelsenGodkjent} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
@@ -260,9 +357,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>For risikoeiere: slik godkjenner du etterlevelsen</h3>
+      <Accordion.Item id={itemIds.forRisikoeiere} open={openItems[itemIds.forRisikoeiere]}>
+        <Accordion.Header onClick={() => toggle(itemIds.forRisikoeiere)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.forRisikoeiere}</h3>
+            <CopyAccordionLinkButton id={itemIds.forRisikoeiere} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
@@ -315,17 +415,14 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </List>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item id='oppdatere-etterlevelsesdokumentasjon-etter-godkjenning'>
-        <Accordion.Header>
+      <Accordion.Item
+        id={itemIds.oppdatereEtterGodkjenning}
+        open={openItems[itemIds.oppdatereEtterGodkjenning]}
+      >
+        <Accordion.Header onClick={() => toggle(itemIds.oppdatereEtterGodkjenning)}>
           <div className='flex flex-row'>
-            <h3>Oppdatere etterlevelsesdokumentasjon etter godkjenning </h3>
-            <CopyButton
-              className='ml-3'
-              data-color='accent'
-              size='xsmall'
-              copyText={`${window.location.origin}/omstottetiletterlevelse#oppdatere-etterlevelsesdokumentasjon-etter-godkjenning`}
-              text='Kopier lenke'
-            />
+            <h3>{itemTitles.oppdatereEtterGodkjenning} </h3>
+            <CopyAccordionLinkButton id={itemIds.oppdatereEtterGodkjenning} />
           </div>
         </Accordion.Header>
         <Accordion.Content>
@@ -352,9 +449,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Gjenbruk av etterlevelsesdokumentasjon</h3>
+      <Accordion.Item id={itemIds.gjenbruk} open={openItems[itemIds.gjenbruk]}>
+        <Accordion.Header onClick={() => toggle(itemIds.gjenbruk)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.gjenbruk}</h3>
+            <CopyAccordionLinkButton id={itemIds.gjenbruk} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <Heading size='small' level='4' spacing>
@@ -430,9 +530,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Slik tilrettelegger dere for gjenbruk av deres eget etterlevelsesdokument</h3>
+      <Accordion.Item
+        id={itemIds.tilretteleggeForGjenbruk}
+        open={openItems[itemIds.tilretteleggeForGjenbruk]}
+      >
+        <Accordion.Header onClick={() => toggle(itemIds.tilretteleggeForGjenbruk)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.tilretteleggeForGjenbruk}</h3>
+            <CopyAccordionLinkButton id={itemIds.tilretteleggeForGjenbruk} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
@@ -553,9 +659,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Slik gjenbruker du et etterlevelsesdokument</h3>
+      <Accordion.Item id={itemIds.slikGjenbrukerDu} open={openItems[itemIds.slikGjenbrukerDu]}>
+        <Accordion.Header onClick={() => toggle(itemIds.slikGjenbrukerDu)}>
+          <div className='flex flex-row'>
+            <h3>{itemTitles.slikGjenbrukerDu}</h3>
+            <CopyAccordionLinkButton id={itemIds.slikGjenbrukerDu} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
@@ -711,3 +820,21 @@ const OmStotteTilEtterlevelseAccordion = () => {
 }
 
 export default OmStotteTilEtterlevelseAccordion
+
+const CopyAccordionLinkButton = ({ id }: { id: string }) => {
+  const user = useContext(UserContext)
+
+  if (!user.isAdmin()) return null
+
+  return (
+    <CopyButton
+      className='ml-3'
+      data-color='accent'
+      size='xsmall'
+      copyText={`${window.location.origin}/omstottetiletterlevelse#${id}`}
+      text='Kopier lenke'
+      // Prevent toggling the accordion when clicking the copy button.
+      onClick={(e) => e.stopPropagation()}
+    />
+  )
+}
