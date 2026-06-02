@@ -7,6 +7,7 @@ import {
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
+import { DashboardReadMore } from '@/components/dashboard/DashboardReadMore'
 import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
@@ -30,7 +31,9 @@ import {
   Heading,
   InfoCard,
   Link,
+  List,
   LocalAlert,
+  ReadMore,
   Search,
   Select,
   SortState,
@@ -414,7 +417,132 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </Heading>
       </div>
 
+      <ReadMore header='Hvordan bruker jeg denne siden?' className='mt-4 max-w-[75ch]'>
+        <p>På denne siden kan du:</p>
+        <List className='mt-4'>
+          <List.Item>
+            Se figurer og lese nøkkeltall om avdelingens nåværende etterlevelser og
+            personvernkonsekvensvurderinger (PVK-er).
+          </List.Item>
+          <List.Item>
+            Utforske nærmere i tabeller, hvilke etterlevelser og PVK-er som finnes, hvem de
+            tilhører, etterlevelsens nåværende tilstand, med mer.
+          </List.Item>
+          <List.Item>
+            Søke og filtrere i datasettet: du kan finne seksjon, team, risikoeier, dokumentnavn, med
+            flere. Du kan også sortere tabellene, for eksempel etter teamnavn.
+          </List.Item>
+        </List>
+        <p className='mt-4'>
+          For mer detaljer anbefaler vi informasjonssidene{' '}
+          <Link href='/omstottetiletterlevelse' target='_blank'>
+            Om Støtte til etterlevelse
+          </Link>
+          ,{' '}
+          <Link href='/om-pvk' target='_blank'>
+            Om Digital PVK
+          </Link>{' '}
+          og{' '}
+          <Link href='/om-behandlingskatalogen' target='_blank'>
+            Om Behandlingskatalogen
+          </Link>
+          .
+        </p>
+      </ReadMore>
+
       {avdelingId === 'ingen-avdeling' && (
+        <LocalAlert status='warning' className='mt-4 mb-4' aria-live='off'>
+          <LocalAlert.Header>
+            <LocalAlert.Title as='h2'>
+              Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>
+            <ul>
+              <li>
+                Det er viktig at alle oppdaterer informasjon om avdeling og seksjon i
+                etterlevelsesdokumentene sine.
+              </li>
+              <li>
+                Dersom du oppdager etterlevelsesdokumenter som ikke er aktuelle lenger, ta kontakt
+                med Team Datajegerne på #etterlevelse på slack.
+              </li>
+            </ul>
+          </LocalAlert.Content>
+        </LocalAlert>
+      )}
+
+      <div className='rounded-lg px-6 py-4' style={{ backgroundColor: '#e3eff7' }}>
+        {data.seksjoner && data.seksjoner.length > 0 && (
+          <div className='flex gap-4 flex-wrap'>
+            <Select
+              label='Velg seksjon'
+              className='mt-4 w-fit min-w-64'
+              value={selectedSeksjon}
+              onChange={(e) => setSelectedSeksjon(e.target.value)}
+            >
+              <option value=''>Alle seksjoner</option>
+              {data.seksjoner
+                .filter((s) => s.navn !== data.avdelingNavn)
+                .map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.navn}
+                  </option>
+                ))}
+            </Select>
+
+            {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enhetOptions.length > 0 && (
+              <Select
+                label='Velg enhet'
+                className='mt-4 w-fit min-w-64'
+                value={selectedEnhet}
+                onChange={(e) => setSelectedEnhet(e.target.value)}
+              >
+                <option value=''>Alle enheter</option>
+                {[...enhetOptions]
+                  .sort((a, b) => a.navn.localeCompare(b.navn))
+                  .map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {e.navn}
+                    </option>
+                  ))}
+                <option value='ingen-enhet'>Ikke valgt enhet</option>
+              </Select>
+            )}
+          </div>
+        )}
+
+        <form
+          className='mt-6'
+          onSubmit={(e) => {
+            e.preventDefault()
+            addSearchFilter(searchInput)
+          }}
+        >
+          <Search
+            label='Søk etter team, person, dokument m.m. Trykk enter for å legge til filter.'
+            hideLabel={false}
+            variant='secondary'
+            value={searchInput}
+            onChange={setSearchInput}
+            onClear={() => setSearchInput('')}
+            ref={searchRef}
+            className='max-w-2xl'
+          />
+        </form>
+
+        {searchFilters.length > 0 && (
+          <Chips className='mt-4 mb-8'>
+            {searchFilters.map((filter) => (
+              <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
+                {filter}
+              </Chips.Removable>
+            ))}
+          </Chips>
+        )}
+      </div>
+
+      {selectedSeksjon === 'ingen-seksjon' && (
         <LocalAlert status='warning' className='mt-4' aria-live='off'>
           <LocalAlert.Header>
             <LocalAlert.Title as='h2'>
@@ -440,96 +568,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         Oversikt
       </Heading>
 
-      {data.seksjoner && data.seksjoner.length > 0 && (
-        <div className='flex gap-4 flex-wrap'>
-          <Select
-            label='Velg seksjon'
-            className='mt-4 w-fit min-w-64'
-            value={selectedSeksjon}
-            onChange={(e) => setSelectedSeksjon(e.target.value)}
-          >
-            <option value=''>Alle seksjoner</option>
-            {data.seksjoner
-              .filter((s) => s.navn !== data.avdelingNavn)
-              .map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.navn}
-                </option>
-              ))}
-          </Select>
-
-          {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enhetOptions.length > 0 && (
-            <Select
-              label='Velg enhet'
-              className='mt-4 w-fit min-w-64'
-              value={selectedEnhet}
-              onChange={(e) => setSelectedEnhet(e.target.value)}
-            >
-              <option value=''>Alle enheter</option>
-              {[...enhetOptions]
-                .sort((a, b) => a.navn.localeCompare(b.navn))
-                .map((e) => (
-                  <option key={e.id} value={e.id}>
-                    {e.navn}
-                  </option>
-                ))}
-              <option value='ingen-enhet'>Ikke valgt enhet</option>
-            </Select>
-          )}
-        </div>
-      )}
-
-      <form
-        className='mt-6'
-        onSubmit={(e) => {
-          e.preventDefault()
-          addSearchFilter(searchInput)
-        }}
-      >
-        <Search
-          label='Søk etter team, person, dokument m.m. Trykk enter for å legge til filter.'
-          hideLabel={false}
-          variant='secondary'
-          value={searchInput}
-          onChange={setSearchInput}
-          onClear={() => setSearchInput('')}
-          ref={searchRef}
-          className='max-w-2xl'
-        />
-      </form>
-
-      {searchFilters.length > 0 && (
-        <Chips className='mt-4 mb-8'>
-          {searchFilters.map((filter) => (
-            <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
-              {filter}
-            </Chips.Removable>
-          ))}
-        </Chips>
-      )}
-
-      {selectedSeksjon === 'ingen-seksjon' && (
-        <LocalAlert status='warning' className='mt-4' aria-live='off'>
-          <LocalAlert.Header>
-            <LocalAlert.Title as='h2'>
-              Disse etterlevelsesdokumentene mangler avdeling og/eller seksjon
-            </LocalAlert.Title>
-          </LocalAlert.Header>
-          <LocalAlert.Content>
-            <ul>
-              <li>
-                Det er viktig at alle oppdaterer informasjon om avdeling og seksjon i
-                etterlevelsesdokumentene sine.
-              </li>
-              <li>
-                Dersom du oppdager etterlevelsesdokumenter som ikke er aktuelle lenger, ta kontakt
-                med Team Datajegerne på #etterlevelse på slack.
-              </li>
-            </ul>
-          </LocalAlert.Content>
-        </LocalAlert>
-      )}
-
       <Tabs className='mt-4' defaultValue='figurer'>
         <Tabs.List>
           <Tabs.Tab value='figurer' label='Vis figurer' />
@@ -538,11 +576,13 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         <Tabs.Panel value='figurer'>
           <div className='mt-6'>
             <DashboardBarCard stats={getDisplayStats()} hideHeader />
+            <DashboardReadMore />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value='nokkeltall'>
           <div className='mt-6'>
             <DashboardCard stats={getDisplayStats()} hideHeader />
+            <DashboardReadMore />
           </div>
         </Tabs.Panel>
       </Tabs>
@@ -719,6 +759,30 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               </Tabs.Panel>
 
               <Tabs.Panel value='krav'>
+                <div style={{ maxWidth: '75ch' }}>
+                  <ReadMore header='Hjelp til å tolke tabellen' className='mt-4 mb-4'>
+                    <List>
+                      <List.Item>
+                        <strong>Hvordan tolke &quot;Antall krav ferdig vurdert&quot;?</strong>
+                        <br />
+                        Første tall viser hvor mange etterlevelseskrav som etterleveren har satt til
+                        &quot;ferdig utfylt&quot;. Andre tall viser totalantall krav som
+                        etterleveren må besvare i sitt etterlevelsesdokument. Ulike
+                        etterlevelsesdokumenter inneholder ulike antall krav basert på hvilke
+                        egenskaper som gjelder for dokumentet.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hva viser &quot;Oppfylt der kravet er ferdig vurdert&quot;?</strong>
+                        <br />
+                        Alle etterlevelseskrav består av ett eller flere suksesskriterier. For hvert
+                        suksesskriterium, vurderer man om det er oppfylt, ikke oppfylt eller ikke
+                        relevant. Så lenge suksesskriteriet er under vurdering, brukes tilstanden
+                        &quot;under arbeid&quot;. Tabellen viser prosentandel suksesskriterier som
+                        er ferdig vurdert.
+                      </List.Item>
+                    </List>
+                  </ReadMore>
+                </div>
                 <StickyHorizontalScroll>
                   <Table
                     className='mt-4 dashboard-table'
