@@ -1,5 +1,6 @@
 'use client'
 
+import { behandlingensArtOgOmfang } from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjonRoutes'
 
 export const personvernKonsekvensvurderingUrl = '/pvkdokument'
@@ -75,13 +76,13 @@ export const pvkDokumentasjonBehandlingsenArtOgOmfangUrl = (
   etterlevelseDokumentId: string,
   behandlingensArtOgOmfangId: string
 ): string =>
-  `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}${behandlingensArtOgOmfang}/${behandlingensArtOgOmfangId}`
 
 export const pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl = (
   etterlevelseDokumentId: string,
   behandlingensArtOgOmfangId: string
 ): string =>
-  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent${behandlingensArtOgOmfang}/${behandlingensArtOgOmfangId}`
 
 export const pvkDokumentasjonPvkBehovUrl = (
   etterlevelseDokumentId: string,
