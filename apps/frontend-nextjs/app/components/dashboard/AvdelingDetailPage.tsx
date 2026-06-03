@@ -763,7 +763,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                   <ReadMore header='Hjelp til å tolke tabellen' className='mt-4 mb-4'>
                     <List>
                       <List.Item>
-                        <strong>Hvordan tolke &quot;Antall krav ferdig vurdert&quot;?</strong>
+                        <strong>Hvordan tolke &quot;Antall krav ferdig utfylt&quot;?</strong>
                         <br />
                         Første tall viser hvor mange etterlevelseskrav som etterleveren har satt til
                         &quot;ferdig utfylt&quot;. Andre tall viser totalantall krav som

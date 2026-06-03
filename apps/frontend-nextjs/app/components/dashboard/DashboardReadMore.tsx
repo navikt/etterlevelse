@@ -38,7 +38,7 @@ export const DashboardReadMore = () => (
         <List.Item>
           <strong>Hvorfor er så mange suksesskriterier ikke relevant?</strong>
           <br />
-          Det er begrenset med hvor mange irrelevante etterlevelseskrav man kan filtrert bort før en
+          Det er begrenset med hvor mange irrelevante etterlevelseskrav man kan filtrere bort før en
           begynner å dokumentere etterlevelse. Dette gjør at etterleveren selv kan være nødt til å
           markere noen krav og suksesskriterier som &quot;ikke relevant&quot;
           <br />
@@ -51,7 +51,7 @@ export const DashboardReadMore = () => (
       <div className='mb-8' />
     </ReadMore>
     <ReadMore
-      header='Hjelp til å tolke figurer og tall om personvernkonsekvensvurdering (PVK)'
+      header='Hjelp til å tolke figurer og tall om personvernkonsekvensvurderinger (PVK)'
       className='mt-2'
     >
       <List>
@@ -73,9 +73,9 @@ export const DashboardReadMore = () => (
           Vi har ikke statistikk om PVK i Word annet enn hva man registrerer under vurdering av
           behov for PVK. Her er det mulig å velge &quot;Vi har en tidligere godkjent PVK i
           Word&quot;. Etter hvert som PVK-en skal oppdateres og sendes til personvernombudet på
-          nytt, skal etterleveren gå over til å bruke Digital PVK. Antall PVK i Word vil dermed
-          senke med tiden, og statistikk om PVK bli mer detaljert når flere PVK-er ligger i ny
-          løsning.
+          nytt, skal etterleveren gå over til å bruke Digital PVK. Antall PVK-er i Word vil dermed
+          reduseres med tiden, og statistikk om PVK vil bli mer detaljert når flere PVK-er ligger i
+          ny løsning.
         </List.Item>
       </List>
     </ReadMore>
