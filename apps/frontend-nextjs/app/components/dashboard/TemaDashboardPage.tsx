@@ -22,6 +22,8 @@ import {
   Detail,
   Heading,
   InfoCard,
+  List,
+  ReadMore,
   Select,
   Tabs,
 } from '@navikt/ds-react'
@@ -496,6 +498,36 @@ const TemaDashboardPage = () => {
           Status pr. tema
         </Heading>
       </div>
+
+      <ReadMore header='Hvordan bruker jeg denne siden?' className='max-w-[75ch] mt-4'>
+        <p>På denne siden kan du:</p>
+        <List className='mt-4'>
+          <List.Item>Få oversikt over Navs etterlevelse, inndelt etter tema.</List.Item>
+          <List.Item>
+            Filtrere etter avdeling og eventuelt seksjon slik at du kan se hvordan enkelte
+            organisasjonsdeler etterlever krav og suksesskriterier.
+          </List.Item>
+          <List.Item>
+            Navigere videre til enkelte temasider hvor du kan utforske etterlevelse av enkelte krav,
+            enten i hele Nav eller på avdelings- eller seksjonsbasis.
+          </List.Item>
+        </List>
+        <p className='mt-4'>
+          For mer detaljer anbefaler vi informasjonssidene{' '}
+          <AkselLink href='/omstottetiletterlevelse' target='_blank'>
+            Om Støtte til etterlevelse
+          </AkselLink>
+          ,{' '}
+          <AkselLink href='/om-pvk' target='_blank'>
+            Om Digital PVK
+          </AkselLink>{' '}
+          og{' '}
+          <AkselLink href='/om-behandlingskatalogen' target='_blank'>
+            Om Behandlingskatalogen
+          </AkselLink>
+          .
+        </p>
+      </ReadMore>
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
