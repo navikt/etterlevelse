@@ -1,5 +1,6 @@
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPageResponse } from '@/constants/commonConstants'
+import { behandlingensArtOgOmfang } from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
 import { env } from '@/util/env/env'
 import axios, { AxiosError } from 'axios'
 import { useEffect, useRef, useState } from 'react'
@@ -27,14 +28,14 @@ export const getBehandlingensArtOgOmfangPage = async (
 ): Promise<IPageResponse<IBehandlingensArtOgOmfang>> =>
   (
     await axios.get<IPageResponse<IBehandlingensArtOgOmfang>>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      `${env.backendBaseUrl}${behandlingensArtOgOmfang}?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 
 export const getBehandlingensArtOgOmfang = async (id: string): Promise<IBehandlingensArtOgOmfang> =>
   (
     await axios.get<IBehandlingensArtOgOmfang>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang/${id}`
+      `${env.backendBaseUrl}${behandlingensArtOgOmfang}/${id}`
     )
   ).data
 
@@ -43,7 +44,7 @@ export const getBehandlingensArtOgOmfangByEtterlevelseDokumentId = async (
 ) =>
   (
     await axios.get<IBehandlingensArtOgOmfang>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang/etterlevelsedokument/${etterlevelseDokumentId}`
+      `${env.backendBaseUrl}${behandlingensArtOgOmfang}/etterlevelsedokument/${etterlevelseDokumentId}`
     )
   ).data
 
@@ -53,7 +54,7 @@ export const createBehandlingensArtOgOmfang = async (
   const dto = behandlingensArtOgOmfangToBehandlingensArtOgOmfangDto(artOgOmfang)
   return (
     await axios.post<IBehandlingensArtOgOmfang>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang`,
+      `${env.backendBaseUrl}${behandlingensArtOgOmfang}`,
       dto
     )
   ).data
@@ -65,7 +66,7 @@ export const updateBehandlingensArtOgOmfang = async (
   const dto = behandlingensArtOgOmfangToBehandlingensArtOgOmfangDto(artOgOmfang)
   return (
     await axios.put<IBehandlingensArtOgOmfang>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang/${artOgOmfang.id}`,
+      `${env.backendBaseUrl}${behandlingensArtOgOmfang}/${artOgOmfang.id}`,
       dto
     )
   ).data
