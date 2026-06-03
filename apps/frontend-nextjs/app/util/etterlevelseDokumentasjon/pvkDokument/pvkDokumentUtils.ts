@@ -1,4 +1,3 @@
-import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
@@ -8,22 +7,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import moment from 'moment'
-
-export const getVariantForPVKBehovButton = (
-  pvkDokument: IPvkDokument | undefined,
-  behandlingsLivslop: IBehandlingensLivslop | undefined
-) => {
-  if (pvkDokument) {
-    return 'tertiary'
-  } else if (
-    (behandlingsLivslop && behandlingsLivslop.filer.length > 0) ||
-    behandlingsLivslop?.beskrivelse
-  ) {
-    return 'primary'
-  } else {
-    return 'secondary'
-  }
-}
 
 export const isReadOnlyPvkStatus = (status: string) => {
   return [
