@@ -4,6 +4,7 @@ import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvens
 import { UserContext } from '@/provider/user/userProvider'
 import {
   adminAuditUrl,
+  adminCodelistUrl,
   adminDokumentrelasjonUrl,
   adminKravUrl,
   adminMaillog,
@@ -13,7 +14,6 @@ import {
 } from '@/routes/admin/adminRoutes'
 import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/adminEtterlevelseDokumentasjonRoutes'
 import { adminEtterlevelseUrl } from '@/routes/admin/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
-import { adminCodelistUrl } from '@/routes/admin/kodeverk.ts/kodeverkRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'

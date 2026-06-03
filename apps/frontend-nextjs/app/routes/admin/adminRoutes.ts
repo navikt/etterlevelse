@@ -2,13 +2,15 @@ import { etterlevelseUrl } from '../etterlevelseDokumentasjon/etterlevelse/etter
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { kravUrl } from '../krav/kravRoutes'
 
+export const codelistUrl: string = '/codelist'
+
 export const adminUrl: string = '/admin'
 
 export const adminKravUrl: string = `${adminUrl}${kravUrl}`
 export const adminDokumentasjonUrl: string = `${adminUrl}${dokumentasjonUrl}`
 export const adminDokumentrelasjonUrl: string = `${adminUrl}/dokumentrelasjon`
 export const adminEtterlevelseUrl: string = `${adminUrl}${etterlevelseUrl}`
-export const adminCodelistUrl: string = `${adminUrl}/codelist`
+export const adminCodelistUrl: string = `${adminUrl}${codelistUrl}`
 export const adminMessagesLogUrl: string = `${adminUrl}/messageslog`
 export const adminVarselUrl: string = `${adminUrl}/varsel`
 export const adminPvkUrl: string = `${adminUrl}/pvk`

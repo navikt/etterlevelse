@@ -4,7 +4,7 @@ import { createCodelist } from '@/api/kodeverk/kodeverkApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { ICode, ICodeListFormValues } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { adminCodelist, adminUrl } from '@/routes/admin/adminRoutes'
+import { adminCodelist, adminCodelistUrl } from '@/routes/admin/adminRoutes'
 import { useForceUpdate } from '@/util/hooks/customHooks/customHooks'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Loader, Select } from '@navikt/ds-react'
@@ -67,7 +67,7 @@ export const ListnameAdminViewPage = () => {
       breadcrumbPaths={[
         {
           pathName: 'Administrering av kodeverk',
-          href: adminUrl + '/codelist',
+          href: adminCodelistUrl,
         },
       ]}
     >
