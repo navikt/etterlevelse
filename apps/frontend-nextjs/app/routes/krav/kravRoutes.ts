@@ -29,8 +29,6 @@ export const kravNyVersjonIdUrl = (kravId?: string): string => {
 export const kravPathUrl = (currentPath: string, nextKravPath: string): string =>
   `${currentPath}${kravUrl}${nextKravPath}`
 
-export const kravRelevanteUrl = (tema: string): string => `/${tema}/RELEVANTE_KRAV`
-
 export const kravTemaFilterUrl = (tema: string, filter: string): string => `${tema}/${filter}`
 
 export const kravNummerUrl = (kravNummer: string): string => `${kravUrl}/${kravNummer}`
