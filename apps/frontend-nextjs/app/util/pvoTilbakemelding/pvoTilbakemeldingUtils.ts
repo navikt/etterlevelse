@@ -1,16 +1,3 @@
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-
-export const addNewVurderingToPvoTilbakemelding = (
-  pvoTilbakemelding: IPvoTilbakemelding,
-  innsendingId: number,
-  etterlevelseDokumentVersjon: number
-) => {
-  pvoTilbakemelding.vurderinger.push(
-    createNewPvoVurderning(innsendingId, etterlevelseDokumentVersjon)
-  )
-  return pvoTilbakemelding
-}
-
 export const createNewPvoVurderning = (
   newInnsendingId: number,
   newEtterlevelseDokumentVersjon: number
