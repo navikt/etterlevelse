@@ -6,7 +6,6 @@ import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import moment from 'moment'
 
@@ -34,17 +33,6 @@ export const isReadOnlyPvkStatus = (status: string) => {
     EPvkDokumentStatus.TRENGER_GODKJENNING.toString(),
   ].includes(status)
 }
-
-export const isPvkDokuemntNotStarted = (
-  risikoscenarioList: IRisikoscenario[],
-  pvkDokument?: IPvkDokument
-) =>
-  pvkDokument &&
-  pvkDokument.representantInvolveringsBeskrivelse === '' &&
-  pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse === '' &&
-  pvkDokument.harInvolvertRepresentant === null &&
-  pvkDokument.harDatabehandlerRepresentantInvolvering === null &&
-  risikoscenarioList.length === 0
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
   switch (status) {
