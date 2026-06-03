@@ -71,15 +71,6 @@ export const updateBehandlingensArtOgOmfang = async (
   ).data
 }
 
-export const deleteBehandlingensArtOgOmfang = async (
-  id: string
-): Promise<IBehandlingensArtOgOmfang> =>
-  (
-    await axios.delete<IBehandlingensArtOgOmfang>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang/${id}`
-    )
-  ).data
-
 export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string) => {
   const [data, setData] = useState<IBehandlingensArtOgOmfang>(
     mapBehandlingensArtOgOmfangToFormValue({})
