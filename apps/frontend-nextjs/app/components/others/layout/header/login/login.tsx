@@ -4,11 +4,11 @@ import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvens
 import { UserContext } from '@/provider/user/userProvider'
 import {
   adminAuditUrl,
+  adminDokumentrelasjonUrl,
   adminMaillog,
   adminPvkUrl,
   adminVarselUrl,
 } from '@/routes/admin/adminRoutes'
-import { adminDokumentrelasjonUrl } from '@/routes/admin/dokumentrelasjon/adminDokumentrelasjonRoutes'
 import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/adminEtterlevelseDokumentasjonRoutes'
 import { adminEtterlevelseUrl } from '@/routes/admin/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { adminCodelistUrl } from '@/routes/admin/kodeverk.ts/kodeverkRoutes'
