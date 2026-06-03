@@ -21,7 +21,8 @@
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
     "prettier": "prettier --write \"./app\"",
     "type-check": "tsc --project tsconfig.json --noEmit --skipLibCheck false --incremental false",
-    "postinstall": "patch-package && husky"
+    "postinstall": "patch-package && husky",
+    "find-deadcode": "ts-prune | grep -v '(used in module)'"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -89,6 +90,7 @@
     "postcss": "^8.5.15",
     "prettier": "^3.8.3",
     "react-select": "^5.10.2",
+    "ts-prune": "^0.10.3",
     "typescript": "^6.0.3"
   }
 }
