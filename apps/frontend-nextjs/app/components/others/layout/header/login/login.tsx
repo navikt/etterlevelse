@@ -6,6 +6,7 @@ import {
   adminAuditUrl,
   adminDokumentrelasjonUrl,
   adminMaillog,
+  adminMessagesLogUrl,
   adminPvkUrl,
   adminVarselUrl,
 } from '@/routes/admin/adminRoutes'
@@ -13,7 +14,6 @@ import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/
 import { adminEtterlevelseUrl } from '@/routes/admin/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { adminCodelistUrl } from '@/routes/admin/kodeverk.ts/kodeverkRoutes'
 import { adminKravUrl } from '@/routes/admin/krav/adminKravRoutes'
-import { adminMessagesLogUrl } from '@/routes/admin/messagesLog/messagesLogRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
