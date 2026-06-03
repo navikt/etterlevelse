@@ -2,8 +2,7 @@
 
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { adminPvkUrl, adminVarselUrl } from '@/routes/admin/adminRoutes'
-import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
+import { adminAuditUrl, adminPvkUrl, adminVarselUrl } from '@/routes/admin/adminRoutes'
 import { adminDokumentrelasjonUrl } from '@/routes/admin/dokumentrelasjon/adminDokumentrelasjonRoutes'
 import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/adminEtterlevelseDokumentasjonRoutes'
 import { adminEtterlevelseUrl } from '@/routes/admin/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
