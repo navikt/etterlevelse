@@ -5,6 +5,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import {
   adminAuditUrl,
   adminDokumentrelasjonUrl,
+  adminKravUrl,
   adminMaillog,
   adminMessagesLogUrl,
   adminPvkUrl,
@@ -13,7 +14,6 @@ import {
 import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/adminEtterlevelseDokumentasjonRoutes'
 import { adminEtterlevelseUrl } from '@/routes/admin/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { adminCodelistUrl } from '@/routes/admin/kodeverk.ts/kodeverkRoutes'
-import { adminKravUrl } from '@/routes/admin/krav/adminKravRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
