@@ -27,19 +27,6 @@ export const getVariantForPVKBehovButton = (
   }
 }
 
-export const getVariantForPVKButton = (
-  pvkDokument: IPvkDokument | undefined,
-  behandlingsLivslop: IBehandlingensLivslop | undefined
-) => {
-  if (pvkDokument?.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'tertiary'
-  if (
-    (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
-    behandlingsLivslop?.beskrivelse
-  )
-    return 'primary'
-  return 'secondary'
-}
-
 export const isReadOnlyPvkStatus = (status: string) => {
   return [
     EPvkDokumentStatus.PVO_UNDERARBEID.toString(),
