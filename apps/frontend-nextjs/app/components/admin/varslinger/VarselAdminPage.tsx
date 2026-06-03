@@ -11,16 +11,16 @@ import { AuditRecentTable } from '../versjonering/AuditRecentTable'
 import EditMelding from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
 
-type TSection =
+type TWarningSection =
   | 'utsendtMelding'
   | EMeldingType.SYSTEM
   | EMeldingType.FORSIDE
   | EMeldingType.OM_ETTERLEVELSE
 
 export const VarselAdminPage = () => {
-  const params = useParams<{ tab?: TSection }>()
+  const params = useParams<{ tab?: TWarningSection }>()
 
-  const [tab, setTab] = useState<TSection>(params.tab || 'utsendtMelding')
+  const [tab, setTab] = useState<TWarningSection>(params.tab || 'utsendtMelding')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [melding, setMelding] = useState<IMelding>()
 
