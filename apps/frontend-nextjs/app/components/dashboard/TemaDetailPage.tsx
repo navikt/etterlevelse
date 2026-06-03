@@ -952,7 +952,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             <option value=''>Alle krav</option>
             {kravStats.map((k) => (
               <option key={k.kravId} value={k.kravId}>
-                K{k.kravNummer}.{k.kravVersjon} {k.kravNavn}
+                K{k.kravNummer}.{k.kravVersjon}{' '}
+                {k.kravStatus === 'UTGAATT' ? '  (Utgått uten ny versjon)' : ''} {k.kravNavn}
               </option>
             ))}
           </Select>
