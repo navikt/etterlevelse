@@ -45,23 +45,6 @@ export function useForceUpdate() {
   return () => setVal(val + 1)
 }
 
-export function useAwait<T>(promise: Promise<T>, setLoading?: Dispatch<SetStateAction<boolean>>) {
-  const update = useForceUpdate()
-
-  useEffect(() => {
-    ;(async () => {
-      if (setLoading) {
-        setLoading(true)
-      }
-      await promise
-      update()
-      if (setLoading) {
-        setLoading(false)
-      }
-    })()
-  }, [])
-}
-
 export type TRefs<T> = { [id: string]: RefObject<T> }
 
 export function useRefs<T>(ids: string[]) {
