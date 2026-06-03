@@ -46,64 +46,6 @@ export const isPvkDokuemntNotStarted = (
   pvkDokument.harDatabehandlerRepresentantInvolvering === null &&
   risikoscenarioList.length === 0
 
-export const getPvkButtonText = (
-  pvkDokument: IPvkDokument,
-  risikoscenarioList: IRisikoscenario[],
-  isRisikoeier: boolean
-): string => {
-  const updatedAfterApprovedOfRisikoeier =
-    pvkDokument.godkjentAvRisikoeierDato !== '' &&
-    moment(pvkDokument.changeStamp.lastModifiedDate)
-      .seconds(0)
-      .milliseconds(0)
-      .isAfter(moment(pvkDokument.godkjentAvRisikoeierDato).seconds(0).milliseconds(0))
-
-  if (isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument)) {
-    return 'Påbegynn PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
-  ) {
-    return 'Fullfør PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    isReadOnlyPvkStatus(pvkDokument.status)
-  ) {
-    return 'Les PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    !isRisikoeier &&
-    [
-      EPvkDokumentStatus.VURDERT_AV_PVO,
-      EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
-      EPvkDokumentStatus.TRENGER_GODKJENNING,
-    ].includes(pvkDokument.status)
-  ) {
-    return 'Les tilbakemelding fra PVO'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    isRisikoeier &&
-    [EPvkDokumentStatus.TRENGER_GODKJENNING].includes(pvkDokument.status)
-  ) {
-    return 'Godkjenn PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-    !updatedAfterApprovedOfRisikoeier
-  ) {
-    return 'Les godkjent PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-    updatedAfterApprovedOfRisikoeier
-  ) {
-    return 'Oppdater PVK'
-  }
-
-  // Fallback to a safe default to avoid rendering empty button text
-  return 'Les PVK'
-}
-
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
   switch (status) {
     case EPvkDokumentStatus.UNDERARBEID:
