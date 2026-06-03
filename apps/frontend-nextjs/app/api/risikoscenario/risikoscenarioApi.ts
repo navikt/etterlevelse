@@ -8,23 +8,6 @@ import {
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
-export const getAllRisikoscenario = async () => {
-  const pageSize = 100
-  const firstPage = await getRisikoscenarioPage(0, pageSize)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allRisikoscenario: IRisikoscenario[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allRisikoscenario = [
-        ...allRisikoscenario,
-        ...(await getRisikoscenarioPage(currentPage, pageSize)).content,
-      ]
-    }
-    return allRisikoscenario
-  }
-}
-
 export const getRisikoscenarioPage = async (
   pageNumber: number,
   pageSize: number
