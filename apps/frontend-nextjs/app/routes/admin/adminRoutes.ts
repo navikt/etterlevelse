@@ -8,7 +8,6 @@ export const adminKravUrl: string = `${adminUrl}${kravUrl}`
 export const adminDokumentasjonUrl: string = `${adminUrl}${dokumentasjonUrl}`
 export const adminDokumentrelasjonUrl: string = `${adminUrl}/dokumentrelasjon`
 export const adminEtterlevelseUrl: string = `${adminUrl}${etterlevelseUrl}`
-export const adminArkivUrl: string = `${adminUrl}/arkiv`
 export const adminCodelistUrl: string = `${adminUrl}/codelist`
 export const adminMessagesLogUrl: string = `${adminUrl}/messageslog`
 export const adminVarselUrl: string = `${adminUrl}/varsel`
