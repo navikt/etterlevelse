@@ -79,11 +79,6 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
           </Heading>
 
           <div className='max-w-[75ch]'>
-            <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
-            {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
-              <DpBehandlingList dpBehandlingIds={dpBehandlingIds} dpBehandlinger={dpBehandlinger} />
-            )}
-
             <div className='flex items-start gap-2 mb-2.5'>
               <div className='mt-0.75'>
                 <Label size='medium'>Egenskaper:</Label>
@@ -95,6 +90,25 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
               />
             </div>
+
+            {env.isDev && (
+              <div className='mb-2.5'>
+                {ardoqSystemData.length > 0 && (
+                  <ArdoqSystemerView ardoqSystemData={ardoqSystemData} link />
+                )}
+                {ardoqSystemData.length === 0 && (
+                  <div className='flex flex-wrap gap-2 items-center'>
+                    <Label size='medium'>System:</Label>
+                    <BodyLong size='medium'>Ikke angitt</BodyLong>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
+            {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
+              <DpBehandlingList dpBehandlingIds={dpBehandlingIds} dpBehandlinger={dpBehandlinger} />
+            )}
 
             <div className='flex items-start gap-2 mb-2.5'>
               <div>
@@ -139,22 +153,6 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               {etterlevelseDokumentasjon.p360CaseNumber === '' && (
                 <BodyLong>Ingen saksnummer</BodyLong>
               )}
-            </div>
-
-            <div className='flex items-start gap-2 mb-2.5'>
-              <div>
-                <Label size='medium'>Risikoeier:</Label>
-              </div>
-              <BodyLong size='medium'>
-                {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
-                  etterlevelseDokumentasjon.risikoeiereData !== undefined &&
-                  etterlevelseDokumentasjon.risikoeiereData.map(
-                    (risikoeier) => risikoeier.fullName
-                  )}
-                {etterlevelseDokumentasjon.risikoeiere.length === 0 &&
-                  etterlevelseDokumentasjon.risikoeiereData === undefined &&
-                  'Ikke angitt'}
-              </BodyLong>
             </div>
 
             <div className='flex items-start gap-2 mb-2.5'>
@@ -208,19 +206,21 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               </div>
             )}
 
-            {env.isDev && (
-              <div className='mb-2.5'>
-                {ardoqSystemData.length > 0 && (
-                  <ArdoqSystemerView ardoqSystemData={ardoqSystemData} link />
-                )}
-                {ardoqSystemData.length === 0 && (
-                  <div className='flex flex-wrap gap-2 items-center'>
-                    <Label size='medium'>System:</Label>
-                    <BodyLong size='medium'>Ikke angitt</BodyLong>
-                  </div>
-                )}
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div>
+                <Label size='medium'>Risikoeier:</Label>
               </div>
-            )}
+              <BodyLong size='medium'>
+                {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
+                  etterlevelseDokumentasjon.risikoeiereData !== undefined &&
+                  etterlevelseDokumentasjon.risikoeiereData.map(
+                    (risikoeier) => risikoeier.fullName
+                  )}
+                {etterlevelseDokumentasjon.risikoeiere.length === 0 &&
+                  etterlevelseDokumentasjon.risikoeiereData?.length === 0 &&
+                  'Ikke angitt'}
+              </BodyLong>
+            </div>
 
             <div className='mb-2.5'>
               {teams.length > 0 && <Teams teams={teams} link />}
