@@ -4,6 +4,7 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { pvotilbakemeldingUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { env } from '@/util/env/env'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import axios, { AxiosError } from 'axios'
@@ -33,19 +34,19 @@ export const getPvoTilbakemeldingPage = async (
 ): Promise<IPageResponse<IPvoTilbakemelding>> =>
   (
     await axios.get<IPageResponse<IPvoTilbakemelding>>(
-      `${env.backendBaseUrl}/pvotilbakemelding?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      `${env.backendBaseUrl}/${pvotilbakemeldingUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
 
 export const getPvoTilbakemelding = async (id: string): Promise<IPvoTilbakemelding> =>
-  (await axios.get<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding/${id}`)).data
+  (await axios.get<IPvoTilbakemelding>(`${env.backendBaseUrl}/${pvotilbakemeldingUrl}/${id}`)).data
 
 export const getPvoTilbakemeldingByPvkDokumentId = async (
   pvkDokumentId: string
 ): Promise<IPvoTilbakemelding> =>
   (
     await axios.get<IPvoTilbakemelding>(
-      `${env.backendBaseUrl}/pvotilbakemelding/pvkdokument/${pvkDokumentId}`
+      `${env.backendBaseUrl}/${pvotilbakemeldingUrl}/pvkdokument/${pvkDokumentId}`
     )
   ).data
 
@@ -110,22 +111,25 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
 
 export const createPvoTilbakemelding = async (pvoTilbakemelding: IPvoTilbakemelding) => {
   const dto = pvoTilbakemeldingToPvoTilbakemeldingDto(pvoTilbakemelding)
-  return (await axios.post<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding`, dto)).data
+  return (
+    await axios.post<IPvoTilbakemelding>(`${env.backendBaseUrl}/${pvotilbakemeldingUrl}`, dto)
+  ).data
 }
 
 export const updatePvoTilbakemelding = async (pvoTilbakemelding: IPvoTilbakemelding) => {
   const dto = pvoTilbakemeldingToPvoTilbakemeldingDto(pvoTilbakemelding)
   return (
     await axios.put<IPvoTilbakemelding>(
-      `${env.backendBaseUrl}/pvotilbakemelding/${pvoTilbakemelding.id}`,
+      `${env.backendBaseUrl}/${pvotilbakemeldingUrl}/${pvoTilbakemelding.id}`,
       dto
     )
   ).data
 }
 
 export const deletePvoTilbakemelding = async (id: string) => {
-  return (await axios.delete<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding/${id}`))
-    .data
+  return (
+    await axios.delete<IPvoTilbakemelding>(`${env.backendBaseUrl}/${pvotilbakemeldingUrl}/${id}`)
+  ).data
 }
 
 const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakemelding) => {

@@ -1,3 +1,4 @@
+import { pvotilbakemeldingUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -52,8 +53,8 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/pvkdokument/:pvkid/pvotilbakemelding/:step',
-        destination: '/pvkdokument/:pvkid/pvotilbakemelding?steg=:step',
+        source: `/pvkdokument/:pvkid/${pvotilbakemeldingUrl}/:step`,
+        destination: `/pvkdokument/:pvkid/${pvotilbakemeldingUrl}?steg=:step`,
         permanent: true,
       },
     ]
