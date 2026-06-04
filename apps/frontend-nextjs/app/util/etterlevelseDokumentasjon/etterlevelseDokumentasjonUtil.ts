@@ -1,9 +1,10 @@
 import { kravPrioritingMapToFormValue } from '@/api/kravPriorityList/kravPriorityListApi'
-import { IPageResponse } from '@/constants/commonConstants'
+import { IChangeStamp, IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
   IEtterlevelse,
+  ISuksesskriterieBegrunnelse,
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
@@ -13,7 +14,7 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IAllCodelists, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
+import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { IMember, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
@@ -264,9 +265,12 @@ interface IKravForTemaProps {
   }
 }
 
-export const getKravForTema = (props: IKravForTemaProps) => {
-  const { tema, kravliste, allKravPriority, codelist } = props
-
+export const getKravForTema = ({
+  tema,
+  kravliste,
+  allKravPriority,
+  codelist,
+}: IKravForTemaProps): TFilterKravProps[] => {
   const lover: TLovCode[] = codelist.utils.getLovCodesForTema(tema.code)
   const lovCodes: string[] = lover.map((lov: TLovCode) => lov.code)
   const krav: TKravQL[] = kravliste.filter((krav: TKravQL) =>
@@ -285,11 +289,31 @@ export const getKravForTema = (props: IKravForTemaProps) => {
   return filterKrav(kravPriority, krav)
 }
 
+export type TFilterKravProps = {
+  etterlevelseId: string | undefined
+  etterleves: boolean
+  frist: string | undefined
+  etterlevelseStatus: EEtterlevelseStatus | undefined
+  etterlevelseSuksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[] | undefined
+  etterlevelseChangeStamp: IChangeStamp | undefined
+  gammelVersjon: boolean
+  kravNummer: number
+  kravVersjon: number
+  navn: string
+  status: EKravStatus
+  suksesskriterier: ISuksesskriterie[]
+  tagger: string[]
+  varselMelding: string | undefined
+  prioriteringsId: number
+  changeStamp: IChangeStamp
+  aktivertDato: string
+}
+
 export const filterKrav = (
   kravPriority: IKravPriorityList,
   kravList?: TKravQL[],
   filterFerdigDokumentert?: boolean
-) => {
+): TFilterKravProps[] => {
   const unfilteredkraver: TKravQL[] = kravList ? _.cloneDeep(kravList) : []
 
   unfilteredkraver.map((krav: TKravQL) => {
@@ -301,7 +325,7 @@ export const filterKrav = (
   const sortedKrav: TKravQL[] = sortKravListeByPriority<TKravQL>(unfilteredkraver)
 
   // burde types
-  const mapped = sortedKrav.map((krav: TKravQL) => {
+  const mapped = sortedKrav.map((krav: TKravQL): TFilterKravProps => {
     const etterlevelse: TEtterlevelseQL | undefined = krav.etterlevelser.length
       ? krav.etterlevelser[0]
       : undefined

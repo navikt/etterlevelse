@@ -4,13 +4,16 @@ import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjo
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
+import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { getNumberOfDaysBetween } from '@/util/checkAge/checkAgeUtil'
-import { getKravForTema } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
+import {
+  TFilterKravProps,
+  getKravForTema,
+} from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { Accordion, Link, List, Loader, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent, useContext } from 'react'
@@ -61,12 +64,12 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
       {!isRisikoscenarioLoading && (
         <Accordion indent={false}>
           {allKravPriority.length !== 0 &&
-            temaListe.map((tema, index) => {
-              const relevantStatsKravnummer = relevanteStats.map((k) => k.kravNummer)
+            temaListe.map((tema: TTemaCode, index) => {
+              const relevantStatsKravnummer = relevanteStats.map((krav: TKravQL) => krav.kravNummer)
 
               const filteredUtgaatKrav = utgaattStats
                 .filter(({ kravNummer }) => !relevantStatsKravnummer.includes(kravNummer))
-                .filter((krav) => {
+                .filter((krav: TKravQL) => {
                   if (etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1) {
                     const currentVersjon = etterlevelseDokumentasjon.versjonHistorikk.filter(
                       (historikk) =>
@@ -87,21 +90,22 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                   }
                 })
 
-              const kravliste = getKravForTema({
+              const kravliste: TFilterKravProps[] = getKravForTema({
                 tema,
                 kravliste: [...relevanteStats, ...filteredUtgaatKrav],
                 allKravPriority,
                 codelist,
               })
 
-              const utfylteKrav = kravliste.filter(
-                (krav) =>
+              const utfylteKrav: TFilterKravProps[] = kravliste.filter(
+                (krav: TFilterKravProps) =>
                   krav.etterlevelseStatus === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
                   krav.etterlevelseStatus === EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT
               )
+
               return (
                 <Accordion.Item
-                  key={`${tema.code}`}
+                  key={tema.code}
                   className={`flex flex-col gap-2 ${kravliste.length > 0 ? '' : 'hidden'}`}
                   open={openAccordions[index]}
                 >
@@ -143,18 +147,27 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                         </Link>
                       </div>
                       <List className='flex flex-col gap-2'>
-                        {kravliste.map((krav, idx) => (
-                          <List.Item icon={<div />} key={`krav_${idx}`}>
-                            <KravCard
-                              risikoscenarioList={risikoscenarioList}
-                              allTiltak={allTiltak}
-                              krav={krav}
-                              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                              temaCode={tema.code}
-                              previousVurdering={previousVurdering}
-                            />
-                          </List.Item>
-                        ))}
+                        {kravliste
+                          .sort((a, b) => {
+                            if (a.status === EKravStatus.UTGAATT) {
+                              return 1
+                            } else if (b.status !== EKravStatus.UTGAATT) {
+                              return -1
+                            }
+                            return 0
+                          })
+                          .map((krav: TFilterKravProps, index: number) => (
+                            <List.Item icon={<div />} key={`krav_${index}`}>
+                              <KravCard
+                                risikoscenarioList={risikoscenarioList}
+                                allTiltak={allTiltak}
+                                krav={krav}
+                                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                                temaCode={tema.code}
+                                previousVurdering={previousVurdering}
+                              />
+                            </List.Item>
+                          ))}
                       </List>
                     </div>
                   </Accordion.Content>
