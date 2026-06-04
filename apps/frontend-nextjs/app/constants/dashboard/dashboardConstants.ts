@@ -108,6 +108,8 @@ export interface IDashboardTable {
   antallKrav?: number
   antallOppfyltKrav?: number
   oppfyltKravProsent?: number
+  antallSuksesskriterierOppfylt?: number
+  antallSuksesskriterierIkkeOppfylt?: number
   sistOppdatertEtterlevelse: string
   sistGodkjentEtterlevelse?: string
 

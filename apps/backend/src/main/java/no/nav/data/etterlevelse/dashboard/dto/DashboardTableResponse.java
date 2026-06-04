@@ -46,6 +46,8 @@ public class DashboardTableResponse {
     private Integer antallKrav;
     private Integer antallOppfyltKrav;
     private Integer oppfyltKravProsent;
+    private Integer antallSuksesskriterierOppfylt;
+    private Integer antallSuksesskriterierIkkeOppfylt;
     private LocalDateTime sistOppdatertEtterlevelse;
     private LocalDateTime sistGodkjentEtterlevelse;
 

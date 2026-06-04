@@ -217,10 +217,6 @@ public class DashboardService {
                             .filter(e -> e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT)
                             .toList();
 
-                    long ikkeRelevantCount = aktivEtterlevelserForDok.stream()
-                            .filter(e -> e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
-                            .count();
-
                     for (Etterlevelse etterlevelse : etterlevelserForDok) {
                         if(etterlevelse.getLastModifiedDate().isAfter(sistOppdatertEtterlevelse)) {
                             sistOppdatertEtterlevelse = etterlevelse.getLastModifiedDate();
@@ -229,9 +225,23 @@ public class DashboardService {
 
                     dashboardTableResponse.setAntallKrav(totalKravForEdok);
                     dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
-                    long oppfyltDenominator = totalKravForEdok - ikkeRelevantCount;
-                    double prosent = oppfyltDenominator > 0 ? ((double) oppfyltEtterlevelseList.size() / oppfyltDenominator) * 100 : 0;
-                    dashboardTableResponse.setOppfyltKravProsent( (int) Math.floor(prosent));
+
+                    int antallSuksesskriterierOppfylt = 0;
+                    int antallSuksesskriterierIkkeOppfylt = 0;
+                    for (Etterlevelse e : oppfyltEtterlevelseList) {
+                        for (var begrunnelse : e.getSuksesskriterieBegrunnelser()) {
+                            if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
+                                antallSuksesskriterierOppfylt++;
+                            } else if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT) {
+                                antallSuksesskriterierIkkeOppfylt++;
+                            }
+                        }
+                    }
+                    dashboardTableResponse.setAntallSuksesskriterierOppfylt(antallSuksesskriterierOppfylt);
+                    dashboardTableResponse.setAntallSuksesskriterierIkkeOppfylt(antallSuksesskriterierIkkeOppfylt);
+                    int totalSuksesskriterier = antallSuksesskriterierOppfylt + antallSuksesskriterierIkkeOppfylt;
+                    double prosent = totalSuksesskriterier > 0 ? ((double) antallSuksesskriterierOppfylt / totalSuksesskriterier) * 100 : 0;
+                    dashboardTableResponse.setOppfyltKravProsent((int) Math.floor(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
 
                     var versjonHistorikk = dok.getEtterlevelseDokumentasjonData().getVersjonHistorikk();
@@ -636,6 +646,7 @@ public class DashboardService {
 
                     if (isFerdig) {
                         switch (sb.getSuksesskriterieStatus()) {
+                            case IKKE_PAABEGYNT -> {}
                             case UNDER_ARBEID -> {}
                             case OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierOppfylt(stats.getFerdigUtfyltKravSuksesskriterierOppfylt() + 1);
                             case IKKE_OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierIkkeOppfylt(stats.getFerdigUtfyltKravSuksesskriterierIkkeOppfylt() + 1);
@@ -802,6 +813,7 @@ public class DashboardService {
 
                 if (isFerdig) {
                     switch (sb.getSuksesskriterieStatus()) {
+                        case IKKE_PAABEGYNT -> {}
                         case UNDER_ARBEID -> {}
                         case OPPFYLT -> kravDashboardResponse.setAntallFerdigUtfyltKravSuksesskriterierOppfylt(kravDashboardResponse.getAntallFerdigUtfyltKravSuksesskriterierOppfylt() + 1);
                         case IKKE_OPPFYLT -> kravDashboardResponse.setAntallFerdigUtfyltKravSuksesskriterierIkkeOppfylt(kravDashboardResponse.getAntallFerdigUtfyltKravSuksesskriterierIkkeOppfylt() + 1);
