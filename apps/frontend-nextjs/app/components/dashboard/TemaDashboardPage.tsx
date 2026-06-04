@@ -565,7 +565,7 @@ const TemaDashboardPage = () => {
           </List.Item>
           <List.Item>
             Navigere videre til enkelte temasider hvor du kan utforske etterlevelse av enkelte krav,
-            enten i hele Nav eller på avdelings- eller seksjonsbasis.
+            enten i hele Nav eller på avdelings- eller seksjonsnivå.
           </List.Item>
         </List>
         <p className='mt-4'>
