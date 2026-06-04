@@ -654,30 +654,30 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             </LocalAlert.Content>
           </LocalAlert>
         )}
-
-        <Heading size='medium' level='2' className='mt-6'>
-          Oversikt
-        </Heading>
-
-        <Tabs className='mt-4' defaultValue='figurer'>
-          <Tabs.List>
-            <Tabs.Tab value='figurer' label='Vis figurer' />
-            <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-          </Tabs.List>
-          <Tabs.Panel value='figurer'>
-            <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
-              <DashboardBarCard stats={getDisplayStats()} hideHeader />
-              <DashboardReadMore />
-            </div>
-          </Tabs.Panel>
-          <Tabs.Panel value='nokkeltall'>
-            <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
-              <DashboardCard stats={getDisplayStats()} hideHeader />
-              <DashboardReadMore />
-            </div>
-          </Tabs.Panel>
-        </Tabs>
       </div>
+
+      <Heading size='medium' level='2' className='mt-6'>
+        Oversikt
+      </Heading>
+
+      <Tabs className='mt-4' defaultValue='figurer'>
+        <Tabs.List>
+          <Tabs.Tab value='figurer' label='Vis figurer' />
+          <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+        </Tabs.List>
+        <Tabs.Panel value='figurer'>
+          <div className='mt-6'>
+            <DashboardBarCard stats={getDisplayStats()} hideHeader />
+            <DashboardReadMore />
+          </div>
+        </Tabs.Panel>
+        <Tabs.Panel value='nokkeltall'>
+          <div className='mt-6'>
+            <DashboardCard stats={getDisplayStats()} hideHeader />
+            <DashboardReadMore />
+          </div>
+        </Tabs.Panel>
+      </Tabs>
 
       {!isTableLoading && tableData && (
         <>
