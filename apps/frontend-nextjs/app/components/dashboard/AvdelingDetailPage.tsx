@@ -127,6 +127,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [tableTab, setTableTab] = useState('dok_pvk')
   const [sort, setSort] = useState<SortState | undefined>()
   const [searchFilters, setSearchFilters] = useState<string[]>([])
+  const [searchValue, setSearchValue] = useState<string>('')
 
   useEffect(() => {
     ;(async () => {
@@ -532,11 +533,15 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             options={[]}
             allowNewValues
             isMultiSelect
+            value={searchValue}
+            onChange={(val) => setSearchValue(val)}
+            onClear={() => setSearchValue('')}
             selectedOptions={searchFilters}
             shouldShowSelectedOptions={false}
             onToggleSelected={(option, isSelected) => {
               if (isSelected) {
                 addSearchFilter(option)
+                setSearchValue('')
               } else {
                 removeSearchFilter(option)
               }
