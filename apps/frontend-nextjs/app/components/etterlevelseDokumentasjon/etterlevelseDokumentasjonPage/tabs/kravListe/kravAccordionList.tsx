@@ -34,6 +34,12 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
+const getSortOrderUtgaattAtTheBottom = (a: TFilterKravProps, b: TFilterKravProps): number => {
+  if (a.status === EKravStatus.UTGAATT) return 1
+  if (b.status !== EKravStatus.UTGAATT) return -1
+  return 0
+}
+
 export const KravAccordionList: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   relevanteStats,
@@ -148,14 +154,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                       </div>
                       <List className='flex flex-col gap-2'>
                         {kravliste
-                          .sort((a, b) => {
-                            if (a.status === EKravStatus.UTGAATT) {
-                              return 1
-                            } else if (b.status !== EKravStatus.UTGAATT) {
-                              return -1
-                            }
-                            return 0
-                          })
+                          .sort((a, b) => getSortOrderUtgaattAtTheBottom(a, b))
                           .map((krav: TFilterKravProps, index: number) => (
                             <List.Item icon={<div />} key={`krav_${index}`}>
                               <KravCard
