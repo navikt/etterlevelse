@@ -4,20 +4,6 @@ import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConst
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
-export const getAllTiltak = async (): Promise<ITiltak[]> => {
-  const pageSize = 100
-  const firstPage = await getTiltakPage(0, pageSize)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allTiltak: ITiltak[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allTiltak = [...allTiltak, ...(await getTiltakPage(currentPage, pageSize)).content]
-    }
-    return allTiltak
-  }
-}
-
 export const getTiltakPage = async (
   pageNumber: number,
   pageSize: number
