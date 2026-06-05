@@ -787,6 +787,39 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 <Tabs.Tab value='pvk' label='Digital PVK' />
               </Tabs.List>
               <Tabs.Panel value='dok_pvk'>
+                <div style={{ maxWidth: '75ch' }}>
+                  <ReadMore header='Hvordan bruker jeg denne tabellen?' className='mt-4 mb-4'>
+                    <List>
+                      <List.Item>
+                        <strong>Du kan bla bortover i tabellen</strong>
+                        <br />
+                        Med mindre du bruker en veldig stor skjerm, er det sannsynligvis flere
+                        kolonner bortover til høyre som du kanskje ikke har sett.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Du kan sortere tabellen etter kolonne</strong>
+                        <br />
+                        Ved å klikke på øverste rad i tabellen kan du velge om du vil sortere etter
+                        kolonnenavnet. Dette kan gjøre det enklere å finne informasjonen du lurer
+                        på.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Jeg savner noen etterlevelser i tabellen</strong>
+                        <br />
+                        Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre
+                        som er valgt øverst i siden, eller se{' '}
+                        <Link
+                          href='/dashboard/ingen-avdeling'
+                          target='_blank'
+                          style={{ display: 'inline' }}
+                        >
+                          listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt
+                          (åpner i en ny fane)
+                        </Link>
+                      </List.Item>
+                    </List>
+                  </ReadMore>
+                </div>
                 <StickyHorizontalScroll>
                   <Table
                     className='mt-4 dashboard-table'
