@@ -804,10 +804,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         på.
                       </List.Item>
                       <List.Item>
-                        <strong>Jeg savner noen etterlevelser i tabellen</strong>
+                        <strong>Savner du noen etterlevelser i tabellen?</strong>
                         <br />
                         Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre
-                        som er valgt øverst i siden, eller se{' '}
+                        som er valgt øverst i siden, eller se i{' '}
                         <Link
                           href='/dashboard/ingen-avdeling'
                           target='_blank'
@@ -1000,10 +1000,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         som ikke relevant.
                       </List.Item>
                       <List.Item>
-                        <strong>Jeg savner noen etterlevelser i tabellen</strong>
+                        <strong>Savner du noen etterlevelser i tabellen?</strong>
                         <br />
                         Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre
-                        som er valgt øverst i siden, eller se{' '}
+                        som er valgt øverst i siden, eller se i{' '}
                         <Link
                           href='/dashboard/ingen-avdeling'
                           target='_blank'
