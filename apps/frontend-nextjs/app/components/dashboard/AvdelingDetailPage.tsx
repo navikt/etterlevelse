@@ -1126,6 +1126,66 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               </Tabs.Panel>
 
               <Tabs.Panel value='pvk'>
+                <div style={{ maxWidth: '75ch' }}>
+                  <ReadMore header='Hvordan bruker jeg denne tabellen?' className='mt-4 mb-4'>
+                    <List>
+                      <List.Item>
+                        <strong>Du kan bla bortover i tabellen</strong>
+                        <br />
+                        Med mindre du bruker en veldig stor skjerm, er det sannsynligvis flere
+                        kolonner bortover til høyre som du kanskje ikke har sett.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Du kan sortere tabellen etter kolonne</strong>
+                        <br />
+                        Ved å klikke på øverste rad i tabellen kan du velge om du vil sortere etter
+                        kolonnenavnet. Dette kan gjøre det enklere å finne informasjonen du lurer
+                        på.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hva vil det si å vurdere behov for PVK?</strong>
+                        <br />I Støtte til etterlevelse er det mulig å gå inn og registrere at man
+                        har vurdert behov for PVK, og hva som ble konklusjonen. Muligheten vises for
+                        alle etterlevere som har valgt “Behandler personopplysninger” som egenskap i
+                        etterlevelsesdokumentet sitt. Det er viktig at vurderingen om behov for PVK
+                        registreres, uansett konklusjon, slik at Nav har oversikt.
+                        <Link
+                          href='/om-pvk#beslutningsstotte'
+                          target='_blank'
+                          style={{ display: 'inline' }}
+                        >
+                          Les mer om beslutningsstøtte ved vurdering av behov for PVK (åpner i en ny
+                          fane).
+                        </Link>
+                      </List.Item>
+                      <List.Item>
+                        <strong>Har vi statistikk om PVK i Word?</strong>
+                        <br />
+                        Vi har ikke statistikk om PVK i Word annet enn hva man registrerer under
+                        vurdering av behov for PVK. Her er det mulig å velge “Vi har en tidligere
+                        godkjent PVK i Word”. Etter hvert som PVK-en skal oppdateres og sendes til
+                        personvernombudet på nytt, skal etterleveren gå over til å bruke Digital
+                        PVK. Antall PVK i Word vil dermed senke med tiden, og statistikk om PVK bli
+                        mer detaljert når flere PVK-er ligger i ny løsning.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Jeg savner PVK-er i tabellen</strong>
+                        <br />
+                        Hvis du savner en viss PVK i listen, er det fordi etterleveren ikke har
+                        valgt avdeling eller seksjon når de har opprettet etterlevelsesdokumentet
+                        sitt. PVK-en er koblet på etterlevelsesdokumentet i løsningen.
+                        <Link
+                          href='/dashboard/ingen-avdeling'
+                          target='_blank'
+                          style={{ display: 'inline' }}
+                        >
+                          Se på listen over etterlevelsesdokumenter der avdeling/seksjon ikke er
+                          valgt (åpner i en ny fane).
+                        </Link>
+                      </List.Item>
+                    </List>
+                  </ReadMore>
+                </div>
                 <StickyHorizontalScroll>
                   <Table
                     className='mt-4 dashboard-table'
