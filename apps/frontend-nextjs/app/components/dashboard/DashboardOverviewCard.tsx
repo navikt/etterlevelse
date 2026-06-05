@@ -27,7 +27,7 @@ const OverviewStackedBar = ({
   ]
 
   return (
-    <div style={{ marginTop: '12px' }}>
+    <div style={{ marginTop: '12px', maxWidth: '200px' }}>
       <ResponsiveContainer width='100%' height={32}>
         <BarChart
           layout='vertical'
