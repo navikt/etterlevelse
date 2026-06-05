@@ -258,7 +258,8 @@ const StatusIOrganisasjonen = () => (
     >
       <LinkPanel.Title>Status i organisasjonen</LinkPanel.Title>
       <LinkPanel.Description>
-        Følg med på status og se hvor godt Nav sine områder dokumenterer på kravene
+        Hvor godt etterlever vi i Nav? Følg med på dashboards som viser status for Nav sine områder
+        og for ulike tema.
       </LinkPanel.Description>
     </LinkPanel>
   </div>
