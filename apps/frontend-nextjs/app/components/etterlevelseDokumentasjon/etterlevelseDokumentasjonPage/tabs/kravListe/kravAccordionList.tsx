@@ -35,8 +35,8 @@ type TProps = {
 }
 
 const getSortOrderUtgaattAtTheBottom = (a: TFilterKravProps, b: TFilterKravProps): number => {
-  if (a.status === EKravStatus.UTGAATT) return 1
-  if (b.status !== EKravStatus.UTGAATT) return -1
+  if (a.status === EKravStatus.UTGAATT && b.status !== EKravStatus.UTGAATT) return 1
+  if (b.status === EKravStatus.UTGAATT && a.status !== EKravStatus.UTGAATT) return -1
   return 0
 }
 
