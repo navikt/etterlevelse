@@ -34,6 +34,7 @@ import {
   Link,
   List,
   LocalAlert,
+  Popover,
   ReadMore,
   Select,
   SortState,
@@ -42,7 +43,7 @@ import {
   UNSAFE_Combobox,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 interface IProps {
@@ -94,14 +95,6 @@ const getKravTrafficColor = (ferdig: number, total: number): string => {
   return '#C30000'
 }
 
-const getOppfyltTrafficColor = (ferdig: number, total: number): string => {
-  if (total === 0) return '#C6C2BF'
-  const pct = (ferdig / total) * 100
-  if (pct >= 90) return '#06893A'
-  if (pct >= 70) return '#E67E22'
-  return '#C30000'
-}
-
 const TrafficDot = ({ color }: { color: string }) => (
   <span
     style={{
@@ -115,6 +108,83 @@ const TrafficDot = ({ color }: { color: string }) => (
     }}
   />
 )
+
+const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
+  const [open, setOpen] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const oppfylt = dok.antallSuksesskriterierOppfylt ?? 0
+  const ikkeOppfylt = dok.antallSuksesskriterierIkkeOppfylt ?? 0
+  const totSuksess = oppfylt + ikkeOppfylt
+  const oppfyltPct = dok.oppfyltKravProsent
+
+  return (
+    <>
+      <button
+        ref={buttonRef}
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          border: '2.5px solid #0067C5',
+          borderRadius: '10px',
+          padding: '4px 12px',
+          background: 'white',
+          color: '#0067C5',
+          fontWeight: 700,
+          fontSize: '1rem',
+          cursor: 'pointer',
+          minWidth: '52px',
+        }}
+      >
+        {oppfyltPct != null ? `${oppfyltPct}%` : '-'}
+      </button>
+      <Popover
+        open={open}
+        onClose={() => setOpen(false)}
+        anchorEl={buttonRef.current}
+        placement='bottom'
+      >
+        <Popover.Content>
+          {totSuksess > 0 ? (
+            <>
+              <div className='flex w-full h-6 mb-4 rounded overflow-hidden'>
+                <div style={{ flex: oppfylt, backgroundColor: '#005B4B' }} />
+                <div style={{ flex: ikkeOppfylt, backgroundColor: '#C30000' }} />
+              </div>
+              <div className='flex items-center gap-2 mb-2'>
+                <span
+                  className='inline-block w-4 h-4 rounded-full'
+                  style={{ backgroundColor: '#005B4B' }}
+                />
+                <BodyShort>
+                  Oppfylt <strong>{oppfylt} suksesskriterier</strong>
+                </BodyShort>
+              </div>
+              <div className='flex items-center gap-2 mb-4'>
+                <span
+                  className='inline-block w-4 h-4 rounded-full'
+                  style={{ backgroundColor: '#C30000' }}
+                />
+                <BodyShort>
+                  Ikke oppfylt <strong>{ikkeOppfylt} suksesskriterier</strong>
+                </BodyShort>
+              </div>
+              <BodyShort className='mb-2'>
+                <strong>Oppfylt der kravet er ferdig vurdert: {oppfyltPct}%</strong>
+              </BodyShort>
+              <BodyShort size='small'>
+                Prosentandelen er beregnet basert på forholdet mellom suksesskriterier vurdert som
+                oppfylt, og suksesskriterier vurdert som ikke oppfylt. Det tas ikke med
+                suksesskriterier som ble vurdert som ikke relevant. Etterleveren må først ha markert
+                hele kravet som ferdig utfylt for at tallene blir tatt med her.
+              </BodyShort>
+            </>
+          ) : (
+            <BodyShort>Ingen suksesskriterier ferdig vurdert ennå.</BodyShort>
+          )}
+        </Popover.Content>
+      </Popover>
+    </>
+  )
+}
 
 const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [data, setData] = useState<IDashboardDetailResponse>()
@@ -868,15 +938,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         etterlevelsesdokumenter inneholder ulike antall krav basert på hvilke
                         egenskaper som gjelder for dokumentet.
                       </List.Item>
-                      <List.Item>
-                        <strong>Hva viser &quot;Oppfylt der kravet er ferdig vurdert&quot;?</strong>
-                        <br />
-                        Alle etterlevelseskrav består av ett eller flere suksesskriterier. For hvert
-                        suksesskriterium, vurderer man om det er oppfylt, ikke oppfylt eller ikke
-                        relevant. Så lenge suksesskriteriet er under vurdering, brukes tilstanden
-                        &quot;under arbeid&quot;. Tabellen viser prosentandel suksesskriterier som
-                        er ferdig vurdert.
-                      </List.Item>
                     </List>
                   </ReadMore>
                 </div>
@@ -901,7 +962,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Antall krav ferdig utfylt
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='oppfylt' align='center'>
-                          Oppfylt der kravet er ferdig vurdert
+                          Oppfylt
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='dato_etterlvelse'>
                           Sist oppdatert
@@ -943,16 +1004,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               {dok.antallOppfyltKrav} av {dok.antallKrav}
                             </Table.DataCell>
                             <Table.DataCell align='center'>
-                              <TrafficDot
-                                color={
-                                  dok.oppfyltKravProsent != null && dok.oppfyltKravProsent > 0
-                                    ? getOppfyltTrafficColor(dok.oppfyltKravProsent, 100)
-                                    : '#C6C2BF'
-                                }
-                              />
-                              {dok.oppfyltKravProsent && dok.oppfyltKravProsent > 0
-                                ? `${dok.oppfyltKravProsent}%`
-                                : '-'}
+                              <OppfyltCell dok={dok} />
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.sistOppdatertEtterlevelse
