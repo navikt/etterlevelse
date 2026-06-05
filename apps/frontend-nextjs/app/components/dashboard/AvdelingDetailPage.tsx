@@ -143,43 +143,49 @@ const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
         placement='bottom'
       >
         <Popover.Content>
-          {totSuksess > 0 ? (
-            <>
-              <div className='flex w-full h-6 mb-4 rounded overflow-hidden'>
-                <div style={{ flex: oppfylt, backgroundColor: '#005B4B' }} />
-                <div style={{ flex: ikkeOppfylt, backgroundColor: '#C30000' }} />
-              </div>
-              <div className='flex items-center gap-2 mb-2'>
-                <span
-                  className='inline-block w-4 h-4 rounded-full'
-                  style={{ backgroundColor: '#005B4B' }}
-                />
-                <BodyShort>
-                  Oppfylt <strong>{oppfylt} suksesskriterier</strong>
+          <div style={{ width: '340px' }}>
+            {totSuksess > 0 ? (
+              <>
+                <div className='flex w-full h-6 mb-4 overflow-hidden'>
+                  <div style={{ flex: oppfylt, backgroundColor: '#005B4B' }} />
+                  <div style={{ flex: ikkeOppfylt, backgroundColor: '#C30000' }} />
+                </div>
+                <div className='flex items-center gap-2 mb-2'>
+                  <span
+                    className='inline-block w-4 h-4 rounded-full'
+                    style={{ backgroundColor: '#005B4B' }}
+                  />
+                  <BodyShort>
+                    Oppfylt <strong>{oppfylt} suksesskriterier</strong>
+                  </BodyShort>
+                </div>
+                <div className='flex items-center gap-2 mb-6'>
+                  <span
+                    className='inline-block w-4 h-4 rounded-full'
+                    style={{ backgroundColor: '#C30000' }}
+                  />
+                  <BodyShort>
+                    Ikke oppfylt <strong>{ikkeOppfylt} suksesskriterier</strong>
+                  </BodyShort>
+                </div>
+                <hr className='my-4' />
+                <BodyShort className='mb-2' style={{ textAlign: 'left' }}>
+                  <strong>Oppfylt der kravet er ferdig vurdert: {oppfyltPct}%</strong>
                 </BodyShort>
-              </div>
-              <div className='flex items-center gap-2 mb-4'>
-                <span
-                  className='inline-block w-4 h-4 rounded-full'
-                  style={{ backgroundColor: '#C30000' }}
-                />
-                <BodyShort>
-                  Ikke oppfylt <strong>{ikkeOppfylt} suksesskriterier</strong>
+                <BodyShort
+                  size='small'
+                  style={{ textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word' }}
+                >
+                  Prosentandelen er beregnet basert på forholdet mellom suksesskriterier vurdert som
+                  oppfylt, og suksesskriterier vurdert som ikke oppfylt. Det tas ikke med
+                  suksesskriterier som ble vurdert som ikke relevant. Etterleveren må først ha
+                  markert hele kravet som ferdig utfylt for at tallene blir tatt med her.
                 </BodyShort>
-              </div>
-              <BodyShort className='mb-2'>
-                <strong>Oppfylt der kravet er ferdig vurdert: {oppfyltPct}%</strong>
-              </BodyShort>
-              <BodyShort size='small'>
-                Prosentandelen er beregnet basert på forholdet mellom suksesskriterier vurdert som
-                oppfylt, og suksesskriterier vurdert som ikke oppfylt. Det tas ikke med
-                suksesskriterier som ble vurdert som ikke relevant. Etterleveren må først ha markert
-                hele kravet som ferdig utfylt for at tallene blir tatt med her.
-              </BodyShort>
-            </>
-          ) : (
-            <BodyShort>Ingen suksesskriterier ferdig vurdert ennå.</BodyShort>
-          )}
+              </>
+            ) : (
+              <BodyShort>Ingen suksesskriterier ferdig vurdert ennå.</BodyShort>
+            )}
+          </div>
         </Popover.Content>
       </Popover>
     </>
