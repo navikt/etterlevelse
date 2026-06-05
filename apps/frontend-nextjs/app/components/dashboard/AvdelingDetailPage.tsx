@@ -176,10 +176,10 @@ const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
                   size='small'
                   style={{ textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word' }}
                 >
-                  Prosentandelen er beregnet basert på forholdet mellom suksesskriterier vurdert som
-                  oppfylt, og suksesskriterier vurdert som ikke oppfylt. Det tas ikke med
-                  suksesskriterier som ble vurdert som ikke relevant. Etterleveren må først ha
-                  markert hele kravet som ferdig utfylt for at tallene blir tatt med her.
+                  Etterleveren må først ha markert hele kravet som ferdig utfylt for at tallene
+                  vises her. Prosentandelen er beregnet basert på forholdet mellom suksesskriterier
+                  vurdert som oppfylt, og suksesskriterier vurdert som ikke oppfylt. Det tas ikke
+                  med suksesskriterier som ble vurdert som ikke relevant.
                 </BodyShort>
               </>
             ) : (
