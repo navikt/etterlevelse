@@ -72,7 +72,7 @@
     "@types/draft-js": "^0.11.20",
     "@types/lodash": "^4.17.24",
     "@types/markdown-draft-js": "^2.2.7",
-    "@types/node": "^25.9.1",
+    "@types/node": "^25.9.2",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.60.1",
