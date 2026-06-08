@@ -427,7 +427,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       } else setTiltakFristError('')
 
       if (amountOfOverdueTiltak > 0) {
-        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
+        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist `)
       } else setTiltakFristUtgaattError('')
     } else {
       setTiltakFristError('')

@@ -65,6 +65,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         tiltakError !== '' ||
         tiltakAnsvarligError !== '' ||
         tiltakFristError.length !== 0 ||
+        tiltakFristUtgaattError !== '' ||
         savnerVurderingError !== '') && (
         <ErrorSummary
           ref={errorSummaryRef}
