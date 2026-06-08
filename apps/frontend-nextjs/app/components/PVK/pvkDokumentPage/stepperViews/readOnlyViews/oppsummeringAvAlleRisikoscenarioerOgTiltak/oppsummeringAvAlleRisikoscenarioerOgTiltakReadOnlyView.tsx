@@ -51,7 +51,7 @@ export const filterValues = {
 }
 
 export const tiltakFilterValues = {
-  alleTiltak: 'alle',
+  alleTiltak: 'alleTiltak',
   utenAnsvarlig: 'utenAnsvarlig',
   utenFrist: 'utenFrist',
 }
