@@ -43,7 +43,7 @@ import {
   UNSAFE_Combobox,
 } from '@navikt/ds-react'
 import moment from 'moment'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 interface IProps {
@@ -111,7 +111,7 @@ const TrafficDot = ({ color }: { color: string }) => (
 
 const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
   const [open, setOpen] = useState(false)
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const oppfylt = dok.antallSuksesskriterierOppfylt ?? 0
   const ikkeOppfylt = dok.antallSuksesskriterierIkkeOppfylt ?? 0
   const totSuksess = oppfylt + ikkeOppfylt
@@ -120,7 +120,7 @@ const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
   return (
     <>
       <button
-        ref={buttonRef}
+        ref={setAnchorEl}
         onClick={() => setOpen((o) => !o)}
         style={{
           border: '2.5px solid #0067C5',
@@ -136,12 +136,7 @@ const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
       >
         {oppfyltPct != null ? `${oppfyltPct}%` : '-'}
       </button>
-      <Popover
-        open={open}
-        onClose={() => setOpen(false)}
-        anchorEl={buttonRef.current}
-        placement='bottom'
-      >
+      <Popover open={open} onClose={() => setOpen(false)} anchorEl={anchorEl} placement='bottom'>
         <Popover.Content>
           <div style={{ width: '340px' }}>
             {totSuksess > 0 ? (
