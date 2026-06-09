@@ -18,8 +18,7 @@ export const DashboardReadMore = () => (
           Det å kunne sende et etterlevelsesdokument til godkjenning hos risikoeieren utgjør nyere
           funksjonalitet i løsningen. Det forventes at andel godkjente etterlevelsesdokumenter vil
           øke etter hvert som flere sender til godkjenning. Når endringer gjøres etter godkjenning,
-          vil etterlevelsesdokumentet igjen stå som under arbeid. Informasjon om når et
-          etterlevelsesdokument sist ble godkjent finner du i tabellene under.
+          vil etterlevelsesdokumentet igjen stå som under arbeid.
         </List.Item>
         <List.Item>
           <strong>Hva er forskjellen mellom etterlevelseskrav og suksesskriterier?</strong>
