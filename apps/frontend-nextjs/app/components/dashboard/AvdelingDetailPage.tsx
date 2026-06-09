@@ -7,7 +7,7 @@ import {
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
 import { DashboardCard } from '@/components/dashboard/DashboardCard'
-import { DashboardReadMore } from '@/components/dashboard/DashboardReadMore'
+import { DashboardReadMore } from '@/components/dashboard/DashboardReadmore/DashboardReadMore'
 import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
