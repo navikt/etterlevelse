@@ -1143,7 +1143,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         har vurdert behov for PVK, og hva som ble konklusjonen. Muligheten vises for
                         alle etterlevere som har valgt “Behandler personopplysninger” som egenskap i
                         etterlevelsesdokumentet sitt. Det er viktig at vurderingen om behov for PVK
-                        registreres, uansett konklusjon, slik at Nav har oversikt.
+                        registreres, uansett konklusjon, slik at Nav har oversikt.{' '}
                         <Link
                           href='/om-pvk#beslutningsstotte'
                           target='_blank'
@@ -1168,7 +1168,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <br />
                         Hvis du savner en viss PVK i listen, er det fordi etterleveren ikke har
                         valgt avdeling eller seksjon når de har opprettet etterlevelsesdokumentet
-                        sitt. PVK-en er koblet på etterlevelsesdokumentet i løsningen.
+                        sitt. PVK-en er koblet på etterlevelsesdokumentet i løsningen.{' '}
                         <Link
                           href='/dashboard/ingen-avdeling'
                           target='_blank'
