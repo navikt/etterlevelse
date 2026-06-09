@@ -934,6 +934,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                     })()}
                   </div>
                 </div>
+                <HjelpTilATolkeFigurerOgNokkelTallReadmore />
               </div>
             </Tabs.Panel>
           </Tabs>
