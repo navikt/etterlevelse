@@ -25,6 +25,7 @@ import {
 } from '@/api/teamkatalogen/teamkatalogenApi'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
 import LabelWithTooltip, {
@@ -674,8 +675,20 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
           <ROSEdit />
           <Heading level='2' size='small' spacing>
-            Legg til minst et team og/eller en person
+            Hvem skal ha redigeringstilgang til dokumentet?
           </Heading>
+          <InfoCard data-color='info' className='my-5 max-w-[70ch]' size='small'>
+            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+              <InfoCard.Title>
+                Hvis du velger team, trenger du ikke legge inn teammedlemmene som enkeltpersoner. Er
+                du i tvil på hvem som er med i teamet,{' '}
+                <ExternalLink href='https://teamkatalogen.nav.no/'>
+                  sjekk Teamkatalogen
+                </ExternalLink>
+              </InfoCard.Title>
+            </InfoCard.Header>
+          </InfoCard>
+
           <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldArray name='teamsData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
