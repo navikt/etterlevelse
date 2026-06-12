@@ -1,5 +1,23 @@
 package no.nav.data.etterlevelse.export;
 
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,16 +38,6 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentas
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import org.springframework.http.HttpHeaders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Slf4j
 @RestController
@@ -252,6 +260,41 @@ public class ExportController {
             case YTTERLIGERE_EGENSKAPER -> "Ytterligere egenskaper";
             case PVO_VURDERING -> "Pvo vurdering";
         };
+    }
+
+    @Operation(summary = "Bulk export of the latest etterlevelse dokumentasjoner as a ZIP of Word documents, without team, person, risikoeier and ansvarlig")
+    @Transactional(readOnly = true)
+    @SneakyThrows
+    @GetMapping(value = "/etterlevelsedokumentasjon/bulk-word", produces = "application/zip")
+    public void getBulkWordEtterlevelseDokumentasjon(
+            HttpServletResponse response,
+            @RequestParam(name = "limit", defaultValue = "100") int limit,
+            @RequestParam(name = "onlyActiveKrav", defaultValue = "true") boolean onlyActiveKrav
+    ) {
+        log.info("Bulk Word exporting {} latest etterlevelse dokumentasjoner, onlyActiveKrav={}", limit, onlyActiveKrav);
+        List<EtterlevelseDokumentasjon> documents = etterlevelseDokumentasjonService.getLatestCreated(limit);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
+        String date = formatter.format(new Date());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ZipOutputStream zip = new ZipOutputStream(baos)) {
+            for (EtterlevelseDokumentasjon doc : documents) {
+                byte[] wordBytes = etterlevelseDokumentasjonToDoc.generateDocForBulk(doc.getId(), onlyActiveKrav);
+                String entryName = date + "_E" + doc.getEtterlevelseNummer()
+                        + "_" + doc.getTitle().replaceAll("[^a-zA-Z0-9æøåÆØÅ_\\-]", "_")
+                        + ".docx";
+                zip.putNextEntry(new ZipEntry(entryName));
+                zip.write(wordBytes);
+                zip.closeEntry();
+            }
+        }
+
+        response.setContentType("application/zip");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=etterlevelse_bulk_" + date + ".zip");
+        StreamUtils.copy(baos.toByteArray(), response.getOutputStream());
+        response.flushBuffer();
     }
 
 }

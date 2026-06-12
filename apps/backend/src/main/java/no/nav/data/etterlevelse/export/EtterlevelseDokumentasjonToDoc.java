@@ -1,5 +1,19 @@
 package no.nav.data.etterlevelse.export;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.docx4j.jaxb.Context;
+import org.docx4j.wml.ObjectFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.WordDocUtils;
@@ -32,13 +46,6 @@ import no.nav.data.integration.dpBehandling.DpBehandlingService;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import org.docx4j.jaxb.Context;
-import org.docx4j.wml.ObjectFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Slf4j
 @Service
@@ -356,6 +363,81 @@ public class EtterlevelseDokumentasjonToDoc {
                 for (int i = 0; i < sortedDataByPriority.size(); i++) {
                     doc.generate(sortedDataByPriority.get(i));
                     if (i != sortedDataByPriority.size() - 1) {
+                        doc.pageBreak();
+                    }
+                }
+            }
+        }
+
+        return doc.build();
+    }
+
+    public byte[] generateDocForBulk(UUID etterlevelseDokumentasjonId, boolean onlyActiveKrav) {
+        var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(etterlevelseDokumentasjonId);
+        EtterlevelseDokumentasjonResponse response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon);
+        // Skip external API calls for team/person/risikoeier — set to empty lists
+        response.setTeams(List.of());
+        response.setTeamsData(List.of());
+        response.setRisikoeiereData(List.of());
+        response.setResourcesData(List.of());
+
+        List<CodeUsage> temaListe = codeUsageService.findCodeUsageOfList(ListName.TEMA).stream()
+                .sorted(Comparator.comparing(CodeUsage::getShortName)).toList();
+
+        List<EtterlevelseMedKravData> etterlevelseMedKravData = getEtterlevelseByFilter(etterlevelseDokumentasjonId, null, List.of());
+        List<EtterlevelseMedKravData> filtered = new ArrayList<>();
+
+        List<Krav> alleAktivKrav = kravService.findForEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
+                .stream().filter(k -> k.getStatus().equals(KravStatus.AKTIV)).toList();
+
+        if (onlyActiveKrav) {
+            alleAktivKrav.forEach(krav -> {
+                var match = etterlevelseMedKravData.stream()
+                        .filter(e -> e.getEtterlevelseData().getKravNummer().equals(krav.getKravNummer())
+                                && e.getEtterlevelseData().getKravVersjon().equals(krav.getKravVersjon()))
+                        .toList();
+                if (match.isEmpty()) {
+                    addUndocummentedEtterlevelseToList(filtered, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId);
+                } else {
+                    filtered.add(match.get(0));
+                }
+            });
+        } else {
+            alleAktivKrav.forEach(krav -> {
+                var sameNummer = etterlevelseMedKravData.stream()
+                        .filter(e -> e.getEtterlevelseData().getKravNummer().equals(krav.getKravNummer()))
+                        .toList();
+                if (sameNummer.stream().noneMatch(e -> e.getEtterlevelseData().getKravVersjon().equals(krav.getKravVersjon()))) {
+                    addUndocummentedEtterlevelseToList(filtered, krav.getKravNummer(), krav.getKravVersjon(), Optional.of(krav), etterlevelseDokumentasjonId);
+                }
+                if (krav.getKravVersjon() > 1) {
+                    for (int v = krav.getKravVersjon() - 1; v > 0; v--) {
+                        int fv = v;
+                        if (sameNummer.stream().noneMatch(e -> e.getEtterlevelseData().getKravVersjon().equals(fv))) {
+                            addUndocummentedEtterlevelseToList(filtered, krav.getKravNummer(), fv, kravService.getByKravNummer(krav.getKravNummer(), fv), etterlevelseDokumentasjonId);
+                        }
+                    }
+                }
+            });
+            filtered.addAll(etterlevelseMedKravData);
+        }
+
+        var doc = new EtterlevelseDocumentBuilder();
+        getEtterlevelseDokumentasjonData(response, doc);
+
+        doc.addHeading1("Dokumentet inneholder etterlevelse for " + filtered.size() + " krav");
+        doc.addTableOfContent(filtered, temaListe);
+
+        for (CodeUsage tema : temaListe) {
+            List<String> regelverk = tema.getCodelist().stream().map(Codelist::getCode).toList();
+            List<EtterlevelseMedKravData> filteredByTema = doc.getEtterlevelseMedKravDataByTema(filtered, regelverk);
+            List<EtterlevelseMedKravData> sorted = doc.getSortedEtterlevelseMedKravDataByPriority(filteredByTema, tema.getCode());
+            if (!sorted.isEmpty()) {
+                doc.pageBreak();
+                doc.addHeading1(tema.getShortName());
+                for (int i = 0; i < sorted.size(); i++) {
+                    doc.generate(sorted.get(i));
+                    if (i != sorted.size() - 1) {
                         doc.pageBreak();
                     }
                 }
