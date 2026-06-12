@@ -1284,6 +1284,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                           </BodyShort>
                         </div>
                       </div>
+                      <HjelpTilATolkeFigurerOgNokkelTallReadmore />
                     </div>
                   )
                 })}
