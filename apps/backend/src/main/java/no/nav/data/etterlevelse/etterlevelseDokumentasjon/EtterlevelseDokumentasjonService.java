@@ -43,7 +43,6 @@ import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.dpBehandling.DpBehandlingService;
 import no.nav.data.integration.dpBehandling.dto.DpBehandling;
-import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.integration.team.domain.Member;
 import no.nav.data.integration.team.domain.Team;
 import no.nav.data.integration.team.dto.Resource;
@@ -99,6 +98,10 @@ public class EtterlevelseDokumentasjonService {
 
     public List<EtterlevelseDokumentasjon> getEtterlevelseDokumentasjonerByTeam(String teamId) {
         return etterlevelseDokumentasjonRepoCustom.getEtterlevelseDokumentasjonerForTeam(List.of(teamId));
+    }
+
+    public List<EtterlevelseDokumentasjon> getLatestCreated(int limit) {
+        return etterlevelseDokumentasjonRepo.findLatestCreated(limit);
     }
 
     public List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam) {
