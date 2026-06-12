@@ -1,5 +1,23 @@
 package no.nav.data.etterlevelse.export;
 
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,16 +38,6 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentas
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import org.springframework.http.HttpHeaders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Slf4j
 @RestController
@@ -241,6 +249,86 @@ public class ExportController {
         response.flushBuffer();
     }
 
+
+    @Operation(summary = "Bulk export of the latest etterlevelse dokumentasjoner, without team, person, and risikoeier data")
+    @Transactional(readOnly = true)
+    @SneakyThrows
+    @GetMapping(value = "/etterlevelsedokumentasjon/bulk")
+    public void getBulkEtterlevelseDokumentasjon(
+            HttpServletResponse response,
+            @RequestParam(name = "limit", defaultValue = "100") int limit,
+            @RequestParam(name = "format", defaultValue = "json") String format
+    ) {
+        log.info("Bulk exporting {} latest etterlevelse dokumentasjoner, format={}", limit, format);
+        var documents = etterlevelseDokumentasjonService.getLatestCreated(limit);
+
+        if ("csv".equalsIgnoreCase(format)) {
+            response.setContentType("text/csv;charset=UTF-8");
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=etterlevelse_bulk_export.csv");
+            var csv = new StringBuilder();
+            csv.append("id,etterlevelseNummer,title,status,etterlevelseDokumentVersjon,behandlingIds,dpBehandlingIds,nomAvdelingId,avdelingNavn,beskrivelse,createdDate,lastModifiedDate\n");
+            for (var doc : documents) {
+                var data = doc.getEtterlevelseDokumentasjonData();
+                csv.append(escapeCsv(doc.getId().toString())).append(",")
+                   .append(escapeCsv(String.valueOf(data.getEtterlevelseNummer()))).append(",")
+                   .append(escapeCsv(data.getTitle())).append(",")
+                   .append(escapeCsv(data.getStatus() != null ? data.getStatus().name() : "")).append(",")
+                   .append(escapeCsv(String.valueOf(data.getEtterlevelseDokumentVersjon()))).append(",")
+                   .append(escapeCsv(data.getBehandlingIds() != null ? String.join(";", data.getBehandlingIds()) : "")).append(",")
+                   .append(escapeCsv(data.getDpBehandlingIds() != null ? String.join(";", data.getDpBehandlingIds()) : "")).append(",")
+                   .append(escapeCsv(data.getNomAvdelingId() != null ? data.getNomAvdelingId() : "")).append(",")
+                   .append(escapeCsv(data.getAvdelingNavn() != null ? data.getAvdelingNavn() : "")).append(",")
+                   .append(escapeCsv(data.getBeskrivelse())).append(",")
+                   .append(escapeCsv(doc.getCreatedDate() != null ? doc.getCreatedDate().toString() : "")).append(",")
+                   .append(escapeCsv(doc.getLastModifiedDate() != null ? doc.getLastModifiedDate().toString() : "")).append("\n");
+            }
+            StreamUtils.copy(csv.toString().getBytes(StandardCharsets.UTF_8), response.getOutputStream());
+        } else {
+            response.setContentType("application/json;charset=UTF-8");
+            var rows = documents.stream().map(doc -> {
+                var data = doc.getEtterlevelseDokumentasjonData();
+                return new BulkExportRow(
+                        doc.getId().toString(),
+                        data.getEtterlevelseNummer(),
+                        data.getTitle(),
+                        data.getStatus() != null ? data.getStatus().name() : null,
+                        data.getEtterlevelseDokumentVersjon(),
+                        data.getBehandlingIds(),
+                        data.getDpBehandlingIds(),
+                        data.getNomAvdelingId(),
+                        data.getAvdelingNavn(),
+                        data.getBeskrivelse(),
+                        doc.getCreatedDate() != null ? doc.getCreatedDate().toString() : null,
+                        doc.getLastModifiedDate() != null ? doc.getLastModifiedDate().toString() : null
+                );
+            }).toList();
+            new ObjectMapper().writeValue(response.getOutputStream(), rows);
+        }
+        response.flushBuffer();
+    }
+
+    private String escapeCsv(String value) {
+        if (value == null) return "";
+        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return value;
+    }
+
+    record BulkExportRow(
+            String id,
+            Integer etterlevelseNummer,
+            String title,
+            String status,
+            Integer etterlevelseDokumentVersjon,
+            List<String> behandlingIds,
+            List<String> dpBehandlingIds,
+            String nomAvdelingId,
+            String avdelingNavn,
+            String beskrivelse,
+            String createdDate,
+            String lastModifiedDate
+    ) {}
 
     private String cleanCodelistName(ListName listName) {
         return switch (listName) {
