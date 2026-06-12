@@ -29,7 +29,7 @@ import {
   Tag,
 } from '@navikt/ds-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { HjelpTilATolkeFigurerOgNokkelTallReadmore } from './DashboardReadmore/HjelpTilATolkeFigurerOgTallReadmore'
+import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
   IBarSegment,
@@ -172,7 +172,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
         </div>
       </div>
-      <HjelpTilATolkeFigurerOgNokkelTallReadmore />
+      <TemaDashboardReadmore />
     </div>
   )
 }
@@ -728,7 +728,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                     <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
                   </div>
                 </div>
-                <HjelpTilATolkeFigurerOgNokkelTallReadmore />
+                <TemaDashboardReadmore />
               </div>
             </Tabs.Panel>
             <Tabs.Panel value='nokkeltall'>
@@ -934,7 +934,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                     })()}
                   </div>
                 </div>
-                <HjelpTilATolkeFigurerOgNokkelTallReadmore />
+                <TemaDashboardReadmore />
               </div>
             </Tabs.Panel>
           </Tabs>
@@ -1284,7 +1284,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                           </BodyShort>
                         </div>
                       </div>
-                      <HjelpTilATolkeFigurerOgNokkelTallReadmore />
+                      <TemaDashboardReadmore />
                     </div>
                   )
                 })}
