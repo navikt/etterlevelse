@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import no.nav.data.etterlevelse.common.domain.KravId;
 
@@ -37,5 +38,8 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<Etterlevels
             countQuery = "select count(1) from etterlevelse_dokumentasjon where data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
             nativeQuery = true)
     Page<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjonWithValidBehandling(Pageable pageable);
+
+    @Query(value = "select * from etterlevelse_dokumentasjon order by created_date desc limit :limit", nativeQuery = true)
+    List<EtterlevelseDokumentasjon> findLatestCreated(@Param("limit") int limit);
 
 }
