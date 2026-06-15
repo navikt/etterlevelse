@@ -261,40 +261,4 @@ public class ExportController {
             case PVO_VURDERING -> "Pvo vurdering";
         };
     }
-
-    @Operation(summary = "Bulk export of the latest etterlevelse dokumentasjoner as a ZIP of Word documents, without team, person, risikoeier and ansvarlig")
-    @Transactional(readOnly = true)
-    @SneakyThrows
-    @GetMapping(value = "/etterlevelsedokumentasjon/bulk-word", produces = "application/zip")
-    public void getBulkWordEtterlevelseDokumentasjon(
-            HttpServletResponse response,
-            @RequestParam(name = "limit", defaultValue = "100") int limit,
-            @RequestParam(name = "onlyActiveKrav", defaultValue = "true") boolean onlyActiveKrav
-    ) {
-        log.info("Bulk Word exporting {} latest etterlevelse dokumentasjoner, onlyActiveKrav={}", limit, onlyActiveKrav);
-        List<EtterlevelseDokumentasjon> documents = etterlevelseDokumentasjonService.getLatestCreated(limit);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
-        String date = formatter.format(new Date());
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (ZipOutputStream zip = new ZipOutputStream(baos)) {
-            for (EtterlevelseDokumentasjon doc : documents) {
-                byte[] wordBytes = etterlevelseDokumentasjonToDoc.generateDocForBulk(doc.getId(), onlyActiveKrav);
-                String entryName = date + "_E" + doc.getEtterlevelseNummer()
-                        + "_" + doc.getTitle().replaceAll("[^a-zA-Z0-9æøåÆØÅ_\\-]", "_")
-                        + ".docx";
-                zip.putNextEntry(new ZipEntry(entryName));
-                zip.write(wordBytes);
-                zip.closeEntry();
-            }
-        }
-
-        response.setContentType("application/zip");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=etterlevelse_bulk_" + date + ".zip");
-        StreamUtils.copy(baos.toByteArray(), response.getOutputStream());
-        response.flushBuffer();
-    }
-
 }
