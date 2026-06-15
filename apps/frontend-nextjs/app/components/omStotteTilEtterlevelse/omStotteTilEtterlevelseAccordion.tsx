@@ -16,8 +16,8 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
+import VisMegHvorJegFinnerDigitalPVK from '../omPvk/images/VisMegHvorJegFinnerDigitalPVK.png'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
-import VisMegHvorJegFinnerDigitalPVK from './images/VisMegHvorJegFinnerDigitalPVK.png'
 
 const OmStotteTilEtterlevelseAccordion = () => {
   const accordionTittel = {

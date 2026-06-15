@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 import SkjermbildePVK from './images/SkjermbildePVK.png'
-import VisHvorJegFinnerDigitalPVK from './images/VisHvorJegFinnerDigitalPVK.png'
+import VisMegHvorJegFinnerDigitalPVK from './images/VisMegHvorJegFinnerDigitalPVK.png'
 
 const OmPvkPage = () => {
   const [activeStep, setActiveStep] = useState(0)
@@ -87,7 +87,7 @@ const OmPvkPage = () => {
           <ReadMore header='Vis meg hvor jeg finner Digital PVK' className='mb-6'>
             <Image
               className='mr-2.5 mt-6 mb-12'
-              src={VisHvorJegFinnerDigitalPVK}
+              src={VisMegHvorJegFinnerDigitalPVK}
               alt='Skjermbilde som viser hvor man finner Digital PVK'
             />
           </ReadMore>
