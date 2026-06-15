@@ -359,6 +359,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
           })()}
         </div>
       </div>
+      <TemaDashboardReadmore />
     </div>
   )
 }
