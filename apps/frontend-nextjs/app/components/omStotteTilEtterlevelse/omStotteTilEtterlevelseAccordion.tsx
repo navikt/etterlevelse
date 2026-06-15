@@ -248,14 +248,33 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
-            for å etterleve kravet. Hvert kriterium inneholder også en nærmere beskrivelse som
-            hjelper dere med å forstå kriteriet. Dere skal ta stilling til, og bekrefte om,
-            kriteriet er oppfylt, ikke oppfylt eller ikke relevant. Som regel vil det i tillegg bes
-            om besvarelse i fritekstfelt. Det er kraveier som avgjør om en fritekstbesvarelse er
-            nødvendig eller ikke. Hvis dere ikke ser et fritekstfelt for et kriterium, holder det å
-            huke av et av valgene nevnt over. Når dere har svart på alle suksesskriteriene, kan dere
-            ferdigstille kravet. Det er fortsatt mulig å redigere besvarelsen selv om status er satt
-            til ferdigstilt.
+            for å etterleve kravet. Hvert kriterium inneholder også “Utfyllende om kravet” som
+            hjelper dere med å forstå kriteriet.
+          </BodyLong>
+          <BodyLong spacing>Et suksesskriterium kan ha følgende tilstander:</BodyLong>
+          <List as='ul' className='mb-6'>
+            <List.Item title='Ikke påbegynt:'>
+              dette er utgangspunktet når dere først skal dokumentere etterlevelse.
+            </List.Item>
+            <List.Item title='Under arbeid:'>
+              dette velger dere når dere begynner å vurdere etterlevelsen av suksesskriteriet.
+            </List.Item>
+            <List.Item title='Oppfylt:'>
+              dere har kommet frem til at deres etterlevelse oppfyller suksesskriteriet.
+            </List.Item>
+            <List.Item title='Ikke oppfylt:'>
+              dere har kommet frem til at dere ikke oppfyller suksesskriteriet.
+            </List.Item>
+            <List.Item title='Ikke relevant:'>
+              dere konkluderer med at suksesskriteriet ikke gjelder i deres kontekst.
+            </List.Item>
+          </List>
+          <BodyLong spacing>
+            Som regel vil det i tillegg bes om besvarelse i fritekstfelt. Det er kraveier som avgjør
+            om en fritekst besvarelse er nødvendig eller ikke: hvis dere ikke ser et fritekstfelt
+            for et kriterium, holder det å huke av et av valgene nevnt over. Når dere har svart på
+            alle suksesskriteriene, kan dere ferdigstille kravet. Det er fortsatt mulig å redigere
+            besvarelsen selv om status er satt til ferdigstilt.
           </BodyLong>
           <BodyLong spacing>
             Det er mulig å innhente inspirasjon fra andre. I fanen “{EKravTab.ETTERLEVER}” kan dere
