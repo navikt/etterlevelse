@@ -24,6 +24,7 @@ const OmPvkPage = () => {
               onStepChange={setActiveStep}
             >
               <Stepper.Step href='#formaalet-med-pvk'>Formålet med PVK</Stepper.Step>
+              <Stepper.Step href='#hvordan-er-pvk-prosessen'>Hvordan er PVK-prosessen</Stepper.Step>
               <Stepper.Step href='#hvordan-bruke-digital-pvk'>
                 Hvordan bruke Digital PVK
               </Stepper.Step>
@@ -67,6 +68,35 @@ const OmPvkPage = () => {
             Ny Digital PVK skal bidra til at det blir lettere å vurdere det vi gjør, og hvordan vi
             skal redusere risikonivået.
           </BodyLong>
+          <Heading size='medium' level='2' spacing id='hvordan-er-pvk-prosessen'>
+            Hvordan er PVK-prosessen?
+          </Heading>
+          <BodyLong spacing>
+            I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en
+            risikoanalyse. Prosessen inkluderer:
+          </BodyLong>
+          <List as='ol' className='mb-6'>
+            <List.Item>
+              Dere beskriver behandlingen slik at det er enklere å identifisere risikoer.
+            </List.Item>
+            <List.Item>
+              Dere gjør risikoanalyse, setter tiltak og vurderer så tiltakenes effekt.
+            </List.Item>
+            <List.Item>Dere sender inn PVK til vurdering av Personvernombudet (PVO).</List.Item>
+            <List.Item>
+              Personvernombudet vurderer PVK og sender så sine tilbakemeldinger.
+            </List.Item>
+            <List.Item>
+              Dere gjør eventuelle endringer, og sender til risikoeier for beslutning om
+              risikonivået er akseptabelt, eller tilbake til PVO hvis de har bedt om det.
+            </List.Item>
+            <List.Item>Risikoeieren godkjenner restrisikoen.</List.Item>
+            <List.Item>
+              Hvis dere senere endrer hvordan dere behandler personopplysninger, skal dere vurdere
+              risikobildet på nytt. Ved endring i risikobildet, burde en oppdatert PVK sendes inn
+              til PVO til en ny vurdering.
+            </List.Item>
+          </List>
           <Heading size='medium' level='2' spacing id='hvordan-bruke-digital-pvk'>
             Hvordan bruker man Digital PVK?
           </Heading>
