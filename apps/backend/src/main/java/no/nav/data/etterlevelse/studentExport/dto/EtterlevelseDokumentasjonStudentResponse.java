@@ -6,13 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
-import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import no.nav.data.etterlevelse.etterlevelse.dto.EtterlevelseResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
@@ -25,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
-import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @SuperBuilder
@@ -73,7 +68,7 @@ public class EtterlevelseDokumentasjonStudentResponse {
     private List<EtterlevelseStudentResponse> kravBesvarelser;
     private PvkDokumentResponse pvkDokument;
     private List<RisikoscenarioResponse> risikoscenarioList;
-    private List<TiltakResponse> tiltakResponseList;
+    private List<TiltakResponse> tiltakList;
     private BehandlingensArtOgOmfangResponse  behandlingsArtOgOmfang;
     private BehandlingensLivslopResponse behandlingensLivslopResponse;
 
