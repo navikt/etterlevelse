@@ -17,6 +17,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
+import VisMegHvorJegFinnerDigitalPVK from './images/VisMegHvorJegFinnerDigitalPVK.png'
 
 const OmStotteTilEtterlevelseAccordion = () => {
   const accordionTittel = {
@@ -24,6 +25,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
     redigereDokumentegenskaper: 'Redigere dokumentegenskaper og filtrere krav',
     jobbeITemaoversikten: 'Jobbe i temaoversikten',
     besvareEtterlevelseskrav: 'Besvare etterlevelseskrav',
+    behandlerPersonopplysninger: 'Etterlevelse når dere behandler personopplysninger',
     faEtterlevelsenGodkjent: 'Få etterlevelsen godkjent av risikoeier',
     forRisikoeiere: 'For risikoeiere: slik godkjenner du etterlevelsen',
     oppdatereEtterGodkjenning: 'Oppdatere etterlevelsesdokumentasjon etter godkjenning',
@@ -38,6 +40,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
     redigereDokumentegenskaper: 'redigere-dokumentegenskaper-og-filtrere-krav',
     jobbeITemaoversikten: 'jobbe-i-temaoversikten',
     besvareEtterlevelseskrav: 'besvare-etterlevelseskrav',
+    behandlerPersonopplysninger: 'etterlevelse-nar-dere-behandler-personopplysninger',
     faEtterlevelsenGodkjent: 'fa-etterlevelsen-godkjent-av-risikoeier',
     forRisikoeiere: 'for-risikoeiere-slik-godkjenner-du-etterlevelsen',
     oppdatereEtterGodkjenning: 'oppdatere-etterlevelsesdokumentasjon-etter-godkjenning',
@@ -298,6 +301,40 @@ const OmStotteTilEtterlevelseAccordion = () => {
             Prioritert kravliste”. Prioritert kravliste står på dokumentets hovedside ved siden av
             “Alle krav”. Her er det også mulig å redigere listen direkte ved å legge til eller
             fjerne enkelte krav.
+          </BodyLong>
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item
+        id={accordionId.behandlerPersonopplysninger}
+        open={openItems[accordionId.behandlerPersonopplysninger]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.behandlerPersonopplysninger)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.behandlerPersonopplysninger}</h3>
+            <CopyAccordionLinkButton id={accordionId.behandlerPersonopplysninger} />
+          </div>
+        </Accordion.Header>
+        <Accordion.Content>
+          <BodyLong spacing>
+            Når dere behandler personopplysninger, skal dere vurdere om det er behov for å
+            gjennomføre en Personvernkonsekvensvurdering (PVK). For at det skal være lettere å
+            vurdere behovet, kan dere ta stilling til{' '}
+            <ExternalLink href='/om-pvk#behandlingens-livslop'>Behandlingens livsløp</ExternalLink>{' '}
+            og{' '}
+            <ExternalLink href='/om-pvk#behandlinges-art-og-omfang'>
+              Behandlingens art og omfang
+            </ExternalLink>
+          </BodyLong>
+          <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene  ' className='mb-6'>
+            <Image
+              className='mr-2.5 mt-6 mb-12'
+              src={VisMegHvorJegFinnerDigitalPVK}
+              alt='Skjermbilde som viser hvor man finner Digital PVK'
+            />
+          </ReadMore>
+          <BodyLong spacing>
+            Hvis dere allerede har en PVK i Word, skal dere også registrere dette på siden “Vurder
+            behov for PVK”.
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
