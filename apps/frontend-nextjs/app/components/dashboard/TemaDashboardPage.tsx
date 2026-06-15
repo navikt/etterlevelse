@@ -198,9 +198,14 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
-      <Heading size='small' level='3'>
-        {stats.temaName}
-      </Heading>
+      <div className='flex items-center gap-4'>
+        <Heading size='small' level='3'>
+          {stats.temaName}
+        </Heading>
+        <AkselLink href={`/dashboard/tema/${stats.temaCode}`}>
+          Les mer om etterlevelse under {stats.temaName}
+        </AkselLink>
+      </div>
 
       <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
 
