@@ -30,7 +30,8 @@ import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
 public class EtterlevelseDokumentasjonStudentResponse {
 
     private UUID id;
-    private Integer version;
+    //versjonering
+    private Integer etterlevelseDokumentVersjon;
     private Integer etterlevelseNummer;
     private String title;
     private List<String> behandlingIds;
@@ -77,7 +78,7 @@ public class EtterlevelseDokumentasjonStudentResponse {
         EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
         return EtterlevelseDokumentasjonStudentResponse.builder()
                 .id(eDok.getId())
-                .version(eDok.getVersion())
+                .etterlevelseDokumentVersjon(eDok.getEtterlevelseDokumentVersjon())
                 .etterlevelseNummer(eDokData.getEtterlevelseNummer())
                 .title(eDokData.getTitle())
                 .beskrivelse(eDokData.getBeskrivelse())
