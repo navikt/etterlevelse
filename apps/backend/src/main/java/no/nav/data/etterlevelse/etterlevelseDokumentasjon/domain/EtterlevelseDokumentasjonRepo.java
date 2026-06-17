@@ -37,7 +37,9 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<Etterlevels
             nativeQuery = true)
     Page<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjonWithValidBehandling(Pageable pageable);
 
-    @Query(value = "select * from etterlevelse_dokumentasjon order by created_date desc limit ?1", nativeQuery = true)
-    List<EtterlevelseDokumentasjon> findLatestCreated(int limit);
+    @Query(value = "select * from etterlevelse_dokumentasjon order by created_date desc",
+            countQuery = "select count(*) from etterlevelse_dokumentasjon order by created_date desc",
+            nativeQuery = true)
+    List<EtterlevelseDokumentasjon> findLatestCreated(Pageable pageable);
 
 }

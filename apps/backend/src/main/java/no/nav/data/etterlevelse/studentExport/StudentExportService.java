@@ -23,6 +23,7 @@ import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,10 +44,10 @@ public class StudentExportService {
     private final RisikoscenarioService risikoscenarioService;
     private final TiltakService tiltakService;
 
-    public List<EtterlevelseDokumentasjonStudentResponse> getDataForStudent(int limit) {
+    public List<EtterlevelseDokumentasjonStudentResponse> getDataForStudent(Pageable page) {
         var response = new ArrayList<EtterlevelseDokumentasjonStudentResponse>();
 
-        var etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.getLatestCreated(limit);
+        var etterlevelseDokumentasjoner = etterlevelseDokumentasjonService.getLatestCreated(page);
         var alleAktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
 
         etterlevelseDokumentasjoner.forEach(ed -> {

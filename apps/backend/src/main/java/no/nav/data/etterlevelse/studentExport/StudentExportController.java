@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.rest.PageParameters;
 import no.nav.data.etterlevelse.studentExport.dto.EtterlevelseDokumentasjonStudentResponse;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,10 +24,10 @@ public class StudentExportController {
 
     @Operation(summary = "Get Etterlevelse Dokumentasjoner")
     @ApiResponse(description = "ok")
-    @GetMapping("/limit/{limit}")
-        public List<EtterlevelseDokumentasjonStudentResponse> getDataForStudent(@PathVariable int limit) {
-            log.info("Get Etterlevelse Dokumentasjoner for student data with data limit={}", limit);
-            return studentExportService.getDataForStudent(limit);
+    @GetMapping("/limit")
+        public List<EtterlevelseDokumentasjonStudentResponse> getDataForStudent(PageParameters pageParameters) {
+            log.info("Get Etterlevelse Dokumentasjoner for student data with data limit={}", pageParameters);
+            return studentExportService.getDataForStudent(pageParameters.createPage());
         }
 
 }
