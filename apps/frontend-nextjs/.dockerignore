@@ -1,9 +1,5 @@
-node_modules
-.next
 .git
 .gitignore
-.env
-.env.*
 Dockerfile
 README.md
 .vscode
