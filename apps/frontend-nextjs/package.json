@@ -92,5 +92,6 @@
     "react-select": "^5.10.2",
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.3"
-  }
+  },
+  "packageManager": "yarn@4.16.0"
 }
