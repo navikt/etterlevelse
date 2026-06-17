@@ -1,0 +1,104 @@
+package no.nav.data.etterlevelse.studentExport.dto;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
+import lombok.experimental.SuperBuilder;
+import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
+import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
+import no.nav.data.integration.behandling.dto.Behandling;
+import no.nav.data.integration.dpBehandling.dto.DpBehandling;
+import no.nav.data.integration.team.dto.ProductAreaResponse;
+import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
+import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
+import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
+import no.nav.data.pvk.tiltak.dto.TiltakResponse;
+
+import java.util.List;
+import java.util.UUID;
+
+import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
+
+@Data
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonPropertyOrder({"id", "etterlevelseNummer", "title", "behandlingId"})
+public class EtterlevelseDokumentasjonStudentResponse {
+
+    private UUID id;
+    private Integer version;
+    private Integer etterlevelseNummer;
+    private String title;
+    private List<String> behandlingIds;
+    private List<String> dpBehandlingIds;
+    private String beskrivelse;
+    private String gjenbrukBeskrivelse;
+    private boolean tilgjengeligForGjenbruk;
+    private boolean behandlerPersonopplysninger;
+
+    private EtterlevelseDokumentasjonStatus status;
+
+    private String meldingEtterlevelerTilRisikoeier;
+    private String meldingRisikoeierTilEtterleveler;
+
+    @Singular("relevansForSingle")
+    private List<CodelistResponse> irrelevansFor;
+    private List<String> prioritertKravNummer;
+    private boolean forGjenbruk;
+    @Singular("team")
+    private List<Behandling> behandlinger;
+    private List<DpBehandling> dpBehandlinger;
+
+    private String nomAvdelingId;
+    private String avdelingNavn;
+    private List<NomSeksjon> seksjoner;
+    private List<NomEnhet> enheter;
+
+    private ProductAreaResponse produktOmradetData;
+    private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
+
+    private Integer P360Recno;
+    private String P360CaseNumber;
+
+    private List<KravStudentResponse> relevanteKraver;
+    private List<EtterlevelseStudentResponse> kravBesvarelser;
+    private PvkDokumentResponse pvkDokument;
+    private List<RisikoscenarioResponse> risikoscenarioList;
+    private List<TiltakResponse> tiltakList;
+    private BehandlingensArtOgOmfangResponse  behandlingsArtOgOmfang;
+    private BehandlingensLivslopResponse behandlingensLivslopResponse;
+
+
+    public static EtterlevelseDokumentasjonStudentResponse buildFrom(EtterlevelseDokumentasjon eDok) {
+        EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
+        return EtterlevelseDokumentasjonStudentResponse.builder()
+                .id(eDok.getId())
+                .version(eDok.getVersion())
+                .etterlevelseNummer(eDokData.getEtterlevelseNummer())
+                .title(eDokData.getTitle())
+                .beskrivelse(eDokData.getBeskrivelse())
+                .status(eDokData.getStatus())
+                .meldingEtterlevelerTilRisikoeier(eDokData.getMeldingEtterlevelerTilRisikoeier())
+                .meldingRisikoeierTilEtterleveler(eDokData.getMeldingRisikoeierTilEtterleveler())
+                .gjenbrukBeskrivelse(eDokData.getGjenbrukBeskrivelse())
+                .tilgjengeligForGjenbruk(eDokData.isTilgjengeligForGjenbruk())
+                .behandlingIds(nullsafeCopyOf(eDokData.getBehandlingIds()))
+                .dpBehandlingIds(nullsafeCopyOf(eDokData.getDpBehandlingIds()))
+                .irrelevansFor(eDok.irrelevantForAsCodes())
+                .prioritertKravNummer(nullsafeCopyOf(eDokData.getPrioritertKravNummer()))
+                .forGjenbruk(eDokData.isForGjenbruk())
+                .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
+                .nomAvdelingId(eDokData.getNomAvdelingId())
+                .avdelingNavn(eDokData.getAvdelingNavn())
+                .seksjoner(nullsafeCopyOf(eDokData.getSeksjoner()))
+                .enheter(nullsafeCopyOf(eDokData.getEnheter()))
+                .risikovurderinger(eDokData.getRisikovurderinger())
+                .P360Recno(eDokData.getP360Recno())
+                .P360CaseNumber(eDokData.getP360CaseNumber())
+                .build();
+    }
+}
