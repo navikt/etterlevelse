@@ -606,6 +606,31 @@ public class DashboardService {
             kravForEdok.forEach(k -> gyldigeKravKeys.add(k.getKravNummer() + "_" + k.getKravVersjon()));
             etterlevelserNotInKravForEdok.forEach(e -> gyldigeKravKeys.add(e.getKravNummer() + "_" + e.getKravVersjon()));
 
+            var existingEtterlevelseKeys = new HashSet<String>();
+            for (var etterlevelse : etterlevelseList) {
+                String key = etterlevelse.getKravNummer() + "_" + etterlevelse.getKravVersjon();
+                if (gyldigeKravKeys.contains(key)) {
+                    existingEtterlevelseKeys.add(key);
+                }
+            }
+
+            for (var krav : kravForEdok) {
+                String key = krav.getKravNummer() + "_" + krav.getKravVersjon();
+                if (!existingEtterlevelseKeys.contains(key)) {
+                    String temaCode = temaByKravKey.getOrDefault(key, "UTEN_TEMA");
+                    var stats = statsMap.computeIfAbsent(temaCode, tc -> {
+                        if ("UTEN_TEMA".equals(tc)) {
+                            return TemaDashboardResponse.builder().temaCode(tc).temaName("Uten tema").build();
+                        }
+                        var temaData = CodelistService.getCodelist(ListName.TEMA, tc);
+                        String temaName = temaData != null ? temaData.getShortName() : tc;
+                        return TemaDashboardResponse.builder().temaCode(tc).temaName(temaName).build();
+                    });
+                    stats.setKravIkkePaabegynt(stats.getKravIkkePaabegynt() + 1);
+                    dokIdsByTema.computeIfAbsent(temaCode, k -> new HashSet<>()).add(dok.getId());
+                }
+            }
+
             for (var etterlevelse : etterlevelseList) {
                 String kravKey = etterlevelse.getKravNummer() + "_" + etterlevelse.getKravVersjon();
 
@@ -763,13 +788,13 @@ public class DashboardService {
                 }
         );
 
-        createKravDashboardCount(aktivKravList, kravDashboardStats, alleEtterlevelse);
-        createKravDashboardCount(utgaatKravUtenNyVersjon, kravDashboardStats, alleEtterlevelse);
+        createKravDashboardCount(aktivKravList, kravDashboardStats, alleEtterlevelse, doks);
+        createKravDashboardCount(utgaatKravUtenNyVersjon, kravDashboardStats, alleEtterlevelse, doks);
 
        return kravDashboardStats;
     }
 
-    private void createKravDashboardCount (List<Krav> kravList, List<KravDashboardResponse> kravDashboardStats, List<Etterlevelse> alleEtterlevelse) {
+    private void createKravDashboardCount (List<Krav> kravList, List<KravDashboardResponse> kravDashboardStats, List<Etterlevelse> alleEtterlevelse, List<EtterlevelseDokumentasjon> doks) {
         kravList.forEach(krav -> {
             KravDashboardResponse kravDashboardResponse = KravDashboardResponse.builder()
                     .kravId(krav.getId())
@@ -779,17 +804,32 @@ public class DashboardService {
                     .kravNavn(krav.getNavn())
                     .build();
 
-            getKravStats(kravDashboardResponse, alleEtterlevelse);
+            getKravStats(kravDashboardResponse, krav, alleEtterlevelse, doks);
 
             kravDashboardStats.add(kravDashboardResponse);
         });
     }
 
-    private void getKravStats (KravDashboardResponse kravDashboardResponse, List<Etterlevelse> alleEtterlevelse) {
+    private void getKravStats (KravDashboardResponse kravDashboardResponse, Krav krav, List<Etterlevelse> alleEtterlevelse, List<EtterlevelseDokumentasjon> doks) {
         var etterlevelseList = alleEtterlevelse.stream().filter(e ->
                 e.getKravNummer().equals(kravDashboardResponse.getKravNummer()) &&
                 e.getKravVersjon().equals(kravDashboardResponse.getKravVersjon())
         ).toList();
+
+        var dokIdsWithEtterlevelse = etterlevelseList.stream()
+                .map(e -> e.getEtterlevelseDokumentasjonId())
+                .collect(Collectors.toSet());
+
+        long ikkePaabegynt = doks.stream()
+                .filter(dok -> {
+                    var irrelevans = dok.getIrrelevansFor();
+                    var relevansFor = krav.getRelevansFor();
+                    return relevansFor.isEmpty() || !new HashSet<>(irrelevans).containsAll(relevansFor);
+                })
+                .filter(dok -> !dokIdsWithEtterlevelse.contains(dok.getId()))
+                .count();
+
+        kravDashboardResponse.setAntallIkkePaabegynt((int) ikkePaabegynt);
 
         for (var etterlevelse : etterlevelseList) {
             boolean isFerdig = etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT

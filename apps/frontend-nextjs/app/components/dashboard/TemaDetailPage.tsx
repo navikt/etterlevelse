@@ -45,6 +45,7 @@ interface IProps {
 
 const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
   const kravData: IBarSegment[] = [
+    { name: 'Ikke påbegynt', value: krav.antallIkkePaabegynt, color: SUKSESS_COLORS.ikkePaabegynt },
     { name: 'Under arbeid', value: krav.antallUnderArbeid, color: KRAV_COLORS.underArbeid },
     { name: 'Ferdig vurdert', value: krav.antallFerdigVurdert, color: KRAV_COLORS.ferdigVurdert },
   ]
@@ -203,6 +204,7 @@ const exportKravToCsv = (
     'Kravnavn',
     'Status',
     'Antall etterlevelser totalt',
+    'Etterlevelser ikke påbegynt',
     'Etterlevelser under arbeid',
     'Etterlevelser ferdig vurdert',
     'Alle suksesskriterier - ikke påbegynt',
@@ -233,6 +235,7 @@ const exportKravToCsv = (
       escapeCsvField(`K${k.kravNummer} ${k.kravNavn}`),
       escapeCsvField(k.kravStatus),
       k.etterlevelseTotal,
+      k.antallIkkePaabegynt,
       k.antallUnderArbeid,
       k.antallFerdigVurdert,
       k.antallSuksesskriterierIkkePaabegynt,
@@ -422,6 +425,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
 
   const kravData: IBarSegment[] = temaStats
     ? [
+        {
+          name: 'Ikke påbegynt',
+          value: temaStats.kravIkkePaabegynt,
+          color: SUKSESS_COLORS.ikkePaabegynt,
+        },
         { name: 'Under arbeid', value: temaStats.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
         {
           name: 'Ferdig vurdert',
@@ -631,6 +639,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               ]
               const header = [
                 'Krav totalt',
+                'Krav ikke påbegynt',
                 'Krav under arbeid',
                 'Krav ferdig vurdert',
                 'Suksesskriterier ikke påbegynt',
@@ -648,7 +657,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
               ].join(';')
               const row = [
-                temaStats.kravTotal,
+                temaStats.kravIkkePaabegynt + temaStats.kravTotal,
+                temaStats.kravIkkePaabegynt,
                 temaStats.kravUnderArbeid,
                 temaStats.kravFerdigVurdert,
                 temaStats.suksesskriterierIkkePaabegynt,
@@ -740,26 +750,35 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4'>
                   <div>
                     {(() => {
+                      const kravTotalWithIkkePaabegynt =
+                        temaStats.kravIkkePaabegynt + temaStats.kravTotal
                       const kravPcts = roundedPercentages([
+                        temaStats.kravIkkePaabegynt,
                         temaStats.kravUnderArbeid,
                         temaStats.kravFerdigVurdert,
                       ])
                       return (
                         <>
                           <Heading size='xsmall' level='3' className='mb-2'>
-                            Gjennomføringsstatus: krav ({temaStats.kravTotal})
+                            Gjennomføringsstatus: krav ({kravTotalWithIkkePaabegynt})
                           </Heading>
+                          <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>{temaStats.kravIkkePaabegynt}</span>
+                            {kravTotalWithIkkePaabegynt > 0 &&
+                              ` (${formatPct(kravPcts[0], temaStats.kravIkkePaabegynt)}%)`}
+                          </BodyShort>
                           <BodyShort>
                             Under arbeid{' '}
                             <span className='font-bold'>{temaStats.kravUnderArbeid}</span>
-                            {temaStats.kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[0], temaStats.kravUnderArbeid)}%)`}
+                            {kravTotalWithIkkePaabegynt > 0 &&
+                              ` (${formatPct(kravPcts[1], temaStats.kravUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ferdig vurdert{' '}
                             <span className='font-bold'>{temaStats.kravFerdigVurdert}</span>
-                            {temaStats.kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[1], temaStats.kravFerdigVurdert)}%)`}
+                            {kravTotalWithIkkePaabegynt > 0 &&
+                              ` (${formatPct(kravPcts[2], temaStats.kravFerdigVurdert)}%)`}
                           </BodyShort>
                         </>
                       )
@@ -1090,8 +1109,10 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             <Tabs.Panel value='nokkeltall'>
               <div className='flex flex-col gap-6 mt-6'>
                 {sortedKrav.map((krav) => {
-                  const kravTotal = krav.antallUnderArbeid + krav.antallFerdigVurdert
+                  const kravTotal =
+                    krav.antallIkkePaabegynt + krav.antallUnderArbeid + krav.antallFerdigVurdert
                   const kravPcts = roundedPercentages([
+                    krav.antallIkkePaabegynt,
                     krav.antallUnderArbeid,
                     krav.antallFerdigVurdert,
                   ])
@@ -1168,15 +1189,21 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                             Gjennomføringsstatus: krav ({kravTotal})
                           </Heading>
                           <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>{krav.antallIkkePaabegynt}</span>
+                            {kravTotal > 0 &&
+                              ` (${formatPct(kravPcts[0], krav.antallIkkePaabegynt)}%)`}
+                          </BodyShort>
+                          <BodyShort>
                             Under arbeid <span className='font-bold'>{krav.antallUnderArbeid}</span>
                             {kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[0], krav.antallUnderArbeid)}%)`}
+                              ` (${formatPct(kravPcts[1], krav.antallUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ferdig vurdert{' '}
                             <span className='font-bold'>{krav.antallFerdigVurdert}</span>
                             {kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[1], krav.antallFerdigVurdert)}%)`}
+                              ` (${formatPct(kravPcts[2], krav.antallFerdigVurdert)}%)`}
                           </BodyShort>
                         </div>
                         <div>
