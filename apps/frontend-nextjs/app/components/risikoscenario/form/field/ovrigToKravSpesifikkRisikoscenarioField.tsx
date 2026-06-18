@@ -4,7 +4,8 @@ import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { IKravReference } from '@/constants/krav/kravConstants'
 import { kravNummerView } from '@/util/krav/kravUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { Alert, BodyLong, Checkbox, CheckboxGroup, Label, List } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Checkbox, CheckboxGroup, InfoCard, Label, List } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
@@ -236,17 +237,17 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 
       {removedAllAlert && (
         <div ref={removedAllAlertRef}>
-          <Alert
-            variant='info'
+          <InfoCard
+            data-color='info'
             className='mt-3'
             aria-live='polite'
             aria-label='Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.'
           >
-            <BodyLong>
+            <InfoCard.Message icon={<InformationSquareFillIcon />}>
               Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen
               over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.
-            </BodyLong>
-          </Alert>
+            </InfoCard.Message>
+          </InfoCard>
         </div>
       )}
 
@@ -320,23 +321,21 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
 
       {generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0 && (
         <div ref={decoupledAlertRef}>
-          <Alert variant='info' className='mt-5'>
-            <BodyLong>
-              Dere har valgt å avkoble dette risikoscenarioet fra følgende etterlevelseskrav:
-            </BodyLong>{' '}
-            <List>
-              {relevanteKravNummerFormValue.map((relevanteKrav, index) => (
-                <List.Item key={`${index}_${relevanteKrav.navn}`}>
-                  {kravNummerView(relevanteKrav.kravVersjon, relevanteKrav.kravNummer)}{' '}
-                  {relevanteKrav.navn}
-                </List.Item>
-              ))}
-            </List>
-            <BodyLong>
+          <InfoCard data-color='info' className='mt-5'>
+            <InfoCard.Message icon={<InformationSquareFillIcon />}>
+              Dere har valgt å avkoble dette risikoscenarioet fra følgende etterlevelseskrav:{' '}
+              <List as='ul' className='my-2'>
+                {relevanteKravNummerFormValue.map((relevanteKrav, index) => (
+                  <List.Item key={`${index}_${relevanteKrav.navn}`}>
+                    {kravNummerView(relevanteKrav.kravVersjon, relevanteKrav.kravNummer)}{' '}
+                    {relevanteKrav.navn}
+                  </List.Item>
+                ))}
+              </List>
               Fordi risikoscenarioet ikke er koblet til andre krav, vil det nå synes som “øvrig”
               scenario på Identifisering av risikoscenarioer og tiltak.
-            </BodyLong>
-          </Alert>
+            </InfoCard.Message>
+          </InfoCard>
         </div>
       )}
 
@@ -344,21 +343,25 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
         !generelScenarioFormValue &&
         relevanteKravNummerFormValue.length !== 0 && (
           <div ref={ovrigScenarioLinkedAlertRef}>
-            <Alert variant='info' className='mt-5'>
-              Dere har valgt å koble dette risikoscenarioet til etterlevelseskrav. Når dere lagrer
-              denne endringen, vil risikoscenarioet forsvinne fra listen over “øvrige” krav.
-              Scenarioet finner dere på de kravsidene som dere velger her. Husk at det også er mulig
-              å legge til aktuelle risikoscenarioer fra selve kravsiden.
-            </Alert>
+            <InfoCard data-color='info' className='mt-5'>
+              <InfoCard.Message icon={<InformationSquareFillIcon />}>
+                Dere har valgt å koble dette risikoscenarioet til etterlevelseskrav. Når dere lagrer
+                denne endringen, vil risikoscenarioet forsvinne fra listen over “øvrige” krav.
+                Scenarioet finner dere på de kravsidene som dere velger her. Husk at det også er
+                mulig å legge til aktuelle risikoscenarioer fra selve kravsiden.
+              </InfoCard.Message>
+            </InfoCard>
           </div>
         )}
 
       {!generelScenarioFormValue && relevanteKravNummerFormValue.length > 1 && (
         <div ref={multiKravAlertRef}>
-          <Alert variant='info' className='mt-5'>
-            Fordi dere har valgt at dette risikoscenarioet skal høre til flere krav, vil scenarioet
-            nå også finnes under gjeldende krav.
-          </Alert>
+          <InfoCard data-color='info' className='mt-5'>
+            <InfoCard.Message icon={<InformationSquareFillIcon />}>
+              Fordi dere har valgt at dette risikoscenarioet skal høre til flere krav, vil
+              scenarioet nå også finnes under gjeldende krav.
+            </InfoCard.Message>
+          </InfoCard>
         </div>
       )}
     </div>
