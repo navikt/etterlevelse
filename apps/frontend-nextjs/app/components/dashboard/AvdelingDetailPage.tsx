@@ -238,7 +238,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       dok.resourcesData?.map((r) => r.fullName)?.join(' ') ?? '',
       dok.risikoeiereData?.map((r) => r.fullName)?.join(' ') ?? '',
       dok.behandlinger?.map((b) => `B${b.nummer} ${b.navn}`)?.join(' ') ?? '',
-      getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
+      dok.ikkePaabegynt
+        ? 'Ikke påbegynt'
+        : getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
       getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger),
       getPvkOnlyStatusText(dok.pvkVurdering, dok.pvkStatus, dok.hasPvkDocumentationStarted),
     ]
@@ -316,7 +318,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           case 'enhet':
             return dok.enheter?.map((e) => e.nomEnhetName).join(', ') || ''
           case 'etterlevelse':
-            return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
+            return dok.ikkePaabegynt
+              ? 'Ikke påbegynt'
+              : getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
           case 'behovForPvk':
             return getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger)
           case 'pvkStatus':
@@ -385,8 +389,15 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
   const computeStatsFromDoks = (doks: IDashboardTable[]): IAvdelingDashboardStats => {
     const total = doks.length
+    const ikkePaabegynt = doks.filter(
+      (d) =>
+        d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
+        d.ikkePaabegynt === true
+    ).length
     const underArbeid = doks.filter(
-      (d) => d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+      (d) =>
+        d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
+        !d.ikkePaabegynt
     ).length
     const sendtTilGodkjenning = doks.filter(
       (d) =>
@@ -444,6 +455,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       ...baseStats,
       dokumenter: {
         total,
+        ikkePaabegynt,
         underArbeid,
         sendtTilGodkjenning,
         godkjentAvRisikoeier: godkjent,
@@ -643,6 +655,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               ]
               const header = [
                 'Etterlevelsesdokumenter totalt',
+                'Ikke påbegynt',
                 'Under arbeid',
                 'Sendt til godkjenning',
                 'Godkjent',
@@ -665,6 +678,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               ].join(';')
               const row = [
                 stats.dokumenter.total,
+                stats.dokumenter.ikkePaabegynt,
                 stats.dokumenter.underArbeid,
                 stats.dokumenter.sendtTilGodkjenning,
                 stats.dokumenter.godkjentAvRisikoeier,
@@ -880,9 +894,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                               </Link>
                             </Table.DataCell>
                             <Table.DataCell>
-                              {getEtterlevelseDokumentStatusText(
-                                dok.etterlevelseDokumentasjonStatus
-                              )}
+                              {dok.ikkePaabegynt
+                                ? 'Ikke p\u00e5begynt'
+                                : getEtterlevelseDokumentStatusText(
+                                    dok.etterlevelseDokumentasjonStatus
+                                  )}
                             </Table.DataCell>
                             <Table.DataCell>
                               {getBehovForPvkText(

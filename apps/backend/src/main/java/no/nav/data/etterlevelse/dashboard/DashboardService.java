@@ -211,6 +211,11 @@ public class DashboardService {
                     }
 
                     //etterlevelseStats
+                    dashboardTableResponse.setIkkePaabegynt(
+                        dok.getEtterlevelseDokumentasjonData().getStatus() == EtterlevelseDokumentasjonStatus.UNDER_ARBEID
+                        && etterlevelserForDok.isEmpty()
+                    );
+
                     LocalDateTime sistOppdatertEtterlevelse = LocalDateTime.of(2000, 1, 1, 0, 0);
 
                     var oppfyltEtterlevelseList = aktivEtterlevelserForDok.stream()
@@ -344,6 +349,7 @@ public class DashboardService {
             Map<UUID, List<Etterlevelse>> etterlevelseByDokId
     ) {
         int totalDokumenter = doks.size();
+        int dokIkkePaabegynt = 0;
         int dokUnderArbeid = 0;
         int dokSendtTilGodkjenning = 0;
         int dokGodkjent = 0;
@@ -352,11 +358,15 @@ public class DashboardService {
 
         for (var dok : doks) {
             var status = dok.getEtterlevelseDokumentasjonData().getStatus();
-            if (status == EtterlevelseDokumentasjonStatus.UNDER_ARBEID) dokUnderArbeid++;
-            else if (status == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) dokSendtTilGodkjenning++;
-            else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
-
             var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
+            if (status == EtterlevelseDokumentasjonStatus.UNDER_ARBEID) {
+                if (etterlevelseList.isEmpty()) {
+                    dokIkkePaabegynt++;
+                } else {
+                    dokUnderArbeid++;
+                }
+            } else if (status == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) dokSendtTilGodkjenning++;
+            else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
 
             var aktivEtterlevelseList = etterlevelseList.stream()
                     .filter(e -> aktivKrav.stream().anyMatch(k ->
@@ -378,6 +388,7 @@ public class DashboardService {
                 .avdelingNavn(avdelingNavn)
                 .dokumenter(DokumenterStats.builder()
                         .total(totalDokumenter)
+                        .ikkePaabegynt(dokIkkePaabegynt)
                         .underArbeid(dokUnderArbeid)
                         .sendtTilGodkjenning(dokSendtTilGodkjenning)
                         .godkjentAvRisikoeier(dokGodkjent)

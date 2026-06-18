@@ -100,11 +100,12 @@ const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
   const dok = stats.reduce(
     (acc, s) => ({
       total: acc.total + s.dokumenter.total,
+      ikkePaabegynt: acc.ikkePaabegynt + (s.dokumenter.ikkePaabegynt ?? 0),
       underArbeid: acc.underArbeid + s.dokumenter.underArbeid,
       sendtTilGodkjenning: acc.sendtTilGodkjenning + s.dokumenter.sendtTilGodkjenning,
       godkjentAvRisikoeier: acc.godkjentAvRisikoeier + s.dokumenter.godkjentAvRisikoeier,
     }),
-    { total: 0, underArbeid: 0, sendtTilGodkjenning: 0, godkjentAvRisikoeier: 0 }
+    { total: 0, ikkePaabegynt: 0, underArbeid: 0, sendtTilGodkjenning: 0, godkjentAvRisikoeier: 0 }
   )
 
   const suksess = stats.reduce(
@@ -163,6 +164,7 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
   const agg = aggregateAvdelingStats(stats)
 
   const dokData: IBarSegment[] = [
+    { name: 'Ikke påbegynt', value: agg.dok.ikkePaabegynt, color: '#8a3ffc' },
     { name: 'Under arbeid', value: agg.dok.underArbeid, color: DOK_COLORS[0] },
     { name: 'Sendt til godkjenning', value: agg.dok.sendtTilGodkjenning, color: DOK_COLORS[1] },
     { name: 'Godkjent', value: agg.dok.godkjentAvRisikoeier, color: DOK_COLORS[2] },
