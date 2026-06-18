@@ -46,6 +46,7 @@ const TemaDokumentCount = ({ count }: { count?: number }) => (
 
 const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const kravData: IBarSegment[] = [
+    { name: 'Ikke påbegynt', value: stats.kravIkkePaabegynt, color: SUKSESS_COLORS.ikkePaabegynt },
     { name: 'Under arbeid', value: stats.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
     { name: 'Ferdig vurdert', value: stats.kravFerdigVurdert, color: KRAV_COLORS.ferdigVurdert },
   ]
@@ -212,19 +213,31 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
         <div>
           {(() => {
-            const kravPcts = roundedPercentages([stats.kravUnderArbeid, stats.kravFerdigVurdert])
+            const kravTotalWithIkkePaabegynt = stats.kravIkkePaabegynt + stats.kravTotal
+            const kravPcts = roundedPercentages([
+              stats.kravIkkePaabegynt,
+              stats.kravUnderArbeid,
+              stats.kravFerdigVurdert,
+            ])
             return (
               <>
                 <Heading size='xsmall' level='4' className='mb-2'>
-                  Gjennomføringsstatus: krav ({stats.kravTotal})
+                  Gjennomføringsstatus: krav ({kravTotalWithIkkePaabegynt})
                 </Heading>
                 <BodyShort>
+                  Ikke påbegynt <span className='font-bold'>{stats.kravIkkePaabegynt}</span>
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[0], stats.kravIkkePaabegynt)}%)`}
+                </BodyShort>
+                <BodyShort>
                   Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
-                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[0], stats.kravUnderArbeid)}%)`}
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[1], stats.kravUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ferdig vurdert <span className='font-bold'>{stats.kravFerdigVurdert}</span>
-                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[1], stats.kravFerdigVurdert)}%)`}
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[2], stats.kravFerdigVurdert)}%)`}
                 </BodyShort>
               </>
             )

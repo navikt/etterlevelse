@@ -20,6 +20,7 @@ public class KravDashboardResponse {
     private Integer kravVersjon;
 
     private int etterlevelseTotal;
+    private int antallIkkePaabegynt;
     private int antallUnderArbeid;
     private int antallFerdigVurdert;
     private int antallSuksesskriterierUnderArbeid;

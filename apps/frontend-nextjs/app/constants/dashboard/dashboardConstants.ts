@@ -37,6 +37,7 @@ export interface ITemaDashboardStats {
   temaCode: string
   temaName: string
   kravTotal: number
+  kravIkkePaabegynt: number
   kravUnderArbeid: number
   kravFerdigVurdert: number
   suksesskriterierUnderArbeid: number
@@ -57,6 +58,7 @@ export interface IKravDashboardStats {
   kravNummer: number
   kravVersjon: number
   etterlevelseTotal: number
+  antallIkkePaabegynt: number
   antallUnderArbeid: number
   antallFerdigVurdert: number
   antallSuksesskriterierUnderArbeid: number
