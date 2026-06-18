@@ -699,7 +699,7 @@ public class DashboardService {
             long uniqueKrav = temaByKravKey.entrySet().stream()
                     .filter(e -> temaCode.equals(e.getValue()))
                     .count();
-            stats.setKravAntall((int) uniqueKrav);
+            stats.setKravAntallPerTema((int) uniqueKrav);
         });
 
         return statsMap.values().stream()
