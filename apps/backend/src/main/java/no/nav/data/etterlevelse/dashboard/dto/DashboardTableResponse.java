@@ -43,6 +43,7 @@ public class DashboardTableResponse {
     private boolean behandlerPersonopplysninger;
 
     //etterlevelse
+    private boolean ikkePaabegynt;
     private Integer antallKrav;
     private Integer antallOppfyltKrav;
     private Integer oppfyltKravProsent;

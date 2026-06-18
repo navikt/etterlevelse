@@ -31,6 +31,9 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
           <BodyShort>
+            Ikke påbegynt <span className='font-bold'>{stats.dokumenter.ikkePaabegynt ?? 0}</span>
+          </BodyShort>
+          <BodyShort>
             Under arbeid <span className='font-bold'>{stats.dokumenter.underArbeid}</span>
           </BodyShort>
           <BodyShort>

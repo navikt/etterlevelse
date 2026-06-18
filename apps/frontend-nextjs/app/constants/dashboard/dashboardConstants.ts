@@ -112,6 +112,7 @@ export interface IDashboardTable {
   oppfyltKravProsent?: number
   antallSuksesskriterierOppfylt?: number
   antallSuksesskriterierIkkeOppfylt?: number
+  ikkePaabegynt?: boolean
   sistOppdatertEtterlevelse: string
   sistGodkjentEtterlevelse?: string
 
@@ -133,6 +134,7 @@ export interface IAvdelingDashboardStats {
   avdelingNavn: string
   dokumenter: {
     total: number
+    ikkePaabegynt?: number
     underArbeid: number
     sendtTilGodkjenning: number
     godkjentAvRisikoeier: number

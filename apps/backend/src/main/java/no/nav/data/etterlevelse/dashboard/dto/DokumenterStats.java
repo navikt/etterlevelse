@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DokumenterStats {
     private int total;
+    private int ikkePaabegynt;
     private int underArbeid;
     private int sendtTilGodkjenning;
     private int godkjentAvRisikoeier;
