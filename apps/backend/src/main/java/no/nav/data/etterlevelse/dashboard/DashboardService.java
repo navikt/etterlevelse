@@ -696,6 +696,10 @@ public class DashboardService {
         statsMap.forEach((temaCode, stats) -> {
             var dokIdsForTema = dokIdsByTema.getOrDefault(temaCode, Set.of());
             stats.setEtterlevelseDokumentCount(dokIdsForTema.size());
+            long uniqueKrav = temaByKravKey.entrySet().stream()
+                    .filter(e -> temaCode.equals(e.getValue()))
+                    .count();
+            stats.setKravAntall((int) uniqueKrav);
         });
 
         return statsMap.values().stream()

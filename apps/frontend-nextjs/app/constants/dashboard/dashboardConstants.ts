@@ -36,6 +36,7 @@ export interface ISeksjonOption {
 export interface ITemaDashboardStats {
   temaCode: string
   temaName: string
+  kravAntallPerTema: number
   kravTotal: number
   kravIkkePaabegynt: number
   kravUnderArbeid: number

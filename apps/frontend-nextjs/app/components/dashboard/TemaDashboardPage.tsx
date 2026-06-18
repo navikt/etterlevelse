@@ -38,10 +38,13 @@ import {
   roundedPercentages,
 } from './chartUtils'
 
-const TemaDokumentCount = ({ count }: { count?: number }) => (
-  <Detail uppercase className='mt-2 mb-4'>
-    {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
-  </Detail>
+const TemaDokumentCount = ({ count, kravCount }: { count?: number; kravCount?: number }) => (
+  <>
+    <Detail className='mt-1 font-bold'>{(kravCount ?? 0).toLocaleString('nb-NO')} krav</Detail>
+    <Detail uppercase className='mt-3 mb-4'>
+      {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+    </Detail>
+  </>
 )
 
 const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
@@ -136,7 +139,10 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
         </AkselLink>
       </div>
 
-      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
+      <TemaDokumentCount
+        count={stats.etterlevelseDokumentCount}
+        kravCount={stats.kravAntallPerTema}
+      />
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
@@ -208,7 +214,10 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         </AkselLink>
       </div>
 
-      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
+      <TemaDokumentCount
+        count={stats.etterlevelseDokumentCount}
+        kravCount={stats.kravAntallPerTema}
+      />
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
         <div>

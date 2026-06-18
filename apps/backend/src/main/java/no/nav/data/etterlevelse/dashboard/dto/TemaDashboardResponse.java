@@ -13,6 +13,7 @@ public class TemaDashboardResponse {
 
     private String temaCode;
     private String temaName;
+    private int kravAntall;
     private int kravTotal;
     private int kravIkkePaabegynt;
     private int kravUnderArbeid;
