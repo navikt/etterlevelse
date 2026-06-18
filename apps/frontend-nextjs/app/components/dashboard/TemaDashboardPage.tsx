@@ -147,7 +147,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level='4' className='min-h-[3rem]'>
-            Vurdering av etterlevelseskrav
+            Kravstatus
           </Heading>
           <RechartsStackedBar data={kravData} percentageOnly />
         </div>
@@ -231,7 +231,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             return (
               <>
                 <Heading size='xsmall' level='4' className='mb-2'>
-                  Gjennomføringsstatus: krav ({kravTotalWithIkkePaabegynt})
+                  Kravstatus ({kravTotalWithIkkePaabegynt})
                 </Heading>
                 <BodyShort>
                   Ikke påbegynt <span className='font-bold'>{stats.kravIkkePaabegynt}</span>

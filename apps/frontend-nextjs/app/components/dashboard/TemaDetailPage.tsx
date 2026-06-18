@@ -147,7 +147,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level='4' className='min-h-12'>
-            Vurdering av etterlevelseskrav
+            Kravstatus
           </Heading>
           <RechartsStackedBar data={kravData} showPercentage />
         </div>
@@ -717,7 +717,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6'>
                   <div>
                     <Heading size='xsmall' level='3' className='min-h-[3rem]'>
-                      Vurdering av etterlevelseskrav
+                      Kravstatus
                     </Heading>
                     <RechartsStackedBar data={kravData} percentageOnly />
                   </div>
@@ -762,7 +762,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       return (
                         <>
                           <Heading size='xsmall' level='3' className='mb-2'>
-                            Gjennomføringsstatus: krav ({kravTotalWithIkkePaabegynt})
+                            Kravstatus ({kravTotalWithIkkePaabegynt})
                           </Heading>
                           <BodyShort>
                             Ikke påbegynt{' '}
@@ -1188,7 +1188,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
                         <div>
                           <Heading size='xsmall' level='4' className='mb-2'>
-                            Gjennomføringsstatus: krav ({kravTotal})
+                            Kravstatus ({kravTotal})
                           </Heading>
                           <BodyShort>
                             Ikke påbegynt{' '}
