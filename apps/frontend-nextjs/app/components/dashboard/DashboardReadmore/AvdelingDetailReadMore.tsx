@@ -2,7 +2,7 @@ import { Link, List, ReadMore } from '@navikt/ds-react'
 
 export const AvdelingDetailReadMore = () => (
   <div style={{ maxWidth: '75ch' }}>
-    <ReadMore header='Hjelp til å tolke figurer og nøkkeltall om etterlevelse' className='mt-6'>
+    <ReadMore header='Hjelp til å tolke figurer og tall om etterlevelse' className='mt-6'>
       <List>
         <List.Item>
           <strong>Hvorfor er så mange etterlevelsesdokumenter under arbeid?</strong>

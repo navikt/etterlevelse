@@ -3,7 +3,7 @@ import { Link, List, ReadMore } from '@navikt/ds-react'
 export const TemaDashboardReadmore = () => (
   <div style={{ maxWidth: '75ch' }}>
     <ReadMore
-      header='Hjelp til å tolke figurer og nøkkeltall om etterlevelse'
+      header='Hjelp til å tolke figurer og tall om etterlevelse'
       className='mt-4 max-w-[75ch]'
     >
       <List>
