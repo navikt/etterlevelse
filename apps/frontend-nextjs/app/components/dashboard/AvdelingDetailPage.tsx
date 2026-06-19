@@ -23,7 +23,11 @@ import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
-import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  DownloadIcon,
+  ExclamationmarkTriangleFillIcon,
+  InformationSquareIcon,
+} from '@navikt/aksel-icons'
 import {
   BodyShort,
   Button,
@@ -722,6 +726,17 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             ))}
           </Chips>
         )}
+
+        {!isTableLoading &&
+          sortedDoks.length === 0 &&
+          (searchFilters.length > 0 || !!selectedSeksjon || !!selectedEnhet) && (
+            <InfoCard data-color='warning' className='mt-4 max-w-[75ch]'>
+              <InfoCard.Header icon={<ExclamationmarkTriangleFillIcon aria-hidden />}>
+                <InfoCard.Title as='h3'>Filtrering har ført til 0 treff</InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>Prøv å fjerne et av filtervalgene dine.</InfoCard.Content>
+            </InfoCard>
+          )}
 
         {selectedSeksjon === 'ingen-seksjon' && (
           <LocalAlert status='warning' className='mt-4' aria-live='off'>
