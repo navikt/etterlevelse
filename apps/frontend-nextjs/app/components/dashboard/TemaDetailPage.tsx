@@ -135,7 +135,6 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
       <Heading size='small' level='3'>
         {krav.kravNavn}
       </Heading>
-      <Detail className='uppercase mt-2'>{krav.etterlevelseTotal} etterlevelsesdokumenter</Detail>
       {krav.kravStatus === 'UTGAATT' && (
         <div className='mt-1'>
           <Tag variant='error' className='h-fit'>
@@ -143,6 +142,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
           </Tag>
         </div>
       )}
+      <Detail className='uppercase mt-2'>{krav.etterlevelseTotal} etterlevelsesdokumenter</Detail>
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
