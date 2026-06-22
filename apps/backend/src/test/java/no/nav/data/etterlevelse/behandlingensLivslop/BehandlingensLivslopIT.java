@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.behandlingensLivslop;
 
 import lombok.SneakyThrows;
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopRequest;
@@ -10,11 +11,7 @@ import no.nav.data.etterlevelse.codelist.CodelistStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.List;
@@ -27,6 +24,7 @@ public class BehandlingensLivslopIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         CodelistStub.initializeCodelist();
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
     }
 
 

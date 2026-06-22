@@ -12,18 +12,12 @@ import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopRequest;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -39,6 +33,7 @@ import java.util.UUID;
 public class BehandlingensLivslopController {
 
     private final BehandlingensLivslopService service;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @Operation(summary = "Get All Behandlingens Livsløp")
     @ApiResponse(description = "ok")
@@ -83,6 +78,12 @@ public class BehandlingensLivslopController {
         if (filer != null && !filer.isEmpty()) {
             request.setFiler(filer);
         }
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         var behandlingensLivslop = service.save(request.convertToBehandlingensLivslop(), request.isUpdate());
         return new ResponseEntity<>(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop), HttpStatus.CREATED);
     }
@@ -105,6 +106,13 @@ public class BehandlingensLivslopController {
         if (behandlingensLivslopToUpdate == null) {
             throw new ValidationException(String.format("Could not find behandlingens livsløp to be updated with id = %s ", request.getId()));
         }
+
+        var edok = etterlevelseDokumentasjonService.get(behandlingensLivslopToUpdate.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         if(filer != null && !filer.isEmpty()) {
             request.setFiler(filer);
         }
