@@ -5,7 +5,8 @@ import {
   IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Alert, Button, Loader } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Button, InfoCard, Loader } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, RefObject } from 'react'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
@@ -60,19 +61,23 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
               markdown
             />
 
-            <Alert variant='info' inline className='my-5'>
-              Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
-              etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne redigeres.
-              Dette innholdet forbli låst enn så lenge saken ligger hos Personvernombudet.
-            </Alert>
+            <InfoCard data-color='info' className='my-5'>
+              <InfoCard.Message icon={<InformationSquareFillIcon />}>
+                Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
+                etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne redigeres.
+                Dette innholdet forbli låst enn så lenge saken ligger hos Personvernombudet.
+              </InfoCard.Message>
+            </InfoCard>
 
             {relevantMeldingTilPvo.length !== 0 &&
               !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
-                <Alert variant='info' className='my-5'>
-                  Innsending trukket <br />
-                  Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
-                  deretter behandlet som en ny innsending
-                </Alert>
+                <InfoCard data-color='info' className='my-5'>
+                  <InfoCard.Message icon={<InformationSquareFillIcon />}>
+                    Innsending trukket <br />
+                    Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
+                    deretter behandlet som en ny innsending
+                  </InfoCard.Message>
+                </InfoCard>
               )}
 
             {errorSummaryComponent}
