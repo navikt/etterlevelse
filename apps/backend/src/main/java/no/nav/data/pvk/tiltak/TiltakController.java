@@ -120,10 +120,10 @@ public class TiltakController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
         Tiltak tiltakToUpdate = service.get(id);
-        hasUserWriteAccessCheck(tiltakToUpdate.getPvkDokumentId());
         if (tiltakToUpdate == null) {
             throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", id));
         }
+        hasUserWriteAccessCheck(tiltakToUpdate.getPvkDokumentId());
         service.updateIverksattDato(tiltakToUpdate, request);
         request.mergeInto(tiltakToUpdate);
         Tiltak tiltak = service.save(tiltakToUpdate, null, true);
