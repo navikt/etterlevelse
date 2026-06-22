@@ -279,7 +279,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         filtered = tableData
       }
 
-      if (selectedEnhet) {
+      if (selectedEnhet === 'ingen-enhet') {
+        filtered = filtered.filter((dok) => !dok.enheter?.length)
+      } else if (selectedEnhet) {
         filtered = filtered.filter((dok) =>
           dok.enheter?.some((e) => e.nomEnhetId === selectedEnhet)
         )
