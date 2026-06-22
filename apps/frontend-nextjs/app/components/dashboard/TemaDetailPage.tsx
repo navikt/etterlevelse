@@ -30,6 +30,7 @@ import {
 } from '@navikt/ds-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { TemaDashboardDetailReadmore } from './DashboardReadmore/TemaDashboardDetailReadmore'
+import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
   IBarSegment,
@@ -173,7 +174,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
         </div>
       </div>
-      <TemaDashboardDetailReadmore />
+      <TemaDashboardReadmore />
     </div>
   )
 }
@@ -1313,7 +1314,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                           </BodyShort>
                         </div>
                       </div>
-                      <TemaDashboardDetailReadmore />
+                      <TemaDashboardReadmore />
                     </div>
                   )
                 })}
