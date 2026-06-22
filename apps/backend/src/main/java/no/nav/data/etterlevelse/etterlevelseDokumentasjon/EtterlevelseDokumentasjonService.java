@@ -416,7 +416,7 @@ public class EtterlevelseDokumentasjonService {
         return dpBehandlingList;
     }
 
-    private List<TeamResponse> getTeamsData(List<String> teams) {
+    public List<TeamResponse> getTeamsData(List<String> teams) {
         if (teams == null || teams.isEmpty()) {
             return null;
         }

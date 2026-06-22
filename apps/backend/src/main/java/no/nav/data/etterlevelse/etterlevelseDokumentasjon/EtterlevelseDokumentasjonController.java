@@ -19,7 +19,6 @@ import no.nav.data.integration.ardoq.ArdoqClient;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.integration.team.dto.MemberResponse;
-import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -136,6 +135,12 @@ public class EtterlevelseDokumentasjonController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
+        var edok = etterlevelseDokumentasjonService.get(id);
+
+        if (!hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setArdoqSystemer(response);
@@ -151,6 +156,7 @@ public class EtterlevelseDokumentasjonController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
+
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateAndIncreaseVersion(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setArdoqSystemer(response);
@@ -191,6 +197,13 @@ public class EtterlevelseDokumentasjonController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
+
+        var edok = etterlevelseDokumentasjonService.get(id);
+
+        if (!hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateKravPriority(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
         setArdoqSystemer(response);
@@ -276,5 +289,35 @@ public class EtterlevelseDokumentasjonController {
                 response.setHasCurrentUserAccess(false);
             }
         }
+    }
+
+    public boolean hasUserWriteAccess(EtterlevelseDokumentasjon edok) {
+        boolean resourceIsEmpty = edok.getResources() == null || edok.getResources().isEmpty();
+        boolean teamIsEmpty = edok.getTeams() == null || edok.getTeams().isEmpty();
+
+        if (resourceIsEmpty && teamIsEmpty) {
+           return true;
+        } else if (SecurityUtils.isAdmin()) {
+            return true;
+        } else {
+            List<String> memeberList = new ArrayList<>();
+            if (!resourceIsEmpty) {
+                memeberList.addAll(edok.getResources());
+            }
+            if (!teamIsEmpty) {
+                etterlevelseDokumentasjonService.getTeamsData(edok.getTeams()).forEach((team) -> {
+                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
+                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
+                    }
+                });
+            }
+            try {
+                String currentUser = SecurityUtils.getCurrentIdent();
+                return memeberList.contains(currentUser);
+            } catch (ValidationException e) {
+                return false;
+            }
+        }
+
     }
 }
