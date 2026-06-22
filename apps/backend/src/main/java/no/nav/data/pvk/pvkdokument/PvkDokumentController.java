@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
@@ -119,6 +120,13 @@ public class PvkDokumentController {
     @PostMapping
     public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
         log.info("Create PvkDokument");
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), request.isUpdate());
 
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
@@ -136,6 +144,12 @@ public class PvkDokumentController {
 
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
@@ -181,6 +195,12 @@ public class PvkDokumentController {
 
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
+            throw new ValidationException(String.format("Kan ikke godkjenne pvk dokument med id: %s fordi brukeren ikke er en risikoeier", request.getId()));
         }
 
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
