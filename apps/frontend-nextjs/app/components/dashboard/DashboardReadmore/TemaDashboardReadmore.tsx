@@ -46,6 +46,11 @@ export const TemaDashboardReadmore = () => (
           ikke ennå er registrert som ferdig vurdert, selv om etterleveren kan ha vurdert hvorvidt
           enkelte suksesskriterier etterleves.
         </List.Item>
+        <List.Item>
+          <b>Er også utgåtte etterlevelseskrav med i beregning?</b>
+          <br />
+          Tallene over gjelder kun for aktive etterlevelseskrav.
+        </List.Item>
       </List>
 
       <Link
