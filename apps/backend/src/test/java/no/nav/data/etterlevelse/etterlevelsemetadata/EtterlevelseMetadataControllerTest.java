@@ -1,9 +1,11 @@
 package no.nav.data.etterlevelse.etterlevelsemetadata;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -15,6 +17,11 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
+
+    @BeforeEach
+    void setUp() {
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
+    }
 
     @Test
     void getAllEtterlevelseMetadata_createTwoEtterlevelseMetadata_getTwoEtterlevelseMetadata() {
