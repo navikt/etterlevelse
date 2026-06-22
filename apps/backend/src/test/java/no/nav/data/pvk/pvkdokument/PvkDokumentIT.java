@@ -1,6 +1,7 @@
 package no.nav.data.pvk.pvkdokument;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -22,6 +23,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         CodelistStub.initializeCodelist();
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
     }
 
     @Test
