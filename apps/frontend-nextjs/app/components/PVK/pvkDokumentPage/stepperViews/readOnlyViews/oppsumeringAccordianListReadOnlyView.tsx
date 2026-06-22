@@ -17,7 +17,7 @@ import {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { Accordion, Alert, BodyLong, InlineMessage, Label, ReadMore } from '@navikt/ds-react'
+import { Accordion, BodyLong, InlineMessage, Label, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef } from 'react'
@@ -158,9 +158,9 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
 
                   {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
                     <div className='mt-5'>
-                      <Alert className='mt-3' variant='warning'>
+                      <InlineMessage className='mt-3' status='warning'>
                         Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
-                      </Alert>
+                      </InlineMessage>
                     </div>
                   )}
 
@@ -169,9 +169,9 @@ export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = (
                       <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
                       {revurdertEffektCheck && (
-                        <Alert className='mt-3' variant='warning'>
+                        <InlineMessage className='mt-3' status='warning'>
                           Dere må vurdere tiltakenes effekt
-                        </Alert>
+                        </InlineMessage>
                       )}
 
                       {!revurdertEffektCheck && (
