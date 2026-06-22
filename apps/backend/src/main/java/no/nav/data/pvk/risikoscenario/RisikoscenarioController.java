@@ -239,8 +239,9 @@ public class RisikoscenarioController {
         log.info("Add Tiltak to risikoscenario id={}", request.getRisikoscenarioId());
         try {
             var risko =  risikoscenarioService.get(request.getRisikoscenarioId());
-            hasUserWriteAccessCheck(risko.getPvkDokumentId());
-
+            if (risko != null) {
+                hasUserWriteAccessCheck(risko.getPvkDokumentId());
+            }
             Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRisikoscenarioId(), request.getTiltakIds());
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
             setTiltakAndKravDataForRelevantKravList(response);
@@ -299,6 +300,9 @@ public class RisikoscenarioController {
 
     private void hasUserWriteAccessCheck(UUID pvkDokumentId) {
         var pvkDok = pvkDokumentService.get(pvkDokumentId);
+        if (pvkDok == null) {
+            throw new ValidationException(String.format("Ugyldig pvk dokument %s", pvkDokumentId));
+        }
         var edok = etterlevelseDokumentasjonService.get(pvkDok.getEtterlevelseDokumentId());
 
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
