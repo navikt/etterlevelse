@@ -18,15 +18,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -111,6 +103,12 @@ public class EtterlevelseController {
     public ResponseEntity<EtterlevelseResponse> createEtterlevelse(@RequestBody EtterlevelseRequest request) {
         log.info("Create Etterlevelse");
 
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         var etterlevelseDokumentasjon = EtterlevelseDokumentasjonResponse.buildFrom(
                 etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId())
         );
@@ -137,6 +135,13 @@ public class EtterlevelseController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
 
         if (request.getEtterlevelseDokumentasjonId() == null) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");

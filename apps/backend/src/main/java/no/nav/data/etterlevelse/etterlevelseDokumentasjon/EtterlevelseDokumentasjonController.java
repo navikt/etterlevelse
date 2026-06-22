@@ -137,7 +137,7 @@ public class EtterlevelseDokumentasjonController {
         }
         var edok = etterlevelseDokumentasjonService.get(id);
 
-        if (!hasUserWriteAccess(edok)) {
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
             throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
@@ -200,7 +200,7 @@ public class EtterlevelseDokumentasjonController {
 
         var edok = etterlevelseDokumentasjonService.get(id);
 
-        if (!hasUserWriteAccess(edok)) {
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
             throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
@@ -289,35 +289,5 @@ public class EtterlevelseDokumentasjonController {
                 response.setHasCurrentUserAccess(false);
             }
         }
-    }
-
-    public boolean hasUserWriteAccess(EtterlevelseDokumentasjon edok) {
-        boolean resourceIsEmpty = edok.getResources() == null || edok.getResources().isEmpty();
-        boolean teamIsEmpty = edok.getTeams() == null || edok.getTeams().isEmpty();
-
-        if (resourceIsEmpty && teamIsEmpty) {
-           return true;
-        } else if (SecurityUtils.isAdmin()) {
-            return true;
-        } else {
-            List<String> memeberList = new ArrayList<>();
-            if (!resourceIsEmpty) {
-                memeberList.addAll(edok.getResources());
-            }
-            if (!teamIsEmpty) {
-                etterlevelseDokumentasjonService.getTeamsData(edok.getTeams()).forEach((team) -> {
-                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
-                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
-                    }
-                });
-            }
-            try {
-                String currentUser = SecurityUtils.getCurrentIdent();
-                return memeberList.contains(currentUser);
-            } catch (ValidationException e) {
-                return false;
-            }
-        }
-
     }
 }

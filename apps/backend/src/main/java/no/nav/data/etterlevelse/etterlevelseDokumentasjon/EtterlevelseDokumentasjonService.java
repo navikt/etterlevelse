@@ -20,6 +20,7 @@ import no.nav.data.integration.dpBehandling.DpBehandlingService;
 import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.domain.Member;
 import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.dto.MemberResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -414,6 +415,36 @@ public class EtterlevelseDokumentasjonService {
             }
         });
         return dpBehandlingList;
+    }
+
+    public boolean hasUserWriteAccess(EtterlevelseDokumentasjon edok) {
+        boolean resourceIsEmpty = edok.getResources() == null || edok.getResources().isEmpty();
+        boolean teamIsEmpty = edok.getTeams() == null || edok.getTeams().isEmpty();
+
+        if (resourceIsEmpty && teamIsEmpty) {
+            return true;
+        } else if (SecurityUtils.isAdmin()) {
+            return true;
+        } else {
+            List<String> memeberList = new ArrayList<>();
+            if (!resourceIsEmpty) {
+                memeberList.addAll(edok.getResources());
+            }
+            if (!teamIsEmpty) {
+                getTeamsData(edok.getTeams()).forEach((team) -> {
+                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
+                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
+                    }
+                });
+            }
+            try {
+                String currentUser = SecurityUtils.getCurrentIdent();
+                return memeberList.contains(currentUser);
+            } catch (ValidationException e) {
+                return false;
+            }
+        }
+
     }
 
     public List<TeamResponse> getTeamsData(List<String> teams) {

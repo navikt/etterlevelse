@@ -1,6 +1,13 @@
 #!/usr/bin/env sh
 set -e
 
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+if ! git diff --cached --name-only | grep -q '^apps/frontend-nextjs/'; then
+  exit 0
+fi
+
 cd apps/frontend-nextjs
 yarn lint-staged
 yarn run pre-commit:deps-check
