@@ -218,6 +218,7 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
 
       <IverksattTiltakForm
         tiltak={tiltak}
+        risikoscenarioList={risikoscenarioList}
         submit={submit}
         setIverksattFormDirty={setIverksattFormDirty}
         formRef={formRef}

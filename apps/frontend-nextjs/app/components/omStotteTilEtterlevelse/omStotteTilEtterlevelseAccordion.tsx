@@ -2,18 +2,98 @@
 
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { EKravTab } from '@/constants/krav/kravConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Accordion, BodyLong, Heading, InfoCard, List, ReadMore } from '@navikt/ds-react'
+import {
+  Accordion,
+  BodyLong,
+  CopyButton,
+  Heading,
+  InfoCard,
+  List,
+  ReadMore,
+} from '@navikt/ds-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useContext, useEffect, useState } from 'react'
+import VisMegHvorJegFinnerDigitalPVK from '../omPvk/images/VisMegHvorJegFinnerDigitalPVK.png'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
 const OmStotteTilEtterlevelseAccordion = () => {
+  const accordionTittel = {
+    oppretteEllerOppdatere: 'Opprette eller oppdatere et etterlevelsesdokument',
+    redigereDokumentegenskaper: 'Redigere dokumentegenskaper og filtrere krav',
+    jobbeITemaoversikten: 'Jobbe i temaoversikten',
+    besvareEtterlevelseskrav: 'Besvare etterlevelseskrav',
+    behandlerPersonopplysninger: 'Etterlevelse når dere behandler personopplysninger',
+    faEtterlevelsenGodkjent: 'Få etterlevelsen godkjent av risikoeier',
+    forRisikoeiere: 'For risikoeiere: slik godkjenner du etterlevelsen',
+    oppdatereEtterGodkjenning: 'Oppdatere etterlevelsesdokumentasjon etter godkjenning',
+    gjenbruk: 'Gjenbruk av etterlevelsesdokumentasjon',
+    tilretteleggeForGjenbruk:
+      'Slik tilrettelegger dere for gjenbruk av deres eget etterlevelsesdokument',
+    slikGjenbrukerDu: 'Slik gjenbruker du et etterlevelsesdokument',
+  } as const
+
+  const accordionId = {
+    oppretteEllerOppdatere: 'opprette-eller-oppdatere-et-etterlevelsesdokument',
+    redigereDokumentegenskaper: 'redigere-dokumentegenskaper-og-filtrere-krav',
+    jobbeITemaoversikten: 'jobbe-i-temaoversikten',
+    besvareEtterlevelseskrav: 'besvare-etterlevelseskrav',
+    behandlerPersonopplysninger: 'etterlevelse-nar-dere-behandler-personopplysninger',
+    faEtterlevelsenGodkjent: 'fa-etterlevelsen-godkjent-av-risikoeier',
+    forRisikoeiere: 'for-risikoeiere-slik-godkjenner-du-etterlevelsen',
+    oppdatereEtterGodkjenning: 'oppdatere-etterlevelsesdokumentasjon-etter-godkjenning',
+    gjenbruk: 'gjenbruk-av-etterlevelsesdokumentasjon',
+    tilretteleggeForGjenbruk:
+      'slik-tilrettelegger-dere-for-gjenbruk-av-deres-eget-etterlevelsesdokument',
+    slikGjenbrukerDu: 'slik-gjenbruker-du-et-etterlevelsesdokument',
+  } as const
+
+  const allItemIds = new Set<string>(Object.values(accordionId))
+
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(Object.values(accordionId).map((id) => [id, false]))
+  )
+
+  const toggle = (id: string) => {
+    setOpenItems((prev) => ({ ...prev, [id]: !prev[id] }))
+  }
+
+  useEffect(() => {
+    const onHash = () => {
+      const hash = decodeURIComponent(window.location.hash.replace(/^#/, ''))
+      if (!hash || !allItemIds.has(hash)) return
+
+      setOpenItems((prev) => ({ ...prev, [hash]: true }))
+      let attempts = 0
+      const tryScroll = () => {
+        const el = document.getElementById(hash)
+        if (el) {
+          el.scrollIntoView({ block: 'start' })
+          return
+        }
+        if (attempts++ < 10) window.setTimeout(tryScroll, 50)
+      }
+      tryScroll()
+    }
+
+    onHash() // handle initial load
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
   return (
     <Accordion className='my-6'>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Opprette eller oppdatere et etterlevelsesdokument</h3>
+      <Accordion.Item
+        id={accordionId.oppretteEllerOppdatere}
+        open={openItems[accordionId.oppretteEllerOppdatere]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.oppretteEllerOppdatere)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.oppretteEllerOppdatere}</h3>
+            <CopyAccordionLinkButton id={accordionId.oppretteEllerOppdatere} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <BodyLong spacing>
@@ -48,9 +128,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Redigere dokumentegenskaper og filtrere krav</h3>
+      <Accordion.Item
+        id={accordionId.redigereDokumentegenskaper}
+        open={openItems[accordionId.redigereDokumentegenskaper]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.redigereDokumentegenskaper)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.redigereDokumentegenskaper}</h3>
+            <CopyAccordionLinkButton id={accordionId.redigereDokumentegenskaper} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <BodyLong spacing>
@@ -116,9 +202,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Jobbe i temaoversikten</h3>
+      <Accordion.Item
+        id={accordionId.jobbeITemaoversikten}
+        open={openItems[accordionId.jobbeITemaoversikten]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.jobbeITemaoversikten)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.jobbeITemaoversikten}</h3>
+            <CopyAccordionLinkButton id={accordionId.jobbeITemaoversikten} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <Image
@@ -139,26 +231,53 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Besvare etterlevelseskrav</h3>
+      <Accordion.Item
+        id={accordionId.besvareEtterlevelseskrav}
+        open={openItems[accordionId.besvareEtterlevelseskrav]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.besvareEtterlevelseskrav)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.besvareEtterlevelseskrav}</h3>
+            <CopyAccordionLinkButton id={accordionId.besvareEtterlevelseskrav} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
-          <div className='my-6'>
-            <video controls src='videos/VisMegHvordanJegBesvarerEtterlevelseskrav.mov'>
-              <track kind='captions' />
-            </video>
-          </div>
+          <ReadMore header='Vis meg hvordan jeg besvarer etterlevelseskrav' className='mb-6'>
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegBesvarerEtterlevelseskrav.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
-            for å etterleve kravet. Hvert kriterium inneholder også en nærmere beskrivelse som
-            hjelper dere med å forstå kriteriet. Dere skal ta stilling til, og bekrefte om,
-            kriteriet er oppfylt, ikke oppfylt eller ikke relevant. Som regel vil det i tillegg bes
-            om besvarelse i fritekstfelt. Det er kraveier som avgjør om en fritekstbesvarelse er
-            nødvendig eller ikke. Hvis dere ikke ser et fritekstfelt for et kriterium, holder det å
-            huke av et av valgene nevnt over. Når dere har svart på alle suksesskriteriene, kan dere
-            ferdigstille kravet. Det er fortsatt mulig å redigere besvarelsen selv om status er satt
-            til ferdigstilt.
+            for å etterleve kravet. Hvert kriterium inneholder også “Utfyllende om kravet” som
+            hjelper dere med å forstå kriteriet.
+          </BodyLong>
+          <BodyLong spacing>Et suksesskriterium kan ha følgende tilstander:</BodyLong>
+          <List as='ul' className='mb-6'>
+            <List.Item title='Ikke påbegynt:'>
+              dette er utgangspunktet når dere først skal dokumentere etterlevelse.
+            </List.Item>
+            <List.Item title='Under arbeid:'>
+              dette velger dere når dere begynner å vurdere etterlevelsen av suksesskriteriet.
+            </List.Item>
+            <List.Item title='Oppfylt:'>
+              dere har kommet frem til at deres etterlevelse oppfyller suksesskriteriet.
+            </List.Item>
+            <List.Item title='Ikke oppfylt:'>
+              dere har kommet frem til at dere ikke oppfyller suksesskriteriet.
+            </List.Item>
+            <List.Item title='Ikke relevant:'>
+              dere konkluderer med at suksesskriteriet ikke gjelder i deres kontekst.
+            </List.Item>
+          </List>
+          <BodyLong spacing>
+            Som regel vil det i tillegg bes om besvarelse i fritekstfelt. Det er kraveier som avgjør
+            om en fritekst besvarelse er nødvendig eller ikke: hvis dere ikke ser et fritekstfelt
+            for et kriterium, holder det å huke av et av valgene nevnt over. Når dere har svart på
+            alle suksesskriteriene, kan dere ferdigstille kravet. Det er fortsatt mulig å redigere
+            besvarelsen selv om status er satt til ferdigstilt.
           </BodyLong>
           <BodyLong spacing>
             Det er mulig å innhente inspirasjon fra andre. I fanen “{EKravTab.ETTERLEVER}” kan dere
@@ -185,16 +304,61 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Få etterlevelsen godkjent av risikoeier</h3>
+      <Accordion.Item
+        id={accordionId.behandlerPersonopplysninger}
+        open={openItems[accordionId.behandlerPersonopplysninger]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.behandlerPersonopplysninger)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.behandlerPersonopplysninger}</h3>
+            <CopyAccordionLinkButton id={accordionId.behandlerPersonopplysninger} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
-          <div className='my-6'>
-            <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'>
-              <track kind='captions' />
-            </video>
+          <BodyLong spacing>
+            Når dere behandler personopplysninger, skal dere vurdere om det er behov for å
+            gjennomføre en Personvernkonsekvensvurdering (PVK). For at det skal være lettere å
+            vurdere behovet, kan dere ta stilling til{' '}
+            <ExternalLink href='/om-pvk#behandlingens-livslop'>Behandlingens livsløp</ExternalLink>{' '}
+            og{' '}
+            <ExternalLink href='/om-pvk#behandlinges-art-og-omfang'>
+              Behandlingens art og omfang
+            </ExternalLink>
+          </BodyLong>
+          <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene  ' className='mb-6'>
+            <Image
+              className='mr-2.5 mt-6 mb-12'
+              src={VisMegHvorJegFinnerDigitalPVK}
+              alt='Skjermbilde som viser hvor man finner Digital PVK'
+            />
+          </ReadMore>
+          <BodyLong spacing>
+            Hvis dere allerede har en PVK i Word, skal dere også registrere dette på siden “Vurder
+            behov for PVK”.
+          </BodyLong>
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item
+        id={accordionId.faEtterlevelsenGodkjent}
+        open={openItems[accordionId.faEtterlevelsenGodkjent]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.faEtterlevelsenGodkjent)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.faEtterlevelsenGodkjent}</h3>
+            <CopyAccordionLinkButton id={accordionId.faEtterlevelsenGodkjent} />
           </div>
+        </Accordion.Header>
+        <Accordion.Content>
+          <ReadMore
+            header={'Vis meg hvordan jeg får etterlevelsen godkjent av risikoeier'}
+            className='mb-6'
+          >
+            <div className='my-6'>
+              <video controls src='videos/FaaEtterlevelsenGodkjentAvRisikoeier.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
           <BodyLong spacing>
             Etterlevelsesdokumenter kan godkjennes av risikoeieren til enhver tid, også uavhengig av
             godkjenning av PVK.
@@ -245,15 +409,24 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>For risikoeiere: slik godkjenner du etterlevelsen</Accordion.Header>
+      <Accordion.Item id={accordionId.forRisikoeiere} open={openItems[accordionId.forRisikoeiere]}>
+        <Accordion.Header onClick={() => toggle(accordionId.forRisikoeiere)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.forRisikoeiere}</h3>
+            <CopyAccordionLinkButton id={accordionId.forRisikoeiere} />
+          </div>
+        </Accordion.Header>
         <Accordion.Content>
-          {/*          <div className='my-6'>
-            <video controls src='videos/mangler'>
-              {' '}
-              <track kind='captions' />
-            </video>
-          </div>*/}
+          <ReadMore
+            header={'Vis meg hvordan jeg som risikoeier godkjenner et etterlevelsesdokument'}
+            className='mb-6'
+          >
+            <div className='my-6'>
+              <video controls src='videos/VisMegHvordanJegGodkjennerEtterlevelse.mov'>
+                <track kind='captions' />
+              </video>
+            </div>
+          </ReadMore>
           <BodyLong className='mb-3'>
             Når du vil godkjenne et etterlevelsesdokument, velger du “Godkjenn etterlevelsen” fra
             menyen på dokumentets temaside. På siden “Godkjenn etterlevelsen” kan du gjøre følgende:
@@ -294,9 +467,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </List>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Oppdatere etterlevelsesdokumentasjon etter godkjenning</h3>
+      <Accordion.Item
+        id={accordionId.oppdatereEtterGodkjenning}
+        open={openItems[accordionId.oppdatereEtterGodkjenning]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.oppdatereEtterGodkjenning)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.oppdatereEtterGodkjenning} </h3>
+            <CopyAccordionLinkButton id={accordionId.oppdatereEtterGodkjenning} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
@@ -322,9 +501,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Gjenbruk av etterlevelsesdokumentasjon</h3>
+      <Accordion.Item id={accordionId.gjenbruk} open={openItems[accordionId.gjenbruk]}>
+        <Accordion.Header onClick={() => toggle(accordionId.gjenbruk)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.gjenbruk}</h3>
+            <CopyAccordionLinkButton id={accordionId.gjenbruk} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <Heading size='small' level='4' spacing>
@@ -400,9 +582,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Slik tilrettelegger dere for gjenbruk av deres eget etterlevelsesdokument</h3>
+      <Accordion.Item
+        id={accordionId.tilretteleggeForGjenbruk}
+        open={openItems[accordionId.tilretteleggeForGjenbruk]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.tilretteleggeForGjenbruk)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.tilretteleggeForGjenbruk}</h3>
+            <CopyAccordionLinkButton id={accordionId.tilretteleggeForGjenbruk} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
@@ -523,9 +711,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item>
-        <Accordion.Header>
-          <h3>Slik gjenbruker du et etterlevelsesdokument</h3>
+      <Accordion.Item
+        id={accordionId.slikGjenbrukerDu}
+        open={openItems[accordionId.slikGjenbrukerDu]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.slikGjenbrukerDu)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.slikGjenbrukerDu}</h3>
+            <CopyAccordionLinkButton id={accordionId.slikGjenbrukerDu} />
+          </div>
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
@@ -681,3 +875,21 @@ const OmStotteTilEtterlevelseAccordion = () => {
 }
 
 export default OmStotteTilEtterlevelseAccordion
+
+const CopyAccordionLinkButton = ({ id }: { id: string }) => {
+  const user = useContext(UserContext)
+
+  if (!user.isAdmin()) return null
+
+  return (
+    <CopyButton
+      className='ml-3'
+      data-color='accent'
+      size='xsmall'
+      copyText={`${window.location.origin}/omstottetiletterlevelse#${id}`}
+      text='Kopier lenke'
+      // Prevent toggling the accordion when clicking the copy button.
+      onClick={(e) => e.stopPropagation()}
+    />
+  )
+}

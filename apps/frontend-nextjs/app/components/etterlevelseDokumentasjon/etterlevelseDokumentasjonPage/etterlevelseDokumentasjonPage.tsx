@@ -162,6 +162,7 @@ export const EtterlevelseDokumentasjonPage = () => {
                 <EtterlevelseDokumentasjonReadmore
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   relasjonLoading={relasjonLoading}
+                  morDokumentRelasjon={morDokumentRelasjon}
                 />
 
                 <div className='flex justify-end'>

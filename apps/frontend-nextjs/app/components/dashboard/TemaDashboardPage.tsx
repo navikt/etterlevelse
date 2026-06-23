@@ -5,6 +5,7 @@ import {
   getDashboardStats,
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
+import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
@@ -12,9 +13,23 @@ import {
   ISeksjonOption,
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
-import { DownloadIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Detail, Heading, LocalAlert, Select, Tabs } from '@navikt/ds-react'
+import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  Link as AkselLink,
+  BodyShort,
+  Button,
+  Detail,
+  Heading,
+  InfoCard,
+  List,
+  ReadMore,
+  Select,
+  Tabs,
+} from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
+import { RechartsStackedBar } from './RechartsStackedBar'
 import {
   IBarSegment,
   KRAV_COLORS,
@@ -23,79 +38,28 @@ import {
   roundedPercentages,
 } from './chartUtils'
 
-const RechartsStackedBar = ({
-  data,
-  showPercentage,
-  percentageOnly,
-}: {
-  data: IBarSegment[]
-  showPercentage?: boolean
-  percentageOnly?: boolean
-}) => {
-  const total = data.reduce((sum, d) => sum + d.value, 0)
-
-  if (total === 0) return <BodyShort className='text-gray-500 mt-2'>Ingen data</BodyShort>
-
-  const pcts = roundedPercentages(data.map((d) => d.value))
-
-  return (
-    <div style={{ marginTop: '12px', maxWidth: '500px' }}>
-      <div style={{ display: 'flex', height: 32, borderRadius: 4, overflow: 'hidden' }}>
-        {data
-          .filter((d) => d.value > 0)
-          .map((d) => (
-            <div
-              key={d.name}
-              style={{
-                width: `${(d.value / total) * 100}%`,
-                backgroundColor: d.color,
-                transition: 'width 0.3s',
-              }}
-            />
-          ))}
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-        {data.map((d, i) => (
-          <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span
-              style={{
-                display: 'inline-block',
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                backgroundColor: d.color,
-                flexShrink: 0,
-              }}
-            />
-            <BodyShort size='small'>
-              {d.name}{' '}
-              <strong>
-                {percentageOnly
-                  ? `${formatPct(pcts[i], d.value)}%`
-                  : `${d.value}${showPercentage ? ` (${formatPct(pcts[i], d.value)}%)` : ''}`}
-              </strong>
-            </BodyShort>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-const TemaDokumentCount = ({ count }: { count?: number }) => (
-  <Detail uppercase className='mt-2 mb-4'>
-    {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
-  </Detail>
+const TemaDokumentCount = ({ count, kravCount }: { count?: number; kravCount?: number }) => (
+  <>
+    <Detail className='mt-1 font-bold'>{(kravCount ?? 0).toLocaleString('nb-NO')} krav</Detail>
+    <Detail uppercase className='mt-3 mb-4'>
+      {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+    </Detail>
+  </>
 )
 
 const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const kravData: IBarSegment[] = [
+    { name: 'Ikke påbegynt', value: stats.kravIkkePaabegynt, color: SUKSESS_COLORS.ikkePaabegynt },
     { name: 'Under arbeid', value: stats.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
     { name: 'Ferdig vurdert', value: stats.kravFerdigVurdert, color: KRAV_COLORS.ferdigVurdert },
   ]
 
   const suksessData: IBarSegment[] = [
+    {
+      name: 'Ikke påbegynt',
+      value: stats.suksesskriterierIkkePaabegynt,
+      color: SUKSESS_COLORS.ikkePaabegynt,
+    },
     {
       name: 'Under arbeid',
       value: stats.suksesskriterierUnderArbeid,
@@ -134,6 +98,11 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
   const ikkeFerdigSuksessData: IBarSegment[] = [
     {
+      name: 'Ikke påbegynt',
+      value: stats.suksesskriterierIkkePaabegynt,
+      color: SUKSESS_COLORS.ikkePaabegynt,
+    },
+    {
       name: 'Under arbeid',
       value: stats.suksesskriterierUnderArbeid,
       color: SUKSESS_COLORS.underArbeid,
@@ -161,47 +130,58 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
-      <Heading size='small' level='2'>
-        {stats.temaName}
-      </Heading>
+      <div className='flex items-center gap-4'>
+        <Heading size='small' level='3'>
+          {stats.temaName}
+        </Heading>
+        <AkselLink href={`/dashboard/tema/${stats.temaCode}`}>
+          Les mer om etterlevelse under {stats.temaName}
+        </AkselLink>
+      </div>
 
-      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
+      <TemaDokumentCount
+        count={stats.etterlevelseDokumentCount}
+        kravCount={stats.kravAntallPerTema}
+      />
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
-            Vurdering av etterlevelseskrav
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
+            Kravstatus
           </Heading>
           <RechartsStackedBar data={kravData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
             Etterlevelse: suksesskriterier
           </Heading>
           <RechartsStackedBar data={suksessData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
             Suksesskriterier der kravet er ferdig utfylt
           </Heading>
           <RechartsStackedBar data={ferdigSuksessData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
             Suksesskriterier der kravet ikke er ferdig utfylt
           </Heading>
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
         </div>
       </div>
+
+      <TemaDashboardReadmore />
     </div>
   )
 }
 
 const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
   const totalSuksess =
+    stats.suksesskriterierIkkePaabegynt +
     stats.suksesskriterierUnderArbeid +
     stats.suksesskriterierOppfylt +
     stats.suksesskriterierIkkeOppfylt +
@@ -215,6 +195,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
   const totalIkkeFerdigSuksess = totalSuksess - totalFerdigSuksess
 
   const ikkeFerdigUnderArbeid = stats.suksesskriterierUnderArbeid
+  const ikkeFerdigIkkePaabegynt = stats.suksesskriterierIkkePaabegynt
   const ikkeFerdigOppfylt =
     stats.suksesskriterierOppfylt - (stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0)
   const ikkeFerdigIkkeOppfylt =
@@ -224,28 +205,48 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
 
   return (
     <div className='border border-gray-300 rounded-lg p-6 bg-white'>
-      <Heading size='small' level='2'>
-        {stats.temaName}
-      </Heading>
+      <div className='flex items-center gap-4'>
+        <Heading size='small' level='3'>
+          {stats.temaName}
+        </Heading>
+        <AkselLink href={`/dashboard/tema/${stats.temaCode}`}>
+          Les mer om etterlevelse under {stats.temaName}
+        </AkselLink>
+      </div>
 
-      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
+      <TemaDokumentCount
+        count={stats.etterlevelseDokumentCount}
+        kravCount={stats.kravAntallPerTema}
+      />
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
         <div>
           {(() => {
-            const kravPcts = roundedPercentages([stats.kravUnderArbeid, stats.kravFerdigVurdert])
+            const kravTotalWithIkkePaabegynt = stats.kravIkkePaabegynt + stats.kravTotal
+            const kravPcts = roundedPercentages([
+              stats.kravIkkePaabegynt,
+              stats.kravUnderArbeid,
+              stats.kravFerdigVurdert,
+            ])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
-                  Gjennomføringsstatus: krav ({stats.kravTotal})
+                <Heading size='xsmall' level='4' className='mb-2'>
+                  Kravstatus ({kravTotalWithIkkePaabegynt})
+                </Heading>
+                <BodyShort>
+                  Ikke påbegynt <span className='font-bold'>{stats.kravIkkePaabegynt}</span>
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[0], stats.kravIkkePaabegynt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
-                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[0], stats.kravUnderArbeid)}%)`}
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[1], stats.kravUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ferdig vurdert <span className='font-bold'>{stats.kravFerdigVurdert}</span>
-                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[1], stats.kravFerdigVurdert)}%)`}
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[2], stats.kravFerdigVurdert)}%)`}
                 </BodyShort>
               </>
             )
@@ -255,6 +256,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         <div>
           {(() => {
             const sukPcts = roundedPercentages([
+              stats.suksesskriterierIkkePaabegynt,
               stats.suksesskriterierUnderArbeid,
               stats.suksesskriterierOppfylt,
               stats.suksesskriterierIkkeOppfylt,
@@ -262,31 +264,37 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
+                <Heading size='xsmall' level='4' className='mb-2'>
                   Etterlevelse: suksesskriterier ({totalSuksess})
+                </Heading>
+                <BodyShort>
+                  Ikke påbegynt{' '}
+                  <span className='font-bold'>{stats.suksesskriterierIkkePaabegynt}</span>
+                  {totalSuksess > 0 &&
+                    ` (${formatPct(sukPcts[0], stats.suksesskriterierIkkePaabegynt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Under arbeid{' '}
                   <span className='font-bold'>{stats.suksesskriterierUnderArbeid}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[0], stats.suksesskriterierUnderArbeid)}%)`}
+                    ` (${formatPct(sukPcts[1], stats.suksesskriterierUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Oppfylt <span className='font-bold'>{stats.suksesskriterierOppfylt}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[1], stats.suksesskriterierOppfylt)}%)`}
+                    ` (${formatPct(sukPcts[2], stats.suksesskriterierOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke oppfylt{' '}
                   <span className='font-bold'>{stats.suksesskriterierIkkeOppfylt}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[2], stats.suksesskriterierIkkeOppfylt)}%)`}
+                    ` (${formatPct(sukPcts[3], stats.suksesskriterierIkkeOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke relevant{' '}
                   <span className='font-bold'>{stats.suksesskriterierIkkeRelevant}</span>
                   {totalSuksess > 0 &&
-                    ` (${formatPct(sukPcts[3], stats.suksesskriterierIkkeRelevant)}%)`}
+                    ` (${formatPct(sukPcts[4], stats.suksesskriterierIkkeRelevant)}%)`}
                 </BodyShort>
               </>
             )
@@ -302,9 +310,9 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
+                <Heading size='xsmall' level='4' className='mb-2'>
                   Suksesskriterier der kravet er ferdig utfylt ({totalFerdigSuksess})
-                </BodyShort>
+                </Heading>
                 <BodyShort>
                   Oppfylt{' '}
                   <span className='font-bold'>
@@ -337,6 +345,7 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         <div>
           {(() => {
             const ikkeFerdigPcts = roundedPercentages([
+              ikkeFerdigIkkePaabegynt,
               ikkeFerdigUnderArbeid,
               ikkeFerdigOppfylt,
               ikkeFerdigIkkeOppfylt,
@@ -344,34 +353,40 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
             ])
             return (
               <>
-                <BodyShort weight='semibold' className='mb-2'>
+                <Heading size='xsmall' level='4' className='mb-2'>
                   Suksesskriterier der kravet ikke er ferdig utfylt ({totalIkkeFerdigSuksess})
+                </Heading>
+                <BodyShort>
+                  Ikke påbegynt <span className='font-bold'>{ikkeFerdigIkkePaabegynt}</span>
+                  {totalIkkeFerdigSuksess > 0 &&
+                    ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigIkkePaabegynt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Under arbeid <span className='font-bold'>{ikkeFerdigUnderArbeid}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[0], ikkeFerdigUnderArbeid)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Oppfylt <span className='font-bold'>{ikkeFerdigOppfylt}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[1], ikkeFerdigOppfylt)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke oppfylt <span className='font-bold'>{ikkeFerdigIkkeOppfylt}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[2], ikkeFerdigIkkeOppfylt)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeOppfylt)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ikke relevant <span className='font-bold'>{ikkeFerdigIkkeRelevant}</span>
                   {totalIkkeFerdigSuksess > 0 &&
-                    ` (${formatPct(ikkeFerdigPcts[3], ikkeFerdigIkkeRelevant)}%)`}
+                    ` (${formatPct(ikkeFerdigPcts[4], ikkeFerdigIkkeRelevant)}%)`}
                 </BodyShort>
               </>
             )
           })()}
         </div>
       </div>
+      <TemaDashboardReadmore />
     </div>
   )
 }
@@ -380,15 +395,18 @@ interface IExportFilters {
   tema?: string
   avdeling?: string
   seksjon?: string
+  enhet?: string
+  hasEnheter?: boolean
 }
 
 const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
   const BOM = '\uFEFF'
 
   const filterLines = [
-    `Tema;${filters.tema || 'Alle temaer'}`,
+    `Tema;${filters.tema || 'Alle tema'}`,
     `Avdeling;${filters.avdeling || 'Alle avdelinger'}`,
     `Seksjon;${filters.seksjon || 'Alle seksjoner'}`,
+    ...(filters.hasEnheter ? [`Enhet;${filters.enhet || 'Alle enheter'}`] : []),
     '',
   ]
 
@@ -397,6 +415,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     'Krav totalt',
     'Krav under arbeid',
     'Krav ferdig vurdert',
+    'Suksesskriterier ikke påbegynt',
     'Suksesskriterier under arbeid',
     'Suksesskriterier oppfylt',
     'Suksesskriterier ikke oppfylt',
@@ -404,6 +423,11 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
     'Ferdig utfylt krav - suksesskriterier oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
     'Ferdig utfylt krav - suksesskriterier ikke relevant',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke påbegynt',
+    'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
+    'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
+    'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
   ].join(';')
 
   const rows = stats.map((s) =>
@@ -412,6 +436,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
       s.kravTotal,
       s.kravUnderArbeid,
       s.kravFerdigVurdert,
+      s.suksesskriterierIkkePaabegynt,
       s.suksesskriterierUnderArbeid,
       s.suksesskriterierOppfylt,
       s.suksesskriterierIkkeOppfylt,
@@ -419,6 +444,11 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
       s.ferdigUtfyltKravSuksesskriterierOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt,
       s.ferdigUtfyltKravSuksesskriterierIkkeRelevant,
+      s.suksesskriterierIkkePaabegynt,
+      s.suksesskriterierUnderArbeid,
+      s.suksesskriterierOppfylt - (s.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
+      s.suksesskriterierIkkeOppfylt - (s.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
+      s.suksesskriterierIkkeRelevant - (s.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
     ].join(';')
   )
 
@@ -440,6 +470,8 @@ const TemaDashboardPage = () => {
   const [selectedTema, setSelectedTema] = useState<string>('')
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
+  const [selectedEnhet, setSelectedEnhet] = useState<string>('')
+  const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
 
   useEffect(() => {
     getDashboardStats()
@@ -448,14 +480,19 @@ const TemaDashboardPage = () => {
   }, [])
 
   useEffect(() => {
-    getTemaDashboardStats(selectedAvdeling || undefined, selectedSeksjon || undefined)
+    getTemaDashboardStats(
+      undefined,
+      selectedAvdeling || undefined,
+      selectedSeksjon || undefined,
+      selectedEnhet || undefined
+    )
       .then((data) => {
         setTemaStats(data)
         setSelectedTema((prev) => (prev && !data.some((d) => d.temaCode === prev) ? '' : prev))
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
       .finally(() => setIsLoading(false))
-  }, [selectedAvdeling, selectedSeksjon])
+  }, [selectedAvdeling, selectedSeksjon, selectedEnhet])
 
   useEffect(() => {
     if (selectedAvdeling) {
@@ -464,6 +501,19 @@ const TemaDashboardPage = () => {
         .catch(() => setSeksjoner([]))
     }
   }, [selectedAvdeling])
+
+  useEffect(() => {
+    const hasValidSeksjon = selectedSeksjon && selectedSeksjon !== 'ingen-seksjon'
+    const promise = hasValidSeksjon ? getEnheterBySeksjonId(selectedSeksjon) : Promise.resolve([])
+    promise
+      .then((result) => {
+        setEnheter(result)
+        if (!hasValidSeksjon) {
+          setSelectedEnhet('')
+        }
+      })
+      .catch(() => setEnheter([]))
+  }, [selectedSeksjon])
 
   const filteredTemaStats = selectedTema
     ? temaStats.filter((s) => s.temaCode === selectedTema)
@@ -481,141 +531,213 @@ const TemaDashboardPage = () => {
         </Heading>
       </div>
 
-      <LocalAlert status='announcement' className='mt-4'>
-        <LocalAlert.Header>
-          <LocalAlert.Title as='h2'>
-            Obs! Disse sidene er fortsatt under utvikling.
-          </LocalAlert.Title>
-        </LocalAlert.Header>
-        <LocalAlert.Content>
-          Dersom dere finner feil eller har forslag til forbedringer, ta kontakt på #etterlevelse på
-          slack.
-        </LocalAlert.Content>
-      </LocalAlert>
+      <ReadMore header='Hvordan bruker jeg denne siden?' className='max-w-[75ch] mt-4'>
+        <p>På denne siden kan du:</p>
+        <List className='mt-4'>
+          <List.Item>Få oversikt over Navs etterlevelse, inndelt etter tema.</List.Item>
+          <List.Item>
+            Filtrere etter avdeling og eventuelt seksjon slik at du kan se hvordan enkelte
+            organisasjonsdeler etterlever krav og suksesskriterier.
+          </List.Item>
+          <List.Item>
+            Navigere videre til enkelte temasider hvor du kan utforske etterlevelse av enkelte krav,
+            enten i hele Nav eller på avdelings- eller seksjonsnivå.
+          </List.Item>
+        </List>
+        <p className='mt-4'>
+          For mer detaljer anbefaler vi informasjonssidene{' '}
+          <AkselLink href='/omstottetiletterlevelse' target='_blank'>
+            Om Støtte til etterlevelse
+          </AkselLink>
+          ,{' '}
+          <AkselLink href='/om-pvk' target='_blank'>
+            Om Digital PVK
+          </AkselLink>{' '}
+          og{' '}
+          <AkselLink href='/om-behandlingskatalogen' target='_blank'>
+            Om Behandlingskatalogen
+          </AkselLink>
+          .
+        </p>
+      </ReadMore>
 
-      <Heading size='medium' level='2' className='mt-6'>
-        Tema
-      </Heading>
+      <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
+        <Heading size='medium' level='2'>
+          Tema
+        </Heading>
 
-      <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
-        <Select
-          label='Velg tema'
-          className='sm:w-fit sm:min-w-64'
-          style={{ width: '100%' }}
-          value={selectedTema}
-          onChange={(e) => setSelectedTema(e.target.value)}
-        >
-          <option value=''>Alle temaer</option>
-          {temaStats.map((t) => (
-            <option key={t.temaCode} value={t.temaCode}>
-              {t.temaName}
-            </option>
-          ))}
-        </Select>
+        <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
+          <Select
+            label='Velg tema'
+            className='sm:w-fit sm:min-w-64'
+            style={{ width: '100%' }}
+            value={selectedTema}
+            onChange={(e) => setSelectedTema(e.target.value)}
+          >
+            <option value=''>Alle tema</option>
+            {temaStats.map((t) => (
+              <option key={t.temaCode} value={t.temaCode}>
+                {t.temaName}
+              </option>
+            ))}
+          </Select>
 
-        <Select
-          label='Filtrer etter avdeling'
-          className='sm:w-fit sm:min-w-64'
-          style={{ width: '100%' }}
-          value={selectedAvdeling}
-          onChange={(e) => {
-            setSelectedAvdeling(e.target.value)
-            setSelectedSeksjon('')
-            setIsLoading(true)
-            if (!e.target.value) {
-              setSeksjoner([])
-            }
-          }}
-        >
-          <option value=''>Alle avdelinger</option>
-          {avdelinger.map((a) => (
-            <option key={a.avdelingId} value={a.avdelingId}>
-              {a.avdelingNavn}
-            </option>
-          ))}
-        </Select>
+          <Select
+            label='Filtrer etter avdeling'
+            className='sm:w-fit sm:min-w-64'
+            style={{ width: '100%' }}
+            value={selectedAvdeling}
+            onChange={(e) => {
+              setSelectedAvdeling(e.target.value)
+              setSelectedSeksjon('')
+              setSelectedEnhet('')
+              setEnheter([])
+              setIsLoading(true)
+              if (!e.target.value) {
+                setSeksjoner([])
+              }
+            }}
+          >
+            <option value=''>Alle avdelinger</option>
+            {avdelinger.map((a) => (
+              <option key={a.avdelingId} value={a.avdelingId}>
+                {a.avdelingNavn}
+              </option>
+            ))}
+          </Select>
 
-        {(() => {
-          const avdelingNavn = avdelinger.find(
-            (a) => a.avdelingId === selectedAvdeling
-          )?.avdelingNavn
-          const filteredSeksjoner = seksjoner.filter(
-            (s) => s.navn !== avdelingNavn && s.id !== 'ingen-seksjon'
-          )
-          return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+          {(() => {
+            const avdelingNavn = avdelinger.find(
+              (a) => a.avdelingId === selectedAvdeling
+            )?.avdelingNavn
+            const filteredSeksjoner = seksjoner.filter((s) => s.navn !== avdelingNavn)
+            return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+              <Select
+                label='Filtrer etter seksjon'
+                className='sm:w-fit sm:min-w-64'
+                style={{ width: '100%' }}
+                value={selectedSeksjon}
+                onChange={(e) => {
+                  setSelectedSeksjon(e.target.value)
+                  setSelectedEnhet('')
+                  setIsLoading(true)
+                }}
+              >
+                <option value=''>Alle seksjoner</option>
+                {filteredSeksjoner.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.navn}
+                  </option>
+                ))}
+              </Select>
+            ) : null
+          })()}
+
+          {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enheter.length > 0 && (
             <Select
-              label='Filtrer etter seksjon'
+              label='Filtrer etter enhet'
               className='sm:w-fit sm:min-w-64'
               style={{ width: '100%' }}
-              value={selectedSeksjon}
+              value={selectedEnhet}
               onChange={(e) => {
-                setSelectedSeksjon(e.target.value)
+                setSelectedEnhet(e.target.value)
                 setIsLoading(true)
               }}
             >
-              <option value=''>Alle seksjoner</option>
-              {filteredSeksjoner.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.navn}
-                </option>
-              ))}
+              <option value=''>Alle enheter</option>
+              {[...enheter]
+                .sort((a, b) => a.navn.localeCompare(b.navn))
+                .map((en) => (
+                  <option key={en.id} value={en.id}>
+                    {en.navn}
+                  </option>
+                ))}
+              <option value='ingen-enhet'>Ikke valgt enhet</option>
             </Select>
-          ) : null
-        })()}
+          )}
 
-        <Button
-          variant='tertiary'
-          size='small'
-          icon={<DownloadIcon aria-hidden />}
-          onClick={() =>
-            exportToCsv(filteredTemaStats, {
-              tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
-              avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
-              seksjon: seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
-            })
-          }
-          disabled={isLoading || filteredTemaStats.length === 0}
-          className='ml-auto pr-4'
-        >
-          Last ned utvalg som CSV
-        </Button>
+          <Button
+            variant='tertiary'
+            size='small'
+            icon={<DownloadIcon aria-hidden />}
+            onClick={() =>
+              exportToCsv(filteredTemaStats, {
+                tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
+                avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
+                seksjon:
+                  selectedSeksjon === 'ingen-seksjon'
+                    ? 'Ikke valgt seksjon'
+                    : seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+                enhet:
+                  selectedEnhet === 'ingen-enhet'
+                    ? 'Ikke valgt enhet'
+                    : enheter.find((e) => e.id === selectedEnhet)?.navn,
+                hasEnheter: enheter.length > 0,
+              })
+            }
+            disabled={isLoading || filteredTemaStats.length === 0}
+            className='pr-4'
+          >
+            Last ned nøkkeltall som CSV
+          </Button>
+        </div>
+
+        {isLoading && (
+          <div className='mt-8'>
+            <CenteredLoader />
+          </div>
+        )}
+
+        {!isLoading && (
+          <Tabs className='mt-4' defaultValue='figurer'>
+            <Tabs.List>
+              <Tabs.Tab value='figurer' label='Vis figurer' />
+              <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+            </Tabs.List>
+
+            <Tabs.Panel value='figurer'>
+              <div className='flex flex-col gap-6 mt-6'>
+                {filteredTemaStats.map((stats) => (
+                  <TemaStatsCard key={stats.temaCode} stats={stats} />
+                ))}
+                {filteredTemaStats.length === 0 && (
+                  <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
+                )}
+              </div>
+            </Tabs.Panel>
+
+            <Tabs.Panel value='nokkeltall'>
+              <div className='flex flex-col gap-6 mt-6'>
+                {filteredTemaStats.map((stats) => (
+                  <TemaStatsKeyMetrics key={stats.temaCode} stats={stats} />
+                ))}
+                {filteredTemaStats.length === 0 && (
+                  <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
+                )}
+              </div>
+            </Tabs.Panel>
+          </Tabs>
+        )}
       </div>
 
-      {isLoading && (
-        <div className='mt-8'>
-          <CenteredLoader />
-        </div>
-      )}
-
       {!isLoading && (
-        <Tabs className='mt-4' defaultValue='figurer'>
-          <Tabs.List>
-            <Tabs.Tab value='figurer' label='Vis figurer' />
-            <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
-          </Tabs.List>
-
-          <Tabs.Panel value='figurer'>
-            <div className='flex flex-col gap-6 mt-6'>
-              {filteredTemaStats.map((stats) => (
-                <TemaStatsCard key={stats.temaCode} stats={stats} />
-              ))}
-              {filteredTemaStats.length === 0 && (
-                <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
-              )}
-            </div>
-          </Tabs.Panel>
-
-          <Tabs.Panel value='nokkeltall'>
-            <div className='flex flex-col gap-6 mt-6'>
-              {filteredTemaStats.map((stats) => (
-                <TemaStatsKeyMetrics key={stats.temaCode} stats={stats} />
-              ))}
-              {filteredTemaStats.length === 0 && (
-                <BodyShort className='text-gray-500'>Ingen data for valgt filter</BodyShort>
-              )}
-            </div>
-          </Tabs.Panel>
-        </Tabs>
+        <InfoCard data-color='info' className='mt-8'>
+          <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+            <InfoCard.Title as='h2'>
+              Savner du noe, eller har du tilbakemelding til oss?
+            </InfoCard.Title>
+          </InfoCard.Header>
+          <InfoCard.Content>
+            Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt
+            i søkefeltet, eller se{' '}
+            <AkselLink href='/dashboard/ingen-avdeling' target='_blank'>
+              listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
+              fane)
+            </AkselLink>
+            . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
+            eller send mail til teamdatajegerne@nav.no.
+          </InfoCard.Content>
+        </InfoCard>
       )}
     </PageLayout>
   )

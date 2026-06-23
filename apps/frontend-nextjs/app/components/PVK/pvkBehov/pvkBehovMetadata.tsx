@@ -1,9 +1,12 @@
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import {
+  IBehandling,
+  IDpBehandling,
+} from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
+import { behandlingName, dpBehandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
 
@@ -35,6 +38,28 @@ export const PvkBehovMetadata: FunctionComponent<TProps> = ({ etterlevelseDokume
         </List>
       )}
       {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
+        <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
+      )}
+
+      <Label>
+        Dere har koblet følgende behandlinger der Nav er databehandler på denne
+        etterlevelsesdokumentasjonen:
+      </Label>
+      {etterlevelseDokumentasjon.dpBehandlinger && (
+        <List>
+          {etterlevelseDokumentasjon.dpBehandlinger.map((behandling: IDpBehandling) => (
+            <List.Item key={behandling.nummer}>
+              <ExternalLink
+                className='text-medium'
+                href={`${getPollyBaseUrl()}process/${behandling.id}`}
+              >
+                {dpBehandlingName(behandling)}
+              </ExternalLink>
+            </List.Item>
+          ))}
+        </List>
+      )}
+      {etterlevelseDokumentasjon.dpBehandlinger?.length === 0 && (
         <BodyShort className='my-5'>Ingen behandling er valgt.</BodyShort>
       )}
 

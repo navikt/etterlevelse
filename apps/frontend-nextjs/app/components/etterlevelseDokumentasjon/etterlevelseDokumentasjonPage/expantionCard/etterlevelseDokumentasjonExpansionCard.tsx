@@ -1,5 +1,6 @@
 'use client'
 
+import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import ArdoqSystemerView from '@/components/ardoq/ardoqSystemerView'
 import { BehandlingList } from '@/components/behandlingskatalog/behandlingList'
 import { DpBehandlingList } from '@/components/behandlingskatalog/dpBehandlingList'
@@ -13,10 +14,11 @@ import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kod
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { p360Url } from '@/routes/p360/p360Routes'
+import { env } from '@/util/env/env'
 import { ettlevColors } from '@/util/theme/theme'
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
 import { BodyLong, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
-import { FunctionComponent, useContext } from 'react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -27,6 +29,19 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 }) => {
   const codelist = useContext(CodelistContext)
   const user = useContext(UserContext)
+  const [seksjonerHaveEnheter, setSeksjonerHaveEnheter] = useState(false)
+
+  useEffect(() => {
+    const promise =
+      etterlevelseDokumentasjon.seksjoner.length > 0
+        ? Promise.all(
+            etterlevelseDokumentasjon.seksjoner.map((seksjon) =>
+              getEnheterBySeksjonId(seksjon.nomSeksjonId)
+            )
+          ).then((results) => results.some((enheter) => enheter.length > 0))
+        : Promise.resolve(false)
+    promise.then(setSeksjonerHaveEnheter)
+  }, [etterlevelseDokumentasjon.seksjoner])
 
   const relevansCodeList: IGetParsedOptionsProps[] = codelist.utils.getParsedOptions(
     EListName.RELEVANS
@@ -64,11 +79,6 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
           </Heading>
 
           <div className='max-w-[75ch]'>
-            <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
-            {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
-              <DpBehandlingList dpBehandlingIds={dpBehandlingIds} dpBehandlinger={dpBehandlinger} />
-            )}
-
             <div className='flex items-start gap-2 mb-2.5'>
               <div className='mt-0.75'>
                 <Label size='medium'>Egenskaper:</Label>
@@ -80,6 +90,25 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
               />
             </div>
+
+            <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
+            {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
+              <DpBehandlingList dpBehandlingIds={dpBehandlingIds} dpBehandlinger={dpBehandlinger} />
+            )}
+
+            {env.isDev && (
+              <div className='mb-2.5'>
+                {ardoqSystemData.length > 0 && (
+                  <ArdoqSystemerView ardoqSystemData={ardoqSystemData} link />
+                )}
+                {ardoqSystemData.length === 0 && (
+                  <div className='flex flex-wrap gap-2 items-center'>
+                    <Label size='medium'>Systemer:</Label>
+                    <BodyLong size='medium'>Ikke angitt</BodyLong>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className='flex items-start gap-2 mb-2.5'>
               <div>
@@ -128,22 +157,6 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 
             <div className='flex items-start gap-2 mb-2.5'>
               <div>
-                <Label size='medium'>Risikoeier:</Label>
-              </div>
-              <BodyLong size='medium'>
-                {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
-                  etterlevelseDokumentasjon.risikoeiereData !== undefined &&
-                  etterlevelseDokumentasjon.risikoeiereData.map(
-                    (risikoeier) => risikoeier.fullName
-                  )}
-                {etterlevelseDokumentasjon.risikoeiere.length === 0 &&
-                  etterlevelseDokumentasjon.risikoeiereData === undefined &&
-                  'Ikke angitt'}
-              </BodyLong>
-            </div>
-
-            <div className='flex items-start gap-2 mb-2.5'>
-              <div>
                 <Label size='medium'>Avdeling:</Label>
               </div>
               <BodyLong size='medium'>
@@ -170,16 +183,43 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               </BodyLong>
             </div>
 
-            <div className='mb-2.5'>
-              {ardoqSystemData.length > 0 && (
-                <ArdoqSystemerView ardoqSystemData={ardoqSystemData} link />
-              )}
-              {ardoqSystemData.length === 0 && (
-                <div className='flex flex-wrap gap-2 items-center'>
-                  <Label size='medium'>System:</Label>
-                  <BodyLong size='medium'>Ikke angitt</BodyLong>
+            {seksjonerHaveEnheter && (
+              <div className='flex items-start gap-2 mb-2.5'>
+                <div>
+                  <Label size='medium'>Enhet:</Label>
                 </div>
-              )}
+                <BodyLong as='div' size='medium'>
+                  {etterlevelseDokumentasjon.enheter &&
+                    etterlevelseDokumentasjon.enheter.length > 0 && (
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {etterlevelseDokumentasjon.enheter
+                            .map((enhet) => enhet.nomEnhetName)
+                            .join(', ')}
+                        </BodyLong>
+                      </div>
+                    )}
+                  {(!etterlevelseDokumentasjon.enheter ||
+                    etterlevelseDokumentasjon.enheter.length === 0) &&
+                    'Ikke angitt'}
+                </BodyLong>
+              </div>
+            )}
+
+            <div className='flex items-start gap-2 mb-2.5'>
+              <div>
+                <Label size='medium'>Risikoeier:</Label>
+              </div>
+              <BodyLong size='medium'>
+                {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
+                  etterlevelseDokumentasjon.risikoeiereData !== undefined &&
+                  etterlevelseDokumentasjon.risikoeiereData.map(
+                    (risikoeier) => risikoeier.fullName
+                  )}
+                {etterlevelseDokumentasjon.risikoeiere.length === 0 &&
+                  etterlevelseDokumentasjon.risikoeiereData?.length === 0 &&
+                  'Ikke angitt'}
+              </BodyLong>
             </div>
 
             <div className='mb-2.5'>

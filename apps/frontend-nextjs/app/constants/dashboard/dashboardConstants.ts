@@ -2,6 +2,7 @@ import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
+  INomEnhet,
   INomSeksjon,
 } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -35,17 +36,40 @@ export interface ISeksjonOption {
 export interface ITemaDashboardStats {
   temaCode: string
   temaName: string
+  kravAntallPerTema: number
   kravTotal: number
+  kravIkkePaabegynt: number
   kravUnderArbeid: number
   kravFerdigVurdert: number
   suksesskriterierUnderArbeid: number
   suksesskriterierOppfylt: number
   suksesskriterierIkkeOppfylt: number
   suksesskriterierIkkeRelevant: number
+  suksesskriterierIkkePaabegynt: number
   ferdigUtfyltKravSuksesskriterierOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeOppfylt?: number
   ferdigUtfyltKravSuksesskriterierIkkeRelevant?: number
   etterlevelseDokumentCount?: number
+}
+
+export interface IKravDashboardStats {
+  kravId: string
+  kravNavn: string
+  kravStatus: string
+  kravNummer: number
+  kravVersjon: number
+  etterlevelseTotal: number
+  antallIkkePaabegynt: number
+  antallUnderArbeid: number
+  antallFerdigVurdert: number
+  antallSuksesskriterierUnderArbeid: number
+  antallSuksesskriterierOppfylt: number
+  antallSuksesskriterierIkkeOppfylt: number
+  antallSuksesskriterierIkkeRelevant: number
+  antallSuksesskriterierIkkePaabegynt: number
+  antallFerdigUtfyltKravSuksesskriterierOppfylt: number
+  antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt: number
+  antallFerdigUtfyltKravSuksesskriterierIkkeRelevant: number
 }
 
 export interface IAvdelingDetailData {
@@ -81,12 +105,17 @@ export interface IDashboardTable {
   nomAvdelingId?: string
   avdelingNavn?: string
   seksjoner: INomSeksjon[]
+  enheter: INomEnhet[]
   behandlerPersonopplysninger: boolean
 
   antallKrav?: number
   antallOppfyltKrav?: number
   oppfyltKravProsent?: number
+  antallSuksesskriterierOppfylt?: number
+  antallSuksesskriterierIkkeOppfylt?: number
+  ikkePaabegynt?: boolean
   sistOppdatertEtterlevelse: string
+  sistGodkjentEtterlevelse?: string
 
   hasPvkDocumentationStarted: boolean
   pvkVurdering: EPvkVurdering
@@ -98,6 +127,7 @@ export interface IDashboardTable {
   antallIkkeIverksattTiltak?: number
   antallTiltakFristPassert?: number
   sistOppdatertPvk: string
+  sistGodkjentPvk?: string
 }
 
 export interface IAvdelingDashboardStats {
@@ -105,16 +135,19 @@ export interface IAvdelingDashboardStats {
   avdelingNavn: string
   dokumenter: {
     total: number
+    ikkePaabegynt?: number
     underArbeid: number
     sendtTilGodkjenning: number
     godkjentAvRisikoeier: number
   }
   suksesskriterier: {
     total: number
+    ikkePaabegyntAntall: number
     underArbeidAntall: number
     oppfyltAntall: number
     ikkeOppfyltAntall: number
     ikkeRelevantAntall: number
+    ikkePaabegyntProsent: number
     underArbeidProsent: number
     oppfyltProsent: number
     ikkeOppfyltProsent: number

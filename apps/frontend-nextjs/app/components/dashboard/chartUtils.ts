@@ -10,6 +10,7 @@ export const KRAV_COLORS = {
 }
 
 export const SUKSESS_COLORS = {
+  ikkePaabegynt: '#8a3ffc',
   underArbeid: '#1192e8',
   oppfylt: '#005d5d',
   ikkeOppfylt: '#fa4d56',
@@ -36,6 +37,6 @@ export const formatPct = (pct: number, value: number): string => {
 }
 
 export const DOK_COLORS = ['#1192e8', '#9f1853', '#005d5d']
-export const AVDELING_SUKSESS_COLORS = ['#1192e8', '#005d5d', '#fa4d56', '#9f1853']
+export const AVDELING_SUKSESS_COLORS = ['#8a3ffc', '#1192e8', '#005d5d', '#fa4d56', '#9f1853']
 export const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8']
 export const PVK_COLORS = ['#fa4d56', '#9f1853', '#005d5d', '#1192e8', '#6929c4', '#198038']

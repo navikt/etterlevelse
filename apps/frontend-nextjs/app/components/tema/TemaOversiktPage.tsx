@@ -101,14 +101,18 @@ export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
                 {tema.shortName}
               </LinkPanel.Title>
               <LinkPanel.Description className='lg:flex items-center gap-2 flex-wrap'>
-                {lover.map((lov, index) => (
-                  <div key={lov.code} className='flex items-center gap-2'>
-                    {lov.shortName}
-                    {index < lover.length - 1 && (
-                      <span className='hidden lg:block h-2 w-2 rotate-45 rounded-[0.063rem] bg-red-200'></span>
-                    )}
-                  </div>
-                ))}
+                {lover.map((lov, index) => {
+                  if (!lov.shortName.includes('opphevet')) {
+                    return (
+                      <div key={lov.code} className='flex items-center gap-2'>
+                        {lov.shortName}
+                        {index < lover.length - 1 && (
+                          <span className='hidden lg:block h-2 w-2 rotate-45 rounded-[0.063rem] bg-red-200'></span>
+                        )}
+                      </div>
+                    )
+                  }
+                })}
               </LinkPanel.Description>
             </div>
             <Spacer />

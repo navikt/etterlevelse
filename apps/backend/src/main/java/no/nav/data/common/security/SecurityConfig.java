@@ -24,7 +24,7 @@ public class SecurityConfig {
                         .allowCredentials(true)
                         .allowedHeaders("*")
                         .allowedMethods("*")
-                        .allowedOrigins(securityProperties.findBaseUrl());
+                        .allowedOrigins(securityProperties.getRedirectUris().toArray(new String[0]));
             }
         };
     }

@@ -1,19 +1,23 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { harKunDpBehandlinger } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   ytterligereEgenskaper: ICode[]
 }
 
 export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
   pvkDokument,
+  etterlevelseDokumentasjon,
   ytterligereEgenskaper,
 }) => (
   <>
@@ -21,6 +25,21 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
       <Label>Øvrige egenskaper for behandlingene:</Label>
       <DataTextWrapper>
         <List>
+          {harKunDpBehandlinger(etterlevelseDokumentasjon) && (
+            <>
+              <List.Item>
+                <strong>
+                  Profilering benyttes {pvkDokument.dpProcessProfilering ? '' : 'ikke'}
+                </strong>
+              </List.Item>
+              <List.Item>
+                <strong>
+                  Behandlingen er{pvkDokument.dpProcessHelautomatiskBehandling ? '' : ' ikke'}
+                </strong>{' '}
+                helautomatisk
+              </List.Item>
+            </>
+          )}
           {ytterligereEgenskaper.map((egenskap: ICode) => {
             const valgtEgenskap: boolean =
               pvkDokument.ytterligereEgenskaper.filter(

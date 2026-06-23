@@ -12,4 +12,5 @@ export interface ITiltak extends IDomainObject {
   ansvarligTeam: ITeam
   iverksatt: boolean
   iverksattDato?: string
+  iverksettingsKommentar?: string
 }

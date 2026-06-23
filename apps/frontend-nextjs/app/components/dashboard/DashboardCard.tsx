@@ -11,7 +11,7 @@ interface IProps {
 
 export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IProps) => {
   return (
-    <div className='border border-gray-300 rounded-lg p-6 bg-white'>
+    <div>
       {!hideHeader && (
         <Heading size='small' level='3'>
           {stats.avdelingNavn}
@@ -22,11 +22,17 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
         {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
       </Detail>
 
-      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4' style={{ whiteSpace: 'nowrap' }}>
-        <div>
+      <div
+        className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'
+        style={{ whiteSpace: 'nowrap' }}
+      >
+        <div className='md:order-1 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
+          <BodyShort>
+            Ikke påbegynt <span className='font-bold'>{stats.dokumenter.ikkePaabegynt ?? 0}</span>
+          </BodyShort>
           <BodyShort>
             Under arbeid <span className='font-bold'>{stats.dokumenter.underArbeid}</span>
           </BodyShort>
@@ -39,10 +45,14 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
         </div>
 
-        <div>
+        <div className='md:order-3 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Suksesskriterier (etterlevelseskrav)
           </Heading>
+          <BodyShort>
+            Ikke påbegynt{' '}
+            <span className='font-bold'>{stats.suksesskriterier.ikkePaabegyntProsent}%</span>
+          </BodyShort>
           <BodyShort>
             Under arbeid{' '}
             <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
@@ -60,7 +70,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
         </div>
 
-        <div>
+        <div className='md:order-2 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
@@ -88,7 +98,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </BodyShort>
         </div>
 
-        <div>
+        <div className='md:order-4 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel} className='mb-2'>
             Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>

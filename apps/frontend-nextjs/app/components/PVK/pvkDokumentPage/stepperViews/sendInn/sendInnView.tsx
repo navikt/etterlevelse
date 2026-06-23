@@ -248,7 +248,10 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const manglerBehandlingErrorCheck = () => {
-    if (etterlevelseDokumentasjon.behandlingIds.length === 0) {
+    if (
+      etterlevelseDokumentasjon.behandlingIds.length === 0 &&
+      etterlevelseDokumentasjon.dpBehandlingIds.length === 0
+    ) {
       setManglerBehandlingError(true)
     } else {
       setManglerBehandlingError(false)
@@ -424,7 +427,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       } else setTiltakFristError('')
 
       if (amountOfOverdueTiltak > 0) {
-        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist.`)
+        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist `)
       } else setTiltakFristUtgaattError('')
     } else {
       setTiltakFristError('')

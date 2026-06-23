@@ -126,10 +126,16 @@ export const getSuksesskriterieStatus = (status: ESuksesskriterieStatus) => {
           Oppfylt
         </Tag>
       )
-    default:
+    case ESuksesskriterieStatus.UNDER_ARBEID:
       return (
         <Tag size='small' variant='info'>
           Under arbeid
+        </Tag>
+      )
+    default:
+      return (
+        <Tag size='small' variant='info'>
+          Ikke påbegynt
         </Tag>
       )
   }

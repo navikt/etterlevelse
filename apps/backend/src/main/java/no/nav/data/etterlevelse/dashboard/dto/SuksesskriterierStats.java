@@ -15,8 +15,10 @@ public class SuksesskriterierStats {
     private int oppfyltAntall;
     private int ikkeOppfyltAntall;
     private int ikkeRelevantAntall;
+    private int ikkePaabegyntAntall;
     private int underArbeidProsent;
     private int oppfyltProsent;
     private int ikkeOppfyltProsent;
     private int ikkeRelevantProsent;
+    private int ikkePaabegyntProsent;
 }

@@ -69,11 +69,15 @@ const TemaMainHeader: FunctionComponent<TTemaMainHeaderProps> = ({ tema, lover, 
         <Heading level='2' size='small' spacing>
           Lovdata
         </Heading>
-        {lover.map((lov: TLovCode, index: number) => (
-          <div key={lov.code + '_' + index} className='mb-1.5'>
-            <ExternalLink href={lovdataBase(lov.code, codelist)}>{lov.shortName}</ExternalLink>
-          </div>
-        ))}
+        {lover.map((lov: TLovCode, index: number) => {
+          if (!lov.shortName.includes('(opphevet)')) {
+            return (
+              <div key={lov.code + '_' + index} className='mb-1.5'>
+                <ExternalLink href={lovdataBase(lov.code, codelist)}>{lov.shortName}</ExternalLink>
+              </div>
+            )
+          }
+        })}
       </div>
     </div>
   )

@@ -1,3 +1,5 @@
+import { Markdown } from '@/components/common/markdown/markdown'
+import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
   TEtterlevelseDokumentasjonQL,
@@ -12,6 +14,7 @@ import { TilgjengeligForGjenbruk } from '../tilgjengeligForGjenbruk/tilgjengelig
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   relasjonLoading: boolean
+  morDokumentRelasjon?: IDocumentRelationWithEtterlevelseDokumetajson
 }
 
 enum EReadmoreTilstand {
@@ -40,6 +43,7 @@ const readmoreTilstandUtil = (
 export const EtterlevelseDokumentasjonReadmore: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   relasjonLoading,
+  morDokumentRelasjon,
 }) => (
   <div className='max-w-5xl flex-1'>
     {etterlevelseDokumentasjon.status ===
@@ -56,6 +60,20 @@ export const EtterlevelseDokumentasjonReadmore: FunctionComponent<TProps> = ({
 
     <div className='flex mb-5'>
       <div>
+        {morDokumentRelasjon && (
+          <div className='my-5'>
+            <ReadMore
+              header='Hvordan dette arvede dokumentet skal brukes'
+              aria-label='Hvordan dette arvede dokumentet skal brukes'
+              className='w-full'
+            >
+              <div className='mb-5'>
+                <Markdown source={morDokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
+              </div>
+            </ReadMore>
+          </div>
+        )}
+
         <EtterlevelseDokumentasjonExpansionCard
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         />

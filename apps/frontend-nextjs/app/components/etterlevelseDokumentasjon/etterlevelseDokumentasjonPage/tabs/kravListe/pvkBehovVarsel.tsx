@@ -26,9 +26,11 @@ export const PvkBehovVarsel: FunctionComponent<TProps> = ({ etterlevelseDokument
   const [artOgOmfang, setArtOgOmfang] = useState<IBehandlingensArtOgOmfang>()
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [behandlingsLivslop, setBehandlingsLivslop] = useState<IBehandlingensLivslop>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     ;(async () => {
+      setIsLoading(true)
       await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
         .then((response: IPvkDokument) => setPvkDokument(response))
         .catch((error) => console.debug(error))
@@ -38,8 +40,11 @@ export const PvkBehovVarsel: FunctionComponent<TProps> = ({ etterlevelseDokument
       await getBehandlingensArtOgOmfangByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
         .then((response: IBehandlingensArtOgOmfang) => setArtOgOmfang(response))
         .catch((error) => console.debug(error))
+      setIsLoading(false)
     })()
   }, [etterlevelseDokumentasjonId])
+
+  if (isLoading) return null
 
   if (pvkDokument?.pvkVurdering && pvkDokument.pvkVurdering !== EPvkVurdering.UNDEFINED) return null
 

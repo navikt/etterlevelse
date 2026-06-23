@@ -50,7 +50,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
       <div className='w-full flex justify-center'>
         <SkipToContent />
         <InternalHeader className='w-full justify-center items-center'>
-          <div className='max-w-7xl flex w-full'>
+          <div className='max-w-7xl flex w-full ml-1'>
             <InternalHeader.Title href='/'>Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
             {!noSearchBar && (

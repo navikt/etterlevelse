@@ -12,13 +12,17 @@ export const etterlevelseSchema = () => {
           .string()
           .test({
             name: 'suksesskriterieStatus',
-            message: 'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid.',
+            message:
+              'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid eller ikke påbegynt.',
             test: function (suksesskriterieStatus) {
               const { options } = this
               if (
                 (options.context?.status === EEtterlevelseStatus.FERDIG ||
                   options.context?.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT) &&
-                suksesskriterieStatus === ESuksesskriterieStatus.UNDER_ARBEID
+                [
+                  ESuksesskriterieStatus.UNDER_ARBEID,
+                  ESuksesskriterieStatus.IKKE_PAABEGYNT,
+                ].includes(suksesskriterieStatus as ESuksesskriterieStatus)
               ) {
                 return false
               }

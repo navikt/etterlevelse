@@ -169,6 +169,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
           <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
           <option value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</option>
           <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
+          <option value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</option>
         </Select>
       </div>
       <div className='flex items-center w-full pb-2'>

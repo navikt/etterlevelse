@@ -71,6 +71,7 @@ const StackedBar = ({
 
 export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IProps) => {
   const dokData: IBarSegment[] = [
+    { name: 'Ikke p\u00e5begynt', value: stats.dokumenter.ikkePaabegynt ?? 0, color: '#8a3ffc' },
     { name: 'Under arbeid', value: stats.dokumenter.underArbeid, color: DOK_COLORS[0] },
     {
       name: 'Sendt til godkjenning',
@@ -82,24 +83,29 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
 
   const suksessData: IBarSegment[] = [
     {
+      name: 'Ikke påbegynt',
+      value: stats.suksesskriterier.ikkePaabegyntProsent,
+      color: AVDELING_SUKSESS_COLORS[0],
+    },
+    {
       name: 'Under arbeid',
       value: stats.suksesskriterier.underArbeidProsent,
-      color: AVDELING_SUKSESS_COLORS[0],
+      color: AVDELING_SUKSESS_COLORS[1],
     },
     {
       name: 'Oppfylt',
       value: stats.suksesskriterier.oppfyltProsent,
-      color: AVDELING_SUKSESS_COLORS[1],
+      color: AVDELING_SUKSESS_COLORS[2],
     },
     {
       name: 'Ikke oppfylt',
       value: stats.suksesskriterier.ikkeOppfyltProsent,
-      color: AVDELING_SUKSESS_COLORS[2],
+      color: AVDELING_SUKSESS_COLORS[3],
     },
     {
       name: 'Ikke relevant',
       value: stats.suksesskriterier.ikkeRelevantProsent,
-      color: AVDELING_SUKSESS_COLORS[3],
+      color: AVDELING_SUKSESS_COLORS[4],
     },
   ]
 
@@ -139,7 +145,7 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
   ]
 
   return (
-    <div className='border border-gray-300 rounded-lg p-6 bg-white'>
+    <div>
       {!hideHeader && (
         <Heading size='small' level='3'>
           {stats.avdelingNavn}
@@ -150,29 +156,29 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
         {stats.dokumenter.total.toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
       </Detail>
 
-      <div className='grid grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
-        <div>
+      <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
+        <div className='md:order-1 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel}>
             Etterlevelsesdokumenter ({stats.dokumenter.total})
           </Heading>
           <StackedBar data={dokData} maxWidth='200px' />
         </div>
 
-        <div>
+        <div className='md:order-3 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel}>
             Suksesskriterier (etterlevelseskrav)
           </Heading>
           <StackedBar data={suksessData} isPercentage maxWidth='200px' />
         </div>
 
-        <div>
+        <div className='md:order-2 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel}>
             Vurdere behov for PVK ({stats.behovForPvk.totalMedPersonopplysninger})
           </Heading>
           <StackedBar data={behovData} maxWidth='200px' />
         </div>
 
-        <div>
+        <div className='md:order-4 xl:order-none'>
           <Heading size='xsmall' level={subHeadingLevel}>
             Digital PVK status ({stats.pvk.total - stats.pvk.pvkIWord})
           </Heading>

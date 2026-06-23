@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -38,13 +39,18 @@ public class DashboardTableResponse {
     private String nomAvdelingId;
     private String avdelingNavn;
     private List<NomSeksjon> seksjoner;
+    private List<NomEnhet> enheter;
     private boolean behandlerPersonopplysninger;
 
     //etterlevelse
+    private boolean ikkePaabegynt;
     private Integer antallKrav;
     private Integer antallOppfyltKrav;
     private Integer oppfyltKravProsent;
+    private Integer antallSuksesskriterierOppfylt;
+    private Integer antallSuksesskriterierIkkeOppfylt;
     private LocalDateTime sistOppdatertEtterlevelse;
+    private LocalDateTime sistGodkjentEtterlevelse;
 
     //pvk
     private boolean hasPvkDocumentationStarted;
@@ -57,6 +63,7 @@ public class DashboardTableResponse {
     private Integer antallIkkeIverksattTiltak;
     private Integer antallTiltakFristPassert;
     private LocalDateTime sistOppdatertPvk;
+    private LocalDateTime sistGodkjentPvk;
 
     public static DashboardTableResponse buildFrom(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){
         return DashboardTableResponse.builder()
@@ -75,6 +82,7 @@ public class DashboardTableResponse {
                 .nomAvdelingId(Objects.equals(etterlevelseDokumentasjonResponse.getNomAvdelingId(), "") ? "ingen-avdeling" : etterlevelseDokumentasjonResponse.getNomAvdelingId())
                 .avdelingNavn(Objects.equals(etterlevelseDokumentasjonResponse.getAvdelingNavn(), "") ? "Ikke valgt avdeling" : etterlevelseDokumentasjonResponse.getAvdelingNavn())
                 .seksjoner(etterlevelseDokumentasjonResponse.getSeksjoner())
+                .enheter(etterlevelseDokumentasjonResponse.getEnheter())
                 .behandlerPersonopplysninger(etterlevelseDokumentasjonResponse.getIrrelevansFor().stream().noneMatch(c -> "PERSONOPPLYSNINGER".equals(c.getCode())))
                 .build();
     }

@@ -13,13 +13,16 @@ public class TemaDashboardResponse {
 
     private String temaCode;
     private String temaName;
+    private int kravAntallPerTema;
     private int kravTotal;
+    private int kravIkkePaabegynt;
     private int kravUnderArbeid;
     private int kravFerdigVurdert;
     private int suksesskriterierUnderArbeid;
     private int suksesskriterierOppfylt;
     private int suksesskriterierIkkeOppfylt;
     private int suksesskriterierIkkeRelevant;
+    private int suksesskriterierIkkePaabegynt;
 
     private int ferdigUtfyltKravSuksesskriterierOppfylt;
     private int ferdigUtfyltKravSuksesskriterierIkkeOppfylt;
