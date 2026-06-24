@@ -81,6 +81,11 @@ spec:
           permissions:
             roles:
               - "arkiv-admin"
+      {{#each inboundApp}}
+        - application: {{this.application}}
+          namespace: {{this.namespace}}
+          cluster: {{this.cluster}}
+      {{/each}}
     outbound:
       rules:
         - application: behandlingskatalog-backend
