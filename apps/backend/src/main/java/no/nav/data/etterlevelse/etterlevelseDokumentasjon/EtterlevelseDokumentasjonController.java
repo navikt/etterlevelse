@@ -139,7 +139,7 @@ public class EtterlevelseDokumentasjonController {
         var edok = etterlevelseDokumentasjonService.get(id);
 
         if (edok.getEtterlevelseDokumentasjonData().getStatus() == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER && request.getStatus() == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) {
-            if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent()) && !SecurityUtils.isAdmin()) {
+            if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
                 throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
             }
         } else if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {

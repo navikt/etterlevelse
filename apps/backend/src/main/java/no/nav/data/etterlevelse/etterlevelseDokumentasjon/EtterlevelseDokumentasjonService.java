@@ -423,8 +423,6 @@ public class EtterlevelseDokumentasjonService {
 
         if (resourceIsEmpty && teamIsEmpty) {
             return true;
-        } else if (SecurityUtils.isAdmin()) {
-            return true;
         } else {
             List<String> memeberList = new ArrayList<>();
             if (!resourceIsEmpty) {
