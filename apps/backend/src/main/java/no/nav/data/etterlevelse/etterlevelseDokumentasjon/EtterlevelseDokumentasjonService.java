@@ -420,7 +420,6 @@ public class EtterlevelseDokumentasjonService {
     public boolean hasUserWriteAccess(EtterlevelseDokumentasjon edok) {
         boolean resourceIsEmpty = edok.getResources() == null || edok.getResources().isEmpty();
         boolean teamIsEmpty = edok.getTeams() == null || edok.getTeams().isEmpty();
-        boolean risikoeierIsEmpty = edok.getEtterlevelseDokumentasjonData().getRisikoeiere() == null || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().isEmpty();
 
         if (resourceIsEmpty && teamIsEmpty) {
             return true;
@@ -437,9 +436,6 @@ public class EtterlevelseDokumentasjonService {
                         memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
                     }
                 });
-            }
-            if (!risikoeierIsEmpty) {
-                memeberList.addAll(edok.getEtterlevelseDokumentasjonData().getRisikoeiere());
             }
 
             try {

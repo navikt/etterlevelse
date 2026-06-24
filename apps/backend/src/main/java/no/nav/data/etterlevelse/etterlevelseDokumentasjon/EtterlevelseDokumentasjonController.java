@@ -11,6 +11,7 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGodkjenningsRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
@@ -137,9 +138,14 @@ public class EtterlevelseDokumentasjonController {
         }
         var edok = etterlevelseDokumentasjonService.get(id);
 
-        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+        if (edok.getEtterlevelseDokumentasjonData().getStatus() == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER && request.getStatus() == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) {
+            if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent()) && !SecurityUtils.isAdmin()) {
+                throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            }
+        } else if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
             throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
+
 
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);

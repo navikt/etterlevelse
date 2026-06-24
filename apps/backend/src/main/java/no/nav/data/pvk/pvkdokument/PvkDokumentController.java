@@ -11,6 +11,7 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -148,7 +149,7 @@ public class PvkDokumentController {
 
         var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
 
-        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+        if (hasPvkDokumentWriteAccess(edok)) {
             throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
@@ -252,6 +253,16 @@ public class PvkDokumentController {
     private void addEtterlevelseDokumentasjonVersjon(PvkDokumentResponse pvkDokument) {
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
         pvkDokument.setCurrentEtterlevelseDokumentVersjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon());
+    }
+
+    private boolean hasPvkDokumentWriteAccess (EtterlevelseDokumentasjon edok) {
+        boolean risikoeierIsEmpty = edok.getEtterlevelseDokumentasjonData().getRisikoeiere() == null || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().isEmpty();
+
+        if (!risikoeierIsEmpty) {
+            return etterlevelseDokumentasjonService.hasUserWriteAccess(edok) || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent());
+        } else {
+            return etterlevelseDokumentasjonService.hasUserWriteAccess(edok);
+        }
     }
 
     private void checkIfPvkDocumentationHasStarted(PvkDokumentResponse pvkDokument) {
