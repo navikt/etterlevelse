@@ -147,16 +147,16 @@ public class PvkDokumentController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
-
-        if (hasPvkDokumentWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
-        }
-
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
 
         if(pvkDokumentToUpdate == null) {
             throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
+        }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!hasPvkDokumentWriteAccess(edok, pvkDokumentToUpdate, request)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         request.mergeInto(pvkDokumentToUpdate);
@@ -198,16 +198,16 @@ public class PvkDokumentController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
-
-        if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
-            throw new ValidationException(String.format("Kan ikke godkjenne pvk dokument med id: %s fordi brukeren ikke er en risikoeier", request.getId()));
-        }
-
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
 
         if(pvkDokumentToUpdate == null) {
             throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
+        }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
+            throw new ValidationException(String.format("Kan ikke godkjenne pvk dokument med id: %s fordi brukeren ikke er en risikoeier", request.getId()));
         }
 
         request.mergeInto(pvkDokumentToUpdate);
@@ -255,11 +255,15 @@ public class PvkDokumentController {
         pvkDokument.setCurrentEtterlevelseDokumentVersjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon());
     }
 
-    private boolean hasPvkDokumentWriteAccess (EtterlevelseDokumentasjon edok) {
+    private boolean hasPvkDokumentWriteAccess (EtterlevelseDokumentasjon edok, PvkDokument pvkDokumentToUpdate, PvkDokumentRequest request) {
         boolean risikoeierIsEmpty = edok.getEtterlevelseDokumentasjonData().getRisikoeiere() == null || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().isEmpty();
 
-        if (!risikoeierIsEmpty) {
-            return etterlevelseDokumentasjonService.hasUserWriteAccess(edok) || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent());
+        if (pvkDokumentToUpdate.getStatus() == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER && request.getStatus() == PvkDokumentStatus.TRENGER_GODKJENNING) {
+            if (!risikoeierIsEmpty) {
+                return edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent());
+            } else {
+                return false;
+            }
         } else {
             return etterlevelseDokumentasjonService.hasUserWriteAccess(edok);
         }

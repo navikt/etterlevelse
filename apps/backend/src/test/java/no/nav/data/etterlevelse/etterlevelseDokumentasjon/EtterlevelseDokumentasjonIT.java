@@ -32,6 +32,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         CodelistStub.initializeCodelist();
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
     }
 
     @Test
@@ -164,7 +165,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         EtterlevelseDokumentasjon updated = etterlevelseDokumentasjonRepo.findById(eDok.getId()).orElseThrow();
         assertThat(updated.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER);
         assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk()).isNotEmpty();
-        assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk().getFirst().getKravTilstandHistorikk().getFirst().getTema()).isEqualTo("Test tema");;
+        assertThat(updated.getEtterlevelseDokumentasjonData().getVersjonHistorikk().getFirst().getKravTilstandHistorikk().getFirst().getTema()).isEqualTo("Test tema");
     }
 
     @Test
@@ -506,6 +507,98 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 new HttpEntity<>(request),
                 String.class,
                 request.getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void cancelApprovalOfEtterlevelseDokumentasjon_should_be_successful() {
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .etterlevelseNummer(101)
+                                        .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .teams(List.of())
+                                        .resources(List.of())
+                                        .risikoeiere(List.of("U123457"))
+                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(1).build()))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
+                .id(eDok.getId())
+                .update(true)
+                .title(eDok.getTitle())
+                .etterlevelseNummer(101)
+                .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
+                .meldingRisikoeierTilEtterleveler("test")
+                .risikoeiere(List.of("U123457"))
+                .resources(List.of())
+                .build();
+
+        ResponseEntity<EtterlevelseDokumentasjonResponse> resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(eDokRequest),
+                EtterlevelseDokumentasjonResponse.class,
+                eDokRequest.getId()
+        );
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertNotNull(resp.getBody());
+        EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse = resp.getBody();
+
+        assertThat(etterlevelseDokumentasjonResponse.getId().toString()).isEqualTo(eDok.getId().toString());
+        assertThat(etterlevelseDokumentasjonResponse.getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER);
+
+        // persisted state
+        EtterlevelseDokumentasjon updated = etterlevelseDokumentasjonRepo.findById(eDok.getId()).orElseThrow();
+        assertThat(updated.getEtterlevelseDokumentasjonData().getStatus()).isEqualTo(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER);
+
+    }
+
+    @Test
+    void cancelApprovalOfEtterlevelseDokumentasjon_no_write_access_should_be_fail() {
+        EtterlevelseDokumentasjon eDok = etterlevelseDokumentasjonRepo.save(
+                EtterlevelseDokumentasjon.builder()
+                        .etterlevelseDokumentasjonData(
+                                EtterlevelseDokumentasjonData.builder()
+                                        .title("test")
+                                        .etterlevelseNummer(101)
+                                        .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
+                                        .etterlevelseDokumentVersjon(1)
+                                        .teams(List.of())
+                                        .resources(List.of())
+                                        .risikoeiere(List.of("U123456"))
+                                        .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(1).build()))
+                                        .build()
+                        )
+                        .build()
+        );
+
+        EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
+                .id(eDok.getId())
+                .update(true)
+                .title(eDok.getTitle())
+                .etterlevelseNummer(101)
+                .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
+                .meldingRisikoeierTilEtterleveler("test")
+                .risikoeiere(List.of("U123456"))
+                .resources(List.of())
+                .build();
+
+        ResponseEntity<String> resp = restTemplate.exchange(
+                "/etterlevelsedokumentasjon/{id}",
+                HttpMethod.PUT,
+                new HttpEntity<>(eDokRequest),
+                String.class,
+                eDokRequest.getId()
         );
 
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
