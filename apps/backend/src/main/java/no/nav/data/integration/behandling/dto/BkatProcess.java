@@ -26,7 +26,7 @@ public class BkatProcess {
     private Boolean automaticProcessing;
     private Boolean profiling;
     private BkatDpia dpia;
-    private BkatLegalBasis legalBasis;
+    private List<BkatLegalBasis> legalBasis;
 
     private String start;
     private String end;
@@ -48,7 +48,7 @@ public class BkatProcess {
                 .behandlingInnfortINav(dpia != null && dpia.getProcessImplemented() != null ? dpia.getProcessImplemented() : false)
                 .gyldigFra(start)
                 .gyldingTil(end)
-                .behandlingensgrunnlag(legalBasis)
+                .behandlingensgrunnlag(List.copyOf(legalBasis))
                 .kiBenyttesIBehandling(aiUsageDescription != null && aiUsageDescription.getAiUsage() != null ? aiUsageDescription.getAiUsage() : false)
                 .personopplysningerBruktTilUtviklingAvKiSystemer(aiUsageDescription != null && aiUsageDescription.getReusingPersonalInformation() != null ? aiUsageDescription.getReusingPersonalInformation() : false)
                 .overordnetFormaal(toCode(purposes.get(0)))

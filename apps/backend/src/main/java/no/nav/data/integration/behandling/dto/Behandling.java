@@ -20,7 +20,7 @@ public class Behandling {
     private ExternalCode overordnetFormaal;
     private String formaal;
     private String ytterligereBeskrivelse;
-    private BkatLegalBasis behandlingensgrunnlag;
+    private List<BkatLegalBasis> behandlingensgrunnlag;
 
     private boolean behandlingInnfortINav;
 
