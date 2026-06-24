@@ -48,7 +48,7 @@ public class BkatProcess {
                 .behandlingInnfortINav(dpia != null && dpia.getProcessImplemented() != null ? dpia.getProcessImplemented() : false)
                 .gyldigFra(start)
                 .gyldingTil(end)
-                .behandlingensgrunnlag(List.copyOf(legalBasis))
+                .behandlingensgrunnlag(legalBasis)
                 .kiBenyttesIBehandling(aiUsageDescription != null && aiUsageDescription.getAiUsage() != null ? aiUsageDescription.getAiUsage() : false)
                 .personopplysningerBruktTilUtviklingAvKiSystemer(aiUsageDescription != null && aiUsageDescription.getReusingPersonalInformation() != null ? aiUsageDescription.getReusingPersonalInformation() : false)
                 .overordnetFormaal(toCode(purposes.get(0)))
