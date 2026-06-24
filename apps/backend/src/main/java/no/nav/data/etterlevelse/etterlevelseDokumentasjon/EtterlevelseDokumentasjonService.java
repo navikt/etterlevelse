@@ -420,6 +420,7 @@ public class EtterlevelseDokumentasjonService {
     public boolean hasUserWriteAccess(EtterlevelseDokumentasjon edok) {
         boolean resourceIsEmpty = edok.getResources() == null || edok.getResources().isEmpty();
         boolean teamIsEmpty = edok.getTeams() == null || edok.getTeams().isEmpty();
+        boolean risikoeierIsEmpty = edok.getEtterlevelseDokumentasjonData().getRisikoeiere() == null || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().isEmpty();
 
         if (resourceIsEmpty && teamIsEmpty) {
             return true;
@@ -437,6 +438,10 @@ public class EtterlevelseDokumentasjonService {
                     }
                 });
             }
+            if (!risikoeierIsEmpty) {
+                memeberList.addAll(edok.getEtterlevelseDokumentasjonData().getRisikoeiere());
+            }
+
             try {
                 String currentUser = SecurityUtils.getCurrentIdent();
                 return memeberList.contains(currentUser);
