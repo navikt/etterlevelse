@@ -1,10 +1,6 @@
 package no.nav.data.integration.behandling.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +22,21 @@ public class BkatProcess {
     private int number;
     private String name;
     private String description;
+    private String additionalDescription;
     private Boolean automaticProcessing;
     private Boolean profiling;
+    private BkatDpia dpia;
+    private BkatLegalBasis legalBasis;
+
+    private String start;
+    private String end;
     @Singular
     private List<BkatCode> purposes;
     private BkatAffiliation affiliation;
     @Singular
     private List<BkatPolicy> policies;
     private BkatDataProcessing dataProcessing;
+    private BkatAiUsageDescription aiUsageDescription;
 
     public Behandling convertToBehandling() {
         return Behandling.builder()
@@ -41,6 +44,13 @@ public class BkatProcess {
                 .nummer(number)
                 .navn(name)
                 .formaal(description)
+                .ytterligereBeskrivelse(additionalDescription)
+                .behandlingInnfortINav(dpia != null && dpia.getProcessImplemented() != null ? dpia.getProcessImplemented() : false)
+                .gyldigFra(start)
+                .gyldingTil(end)
+                .behandlingensgrunnlag(legalBasis)
+                .kiBenyttesIBehandling(aiUsageDescription != null && aiUsageDescription.getAiUsage() != null ? aiUsageDescription.getAiUsage() : false)
+                .personopplysningerBruktTilUtviklingAvKiSystemer(aiUsageDescription != null && aiUsageDescription.getReusingPersonalInformation() != null ? aiUsageDescription.getReusingPersonalInformation() : false)
                 .overordnetFormaal(toCode(purposes.get(0)))
                 .avdeling(toCode(affiliation.getDepartment()))
                 .linjer(convert(affiliation.getSubDepartments(), BkatCode::toCode))
