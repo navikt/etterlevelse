@@ -260,7 +260,7 @@ public class PvkDokumentController {
 
         if (pvkDokumentToUpdate.getStatus() == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER && request.getStatus() == PvkDokumentStatus.TRENGER_GODKJENNING) {
             if (!risikoeierIsEmpty) {
-                return edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent());
+                return edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent()) || SecurityUtils.isAdmin();
             } else {
                 return false;
             }
