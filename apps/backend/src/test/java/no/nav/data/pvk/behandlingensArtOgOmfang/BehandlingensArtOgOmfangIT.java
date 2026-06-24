@@ -1,9 +1,11 @@
 package no.nav.data.pvk.behandlingensArtOgOmfang;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangRequest;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -14,6 +16,11 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BehandlingensArtOgOmfangIT extends IntegrationTestBase {
+
+    @BeforeEach
+    void setUp() {
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
+    }
 
     @Test
     void getBehandlingensArtOgOmfang() {

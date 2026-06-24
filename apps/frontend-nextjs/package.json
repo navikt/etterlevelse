@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "lint-staged": "lint-staged",
     "test": "yarn lint-staged",
     "start": "next start",
     "prettier:check": "prettier -c ./app",

@@ -11,10 +11,12 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravReference;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
@@ -39,7 +41,9 @@ import java.util.UUID;
 public class RisikoscenarioController {
 
     private final RisikoscenarioService risikoscenarioService;
+    private final PvkDokumentService pvkDokumentService;
     private final KravService kravService;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @Operation(summary = "Get All Risikoscenario")
     @ApiResponse(description = "ok")
@@ -96,6 +100,7 @@ public class RisikoscenarioController {
         log.info("Create Risikoscenario");
 
         try {
+            hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
             Risikoscenario risikoscenario = risikoscenarioService.save(request.convertToRisikoscenario(), false);
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
             setTiltakAndKravDataForRelevantKravList(response);
@@ -118,6 +123,8 @@ public class RisikoscenarioController {
         }
         
         try {
+            hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
+
             Risikoscenario risikoscenario = request.convertToRisikoscenario();
             risikoscenario.getRisikoscenarioData().getRelevanteKravNummer().add(kravnummer);
             risikoscenario = risikoscenarioService.save(risikoscenario, false);
@@ -141,6 +148,8 @@ public class RisikoscenarioController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
+
+        hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
 
         var risikoscenarioToUpdate = risikoscenarioService.get(id);
 
@@ -190,10 +199,12 @@ public class RisikoscenarioController {
             log.warn("Requested to add non-existing or non-active Krav to Risikoscenario");
             return ResponseEntity.badRequest().build(); // Somehow we may get client-side MismatchedInputException if we just throw ValidationException here
         }
-        
+
         // Note: The following will cause NPE (and INTERNAL SE) if a request contains non-existing risikoscenarios. 
         List<Risikoscenario> updatedRisikoscenarioer =  risikoscenarioService.addRelevantKravToRisikoscenarioer(request.getKravnummer(), request.getRisikoscenarioIder());
-        
+
+        hasUserWriteAccessCheck(updatedRisikoscenarioer.getFirst().getPvkDokumentId());
+
         List<RisikoscenarioResponse> reply = updatedRisikoscenarioer.stream().map(RisikoscenarioResponse::buildFrom).toList();
         reply.forEach(this::setTiltakAndKravDataForRelevantKravList);
 
@@ -206,6 +217,9 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> removeKravFromRisikoscenarioById(@PathVariable String id, @PathVariable Integer kravnummer) {
         log.info("Remove krav {} from risikoscenario id={}", kravnummer, id);
         var risikoscenario = risikoscenarioService.get(UUID.fromString(id));
+
+        hasUserWriteAccessCheck(risikoscenario.getPvkDokumentId());
+
         List<Integer> relevanteKravNummer = risikoscenario.getRisikoscenarioData().getRelevanteKravNummer();
         if (relevanteKravNummer.remove(kravnummer)) {
             var updatedRisikoscenario = risikoscenarioService.save(risikoscenario, true);
@@ -224,6 +238,10 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> updateRisikoscenarioAddTiltak(@RequestBody RisikoscenarioTiltakRequest request) {
         log.info("Add Tiltak to risikoscenario id={}", request.getRisikoscenarioId());
         try {
+            var risko =  risikoscenarioService.get(request.getRisikoscenarioId());
+            if (risko != null) {
+                hasUserWriteAccessCheck(risko.getPvkDokumentId());
+            }
             Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRisikoscenarioId(), request.getTiltakIds());
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
             setTiltakAndKravDataForRelevantKravList(response);
@@ -240,6 +258,9 @@ public class RisikoscenarioController {
     @PutMapping("/{id}/removeTiltak/{tiltakId}")
     public ResponseEntity<RisikoscenarioResponse> removeTiltakFromRisikoscenarioById(@PathVariable UUID id, @PathVariable UUID tiltakId) {
         log.info("Remove Tiltak (id={}) from risikoscenario (id={})", tiltakId, id);
+        var risko =  risikoscenarioService.get(id);
+        hasUserWriteAccessCheck(risko.getPvkDokumentId());
+
         if (risikoscenarioService.removeTiltak(id, tiltakId)) {
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenarioService.updateTiltakOppdatertField(id, true));
             setTiltakAndKravDataForRelevantKravList(response);
@@ -276,4 +297,16 @@ public class RisikoscenarioController {
             risikoscenario.setRelevanteKravNummer(filteredKravReference);
     }
 
+
+    private void hasUserWriteAccessCheck(UUID pvkDokumentId) {
+        var pvkDok = pvkDokumentService.get(pvkDokumentId);
+        if (pvkDok == null) {
+            throw new ValidationException(String.format("Ugyldig pvk dokument %s", pvkDokumentId));
+        }
+        var edok = etterlevelseDokumentasjonService.get(pvkDok.getEtterlevelseDokumentId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", pvkDokumentId));
+        }
+    }
 }

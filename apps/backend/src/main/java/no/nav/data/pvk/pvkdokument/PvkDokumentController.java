@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -119,6 +121,13 @@ public class PvkDokumentController {
     @PostMapping
     public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
         log.info("Create PvkDokument");
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), request.isUpdate());
 
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
@@ -142,6 +151,12 @@ public class PvkDokumentController {
 
         if(pvkDokumentToUpdate == null) {
             throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
+        }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!hasPvkDokumentWriteAccess(edok, pvkDokumentToUpdate, request)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         request.mergeInto(pvkDokumentToUpdate);
@@ -189,6 +204,12 @@ public class PvkDokumentController {
             throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
         }
 
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
+
+        if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
+            throw new ValidationException(String.format("Kan ikke godkjenne pvk dokument med id: %s fordi brukeren ikke er en risikoeier", request.getId()));
+        }
+
         request.mergeInto(pvkDokumentToUpdate);
         var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
         updatePvoTilbakemeldingStatus(pvkDokument);
@@ -232,6 +253,20 @@ public class PvkDokumentController {
     private void addEtterlevelseDokumentasjonVersjon(PvkDokumentResponse pvkDokument) {
         var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
         pvkDokument.setCurrentEtterlevelseDokumentVersjon(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon());
+    }
+
+    private boolean hasPvkDokumentWriteAccess (EtterlevelseDokumentasjon edok, PvkDokument pvkDokumentToUpdate, PvkDokumentRequest request) {
+        boolean risikoeierIsEmpty = edok.getEtterlevelseDokumentasjonData().getRisikoeiere() == null || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().isEmpty();
+
+        if (pvkDokumentToUpdate.getStatus() == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER && request.getStatus() == PvkDokumentStatus.TRENGER_GODKJENNING) {
+            if (!risikoeierIsEmpty) {
+                return edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent());
+            } else {
+                return false;
+            }
+        } else {
+            return etterlevelseDokumentasjonService.hasUserWriteAccess(edok);
+        }
     }
 
     private void checkIfPvkDocumentationHasStarted(PvkDokumentResponse pvkDokument) {
