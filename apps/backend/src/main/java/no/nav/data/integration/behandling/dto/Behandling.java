@@ -1,15 +1,10 @@
 package no.nav.data.integration.behandling.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 import no.nav.data.etterlevelse.common.domain.ExternalCode;
 import no.nav.data.integration.team.dto.TeamResponse;
 
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -24,6 +19,13 @@ public class Behandling {
 
     private ExternalCode overordnetFormaal;
     private String formaal;
+    private String ytterligereBeskrivelse;
+    private BkatLegalBasis behandlingensgrunnlag;
+
+    private boolean behandlingInnfortINav;
+
+    private String gyldigFra;
+    private String gyldingTil;
 
     private ExternalCode avdeling;
     @Singular("linje")
@@ -40,4 +42,7 @@ public class Behandling {
 
     private Boolean automatiskBehandling;
     private Boolean profilering;
+
+    private Boolean kiBenyttesIBehandling;
+    private Boolean personopplysningerBruktTilUtviklingAvKiSystemer;
 }
