@@ -243,7 +243,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
             aria-live='polite'
             aria-label='Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.'
           >
-            <InfoCard.Message icon={<InformationSquareFillIcon />}>
+            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
               Fordi du har fjernet alle etterlevelseskrav, vil dette risikoscenarioet vises i listen
               over alle øvrige krav, på siden Identifisering av risikoscenarioer og tiltak.
             </InfoCard.Message>
