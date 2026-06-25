@@ -143,6 +143,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
               <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
                 Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
                 <List>
+                  {profilering === null && <List.Item>Profilering</List.Item>}
                   {automatiskBehandling === null && (
                     <List.Item>Helautomatisert behandling</List.Item>
                   )}
@@ -154,7 +155,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
                 <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
                   Behandlingskatalogen
                 </ExternalLink>{' '}
-                før dere vurderer behov for
+                før dere vurderer behov for PVK.
               </InfoCard.Message>
             </InfoCard>
           )}
