@@ -322,7 +322,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       {generelScenarioFormValue && relevanteKravNummerFormValue.length !== 0 && (
         <div ref={decoupledAlertRef}>
           <InfoCard data-color='info' className='mt-5'>
-            <InfoCard.Message icon={<InformationSquareFillIcon />}>
+            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
               Dere har valgt å avkoble dette risikoscenarioet fra følgende etterlevelseskrav:{' '}
               <List as='ul' className='my-2'>
                 {relevanteKravNummerFormValue.map((relevanteKrav, index) => (
@@ -344,7 +344,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
         relevanteKravNummerFormValue.length !== 0 && (
           <div ref={ovrigScenarioLinkedAlertRef}>
             <InfoCard data-color='info' className='mt-5'>
-              <InfoCard.Message icon={<InformationSquareFillIcon />}>
+              <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
                 Dere har valgt å koble dette risikoscenarioet til etterlevelseskrav. Når dere lagrer
                 denne endringen, vil risikoscenarioet forsvinne fra listen over “øvrige” krav.
                 Scenarioet finner dere på de kravsidene som dere velger her. Husk at det også er
@@ -357,7 +357,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
       {!generelScenarioFormValue && relevanteKravNummerFormValue.length > 1 && (
         <div ref={multiKravAlertRef}>
           <InfoCard data-color='info' className='mt-5'>
-            <InfoCard.Message icon={<InformationSquareFillIcon />}>
+            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
               Fordi dere har valgt at dette risikoscenarioet skal høre til flere krav, vil
               scenarioet nå også finnes under gjeldende krav.
             </InfoCard.Message>

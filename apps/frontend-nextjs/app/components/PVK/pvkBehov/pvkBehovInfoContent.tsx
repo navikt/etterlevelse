@@ -70,7 +70,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
 
             {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
               <InfoCard data-color='warning' className='mb-5'>
-                <InfoCard.Message icon={<ExclamationmarkTriangleIcon />}>
+                <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
                   Det har ikke blitt lagt til behandlinger under dokumentegenskaper.
                 </InfoCard.Message>
               </InfoCard>
@@ -140,7 +140,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
 
           {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
             <InfoCard data-color='warning'>
-              <InfoCard.Message icon={<ExclamationmarkTriangleIcon />}>
+              <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
                 Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
                 <List>
                   {automatiskBehandling === null && (

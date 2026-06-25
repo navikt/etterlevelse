@@ -450,7 +450,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       {risikoscenarioList.length === 0 && (
                         <div className='my-5'>
                           <InfoCard data-color='info'>
-                            <InfoCard.Message icon={<InformationSquareFillIcon />}>
+                            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
                               <Heading spacing size='small' level='3'>
                                 Dere har foreløpig ingen risikoscenarioer
                               </Heading>
@@ -532,7 +532,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       {tiltakList.length === 0 && (
                         <div className='my-5'>
                           <InfoCard data-color='info'>
-                            <InfoCard.Message icon={<InformationSquareFillIcon />}>
+                            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
                               <Heading spacing size='small' level='3'>
                                 Foreløpig er ingen tiltak satt
                               </Heading>
