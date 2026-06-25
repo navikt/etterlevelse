@@ -34,7 +34,8 @@ import {
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, BodyLong, Heading, Loader, ReadMore, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { BodyLong, Heading, InfoCard, Loader, ReadMore, Tabs, ToggleGroup } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
@@ -448,27 +449,29 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       </ToggleGroup>
                       {risikoscenarioList.length === 0 && (
                         <div className='my-5'>
-                          <Alert variant='info'>
-                            <Heading spacing size='small' level='3'>
-                              Dere har foreløpig ingen risikoscenarioer
-                            </Heading>
-                            Risikoscenarioer legges inn under{' '}
-                            <ExternalLink
-                              href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}?tab=pvk`}
-                            >
-                              PVK-relaterte krav
-                            </ExternalLink>{' '}
-                            eller eventuelt under{' '}
-                            <ExternalLink
-                              href={pvkDokumentasjonStepUrl(
-                                etterlevelseDokumentasjon.id,
-                                pvkDokument.id,
-                                6
-                              )}
-                            >
-                              øvrige risikoscenarioer
-                            </ExternalLink>
-                          </Alert>
+                          <InfoCard data-color='info'>
+                            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                              <Heading spacing size='small' level='3'>
+                                Dere har foreløpig ingen risikoscenarioer
+                              </Heading>
+                              Risikoscenarioer legges inn under{' '}
+                              <ExternalLink
+                                href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}?tab=pvk`}
+                              >
+                                PVK-relaterte krav
+                              </ExternalLink>{' '}
+                              eller eventuelt under{' '}
+                              <ExternalLink
+                                href={pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjon.id,
+                                  pvkDokument.id,
+                                  6
+                                )}
+                              >
+                                øvrige risikoscenarioer
+                              </ExternalLink>
+                            </InfoCard.Message>
+                          </InfoCard>
                         </div>
                       )}
 
@@ -528,30 +531,31 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                     <Tabs.Panel value={tabValues.tiltak} className='w-full'>
                       {tiltakList.length === 0 && (
                         <div className='my-5'>
-                          <Alert variant='info'>
-                            <Heading spacing size='small' level='3'>
-                              Foreløpig er ingen tiltak satt
-                            </Heading>
-                            Tiltak legges inn under{' '}
-                            <ExternalLink
-                              href={etterlevelseDokumentasjonPvkTabUrl(
-                                etterlevelseDokumentasjon.id
-                              )}
-                            >
-                              PVK-relaterte krav{' '}
-                            </ExternalLink>{' '}
-                            eller eventuelt under{' '}
-                            <ExternalLink
-                              href={pvkDokumentasjonStepUrl(
-                                etterlevelseDokumentasjon.id,
-                                pvkDokument.id,
-                                6
-                              )}
-                            >
-                              øvrige risikoscenarioer
-                            </ExternalLink>
-                            .
-                          </Alert>
+                          <InfoCard data-color='info'>
+                            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                              <Heading spacing size='small' level='3'>
+                                Foreløpig er ingen tiltak satt
+                              </Heading>
+                              Tiltak legges inn under{' '}
+                              <ExternalLink
+                                href={etterlevelseDokumentasjonPvkTabUrl(
+                                  etterlevelseDokumentasjon.id
+                                )}
+                              >
+                                PVK-relaterte krav{' '}
+                              </ExternalLink>{' '}
+                              eller eventuelt under{' '}
+                              <ExternalLink
+                                href={pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjon.id,
+                                  pvkDokument.id,
+                                  6
+                                )}
+                              >
+                                øvrige risikoscenarioer.
+                              </ExternalLink>
+                            </InfoCard.Message>
+                          </InfoCard>
                         </div>
                       )}
 

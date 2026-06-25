@@ -5,7 +5,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Accordion, Alert, BodyLong, ReadMore } from '@navikt/ds-react'
+import { Accordion, BodyLong, LocalAlert, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useRef, useState } from 'react'
@@ -171,10 +171,14 @@ export const RisikoscenarioAccordianListReadOnlyWithIverksetting: FunctionCompon
 
                       {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
                         <div className='mt-5'>
-                          <Alert className='mt-3' variant='warning'>
-                            Dere må legge inn tiltak under Identifisering av risikoscenarioer og
-                            tiltak.
-                          </Alert>
+                          <LocalAlert className='mt-3' status='warning'>
+                            <LocalAlert.Header>
+                              <LocalAlert.Title>
+                                Dere må legge inn tiltak under Identifisering av risikoscenarioer og
+                                tiltak.
+                              </LocalAlert.Title>
+                            </LocalAlert.Header>
+                          </LocalAlert>
                         </div>
                       )}
                     </div>

@@ -51,7 +51,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { isRisikoUnderarbeidCheck } from '@/util/risikoscenario/risikoscenarioUtils'
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Modal } from '@navikt/ds-react'
+import { BodyLong, Button, CopyButton, Heading, InlineMessage, Modal } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -607,9 +607,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   icon={<FilesIcon aria-hidden />}
                 />
                 {pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
-                  <Alert variant='info' className='my-5'>
+                  <InlineMessage status='info' className='my-5'>
                     Status: {pvkDokumentStatusToText(pvkDokument.status)}
-                  </Alert>
+                  </InlineMessage>
                 )}
 
                 <BehandlingensLivslopSummary

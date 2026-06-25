@@ -14,7 +14,18 @@ import { behandlingskatalogenProcessUrl } from '@/routes/behandlingskatalog/beha
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { Alert, BodyLong, BodyShort, Button, Heading, Link, List, ReadMore } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  BodyShort,
+  Button,
+  Heading,
+  InfoCard,
+  Link,
+  List,
+  LocalAlert,
+  ReadMore,
+} from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useMemo } from 'react'
@@ -95,18 +106,24 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                 )}
             </div>
             {etterlevelseDokumentasjon.behandlinger?.length === 0 && (
-              <Alert variant='warning' id='behandling-error' className='mb-2'>
-                Dere må legge inn minst 1 behandling fra Behandlingskatalogen. Dette kan dere gjøre
-                under{' '}
-                <Link
-                  href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#behandling`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  aria-label='redigere etterlevelsesdokumentasjon'
-                >
-                  Rediger dokumentegenskaper (åpner i en ny fane)
-                </Link>
-              </Alert>
+              <LocalAlert status='warning' id='behandling-error' className='mb-2'>
+                <LocalAlert.Header>
+                  <LocalAlert.Title>
+                    Dere må legge inn minst 1 behandling fra Behandlingskatalogen.
+                  </LocalAlert.Title>
+                </LocalAlert.Header>
+                <LocalAlert.Content>
+                  Dette kan dere gjøre under{' '}
+                  <Link
+                    href={`${etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}#behandling`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label='redigere etterlevelsesdokumentasjon'
+                  >
+                    Rediger dokumentegenskaper (åpner i en ny fane)
+                  </Link>
+                </LocalAlert.Content>
+              </LocalAlert>
             )}
 
             {etterlevelseDokumentasjon.behandlinger?.length !== 0 && (
@@ -147,9 +164,13 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
             {isPvkKravLoading && <CenteredLoader />}
 
             {antallFerdigPvkKrav !== antallPvkKrav && (
-              <Alert variant='warning' className='mb-4'>
-                Dere må fullføre dokumentering av personvernkrav før dere kan sende inn PVK.
-              </Alert>
+              <LocalAlert status='warning' className='mb-4'>
+                <LocalAlert.Header>
+                  <LocalAlert.Title>
+                    Dere må fullføre dokumentering av personvernkrav før dere kan sende inn PVK.
+                  </LocalAlert.Title>
+                </LocalAlert.Header>
+              </LocalAlert>
             )}
 
             <Button
@@ -224,9 +245,14 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
             </ReadMore>
 
             {!readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
-              <Alert variant='info'>
-                <BodyLong>
-                  Dere har ikke lagt ved noen tilhørende dokumenter. Dette kan dere gjøre under{' '}
+              <InfoCard data-color='info'>
+                <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                  <InfoCard.Title>
+                    Dere har ikke lagt ved noen tilhørende dokumenter.
+                  </InfoCard.Title>
+                </InfoCard.Header>
+                <InfoCard.Content>
+                  Dette kan dere gjøre under{' '}
                   <Link
                     href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
                     target='_blank'
@@ -235,14 +261,16 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
                   >
                     Rediger dokumentegenskaper (åpner i en ny fane).
                   </Link>
-                </BodyLong>
-              </Alert>
+                </InfoCard.Content>
+              </InfoCard>
             )}
 
             {readOnly && etterlevelseDokumentasjon.risikovurderinger?.length === 0 && (
-              <Alert variant='info'>
-                <BodyLong>Det er ikke lagt til noen dokumenter</BodyLong>
-              </Alert>
+              <InfoCard data-color='info'>
+                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                  Det er ikke lagt til noen dokumenter
+                </InfoCard.Message>
+              </InfoCard>
             )}
           </div>
         </div>

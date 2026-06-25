@@ -19,11 +19,11 @@ import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterlevels
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ExclamationmarkTriangleIcon, LightBulbIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
   BodyLong,
   Button,
   Heading,
   InfoCard,
+  InlineMessage,
   Label,
   Link,
   List,
@@ -160,7 +160,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                   <>
                     {fieldProps.form.values.stemmerPersonkategorier === false && (
                       <div>
-                        <Alert inline variant='warning' className='mt-5 mb-10'>
+                        <InlineMessage status='warning' className='mt-5 mb-10'>
                           Dere må oppdatere personkategori(er) i Behandlingskatalogen. Hvis dere
                           ikke finner riktig personkategori(er), ta kontakt på{' '}
                           <Link
@@ -172,7 +172,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                             #behandlingskatalogen på Slack (åpner i en ny fane)
                           </Link>
                           , eller på epost: teamdatajegerne@nav.no.
-                        </Alert>
+                        </InlineMessage>
                       </div>
                     )}
                   </>
