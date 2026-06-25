@@ -235,6 +235,7 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                               isCreateMode={isCreateMode}
                               kravnummer={krav.kravNummer}
                               kravversjon={krav.kravVersjon}
+                              godkjentAvRisikoeierDato={pvkDokument.godkjentAvRisikoeierDato}
                               risikoscenarioer={risikoscenarioer}
                               setRisikoscenarioer={setRisikoscenarioer}
                               risikoscenarioForKrav={risikoscenarioForKrav}

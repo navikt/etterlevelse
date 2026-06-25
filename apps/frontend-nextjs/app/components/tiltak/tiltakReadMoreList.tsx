@@ -30,6 +30,7 @@ interface IProps {
   isAddExistingMode: boolean
   customDelete?: (tiltakId: string) => void
   formRef?: RefObject<any>
+  godkjentAvRisikoeierDato?: string
 }
 
 export const TiltakReadMoreList = (props: IProps) => {
@@ -47,6 +48,7 @@ export const TiltakReadMoreList = (props: IProps) => {
     isAddExistingMode,
     customDelete,
     formRef,
+    godkjentAvRisikoeierDato,
   } = props
   const [activeTiltakForm, setActiveTiltakForm] = useState<boolean>(false)
   const queryParams = useSearchParams()
@@ -76,6 +78,7 @@ export const TiltakReadMoreList = (props: IProps) => {
                 isAddExistingMode={isAddExistingMode}
                 customDelete={customDelete}
                 formRef={formRef}
+                godkjentAvRisikoeierDato={godkjentAvRisikoeierDato}
                 activeTiltakForm={activeTiltakForm}
                 setActiveTiltakForm={setActiveTiltakForm}
               />
@@ -110,9 +113,15 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     isAddExistingMode,
     customDelete,
     formRef,
+    godkjentAvRisikoeierDato,
     activeTiltakForm,
     setActiveTiltakForm,
   } = props
+
+  const isFromPreviousVersion =
+    !!godkjentAvRisikoeierDato &&
+    !!tiltak.changeStamp.createdDate &&
+    new Date(tiltak.changeStamp.createdDate + 'Z') < new Date(godkjentAvRisikoeierDato)
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
@@ -218,17 +227,19 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
                 Rediger tiltak
               </Button>
 
-              <Button
-                type='button'
-                variant='tertiary'
-                size='small'
-                icon={<TrashIcon title='' aria-hidden />}
-                onClick={async () => {
-                  await activeFormButton(() => setIsDeleteModalOpen(true))
-                }}
-              >
-                Slett tiltak
-              </Button>
+              {!isFromPreviousVersion && (
+                <Button
+                  type='button'
+                  variant='tertiary'
+                  size='small'
+                  icon={<TrashIcon title='' aria-hidden />}
+                  onClick={async () => {
+                    await activeFormButton(() => setIsDeleteModalOpen(true))
+                  }}
+                >
+                  Slett tiltak
+                </Button>
+              )}
             </div>
           )}
       </div>
