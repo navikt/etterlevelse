@@ -40,7 +40,7 @@
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@fortawesome/react-fontawesome": "^3.3.1",
     "@navikt/aksel-icons": "^8.13.1",
-    "@navikt/ds-css": "^8.13.1",
+    "@navikt/ds-css": "^8.14.0",
     "@navikt/ds-react": "^8.13.1",
     "@navikt/ds-tailwind": "^8.13.1",
     "@tailwindcss/postcss": "^4.3.1",
