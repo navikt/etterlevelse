@@ -23,6 +23,7 @@ interface IProps {
 export const TiltakView = (props: IProps) => {
   const { tiltak, risikoscenarioList, noIverksattKommentar } = props
   const [ansvarligView, setAnsvarligView] = useState<string>('')
+  const today = new Date()
 
   useEffect(() => {
     ;(async () => {
@@ -98,9 +99,15 @@ export const TiltakView = (props: IProps) => {
       )}
 
       <div className='mt-3 mb-5'>
-        {tiltak.iverksatt && (
+        {tiltak.iverksatt && tiltak.iverksattDato !== null && (
           <InlineMessage status='success'>
             Tiltaket ble markert som iverksatt {moment(tiltak.iverksattDato).format('LL')}
+          </InlineMessage>
+        )}
+
+        {tiltak.iverksatt && tiltak.iverksattDato === null && (
+          <InlineMessage status='success'>
+            Tiltaket blir markert som iverksatt {moment(today).format('LL')}
           </InlineMessage>
         )}
       </div>
