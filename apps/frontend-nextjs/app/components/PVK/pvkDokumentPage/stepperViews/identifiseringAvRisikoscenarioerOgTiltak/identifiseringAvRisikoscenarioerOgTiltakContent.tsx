@@ -2,7 +2,8 @@
 
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, Heading, InfoCard, ReadMore } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, ReactNode } from 'react'
 
@@ -37,10 +38,12 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
         identifisere forebyggende tiltak som reduserer risiko.
       </BodyLong>
 
-      <Alert variant='info' inline className='mt-5'>
-        <strong>Godt å vite:</strong> risikoscenarioer og tiltak som dere dokumenterer, kan dere
-        finne og gjenbruke andre steder hvor det er aktuelt.
-      </Alert>
+      <InfoCard data-color='info' className='mt-5'>
+        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+          Risikoscenarioer og tiltak som dere dokumenterer, kan dere finne og gjenbruke andre steder
+          hvor det er aktuelt.
+        </InfoCard.Message>
+      </InfoCard>
 
       {(antallInnsendingerTilPvo ?? 0) >= 2 && (
         <ReadMore
@@ -87,9 +90,11 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
       </BodyLong>
 
       {risikoscenarioList.length === 0 && (
-        <Alert variant='info' className='my-5 w-fit'>
-          Dere har ikke lagt inn noen øvrige risikoscenarioer.
-        </Alert>
+        <InfoCard data-color='info' className='my-5 w-fit'>
+          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+            Dere har ikke lagt inn noen øvrige risikoscenarioer.
+          </InfoCard.Message>
+        </InfoCard>
       )}
     </div>
   )

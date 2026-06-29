@@ -37,12 +37,13 @@ import {
   isRisikoUnderarbeidCheck,
   risikoscenarioFieldCheck,
 } from '@/util/risikoscenario/risikoscenarioUtils'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
   BodyShort,
   Button,
   FormSummary,
   Heading,
+  InfoCard,
   Link,
   List,
   LocalAlert,
@@ -535,18 +536,20 @@ export const OversiktView: FunctionComponent<TProps> = ({
 
         {!etterlevelseDokumentasjon.risikoeiereData && (
           <div className='w-fit'>
-            <Alert variant='warning'>
-              Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
-              Personvernombudet. Dere kan redigere deltakere og ansvarlige under
-              <Link
-                href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                target='_blank'
-                rel='noopener noreferrer'
-                aria-label='redigere etterlevelsesdokumentasjon'
-              >
-                Dokumentegenskaper (åpner i en ny fane).
-              </Link>
-            </Alert>
+            <InfoCard data-color='warning'>
+              <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                Dere har ikke lagt inn en risikoeier. Dere må gjøre dette før dere sender PVK-en til
+                Personvernombudet. Dere kan redigere deltakere og ansvarlige under
+                <Link
+                  href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label='redigere etterlevelsesdokumentasjon'
+                >
+                  Dokumentegenskaper (åpner i en ny fane).
+                </Link>
+              </InfoCard.Message>
+            </InfoCard>
           </div>
         )}
 

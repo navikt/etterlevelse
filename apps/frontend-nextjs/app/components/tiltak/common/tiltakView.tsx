@@ -9,7 +9,7 @@ import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, Button, Checkbox, CheckboxGroup, List, Modal } from '@navikt/ds-react'
+import { Button, Checkbox, CheckboxGroup, InlineMessage, List, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
 import { FunctionComponent, useEffect, useState } from 'react'
@@ -99,9 +99,9 @@ export const TiltakView = (props: IProps) => {
 
       <div className='mt-3 mb-5'>
         {tiltak.iverksatt && (
-          <Alert variant='success' inline>
+          <InlineMessage status='success'>
             Tiltaket ble markert som iverksatt {moment(tiltak.iverksattDato).format('LL')}
-          </Alert>
+          </InlineMessage>
         )}
       </div>
 
@@ -196,7 +196,7 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
                             hideLegend
                             value={fieldProps.field.value ? ['iverksatt'] : []}
                             onChange={(value) => {
-                              const fieldValue: boolean = value.length > 0 ? true : false
+                              const fieldValue: boolean = value.length > 0
                               fieldProps.form.setFieldValue('iverksatt', fieldValue)
                             }}
                           >

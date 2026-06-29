@@ -12,7 +12,8 @@ import {
   harBehandlinger,
   harKunDpBehandlinger,
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, BodyLong, BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
@@ -53,22 +54,26 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
         !harKunDpBehandlinger(etterlevelseDokumentasjon) && (
           <div>
             {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-              <Alert variant='warning' className='mb-5'>
-                Dere har ikke ennå lagt til behandlinger under{' '}
-                <ExternalLink
-                  className='text-medium'
-                  href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                >
-                  Dokumentegenskaper
-                </ExternalLink>
-                . Det må legges til behandlinger før dere vurderer behov for PVK.
-              </Alert>
+              <InfoCard data-color='warning' className='mb-5'>
+                <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                  Dere har ikke ennå lagt til behandlinger under{' '}
+                  <ExternalLink
+                    className='text-medium'
+                    href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                  >
+                    Dokumentegenskaper
+                  </ExternalLink>
+                  . Det må legges til behandlinger før dere vurderer behov for PVK.
+                </InfoCard.Message>
+              </InfoCard>
             )}
 
             {!etterlevelseDokumentasjon.hasCurrentUserAccess && !user.isAdmin() && (
-              <Alert variant='warning' className='mb-5'>
-                Det har ikke blitt lagt til behandlinger under dokumentegenskaper.
-              </Alert>
+              <InfoCard data-color='warning' className='mb-5'>
+                <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                  Det har ikke blitt lagt til behandlinger under dokumentegenskaper.
+                </InfoCard.Message>
+              </InfoCard>
             )}
           </div>
         )}
@@ -134,21 +139,25 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           </List>
 
           {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
-            <Alert variant='warning'>
-              Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
-              <List>
-                {profilering === null && <List.Item>Profilering</List.Item>}
-                {automatiskBehandling === null && <List.Item>Helautomatisert behandling</List.Item>}
-                {opplysningstyperMangler && (
-                  <List.Item>Særlige kategorier av personopplysninger</List.Item>
-                )}
-              </List>
-              Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
-              <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
-                Behandlingskatalogen
-              </ExternalLink>{' '}
-              før dere vurderer behov for PVK.
-            </Alert>
+            <InfoCard data-color='warning'>
+              <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:
+                <List>
+                  {profilering === null && <List.Item>Profilering</List.Item>}
+                  {automatiskBehandling === null && (
+                    <List.Item>Helautomatisert behandling</List.Item>
+                  )}
+                  {opplysningstyperMangler && (
+                    <List.Item>Særlige kategorier av personopplysninger</List.Item>
+                  )}
+                </List>
+                Dere bør fullføre dokumentasjon av behandlingene deres i{' '}
+                <ExternalLink className='text-medium' href={`${getPollyBaseUrl()}`}>
+                  Behandlingskatalogen
+                </ExternalLink>{' '}
+                før dere vurderer behov for PVK.
+              </InfoCard.Message>
+            </InfoCard>
           )}
         </>
       )}
