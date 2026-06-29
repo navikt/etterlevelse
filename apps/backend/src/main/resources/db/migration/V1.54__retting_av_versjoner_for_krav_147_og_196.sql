@@ -1,4 +1,9 @@
 
+BEGIN;
+
+-- Defer all deferrable constraints to the end of the transaction
+SET CONSTRAINTS ALL DEFERRED;
+
 -- Krav 147 --
 
 -- versjon 2 til 1 --
@@ -105,3 +110,5 @@ WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '6';
 UPDATE TILBAKEMELDING
 SET KRAV_VERSJON = '5'
 WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '6';
+
+COMMIT;
