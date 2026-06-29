@@ -1000,6 +1000,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/aksel-icons@npm:^8.14.0":
+  version: 8.14.0
+  resolution: "@navikt/aksel-icons@npm:8.14.0"
+  checksum: 10c0/d5179e07c34ca40c03dac08db3d234b5155baeaa60401c324abca2707bf1d6634a6fb99ab0be1d852d8a1c5db6481d2f05c1889cd61a7aec44dd1eb15c4d9c9c
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-css@npm:^8.13.1":
   version: 8.13.1
   resolution: "@navikt/ds-css@npm:8.13.1"
@@ -3462,7 +3469,7 @@ __metadata:
     "@fortawesome/free-brands-svg-icons": "npm:^7.2.0"
     "@fortawesome/free-solid-svg-icons": "npm:^7.2.0"
     "@fortawesome/react-fontawesome": "npm:^3.3.1"
-    "@navikt/aksel-icons": "npm:^8.13.1"
+    "@navikt/aksel-icons": "npm:^8.14.0"
     "@navikt/ds-css": "npm:^8.13.1"
     "@navikt/ds-react": "npm:^8.13.1"
     "@navikt/ds-tailwind": "npm:^8.13.1"
