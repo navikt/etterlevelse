@@ -99,6 +99,7 @@ export const IverksattTiltakForm: FunctionComponent<TProps> = ({
                   type='button'
                   onClick={async () => {
                     await submitForm()
+                    setIsModalOpen(false)
                   }}
                 >
                   Lagre
