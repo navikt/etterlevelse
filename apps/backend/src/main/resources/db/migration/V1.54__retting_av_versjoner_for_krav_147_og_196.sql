@@ -1,7 +1,10 @@
-BEGIN;
 
-  -- Postpone constraint checking until the COMMIT statement
-SET CONSTRAINTS fk_metadata_krav_krav_id,fk_tilbakemelding_krav_krav_id DEFERRED;
+-- remove constraints to be able to update the version numbers --
+ALTER TABLE etterlevelse_metadata
+DROP CONSTRAINT fk_metadata_krav_krav_id;
+
+ALTER TABLE tilbakemelding
+DROP CONSTRAINT fk_tilbakemelding_krav_krav_id;
 
 -- Krav 147 --
 
@@ -110,4 +113,16 @@ UPDATE TILBAKEMELDING
 SET KRAV_VERSJON = '5'
 WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '6';
 
-COMMIT;
+
+-- add constraints after updated version numbers --
+alter table etterlevelse_metadata
+    add constraint fk_metadata_krav_krav_id
+        foreign key (krav_nummer, krav_versjon)
+            references krav (krav_nummer, krav_versjon)
+;
+
+alter table tilbakemelding
+    add constraint fk_tilbakemelding_krav_krav_id
+        foreign key (krav_nummer, krav_versjon)
+            references krav (krav_nummer, krav_versjon)
+;
