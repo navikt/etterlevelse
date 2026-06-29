@@ -1000,6 +1000,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/aksel-icons@npm:^8.14.0":
+  version: 8.14.0
+  resolution: "@navikt/aksel-icons@npm:8.14.0"
+  checksum: 10c0/d5179e07c34ca40c03dac08db3d234b5155baeaa60401c324abca2707bf1d6634a6fb99ab0be1d852d8a1c5db6481d2f05c1889cd61a7aec44dd1eb15c4d9c9c
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-css@npm:^8.13.1":
   version: 8.13.1
   resolution: "@navikt/ds-css@npm:8.13.1"
@@ -1007,14 +1014,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:^8.13.1":
-  version: 8.13.1
-  resolution: "@navikt/ds-react@npm:8.13.1"
+"@navikt/ds-react@npm:^8.14.0":
+  version: 8.14.0
+  resolution: "@navikt/ds-react@npm:8.14.0"
   dependencies:
     "@floating-ui/react": "npm:0.27.19"
     "@floating-ui/react-dom": "npm:^2.1.8"
-    "@navikt/aksel-icons": "npm:^8.13.1"
-    "@navikt/ds-tokens": "npm:^8.13.1"
+    "@navikt/aksel-icons": "npm:^8.14.0"
+    "@navikt/ds-tokens": "npm:^8.14.0"
     date-fns: "npm:^4.0.0"
     react-day-picker: "npm:9.14.0"
   peerDependencies:
@@ -1024,7 +1031,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/09e688e5abe7a602e5bb78b1b49fd1ab8546670c3e0a9f92c287176d8704228a9bde8b21c02f8cdcc5f48ed49548ebefd044ec1e17f55a2e84af3fd6310ac8c6
+  checksum: 10c0/8b60a52d9c219836e6c66afacc676c360463f7896a7a2ff07e45bd1efa8c2ea0138b0ad318192c55f6df6b122d9b5b118baebe64be88297fbd98c6c07f684f0b
   languageName: node
   linkType: hard
 
@@ -1035,10 +1042,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^8.13.1":
-  version: 8.13.1
-  resolution: "@navikt/ds-tokens@npm:8.13.1"
-  checksum: 10c0/5932bfde8863440baadc67c6f506662528e1f6ceb4c423837e9daa31ea64d645b1fe6db237aa03d24a85385a89b444d96cb3b84ce5ef7df41171257d6b7ca546
+"@navikt/ds-tokens@npm:^8.14.0":
+  version: 8.14.0
+  resolution: "@navikt/ds-tokens@npm:8.14.0"
+  checksum: 10c0/030821444acf90da035b4819e00ae6fdae97919f500e531f30aa0f8489a26bf2a1ee74e4ae61583d054b62e4de2962f2b7f50f320113e774a1deb9fdcad028b3
   languageName: node
   linkType: hard
 
@@ -3464,7 +3471,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^3.3.1"
     "@navikt/aksel-icons": "npm:^8.13.1"
     "@navikt/ds-css": "npm:^8.13.1"
-    "@navikt/ds-react": "npm:^8.13.1"
+    "@navikt/ds-react": "npm:^8.14.0"
     "@navikt/ds-tailwind": "npm:^8.13.1"
     "@next/eslint-plugin-next": "npm:^16.2.9"
     "@tailwindcss/postcss": "npm:^4.3.1"
