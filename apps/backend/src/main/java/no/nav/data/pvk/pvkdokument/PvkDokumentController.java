@@ -14,10 +14,13 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentas
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentListItemResponse;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
+import no.nav.data.pvk.pvkdokument.dto.PvkDokumentShortResponse;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
@@ -45,6 +48,7 @@ public class PvkDokumentController {
     private final RisikoscenarioService risikoscenarioService;
     private final P360ArkiveringService p360ArkiveringService;
     private final TiltakService tiltakService;
+    private final PvkDokumentRepo pvkDokumentRepo;
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")
@@ -113,6 +117,49 @@ public class PvkDokumentController {
             checkIfPvkDocumentationHasStarted(response);
             checkIfPvkDocumentBeenUpdatedAfterApproval(response);
             return ResponseEntity.ok(response);
+        }
+    }
+
+    @Operation(summary = "Get Pvk Document by behandling id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/behandling/{behandlingId}")
+    public ResponseEntity<List<PvkDokumentShortResponse>> getPvkDokumentByBehandlingId(@PathVariable UUID behandlingId) {
+        log.info("Get Pvk Document by behandling id={}", behandlingId);
+        List <PvkDokumentShortResponse> pvkDokumentShortResponses = new ArrayList<>();
+        List<EtterlevelseDokumentasjon> eDoks = etterlevelseDokumentasjonService.getByBehandlingId(List.of(behandlingId.toString()));
+
+        if (eDoks.isEmpty()) {
+            log.info("No Pvk Document found for behandling id={}", behandlingId);
+            return ResponseEntity.notFound().build();
+        } else {
+            eDoks.forEach(eDok -> {
+               var pvkDokumentShortResp = PvkDokumentShortResponse.builder()
+                       .etterlevelseDokumentVersjon(eDok.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
+                       .etterlevelseDokumentasjonId(eDok.getId())
+                       .etterlevelseNummer(eDok.getEtterlevelseDokumentasjonData().getEtterlevelseNummer())
+                       .title(eDok.getEtterlevelseDokumentasjonData().getTitle())
+                       .pvkVurdering(PvkVurdering.UNDEFINED)
+                       .status(PvkDokumentStatus.UNDERARBEID)
+                       .ytterligereEgenskaper(List.of())
+                       .hasPvkDocumentationStarted(false)
+                       .build();
+
+                Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(eDok.getId());
+                if (pvkDokument.isPresent()) {
+                    var response = PvkDokumentResponse.buildFrom(pvkDokument.get());
+                    checkIfPvkDocumentationHasStarted(response);
+
+                    pvkDokumentShortResp.setPvkDokumentId(response.getId());
+                    pvkDokumentShortResp.setPvkVurdering(response.getPvkVurdering());
+                    pvkDokumentShortResp.setStatus(response.getStatus());
+                    pvkDokumentShortResp.setYtterligereEgenskaper(response.getYtterligereEgenskaper());
+                    pvkDokumentShortResp.setHasPvkDocumentationStarted(response.isHasPvkDocumentationStarted());
+                }
+
+                pvkDokumentShortResponses.add(pvkDokumentShortResp);
+            });
+
+            return ResponseEntity.ok(pvkDokumentShortResponses);
         }
     }
 
