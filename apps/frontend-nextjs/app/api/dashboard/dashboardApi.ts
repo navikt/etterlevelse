@@ -37,13 +37,15 @@ export const getTemaDashboardStats = async (
   temaCode?: string,
   avdelingId?: string,
   seksjonId?: string,
-  enhetId?: string
+  enhetId?: string,
+  teamIds?: string[]
 ): Promise<ITemaDashboardStats[]> => {
   const params = new URLSearchParams()
   if (temaCode) params.set('temaCode', temaCode)
   if (avdelingId) params.set('avdelingId', avdelingId)
   if (seksjonId) params.set('seksjonId', seksjonId)
   if (enhetId) params.set('enhetId', enhetId)
+  if (teamIds) teamIds.forEach((teamId) => params.append('teamId', teamId))
   const query = params.toString()
   const response = await axios.get<ITemaDashboardStats[]>(
     `${env.backendBaseUrl}/dashboard/tema${query ? `?${query}` : ''}`
