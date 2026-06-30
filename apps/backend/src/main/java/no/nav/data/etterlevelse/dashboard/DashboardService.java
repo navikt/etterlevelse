@@ -530,7 +530,7 @@ public class DashboardService {
                 .build();
     }
 
-    public List<TemaDashboardResponse> getTemaDashboardStats(String temaId ,String avdelingId, String seksjonId, String enhetId) {
+    public List<TemaDashboardResponse> getTemaDashboardStats(String temaId ,String avdelingId, String seksjonId, String enhetId, List<String> teamIds) {
         List<EtterlevelseDokumentasjon> doks;
 
         if (avdelingId != null && !avdelingId.isEmpty()) {
@@ -568,6 +568,13 @@ public class DashboardService {
             }
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
+        }
+
+        if (teamIds != null && !teamIds.isEmpty()) {
+            doks = doks.stream().filter(d ->
+                    d.getTeams() != null &&
+                    d.getTeams().stream().anyMatch(teamIds::contains)
+            ).toList();
         }
 
         var dokIds = doks.stream().map(EtterlevelseDokumentasjon::getId).toList();

@@ -6,7 +6,10 @@ import {
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
+import { useSearchTeamOptions } from '@/api/teamkatalogen/teamkatalogenApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
@@ -14,6 +17,7 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Link as AkselLink,
@@ -22,12 +26,14 @@ import {
   Detail,
   Heading,
   InfoCard,
+  Label,
   List,
   ReadMore,
   Select,
   Tabs,
 } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import AsyncSelect from 'react-select/async'
 import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
@@ -472,6 +478,7 @@ const TemaDashboardPage = () => {
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
   const [selectedEnhet, setSelectedEnhet] = useState<string>('')
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
+  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
 
   useEffect(() => {
     getDashboardStats()
@@ -484,7 +491,8 @@ const TemaDashboardPage = () => {
       undefined,
       selectedAvdeling || undefined,
       selectedSeksjon || undefined,
-      selectedEnhet || undefined
+      selectedEnhet || undefined,
+      selectedTeams.length > 0 ? selectedTeams.map((team) => team.id) : undefined
     )
       .then((data) => {
         setTemaStats(data)
@@ -492,7 +500,7 @@ const TemaDashboardPage = () => {
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
       .finally(() => setIsLoading(false))
-  }, [selectedAvdeling, selectedSeksjon, selectedEnhet])
+  }, [selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
 
   useEffect(() => {
     if (selectedAvdeling) {
@@ -536,12 +544,12 @@ const TemaDashboardPage = () => {
         <List className='mt-4'>
           <List.Item>Få oversikt over Navs etterlevelse, inndelt etter tema.</List.Item>
           <List.Item>
-            Filtrere etter avdeling og eventuelt seksjon slik at du kan se hvordan enkelte
+            Filtrere etter avdeling, seksjon og eventuelt enhet slik at du kan se hvordan enkelte
             organisasjonsdeler etterlever krav og suksesskriterier.
           </List.Item>
           <List.Item>
             Navigere videre til enkelte temasider hvor du kan utforske etterlevelse av enkelte krav,
-            enten i hele Nav eller på avdelings- eller seksjonsnivå.
+            enten i hele Nav eller på avdeling, seksjon eller enhetsnivå.
           </List.Item>
         </List>
         <p className='mt-4'>
@@ -680,6 +688,40 @@ const TemaDashboardPage = () => {
           >
             Last ned nøkkeltall som CSV
           </Button>
+        </div>
+
+        <div className='mt-4 max-w-xl'>
+          <Label htmlFor='tema-dashboard-team-search'>Søk etter team</Label>
+          <BodyShort size='small' className='mb-2 text-gray-600'>
+            Trykk Enter for å legge til teamet. Du kan velge flere.
+          </BodyShort>
+          <AsyncSelect
+            inputId='tema-dashboard-team-search'
+            aria-label='Søk etter team'
+            placeholder=''
+            tabSelectsValue={false}
+            components={{ DropdownIndicator }}
+            noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+            controlShouldRenderValue={false}
+            loadingMessage={() => 'Søker...'}
+            isClearable={false}
+            loadOptions={useSearchTeamOptions}
+            value={null}
+            onChange={(value: any) => {
+              if (value && !selectedTeams.some((team) => team.id === value.id)) {
+                setIsLoading(true)
+                setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
+              }
+            }}
+            styles={selectOverrides}
+          />
+          <RenderTagList
+            list={selectedTeams.map((team) => team.name)}
+            onRemove={(index) => {
+              setIsLoading(true)
+              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
+            }}
+          />
         </div>
 
         {isLoading && (

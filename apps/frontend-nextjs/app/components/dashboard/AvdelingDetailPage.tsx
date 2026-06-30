@@ -528,8 +528,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             tilhører, etterlevelsens nåværende tilstand, med mer.
           </List.Item>
           <List.Item>
-            Søke og filtrere i datasettet: du kan finne seksjon, team, risikoeier, dokumentnavn, med
-            flere. Du kan også sortere tabellene, for eksempel etter teamnavn.
+            Søke og filtrere i datasettet: du kan finne seksjon, enhet team, risikoeier,
+            dokumentnavn, med flere. Du kan også sortere tabellene, for eksempel etter teamnavn.
           </List.Item>
         </List>
         <p className='mt-4'>

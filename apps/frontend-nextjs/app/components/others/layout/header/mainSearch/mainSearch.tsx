@@ -100,7 +100,7 @@ const MainSearch = () => {
               boxShadow: 'none',
               color: 'var(--a-text-default)',
               border: '1px solid var(--a-border-subtle)',
-              borderRadius: 'var(--a-border-radius-medium)',
+              borderRadius: 'var(--ax-radius-8)',
               ':focus-within': {
                 boxShadow: 'var(--a-shadow-focus)',
                 outline: 'none',
