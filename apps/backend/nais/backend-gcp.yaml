@@ -76,7 +76,7 @@ spec:
       rules:
         - application: etterlevelse-frontend
         - application: etterlevelse-frontend-nextjs
-        - application: behandlingskatalog-frontend
+        - application: behandlingskatalog-backend
         - application: etterlevelse-arkiv
           cluster: prod-legacy
           permissions:
