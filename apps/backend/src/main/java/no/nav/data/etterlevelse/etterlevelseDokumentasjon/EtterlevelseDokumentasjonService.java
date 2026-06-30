@@ -377,7 +377,7 @@ public class EtterlevelseDokumentasjonService {
         etterlevelseDokumentasjonResponse.setRisikoeiereData(getRisikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiere()));
     }
 
-    private List<Behandling> getBehandlingData(List<String> behandlinger) {
+    public List<Behandling> getBehandlingData(List<String> behandlinger) {
         if (behandlinger == null || behandlinger.isEmpty()) {
             return List.of();
         }

@@ -52,6 +52,8 @@ public class StudentExportService {
 
         etterlevelseDokumentasjoner.forEach(ed -> {
             var studentResponse = EtterlevelseDokumentasjonStudentResponse.buildFrom(ed);
+            studentResponse.setBehandlinger(etterlevelseDokumentasjonService.getBehandlingData(ed.getBehandlingIds()));
+
             var behandlingensLivslop = behandlingensLivslopService.getByEtterlevelseDokumentasjon(ed.getId());
             var artOgOmfang = behandlingensArtOgOmfangService.getByEtterlevelseDokumentasjonId(ed.getId());
             var pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(ed.getId());
