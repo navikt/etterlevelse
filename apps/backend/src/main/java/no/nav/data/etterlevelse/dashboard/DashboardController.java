@@ -70,8 +70,9 @@ public class DashboardController {
             @RequestParam(required = false) String temaCode,
             @RequestParam(required = false) String avdelingId,
             @RequestParam(required = false) String seksjonId,
-            @RequestParam(required = false) String enhetId) {
-        log.info("Getting tema dashboard stats avdelingId={} seksjonId={} enhetId={}", avdelingId, seksjonId, enhetId);
+            @RequestParam(required = false) String enhetId,
+            @RequestParam(required = false) List<String> teamId) {
+        log.info("Getting tema dashboard stats avdelingId={} seksjonId={} enhetId={} teamId={}", avdelingId, seksjonId, enhetId, teamId);
 
         if (temaCode != null && temaCode.isEmpty()) {
             var tema = CodelistService.getCodelist(ListName.TEMA, temaCode);
@@ -80,7 +81,7 @@ public class DashboardController {
             }
         }
 
-        return ResponseEntity.ok(dashboardService.getTemaDashboardStats(temaCode, avdelingId, seksjonId, enhetId));
+        return ResponseEntity.ok(dashboardService.getTemaDashboardStats(temaCode, avdelingId, seksjonId, enhetId, teamId));
     }
 
     @Operation(summary = "Get tema dashboard stats")
