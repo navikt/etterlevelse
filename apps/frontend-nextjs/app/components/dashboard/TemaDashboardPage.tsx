@@ -536,12 +536,12 @@ const TemaDashboardPage = () => {
         <List className='mt-4'>
           <List.Item>Få oversikt over Navs etterlevelse, inndelt etter tema.</List.Item>
           <List.Item>
-            Filtrere etter avdeling og eventuelt seksjon slik at du kan se hvordan enkelte
+            Filtrere etter avdeling, seksjon og eventuelt enhet slik at du kan se hvordan enkelte
             organisasjonsdeler etterlever krav og suksesskriterier.
           </List.Item>
           <List.Item>
             Navigere videre til enkelte temasider hvor du kan utforske etterlevelse av enkelte krav,
-            enten i hele Nav eller på avdelings- eller seksjonsnivå.
+            enten i hele Nav eller på avdeling, seksjon eller enhetsnivå.
           </List.Item>
         </List>
         <p className='mt-4'>
