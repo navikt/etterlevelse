@@ -27,6 +27,7 @@ public class BkatProcess {
     private Boolean profiling;
     private BkatDpia dpia;
     private List<BkatLegalBasis> legalBases;
+    private Boolean usesAllInformationTypes;
 
     private String start;
     private String end;
@@ -44,6 +45,7 @@ public class BkatProcess {
                 .nummer(number)
                 .navn(name)
                 .formaal(description)
+                .brukerAlleOpplysningstyper(usesAllInformationTypes)
                 .ytterligereBeskrivelse(additionalDescription)
                 .behandlingInnfortINav(dpia != null && dpia.getProcessImplemented() != null ? dpia.getProcessImplemented() : false)
                 .gyldigFra(start)

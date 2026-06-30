@@ -23,6 +23,7 @@ public class Behandling {
     private List<BkatLegalBasis> behandlingensgrunnlag;
 
     private boolean behandlingInnfortINav;
+    private Boolean brukerAlleOpplysningstyper;
 
     private String gyldigFra;
     private String gyldingTil;
