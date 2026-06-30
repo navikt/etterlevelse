@@ -116,6 +116,21 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
     }
   }
 
+  const brukerAlleOpplysningstyperCheck = () => {
+    if (
+      etterlevelseDokumentasjon.behandlinger === null ||
+      etterlevelseDokumentasjon.behandlinger === undefined ||
+      (etterlevelseDokumentasjon.behandlinger &&
+        etterlevelseDokumentasjon.behandlinger.length === 0)
+    ) {
+      return false
+    } else {
+      return etterlevelseDokumentasjon.behandlinger.some(
+        (behandling) => behandling.brukerAlleOpplysningstyper === true
+      )
+    }
+  }
+
   return (
     <Formik
       validateOnChange={false}
@@ -142,7 +157,12 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
 
               <List as='ul' className='mb-5'>
                 <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
-                {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
+                {!brukerAlleOpplysningstyperCheck() && personkategorier.length === 0 && (
+                  <List.Item>Ingen</List.Item>
+                )}
+                {brukerAlleOpplysningstyperCheck() && (
+                  <List.Item>Bruker potensielt alle opplysningstyper</List.Item>
+                )}
                 {personkategorier.length > 0 &&
                   personkategorier.map((personkategori) => (
                     <List.Item key={personkategori}>{personkategori}</List.Item>
