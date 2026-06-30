@@ -713,13 +713,7 @@ const TemaDashboardPage = () => {
                 setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
               }
             }}
-            styles={{
-              ...selectOverrides,
-              control: (base) => ({
-                ...selectOverrides.control(base),
-                borderRadius: 'var(--ax-radius-8)',
-              }),
-            }}
+            styles={selectOverrides}
           />
           <RenderTagList
             list={selectedTeams.map((team) => team.name)}
