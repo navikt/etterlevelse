@@ -9,12 +9,14 @@ type TProps = {
   artOgOmfang: IBehandlingensArtOgOmfang
   personkategorier: string[]
   isChangesMadeSinceLastSubmission?: boolean
+  brukerAlleOpplysningstyper?: boolean
 }
 
 export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
   artOgOmfang,
   personkategorier,
   isChangesMadeSinceLastSubmission,
+  brukerAlleOpplysningstyper,
 }) => {
   return (
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
@@ -28,7 +30,12 @@ export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
 
           <List>
             <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
-            {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
+            {!brukerAlleOpplysningstyper && personkategorier.length === 0 && (
+              <List.Item>Ingen</List.Item>
+            )}
+            {brukerAlleOpplysningstyper === true && (
+              <List.Item>Bruker potensielt alle opplysningstyper</List.Item>
+            )}
             {personkategorier.length > 0 &&
               personkategorier.map((personkategori) => (
                 <List.Item key={personkategori}>{personkategori}</List.Item>
