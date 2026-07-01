@@ -29,6 +29,7 @@ import {
   Tag,
 } from '@navikt/ds-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { TemaDashboardDetailHowToReadmore } from './DashboardReadmore/TemaDashboardDetailHowToReadmore'
 import { TemaDashboardDetailKravReadmore } from './DashboardReadmore/TemaDashboardDetailKravReadmore'
 import { TemaDashboardDetailReadmore } from './DashboardReadmore/TemaDashboardDetailReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
@@ -540,6 +541,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           Tema: {temaName}
         </Heading>
       </div>
+
+      <TemaDashboardDetailHowToReadmore />
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>

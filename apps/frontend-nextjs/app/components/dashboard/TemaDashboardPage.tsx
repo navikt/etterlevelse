@@ -20,20 +20,19 @@ import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
-  Link as AkselLink,
   BodyShort,
   Button,
   Detail,
   Heading,
   InfoCard,
   Label,
-  List,
-  ReadMore,
+  Link,
   Select,
   Tabs,
 } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import AsyncSelect from 'react-select/async'
+import { TemaDashboardHowToReadmore } from './DashboardReadmore/TemaDashboardHowToReadmore'
 import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
@@ -140,9 +139,9 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
         <Heading size='small' level='3'>
           {stats.temaName}
         </Heading>
-        <AkselLink href={`/dashboard/tema/${stats.temaCode}`}>
+        <Link href={`/dashboard/tema/${stats.temaCode}`}>
           Les mer om etterlevelse under {stats.temaName}
-        </AkselLink>
+        </Link>
       </div>
 
       <TemaDokumentCount
@@ -215,9 +214,9 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         <Heading size='small' level='3'>
           {stats.temaName}
         </Heading>
-        <AkselLink href={`/dashboard/tema/${stats.temaCode}`}>
+        <Link href={`/dashboard/tema/${stats.temaCode}`}>
           Les mer om etterlevelse under {stats.temaName}
-        </AkselLink>
+        </Link>
       </div>
 
       <TemaDokumentCount
@@ -539,35 +538,7 @@ const TemaDashboardPage = () => {
         </Heading>
       </div>
 
-      <ReadMore header='Hvordan bruker jeg denne siden?' className='max-w-[75ch] mt-4'>
-        <p>På denne siden kan du:</p>
-        <List className='mt-4'>
-          <List.Item>Få oversikt over Navs etterlevelse, inndelt etter tema.</List.Item>
-          <List.Item>
-            Filtrere etter avdeling, seksjon og eventuelt enhet slik at du kan se hvordan enkelte
-            organisasjonsdeler etterlever krav og suksesskriterier.
-          </List.Item>
-          <List.Item>
-            Navigere videre til enkelte temasider hvor du kan utforske etterlevelse av enkelte krav,
-            enten i hele Nav eller på avdeling, seksjon eller enhetsnivå.
-          </List.Item>
-        </List>
-        <p className='mt-4'>
-          For mer detaljer anbefaler vi informasjonssidene{' '}
-          <AkselLink href='/omstottetiletterlevelse' target='_blank'>
-            Om Støtte til etterlevelse
-          </AkselLink>
-          ,{' '}
-          <AkselLink href='/om-pvk' target='_blank'>
-            Om Digital PVK
-          </AkselLink>{' '}
-          og{' '}
-          <AkselLink href='/om-behandlingskatalogen' target='_blank'>
-            Om Behandlingskatalogen
-          </AkselLink>
-          .
-        </p>
-      </ReadMore>
+      <TemaDashboardHowToReadmore />
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
@@ -772,10 +743,10 @@ const TemaDashboardPage = () => {
           <InfoCard.Content>
             Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt
             i søkefeltet, eller se{' '}
-            <AkselLink href='/dashboard/ingen-avdeling' target='_blank'>
+            <Link href='/dashboard/ingen-avdeling' target='_blank'>
               listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
               fane)
-            </AkselLink>
+            </Link>
             . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
             eller send mail til teamdatajegerne@nav.no.
           </InfoCard.Content>
