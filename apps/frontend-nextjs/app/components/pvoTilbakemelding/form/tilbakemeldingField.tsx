@@ -22,9 +22,7 @@ type TProps = {
     | 'kravDokumentasjonTilbakemelding'
     | 'risikovurderingTilbakemelding'
   internDiskosjonFieldName:
-    | 'behandlingsInternDiskusjon'
-    | 'kravInternDiskusjon'
-    | 'risikovurderingInternDiskusjon'
+    'behandlingsInternDiskusjon' | 'kravInternDiskusjon' | 'risikovurderingInternDiskusjon'
 }
 
 export const TilbakemeldingField: FunctionComponent<TProps> = ({
