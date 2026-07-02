@@ -49,6 +49,7 @@ export const TilbakemeldingField: FunctionComponent<TProps> = ({
           caption='Denne teksten er privat for PVO og skal ikke deles med etterleveren'
           withHighlight={true}
           withUnderline={true}
+          withTextColor={true}
         />
       </div>
 
@@ -99,6 +100,7 @@ export const TilbakemeldingField: FunctionComponent<TProps> = ({
           name={textAreaFieldName}
           label='Skriv tilbakemelding til etterleveren'
           withUnderline={true}
+          withTextColor={true}
         />
       </div>
     </div>

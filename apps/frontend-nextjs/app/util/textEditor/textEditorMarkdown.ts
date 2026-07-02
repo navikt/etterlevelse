@@ -24,6 +24,14 @@ turndownService.addRule('backgroundColor', {
   },
 })
 
+turndownService.addRule('textColor', {
+  filter: (node) => node.nodeName === 'SPAN' && !!node.style.color && !node.style.backgroundColor,
+  replacement: (content, node) => {
+    const element = node as HTMLElement
+    return `<span style='color: ${element.style.color}'>${content}</span>`
+  },
+})
+
 turndownService.addRule('underline', {
   filter: 'ins',
   replacement: (content) => `<ins>${content}</ins>`,

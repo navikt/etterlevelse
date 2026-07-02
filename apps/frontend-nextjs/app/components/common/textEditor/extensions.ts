@@ -13,12 +13,29 @@ export const highlightColors = [
   'rgb(200, 202, 255)',
 ]
 
+// Aksel design-tokens (ds-css) for tekstfarge, til bruk for PVO-brukere.
+// Bruker de statiske fargeverdiene (lys-tema, 600-nivå) i stedet for CSS-variablene, siden
+// @navikt/ds-css importeres i et eget CSS-layer og --ax-text-* variablene ikke
+// resolves korrekt i den layeren i denne editoren. 1000-nivået (--ax-text-*) er ment
+// for tekstkontrast og er derfor svært mørkt/nesten sort, og var vanskelig å skille fra
+// hverandre i fargevelgeren, så 600-nivået brukes for tydeligere/mer synlige farger.
+export const textColors: { label: string; value: string }[] = [
+  { label: 'Accent', value: '#2176d4' },
+  { label: 'Success', value: '#00893c' },
+  { label: 'Warning', value: '#ca5000' },
+  { label: 'Meta Purple', value: '#905bd3' },
+]
+
 declare module '@tiptap/core' {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   interface Commands<ReturnType> {
     backgroundColor: {
       setBackgroundColor: (color: string) => ReturnType
       unsetBackgroundColor: () => ReturnType
+    }
+    textColor: {
+      setTextColor: (color: string) => ReturnType
+      unsetTextColor: () => ReturnType
     }
   }
 }
@@ -64,6 +81,55 @@ export const BackgroundColor = Mark.create({
         ({ chain }) =>
           chain().setMark(this.name, { color }).run(),
       unsetBackgroundColor:
+        () =>
+        ({ chain }) =>
+          chain().unsetMark(this.name).run(),
+    }
+  },
+})
+
+// Rendrer som <span style='color: ...'> for tekstfarge (Aksel design-tokens).
+export const TextColor = Mark.create({
+  name: 'textColor',
+
+  addAttributes() {
+    return {
+      color: {
+        default: null,
+        parseHTML: (element) => element.style.color || null,
+        renderHTML: (attributes) => {
+          if (!attributes.color) {
+            return {}
+          }
+          return { style: `color: ${attributes.color}` }
+        },
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'span',
+        getAttrs: (element) =>
+          typeof element !== 'string' && element.style.color && !element.style.backgroundColor
+            ? {}
+            : false,
+      },
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['span', mergeAttributes(HTMLAttributes), 0]
+  },
+
+  addCommands() {
+    return {
+      setTextColor:
+        (color: string) =>
+        ({ chain }) =>
+          chain().setMark(this.name, { color }).run(),
+      unsetTextColor:
         () =>
         ({ chain }) =>
           chain().unsetMark(this.name).run(),

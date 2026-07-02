@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { FormError } from '../modalSchema/formError/formError'
 import { Toolbar } from './Toolbar'
 import './customStyle.css'
-import { BackgroundColor, Underline } from './extensions'
+import { BackgroundColor, TextColor, Underline } from './extensions'
 
 type TTextEditorProps = {
   initialValue: string
@@ -27,6 +27,7 @@ type TTextEditorProps = {
   maxWidth?: string
   withHighlight?: boolean
   withUnderline?: boolean
+  withTextColor?: boolean
 }
 
 export const TextEditor = ({
@@ -41,6 +42,7 @@ export const TextEditor = ({
   maxWidth,
   withHighlight,
   withUnderline,
+  withTextColor,
 }: TTextEditorProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const [val, setVal] = useDebouncedState(initialValue, 500, setValue)
@@ -54,6 +56,7 @@ export const TextEditor = ({
       }),
       Underline,
       BackgroundColor,
+      TextColor,
       Link.configure({
         openOnClick: false,
         HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' },
@@ -100,6 +103,7 @@ export const TextEditor = ({
             simple={simple}
             withHighlight={withHighlight}
             withUnderline={withUnderline}
+            withTextColor={withTextColor}
           />
         )}
         <EditorContent editor={editor} tabIndex={0} />

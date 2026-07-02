@@ -4,13 +4,14 @@ import { ettlevColors } from '@/util/theme/theme'
 import { LinkIcon } from '@navikt/aksel-icons'
 import { Editor } from '@tiptap/react'
 import { useState } from 'react'
-import { highlightColors } from './extensions'
+import { highlightColors, textColors } from './extensions'
 
 type TToolbarProps = {
   editor: Editor
   simple?: boolean
   withHighlight?: boolean
   withUnderline?: boolean
+  withTextColor?: boolean
 }
 
 const ToolbarButton = ({
@@ -40,9 +41,16 @@ const ToolbarButton = ({
   </button>
 )
 
-export const Toolbar = ({ editor, simple, withHighlight, withUnderline }: TToolbarProps) => {
+export const Toolbar = ({
+  editor,
+  simple,
+  withHighlight,
+  withUnderline,
+  withTextColor,
+}: TToolbarProps) => {
   const [showLinkForm, setShowLinkForm] = useState(false)
   const [showColorPicker, setShowColorPicker] = useState(false)
+  const [showTextColorPicker, setShowTextColorPicker] = useState(false)
   const [linkUrl, setLinkUrl] = useState('')
 
   const currentBlockType = editor.isActive('blockquote')
@@ -236,6 +244,35 @@ export const Toolbar = ({ editor, simple, withHighlight, withUnderline }: TToolb
                     setShowColorPicker(false)
                   }}
                 />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {!simple && withTextColor && (
+        <div className='rdw-colorpicker-wrapper'>
+          <ToolbarButton label='Text Color' onClick={() => setShowTextColorPicker((v) => !v)}>
+            Tekstfarge
+          </ToolbarButton>
+          {showTextColorPicker && (
+            <div className='rdw-colorpicker-modal' role='listbox' aria-label='Text Color'>
+              {textColors.map(({ label, value }) => (
+                <button
+                  type='button'
+                  role='option'
+                  key={value}
+                  aria-label={label}
+                  aria-selected={editor.isActive('textColor', { color: value })}
+                  title={label}
+                  className='rdw-colorpicker-option rdw-textcolor-option'
+                  onClick={() => {
+                    editor.chain().focus().setTextColor(value).run()
+                    setShowTextColorPicker(false)
+                  }}
+                >
+                  <span style={{ color: value }}>A</span>
+                </button>
               ))}
             </div>
           )}
