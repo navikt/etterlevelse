@@ -1,4 +1,5 @@
 import { Mark, mergeAttributes } from '@tiptap/core'
+import TiptapOrderedList from '@tiptap/extension-ordered-list'
 import TiptapUnderline from '@tiptap/extension-underline'
 
 // gul = FFF83B, turkis = 7FF2FF, grønn = 9DFF3B, rosa = FFAFEB,
@@ -145,5 +146,14 @@ export const Underline = TiptapUnderline.extend({
   },
   renderHTML({ HTMLAttributes }) {
     return ['ins', mergeAttributes(HTMLAttributes), 0]
+  },
+})
+
+// Fjerner input-regelen som automatisk gjør om tekst som "21. " til en nummerert liste
+// mens man skriver, slik at f.eks. datoer som "21. mars" ikke blir tolket som en liste.
+// Listeknappen i verktøylinjen (toggleOrderedList) fungerer fortsatt som normalt.
+export const OrderedList = TiptapOrderedList.extend({
+  addInputRules() {
+    return []
   },
 })

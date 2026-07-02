@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { FormError } from '../modalSchema/formError/formError'
 import { Toolbar } from './Toolbar'
 import './customStyle.css'
-import { BackgroundColor, TextColor, Underline } from './extensions'
+import { BackgroundColor, OrderedList, TextColor, Underline } from './extensions'
 
 type TTextEditorProps = {
   initialValue: string
@@ -53,7 +53,9 @@ export const TextEditor = ({
         heading: { levels: [2, 3, 4, 5, 6] },
         link: false,
         underline: false,
+        orderedList: false,
       }),
+      OrderedList,
       Underline,
       BackgroundColor,
       TextColor,

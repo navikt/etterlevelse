@@ -122,8 +122,20 @@ export const Markdown: FunctionComponent<TProps> = ({
       return <List>{children}</List>
     },
     ol: (olProps: any) => {
-      const { children } = olProps
-      return <List as='ol'>{children}</List>
+      const { children, start } = olProps
+      const startNumber = typeof start === 'number' ? start : start ? Number(start) : undefined
+      return (
+        <List
+          as='ol'
+          style={
+            startNumber && startNumber !== 1
+              ? { counterReset: `list-item ${startNumber - 1}` }
+              : undefined
+          }
+        >
+          {children}
+        </List>
+      )
     },
   }
 
