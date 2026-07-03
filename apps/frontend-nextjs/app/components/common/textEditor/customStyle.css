@@ -86,7 +86,7 @@
 .rdw-colorpicker-modal {
   position: absolute;
   top: 2rem;
-  left: -10.5rem;
+  left: 0;
   z-index: 1;
   display: flex;
   flex-wrap: wrap;
@@ -179,7 +179,4 @@
 }
 .rdw-editor-main code {
   font-family: monospace;
-}
-.rdw-colorpicker-modal {
-  left: -168px;
 }
