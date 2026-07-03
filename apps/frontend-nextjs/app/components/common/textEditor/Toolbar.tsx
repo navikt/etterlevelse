@@ -271,6 +271,20 @@ export const Toolbar = ({
           </ToolbarButton>
           {showTextColorPicker && (
             <div className='rdw-colorpicker-modal' role='listbox' aria-label='Text Color'>
+              <button
+                type='button'
+                role='option'
+                aria-label='Remove text color'
+                aria-selected={!editor.isActive('textColor')}
+                title='Remove text color'
+                className='rdw-colorpicker-option rdw-colorpicker-remove'
+                onClick={() => {
+                  editor.chain().focus().unsetTextColor().run()
+                  setShowTextColorPicker(false)
+                }}
+              >
+                <XMarkIcon aria-hidden />
+              </button>
               {textColors.map(({ label, value }) => (
                 <button
                   type='button'
