@@ -77,7 +77,7 @@ export const TextEditor = ({
         role: 'textbox',
         'aria-label': '',
         class: 'rdw-editor-main',
-        style: `padding: 0.625rem; min-height: ${height || '31.25rem'};`,
+        style: `padding: 0.625rem 0.625rem 0.625rem 1.25rem; min-height: ${height || '31.25rem'};`,
       },
     },
   })
