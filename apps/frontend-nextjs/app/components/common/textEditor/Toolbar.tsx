@@ -224,11 +224,11 @@ export const Toolbar = ({
 
       {!simple && withHighlight && (
         <div className='rdw-colorpicker-wrapper'>
-          <ToolbarButton label='Bakgrunnsfarge' onClick={() => setShowColorPicker((v) => !v)}>
-            Bakgrunnsfarge
+          <ToolbarButton label='Highlight' onClick={() => setShowColorPicker((v) => !v)}>
+            Highlight
           </ToolbarButton>
           {showColorPicker && (
-            <div className='rdw-colorpicker-modal' role='listbox' aria-label='Bakgrunnsfarge'>
+            <div className='rdw-colorpicker-modal' role='listbox' aria-label='Highlight'>
               {highlightColors.map((color) => (
                 <button
                   type='button'
