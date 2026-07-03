@@ -1,7 +1,7 @@
 'use client'
 
 import { ettlevColors } from '@/util/theme/theme'
-import { LinkIcon } from '@navikt/aksel-icons'
+import { LinkIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Editor } from '@tiptap/react'
 import { useState } from 'react'
 import { highlightColors, textColors } from './extensions'
@@ -229,6 +229,20 @@ export const Toolbar = ({
           </ToolbarButton>
           {showColorPicker && (
             <div className='rdw-colorpicker-modal' role='listbox' aria-label='Highlight'>
+              <button
+                type='button'
+                role='option'
+                aria-label='Remove highlight'
+                aria-selected={!editor.isActive('backgroundColor')}
+                title='Remove highlight'
+                className='rdw-colorpicker-option rdw-colorpicker-remove'
+                onClick={() => {
+                  editor.chain().focus().unsetBackgroundColor().run()
+                  setShowColorPicker(false)
+                }}
+              >
+                <XMarkIcon aria-hidden />
+              </button>
               {highlightColors.map((color) => (
                 <button
                   type='button'

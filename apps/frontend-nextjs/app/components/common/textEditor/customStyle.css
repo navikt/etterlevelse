@@ -104,6 +104,12 @@
   border-radius: 0.25rem;
   cursor: pointer;
 }
+.rdw-colorpicker-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+}
 .rdw-textcolor-option {
   display: flex;
   align-items: center;
