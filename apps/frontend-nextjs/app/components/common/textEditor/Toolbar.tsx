@@ -283,7 +283,7 @@ export const Toolbar = ({
                   setShowTextColorPicker(false)
                 }}
               >
-                <XMarkIcon aria-hidden />
+                <span style={{ color: 'black' }}>A</span>
               </button>
               {textColors.map(({ label, value }) => (
                 <button

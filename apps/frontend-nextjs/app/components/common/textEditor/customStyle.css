@@ -109,6 +109,8 @@
   align-items: center;
   justify-content: center;
   background-color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
 }
 .rdw-textcolor-option {
   display: flex;
