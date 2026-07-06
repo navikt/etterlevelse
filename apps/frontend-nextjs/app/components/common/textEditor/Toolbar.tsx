@@ -3,7 +3,7 @@
 import { ettlevColors } from '@/util/theme/theme'
 import { LinkIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Editor } from '@tiptap/react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { highlightColors, textColors } from './extensions'
 
 type TToolbarProps = {
@@ -19,18 +19,21 @@ const ToolbarButton = ({
   active,
   disabled,
   label,
+  expanded,
   children,
 }: {
   onClick: () => void
   active?: boolean
   disabled?: boolean
   label: string
+  expanded?: boolean
   children: React.ReactNode
 }) => (
   <button
     type='button'
-    role='option'
-    aria-selected={!!active}
+    aria-pressed={!!active}
+    aria-expanded={expanded}
+    aria-haspopup={expanded !== undefined ? 'true' : undefined}
     aria-label={label}
     title={label}
     disabled={disabled}
@@ -40,6 +43,43 @@ const ToolbarButton = ({
     {children}
   </button>
 )
+
+// Lukker en åpen popover når man trykker Escape eller klikker/tabber utenfor den,
+// og flytter fokus til første element i popoveren når den åpnes.
+const usePopover = (open: boolean, onClose: () => void) => {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    const firstFocusable = ref.current?.querySelector<HTMLElement>(
+      'button, input, [tabindex]:not([tabindex="-1"])'
+    )
+    firstFocusable?.focus()
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        onClose()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [open, onClose])
+
+  return ref
+}
 
 export const Toolbar = ({
   editor,
@@ -52,6 +92,10 @@ export const Toolbar = ({
   const [showColorPicker, setShowColorPicker] = useState(false)
   const [showTextColorPicker, setShowTextColorPicker] = useState(false)
   const [linkUrl, setLinkUrl] = useState('')
+
+  const linkFormRef = usePopover(showLinkForm, () => setShowLinkForm(false))
+  const colorPickerRef = usePopover(showColorPicker, () => setShowColorPicker(false))
+  const textColorPickerRef = usePopover(showTextColorPicker, () => setShowTextColorPicker(false))
 
   const currentBlockType = editor.isActive('blockquote')
     ? 'blockquote'
@@ -112,7 +156,7 @@ export const Toolbar = ({
         borderBottom: `0.063rem solid ${ettlevColors.textAreaBorder}`,
       }}
     >
-      <div className='rdw-inline-wrapper' role='listbox' aria-label='Tekststil'>
+      <div className='rdw-inline-wrapper' role='group' aria-label='Tekststil'>
         <ToolbarButton
           label='Bold'
           active={editor.isActive('bold')}
@@ -156,7 +200,7 @@ export const Toolbar = ({
         </select>
       )}
 
-      <div className='rdw-list-wrapper' role='listbox' aria-label='List'>
+      <div className='rdw-list-wrapper' role='group' aria-label='List'>
         <ToolbarButton
           label='Unordered'
           active={editor.isActive('bulletList')}
@@ -173,8 +217,13 @@ export const Toolbar = ({
         </ToolbarButton>
       </div>
 
-      <div className='rdw-link-wrapper' role='listbox' aria-label='Link'>
-        <ToolbarButton label='Link' active={editor.isActive('link')} onClick={openLinkForm}>
+      <div className='rdw-link-wrapper' role='group' aria-label='Link' ref={linkFormRef}>
+        <ToolbarButton
+          label='Link'
+          active={editor.isActive('link')}
+          expanded={showLinkForm}
+          onClick={openLinkForm}
+        >
           <LinkIcon aria-hidden />
         </ToolbarButton>
         {editor.isActive('link') && (
@@ -223,18 +272,21 @@ export const Toolbar = ({
       )}
 
       {!simple && withHighlight && (
-        <div className='rdw-colorpicker-wrapper'>
-          <ToolbarButton label='Highlight' onClick={() => setShowColorPicker((v) => !v)}>
+        <div className='rdw-colorpicker-wrapper' ref={colorPickerRef}>
+          <ToolbarButton
+            label='Highlight'
+            expanded={showColorPicker}
+            onClick={() => setShowColorPicker((v) => !v)}
+          >
             Highlight
           </ToolbarButton>
           {showColorPicker && (
-            <div className='rdw-colorpicker-modal' role='listbox' aria-label='Highlight'>
+            <div className='rdw-colorpicker-modal' role='group' aria-label='Highlight'>
               <button
                 type='button'
-                role='option'
-                aria-label='Remove highlight'
-                aria-selected={!editor.isActive('backgroundColor')}
-                title='Remove highlight'
+                aria-label='Fjern bakgrunnsfarge'
+                aria-pressed={!editor.isActive('backgroundColor')}
+                title='Fjern bakgrunnsfarge'
                 className='rdw-colorpicker-option rdw-colorpicker-remove'
                 onClick={() => {
                   editor.chain().focus().unsetBackgroundColor().run()
@@ -243,18 +295,17 @@ export const Toolbar = ({
               >
                 <XMarkIcon aria-hidden />
               </button>
-              {highlightColors.map((color) => (
+              {highlightColors.map(({ label, value }) => (
                 <button
                   type='button'
-                  role='option'
-                  key={color}
-                  aria-label={color}
-                  aria-selected={editor.isActive('backgroundColor', { color })}
-                  title={color}
-                  style={{ backgroundColor: color }}
+                  key={value}
+                  aria-label={label}
+                  aria-pressed={editor.isActive('backgroundColor', { color: value })}
+                  title={label}
+                  style={{ backgroundColor: value }}
                   className='rdw-colorpicker-option'
                   onClick={() => {
-                    editor.chain().focus().setBackgroundColor(color).run()
+                    editor.chain().focus().setBackgroundColor(value).run()
                     setShowColorPicker(false)
                   }}
                 />
@@ -265,18 +316,21 @@ export const Toolbar = ({
       )}
 
       {!simple && withTextColor && (
-        <div className='rdw-colorpicker-wrapper'>
-          <ToolbarButton label='Text Color' onClick={() => setShowTextColorPicker((v) => !v)}>
+        <div className='rdw-colorpicker-wrapper' ref={textColorPickerRef}>
+          <ToolbarButton
+            label='Text Color'
+            expanded={showTextColorPicker}
+            onClick={() => setShowTextColorPicker((v) => !v)}
+          >
             Tekstfarge
           </ToolbarButton>
           {showTextColorPicker && (
-            <div className='rdw-colorpicker-modal' role='listbox' aria-label='Text Color'>
+            <div className='rdw-colorpicker-modal' role='group' aria-label='Text Color'>
               <button
                 type='button'
-                role='option'
-                aria-label='Remove text color'
-                aria-selected={!editor.isActive('textColor')}
-                title='Remove text color'
+                aria-label='Fjern tekstfarge'
+                aria-pressed={!editor.isActive('textColor')}
+                title='Fjern tekstfarge'
                 className='rdw-colorpicker-option rdw-colorpicker-remove'
                 onClick={() => {
                   editor.chain().focus().unsetTextColor().run()
@@ -288,10 +342,9 @@ export const Toolbar = ({
               {textColors.map(({ label, value }) => (
                 <button
                   type='button'
-                  role='option'
                   key={value}
                   aria-label={label}
-                  aria-selected={editor.isActive('textColor', { color: value })}
+                  aria-pressed={editor.isActive('textColor', { color: value })}
                   title={label}
                   className='rdw-colorpicker-option rdw-textcolor-option'
                   onClick={() => {

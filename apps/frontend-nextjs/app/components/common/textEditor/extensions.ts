@@ -4,13 +4,13 @@ import TiptapUnderline from '@tiptap/extension-underline'
 
 // gul = FFF83B, turkis = 7FF2FF, grønn = 9DFF3B, rosa = FFAFEB,
 // hvit = FFFFFF (brukes for å fjerne farge), oransje = FFC074, mørkelilla = C8CAFF
-export const highlightColors = [
-  'rgb(255, 248, 59)',
-  'rgb(127, 242, 255)',
-  'rgb(157, 255, 59)',
-  'rgb(255, 175, 235)',
-  'rgb(255, 192, 116)',
-  'rgb(200, 202, 255)',
+export const highlightColors: { label: string; value: string }[] = [
+  { label: 'Gul', value: 'rgb(255, 248, 59)' },
+  { label: 'Turkis', value: 'rgb(127, 242, 255)' },
+  { label: 'Grønn', value: 'rgb(157, 255, 59)' },
+  { label: 'Rosa', value: 'rgb(255, 175, 235)' },
+  { label: 'Oransje', value: 'rgb(255, 192, 116)' },
+  { label: 'Mørkelilla', value: 'rgb(200, 202, 255)' },
 ]
 
 // Aksel design-tokens (ds-css) for tekstfarge, til bruk for PVO-brukere.
