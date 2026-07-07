@@ -97,21 +97,17 @@ export const Toolbar = ({
   const colorPickerRef = usePopover(showColorPicker, () => setShowColorPicker(false))
   const textColorPickerRef = usePopover(showTextColorPicker, () => setShowTextColorPicker(false))
 
-  const currentBlockType = editor.isActive('blockquote')
-    ? 'blockquote'
-    : editor.isActive('codeBlock')
-      ? 'codeBlock'
-      : editor.isActive('heading', { level: 2 })
-        ? 'h2'
-        : editor.isActive('heading', { level: 3 })
-          ? 'h3'
-          : editor.isActive('heading', { level: 4 })
-            ? 'h4'
-            : editor.isActive('heading', { level: 5 })
-              ? 'h5'
-              : editor.isActive('heading', { level: 6 })
-                ? 'h6'
-                : 'normal'
+  const getBlockType = () => {
+    if (editor.isActive('blockquote')) return 'blockquote'
+    else if (editor.isActive('codeBlock')) return 'codeBlock'
+    else if (editor.isActive('heading', { level: 2 })) return 'h2'
+    else if (editor.isActive('heading', { level: 3 })) return 'h3'
+    else if (editor.isActive('heading', { level: 4 })) return 'h4'
+    else if (editor.isActive('heading', { level: 5 })) return 'h5'
+    else if (editor.isActive('heading', { level: 6 })) return 'h6'
+    return 'normal'
+  }
+  const currentBlockType = getBlockType()
 
   const setBlockType = (value: string) => {
     const chain = editor.chain().focus()

@@ -123,7 +123,19 @@ export const Markdown: FunctionComponent<TProps> = ({
     },
     ol: (olProps: any) => {
       const { children, start } = olProps
-      const startNumber = typeof start === 'number' ? start : start ? Number(start) : undefined
+
+      const getStartNumber = () => {
+        if (typeof start === 'number') {
+          return start
+        } else if (start) {
+          return Number(start)
+        } else {
+          return undefined
+        }
+      }
+
+      const startNumber = getStartNumber()
+
       return (
         <List
           as='ol'

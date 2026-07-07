@@ -26,6 +26,8 @@ export const textColors: { label: string; value: string }[] = [
   { label: 'Meta Purple', value: '#905bd3' },
 ]
 
+// Interface trenger å hete Commands
+
 declare module '@tiptap/core' {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   interface Commands<ReturnType> {
