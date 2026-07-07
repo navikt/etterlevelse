@@ -49,7 +49,7 @@ export const IverksattTiltakForm: FunctionComponent<TProps> = ({
             <Modal
               open={isModalOpen}
               header={{
-                heading: !values.iverksatt
+                heading: !initialValues.iverksatt
                   ? 'Marker tiltaket som iverksatt'
                   : 'Endre iverksatt tilstand',
                 closeButton: false,
