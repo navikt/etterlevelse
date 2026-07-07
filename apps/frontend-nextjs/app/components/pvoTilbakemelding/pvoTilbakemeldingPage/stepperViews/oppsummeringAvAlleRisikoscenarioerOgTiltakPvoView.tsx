@@ -175,10 +175,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
           setAntallUtenTiltakAnsvarlig(
             tiltak.content.filter(
               (tiltak: ITiltak) =>
-                !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+                !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
             ).length
           )
-          setAntallUtenFrist(tiltak.content.filter((tiltak: ITiltak) => !tiltak.frist).length)
+          setAntallUtenFrist(
+            tiltak.content.filter((tiltak: ITiltak) => !tiltak.iverksatt && !tiltak.frist).length
+          )
         })
         setIsLoading(false)
       })()
@@ -268,12 +270,13 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
       case tiltakFilterValues.utenAnsvarlig:
         setFilteredTiltakList(
           tiltakList.filter(
-            (tiltak) => !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+            (tiltak) =>
+              !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
           )
         )
         break
       case tiltakFilterValues.utenFrist:
-        setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.frist))
+        setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.iverksatt && !tiltak.frist))
         break
     }
   }

@@ -18,7 +18,11 @@ import {
   ERisikoscenarioType,
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import {
+  ITiltak,
+  filterTiltakList,
+  tiltakFilterValues,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -63,12 +67,6 @@ export const filterValues = {
   effektIkkeVurdert: 'ikke-vurdert',
   hoyRisiko: 'hoy-risiko',
   tiltakIkkeAktuelt: 'ingen-tiltak',
-}
-
-export const tiltakFilterValues = {
-  alleTiltak: 'alleTiltak',
-  utenAnsvarlig: 'utenAnsvarlig',
-  utenFrist: 'utenFrist',
 }
 
 const visTomListeBeskrivelse = (filter: string | null) => {
@@ -315,22 +313,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     setTiltakFilter(filter)
     const tab: string = tabQuery ? tabQuery : tabValues.tiltak
 
-    switch (filter) {
-      case tiltakFilterValues.alleTiltak:
-        setFilteredTiltakList(tiltakList)
-        break
-      case tiltakFilterValues.utenAnsvarlig:
-        setFilteredTiltakList(
-          tiltakList.filter(
-            (tiltak: ITiltak) =>
-              !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
-          )
-        )
-        break
-      case tiltakFilterValues.utenFrist:
-        setFilteredTiltakList(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist))
-        break
-    }
+    setFilteredTiltakList(filterTiltakList(tiltakList, filter))
 
     setNavigateUrl(pvkDokumentasjonTabFilterTiltakUrl(steg, tab, filter, tiltakId))
     if (formRef.current?.dirty) {
@@ -591,6 +574,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             setTiltakList={setTiltakList}
                             filteredTiltakList={filteredTiltakList}
                             setFilteredTiltakList={setFilteredTiltakList}
+                            tiltakFilter={tiltakFilter}
                             risikoscenarioList={risikoscenarioList}
                             formRef={formRef}
                           />

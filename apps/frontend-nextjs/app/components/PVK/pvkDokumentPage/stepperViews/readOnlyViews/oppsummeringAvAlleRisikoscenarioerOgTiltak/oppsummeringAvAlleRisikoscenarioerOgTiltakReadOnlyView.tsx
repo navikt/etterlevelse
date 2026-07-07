@@ -299,7 +299,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
         )
         break
       case tiltakFilterValues.utenFrist:
-        setFilteredTiltakList(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist))
+        setFilteredTiltakList(
+          tiltakList.filter((tiltak: ITiltak) => !tiltak.iverksatt && !tiltak.frist)
+        )
         break
     }
 
