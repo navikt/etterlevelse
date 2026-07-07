@@ -20,6 +20,7 @@ interface IPropsTextAreaField {
   rows?: number
   withHighlight?: boolean
   withUnderline?: boolean
+  withTextColor?: boolean
   marginBottom?: boolean
   caption?: ReactNode
 }
@@ -37,6 +38,7 @@ export const TextAreaField = ({
   rows,
   withHighlight,
   withUnderline,
+  withTextColor,
 }: IPropsTextAreaField) => {
   const [mode, setMode] = useState('edit')
 
@@ -63,6 +65,7 @@ export const TextAreaField = ({
                     name={name}
                     withHighlight={withHighlight}
                     withUnderline={withUnderline}
+                    withTextColor={withTextColor}
                   />
                 )}
 

@@ -135,6 +135,7 @@ export const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
               markdown
               withHighlight
               withUnderline
+              withTextColor
             />
           </FieldRadioLayout>
 
