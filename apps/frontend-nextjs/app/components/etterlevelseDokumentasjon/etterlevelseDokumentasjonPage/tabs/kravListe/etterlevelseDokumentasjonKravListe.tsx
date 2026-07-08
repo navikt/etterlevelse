@@ -150,6 +150,14 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
     }
   }, [relevanteStats, utgaattStats, searchKrav, kravNivaaStatusFilter, suksesskriterieStatusFilter])
 
+  const checkForUtgattKravLength = () => {
+    if (etterlevelseDokumentasjon.etterlevelseDokumentVersjon === 1) {
+      return utgaattKravList.length === 0
+    } else {
+      return true
+    }
+  }
+
   let antallFylttKrav = 0
 
   getNewestKravVersjon(relevanteStats).forEach((k: TKravQL) => {
@@ -253,7 +261,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
       {!loading &&
         (relevanteStats.length !== 0 || utgaattStats.length !== 0) &&
         relevantKravList.length === 0 &&
-        utgaattKravList.length === 0 && (
+        checkForUtgattKravLength() && (
           <div className='flex w-full justify-center'>
             <BodyShort>Fant ingen krav</BodyShort>
           </div>
