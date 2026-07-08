@@ -1,10 +1,10 @@
 'use client'
 
 import {
-  EEtterlevelseStatus,
-  ESuksesskriterieStatus,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+  IKravNivaaStatusFilter,
+  ISuksesskriterieStatusFilter,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
@@ -21,9 +21,13 @@ import {
   getNewestKravVersjon,
   isFerdigUtfylt,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { BodyShort, Button, Label, Loader, Select, TextField } from '@navikt/ds-react'
+import { BodyShort, Button, Label, Loader, TextField } from '@navikt/ds-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
+import {
+  KravNivaaStatusFilter,
+  SuksesskriterieStatusFilter,
+} from '../common/statusFilterActionMenu'
 import { KravAccordionList } from './kravAccordionList'
 
 type TProps = {
@@ -56,8 +60,22 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const queryParams = useSearchParams()
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
-  const [statusFilter, setStatusFilter] = useState<string>('ALLE')
-  const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] = useState<string>('ALLE')
+  const [kravNivaaStatusFilter, setKravNivaaStatusFilter] = useState<IKravNivaaStatusFilter>({
+    IKKE_PAABEGYNT: true,
+    UNDER_REDIGERING: true,
+    FERDIG_DOKUMENTERT: true,
+    OPPFYLLES_SENERE: true,
+  })
+
+  const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] =
+    useState<ISuksesskriterieStatusFilter>({
+      UNDER_ARBEID: true,
+      OPPFYLT: true,
+      IKKE_RELEVANT: true,
+      IKKE_OPPFYLT: true,
+      IKKE_PAABEGYNT: true,
+    })
+
   const [searchKrav, setSearchKrav] = useState<string>('')
   const router = useRouter()
 
@@ -94,12 +112,15 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   const { relevantKravList, utgaattKravList } = useMemo(() => {
     let relevanteStatusListe: TKravQL[] = relevanteStats
     let utgaattStatusListe: TKravQL[] = utgaattStats
-    if (statusFilter !== 'ALLE') {
-      relevanteStatusListe = filterKravEtterlevelseStatus(statusFilter, relevanteStatusListe)
-      utgaattStatusListe = filterKravEtterlevelseStatus(statusFilter, utgaattStatusListe)
+    if (Object.values(kravNivaaStatusFilter).some((value) => value !== true)) {
+      relevanteStatusListe = filterKravEtterlevelseStatus(
+        kravNivaaStatusFilter,
+        relevanteStatusListe
+      )
+      utgaattStatusListe = filterKravEtterlevelseStatus(kravNivaaStatusFilter, utgaattStatusListe)
     }
 
-    if (suksesskriterieStatusFilter !== 'ALLE') {
+    if (Object.values(suksesskriterieStatusFilter).some((value) => value !== true)) {
       relevanteStatusListe = filterSuksesskriterieStatus(
         suksesskriterieStatusFilter,
         relevanteStatusListe
@@ -127,7 +148,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
       relevantKravList: relevanteStatusListe,
       utgaattKravList: utgaattStatusListe,
     }
-  }, [relevanteStats, utgaattStats, searchKrav, statusFilter, suksesskriterieStatusFilter])
+  }, [relevanteStats, utgaattStats, searchKrav, kravNivaaStatusFilter, suksesskriterieStatusFilter])
 
   let antallFylttKrav = 0
 
@@ -145,32 +166,16 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
           label='Søk etter kravet'
           onChange={(event) => setSearchKrav(event.target.value)}
         />
-        <Select
-          label='Velg fullføringsgrad'
-          onChange={(event) => {
-            setStatusFilter(event.target.value)
-          }}
-        >
-          <option value='ALLE'>Alle</option>
-          <option value={EEtterlevelseStatus.UNDER_REDIGERING}>Under arbeid</option>
-          <option value={EEtterlevelseStatus.OPPFYLLES_SENERE}>Oppfylles senere</option>
-          <option value=''>Ikke påbegynt</option>
-          <option value={EEtterlevelseStatus.FERDIG_DOKUMENTERT}>Ferdig utfylt</option>
-        </Select>
 
-        <Select
-          label='Velg suksesskriterie status'
-          onChange={(event) => {
-            setSuksesskriterieStatusFilter(event.target.value)
-          }}
-        >
-          <option value='ALLE'>Alle</option>
-          <option value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</option>
-          <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
-          <option value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</option>
-          <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
-          <option value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</option>
-        </Select>
+        <KravNivaaStatusFilter
+          kravNivaaStatusFilter={kravNivaaStatusFilter}
+          setKravNivaaStatusFilter={setKravNivaaStatusFilter}
+        />
+
+        <SuksesskriterieStatusFilter
+          suksesskriterieStatusFilter={suksesskriterieStatusFilter}
+          setSuksesskriterieStatusFilter={setSuksesskriterieStatusFilter}
+        />
       </div>
       <div className='flex items-center w-full pb-2'>
         <div className='flex items-center w-full gap-4'>
@@ -217,7 +222,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
         <div className='flex justify-end w-full items-center'>
           <BodyShort size='medium'>
             Totalt {getNewestKravVersjon(relevanteStats).length} krav
-            {statusFilter === 'ALLE'
+            {Object.values(kravNivaaStatusFilter).every((value) => value === true)
               ? `, ${antallFylttKrav} ferdig
               utfylt`
               : ''}
