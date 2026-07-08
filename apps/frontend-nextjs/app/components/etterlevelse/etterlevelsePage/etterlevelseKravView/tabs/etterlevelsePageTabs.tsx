@@ -12,6 +12,7 @@ import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import {
   EEtterlevelseStatus,
+  ESuksesskriterieStatus,
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
@@ -25,7 +26,10 @@ import {
 import { EKravTab, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
+import {
+  isEtterlevelseIkkePaabegynt,
+  syncEtterlevelseKriterieBegrunnelseWithKrav,
+} from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
@@ -138,9 +142,11 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         handleStateChangeOnEtterlevelseResponse(res)
       })
     } else {
-      await createEtterlevelse(nyEtterlevelse).then((res) => {
-        handleStateChangeOnEtterlevelseResponse(res)
-      })
+      if (!isEtterlevelseIkkePaabegynt(etterlevelse)) {
+        await createEtterlevelse(nyEtterlevelse).then((res) => {
+          handleStateChangeOnEtterlevelseResponse(res)
+        })
+      }
     }
   }
 
@@ -155,6 +161,14 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
       prioritised: isPrioritised,
     } as IEtterlevelse
     setEditedEtterlevelse(mutatedEtterlevelse)
+
+    if (
+      mutatedEtterlevelse.suksesskriterieBegrunnelser.every(
+        (kriterie) => kriterie.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_PAABEGYNT
+      )
+    ) {
+      mutatedEtterlevelse.status = EEtterlevelseStatus.IKKE_PAABEGYNT
+    }
 
     //double check if etterlevelse already exist before submitting
     let existingEtterlevelseId = ''
