@@ -7,7 +7,10 @@ import {
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
+import { useSearchTeamOptions } from '@/api/teamkatalogen/teamkatalogenApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
@@ -16,6 +19,7 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Link as AkselLink,
@@ -24,11 +28,13 @@ import {
   Detail,
   Heading,
   InfoCard,
+  Label,
   Select,
   Tabs,
   Tag,
 } from '@navikt/ds-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import AsyncSelect from 'react-select/async'
 import { TemaDashboardDetailHowToReadmore } from './DashboardReadmore/TemaDashboardDetailHowToReadmore'
 import { TemaDashboardDetailKravReadmore } from './DashboardReadmore/TemaDashboardDetailKravReadmore'
 import { TemaDashboardDetailReadmore } from './DashboardReadmore/TemaDashboardDetailReadmore'
@@ -283,6 +289,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
   const [kravEnheter, setKravEnheter] = useState<IOrgEnhet[]>([])
   const [selectedKrav, setSelectedKrav] = useState<string>('')
+  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
   const seksjonRequestId = useRef(0)
@@ -300,7 +307,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
       temaCode,
       selectedAvdeling || undefined,
       selectedSeksjon || undefined,
-      selectedEnhet || undefined
+      selectedEnhet || undefined,
+      selectedTeams.length > 0 ? selectedTeams.map((team) => team.id) : undefined
     )
       .then((data) => {
         if (requestId === temaRequestId.current) {
@@ -313,7 +321,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           setIsLoading(false)
         }
       })
-  }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet])
+  }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
 
   useEffect(() => {
     const requestId = ++kravRequestId.current
@@ -700,6 +708,41 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           </Button>
         </div>
 
+        <div className='mt-4 max-w-xl'>
+          <Label htmlFor='tema-detail-team-search'>Søk etter team</Label>
+          <BodyShort size='small' className='mb-2 text-gray-600'>
+            Trykk Enter for å legge til teamet. Du kan velge flere.
+          </BodyShort>
+          <AsyncSelect
+            inputId='tema-detail-team-search'
+            aria-label='Søk etter team'
+            placeholder=''
+            tabSelectsValue={false}
+            components={{ DropdownIndicator }}
+            noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+            controlShouldRenderValue={false}
+            loadingMessage={() => 'Søker...'}
+            isClearable={false}
+            loadOptions={useSearchTeamOptions}
+            value={null}
+            onChange={(value: any) => {
+              if (value && !selectedTeams.some((team) => team.id === value.id)) {
+                setIsLoading(true)
+                setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
+              }
+            }}
+            styles={selectOverrides}
+          />
+          <RenderTagList
+            list={selectedTeams.map((team) => team.name)}
+            variant='action'
+            onRemove={(index) => {
+              setIsLoading(true)
+              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
+            }}
+          />
+        </div>
+
         {isLoading && <CenteredLoader />}
 
         {!isLoading && !temaStats && (
@@ -720,25 +763,25 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 </Detail>
                 <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6'>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+                    <Heading size='xsmall' level='3' className='min-h-12'>
                       Kravstatus
                     </Heading>
                     <RechartsStackedBar data={kravData} percentageOnly />
                   </div>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+                    <Heading size='xsmall' level='3' className='min-h-12'>
                       Etterlevelse: suksesskriterier
                     </Heading>
                     <RechartsStackedBar data={suksessData} percentageOnly />
                   </div>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+                    <Heading size='xsmall' level='3' className='min-h-12'>
                       Suksesskriterier der kravet er ferdig utfylt
                     </Heading>
                     <RechartsStackedBar data={ferdigSuksessData} percentageOnly />
                   </div>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+                    <Heading size='xsmall' level='3' className='min-h-12'>
                       Suksesskriterier der kravet ikke er ferdig utfylt
                     </Heading>
                     <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
