@@ -209,6 +209,20 @@ export const syncEtterlevelseKriterieBegrunnelseWithKrav = (
   return suksesskriterieBegrunnelse
 }
 
+export const isEtterlevelseIkkePaabegynt = (etterlevelse: IEtterlevelse) => {
+  if (
+    etterlevelse.suksesskriterieBegrunnelser.every(
+      (kriterie) =>
+        kriterie.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_PAABEGYNT &&
+        ['', null, undefined].includes(kriterie.begrunnelse)
+    )
+  ) {
+    return true
+  }
+
+  return false
+}
+
 export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskriterieStatus) => {
   if (suksessKriterieStatus === ESuksesskriterieStatus.UNDER_ARBEID) {
     return 'Hva er oppfylt og hva er under arbeid?'
