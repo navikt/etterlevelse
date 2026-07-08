@@ -28,6 +28,7 @@ export interface ISuksesskriterieBegrunnelse {
 
 export enum EEtterlevelseStatus {
   UNDER_REDIGERING = 'UNDER_REDIGERING',
+  IKKE_PAABEGYNT = 'IKKE_PAABEGYNT',
   FERDIG = 'FERDIG',
   OPPFYLLES_SENERE = 'OPPFYLLES_SENERE',
   IKKE_RELEVANT = 'IKKE_RELEVANT',

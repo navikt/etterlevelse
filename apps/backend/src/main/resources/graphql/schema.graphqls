@@ -212,6 +212,7 @@ type SuksesskriterieBegrunnelse {
 
 enum EtterlevelseStatus {
     UNDER_REDIGERING,
+    IKKE_PAABEGYNT,
     FERDIG,
     OPPFYLLES_SENERE,
     IKKE_RELEVANT,
