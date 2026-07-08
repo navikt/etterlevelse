@@ -12,6 +12,7 @@ import {
   IEtterlevelseDokumentasjon,
   IEtterlevelseDokumentasjonStats,
   IKravNivaaStatusFilter,
+  ISuksesskriterieStatusFilter,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IAllCodelists, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
@@ -162,10 +163,6 @@ export const filterKravEtterlevelseStatus = (
     Object.keys(statusFilter) as (keyof IKravNivaaStatusFilter)[]
   ).filter((key) => statusFilter[key])
 
-  if (activeStatusFilters.includes(EEtterlevelseStatus.UNDER_REDIGERING)) {
-    activeStatusFilters.push(EEtterlevelseStatus.FERDIG)
-  }
-
   const filteredData: TKravQL[] = []
 
   if (activeStatusFilters.includes(EEtterlevelseStatus.UNDER_REDIGERING)) {
@@ -228,35 +225,58 @@ const suksesskriterieStatusCheck = (krav: TKravQL, status: ESuksesskriterieStatu
 }
 
 export const filterSuksesskriterieStatus = (
-  suksesskriterieStatusFilter: string,
+  suksesskriterieStatusFilter: ISuksesskriterieStatusFilter,
   dataToFilter: TKravQL[]
 ): TKravQL[] => {
-  switch (suksesskriterieStatusFilter) {
-    case ESuksesskriterieStatus.OPPFYLT:
-      return dataToFilter.filter((krav) =>
+  const activeStatusFilters: string[] = (
+    Object.keys(suksesskriterieStatusFilter) as (keyof ISuksesskriterieStatusFilter)[]
+  ).filter((key) => suksesskriterieStatusFilter[key])
+
+  const filteredData: TKravQL[] = []
+
+  if (activeStatusFilters.includes(ESuksesskriterieStatus.OPPFYLT)) {
+    filteredData.push(
+      ...dataToFilter.filter((krav) =>
         suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.OPPFYLT)
       )
-    case ESuksesskriterieStatus.IKKE_OPPFYLT:
-      return dataToFilter.filter((krav) =>
+    )
+  }
+
+  if (activeStatusFilters.includes(ESuksesskriterieStatus.IKKE_OPPFYLT)) {
+    filteredData.push(
+      ...dataToFilter.filter((krav) =>
         suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.IKKE_OPPFYLT)
       )
-    case ESuksesskriterieStatus.IKKE_RELEVANT:
-      return dataToFilter.filter((krav) =>
+    )
+  }
+
+  if (activeStatusFilters.includes(ESuksesskriterieStatus.IKKE_RELEVANT)) {
+    filteredData.push(
+      ...dataToFilter.filter((krav) =>
         suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.IKKE_RELEVANT)
       )
-    case ESuksesskriterieStatus.UNDER_ARBEID:
-      return dataToFilter.filter((krav) =>
+    )
+  }
+
+  if (activeStatusFilters.includes(ESuksesskriterieStatus.UNDER_ARBEID)) {
+    filteredData.push(
+      ...dataToFilter.filter((krav) =>
         suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.UNDER_ARBEID)
       )
-    case ESuksesskriterieStatus.IKKE_PAABEGYNT:
-      return dataToFilter.filter(
+    )
+  }
+
+  if (activeStatusFilters.includes(ESuksesskriterieStatus.IKKE_PAABEGYNT)) {
+    filteredData.push(
+      ...dataToFilter.filter(
         (krav) =>
           suksesskriterieStatusCheck(krav, ESuksesskriterieStatus.IKKE_PAABEGYNT) ||
           krav.etterlevelser.length === 0
       )
-    default:
-      return dataToFilter
+    )
   }
+
+  return filteredData
 }
 
 export const getNewestKravVersjon = (list: any[]) => {

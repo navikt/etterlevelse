@@ -1,7 +1,10 @@
 'use client'
 
-import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  IKravNivaaStatusFilter,
+  ISuksesskriterieStatusFilter,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
@@ -18,10 +21,13 @@ import {
   getNewestKravVersjon,
   isFerdigUtfylt,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { BodyShort, Button, Label, Loader, Select, TextField } from '@navikt/ds-react'
+import { BodyShort, Button, Label, Loader, TextField } from '@navikt/ds-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
-import { KravNivaaStatusFilter } from '../common/statusFilterActionMenu'
+import {
+  KravNivaaStatusFilter,
+  SuksesskriterieStatusFilter,
+} from '../common/statusFilterActionMenu'
 import { KravAccordionList } from './kravAccordionList'
 
 type TProps = {
@@ -54,13 +60,22 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const queryParams = useSearchParams()
   const [openAccordions, setOpenAccordions] = useState<boolean[]>(temaListe.map(() => false))
-  const [kravNivaaStatusFilter, setKravNivaaStatusFilter] = useState({
+  const [kravNivaaStatusFilter, setKravNivaaStatusFilter] = useState<IKravNivaaStatusFilter>({
     IKKE_PAABEGYNT: true,
     UNDER_REDIGERING: true,
     FERDIG_DOKUMENTERT: true,
     OPPFYLLES_SENERE: true,
   })
-  const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] = useState<string>('ALLE')
+
+  const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] =
+    useState<ISuksesskriterieStatusFilter>({
+      UNDER_ARBEID: true,
+      OPPFYLT: true,
+      IKKE_RELEVANT: true,
+      IKKE_OPPFYLT: true,
+      IKKE_PAABEGYNT: true,
+    })
+
   const [searchKrav, setSearchKrav] = useState<string>('')
   const router = useRouter()
 
@@ -105,7 +120,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
       utgaattStatusListe = filterKravEtterlevelseStatus(kravNivaaStatusFilter, utgaattStatusListe)
     }
 
-    if (suksesskriterieStatusFilter !== 'ALLE') {
+    if (Object.values(suksesskriterieStatusFilter).some((value) => value !== true)) {
       relevanteStatusListe = filterSuksesskriterieStatus(
         suksesskriterieStatusFilter,
         relevanteStatusListe
@@ -157,19 +172,10 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
           setKravNivaaStatusFilter={setKravNivaaStatusFilter}
         />
 
-        <Select
-          label='Velg suksesskriterie status'
-          onChange={(event) => {
-            setSuksesskriterieStatusFilter(event.target.value)
-          }}
-        >
-          <option value='ALLE'>Alle</option>
-          <option value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</option>
-          <option value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</option>
-          <option value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</option>
-          <option value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</option>
-          <option value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</option>
-        </Select>
+        <SuksesskriterieStatusFilter
+          suksesskriterieStatusFilter={suksesskriterieStatusFilter}
+          setSuksesskriterieStatusFilter={setSuksesskriterieStatusFilter}
+        />
       </div>
       <div className='flex items-center w-full pb-2'>
         <div className='flex items-center w-full gap-4'>
