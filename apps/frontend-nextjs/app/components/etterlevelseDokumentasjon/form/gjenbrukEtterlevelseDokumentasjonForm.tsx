@@ -35,7 +35,6 @@ import {
   IEtterlevelseDokumentasjonWithRelation,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
-  IEtterlevelseDokumentasjon,
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -46,7 +45,7 @@ import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUt
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { Button, ErrorSummary, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
+import { Alert, Button, ErrorSummary, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { useRouter } from 'next/navigation'
@@ -66,6 +65,8 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
 }) => {
   const [alleAvdelingOptions, setAlleAvdelingOptions] = useState<TOption[]>([])
   const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [isSubmitSuccess, setIsSubmitSuccess] = useState<boolean>(false)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>(
     etterlevelseDokumentasjon && etterlevelseDokumentasjon.nomAvdelingId
       ? etterlevelseDokumentasjon.nomAvdelingId
@@ -81,6 +82,10 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
   const submit = async (
     etterlevelseDokumentasjonWithRelation: IEtterlevelseDokumentasjonWithRelation
   ): Promise<void> => {
+    if (isSubmitting) {
+      return
+    }
+
     const mutatedEtterlevelsesDokumentasjon = etterlevelseDokumentasjonWithRelation
     const members = getMembersFromEtterlevelseDokumentasjon(etterlevelseDokumentasjon)
 
@@ -96,12 +101,18 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
       })
     }
 
-    await createEtterlevelseDokumentasjonWithRelataion(
-      etterlevelseDokumentasjon.id,
-      mutatedEtterlevelsesDokumentasjon
-    ).then((response: IEtterlevelseDokumentasjon) =>
+    setIsSubmitting(true)
+    try {
+      const response = await createEtterlevelseDokumentasjonWithRelataion(
+        etterlevelseDokumentasjon.id,
+        mutatedEtterlevelsesDokumentasjon
+      )
+      setIsSubmitSuccess(true)
       router.push(etterlevelseDokumentasjonIdUrl(response.id))
-    )
+    } catch (error) {
+      setIsSubmitting(false)
+      throw error
+    }
   }
 
   useEffect(() => {
@@ -562,14 +573,19 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             </ErrorSummary>
           )}
 
+          {isSubmitSuccess && (
+            <Alert variant='success' className='mb-5'>
+              Dokumentet ble opprettet. Du blir straks sendt videre.
+            </Alert>
+          )}
+
           <div className='button_container flex flex-col mt-40 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
             <div className='flex flex-row-reverse'>
               <Button
                 type='button'
+                loading={isSubmitting}
+                disabled={isSubmitting || isSubmitSuccess}
                 onClick={async () => {
-                  // ampli.logEvent('knapp trykket', {
-                  //   tekst: 'gjenbruk etterlevelsesdokument',
-                  // })
                   errorSummaryRef.current?.focus()
                   await submitForm()
                   setSubmitClick(!submitClick)
@@ -581,10 +597,8 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
               <Button
                 type='button'
                 variant='secondary'
+                disabled={isSubmitting}
                 onClick={() => {
-                  // ampli.logEvent('knapp trykket', {
-                  //   tekst: 'Avbryt gjenbruk etterlevelsesdokument',
-                  // })
                   router.back()
                 }}
               >
