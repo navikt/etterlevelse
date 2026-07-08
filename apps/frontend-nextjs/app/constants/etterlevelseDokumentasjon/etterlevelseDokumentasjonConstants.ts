@@ -52,6 +52,13 @@ export interface IEtterlevelseDokumentasjon {
   ardoqSystemData: IArdoqSystem[]
 }
 
+export interface IKravNivaaStatusFilter {
+  IKKE_PAABEGYNT: boolean
+  UNDER_REDIGERING: boolean
+  FERDIG_DOKUMENTERT: boolean
+  OPPFYLLES_SENERE: boolean
+}
+
 export interface IEtterlevelseVersjonHistorikk {
   versjon: number
   godkjentAvRisikoeier?: string
