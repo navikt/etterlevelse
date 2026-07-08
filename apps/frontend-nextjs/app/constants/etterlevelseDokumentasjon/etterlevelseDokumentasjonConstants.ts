@@ -59,6 +59,14 @@ export interface IKravNivaaStatusFilter {
   OPPFYLLES_SENERE: boolean
 }
 
+export interface ISuksesskriterieStatusFilter {
+  UNDER_ARBEID: boolean
+  OPPFYLT: boolean
+  IKKE_RELEVANT: boolean
+  IKKE_OPPFYLT: boolean
+  IKKE_PAABEGYNT: boolean
+}
+
 export interface IEtterlevelseVersjonHistorikk {
   versjon: number
   godkjentAvRisikoeier?: string

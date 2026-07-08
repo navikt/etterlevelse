@@ -94,7 +94,7 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
     })()
   }, [defaultOpen])
 
-  const { relevantKravList, utgaattKravList, kravCount } = useMemo(() => {
+  const { relevantKravList, utgaattKravList } = useMemo(() => {
     let relevanteStatusListe: TKravQL[] = relevanteStats
     let utgaattStatusListe: TKravQL[] = utgaattStats
     if (Object.values(kravNivaaStatusFilter).some((value) => value !== true)) {
@@ -132,7 +132,6 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
     return {
       relevantKravList: relevanteStatusListe,
       utgaattKravList: utgaattStatusListe,
-      kravCount: relevanteStatusListe.length,
     }
   }, [relevanteStats, utgaattStats, searchKrav, kravNivaaStatusFilter, suksesskriterieStatusFilter])
 
@@ -154,7 +153,6 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
         />
 
         <KravNivaaStatusFilter
-          kravCount={kravCount}
           kravNivaaStatusFilter={kravNivaaStatusFilter}
           setKravNivaaStatusFilter={setKravNivaaStatusFilter}
         />
