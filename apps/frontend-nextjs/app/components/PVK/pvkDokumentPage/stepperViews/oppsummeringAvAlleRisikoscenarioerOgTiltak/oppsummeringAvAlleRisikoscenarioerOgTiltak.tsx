@@ -609,7 +609,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
             />
           </div>
         </div>
-        <div>
+        <div className='min-w-0'>
           {/* sidepanel */}
           {isPvoTilbakemeldingFerdig && relevantVurdering && (
             <PvkSidePanelWrapper>

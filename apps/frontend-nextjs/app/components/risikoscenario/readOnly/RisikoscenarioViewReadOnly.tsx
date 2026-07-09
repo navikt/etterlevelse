@@ -38,7 +38,7 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
           icon={<LinkIcon aria-hidden />}
         />
       )}
-      <BodyLong className='mt-5'>{risikoscenario.beskrivelse}</BodyLong>
+      <BodyLong className='mt-5 break-words'>{risikoscenario.beskrivelse}</BodyLong>
 
       {risikoscenario.generelScenario && (
         <BodyLong className='mt-8'>
