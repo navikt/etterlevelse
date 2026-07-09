@@ -1,12 +1,16 @@
 package no.nav.data.integration.behandling.dto;
 
-import lombok.*;
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.integration.behandling.dto.BkatCode.toCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.integration.behandling.dto.BkatCode.toCode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 
 /**
  * Bruker operasjon i Polly som svarer med "ProcessShortResponse", ikke hele Process objektet,
