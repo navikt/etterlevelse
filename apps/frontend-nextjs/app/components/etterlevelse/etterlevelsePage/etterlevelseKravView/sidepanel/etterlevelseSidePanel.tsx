@@ -88,7 +88,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   }, [isPvkFormActive])
 
   return (
-    <div className='pl-4 border-l border-[#071a3636] w-full max-w-lg'>
+    <div className='pl-4 border-l border-[#071a3636] w-full max-w-lg min-w-0'>
       <div className='sticky top-4'>
         <Tabs
           defaultValue='mer'
