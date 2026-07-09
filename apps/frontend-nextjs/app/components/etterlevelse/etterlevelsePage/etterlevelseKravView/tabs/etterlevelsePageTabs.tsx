@@ -142,7 +142,7 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         handleStateChangeOnEtterlevelseResponse(res)
       })
     } else {
-      if (!isEtterlevelseIkkePaabegynt(etterlevelse)) {
+      if (!isEtterlevelseIkkePaabegynt(nyEtterlevelse)) {
         await createEtterlevelse(nyEtterlevelse).then((res) => {
           handleStateChangeOnEtterlevelseResponse(res)
         })

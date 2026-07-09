@@ -230,8 +230,10 @@ export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskrite
     return 'Hvordan oppfylles kriteriet?'
   } else if (suksessKriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT) {
     return 'Hvorfor er ikke kriteriet oppfylt?'
-  } else {
+  } else if (suksessKriterieStatus === ESuksesskriterieStatus.IKKE_RELEVANT) {
     return 'Hvorfor er ikke kriteriet relevant?'
+  } else {
+    return ''
   }
 }
 
