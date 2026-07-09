@@ -274,6 +274,7 @@ const exportKravToCsv = (
 
 const TemaDetailPage = ({ temaCode }: IProps) => {
   const [temaStats, setTemaStats] = useState<ITemaDashboardStats | null>(null)
+  const [temaDisplayName, setTemaDisplayName] = useState<string>(temaCode)
   const [kravStats, setKravStats] = useState<IKravDashboardStats[]>([])
   const [avdelinger, setAvdelinger] = useState<IAvdelingDashboardStats[]>([])
   const [seksjoner, setSeksjoner] = useState<ISeksjonOption[]>([])
@@ -312,7 +313,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
     )
       .then((data) => {
         if (requestId === temaRequestId.current) {
-          setTemaStats(data[0] || null)
+          const stats = data[0] || null
+          setTemaStats(stats)
+          if (stats?.temaName) {
+            setTemaDisplayName(stats.temaName)
+          }
         }
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
@@ -431,7 +436,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
     )
   }
 
-  const temaName = temaStats?.temaName || temaCode
+  const temaName = temaDisplayName || temaCode
 
   const kravData: IBarSegment[] = temaStats
     ? [
