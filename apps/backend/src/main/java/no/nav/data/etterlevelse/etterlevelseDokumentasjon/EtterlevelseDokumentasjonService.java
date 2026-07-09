@@ -392,6 +392,12 @@ public class EtterlevelseDokumentasjonService {
                 behandling.setId(behandlingId);
                 behandling.setNavn("Fant ikke behandling med id: " + behandlingId);
                 behandlingList.add(behandling);
+            } catch (Exception e) {
+                log.error("Failed to fetch behandling with id: {}", behandlingId, e);
+                var behandling = new Behandling();
+                behandling.setId(behandlingId);
+                behandling.setNavn("Klarte ikke å hente behandling med id: " + behandlingId);
+                behandlingList.add(behandling);
             }
         });
         return behandlingList;
@@ -411,6 +417,12 @@ public class EtterlevelseDokumentasjonService {
                 var dpBehandling = new DpBehandling();
                 dpBehandling.setId(dpBehandlingId);
                 dpBehandling.setNavn("Fant ikke DP behandling med id: " + dpBehandlingId);
+                dpBehandlingList.add(dpBehandling);
+            } catch (Exception e) {
+                log.error("Failed to fetch dp behandling with id: {}", dpBehandlingId, e);
+                var dpBehandling = new DpBehandling();
+                dpBehandling.setId(dpBehandlingId);
+                dpBehandling.setNavn("Klarte ikke å hente DP behandling med id: " + dpBehandlingId);
                 dpBehandlingList.add(dpBehandling);
             }
         });
