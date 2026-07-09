@@ -15,7 +15,8 @@
 6. [EtterlevelseDokumentasjon Status State Machine](#etterlevelsedokumentasjon-status-state-machine)
 7. [PVK/PVO Status State Machine](#pvkpvo-status-state-machine)
 8. [Action Menu Button State Machines](#action-menu-button-state-machines)
-9. [Sequence Diagrams](#sequence-diagrams)
+9. [Dashboard Traffic Light Colors](#dashboard-traffic-light-colors)
+10. [Sequence Diagrams](#sequence-diagrams)
 
 ---
 
@@ -462,6 +463,53 @@ Bold = action-triggering button. Italic = read-only navigation only.
 | T8 – Sendt til risikoeier          | _Les PVK_                  | _Les PVK_              | **Godkjenn PVK**         | **Godkjenn PVK**           | **Godkjenn PVK**           |
 | T9 – Godkjent av risikoeier        | **Les og oppdater PVK**    | _Les PVK_              | _Les PVK_                | _Les og oppdater PVK_      | _Les og oppdater PVK_      |
 | T10 – Ny versjon under arbeid      | **Fullfør PVK**            | **Vurder PVK (ny v.)** | **Godkjenn PVK (ny v.)** | **Fullfør PVK**            | **Fullfør PVK**            |
+
+---
+
+## Dashboard Traffic Light Colors
+
+The department dashboard (`/dashboard/:avdeling`, `AvdelingDetailPage.tsx`) uses colored dots
+(`TrafficDot`) to give a quick visual indication of status in the **Etterlevelse** and
+**Digital PVK** tabs.
+
+### Etterlevelse tab – "Antall krav ferdig utfylt"
+
+The dot color is based on the percentage of krav marked as ferdig utfylt
+(`antallOppfyltKrav` / `antallKrav`), via `getKravTrafficColor`:
+
+| Condition     | Color              | Meaning                                      |
+| ------------- | ------------------ | -------------------------------------------- |
+| `total === 0` | Grey (`#C6C2BF`)   | No krav exist yet for the document           |
+| `pct >= 100`  | Green (`#06893A`)  | All krav are ferdig utfylt                   |
+| `pct >= 50`   | Orange (`#E67E22`) | At least half of the krav are ferdig utfylt  |
+| `pct < 50`    | Red (`#C30000`)    | Less than half of the krav are ferdig utfylt |
+
+### Etterlevelse tab – "Oppfylt"
+
+This column (`OppfyltCell`) shows a percentage button that, when clicked, opens a popover with
+more detail. The percentage (`oppfyltKravProsent`) is calculated only from krav that the etterlever
+has already marked as **ferdig utfylt** — krav that are not yet ferdig utfylt are not counted.
+
+- `antallSuksesskriterierOppfylt` — number of suksesskriterier assessed as oppfylt, shown in green (`#005B4B`)
+- `antallSuksesskriterierIkkeOppfylt` — number of suksesskriterier assessed as ikke oppfylt, shown in red (`#C30000`)
+- Suksesskriterier assessed as "ikke relevant" are excluded from both counts and from the percentage
+- The percentage = oppfylt / (oppfylt + ikke oppfylt) among ferdig utfylt krav
+- If no krav are ferdig utfylt yet (`totSuksess === 0`), the button shows `-` instead of a percentage
+
+### Digital PVK tab – "Høy risiko før tiltak", "Høy risiko etter tiltak", "Tiltaksfrist passert"
+
+These three columns use a simpler rule: a red dot (`#C30000`) is shown together with the count
+whenever the count is greater than 0. If the count is 0 (or not applicable), no dot is shown and
+a dash (`-`) is displayed instead.
+
+| Column                  | Dot shown when                   | Meaning                                                          |
+| ----------------------- | -------------------------------- | ---------------------------------------------------------------- |
+| Høy risiko før tiltak   | `antallHoyRisikoscenario > 0`    | There are risikoscenarioer with high risk before tiltak          |
+| Høy risiko etter tiltak | `antallHoyRisikoEtterTiltak > 0` | There are risikoscenarioer with high risk remaining after tiltak |
+| Tiltaksfrist passert    | `antallTiltakFristPassert > 0`   | There are tiltak whose deadline has passed                       |
+
+Unlike the "Antall krav ferdig utfylt" column, these columns do not use graded colors (green/orange/red) —
+they only ever show red or nothing, since any non-zero count represents a risk that needs attention.
 
 ---
 
