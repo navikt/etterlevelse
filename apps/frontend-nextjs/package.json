@@ -98,7 +98,7 @@
     "lint-staged": "17.0.8",
     "patch-package": "^8.0.1",
     "postcss": "^8.5.16",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.5",
     "react-select": "^5.10.2",
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.3"
