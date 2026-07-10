@@ -42,7 +42,7 @@
     "@navikt/aksel-icons": "^8.14.0",
     "@navikt/ds-css": "^8.14.0",
     "@navikt/ds-react": "^8.14.0",
-    "@navikt/ds-tailwind": "^8.14.0",
+    "@navikt/ds-tailwind": "^8.15.0",
     "@tailwindcss/postcss": "^4.3.2",
     "@tiptap/core": "^3.27.3",
     "@tiptap/extension-image": "^3.27.3",

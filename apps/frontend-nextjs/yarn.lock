@@ -933,10 +933,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tailwind@npm:^8.14.0":
-  version: 8.14.0
-  resolution: "@navikt/ds-tailwind@npm:8.14.0"
-  checksum: 10c0/f9821b25b88a3480a957cd96950222529c54b5359448417275b581799b29bafe8f48598e1a3ca16358c001974de20dc4b9af62183462a302a237e89fac80185e
+"@navikt/ds-tailwind@npm:^8.15.0":
+  version: 8.15.0
+  resolution: "@navikt/ds-tailwind@npm:8.15.0"
+  checksum: 10c0/018e78337a095ec5d5ecebff4d108dae45950212bda749de11caec8ad09fd3337007eedc6badaea57d9992cf57e01d3ebc0cabb66c4ce010a96522376afecb8c
   languageName: node
   linkType: hard
 
@@ -3616,7 +3616,7 @@ __metadata:
     "@navikt/aksel-icons": "npm:^8.14.0"
     "@navikt/ds-css": "npm:^8.14.0"
     "@navikt/ds-react": "npm:^8.14.0"
-    "@navikt/ds-tailwind": "npm:^8.14.0"
+    "@navikt/ds-tailwind": "npm:^8.15.0"
     "@next/eslint-plugin-next": "npm:^16.2.10"
     "@tailwindcss/postcss": "npm:^4.3.2"
     "@tiptap/core": "npm:^3.27.3"
