@@ -869,7 +869,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                ? dok.teamsData.map((team, index) => (
+                                    <div key={`${team.id}-${index}`}>{team.name}</div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
@@ -1030,7 +1032,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                ? dok.teamsData.map((team, index) => (
+                                    <div key={`${team.id}-${index}`}>{team.name}</div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
@@ -1258,7 +1262,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                ? dok.teamsData.map((team, index) => (
+                                    <div key={`${team.id}-${index}`}>{team.name}</div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
