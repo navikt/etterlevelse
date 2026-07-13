@@ -471,7 +471,10 @@ Bold = action-triggering button. Italic = read-only navigation only.
 
 The department dashboard (`/dashboard/:avdeling`, `AvdelingDetailPage.tsx`) uses colored dots
 (`TrafficDot`) to give a quick visual indication of status in the **Etterlevelse** and
-**Digital PVK** tabs.
+**Digital PVK** tabs. The tema dashboard (`/dashboard/tema/:temaCode`, `TemaDetailPage.tsx`) reuses
+the same dot and "Oppfylt" popover logic in its **Vis etterlevelsesdokumenter** tab. Both
+`TrafficDot`, `getKravTrafficColor` and `OppfyltCell` live in the shared `DashboardTableCells.tsx`
+component so the visual rules described below apply identically on both pages.
 
 ### Etterlevelse tab – "Antall krav ferdig utfylt"
 
@@ -602,6 +605,28 @@ The tema-level dashboards apply the exact same counting rules as above, but inst
 input documents by avdeling, they scope by tema (and, on the detail page, additionally by krav
 belonging to that tema code, e.g. `EL_KOM`). The same `DashboardBarCard` component is reused to
 render the figures, so the status definitions and edge cases described above apply identically.
+
+### 5. Vis etterlevelsesdokumenter tab (tema detail page only)
+
+In addition to the "Vis figurer" and "Vis nøkkeltall" tabs, the "Overordnet for alle X krav"
+section on `TemaDetailPage.tsx` has a third tab, **Vis etterlevelsesdokumenter**, listing every
+etterlevelsesdokument relevant for the selected tema (and current avdeling/seksjon/enhet/team
+filters) in a table, reusing the same columns and traffic-light/oppfylt logic as the
+**Etterlevelse** tab on the avdeling dashboard (see
+[Dashboard Traffic Light Colors](#dashboard-traffic-light-colors)):
+
+- **Etterlevelsesdokument** — link to the document
+- **Antall krav ferdig utfylt** — `antallOppfyltKrav` / `antallKrav`, with a `TrafficDot`
+- **Oppfylt** — `OppfyltCell` popover, as described above
+- **Risikoeier**, **Team**, **Person**
+
+The data is fetched from a dedicated backend endpoint, `GET /dashboard/table/tema/{temaCode}`
+(`DashboardService.getDashboardTableByTema`), which filters etterlevelsesdokumenter the same way as
+the "Vis figurer"/"Vis nøkkeltall" tema stats, restricts the active krav list to those belonging to
+the tema's lov codes, and — unlike the avdeling table — only returns documents that have at least
+one relevant krav for the tema (`antallKrav > 0`). Internally it shares its row-building logic with
+`getDashboardTable` (avdeling) via a private `buildDashboardTable` helper, so PVK/risiko fields are
+computed identically; only the input document list and active krav list differ.
 
 ---
 
