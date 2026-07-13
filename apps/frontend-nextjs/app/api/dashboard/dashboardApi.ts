@@ -24,6 +24,25 @@ export const getDashboardTableByAvdeling = async (
   return response.data
 }
 
+export const getDashboardTableByTema = async (
+  temaCode: string,
+  avdelingId?: string,
+  seksjonId?: string,
+  enhetId?: string,
+  teamIds?: string[]
+): Promise<IDashboardTable[]> => {
+  const params = new URLSearchParams()
+  if (avdelingId) params.set('avdelingId', avdelingId)
+  if (seksjonId) params.set('seksjonId', seksjonId)
+  if (enhetId) params.set('enhetId', enhetId)
+  if (teamIds) teamIds.forEach((teamId) => params.append('teamId', teamId))
+  const query = params.toString()
+  const response = await axios.get<IDashboardTable[]>(
+    `${env.backendBaseUrl}/dashboard/table/tema/${encodeURIComponent(temaCode)}${query ? `?${query}` : ''}`
+  )
+  return response.data
+}
+
 export const getDashboardAvdelingStats = async (
   avdelingId: string
 ): Promise<IDashboardDetailResponse> => {
