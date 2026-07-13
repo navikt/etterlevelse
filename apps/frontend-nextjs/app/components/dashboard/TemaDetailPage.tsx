@@ -301,6 +301,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [selectedKrav, setSelectedKrav] = useState<string>('')
   const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
   const [dokTableData, setDokTableData] = useState<IDashboardTable[]>([])
+  const [isTableLoading, setIsTableLoading] = useState(true)
   const [tableSort, setTableSort] = useState<SortState | undefined>()
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
@@ -355,6 +356,11 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
         }
       })
       .catch((err) => console.error('Failed to fetch dashboard table for tema:', err))
+      .finally(() => {
+        if (requestId === tableRequestId.current) {
+          setIsTableLoading(false)
+        }
+      })
   }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
 
   useEffect(() => {
@@ -634,6 +640,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               setSelectedEnhet('')
               setEnheter([])
               setIsLoading(true)
+              setIsTableLoading(true)
               if (!e.target.value) {
                 setSeksjoner([])
               }
@@ -662,6 +669,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   setSelectedSeksjon(e.target.value)
                   setSelectedEnhet('')
                   setIsLoading(true)
+                  setIsTableLoading(true)
                 }}
               >
                 <option value=''>Alle seksjoner</option>
@@ -683,6 +691,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               onChange={(e) => {
                 setSelectedEnhet(e.target.value)
                 setIsLoading(true)
+                setIsTableLoading(true)
               }}
             >
               <option value=''>Alle enheter</option>
@@ -792,6 +801,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             onChange={(value: any) => {
               if (value && !selectedTeams.some((team) => team.id === value.id)) {
                 setIsLoading(true)
+                setIsTableLoading(true)
                 setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
               }
             }}
@@ -802,6 +812,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             variant='action'
             onRemove={(index) => {
               setIsLoading(true)
+              setIsTableLoading(true)
               setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
             }}
           />
@@ -1108,9 +1119,9 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   </ReadMore>
                 </div>
 
-                {isLoading && <CenteredLoader />}
+                {isTableLoading && <CenteredLoader />}
 
-                {!isLoading && (
+                {!isTableLoading && (
                   <>
                     <StickyHorizontalScroll>
                       <Table
@@ -1181,8 +1192,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                               </Table.DataCell>
                               <Table.DataCell>
                                 {dok.teamsData && dok.teamsData.length > 0
-                                  ? dok.teamsData.map((team) => (
-                                      <div key={team.id}>{team.name}</div>
+                                  ? dok.teamsData.map((team, index) => (
+                                      <div key={`${team.id}-${index}`}>{team.name}</div>
                                     ))
                                   : '-'}
                               </Table.DataCell>
