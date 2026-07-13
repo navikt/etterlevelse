@@ -92,8 +92,75 @@ public class DashboardService {
         List<EtterlevelseDokumentasjon> allEdoksWithAvdeling = etterlevelseDokumentasjonService.getByAvdeling(avdelingId);
         List<Krav> aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
 
+        return buildDashboardTable(allEdoksWithAvdeling, aktivKrav);
+    }
+
+    public List<DashboardTableResponse> getDashboardTableByTema(String temaCode, String avdelingId, String seksjonId, String enhetId, List<String> teamIds) {
+        List<EtterlevelseDokumentasjon> doks;
+
+        if (avdelingId != null && !avdelingId.isEmpty()) {
+            String effectiveAvdelingId = "ingen-avdeling".equals(avdelingId) ? "" : avdelingId;
+            doks = etterlevelseDokumentasjonService.getByAvdeling(effectiveAvdelingId);
+
+            if (seksjonId != null && !seksjonId.isEmpty()) {
+                if (seksjonId.equals("ingen-seksjon")) {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
+                    ).toList();
+                } else {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner() != null &&
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
+                                    .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
+                    ).toList();
+                }
+            }
+
+            if (enhetId != null && !enhetId.isEmpty()) {
+                if (enhetId.equals("ingen-enhet")) {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() == null ||
+                            d.getEtterlevelseDokumentasjonData().getEnheter().isEmpty()
+                    ).toList();
+                } else {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
+                            d.getEtterlevelseDokumentasjonData().getEnheter().stream()
+                                    .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
+                    ).toList();
+                }
+            }
+        } else {
+            doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
+        }
+
+        if (teamIds != null && !teamIds.isEmpty()) {
+            doks = doks.stream().filter(d ->
+                    d.getTeams() != null &&
+                    d.getTeams().stream().anyMatch(teamIds::contains)
+            ).toList();
+        }
+
+        List<Krav> aktivKrav;
+        if (temaCode != null && !temaCode.isEmpty()) {
+            var lovCodeForTema = CodelistService.getCodelist(ListName.LOV)
+                    .stream().filter(lov -> lov.getValueFromKeyData("tema").equals(temaCode))
+                    .map(Codelist::getCode).toList();
+
+            aktivKrav = kravService.getByFilter(KravFilter.builder().lover(lovCodeForTema).status(List.of(KravStatus.AKTIV.name())).build());
+        } else {
+            aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
+        }
+
+        return buildDashboardTable(doks, aktivKrav).stream()
+                .filter(r -> r.getAntallKrav() != null && r.getAntallKrav() > 0)
+                .toList();
+    }
+
+    private List<DashboardTableResponse> buildDashboardTable(List<EtterlevelseDokumentasjon> doks, List<Krav> aktivKrav) {
         LocalDate now = LocalDate.now();
-        return allEdoksWithAvdeling.stream()
+        return doks.stream()
                 .map(dok -> {
                     List<Etterlevelse> etterlevelserForDok = etterlevelseService.getByEtterlevelseDokumentasjon(dok.getId());
                     List<Krav> kravForEdok = new ArrayList<>(aktivKrav.stream().filter(k ->

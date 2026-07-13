@@ -3,6 +3,7 @@
 import {
   getDashboardAvdelingStats,
   getDashboardStats,
+  getDashboardTableByTema,
   getKravDashboardStats,
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
@@ -14,11 +15,13 @@ import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
+  IDashboardTable,
   IKravDashboardStats,
   ISeksjonOption,
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { handleSort } from '@/util/handleTableSort'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
@@ -29,7 +32,11 @@ import {
   Heading,
   InfoCard,
   Label,
+  List,
+  ReadMore,
   Select,
+  SortState,
+  Table,
   Tabs,
   Tag,
 } from '@navikt/ds-react'
@@ -38,7 +45,9 @@ import AsyncSelect from 'react-select/async'
 import { TemaDashboardDetailHowToReadmore } from './DashboardReadmore/TemaDashboardDetailHowToReadmore'
 import { TemaDashboardDetailKravReadmore } from './DashboardReadmore/TemaDashboardDetailKravReadmore'
 import { TemaDashboardDetailReadmore } from './DashboardReadmore/TemaDashboardDetailReadmore'
+import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
 import { RechartsStackedBar } from './RechartsStackedBar'
+import { StickyHorizontalScroll } from './StickyHorizontalScroll'
 import {
   IBarSegment,
   KRAV_COLORS,
@@ -291,10 +300,13 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [kravEnheter, setKravEnheter] = useState<IOrgEnhet[]>([])
   const [selectedKrav, setSelectedKrav] = useState<string>('')
   const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
+  const [dokTableData, setDokTableData] = useState<IDashboardTable[]>([])
+  const [tableSort, setTableSort] = useState<SortState | undefined>()
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
   const seksjonRequestId = useRef(0)
   const kravSeksjonRequestId = useRef(0)
+  const tableRequestId = useRef(0)
 
   useEffect(() => {
     getDashboardStats()
@@ -326,6 +338,23 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           setIsLoading(false)
         }
       })
+  }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
+
+  useEffect(() => {
+    const requestId = ++tableRequestId.current
+    getDashboardTableByTema(
+      temaCode,
+      selectedAvdeling || undefined,
+      selectedSeksjon || undefined,
+      selectedEnhet || undefined,
+      selectedTeams.length > 0 ? selectedTeams.map((team) => team.id) : undefined
+    )
+      .then((data) => {
+        if (requestId === tableRequestId.current) {
+          setDokTableData(data)
+        }
+      })
+      .catch((err) => console.error('Failed to fetch dashboard table for tema:', err))
   }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
 
   useEffect(() => {
@@ -427,6 +456,36 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
     if (!filteredKrav) return []
     return filteredKrav
   }, [filteredKrav])
+
+  const sortedTableDoks = useMemo(() => {
+    if (!tableSort) return dokTableData
+
+    const dir = tableSort.direction === 'ascending' ? 1 : -1
+    return [...dokTableData].sort((a, b) => {
+      const getValue = (dok: IDashboardTable): string | number => {
+        switch (tableSort.orderBy) {
+          case 'dok':
+            return `E${dok.etterlevelseNummer} ${dok.etterlevelseDokumentasjonTittel}`
+          case 'krav':
+            return dok.antallOppfyltKrav || 0
+          case 'oppfylt':
+            return dok.oppfyltKravProsent && dok.oppfyltKravProsent > 0 ? dok.oppfyltKravProsent : 0
+          case 'risikoeier':
+            return dok.risikoeiereData?.map((risikoeier) => risikoeier.fullName).join(', ') || ''
+          case 'team':
+            return dok.teamsData?.map((team) => team.name).join(', ') || ''
+          case 'person':
+            return dok.resourcesData?.map((resource) => resource.fullName).join(', ') || ''
+          default:
+            return ''
+        }
+      }
+      const aVal = getValue(a)
+      const bVal = getValue(b)
+      if (typeof aVal === 'number' && typeof bVal === 'number') return (aVal - bVal) * dir
+      return String(aVal).localeCompare(String(bVal)) * dir
+    })
+  }, [dokTableData, tableSort])
 
   if (isLoading && !temaStats) {
     return (
@@ -759,6 +818,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             <Tabs.List>
               <Tabs.Tab value='figurer' label='Vis figurer' />
               <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+              <Tabs.Tab value='etterlevelsesdokumenter' label='Vis etterlevelsesdokumenter' />
             </Tabs.List>
             <Tabs.Panel value='figurer'>
               <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
@@ -1008,6 +1068,145 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   </div>
                 </div>
                 <TemaDashboardDetailReadmore />
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value='etterlevelsesdokumenter'>
+              <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
+                <div style={{ maxWidth: '75ch' }}>
+                  <ReadMore header='Hvordan bruker jeg denne tabellen?' className='mb-4'>
+                    <List>
+                      <List.Item>
+                        <strong>Du kan bla bortover i tabellen</strong>
+                        <br />
+                        Med mindre du bruker en veldig stor skjerm, er det sannsynligvis flere
+                        kolonner bortover til høyre som du kanskje ikke har sett.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Du kan sortere tabellen etter kolonne</strong>
+                        <br />
+                        Ved å klikke på øverste rad i tabellen kan du velge om du vil sortere etter
+                        kolonnenavnet. Dette kan gjøre det enklere å finne informasjonen du lurer
+                        på.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hvordan tolke &quot;Antall krav ferdig utfylt&quot;?</strong>
+                        <br />
+                        Første tall viser hvor mange etterlevelseskrav som etterleveren har satt til
+                        &quot;ferdig utfylt&quot;. Andre tall viser totalantall krav under{' '}
+                        {temaName} som etterleveren må besvare i sitt etterlevelsesdokument.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hva betyr &quot;Oppfylt&quot;?</strong>
+                        <br />I denne kolonna kan du klikke på prosentandel og finne mer
+                        informasjon. Etterleveren må først ha markert hele kravet som ferdig utfylt
+                        for at tallene blir tatt med her. Prosentandelen er beregnet basert på
+                        forholdet mellom suksesskriterier vurdert som oppfylt, og suksesskriterier
+                        vurdert som ikke oppfylt. Det tas ikke med suksesskriterier som ble vurdert
+                        som ikke relevant.
+                      </List.Item>
+                    </List>
+                  </ReadMore>
+                </div>
+
+                {isLoading && <CenteredLoader />}
+
+                {!isLoading && (
+                  <>
+                    <StickyHorizontalScroll>
+                      <Table
+                        className='mt-4 dashboard-table'
+                        size='small'
+                        zebraStripes
+                        stickyHeader
+                        sort={tableSort}
+                        onSortChange={(sortKey) => handleSort(tableSort, setTableSort, sortKey)}
+                      >
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.ColumnHeader sortable sortKey='dok'>
+                              <span className='flex flex-col'>
+                                <span>Etterlevelsesdokument</span>
+                                <span className='font-normal'>(Lenker åpnes i ny fane)</span>
+                              </span>
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='krav' align='center'>
+                              Antall krav ferdig utfylt
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='oppfylt' align='center'>
+                              Oppfylt
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='risikoeier'>
+                              Risikoeier
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='team'>
+                              Team
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='person'>
+                              Person
+                            </Table.ColumnHeader>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {sortedTableDoks.map((dok) => (
+                            <Table.Row key={dok.etterlevelseDokumentasjonId}>
+                              <Table.DataCell className='dashboard-cell-wide'>
+                                <AkselLink
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </AkselLink>
+                              </Table.DataCell>
+                              <Table.DataCell align='center'>
+                                <TrafficDot
+                                  color={getKravTrafficColor(
+                                    dok.antallOppfyltKrav || 0,
+                                    dok.antallKrav || 0
+                                  )}
+                                />
+                                {dok.antallOppfyltKrav} av {dok.antallKrav}
+                              </Table.DataCell>
+                              <Table.DataCell align='center'>
+                                <OppfyltCell dok={dok} />
+                              </Table.DataCell>
+                              <Table.DataCell>
+                                {dok.risikoeiereData && dok.risikoeiereData.length > 0
+                                  ? dok.risikoeiereData.map((risikoeier, index) => (
+                                      <div key={`${risikoeier.navIdent}-${index}`}>
+                                        {risikoeier.fullName}
+                                      </div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                              <Table.DataCell>
+                                {dok.teamsData && dok.teamsData.length > 0
+                                  ? dok.teamsData.map((team) => (
+                                      <div key={team.id}>{team.name}</div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                              <Table.DataCell>
+                                {dok.resourcesData && dok.resourcesData.length > 0
+                                  ? dok.resourcesData.map((resource, index) => (
+                                      <div key={`${resource.navIdent}-${index}`}>
+                                        {resource.fullName}
+                                      </div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                            </Table.Row>
+                          ))}
+                        </Table.Body>
+                      </Table>
+                    </StickyHorizontalScroll>
+                    {sortedTableDoks.length === 0 && (
+                      <BodyShort className='mt-4 text-gray-500'>
+                        Ingen treff på valgte filtre
+                      </BodyShort>
+                    )}
+                  </>
+                )}
               </div>
             </Tabs.Panel>
           </Tabs>

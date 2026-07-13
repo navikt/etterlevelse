@@ -63,6 +63,23 @@ public class DashboardController {
         }
     }
 
+    @Operation(summary = "Get dashboard table for a single tema")
+    @ApiResponse(description = "ok")
+    @GetMapping("/table/tema/{temaCode}")
+    public ResponseEntity<List<DashboardTableResponse>> getTableDashboardForTema(
+            @PathVariable String temaCode,
+            @RequestParam(required = false) String avdelingId,
+            @RequestParam(required = false) String seksjonId,
+            @RequestParam(required = false) String enhetId,
+            @RequestParam(required = false) List<String> teamId) {
+        log.info("Getting dashboard table for tema={} avdelingId={} seksjonId={} enhetId={} teamId={}", temaCode, avdelingId, seksjonId, enhetId, teamId);
+        var tema = CodelistService.getCodelist(ListName.TEMA, temaCode);
+        if (tema == null) {
+            throw new ValidationException( "Invalid temaCode: " + temaCode);
+        }
+        return ResponseEntity.ok(dashboardService.getDashboardTableByTema(temaCode, avdelingId, seksjonId, enhetId, teamId));
+    }
+
     @Operation(summary = "Get tema dashboard stats")
     @ApiResponse(description = "ok")
     @GetMapping("/tema")
