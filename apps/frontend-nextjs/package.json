@@ -46,7 +46,7 @@
     "@tailwindcss/postcss": "^4.3.2",
     "@tiptap/core": "^3.27.3",
     "@tiptap/extension-image": "^3.27.3",
-    "@tiptap/extension-link": "^3.27.3",
+    "@tiptap/extension-link": "^3.27.4",
     "@tiptap/extension-list": "^3.27.3",
     "@tiptap/extension-ordered-list": "^3.27.3",
     "@tiptap/extension-underline": "^3.27.3",
