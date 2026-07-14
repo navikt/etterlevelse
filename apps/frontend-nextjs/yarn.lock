@@ -1278,6 +1278,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tiptap/core@npm:^3.27.4":
+  version: 3.27.4
+  resolution: "@tiptap/core@npm:3.27.4"
+  peerDependencies:
+    "@tiptap/pm": 3.27.4
+  checksum: 10c0/7143aaf120ee99b263d3f60bd926da2f85136abcf3815563ddd3e30daf8c8919363c5e155eb21a65a1008252edf591f5c07a7ea5b61f59cc1f26950b42feeda4
+  languageName: node
+  linkType: hard
+
 "@tiptap/extension-blockquote@npm:^3.27.3":
   version: 3.27.3
   resolution: "@tiptap/extension-blockquote@npm:3.27.3"
@@ -3619,7 +3628,7 @@ __metadata:
     "@navikt/ds-tailwind": "npm:^8.15.0"
     "@next/eslint-plugin-next": "npm:^16.2.10"
     "@tailwindcss/postcss": "npm:^4.3.2"
-    "@tiptap/core": "npm:^3.27.3"
+    "@tiptap/core": "npm:^3.27.4"
     "@tiptap/extension-image": "npm:^3.27.3"
     "@tiptap/extension-link": "npm:^3.27.3"
     "@tiptap/extension-list": "npm:^3.27.3"
