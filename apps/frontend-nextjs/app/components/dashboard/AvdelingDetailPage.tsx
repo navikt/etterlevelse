@@ -823,14 +823,16 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       {sortedDoks.map((dok) => {
                         return (
                           <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                            <Table.DataCell className='dashboard-cell-wide'>
-                              <Link
-                                href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
-                                target='_blank'
-                              >
-                                E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
-                                {dok.etterlevelseDokumentasjonTittel}
-                              </Link>
+                            <Table.DataCell className='dashboard-cell-doc'>
+                              <div className='dashboard-cell-doc-content'>
+                                <Link
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </Link>
+                              </div>
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.ikkePaabegynt
@@ -1012,14 +1014,16 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       {sortedDoks.map((dok) => {
                         return (
                           <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                            <Table.DataCell className='dashboard-cell-wide'>
-                              <Link
-                                href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
-                                target='_blank'
-                              >
-                                E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
-                                {dok.etterlevelseDokumentasjonTittel}
-                              </Link>
+                            <Table.DataCell className='dashboard-cell-doc'>
+                              <div className='dashboard-cell-doc-content'>
+                                <Link
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </Link>
+                              </div>
                             </Table.DataCell>
                             <Table.DataCell align='center'>
                               <TrafficDot
@@ -1228,14 +1232,16 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       {sortedDoks.map((dok) => {
                         return (
                           <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                            <Table.DataCell className='dashboard-cell-wide'>
-                              <Link
-                                href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
-                                target='_blank'
-                              >
-                                E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
-                                {dok.etterlevelseDokumentasjonTittel}
-                              </Link>
+                            <Table.DataCell className='dashboard-cell-doc'>
+                              <div className='dashboard-cell-doc-content'>
+                                <Link
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </Link>
+                              </div>
                             </Table.DataCell>
                             <Table.DataCell>
                               {getBehovForPvkText(

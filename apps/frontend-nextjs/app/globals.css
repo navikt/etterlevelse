@@ -78,6 +78,17 @@ iframe#webpack-dev-server-client-overlay {
   word-break: break-word;
 }
 
+.dashboard-table td.dashboard-cell-doc {
+  white-space: normal;
+  width: clamp(30ch, 60vw, 75ch);
+  word-break: break-word;
+}
+
+.dashboard-cell-doc-content {
+  display: inline-block;
+  width: clamp(30ch, 60vw, 75ch);
+}
+
 /* Locked "Behandler personopplysninger" checkbox: custom marker colors (no padlock overlay) */
 .behandler-personopplysninger--locked.aksel-checkbox--readonly
   .aksel-checkbox__input:where(:checked, :indeterminate) {
