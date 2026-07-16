@@ -140,7 +140,7 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
           {stats.temaName}
         </Heading>
         <Link href={`/dashboard/tema/${stats.temaCode}`}>
-          Les mer om etterlevelse under {stats.temaName}
+          Utforsk etterlevelse under {stats.temaName}
         </Link>
       </div>
 
