@@ -277,6 +277,28 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     return tableData?.some((dok) => dok.enheter && dok.enheter.length > 0) ?? false
   }, [tableData])
 
+  const pvkTotals = useMemo(() => {
+    return sortedDoks.reduce(
+      (acc, dok) => {
+        acc.antallRisikoscenario += dok.antallRisikoscenario || 0
+        acc.antallHoyRisikoscenario += dok.antallHoyRisikoscenario || 0
+        acc.antallHoyRisikoEtterTiltak += dok.antallHoyRisikoEtterTiltak || 0
+        acc.antallTiltak += dok.antallTiltak || 0
+        acc.antallIkkeIverksattTiltak += dok.antallIkkeIverksattTiltak || 0
+        acc.antallTiltakFristPassert += dok.antallTiltakFristPassert || 0
+        return acc
+      },
+      {
+        antallRisikoscenario: 0,
+        antallHoyRisikoscenario: 0,
+        antallHoyRisikoEtterTiltak: 0,
+        antallTiltak: 0,
+        antallIkkeIverksattTiltak: 0,
+        antallTiltakFristPassert: 0,
+      }
+    )
+  }, [sortedDoks])
+
   if (isLoading || data == null) {
     return (
       <PageLayout pageTitle='Dashboard' currentPage='Dashboard' breadcrumbPaths={[]}>
@@ -1142,22 +1164,48 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Digital PVK status
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='antallScenarioer' align='center'>
-                          Antall risikoscenarioer
+                          <span className='whitespace-nowrap'>
+                            Antall risikoscenarioer{' '}
+                            <span className='font-normal'>({pvkTotals.antallRisikoscenario})</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='hoyRisiko' align='center'>
-                          Høy risiko før tiltak
+                          <span className='whitespace-nowrap'>
+                            Høy risiko før tiltak{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallHoyRisikoscenario})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='hoyRisikoEtterTiltak' align='center'>
-                          Høy risiko etter tiltak
+                          <span className='whitespace-nowrap'>
+                            Høy risiko etter tiltak{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallHoyRisikoEtterTiltak})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='antallTiltak' align='center'>
-                          Antall tiltak
+                          <span className='whitespace-nowrap'>
+                            Antall tiltak{' '}
+                            <span className='font-normal'>({pvkTotals.antallTiltak})</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='ikkeIverksatte' align='center'>
-                          Ikke iverksatte tiltak
+                          <span className='whitespace-nowrap'>
+                            Ikke iverksatte tiltak{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallIkkeIverksattTiltak})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='fristPassert' align='center'>
-                          Tiltaksfrist passert
+                          <span className='whitespace-nowrap'>
+                            Tiltaksfrist passert{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallTiltakFristPassert})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='dato_pvk'>
                           Sist oppdatert
