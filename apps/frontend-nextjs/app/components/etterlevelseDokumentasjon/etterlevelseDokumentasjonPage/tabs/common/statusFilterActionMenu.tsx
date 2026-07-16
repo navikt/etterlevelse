@@ -124,7 +124,7 @@ export const SuksesskriterieStatusFilter: FunctionComponent<ISuksesskriterieStat
           icon={<ChevronDownIcon aria-hidden />}
           iconPosition='right'
         >
-          Velg fullføringsgrad på kravnivå (
+          Velg suksesskriterie-status (
           {
             (
               Object.keys(suksesskriterieStatusFilter) as (keyof ISuksesskriterieStatusFilter)[]
