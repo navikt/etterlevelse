@@ -66,7 +66,7 @@ export const Footer = () => {
           <div className=' flex flex-col'>
             <BodyShort className='text-2xl mb-5 flex items-baseline'>
               <Image
-                className='mr-2.5'
+                className='mr-2.5 hidden md:block'
                 src={etterlevelseLogoWhiteIcon}
                 alt='Etterlevelse logo'
                 aria-hidden
@@ -78,7 +78,7 @@ export const Footer = () => {
             <BodyShort>Arbeids- og velferdsetaten</BodyShort>
           </div>
           <Spacer />
-          <div className='flex flex-col gap-4'>
+          <div className='flex flex-col gap-4 px-2'>
             <BodyShort>Nyttige lenker</BodyShort>
             <Link className='text-white' href={statusPageLink}>
               Status på etterlevelse i Nav
@@ -97,7 +97,7 @@ export const Footer = () => {
             </Link>
           </div>
           <Spacer />
-          <div className='flex flex-col gap-4'>
+          <div className='flex flex-col gap-4 px-2'>
             <BodyShort>Om nettstedet</BodyShort>
             <Link className='text-white' href='/oversikt-over-losningene'>
               Oversikt over løsningene
@@ -113,7 +113,7 @@ export const Footer = () => {
             </Link>
           </div>
           <Spacer />
-          <div className='flex flex-col gap-4'>
+          <div className='flex flex-col gap-4 px-2'>
             <BodyShort>Finn oss</BodyShort>
             <Link className='text-white' href={datajegerSlackLink}>
               Slack
