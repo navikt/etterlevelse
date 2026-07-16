@@ -548,8 +548,8 @@ const TemaDashboardPage = () => {
         <div className='mt-4'>
           <Select
             label='Velg tema'
-            className='sm:w-fit sm:min-w-64'
-            style={{ width: '100%' }}
+            className='w-full'
+            style={{ maxWidth: 350 }}
             value={selectedTema}
             onChange={(e) => setSelectedTema(e.target.value)}
           >
@@ -562,11 +562,10 @@ const TemaDashboardPage = () => {
           </Select>
         </div>
 
-        <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
+        <div className='flex flex-row flex-wrap gap-4 mt-4 items-end'>
           <Select
             label='Filtrer etter avdeling'
-            className='sm:w-fit sm:min-w-64'
-            style={{ width: '100%' }}
+            style={{ width: 350 }}
             value={selectedAvdeling}
             onChange={(e) => {
               setSelectedAvdeling(e.target.value)
@@ -595,8 +594,7 @@ const TemaDashboardPage = () => {
             return selectedAvdeling && filteredSeksjoner.length > 0 ? (
               <Select
                 label='Filtrer etter seksjon'
-                className='sm:w-fit sm:min-w-64'
-                style={{ width: '100%' }}
+                style={{ width: 350 }}
                 value={selectedSeksjon}
                 onChange={(e) => {
                   setSelectedSeksjon(e.target.value)
@@ -617,8 +615,7 @@ const TemaDashboardPage = () => {
           {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enheter.length > 0 && (
             <Select
               label='Filtrer etter enhet'
-              className='sm:w-fit sm:min-w-64'
-              style={{ width: '100%' }}
+              style={{ width: 350 }}
               value={selectedEnhet}
               onChange={(e) => {
                 setSelectedEnhet(e.target.value)
