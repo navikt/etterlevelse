@@ -545,7 +545,7 @@ const TemaDashboardPage = () => {
           Tema
         </Heading>
 
-        <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
+        <div className='mt-4'>
           <Select
             label='Velg tema'
             className='sm:w-fit sm:min-w-64'
@@ -560,7 +560,9 @@ const TemaDashboardPage = () => {
               </option>
             ))}
           </Select>
+        </div>
 
+        <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
           <Select
             label='Filtrer etter avdeling'
             className='sm:w-fit sm:min-w-64'
