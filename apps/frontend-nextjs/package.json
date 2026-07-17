@@ -72,7 +72,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "rxjs": "^7.8.2",
-    "tailwindcss": "^4.3.2",
+    "tailwindcss": "^4.3.3",
     "turndown": "^7.2.4",
     "yup": "^1.7.1"
   },
