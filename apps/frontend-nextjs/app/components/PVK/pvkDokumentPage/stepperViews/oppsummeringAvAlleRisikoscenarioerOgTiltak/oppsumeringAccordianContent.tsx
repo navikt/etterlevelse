@@ -10,6 +10,7 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '@/components/risikoscenario/common/risikoscenarioTiltakHeader'
+import SlettOvrigRisikoscenario from '@/components/risikoscenario/edit/slettOvrigRisikoscenario'
 import RisikoscenarioModalForm from '@/components/risikoscenario/form/risikoscenarioModalForm'
 import { TiltakReadMoreListModalEdit } from '@/components/tiltak/edit/tiltakReadMoreListModalEdit'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -104,6 +105,12 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
         >
           Rediger risikoscenario
         </Button>
+        <SlettOvrigRisikoscenario
+          risikoscenario={risikoscenario}
+          tiltakList={tiltakList}
+          risikoscenarioer={risikoscenarioList}
+          setRisikoscenarioer={setRisikosenarioList}
+        />
       </div>
       <div className='mt-12'>
         <RisikoscenarioTiltakHeader />
