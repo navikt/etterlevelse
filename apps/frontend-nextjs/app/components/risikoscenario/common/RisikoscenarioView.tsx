@@ -35,6 +35,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       {!noCopyButton && (
         <CopyButton
           variant='action'
+          size='small'
           copyText={pvkDokumentasjonCopyUrl(
             window.location.origin,
             etterlevelseDokumentasjonId,

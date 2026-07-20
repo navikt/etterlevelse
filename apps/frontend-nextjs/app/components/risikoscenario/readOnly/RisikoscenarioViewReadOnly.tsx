@@ -32,6 +32,7 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       {!noCopyButton && (
         <CopyButton
           variant='action'
+          size='small'
           copyText={window.location.href}
           text='Kopier scenariolenke'
           activeText='Lenken er kopiert'
