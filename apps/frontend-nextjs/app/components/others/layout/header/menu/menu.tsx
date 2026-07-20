@@ -33,7 +33,7 @@ export const Menu: FunctionComponent<TMenuProps> = ({ pages, title, icon }) => {
 
   return (
     <Dropdown>
-      <InternalHeader.Button as={Dropdown.Toggle}>
+      <InternalHeader.Button as={Dropdown.Toggle} className='header-menu-toggle'>
         {icon} {title}
       </InternalHeader.Button>
       <Dropdown.Menu

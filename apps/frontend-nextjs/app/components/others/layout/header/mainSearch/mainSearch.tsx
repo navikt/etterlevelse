@@ -82,6 +82,7 @@ const MainSearch = () => {
     <div className='w-full'>
       <AsyncSelect
         instanceId='main-search'
+        className='main-search'
         aria-label='Søk etter krav, dokumentasjon eller behandling'
         placeholder='Søk etter krav, dokumentasjon eller behandling'
         components={{ DropdownIndicator, Option }}
@@ -94,25 +95,28 @@ const MainSearch = () => {
         onChange={(selectedOption) => selectedOption && router.push([selectedOption].flat()[0].url)}
         styles={{
           // Updates default focus-border so it can be replaced with focus from DesignSystem
-          control: (base: CSSObjectWithLabel) =>
+          control: (base: CSSObjectWithLabel, state) =>
             ({
               ...base,
               boxShadow: 'none',
-              color: 'var(--a-text-default)',
-              border: '1px solid var(--a-border-subtle)',
+              color: 'var(--ax-text-default)',
+              border: '1px solid var(--ax-border-subtle)',
               borderRadius: 'var(--ax-radius-8)',
-              ':focus-within': {
-                boxShadow: 'var(--a-shadow-focus)',
-                outline: 'none',
-              },
-              ':focus': { borderColor: 'var(--a-border-action)' },
-              ':hover': { borderColor: 'var(--a-border-action)' },
+              outline: state.isFocused ? '3px solid var(--ax-border-focus)' : 'none',
+              outlineOffset: '1px',
+              ':hover': { borderColor: 'var(--ax-border-strong)' },
               cursor: 'text',
             }) as CSSObjectWithLabel,
           placeholder: (base: CSSObjectWithLabel) =>
             ({ ...base, color: '#000', opacity: 1 }) as CSSObjectWithLabel,
           input: (base: CSSObjectWithLabel) =>
-            ({ ...base, color: '#000', opacity: 1 }) as CSSObjectWithLabel,
+            ({
+              ...base,
+              color: '#000',
+              opacity: 1,
+              outline: 'none',
+              boxShadow: 'none',
+            }) as CSSObjectWithLabel,
           option: (base: CSSObjectWithLabel) =>
             ({ ...base, color: '#000', opacity: 1, fontWeight: 500 }) as CSSObjectWithLabel,
           menu: (base: CSSObjectWithLabel) => ({ ...base, color: '#000' }) as CSSObjectWithLabel,
