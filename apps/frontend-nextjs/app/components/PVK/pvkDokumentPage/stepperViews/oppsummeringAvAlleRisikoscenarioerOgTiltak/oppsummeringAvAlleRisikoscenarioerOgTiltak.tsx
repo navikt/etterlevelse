@@ -589,6 +589,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                           <TiltakAccordionListReadOnly
                             tiltakList={filteredTiltakList}
                             risikoscenarioList={risikoscenarioList}
+                            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                           />
                         )}
 

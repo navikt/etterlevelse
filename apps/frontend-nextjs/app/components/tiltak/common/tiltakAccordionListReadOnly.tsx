@@ -10,10 +10,11 @@ interface IProps {
   tiltakList: ITiltak[]
   risikoscenarioList: IRisikoscenario[]
   previousVurdering?: IVurdering
+  etterlevelseDokumentasjonId?: string
 }
 
 export const TiltakAccordionListReadOnly = (props: IProps) => {
-  const { tiltakList, risikoscenarioList, previousVurdering } = props
+  const { tiltakList, risikoscenarioList, previousVurdering, etterlevelseDokumentasjonId } = props
 
   return (
     <Accordion>
@@ -33,7 +34,11 @@ export const TiltakAccordionListReadOnly = (props: IProps) => {
               </div>
             </Accordion.Header>
             <Accordion.Content>
-              <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
+              <TiltakView
+                tiltak={tiltak}
+                risikoscenarioList={risikoscenarioList}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+              />
             </Accordion.Content>
           </Accordion.Item>
         )

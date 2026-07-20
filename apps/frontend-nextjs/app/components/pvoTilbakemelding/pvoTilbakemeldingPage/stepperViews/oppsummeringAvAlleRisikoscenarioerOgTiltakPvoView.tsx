@@ -422,6 +422,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                               tiltakList={filteredTiltakList}
                               risikoscenarioList={risikoscenarioList}
                               previousVurdering={previousVurdering}
+                              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                             />
                           )}
 

@@ -199,7 +199,11 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
 
   return (
     <div>
-      <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
+      <TiltakView
+        tiltak={tiltak}
+        risikoscenarioList={risikoscenarioList}
+        etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
+      />
       {!iverksattFormDirty && pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
         <div className='mb-5'>
           <Button
