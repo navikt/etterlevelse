@@ -21,7 +21,7 @@ import {
   getNewestKravVersjon,
   isFerdigUtfylt,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { BodyShort, Button, Label, Loader, TextField } from '@navikt/ds-react'
+import { BodyShort, Label, Loader, Switch, TextField } from '@navikt/ds-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import {
@@ -187,15 +187,17 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
       </div>
       <div className='flex items-center w-full pb-2'>
         <div className='flex items-center w-full gap-4'>
-          <Button
-            variant='tertiary'
-            size='xsmall'
-            onClick={() => {
-              setOpenAccordions(temaListe.map(() => true))
+          <Switch
+            checked={openAccordions.length > 0 && openAccordions.every((open) => open)}
+            onChange={(event) => {
+              const checked = event.target.checked
+              setOpenAccordions(temaListe.map(() => checked))
 
               const tabQuery = queryParams.get('tab')
 
-              let url = etterlevelseDokumentasjonAlleOpenUrl(params.etterlevelseDokumentasjonId)
+              let url = checked
+                ? etterlevelseDokumentasjonAlleOpenUrl(params.etterlevelseDokumentasjonId)
+                : etterlevelseDokumentasjonAlleClosedUrl(params.etterlevelseDokumentasjonId)
 
               if (![null, undefined, ''].includes(tabQuery)) {
                 url += '&tab=' + tabQuery
@@ -204,27 +206,8 @@ export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
               router.push(url, { scroll: false })
             }}
           >
-            Åpne alle tema
-          </Button>
-          <Button
-            variant='tertiary'
-            size='xsmall'
-            onClick={() => {
-              setOpenAccordions(temaListe.map(() => false))
-
-              const tabQuery = queryParams.get('tab')
-
-              let url = etterlevelseDokumentasjonAlleClosedUrl(params.etterlevelseDokumentasjonId)
-
-              if (![null, undefined, ''].includes(tabQuery)) {
-                url += '&tab=' + tabQuery
-              }
-
-              router.push(url, { scroll: false })
-            }}
-          >
-            Lukk alle tema
-          </Button>
+            Ekspander alle temaer
+          </Switch>
         </div>
 
         <div className='flex justify-end w-full items-center'>
