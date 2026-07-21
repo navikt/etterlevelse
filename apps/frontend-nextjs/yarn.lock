@@ -548,13 +548,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "@fortawesome/react-fontawesome@npm:3.4.0"
+"@fortawesome/react-fontawesome@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.5.0"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: 10c0/baf64306529b5cf997aadde64616724f58e286b8d3c80deb3332366f1b4cb8ddcbeb29b202672cf3f739d95e1e7d752613b5228703161558cbd984650add261e
+  checksum: 10c0/b1b854095f9cbd52fe18f02461e594452fc70e3977ceab5fd1c9206ac98f89e40500e7fb5625426fa0cc2dc7e65d3d86bd07b70171d58dc5d54b0c74878d3b44
   languageName: node
   linkType: hard
 
@@ -3557,7 +3557,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": "npm:^7.3.1"
     "@fortawesome/free-brands-svg-icons": "npm:^7.3.1"
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
-    "@fortawesome/react-fontawesome": "npm:^3.4.0"
+    "@fortawesome/react-fontawesome": "npm:^3.5.0"
     "@navikt/aksel-icons": "npm:^8.15.0"
     "@navikt/ds-css": "npm:^8.15.0"
     "@navikt/ds-react": "npm:^8.15.0"
