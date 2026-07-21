@@ -15,7 +15,7 @@ export const BeskjedTilRisikoeierReadOnly: FunctionComponent<TProps> = ({
       <div className='mt-5 mb-3'>
         <Label>Hvem skal dere sende PVK-en til?</Label>
         <DataTextWrapper>
-          <BodyLong className='break-all'>Risikoeier, til godkjenning</BodyLong>
+          <BodyLong className='break-words'>Risikoeier, til godkjenning</BodyLong>
         </DataTextWrapper>
       </div>
 
@@ -27,7 +27,7 @@ export const BeskjedTilRisikoeierReadOnly: FunctionComponent<TProps> = ({
           Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemeldinger
         </Label>
         <DataTextWrapper>
-          <BodyLong className='break-all'>
+          <BodyLong className='break-words'>
             {merknadTilRisikoeier ? <Markdown source={merknadTilRisikoeier} /> : 'Ingen beskjed'}
           </BodyLong>
         </DataTextWrapper>

@@ -17,7 +17,7 @@ export const BeskjedFraRisikoeierReadOnly: FunctionComponent<TProps> = ({
       </Heading>
       <Label>Risikoeiers begrunnelse for godkjenning av restrisiko</Label>
       <DataTextWrapper>
-        <BodyLong className='break-all'>
+        <BodyLong className='break-words'>
           {merknadFraRisikoeier ? <Markdown source={merknadFraRisikoeier} /> : 'Ingen beskjed'}
         </BodyLong>
       </DataTextWrapper>
