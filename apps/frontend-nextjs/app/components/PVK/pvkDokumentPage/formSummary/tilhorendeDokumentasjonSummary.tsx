@@ -45,7 +45,7 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
   }, [pvkKrav])
 
   return (
-    <FormSummary className='my-3'>
+    <FormSummary className='my-6'>
       <FormSummary.Header>
         <FormSummary.Heading level='2' id='behandlingensLivslop'>
           Tilhørende dokumentasjon
