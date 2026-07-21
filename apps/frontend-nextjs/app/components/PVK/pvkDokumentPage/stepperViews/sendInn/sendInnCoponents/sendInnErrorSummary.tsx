@@ -102,7 +102,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
           {tiltakFristUtgaattError && (
             <ErrorSummary.Item
               target='_blank'
-              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'alleTiltak')}
+              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'fristPassert')}
               className='max-w-[75ch]'
             >
               {tiltakFristUtgaattError}
