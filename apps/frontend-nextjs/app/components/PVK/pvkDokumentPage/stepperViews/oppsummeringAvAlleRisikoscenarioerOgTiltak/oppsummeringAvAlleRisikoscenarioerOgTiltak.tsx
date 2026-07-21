@@ -95,6 +95,9 @@ const visTomTiltakListeBeskrivelse = (filter: string | null) => {
     case tiltakFilterValues.utenFrist:
       textBody = 'Det finnes ingen tiltak uten frist 🎉'
       break
+    case tiltakFilterValues.fristPassert:
+      textBody = 'Det finnes ingen tiltak med passert frist 🎉'
+      break
     default:
   }
   return <BodyLong className='my-5'>{textBody}</BodyLong>
@@ -236,7 +239,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         setAntallUtgaatteFrister(
           tiltakList.filter(
             (tiltak: ITiltak) =>
-              !tiltak.iverksatt && tiltak.frist && moment(now).isAfter(moment(tiltak.frist))
+              !tiltak.iverksatt && tiltak.frist && moment(now).isAfter(moment(tiltak.frist), 'day')
           ).length
         )
       }
@@ -560,6 +563,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                           <ToggleGroup.Item
                             value={tiltakFilterValues.utenFrist}
                             label={`Uten frist (${antallUtenFrist})`}
+                          />
+                          <ToggleGroup.Item
+                            value={tiltakFilterValues.fristPassert}
+                            label={`Frist passert (${antallUtgaatteFrister})`}
                           />
                         </ToggleGroup>
                       )}

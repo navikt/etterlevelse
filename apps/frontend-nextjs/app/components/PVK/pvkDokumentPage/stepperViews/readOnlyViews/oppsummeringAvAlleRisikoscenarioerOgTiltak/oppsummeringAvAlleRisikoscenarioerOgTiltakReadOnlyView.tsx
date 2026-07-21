@@ -219,7 +219,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
         setAntallUtgaatteFrister(
           tiltakList.filter(
             (tiltak: ITiltak) =>
-              !tiltak.iverksatt && tiltak.frist && moment(now).isAfter(moment(tiltak.frist))
+              !tiltak.iverksatt && tiltak.frist && moment(now).isAfter(moment(tiltak.frist), 'day')
           ).length
         )
       }

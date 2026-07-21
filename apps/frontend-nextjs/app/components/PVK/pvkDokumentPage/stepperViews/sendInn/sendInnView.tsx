@@ -413,7 +413,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
       alleTiltak.map((tiltak) => {
         if (tiltak.frist !== null && !tiltak.iverksatt) {
-          if (moment(now).isAfter(moment(tiltak.frist))) {
+          if (moment(now).isAfter(moment(tiltak.frist), 'day')) {
             amountOfOverdueTiltak++
           }
         }

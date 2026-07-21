@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { IDomainObject } from '../../../commonConstants'
 import { ITeam, ITeamResource } from '../../../teamkatalogen/teamkatalogConstants'
 
@@ -19,6 +20,7 @@ export const tiltakFilterValues = {
   alleTiltak: 'alleTiltak',
   utenAnsvarlig: 'utenAnsvarlig',
   utenFrist: 'utenFrist',
+  fristPassert: 'fristPassert',
 }
 
 export const filterTiltakList = (tiltakList: ITiltak[], filter: string): ITiltak[] => {
@@ -30,6 +32,13 @@ export const filterTiltakList = (tiltakList: ITiltak[], filter: string): ITiltak
       )
     case tiltakFilterValues.utenFrist:
       return tiltakList.filter((tiltak: ITiltak) => !tiltak.iverksatt && !tiltak.frist)
+    case tiltakFilterValues.fristPassert:
+      return tiltakList.filter(
+        (tiltak: ITiltak) =>
+          !tiltak.iverksatt &&
+          tiltak.frist &&
+          moment(new Date()).isAfter(moment(tiltak.frist), 'day')
+      )
     default:
       return tiltakList
   }
