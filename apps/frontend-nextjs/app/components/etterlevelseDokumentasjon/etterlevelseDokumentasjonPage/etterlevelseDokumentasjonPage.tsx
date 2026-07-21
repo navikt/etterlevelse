@@ -33,6 +33,7 @@ import { ContentLayout } from '../../others/layout/content/content'
 import { PageLayout } from '../../others/scaffold/scaffold'
 import EtterlevelseDokumentasjonButtonGroup from './buttonGroup/etterlevelseDokumentasjonButtonGroup'
 import { EtterlevelseDokumentasjonReadmore } from './readmore/readmore'
+import { EtterlevelseDokumentasjonStatusTag } from './statusTag/etterlevelseDokumentasjonStatusTag'
 import EtterlevelseDokumentasjonPageTabs from './tabs/etterlevelseDokumentasjonPageTabs'
 
 export const EtterlevelseDokumentasjonPage = () => {
@@ -143,6 +144,12 @@ export const EtterlevelseDokumentasjonPage = () => {
                 E{etterlevelseNummer.toString()}.
                 {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} {title}
               </Heading>
+
+              <EtterlevelseDokumentasjonStatusTag
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                pvkDokument={pvkDokument}
+              />
+
               {morDokumentRelasjon && (
                 <BodyShort className='my-5'>
                   Dette dokumentet er et arv fra{' '}
