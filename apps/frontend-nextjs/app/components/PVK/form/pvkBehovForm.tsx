@@ -6,6 +6,7 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '@/api/pvkDokument/pvkDokumentApi'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
@@ -204,6 +205,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 className='mt-10 mb-4'
                 header='Lurer dere fortsatt på om det er behov for PVK?'
               >
+                <div className='mb-5'>
+                  <ExternalLink href='https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/vurdering-av-personvernkonsekvenser/nar-er-risiko-hoy/'>
+                    Les Datatilsynets veiledning om Når risiko er høy
+                  </ExternalLink>
+                </div>
                 Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK. Ta
                 kontakt via mail.
                 <CopyButton
