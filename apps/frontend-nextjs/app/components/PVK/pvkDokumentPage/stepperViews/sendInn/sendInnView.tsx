@@ -507,6 +507,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
     }
   }, [submitClick])
 
+  useEffect(() => {
+    if (savedSuccess) {
+      const timer = setTimeout(() => setSavedSuccess(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [savedSuccess])
+
   return (
     <div>
       {isPvoAlertModalOpen && (
