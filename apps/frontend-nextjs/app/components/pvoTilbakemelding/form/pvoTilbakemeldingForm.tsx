@@ -22,7 +22,7 @@ import { BodyShort, Button, Heading, LocalAlert, Radio, RadioGroup } from '@navi
 import { AxiosError } from 'axios'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import AlertPvoModal from '../common/alertPvoModal'
 
 export enum EBidragVerdier {
@@ -57,6 +57,13 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (saveSuccessfull) {
+      const timer = setTimeout(() => setSaveSuccessfull(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [saveSuccessfull])
 
   const resetFormWithNewInitalValue = (relevantVurdering: IVurdering) => {
     if (fieldName === 'behandlingenslivslop') {
