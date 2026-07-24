@@ -146,9 +146,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         filterQuery in tiltakFilterValues
       ) {
         setTiltakFilter(filterQuery)
+        setFilteredTiltakList(filterTiltakList(tiltakList, filterQuery))
       }
     })()
-  }, [tabQuery, filterQuery])
+  }, [tabQuery, filterQuery, tiltakList])
 
   useEffect(() => {
     if (pvkDokument) {

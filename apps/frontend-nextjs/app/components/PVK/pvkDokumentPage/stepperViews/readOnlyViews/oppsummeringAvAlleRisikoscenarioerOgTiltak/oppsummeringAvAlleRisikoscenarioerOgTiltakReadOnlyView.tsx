@@ -126,9 +126,28 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
         filterQuery in tiltakFilterValues
       ) {
         setTiltakFilter(filterQuery)
+
+        switch (filterQuery) {
+          case tiltakFilterValues.alleTiltak:
+            setFilteredTiltakList(tiltakList)
+            break
+          case tiltakFilterValues.utenAnsvarlig:
+            setFilteredTiltakList(
+              tiltakList.filter(
+                (tiltak: ITiltak) =>
+                  !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
+              )
+            )
+            break
+          case tiltakFilterValues.utenFrist:
+            setFilteredTiltakList(
+              tiltakList.filter((tiltak: ITiltak) => !tiltak.iverksatt && !tiltak.frist)
+            )
+            break
+        }
       }
     })()
-  }, [tabQuery, filterQuery])
+  }, [tabQuery, filterQuery, tiltakList])
 
   useEffect(() => {
     if (pvkDokument) {
