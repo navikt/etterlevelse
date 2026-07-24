@@ -117,7 +117,7 @@
     "http-proxy-middleware": "3.0.7",
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
-    "postcss": "8.5.10",
+    "postcss": "8.5.12",
     "prettier": "3.6.2",
     "react-localization": "2.0.6",
     "react-router-dom": "7.9.6",
