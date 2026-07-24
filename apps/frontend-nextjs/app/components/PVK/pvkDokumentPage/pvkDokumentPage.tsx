@@ -194,6 +194,17 @@ export const PvkDokumentPage = () => {
     })()
   }, [pvkDokument])
 
+  useEffect(() => {
+    if (etterlevelseDokumentasjon && pvkDokument && window.location.hash) {
+      const elementId: string = window.location.hash.replace('#', '')
+      const timeout: NodeJS.Timeout = setTimeout(() => {
+        document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth' })
+      }, 300)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [etterlevelseDokumentasjon, pvkDokument, activeStep])
+
   return (
     <div id='content' role='main' className='flex flex-col w-full bg-white'>
       <Helmet>

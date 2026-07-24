@@ -1,10 +1,20 @@
 import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import {
+  etterlevelseDokumentasjonIdUrl,
+  etterlevelsesDokumentasjonEditUrl,
+} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
   etterlevelseDokumentasjonPvkTabUrl,
+  pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterTiltakUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  risikoDokumentasjonTemaKravNummerVersjonUrl,
+  risikoscenarioFilterAlleUrl,
+  tabTiltakQuery,
+} from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
@@ -13,6 +23,7 @@ import { FunctionComponent, RefObject } from 'react'
 type TProps = {
   errors: FormikErrors<IPvkDokument>
   etterlevelseDokumentasjonId: string
+  pvkDokumentId: number | string
   risikoeiereDataError: boolean
   avdelingError: boolean
   medlemError: boolean
@@ -20,6 +31,8 @@ type TProps = {
   behandlingensLivslopError: boolean
   manglerBehandlingError: boolean
   risikoscenarioError: string
+  generelleRisikoscenarioMedFeil: IRisikoscenario[]
+  spesifikkeRisikoscenarioMedFeil: IRisikoscenario[]
   tiltakError: string
   tiltakAnsvarligError: string
   tiltakFristError: string
@@ -32,12 +45,15 @@ type TProps = {
 export const SendInnErrorSummary: FunctionComponent<TProps> = ({
   errors,
   etterlevelseDokumentasjonId,
+  pvkDokumentId,
   risikoeiereDataError,
   avdelingError,
   medlemError,
   behandlingensLivslopError,
   artOgOmfangError,
   risikoscenarioError,
+  generelleRisikoscenarioMedFeil,
+  spesifikkeRisikoscenarioMedFeil,
   tiltakError,
   tiltakAnsvarligError,
   tiltakFristError,
@@ -62,6 +78,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
         artOgOmfangError.tilgangsBeskrivelsePersonopplysningene ||
         artOgOmfangError.lagringsBeskrivelsePersonopplysningene ||
         risikoscenarioError !== '' ||
+        spesifikkeRisikoscenarioMedFeil.length !== 0 ||
         tiltakError !== '' ||
         tiltakAnsvarligError !== '' ||
         tiltakFristError.length !== 0 ||
@@ -93,9 +110,18 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
           )}
 
           {behandlingensLivslopError && (
-            <ErrorSummary.Item href='#behandlingensLivslop' className='max-w-[75ch]'>
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                2,
+                '#behandlingensLivslop'
+              )}
+              className='max-w-[75ch]'
+            >
               Behandlingens livsløp må ha minimum 1 opplastet tegning, eller en skriftlig
-              beskrivelse.
+              beskrivelse. (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
@@ -111,27 +137,65 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
           )}
 
           {artOgOmfangError.stemmerPersonkategorier && (
-            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
-              Dere må oppgi om lista over personkategorier stemmer.
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                3,
+                '#stemmerPersonkategorier'
+              )}
+              className='max-w-[75ch]'
+            >
+              Dere må oppgi om lista over personkategorier stemmer. (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
           {artOgOmfangError.personkategoriAntallBeskrivelse && (
-            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
-              Dere må beskrive hvor mange personer dere behandler personopplysninger om.
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                3,
+                '#personkategoriAntallBeskrivelse'
+              )}
+              className='max-w-[75ch]'
+            >
+              Dere må beskrive hvor mange personer dere behandler personopplysninger om. (åpner i ny
+              fane)
             </ErrorSummary.Item>
           )}
 
           {artOgOmfangError.tilgangsBeskrivelsePersonopplysningene && (
-            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                3,
+                '#tilgangsBeskrivelsePersonopplysningene'
+              )}
+              className='max-w-[75ch]'
+            >
               Dere må beskrive hvilke roller som skal ha tilgang til personopplysningene, og pr.
-              rolle, hvor mange som skal ha tilgang til hva.
+              rolle, hvor mange som skal ha tilgang til hva. (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
           {artOgOmfangError.lagringsBeskrivelsePersonopplysningene && (
-            <ErrorSummary.Item href='#stemmerPersonkategorier' className='max-w-[75ch]'>
-              Dere må beskrive hvordan og hvor lenge personopplysningene skal lagres.
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                3,
+                '#lagringsBeskrivelsePersonopplysningene'
+              )}
+              className='max-w-[75ch]'
+            >
+              Dere må beskrive hvordan og hvor lenge personopplysningene skal lagres. (åpner i ny
+              fane)
             </ErrorSummary.Item>
           )}
 
@@ -139,34 +203,112 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
             .filter(([, error]) => error)
             .map(([key, error]) => {
               return (
-                <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
-                  {error as string}
+                <ErrorSummary.Item
+                  target='_blank'
+                  href={pvkDokumentasjonStepUrl(
+                    etterlevelseDokumentasjonId,
+                    pvkDokumentId,
+                    5,
+                    `#${key}`
+                  )}
+                  key={key}
+                  className='max-w-[75ch]'
+                >
+                  {error as string} (åpner i ny fane)
                 </ErrorSummary.Item>
               )
             })}
-          {risikoscenarioError !== '' && (
-            <ErrorSummary.Item href='#risikoscenarioer' className='max-w-[75ch]'>
-              {risikoscenarioError}
+          {risikoscenarioError !== '' && generelleRisikoscenarioMedFeil.length === 0 && (
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                6,
+                risikoscenarioFilterAlleUrl()
+              )}
+              className='max-w-[75ch]'
+            >
+              {risikoscenarioError} (åpner i ny fane)
             </ErrorSummary.Item>
           )}
+          {generelleRisikoscenarioMedFeil.map((risiko) => (
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                6,
+                `&risikoscenario=${risiko.id}`
+              )}
+              key={risiko.id}
+              className='max-w-[75ch]'
+            >
+              Risikoscenarioet &quot;{risiko.navn}&quot; er ikke ferdig beskrevet. (åpner i ny fane)
+            </ErrorSummary.Item>
+          ))}
+          {spesifikkeRisikoscenarioMedFeil.map((risiko) => {
+            const kravReferanse = risiko.relevanteKravNummer[0]
+            const href = kravReferanse
+              ? `${risikoDokumentasjonTemaKravNummerVersjonUrl(
+                  etterlevelseDokumentasjonId,
+                  kravReferanse.temaCode,
+                  kravReferanse.kravNummer,
+                  kravReferanse.kravVersjon
+                )}?risikoscenario=${risiko.id}`
+              : etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjonId)
+
+            return (
+              <ErrorSummary.Item
+                target='_blank'
+                href={href}
+                key={risiko.id}
+                className='max-w-[75ch]'
+              >
+                Risikoscenarioet &quot;{risiko.navn}&quot; (knyttet til krav{' '}
+                {kravReferanse?.kravNummer}) er ikke ferdig beskrevet. (åpner i ny fane)
+              </ErrorSummary.Item>
+            )
+          })}
           {tiltakError !== '' && (
-            <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
-              {tiltakError}
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonStepUrl(
+                etterlevelseDokumentasjonId,
+                pvkDokumentId,
+                7,
+                tabTiltakQuery
+              )}
+              className='max-w-[75ch]'
+            >
+              {tiltakError} (åpner i ny fane)
             </ErrorSummary.Item>
           )}
           {tiltakAnsvarligError !== '' && (
-            <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
-              {tiltakAnsvarligError}
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'utenAnsvarlig')}
+              className='max-w-[75ch]'
+            >
+              {tiltakAnsvarligError} (åpner i ny fane)
             </ErrorSummary.Item>
           )}
           {tiltakFristError !== '' && (
-            <ErrorSummary.Item href='#tiltak' className='max-w-[75ch]'>
-              {tiltakFristError}
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'tiltak', 'utenFrist')}
+              className='max-w-[75ch]'
+            >
+              {tiltakFristError} (åpner i ny fane)
             </ErrorSummary.Item>
           )}
           {savnerVurderingError !== '' && (
-            <ErrorSummary.Item href='#effektEtterTiltak' className='max-w-[75ch]'>
-              {savnerVurderingError}
+            <ErrorSummary.Item
+              target='_blank'
+              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'risikoscenarioer', 'ikke-vurdert')}
+              className='max-w-[75ch]'
+            >
+              {savnerVurderingError} (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
