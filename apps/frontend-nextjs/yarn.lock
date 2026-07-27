@@ -1537,6 +1537,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tiptap/pm@npm:^3.29.0":
+  version: 3.29.0
+  resolution: "@tiptap/pm@npm:3.29.0"
+  dependencies:
+    prosemirror-changeset: "npm:^2.4.1"
+    prosemirror-commands: "npm:^1.7.1"
+    prosemirror-dropcursor: "npm:^1.8.2"
+    prosemirror-gapcursor: "npm:^1.4.1"
+    prosemirror-history: "npm:^1.5.0"
+    prosemirror-inputrules: "npm:^1.5.1"
+    prosemirror-keymap: "npm:^1.2.3"
+    prosemirror-model: "npm:^1.25.11"
+    prosemirror-schema-list: "npm:^1.5.1"
+    prosemirror-state: "npm:^1.4.4"
+    prosemirror-tables: "npm:^1.8.5"
+    prosemirror-transform: "npm:^1.12.0"
+    prosemirror-view: "npm:^1.41.9"
+  checksum: 10c0/93d590c997705e752f8d1bc622aece73637cb5c447cf705c158326005552b30f562507db479f65b90ca3cd8ad7c2d80a27c9f6604919ed74109e8f925f9bf878
+  languageName: node
+  linkType: hard
+
 "@tiptap/react@npm:^3.28.0":
   version: 3.28.0
   resolution: "@tiptap/react@npm:3.28.0"
@@ -3570,7 +3591,7 @@ __metadata:
     "@tiptap/extension-list": "npm:^3.28.0"
     "@tiptap/extension-ordered-list": "npm:^3.28.0"
     "@tiptap/extension-underline": "npm:^3.28.0"
-    "@tiptap/pm": "npm:^3.28.0"
+    "@tiptap/pm": "npm:^3.29.0"
     "@tiptap/react": "npm:^3.28.0"
     "@tiptap/starter-kit": "npm:^3.28.0"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
@@ -6112,6 +6133,15 @@ __metadata:
   dependencies:
     orderedmap: "npm:^2.0.0"
   checksum: 10c0/7a32d97cc3519004bf7c1e3cd45a1955214e4fb5a83ed47b45fe0bc252cce7e3b3c5d1b5edfc173d5c71e3643e2bab88fc9c49f9bb80f3a4552198e85ba5db8d
+  languageName: node
+  linkType: hard
+
+"prosemirror-model@npm:^1.25.11":
+  version: 1.25.11
+  resolution: "prosemirror-model@npm:1.25.11"
+  dependencies:
+    orderedmap: "npm:^2.0.0"
+  checksum: 10c0/e41faa477414160a602289b778189163b39a4563799defea1862183087f9ec77f02c292e3e79dd32fcc1a8878aedbdcea50f0f752ee03fe64c24ce6780b82205
   languageName: node
   linkType: hard
 
