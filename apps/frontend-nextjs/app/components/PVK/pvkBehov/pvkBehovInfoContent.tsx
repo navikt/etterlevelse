@@ -1,3 +1,4 @@
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -113,30 +114,48 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
 
       {harBehandlinger(etterlevelseDokumentasjon) && (
         <>
-          <List className='py-5'>
-            <div className='pb-3'>
-              <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
-            </div>
-            {profilering !== null && (
-              <List.Item>
-                <strong>Det {profilering ? 'gjelder' : 'gjelder ikke'}</strong> profilering
-              </List.Item>
-            )}
+          <div>
+            <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+            <DataTextWrapper>
+              {(profilering === true ||
+                automatiskBehandling === true ||
+                saerligKategorier === true) && (
+                <div className='pb-3'>
+                  <strong>Det gjelder:</strong>
+                  <List className='ml-6'>
+                    {profilering === true && <List.Item>profilering</List.Item>}
+                    {automatiskBehandling === true && (
+                      <List.Item>helautomatisert behandling</List.Item>
+                    )}
+                    {!opplysningstyperMangler && saerligKategorier === true && (
+                      <List.Item>særlige kategorier av personopplysninger</List.Item>
+                    )}
+                  </List>
+                </div>
+              )}
 
-            {automatiskBehandling !== null && (
-              <List.Item>
-                <strong>Det {automatiskBehandling ? 'gjelder' : 'gjelder ikke'}</strong>{' '}
-                helautomatisert behandling
-              </List.Item>
-            )}
+              {(profilering === false ||
+                automatiskBehandling === false ||
+                (!opplysningstyperMangler && saerligKategorier === false)) && (
+                <div>
+                  <strong>Det gjelder ikke:</strong>
+                  <List className='ml-6'>
+                    {profilering === false && <List.Item>profilering</List.Item>}
+                    {automatiskBehandling === false && (
+                      <List.Item>helautomatisert behandling</List.Item>
+                    )}
+                    {!opplysningstyperMangler && saerligKategorier === false && (
+                      <List.Item>særlige kategorier av personopplysninger</List.Item>
+                    )}
+                  </List>
+                </div>
+              )}
 
-            {!opplysningstyperMangler && (
-              <List.Item>
-                <strong>Det {saerligKategorier ? 'gjelder' : 'gjelder ikke'}</strong> særlige
-                kategorier av personopplysninger
-              </List.Item>
-            )}
-          </List>
+              {profilering === null && automatiskBehandling === null && opplysningstyperMangler && (
+                <BodyShort>Ingen egenskaper gjelder</BodyShort>
+              )}
+            </DataTextWrapper>
+          </div>
 
           {(profilering === null || automatiskBehandling === null || opplysningstyperMangler) && (
             <InfoCard data-color='warning'>
@@ -163,23 +182,23 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
       )}
 
       {harKunDpBehandlinger(etterlevelseDokumentasjon) && (
-        <>
-          <List className='py-5'>
-            <div className='pb-3'>
-              <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
-            </div>
-            <List.Item>
-              <strong>
-                Det{' '}
-                {etterlevelseDokumentasjon.dpBehandlinger &&
-                etterlevelseDokumentasjon.dpBehandlinger.some((dp) => dp.art9)
-                  ? 'gjelder'
-                  : 'gjelder ikke'}
-              </strong>{' '}
-              særlige kategorier av personopplysninger
-            </List.Item>
-          </List>
-        </>
+        <div>
+          <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+          <DataTextWrapper>
+            <List>
+              <List.Item>
+                <strong>
+                  Det{' '}
+                  {etterlevelseDokumentasjon.dpBehandlinger &&
+                  etterlevelseDokumentasjon.dpBehandlinger.some((dp) => dp.art9)
+                    ? 'gjelder'
+                    : 'gjelder ikke'}
+                </strong>{' '}
+                særlige kategorier av personopplysninger
+              </List.Item>
+            </List>
+          </DataTextWrapper>
+        </div>
       )}
     </>
   )

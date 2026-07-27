@@ -6,7 +6,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { harKunDpBehandlinger } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Label, List } from '@navikt/ds-react'
+import { BodyShort, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -21,7 +21,7 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
   ytterligereEgenskaper,
 }) => (
   <>
-    <div id='ytterligere-egenskaper'>
+    <div id='ytterligere-egenskaper' className='mt-5'>
       <Label>Øvrige egenskaper for behandlingene:</Label>
       <DataTextWrapper>
         <List>
@@ -40,20 +40,55 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
               </List.Item>
             </>
           )}
-          {ytterligereEgenskaper.map((egenskap: ICode) => {
-            const valgtEgenskap: boolean =
-              pvkDokument.ytterligereEgenskaper.filter(
-                (pvkEgenskap: ICode) => pvkEgenskap.code === egenskap.code
-              ).length !== 0
-
-            return (
-              <List.Item key={egenskap.code}>
-                <strong>Det gjelder {valgtEgenskap ? '' : 'ikke'} for</strong>{' '}
-                {egenskap.shortName.toLowerCase()}
-              </List.Item>
-            )
-          })}
         </List>
+
+        {ytterligereEgenskaper.some(
+          (egenskap: ICode) =>
+            pvkDokument.ytterligereEgenskaper.filter(
+              (pvkEgenskap: ICode) => pvkEgenskap.code === egenskap.code
+            ).length !== 0
+        ) && (
+          <div className='pb-3'>
+            <strong>Det gjelder for:</strong>
+            <List className='ml-6'>
+              {ytterligereEgenskaper
+                .filter(
+                  (egenskap: ICode) =>
+                    pvkDokument.ytterligereEgenskaper.filter(
+                      (pvkEgenskap: ICode) => pvkEgenskap.code === egenskap.code
+                    ).length !== 0
+                )
+                .map((egenskap: ICode) => (
+                  <List.Item key={egenskap.code}>{egenskap.shortName.toLowerCase()}</List.Item>
+                ))}
+            </List>
+          </div>
+        )}
+
+        {ytterligereEgenskaper.some(
+          (egenskap: ICode) =>
+            pvkDokument.ytterligereEgenskaper.filter(
+              (pvkEgenskap: ICode) => pvkEgenskap.code === egenskap.code
+            ).length === 0
+        ) && (
+          <div>
+            <strong>Det gjelder ikke for:</strong>
+            <List className='ml-6'>
+              {ytterligereEgenskaper
+                .filter(
+                  (egenskap: ICode) =>
+                    pvkDokument.ytterligereEgenskaper.filter(
+                      (pvkEgenskap: ICode) => pvkEgenskap.code === egenskap.code
+                    ).length === 0
+                )
+                .map((egenskap: ICode) => (
+                  <List.Item key={egenskap.code}>{egenskap.shortName.toLowerCase()}</List.Item>
+                ))}
+            </List>
+          </div>
+        )}
+
+        {ytterligereEgenskaper.length === 0 && <BodyShort>Ingen egenskaper gjelder</BodyShort>}
       </DataTextWrapper>
     </div>
 
