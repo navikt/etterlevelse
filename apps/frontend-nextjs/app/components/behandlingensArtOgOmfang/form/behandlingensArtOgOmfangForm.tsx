@@ -238,6 +238,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                   rows={3}
                   noPlaceholder
                   label='3. Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.'
+                  caption='Dette kan for eksempel være saksbehandlere, utviklere, produktteammedlemmer ellers, …'
                   name='tilgangsBeskrivelsePersonopplysningene'
                 />
               </div>
