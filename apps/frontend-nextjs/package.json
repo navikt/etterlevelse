@@ -52,7 +52,7 @@
     "@tiptap/extension-underline": "^3.29.0",
     "@tiptap/pm": "^3.29.0",
     "@tiptap/react": "^3.29.0",
-    "@tiptap/starter-kit": "^3.29.0",
+    "@tiptap/starter-kit": "^3.29.1",
     "axios": "^1.18.1",
     "graphql": "17.0.2",
     "json-diff-kit": "^1.0.35",
