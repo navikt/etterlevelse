@@ -38,8 +38,17 @@ import {
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { BodyLong, Heading, InfoCard, Loader, ReadMore, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  CopyButton,
+  Heading,
+  InfoCard,
+  Loader,
+  ReadMore,
+  Tabs,
+  ToggleGroup,
+} from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
@@ -514,6 +523,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               )}
                           </div>
                         )}
+
+                      <CopyButton
+                        variant='action'
+                        copyText={`${window.location.origin}${pvkDokumentasjonTabFilterRisikoscenarioUrl(steg, tabValues.risikoscenarioer, filterQuery ? filterQuery : filterValues.alleRisikoscenarioer, risikoscenarioId)}`}
+                        text='Kopier lenken til scenarioliste'
+                        activeText='Lenken er kopiert'
+                        icon={<LinkIcon aria-hidden />}
+                      />
                     </Tabs.Panel>
                     <Tabs.Panel value={tabValues.tiltak} className='w-full'>
                       {tiltakList.length === 0 && (
@@ -603,6 +620,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
                       {filteredTiltakList.length === 0 &&
                         visTomTiltakListeBeskrivelse(tiltakFilter)}
+
+                      <CopyButton
+                        variant='action'
+                        copyText={`${window.location.origin}${pvkDokumentasjonTabFilterTiltakUrl(steg, tabValues.tiltak, tiltakFilter, tiltakId)}`}
+                        text='Kopier lenken til tiltaksliste'
+                        activeText='Lenken er kopiert'
+                        icon={<LinkIcon aria-hidden />}
+                      />
                     </Tabs.Panel>
                   </Tabs>
                 </div>

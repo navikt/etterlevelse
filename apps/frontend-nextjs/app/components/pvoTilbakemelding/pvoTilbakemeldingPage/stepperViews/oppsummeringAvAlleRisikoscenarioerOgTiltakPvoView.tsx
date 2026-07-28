@@ -24,9 +24,11 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterTiltakUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { LinkIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, CopyButton, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
@@ -281,6 +283,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
     }
   }
 
+  useEffect(() => {
+    if (
+      tiltakList.length !== 0 &&
+      filterQuery &&
+      tabQuery === tabValues.tiltak &&
+      Object.values(tiltakFilterValues).includes(filterQuery)
+    ) {
+      onTiltakFilterChange(filterQuery)
+    }
+  }, [tabQuery, filterQuery, tiltakList])
+
   return (
     <div className='w-full'>
       <ContentLayout>
@@ -387,6 +400,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                 />
                               </div>
                             )}
+
+                          <CopyButton
+                            variant='action'
+                            copyText={`${window.location.origin}${pvkDokumentasjonTabFilterRisikoscenarioUrl(stegQuery, tabValues.risikoscenarioer, filterQuery ? filterQuery : filterValues.alleRisikoscenarioer, risikoscenarioId)}`}
+                            text='Kopier lenken til scenarioliste'
+                            activeText='Lenken er kopiert'
+                            icon={<LinkIcon aria-hidden />}
+                          />
                         </Tabs.Panel>
                         <Tabs.Panel value={tabValues.tiltak} className='w-full'>
                           {tiltakList.length === 0 && (
@@ -428,6 +449,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
 
                           {filteredTiltakList.length === 0 &&
                             visTomTiltakListeBeskrivelse(tiltakFilter)}
+
+                          <CopyButton
+                            variant='action'
+                            copyText={`${window.location.origin}${pvkDokumentasjonTabFilterTiltakUrl(stegQuery, tabValues.tiltak, tiltakFilter)}`}
+                            text='Kopier lenken til tiltaksliste'
+                            activeText='Lenken er kopiert'
+                            icon={<LinkIcon aria-hidden />}
+                          />
                         </Tabs.Panel>
                       </Tabs>
                     </div>
