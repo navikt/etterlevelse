@@ -117,8 +117,15 @@ const MainSearch = () => {
               outline: 'none',
               boxShadow: 'none',
             }) as CSSObjectWithLabel,
-          option: (base: CSSObjectWithLabel) =>
-            ({ ...base, color: '#000', opacity: 1, fontWeight: 500 }) as CSSObjectWithLabel,
+          option: (base: CSSObjectWithLabel, state) =>
+            ({
+              ...base,
+              color: '#000',
+              opacity: 1,
+              fontWeight: 500,
+              backgroundColor:
+                state.isFocused || state.isSelected ? '#deebff' : base.backgroundColor,
+            }) as CSSObjectWithLabel,
           menu: (base: CSSObjectWithLabel) => ({ ...base, color: '#000' }) as CSSObjectWithLabel,
           menuList: (base: CSSObjectWithLabel) =>
             ({ ...base, color: '#000' }) as CSSObjectWithLabel,
