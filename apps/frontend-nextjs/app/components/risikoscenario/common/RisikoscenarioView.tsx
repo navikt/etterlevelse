@@ -10,7 +10,7 @@ import {
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { LinkIcon } from '@navikt/aksel-icons'
-import { BodyLong, CopyButton, InlineMessage, List, ReadMore } from '@navikt/ds-react'
+import { BodyLong, CopyButton, InlineMessage, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import RisikoscenarioTag from './risikoscenarioTag'
 
@@ -47,36 +47,10 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
           icon={<LinkIcon aria-hidden />}
         />
       )}
-      {markdownCopyLinkButton && (
-        <CopyButton
-          variant='action'
-          copyText={`[${risikoscenario.navn}](${pvkDokumentasjonCopyUrl(
-            window.location.origin,
-            etterlevelseDokumentasjonId,
-            risikoscenario.pvkDokumentId,
-            queryUrl
-          )})`}
-          text='Kopier scenario riktekstfelt lenke med titel'
-          activeText='Lenken er kopiert'
-          icon={<LinkIcon aria-hidden />}
-        />
-      )}
-      <BodyLong className='mt-5 min-w-0 [overflow-wrap:anywhere]'>
-        {risikoscenario.beskrivelse}
-      </BodyLong>
-
-      {risikoscenario.generelScenario && (
-        <BodyLong className='mt-8'>
-          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
-        </BodyLong>
-      )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore
-          header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer'
-          className='mt-5'
-          defaultOpen={!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0}
-        >
+        <div className='mt-5'>
+          <Label>Brukes av følgende krav:</Label>
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
@@ -100,7 +74,32 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
               }
             )}
           </List>
-        </ReadMore>
+        </div>
+      )}
+
+      {markdownCopyLinkButton && (
+        <CopyButton
+          variant='action'
+          copyText={`[${risikoscenario.navn}](${pvkDokumentasjonCopyUrl(
+            window.location.origin,
+            etterlevelseDokumentasjonId,
+            risikoscenario.pvkDokumentId,
+            queryUrl
+          )})`}
+          text='Kopier scenario riktekstfelt lenke med tittel'
+          activeText='Lenken er kopiert'
+          icon={<LinkIcon aria-hidden />}
+        />
+      )}
+      <Label className='mt-5 block'>Beskrivelse av riskoscenarioet:</Label>
+      <BodyLong className='mt-1 min-w-0 [overflow-wrap:anywhere]'>
+        {risikoscenario.beskrivelse}
+      </BodyLong>
+
+      {risikoscenario.generelScenario && (
+        <BodyLong className='mt-8'>
+          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
+        </BodyLong>
       )}
 
       {risikoscenario.sannsynlighetsNivaa !== 0 && (
