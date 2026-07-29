@@ -1,3 +1,4 @@
+import { ErrorMessage as AkselErrorMessage } from '@navikt/ds-react'
 import { ErrorMessage } from 'formik'
 import { FunctionComponent } from 'react'
 
@@ -12,18 +13,13 @@ export const FormError: FunctionComponent<TProps> = ({ fieldName, akselStyling }
 
     {akselStyling && (
       <div
-        className='navds-form-field__error pt-2'
+        className='aksel-form-field__error pt-2'
         id='textField-error-rm'
         aria-relevant='additions removals'
         aria-live='polite'
       >
         <ErrorMessage name={fieldName}>
-          {(message: string) => (
-            <p className='navds-error-message navds-label flex gap-2'>
-              <span>•</span>
-              {message}
-            </p>
-          )}
+          {(message: string) => <AkselErrorMessage showIcon>{message}</AkselErrorMessage>}
         </ErrorMessage>
       </div>
     )}
