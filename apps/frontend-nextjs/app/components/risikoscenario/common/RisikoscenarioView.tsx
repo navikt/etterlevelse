@@ -10,7 +10,7 @@ import {
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { LinkIcon } from '@navikt/aksel-icons'
-import { BodyLong, CopyButton, InlineMessage, Label, List } from '@navikt/ds-react'
+import { BodyLong, CopyButton, Label, List, LocalAlert } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import RisikoscenarioTag from './risikoscenarioTag'
 
@@ -113,17 +113,21 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
 
       {(!risikoscenario.sannsynlighetsNivaaBegrunnelse ||
         risikoscenario.sannsynlighetsNivaa === 0) && (
-        <InlineMessage className='mt-5' status='warning'>
-          {risikoscenario.sannsynlighetsNivaa === 0 &&
-            !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
-            'Dere må gjøre sannsynlighetsvurdering'}
-          {!risikoscenario.sannsynlighetsNivaaBegrunnelse &&
-            risikoscenario.sannsynlighetsNivaa !== 0 &&
-            'Dere må begrunne sannsynlighetsvurderingen'}
-          {risikoscenario.sannsynlighetsNivaaBegrunnelse &&
-            risikoscenario.sannsynlighetsNivaa === 0 &&
-            'Dere må velge sannsynlighetsnivå'}
-        </InlineMessage>
+        <LocalAlert className='mt-5' status='warning'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>
+              {risikoscenario.sannsynlighetsNivaa === 0 &&
+                !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+                'Dere må gjøre sannsynlighetsvurdering'}
+              {!risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+                risikoscenario.sannsynlighetsNivaa !== 0 &&
+                'Dere må begrunne sannsynlighetsvurderingen'}
+              {risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+                risikoscenario.sannsynlighetsNivaa === 0 &&
+                'Dere må velge sannsynlighetsnivå'}
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
 
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
@@ -140,17 +144,21 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
-        <InlineMessage className='mt-5' status='warning'>
-          {risikoscenario.konsekvensNivaa === 0 &&
-            !risikoscenario.konsekvensNivaaBegrunnelse &&
-            'Dere må gjøre konsekvensvurdering'}
-          {!risikoscenario.konsekvensNivaaBegrunnelse &&
-            risikoscenario.konsekvensNivaa !== 0 &&
-            'Dere må begrunne konsekvensvurderingen'}
-          {risikoscenario.konsekvensNivaaBegrunnelse &&
-            risikoscenario.konsekvensNivaa === 0 &&
-            'Dere må velge konsekensnivå'}
-        </InlineMessage>
+        <LocalAlert className='mt-5' status='warning'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>
+              {risikoscenario.konsekvensNivaa === 0 &&
+                !risikoscenario.konsekvensNivaaBegrunnelse &&
+                'Dere må gjøre konsekvensvurdering'}
+              {!risikoscenario.konsekvensNivaaBegrunnelse &&
+                risikoscenario.konsekvensNivaa !== 0 &&
+                'Dere må begrunne konsekvensvurderingen'}
+              {risikoscenario.konsekvensNivaaBegrunnelse &&
+                risikoscenario.konsekvensNivaa === 0 &&
+                'Dere må velge konsekensnivå'}
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
       {risikoscenario.konsekvensNivaaBegrunnelse && (
         <BodyLong className='mt-5'>{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
