@@ -202,6 +202,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
                   allRisikoscenarioList={allRisikoscenarioList}
                   setAllRisikoscenarioList={setAllRisikoscenarioList}
                   formRef={formRef}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
                 />
               </div>
             )}
