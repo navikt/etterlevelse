@@ -9,7 +9,6 @@ import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.KravController.KravPage;
 import no.nav.data.etterlevelse.krav.domain.Krav;
-import no.nav.data.etterlevelse.krav.domain.KravImage;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.domain.TilbakemeldingData;
@@ -292,10 +291,7 @@ public class KravIT extends IntegrationTestBase {
         krav.setHensikt(id1);
         kravService.save(krav);
 
-        jdbcTemplate.update("update generic_storage set last_modified_date = now() - interval '65 minute' where type = 'KravImage'");
-        assertThat(kravImageStorageService.getAll(KravImage.class)).hasSize(2);
-        kravService.cleanupImages();
-        assertThat(kravImageStorageService.getAll(KravImage.class)).hasSize(1);
+        assertThat(kravImageStorageService.getAll()).hasSize(2);
     }
 
     private void addImage(LinkedMultiValueMap<String, Object> body, final String name, byte[] content) {

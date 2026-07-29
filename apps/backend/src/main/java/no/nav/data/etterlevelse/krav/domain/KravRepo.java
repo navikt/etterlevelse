@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.krav.domain;
 
-import no.nav.data.common.storage.domain.GenericStorage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -54,25 +53,13 @@ public interface KravRepo extends JpaRepository<Krav, UUID>, KravRepoCustom {
     @Query(value = "select max(krav_versjon) + 1 from krav where krav_nummer = ?1", nativeQuery = true)
     int nextKravVersjon(Integer kravNummer);
 
-    @Query(value = "select * from generic_storage where data ->> 'kravId' = cast(?1 as text) and id = ?2 and type = 'KravImage'", nativeQuery = true)
-    GenericStorage<KravImage> findKravImage(UUID kravId, UUID fileId);
+    // TODO: Trenger vi begge disse id-ene?
+    @Query(value = "select * from krav_image where krav_id = ?1 and id = ?2", nativeQuery = true)
+    KravImage findKravImage(UUID kravId, UUID fileId);
 
     @Modifying(clearAutomatically = true)
     @Transactional(propagation = Propagation.MANDATORY)
     @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where krav_nummer = ?1 and krav_versjon = ?2", nativeQuery = true)
     void updateKravToUtgaatt(int kravNummer, int kravVersjon);
-
-    @Modifying
-    @Transactional(propagation = Propagation.MANDATORY)
-    @Query(nativeQuery = true, value = """
-            delete from generic_storage image 
-            where type = 'KravImage'
-              and last_modified_date < now() at time zone 'Europe/Oslo' - interval '60 minute'
-              and not exists (
-                select 1 from krav 
-                where cast(krav.id as text) = image.data ->> 'kravId'
-                  and jsonb_path_exists(krav.data, cast('$.** ? (@.type() == "string" && @ like_regex "' || image.id || '")' as jsonpath))
-            )""")
-    int cleanupImages();
 
 }
