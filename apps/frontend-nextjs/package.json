@@ -51,7 +51,7 @@
     "@tiptap/extension-ordered-list": "^3.29.1",
     "@tiptap/extension-underline": "^3.29.1",
     "@tiptap/pm": "^3.29.1",
-    "@tiptap/react": "^3.29.1",
+    "@tiptap/react": "^3.29.2",
     "@tiptap/starter-kit": "^3.29.1",
     "axios": "^1.18.1",
     "graphql": "17.0.2",
