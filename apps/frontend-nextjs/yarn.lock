@@ -905,10 +905,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:^8.15.0":
-  version: 8.15.0
-  resolution: "@navikt/ds-css@npm:8.15.0"
-  checksum: 10c0/88fd2095bde88adb9e7751ad1e75fa08390134bcfa694606933c3ebec237e2e2b7a5e662f86a50e4e373f3ba479f978e63add99dbaf58b16e35c16a3699b31d3
+"@navikt/ds-css@npm:^8.16.1":
+  version: 8.16.1
+  resolution: "@navikt/ds-css@npm:8.16.1"
+  checksum: 10c0/3f5d10566d258d15067cc3a821f162ac51f694dedfa0c99e988154db1fed0540a009c11e163d5f7830ab2d24ea57d39668febca646b9d05721818a9c01e97b44
   languageName: node
   linkType: hard
 
@@ -3559,7 +3559,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
     "@navikt/aksel-icons": "npm:^8.15.0"
-    "@navikt/ds-css": "npm:^8.15.0"
+    "@navikt/ds-css": "npm:^8.16.1"
     "@navikt/ds-react": "npm:^8.15.0"
     "@navikt/ds-tailwind": "npm:^8.15.0"
     "@next/eslint-plugin-next": "npm:^16.2.12"
