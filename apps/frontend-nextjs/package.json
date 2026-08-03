@@ -79,7 +79,7 @@
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.2.12",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
-    "@types/lodash": "^4.17.24",
+    "@types/lodash": "^4.17.25",
     "@types/node": "26.1.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
@@ -95,7 +95,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "formik": "^2.4.9",
     "husky": "^9.1.7",
-    "lint-staged": "17.2.0",
+    "lint-staged": "17.3.0",
     "patch-package": "^8.0.1",
     "postcss": "^8.5.25",
     "prettier": "^3.9.6",
