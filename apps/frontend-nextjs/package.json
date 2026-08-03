@@ -103,5 +103,8 @@
     "ts-prune": "^0.10.3",
     "typescript": "^6.0.3"
   },
+  "resolutions": {
+    "prosemirror-model": "1.25.11"
+  },
   "packageManager": "yarn@4.16.0"
 }
