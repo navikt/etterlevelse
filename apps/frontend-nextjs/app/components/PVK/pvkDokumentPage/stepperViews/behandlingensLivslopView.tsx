@@ -107,13 +107,6 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
     }
   }, [submitClick])
 
-  useEffect(() => {
-    if (savedSuccessful) {
-      const timer = setTimeout(() => setSavedSuccessful(false), 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [savedSuccessful])
-
   const submit = async (submitedValues: any): Promise<void> => {
     if (etterlevelseDokumentasjon) {
       const mutatedBehandlingensLivslop = {

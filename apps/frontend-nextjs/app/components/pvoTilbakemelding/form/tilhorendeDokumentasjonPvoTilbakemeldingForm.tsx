@@ -20,7 +20,7 @@ import { BodyShort, Button, LocalAlert } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import moment from 'moment'
-import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useState } from 'react'
 import AlertPvoModal from '../common/alertPvoModal'
 import TilbakemeldingField from './tilbakemeldingField'
 
@@ -44,13 +44,6 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (savedSuccessful) {
-      const timer = setTimeout(() => setSavedSuccessful(false), 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [savedSuccessful])
 
   const submit = async (
     tilbakemeldingsInnhold: ITilhorendeDokumentasjonTilbakemelding
@@ -181,7 +174,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
         initialValues={initialValue}
         innerRef={formRef}
       >
-        {({ submitForm, setFieldValue }) => (
+        {({ submitForm, setFieldValue, dirty }) => (
           <Form>
             <div className='z-10 flex flex-col w-full button_container sticky top-0 bg-[#e3eff7]'>
               <div className='mt-2 mb-5 flex flex-row gap-2'>
@@ -203,7 +196,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                   </Button>
                 </div>
               </div>
-              {savedSuccessful && (
+              {savedSuccessful && !dirty && (
                 <div className='my-5'>
                   <LocalAlert size='small' status='success'>
                     <LocalAlert.Header>
