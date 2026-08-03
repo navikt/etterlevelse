@@ -13,16 +13,8 @@ export const TemaDashboardDetailHowToReadmore = () => (
       </List>
       <p className='mt-4'>
         For mer detaljer anbefaler vi informasjonssidene{' '}
-        <Link href='/omstottetiletterlevelse' target='_blank'>
-          Om Støtte til etterlevelse
-        </Link>
-        ,{' '}
-        <Link href='/om-pvk' target='_blank'>
-          Om Digital PVK
-        </Link>{' '}
-        og{' '}
-        <Link href='/om-behandlingskatalogen' target='_blank'>
-          Om Behandlingskatalogen
+        <Link href='/tema' target='_blank'>
+          Forstå kravene (åpner i en ny fane)
         </Link>
         .
       </p>
