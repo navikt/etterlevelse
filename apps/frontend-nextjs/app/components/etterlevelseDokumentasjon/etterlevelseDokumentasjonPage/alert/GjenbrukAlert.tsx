@@ -10,7 +10,6 @@ export const GjenbrukAlert = () => {
         // variant="moderate"
         header='Tilrettelegging for gjenbruk: slik gjør dere nå'
         size='large'
-        defaultOpen={true}
       >
         <List>
           <List.Item>

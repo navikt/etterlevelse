@@ -20,7 +20,7 @@ import { BodyShort, Button, LocalAlert } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import moment from 'moment'
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import AlertPvoModal from '../common/alertPvoModal'
 import TilbakemeldingField from './tilbakemeldingField'
 
@@ -44,6 +44,13 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
   const user = useContext(UserContext)
   const [isAlertModalOpen, setIsAlertModalOpen] = useState<boolean>(false)
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (savedSuccessful) {
+      const timer = setTimeout(() => setSavedSuccessful(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [savedSuccessful])
 
   const submit = async (
     tilbakemeldingsInnhold: ITilhorendeDokumentasjonTilbakemelding

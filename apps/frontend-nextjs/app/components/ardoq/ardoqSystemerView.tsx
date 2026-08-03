@@ -37,7 +37,7 @@ export const ArdoqSystemName: FunctionComponent<IArdoqSystemNameProp> = ({
 export const ArdoqSystemerView: FunctionComponent<IProps> = ({ ardoqSystemData, link, big }) => (
   <div className='flex gap-2 items-start'>
     <div className='min-w-16'>
-      <Label size='medium'>System:</Label>
+      <Label size='medium'>Systemer:</Label>
     </div>
     <div>
       <List>

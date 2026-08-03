@@ -1,5 +1,22 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
+import static no.nav.data.common.utils.StreamUtils.convert;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
@@ -11,8 +28,16 @@ import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.*;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepoCustom;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGodkjenningsRequest;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -20,6 +45,7 @@ import no.nav.data.integration.dpBehandling.DpBehandlingService;
 import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.domain.Member;
 import no.nav.data.integration.team.domain.Team;
+import no.nav.data.integration.team.dto.MemberResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
@@ -32,18 +58,6 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Slf4j
 @Service
@@ -376,7 +390,7 @@ public class EtterlevelseDokumentasjonService {
         etterlevelseDokumentasjonResponse.setRisikoeiereData(getRisikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiere()));
     }
 
-    private List<Behandling> getBehandlingData(List<String> behandlinger) {
+    public List<Behandling> getBehandlingData(List<String> behandlinger) {
         if (behandlinger == null || behandlinger.isEmpty()) {
             return List.of();
         }
@@ -390,6 +404,12 @@ public class EtterlevelseDokumentasjonService {
                 var behandling = new Behandling();
                 behandling.setId(behandlingId);
                 behandling.setNavn("Fant ikke behandling med id: " + behandlingId);
+                behandlingList.add(behandling);
+            } catch (Exception e) {
+                log.error("Failed to fetch behandling with id: {}", behandlingId, e);
+                var behandling = new Behandling();
+                behandling.setId(behandlingId);
+                behandling.setNavn("Klarte ikke å hente behandling med id: " + behandlingId);
                 behandlingList.add(behandling);
             }
         });
@@ -411,12 +431,49 @@ public class EtterlevelseDokumentasjonService {
                 dpBehandling.setId(dpBehandlingId);
                 dpBehandling.setNavn("Fant ikke DP behandling med id: " + dpBehandlingId);
                 dpBehandlingList.add(dpBehandling);
+            } catch (Exception e) {
+                log.error("Failed to fetch dp behandling with id: {}", dpBehandlingId, e);
+                var dpBehandling = new DpBehandling();
+                dpBehandling.setId(dpBehandlingId);
+                dpBehandling.setNavn("Klarte ikke å hente DP behandling med id: " + dpBehandlingId);
+                dpBehandlingList.add(dpBehandling);
             }
         });
         return dpBehandlingList;
     }
 
-    private List<TeamResponse> getTeamsData(List<String> teams) {
+    public boolean hasUserWriteAccess(EtterlevelseDokumentasjon edok) {
+        boolean resourceIsEmpty = edok.getResources() == null || edok.getResources().isEmpty();
+        boolean teamIsEmpty = edok.getTeams() == null || edok.getTeams().isEmpty();
+
+        if (resourceIsEmpty && teamIsEmpty) {
+            return true;
+        } else if (SecurityUtils.isAdmin()) {
+            return true;
+        } else {
+            List<String> memeberList = new ArrayList<>();
+            if (!resourceIsEmpty) {
+                memeberList.addAll(edok.getResources());
+            }
+            if (!teamIsEmpty) {
+                getTeamsData(edok.getTeams()).forEach((team) -> {
+                    if (team.getMembers() != null && !team.getMembers().isEmpty()) {
+                        memeberList.addAll(team.getMembers().stream().map(MemberResponse::getNavIdent).toList());
+                    }
+                });
+            }
+
+            try {
+                String currentUser = SecurityUtils.getCurrentIdent();
+                return memeberList.contains(currentUser);
+            } catch (ValidationException e) {
+                return false;
+            }
+        }
+
+    }
+
+    public List<TeamResponse> getTeamsData(List<String> teams) {
         if (teams == null || teams.isEmpty()) {
             return null;
         }

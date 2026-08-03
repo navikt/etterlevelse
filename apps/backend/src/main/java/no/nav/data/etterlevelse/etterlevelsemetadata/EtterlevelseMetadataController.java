@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataResponse;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class EtterlevelseMetadataController {
 
     private final EtterlevelseMetadataService service;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @Operation(summary = "Get all etterlevelsemetadata")
     @ApiResponse(description = "ok")
@@ -97,6 +99,11 @@ public class EtterlevelseMetadataController {
     @PostMapping
     public ResponseEntity<EtterlevelseMetadataResponse> createEtterlevelseMetadata(@RequestBody EtterlevelseMetadataRequest request) {
         log.info("Create etterlevelsemetadata");
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
         var etterlevelseMetadata = service.save(request);
         return new ResponseEntity<>(EtterlevelseMetadataResponse.buildFrom(etterlevelseMetadata), HttpStatus.CREATED);
     }
@@ -112,6 +119,12 @@ public class EtterlevelseMetadataController {
 
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         var etterlevelseMetadata = service.save(request);

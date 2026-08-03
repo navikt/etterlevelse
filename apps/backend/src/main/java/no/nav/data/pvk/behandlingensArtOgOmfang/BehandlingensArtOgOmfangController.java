@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangRequest;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
@@ -28,6 +29,7 @@ import java.util.UUID;
 @Tag(name = "Behandlingens art og omfang", description = "Behandlingens art og omfang for etterlevelsesdokumentasjon")
 public class BehandlingensArtOgOmfangController {
     private final BehandlingensArtOgOmfangService service;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @Operation(summary = "Get Behandlingens art og omfang")
     @ApiResponse(description = "ok")
@@ -64,6 +66,12 @@ public class BehandlingensArtOgOmfangController {
     public ResponseEntity<BehandlingensArtOgOmfangResponse> createBehandlingensArtOgOmfang(@RequestBody BehandlingensArtOgOmfangRequest request) {
         log.info("Create Behandlingens art og omfang");
 
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        }
+
         var behandlingensArtOgOmfang = service.save(request.convertToBehandlingensArtOgOmfang(), request.isUpdate());
 
         return new ResponseEntity<>(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang), HttpStatus.CREATED);
@@ -77,6 +85,12 @@ public class BehandlingensArtOgOmfangController {
 
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         var behandlingensArtOgOmfangToUpdate = service.get(id);

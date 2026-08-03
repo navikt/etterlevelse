@@ -19,11 +19,11 @@ import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterlevels
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ExclamationmarkTriangleIcon, LightBulbIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
   BodyLong,
   Button,
   Heading,
   InfoCard,
+  InlineMessage,
   Label,
   Link,
   List,
@@ -116,6 +116,21 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
     }
   }
 
+  const brukerAlleOpplysningstyperCheck = () => {
+    if (
+      etterlevelseDokumentasjon.behandlinger === null ||
+      etterlevelseDokumentasjon.behandlinger === undefined ||
+      (etterlevelseDokumentasjon.behandlinger &&
+        etterlevelseDokumentasjon.behandlinger.length === 0)
+    ) {
+      return false
+    } else {
+      return etterlevelseDokumentasjon.behandlinger.some(
+        (behandling) => behandling.brukerAlleOpplysningstyper === true
+      )
+    }
+  }
+
   return (
     <Formik
       validateOnChange={false}
@@ -142,7 +157,12 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
 
               <List as='ul' className='mb-5'>
                 <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
-                {personkategorier.length === 0 && <List.Item>Ingen</List.Item>}
+                {!brukerAlleOpplysningstyperCheck() && personkategorier.length === 0 && (
+                  <List.Item>Ingen</List.Item>
+                )}
+                {brukerAlleOpplysningstyperCheck() && (
+                  <List.Item>Bruker potensielt alle opplysningstyper</List.Item>
+                )}
                 {personkategorier.length > 0 &&
                   personkategorier.map((personkategori) => (
                     <List.Item key={personkategori}>{personkategori}</List.Item>
@@ -160,7 +180,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                   <>
                     {fieldProps.form.values.stemmerPersonkategorier === false && (
                       <div>
-                        <Alert inline variant='warning' className='mt-5 mb-10'>
+                        <InlineMessage status='warning' className='mt-5 mb-10'>
                           Dere må oppdatere personkategori(er) i Behandlingskatalogen. Hvis dere
                           ikke finner riktig personkategori(er), ta kontakt på{' '}
                           <Link
@@ -172,7 +192,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                             #behandlingskatalogen på Slack (åpner i en ny fane)
                           </Link>
                           , eller på epost: teamdatajegerne@nav.no.
-                        </Alert>
+                        </InlineMessage>
                       </div>
                     )}
                   </>
@@ -218,6 +238,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                   rows={3}
                   noPlaceholder
                   label='3. Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.'
+                  caption='Dette kan for eksempel være saksbehandlere, utviklere, produktteammedlemmer ellers, …'
                   name='tilgangsBeskrivelsePersonopplysningene'
                 />
               </div>

@@ -1,11 +1,15 @@
 package no.nav.data.pvk.pvkdokument;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
@@ -22,6 +26,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         CodelistStub.initializeCodelist();
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
     }
 
     @Test
@@ -89,6 +94,89 @@ public class PvkDokumentIT extends IntegrationTestBase {
         restTemplate.delete("/pvkdokument/{id}", pvkDokument.getId());
 
         assertThat(pvkDokumentRepo.count()).isEqualTo(0);
+    }
+
+    @Test
+    void cancelApproval_is_risikoeier_should_succeed() {
+        var ettDok = etterlevelseDokumentasjonService.save(
+                EtterlevelseDokumentasjonRequest.builder()
+                        .title("test dokumentasjon")
+                        .etterlevelseNummer(101) // Note: This will be overwritten
+                        .beskrivelse("")
+                        .forGjenbruk(false)
+                        .teams(List.of("TEST"))
+                        .resources(List.of("TEST"))
+                        .risikoeiere(List.of("U123457"))
+                        .irrelevansFor(List.of(""))
+                        .update(false)
+                        .behandlerPersonopplysninger(true)
+                        .behandlingIds(List.of(""))
+                        .prioritertKravNummer(List.of())
+                        .varslingsadresser(List.of())
+                        .build()
+        );
+
+        PvkDokument pvkDok = buildPvkDokument();
+        pvkDok.setStatus(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER);
+        pvkDok.setEtterlevelseDokumentId(ettDok.getId());
+        var pvkDokument =  pvkDokumentService.save(pvkDok, false);
+
+        pvoTilbakemeldingRepo.save(PvoTilbakemelding.builder()
+                        .pvkDokumentId(pvkDok.getId())
+                .build());
+
+        var request = PvkDokumentRequest.builder()
+                .id(pvkDokument.getId())
+                .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
+                .status(PvkDokumentStatus.TRENGER_GODKJENNING)
+                .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
+                .build();
+        var resp = restTemplate.exchange("/pvkdokument/{id}", HttpMethod.PUT, new HttpEntity<>(request), PvkDokumentResponse.class, request.getId());
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(pvkDokumentRepo.count()).isOne();
+        Assertions.assertNotNull(resp.getBody());
+        assertThat(resp.getBody().getStatus()).isEqualTo(PvkDokumentStatus.TRENGER_GODKJENNING);
+    }
+
+    @Test
+    void cancelApproval_is_not_risikoeier_should_fail() {
+        var ettDok = etterlevelseDokumentasjonService.save(
+                EtterlevelseDokumentasjonRequest.builder()
+                        .title("test dokumentasjon")
+                        .etterlevelseNummer(101) // Note: This will be overwritten
+                        .beskrivelse("")
+                        .forGjenbruk(false)
+                        .teams(List.of("TEST"))
+                        .resources(List.of("TEST"))
+                        .risikoeiere(List.of("U123456"))
+                        .irrelevansFor(List.of(""))
+                        .update(false)
+                        .behandlerPersonopplysninger(true)
+                        .behandlingIds(List.of(""))
+                        .prioritertKravNummer(List.of())
+                        .varslingsadresser(List.of())
+                        .build()
+        );
+
+        PvkDokument pvkDok = buildPvkDokument();
+        pvkDok.setStatus(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER);
+        pvkDok.setEtterlevelseDokumentId(ettDok.getId());
+        var pvkDokument =  pvkDokumentService.save(pvkDok, false);
+
+        pvoTilbakemeldingRepo.save(PvoTilbakemelding.builder()
+                .pvkDokumentId(pvkDok.getId())
+                .build());
+
+        var request = PvkDokumentRequest.builder()
+                .id(pvkDokument.getId())
+                .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
+                .status(PvkDokumentStatus.TRENGER_GODKJENNING)
+                .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
+                .build();
+        var resp = restTemplate.exchange("/pvkdokument/{id}", HttpMethod.PUT, new HttpEntity<>(request), String.class, request.getId());
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
 }

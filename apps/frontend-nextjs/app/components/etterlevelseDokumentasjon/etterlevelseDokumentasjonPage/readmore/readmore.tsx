@@ -6,7 +6,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import { InfoCard, ReadMore } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import GjenbrukAlert from '../alert/GjenbrukAlert'
 import EtterlevelseDokumentasjonExpansionCard from '../expantionCard/etterlevelseDokumentasjonExpansionCard'
 import { TilgjengeligForGjenbruk } from '../tilgjengeligForGjenbruk/tilgjengeligForGjenbruk'
@@ -44,52 +44,71 @@ export const EtterlevelseDokumentasjonReadmore: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   relasjonLoading,
   morDokumentRelasjon,
-}) => (
-  <div className='max-w-5xl flex-1'>
-    {etterlevelseDokumentasjon.status ===
-      EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
-      <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
-        <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-          <InfoCard.Title>
-            Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det ikke
-            være mulig å redigere kravdokumentasjon fram til at dokumentet er godkjent.
-          </InfoCard.Title>
-        </InfoCard.Header>
-      </InfoCard>
-    )}
+}) => {
+  const [gjenbrukReadmoreOpen, setGjenbrukReadmoreOpen] = useState(false)
+  const previousTilgjengeligForGjenbruk = useRef(etterlevelseDokumentasjon.tilgjengeligForGjenbruk)
 
-    <div className='flex mb-5'>
-      <div>
-        {morDokumentRelasjon && (
-          <div className='my-5'>
-            <ReadMore
-              header='Hvordan dette arvede dokumentet skal brukes'
-              aria-label='Hvordan dette arvede dokumentet skal brukes'
-              className='w-full'
-            >
-              <div className='mb-5'>
-                <Markdown source={morDokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
-              </div>
-            </ReadMore>
-          </div>
-        )}
+  useEffect(() => {
+    if (
+      !previousTilgjengeligForGjenbruk.current &&
+      etterlevelseDokumentasjon.tilgjengeligForGjenbruk
+    ) {
+      setGjenbrukReadmoreOpen(true)
+    }
+    previousTilgjengeligForGjenbruk.current = etterlevelseDokumentasjon.tilgjengeligForGjenbruk
+  }, [etterlevelseDokumentasjon.tilgjengeligForGjenbruk])
 
-        <EtterlevelseDokumentasjonExpansionCard
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        />
+  return (
+    <div className='max-w-5xl flex-1'>
+      {etterlevelseDokumentasjon.status ===
+        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
+        <InfoCard data-color='warning' className='my-5 max-w-[75ch]' size='small'>
+          <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+            <InfoCard.Title>
+              Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det
+              ikke være mulig å redigere kravdokumentasjon fram til at dokumentet er godkjent.
+            </InfoCard.Title>
+          </InfoCard.Header>
+        </InfoCard>
+      )}
 
-        {readmoreTilstandUtil(etterlevelseDokumentasjon, relasjonLoading) ===
-          EReadmoreTilstand.GJENBRUK_PA && (
-          <div className='mt-5'>
-            <ReadMore header='Du kan gjenbruke dette etterlevelsesdokumentet'>
-              <TilgjengeligForGjenbruk etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
-            </ReadMore>
-          </div>
-        )}
+      <div className='flex mb-5'>
+        <div>
+          {morDokumentRelasjon && (
+            <div className='my-5'>
+              <ReadMore
+                header='Hvordan dette arvede dokumentet skal brukes'
+                aria-label='Hvordan dette arvede dokumentet skal brukes'
+                className='w-full'
+              >
+                <div className='mb-5'>
+                  <Markdown source={morDokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
+                </div>
+              </ReadMore>
+            </div>
+          )}
 
-        {readmoreTilstandUtil(etterlevelseDokumentasjon, relasjonLoading) ===
-          EReadmoreTilstand.GJENBRUK_AV && <GjenbrukAlert />}
+          <EtterlevelseDokumentasjonExpansionCard
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          />
+
+          {readmoreTilstandUtil(etterlevelseDokumentasjon, relasjonLoading) ===
+            EReadmoreTilstand.GJENBRUK_PA && (
+            <div className='mt-5'>
+              <ReadMore
+                header='Du kan gjenbruke dette etterlevelsesdokumentet'
+                open={gjenbrukReadmoreOpen}
+                onOpenChange={setGjenbrukReadmoreOpen}
+              >
+                <TilgjengeligForGjenbruk etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+              </ReadMore>
+            </div>
+          )}
+
+          {readmoreTilstandUtil(etterlevelseDokumentasjon, relasjonLoading) ===
+            EReadmoreTilstand.GJENBRUK_AV && <GjenbrukAlert />}
+        </div>
       </div>
     </div>
-  </div>
-)
+  )
+}

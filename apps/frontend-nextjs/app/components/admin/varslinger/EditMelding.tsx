@@ -106,7 +106,6 @@ export const EditMelding: FunctionComponent<TProps> = ({
                 </Field>
               </div>
 
-              {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
               <TextAreaField
                 maxCharacter={maxChar}
                 markdown

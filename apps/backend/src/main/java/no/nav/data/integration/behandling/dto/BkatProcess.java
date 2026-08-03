@@ -1,16 +1,16 @@
 package no.nav.data.integration.behandling.dto;
 
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.integration.behandling.dto.BkatCode.toCode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.integration.behandling.dto.BkatCode.toCode;
 
 /**
  * Bruker operasjon i Polly som svarer med "ProcessShortResponse", ikke hele Process objektet,
@@ -26,14 +26,22 @@ public class BkatProcess {
     private int number;
     private String name;
     private String description;
+    private String additionalDescription;
     private Boolean automaticProcessing;
     private Boolean profiling;
+    private BkatDpia dpia;
+    private List<BkatLegalBasis> legalBases;
+    private Boolean usesAllInformationTypes;
+
+    private String start;
+    private String end;
     @Singular
     private List<BkatCode> purposes;
     private BkatAffiliation affiliation;
     @Singular
     private List<BkatPolicy> policies;
     private BkatDataProcessing dataProcessing;
+    private BkatAiUsageDescription aiUsageDescription;
 
     public Behandling convertToBehandling() {
         return Behandling.builder()
@@ -41,11 +49,19 @@ public class BkatProcess {
                 .nummer(number)
                 .navn(name)
                 .formaal(description)
-                .overordnetFormaal(toCode(purposes.get(0)))
-                .avdeling(toCode(affiliation.getDepartment()))
-                .linjer(convert(affiliation.getSubDepartments(), BkatCode::toCode))
-                .systemer(convert(affiliation.getProducts(), BkatCode::toCode))
-                .teams(affiliation.getProductTeams())
+                .brukerAlleOpplysningstyper(usesAllInformationTypes)
+                .ytterligereBeskrivelse(additionalDescription)
+                .behandlingInnfortINav(dpia != null && dpia.getProcessImplemented() != null ? dpia.getProcessImplemented() : false)
+                .gyldigFra(start)
+                .gyldingTil(end)
+                .behandlingensgrunnlag(legalBases)
+                .kiBenyttesIBehandling(aiUsageDescription != null && aiUsageDescription.getAiUsage() != null ? aiUsageDescription.getAiUsage() : false)
+                .personopplysningerBruktTilUtviklingAvKiSystemer(aiUsageDescription != null && aiUsageDescription.getReusingPersonalInformation() != null ? aiUsageDescription.getReusingPersonalInformation() : false)
+                .overordnetFormaal(purposes != null && !purposes.isEmpty() ? toCode(purposes.get(0)) : null)
+                .avdeling(affiliation != null ? toCode(affiliation.getDepartment()) : null)
+                .linjer(affiliation != null ? convert(affiliation.getSubDepartments(), BkatCode::toCode) : new ArrayList<>())
+                .systemer(affiliation != null ? convert(affiliation.getProducts(), BkatCode::toCode) : new ArrayList<>())
+                .teams(affiliation != null ? affiliation.getProductTeams() : List.of())
                 .policies(policies != null && !policies.isEmpty() ? policies.stream().map(BkatPolicy::convertToPolyResponse).toList(): new ArrayList<>())
                 .automatiskBehandling(automaticProcessing)
                 .profilering(profiling)

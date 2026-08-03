@@ -116,6 +116,13 @@ export const BehandlingensLivslopPage = () => {
     }
   }, [submitClick])
 
+  useEffect(() => {
+    if (savedSuccessful) {
+      const timer = setTimeout(() => setSavedSuccessful(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [savedSuccessful])
+
   const submit = async (behandlingensLivslop: any) => {
     if (etterlevelseDokumentasjon) {
       const mutatedBehandlingensLivslop = {

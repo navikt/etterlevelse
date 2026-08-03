@@ -116,7 +116,7 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
                       etterlevelseDokumentasjoner.totalElements
                   }
                 >
-                  Vis mer
+                  Vis flere
                 </Button>
 
                 {gqlLoading && (

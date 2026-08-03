@@ -58,8 +58,4 @@ export enum EAuditAction {
 }
 
 export type TNavigableItem =
-  | EObjectType
-  | EListName.RELEVANS
-  | EListName.UNDERAVDELING
-  | EListName.TEMA
-  | EListName.LOV
+  EObjectType | EListName.RELEVANS | EListName.UNDERAVDELING | EListName.TEMA | EListName.LOV

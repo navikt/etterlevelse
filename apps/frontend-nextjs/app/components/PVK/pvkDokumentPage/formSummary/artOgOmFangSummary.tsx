@@ -26,7 +26,7 @@ export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
   customLinktext,
   customStepNumber,
 }) => (
-  <FormSummary className='my-3'>
+  <FormSummary className='my-6'>
     <FormSummary.Header>
       <FormSummary.Heading level='2'>{StepTitle[2]}</FormSummary.Heading>
     </FormSummary.Header>

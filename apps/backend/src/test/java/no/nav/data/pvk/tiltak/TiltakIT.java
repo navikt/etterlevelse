@@ -1,6 +1,7 @@
 package no.nav.data.pvk.tiltak;
 
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
@@ -26,6 +27,7 @@ public class TiltakIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         CodelistStub.initializeCodelist();
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
     }
 
     @Test

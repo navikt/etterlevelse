@@ -23,7 +23,11 @@ import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
-import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  DownloadIcon,
+  ExclamationmarkTriangleFillIcon,
+  InformationSquareIcon,
+} from '@navikt/aksel-icons'
 import {
   BodyShort,
   Button,
@@ -33,7 +37,6 @@ import {
   Link,
   List,
   LocalAlert,
-  Popover,
   ReadMore,
   Select,
   SortState,
@@ -45,6 +48,7 @@ import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { AvdelingDetailReadMore } from './DashboardReadmore/AvdelingDetailReadMore'
+import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
 
 interface IProps {
   avdelingId: string
@@ -85,106 +89,6 @@ const getPvkOnlyStatusText = (
   )
     return 'Tilbakemelding fra PVO'
   return 'Under arbeid'
-}
-
-const getKravTrafficColor = (ferdig: number, total: number): string => {
-  if (total === 0) return '#C6C2BF'
-  const pct = (ferdig / total) * 100
-  if (pct >= 100) return '#06893A'
-  if (pct >= 50) return '#E67E22'
-  return '#C30000'
-}
-
-const TrafficDot = ({ color }: { color: string }) => (
-  <span
-    style={{
-      display: 'inline-block',
-      width: 12,
-      height: 12,
-      borderRadius: '50%',
-      backgroundColor: color,
-      marginRight: 6,
-      verticalAlign: 'middle',
-    }}
-  />
-)
-
-const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
-  const [open, setOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const oppfylt = dok.antallSuksesskriterierOppfylt ?? 0
-  const ikkeOppfylt = dok.antallSuksesskriterierIkkeOppfylt ?? 0
-  const totSuksess = oppfylt + ikkeOppfylt
-  const oppfyltPct = dok.oppfyltKravProsent
-
-  return (
-    <>
-      <button
-        ref={setAnchorEl}
-        onClick={() => setOpen((o) => !o)}
-        style={{
-          border: '2.5px solid #0067C5',
-          borderRadius: '10px',
-          padding: '4px 12px',
-          background: 'white',
-          color: '#0067C5',
-          fontWeight: 700,
-          fontSize: '1rem',
-          cursor: 'pointer',
-          minWidth: '52px',
-        }}
-      >
-        {oppfyltPct != null ? `${oppfyltPct}%` : '-'}
-      </button>
-      <Popover open={open} onClose={() => setOpen(false)} anchorEl={anchorEl} placement='bottom'>
-        <Popover.Content>
-          <div style={{ width: '340px' }}>
-            {totSuksess > 0 ? (
-              <>
-                <div className='flex w-full h-6 mb-4 overflow-hidden'>
-                  <div style={{ flex: oppfylt, backgroundColor: '#005B4B' }} />
-                  <div style={{ flex: ikkeOppfylt, backgroundColor: '#C30000' }} />
-                </div>
-                <div className='flex items-center gap-2 mb-2'>
-                  <span
-                    className='inline-block w-4 h-4 rounded-full'
-                    style={{ backgroundColor: '#005B4B' }}
-                  />
-                  <BodyShort>
-                    Oppfylt <strong>{oppfylt} suksesskriterier</strong>
-                  </BodyShort>
-                </div>
-                <div className='flex items-center gap-2 mb-6'>
-                  <span
-                    className='inline-block w-4 h-4 rounded-full'
-                    style={{ backgroundColor: '#C30000' }}
-                  />
-                  <BodyShort>
-                    Ikke oppfylt <strong>{ikkeOppfylt} suksesskriterier</strong>
-                  </BodyShort>
-                </div>
-                <hr className='my-4' />
-                <BodyShort className='mb-2' style={{ textAlign: 'left' }}>
-                  <strong>Oppfylt der kravet er ferdig vurdert: {oppfyltPct}%</strong>
-                </BodyShort>
-                <BodyShort
-                  size='small'
-                  style={{ textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word' }}
-                >
-                  Etterleveren må først ha markert hele kravet som ferdig utfylt for at tallene
-                  vises her. Prosentandelen er beregnet basert på forholdet mellom suksesskriterier
-                  vurdert som oppfylt, og suksesskriterier vurdert som ikke oppfylt. Det tas ikke
-                  med suksesskriterier som ble vurdert som ikke relevant.
-                </BodyShort>
-              </>
-            ) : (
-              <BodyShort>Ingen suksesskriterier ferdig vurdert ennå.</BodyShort>
-            )}
-          </div>
-        </Popover.Content>
-      </Popover>
-    </>
-  )
 }
 
 const AvdelingDetailPage = ({ avdelingId }: IProps) => {
@@ -238,7 +142,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       dok.resourcesData?.map((r) => r.fullName)?.join(' ') ?? '',
       dok.risikoeiereData?.map((r) => r.fullName)?.join(' ') ?? '',
       dok.behandlinger?.map((b) => `B${b.nummer} ${b.navn}`)?.join(' ') ?? '',
-      getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
+      dok.ikkePaabegynt
+        ? 'Ikke påbegynt'
+        : getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
       getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger),
       getPvkOnlyStatusText(dok.pvkVurdering, dok.pvkStatus, dok.hasPvkDocumentationStarted),
     ]
@@ -273,7 +179,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         filtered = tableData
       }
 
-      if (selectedEnhet) {
+      if (selectedEnhet === 'ingen-enhet') {
+        filtered = filtered.filter((dok) => !dok.enheter?.length)
+      } else if (selectedEnhet) {
         filtered = filtered.filter((dok) =>
           dok.enheter?.some((e) => e.nomEnhetId === selectedEnhet)
         )
@@ -316,7 +224,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
           case 'enhet':
             return dok.enheter?.map((e) => e.nomEnhetName).join(', ') || ''
           case 'etterlevelse':
-            return getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
+            return dok.ikkePaabegynt
+              ? 'Ikke påbegynt'
+              : getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
           case 'behovForPvk':
             return getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger)
           case 'pvkStatus':
@@ -367,6 +277,28 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     return tableData?.some((dok) => dok.enheter && dok.enheter.length > 0) ?? false
   }, [tableData])
 
+  const pvkTotals = useMemo(() => {
+    return sortedDoks.reduce(
+      (acc, dok) => {
+        acc.antallRisikoscenario += dok.antallRisikoscenario || 0
+        acc.antallHoyRisikoscenario += dok.antallHoyRisikoscenario || 0
+        acc.antallHoyRisikoEtterTiltak += dok.antallHoyRisikoEtterTiltak || 0
+        acc.antallTiltak += dok.antallTiltak || 0
+        acc.antallIkkeIverksattTiltak += dok.antallIkkeIverksattTiltak || 0
+        acc.antallTiltakFristPassert += dok.antallTiltakFristPassert || 0
+        return acc
+      },
+      {
+        antallRisikoscenario: 0,
+        antallHoyRisikoscenario: 0,
+        antallHoyRisikoEtterTiltak: 0,
+        antallTiltak: 0,
+        antallIkkeIverksattTiltak: 0,
+        antallTiltakFristPassert: 0,
+      }
+    )
+  }, [sortedDoks])
+
   if (isLoading || data == null) {
     return (
       <PageLayout pageTitle='Dashboard' currentPage='Dashboard' breadcrumbPaths={[]}>
@@ -385,8 +317,15 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
   const computeStatsFromDoks = (doks: IDashboardTable[]): IAvdelingDashboardStats => {
     const total = doks.length
+    const ikkePaabegynt = doks.filter(
+      (d) =>
+        d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
+        d.ikkePaabegynt === true
+    ).length
     const underArbeid = doks.filter(
-      (d) => d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
+      (d) =>
+        d.etterlevelseDokumentasjonStatus === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
+        !d.ikkePaabegynt
     ).length
     const sendtTilGodkjenning = doks.filter(
       (d) =>
@@ -444,6 +383,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       ...baseStats,
       dokumenter: {
         total,
+        ikkePaabegynt,
         underArbeid,
         sendtTilGodkjenning,
         godkjentAvRisikoeier: godkjent,
@@ -510,8 +450,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             tilhører, etterlevelsens nåværende tilstand, med mer.
           </List.Item>
           <List.Item>
-            Søke og filtrere i datasettet: du kan finne seksjon, team, risikoeier, dokumentnavn, med
-            flere. Du kan også sortere tabellene, for eksempel etter teamnavn.
+            Søke og filtrere i datasettet: du kan finne seksjon, enhet team, risikoeier,
+            dokumentnavn, med flere. Du kan også sortere tabellene, for eksempel etter teamnavn.
           </List.Item>
         </List>
         <p className='mt-4'>
@@ -643,6 +583,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               ]
               const header = [
                 'Etterlevelsesdokumenter totalt',
+                'Ikke påbegynt',
                 'Under arbeid',
                 'Sendt til godkjenning',
                 'Godkjent',
@@ -665,6 +606,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               ].join(';')
               const row = [
                 stats.dokumenter.total,
+                stats.dokumenter.ikkePaabegynt,
                 stats.dokumenter.underArbeid,
                 stats.dokumenter.sendtTilGodkjenning,
                 stats.dokumenter.godkjentAvRisikoeier,
@@ -708,6 +650,17 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             ))}
           </Chips>
         )}
+
+        {!isTableLoading &&
+          sortedDoks.length === 0 &&
+          (searchFilters.length > 0 || !!selectedSeksjon || !!selectedEnhet) && (
+            <InfoCard data-color='warning' className='mt-4 max-w-[75ch]'>
+              <InfoCard.Header icon={<ExclamationmarkTriangleFillIcon aria-hidden />}>
+                <InfoCard.Title as='h3'>Filtrering har ført til 0 treff</InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>Prøv å fjerne et av filtervalgene dine.</InfoCard.Content>
+            </InfoCard>
+          )}
 
         {selectedSeksjon === 'ingen-seksjon' && (
           <LocalAlert status='warning' className='mt-4' aria-live='off'>
@@ -870,19 +823,23 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       {sortedDoks.map((dok) => {
                         return (
                           <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                            <Table.DataCell className='dashboard-cell-wide'>
-                              <Link
-                                href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
-                                target='_blank'
-                              >
-                                E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
-                                {dok.etterlevelseDokumentasjonTittel}
-                              </Link>
+                            <Table.DataCell className='dashboard-cell-doc'>
+                              <div className='dashboard-cell-doc-content'>
+                                <Link
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </Link>
+                              </div>
                             </Table.DataCell>
                             <Table.DataCell>
-                              {getEtterlevelseDokumentStatusText(
-                                dok.etterlevelseDokumentasjonStatus
-                              )}
+                              {dok.ikkePaabegynt
+                                ? 'Ikke p\u00e5begynt'
+                                : getEtterlevelseDokumentStatusText(
+                                    dok.etterlevelseDokumentasjonStatus
+                                  )}
                             </Table.DataCell>
                             <Table.DataCell>
                               {getBehovForPvkText(
@@ -936,7 +893,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                ? dok.teamsData.map((team, index) => (
+                                    <div key={`${team.id}-${index}`}>{team.name}</div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
@@ -1055,14 +1014,16 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       {sortedDoks.map((dok) => {
                         return (
                           <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                            <Table.DataCell className='dashboard-cell-wide'>
-                              <Link
-                                href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
-                                target='_blank'
-                              >
-                                E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
-                                {dok.etterlevelseDokumentasjonTittel}
-                              </Link>
+                            <Table.DataCell className='dashboard-cell-doc'>
+                              <div className='dashboard-cell-doc-content'>
+                                <Link
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </Link>
+                              </div>
                             </Table.DataCell>
                             <Table.DataCell align='center'>
                               <TrafficDot
@@ -1097,7 +1058,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                ? dok.teamsData.map((team, index) => (
+                                    <div key={`${team.id}-${index}`}>{team.name}</div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
@@ -1205,22 +1168,48 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                           Digital PVK status
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='antallScenarioer' align='center'>
-                          Antall risikoscenarioer
+                          <span className='whitespace-nowrap'>
+                            Antall risikoscenarioer{' '}
+                            <span className='font-normal'>({pvkTotals.antallRisikoscenario})</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='hoyRisiko' align='center'>
-                          Høy risiko før tiltak
+                          <span className='whitespace-nowrap'>
+                            Høy risiko før tiltak{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallHoyRisikoscenario})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='hoyRisikoEtterTiltak' align='center'>
-                          Høy risiko etter tiltak
+                          <span className='whitespace-nowrap'>
+                            Høy risiko etter tiltak{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallHoyRisikoEtterTiltak})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='antallTiltak' align='center'>
-                          Antall tiltak
+                          <span className='whitespace-nowrap'>
+                            Antall tiltak{' '}
+                            <span className='font-normal'>({pvkTotals.antallTiltak})</span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='ikkeIverksatte' align='center'>
-                          Ikke iverksatte tiltak
+                          <span className='whitespace-nowrap'>
+                            Ikke iverksatte tiltak{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallIkkeIverksattTiltak})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='fristPassert' align='center'>
-                          Tiltaksfrist passert
+                          <span className='whitespace-nowrap'>
+                            Tiltaksfrist passert{' '}
+                            <span className='font-normal'>
+                              ({pvkTotals.antallTiltakFristPassert})
+                            </span>
+                          </span>
                         </Table.ColumnHeader>
                         <Table.ColumnHeader sortable sortKey='dato_pvk'>
                           Sist oppdatert
@@ -1243,14 +1232,16 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                       {sortedDoks.map((dok) => {
                         return (
                           <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                            <Table.DataCell className='dashboard-cell-wide'>
-                              <Link
-                                href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
-                                target='_blank'
-                              >
-                                E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
-                                {dok.etterlevelseDokumentasjonTittel}
-                              </Link>
+                            <Table.DataCell className='dashboard-cell-doc'>
+                              <div className='dashboard-cell-doc-content'>
+                                <Link
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </Link>
+                              </div>
                             </Table.DataCell>
                             <Table.DataCell>
                               {getBehovForPvkText(
@@ -1325,7 +1316,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.teamsData && dok.teamsData.length > 0
-                                ? dok.teamsData.map((team) => <div key={team.id}>{team.name}</div>)
+                                ? dok.teamsData.map((team, index) => (
+                                    <div key={`${team.id}-${index}`}>{team.name}</div>
+                                  ))
                                 : '-'}
                             </Table.DataCell>
                             <Table.DataCell>

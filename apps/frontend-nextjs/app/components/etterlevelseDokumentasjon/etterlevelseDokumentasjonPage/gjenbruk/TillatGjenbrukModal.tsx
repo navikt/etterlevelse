@@ -44,7 +44,7 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
       etterlevelseDokumentasjon.id
     )
     const etterlevelseDokumentasjonWithGjenbrukData: TEtterlevelseDokumentasjonQL = {
-      ...updatedEtterlevelseDokumentajson,
+      ...etterlevelseDokumentasjonMapToFormVal(updatedEtterlevelseDokumentajson),
       tilgjengeligForGjenbruk: etterlevelseDokumentasjon.tilgjengeligForGjenbruk,
       gjenbrukBeskrivelse: etterlevelseDokumentasjon.gjenbrukBeskrivelse,
     }

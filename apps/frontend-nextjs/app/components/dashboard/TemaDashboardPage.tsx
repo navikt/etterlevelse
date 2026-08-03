@@ -6,7 +6,10 @@ import {
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
+import { useSearchTeamOptions } from '@/api/teamkatalogen/teamkatalogenApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
@@ -14,20 +17,22 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
-  Link as AkselLink,
   BodyShort,
   Button,
   Detail,
   Heading,
   InfoCard,
-  List,
-  ReadMore,
+  Label,
+  Link,
   Select,
   Tabs,
 } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import AsyncSelect from 'react-select/async'
+import { TemaDashboardHowToReadmore } from './DashboardReadmore/TemaDashboardHowToReadmore'
 import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
@@ -38,14 +43,18 @@ import {
   roundedPercentages,
 } from './chartUtils'
 
-const TemaDokumentCount = ({ count }: { count?: number }) => (
-  <Detail uppercase className='mt-2 mb-4'>
-    {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
-  </Detail>
+const TemaDokumentCount = ({ count, kravCount }: { count?: number; kravCount?: number }) => (
+  <>
+    <Detail className='mt-1 font-bold'>{(kravCount ?? 0).toLocaleString('nb-NO')} krav</Detail>
+    <Detail uppercase className='mt-3 mb-4'>
+      {(count ?? 0).toLocaleString('nb-NO')} ETTERLEVELSESDOKUMENTER
+    </Detail>
+  </>
 )
 
 const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
   const kravData: IBarSegment[] = [
+    { name: 'Ikke påbegynt', value: stats.kravIkkePaabegynt, color: SUKSESS_COLORS.ikkePaabegynt },
     { name: 'Under arbeid', value: stats.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
     { name: 'Ferdig vurdert', value: stats.kravFerdigVurdert, color: KRAV_COLORS.ferdigVurdert },
   ]
@@ -130,17 +139,20 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
         <Heading size='small' level='3'>
           {stats.temaName}
         </Heading>
-        <AkselLink href={`/dashboard/tema/${stats.temaCode}`}>
-          Les mer om etterlevelse under {stats.temaName}
-        </AkselLink>
+        <Link href={`/dashboard/tema/${stats.temaCode}`}>
+          Utforsk etterlevelse under {stats.temaName}
+        </Link>
       </div>
 
-      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
+      <TemaDokumentCount
+        count={stats.etterlevelseDokumentCount}
+        kravCount={stats.kravAntallPerTema}
+      />
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level='4' className='min-h-[3rem]'>
-            Vurdering av etterlevelseskrav
+            Kravstatus
           </Heading>
           <RechartsStackedBar data={kravData} percentageOnly />
         </div>
@@ -202,29 +214,44 @@ const TemaStatsKeyMetrics = ({ stats }: { stats: ITemaDashboardStats }) => {
         <Heading size='small' level='3'>
           {stats.temaName}
         </Heading>
-        <AkselLink href={`/dashboard/tema/${stats.temaCode}`}>
+        <Link href={`/dashboard/tema/${stats.temaCode}`}>
           Les mer om etterlevelse under {stats.temaName}
-        </AkselLink>
+        </Link>
       </div>
 
-      <TemaDokumentCount count={stats.etterlevelseDokumentCount} />
+      <TemaDokumentCount
+        count={stats.etterlevelseDokumentCount}
+        kravCount={stats.kravAntallPerTema}
+      />
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
         <div>
           {(() => {
-            const kravPcts = roundedPercentages([stats.kravUnderArbeid, stats.kravFerdigVurdert])
+            const kravTotalWithIkkePaabegynt = stats.kravIkkePaabegynt + stats.kravTotal
+            const kravPcts = roundedPercentages([
+              stats.kravIkkePaabegynt,
+              stats.kravUnderArbeid,
+              stats.kravFerdigVurdert,
+            ])
             return (
               <>
                 <Heading size='xsmall' level='4' className='mb-2'>
-                  Gjennomføringsstatus: krav ({stats.kravTotal})
+                  Kravstatus ({kravTotalWithIkkePaabegynt})
                 </Heading>
                 <BodyShort>
+                  Ikke påbegynt <span className='font-bold'>{stats.kravIkkePaabegynt}</span>
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[0], stats.kravIkkePaabegynt)}%)`}
+                </BodyShort>
+                <BodyShort>
                   Under arbeid <span className='font-bold'>{stats.kravUnderArbeid}</span>
-                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[0], stats.kravUnderArbeid)}%)`}
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[1], stats.kravUnderArbeid)}%)`}
                 </BodyShort>
                 <BodyShort>
                   Ferdig vurdert <span className='font-bold'>{stats.kravFerdigVurdert}</span>
-                  {stats.kravTotal > 0 && ` (${formatPct(kravPcts[1], stats.kravFerdigVurdert)}%)`}
+                  {kravTotalWithIkkePaabegynt > 0 &&
+                    ` (${formatPct(kravPcts[2], stats.kravFerdigVurdert)}%)`}
                 </BodyShort>
               </>
             )
@@ -450,6 +477,7 @@ const TemaDashboardPage = () => {
   const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
   const [selectedEnhet, setSelectedEnhet] = useState<string>('')
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
+  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
 
   useEffect(() => {
     getDashboardStats()
@@ -462,7 +490,8 @@ const TemaDashboardPage = () => {
       undefined,
       selectedAvdeling || undefined,
       selectedSeksjon || undefined,
-      selectedEnhet || undefined
+      selectedEnhet || undefined,
+      selectedTeams.length > 0 ? selectedTeams.map((team) => team.id) : undefined
     )
       .then((data) => {
         setTemaStats(data)
@@ -470,7 +499,7 @@ const TemaDashboardPage = () => {
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
       .finally(() => setIsLoading(false))
-  }, [selectedAvdeling, selectedSeksjon, selectedEnhet])
+  }, [selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
 
   useEffect(() => {
     if (selectedAvdeling) {
@@ -509,46 +538,18 @@ const TemaDashboardPage = () => {
         </Heading>
       </div>
 
-      <ReadMore header='Hvordan bruker jeg denne siden?' className='max-w-[75ch] mt-4'>
-        <p>På denne siden kan du:</p>
-        <List className='mt-4'>
-          <List.Item>Få oversikt over Navs etterlevelse, inndelt etter tema.</List.Item>
-          <List.Item>
-            Filtrere etter avdeling og eventuelt seksjon slik at du kan se hvordan enkelte
-            organisasjonsdeler etterlever krav og suksesskriterier.
-          </List.Item>
-          <List.Item>
-            Navigere videre til enkelte temasider hvor du kan utforske etterlevelse av enkelte krav,
-            enten i hele Nav eller på avdelings- eller seksjonsnivå.
-          </List.Item>
-        </List>
-        <p className='mt-4'>
-          For mer detaljer anbefaler vi informasjonssidene{' '}
-          <AkselLink href='/omstottetiletterlevelse' target='_blank'>
-            Om Støtte til etterlevelse
-          </AkselLink>
-          ,{' '}
-          <AkselLink href='/om-pvk' target='_blank'>
-            Om Digital PVK
-          </AkselLink>{' '}
-          og{' '}
-          <AkselLink href='/om-behandlingskatalogen' target='_blank'>
-            Om Behandlingskatalogen
-          </AkselLink>
-          .
-        </p>
-      </ReadMore>
+      <TemaDashboardHowToReadmore />
 
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
           Tema
         </Heading>
 
-        <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
+        <div className='mt-4'>
           <Select
             label='Velg tema'
-            className='sm:w-fit sm:min-w-64'
-            style={{ width: '100%' }}
+            className='w-full'
+            style={{ maxWidth: 350 }}
             value={selectedTema}
             onChange={(e) => setSelectedTema(e.target.value)}
           >
@@ -559,11 +560,12 @@ const TemaDashboardPage = () => {
               </option>
             ))}
           </Select>
+        </div>
 
+        <div className='flex flex-row flex-wrap gap-4 mt-4 items-end'>
           <Select
             label='Filtrer etter avdeling'
-            className='sm:w-fit sm:min-w-64'
-            style={{ width: '100%' }}
+            style={{ width: 350 }}
             value={selectedAvdeling}
             onChange={(e) => {
               setSelectedAvdeling(e.target.value)
@@ -592,8 +594,7 @@ const TemaDashboardPage = () => {
             return selectedAvdeling && filteredSeksjoner.length > 0 ? (
               <Select
                 label='Filtrer etter seksjon'
-                className='sm:w-fit sm:min-w-64'
-                style={{ width: '100%' }}
+                style={{ width: 350 }}
                 value={selectedSeksjon}
                 onChange={(e) => {
                   setSelectedSeksjon(e.target.value)
@@ -614,8 +615,7 @@ const TemaDashboardPage = () => {
           {selectedSeksjon && selectedSeksjon !== 'ingen-seksjon' && enheter.length > 0 && (
             <Select
               label='Filtrer etter enhet'
-              className='sm:w-fit sm:min-w-64'
-              style={{ width: '100%' }}
+              style={{ width: 350 }}
               value={selectedEnhet}
               onChange={(e) => {
                 setSelectedEnhet(e.target.value)
@@ -658,6 +658,40 @@ const TemaDashboardPage = () => {
           >
             Last ned nøkkeltall som CSV
           </Button>
+        </div>
+
+        <div className='mt-4 max-w-xl'>
+          <Label htmlFor='tema-dashboard-team-search'>Søk etter team</Label>
+          <BodyShort size='small' className='mb-2 text-gray-600'>
+            Trykk Enter for å legge til teamet. Du kan velge flere.
+          </BodyShort>
+          <AsyncSelect
+            inputId='tema-dashboard-team-search'
+            aria-label='Søk etter team'
+            placeholder=''
+            tabSelectsValue={false}
+            components={{ DropdownIndicator }}
+            noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+            controlShouldRenderValue={false}
+            loadingMessage={() => 'Søker...'}
+            isClearable={false}
+            loadOptions={useSearchTeamOptions}
+            value={null}
+            onChange={(value: any) => {
+              if (value && !selectedTeams.some((team) => team.id === value.id)) {
+                setIsLoading(true)
+                setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
+              }
+            }}
+            styles={selectOverrides}
+          />
+          <RenderTagList
+            list={selectedTeams.map((team) => team.name)}
+            onRemove={(index) => {
+              setIsLoading(true)
+              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
+            }}
+          />
         </div>
 
         {isLoading && (
@@ -708,10 +742,10 @@ const TemaDashboardPage = () => {
           <InfoCard.Content>
             Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre som er valgt
             i søkefeltet, eller se{' '}
-            <AkselLink href='/dashboard/ingen-avdeling' target='_blank'>
+            <Link href='/dashboard/ingen-avdeling' target='_blank'>
               listen over etterlevelsesdokumenter der avdeling/seksjon ikke er valgt (åpner i en ny
               fane)
-            </AkselLink>
+            </Link>
             . Hvis du har andre tilbakemeldinger om dashboards, bli med på #etterlevelse på Slack,
             eller send mail til teamdatajegerne@nav.no.
           </InfoCard.Content>

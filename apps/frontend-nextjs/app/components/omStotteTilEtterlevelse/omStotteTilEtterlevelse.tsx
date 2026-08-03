@@ -3,7 +3,7 @@
 import OmStotteTilEtterlevelseAccordion from '@/components/omStotteTilEtterlevelse/omStotteTilEtterlevelseAccordion'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { BodyLong, Button, FormProgress, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -18,7 +18,7 @@ const OmStotteTilEtterlevelse = () => {
   return (
     <PageLayout pageTitle='Om Støtte til etterlevelse' currentPage='Støtte til etterlevelse'>
       <div className='flex gap-7 mt-10'>
-        <div className='sticky top-4 h-full'>
+        <div className='sticky top-4 h-full hidden md:block'>
           <div className='max-w-68.5'>
             <Stepper
               aria-labelledby='stepper-heading'
@@ -45,6 +45,30 @@ const OmStotteTilEtterlevelse = () => {
           </div>
         </div>
         <div className='max-w-[75ch]'>
+          <div className='md:hidden mb-6'>
+            <FormProgress
+              activeStep={activeStep + 1}
+              totalSteps={6}
+              onStepChange={(step) => setActiveStep(step - 1)}
+            >
+              <FormProgress.Step href='#formaalet-med-stotte-til-etterlevelse'>
+                Hva er formålet med Støtte til etterlevelse?
+              </FormProgress.Step>
+              <FormProgress.Step href='#forstesiden-i-stotte-til-etterlevelse'>
+                Førstesiden i Støtte til etterlevelse
+              </FormProgress.Step>
+              <FormProgress.Step href='#temainndeling-og-temaoversikt'>
+                Temainndeling og temaoversikt
+              </FormProgress.Step>
+              <FormProgress.Step href='#dette-inneholder-et-etterlevelseskrav'>
+                Dette inneholder et etterlevelseskrav
+              </FormProgress.Step>
+              <FormProgress.Step href='#hvordan-dokumentere-etterlevelse'>
+                Hvordan dokumentere etterlevelse
+              </FormProgress.Step>
+              <FormProgress.Step href='#ta-kontakt'>Ta kontakt</FormProgress.Step>
+            </FormProgress>
+          </div>
           <Heading id='stepper-heading' spacing size='large' level='1'>
             Om Støtte til etterlevelse
           </Heading>

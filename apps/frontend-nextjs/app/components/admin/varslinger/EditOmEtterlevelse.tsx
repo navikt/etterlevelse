@@ -67,8 +67,6 @@ export const EditOmEtterlevelse: FunctionComponent<TProps> = ({
               <Heading size='small' level='2' className='my-4'>
                 Om støtte til etterlevelse
               </Heading>
-              {/* Problem med react-draft-wysiwyg Editor komponent, når du setter en custom option som props vil du man få en ' Can't perform a React state update on an unmounted component' */}
-
               <TextAreaField
                 maxCharacter={maxChar}
                 height='12.5rem'

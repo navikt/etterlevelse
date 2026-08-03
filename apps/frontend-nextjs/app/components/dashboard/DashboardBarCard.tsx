@@ -71,6 +71,7 @@ const StackedBar = ({
 
 export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IProps) => {
   const dokData: IBarSegment[] = [
+    { name: 'Ikke p\u00e5begynt', value: stats.dokumenter.ikkePaabegynt ?? 0, color: '#8a3ffc' },
     { name: 'Under arbeid', value: stats.dokumenter.underArbeid, color: DOK_COLORS[0] },
     {
       name: 'Sendt til godkjenning',

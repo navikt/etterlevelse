@@ -253,13 +253,13 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               >
                 <option value={EPvoTilbakemeldingStatus.IKKE_PABEGYNT}>Ikke påbegynt</option>
                 <option value={EPvoTilbakemeldingStatus.UNDERARBEID}>Påbegynt</option>
-                <option value={EPvoTilbakemeldingStatus.AVVENTER}>Aventer</option>
+                <option value={EPvoTilbakemeldingStatus.AVVENTER}>Avventer</option>
                 <option value={EPvoTilbakemeldingStatus.SNART_FERDIG}>Snart Ferdig</option>
                 <option value={EPvoTilbakemeldingStatus.TIL_KONTROL}>PVO øvrig beslutning</option>
                 <option value={EPvoTilbakemeldingStatus.UTGAAR}>Utgår</option>
                 {user.isAdmin() && (
                   <option value={EPvoTilbakemeldingStatus.TRENGER_REVURDERING}>
-                    Trenger redvurdering
+                    Trenger revurdering
                   </option>
                 )}
               </Select>

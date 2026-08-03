@@ -3,7 +3,7 @@ import { Link, List, ReadMore } from '@navikt/ds-react'
 export const TemaDashboardReadmore = () => (
   <div style={{ maxWidth: '75ch' }}>
     <ReadMore
-      header='Hjelp til å tolke figurer og nøkkeltall om etterlevelse'
+      header='Hjelp til å tolke figurer og tall om etterlevelse'
       className='mt-4 max-w-[75ch]'
     >
       <List>
@@ -45,6 +45,11 @@ export const TemaDashboardReadmore = () => (
           registrert at de ble ferdig med vurderingen sin. Den tredje viser statistikk for krav som
           ikke ennå er registrert som ferdig vurdert, selv om etterleveren kan ha vurdert hvorvidt
           enkelte suksesskriterier etterleves.
+        </List.Item>
+        <List.Item>
+          <b>Er også utgåtte etterlevelseskrav med i beregning?</b>
+          <br />
+          Tallene over gjelder kun for aktive etterlevelseskrav.
         </List.Item>
       </List>
 

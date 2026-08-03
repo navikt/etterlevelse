@@ -41,7 +41,7 @@ import {
   ReadMore,
 } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
 
 type TProps = {
@@ -76,6 +76,13 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (savedSuccessful) {
+      const timer = setTimeout(() => setSavedSuccessful(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [savedSuccessful])
 
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
