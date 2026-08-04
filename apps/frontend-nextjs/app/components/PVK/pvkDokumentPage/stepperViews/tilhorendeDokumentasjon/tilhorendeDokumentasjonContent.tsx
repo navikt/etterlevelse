@@ -40,6 +40,7 @@ type TProps = {
   isPvkKravLoading: boolean
   isChangesMadeSinceLastSubmission?: boolean
   readOnly?: boolean
+  hideEditDokumentLink?: boolean
 }
 
 export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
@@ -48,6 +49,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   isPvkKravLoading,
   isChangesMadeSinceLastSubmission,
   readOnly,
+  hideEditDokumentLink,
 }) => {
   const router: AppRouterInstance = useRouter()
 
@@ -248,20 +250,24 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
               <InfoCard data-color='info'>
                 <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                   <InfoCard.Title>
-                    Dere har ikke lagt ved noen tilhørende dokumenter.
+                    {hideEditDokumentLink
+                      ? 'Det er ikke lagt ved noen tilhørende dokumenter.'
+                      : 'Dere har ikke lagt ved noen tilhørende dokumenter.'}
                   </InfoCard.Title>
                 </InfoCard.Header>
-                <InfoCard.Content>
-                  Dette kan dere gjøre under{' '}
-                  <Link
-                    href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    aria-label='redigere etterlevelsesdokumentasjon'
-                  >
-                    Rediger dokumentegenskaper (åpner i en ny fane).
-                  </Link>
-                </InfoCard.Content>
+                {!hideEditDokumentLink && (
+                  <InfoCard.Content>
+                    Dette kan dere gjøre under{' '}
+                    <Link
+                      href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label='redigere etterlevelsesdokumentasjon'
+                    >
+                      Rediger dokumentegenskaper (åpner i en ny fane).
+                    </Link>
+                  </InfoCard.Content>
+                )}
               </InfoCard>
             )}
 

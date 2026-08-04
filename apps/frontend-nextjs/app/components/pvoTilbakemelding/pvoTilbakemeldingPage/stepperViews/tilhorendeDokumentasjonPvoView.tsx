@@ -106,6 +106,7 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
               pvkKrav={pvkKrav}
               isPvkKravLoading={isPvkKravLoading}
               isChangesMadeSinceLastSubmission={isChangesMadeSinceLastSubmission}
+              hideEditDokumentLink
             />
           </div>
           <div className='w-1/2'>

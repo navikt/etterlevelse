@@ -705,108 +705,112 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               <option value='ingen-enhet'>Ikke valgt enhet</option>
             </Select>
           )}
-
-          <Button
-            variant='tertiary'
-            size='small'
-            icon={<DownloadIcon aria-hidden />}
-            onClick={() => {
-              if (!temaStats) return
-              const BOM = '\uFEFF'
-              const enhetNavn =
-                selectedEnhet === 'ingen-enhet'
-                  ? 'Ikke valgt enhet'
-                  : enheter.find((e) => e.id === selectedEnhet)?.navn
-              const filterLines = [
-                `Tema;${temaName}`,
-                `Avdeling;${avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn || 'Alle avdelinger'}`,
-                `Seksjon;${selectedSeksjon === 'ingen-seksjon' ? 'Ikke valgt seksjon' : seksjoner.find((s) => s.id === selectedSeksjon)?.navn || 'Alle seksjoner'}`,
-                ...(enheter.length > 0 ? [`Enhet;${enhetNavn || 'Alle enheter'}`] : []),
-                '',
-              ]
-              const header = [
-                'Krav totalt',
-                'Krav ikke påbegynt',
-                'Krav under arbeid',
-                'Krav ferdig vurdert',
-                'Suksesskriterier ikke påbegynt',
-                'Suksesskriterier under arbeid',
-                'Suksesskriterier oppfylt',
-                'Suksesskriterier ikke oppfylt',
-                'Suksesskriterier ikke relevant',
-                'Ferdig utfylt krav - suksesskriterier oppfylt',
-                'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
-                'Ferdig utfylt krav - suksesskriterier ikke relevant',
-                'Ikke ferdig utfylt krav - suksesskriterier ikke påbegynt',
-                'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
-                'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
-                'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
-                'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
-              ].join(';')
-              const row = [
-                temaStats.kravIkkePaabegynt + temaStats.kravTotal,
-                temaStats.kravIkkePaabegynt,
-                temaStats.kravUnderArbeid,
-                temaStats.kravFerdigVurdert,
-                temaStats.suksesskriterierIkkePaabegynt,
-                temaStats.suksesskriterierUnderArbeid,
-                temaStats.suksesskriterierOppfylt,
-                temaStats.suksesskriterierIkkeOppfylt,
-                temaStats.suksesskriterierIkkeRelevant,
-                temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
-                temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
-                temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
-                temaStats.suksesskriterierIkkePaabegynt,
-                temaStats.suksesskriterierUnderArbeid,
-                temaStats.suksesskriterierOppfylt -
-                  (temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
-                temaStats.suksesskriterierIkkeOppfylt -
-                  (temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
-                temaStats.suksesskriterierIkkeRelevant -
-                  (temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
-              ].join(';')
-              const csv = BOM + [...filterLines, header, row].join('\n')
-              const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-              const url = URL.createObjectURL(blob)
-              const link = document.createElement('a')
-              link.href = url
-              link.download = `overordnet-${temaName}-${new Date().toISOString().slice(0, 10)}.csv`
-              link.click()
-              URL.revokeObjectURL(url)
-            }}
-            disabled={isLoading || !temaStats}
-            className='pr-4'
-          >
-            Last ned nøkkeltall som CSV
-          </Button>
         </div>
 
-        <div className='mt-4 max-w-xl'>
+        <div className='mt-4'>
           <Label htmlFor='tema-detail-team-search'>Søk etter team</Label>
           <BodyShort size='small' className='mb-2 text-gray-600'>
             Trykk Enter for å legge til teamet. Du kan velge flere.
           </BodyShort>
-          <AsyncSelect
-            inputId='tema-detail-team-search'
-            aria-label='Søk etter team'
-            placeholder=''
-            tabSelectsValue={false}
-            components={{ DropdownIndicator }}
-            noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-            controlShouldRenderValue={false}
-            loadingMessage={() => 'Søker...'}
-            isClearable={false}
-            loadOptions={useSearchTeamOptions}
-            value={null}
-            onChange={(value: any) => {
-              if (value && !selectedTeams.some((team) => team.id === value.id)) {
-                setIsLoading(true)
-                setIsTableLoading(true)
-                setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
-              }
-            }}
-            styles={selectOverrides}
-          />
+          <div className='flex flex-row flex-wrap gap-4 items-end'>
+            <div className='max-w-xl grow'>
+              <AsyncSelect
+                inputId='tema-detail-team-search'
+                aria-label='Søk etter team'
+                placeholder=''
+                tabSelectsValue={false}
+                components={{ DropdownIndicator }}
+                noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                controlShouldRenderValue={false}
+                loadingMessage={() => 'Søker...'}
+                isClearable={false}
+                loadOptions={useSearchTeamOptions}
+                value={null}
+                onChange={(value: any) => {
+                  if (value && !selectedTeams.some((team) => team.id === value.id)) {
+                    setIsLoading(true)
+                    setIsTableLoading(true)
+                    setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
+                  }
+                }}
+                styles={selectOverrides}
+              />
+            </div>
+
+            <Button
+              variant='tertiary'
+              size='small'
+              icon={<DownloadIcon aria-hidden />}
+              onClick={() => {
+                if (!temaStats) return
+                const BOM = '\uFEFF'
+                const enhetNavn =
+                  selectedEnhet === 'ingen-enhet'
+                    ? 'Ikke valgt enhet'
+                    : enheter.find((e) => e.id === selectedEnhet)?.navn
+                const filterLines = [
+                  `Tema;${temaName}`,
+                  `Avdeling;${avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn || 'Alle avdelinger'}`,
+                  `Seksjon;${selectedSeksjon === 'ingen-seksjon' ? 'Ikke valgt seksjon' : seksjoner.find((s) => s.id === selectedSeksjon)?.navn || 'Alle seksjoner'}`,
+                  ...(enheter.length > 0 ? [`Enhet;${enhetNavn || 'Alle enheter'}`] : []),
+                  '',
+                ]
+                const header = [
+                  'Krav totalt',
+                  'Krav ikke påbegynt',
+                  'Krav under arbeid',
+                  'Krav ferdig vurdert',
+                  'Suksesskriterier ikke påbegynt',
+                  'Suksesskriterier under arbeid',
+                  'Suksesskriterier oppfylt',
+                  'Suksesskriterier ikke oppfylt',
+                  'Suksesskriterier ikke relevant',
+                  'Ferdig utfylt krav - suksesskriterier oppfylt',
+                  'Ferdig utfylt krav - suksesskriterier ikke oppfylt',
+                  'Ferdig utfylt krav - suksesskriterier ikke relevant',
+                  'Ikke ferdig utfylt krav - suksesskriterier ikke påbegynt',
+                  'Ikke ferdig utfylt krav - suksesskriterier under arbeid',
+                  'Ikke ferdig utfylt krav - suksesskriterier oppfylt',
+                  'Ikke ferdig utfylt krav - suksesskriterier ikke oppfylt',
+                  'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
+                ].join(';')
+                const row = [
+                  temaStats.kravIkkePaabegynt + temaStats.kravTotal,
+                  temaStats.kravIkkePaabegynt,
+                  temaStats.kravUnderArbeid,
+                  temaStats.kravFerdigVurdert,
+                  temaStats.suksesskriterierIkkePaabegynt,
+                  temaStats.suksesskriterierUnderArbeid,
+                  temaStats.suksesskriterierOppfylt,
+                  temaStats.suksesskriterierIkkeOppfylt,
+                  temaStats.suksesskriterierIkkeRelevant,
+                  temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
+                  temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
+                  temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
+                  temaStats.suksesskriterierIkkePaabegynt,
+                  temaStats.suksesskriterierUnderArbeid,
+                  temaStats.suksesskriterierOppfylt -
+                    (temaStats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0),
+                  temaStats.suksesskriterierIkkeOppfylt -
+                    (temaStats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0),
+                  temaStats.suksesskriterierIkkeRelevant -
+                    (temaStats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0),
+                ].join(';')
+                const csv = BOM + [...filterLines, header, row].join('\n')
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+                const url = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = `overordnet-${temaName}-${new Date().toISOString().slice(0, 10)}.csv`
+                link.click()
+                URL.revokeObjectURL(url)
+              }}
+              disabled={isLoading || !temaStats}
+              className='pr-4'
+            >
+              Last ned nøkkeltall som CSV
+            </Button>
+          </div>
           <RenderTagList
             list={selectedTeams.map((team) => team.name)}
             variant='action'

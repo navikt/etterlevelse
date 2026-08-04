@@ -151,28 +151,28 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
-          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-12'>
             Kravstatus
           </Heading>
           <RechartsStackedBar data={kravData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-12'>
             Etterlevelse: suksesskriterier
           </Heading>
           <RechartsStackedBar data={suksessData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-12'>
             Suksesskriterier der kravet er ferdig utfylt
           </Heading>
           <RechartsStackedBar data={ferdigSuksessData} percentageOnly />
         </div>
 
         <div>
-          <Heading size='xsmall' level='4' className='min-h-[3rem]'>
+          <Heading size='xsmall' level='4' className='min-h-12'>
             Suksesskriterier der kravet ikke er ferdig utfylt
           </Heading>
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
@@ -418,6 +418,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
   const header = [
     'Tema',
     'Krav totalt',
+    'Krav ikke påbegynt',
     'Krav under arbeid',
     'Krav ferdig vurdert',
     'Suksesskriterier ikke påbegynt',
@@ -438,7 +439,8 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
   const rows = stats.map((s) =>
     [
       s.temaName,
-      s.kravTotal,
+      s.kravIkkePaabegynt + s.kravTotal,
+      s.kravIkkePaabegynt,
       s.kravUnderArbeid,
       s.kravFerdigVurdert,
       s.suksesskriterierIkkePaabegynt,
@@ -633,58 +635,62 @@ const TemaDashboardPage = () => {
               <option value='ingen-enhet'>Ikke valgt enhet</option>
             </Select>
           )}
-
-          <Button
-            variant='tertiary'
-            size='small'
-            icon={<DownloadIcon aria-hidden />}
-            onClick={() =>
-              exportToCsv(filteredTemaStats, {
-                tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
-                avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
-                seksjon:
-                  selectedSeksjon === 'ingen-seksjon'
-                    ? 'Ikke valgt seksjon'
-                    : seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
-                enhet:
-                  selectedEnhet === 'ingen-enhet'
-                    ? 'Ikke valgt enhet'
-                    : enheter.find((e) => e.id === selectedEnhet)?.navn,
-                hasEnheter: enheter.length > 0,
-              })
-            }
-            disabled={isLoading || filteredTemaStats.length === 0}
-            className='pr-4'
-          >
-            Last ned nøkkeltall som CSV
-          </Button>
         </div>
 
-        <div className='mt-4 max-w-xl'>
+        <div className='mt-4'>
           <Label htmlFor='tema-dashboard-team-search'>Søk etter team</Label>
           <BodyShort size='small' className='mb-2 text-gray-600'>
             Trykk Enter for å legge til teamet. Du kan velge flere.
           </BodyShort>
-          <AsyncSelect
-            inputId='tema-dashboard-team-search'
-            aria-label='Søk etter team'
-            placeholder=''
-            tabSelectsValue={false}
-            components={{ DropdownIndicator }}
-            noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-            controlShouldRenderValue={false}
-            loadingMessage={() => 'Søker...'}
-            isClearable={false}
-            loadOptions={useSearchTeamOptions}
-            value={null}
-            onChange={(value: any) => {
-              if (value && !selectedTeams.some((team) => team.id === value.id)) {
-                setIsLoading(true)
-                setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
+          <div className='flex flex-row flex-wrap gap-4 items-end'>
+            <div className='max-w-xl grow'>
+              <AsyncSelect
+                inputId='tema-dashboard-team-search'
+                aria-label='Søk etter team'
+                placeholder=''
+                tabSelectsValue={false}
+                components={{ DropdownIndicator }}
+                noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                controlShouldRenderValue={false}
+                loadingMessage={() => 'Søker...'}
+                isClearable={false}
+                loadOptions={useSearchTeamOptions}
+                value={null}
+                onChange={(value: any) => {
+                  if (value && !selectedTeams.some((team) => team.id === value.id)) {
+                    setIsLoading(true)
+                    setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
+                  }
+                }}
+                styles={selectOverrides}
+              />
+            </div>
+
+            <Button
+              variant='tertiary'
+              size='small'
+              icon={<DownloadIcon aria-hidden />}
+              onClick={() =>
+                exportToCsv(filteredTemaStats, {
+                  tema: temaStats.find((t) => t.temaCode === selectedTema)?.temaName,
+                  avdeling: avdelinger.find((a) => a.avdelingId === selectedAvdeling)?.avdelingNavn,
+                  seksjon:
+                    selectedSeksjon === 'ingen-seksjon'
+                      ? 'Ikke valgt seksjon'
+                      : seksjoner.find((s) => s.id === selectedSeksjon)?.navn,
+                  enhet:
+                    selectedEnhet === 'ingen-enhet'
+                      ? 'Ikke valgt enhet'
+                      : enheter.find((e) => e.id === selectedEnhet)?.navn,
+                  hasEnheter: enheter.length > 0,
+                })
               }
-            }}
-            styles={selectOverrides}
-          />
+              disabled={isLoading || filteredTemaStats.length === 0}
+              className='pr-4'
+            >
+              Last ned nøkkeltall som CSV
+            </Button>
+          </div>
           <RenderTagList
             list={selectedTeams.map((team) => team.name)}
             onRemove={(index) => {

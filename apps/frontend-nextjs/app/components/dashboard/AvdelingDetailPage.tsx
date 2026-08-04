@@ -38,11 +38,11 @@ import {
   List,
   LocalAlert,
   ReadMore,
+  Search,
   Select,
   SortState,
   Table,
   Tabs,
-  UNSAFE_Combobox,
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
@@ -538,27 +538,25 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </div>
 
         <div className='flex flex-col md:flex-row md:items-end gap-4 mt-4'>
-          <UNSAFE_Combobox
-            label='Søk etter team, personer eller dokumentnavn'
-            description='Trykk Enter for å legge til søkeord. Du kan velge flere.'
-            options={[]}
-            allowNewValues
-            isMultiSelect
-            value={searchValue}
-            onChange={(val) => setSearchValue(val)}
-            onClear={() => setSearchValue('')}
-            selectedOptions={searchFilters}
-            shouldShowSelectedOptions={false}
-            onToggleSelected={(option, isSelected) => {
-              if (isSelected) {
-                addSearchFilter(option)
-                setSearchValue('')
-              } else {
-                removeSearchFilter(option)
-              }
-            }}
+          <form
+            role='search'
             className='flex-1'
-          />
+            onSubmit={(e) => {
+              e.preventDefault()
+              addSearchFilter(searchValue)
+              setSearchValue('')
+            }}
+          >
+            <Search
+              label='Søk etter team, personer eller dokumentnavn'
+              description='Trykk Enter for å legge til søkeord. Du kan velge flere.'
+              hideLabel={false}
+              variant='secondary'
+              value={searchValue}
+              onChange={setSearchValue}
+              onClear={() => setSearchValue('')}
+            />
+          </form>
           <Button
             variant='tertiary'
             size='small'
@@ -583,10 +581,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               ]
               const header = [
                 'Etterlevelsesdokumenter totalt',
-                'Ikke påbegynt',
-                'Under arbeid',
-                'Sendt til godkjenning',
-                'Godkjent',
+                'Etterlevelsesdokumenter - ikke påbegynt',
+                'Etterlevelsesdokumenter - under arbeid',
+                'Etterlevelsesdokumenter - sendt til godkjenning',
+                'Etterlevelsesdokumenter - godkjent',
                 'Suksesskriterier - ikke påbegynt %',
                 'Suksesskriterier - under arbeid %',
                 'Suksesskriterier - oppfylt %',
@@ -598,11 +596,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 'Skal gjennomføre PVK',
                 'PVK i Word',
                 'Digital PVK totalt',
-                'Ikke påbegynt',
-                'Under arbeid',
-                'Til behandling hos PVO',
-                'Tilbakemelding fra PVO',
-                'Godkjent av risikoeier',
+                'Digital PVK - ikke påbegynt',
+                'Digital PVK - under arbeid',
+                'Digital PVK - til behandling hos PVO',
+                'Digital PVK - tilbakemelding fra PVO',
+                'Digital PVK - godkjent av risikoeier',
               ].join(';')
               const row = [
                 stats.dokumenter.total,

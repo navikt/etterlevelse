@@ -1,5 +1,5 @@
 # Stage 1: Build the Next.js application
-FROM node:26.5.0-alpine AS builder
+FROM node:26.5.1-alpine AS builder
 
 WORKDIR /usr/app
 
@@ -10,7 +10,6 @@ COPY package.json .
 COPY yarn.lock .
 COPY .yarnrc.yml .
 COPY .yarn/releases ./.yarn/releases
-COPY patches ./patches
 
 # Install dependencies
 RUN node .yarn/releases/yarn-4.16.0.cjs --version && node .yarn/releases/yarn-4.16.0.cjs install --immutable
