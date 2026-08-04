@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
-import no.nav.data.etterlevelse.krav.dto.SuksesskriterieRequest;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.Vurdering;

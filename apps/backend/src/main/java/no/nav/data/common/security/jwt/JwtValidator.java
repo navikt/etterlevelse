@@ -11,6 +11,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.interfaces.RSAPublicKey;
 
@@ -20,7 +22,7 @@ public class JwtValidator {
     public static DecodedJWT isJwtTokenValid(String token) throws JwkException{
         DecodedJWT jwt = JWT.decode(token);
         try {
-            URL azureOpenIdConfig = new URL(System.getenv("AZURE_OPENID_CONFIG_JWKS_URI"));
+            URL azureOpenIdConfig = new URI(System.getenv("AZURE_OPENID_CONFIG_JWKS_URI")).toURL();
             JwkProvider provider = new UrlJwkProvider(azureOpenIdConfig);
             log.info("Validating token from: " + jwt.getClaim("azp"));
             Jwk jwk = provider.get(jwt.getKeyId());
@@ -31,7 +33,7 @@ public class JwtValidator {
                     .withArrayClaim("roles", "arkiv-admin", "access_as_application")
                     .build();
             return verifier.verify(token);
-        } catch (MalformedURLException e) {
+        } catch (URISyntaxException | MalformedURLException e) {
             log.error("Invalid azure openid config url for jwks uri");
             throw new RuntimeException("Invalid url: " + e);
         }

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
@@ -17,7 +16,6 @@ import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import no.nav.data.etterlevelse.krav.domain.Suksesskriterie;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
-import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.time.LocalDateTime;
 import java.util.List;

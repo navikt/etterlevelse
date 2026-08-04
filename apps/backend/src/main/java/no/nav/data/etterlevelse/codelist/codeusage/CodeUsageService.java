@@ -2,7 +2,6 @@ package no.nav.data.etterlevelse.codelist.codeusage;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.prometheus.client.Summary;
-import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.utils.StreamUtils;
 import no.nav.data.common.validator.Validated;
@@ -28,7 +27,9 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.replaceAll;
 import static java.util.stream.Collectors.toList;
-import static no.nav.data.common.utils.StreamUtils.*;
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.filter;
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 import static no.nav.data.etterlevelse.codelist.CodelistService.getCodelist;
 
 @Service

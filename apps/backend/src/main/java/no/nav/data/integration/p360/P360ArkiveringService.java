@@ -1,26 +1,24 @@
 package no.nav.data.integration.p360;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopRepo;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.export.EtterlevelseDokumentasjonToDoc;
 import no.nav.data.integration.p360.dto.P360Case;
 import no.nav.data.integration.p360.dto.P360CaseRequest;
 import no.nav.data.integration.p360.dto.P360DocumentCreateRequest;
 import no.nav.data.integration.p360.dto.P360File;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Slf4j
 @Service

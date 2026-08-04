@@ -14,7 +14,6 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentas
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.integration.p360.P360ArkiveringService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvkdokument.dto.PvkDokumentListItemResponse;
@@ -48,7 +47,6 @@ public class PvkDokumentController {
     private final RisikoscenarioService risikoscenarioService;
     private final P360ArkiveringService p360ArkiveringService;
     private final TiltakService tiltakService;
-    private final PvkDokumentRepo pvkDokumentRepo;
 
     @Operation(summary = "Get All Pvk Document")
     @ApiResponse(description = "ok")

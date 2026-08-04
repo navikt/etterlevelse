@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
-import no.nav.data.integration.team.dto.Resource;
-import no.nav.data.pvk.pvotilbakemelding.domain.*;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

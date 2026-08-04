@@ -82,8 +82,6 @@ public class EtterlevelseDokumentasjonToDoc {
         doc.newLine();
         doc.addLabel("Godkjent av risikoeier:");
         if (etterlevelseDokumentasjon.getStatus() == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) {
-            List<String> risikoeierNameList = etterlevelseDokumentasjon.getRisikoeiereData().stream().map(risikoeier -> risikoeier.getFullName() + ", ").toList();
-            var nameListLength = risikoeierNameList.size();
             var versjonHistorikk = etterlevelseDokumentasjon
                     .getVersjonHistorikk().stream().filter(historikk -> Objects.equals(historikk.getVersjon(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon()))
                     .toList().getFirst();
