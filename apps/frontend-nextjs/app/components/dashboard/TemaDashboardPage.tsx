@@ -418,6 +418,7 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
   const header = [
     'Tema',
     'Krav totalt',
+    'Krav ikke påbegynt',
     'Krav under arbeid',
     'Krav ferdig vurdert',
     'Suksesskriterier ikke påbegynt',
@@ -438,7 +439,8 @@ const exportToCsv = (stats: ITemaDashboardStats[], filters: IExportFilters) => {
   const rows = stats.map((s) =>
     [
       s.temaName,
-      s.kravTotal,
+      s.kravIkkePaabegynt + s.kravTotal,
+      s.kravIkkePaabegynt,
       s.kravUnderArbeid,
       s.kravFerdigVurdert,
       s.suksesskriterierIkkePaabegynt,
