@@ -19,7 +19,7 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 
 type TProps = {
   personkategorier: string[]
@@ -51,6 +51,13 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
   )
 
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (savedSuccessful) {
+      const timer = setTimeout(() => setSavedSuccessful(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [savedSuccessful])
 
   return (
     <div className='w-full'>

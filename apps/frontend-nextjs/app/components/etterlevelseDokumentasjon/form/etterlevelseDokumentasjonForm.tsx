@@ -172,11 +172,15 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             .filter((index: number) => !irrelevansIndex.includes(index))
         )
       } else {
-        setSelectedFilter(
-          relevansOptions.map((_relevans: IGetParsedOptionsProps, index: number) => {
-            return index
-          })
-        )
+        setSelectedFilter([])
+        if (!etterlevelseDokumentasjon) {
+          formRef.current?.setFieldValue(
+            'irrelevansFor',
+            relevansOptions.map((r: IGetParsedOptionsProps) =>
+              codelist.utils.getCode(EListName.RELEVANS, r.value)
+            )
+          )
+        }
       }
     })()
   }, [etterlevelseDokumentasjon, codelist.lists])
@@ -313,6 +317,12 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
       )}
       onSubmit={submit}
       validationSchema={etterlevelseDokumentasjonSchema()}
+      validate={() => {
+        if (selectedFilter.length === 0) {
+          return { irrelevansFor: 'Du må velge minst én egenskap' }
+        }
+        return {}
+      }}
       validateOnChange={false}
       validateOnBlur={validateOnBlur}
       innerRef={formRef}
@@ -355,9 +365,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
                     Velg egenskaper
                   </Heading>
                   <CheckboxGroup
+                    id='irrelevansFor'
                     legend='Hvilke egenskaper gjelder for etterlevelsen?'
                     description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
                     value={selectedFilter}
+                    error={errors.irrelevansFor as string | undefined}
                     onChange={(selected: number[]) => {
                       const irrelevansListe = relevansOptions.filter(
                         (_irrelevans: IGetParsedOptionsProps, index: number) =>

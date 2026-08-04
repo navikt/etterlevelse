@@ -1,0 +1,128 @@
+
+-- remove constraints to be able to update the version numbers --
+ALTER TABLE etterlevelse_metadata
+DROP CONSTRAINT fk_metadata_krav_krav_id;
+
+ALTER TABLE tilbakemelding
+DROP CONSTRAINT fk_tilbakemelding_krav_krav_id;
+
+-- Krav 147 --
+
+-- versjon 2 til 1 --
+UPDATE KRAV
+SET KRAV_VERSJON = '1'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '2';
+
+UPDATE ETTERLEVELSE
+SET KRAV_VERSJON = '1'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '2';
+
+UPDATE ETTERLEVELSE_METADATA
+SET KRAV_VERSJON = '1'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '2';
+
+UPDATE TILBAKEMELDING
+SET KRAV_VERSJON = '1'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '2';
+
+-- versjon 3 til 2 --
+UPDATE KRAV
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '3';
+
+UPDATE ETTERLEVELSE
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '3';
+
+UPDATE ETTERLEVELSE_METADATA
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '3';
+
+UPDATE TILBAKEMELDING
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '147' and KRAV_VERSJON = '3';
+
+
+-- Krav 196 --
+
+-- versjon 3 til 2 --
+UPDATE KRAV
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '3';
+
+UPDATE ETTERLEVELSE
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '3';
+
+UPDATE ETTERLEVELSE_METADATA
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '3';
+
+UPDATE TILBAKEMELDING
+SET KRAV_VERSJON = '2'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '3';
+
+-- versjon 4 til 3 --
+UPDATE KRAV
+SET KRAV_VERSJON = '3'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '4';
+
+UPDATE ETTERLEVELSE
+SET KRAV_VERSJON = '3'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '4';
+
+UPDATE ETTERLEVELSE_METADATA
+SET KRAV_VERSJON = '3'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '4';
+
+UPDATE TILBAKEMELDING
+SET KRAV_VERSJON = '3'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '4';
+
+-- versjon 5 til 4 --
+UPDATE KRAV
+SET KRAV_VERSJON = '4'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '5';
+
+UPDATE ETTERLEVELSE
+SET KRAV_VERSJON = '4'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '5';
+
+UPDATE ETTERLEVELSE_METADATA
+SET KRAV_VERSJON = '4'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '5';
+
+UPDATE TILBAKEMELDING
+SET KRAV_VERSJON = '4'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '5';
+
+-- versjon 6 til 5 --
+UPDATE KRAV
+SET KRAV_VERSJON = '5'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '6';
+
+UPDATE ETTERLEVELSE
+SET KRAV_VERSJON = '5'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '6';
+
+UPDATE ETTERLEVELSE_METADATA
+SET KRAV_VERSJON = '5'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '6';
+
+UPDATE TILBAKEMELDING
+SET KRAV_VERSJON = '5'
+WHERE KRAV_NUMMER = '196' and KRAV_VERSJON = '6';
+
+
+-- add constraints after updated version numbers --
+alter table etterlevelse_metadata
+    add constraint fk_metadata_krav_krav_id
+        foreign key (krav_nummer, krav_versjon)
+            references krav (krav_nummer, krav_versjon)
+;
+
+alter table tilbakemelding
+    add constraint fk_tilbakemelding_krav_krav_id
+        foreign key (krav_nummer, krav_versjon)
+            references krav (krav_nummer, krav_versjon)
+;

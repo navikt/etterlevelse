@@ -21,7 +21,7 @@ import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokum
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { Button, Loader, Modal, Stepper } from '@navikt/ds-react'
+import { Button, FormProgress, Loader, Modal, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -220,7 +220,7 @@ export const PvoTilbakemeldingPage = () => {
               <div className='w-full max-w-7xl'>
                 <div className='px-2 pb-6'>
                   <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
-                  <div>
+                  <div className='hidden md:block'>
                     <Stepper
                       aria-labelledby='stepper-heading'
                       activeStep={activeStep}
@@ -238,6 +238,20 @@ export const PvoTilbakemeldingPage = () => {
                         )
                       })}
                     </Stepper>
+                  </div>
+                  <div className='md:hidden'>
+                    <FormProgress
+                      activeStep={activeStep}
+                      totalSteps={StepTitle.length}
+                      onStepChange={(step) => {
+                        setSelectedStep(step)
+                        updateTitleUrlAndStep(step)
+                      }}
+                    >
+                      {StepTitle.map((title) => (
+                        <FormProgress.Step key={title}>{title}</FormProgress.Step>
+                      ))}
+                    </FormProgress>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.etterlevelse;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.data.IntegrationTestBase;
+import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseController.EtterlevelsePage;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -28,6 +30,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 public class EtterlevelseIT extends IntegrationTestBase {
 
     @Autowired
@@ -36,6 +39,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
     @BeforeEach
     void setUp() {
         CodelistStub.initializeCodelist();
+        TestConfig.MockFilter.setUser(TestConfig.MockFilter.BRUKER);
     }
 
     @Test

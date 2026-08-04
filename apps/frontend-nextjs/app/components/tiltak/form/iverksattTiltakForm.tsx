@@ -2,7 +2,7 @@ import { mapTiltakToFormValue } from '@/api/tiltak/tiltakApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { PencilIcon } from '@navikt/aksel-icons'
+import { WrenchIcon } from '@navikt/aksel-icons'
 import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikHelpers } from 'formik'
 import { FunctionComponent, RefObject, useState } from 'react'
@@ -42,14 +42,14 @@ export const IverksattTiltakForm: FunctionComponent<TProps> = ({
               variant='tertiary'
               size='small'
               onClick={() => setIsModalOpen(true)}
-              icon={<PencilIcon title='' aria-hidden />}
+              icon={<WrenchIcon title='' aria-hidden />}
             >
               {!values.iverksatt ? 'Marker tiltaket som iverksatt' : 'Endre iverksatt tilstand'}
             </Button>
             <Modal
               open={isModalOpen}
               header={{
-                heading: !values.iverksatt
+                heading: !initialValues.iverksatt
                   ? 'Marker tiltaket som iverksatt'
                   : 'Endre iverksatt tilstand',
                 closeButton: false,
@@ -99,6 +99,7 @@ export const IverksattTiltakForm: FunctionComponent<TProps> = ({
                   type='button'
                   onClick={async () => {
                     await submitForm()
+                    setIsModalOpen(false)
                   }}
                 >
                   Lagre

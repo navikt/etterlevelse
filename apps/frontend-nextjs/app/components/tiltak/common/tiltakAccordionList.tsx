@@ -9,7 +9,10 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import {
+  ITiltak,
+  filterTiltakList,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
   pvkDokumentasjonTabFilterTiltakUrl,
   pvkDokumentasjonTabFilterUrl,
@@ -27,6 +30,7 @@ type TProps = {
   setTiltakList: (state: ITiltak[]) => void
   filteredTiltakList: ITiltak[]
   setFilteredTiltakList: (state: ITiltak[]) => void
+  tiltakFilter: string
   risikoscenarioList: IRisikoscenario[]
   formRef: RefObject<any>
 }
@@ -38,6 +42,7 @@ type TContentProps = {
   setTiltakList: (state: ITiltak[]) => void
   filteredTiltakList: ITiltak[]
   setFilteredTiltakList: (state: ITiltak[]) => void
+  tiltakFilter: string
   risikoscenarioList: IRisikoscenario[]
   formRef: RefObject<any>
 }
@@ -48,6 +53,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
   setTiltakList,
   filteredTiltakList,
   setFilteredTiltakList,
+  tiltakFilter,
   risikoscenarioList,
   formRef,
 }) => {
@@ -124,7 +130,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                   )}
                   {!tiltak.iverksatt &&
                     tiltak.frist &&
-                    moment(now).isAfter(moment(tiltak.frist)) && (
+                    moment(now).isAfter(moment(tiltak.frist), 'day') && (
                       <Tag variant='warning'>Tiltaksfrist utløpt</Tag>
                     )}
                 </div>
@@ -139,6 +145,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                     filteredTiltakList={filteredTiltakList}
                     setTiltakList={setTiltakList}
                     setFilteredTiltakList={setFilteredTiltakList}
+                    tiltakFilter={tiltakFilter}
                     formRef={formRef}
                   />
                 </Accordion.Content>
@@ -164,8 +171,8 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
   risikoscenarioList,
   tiltakList,
   setTiltakList,
-  filteredTiltakList,
   setFilteredTiltakList,
+  tiltakFilter,
   formRef,
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
@@ -174,24 +181,15 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
   const submit = async (submitedValues: ITiltak) => {
     await updateTiltak(submitedValues)
       .then((response) => {
-        setFilteredTiltakList(
-          filteredTiltakList.map((tiltak) => {
-            if (tiltak.id === response.id) {
-              return { ...response }
-            } else {
-              return tiltak
-            }
-          })
-        )
-        setTiltakList(
-          tiltakList.map((tiltak) => {
-            if (tiltak.id === response.id) {
-              return { ...response }
-            } else {
-              return tiltak
-            }
-          })
-        )
+        const updatedTiltakList: ITiltak[] = tiltakList.map((tiltak) => {
+          if (tiltak.id === response.id) {
+            return { ...response }
+          } else {
+            return tiltak
+          }
+        })
+        setTiltakList(updatedTiltakList)
+        setFilteredTiltakList(filterTiltakList(updatedTiltakList, tiltakFilter))
       })
       .finally(() => {
         setIsEditModalOpen(false)
@@ -201,7 +199,11 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
 
   return (
     <div>
-      <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
+      <TiltakView
+        tiltak={tiltak}
+        risikoscenarioList={risikoscenarioList}
+        etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId}
+      />
       {!iverksattFormDirty && pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
         <div className='mb-5'>
           <Button

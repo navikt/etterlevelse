@@ -25,7 +25,15 @@ import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useContext, useMemo, useRef, useState } from 'react'
+import {
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import SendInnPvoViewFerdig from './sendInnPvoViewFerdig'
 import SendInnPvoViewIkkeFerdig from './sendInnPvoViewIkkeFerdig'
 
@@ -68,6 +76,13 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   }, [codelistUtils])
   const [sucessSubmit, setSuccessSubmit] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
+
+  useEffect(() => {
+    if (sucessSubmit) {
+      const timer = setTimeout(() => setSuccessSubmit(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [sucessSubmit])
 
   const submit = async (submittedValues: IVurdering): Promise<void> => {
     //backend vil oppdatere statusen til PVk dokument til 'SENDT_TIL_PVO', dersom statusen til PVO tilbakemelding = 'ikke påbegynt' eller 'avventer'

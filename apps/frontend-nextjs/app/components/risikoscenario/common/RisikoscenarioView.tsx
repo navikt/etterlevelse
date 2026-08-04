@@ -10,7 +10,7 @@ import {
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { LinkIcon } from '@navikt/aksel-icons'
-import { BodyLong, CopyButton, InlineMessage, List, ReadMore } from '@navikt/ds-react'
+import { BodyLong, CopyButton, Label, List, LocalAlert } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import RisikoscenarioTag from './risikoscenarioTag'
 
@@ -35,6 +35,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       {!noCopyButton && (
         <CopyButton
           variant='action'
+          size='small'
           copyText={pvkDokumentasjonCopyUrl(
             window.location.origin,
             etterlevelseDokumentasjonId,
@@ -46,34 +47,10 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
           icon={<LinkIcon aria-hidden />}
         />
       )}
-      {markdownCopyLinkButton && (
-        <CopyButton
-          variant='action'
-          copyText={`[${risikoscenario.navn}](${pvkDokumentasjonCopyUrl(
-            window.location.origin,
-            etterlevelseDokumentasjonId,
-            risikoscenario.pvkDokumentId,
-            queryUrl
-          )})`}
-          text='Kopier scenario riktekstfelt lenke med titel'
-          activeText='Lenken er kopiert'
-          icon={<LinkIcon aria-hidden />}
-        />
-      )}
-      <BodyLong className='mt-5'>{risikoscenario.beskrivelse}</BodyLong>
-
-      {risikoscenario.generelScenario && (
-        <BodyLong className='mt-8'>
-          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
-        </BodyLong>
-      )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore
-          header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer'
-          className='mt-5'
-          defaultOpen={!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0}
-        >
+        <div className='mt-5'>
+          <Label>Brukes av følgende krav:</Label>
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
@@ -97,7 +74,32 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
               }
             )}
           </List>
-        </ReadMore>
+        </div>
+      )}
+
+      {markdownCopyLinkButton && (
+        <CopyButton
+          variant='action'
+          copyText={`[${risikoscenario.navn}](${pvkDokumentasjonCopyUrl(
+            window.location.origin,
+            etterlevelseDokumentasjonId,
+            risikoscenario.pvkDokumentId,
+            queryUrl
+          )})`}
+          text='Kopier scenario riktekstfelt lenke med tittel'
+          activeText='Lenken er kopiert'
+          icon={<LinkIcon aria-hidden />}
+        />
+      )}
+      <Label className='mt-5 block'>Beskrivelse av riskoscenarioet:</Label>
+      <BodyLong className='mt-1 min-w-0 [overflow-wrap:anywhere]'>
+        {risikoscenario.beskrivelse}
+      </BodyLong>
+
+      {risikoscenario.generelScenario && (
+        <BodyLong className='mt-8'>
+          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
+        </BodyLong>
       )}
 
       {risikoscenario.sannsynlighetsNivaa !== 0 && (
@@ -111,17 +113,21 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
 
       {(!risikoscenario.sannsynlighetsNivaaBegrunnelse ||
         risikoscenario.sannsynlighetsNivaa === 0) && (
-        <InlineMessage className='mt-5' status='warning'>
-          {risikoscenario.sannsynlighetsNivaa === 0 &&
-            !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
-            'Dere må gjøre sannsynlighetsvurdering'}
-          {!risikoscenario.sannsynlighetsNivaaBegrunnelse &&
-            risikoscenario.sannsynlighetsNivaa !== 0 &&
-            'Dere må begrunne sannsynlighetsvurderingen'}
-          {risikoscenario.sannsynlighetsNivaaBegrunnelse &&
-            risikoscenario.sannsynlighetsNivaa === 0 &&
-            'Dere må velge sannsynlighetsnivå'}
-        </InlineMessage>
+        <LocalAlert className='mt-5' status='warning'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>
+              {risikoscenario.sannsynlighetsNivaa === 0 &&
+                !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+                'Dere må gjøre sannsynlighetsvurdering'}
+              {!risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+                risikoscenario.sannsynlighetsNivaa !== 0 &&
+                'Dere må begrunne sannsynlighetsvurderingen'}
+              {risikoscenario.sannsynlighetsNivaaBegrunnelse &&
+                risikoscenario.sannsynlighetsNivaa === 0 &&
+                'Dere må velge sannsynlighetsnivå'}
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
 
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
@@ -138,17 +144,21 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
-        <InlineMessage className='mt-5' status='warning'>
-          {risikoscenario.konsekvensNivaa === 0 &&
-            !risikoscenario.konsekvensNivaaBegrunnelse &&
-            'Dere må gjøre konsekvensvurdering'}
-          {!risikoscenario.konsekvensNivaaBegrunnelse &&
-            risikoscenario.konsekvensNivaa !== 0 &&
-            'Dere må begrunne konsekvensvurderingen'}
-          {risikoscenario.konsekvensNivaaBegrunnelse &&
-            risikoscenario.konsekvensNivaa === 0 &&
-            'Dere må velge konsekensnivå'}
-        </InlineMessage>
+        <LocalAlert className='mt-5' status='warning'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>
+              {risikoscenario.konsekvensNivaa === 0 &&
+                !risikoscenario.konsekvensNivaaBegrunnelse &&
+                'Dere må gjøre konsekvensvurdering'}
+              {!risikoscenario.konsekvensNivaaBegrunnelse &&
+                risikoscenario.konsekvensNivaa !== 0 &&
+                'Dere må begrunne konsekvensvurderingen'}
+              {risikoscenario.konsekvensNivaaBegrunnelse &&
+                risikoscenario.konsekvensNivaa === 0 &&
+                'Dere må velge konsekensnivå'}
+            </LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
       {risikoscenario.konsekvensNivaaBegrunnelse && (
         <BodyLong className='mt-5'>{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>

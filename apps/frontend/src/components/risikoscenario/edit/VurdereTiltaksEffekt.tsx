@@ -109,7 +109,7 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
             <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
             {!revurdertEffektCheck && risikoscenario.tiltakOppdatert && (
-              <Alert variant='warning' className='my-5'>
+              <Alert inline variant='warning' className='my-5'>
                 Fordi dere har gjort endringer i tiltak, må dere revurdere tiltakenes antatte
                 effekt. Dere kan enten redigere deres opprinnelige vurdering, eller bekrefte at den
                 fortsatt er aktuell.

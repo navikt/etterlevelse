@@ -46,17 +46,18 @@ export const IngenTiltakField: FunctionComponent<TProps> = ({
             )}
           </Field>
 
-          {dirty && (
-            <Button
-              type='button'
-              onClick={() => {
-                submitForm()
-                resetForm({ values })
-              }}
-            >
-              Lagre
-            </Button>
-          )}
+          <Button
+            type='button'
+            className={dirty ? 'mt-2' : 'mt-2 invisible pointer-events-none'}
+            tabIndex={dirty ? 0 : -1}
+            aria-hidden={!dirty}
+            onClick={() => {
+              submitForm()
+              resetForm({ values })
+            }}
+          >
+            Lagre
+          </Button>
         </Form>
       )}
     </Formik>

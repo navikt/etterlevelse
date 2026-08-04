@@ -28,45 +28,50 @@ export const BehandlingensArtOgOmfangReadOnlyPage = () => {
     params.etterlevelseDokumentasjonId
   )
 
-  const readOnlyData: { personkategorier: string[] } = useMemo(() => {
-    if (
-      etterlevelseDokumentasjon &&
-      etterlevelseDokumentasjon.behandlinger &&
-      etterlevelseDokumentasjon.behandlinger.length > 0
-    ) {
-      const allePersonKategorier: IExternalCode[] = []
+  const readOnlyData: { personkategorier: string[]; brukerAlleOpplysningstyper?: boolean } =
+    useMemo(() => {
+      if (
+        etterlevelseDokumentasjon &&
+        etterlevelseDokumentasjon.behandlinger &&
+        etterlevelseDokumentasjon.behandlinger.length > 0
+      ) {
+        const allePersonKategorier: IExternalCode[] = []
 
-      etterlevelseDokumentasjon.behandlinger.map((behandling) => {
-        if (behandling.dataBehandlerList) {
-          behandling.policies.map((policy) => {
-            allePersonKategorier.push(...policy.personKategorier)
-          })
-        }
-      })
-
-      const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code')
-        .map((personkategori) => personkategori.shortName)
-        .sort((a, b) => {
-          if (a === 'Annet') {
-            return 1
-          }
-          if (b === 'Annet') {
-            return 1
-          } else {
-            return 0
+        etterlevelseDokumentasjon.behandlinger.map((behandling) => {
+          if (behandling.dataBehandlerList) {
+            behandling.policies.map((policy) => {
+              allePersonKategorier.push(...policy.personKategorier)
+            })
           }
         })
 
-      return {
-        personkategorier: uniqPersonkategorier,
+        const uniqPersonkategorier: string[] = uniqBy(allePersonKategorier, 'code')
+          .map((personkategori) => personkategori.shortName)
+          .sort((a, b) => {
+            if (a === 'Annet') {
+              return 1
+            }
+            if (b === 'Annet') {
+              return 1
+            } else {
+              return 0
+            }
+          })
+
+        return {
+          personkategorier: uniqPersonkategorier,
+          brukerAlleOpplysningstyper: etterlevelseDokumentasjon.behandlinger.some(
+            (behandling) => behandling.brukerAlleOpplysningstyper === true
+          ),
+        }
+      } else {
+        return {
+          databehandlere: [],
+          personkategorier: [],
+          brukerAlleOpplysningstyper: false,
+        }
       }
-    } else {
-      return {
-        databehandlere: [],
-        personkategorier: [],
-      }
-    }
-  }, [etterlevelseDokumentasjon])
+    }, [etterlevelseDokumentasjon])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -103,6 +108,7 @@ export const BehandlingensArtOgOmfangReadOnlyPage = () => {
               <ArtOgOmfangReadOnlyContent
                 artOgOmfang={artOgOmfang}
                 personkategorier={readOnlyData.personkategorier}
+                brukerAlleOpplysningstyper={readOnlyData.brukerAlleOpplysningstyper}
               />
             </MainPanelLayout>
 

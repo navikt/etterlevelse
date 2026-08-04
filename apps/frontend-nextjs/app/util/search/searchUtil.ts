@@ -20,7 +20,7 @@ export const selectOverrides = {
       borderColor: '#000',
       borderWidth: '1px',
       borderStyle: 'solid',
-      borderRadius: 'var(--a-border-radius-medium)',
+      borderRadius: 'var(--ax-radius-8)',
       ':focus-within': {
         boxShadow: 'var(--a-shadow-focus)',
         outline: 'none',

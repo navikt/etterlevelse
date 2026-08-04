@@ -558,6 +558,7 @@ public class EtterlevelseDokumentasjonToDoc {
         public String etterlevelseStatusText(EtterlevelseStatus status) {
             return switch (status) {
                 case UNDER_REDIGERING -> "Under arbeid";
+                case IKKE_PAABEGYNT -> "Ikke påbegynt";
                 case FERDIG -> "Oppfylt";
                 case OPPFYLLES_SENERE -> "Oppfyles senere";
                 case IKKE_RELEVANT -> "Ikke relevant";

@@ -1,6 +1,7 @@
 'use client'
 
 import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import ReadOnlyField, {
   ReadOnlyFieldBool,
   ReadOnlyFieldDescriptionOptional,
@@ -8,8 +9,10 @@ import ReadOnlyField, {
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Alert, Button, Checkbox, CheckboxGroup, List, Modal } from '@navikt/ds-react'
+import { Button, Checkbox, CheckboxGroup, InlineMessage, List, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import moment from 'moment'
 import { FunctionComponent, useEffect, useState } from 'react'
@@ -18,11 +21,38 @@ interface IProps {
   tiltak: ITiltak
   risikoscenarioList: IRisikoscenario[]
   noIverksattKommentar?: boolean
+  etterlevelseDokumentasjonId?: string
+}
+
+const getRisikoscenarioHref = (
+  risikoscenario: IRisikoscenario,
+  etterlevelseDokumentasjonId?: string
+): string | undefined => {
+  if (risikoscenario.generelScenario) {
+    return risikoscenarioUrl(risikoscenario.id, '6')
+  }
+
+  const relevantKrav = risikoscenario.relevanteKravNummer[0]
+  if (!etterlevelseDokumentasjonId || !relevantKrav) {
+    return undefined
+  }
+
+  return (
+    risikoDokumentasjonTemaKravNummerVersjonUrl(
+      etterlevelseDokumentasjonId,
+      relevantKrav.temaCode || 'PVK',
+      relevantKrav.kravNummer,
+      relevantKrav.kravVersjon
+    ) +
+    '?risikoscenario=' +
+    risikoscenario.id
+  )
 }
 
 export const TiltakView = (props: IProps) => {
-  const { tiltak, risikoscenarioList, noIverksattKommentar } = props
+  const { tiltak, risikoscenarioList, noIverksattKommentar, etterlevelseDokumentasjonId } = props
   const [ansvarligView, setAnsvarligView] = useState<string>('')
+  const today = new Date()
 
   useEffect(() => {
     ;(async () => {
@@ -61,9 +91,19 @@ export const TiltakView = (props: IProps) => {
                 .filter((risikoscenario: IRisikoscenario) =>
                   tiltak.risikoscenarioIds.includes(risikoscenario.id)
                 )
-                .map((risikoscenario: IRisikoscenario) => (
-                  <List.Item key={risikoscenario.id}>{risikoscenario.navn}</List.Item>
-                ))}
+                .map((risikoscenario: IRisikoscenario) => {
+                  const href = getRisikoscenarioHref(risikoscenario, etterlevelseDokumentasjonId)
+
+                  return (
+                    <List.Item key={risikoscenario.id}>
+                      {href ? (
+                        <ExternalLink href={href}>{risikoscenario.navn}</ExternalLink>
+                      ) : (
+                        risikoscenario.navn
+                      )}
+                    </List.Item>
+                  )
+                })}
             </List>
           )}
         </div>
@@ -98,10 +138,16 @@ export const TiltakView = (props: IProps) => {
       )}
 
       <div className='mt-3 mb-5'>
-        {tiltak.iverksatt && (
-          <Alert variant='success' inline>
+        {tiltak.iverksatt && tiltak.iverksattDato !== null && (
+          <InlineMessage status='success'>
             Tiltaket ble markert som iverksatt {moment(tiltak.iverksattDato).format('LL')}
-          </Alert>
+          </InlineMessage>
+        )}
+
+        {tiltak.iverksatt && tiltak.iverksattDato === null && (
+          <InlineMessage status='success'>
+            Tiltaket blir markert som iverksatt {moment(today).format('LL')}
+          </InlineMessage>
         )}
       </div>
 
@@ -130,6 +176,7 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
   risikoscenarioList,
   tiltakList,
   setTiltakList,
+  etterlevelseDokumentasjonId,
 }) => {
   const [isTiltakEditModalOpen, setIsTiltakEditModalOpen] = useState<boolean>(false)
 
@@ -153,7 +200,11 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
 
   return (
     <div>
-      <TiltakView risikoscenarioList={risikoscenarioList} tiltak={tiltak} />
+      <TiltakView
+        risikoscenarioList={risikoscenarioList}
+        tiltak={tiltak}
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+      />
       <div className='my-5'>
         <Button
           variant='tertiary'
@@ -186,7 +237,11 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
                       className='my-3 flex gap-2'
                     />
 
-                    <TiltakView risikoscenarioList={risikoscenarioList} tiltak={tiltak} />
+                    <TiltakView
+                      risikoscenarioList={risikoscenarioList}
+                      tiltak={tiltak}
+                      etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
+                    />
 
                     <div className='mb-5'>
                       <Field name='iverksatt'>
@@ -196,7 +251,7 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
                             hideLegend
                             value={fieldProps.field.value ? ['iverksatt'] : []}
                             onChange={(value) => {
-                              const fieldValue: boolean = value.length > 0 ? true : false
+                              const fieldValue: boolean = value.length > 0
                               fieldProps.form.setFieldValue('iverksatt', fieldValue)
                             }}
                           >

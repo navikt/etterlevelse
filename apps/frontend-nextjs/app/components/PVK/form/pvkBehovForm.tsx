@@ -6,6 +6,7 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '@/api/pvkDokument/pvkDokumentApi'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
@@ -28,14 +29,20 @@ import {
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ChevronLeftIcon, ChevronRightIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EnvelopeClosedIcon,
+  ExclamationmarkTriangleIcon,
+  InformationSquareIcon,
+} from '@navikt/aksel-icons'
+import {
   BodyLong,
   Button,
   Checkbox,
   CheckboxGroup,
   CopyButton,
+  InfoCard,
   Link,
   List,
   LocalAlert,
@@ -186,16 +193,23 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 profilering ||
                 automatiskBehandling ||
                 saerligKategorier) && (
-                <Alert className='mb-5 mt-10' variant='info'>
-                  Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være
-                  behov for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
-                </Alert>
+                <InfoCard className='mb-5 mt-10' data-color='info' size='medium' as='section'>
+                  <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                    Data som hentes og svarene dere har oppgitt gir en indikasjon på at det kan være
+                    behov for gjennomføring av PVK. Likevel er dere ansvarlige for å vurdere behov.
+                  </InfoCard.Message>
+                </InfoCard>
               )}
 
               <ReadMore
                 className='mt-10 mb-4'
                 header='Lurer dere fortsatt på om det er behov for PVK?'
               >
+                <div className='mb-5'>
+                  <ExternalLink href='https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/vurdering-av-personvernkonsekvenser/nar-er-risiko-hoy/'>
+                    Les Datatilsynets veiledning om Når risiko er høy
+                  </ExternalLink>
+                </div>
                 Personvernombudet (PVO) kan hjelpe dere å vurdere om dere skal gjøre en PVK. Ta
                 kontakt via mail.
                 <CopyButton
@@ -247,31 +261,36 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                   </List>
 
                   {etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
-                    <Alert variant='info' className='mt-5'>
-                      Dersom dokumentene over ikke inkluderer deres PVK, skal dere legge den inn på{' '}
-                      <Link
-                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        aria-label='redigere etterlevelsesdokumentasjon'
-                      >
-                        Rediger dokumentegenskaper (åpner i en ny fane).
-                      </Link>
-                    </Alert>
+                    <InfoCard data-color='info' className='mt-5'>
+                      <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                        Dersom dokumentene over ikke inkluderer deres PVK, skal dere legge den inn
+                        på{' '}
+                        <Link
+                          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          aria-label='redigere etterlevelsesdokumentasjon'
+                        >
+                          Rediger dokumentegenskaper (åpner i en ny fane).
+                        </Link>
+                      </InfoCard.Message>
+                    </InfoCard>
                   )}
 
                   {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
-                    <Alert variant='warning' className='mt-5'>
-                      Dere må legge inn lenke til deres PVK i Public360 under{' '}
-                      <Link
-                        href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        aria-label='redigere etterlevelsesdokumentasjon'
-                      >
-                        Rediger dokumentegenskaper (åpner i en ny fane).
-                      </Link>
-                    </Alert>
+                    <InfoCard data-color='warning' className='mt-5'>
+                      <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                        Dere må legge inn lenke til deres PVK i Public360 under{' '}
+                        <Link
+                          href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          aria-label='redigere etterlevelsesdokumentasjon'
+                        >
+                          Rediger dokumentegenskaper (åpner i en ny fane).
+                        </Link>
+                      </InfoCard.Message>
+                    </InfoCard>
                   )}
                 </div>
               )}

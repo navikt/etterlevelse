@@ -49,6 +49,7 @@ type TProps = {
   setTiltakList: (state: ITiltak[]) => void
   kravnummer: number
   kravversjon: number
+  godkjentAvRisikoeierDato?: string
   setIsTiltakFormActive: (state: boolean) => void
   isCreateMode?: boolean
   noCopyButton?: boolean
@@ -65,6 +66,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjonId,
   kravnummer,
   kravversjon,
+  godkjentAvRisikoeierDato,
   setRisikoscenarioer,
   setRisikoscenarioForKrav,
   tiltakList,
@@ -287,6 +289,7 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
                 isAddExistingMode={isAddExistingMode}
                 customDelete={submitDeleteTiltak}
                 formRef={formRef}
+                godkjentAvRisikoeierDato={godkjentAvRisikoeierDato}
               />
             )}
 

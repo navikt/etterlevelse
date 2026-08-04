@@ -51,7 +51,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { isRisikoUnderarbeidCheck } from '@/util/risikoscenario/risikoscenarioUtils'
 import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, Button, CopyButton, Heading, Modal } from '@navikt/ds-react'
+import { BodyLong, Button, CopyButton, Heading, InlineMessage, Modal } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -115,6 +115,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const [behandlingensLivslopError, setBehandlingensLivslopError] = useState<boolean>(false)
   const [manglerBehandlingError, setManglerBehandlingError] = useState<boolean>(false)
   const [risikoscenarioError, setRisikoscenarioError] = useState<string>('')
+  const [generelleRisikoscenarioMedFeil, setGenerelleRisikoscenarioMedFeil] = useState<
+    IRisikoscenario[]
+  >([])
+  const [spesifikkeRisikoscenarioMedFeil, setSpesifikkeRisikoscenarioMedFeil] = useState<
+    IRisikoscenario[]
+  >([])
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
   const [tiltakError, setTiltakError] = useState<string>('')
   const [tiltakAnsvarligError, setTiltakAnsvarligError] = useState<string>('')
@@ -148,6 +154,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
       !artOgOmfangError.tilgangsBeskrivelsePersonopplysningene &&
       !artOgOmfangError.personkategoriAntallBeskrivelse &&
       risikoscenarioError === '' &&
+      spesifikkeRisikoscenarioMedFeil.length === 0 &&
       savnerVurderingError === '' &&
       tiltakError === '' &&
       tiltakAnsvarligError === '' &&
@@ -361,18 +368,29 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const risikoscenarioCheck = () => {
     if (alleRisikoscenario.length === 0) {
       setRisikoscenarioError('Dere må ha minst 1 risikoscenario.')
+      setGenerelleRisikoscenarioMedFeil([])
+      setSpesifikkeRisikoscenarioMedFeil([])
     } else {
       const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko: IRisikoscenario) =>
         isRisikoUnderarbeidCheck(risiko)
       )
+      const generelleMedFeil = ikkeFerdigBeskrevetScenario.filter(
+        (risiko: IRisikoscenario) => risiko.generelScenario
+      )
+      const spesifikkeMedFeil = ikkeFerdigBeskrevetScenario.filter(
+        (risiko: IRisikoscenario) => !risiko.generelScenario
+      )
 
-      if (ikkeFerdigBeskrevetScenario.length !== 0) {
+      if (generelleMedFeil.length !== 0) {
         setRisikoscenarioError(
-          `${ikkeFerdigBeskrevetScenario.length} risikoscenarioer er ikke ferdig beskrevet.`
+          `${generelleMedFeil.length} risikoscenarioer er ikke ferdig beskrevet.`
         )
       } else {
         setRisikoscenarioError('')
       }
+
+      setGenerelleRisikoscenarioMedFeil(generelleMedFeil)
+      setSpesifikkeRisikoscenarioMedFeil(spesifikkeMedFeil)
     }
   }
 
@@ -413,7 +431,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
       alleTiltak.map((tiltak) => {
         if (tiltak.frist !== null && !tiltak.iverksatt) {
-          if (moment(now).isAfter(moment(tiltak.frist))) {
+          if (moment(now).isAfter(moment(tiltak.frist), 'day')) {
             amountOfOverdueTiltak++
           }
         }
@@ -496,6 +514,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
         artOgOmfangError.personkategoriAntallBeskrivelse ||
         behandlingensLivslopError ||
         risikoscenarioError !== '' ||
+        spesifikkeRisikoscenarioMedFeil.length !== 0 ||
         tiltakError !== '' ||
         tiltakAnsvarligError !== '' ||
         tiltakFristError.length !== 0 ||
@@ -506,6 +525,13 @@ export const SendInnView: FunctionComponent<TProps> = ({
       errorSummaryRef.current.focus()
     }
   }, [submitClick])
+
+  useEffect(() => {
+    if (savedSuccess) {
+      const timer = setTimeout(() => setSavedSuccess(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [savedSuccess])
 
   return (
     <div>
@@ -607,9 +633,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   icon={<FilesIcon aria-hidden />}
                 />
                 {pvkDokument.status !== EPvkDokumentStatus.UNDERARBEID && (
-                  <Alert variant='info' className='my-5'>
+                  <InlineMessage status='info' className='my-5'>
                     Status: {pvkDokumentStatusToText(pvkDokument.status)}
-                  </Alert>
+                  </InlineMessage>
                 )}
 
                 <BehandlingensLivslopSummary
@@ -666,12 +692,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           <SendInnErrorSummary
                             errors={errors}
                             etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                            pvkDokumentId={pvkDokument.id}
                             risikoeiereDataError={risikoeiereDataError}
                             avdelingError={avdelingError}
                             medlemError={medlemError}
                             behandlingensLivslopError={behandlingensLivslopError}
                             artOgOmfangError={artOgOmfangError}
                             risikoscenarioError={risikoscenarioError}
+                            generelleRisikoscenarioMedFeil={generelleRisikoscenarioMedFeil}
+                            spesifikkeRisikoscenarioMedFeil={spesifikkeRisikoscenarioMedFeil}
                             tiltakError={tiltakError}
                             tiltakAnsvarligError={tiltakAnsvarligError}
                             tiltakFristError={tiltakFristError}
@@ -723,12 +752,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             <SendInnErrorSummary
                               errors={errors}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                              pvkDokumentId={pvkDokument.id}
                               risikoeiereDataError={risikoeiereDataError}
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
                               artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
+                              generelleRisikoscenarioMedFeil={generelleRisikoscenarioMedFeil}
+                              spesifikkeRisikoscenarioMedFeil={spesifikkeRisikoscenarioMedFeil}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
@@ -764,12 +796,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             <SendInnErrorSummary
                               errors={errors}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                              pvkDokumentId={pvkDokument.id}
                               risikoeiereDataError={risikoeiereDataError}
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
                               artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
+                              generelleRisikoscenarioMedFeil={generelleRisikoscenarioMedFeil}
+                              spesifikkeRisikoscenarioMedFeil={spesifikkeRisikoscenarioMedFeil}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
@@ -808,12 +843,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             <SendInnErrorSummary
                               errors={errors}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                              pvkDokumentId={pvkDokument.id}
                               risikoeiereDataError={risikoeiereDataError}
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               behandlingensLivslopError={behandlingensLivslopError}
                               artOgOmfangError={artOgOmfangError}
                               risikoscenarioError={risikoscenarioError}
+                              generelleRisikoscenarioMedFeil={generelleRisikoscenarioMedFeil}
+                              spesifikkeRisikoscenarioMedFeil={spesifikkeRisikoscenarioMedFeil}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}
@@ -851,12 +889,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             <SendInnErrorSummary
                               errors={errors}
                               etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                              pvkDokumentId={pvkDokument.id}
                               risikoeiereDataError={risikoeiereDataError}
                               avdelingError={avdelingError}
                               medlemError={medlemError}
                               artOgOmfangError={artOgOmfangError}
                               behandlingensLivslopError={behandlingensLivslopError}
                               risikoscenarioError={risikoscenarioError}
+                              generelleRisikoscenarioMedFeil={generelleRisikoscenarioMedFeil}
+                              spesifikkeRisikoscenarioMedFeil={spesifikkeRisikoscenarioMedFeil}
                               tiltakError={tiltakError}
                               tiltakAnsvarligError={tiltakAnsvarligError}
                               tiltakFristError={tiltakFristError}

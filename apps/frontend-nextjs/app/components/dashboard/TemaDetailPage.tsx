@@ -3,19 +3,26 @@
 import {
   getDashboardAvdelingStats,
   getDashboardStats,
+  getDashboardTableByTema,
   getKravDashboardStats,
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
+import { useSearchTeamOptions } from '@/api/teamkatalogen/teamkatalogenApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import {
   IAvdelingDashboardStats,
+  IDashboardTable,
   IKravDashboardStats,
   ISeksjonOption,
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { handleSort } from '@/util/handleTableSort'
+import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Link as AkselLink,
@@ -24,13 +31,23 @@ import {
   Detail,
   Heading,
   InfoCard,
+  Label,
+  List,
+  ReadMore,
   Select,
+  SortState,
+  Table,
   Tabs,
   Tag,
 } from '@navikt/ds-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
+import AsyncSelect from 'react-select/async'
+import { TemaDashboardDetailHowToReadmore } from './DashboardReadmore/TemaDashboardDetailHowToReadmore'
+import { TemaDashboardDetailKravReadmore } from './DashboardReadmore/TemaDashboardDetailKravReadmore'
+import { TemaDashboardDetailReadmore } from './DashboardReadmore/TemaDashboardDetailReadmore'
+import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
 import { RechartsStackedBar } from './RechartsStackedBar'
+import { StickyHorizontalScroll } from './StickyHorizontalScroll'
 import {
   IBarSegment,
   KRAV_COLORS,
@@ -45,6 +62,7 @@ interface IProps {
 
 const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
   const kravData: IBarSegment[] = [
+    { name: 'Ikke påbegynt', value: krav.antallIkkePaabegynt, color: SUKSESS_COLORS.ikkePaabegynt },
     { name: 'Under arbeid', value: krav.antallUnderArbeid, color: KRAV_COLORS.underArbeid },
     { name: 'Ferdig vurdert', value: krav.antallFerdigVurdert, color: KRAV_COLORS.ferdigVurdert },
   ]
@@ -134,7 +152,6 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
       <Heading size='small' level='3'>
         {krav.kravNavn}
       </Heading>
-      <Detail className='uppercase mt-2'>{krav.etterlevelseTotal} etterlevelsesdokumenter</Detail>
       {krav.kravStatus === 'UTGAATT' && (
         <div className='mt-1'>
           <Tag variant='error' className='h-fit'>
@@ -142,11 +159,12 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
           </Tag>
         </div>
       )}
+      <Detail className='uppercase mt-2'>{krav.etterlevelseTotal} etterlevelsesdokumenter</Detail>
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
           <Heading size='xsmall' level='4' className='min-h-12'>
-            Vurdering av etterlevelseskrav
+            Kravstatus
           </Heading>
           <RechartsStackedBar data={kravData} showPercentage />
         </div>
@@ -172,7 +190,7 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
           <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
         </div>
       </div>
-      <TemaDashboardReadmore />
+      <TemaDashboardDetailKravReadmore />
     </div>
   )
 }
@@ -203,6 +221,7 @@ const exportKravToCsv = (
     'Kravnavn',
     'Status',
     'Antall etterlevelser totalt',
+    'Etterlevelser ikke påbegynt',
     'Etterlevelser under arbeid',
     'Etterlevelser ferdig vurdert',
     'Alle suksesskriterier - ikke påbegynt',
@@ -233,6 +252,7 @@ const exportKravToCsv = (
       escapeCsvField(`K${k.kravNummer} ${k.kravNavn}`),
       escapeCsvField(k.kravStatus),
       k.etterlevelseTotal,
+      k.antallIkkePaabegynt,
       k.antallUnderArbeid,
       k.antallFerdigVurdert,
       k.antallSuksesskriterierIkkePaabegynt,
@@ -263,6 +283,7 @@ const exportKravToCsv = (
 
 const TemaDetailPage = ({ temaCode }: IProps) => {
   const [temaStats, setTemaStats] = useState<ITemaDashboardStats | null>(null)
+  const [temaDisplayName, setTemaDisplayName] = useState<string>(temaCode)
   const [kravStats, setKravStats] = useState<IKravDashboardStats[]>([])
   const [avdelinger, setAvdelinger] = useState<IAvdelingDashboardStats[]>([])
   const [seksjoner, setSeksjoner] = useState<ISeksjonOption[]>([])
@@ -278,10 +299,15 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
   const [kravEnheter, setKravEnheter] = useState<IOrgEnhet[]>([])
   const [selectedKrav, setSelectedKrav] = useState<string>('')
+  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
+  const [dokTableData, setDokTableData] = useState<IDashboardTable[]>([])
+  const [isTableLoading, setIsTableLoading] = useState(true)
+  const [tableSort, setTableSort] = useState<SortState | undefined>()
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
   const seksjonRequestId = useRef(0)
   const kravSeksjonRequestId = useRef(0)
+  const tableRequestId = useRef(0)
 
   useEffect(() => {
     getDashboardStats()
@@ -295,11 +321,16 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
       temaCode,
       selectedAvdeling || undefined,
       selectedSeksjon || undefined,
-      selectedEnhet || undefined
+      selectedEnhet || undefined,
+      selectedTeams.length > 0 ? selectedTeams.map((team) => team.id) : undefined
     )
       .then((data) => {
         if (requestId === temaRequestId.current) {
-          setTemaStats(data[0] || null)
+          const stats = data[0] || null
+          setTemaStats(stats)
+          if (stats?.temaName) {
+            setTemaDisplayName(stats.temaName)
+          }
         }
       })
       .catch((err) => console.error('Failed to fetch tema stats:', err))
@@ -308,7 +339,29 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           setIsLoading(false)
         }
       })
-  }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet])
+  }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
+
+  useEffect(() => {
+    const requestId = ++tableRequestId.current
+    getDashboardTableByTema(
+      temaCode,
+      selectedAvdeling || undefined,
+      selectedSeksjon || undefined,
+      selectedEnhet || undefined,
+      selectedTeams.length > 0 ? selectedTeams.map((team) => team.id) : undefined
+    )
+      .then((data) => {
+        if (requestId === tableRequestId.current) {
+          setDokTableData(data)
+        }
+      })
+      .catch((err) => console.error('Failed to fetch dashboard table for tema:', err))
+      .finally(() => {
+        if (requestId === tableRequestId.current) {
+          setIsTableLoading(false)
+        }
+      })
+  }, [temaCode, selectedAvdeling, selectedSeksjon, selectedEnhet, selectedTeams])
 
   useEffect(() => {
     const requestId = ++kravRequestId.current
@@ -410,6 +463,36 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
     return filteredKrav
   }, [filteredKrav])
 
+  const sortedTableDoks = useMemo(() => {
+    if (!tableSort) return dokTableData
+
+    const dir = tableSort.direction === 'ascending' ? 1 : -1
+    return [...dokTableData].sort((a, b) => {
+      const getValue = (dok: IDashboardTable): string | number => {
+        switch (tableSort.orderBy) {
+          case 'dok':
+            return `E${dok.etterlevelseNummer} ${dok.etterlevelseDokumentasjonTittel}`
+          case 'krav':
+            return dok.antallOppfyltKrav || 0
+          case 'oppfylt':
+            return dok.oppfyltKravProsent && dok.oppfyltKravProsent > 0 ? dok.oppfyltKravProsent : 0
+          case 'risikoeier':
+            return dok.risikoeiereData?.map((risikoeier) => risikoeier.fullName).join(', ') || ''
+          case 'team':
+            return dok.teamsData?.map((team) => team.name).join(', ') || ''
+          case 'person':
+            return dok.resourcesData?.map((resource) => resource.fullName).join(', ') || ''
+          default:
+            return ''
+        }
+      }
+      const aVal = getValue(a)
+      const bVal = getValue(b)
+      if (typeof aVal === 'number' && typeof bVal === 'number') return (aVal - bVal) * dir
+      return String(aVal).localeCompare(String(bVal)) * dir
+    })
+  }, [dokTableData, tableSort])
+
   if (isLoading && !temaStats) {
     return (
       <PageLayout pageTitle='Dashboard' currentPage='Dashboard' breadcrumbPaths={[]}>
@@ -418,10 +501,15 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
     )
   }
 
-  const temaName = temaStats?.temaName || temaCode
+  const temaName = temaDisplayName || temaCode
 
   const kravData: IBarSegment[] = temaStats
     ? [
+        {
+          name: 'Ikke påbegynt',
+          value: temaStats.kravIkkePaabegynt,
+          color: SUKSESS_COLORS.ikkePaabegynt,
+        },
         { name: 'Under arbeid', value: temaStats.kravUnderArbeid, color: KRAV_COLORS.underArbeid },
         {
           name: 'Ferdig vurdert',
@@ -532,9 +620,13 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
         </Heading>
       </div>
 
+      <TemaDashboardDetailHowToReadmore />
+
       <div className='rounded-lg p-6 mt-8' style={{ backgroundColor: '#e3eff7' }}>
         <Heading size='medium' level='2'>
-          Overordnet for alle krav under {temaName}
+          Overordnet for alle{' '}
+          {kravStats.length > 0 && `${kravStats.filter((k) => k.kravStatus !== 'UTGAATT').length} `}
+          krav under {temaName}
         </Heading>
         <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
           <Select
@@ -548,6 +640,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               setSelectedEnhet('')
               setEnheter([])
               setIsLoading(true)
+              setIsTableLoading(true)
               if (!e.target.value) {
                 setSeksjoner([])
               }
@@ -576,6 +669,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   setSelectedSeksjon(e.target.value)
                   setSelectedEnhet('')
                   setIsLoading(true)
+                  setIsTableLoading(true)
                 }}
               >
                 <option value=''>Alle seksjoner</option>
@@ -597,6 +691,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               onChange={(e) => {
                 setSelectedEnhet(e.target.value)
                 setIsLoading(true)
+                setIsTableLoading(true)
               }}
             >
               <option value=''>Alle enheter</option>
@@ -631,6 +726,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               ]
               const header = [
                 'Krav totalt',
+                'Krav ikke påbegynt',
                 'Krav under arbeid',
                 'Krav ferdig vurdert',
                 'Suksesskriterier ikke påbegynt',
@@ -648,7 +744,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 'Ikke ferdig utfylt krav - suksesskriterier ikke relevant',
               ].join(';')
               const row = [
-                temaStats.kravTotal,
+                temaStats.kravIkkePaabegynt + temaStats.kravTotal,
+                temaStats.kravIkkePaabegynt,
                 temaStats.kravUnderArbeid,
                 temaStats.kravFerdigVurdert,
                 temaStats.suksesskriterierIkkePaabegynt,
@@ -684,6 +781,43 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           </Button>
         </div>
 
+        <div className='mt-4 max-w-xl'>
+          <Label htmlFor='tema-detail-team-search'>Søk etter team</Label>
+          <BodyShort size='small' className='mb-2 text-gray-600'>
+            Trykk Enter for å legge til teamet. Du kan velge flere.
+          </BodyShort>
+          <AsyncSelect
+            inputId='tema-detail-team-search'
+            aria-label='Søk etter team'
+            placeholder=''
+            tabSelectsValue={false}
+            components={{ DropdownIndicator }}
+            noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+            controlShouldRenderValue={false}
+            loadingMessage={() => 'Søker...'}
+            isClearable={false}
+            loadOptions={useSearchTeamOptions}
+            value={null}
+            onChange={(value: any) => {
+              if (value && !selectedTeams.some((team) => team.id === value.id)) {
+                setIsLoading(true)
+                setIsTableLoading(true)
+                setSelectedTeams((prev) => [...prev, { id: value.id, name: value.label }])
+              }
+            }}
+            styles={selectOverrides}
+          />
+          <RenderTagList
+            list={selectedTeams.map((team) => team.name)}
+            variant='action'
+            onRemove={(index) => {
+              setIsLoading(true)
+              setIsTableLoading(true)
+              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
+            }}
+          />
+        </div>
+
         {isLoading && <CenteredLoader />}
 
         {!isLoading && !temaStats && (
@@ -695,6 +829,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             <Tabs.List>
               <Tabs.Tab value='figurer' label='Vis figurer' />
               <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
+              <Tabs.Tab value='etterlevelsesdokumenter' label='Vis etterlevelsesdokumenter' />
             </Tabs.List>
             <Tabs.Panel value='figurer'>
               <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
@@ -704,31 +839,31 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 </Detail>
                 <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6'>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
-                      Vurdering av etterlevelseskrav
+                    <Heading size='xsmall' level='3' className='min-h-12'>
+                      Kravstatus
                     </Heading>
                     <RechartsStackedBar data={kravData} percentageOnly />
                   </div>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+                    <Heading size='xsmall' level='3' className='min-h-12'>
                       Etterlevelse: suksesskriterier
                     </Heading>
                     <RechartsStackedBar data={suksessData} percentageOnly />
                   </div>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+                    <Heading size='xsmall' level='3' className='min-h-12'>
                       Suksesskriterier der kravet er ferdig utfylt
                     </Heading>
                     <RechartsStackedBar data={ferdigSuksessData} percentageOnly />
                   </div>
                   <div>
-                    <Heading size='xsmall' level='3' className='min-h-[3rem]'>
+                    <Heading size='xsmall' level='3' className='min-h-12'>
                       Suksesskriterier der kravet ikke er ferdig utfylt
                     </Heading>
                     <RechartsStackedBar data={ikkeFerdigSuksessData} percentageOnly />
                   </div>
                 </div>
-                <TemaDashboardReadmore />
+                <TemaDashboardDetailReadmore />
               </div>
             </Tabs.Panel>
             <Tabs.Panel value='nokkeltall'>
@@ -740,26 +875,35 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4'>
                   <div>
                     {(() => {
+                      const kravTotalWithIkkePaabegynt =
+                        temaStats.kravIkkePaabegynt + temaStats.kravTotal
                       const kravPcts = roundedPercentages([
+                        temaStats.kravIkkePaabegynt,
                         temaStats.kravUnderArbeid,
                         temaStats.kravFerdigVurdert,
                       ])
                       return (
                         <>
                           <Heading size='xsmall' level='3' className='mb-2'>
-                            Gjennomføringsstatus: krav ({temaStats.kravTotal})
+                            Kravstatus ({kravTotalWithIkkePaabegynt})
                           </Heading>
+                          <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>{temaStats.kravIkkePaabegynt}</span>
+                            {kravTotalWithIkkePaabegynt > 0 &&
+                              ` (${formatPct(kravPcts[0], temaStats.kravIkkePaabegynt)}%)`}
+                          </BodyShort>
                           <BodyShort>
                             Under arbeid{' '}
                             <span className='font-bold'>{temaStats.kravUnderArbeid}</span>
-                            {temaStats.kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[0], temaStats.kravUnderArbeid)}%)`}
+                            {kravTotalWithIkkePaabegynt > 0 &&
+                              ` (${formatPct(kravPcts[1], temaStats.kravUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ferdig vurdert{' '}
                             <span className='font-bold'>{temaStats.kravFerdigVurdert}</span>
-                            {temaStats.kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[1], temaStats.kravFerdigVurdert)}%)`}
+                            {kravTotalWithIkkePaabegynt > 0 &&
+                              ` (${formatPct(kravPcts[2], temaStats.kravFerdigVurdert)}%)`}
                           </BodyShort>
                         </>
                       )
@@ -934,7 +1078,146 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                     })()}
                   </div>
                 </div>
-                <TemaDashboardReadmore />
+                <TemaDashboardDetailReadmore />
+              </div>
+            </Tabs.Panel>
+            <Tabs.Panel value='etterlevelsesdokumenter'>
+              <div className='border border-gray-300 rounded-lg p-6 bg-white mt-6'>
+                <div style={{ maxWidth: '75ch' }}>
+                  <ReadMore header='Hvordan bruker jeg denne tabellen?' className='mb-4'>
+                    <List>
+                      <List.Item>
+                        <strong>Du kan bla bortover i tabellen</strong>
+                        <br />
+                        Med mindre du bruker en veldig stor skjerm, er det sannsynligvis flere
+                        kolonner bortover til høyre som du kanskje ikke har sett.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Du kan sortere tabellen etter kolonne</strong>
+                        <br />
+                        Ved å klikke på øverste rad i tabellen kan du velge om du vil sortere etter
+                        kolonnenavnet. Dette kan gjøre det enklere å finne informasjonen du lurer
+                        på.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hvordan tolke &quot;Antall krav ferdig utfylt&quot;?</strong>
+                        <br />
+                        Første tall viser hvor mange etterlevelseskrav som etterleveren har satt til
+                        &quot;ferdig utfylt&quot;. Andre tall viser totalantall krav under{' '}
+                        {temaName} som etterleveren må besvare i sitt etterlevelsesdokument.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hva betyr &quot;Oppfylt&quot;?</strong>
+                        <br />I denne kolonna kan du klikke på prosentandel og finne mer
+                        informasjon. Etterleveren må først ha markert hele kravet som ferdig utfylt
+                        for at tallene blir tatt med her. Prosentandelen er beregnet basert på
+                        forholdet mellom suksesskriterier vurdert som oppfylt, og suksesskriterier
+                        vurdert som ikke oppfylt. Det tas ikke med suksesskriterier som ble vurdert
+                        som ikke relevant.
+                      </List.Item>
+                    </List>
+                  </ReadMore>
+                </div>
+
+                {isTableLoading && <CenteredLoader />}
+
+                {!isTableLoading && (
+                  <>
+                    <StickyHorizontalScroll>
+                      <Table
+                        className='mt-4 dashboard-table'
+                        size='small'
+                        zebraStripes
+                        stickyHeader
+                        sort={tableSort}
+                        onSortChange={(sortKey) => handleSort(tableSort, setTableSort, sortKey)}
+                      >
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.ColumnHeader sortable sortKey='dok'>
+                              <span className='flex flex-col'>
+                                <span>Etterlevelsesdokument</span>
+                                <span className='font-normal'>(Lenker åpnes i ny fane)</span>
+                              </span>
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='krav' align='center'>
+                              Antall krav ferdig utfylt
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='oppfylt' align='center'>
+                              Oppfylt
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='risikoeier'>
+                              Risikoeier
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='team'>
+                              Team
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader sortable sortKey='person'>
+                              Person
+                            </Table.ColumnHeader>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {sortedTableDoks.map((dok) => (
+                            <Table.Row key={dok.etterlevelseDokumentasjonId}>
+                              <Table.DataCell className='dashboard-cell-wide'>
+                                <AkselLink
+                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
+                                  target='_blank'
+                                >
+                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+                                  {dok.etterlevelseDokumentasjonTittel}
+                                </AkselLink>
+                              </Table.DataCell>
+                              <Table.DataCell align='center'>
+                                <TrafficDot
+                                  color={getKravTrafficColor(
+                                    dok.antallOppfyltKrav || 0,
+                                    dok.antallKrav || 0
+                                  )}
+                                />
+                                {dok.antallOppfyltKrav} av {dok.antallKrav}
+                              </Table.DataCell>
+                              <Table.DataCell align='center'>
+                                <OppfyltCell dok={dok} />
+                              </Table.DataCell>
+                              <Table.DataCell>
+                                {dok.risikoeiereData && dok.risikoeiereData.length > 0
+                                  ? dok.risikoeiereData.map((risikoeier, index) => (
+                                      <div key={`${risikoeier.navIdent}-${index}`}>
+                                        {risikoeier.fullName}
+                                      </div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                              <Table.DataCell>
+                                {dok.teamsData && dok.teamsData.length > 0
+                                  ? dok.teamsData.map((team, index) => (
+                                      <div key={`${team.id}-${index}`}>{team.name}</div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                              <Table.DataCell>
+                                {dok.resourcesData && dok.resourcesData.length > 0
+                                  ? dok.resourcesData.map((resource, index) => (
+                                      <div key={`${resource.navIdent}-${index}`}>
+                                        {resource.fullName}
+                                      </div>
+                                    ))
+                                  : '-'}
+                              </Table.DataCell>
+                            </Table.Row>
+                          ))}
+                        </Table.Body>
+                      </Table>
+                    </StickyHorizontalScroll>
+                    {sortedTableDoks.length === 0 && (
+                      <BodyShort className='mt-4 text-gray-500'>
+                        Ingen treff på valgte filtre
+                      </BodyShort>
+                    )}
+                  </>
+                )}
               </div>
             </Tabs.Panel>
           </Tabs>
@@ -1090,8 +1373,10 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             <Tabs.Panel value='nokkeltall'>
               <div className='flex flex-col gap-6 mt-6'>
                 {sortedKrav.map((krav) => {
-                  const kravTotal = krav.antallUnderArbeid + krav.antallFerdigVurdert
+                  const kravTotal =
+                    krav.antallIkkePaabegynt + krav.antallUnderArbeid + krav.antallFerdigVurdert
                   const kravPcts = roundedPercentages([
+                    krav.antallIkkePaabegynt,
                     krav.antallUnderArbeid,
                     krav.antallFerdigVurdert,
                   ])
@@ -1165,18 +1450,24 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-4 mt-4'>
                         <div>
                           <Heading size='xsmall' level='4' className='mb-2'>
-                            Gjennomføringsstatus: krav ({kravTotal})
+                            Kravstatus ({kravTotal})
                           </Heading>
+                          <BodyShort>
+                            Ikke påbegynt{' '}
+                            <span className='font-bold'>{krav.antallIkkePaabegynt}</span>
+                            {kravTotal > 0 &&
+                              ` (${formatPct(kravPcts[0], krav.antallIkkePaabegynt)}%)`}
+                          </BodyShort>
                           <BodyShort>
                             Under arbeid <span className='font-bold'>{krav.antallUnderArbeid}</span>
                             {kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[0], krav.antallUnderArbeid)}%)`}
+                              ` (${formatPct(kravPcts[1], krav.antallUnderArbeid)}%)`}
                           </BodyShort>
                           <BodyShort>
                             Ferdig vurdert{' '}
                             <span className='font-bold'>{krav.antallFerdigVurdert}</span>
                             {kravTotal > 0 &&
-                              ` (${formatPct(kravPcts[1], krav.antallFerdigVurdert)}%)`}
+                              ` (${formatPct(kravPcts[2], krav.antallFerdigVurdert)}%)`}
                           </BodyShort>
                         </div>
                         <div>
@@ -1284,7 +1575,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                           </BodyShort>
                         </div>
                       </div>
-                      <TemaDashboardReadmore />
+                      <TemaDashboardDetailKravReadmore />
                     </div>
                   )
                 })}

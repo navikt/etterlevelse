@@ -90,17 +90,13 @@ export const mapEtterlevelseToFormValue = (
   const suksesskriterieBegrunnelser = etterlevelse.suksesskriterieBegrunnelser || []
 
   if (krav) {
-    if (suksesskriterieBegrunnelser.length) {
-      krav.suksesskriterier.forEach((suksesskriterium: ISuksesskriterie) => {
-        suksesskriterieBegrunnelser.map((suksesskriteriumBegrunnelse) => {
-          if (suksesskriteriumBegrunnelse.suksesskriterieId === suksesskriterium.id) {
-            suksesskriteriumBegrunnelse.behovForBegrunnelse = suksesskriterium.behovForBegrunnelse
-          }
-          return suksesskriteriumBegrunnelse
-        })
-      })
-    } else {
-      krav.suksesskriterier.forEach((suksesskriterium: ISuksesskriterie) => {
+    krav.suksesskriterier.forEach((suksesskriterium: ISuksesskriterie) => {
+      const suksesskriteriumBegrunnelse = suksesskriterieBegrunnelser.find(
+        (begrunnelse) => begrunnelse.suksesskriterieId === suksesskriterium.id
+      )
+      if (suksesskriteriumBegrunnelse) {
+        suksesskriteriumBegrunnelse.behovForBegrunnelse = suksesskriterium.behovForBegrunnelse
+      } else {
         suksesskriterieBegrunnelser.push({
           suksesskriterieId: suksesskriterium.id,
           behovForBegrunnelse: suksesskriterium.behovForBegrunnelse,
@@ -110,8 +106,8 @@ export const mapEtterlevelseToFormValue = (
           veiledningsTekst: '',
           veiledningsTekst2: '',
         })
-      })
-    }
+      }
+    })
   }
 
   return {

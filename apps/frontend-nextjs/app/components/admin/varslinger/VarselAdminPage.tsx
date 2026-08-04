@@ -12,10 +12,7 @@ import EditMelding from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
 
 type TSection =
-  | 'utsendtMelding'
-  | EMeldingType.SYSTEM
-  | EMeldingType.FORSIDE
-  | EMeldingType.OM_ETTERLEVELSE
+  'utsendtMelding' | EMeldingType.SYSTEM | EMeldingType.FORSIDE | EMeldingType.OM_ETTERLEVELSE
 
 export const VarselAdminPage = () => {
   const params = useParams<{ tab?: TSection }>()

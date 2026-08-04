@@ -49,7 +49,7 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
         <CopyButton
           variant='action'
           copyText={`[${risikoscenario.navn}](${window.location.origin}${pvkDokumentasjonStepUrl(etterlevelseDokumentasjonId, risikoscenario.pvkDokumentId, stepUrl, `?${queryUrl}`)})`}
-          text='Kopiér scenario riktekstfelt lenke med titel'
+          text='Kopiér scenario riktekstfelt lenke med tittel'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
         />

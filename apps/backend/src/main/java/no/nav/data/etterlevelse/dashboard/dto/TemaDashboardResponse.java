@@ -13,7 +13,9 @@ public class TemaDashboardResponse {
 
     private String temaCode;
     private String temaName;
+    private int kravAntallPerTema;
     private int kravTotal;
+    private int kravIkkePaabegynt;
     private int kravUnderArbeid;
     private int kravFerdigVurdert;
     private int suksesskriterierUnderArbeid;

@@ -276,8 +276,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
             Som regel vil det i tillegg bes om besvarelse i fritekstfelt. Det er kraveier som avgjør
             om en fritekst besvarelse er nødvendig eller ikke: hvis dere ikke ser et fritekstfelt
             for et kriterium, holder det å huke av et av valgene nevnt over. Når dere har svart på
-            alle suksesskriteriene, kan dere ferdigstille kravet. Det er fortsatt mulig å redigere
-            besvarelsen selv om status er satt til ferdigstilt.
+            alle suksesskriteriene, velger dere "Ferdig utfylt". Markering av kravet som ferdig gir
+            bedre oversikt for både dere og Nav over hvilke krav som er ferdig dokumentert. Det blir
+            fortsatt mulig å redigere besvarelsen selv om status er satt til ferdigstilt.
           </BodyLong>
           <BodyLong spacing>
             Det er mulig å innhente inspirasjon fra andre. I fanen “{EKravTab.ETTERLEVER}” kan dere
