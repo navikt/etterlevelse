@@ -160,7 +160,7 @@ export const BehandlingensLivslopPage = () => {
             window.history.pushState(
               { savedAlert: true, pvkDokument: response },
               '',
-              `${dokumentasjonUrl}/${response.etterlevelseDokumentasjonId}/behandlingens-livslop/${response.id}`
+              `${dokumentasjonUrl}/${response.etterlevelseDokumentasjonId}${behandlingensLivslop}/${response.id}`
             )
 
             await formRef.current.resetForm({
