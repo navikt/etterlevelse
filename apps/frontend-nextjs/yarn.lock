@@ -1058,7 +1058,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:^8.16.1":
+"@navikt/ds-react@npm:8.16.1":
   version: 8.16.1
   resolution: "@navikt/ds-react@npm:8.16.1"
   dependencies:
@@ -1076,6 +1076,27 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/d1fbf9cdc7ee4e29723515ce85c120ce860a835f1f23225baaef60d8f8697c20b3d52425b8e316ca216f314b9be4b93940d670f6d24a4cb128a66bfbe21052cf
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch":
+  version: 8.16.1
+  resolution: "@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch::version=8.16.1&hash=e1fe3b"
+  dependencies:
+    "@floating-ui/react": "npm:0.27.20"
+    "@floating-ui/react-dom": "npm:^2.1.9"
+    "@navikt/aksel-icons": "npm:^8.16.1"
+    "@navikt/ds-tokens": "npm:^8.16.1"
+    date-fns: "npm:^4.0.0"
+    react-day-picker: "npm:10.0.1"
+  peerDependencies:
+    "@types/react": ^17.0.30 || ^18 || ^19
+    react: ^17 || ^18 || ^19
+    react-dom: ^17 || ^18 || ^19
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/63c81ad53a4f2c46ab132261eb73eaf6efc4051d67edfeacbd30958f42ad46d462886c190458eb64d9b74b73a874c55a2e79ffefefa92de4dd6932d91fe77986
   languageName: node
   linkType: hard
 
@@ -3703,7 +3724,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
     "@navikt/aksel-icons": "npm:^8.16.1"
     "@navikt/ds-css": "npm:^8.16.1"
-    "@navikt/ds-react": "npm:^8.16.1"
+    "@navikt/ds-react": "patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch"
     "@navikt/ds-tailwind": "npm:^8.16.1"
     "@next/eslint-plugin-next": "npm:^16.3.0"
     "@tailwindcss/postcss": "npm:^4.3.3"

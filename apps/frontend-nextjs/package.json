@@ -103,7 +103,8 @@
     "typescript": "^6.0.3"
   },
   "resolutions": {
-    "prosemirror-model": "1.25.11"
+    "prosemirror-model": "1.25.11",
+    "@navikt/ds-react": "patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch"
   },
   "packageManager": "yarn@4.16.0"
 }
