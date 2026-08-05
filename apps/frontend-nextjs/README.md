@@ -2,19 +2,23 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-### Requires Node 20.19+
+### Requires Node 22.22+
 
 ### Install deps
 
 `yarn install`
 
-If you use `nvm`:
+To check node version:
 
-`nvm use`
+`node -v`
+
+If node version is wrong, use `nvm`:
+
+`nvm use` or `nvm use <version-number>`
 
 ### Login with Google Cloud with @nav.no user
 
-Do this in Google Chrome as it doesn't work in Firefox on Mac
+Do this in Google Chrome as it doesn't work on Firefox on Mac
 
 `gcloud auth login`
 
@@ -30,7 +34,7 @@ Remember to flush sockets when you can't login
 
 ## Other
 
-### To use Yarn you need to
+### To use Yarn v4 and node you need to
 
 1. `brew install yarn`
 2. `brew install node`
