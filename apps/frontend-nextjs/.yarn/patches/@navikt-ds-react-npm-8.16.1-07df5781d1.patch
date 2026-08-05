@@ -1,0 +1,26 @@
+diff --git a/esm/types/theme.d.ts b/esm/types/theme.d.ts
+index ae2650dbe23ad609287fe26847bafe5730e412d5..8e4344da52dd3ca61fe0ebbf422019937ec47aad 100644
+--- a/esm/types/theme.d.ts
++++ b/esm/types/theme.d.ts
+@@ -8,7 +8,7 @@ export type AkselColor = AkselColorRole | keyof CustomAkselColor;
+ 
+ declare global {
+   namespace React {
+-    interface HTMLAttributes {
++    interface HTMLAttributes<T> {
+       "data-color"?: AkselColor;
+     }
+   }
+diff --git a/src/types/theme.d.ts b/src/types/theme.d.ts
+index ae2650dbe23ad609287fe26847bafe5730e412d5..8e4344da52dd3ca61fe0ebbf422019937ec47aad 100644
+--- a/src/types/theme.d.ts
++++ b/src/types/theme.d.ts
+@@ -8,7 +8,7 @@ export type AkselColor = AkselColorRole | keyof CustomAkselColor;
+ 
+ declare global {
+   namespace React {
+-    interface HTMLAttributes {
++    interface HTMLAttributes<T> {
+       "data-color"?: AkselColor;
+     }
+   }
