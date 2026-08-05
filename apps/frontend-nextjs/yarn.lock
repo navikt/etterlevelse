@@ -7308,7 +7308,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^6.0.3":
+"typescript@npm:6.0.3":
   version: 6.0.3
   resolution: "typescript@npm:6.0.3"
   bin:
@@ -7318,13 +7318,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^6.0.3#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A6.0.3#~/.yarn/patches/typescript-npm-6.0.3-585eecd158.patch":
   version: 6.0.3
-  resolution: "typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>::version=6.0.3&hash=5786d5"
+  resolution: "typescript@patch:typescript@npm%3A6.0.3#~/.yarn/patches/typescript-npm-6.0.3-585eecd158.patch::version=6.0.3&hash=0a5364"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/2f25c74e65663c248fa1ade2b8459d9ce5372ff9dad07067310f132966ebec1d93f6c42f0baf77a6b6a7a91460463f708e6887013aaade22111037457c6b25df
+  checksum: 10c0/9a1c5395402b5941b2406ef2b1659328c8ca90890db06d39d6c6dbd84aa909ee28c821003600c459cf39bdbea3c3782b09e38240d9392867ef5ea54b6abf9d33
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@patch%3Atypescript@npm%253A6.0.3%23~/.yarn/patches/typescript-npm-6.0.3-585eecd158.patch#optional!builtin<compat/typescript>":
+  version: 6.0.3
+  resolution: "typescript@patch:typescript@patch%3Atypescript@npm%253A6.0.3%23~/.yarn/patches/typescript-npm-6.0.3-585eecd158.patch%3A%3Aversion=6.0.3&hash=0a5364#optional!builtin<compat/typescript>::version=6.0.3&hash=5786d5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/505d8ba1b179bf8bba8eff3ec017501124597746037d4735131744db1561ffc5cdd8e7f30add4b301f7ed1f72b1281e537869fa6a4e3408dc7b95e98a52e5204
   languageName: node
   linkType: hard
 

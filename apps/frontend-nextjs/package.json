@@ -104,7 +104,8 @@
   "resolutions": {
     "prosemirror-model": "1.25.11",
     "@navikt/ds-react": "patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch",
-    "json-diff-kit": "patch:json-diff-kit@npm%3A1.0.35#~/.yarn/patches/json-diff-kit-npm-1.0.35-99a2649175.patch"
+    "json-diff-kit": "patch:json-diff-kit@npm%3A1.0.35#~/.yarn/patches/json-diff-kit-npm-1.0.35-99a2649175.patch",
+    "typescript": "patch:typescript@npm%3A6.0.3#~/.yarn/patches/typescript-npm-6.0.3-585eecd158.patch"
   },
   "packageManager": "yarn@4.16.0"
 }
