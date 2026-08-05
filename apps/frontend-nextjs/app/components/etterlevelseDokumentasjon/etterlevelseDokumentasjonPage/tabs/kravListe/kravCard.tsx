@@ -208,12 +208,13 @@ export const KravCard = (props: IProps) => {
               <StatusView status='Inneholder risikoscenario' variant='alt1' />
             )}
 
-            {krav.etterlevelseStatus && (
-              <StatusView
-                status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
-                variant={getStatusLabelColor(krav.etterlevelseStatus)}
-              />
-            )}
+            {krav.etterlevelseStatus &&
+              krav.etterlevelseStatus !== EEtterlevelseStatus.IKKE_PAABEGYNT && (
+                <StatusView
+                  status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
+                  variant={getStatusLabelColor(krav.etterlevelseStatus)}
+                />
+              )}
           </div>
         )}
       </div>

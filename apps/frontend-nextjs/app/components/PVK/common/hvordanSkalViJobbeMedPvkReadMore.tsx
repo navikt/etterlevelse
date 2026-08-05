@@ -2,7 +2,7 @@ import { BodyShort, List, ReadMore } from '@navikt/ds-react'
 
 export const HvordanSkalViJobbeMedPvkReadMore = () => (
   <ReadMore className='mb-5 max-w-[766px]' header='Hvordan skal vi jobbe med PVK?'>
-    <BodyShort>
+    <BodyShort spacing>
       I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en risikoanalyse.
       Prosessen inkluderer:
     </BodyShort>
@@ -20,7 +20,7 @@ export const HvordanSkalViJobbeMedPvkReadMore = () => (
       </List.Item>
       <List.Item>
         Dere gjør eventuelle endringer, og sender til risikoeier for beslutning om risikonivået er
-        akseptabelt.
+        akseptabelt, eller tilbake til PVO hvis de har bedt om det.
       </List.Item>
       <List.Item>
         Risikoeieren godkjenner restrisikoen. Idet risikoeier gjør det, arkiveres den endelige,

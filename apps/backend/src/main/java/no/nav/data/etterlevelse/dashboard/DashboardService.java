@@ -92,8 +92,75 @@ public class DashboardService {
         List<EtterlevelseDokumentasjon> allEdoksWithAvdeling = etterlevelseDokumentasjonService.getByAvdeling(avdelingId);
         List<Krav> aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
 
+        return buildDashboardTable(allEdoksWithAvdeling, aktivKrav);
+    }
+
+    public List<DashboardTableResponse> getDashboardTableByTema(String temaCode, String avdelingId, String seksjonId, String enhetId, List<String> teamIds) {
+        List<EtterlevelseDokumentasjon> doks;
+
+        if (avdelingId != null && !avdelingId.isEmpty()) {
+            String effectiveAvdelingId = "ingen-avdeling".equals(avdelingId) ? "" : avdelingId;
+            doks = etterlevelseDokumentasjonService.getByAvdeling(effectiveAvdelingId);
+
+            if (seksjonId != null && !seksjonId.isEmpty()) {
+                if (seksjonId.equals("ingen-seksjon")) {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
+                    ).toList();
+                } else {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner() != null &&
+                            d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
+                                    .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
+                    ).toList();
+                }
+            }
+
+            if (enhetId != null && !enhetId.isEmpty()) {
+                if (enhetId.equals("ingen-enhet")) {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() == null ||
+                            d.getEtterlevelseDokumentasjonData().getEnheter().isEmpty()
+                    ).toList();
+                } else {
+                    doks = doks.stream().filter(d ->
+                            d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
+                            d.getEtterlevelseDokumentasjonData().getEnheter().stream()
+                                    .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
+                    ).toList();
+                }
+            }
+        } else {
+            doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
+        }
+
+        if (teamIds != null && !teamIds.isEmpty()) {
+            doks = doks.stream().filter(d ->
+                    d.getTeams() != null &&
+                    d.getTeams().stream().anyMatch(teamIds::contains)
+            ).toList();
+        }
+
+        List<Krav> aktivKrav;
+        if (temaCode != null && !temaCode.isEmpty()) {
+            var lovCodeForTema = CodelistService.getCodelist(ListName.LOV)
+                    .stream().filter(lov -> lov.getValueFromKeyData("tema").equals(temaCode))
+                    .map(Codelist::getCode).toList();
+
+            aktivKrav = kravService.getByFilter(KravFilter.builder().lover(lovCodeForTema).status(List.of(KravStatus.AKTIV.name())).build());
+        } else {
+            aktivKrav = kravService.getByFilter(KravFilter.builder().status(List.of(KravStatus.AKTIV.name())).build());
+        }
+
+        return buildDashboardTable(doks, aktivKrav).stream()
+                .filter(r -> r.getAntallKrav() != null && r.getAntallKrav() > 0)
+                .toList();
+    }
+
+    private List<DashboardTableResponse> buildDashboardTable(List<EtterlevelseDokumentasjon> doks, List<Krav> aktivKrav) {
         LocalDate now = LocalDate.now();
-        return allEdoksWithAvdeling.stream()
+        return doks.stream()
                 .map(dok -> {
                     List<Etterlevelse> etterlevelserForDok = etterlevelseService.getByEtterlevelseDokumentasjon(dok.getId());
                     List<Krav> kravForEdok = new ArrayList<>(aktivKrav.stream().filter(k ->
@@ -211,15 +278,16 @@ public class DashboardService {
                     }
 
                     //etterlevelseStats
+                    dashboardTableResponse.setIkkePaabegynt(
+                        dok.getEtterlevelseDokumentasjonData().getStatus() == EtterlevelseDokumentasjonStatus.UNDER_ARBEID
+                        && etterlevelserForDok.isEmpty()
+                    );
+
                     LocalDateTime sistOppdatertEtterlevelse = LocalDateTime.of(2000, 1, 1, 0, 0);
 
                     var oppfyltEtterlevelseList = aktivEtterlevelserForDok.stream()
                             .filter(e -> e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT)
                             .toList();
-
-                    long ikkeRelevantCount = aktivEtterlevelserForDok.stream()
-                            .filter(e -> e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
-                            .count();
 
                     for (Etterlevelse etterlevelse : etterlevelserForDok) {
                         if(etterlevelse.getLastModifiedDate().isAfter(sistOppdatertEtterlevelse)) {
@@ -229,9 +297,23 @@ public class DashboardService {
 
                     dashboardTableResponse.setAntallKrav(totalKravForEdok);
                     dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
-                    long oppfyltDenominator = totalKravForEdok - ikkeRelevantCount;
-                    double prosent = oppfyltDenominator > 0 ? ((double) oppfyltEtterlevelseList.size() / oppfyltDenominator) * 100 : 0;
-                    dashboardTableResponse.setOppfyltKravProsent( (int) Math.floor(prosent));
+
+                    int antallSuksesskriterierOppfylt = 0;
+                    int antallSuksesskriterierIkkeOppfylt = 0;
+                    for (Etterlevelse e : oppfyltEtterlevelseList) {
+                        for (var begrunnelse : e.getSuksesskriterieBegrunnelser()) {
+                            if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
+                                antallSuksesskriterierOppfylt++;
+                            } else if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT) {
+                                antallSuksesskriterierIkkeOppfylt++;
+                            }
+                        }
+                    }
+                    dashboardTableResponse.setAntallSuksesskriterierOppfylt(antallSuksesskriterierOppfylt);
+                    dashboardTableResponse.setAntallSuksesskriterierIkkeOppfylt(antallSuksesskriterierIkkeOppfylt);
+                    int totalSuksesskriterier = antallSuksesskriterierOppfylt + antallSuksesskriterierIkkeOppfylt;
+                    double prosent = totalSuksesskriterier > 0 ? ((double) antallSuksesskriterierOppfylt / totalSuksesskriterier) * 100 : 0;
+                    dashboardTableResponse.setOppfyltKravProsent((int) Math.floor(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
 
                     var versjonHistorikk = dok.getEtterlevelseDokumentasjonData().getVersjonHistorikk();
@@ -334,6 +416,7 @@ public class DashboardService {
             Map<UUID, List<Etterlevelse>> etterlevelseByDokId
     ) {
         int totalDokumenter = doks.size();
+        int dokIkkePaabegynt = 0;
         int dokUnderArbeid = 0;
         int dokSendtTilGodkjenning = 0;
         int dokGodkjent = 0;
@@ -342,11 +425,15 @@ public class DashboardService {
 
         for (var dok : doks) {
             var status = dok.getEtterlevelseDokumentasjonData().getStatus();
-            if (status == EtterlevelseDokumentasjonStatus.UNDER_ARBEID) dokUnderArbeid++;
-            else if (status == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) dokSendtTilGodkjenning++;
-            else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
-
             var etterlevelseList = etterlevelseByDokId.getOrDefault(dok.getId(), List.of());
+            if (status == EtterlevelseDokumentasjonStatus.UNDER_ARBEID) {
+                if (etterlevelseList.isEmpty()) {
+                    dokIkkePaabegynt++;
+                } else {
+                    dokUnderArbeid++;
+                }
+            } else if (status == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) dokSendtTilGodkjenning++;
+            else if (status == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) dokGodkjent++;
 
             var aktivEtterlevelseList = etterlevelseList.stream()
                     .filter(e -> aktivKrav.stream().anyMatch(k ->
@@ -368,6 +455,7 @@ public class DashboardService {
                 .avdelingNavn(avdelingNavn)
                 .dokumenter(DokumenterStats.builder()
                         .total(totalDokumenter)
+                        .ikkePaabegynt(dokIkkePaabegynt)
                         .underArbeid(dokUnderArbeid)
                         .sendtTilGodkjenning(dokSendtTilGodkjenning)
                         .godkjentAvRisikoeier(dokGodkjent)
@@ -509,7 +597,7 @@ public class DashboardService {
                 .build();
     }
 
-    public List<TemaDashboardResponse> getTemaDashboardStats(String temaId ,String avdelingId, String seksjonId, String enhetId) {
+    public List<TemaDashboardResponse> getTemaDashboardStats(String temaId ,String avdelingId, String seksjonId, String enhetId, List<String> teamIds) {
         List<EtterlevelseDokumentasjon> doks;
 
         if (avdelingId != null && !avdelingId.isEmpty()) {
@@ -547,6 +635,13 @@ public class DashboardService {
             }
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
+        }
+
+        if (teamIds != null && !teamIds.isEmpty()) {
+            doks = doks.stream().filter(d ->
+                    d.getTeams() != null &&
+                    d.getTeams().stream().anyMatch(teamIds::contains)
+            ).toList();
         }
 
         var dokIds = doks.stream().map(EtterlevelseDokumentasjon::getId).toList();
@@ -596,6 +691,31 @@ public class DashboardService {
             kravForEdok.forEach(k -> gyldigeKravKeys.add(k.getKravNummer() + "_" + k.getKravVersjon()));
             etterlevelserNotInKravForEdok.forEach(e -> gyldigeKravKeys.add(e.getKravNummer() + "_" + e.getKravVersjon()));
 
+            var existingEtterlevelseKeys = new HashSet<String>();
+            for (var etterlevelse : etterlevelseList) {
+                String key = etterlevelse.getKravNummer() + "_" + etterlevelse.getKravVersjon();
+                if (gyldigeKravKeys.contains(key)) {
+                    existingEtterlevelseKeys.add(key);
+                }
+            }
+
+            for (var krav : kravForEdok) {
+                String key = krav.getKravNummer() + "_" + krav.getKravVersjon();
+                if (!existingEtterlevelseKeys.contains(key)) {
+                    String temaCode = temaByKravKey.getOrDefault(key, "UTEN_TEMA");
+                    var stats = statsMap.computeIfAbsent(temaCode, tc -> {
+                        if ("UTEN_TEMA".equals(tc)) {
+                            return TemaDashboardResponse.builder().temaCode(tc).temaName("Uten tema").build();
+                        }
+                        var temaData = CodelistService.getCodelist(ListName.TEMA, tc);
+                        String temaName = temaData != null ? temaData.getShortName() : tc;
+                        return TemaDashboardResponse.builder().temaCode(tc).temaName(temaName).build();
+                    });
+                    stats.setKravIkkePaabegynt(stats.getKravIkkePaabegynt() + 1);
+                    dokIdsByTema.computeIfAbsent(temaCode, k -> new HashSet<>()).add(dok.getId());
+                }
+            }
+
             for (var etterlevelse : etterlevelseList) {
                 String kravKey = etterlevelse.getKravNummer() + "_" + etterlevelse.getKravVersjon();
 
@@ -636,6 +756,7 @@ public class DashboardService {
 
                     if (isFerdig) {
                         switch (sb.getSuksesskriterieStatus()) {
+                            case IKKE_PAABEGYNT -> {}
                             case UNDER_ARBEID -> {}
                             case OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierOppfylt(stats.getFerdigUtfyltKravSuksesskriterierOppfylt() + 1);
                             case IKKE_OPPFYLT -> stats.setFerdigUtfyltKravSuksesskriterierIkkeOppfylt(stats.getFerdigUtfyltKravSuksesskriterierIkkeOppfylt() + 1);
@@ -649,6 +770,10 @@ public class DashboardService {
         statsMap.forEach((temaCode, stats) -> {
             var dokIdsForTema = dokIdsByTema.getOrDefault(temaCode, Set.of());
             stats.setEtterlevelseDokumentCount(dokIdsForTema.size());
+            long uniqueKrav = temaByKravKey.entrySet().stream()
+                    .filter(e -> temaCode.equals(e.getValue()))
+                    .count();
+            stats.setKravAntallPerTema((int) uniqueKrav);
         });
 
         return statsMap.values().stream()
@@ -752,13 +877,13 @@ public class DashboardService {
                 }
         );
 
-        createKravDashboardCount(aktivKravList, kravDashboardStats, alleEtterlevelse);
-        createKravDashboardCount(utgaatKravUtenNyVersjon, kravDashboardStats, alleEtterlevelse);
+        createKravDashboardCount(aktivKravList, kravDashboardStats, alleEtterlevelse, doks);
+        createKravDashboardCount(utgaatKravUtenNyVersjon, kravDashboardStats, alleEtterlevelse, doks);
 
        return kravDashboardStats;
     }
 
-    private void createKravDashboardCount (List<Krav> kravList, List<KravDashboardResponse> kravDashboardStats, List<Etterlevelse> alleEtterlevelse) {
+    private void createKravDashboardCount (List<Krav> kravList, List<KravDashboardResponse> kravDashboardStats, List<Etterlevelse> alleEtterlevelse, List<EtterlevelseDokumentasjon> doks) {
         kravList.forEach(krav -> {
             KravDashboardResponse kravDashboardResponse = KravDashboardResponse.builder()
                     .kravId(krav.getId())
@@ -768,17 +893,32 @@ public class DashboardService {
                     .kravNavn(krav.getNavn())
                     .build();
 
-            getKravStats(kravDashboardResponse, alleEtterlevelse);
+            getKravStats(kravDashboardResponse, krav, alleEtterlevelse, doks);
 
             kravDashboardStats.add(kravDashboardResponse);
         });
     }
 
-    private void getKravStats (KravDashboardResponse kravDashboardResponse, List<Etterlevelse> alleEtterlevelse) {
+    private void getKravStats (KravDashboardResponse kravDashboardResponse, Krav krav, List<Etterlevelse> alleEtterlevelse, List<EtterlevelseDokumentasjon> doks) {
         var etterlevelseList = alleEtterlevelse.stream().filter(e ->
                 e.getKravNummer().equals(kravDashboardResponse.getKravNummer()) &&
                 e.getKravVersjon().equals(kravDashboardResponse.getKravVersjon())
         ).toList();
+
+        var dokIdsWithEtterlevelse = etterlevelseList.stream()
+                .map(e -> e.getEtterlevelseDokumentasjonId())
+                .collect(Collectors.toSet());
+
+        long ikkePaabegynt = doks.stream()
+                .filter(dok -> {
+                    var irrelevans = dok.getIrrelevansFor();
+                    var relevansFor = krav.getRelevansFor();
+                    return relevansFor.isEmpty() || !new HashSet<>(irrelevans).containsAll(relevansFor);
+                })
+                .filter(dok -> !dokIdsWithEtterlevelse.contains(dok.getId()))
+                .count();
+
+        kravDashboardResponse.setAntallIkkePaabegynt((int) ikkePaabegynt);
 
         for (var etterlevelse : etterlevelseList) {
             boolean isFerdig = etterlevelse.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT
@@ -802,6 +942,7 @@ public class DashboardService {
 
                 if (isFerdig) {
                     switch (sb.getSuksesskriterieStatus()) {
+                        case IKKE_PAABEGYNT -> {}
                         case UNDER_ARBEID -> {}
                         case OPPFYLT -> kravDashboardResponse.setAntallFerdigUtfyltKravSuksesskriterierOppfylt(kravDashboardResponse.getAntallFerdigUtfyltKravSuksesskriterierOppfylt() + 1);
                         case IKKE_OPPFYLT -> kravDashboardResponse.setAntallFerdigUtfyltKravSuksesskriterierIkkeOppfylt(kravDashboardResponse.getAntallFerdigUtfyltKravSuksesskriterierIkkeOppfylt() + 1);

@@ -1,14 +1,13 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import java.util.List;
-import java.util.UUID;
-
+import no.nav.data.etterlevelse.common.domain.KravId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import no.nav.data.etterlevelse.common.domain.KravId;
+import java.util.List;
+import java.util.UUID;
 
 public interface EtterlevelseDokumentasjonRepo extends JpaRepository<EtterlevelseDokumentasjon, UUID> {
 
@@ -37,5 +36,10 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<Etterlevels
             countQuery = "select count(1) from etterlevelse_dokumentasjon where data->> 'title' not ilike '%fant ikke behandling%' and data->'behandlingIds' != '[]'",
             nativeQuery = true)
     Page<EtterlevelseDokumentasjon> getAllEtterlevelseDokumentasjonWithValidBehandling(Pageable pageable);
+
+    @Query(value = "select * from etterlevelse_dokumentasjon order by created_date desc",
+            countQuery = "select count(*) from etterlevelse_dokumentasjon order by created_date desc",
+            nativeQuery = true)
+    List<EtterlevelseDokumentasjon> findLatestCreated(Pageable pageable);
 
 }

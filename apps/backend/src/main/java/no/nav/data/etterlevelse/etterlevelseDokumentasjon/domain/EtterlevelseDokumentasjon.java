@@ -83,6 +83,10 @@ public class EtterlevelseDokumentasjon extends Auditable  {
         return etterlevelseDokumentasjonData.getAvdelingNavn();
     }
 
+    public List<String> getResources() {
+        return etterlevelseDokumentasjonData.getResources();
+    }
+
     public List<String> getTeams() {
         return etterlevelseDokumentasjonData.getTeams();
     }

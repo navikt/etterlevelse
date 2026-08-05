@@ -36,7 +36,9 @@ export interface ISeksjonOption {
 export interface ITemaDashboardStats {
   temaCode: string
   temaName: string
+  kravAntallPerTema: number
   kravTotal: number
+  kravIkkePaabegynt: number
   kravUnderArbeid: number
   kravFerdigVurdert: number
   suksesskriterierUnderArbeid: number
@@ -57,6 +59,7 @@ export interface IKravDashboardStats {
   kravNummer: number
   kravVersjon: number
   etterlevelseTotal: number
+  antallIkkePaabegynt: number
   antallUnderArbeid: number
   antallFerdigVurdert: number
   antallSuksesskriterierUnderArbeid: number
@@ -108,6 +111,9 @@ export interface IDashboardTable {
   antallKrav?: number
   antallOppfyltKrav?: number
   oppfyltKravProsent?: number
+  antallSuksesskriterierOppfylt?: number
+  antallSuksesskriterierIkkeOppfylt?: number
+  ikkePaabegynt?: boolean
   sistOppdatertEtterlevelse: string
   sistGodkjentEtterlevelse?: string
 
@@ -129,6 +135,7 @@ export interface IAvdelingDashboardStats {
   avdelingNavn: string
   dokumenter: {
     total: number
+    ikkePaabegynt?: number
     underArbeid: number
     sendtTilGodkjenning: number
     godkjentAvRisikoeier: number

@@ -33,6 +33,7 @@ export interface IBehandling {
   dataBehandlerList: IDataBehandler[]
   automatiskBehandling: boolean
   profilering: boolean
+  brukerAlleOpplysningstyper: boolean
 }
 
 export interface IDpBehandling {

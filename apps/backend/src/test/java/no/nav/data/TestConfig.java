@@ -40,6 +40,10 @@ public class TestConfig {
     public static class MockFilter extends AADStatelessAuthenticationFilter {
 
         private static AzureUserInfo user;
+        public static AzureUserInfo BRUKER = new AzureUserInfo(new Builder()
+                .claim(StandardClaimNames.NAME, "User Userson")
+                .claim(AzureConstants.IDENT_CLAIM, "U123457")
+                .build(), Set.of(AppRole.WRITE.toAuthority()));
         public static AzureUserInfo KRAVEIER = new AzureUserInfo(new Builder()
                 .claim(StandardClaimNames.NAME, "Name Nameson")
                 .claim(AzureConstants.IDENT_CLAIM, "A123457")

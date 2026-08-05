@@ -91,6 +91,11 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               />
             </div>
 
+            <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
+            {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
+              <DpBehandlingList dpBehandlingIds={dpBehandlingIds} dpBehandlinger={dpBehandlinger} />
+            )}
+
             {env.isDev && (
               <div className='mb-2.5'>
                 {ardoqSystemData.length > 0 && (
@@ -98,16 +103,11 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 )}
                 {ardoqSystemData.length === 0 && (
                   <div className='flex flex-wrap gap-2 items-center'>
-                    <Label size='medium'>System:</Label>
+                    <Label size='medium'>Systemer:</Label>
                     <BodyLong size='medium'>Ikke angitt</BodyLong>
                   </div>
                 )}
               </div>
-            )}
-
-            <BehandlingList behandlingIds={behandlingIds} behandlinger={behandlinger} />
-            {dpBehandlingIds && dpBehandlingIds.length !== 0 && (
-              <DpBehandlingList dpBehandlingIds={dpBehandlingIds} dpBehandlinger={dpBehandlinger} />
             )}
 
             <div className='flex items-start gap-2 mb-2.5'>

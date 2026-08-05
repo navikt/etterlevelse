@@ -2,7 +2,6 @@ package no.nav.data.pvk.pvotilbakemelding.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
 import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;

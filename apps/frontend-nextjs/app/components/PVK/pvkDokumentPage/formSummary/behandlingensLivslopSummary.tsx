@@ -15,7 +15,7 @@ export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
   behandlingensLivslopError,
   customLinkText,
 }) => (
-  <FormSummary className='my-3'>
+  <FormSummary className='my-6'>
     <FormSummary.Header>
       <FormSummary.Heading level='2' id='behandlingensLivslop'>
         Tegn behandlingens livsløp

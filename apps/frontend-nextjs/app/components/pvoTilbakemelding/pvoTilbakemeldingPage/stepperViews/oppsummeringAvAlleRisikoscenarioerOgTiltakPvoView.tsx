@@ -24,11 +24,13 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import {
   pvkDokumentasjonStepUrl,
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterTiltakUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Alert, BodyLong, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { LinkIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, CopyButton, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
@@ -56,7 +58,7 @@ export const filterValues = {
 }
 
 export const tiltakFilterValues = {
-  alleTiltak: 'alle',
+  alleTiltak: 'alleTiltak',
   utenAnsvarlig: 'utenAnsvarlig',
   utenFrist: 'utenFrist',
 }
@@ -114,7 +116,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
   const [filteredRisikoscenarioList, setFilteredRisikosenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakFilter, setTiltakFilter] = useState<string>(tiltakFilterValues.alleTiltak)
-  const [filteredTiltakList, setFilteredTiltakList] = useState<ITiltak[]>([])
+  const [syncedTiltakFilterQuery, setSyncedTiltakFilterQuery] = useState<string | null>(null)
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
@@ -170,15 +172,16 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
 
         await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak: IPageResponse<ITiltak>) => {
           setTiltakList(tiltak.content)
-          setFilteredTiltakList(tiltak.content)
 
           setAntallUtenTiltakAnsvarlig(
             tiltak.content.filter(
               (tiltak: ITiltak) =>
-                !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
+                !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
             ).length
           )
-          setAntallUtenFrist(tiltak.content.filter((tiltak: ITiltak) => !tiltak.frist).length)
+          setAntallUtenFrist(
+            tiltak.content.filter((tiltak: ITiltak) => !tiltak.iverksatt && !tiltak.frist).length
+          )
         })
         setIsLoading(false)
       })()
@@ -261,21 +264,30 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
 
   const onTiltakFilterChange = (filter: string): void => {
     setTiltakFilter(filter)
-    switch (filter) {
-      case tiltakFilterValues.alleTiltak:
-        setFilteredTiltakList(tiltakList)
-        break
+  }
+
+  const filteredTiltakList = useMemo<ITiltak[]>(() => {
+    switch (tiltakFilter) {
       case tiltakFilterValues.utenAnsvarlig:
-        setFilteredTiltakList(
-          tiltakList.filter(
-            (tiltak) => !tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === '')
-          )
+        return tiltakList.filter(
+          (tiltak) =>
+            !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
         )
-        break
       case tiltakFilterValues.utenFrist:
-        setFilteredTiltakList(tiltakList.filter((tiltak) => !tiltak.frist))
-        break
+        return tiltakList.filter((tiltak) => !tiltak.iverksatt && !tiltak.frist)
+      default:
+        return tiltakList
     }
+  }, [tiltakFilter, tiltakList])
+
+  if (
+    filterQuery !== syncedTiltakFilterQuery &&
+    tabQuery === tabValues.tiltak &&
+    filterQuery &&
+    Object.values(tiltakFilterValues).includes(filterQuery)
+  ) {
+    setSyncedTiltakFilterQuery(filterQuery)
+    setTiltakFilter(filterQuery)
   }
 
   return (
@@ -384,6 +396,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                                 />
                               </div>
                             )}
+
+                          <CopyButton
+                            variant='action'
+                            copyText={`${window.location.origin}${pvkDokumentasjonTabFilterRisikoscenarioUrl(stegQuery, tabValues.risikoscenarioer, filterQuery ? filterQuery : filterValues.alleRisikoscenarioer, risikoscenarioId)}`}
+                            text='Kopier lenken til scenarioliste'
+                            activeText='Lenken er kopiert'
+                            icon={<LinkIcon aria-hidden />}
+                          />
                         </Tabs.Panel>
                         <Tabs.Panel value={tabValues.tiltak} className='w-full'>
                           {tiltakList.length === 0 && (
@@ -419,11 +439,20 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                               tiltakList={filteredTiltakList}
                               risikoscenarioList={risikoscenarioList}
                               previousVurdering={previousVurdering}
+                              etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                             />
                           )}
 
                           {filteredTiltakList.length === 0 &&
                             visTomTiltakListeBeskrivelse(tiltakFilter)}
+
+                          <CopyButton
+                            variant='action'
+                            copyText={`${window.location.origin}${pvkDokumentasjonTabFilterTiltakUrl(stegQuery, tabValues.tiltak, tiltakFilter)}`}
+                            text='Kopier lenken til tiltaksliste'
+                            activeText='Lenken er kopiert'
+                            icon={<LinkIcon aria-hidden />}
+                          />
                         </Tabs.Panel>
                       </Tabs>
                     </div>

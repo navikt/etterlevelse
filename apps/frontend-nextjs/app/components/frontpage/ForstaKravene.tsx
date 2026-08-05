@@ -22,8 +22,8 @@ export const ForstaKravene = () => {
       >
         <LinkPanel.Title>Forstå kravene</LinkPanel.Title>
         <LinkPanel.Description>
-          Få oversikt over krav til etterlevelse, og bli trygg på at du kjenner til alle relevante
-          krav for det du lager
+          Hvilke krav må vi etterleve i Nav? Få oversikt over overordnede temaer og alle
+          etterlevelseskrav.
         </LinkPanel.Description>
       </LinkPanel>
     </div>

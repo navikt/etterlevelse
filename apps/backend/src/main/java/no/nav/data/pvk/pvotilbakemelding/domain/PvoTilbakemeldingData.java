@@ -2,7 +2,6 @@ package no.nav.data.pvk.pvotilbakemelding.domain;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data

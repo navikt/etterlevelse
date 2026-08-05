@@ -99,7 +99,7 @@ export const BoolField = (props: IPropsBoolField) => {
   const { label, name, nullable, tooltip, horizontal } = props
 
   return (
-    <FieldWrapper>
+    <FieldWrapper id={name}>
       <Field name={name}>
         {(fieldProps: FieldProps) => (
           <div className='my-3'>

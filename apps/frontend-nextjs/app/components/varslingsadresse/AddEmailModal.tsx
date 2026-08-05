@@ -67,7 +67,7 @@ export const AddEmailModal = (props: IProps) => {
 
         {radioValue === 'epost' && (
           <div className='w-full pl-8'>
-            <Label>Skriv Epost adresse</Label>
+            <Label className='mb-2 block'>Skriv Epost adresse</Label>
             <TextField
               label=''
               hideLabel

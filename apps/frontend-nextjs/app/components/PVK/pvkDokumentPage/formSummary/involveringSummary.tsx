@@ -33,7 +33,7 @@ export const InvolveringSummary: FunctionComponent<TProps> = ({
   return (
     <Field>
       {(fieldProp: FieldProps) => (
-        <FormSummary className='my-3'>
+        <FormSummary className='my-6'>
           <FormSummary.Header>
             <FormSummary.Heading level='2'>{StepTitle[4]}</FormSummary.Heading>
           </FormSummary.Header>

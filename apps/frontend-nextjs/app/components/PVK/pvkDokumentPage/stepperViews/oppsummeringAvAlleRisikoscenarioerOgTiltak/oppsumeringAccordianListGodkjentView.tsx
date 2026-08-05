@@ -17,7 +17,7 @@ import {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { Accordion, Alert, BodyLong, InlineMessage, Label, ReadMore } from '@navikt/ds-react'
+import { Accordion, BodyLong, Label, LocalAlert, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
@@ -179,9 +179,14 @@ export const OppsumeringAccordianListGodkjentView: FunctionComponent<TProps> = (
 
                   {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
                     <div className='mt-5'>
-                      <Alert className='mt-3' variant='warning'>
-                        Dere må legge inn tiltak under Identifisering av risikoscenarioer og tiltak.
-                      </Alert>
+                      <LocalAlert className='mt-3' status='warning'>
+                        <LocalAlert.Header>
+                          <LocalAlert.Title>
+                            Dere må legge inn tiltak under Identifisering av risikoscenarioer og
+                            tiltak.
+                          </LocalAlert.Title>
+                        </LocalAlert.Header>
+                      </LocalAlert>
                     </div>
                   )}
 
@@ -189,9 +194,11 @@ export const OppsumeringAccordianListGodkjentView: FunctionComponent<TProps> = (
                     <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
                     {revurdertEffektCheck && (
-                      <InlineMessage className='mt-3' status='warning'>
-                        Dere må vurdere tiltakenes effekt
-                      </InlineMessage>
+                      <LocalAlert className='mt-3' status='warning'>
+                        <LocalAlert.Header>
+                          <LocalAlert.Title>Dere må vurdere tiltakenes effekt</LocalAlert.Title>
+                        </LocalAlert.Header>
+                      </LocalAlert>
                     )}
 
                     {!revurdertEffektCheck && (
@@ -219,9 +226,13 @@ export const OppsumeringAccordianListGodkjentView: FunctionComponent<TProps> = (
                         )}
 
                         {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
-                          <InlineMessage status='warning' className='mt-3'>
-                            Dere må begrunne denne vurderingen av tiltakenes effekt.
-                          </InlineMessage>
+                          <LocalAlert status='warning' className='mt-3'>
+                            <LocalAlert.Header>
+                              <LocalAlert.Title>
+                                Dere må begrunne denne vurderingen av tiltakenes effekt.
+                              </LocalAlert.Title>
+                            </LocalAlert.Header>
+                          </LocalAlert>
                         )}
                       </div>
                     )}

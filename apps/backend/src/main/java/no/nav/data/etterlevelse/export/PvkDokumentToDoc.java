@@ -34,8 +34,6 @@ import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
-import org.docx4j.jaxb.Context;
-import org.docx4j.wml.ObjectFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -49,7 +47,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class PvkDokumentToDoc {
-    private static final ObjectFactory pvkFactory = Context.getWmlObjectFactory();
 
     private final PvkDokumentService pvkDokumentService;
     private final BehandlingensArtOgOmfangService behandlingensArtOgOmfangService;

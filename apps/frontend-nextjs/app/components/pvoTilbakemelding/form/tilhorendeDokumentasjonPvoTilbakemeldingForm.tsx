@@ -174,7 +174,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
         initialValues={initialValue}
         innerRef={formRef}
       >
-        {({ submitForm, setFieldValue }) => (
+        {({ submitForm, setFieldValue, dirty }) => (
           <Form>
             <div className='z-10 flex flex-col w-full button_container sticky top-0 bg-[#e3eff7]'>
               <div className='mt-2 mb-5 flex flex-row gap-2'>
@@ -196,7 +196,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                   </Button>
                 </div>
               </div>
-              {savedSuccessful && (
+              {savedSuccessful && !dirty && (
                 <div className='my-5'>
                   <LocalAlert size='small' status='success'>
                     <LocalAlert.Header>

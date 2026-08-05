@@ -18,7 +18,11 @@ import {
   ERisikoscenarioType,
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import {
+  ITiltak,
+  filterTiltakList,
+  tiltakFilterValues,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -34,7 +38,17 @@ import {
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, BodyLong, Heading, Loader, ReadMore, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  CopyButton,
+  Heading,
+  InfoCard,
+  Loader,
+  ReadMore,
+  Tabs,
+  ToggleGroup,
+} from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
@@ -64,12 +78,6 @@ export const filterValues = {
   tiltakIkkeAktuelt: 'ingen-tiltak',
 }
 
-export const tiltakFilterValues = {
-  alleTiltak: 'alle',
-  utenAnsvarlig: 'utenAnsvarlig',
-  utenFrist: 'utenFrist',
-}
-
 const visTomListeBeskrivelse = (filter: string | null) => {
   let textBody = ''
   switch (filter) {
@@ -95,6 +103,9 @@ const visTomTiltakListeBeskrivelse = (filter: string | null) => {
       break
     case tiltakFilterValues.utenFrist:
       textBody = 'Det finnes ingen tiltak uten frist 🎉'
+      break
+    case tiltakFilterValues.fristPassert:
+      textBody = 'Det finnes ingen tiltak med passert frist 🎉'
       break
     default:
   }
@@ -144,9 +155,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         filterQuery in tiltakFilterValues
       ) {
         setTiltakFilter(filterQuery)
+        setFilteredTiltakList(filterTiltakList(tiltakList, filterQuery))
       }
     })()
-  }, [tabQuery, filterQuery])
+  }, [tabQuery, filterQuery, tiltakList])
 
   useEffect(() => {
     if (pvkDokument) {
@@ -237,7 +249,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         setAntallUtgaatteFrister(
           tiltakList.filter(
             (tiltak: ITiltak) =>
-              !tiltak.iverksatt && tiltak.frist && moment(now).isAfter(moment(tiltak.frist))
+              !tiltak.iverksatt && tiltak.frist && moment(now).isAfter(moment(tiltak.frist), 'day')
           ).length
         )
       }
@@ -314,22 +326,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     setTiltakFilter(filter)
     const tab: string = tabQuery ? tabQuery : tabValues.tiltak
 
-    switch (filter) {
-      case tiltakFilterValues.alleTiltak:
-        setFilteredTiltakList(tiltakList)
-        break
-      case tiltakFilterValues.utenAnsvarlig:
-        setFilteredTiltakList(
-          tiltakList.filter(
-            (tiltak: ITiltak) =>
-              !tiltak.ansvarlig || (!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name)
-          )
-        )
-        break
-      case tiltakFilterValues.utenFrist:
-        setFilteredTiltakList(tiltakList.filter((tiltak: ITiltak) => !tiltak.frist))
-        break
-    }
+    setFilteredTiltakList(filterTiltakList(tiltakList, filter))
 
     setNavigateUrl(pvkDokumentasjonTabFilterTiltakUrl(steg, tab, filter, tiltakId))
     if (formRef.current?.dirty) {
@@ -448,27 +445,29 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       </ToggleGroup>
                       {risikoscenarioList.length === 0 && (
                         <div className='my-5'>
-                          <Alert variant='info'>
-                            <Heading spacing size='small' level='3'>
-                              Dere har foreløpig ingen risikoscenarioer
-                            </Heading>
-                            Risikoscenarioer legges inn under{' '}
-                            <ExternalLink
-                              href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}?tab=pvk`}
-                            >
-                              PVK-relaterte krav
-                            </ExternalLink>{' '}
-                            eller eventuelt under{' '}
-                            <ExternalLink
-                              href={pvkDokumentasjonStepUrl(
-                                etterlevelseDokumentasjon.id,
-                                pvkDokument.id,
-                                6
-                              )}
-                            >
-                              øvrige risikoscenarioer
-                            </ExternalLink>
-                          </Alert>
+                          <InfoCard data-color='info'>
+                            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                              <Heading spacing size='small' level='3'>
+                                Dere har foreløpig ingen risikoscenarioer
+                              </Heading>
+                              Risikoscenarioer legges inn under{' '}
+                              <ExternalLink
+                                href={`${etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}?tab=pvk`}
+                              >
+                                PVK-relaterte krav
+                              </ExternalLink>{' '}
+                              eller eventuelt under{' '}
+                              <ExternalLink
+                                href={pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjon.id,
+                                  pvkDokument.id,
+                                  6
+                                )}
+                              >
+                                øvrige risikoscenarioer
+                              </ExternalLink>
+                            </InfoCard.Message>
+                          </InfoCard>
                         </div>
                       )}
 
@@ -524,34 +523,43 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                               )}
                           </div>
                         )}
+
+                      <CopyButton
+                        variant='action'
+                        copyText={`${window.location.origin}${pvkDokumentasjonTabFilterRisikoscenarioUrl(steg, tabValues.risikoscenarioer, filterQuery ? filterQuery : filterValues.alleRisikoscenarioer, risikoscenarioId)}`}
+                        text='Kopier lenken til scenarioliste'
+                        activeText='Lenken er kopiert'
+                        icon={<LinkIcon aria-hidden />}
+                      />
                     </Tabs.Panel>
                     <Tabs.Panel value={tabValues.tiltak} className='w-full'>
                       {tiltakList.length === 0 && (
                         <div className='my-5'>
-                          <Alert variant='info'>
-                            <Heading spacing size='small' level='3'>
-                              Foreløpig er ingen tiltak satt
-                            </Heading>
-                            Tiltak legges inn under{' '}
-                            <ExternalLink
-                              href={etterlevelseDokumentasjonPvkTabUrl(
-                                etterlevelseDokumentasjon.id
-                              )}
-                            >
-                              PVK-relaterte krav{' '}
-                            </ExternalLink>{' '}
-                            eller eventuelt under{' '}
-                            <ExternalLink
-                              href={pvkDokumentasjonStepUrl(
-                                etterlevelseDokumentasjon.id,
-                                pvkDokument.id,
-                                6
-                              )}
-                            >
-                              øvrige risikoscenarioer
-                            </ExternalLink>
-                            .
-                          </Alert>
+                          <InfoCard data-color='info'>
+                            <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                              <Heading spacing size='small' level='3'>
+                                Foreløpig er ingen tiltak satt
+                              </Heading>
+                              Tiltak legges inn under{' '}
+                              <ExternalLink
+                                href={etterlevelseDokumentasjonPvkTabUrl(
+                                  etterlevelseDokumentasjon.id
+                                )}
+                              >
+                                PVK-relaterte krav{' '}
+                              </ExternalLink>{' '}
+                              eller eventuelt under{' '}
+                              <ExternalLink
+                                href={pvkDokumentasjonStepUrl(
+                                  etterlevelseDokumentasjon.id,
+                                  pvkDokument.id,
+                                  6
+                                )}
+                              >
+                                øvrige risikoscenarioer.
+                              </ExternalLink>
+                            </InfoCard.Message>
+                          </InfoCard>
                         </div>
                       )}
 
@@ -574,6 +582,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             value={tiltakFilterValues.utenFrist}
                             label={`Uten frist (${antallUtenFrist})`}
                           />
+                          <ToggleGroup.Item
+                            value={tiltakFilterValues.fristPassert}
+                            label={`Frist passert (${antallUtgaatteFrister})`}
+                          />
                         </ToggleGroup>
                       )}
 
@@ -587,6 +599,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             setTiltakList={setTiltakList}
                             filteredTiltakList={filteredTiltakList}
                             setFilteredTiltakList={setFilteredTiltakList}
+                            tiltakFilter={tiltakFilter}
                             risikoscenarioList={risikoscenarioList}
                             formRef={formRef}
                           />
@@ -601,11 +614,20 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                           <TiltakAccordionListReadOnly
                             tiltakList={filteredTiltakList}
                             risikoscenarioList={risikoscenarioList}
+                            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                           />
                         )}
 
                       {filteredTiltakList.length === 0 &&
                         visTomTiltakListeBeskrivelse(tiltakFilter)}
+
+                      <CopyButton
+                        variant='action'
+                        copyText={`${window.location.origin}${pvkDokumentasjonTabFilterTiltakUrl(steg, tabValues.tiltak, tiltakFilter, tiltakId)}`}
+                        text='Kopier lenken til tiltaksliste'
+                        activeText='Lenken er kopiert'
+                        icon={<LinkIcon aria-hidden />}
+                      />
                     </Tabs.Panel>
                   </Tabs>
                 </div>
@@ -621,7 +643,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
             />
           </div>
         </div>
-        <div>
+        <div className='min-w-0'>
           {/* sidepanel */}
           {isPvoTilbakemeldingFerdig && relevantVurdering && (
             <PvkSidePanelWrapper>

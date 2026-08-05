@@ -29,7 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -253,5 +257,4 @@ public class ExportController {
             case PVO_VURDERING -> "Pvo vurdering";
         };
     }
-
 }

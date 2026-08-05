@@ -16,6 +16,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
+import VisMegHvorJegFinnerDigitalPVK from '../omPvk/images/VisMegHvorJegFinnerDigitalPVK.png'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
 const OmStotteTilEtterlevelseAccordion = () => {
@@ -24,6 +25,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
     redigereDokumentegenskaper: 'Redigere dokumentegenskaper og filtrere krav',
     jobbeITemaoversikten: 'Jobbe i temaoversikten',
     besvareEtterlevelseskrav: 'Besvare etterlevelseskrav',
+    behandlerPersonopplysninger: 'Etterlevelse når dere behandler personopplysninger',
     faEtterlevelsenGodkjent: 'Få etterlevelsen godkjent av risikoeier',
     forRisikoeiere: 'For risikoeiere: slik godkjenner du etterlevelsen',
     oppdatereEtterGodkjenning: 'Oppdatere etterlevelsesdokumentasjon etter godkjenning',
@@ -38,6 +40,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
     redigereDokumentegenskaper: 'redigere-dokumentegenskaper-og-filtrere-krav',
     jobbeITemaoversikten: 'jobbe-i-temaoversikten',
     besvareEtterlevelseskrav: 'besvare-etterlevelseskrav',
+    behandlerPersonopplysninger: 'etterlevelse-nar-dere-behandler-personopplysninger',
     faEtterlevelsenGodkjent: 'fa-etterlevelsen-godkjent-av-risikoeier',
     forRisikoeiere: 'for-risikoeiere-slik-godkjenner-du-etterlevelsen',
     oppdatereEtterGodkjenning: 'oppdatere-etterlevelsesdokumentasjon-etter-godkjenning',
@@ -248,14 +251,34 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
           <BodyLong spacing>
             Hvert krav inneholder et sett med suksesskriterier som viser hva dere konkret må gjøre
-            for å etterleve kravet. Hvert kriterium inneholder også en nærmere beskrivelse som
-            hjelper dere med å forstå kriteriet. Dere skal ta stilling til, og bekrefte om,
-            kriteriet er oppfylt, ikke oppfylt eller ikke relevant. Som regel vil det i tillegg bes
-            om besvarelse i fritekstfelt. Det er kraveier som avgjør om en fritekstbesvarelse er
-            nødvendig eller ikke. Hvis dere ikke ser et fritekstfelt for et kriterium, holder det å
-            huke av et av valgene nevnt over. Når dere har svart på alle suksesskriteriene, kan dere
-            ferdigstille kravet. Det er fortsatt mulig å redigere besvarelsen selv om status er satt
-            til ferdigstilt.
+            for å etterleve kravet. Hvert kriterium inneholder også “Utfyllende om kravet” som
+            hjelper dere med å forstå kriteriet.
+          </BodyLong>
+          <BodyLong spacing>Et suksesskriterium kan ha følgende tilstander:</BodyLong>
+          <List as='ul' className='mb-6'>
+            <List.Item title='Ikke påbegynt:'>
+              dette er utgangspunktet når dere først skal dokumentere etterlevelse.
+            </List.Item>
+            <List.Item title='Under arbeid:'>
+              dette velger dere når dere begynner å vurdere etterlevelsen av suksesskriteriet.
+            </List.Item>
+            <List.Item title='Oppfylt:'>
+              dere har kommet frem til at deres etterlevelse oppfyller suksesskriteriet.
+            </List.Item>
+            <List.Item title='Ikke oppfylt:'>
+              dere har kommet frem til at dere ikke oppfyller suksesskriteriet.
+            </List.Item>
+            <List.Item title='Ikke relevant:'>
+              dere konkluderer med at suksesskriteriet ikke gjelder i deres kontekst.
+            </List.Item>
+          </List>
+          <BodyLong spacing>
+            Som regel vil det i tillegg bes om besvarelse i fritekstfelt. Det er kraveier som avgjør
+            om en fritekst besvarelse er nødvendig eller ikke: hvis dere ikke ser et fritekstfelt
+            for et kriterium, holder det å huke av et av valgene nevnt over. Når dere har svart på
+            alle suksesskriteriene, velger dere "Ferdig utfylt". Markering av kravet som ferdig gir
+            bedre oversikt for både dere og Nav over hvilke krav som er ferdig dokumentert. Det blir
+            fortsatt mulig å redigere besvarelsen selv om status er satt til ferdigstilt.
           </BodyLong>
           <BodyLong spacing>
             Det er mulig å innhente inspirasjon fra andre. I fanen “{EKravTab.ETTERLEVER}” kan dere
@@ -279,6 +302,40 @@ const OmStotteTilEtterlevelseAccordion = () => {
             Prioritert kravliste”. Prioritert kravliste står på dokumentets hovedside ved siden av
             “Alle krav”. Her er det også mulig å redigere listen direkte ved å legge til eller
             fjerne enkelte krav.
+          </BodyLong>
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item
+        id={accordionId.behandlerPersonopplysninger}
+        open={openItems[accordionId.behandlerPersonopplysninger]}
+      >
+        <Accordion.Header onClick={() => toggle(accordionId.behandlerPersonopplysninger)}>
+          <div className='flex flex-row'>
+            <h3>{accordionTittel.behandlerPersonopplysninger}</h3>
+            <CopyAccordionLinkButton id={accordionId.behandlerPersonopplysninger} />
+          </div>
+        </Accordion.Header>
+        <Accordion.Content>
+          <BodyLong spacing>
+            Når dere behandler personopplysninger, skal dere vurdere om det er behov for å
+            gjennomføre en Personvernkonsekvensvurdering (PVK). For at det skal være lettere å
+            vurdere behovet, kan dere ta stilling til{' '}
+            <ExternalLink href='/om-pvk#behandlingens-livslop'>Behandlingens livsløp</ExternalLink>{' '}
+            og{' '}
+            <ExternalLink href='/om-pvk#behandlinges-art-og-omfang'>
+              Behandlingens art og omfang
+            </ExternalLink>
+          </BodyLong>
+          <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene  ' className='mb-6'>
+            <Image
+              className='mr-2.5 mt-6 mb-12'
+              src={VisMegHvorJegFinnerDigitalPVK}
+              alt='Skjermbilde som viser hvor man finner Digital PVK'
+            />
+          </ReadMore>
+          <BodyLong spacing>
+            Hvis dere allerede har en PVK i Word, skal dere også registrere dette på siden “Vurder
+            behov for PVK”.
           </BodyLong>
         </Accordion.Content>
       </Accordion.Item>

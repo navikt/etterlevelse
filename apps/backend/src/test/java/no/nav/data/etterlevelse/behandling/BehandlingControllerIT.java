@@ -47,6 +47,8 @@ class BehandlingControllerIT extends IntegrationTestBase {
                 .system(ExternalCode.builder().list("SYSTEM").code("SYS").shortName("Sys").description("desc").external(true).build())
                 .team("team")
                 .dataBehandlerList(List.of())
+                .personopplysningerBruktTilUtviklingAvKiSystemer(false)
+                .kiBenyttesIBehandling(false)
                 .policies(List.of(PolicyResponse.builder()
                         .id("test policy")
                         .opplysningsTypeId("test information type")

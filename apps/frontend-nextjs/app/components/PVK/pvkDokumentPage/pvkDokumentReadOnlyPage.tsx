@@ -22,7 +22,7 @@ import { pvkDokumentasjonReadOnlyStepUrl } from '@/routes/etterlevelseDokumentas
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { Loader, Stepper } from '@navikt/ds-react'
+import { FormProgress, Loader, Stepper } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
@@ -203,7 +203,7 @@ export const PvkDokumentReadOnlyPage = () => {
             <div className='w-full max-w-7xl'>
               <div className='px-2 pb-6'>
                 <CustomizedBreadcrumbs currentPage={currentPage} paths={breadcrumbPaths} />
-                <div>
+                <div className='hidden md:block'>
                   <Stepper
                     aria-labelledby='stepper-heading'
                     activeStep={activeStep}
@@ -221,6 +221,20 @@ export const PvkDokumentReadOnlyPage = () => {
                       )
                     })}
                   </Stepper>
+                </div>
+                <div className='md:hidden'>
+                  <FormProgress
+                    activeStep={activeStep}
+                    totalSteps={StepTitle.length}
+                    onStepChange={(step) => {
+                      setSelectedStep(step)
+                      updateTitleUrlAndStep(step)
+                    }}
+                  >
+                    {StepTitle.map((title) => (
+                      <FormProgress.Step key={title}>{title}</FormProgress.Step>
+                    ))}
+                  </FormProgress>
                 </div>
               </div>
             </div>

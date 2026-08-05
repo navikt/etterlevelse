@@ -10,13 +10,14 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
+import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
-import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
@@ -27,7 +28,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -43,6 +43,8 @@ public class TiltakController {
     private final RisikoscenarioService risikoscenarioService;
     private final TeamcatResourceClient teamcatResourceClient;
     private final TeamcatTeamClient teamcatTeamClient;
+    private final PvkDokumentService pvkDokumentService;
+    private final EtterlevelseDokumentasjonService  etterlevelseDokumentasjonService;
 
     @Operation(summary = "Get All Tiltak")
     @ApiResponse(description = "ok")
@@ -94,6 +96,7 @@ public class TiltakController {
             if(request.isIverksatt()) {
                 request.setIverksattDato(LocalDate.now());
             }
+            hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
             Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
             TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
             risikoscenarioService.updateTiltakOppdatertField(risikoscenarioId, true);
@@ -120,6 +123,7 @@ public class TiltakController {
         if (tiltakToUpdate == null) {
             throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", id));
         }
+        hasUserWriteAccessCheck(tiltakToUpdate.getPvkDokumentId());
         service.updateIverksattDato(tiltakToUpdate, request);
         request.mergeInto(tiltakToUpdate);
         Tiltak tiltak = service.save(tiltakToUpdate, null, true);
@@ -194,6 +198,18 @@ public class TiltakController {
         }
 
         return res;
+    }
+
+    private void hasUserWriteAccessCheck(UUID pvkDokumentId) {
+        var pvkDok = pvkDokumentService.get(pvkDokumentId);
+        if (pvkDok == null) {
+            throw new ValidationException(String.format("Ugyldig pvk dokument %s", pvkDokumentId));
+        }
+        var edok = etterlevelseDokumentasjonService.get(pvkDok.getEtterlevelseDokumentId());
+
+        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
+            throw new ValidationException(String.format("User has no write access for this dokument %s", pvkDokumentId));
+        }
     }
 
 }

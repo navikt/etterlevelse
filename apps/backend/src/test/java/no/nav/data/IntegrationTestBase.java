@@ -255,7 +255,7 @@ public abstract class IntegrationTestBase {
                         .beskrivelse("")
                         .forGjenbruk(false)
                         .teams(List.of("TEST"))
-                        .resources(List.of("TEST"))
+                        .resources(List.of("TEST", "U123457"))
                         .risikoeiere(List.of(""))
                         .irrelevansFor(List.of(""))
                         .update(false)

@@ -246,7 +246,7 @@ const ForstaKravene = () => (
 const StatusIOrganisasjonen = () => (
   <div className='w-full ml-2.5'>
     <LinkPanel
-      href='https://metabase.ansatt.nav.no/dashboard/116-dashboard-for-etterlevelse'
+      href='/dashboard'
       onClick={() => {
         // ampli.logEvent('navigere', {
         //   kilde: 'forside-panel',
@@ -258,7 +258,8 @@ const StatusIOrganisasjonen = () => (
     >
       <LinkPanel.Title>Status i organisasjonen</LinkPanel.Title>
       <LinkPanel.Description>
-        Følg med på status og se hvor godt Nav sine områder dokumenterer på kravene
+        Hvor godt etterlever vi i Nav? Følg med på dashboards som viser status for Nav sine områder
+        og for ulike tema.
       </LinkPanel.Description>
     </LinkPanel>
   </div>

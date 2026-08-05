@@ -1,5 +1,19 @@
 package no.nav.data.etterlevelse.export;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.docx4j.jaxb.Context;
+import org.docx4j.wml.ObjectFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.WordDocUtils;
@@ -32,13 +46,6 @@ import no.nav.data.integration.dpBehandling.DpBehandlingService;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import org.docx4j.jaxb.Context;
-import org.docx4j.wml.ObjectFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Slf4j
 @Service
@@ -75,8 +82,6 @@ public class EtterlevelseDokumentasjonToDoc {
         doc.newLine();
         doc.addLabel("Godkjent av risikoeier:");
         if (etterlevelseDokumentasjon.getStatus() == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER) {
-            List<String> risikoeierNameList = etterlevelseDokumentasjon.getRisikoeiereData().stream().map(risikoeier -> risikoeier.getFullName() + ", ").toList();
-            var nameListLength = risikoeierNameList.size();
             var versjonHistorikk = etterlevelseDokumentasjon
                     .getVersjonHistorikk().stream().filter(historikk -> Objects.equals(historikk.getVersjon(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon()))
                     .toList().getFirst();
@@ -551,6 +556,7 @@ public class EtterlevelseDokumentasjonToDoc {
         public String etterlevelseStatusText(EtterlevelseStatus status) {
             return switch (status) {
                 case UNDER_REDIGERING -> "Under arbeid";
+                case IKKE_PAABEGYNT -> "Ikke påbegynt";
                 case FERDIG -> "Oppfylt";
                 case OPPFYLLES_SENERE -> "Oppfyles senere";
                 case IKKE_RELEVANT -> "Ikke relevant";

@@ -21,7 +21,7 @@ import { IKravReference } from '@/constants/krav/kravConstants'
 import { risikoscenarioTiltakUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, InlineMessage, LocalAlert } from '@navikt/ds-react'
+import { Button, LocalAlert } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
@@ -179,6 +179,13 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   }
 
   useEffect(() => {
+    if (submitSuccess) {
+      const timer = setTimeout(() => setSubmitSuccess(false), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [submitSuccess])
+
+  useEffect(() => {
     if (isCreateTiltakFormActive || isAddExistingMode || isEditTiltakFormActive) {
       setIsTiltakFormActive(true)
     } else {
@@ -247,41 +254,56 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       />
 
       <div>
-        {!isIngenTilgangFormDirty &&
-          !isCreateTiltakFormActive &&
-          !isEditTiltakFormActive &&
-          !isAddExistingMode && (
-            <div className='mt-5 flex gap-2 items-center'>
-              <Button
-                variant='tertiary'
-                type='button'
-                icon={<PencilIcon aria-hidden />}
-                onClick={async () => {
-                  await activeFormButton(() => setIsEditModalOpen(true))
-                }}
-              >
-                Rediger risikoscenario
-              </Button>
-              <SlettOvrigRisikoscenario
-                risikoscenario={risikoscenario}
-                tiltakList={tiltakList}
-                risikoscenarioer={risikoscenarioer}
-                setRisikoscenarioer={setRisikoscenarioer}
-              />
-            </div>
-          )}
+        {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
+          <div className='mt-5 flex gap-2 items-center'>
+            <Button
+              variant='tertiary'
+              type='button'
+              icon={<PencilIcon aria-hidden />}
+              onClick={async () => {
+                await activeFormButton(() => setIsEditModalOpen(true))
+              }}
+            >
+              Rediger risikoscenario
+            </Button>
+            <SlettOvrigRisikoscenario
+              risikoscenario={risikoscenario}
+              tiltakList={tiltakList}
+              risikoscenarioer={risikoscenarioer}
+              setRisikoscenarioer={setRisikoscenarioer}
+            />
+          </div>
+        )}
       </div>
 
       <div className='mt-12'>
         <RisikoscenarioTiltakHeader />
+
+        {!isCreateModalOpen &&
+          !isCreateTiltakFormActive &&
+          !isEditTiltakFormActive &&
+          !isAddExistingMode &&
+          activeRisikoscenario.tiltakIds.length === 0 && (
+            <div className='mt-3'>
+              <IngenTiltakField
+                risikoscenario={activeRisikoscenario}
+                formRef={formRef}
+                submit={submitIngenTiltak}
+                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
+              />
+            </div>
+          )}
+
         {!risikoscenario.ingenTiltak && (
           <div>
             {risikoscenario.tiltakIds.length === 0 &&
               !isCreateTiltakFormActive &&
               !isEditTiltakFormActive && (
-                <InlineMessage className='mt-5 mb-9' status='warning'>
-                  Dere har ikke lagt inn tiltak
-                </InlineMessage>
+                <LocalAlert className='mt-5 mb-9' status='warning'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>Dere har ikke lagt inn tiltak</LocalAlert.Title>
+                  </LocalAlert.Header>
+                </LocalAlert>
               )}
 
             {risikoscenario.tiltakIds.length !== 0 && (
@@ -354,21 +376,6 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               )}
           </div>
         )}
-
-        {!isCreateModalOpen &&
-          !isCreateTiltakFormActive &&
-          !isEditTiltakFormActive &&
-          !isAddExistingMode &&
-          activeRisikoscenario.tiltakIds.length === 0 && (
-            <div className='mt-3'>
-              <IngenTiltakField
-                risikoscenario={activeRisikoscenario}
-                formRef={formRef}
-                submit={submitIngenTiltak}
-                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
-              />
-            </div>
-          )}
 
         {submitSuccess && !isIngenTilgangFormDirty && (
           <LocalAlert className='mt-3' status='success'>

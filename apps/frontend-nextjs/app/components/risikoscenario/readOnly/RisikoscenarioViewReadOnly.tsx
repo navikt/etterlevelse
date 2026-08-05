@@ -7,7 +7,7 @@ import {
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
 import { LinkIcon } from '@navikt/aksel-icons'
-import { BodyLong, CopyButton, List, ReadMore } from '@navikt/ds-react'
+import { BodyLong, CopyButton, Label, List } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { FunctionComponent } from 'react'
 import RisikoscenarioTag from '../common/risikoscenarioTag'
@@ -32,22 +32,17 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       {!noCopyButton && (
         <CopyButton
           variant='action'
+          size='small'
           copyText={window.location.href}
           text='Kopier scenariolenke'
           activeText='Lenken er kopiert'
           icon={<LinkIcon aria-hidden />}
         />
       )}
-      <BodyLong className='mt-5'>{risikoscenario.beskrivelse}</BodyLong>
-
-      {risikoscenario.generelScenario && (
-        <BodyLong className='mt-8'>
-          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
-        </BodyLong>
-      )}
 
       {!risikoscenario.generelScenario && (
-        <ReadMore header='Vis etterlevelseskrav hvor risikoscenarioet inntreffer' className='mt-5'>
+        <div className='mt-5'>
+          <Label>Brukes av følgende krav:</Label>
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
@@ -71,7 +66,18 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
               }
             )}
           </List>
-        </ReadMore>
+        </div>
+      )}
+
+      <Label className='mt-5 block'>Beskrivelse av riskoscenarioet:</Label>
+      <BodyLong className='mt-1 min-w-0 [overflow-wrap:anywhere]'>
+        {risikoscenario.beskrivelse}
+      </BodyLong>
+
+      {risikoscenario.generelScenario && (
+        <BodyLong className='mt-8'>
+          Dette risikoscenarioet er ikke tilknyttet spesifikke etterlevelseskrav.
+        </BodyLong>
       )}
 
       {risikoscenario.sannsynlighetsNivaa !== 0 && (

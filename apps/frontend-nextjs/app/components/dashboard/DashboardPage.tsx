@@ -2,7 +2,7 @@
 
 import { getDashboardStats } from '@/api/dashboard/dashboardApi'
 import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
-import { DashboardReadMore } from '@/components/dashboard/DashboardReadMore'
+import { DashboardReadMore } from '@/components/dashboard/DashboardReadmore/DashboardReadMore'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { InformationSquareIcon } from '@navikt/aksel-icons'

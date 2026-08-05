@@ -209,15 +209,32 @@ export const syncEtterlevelseKriterieBegrunnelseWithKrav = (
   return suksesskriterieBegrunnelse
 }
 
+export const isEtterlevelseIkkePaabegynt = (etterlevelse: IEtterlevelse) => {
+  if (
+    etterlevelse.suksesskriterieBegrunnelser.every(
+      (kriterie) =>
+        kriterie.suksesskriterieStatus === ESuksesskriterieStatus.IKKE_PAABEGYNT &&
+        ['', null, undefined].includes(kriterie.begrunnelse)
+    )
+  ) {
+    return true
+  }
+
+  return false
+}
+
 export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskriterieStatus) => {
-  if (suksessKriterieStatus === ESuksesskriterieStatus.UNDER_ARBEID) {
-    return 'Hva er oppfylt og hva er under arbeid?'
-  } else if (suksessKriterieStatus === ESuksesskriterieStatus.OPPFYLT) {
-    return 'Hvordan oppfylles kriteriet?'
-  } else if (suksessKriterieStatus === ESuksesskriterieStatus.IKKE_OPPFYLT) {
-    return 'Hvorfor er ikke kriteriet oppfylt?'
-  } else {
-    return 'Hvorfor er ikke kriteriet relevant?'
+  switch (suksessKriterieStatus) {
+    case ESuksesskriterieStatus.UNDER_ARBEID:
+      return 'Hva er oppfylt og hva er under arbeid?'
+    case ESuksesskriterieStatus.OPPFYLT:
+      return 'Hvordan oppfylles kriteriet?'
+    case ESuksesskriterieStatus.IKKE_OPPFYLT:
+      return 'Hvorfor er ikke kriteriet oppfylt?'
+    case ESuksesskriterieStatus.IKKE_RELEVANT:
+      return 'Hvorfor er ikke kriteriet relevant?'
+    default:
+      return 'Hvorfor er ikke kriteriet påbegynt?'
   }
 }
 
