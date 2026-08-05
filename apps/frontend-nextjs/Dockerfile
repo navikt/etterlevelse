@@ -10,6 +10,7 @@ COPY package.json .
 COPY yarn.lock .
 COPY .yarnrc.yml .
 COPY .yarn/releases ./.yarn/releases
+COPY .yarn/patches ./.yarn/patches
 
 # Install dependencies
 RUN node .yarn/releases/yarn-4.16.0.cjs --version && node .yarn/releases/yarn-4.16.0.cjs install --immutable
