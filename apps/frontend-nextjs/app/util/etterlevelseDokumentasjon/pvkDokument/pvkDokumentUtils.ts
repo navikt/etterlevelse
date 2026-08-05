@@ -41,8 +41,6 @@ export const getVariantForPVKButton = (
 }
 
 export const isReadOnlyPvkStatus = (status: string) => {
-  console.log('test')
-
   return [
     EPvkDokumentStatus.PVO_UNDERARBEID.toString(),
     EPvkDokumentStatus.SENDT_TIL_PVO.toString(),
