@@ -95,7 +95,6 @@
     "formik": "^2.4.9",
     "husky": "^9.1.7",
     "lint-staged": "17.3.0",
-    "patch-package": "^8.0.1",
     "postcss": "^8.5.25",
     "prettier": "^3.9.6",
     "react-select": "^5.10.2",
