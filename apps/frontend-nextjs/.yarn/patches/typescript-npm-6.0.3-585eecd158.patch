@@ -1,0 +1,13 @@
+diff --git a/lib/lib.es2025.iterator.d.ts b/lib/lib.es2025.iterator.d.ts
+index 13ca5401a15307f3da5097e136fcd3fc72197000..490fe205b06c2eb06070cf7f09b0c45fe0dbf9c4 100644
+--- a/lib/lib.es2025.iterator.d.ts
++++ b/lib/lib.es2025.iterator.d.ts
+@@ -142,5 +142,7 @@ declare global {
+         from<T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>): IteratorObject<T, undefined, unknown>;
+     }
+ 
+-    var Iterator: IteratorConstructor;
++    var Iterator: undefined | {
++        from<T, TReturn>(iterable: Iterator<T, TReturn, any>): IterableIterator<T>;
++    };
+ }

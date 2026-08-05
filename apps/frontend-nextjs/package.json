@@ -13,7 +13,7 @@
     "start": "next start",
     "prettier:check": "prettier -c ./app",
     "eslint:check": "eslint . --cache --max-warnings=0",
-    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run build",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
@@ -95,7 +95,6 @@
     "formik": "^2.4.9",
     "husky": "^9.1.7",
     "lint-staged": "17.3.0",
-    "patch-package": "^8.0.1",
     "postcss": "^8.5.25",
     "prettier": "^3.9.6",
     "react-select": "^5.10.2",
@@ -103,7 +102,10 @@
     "typescript": "^6.0.3"
   },
   "resolutions": {
-    "prosemirror-model": "1.25.11"
+    "prosemirror-model": "1.25.11",
+    "@navikt/ds-react": "patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch",
+    "json-diff-kit": "patch:json-diff-kit@npm%3A1.0.35#~/.yarn/patches/json-diff-kit-npm-1.0.35-99a2649175.patch",
+    "typescript": "patch:typescript@npm%3A6.0.3#~/.yarn/patches/typescript-npm-6.0.3-585eecd158.patch"
   },
   "packageManager": "yarn@4.16.0"
 }

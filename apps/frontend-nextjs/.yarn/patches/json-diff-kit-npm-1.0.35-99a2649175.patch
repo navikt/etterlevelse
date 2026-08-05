@@ -1,0 +1,13 @@
+diff --git a/typings/viewer.d.ts b/typings/viewer.d.ts
+index f0bd1eca5bce2e6bfc5942c1e19bd37f18e5a6ab..d311eceb0f2da3feaa7c641a8755292b6129d255 100644
+--- a/typings/viewer.d.ts
++++ b/typings/viewer.d.ts
+@@ -49,7 +49,7 @@ export declare type HideUnchangedLinesOptions = boolean | {
+      * [⭡ Show 20 lines] [⭥ Show all unchanged lines] [⭣ Show 20 lines]
+      * ```
+      */
+-    expandLineRenderer?: (options?: ExpandLineRendererOptions) => JSX.Element;
++    expandLineRenderer?: (options?: ExpandLineRendererOptions) => React.JSX.Element;
+ };
+ export interface ViewerProps {
+     /** The diff result `[before, after]`. */
