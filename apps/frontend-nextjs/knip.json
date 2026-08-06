@@ -8,5 +8,5 @@
     "duplicates": "warn"
   },
   "entry": ["app/**.{tsx,ts,mjs,css}"],
-  "project": ["app/**/*.{tsx,ts,mjs.css}"]
+  "project": ["app/**/*.{tsx,ts,mjs,css}"]
 }
