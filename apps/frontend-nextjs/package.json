@@ -12,6 +12,7 @@
     "test": "yarn lint-staged",
     "start": "next start",
     "prettier:check": "prettier -c ./app",
+    "knip:test": "yarn knip --max-show-issues 5",
     "eslint:check": "eslint . --cache --max-warnings=0",
     "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
@@ -22,13 +23,23 @@
     "prettier": "prettier --write \"./app\"",
     "type-check": "tsc --project tsconfig.json --noEmit --skipLibCheck false --incremental false",
     "postinstall": "husky",
-    "find-deadcode": "ts-prune | grep -v '(used in module)' | grep -E -v ' - default$'"
+    "find-deadcode": "ts-prune | grep -v '(used in module)' | grep -E -v ' - default$'",
+    "knip": "knip"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different --write",
       "eslint --cache --max-warnings=0",
-      "bash -c 'yarn run type-check'"
+      "bash -c 'yarn run type-check'",
+      "knip --max-show-issues 5"
+    ],
+    "config": [
+      ".lint-stagedrc",
+      ".config/lint-stagedrc",
+      ".config/lint-stagedrc.{json,ts,js,cjs,mjs}",
+      ".lintstagedrc",
+      ".config/lintstagedrc",
+      ".config/lintstagedrc.{json,ts,js,cjs,mjs}"
     ]
   },
   "dependencies": {
@@ -79,7 +90,7 @@
     "@next/eslint-plugin-next": "^16.3.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/lodash": "^4.17.25",
-    "@types/node": "26.1.2",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@types/react-is": "^19.2.0",
@@ -94,12 +105,13 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "formik": "^2.4.9",
     "husky": "^9.1.7",
+    "knip": "^6.32.0",
     "lint-staged": "17.3.0",
     "postcss": "^8.5.25",
     "prettier": "^3.9.6",
     "react-select": "^5.10.2",
     "ts-prune": "^0.10.3",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "resolutions": {
     "prosemirror-model": "1.25.11",
