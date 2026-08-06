@@ -5,7 +5,7 @@
     "files": "error",
     "dependencies": "error",
     "exports": "warn",
-    "duplicates": "off"
+    "duplicates": "warn"
   },
   "entry": ["app/**.tsx"],
   "project": ["app/**/*.tsx"],
