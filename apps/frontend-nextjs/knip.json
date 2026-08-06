@@ -7,7 +7,7 @@
     "exports": "warn",
     "duplicates": "warn"
   },
-  "entry": ["app/**.tsx"],
-  "project": ["app/**/*.tsx"],
-  "ignore": ["app/**/*.test.ts"]
+  "entry": ["app/**.{tsx,ts}"],
+  "project": ["app/**/*.{tsx,ts}"],
+  "ignore": ["app/**/*.test.{tsx,ts}"]
 }
