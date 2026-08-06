@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "tags": ["-lintignore"],
+  "rules": {
+    "files": "error",
+    "dependencies": "error",
+    "exports": "warn",
+    "duplicates": "off"
+  },
+  "entry": ["app/**.ts", "app/**.tsx"],
+  "project": ["app/**/*.ts", "app/**/*.tsx"],
+  "ignore": ["app/**/*.test.ts"]
+}
