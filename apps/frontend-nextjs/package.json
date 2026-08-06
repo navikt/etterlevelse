@@ -30,7 +30,11 @@
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different --write",
       "eslint --cache --max-warnings=0",
-      "bash -c 'yarn run type-check'"
+      "bash -c 'yarn run type-check'",
+      "bash -c 'yarn knip --include dependencies --max-issues 20'"
+    ],
+    "{package.json,yarn.lock,package-lock.json,pnpm-lock.yaml}": [
+      "bash -c 'yarn knip --include dependencies --max-issues 20'"
     ]
   },
   "dependencies": {
