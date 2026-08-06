@@ -14,7 +14,7 @@
     "prettier:check": "prettier -c ./app",
     "knip:test": "yarn knip --max-show-issues 5",
     "eslint:check": "eslint . --cache --max-warnings=0",
-    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn knip --max-show-issues 5 && yarn run type-check && yarn run build",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
