@@ -350,7 +350,6 @@ export interface ITemaCodeData {
   image?: string
   shortDesciption?: string
 }
-
 const containsLovCodeDataCheck = (data?: string, list?: string): boolean => {
   if (list === EListName.LOV) {
     return data ? true : false
