@@ -102,7 +102,7 @@
     "prettier": "^3.9.6",
     "react-select": "^5.10.2",
     "ts-prune": "^0.10.3",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   },
   "resolutions": {
     "prosemirror-model": "1.25.11",

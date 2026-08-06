@@ -42,7 +42,7 @@ if (!hasDependencyFileChanges) {
 }
 
 process.stdout.write(
-  'Dependency manifest changes detected. Running prettier, eslint, build and knip...\n'
+  'Dependency manifest changes detected. Running prettier, eslint, tsconfig, build and knip...\n'
 )
 
 const yarnCommand = process.platform === 'win32' ? 'yarn.cmd' : 'yarn'
