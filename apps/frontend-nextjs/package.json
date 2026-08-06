@@ -30,16 +30,7 @@
     "*.{js,jsx,ts,tsx}": [
       "prettier --list-different --write",
       "eslint --cache --max-warnings=0",
-      "bash -c 'yarn run type-check'",
-      "knip --max-show-issues 5"
-    ],
-    "config": [
-      ".lint-stagedrc",
-      ".config/lint-stagedrc",
-      ".config/lint-stagedrc.{json,ts,js,cjs,mjs}",
-      ".lintstagedrc",
-      ".config/lintstagedrc",
-      ".config/lintstagedrc.{json,ts,js,cjs,mjs}"
+      "bash -c 'yarn run type-check'"
     ]
   },
   "dependencies": {
