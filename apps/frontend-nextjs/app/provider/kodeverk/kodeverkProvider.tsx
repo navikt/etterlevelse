@@ -322,6 +322,7 @@ export interface ICodeListFormValues {
   description?: string
   data?: ILovCodeData | ITemaCodeData
 }
+
 export interface ICodeUsage {
   listName: EListName
   code: string
