@@ -13,9 +13,7 @@ import { FunctionComponent, createContext, useEffect, useState } from 'react'
 import * as yup from 'yup'
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
-
 const LOVDATA_RUNDSKRIV_PREFIX = 'RUNDSKRIV_'
-
 const LOVDATA_RETTSKILDE_PREFIX = 'RETTSKILDE_'
 
 export interface ICodelistProps {
@@ -348,7 +346,6 @@ export interface ILovCodeData {
   underavdeling?: string
   tema?: string
 }
-
 export interface ITemaCodeData {
   image?: string
   shortDesciption?: string
