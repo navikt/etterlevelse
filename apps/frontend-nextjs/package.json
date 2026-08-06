@@ -12,9 +12,9 @@
     "test": "yarn lint-staged",
     "start": "next start",
     "prettier:check": "prettier -c ./app",
-    "knip:test": "yarn knip --max-show-issues 5",
     "eslint:check": "eslint . --cache --max-warnings=0",
-    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn knip --max-show-issues 5 && yarn run type-check && yarn run build",
+    "knip:test": "yarn knip --max-show-issues 5",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build && yarn knip:test",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
@@ -23,8 +23,7 @@
     "prettier": "prettier --write \"./app\"",
     "type-check": "tsc --project tsconfig.json --noEmit --skipLibCheck false --incremental false",
     "postinstall": "husky",
-    "find-deadcode": "ts-prune | grep -v '(used in module)' | grep -E -v ' - default$'",
-    "knip": "knip"
+    "find-deadcode": "ts-prune | grep -v '(used in module)' | grep -E -v '- default$'"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -28,15 +24,12 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./app/*"
-      ]
+      "@/*": ["./app/*"]
     }
   },
   "include": [
     "moment-locale.d.ts",
-    "app/**/*.ts",
-    "app/**/*.tsx",
+    "app/**/*.{ts,tsx,mjs}",
     "proxy.ts",
     "next.config.ts",
     "app/api/begrep",
@@ -47,9 +40,8 @@
   "exclude": [
     "node_modules",
     ".next/dev",
-    "build/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    ".next/types/**/*.ts",
-    ".next/types/**/*.tsx"
+    "build/types/**/*.{ts,tsx}",
+    ".next/dev/types/**/*.{ts,tsx}",
+    ".next/types/**/*.{ts,tsx}"
   ]
 }
