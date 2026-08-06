@@ -5,11 +5,8 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
-import no.nav.data.common.storage.StorageService;
-import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
@@ -30,7 +27,6 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +38,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static no.nav.data.common.security.SecurityUtils.isKravEier;
-import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Slf4j
@@ -51,7 +46,7 @@ import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.
 public class KravService {
 
     private final KravRepo repo;
-    private final StorageService<KravImage> imageStorage;
+    private final KravImageService imageService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final EtterlevelseService etterlevelseService;
     private final UrlGenerator urlGenerator;
@@ -204,26 +199,19 @@ public class KravService {
     public List<Krav> findForEtterlevelseDokumentasjonIrrelevans(UUID etterlevelseDokumentasjonId) {
         return getByFilter(KravFilter.builder().etterlevelseDokumentasjonId(etterlevelseDokumentasjonId).etterlevelseDokumentasjonIrrevantKrav(true).build());
     }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public List<KravImage> saveImages(List<KravImage> images) {
-        return convert(imageStorage.saveAll(images), GenericStorage::getDomainObjectData);
+        return imageService.saveAll(images);
     }
 
     public KravImage getImage(UUID kravId, UUID fileId) {
-        return repo.findKravImage(kravId, fileId).getDomainObjectData();
+        return repo.findKravImage(kravId, fileId);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public boolean isActiveKrav(Integer kravnummer) {
         return !findByKravNummerAndActiveStatus(kravnummer).isEmpty();
-    }
-
-    @SchedulerLock(name = "clean_krav_images", lockAtLeastFor = "PT5M")
-    @Scheduled(initialDelayString = "PT5M", fixedRateString = "PT1H")
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void cleanupImages() {
-        var deletes = repo.cleanupImages();
-        log.info("Deleted {} unused krav images", deletes);
     }
 
     private void varsle(Krav krav, boolean isNewVersion) {

@@ -21,6 +21,7 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
+import no.nav.data.etterlevelse.krav.KravImageService;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.*;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
@@ -92,7 +93,7 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected StorageService<KravPriorityList> kravPriorityListStorageService;
     @Autowired
-    protected StorageService<KravImage> kravImageStorageService;
+    protected KravImageService kravImageStorageService;
     @Autowired
     protected EtterlevelseMetadataRepo etterlevelseMetadataRepo;
     @Autowired

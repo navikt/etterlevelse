@@ -1,24 +1,49 @@
 package no.nav.data.etterlevelse.krav.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import no.nav.data.common.storage.domain.DomainObject;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.Type;
 
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class KravImage extends DomainObject {
+@Builder
+@Entity
+@Table(name = "KRAV_IMAGE")
+public class KravImage {
 
+    @Id
+    @Column(name = "ID")
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
+    
+    @Column(name = "KRAV_ID")
     private UUID kravId;
-    private String name;
-    private String type;
-    private byte[] content;
+    
+    @Type(value = JsonBinaryType.class)
+    @Column(name = "DATA", nullable = false)
+    @Builder.Default
+    private KravImageData data = new KravImageData();
 
+    @Version
+    @Column(name = "VERSION")
+    protected Integer version;
+
+    // The rest is just boilerplate to delegate some getters and setters to data
+
+    public String getType() {
+        return data.getType();
+    }
+
+    public byte[] getContent() {
+        return data.getContent();
+    }
+
+    public String getName() {
+        return data.getName();
+    }
 }
