@@ -11,9 +11,9 @@ import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import moment from 'moment'
 import { useContext, useState } from 'react'
-import TilbakemeldingEdit from './TilbakemeldingEdit'
+import { TilbakemeldingEdit } from '../tilbakemeldingEdit/tilbakemeldingEdit'
 
-export const MeldingKnapper = (props: {
+const MeldingKnapper = (props: {
   melding: ITilbakemeldingMelding
   tilbakemeldingId: string
   oppdater: (t: ITilbakemelding) => void
@@ -105,9 +105,9 @@ export const MeldingKnapper = (props: {
             <TilbakemeldingEdit
               tilbakemeldingId={tilbakemeldingId}
               melding={melding}
-              close={(t) => {
+              close={(tilbakemelding: ITilbakemelding) => {
                 setEditModal(false)
-                oppdater(t)
+                oppdater(tilbakemelding)
               }}
               setEditModal={setEditModal}
             />
@@ -117,4 +117,5 @@ export const MeldingKnapper = (props: {
     </div>
   )
 }
+
 export default MeldingKnapper

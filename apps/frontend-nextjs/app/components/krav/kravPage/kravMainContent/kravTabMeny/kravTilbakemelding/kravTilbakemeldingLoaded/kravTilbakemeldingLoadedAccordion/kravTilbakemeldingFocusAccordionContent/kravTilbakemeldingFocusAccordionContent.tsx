@@ -1,6 +1,6 @@
 'use client'
 
-import MeldingKnapper from '@/components/krav/kravPage/tilbakemelding/edit/MeldingKnapper'
+import MeldingKnapper from '@/components/krav/kravPage/tilbakemelding/edit/tilbakemeldingKnapper'
 import EndretInfo from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
 import TilbakemeldingResponseMelding from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingResponseMelding/tilbakemeldingResponseMelding'
 import TilbakemeldingSvar from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingSvar/tilbakemeldingSvar'
