@@ -1,4 +1,4 @@
-import { getSlackChannelById, getSlackUserById } from '@/api/teamkatalogen/teamkatalogenApi'
+import { getSlackChannelById, getSlackUserById } from '@/api/teamkatalogen/slack/slackApi'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import {

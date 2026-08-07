@@ -1,4 +1,4 @@
-import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
+import { useSlackChannelSearch } from '@/api/teamkatalogen/slack/slackApi'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import {
   EAdresseType,

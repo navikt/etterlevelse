@@ -1,6 +1,7 @@
 'use client'
 
-import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
+import { getSlackUserByEmail } from '@/api/teamkatalogen/slack/slackApi'
+import { usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import {
   EAdresseType,

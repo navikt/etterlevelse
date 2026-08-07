@@ -1,6 +1,7 @@
 'use client'
 
-import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
+import { getSlackUserByEmail } from '@/api/teamkatalogen/slack/slackApi'
+import { usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'

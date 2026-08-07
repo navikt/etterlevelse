@@ -4,9 +4,9 @@ import {
   getSlackChannelById,
   getSlackUserByEmail,
   getSlackUserById,
-  usePersonSearch,
   useSlackChannelSearch,
-} from '@/api/teamkatalogen/teamkatalogenApi'
+} from '@/api/teamkatalogen/slack/slackApi'
+import { usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'

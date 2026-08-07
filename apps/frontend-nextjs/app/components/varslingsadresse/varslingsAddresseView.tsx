@@ -1,4 +1,4 @@
-import { getSlackChannelById, getSlackUserById } from '@/api/teamkatalogen/teamkatalogenApi'
+import { getSlackChannelById, getSlackUserById } from '@/api/teamkatalogen/slack/slackApi'
 import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import {
   EAdresseType,

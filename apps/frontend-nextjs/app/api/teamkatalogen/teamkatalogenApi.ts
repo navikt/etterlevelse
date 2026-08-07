@@ -1,7 +1,6 @@
 'use client'
 
 import { IPageResponse } from '@/constants/commonConstants'
-import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import { IProductArea, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
@@ -63,26 +62,6 @@ export const myProductArea = async () => {
 export const searchTeam = async (teamSearch: string) => {
   return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team/search/${teamSearch}`))
     .data.content
-}
-
-export const getSlackChannelById = async (id: string) => {
-  return (await axios.get<ISlackChannel>(`${env.backendBaseUrl}/team/slack/channel/${id}`)).data
-}
-
-export const getSlackUserByEmail = async (id: string) => {
-  return (await axios.get<ISlackUser>(`${env.backendBaseUrl}/team/slack/user/email/${id}`)).data
-}
-
-export const getSlackUserById = async (id: string) => {
-  return (await axios.get<ISlackUser>(`${env.backendBaseUrl}/team/slack/user/id/${id}`)).data
-}
-
-export const searchSlackChannel = async (name: string) => {
-  return (
-    await axios.get<IPageResponse<ISlackChannel>>(
-      `${env.backendBaseUrl}/team/slack/channel/search/${name}`
-    )
-  ).data.content
 }
 
 // Overly complicated async fetch of people and teams
@@ -236,16 +215,6 @@ export const usePersonSearch = async (searchParam: string) => {
     const searchResult = await searchResourceByName(searchParam)
     return searchResult.map((person) => {
       return { value: person.navIdent, label: person.fullName, ...person }
-    })
-  }
-  return []
-}
-
-export const useSlackChannelSearch = async (searchParam: string) => {
-  if (searchParam && searchParam.replace(/ /g, '').length > 2) {
-    const searchResult = await searchSlackChannel(searchParam)
-    return searchResult.map((slackChannel) => {
-      return { value: slackChannel.id, label: slackChannel.name, ...slackChannel }
     })
   }
   return []
