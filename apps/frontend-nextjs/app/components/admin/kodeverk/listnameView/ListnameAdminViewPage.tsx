@@ -6,11 +6,11 @@ import { ICode, ICodeListFormValues } from '@/constants/kodeverk/kodeverkConstan
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { adminCodelist, adminUrl } from '@/routes/admin/adminRoutes'
 import { useForceUpdate } from '@/util/hooks/customHooks/customHooks'
-import { PlusIcon } from '@navikt/aksel-icons'
-import { Button, Heading, Loader, Select } from '@navikt/ds-react'
+import { Heading, Loader } from '@navikt/ds-react'
 import { useParams, useRouter } from 'next/navigation'
-import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import ModalCreateCodeList from '../edit/ModalCreateCodeList'
+import VelgKodeverk from '../velgKodeverk/velgKodeverk'
 import CodeListTable from './CodelistStyledTable'
 
 export const ListnameAdminViewPage = () => {
@@ -75,44 +75,14 @@ export const ListnameAdminViewPage = () => {
         Administrering av {listname}
       </Heading>
 
-      <div className='flex justify-between w-full'>
-        <Select
-          label='Velg kodeverk'
-          hideLabel
-          className='w-full max-w-xl'
-          value={selectedListname}
-          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
-            setSelectedListname(event.target.value)
-          }
-        >
-          <option value=''>Velg kodeverk</option>
-          {codelist.utils.makeValueLabelForAllCodeLists().map(
-            (
-              codeLabel: {
-                value: string
-                label: string
-              },
-              index: number
-            ) => {
-              return (
-                <option key={index + '_' + codeLabel.label} value={codeLabel.value}>
-                  {codeLabel.label}
-                </option>
-              )
-            }
-          )}
-        </Select>
-
-        {listname && (
-          <Button
-            icon={<PlusIcon aria-label='' aria-hidden />}
-            variant='tertiary'
-            onClick={() => setCreateCodeListModal(!createCodeListModal)}
-          >
-            Opprett ny kode
-          </Button>
-        )}
-      </div>
+      <VelgKodeverk
+        selectedListname={selectedListname}
+        setSelectedListname={setSelectedListname}
+        codelist={codelist}
+        listname={listname}
+        setCreateCodeListModal={setCreateCodeListModal}
+        createCodeListModal={createCodeListModal}
+      />
 
       {isLoading && <Loader size='large' />}
 

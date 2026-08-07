@@ -1,6 +1,6 @@
 import { EObjectType, TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { adminCodelistUrl } from '../admin/kodeverk.ts/kodeverkRoutes'
+import { adminCodelistUrl } from '../admin/kodeverk/kodeverkRoutes'
 import { adminVarselUrl } from '../admin/varsel/varselRoutes'
 import { behandlingUrl } from '../behandlingskatalog/behandlingskatalogRoutes'
 import { etterlevelseUrl } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
