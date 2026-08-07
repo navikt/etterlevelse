@@ -4,6 +4,7 @@ import { getMeldingByType, mapMeldingToFormValue } from '@/api/melding/meldingAp
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
+import { TWarningSection } from '@/constants/admin/varsel/varselConstants'
 import { Heading, Tabs } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -11,13 +12,10 @@ import { AuditRecentTable } from '../versjonering/AuditRecentTable'
 import EditMelding from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
 
-type TSection =
-  'utsendtMelding' | EMeldingType.SYSTEM | EMeldingType.FORSIDE | EMeldingType.OM_ETTERLEVELSE
-
 export const VarselAdminPage = () => {
-  const params = useParams<{ tab?: TSection }>()
+  const params = useParams<{ tab?: TWarningSection }>()
 
-  const [tab, setTab] = useState<TSection>(params.tab || 'utsendtMelding')
+  const [tab, setTab] = useState<TWarningSection>(params.tab || 'utsendtMelding')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [melding, setMelding] = useState<IMelding>()
 
