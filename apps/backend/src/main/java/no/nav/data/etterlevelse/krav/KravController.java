@@ -16,6 +16,7 @@ import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.KravImageData;
 import no.nav.data.etterlevelse.krav.domain.Tilbakemelding;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.krav.dto.KravResponse;
@@ -228,7 +229,7 @@ public class KravController {
                     .body(image.getContent());
         }
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
+                .header(HttpHeaders.CONTENT_TYPE, image.getType())
                 .body(ImageUtils.resize(image.getContent(), w));
     }
 
@@ -242,9 +243,10 @@ public class KravController {
         var krav = service.get(id);
         var images = service.saveImages(convert(files, f -> KravImage.builder()
                 .kravId(krav.getId())
-                .name(f.getOriginalFilename())
-                .type(f.getContentType())
-                .content(getBytes(f))
+                .data(KravImageData.builder()
+                        .name(f.getOriginalFilename())
+                        .type(f.getContentType())
+                        .content(getBytes(f)).build())
                 .build()));
         images.forEach(i -> Assert.isTrue(validImage(i), () -> "Invalid image " + i.getName() + " " + i.getType()));
         return new ResponseEntity<>(convert(images, i -> i.getId().toString()), HttpStatus.CREATED);
