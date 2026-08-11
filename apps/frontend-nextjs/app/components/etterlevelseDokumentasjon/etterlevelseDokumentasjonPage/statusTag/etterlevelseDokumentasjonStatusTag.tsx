@@ -6,6 +6,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
@@ -55,7 +56,22 @@ const etterlevelseStatusToVariant = (etterlevelseDokumentasjon: TEtterlevelseDok
   return 'warning'
 }
 
-const pvkStatusToVariant = (pvkDokument: IPvkDokument) => {
+const pvkStatusToVariant = (pvkDokument?: IPvkDokument) => {
+  if (
+    !pvkDokument ||
+    !pvkDokument.pvkVurdering ||
+    pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED
+  ) {
+    return 'error'
+  }
+
+  if (
+    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE ||
+    pvkDokument.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT
+  ) {
+    return 'success'
+  }
+
   if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
     return 'success'
   }
@@ -67,7 +83,23 @@ const pvkStatusToVariant = (pvkDokument: IPvkDokument) => {
   return 'info'
 }
 
-const pvkStatusToText = (pvkDokument: IPvkDokument) => {
+const pvkStatusToText = (pvkDokument?: IPvkDokument) => {
+  if (
+    !pvkDokument ||
+    !pvkDokument.pvkVurdering ||
+    pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED
+  ) {
+    return 'PVK: Ikke vurdert behov'
+  }
+
+  if (pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) {
+    return 'PVK: Vurdert, ikke behov'
+  }
+
+  if (pvkDokument.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) {
+    return 'PVK: Utført i Word'
+  }
+
   if (
     pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
     pvkDokument.godkjentAvRisikoeierDato
@@ -88,11 +120,9 @@ export const EtterlevelseDokumentasjonStatusTag: FunctionComponent<TProps> = ({
       <Detail>{etterlevelseStatusToText(etterlevelseDokumentasjon)}</Detail>
     </Tag>
 
-    {pvkDokument && (
-      <Tag variant={pvkStatusToVariant(pvkDokument)} className='w-fit'>
-        <Detail>{pvkStatusToText(pvkDokument)}</Detail>
-      </Tag>
-    )}
+    <Tag variant={pvkStatusToVariant(pvkDokument)} className='w-fit'>
+      <Detail>{pvkStatusToText(pvkDokument)}</Detail>
+    </Tag>
   </div>
 )
 
