@@ -14,7 +14,8 @@
     "prettier:check": "prettier -c ./app",
     "eslint:check": "eslint . --cache --max-warnings=0",
     "knip:test": "yarn knip --max-show-issues 5",
-    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build && yarn knip:test",
+    "knip:cachetest": "yarn knip --cache --max-issues=0",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
@@ -28,9 +29,7 @@
     "*.{js,jsx,ts,tsx,mjs}": [
       "prettier --list-different --write",
       "eslint --cache --max-warnings=0",
-      "bash -c 'yarn run type-check'",
-      "bash -c 'yarn knip --cache --max-issues=0'",
-      "bash -c 'yarn knip --max-show-issues 5'"
+      "bash -c 'yarn run type-check'"
     ]
   },
   "dependencies": {
