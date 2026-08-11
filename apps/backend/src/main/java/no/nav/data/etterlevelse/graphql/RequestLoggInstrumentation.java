@@ -41,7 +41,7 @@ public class RequestLoggInstrumentation extends SimplePerformantInstrumentation 
                                 if (error instanceof ExceptionWhileDataFetching dataFetchingError && Objects.nonNull(dataFetchingError.getException())) {
                                     log.warn("Internal GraphQL error at path {}: {}", dataFetchingError.getPath(), dataFetchingError.getException().getMessage(), dataFetchingError.getException());
                                 } else {
-                                    log.warn("GraphQL error type={} path={} message={} extensions={}", error.getClass().getSimpleName(), error.getPath(), error.getMessage(), error.getExtensions());
+                                    log.warn("GraphQL error type={} payload={}", error.getClass().getSimpleName(), JsonUtils.toJson(error.toSpecification()));
                                 }
                             });
                 }
