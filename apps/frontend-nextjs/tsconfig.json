@@ -43,8 +43,11 @@
   "exclude": [
     "node_modules",
     ".next/dev",
-    "build/types/**/*.{ts,tsx}",
-    ".next/dev/types/**/*.{ts,tsx}",
-    ".next/types/**/*.{ts,tsx}"
+    "build/types/**/*.ts",
+    "build/types/**/*.tsx",
+    ".next/dev/types/**/*.ts",
+    ".next/dev/types/**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/types/**/*.tsx"
   ]
 }
