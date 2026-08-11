@@ -13,9 +13,7 @@ import { FunctionComponent, createContext, useEffect, useState } from 'react'
 import * as yup from 'yup'
 
 const LOVDATA_FORSKRIFT_PREFIX = 'FORSKRIFT_'
-
 const LOVDATA_RUNDSKRIV_PREFIX = 'RUNDSKRIV_'
-
 const LOVDATA_RETTSKILDE_PREFIX = 'RETTSKILDE_'
 
 export interface ICodelistProps {
@@ -322,6 +320,7 @@ export interface ICodeListFormValues {
   description?: string
   data?: ILovCodeData | ITemaCodeData
 }
+
 export interface ICodeUsage {
   listName: EListName
   code: string
@@ -347,12 +346,10 @@ export interface ILovCodeData {
   underavdeling?: string
   tema?: string
 }
-
 export interface ITemaCodeData {
   image?: string
   shortDesciption?: string
 }
-
 const containsLovCodeDataCheck = (data?: string, list?: string): boolean => {
   if (list === EListName.LOV) {
     return data ? true : false

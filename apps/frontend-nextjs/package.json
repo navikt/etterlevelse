@@ -13,7 +13,8 @@
     "start": "next start",
     "prettier:check": "prettier -c ./app",
     "eslint:check": "eslint . --cache --max-warnings=0",
-    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
+    "knip:test": "yarn knip --max-show-issues 5",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build && yarn knip:test",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
@@ -21,14 +22,15 @@
     "prepare": "cd ../../ && husky apps/frontend-nextjs/.husky",
     "prettier": "prettier --write \"./app\"",
     "type-check": "tsc --project tsconfig.json --noEmit --skipLibCheck false --incremental false",
-    "postinstall": "husky",
-    "find-deadcode": "ts-prune | grep -v '(used in module)' | grep -E -v ' - default$'"
+    "postinstall": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,ts,tsx,mjs}": [
       "prettier --list-different --write",
       "eslint --cache --max-warnings=0",
-      "bash -c 'yarn run type-check'"
+      "bash -c 'yarn run type-check'",
+      "bash -c 'yarn knip --cache --max-issues=0'",
+      "bash -c 'yarn knip --max-show-issues 5'"
     ]
   },
   "dependencies": {
@@ -94,11 +96,11 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "formik": "^2.4.9",
     "husky": "^9.1.7",
+    "knip": "^6.32.0",
     "lint-staged": "17.3.0",
     "postcss": "^8.5.26",
     "prettier": "^3.9.6",
     "react-select": "^5.10.2",
-    "ts-prune": "^0.10.3",
     "typescript": "^6.0.3"
   },
   "resolutions": {

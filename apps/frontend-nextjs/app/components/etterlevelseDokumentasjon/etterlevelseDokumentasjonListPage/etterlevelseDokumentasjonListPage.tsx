@@ -4,11 +4,13 @@ import { ListPageHeader } from '@/components/krav/kravlistePage/listPageHeader/l
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { Button } from '@navikt/ds-react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import DokumentasjonTabs from './dokumentasjonTabs'
 
-export const EtterlevelseDokumentasjonListPage = () => {
-  const router = useRouter()
+const EtterlevelseDokumentasjonListPage = () => {
+  const router: AppRouterInstance = useRouter()
+
   return (
     <PageLayout pageTitle='Dokumentere etterlevelse' currentPage='Dokumentere etterlevelse'>
       <div className='pb-52 w-full'>
