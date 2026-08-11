@@ -11,6 +11,7 @@ import graphql.execution.instrumentation.parameters.InstrumentationExecutionPara
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.JsonUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -41,7 +42,10 @@ public class RequestLoggInstrumentation extends SimplePerformantInstrumentation 
                                 if (error instanceof ExceptionWhileDataFetching dataFetchingError && Objects.nonNull(dataFetchingError.getException())) {
                                     log.warn("Internal GraphQL error at path {}: {}", dataFetchingError.getPath(), dataFetchingError.getException().getMessage(), dataFetchingError.getException());
                                 } else {
-                                    log.warn("GraphQL error type={} payload={}", error.getClass().getSimpleName(), JsonUtils.toJson(error.toSpecification()));
+                                    String stackTrace = error instanceof ExceptionWhileDataFetching e && e.getException() != null
+                                            ? ExceptionUtils.getStackTrace(e.getException())
+                                            : "(no exception attached)";
+                                    log.warn("GraphQL error type={} payload={}\nStack trace:\n{}", error.getClass().getSimpleName(), JsonUtils.toJson(error.toSpecification()), stackTrace);
                                 }
                             });
                 }
