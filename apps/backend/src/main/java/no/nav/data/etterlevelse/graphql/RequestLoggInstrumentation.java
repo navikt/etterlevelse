@@ -36,11 +36,14 @@ public class RequestLoggInstrumentation extends SimplePerformantInstrumentation 
                     log.info("Completed successfully in: {}", duration);
                 } else {
                     log.warn("Completed with errors in: {} - {}", duration, JsonUtils.toJson(convert(executionResult.getErrors(), GraphQLError::toSpecification)));
-                    executionResult.getErrors().stream()
-                            .filter(ExceptionWhileDataFetching.class::isInstance)
-                            .map(ExceptionWhileDataFetching.class::cast)
-                            .filter(error -> Objects.nonNull(error.getException()))
-                            .forEach(error -> log.warn("Internal GraphQL error at path {}: {}", error.getPath(), error.getException().getMessage(), error.getException()));
+                    executionResult.getErrors()
+                            .forEach(error -> {
+                                if (error instanceof ExceptionWhileDataFetching dataFetchingError && Objects.nonNull(dataFetchingError.getException())) {
+                                    log.warn("Internal GraphQL error at path {}: {}", dataFetchingError.getPath(), dataFetchingError.getException().getMessage(), dataFetchingError.getException());
+                                } else {
+                                    log.warn("GraphQL error type={} path={} message={} extensions={}", error.getClass().getSimpleName(), error.getPath(), error.getMessage(), error.getExtensions());
+                                }
+                            });
                 }
             } else {
                 log.error("Failed in: {}", duration, throwable);
