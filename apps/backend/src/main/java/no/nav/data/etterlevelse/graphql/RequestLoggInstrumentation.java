@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.graphql;
 
+import graphql.ExceptionWhileDataFetching;
 import graphql.ExecutionResult;
 import graphql.GraphQLError;
 import graphql.execution.instrumentation.InstrumentationContext;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 import static no.nav.data.common.utils.StreamUtils.convert;
 
@@ -34,6 +36,11 @@ public class RequestLoggInstrumentation extends SimplePerformantInstrumentation 
                     log.info("Completed successfully in: {}", duration);
                 } else {
                     log.warn("Completed with errors in: {} - {}", duration, JsonUtils.toJson(convert(executionResult.getErrors(), GraphQLError::toSpecification)));
+                    executionResult.getErrors().stream()
+                            .filter(ExceptionWhileDataFetching.class::isInstance)
+                            .map(ExceptionWhileDataFetching.class::cast)
+                            .filter(error -> Objects.nonNull(error.getException()))
+                            .forEach(error -> log.warn("Internal GraphQL error at path {}: {}", error.getPath(), error.getException().getMessage(), error.getException()));
                 }
             } else {
                 log.error("Failed in: {}", duration, throwable);
