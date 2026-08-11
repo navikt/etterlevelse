@@ -29,7 +29,10 @@
   },
   "include": [
     "moment-locale.d.ts",
-    "app/**/*.{ts,tsx,mjs,json}",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "app/**/*.mjs",
+    "app/**/*.json",
     "proxy.ts",
     "next.config.ts",
     "app/api/begrep",
