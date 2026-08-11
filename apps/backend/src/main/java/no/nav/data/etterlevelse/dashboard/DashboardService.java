@@ -389,7 +389,16 @@ public class DashboardService {
 
 
     public DashboardResponse getStatsForEtterlevelsesDokumentWithNoAvdeling () {
-        List<EtterlevelseDokumentasjon> allDoks = etterlevelseDokumentasjonService.getByAvdeling("");
+        Set<String> validAvdelingIds = nomGraphClient.getAllAvdelinger().stream()
+                .map(OrgEnhet::getId)
+                .collect(Collectors.toSet());
+
+        List<EtterlevelseDokumentasjon> allDoks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent().stream()
+                .filter(d -> {
+                    String nomAvdelingId = d.getEtterlevelseDokumentasjonData().getNomAvdelingId();
+                    return nomAvdelingId == null || nomAvdelingId.isEmpty() || !validAvdelingIds.contains(nomAvdelingId);
+                })
+                .toList();
         if(!allDoks.isEmpty()) {
             List<PvkDokument> pvkByDokId = new ArrayList<>();
             allDoks.forEach((eDok) -> {
