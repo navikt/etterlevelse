@@ -12,6 +12,11 @@
   box-shadow: none;
 }
 
+.main-search input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
 .header-menu-toggle:focus-visible {
   outline-offset: 2px;
 }
