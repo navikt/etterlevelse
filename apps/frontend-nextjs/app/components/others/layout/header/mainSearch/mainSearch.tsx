@@ -1,3 +1,5 @@
+'use client'
+
 import { searchBehandling } from '@/api/behandlingskatalog/behandlingskatalogApi'
 import { searchEtterlevelsedokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { kravMainHeaderSearch } from '@/api/krav/kravApi'
@@ -8,26 +10,12 @@ import { TSearchItem } from '@/constants/search/searchConstants'
 import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { etterlevelseDokumentasjonName } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage } from '@/util/search/searchUtil'
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons'
-import { BodyShort } from '@navikt/ds-react'
+import { Search } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { CSSObjectWithLabel, DropdownIndicatorProps, OptionProps, components } from 'react-select'
-import AsyncSelect from 'react-select/async'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
-const Option = (properties: OptionProps<TSearchItem>) => (
-  <components.Option {...properties}>
-    <div className='flex justify-between'>
-      <BodyShort style={{ color: 'var(--a-text-default)' }}>{properties.data.label}</BodyShort>
-    </div>
-  </components.Option>
-)
-
-const DropdownIndicator = (props: DropdownIndicatorProps<TSearchItem>) => (
-  <components.DropdownIndicator {...props}>
-    <MagnifyingGlassIcon title='Søk' aria-label='Søk' />
-  </components.DropdownIndicator>
-)
+type TSearchGroup = { label: string; options: TSearchItem[] }
 
 const EtterlevelseDokumentasjonMap = (props: IEtterlevelseDokumentasjon): TSearchItem => ({
   value: props.id,
@@ -43,110 +31,148 @@ const behandlingMap = (props: IBehandling): TSearchItem => ({
   url: `/dokumentasjoner?tab=behandlingsok&behandlingId=${props.id}`,
 })
 
-const useMainSearch = async (
-  searchParam: string
-): Promise<
-  {
-    label: string
-    options: TSearchItem[]
-  }[]
-> => {
-  if (searchParam && searchParam.replace(/ /g, '').length > 2) {
-    const result: [TSearchItem[], TSearchItem[], TSearchItem[]] = await Promise.all([
-      await kravMainHeaderSearch(searchParam),
-      (await searchEtterlevelsedokumentasjon(searchParam)).map(EtterlevelseDokumentasjonMap),
-      (await searchBehandling(searchParam)).map(behandlingMap),
-    ])
-    return [
-      {
-        label: EObjectType.Krav,
-        options: result[0],
-      },
-      {
-        label: 'Dokumentasjon',
-        options: result[1],
-      },
-      {
-        label: EObjectType.Behandling,
-        options: result[2],
-      },
-    ]
+const fetchSearchGroups = async (searchParam: string): Promise<TSearchGroup[]> => {
+  if (!searchParam || searchParam.replace(/ /g, '').length <= 2) {
+    return []
   }
-  return []
+
+  const [krav, dokumentasjon, behandling] = await Promise.all([
+    kravMainHeaderSearch(searchParam),
+    searchEtterlevelsedokumentasjon(searchParam).then((result) =>
+      result.map(EtterlevelseDokumentasjonMap)
+    ),
+    searchBehandling(searchParam).then((result) => result.map(behandlingMap)),
+  ])
+
+  return [
+    { label: EObjectType.Krav, options: krav },
+    { label: 'Dokumentasjon', options: dokumentasjon },
+    { label: EObjectType.Behandling, options: behandling },
+  ]
 }
 
 const MainSearch = () => {
   const router: AppRouterInstance = useRouter()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [inputValue, setInputValue] = useState('')
+  const [groups, setGroups] = useState<TSearchGroup[]>([])
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
+
+  const flatOptions: TSearchItem[] = groups.flatMap((group) => group.options)
+  const hasOptions: boolean = flatOptions.length > 0
+
+  useEffect(() => {
+    const onClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
+  }, [])
+
+  const handleChange = async (value: string) => {
+    setInputValue(value)
+    setActiveIndex(-1)
+
+    if (value.replace(/ /g, '').length <= 2) {
+      setGroups([])
+      setIsOpen(value.length > 0)
+      return
+    }
+
+    setIsLoading(true)
+    setIsOpen(true)
+    setGroups(await fetchSearchGroups(value))
+    setIsLoading(false)
+  }
+
+  const selectItem = (item: TSearchItem) => {
+    setIsOpen(false)
+    setInputValue('')
+    router.push(item.url)
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (!isOpen || !hasOptions) {
+      return
+    }
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      setActiveIndex((index) => (index + 1) % flatOptions.length)
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      setActiveIndex((index) => (index <= 0 ? flatOptions.length - 1 : index - 1))
+    } else if (event.key === 'Enter' && activeIndex >= 0) {
+      event.preventDefault()
+      selectItem(flatOptions[activeIndex])
+    }
+  }
 
   return (
-    <div className='w-full'>
-      <AsyncSelect
-        instanceId='main-search'
-        className='main-search'
-        aria-label='Søk etter krav, dokumentasjon eller behandling'
+    <div className='relative w-full' ref={containerRef}>
+      <Search
+        label='Søk etter krav, dokumentasjon eller behandling'
+        hideLabel
         placeholder='Søk etter krav, dokumentasjon eller behandling'
-        components={{ DropdownIndicator, Option }}
-        controlShouldRenderValue={false}
-        loadingMessage={() => 'Søker...'}
-        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-        tabSelectsValue={false}
-        isClearable={false}
-        loadOptions={useMainSearch}
-        onChange={(selectedOption) => selectedOption && router.push([selectedOption].flat()[0].url)}
-        styles={{
-          // Updates default focus-border so it can be replaced with focus from DesignSystem
-          control: (base: CSSObjectWithLabel, state) =>
-            ({
-              ...base,
-              boxShadow: 'none',
-              color: 'var(--ax-text-default)',
-              border: '1px solid var(--ax-border-subtle)',
-              borderRadius: 'var(--ax-radius-8)',
-              outline: state.isFocused ? '3px solid var(--ax-border-focus)' : 'none',
-              outlineOffset: '1px',
-              ':hover': { borderColor: 'var(--ax-border-strong)' },
-              cursor: 'text',
-            }) as CSSObjectWithLabel,
-          placeholder: (base: CSSObjectWithLabel) =>
-            ({ ...base, color: '#000', opacity: 1 }) as CSSObjectWithLabel,
-          input: (base: CSSObjectWithLabel) =>
-            ({
-              ...base,
-              color: '#000',
-              opacity: 1,
-              outline: 'none',
-              boxShadow: 'none',
-            }) as CSSObjectWithLabel,
-          option: (base: CSSObjectWithLabel, state) =>
-            ({
-              ...base,
-              color: '#000',
-              opacity: 1,
-              fontWeight: 500,
-              backgroundColor:
-                state.isFocused || state.isSelected ? '#deebff' : base.backgroundColor,
-            }) as CSSObjectWithLabel,
-          menu: (base: CSSObjectWithLabel) => ({ ...base, color: '#000' }) as CSSObjectWithLabel,
-          menuList: (base: CSSObjectWithLabel) =>
-            ({ ...base, color: '#000' }) as CSSObjectWithLabel,
-          groupHeading: (base: CSSObjectWithLabel) =>
-            ({
-              ...base,
-              color: 'black',
-              fontSize: 'var(--a-font-size-large)',
-              fontWeight: 'var(--a-font-weight-bold)',
-              letterSpacing: 0,
-              lineHeight: 'var(--a-font-line-height-large)',
-              maring: 0,
-            }) as CSSObjectWithLabel,
-          // Make border and size of input box to be identical with those from DesignSystem
-          valueContainer: (base: CSSObjectWithLabel) =>
-            ({ ...base, color: 'black' }) as CSSObjectWithLabel,
-          // Remove separator
-          indicatorSeparator: (base: CSSObjectWithLabel) =>
-            ({ ...base, display: 'none' }) as CSSObjectWithLabel,
-        }}
+        variant='simple'
+        className='main-search'
+        value={inputValue}
+        onChange={handleChange}
+        onFocus={() => inputValue.length > 0 && setIsOpen(true)}
+        onKeyDown={handleKeyDown}
+        role='combobox'
+        aria-expanded={isOpen}
+        aria-controls='main-search-listbox'
+        aria-activedescendant={activeIndex >= 0 ? `main-search-option-${activeIndex}` : undefined}
       />
+      {isOpen && (
+        <div
+          id='main-search-listbox'
+          role='listbox'
+          className='absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-(--ax-border-subtle) bg-(--ax-bg-raised) shadow-lg'
+        >
+          {isLoading && <div className='px-4 py-2'>Søker...</div>}
+          {!isLoading && !hasOptions && (
+            <div className='px-4 py-2'>{noOptionMessage(inputValue)}</div>
+          )}
+          {!isLoading &&
+            groups.map(
+              (group) =>
+                group.options.length > 0 && (
+                  <div key={group.label}>
+                    <div className='px-4 pt-2 text-sm font-bold'>{group.label}</div>
+                    {group.options.map((option) => {
+                      const index: number = flatOptions.indexOf(option)
+                      return (
+                        <div
+                          key={option.value}
+                          id={`main-search-option-${index}`}
+                          role='option'
+                          aria-selected={activeIndex === index}
+                          tabIndex={-1}
+                          className='cursor-pointer px-4 py-2'
+                          style={{
+                            backgroundColor:
+                              activeIndex === index ? 'var(--ax-bg-moderate-hoverA)' : undefined,
+                          }}
+                          onMouseDown={(event) => {
+                            event.preventDefault()
+                            selectItem(option)
+                          }}
+                          onMouseEnter={() => setActiveIndex(index)}
+                        >
+                          {option.label}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
+            )}
+        </div>
+      )}
     </div>
   )
 }
