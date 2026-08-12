@@ -77,6 +77,12 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
+  const hasPvoComment = !!(
+    pvoTilbakemelding &&
+    pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+    relevantVurdering
+  )
+
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
       const updatedatePvkDokument = {
@@ -108,7 +114,9 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
           !isReadOnlyPvkStatus(pvkDokument.status) &&
           pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
           (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
-            <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+            <div
+              className={`pt-6 pr-4 flex flex-col gap-4 col-span-8 ${hasPvoComment ? 'w-1/2' : 'flex-1'}`}
+            >
               <Formik
                 validateOnChange={false}
                 validateOnBlur={false}
@@ -416,42 +424,42 @@ export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
           (isReadOnlyPvkStatus(pvkDokument.status) ||
             pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER ||
             !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
-            <InvolveringAvEksterneReadOnlyContent
-              personkategorier={personkategorier}
-              databehandlere={databehandlere}
-              pvkDokument={pvkDokument}
-            />
+            <div className={hasPvoComment ? 'w-1/2' : 'w-full'}>
+              <InvolveringAvEksterneReadOnlyContent
+                personkategorier={personkategorier}
+                databehandlere={databehandlere}
+                pvkDokument={pvkDokument}
+              />
+            </div>
           )}
 
         {/* sidepanel */}
 
-        {pvoTilbakemelding &&
-          pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
-          relevantVurdering && (
-            <div>
-              <PvkSidePanelWrapper>
-                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                  <PvoTilbakemeldingReadOnly
-                    relevantVurdering={relevantVurdering}
-                    tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
-                    sentDate={relevantVurdering.sendtDato}
-                  />
-                )}
+        {hasPvoComment && relevantVurdering && (
+          <div className='w-1/2'>
+            <PvkSidePanelWrapper wide>
+              {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
+                  tilbakemeldingsinnhold={relevantVurdering.innvolveringAvEksterne}
+                  sentDate={relevantVurdering.sendtDato}
+                />
+              )}
 
-                {pvkDokument.antallInnsendingTilPvo >= 1 && (
-                  <div className='mt-10'>
-                    <PvoTilbakemeldingsHistorikk
-                      pvkDokument={pvkDokument}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      fieldName='innvolveringAvEksterne'
-                      relevantVurdering={relevantVurdering}
-                      forPvo={false}
-                    />
-                  </div>
-                )}
-              </PvkSidePanelWrapper>
-            </div>
-          )}
+              {pvkDokument.antallInnsendingTilPvo >= 1 && (
+                <div className='mt-10'>
+                  <PvoTilbakemeldingsHistorikk
+                    pvkDokument={pvkDokument}
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    fieldName='innvolveringAvEksterne'
+                    relevantVurdering={relevantVurdering}
+                    forPvo={false}
+                  />
+                </div>
+              )}
+            </PvkSidePanelWrapper>
+          </div>
+        )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

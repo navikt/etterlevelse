@@ -105,6 +105,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
+  // Synchronous flag so submit() sees the result of the latest validate() run, avoiding a race
+  // with React state updates not yet re-rendered when Formik calls onSubmit.
+  const hasBlockingErrorsRef = useRef<boolean>(false)
 
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
@@ -147,25 +150,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const hasAccess = user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess
 
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
-    if (
-      !behandlingensLivslopError &&
-      !artOgOmfangError.stemmerPersonkategorier &&
-      !artOgOmfangError.lagringsBeskrivelsePersonopplysningene &&
-      !artOgOmfangError.tilgangsBeskrivelsePersonopplysningene &&
-      !artOgOmfangError.personkategoriAntallBeskrivelse &&
-      risikoscenarioError === '' &&
-      spesifikkeRisikoscenarioMedFeil.length === 0 &&
-      savnerVurderingError === '' &&
-      tiltakError === '' &&
-      tiltakAnsvarligError === '' &&
-      tiltakFristError === '' &&
-      tiltakFristUtgaattError === '' &&
-      !medlemError &&
-      !avdelingError &&
-      !risikoeiereDataError &&
-      pvkKravError === '' &&
-      !manglerBehandlingError
-    ) {
+    if (!hasBlockingErrorsRef.current) {
       await getEtterlevelseDokumentasjon(etterlevelseDokumentasjon.id).then(async (edok) => {
         if (edok.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID) {
           await getPvkDokument(submitedValues.id).then(async (response: IPvkDokument) => {
@@ -254,85 +239,57 @@ export const SendInnView: FunctionComponent<TProps> = ({
     }
   }
 
-  const manglerBehandlingErrorCheck = () => {
-    if (
+  const manglerBehandlingErrorCheck = (): boolean => {
+    const hasError =
       etterlevelseDokumentasjon.behandlingIds.length === 0 &&
       etterlevelseDokumentasjon.dpBehandlingIds.length === 0
-    ) {
-      setManglerBehandlingError(true)
-    } else {
-      setManglerBehandlingError(false)
-    }
+    setManglerBehandlingError(hasError)
+    return hasError
   }
 
-  const risikoeiereDataFieldCheck = () => {
-    if (etterlevelseDokumentasjon.risikoeiereData?.length === 0) {
-      setRisikoeiereDataError(true)
-    } else {
-      setRisikoeiereDataError(false)
-    }
+  const risikoeiereDataFieldCheck = (): boolean => {
+    const hasError = etterlevelseDokumentasjon.risikoeiereData?.length === 0
+    setRisikoeiereDataError(hasError)
+    return hasError
   }
 
-  const avdelingFieldCheck = () => {
-    if (!etterlevelseDokumentasjon.nomAvdelingId) {
-      setAvdelingError(true)
-    } else {
-      setAvdelingError(false)
-    }
+  const avdelingFieldCheck = (): boolean => {
+    const hasError = !etterlevelseDokumentasjon.nomAvdelingId
+    setAvdelingError(hasError)
+    return hasError
   }
 
-  const medlemErrorCheck = () => {
-    if (
+  const medlemErrorCheck = (): boolean => {
+    const hasError =
       (etterlevelseDokumentasjon.teamsData === undefined ||
         etterlevelseDokumentasjon.teamsData?.length === 0) &&
       (etterlevelseDokumentasjon.resourcesData === undefined ||
         etterlevelseDokumentasjon.resourcesData?.length === 0)
-    ) {
-      setMedlemError(true)
-    } else {
-      setMedlemError(false)
-    }
+    setMedlemError(hasError)
+    return hasError
   }
 
-  const behandlingensLivslopFieldCheck = () => {
-    if (behandlingensLivslop?.filer.length === 0 && behandlingensLivslop.beskrivelse === '') {
-      setBehandlingensLivslopError(true)
-    } else {
-      setBehandlingensLivslopError(false)
-    }
+  const behandlingensLivslopFieldCheck = (
+    data: IBehandlingensLivslop | undefined = behandlingensLivslop
+  ): boolean => {
+    const hasError = data?.filer.length === 0 && data.beskrivelse === ''
+    setBehandlingensLivslopError(hasError)
+    return hasError
   }
 
-  const artOgOmfangFieldCheck = () => {
-    let stemmerPersonkategorier = false
-    let personkategoriAntallBeskrivelse = false
-    let tilgangsBeskrivelsePersonopplysningene = false
-    let lagringsBeskrivelsePersonopplysningene = false
-
-    if (
+  const artOgOmfangFieldCheck = (): boolean => {
+    const stemmerPersonkategorier =
       artOgOmfang.stemmerPersonkategorier === undefined ||
       artOgOmfang.stemmerPersonkategorier === null
-    ) {
-      stemmerPersonkategorier = true
-    }
-    if (
+    const personkategoriAntallBeskrivelse =
       artOgOmfang.personkategoriAntallBeskrivelse === '' ||
       artOgOmfang.personkategoriAntallBeskrivelse === undefined
-    ) {
-      personkategoriAntallBeskrivelse = true
-    }
-
-    if (
+    const tilgangsBeskrivelsePersonopplysningene =
       artOgOmfang.tilgangsBeskrivelsePersonopplysningene === '' ||
       artOgOmfang.tilgangsBeskrivelsePersonopplysningene === undefined
-    ) {
-      tilgangsBeskrivelsePersonopplysningene = true
-    }
-    if (
+    const lagringsBeskrivelsePersonopplysningene =
       artOgOmfang.lagringsBeskrivelsePersonopplysningene === '' ||
       artOgOmfang.lagringsBeskrivelsePersonopplysningene === undefined
-    ) {
-      lagringsBeskrivelsePersonopplysningene = true
-    }
 
     setArtOgOmfangError({
       stemmerPersonkategorier,
@@ -340,121 +297,140 @@ export const SendInnView: FunctionComponent<TProps> = ({
       tilgangsBeskrivelsePersonopplysningene,
       lagringsBeskrivelsePersonopplysningene,
     })
+
+    return (
+      stemmerPersonkategorier ||
+      personkategoriAntallBeskrivelse ||
+      tilgangsBeskrivelsePersonopplysningene ||
+      lagringsBeskrivelsePersonopplysningene
+    )
   }
 
-  const pvkKravCheck = () => {
-    if (!isPvkKravLoading) {
-      const antallPvkKrav = pvkKrav?.krav.totalElements
-      const pvkEtterlevelser: TEtterlevelseQL[] = []
-
-      pvkKrav?.krav.content.forEach((krav) => {
-        pvkEtterlevelser.push(...krav.etterlevelser)
-      })
-
-      const ferdigPvkEtterlevelser = pvkEtterlevelser.filter(
-        (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
-      )
-
-      if (ferdigPvkEtterlevelser.length !== antallPvkKrav) {
-        setPvkKravError(
-          'Alle krav relatert til personvernkonsekvens vurdering må være ferdig dokumentert'
-        )
-      } else {
-        setPvkKravError('')
-      }
+  const pvkKravCheck = (): boolean => {
+    if (isPvkKravLoading) {
+      return pvkKravError !== ''
     }
+
+    const antallPvkKrav = pvkKrav?.krav.totalElements
+    const pvkEtterlevelser: TEtterlevelseQL[] = []
+
+    pvkKrav?.krav.content.forEach((krav) => {
+      pvkEtterlevelser.push(...krav.etterlevelser)
+    })
+
+    const ferdigPvkEtterlevelser = pvkEtterlevelser.filter(
+      (etterlevelse) => etterlevelse.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
+    )
+
+    const hasError = ferdigPvkEtterlevelser.length !== antallPvkKrav
+    setPvkKravError(
+      hasError
+        ? 'Alle krav relatert til personvernkonsekvens vurdering må være ferdig dokumentert'
+        : ''
+    )
+    return hasError
   }
 
-  const risikoscenarioCheck = () => {
-    if (alleRisikoscenario.length === 0) {
+  const risikoscenarioCheck = (data: IRisikoscenario[] = alleRisikoscenario): boolean => {
+    if (data.length === 0) {
       setRisikoscenarioError('Dere må ha minst 1 risikoscenario.')
       setGenerelleRisikoscenarioMedFeil([])
       setSpesifikkeRisikoscenarioMedFeil([])
-    } else {
-      const ikkeFerdigBeskrevetScenario = alleRisikoscenario.filter((risiko: IRisikoscenario) =>
-        isRisikoUnderarbeidCheck(risiko)
-      )
-      const generelleMedFeil = ikkeFerdigBeskrevetScenario.filter(
-        (risiko: IRisikoscenario) => risiko.generelScenario
-      )
-      const spesifikkeMedFeil = ikkeFerdigBeskrevetScenario.filter(
-        (risiko: IRisikoscenario) => !risiko.generelScenario
-      )
-
-      if (generelleMedFeil.length !== 0) {
-        setRisikoscenarioError(
-          `${generelleMedFeil.length} risikoscenarioer er ikke ferdig beskrevet.`
-        )
-      } else {
-        setRisikoscenarioError('')
-      }
-
-      setGenerelleRisikoscenarioMedFeil(generelleMedFeil)
-      setSpesifikkeRisikoscenarioMedFeil(spesifikkeMedFeil)
+      return true
     }
+
+    const ikkeFerdigBeskrevetScenario = data.filter((risiko: IRisikoscenario) =>
+      isRisikoUnderarbeidCheck(risiko)
+    )
+    const generelleMedFeil = ikkeFerdigBeskrevetScenario.filter(
+      (risiko: IRisikoscenario) => risiko.generelScenario
+    )
+    const spesifikkeMedFeil = ikkeFerdigBeskrevetScenario.filter(
+      (risiko: IRisikoscenario) => !risiko.generelScenario
+    )
+
+    setRisikoscenarioError(
+      generelleMedFeil.length !== 0
+        ? `${generelleMedFeil.length} risikoscenarioer er ikke ferdig beskrevet.`
+        : ''
+    )
+    setGenerelleRisikoscenarioMedFeil(generelleMedFeil)
+    setSpesifikkeRisikoscenarioMedFeil(spesifikkeMedFeil)
+
+    return generelleMedFeil.length !== 0 || spesifikkeMedFeil.length !== 0
   }
 
-  const tiltakCheck = () => {
-    if (alleTiltak.length > 0) {
-      const ikkeFerdigBeskrevetTiltak = alleTiltak.filter(
-        (tiltak) => tiltak.beskrivelse === '' || tiltak.navn === ''
-      )
-      if (ikkeFerdigBeskrevetTiltak.length !== 0) {
-        setTiltakError(`${ikkeFerdigBeskrevetTiltak.length} tiltak er ikke ferdig beskrevet`)
-      }
-    } else {
+  const tiltakCheck = (data: ITiltak[] = alleTiltak): boolean => {
+    if (data.length === 0) {
       setTiltakError('')
+      return false
     }
+
+    const ikkeFerdigBeskrevetTiltak = data.filter(
+      (tiltak) => tiltak.beskrivelse === '' || tiltak.navn === ''
+    )
+    setTiltakError(
+      ikkeFerdigBeskrevetTiltak.length !== 0
+        ? `${ikkeFerdigBeskrevetTiltak.length} tiltak er ikke ferdig beskrevet`
+        : ''
+    )
+    return ikkeFerdigBeskrevetTiltak.length !== 0
   }
 
-  const tiltakAnsvarligCheck = () => {
-    if (alleTiltak.length > 0) {
-      const manglerTiltaksansvarlig = alleTiltak.filter(
-        (tiltak) =>
-          tiltak.ansvarlig.navIdent === '' &&
-          tiltak.ansvarligTeam.name === null &&
-          !tiltak.iverksatt
-      )
-      if (manglerTiltaksansvarlig.length !== 0) {
-        setTiltakAnsvarligError(`${manglerTiltaksansvarlig.length} tiltak mangler tiltaksansvarlig`)
-      }
-    } else {
+  const tiltakAnsvarligCheck = (data: ITiltak[] = alleTiltak): boolean => {
+    if (data.length === 0) {
       setTiltakAnsvarligError('')
+      return false
     }
+
+    const manglerTiltaksansvarlig = data.filter(
+      (tiltak) =>
+        tiltak.ansvarlig.navIdent === '' && tiltak.ansvarligTeam.name === null && !tiltak.iverksatt
+    )
+    setTiltakAnsvarligError(
+      manglerTiltaksansvarlig.length !== 0
+        ? `${manglerTiltaksansvarlig.length} tiltak mangler tiltaksansvarlig`
+        : ''
+    )
+    return manglerTiltaksansvarlig.length !== 0
   }
 
-  const tiltakFristCheck = () => {
-    if (alleTiltak.length > 0) {
-      const now = new Date()
-      let amountOfOverdueTiltak = 0
-      let amountOfMissingTiltakFrist = 0
-
-      alleTiltak.map((tiltak) => {
-        if (tiltak.frist !== null && !tiltak.iverksatt) {
-          if (moment(now).isAfter(moment(tiltak.frist), 'day')) {
-            amountOfOverdueTiltak++
-          }
-        }
-        if (tiltak.frist === null && !tiltak.iverksatt) {
-          amountOfMissingTiltakFrist++
-        }
-      })
-
-      if (amountOfMissingTiltakFrist > 0) {
-        setTiltakFristError(`${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`)
-      } else setTiltakFristError('')
-
-      if (amountOfOverdueTiltak > 0) {
-        setTiltakFristUtgaattError(`${amountOfOverdueTiltak} tiltak har utløpt frist `)
-      } else setTiltakFristUtgaattError('')
-    } else {
+  const tiltakFristCheck = (data: ITiltak[] = alleTiltak): boolean => {
+    if (data.length === 0) {
       setTiltakFristError('')
       setTiltakFristUtgaattError('')
+      return false
     }
+
+    const now = new Date()
+    let amountOfOverdueTiltak = 0
+    let amountOfMissingTiltakFrist = 0
+
+    data.map((tiltak) => {
+      if (tiltak.frist !== null && !tiltak.iverksatt) {
+        if (moment(now).isAfter(moment(tiltak.frist), 'day')) {
+          amountOfOverdueTiltak++
+        }
+      }
+      if (tiltak.frist === null && !tiltak.iverksatt) {
+        amountOfMissingTiltakFrist++
+      }
+    })
+
+    setTiltakFristError(
+      amountOfMissingTiltakFrist > 0
+        ? `${amountOfMissingTiltakFrist} tiltak mangler tiltaksfrist.`
+        : ''
+    )
+    setTiltakFristUtgaattError(
+      amountOfOverdueTiltak > 0 ? `${amountOfOverdueTiltak} tiltak har utløpt frist ` : ''
+    )
+
+    return amountOfMissingTiltakFrist > 0 || amountOfOverdueTiltak > 0
   }
 
-  const savnerVurderingCheck = () => {
-    const savnerVurdering = alleRisikoscenario
+  const savnerVurderingCheck = (data: IRisikoscenario[] = alleRisikoscenario): boolean => {
+    const savnerVurdering = data
       .filter((risiko: IRisikoscenario) => !risiko.ingenTiltak)
       .filter(
         (risiko) =>
@@ -464,12 +440,52 @@ export const SendInnView: FunctionComponent<TProps> = ({
           risiko.nivaaBegrunnelseEtterTiltak === ''
       )
 
-    if (savnerVurdering.length !== 0) {
-      setsavnerVurderingError(
-        `${savnerVurdering.length} risikoscenarioer savner en vurdering av tiltakenes effekt.`
-      )
-    } else {
-      setsavnerVurderingError('')
+    setsavnerVurderingError(
+      savnerVurdering.length !== 0
+        ? `${savnerVurdering.length} risikoscenarioer savner en vurdering av tiltakenes effekt.`
+        : ''
+    )
+    return savnerVurdering.length !== 0
+  }
+
+  // Refetches the latest state from backend so validation checks don't run on stale data
+  const fetchValidationData = async (): Promise<{
+    behandlingensLivslop: IBehandlingensLivslop
+    alleRisikoscenario: IRisikoscenario[]
+    alleTiltak: ITiltak[]
+  }> => {
+    let freshBehandlingensLivslop = behandlingensLivslop as IBehandlingensLivslop
+    let freshAlleRisikoscenario = alleRisikoscenario
+    let freshAlleTiltak = alleTiltak
+
+    await getBehandlingensLivslopByEtterlevelseDokumentId(pvkDokument.etterlevelseDokumentId)
+      .then((response: IBehandlingensLivslop) => {
+        freshBehandlingensLivslop = response
+        setBehandlingensLivslop(response)
+      })
+      .catch((error: AxiosError) => {
+        if (error.status === 404) {
+          freshBehandlingensLivslop = mapBehandlingensLivslopToFormValue({})
+          setBehandlingensLivslop(freshBehandlingensLivslop)
+        } else {
+          console.debug(error)
+        }
+      })
+    await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
+      (response: IPageResponse<IRisikoscenario>) => {
+        freshAlleRisikoscenario = response.content
+        setAlleRisikoscenario(response.content)
+      }
+    )
+    await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
+      freshAlleTiltak = response.content
+      setAlleTitltak(response.content)
+    })
+
+    return {
+      behandlingensLivslop: freshBehandlingensLivslop,
+      alleRisikoscenario: freshAlleRisikoscenario,
+      alleTiltak: freshAlleTiltak,
     }
   }
 
@@ -477,23 +493,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     ;(async () => {
       if (pvkDokument) {
         setIsLoading(true)
-        await getBehandlingensLivslopByEtterlevelseDokumentId(pvkDokument.etterlevelseDokumentId)
-          .then((response: IBehandlingensLivslop) => {
-            setBehandlingensLivslop(response)
-          })
-          .catch((error: AxiosError) => {
-            if (error.status === 404) {
-              setBehandlingensLivslop(mapBehandlingensLivslopToFormValue({}))
-            } else {
-              console.debug(error)
-            }
-          })
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (response: IPageResponse<IRisikoscenario>) => setAlleRisikoscenario(response.content)
-        )
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) =>
-          setAlleTitltak(response.content)
-        )
+        await fetchValidationData()
         setIsLoading(false)
 
         setPvoVurderingList(
@@ -565,7 +565,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
         onSubmit={submit}
         innerRef={formRef}
         initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
-        validate={(value) => {
+        validate={async (value) => {
           try {
             if (
               [
@@ -574,23 +574,35 @@ export const SendInnView: FunctionComponent<TProps> = ({
                 EPvkDokumentStatus.TRENGER_GODKJENNING,
               ].includes(value.status)
             ) {
-              manglerBehandlingErrorCheck()
-              risikoeiereDataFieldCheck()
-              avdelingFieldCheck()
-              medlemErrorCheck()
-              behandlingensLivslopFieldCheck()
-              artOgOmfangFieldCheck()
-              pvkKravCheck()
-              risikoscenarioCheck()
+              const freshData = await fetchValidationData()
+
+              let hasBlockingErrors = false
+              hasBlockingErrors = manglerBehandlingErrorCheck() || hasBlockingErrors
+              hasBlockingErrors = risikoeiereDataFieldCheck() || hasBlockingErrors
+              hasBlockingErrors = avdelingFieldCheck() || hasBlockingErrors
+              hasBlockingErrors = medlemErrorCheck() || hasBlockingErrors
+              hasBlockingErrors =
+                behandlingensLivslopFieldCheck(freshData.behandlingensLivslop) || hasBlockingErrors
+              hasBlockingErrors = artOgOmfangFieldCheck() || hasBlockingErrors
+              hasBlockingErrors = pvkKravCheck() || hasBlockingErrors
+              hasBlockingErrors =
+                risikoscenarioCheck(freshData.alleRisikoscenario) || hasBlockingErrors
+
               if (
-                alleRisikoscenario.filter((risiko: IRisikoscenario) => !risiko.ingenTiltak)
-                  .length !== 0
+                freshData.alleRisikoscenario.filter(
+                  (risiko: IRisikoscenario) => !risiko.ingenTiltak
+                ).length !== 0
               ) {
-                tiltakCheck()
-                tiltakAnsvarligCheck()
-                tiltakFristCheck()
-                savnerVurderingCheck()
+                hasBlockingErrors = tiltakCheck(freshData.alleTiltak) || hasBlockingErrors
+                hasBlockingErrors = tiltakAnsvarligCheck(freshData.alleTiltak) || hasBlockingErrors
+                hasBlockingErrors = tiltakFristCheck(freshData.alleTiltak) || hasBlockingErrors
+                hasBlockingErrors =
+                  savnerVurderingCheck(freshData.alleRisikoscenario) || hasBlockingErrors
               }
+
+              hasBlockingErrorsRef.current = hasBlockingErrors
+            } else {
+              hasBlockingErrorsRef.current = false
             }
 
             validateYupSchema(value, pvkDocumentSchema(), true)

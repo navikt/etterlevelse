@@ -40,46 +40,52 @@ export const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = (
 }) => {
   const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
 
+  const hasPvoComment = !!(
+    pvoTilbakemelding &&
+    pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+    relevantVurdering
+  )
+
   return (
     <div className='w-full'>
       <ContentLayout>
         {loading && <CenteredLoader />}
 
         {!loading && artOgOmfang && (
-          <ArtOgOmfangReadOnlyContent
-            artOgOmfang={artOgOmfang}
-            personkategorier={personkategorier}
-          />
+          <div className={hasPvoComment ? 'w-1/2' : 'w-full'}>
+            <ArtOgOmfangReadOnlyContent
+              artOgOmfang={artOgOmfang}
+              personkategorier={personkategorier}
+            />
+          </div>
         )}
 
         {/* sidepanel */}
-        {pvoTilbakemelding &&
-          pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
-          relevantVurdering && (
-            <div>
-              <PvkSidePanelWrapper>
-                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                  <PvoTilbakemeldingReadOnly
-                    relevantVurdering={relevantVurdering}
-                    tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
-                    sentDate={relevantVurdering.sendtDato}
-                  />
-                )}
+        {hasPvoComment && relevantVurdering && (
+          <div className='w-1/2'>
+            <PvkSidePanelWrapper wide>
+              {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
+                  tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
+                  sentDate={relevantVurdering.sendtDato}
+                />
+              )}
 
-                {pvkDokument.antallInnsendingTilPvo >= 1 && (
-                  <div className='mt-10'>
-                    <PvoTilbakemeldingsHistorikk
-                      pvkDokument={pvkDokument}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      fieldName='behandlingensArtOgOmfang'
-                      relevantVurdering={relevantVurdering}
-                      forPvo={false}
-                    />
-                  </div>
-                )}
-              </PvkSidePanelWrapper>
-            </div>
-          )}
+              {pvkDokument.antallInnsendingTilPvo >= 1 && (
+                <div className='mt-10'>
+                  <PvoTilbakemeldingsHistorikk
+                    pvkDokument={pvkDokument}
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    fieldName='behandlingensArtOgOmfang'
+                    relevantVurdering={relevantVurdering}
+                    forPvo={false}
+                  />
+                </div>
+              )}
+            </PvkSidePanelWrapper>
+          </div>
+        )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

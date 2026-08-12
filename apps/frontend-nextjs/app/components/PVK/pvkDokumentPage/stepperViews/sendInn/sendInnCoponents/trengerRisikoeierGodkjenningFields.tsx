@@ -16,7 +16,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useContext } from 'react'
+import { FunctionComponent, ReactNode, useContext, useState } from 'react'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 
 type TProps = {
@@ -50,6 +50,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
 }) => {
   const user = useContext(UserContext)
   const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
+  const [isAksepterLoading, setIsAksepterLoading] = useState<boolean>(false)
 
   return (
     <Field>
@@ -132,7 +133,9 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
 
               <Button
                 type='button'
+                loading={isAksepterLoading}
                 onClick={async () => {
+                  setIsAksepterLoading(true)
                   await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
                   await setFieldValue(
                     'godkjentAvRisikoeierDato',
@@ -142,7 +145,7 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
                     'godkjentAvRisikoeier',
                     user.getIdent() + ' - ' + user.getName()
                   )
-                  await submitForm()
+                  await submitForm().finally(() => setIsAksepterLoading(false))
                 }}
               >
                 Aksepter restrisiko og arkiver i Public 360

@@ -81,6 +81,12 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
 
+  const hasPvoComment = !!(
+    pvoTilbakemelding &&
+    pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+    relevantVurdering
+  )
+
   useEffect(() => {
     ;(async () => {
       if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
@@ -169,7 +175,9 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           {pvkDokument &&
             !isReadOnlyPvkStatus(pvkDokument.status) &&
             (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
-              <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+              <div
+                className={`pt-6 pr-4 flex flex-col gap-4 col-span-8 ${hasPvoComment ? 'w-1/2' : 'flex-1'}`}
+              >
                 <Formik
                   validateOnBlur={false}
                   validateOnChange={false}
@@ -310,35 +318,31 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
           )}
 
           {/* Sidepanel */}
-          <div>
-            {pvoTilbakemelding &&
-              pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
-              relevantVurdering && (
-                <PvkSidePanelWrapper>
-                  {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                    <PvoTilbakemeldingReadOnly
+          <div className={hasPvoComment ? 'w-1/2' : ''}>
+            {hasPvoComment && relevantVurdering && (
+              <PvkSidePanelWrapper wide>
+                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                  <PvoTilbakemeldingReadOnly
+                    relevantVurdering={relevantVurdering}
+                    tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
+                    sentDate={relevantVurdering.sendtDato}
+                  />
+                )}
+                {pvkDokument.antallInnsendingTilPvo >= 1 && (
+                  <div className='mt-10'>
+                    <PvoTilbakemeldingsHistorikk
+                      pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      fieldName='behandlingenslivslop'
                       relevantVurdering={relevantVurdering}
-                      tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
-                      sentDate={relevantVurdering.sendtDato}
+                      forPvo={false}
                     />
-                  )}
-                  {pvkDokument.antallInnsendingTilPvo >= 1 && (
-                    <div className='mt-10'>
-                      <PvoTilbakemeldingsHistorikk
-                        pvkDokument={pvkDokument}
-                        pvoTilbakemelding={pvoTilbakemelding}
-                        fieldName='behandlingenslivslop'
-                        relevantVurdering={relevantVurdering}
-                        forPvo={false}
-                      />
-                    </div>
-                  )}
-                </PvkSidePanelWrapper>
-              )}
+                  </div>
+                )}
+              </PvkSidePanelWrapper>
+            )}
 
-            {(!pvoTilbakemelding ||
-              (pvoTilbakemelding &&
-                pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG)) && (
+            {!hasPvoComment && (
               // Don't remove this div. Sticky will not work without it.
               <div>
                 <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>
