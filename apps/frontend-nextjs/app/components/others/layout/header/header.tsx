@@ -8,7 +8,7 @@ import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/messag
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
-import { InternalHeader, Spacer } from '@navikt/ds-react'
+import { InternalHeader, Spacer, Theme } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent, useContext, useEffect, useRef, useState } from 'react'
@@ -49,7 +49,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
     <div className='w-full'>
       <div className='w-full flex justify-center'>
         <SkipToContent />
-        <InternalHeader className='w-full justify-center items-center'>
+        <InternalHeader className='w-full justify-center items-center py-2'>
           <div className='max-w-7xl flex w-full ml-1'>
             <InternalHeader.Title href='/'>Støtte til etterlevelse</InternalHeader.Title>
             <Spacer />
@@ -71,14 +71,18 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
           </div>
         </InternalHeader>
       </div>
-      <div
-        className='flex lg:hidden bg-gray-900 py-1 px-1 w-full justify-center items-center'
-        role='search'
+      <Theme
+        theme='dark'
+        hasBackground={false}
+        asChild
+        className='flex lg:hidden bg-gray-900 py-2 px-1 w-full justify-center items-center'
       >
-        <div className=' max-w-xl w-full '>
-          <MainSearch />
+        <div role='search'>
+          <div className=' max-w-xl w-full '>
+            <MainSearch />
+          </div>
         </div>
-      </div>
+      </Theme>
       {systemVarsel && systemVarsel.meldingStatus === EMeldingStatus.ACTIVE && (
         <div className='w-full flex justify-center'>
           <div
