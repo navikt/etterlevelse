@@ -43,22 +43,29 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   relevantVurdering,
   readOnly,
-}) => (
-  <div className='w-full'>
-    <ContentLayout>
-      <TilhorendeDokumentasjonContent
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        pvkKrav={pvkKrav}
-        isPvkKravLoading={isPvkKravLoading}
-        readOnly={readOnly}
-      />
+}) => {
+  const hasPvoComment = !!(
+    pvoTilbakemelding &&
+    pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+    relevantVurdering
+  )
 
-      {/* sidepanel */}
-      {pvoTilbakemelding &&
-        pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
-        relevantVurdering && (
-          <div>
-            <PvkSidePanelWrapper>
+  return (
+    <div className='w-full'>
+      <ContentLayout>
+        <div className={hasPvoComment ? 'w-1/2' : 'w-full'}>
+          <TilhorendeDokumentasjonContent
+            etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+            pvkKrav={pvkKrav}
+            isPvkKravLoading={isPvkKravLoading}
+            readOnly={readOnly}
+          />
+        </div>
+
+        {/* sidepanel */}
+        {hasPvoComment && relevantVurdering && (
+          <div className='w-1/2'>
+            <PvkSidePanelWrapper wide>
               {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
                 <TilhorendeDokumentasjonTilbakemeldingReadOnly
                   tilbakemeldingsinnhold={relevantVurdering.tilhorendeDokumentasjon}
@@ -79,14 +86,15 @@ export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
             </PvkSidePanelWrapper>
           </div>
         )}
-    </ContentLayout>
-    <FormButtons
-      etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-      activeStep={activeStep}
-      setActiveStep={setActiveStep}
-      setSelectedStep={setSelectedStep}
-    />
-  </div>
-)
+      </ContentLayout>
+      <FormButtons
+        etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+        setSelectedStep={setSelectedStep}
+      />
+    </div>
+  )
+}
 
 export default TilhorendeDokumentasjon

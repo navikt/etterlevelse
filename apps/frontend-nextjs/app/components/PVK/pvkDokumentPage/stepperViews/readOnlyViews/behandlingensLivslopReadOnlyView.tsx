@@ -46,6 +46,12 @@ export const BehandlingensLivslopReadOnlyView: FunctionComponent<TProps> = ({
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  const hasPvoComment = !!(
+    pvoTilbakemelding &&
+    pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+    relevantVurdering
+  )
+
   useEffect(() => {
     ;(async () => {
       if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
@@ -72,42 +78,43 @@ export const BehandlingensLivslopReadOnlyView: FunctionComponent<TProps> = ({
       {!isLoading && behandlingensLivslop && (
         <ContentLayout>
           {pvkDokument && (
-            <BehandlingensLivslopReadOnlyContent
-              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-              behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
-              noSidePanelContent
-            />
+            <div className={hasPvoComment ? 'w-1/2' : 'w-full'}>
+              <BehandlingensLivslopReadOnlyContent
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(
+                  behandlingensLivslop
+                )}
+                noSidePanelContent
+              />
+            </div>
           )}
 
           {/* Sidepanel */}
-          <div>
-            {pvoTilbakemelding &&
-              pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
-              relevantVurdering && (
-                <PvkSidePanelWrapper>
-                  {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                    <PvoTilbakemeldingReadOnly
+          <div className={hasPvoComment ? 'w-1/2' : ''}>
+            {hasPvoComment && relevantVurdering && (
+              <PvkSidePanelWrapper wide>
+                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                  <PvoTilbakemeldingReadOnly
+                    relevantVurdering={relevantVurdering}
+                    tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
+                    sentDate={relevantVurdering.sendtDato}
+                  />
+                )}
+                {pvkDokument.antallInnsendingTilPvo >= 1 && (
+                  <div className='mt-10'>
+                    <PvoTilbakemeldingsHistorikk
+                      pvkDokument={pvkDokument}
+                      pvoTilbakemelding={pvoTilbakemelding}
+                      fieldName='behandlingenslivslop'
                       relevantVurdering={relevantVurdering}
-                      tilbakemeldingsinnhold={relevantVurdering.behandlingenslivslop}
-                      sentDate={relevantVurdering.sendtDato}
+                      forPvo={false}
                     />
-                  )}
-                  {pvkDokument.antallInnsendingTilPvo >= 1 && (
-                    <div className='mt-10'>
-                      <PvoTilbakemeldingsHistorikk
-                        pvkDokument={pvkDokument}
-                        pvoTilbakemelding={pvoTilbakemelding}
-                        fieldName='behandlingenslivslop'
-                        relevantVurdering={relevantVurdering}
-                        forPvo={false}
-                      />
-                    </div>
-                  )}
-                </PvkSidePanelWrapper>
-              )}
+                  </div>
+                )}
+              </PvkSidePanelWrapper>
+            )}
 
-            {(!pvoTilbakemelding ||
-              pvoTilbakemelding.status !== EPvoTilbakemeldingStatus.FERDIG) && (
+            {!hasPvoComment && (
               // Don't remove this div. Sticky will not work without it.
               <div>
                 <div className='pl-6 border-l border-[#071a3636] w-full max-w-lg sticky top-4'>

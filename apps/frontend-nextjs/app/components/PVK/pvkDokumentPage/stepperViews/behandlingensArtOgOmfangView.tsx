@@ -52,6 +52,12 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
 
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
+  const hasPvoComment = !!(
+    pvoTilbakemelding &&
+    pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
+    relevantVurdering
+  )
+
   return (
     <div className='w-full'>
       <ContentLayout>
@@ -61,7 +67,9 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
           artOgOmfang &&
           !isReadOnlyPvkStatus(pvkDokument.status) &&
           (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
-            <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+            <div
+              className={`pt-6 pr-4 flex flex-col gap-4 col-span-8 ${hasPvoComment ? 'w-1/2' : 'flex-1'}`}
+            >
               <BehandlingensArtOgOmfangForm
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 personkategorier={personkategorier}
@@ -93,33 +101,31 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
           )}
 
         {/* sidepanel */}
-        {pvoTilbakemelding &&
-          pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
-          relevantVurdering && (
-            <div>
-              <PvkSidePanelWrapper>
-                {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
-                  <PvoTilbakemeldingReadOnly
-                    relevantVurdering={relevantVurdering}
-                    tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
-                    sentDate={relevantVurdering.sendtDato}
-                  />
-                )}
+        {hasPvoComment && relevantVurdering && (
+          <div className='w-1/2'>
+            <PvkSidePanelWrapper wide>
+              {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
+                <PvoTilbakemeldingReadOnly
+                  relevantVurdering={relevantVurdering}
+                  tilbakemeldingsinnhold={relevantVurdering.behandlingensArtOgOmfang}
+                  sentDate={relevantVurdering.sendtDato}
+                />
+              )}
 
-                {pvkDokument.antallInnsendingTilPvo >= 1 && (
-                  <div className='mt-10'>
-                    <PvoTilbakemeldingsHistorikk
-                      pvkDokument={pvkDokument}
-                      pvoTilbakemelding={pvoTilbakemelding}
-                      fieldName='behandlingensArtOgOmfang'
-                      relevantVurdering={relevantVurdering}
-                      forPvo={false}
-                    />
-                  </div>
-                )}
-              </PvkSidePanelWrapper>
-            </div>
-          )}
+              {pvkDokument.antallInnsendingTilPvo >= 1 && (
+                <div className='mt-10'>
+                  <PvoTilbakemeldingsHistorikk
+                    pvkDokument={pvkDokument}
+                    pvoTilbakemelding={pvoTilbakemelding}
+                    fieldName='behandlingensArtOgOmfang'
+                    relevantVurdering={relevantVurdering}
+                    forPvo={false}
+                  />
+                </div>
+              )}
+            </PvkSidePanelWrapper>
+          </div>
+        )}
       </ContentLayout>
       <FormButtons
         etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}

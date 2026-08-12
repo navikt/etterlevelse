@@ -344,7 +344,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
   return (
     <div className='w-full'>
       <div className={`flex w-full ${isPvoTilbakemeldingFerdig ? '' : 'justify-center'}`}>
-        <div className={`pt-6 ${isPvoTilbakemeldingFerdig ? 'w-204' : 'min-w-225'}`}>
+        <div className={`pt-6 ${isPvoTilbakemeldingFerdig ? 'w-1/2' : 'min-w-225'}`}>
           <div>
             <Heading level='1' size='medium' className='mb-5'>
               Risikobildet etter tiltak
@@ -519,10 +519,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
             </div>
           </div>
         </div>
-        <div className='min-w-0'>
+        <div className={isPvoTilbakemeldingFerdig ? 'w-1/2' : 'min-w-0'}>
           {/* sidepanel */}
           {isPvoTilbakemeldingFerdig && relevantVurdering && (
-            <PvkSidePanelWrapper>
+            <PvkSidePanelWrapper wide>
               {[undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) && (
                 <PvoTilbakemeldingReadOnly
                   relevantVurdering={relevantVurdering}
