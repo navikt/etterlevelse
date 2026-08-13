@@ -1,8 +1,27 @@
 package no.nav.data.etterlevelse.krav;
 
 
+import static no.nav.data.common.security.SecurityUtils.isKravEier;
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.JsonNode;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -27,23 +46,6 @@ import no.nav.data.etterlevelse.varsel.UrlGenerator;
 import no.nav.data.etterlevelse.varsel.VarselService;
 import no.nav.data.etterlevelse.varsel.domain.Varsel;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static no.nav.data.common.security.SecurityUtils.isKravEier;
-import static no.nav.data.common.utils.StreamUtils.convert;
-import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Slf4j
 @Service
@@ -251,7 +253,7 @@ public class KravService {
                         )
                 );
 
-                varselService.varsle(recipients, varselBuilder.build());
+                varselService.varsle(recipients, varselBuilder.build(), e.getId().toString());
             }
         });
     }

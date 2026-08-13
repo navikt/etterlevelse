@@ -1,6 +1,7 @@
 package no.nav.data.common.mail;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class MailTask extends DomainObject {
     private String to;
     private String subject;
     private String body;
+    private String etterlevelseDokumentasjonId;
     
     @JsonIgnore // Ikke i bruk for denne klassen
     @Getter(value = AccessLevel.NONE)

@@ -1,12 +1,13 @@
 package no.nav.data.integration.slack;
 
+import java.util.List;
+
+import org.springframework.util.Assert;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -29,6 +30,7 @@ public class SlackMeldingData {
     private boolean sendTilKanal;
     private int prioritet;
     private List<MeldingPart> parts;
+    private String etterlevelseDokumentasjonId;
     
     @Data
     @AllArgsConstructor

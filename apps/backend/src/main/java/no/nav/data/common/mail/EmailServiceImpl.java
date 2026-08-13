@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.storage.StorageService;
+import no.nav.data.common.varsel.QueuedVarselValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,6 +18,7 @@ public class EmailServiceImpl implements EmailService {
     private final StorageService<MailTask> storage;
     private final EmailProvider emailProvider;
     private final SecurityProperties securityProperties;
+    private final QueuedVarselValidator queuedVarselValidator;
 
     @Autowired
     private Environment env;
@@ -51,6 +53,9 @@ public class EmailServiceImpl implements EmailService {
     @Transactional
     protected void sendMailAndDelete(MailTask task) {
         storage.delete(task);
+        if (task.getEtterlevelseDokumentasjonId() != null && !queuedVarselValidator.shouldStillSend(task.getEtterlevelseDokumentasjonId(), task.getTo())) {
+            return;
+        }
         sendMail(task);
     }
 
