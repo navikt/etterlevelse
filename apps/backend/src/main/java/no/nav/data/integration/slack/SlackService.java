@@ -1,12 +1,14 @@
 package no.nav.data.integration.slack;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import no.nav.data.common.varsel.QueuedVarselValidator;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,7 @@ public class SlackService {
     
     private final SlackMeldingRepo repo;
     private final SlackClient slackClient;
+    private final QueuedVarselValidator queuedVarselValidator;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void scheduleSlack(SlackMeldingData melding) {
@@ -57,6 +60,9 @@ public class SlackService {
             // - If the send fails with RuntimeException, deletion is rolled back (default behaviour of @Transactional)
             // - However, if parts of the message is sent before another part triggers an exception, the result is repeat dispatching of the parts already sent
             repo.delete(sm);
+            if (sm.getEtterlevelseDokumentasjonId() != null && !queuedVarselValidator.shouldStillSend(sm.getEtterlevelseDokumentasjonId(), sm.getMottager())) {
+                return true;
+            }
             if (sm.getSendTilKanal()) {
                 slackClient.sendMessageToChannel(sm.getMottager(), sm.getParts());
             } else {

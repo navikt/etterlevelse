@@ -1,5 +1,9 @@
 package no.nav.data.integration.slack;
 
+import java.util.List;
+
+import org.hibernate.annotations.Type;
+
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,9 +17,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.integration.slack.SlackMeldingData.MeldingPart;
-import org.hibernate.annotations.Type;
-
-import java.util.List;
 
 
 /**
@@ -53,6 +54,10 @@ public class SlackMelding {
     
     public List<MeldingPart> getParts() {
         return data.getParts();
+    }
+
+    public String getEtterlevelseDokumentasjonId() {
+        return data.getEtterlevelseDokumentasjonId();
     }
 
 }
