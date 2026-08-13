@@ -46,6 +46,11 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
 }) => {
   const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(pvkDokument.etterlevelseDokumentId)
 
+  const brukerAlleOpplysningstyper =
+    etterlevelseDokumentasjon.behandlinger?.some(
+      (behandling) => behandling.brukerAlleOpplysningstyper === true
+    ) ?? false
+
   const isChangesMadeSinceLastSubmission = useMemo(() => {
     if (pvkDokument.antallInnsendingTilPvo > 1) {
       const previousSubmission = pvoTilbakemelding.vurderinger.find(
@@ -79,6 +84,7 @@ export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
                 artOgOmfang={artOgOmfang}
                 personkategorier={personkategorier}
                 isChangesMadeSinceLastSubmission={isChangesMadeSinceLastSubmission}
+                brukerAlleOpplysningstyper={brukerAlleOpplysningstyper}
               />
             )}
           </div>
