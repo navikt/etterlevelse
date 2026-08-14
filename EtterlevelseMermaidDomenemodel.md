@@ -467,7 +467,7 @@ Bold = action-triggering button. Italic = read-only navigation only.
 
 ---
 
-## Dashboard Traffic Light Colors
+## Dashboard traffic light colours and percentages
 
 The department dashboard (`/dashboard/:avdeling`, `AvdelingDetailPage.tsx`) uses colored dots
 (`TrafficDot`) to give a quick visual indication of status in the **Etterlevelse** and
