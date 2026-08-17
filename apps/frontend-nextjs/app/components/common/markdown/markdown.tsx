@@ -1,17 +1,31 @@
 import { BodyLong, BodyShort, Heading, Link, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { ComponentProps, FunctionComponent } from 'react'
 import ReactMarkdown from 'react-markdown'
 import 'react-markdown-editor-lite/lib/index.css'
 import rehypeRaw from 'rehype-raw'
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import remarkGfm from 'remark-gfm'
 import { markdownLink } from '../../../util/footer/footerUtil'
 import { ettlevColors } from '../../../util/theme/theme'
 import { ExternalLink } from '../externalLink/externalLink'
 
+// Tillat den inline-HTML-en teksteditoren (Tiptap) produserer: understreking (<ins>/<u>),
+// tekst- og bakgrunnsfarge (<span style>) og linjeskift (<br>). Alt annet saneres bort
+// for å hindre XSS fra brukergenerert tekst.
+const sanitizeSchema = {
+  ...defaultSchema,
+  tagNames: [...(defaultSchema.tagNames ?? []), 'ins', 'u', 'span', 'br'],
+  attributes: {
+    ...defaultSchema.attributes,
+    span: [...(defaultSchema.attributes?.span ?? []), 'style'],
+    ins: [...(defaultSchema.attributes?.ins ?? []), 'style'],
+    u: ['style'],
+  },
+}
+
 type TProps = {
   source?: string
   sources?: string[]
-  escapeHtml?: boolean
   shortenLinks?: boolean
   vertical?: boolean
   p1?: boolean
@@ -20,7 +34,6 @@ type TProps = {
 
 export const Markdown: FunctionComponent<TProps> = ({
   vertical,
-  escapeHtml = true,
   shortenLinks,
   source,
   sources: sourcesOrig,
@@ -161,7 +174,9 @@ export const Markdown: FunctionComponent<TProps> = ({
     sources = ['']
   }
 
-  const htmlPlugins = escapeHtml ? [] : [rehypeRaw]
+  const htmlPlugins = [rehypeRaw, [rehypeSanitize, sanitizeSchema]] as unknown as ComponentProps<
+    typeof ReactMarkdown
+  >['rehypePlugins']
   return (
     <div>
       <ReactMarkdown components={renderers} remarkPlugins={[remarkGfm]} rehypePlugins={htmlPlugins}>

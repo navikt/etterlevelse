@@ -28,10 +28,7 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<
           {tilbakemeldingsinnhold &&
             tilbakemeldingsinnhold.behandlingsInternDiskusjon &&
             tilbakemeldingsinnhold.behandlingsInternDiskusjon.length !== 0 && (
-              <Markdown
-                source={tilbakemeldingsinnhold.behandlingsInternDiskusjon}
-                escapeHtml={false}
-              />
+              <Markdown source={tilbakemeldingsinnhold.behandlingsInternDiskusjon} />
             )}
           <BodyLong>
             {(!tilbakemeldingsinnhold ||
@@ -88,7 +85,7 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<
           {tilbakemeldingsinnhold &&
             tilbakemeldingsinnhold.kravInternDiskusjon &&
             tilbakemeldingsinnhold.kravInternDiskusjon.length !== 0 && (
-              <Markdown source={tilbakemeldingsinnhold.kravInternDiskusjon} escapeHtml={false} />
+              <Markdown source={tilbakemeldingsinnhold.kravInternDiskusjon} />
             )}
           <BodyLong>
             {(!tilbakemeldingsinnhold ||
@@ -143,10 +140,7 @@ export const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<
           {tilbakemeldingsinnhold &&
             tilbakemeldingsinnhold.risikovurderingInternDiskusjon &&
             tilbakemeldingsinnhold.risikovurderingInternDiskusjon.length !== 0 && (
-              <Markdown
-                source={tilbakemeldingsinnhold.risikovurderingInternDiskusjon}
-                escapeHtml={false}
-              />
+              <Markdown source={tilbakemeldingsinnhold.risikovurderingInternDiskusjon} />
             )}
           <BodyLong>
             {(!tilbakemeldingsinnhold ||

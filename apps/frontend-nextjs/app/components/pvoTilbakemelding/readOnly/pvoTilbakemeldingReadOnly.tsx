@@ -52,7 +52,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
         {tilbakemeldingsinnhold &&
           tilbakemeldingsinnhold.internDiskusjon &&
           tilbakemeldingsinnhold.internDiskusjon.length !== 0 && (
-            <Markdown source={tilbakemeldingsinnhold.internDiskusjon} escapeHtml={false} />
+            <Markdown source={tilbakemeldingsinnhold.internDiskusjon} />
           )}
         <BodyLong>
           {(!tilbakemeldingsinnhold ||
@@ -89,10 +89,7 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
       {tilbakemeldingsinnhold &&
         tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere &&
         tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere.length !== 0 && (
-          <Markdown
-            source={tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere}
-            escapeHtml={false}
-          />
+          <Markdown source={tilbakemeldingsinnhold.tilbakemeldingTilEtterlevere} />
         )}
       <BodyLong>
         {(!tilbakemeldingsinnhold ||

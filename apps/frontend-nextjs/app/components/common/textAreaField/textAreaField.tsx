@@ -71,7 +71,7 @@ export const TextAreaField = ({
 
                 {mode === 'view' && (
                   <div className='p-8 border-border-subtle-hover border border-solid rounded-md'>
-                    <Markdown source={fieldProps.field.value} escapeHtml={false} />
+                    <Markdown source={fieldProps.field.value} />
                   </div>
                 )}
                 <div className='flex flex-col items-end justify-end -mt-px'>

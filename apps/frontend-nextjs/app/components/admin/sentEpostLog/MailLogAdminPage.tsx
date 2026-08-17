@@ -54,7 +54,7 @@ const MailLogAdminPage = () => {
               borderRadius='12'
               background='default'
             >
-              <Markdown source={html} escapeHtml={false} />
+              <Markdown source={html} />
             </Box>
           </div>
         )
