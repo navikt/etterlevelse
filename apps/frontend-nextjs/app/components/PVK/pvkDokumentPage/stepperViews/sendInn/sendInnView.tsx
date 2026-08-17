@@ -85,6 +85,7 @@ type TProps = {
       }
     | undefined
   isPvkKravLoading: boolean
+  refetchPvkKrav: () => Promise<{ data?: { krav: IPageResponse<TKravQL> } }>
   pvoTilbakemelding?: IPvoTilbakemelding
 }
 
@@ -101,6 +102,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   codelistUtils,
   pvkKrav,
   isPvkKravLoading,
+  refetchPvkKrav,
   pvoTilbakemelding,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
@@ -306,16 +308,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
     )
   }
 
-  const pvkKravCheck = (): boolean => {
-    if (isPvkKravLoading) {
+  const pvkKravCheck = (krav: IPageResponse<TKravQL> | undefined = pvkKrav?.krav): boolean => {
+    if (isPvkKravLoading && krav === undefined) {
       return pvkKravError !== ''
     }
 
-    const antallPvkKrav = pvkKrav?.krav.totalElements
+    const antallPvkKrav = krav?.totalElements
     const pvkEtterlevelser: TEtterlevelseQL[] = []
 
-    pvkKrav?.krav.content.forEach((krav) => {
-      pvkEtterlevelser.push(...krav.etterlevelser)
+    krav?.content.forEach((pvkKravItem) => {
+      pvkEtterlevelser.push(...pvkKravItem.etterlevelser)
     })
 
     const ferdigPvkEtterlevelser = pvkEtterlevelser.filter(
@@ -453,10 +455,12 @@ export const SendInnView: FunctionComponent<TProps> = ({
     behandlingensLivslop: IBehandlingensLivslop
     alleRisikoscenario: IRisikoscenario[]
     alleTiltak: ITiltak[]
+    pvkKrav: IPageResponse<TKravQL> | undefined
   }> => {
     let freshBehandlingensLivslop = behandlingensLivslop as IBehandlingensLivslop
     let freshAlleRisikoscenario = alleRisikoscenario
     let freshAlleTiltak = alleTiltak
+    let freshPvkKrav = pvkKrav?.krav
 
     await getBehandlingensLivslopByEtterlevelseDokumentId(pvkDokument.etterlevelseDokumentId)
       .then((response: IBehandlingensLivslop) => {
@@ -482,10 +486,19 @@ export const SendInnView: FunctionComponent<TProps> = ({
       setAlleTitltak(response.content)
     })
 
+    await refetchPvkKrav()
+      .then((response) => {
+        freshPvkKrav = response.data?.krav
+      })
+      .catch((error: AxiosError) => {
+        console.debug(error)
+      })
+
     return {
       behandlingensLivslop: freshBehandlingensLivslop,
       alleRisikoscenario: freshAlleRisikoscenario,
       alleTiltak: freshAlleTiltak,
+      pvkKrav: freshPvkKrav,
     }
   }
 
@@ -584,7 +597,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
               hasBlockingErrors =
                 behandlingensLivslopFieldCheck(freshData.behandlingensLivslop) || hasBlockingErrors
               hasBlockingErrors = artOgOmfangFieldCheck() || hasBlockingErrors
-              hasBlockingErrors = pvkKravCheck() || hasBlockingErrors
+              hasBlockingErrors = pvkKravCheck(freshData.pvkKrav) || hasBlockingErrors
               hasBlockingErrors =
                 risikoscenarioCheck(freshData.alleRisikoscenario) || hasBlockingErrors
 

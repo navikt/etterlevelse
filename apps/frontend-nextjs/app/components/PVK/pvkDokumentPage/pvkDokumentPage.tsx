@@ -76,7 +76,11 @@ export const PvkDokumentPage = () => {
   const router = useRouter()
   const user = useContext(UserContext)
   const formRef: RefObject<any> = useRef(undefined)
-  const { data: pvkKrav, loading: isPvkKravLoading } = useKravFilter(
+  const {
+    data: pvkKrav,
+    loading: isPvkKravLoading,
+    refetch: refetchPvkKrav,
+  } = useKravFilter(
     {
       gjeldendeKrav: true,
       tagger: ['Personvernkonsekvensvurdering'],
@@ -376,6 +380,7 @@ export const PvkDokumentPage = () => {
                       codelistUtils={codelist.utils}
                       pvkKrav={pvkKrav}
                       isPvkKravLoading={isPvkKravLoading}
+                      refetchPvkKrav={refetchPvkKrav}
                     />
                   )}
                 </div>
