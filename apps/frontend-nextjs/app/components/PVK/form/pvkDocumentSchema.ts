@@ -25,6 +25,28 @@ const stringCheck = (fielName: string, errorMessage?: string) =>
     },
   })
 
+const stringCheckForStatus = (
+  fielName: string,
+  statuses: EPvkDokumentStatus[],
+  errorMessage?: string
+) =>
+  yup.string().test({
+    name: fielName,
+    message: errorMessage ? errorMessage : 'Dette er et påkrevd felt',
+    test: function (stringField) {
+      const { parent } = this
+      if (statuses.includes(parent.status)) {
+        if (stringField === undefined || stringField === '') {
+          return false
+        } else {
+          return true
+        }
+      } else {
+        return true
+      }
+    },
+  })
+
 const boolCheck = (fieldName: string, errorMessage?: string) =>
   yup
     .boolean()
@@ -66,6 +88,12 @@ export const pvkDocumentSchema = () => {
     dataBehandlerRepresentantInvolveringBeskrivelse: stringCheck(
       'dataBehandlerRepresentantInvolveringBeskrivelse',
       'Dere må beskrive nærmere valget om involvering av representanter for databehandlere.'
+    ),
+
+    merknadTilRisikoeier: stringCheckForStatus(
+      'merknadTilRisikoeier',
+      [EPvkDokumentStatus.TRENGER_GODKJENNING],
+      'Dere må oppsummere for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding.'
     ),
   })
 }
