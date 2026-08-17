@@ -279,21 +279,6 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       <div className='mt-12'>
         <RisikoscenarioTiltakHeader />
 
-        {!isCreateModalOpen &&
-          !isCreateTiltakFormActive &&
-          !isEditTiltakFormActive &&
-          !isAddExistingMode &&
-          activeRisikoscenario.tiltakIds.length === 0 && (
-            <div className='mt-3'>
-              <IngenTiltakField
-                risikoscenario={activeRisikoscenario}
-                formRef={formRef}
-                submit={submitIngenTiltak}
-                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
-              />
-            </div>
-          )}
-
         {!risikoscenario.ingenTiltak && (
           <div>
             {risikoscenario.tiltakIds.length === 0 &&
@@ -376,6 +361,21 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               )}
           </div>
         )}
+
+        {!isCreateModalOpen &&
+          !isCreateTiltakFormActive &&
+          !isEditTiltakFormActive &&
+          !isAddExistingMode &&
+          activeRisikoscenario.tiltakIds.length === 0 && (
+            <div className='mt-3'>
+              <IngenTiltakField
+                risikoscenario={activeRisikoscenario}
+                formRef={formRef}
+                submit={submitIngenTiltak}
+                setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
+              />
+            </div>
+          )}
 
         {submitSuccess && !isIngenTilgangFormDirty && (
           <LocalAlert className='mt-3' status='success'>
