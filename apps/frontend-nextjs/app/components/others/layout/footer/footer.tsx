@@ -6,8 +6,6 @@ import {
   dokumentasjonLink,
   githubRepo,
   omEtterlevelsePaNavet,
-  rutineForArkivering,
-  statusPageLink,
   teamInfoLink,
   veilederEtterlevelseskrav,
 } from '@/util/footer/footerUtil'
@@ -80,9 +78,6 @@ export const Footer = () => {
           <Spacer />
           <div className='flex flex-col gap-4 px-2'>
             <BodyShort>Nyttige lenker</BodyShort>
-            <Link className='text-white' href={statusPageLink}>
-              Status på etterlevelse i Nav
-            </Link>
             <Link className='text-white' href={omEtterlevelsePaNavet}>
               Om etterlevelse på Navet
             </Link>
@@ -91,9 +86,6 @@ export const Footer = () => {
             </Link>
             <Link className='text-white' href={veilederEtterlevelseskrav}>
               Veileder for å skrive etterlevelseskrav
-            </Link>
-            <Link className='text-white' href={rutineForArkivering}>
-              Rutine for arkivering av Etterlevelse
             </Link>
           </div>
           <Spacer />
