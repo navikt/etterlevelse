@@ -433,12 +433,11 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
   const savnerVurderingCheck = (data: IRisikoscenario[] = alleRisikoscenario): boolean => {
     const savnerVurdering = data
-      .filter((risiko: IRisikoscenario) => !risiko.ingenTiltak)
+      .filter((risiko: IRisikoscenario) => !risiko.ingenTiltak && !isRisikoUnderarbeidCheck(risiko))
       .filter(
         (risiko) =>
-          risiko.tiltakIds.length === 0 ||
           risiko.konsekvensNivaaEtterTiltak === 0 ||
-          risiko.sannsynlighetsNivaa === 0 ||
+          risiko.sannsynlighetsNivaaEtterTiltak === 0 ||
           risiko.nivaaBegrunnelseEtterTiltak === ''
       )
 
