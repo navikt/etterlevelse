@@ -77,7 +77,7 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^16.3.0",
+    "@next/eslint-plugin-next": "^16.3.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/lodash": "^4.17.25",
     "@types/node": "26.2.0",
