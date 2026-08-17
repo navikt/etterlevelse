@@ -42,7 +42,7 @@ export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
 
       {!risikoscenario.generelScenario && (
         <div className='mt-5'>
-          <Label>Brukes av følgende krav:</Label>
+          <Label>Brukes i følgende krav:</Label>
           <List as='ul'>
             {risikoscenario.relevanteKravNummer.map(
               (relevantKrav: IKravReference, index: number) => {
