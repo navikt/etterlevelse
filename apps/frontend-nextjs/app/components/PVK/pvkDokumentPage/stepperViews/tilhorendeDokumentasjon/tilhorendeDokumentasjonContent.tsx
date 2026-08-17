@@ -150,7 +150,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
 
             <BodyLong className='mb-2'>
               Personvernkonsekvensvurdering forutsetter at dere har dokumentert etterlevelse ved
-              alle personvernkrav. Så langt har dere:
+              alle personvernkrav.
             </BodyLong>
 
             <div className='mb-2'>
