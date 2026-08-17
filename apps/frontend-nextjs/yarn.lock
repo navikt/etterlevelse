@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^4.2.11":
-  version: 4.2.11
-  resolution: "@apollo/client@npm:4.2.11"
+"@apollo/client@npm:^4.2.12":
+  version: 4.2.12
+  resolution: "@apollo/client@npm:4.2.12"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -39,7 +39,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/de20400eb6025cba6002dbf4a8644abbbf7ff029a124e6c4f3ac3c650041cdeb6a85ef023938ba99f71df0da929dcdf880632b398af9a2c5d01b34e64b098e39
+  checksum: 10c0/97852e2a88231ea15b3cc6f1cef307f0df655d96d8f96531717f764cb8440b0a8931ca13b8a73623b6fffe156cccdfaf75f940e0d72f928fbc68edad6345e301
   languageName: node
   linkType: hard
 
@@ -3817,7 +3817,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend-nextjs@workspace:."
   dependencies:
-    "@apollo/client": "npm:^4.2.11"
+    "@apollo/client": "npm:^4.2.12"
     "@fontsource/source-sans-pro": "npm:^5.3.0"
     "@fortawesome/fontawesome-svg-core": "npm:^7.3.1"
     "@fortawesome/free-brands-svg-icons": "npm:^7.3.1"
