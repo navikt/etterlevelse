@@ -38,6 +38,10 @@ OR
 
 ### Finally, run frontend
 
+`yarn dev`
+
+OR
+
 `yarn run dev`
 
 ## Other
