@@ -161,7 +161,7 @@ public class P360Service {
                 .paragraph(new Varsel.Paragraph(melding))
                 .build();
 
-        varselService.varsle(List.of(Varslingsadresse.builder()
+        varselService.varsleWithNoEtterlevelseDokumentasjonId(List.of(Varslingsadresse.builder()
                 .type(AdresseType.SLACK)
                 .adresse(channelToRecieve)
                 .build()), varselBuilder);

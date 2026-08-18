@@ -133,7 +133,7 @@ public class TilbakemeldingService {
         varselBuilder.paragraph(new Paragraph("%s har lagt igjen en tilbakemelding på Krav %%s"
                 .formatted(sender.getFullName()), url(urlGenerator.tilbakemeldingUrl(tilbakemelding), kravId)));
         
-        varselService.varsle(recipients, varselBuilder.build());
+        varselService.varsleWithNoEtterlevelseDokumentasjonId(recipients, varselBuilder.build());
     }
 
 }

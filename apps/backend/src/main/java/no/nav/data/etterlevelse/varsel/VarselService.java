@@ -24,7 +24,7 @@ public class VarselService {
     private final SlackService slackService;
     private final SecurityProperties securityProperties;
 
-    public void varsle(List<Varslingsadresse> recipients, Varsel varsel) {
+    public void varsleWithNoEtterlevelseDokumentasjonId(List<Varslingsadresse> recipients, Varsel varsel) {
         varsle(recipients, varsel, null);
     }
 
