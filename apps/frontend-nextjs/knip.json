@@ -7,6 +7,6 @@
     "exports": "warn",
     "duplicates": "warn"
   },
-  "entry": ["app/**.{tsx,ts,mjs,css}"],
-  "project": ["app/**/*.{tsx,ts,mjs,css}"]
+  "entry": ["app/**.{tsx,ts,mjs,mts,css}"],
+  "project": ["app/**/*.{tsx,ts,mjs,mts,css}"]
 }
