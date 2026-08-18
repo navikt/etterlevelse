@@ -1,10 +1,12 @@
+[![Frontend](https://github.com/navikt/etterlevelse/workflows/Frontend/badge.svg?branch=master)](https://github.com/navikt/etterlevelse/actions)
+
 # Frontend for Etterlevelse
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-### Requires Node 22.22+
+## Requires Node 22.22+
 
-### Install deps
+### Install dependencies
 
 `yarn install`
 
@@ -26,9 +28,15 @@ Remember to flush sockets when you can't login
 
 `chrome://net-internals/#sockets`
 
-### Run local, with port forward to dev-gcp
+### Run locally, with port forward to dev-gcp
 
-`kubectl port-forward deployment/etterlevelse-backend` eller `kpfe`
+`kubectl port-forward deployment/etterlevelse-backend`
+
+OR
+
+`kpfe`
+
+### Finally, run frontend
 
 `yarn run dev`
 
@@ -54,7 +62,7 @@ See 'kubectl port-forward -h' for help and examples
 1. You need to add config (see below) in `.zshrc`.
 2. Run `gcloud auth login`
 3. Run `kpfe`
-4. Then run in separate window `yarn run start`
+4. Then run in separate window `yarn run dev`
 5. Go to `http://localhost:3000/`
 6. Done!
 
@@ -90,6 +98,8 @@ First, run the development server:
 
 ```bash
 npm run dev
+# or
+yarn run dev
 # or
 yarn dev
 # or
