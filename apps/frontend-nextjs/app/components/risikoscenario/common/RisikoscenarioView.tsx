@@ -32,21 +32,39 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
 
   return (
     <div>
-      {!noCopyButton && (
-        <CopyButton
-          variant='action'
-          size='small'
-          copyText={pvkDokumentasjonCopyUrl(
-            window.location.origin,
-            etterlevelseDokumentasjonId,
-            risikoscenario.pvkDokumentId,
-            queryUrl
-          )}
-          text='Kopier scenariolenke'
-          activeText='Lenken er kopiert'
-          icon={<LinkIcon aria-hidden />}
-        />
-      )}
+      <div className='flex flex-col items-start gap-2'>
+        {!noCopyButton && (
+          <CopyButton
+            variant='action'
+            size='small'
+            copyText={pvkDokumentasjonCopyUrl(
+              window.location.origin,
+              etterlevelseDokumentasjonId,
+              risikoscenario.pvkDokumentId,
+              queryUrl
+            )}
+            text='Kopier scenariolenke'
+            activeText='Lenken er kopiert'
+            icon={<LinkIcon aria-hidden />}
+          />
+        )}
+
+        {markdownCopyLinkButton && (
+          <CopyButton
+            variant='action'
+            size='small'
+            copyText={`[${risikoscenario.navn}](${pvkDokumentasjonCopyUrl(
+              window.location.origin,
+              etterlevelseDokumentasjonId,
+              risikoscenario.pvkDokumentId,
+              queryUrl
+            )})`}
+            text='Kopier scenario riktekstfelt med tittel og lenke'
+            activeText='Lenken er kopiert'
+            icon={<LinkIcon aria-hidden />}
+          />
+        )}
+      </div>
 
       {!risikoscenario.generelScenario && (
         <div className='mt-5'>
@@ -77,20 +95,6 @@ export const RisikoscenarioView: FunctionComponent<TProps> = ({
         </div>
       )}
 
-      {markdownCopyLinkButton && (
-        <CopyButton
-          variant='action'
-          copyText={`[${risikoscenario.navn}](${pvkDokumentasjonCopyUrl(
-            window.location.origin,
-            etterlevelseDokumentasjonId,
-            risikoscenario.pvkDokumentId,
-            queryUrl
-          )})`}
-          text='Kopier scenario riktekstfelt lenke med tittel'
-          activeText='Lenken er kopiert'
-          icon={<LinkIcon aria-hidden />}
-        />
-      )}
       <Label className='mt-5 block'>Beskrivelse av riskoscenarioet:</Label>
       <BodyLong className='mt-1 min-w-0 [overflow-wrap:anywhere]'>
         {risikoscenario.beskrivelse}
