@@ -40,6 +40,11 @@ export const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = (
 }) => {
   const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
 
+  const brukerAlleOpplysningstyper =
+    etterlevelseDokumentasjon.behandlinger?.some(
+      (behandling) => behandling.brukerAlleOpplysningstyper === true
+    ) ?? false
+
   const hasPvoComment = !!(
     pvoTilbakemelding &&
     pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
@@ -56,6 +61,7 @@ export const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = (
             <ArtOgOmfangReadOnlyContent
               artOgOmfang={artOgOmfang}
               personkategorier={personkategorier}
+              brukerAlleOpplysningstyper={brukerAlleOpplysningstyper}
             />
           </div>
         )}

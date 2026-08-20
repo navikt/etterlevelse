@@ -52,6 +52,11 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
 
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
 
+  const brukerAlleOpplysningstyper =
+    etterlevelseDokumentasjon.behandlinger?.some(
+      (behandling) => behandling.brukerAlleOpplysningstyper === true
+    ) ?? false
+
   const hasPvoComment = !!(
     pvoTilbakemelding &&
     pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
@@ -97,6 +102,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
             <ArtOgOmfangReadOnlyContent
               artOgOmfang={artOgOmfang}
               personkategorier={personkategorier}
+              brukerAlleOpplysningstyper={brukerAlleOpplysningstyper}
             />
           )}
 
