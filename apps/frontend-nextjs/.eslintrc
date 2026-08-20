@@ -28,6 +28,7 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-extra-semi": "off",
+    "filenames/match-regex": ["error", "^[a-z][a-zA-Z0-9]*\\.tsx?$", true],
     "@typescript-eslint/naming-convention": [
       "error",
       {
