@@ -158,7 +158,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
               <List as='ul' className='mb-5'>
                 <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
                 {!brukerAlleOpplysningstyperCheck() && personkategorier.length === 0 && (
-                  <List.Item>Ingen</List.Item>
+                  <List.Item>Ikke utfylt</List.Item>
                 )}
                 {brukerAlleOpplysningstyperCheck() && (
                   <List.Item>Bruker potensielt alle opplysningstyper</List.Item>
