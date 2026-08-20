@@ -7,6 +7,7 @@ type TProps = {
 
 export const KravRisikoscenarioReadMore: FunctionComponent<TProps> = ({ defaultOpen }) => (
   <ReadMore
+    variant='moderate'
     defaultOpen={defaultOpen !== null ? defaultOpen : false}
     header='Slik dokumenterer dere risikoscenarioer og tiltak'
   >

@@ -18,7 +18,7 @@ import {
   risikoscenarioUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Accordion, Alert, Button, Loader, LocalAlert } from '@navikt/ds-react'
+import { Accordion, Alert, Button, Heading, Loader, LocalAlert } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import AccordianAlertModal from '../../common/accordianAlertModal'
@@ -184,6 +184,9 @@ export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
       {!isLoading && (
         <div className='w-full'>
           <KravRisikoscenarioReadMore defaultOpen={risikoscenarioForKrav.length === 0} />
+          <Heading size='small' level='3' className='mb-2 mt-5'>
+            Risikoscenarioer
+          </Heading>
 
           <div className='mt-5'>
             {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioForKrav.length === 0 && (
