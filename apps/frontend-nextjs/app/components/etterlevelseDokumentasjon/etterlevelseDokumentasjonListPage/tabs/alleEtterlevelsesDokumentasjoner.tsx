@@ -7,7 +7,7 @@ import { emptyPage } from '@/util/common/emptyPageUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { useQuery } from '@apollo/client/react'
 import { PlusIcon } from '@navikt/aksel-icons'
-import { Button, Heading, Label, Loader, Search } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Label, Loader, Search } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import { TVariables } from '../dokumentasjonTabs'
 import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
@@ -96,6 +96,10 @@ export const AlleEtterlevelsesDokumentasjoner = () => {
               </Heading>
               {!etterlevelseDokumentasjoner.totalElements && <Label>Ingen treff</Label>}
             </div>
+          )}
+
+          {!loading && !sok && !etterlevelseDokumentasjoner.totalElements && (
+            <BodyShort>Ingen dokumentasjoner</BodyShort>
           )}
 
           <EtterlevelseDokumentasjonsPanels

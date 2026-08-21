@@ -10,7 +10,7 @@ import { emptyPage } from '@/util/common/emptyPageUtil'
 import { useQuery } from '@apollo/client/react'
 import { Tabs } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { AlleEtterlevelsesDokumentasjoner } from './tabs/alleEtterlevelsesDokumentasjoner'
 import BehandlingSok from './tabs/behandlingSok'
 import MineEtterlevelseDokumentasjoner from './tabs/mineEtterlevelseDokumentasjoner'
@@ -86,7 +86,10 @@ export const DokumentasjonTabs = () => {
 
   const sortedTeams = sortTeams(teams)
 
+  const userSelectedTab = useRef<boolean>(false)
+
   useEffect(() => {
+    if (userSelectedTab.current) return
     if (!data || etterlevelseDokumentasjonLoading) return
     else if (selectedTab === ETab.MINE && !etterlevelseDokumentasjoner.totalElements)
       router.push(etterlevelseDokumentasjonerUrl(ETab.SISTE))
@@ -105,6 +108,7 @@ export const DokumentasjonTabs = () => {
       defaultValue={ETab.MINE}
       value={selectedTab}
       onChange={(tabQuery: string) => {
+        userSelectedTab.current = true
         router.push(`/dokumentasjoner?tab=${tabQuery}`)
       }}
     >
