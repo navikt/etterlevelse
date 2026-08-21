@@ -59,15 +59,8 @@ export const getMembersFromEtterlevelseDokumentasjon = (
 const getUsersLastModifiedTime = (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ): number => {
-  const dates: number[] = [
-    etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg,
-    etterlevelseDokumentasjon.sistEndretDokumentasjonAvMeg,
-    etterlevelseDokumentasjon.changeStamp.createdDate,
-  ]
-    .filter((date): date is string => !!date)
-    .map((date: string) => moment(date).valueOf())
-
-  return dates.length ? Math.max(...dates) : 0
+  const date = etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg
+  return date ? moment(date).valueOf() : 0
 }
 
 export const filteredEtterlevelsesDokumentasjoner = (
@@ -77,10 +70,10 @@ export const filteredEtterlevelsesDokumentasjoner = (
 
   return sortedEtterlevelseDokumentasjoner
     .filter((etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => {
-      const monthAge = getNumberOfMonthsBetween(
-        new Date(getUsersLastModifiedTime(etterlevelseDokumentasjon)).toISOString(),
-        today
-      )
+      const lastModifiedTime = getUsersLastModifiedTime(etterlevelseDokumentasjon)
+      if (!lastModifiedTime) return false
+
+      const monthAge = getNumberOfMonthsBetween(new Date(lastModifiedTime).toISOString(), today)
       return monthAge <= 6
     })
     .slice(0, 2)

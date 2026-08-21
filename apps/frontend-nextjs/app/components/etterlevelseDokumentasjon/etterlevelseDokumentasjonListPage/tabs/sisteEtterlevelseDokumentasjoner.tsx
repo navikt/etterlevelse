@@ -12,18 +12,19 @@ export const SisteEtterlevelseDokumentasjoner = ({
   etterlevelseDokumentasjoner,
   loading,
 }: ISisteEtterlevelseDokumentasjoner) => {
-  const sorted = sortEtterlevelseDokumentasjonerByUsersLastModifiedDate([
+  const mineDokumenterte = sortEtterlevelseDokumentasjonerByUsersLastModifiedDate([
     ...etterlevelseDokumentasjoner,
-  ])
+  ]).filter((etterlevelseDokumentasjon) => !!etterlevelseDokumentasjon.sistEndretEtterlevelseAvMeg)
 
   return (
     <div className='my-5'>
       {loading && <Loader size='large' className='flex justify-self-center' />}
-      {!etterlevelseDokumentasjoner.length && !loading && (
-        <BodyShort>Du har ikke dokumentert etterlevelse på krav</BodyShort>
-      )}
-      {etterlevelseDokumentasjoner.length > 0 && !loading && (
-        <EtterlevelseDokumentasjonsPanels etterlevelseDokumentasjoner={sorted} loading={loading} />
+      {!mineDokumenterte.length && !loading && <BodyShort>Ingen dokumentasjoner</BodyShort>}
+      {mineDokumenterte.length > 0 && !loading && (
+        <EtterlevelseDokumentasjonsPanels
+          etterlevelseDokumentasjoner={mineDokumenterte}
+          loading={loading}
+        />
       )}
     </div>
   )
