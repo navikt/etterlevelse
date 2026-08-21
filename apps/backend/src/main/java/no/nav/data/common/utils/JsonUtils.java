@@ -1,5 +1,8 @@
 package no.nav.data.common.utils;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -7,10 +10,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import no.nav.data.common.exceptions.TechnicalException;
 
-import java.io.IOException;
+import no.nav.data.common.exceptions.TechnicalException;
 
 public final class JsonUtils {
 
@@ -24,6 +27,15 @@ public final class JsonUtils {
         om.registerModule(new JavaTimeModule());
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         om.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        return om;
+    }
+
+    // For HTTP responses only: emit LocalDateTime as UTC with a 'Z' offset so clients render local time correctly.
+    public static ObjectMapper createRestObjectMapper() {
+        ObjectMapper om = createObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(LocalDateTime.class, new UtcLocalDateTimeSerializer());
+        om.registerModule(module);
         return om;
     }
 

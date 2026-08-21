@@ -1,11 +1,7 @@
 package no.nav.data.common;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.prometheus.client.CollectorRegistry;
-import net.javacrumbs.shedlock.core.LockProvider;
-import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
-import no.nav.data.common.utils.JsonUtils;
-import no.nav.data.common.web.TraceHeaderRequestInterceptor;
+import javax.sql.DataSource;
+
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +11,18 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
 
-import javax.sql.DataSource;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.prometheus.client.CollectorRegistry;
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
+import no.nav.data.common.utils.JsonUtils;
+import no.nav.data.common.web.TraceHeaderRequestInterceptor;
 
 @Configuration
 public class CommonConfig {
 
-    private static ObjectMapper omForHttpMessageConverter = JsonUtils.createObjectMapper();
+    private static ObjectMapper omForHttpMessageConverter = JsonUtils.createRestObjectMapper();
     
     @Primary
     @Bean
@@ -28,7 +30,7 @@ public class CommonConfig {
         // ObjectMapper oppfører seg ikke-deterministisk hvis flere tråder bruker den samtidig, og der minst en av dem konfigurerer den.
         // Dessuten kan forskjellige klienter konfigurere den på hver sin måte, noe som vil sabotere for andre.
         // OM er kostbare å konstruere, men her skal vi ikke returnere en delt OM. 
-        return JsonUtils.createObjectMapper();
+        return JsonUtils.createRestObjectMapper();
     }
 
     @Bean
