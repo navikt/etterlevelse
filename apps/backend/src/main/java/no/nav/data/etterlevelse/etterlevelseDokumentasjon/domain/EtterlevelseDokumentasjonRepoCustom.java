@@ -1,19 +1,20 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 
 @Repository
 @RequiredArgsConstructor
@@ -85,7 +86,7 @@ public class EtterlevelseDokumentasjonRepoCustom {
                                   from audit_version
                                   where table_name = 'ETTERLEVELSE'
                                     and user_id like :user_id
-                                    and exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid))
+                                    and exists (select 1 from etterlevelse_dokumentasjon where id = cast(data ->> 'etterlevelseDokumentasjonId' as uuid))
                                   order by data ->> 'etterlevelseDokumentasjonId', time desc
                               ) sub
                          order by time desc
