@@ -216,37 +216,6 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
     })()
   }, [etterlevelseDokumentasjon])
 
-  // A locked "Behandler personopplysninger" (PVK-dokumentasjon startet) må alltid vises som valgt
-  useEffect(() => {
-    ;(async () => {
-      if (pvkDokument?.hasPvkDocumentationStarted !== true) {
-        return
-      }
-
-      const behandlerPersonopplysningerIndex = relevansOptions.findIndex(
-        (relevans: IGetParsedOptionsProps) => relevans.label === 'Behandler personopplysninger'
-      )
-
-      if (behandlerPersonopplysningerIndex === -1) {
-        return
-      }
-
-      setSelectedFilter((prev) =>
-        prev.includes(behandlerPersonopplysningerIndex)
-          ? prev
-          : [...prev, behandlerPersonopplysningerIndex]
-      )
-
-      const currentIrrelevans: ICode[] = formRef.current?.values?.irrelevansFor ?? []
-      if (currentIrrelevans.some((irrelevans: ICode) => irrelevans.code === 'PERSONOPPLYSNINGER')) {
-        formRef.current?.setFieldValue(
-          'irrelevansFor',
-          currentIrrelevans.filter((irrelevans: ICode) => irrelevans.code !== 'PERSONOPPLYSNINGER')
-        )
-      }
-    })()
-  }, [pvkDokument, codelist.lists])
-
   useEffect(() => {
     ;(async () => {
       await getAvdelingOptions().then(setAllAvdelingOptions)
