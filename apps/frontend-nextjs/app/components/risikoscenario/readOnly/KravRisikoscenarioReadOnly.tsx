@@ -13,7 +13,7 @@ import { IKravReference, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Accordion, Alert } from '@navikt/ds-react'
+import { Accordion, Alert, Heading } from '@navikt/ds-react'
 import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useContext, useEffect, useState } from 'react'
@@ -92,6 +92,9 @@ export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
   return (
     <div className='w-full'>
       <KravRisikoscenarioReadMore defaultOpen={risikoscenarioForKrav.length === 0} />
+      <Heading size='small' level='3' className='mb-2 mt-5'>
+        Risikoscenarioer
+      </Heading>
 
       <div className='mt-5'>
         {risikoscenarioForKrav.length === 0 && (
