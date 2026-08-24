@@ -460,11 +460,12 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
                           {showBehandlerPersonopplysningerInfoCard &&
                             isBehandlerPersonopplysninger &&
+                            !isBehandlerPersonopplysningerLocked &&
                             (behandlingensLivslop || behandlingensArtOgOmfang || pvkDokument) && (
                               <InfoCard
                                 data-color='info'
                                 size='small'
-                                className='-mt-1 ml-6 max-w-[75ch]'
+                                className='mt-2 max-w-[75ch]'
                               >
                                 <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                                   <InfoCard.Title as='div'>
