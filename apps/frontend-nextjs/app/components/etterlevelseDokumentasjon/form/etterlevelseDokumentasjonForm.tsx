@@ -171,16 +171,18 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             })
             .filter((index: number) => !irrelevansIndex.includes(index))
         )
+      } else if (etterlevelseDokumentasjon) {
+        setSelectedFilter(
+          relevansOptions.map((_relevans: IGetParsedOptionsProps, index: number) => index)
+        )
       } else {
         setSelectedFilter([])
-        if (!etterlevelseDokumentasjon) {
-          formRef.current?.setFieldValue(
-            'irrelevansFor',
-            relevansOptions.map((r: IGetParsedOptionsProps) =>
-              codelist.utils.getCode(EListName.RELEVANS, r.value)
-            )
+        formRef.current?.setFieldValue(
+          'irrelevansFor',
+          relevansOptions.map((r: IGetParsedOptionsProps) =>
+            codelist.utils.getCode(EListName.RELEVANS, r.value)
           )
-        }
+        )
       }
     })()
   }, [etterlevelseDokumentasjon, codelist.lists])
@@ -424,7 +426,8 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
 
                       const isBehandlerPersonopplysningerLocked =
                         pvkDokument?.hasPvkDocumentationStarted === true &&
-                        isBehandlerPersonopplysninger
+                        isBehandlerPersonopplysninger &&
+                        selectedFilter.includes(index)
 
                       return (
                         <Fragment key={'relevans_' + relevans.value}>
