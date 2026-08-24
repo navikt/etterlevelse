@@ -3,7 +3,7 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Alert, Button, Heading, InlineMessage } from '@navikt/ds-react'
+import { Alert, Button, ErrorSummary, Heading } from '@navikt/ds-react'
 import { FieldProps } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
@@ -21,6 +21,13 @@ export const SendTilPvo: FunctionComponent<TProps> = ({
   fieldProps,
   errorComponent,
 }) => {
+  const merknadTilPvoError = fieldProps.form.getFieldMeta(
+    `meldingerTilPvo[${relevantIndex}].merknadTilPvo`
+  ).error
+  const endringsNotatError = fieldProps.form.getFieldMeta(
+    `meldingerTilPvo[${relevantIndex}].endringsNotat`
+  ).error
+
   return (
     <div>
       <Heading size='small' level='3' className='mb-5 mt-8'>
@@ -35,12 +42,6 @@ export const SendTilPvo: FunctionComponent<TProps> = ({
           name={`meldingerTilPvo[${relevantIndex}].merknadTilPvo`}
           markdown
         />
-
-        {fieldProps.form.getFieldMeta(`meldingerTilPvo[${relevantIndex}].merknadTilPvo`).error && (
-          <InlineMessage status='error' className='mt-3'>
-            Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
-          </InlineMessage>
-        )}
       </div>
       <div className='mt-8 mb-3'>
         <TextAreaField
@@ -52,16 +53,26 @@ export const SendTilPvo: FunctionComponent<TProps> = ({
           markdown
         />
 
-        {fieldProps.form.getFieldMeta(`meldingerTilPvo[${relevantIndex}].endringsNotat`).error && (
-          <InlineMessage status='error' className='mt-3'>
-            Beskriv hvilke endringer som er gjort.
-          </InlineMessage>
-        )}
         <Alert variant='info' inline className='my-8'>
           Når dere sender inn PVK, vil hele dokumentasjonen, inkludert etterlevelsesdokumentasjon
           ved PVK-relaterte krav, låses og ikke kunne redigeres. Dette innholdet forbli låst enn så
           lenge saken ligger hos Personvernombudet.
         </Alert>
+
+        {(merknadTilPvoError || endringsNotatError) && (
+          <ErrorSummary heading='Du må rette disse feilene før du kan fortsette' className='my-8'>
+            {merknadTilPvoError && (
+              <ErrorSummary.Item href={`#meldingerTilPvo[${relevantIndex}].merknadTilPvo`}>
+                Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
+              </ErrorSummary.Item>
+            )}
+            {endringsNotatError && (
+              <ErrorSummary.Item href={`#meldingerTilPvo[${relevantIndex}].endringsNotat`}>
+                Beskriv hvilke endringer som er gjort.
+              </ErrorSummary.Item>
+            )}
+          </ErrorSummary>
+        )}
 
         {errorComponent}
 
