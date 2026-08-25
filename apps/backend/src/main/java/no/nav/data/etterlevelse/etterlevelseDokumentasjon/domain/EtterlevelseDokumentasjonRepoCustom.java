@@ -1,20 +1,19 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.security.SecurityUtils;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonFilter;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Repository
 @RequiredArgsConstructor
@@ -82,12 +81,12 @@ public class EtterlevelseDokumentasjonRepoCustom {
                      and (id in (
                        select cast(etterlevelseDokumentasjonId as uuid)
                          from (
-                                  select distinct on (data ->> 'etterlevelseDokumentasjonId') data ->> 'etterlevelseDokumentasjonId' etterlevelseDokumentasjonId, time
-                                  from audit_version
+                                  select distinct on (av.data ->> 'etterlevelseDokumentasjonId') av.data ->> 'etterlevelseDokumentasjonId' etterlevelseDokumentasjonId, time
+                                  from audit_version av
                                   where table_name = 'ETTERLEVELSE'
-                                    and user_id like :user_id
-                                    and exists (select 1 from etterlevelse_dokumentasjon where id = cast(data ->> 'etterlevelseDokumentasjonId' as uuid))
-                                  order by data ->> 'etterlevelseDokumentasjonId', time desc
+                                    and user_id ilike :user_id
+                                    and exists (select 1 from etterlevelse_dokumentasjon ed where cast(ed.id as text) = av.data ->> 'etterlevelseDokumentasjonId')
+                                  order by av.data ->> 'etterlevelseDokumentasjonId', time desc
                               ) sub
                          order by time desc
                          limit :limit
@@ -96,18 +95,18 @@ public class EtterlevelseDokumentasjonRepoCustom {
                     or id in (
                        select cast(etterlevelseDokumentasjonId as uuid)
                          from (
-                                  select distinct on (data ->> 'id') data ->> 'id' etterlevelseDokumentasjonId, time
-                                  from audit_version
+                                  select distinct on (av.data ->> 'id') av.data ->> 'id' etterlevelseDokumentasjonId, time
+                                  from audit_version av
                                   where table_name in ('EtterlevelseDokumentasjon', 'ETTERLEVELSE_DOKUMENTASJON')
-                                    and user_id like :user_id
-                                    and exists (select 1 from etterlevelse_dokumentasjon where id = cast(table_id as uuid))
-                                  order by data ->> 'id', time desc
+                                    and user_id ilike :user_id
+                                    and exists (select 1 from etterlevelse_dokumentasjon ed where cast(ed.id as text) = av.data ->> 'id')
+                                  order by av.data ->> 'id', time desc
                               ) sub
                          order by time desc
                          limit :limit
                     ))
                     """;
-            par.addValue("limit", filter.getSistRedigert() -1)
+            par.addValue("limit", filter.getSistRedigert())
                     .addValue("user_id", SecurityUtils.getCurrentIdent() + "%");
         }
 
