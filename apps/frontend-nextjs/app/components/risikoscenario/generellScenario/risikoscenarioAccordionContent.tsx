@@ -203,6 +203,12 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     })
   }
 
+  const ferdigBeskrevet: boolean =
+    activeRisikoscenario.konsekvensNivaa !== 0 &&
+    activeRisikoscenario.sannsynlighetsNivaa !== 0 &&
+    activeRisikoscenario.konsekvensNivaaBegrunnelse !== '' &&
+    activeRisikoscenario.sannsynlighetsNivaaBegrunnelse !== ''
+
   const submitLeggTilEksisterendeTitltak = async (request: ITiltakRisikoscenarioRelasjon) => {
     await addTiltakToRisikoscenario(request).then(() => {
       router.push(risikoscenarioTiltakUrl(request.risikoscenarioId, request.tiltakIds[0], steg), {
@@ -257,7 +263,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
           <div className='mt-5 flex gap-2 items-center'>
             <Button
-              variant='primary'
+              variant={ferdigBeskrevet ? 'tertiary' : 'primary'}
               type='button'
               icon={<PencilIcon aria-hidden />}
               onClick={async () => {
