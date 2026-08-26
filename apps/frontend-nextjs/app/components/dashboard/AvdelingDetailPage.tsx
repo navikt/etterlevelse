@@ -952,6 +952,24 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         som ikke relevant.
                       </List.Item>
                       <List.Item>
+                        <strong>Hva innebærer “Ikke godkjent i ny løsning”?</strong>
+                        <br />
+                        Etterlevelsesdokumenter som har blitt godkjent av risikoeieren utenfor ny
+                        løsning vil ikke vise oppdatert status her. “Ikke godkjent i ny løsning”
+                        sier dermed ingenting om etterlevelsens godkjenningsstatus, bare at
+                        godkjenning ikke ennå er blitt gjennomført digitalt. Det blir først når
+                        godkjenning gjennomføres digitalt i Støtte til etterlevelse at denne
+                        statusen vil endre seg.{' '}
+                        <Link
+                          href='https://etterlevelse.ansatt.nav.no/omstottetiletterlevelse#fa-etterlevelsen-godkjent-av-risikoeier'
+                          target='_blank'
+                          style={{ display: 'inline' }}
+                        >
+                          Les mer om digital godkjenning av etterlevelsesdokumenter (åpner i en ny
+                          fane).
+                        </Link>
+                      </List.Item>
+                      <List.Item>
                         <strong>Savner du noen etterlevelser i tabellen?</strong>
                         <br />
                         Hvis du savner et visst etterlevelsesdokument i listen, sjekk hvilke filtre
@@ -1043,7 +1061,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {dok.sistGodkjentEtterlevelse
                                 ? moment(dok.sistGodkjentEtterlevelse).format('D. MMMM YYYY')
-                                : 'Aldri godkjent'}
+                                : 'Ikke godkjent i ny løsning'}
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.risikoeiereData && dok.risikoeiereData.length > 0
@@ -1123,6 +1141,23 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         personvernombudet på nytt, skal etterleveren gå over til å bruke Digital
                         PVK. Antall PVK i Word vil dermed senke med tiden, og statistikk om PVK bli
                         mer detaljert når flere PVK-er ligger i ny løsning.
+                      </List.Item>
+                      <List.Item>
+                        <strong>Hva innebærer “Ikke godkjent i ny løsning”?</strong>
+                        <br />
+                        PVK-er som har blitt dokumentert og godkjent av risikoeieren utenfor ny
+                        løsning vil ikke vise oppdatert status her. “Ikke godkjent i ny løsning”
+                        sier dermed ingenting om PVK-ens godkjenningsstatus, bare at godkjenning
+                        ikke ennå er blitt gjennomført digitalt. Det blir først når PVK dokumenteres
+                        og godkjennes i Digital PVK at denne statusen vil endre seg.{' '}
+                        <Link
+                          href='https://etterlevelse.ansatt.dev.nav.no/om-pvk#hvordan-er-pvk-prosessen'
+                          target='_blank'
+                          style={{ display: 'inline' }}
+                        >
+                          Les mer om digital godkjenning av etterlevelsesdokumenter (åpner i en ny
+                          fane).
+                        </Link>
                       </List.Item>
                       <List.Item>
                         <strong>Jeg savner PVK-er i tabellen</strong>
@@ -1301,7 +1336,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {dok.sistGodkjentPvk
                                 ? moment(dok.sistGodkjentPvk).format('D. MMMM YYYY')
-                                : 'Aldri godkjent'}
+                                : 'Ikke godkjent i ny løsning'}
                             </Table.DataCell>
                             <Table.DataCell>
                               {dok.risikoeiereData && dok.risikoeiereData.length > 0
