@@ -1,14 +1,13 @@
 package no.nav.data.integration.slack;
 
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.varsel.QueuedVarselValidator;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class SlackService {
     }
 
     @SchedulerLock(name = "sendSlackEnGros")
-    @Scheduled(cron = "0 55 12 * * *") // Happens every day at 12:55:00
+    @Scheduled(cron = "30 * * * * *") // Happens every minute (30 seconds past every minute)
     public void sendAll() {
         log.info("Sending all pending slack messages...");
         int sendCount = 0;
