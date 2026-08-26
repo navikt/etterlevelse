@@ -961,7 +961,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         godkjenning gjennomføres digitalt i Støtte til etterlevelse at denne
                         statusen vil endre seg.{' '}
                         <Link
-                          href='https://etterlevelse.ansatt.nav.no/omstottetiletterlevelse#fa-etterlevelsen-godkjent-av-risikoeier'
+                          href='/omstottetiletterlevelse#fa-etterlevelsen-godkjent-av-risikoeier'
                           target='_blank'
                           style={{ display: 'inline' }}
                         >
@@ -1151,7 +1151,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         ikke ennå er blitt gjennomført digitalt. Det blir først når PVK dokumenteres
                         og godkjennes i Digital PVK at denne statusen vil endre seg.{' '}
                         <Link
-                          href='https://etterlevelse.ansatt.dev.nav.no/om-pvk#hvordan-er-pvk-prosessen'
+                          href='/om-pvk#hvordan-er-pvk-prosessen'
                           target='_blank'
                           style={{ display: 'inline' }}
                         >
