@@ -143,6 +143,7 @@ const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
       underArbeid: acc.underArbeid + s.pvk.underArbeid,
       tilBehandlingHosPvo: acc.tilBehandlingHosPvo + s.pvk.tilBehandlingHosPvo,
       tilbakemeldingFraPvo: acc.tilbakemeldingFraPvo + s.pvk.tilbakemeldingFraPvo,
+      sendtTilGodkjenning: acc.sendtTilGodkjenning + s.pvk.sendtTilGodkjenning,
       godkjentAvRisikoeier: acc.godkjentAvRisikoeier + s.pvk.godkjentAvRisikoeier,
       pvkIWord: acc.pvkIWord + s.pvk.pvkIWord,
     }),
@@ -152,6 +153,7 @@ const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
       underArbeid: 0,
       tilBehandlingHosPvo: 0,
       tilbakemeldingFraPvo: 0,
+      sendtTilGodkjenning: 0,
       godkjentAvRisikoeier: 0,
       pvkIWord: 0,
     }
@@ -220,9 +222,14 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
       color: PVK_COLORS[3],
     },
     {
+      name: 'Sendt til godkjenning',
+      value: agg.pvk.sendtTilGodkjenning,
+      color: PVK_COLORS[4],
+    },
+    {
       name: 'Godkjent av risikoeier',
       value: agg.pvk.godkjentAvRisikoeier,
-      color: PVK_COLORS[4],
+      color: PVK_COLORS[5],
     },
   ]
 

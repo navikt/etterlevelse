@@ -165,6 +165,7 @@ export interface IAvdelingDashboardStats {
     underArbeid: number
     tilBehandlingHosPvo: number
     tilbakemeldingFraPvo: number
+    sendtTilGodkjenning: number
     godkjentAvRisikoeier: number
     pvkIWord: number
   }

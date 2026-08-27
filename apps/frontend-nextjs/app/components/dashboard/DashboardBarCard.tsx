@@ -138,9 +138,14 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
       color: PVK_COLORS[3],
     },
     {
+      name: 'Sendt til godkjenning',
+      value: stats.pvk.sendtTilGodkjenning,
+      color: PVK_COLORS[4],
+    },
+    {
       name: 'Godkjent av risikoeier',
       value: stats.pvk.godkjentAvRisikoeier,
-      color: PVK_COLORS[4],
+      color: PVK_COLORS[5],
     },
   ]
 

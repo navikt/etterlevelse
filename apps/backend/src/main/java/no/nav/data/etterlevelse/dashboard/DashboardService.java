@@ -488,6 +488,7 @@ public class DashboardService {
         int pvkUnderArbeid = 0;
         int pvkTilBehandlingPvo = 0;
         int pvkTilbakemeldingPvo = 0;
+        int pvkSendtTilGodkjenning = 0;
         int pvkGodkjent = 0;
         int pvkIWord = 0;
 
@@ -539,6 +540,8 @@ public class DashboardService {
                         } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
                                 || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
                             pvkTilbakemeldingPvo++;
+                        } else if (pvkStatus == PvkDokumentStatus.TRENGER_GODKJENNING) {
+                            pvkSendtTilGodkjenning++;
                         } else {
                             pvkUnderArbeid++;
                         }
@@ -560,6 +563,7 @@ public class DashboardService {
                 .underArbeid(pvkUnderArbeid)
                 .tilBehandlingHosPvo(pvkTilBehandlingPvo)
                 .tilbakemeldingFraPvo(pvkTilbakemeldingPvo)
+                .sendtTilGodkjenning(pvkSendtTilGodkjenning)
                 .godkjentAvRisikoeier(pvkGodkjent)
                 .pvkIWord(pvkIWord)
                 .build());

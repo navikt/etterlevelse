@@ -76,7 +76,7 @@ const getPvkOnlyStatusText = (
   if (pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) return '-'
   if (!hasPvkDocumentationStarted) return 'Ikke påbegynt'
   if (pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) return 'Godkjent av risikoeier'
-  if (pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING) return 'Sendt til risikoeier'
+  if (pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING) return 'Sendt til godkjenning'
   if (
     pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
     pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
@@ -371,11 +371,15 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         (d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
           d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
     ).length
+    const pvkSendtTilGodkjenning = skalUtfore.filter(
+      (d) => d.hasPvkDocumentationStarted && d.pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING
+    ).length
     const pvkUnderArbeid =
       skalUtfore.filter((d) => d.hasPvkDocumentationStarted).length -
       pvkGodkjent -
       pvkTilBehandling -
-      pvkTilbakemelding
+      pvkTilbakemelding -
+      pvkSendtTilGodkjenning
 
     const baseStats = getCurrentStats()
 
@@ -413,6 +417,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         underArbeid: pvkUnderArbeid,
         tilBehandlingHosPvo: pvkTilBehandling,
         tilbakemeldingFraPvo: pvkTilbakemelding,
+        sendtTilGodkjenning: pvkSendtTilGodkjenning,
         godkjentAvRisikoeier: pvkGodkjent,
         pvkIWord,
       },
@@ -600,6 +605,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 'Digital PVK - under arbeid',
                 'Digital PVK - til behandling hos PVO',
                 'Digital PVK - tilbakemelding fra PVO',
+                'Digital PVK - sendt til godkjenning',
                 'Digital PVK - godkjent av risikoeier',
               ].join(';')
               const row = [
@@ -623,6 +629,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 stats.pvk.underArbeid,
                 stats.pvk.tilBehandlingHosPvo,
                 stats.pvk.tilbakemeldingFraPvo,
+                stats.pvk.sendtTilGodkjenning,
                 stats.pvk.godkjentAvRisikoeier,
               ].join(';')
               const csv = BOM + [...filterLines, header, row].join('\n')

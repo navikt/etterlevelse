@@ -592,12 +592,13 @@ If none of these are true, the document is counted as **Ikke påbegynt**, regard
 
 **Step 2 – if started, map `PvkDokumentStatus` to a figure bucket:**
 
-| Status shown           | `PvkDokumentStatus` values                                                        |
-| ---------------------- | --------------------------------------------------------------------------------- |
-| Til behandling hos PVO | `SENDT_TIL_PVO`, `PVO_UNDERARBEID`, `SENDT_TIL_PVO_FOR_REVURDERING`               |
-| Tilbakemelding fra PVO | `VURDERT_AV_PVO`, `VURDERT_AV_PVO_TRENGER_MER_ARBEID`                             |
-| Godkjent av risikoeier | `GODKJENT_AV_RISIKOEIER`                                                          |
-| Under arbeid           | Everything else (`UNDERARBEID`, `TRENGER_GODKJENNING`, ...) — the fallback bucket |
+| Status shown           | `PvkDokumentStatus` values                                          |
+| ---------------------- | ------------------------------------------------------------------- |
+| Til behandling hos PVO | `SENDT_TIL_PVO`, `PVO_UNDERARBEID`, `SENDT_TIL_PVO_FOR_REVURDERING` |
+| Tilbakemelding fra PVO | `VURDERT_AV_PVO`, `VURDERT_AV_PVO_TRENGER_MER_ARBEID`               |
+| Sendt til godkjenning  | `TRENGER_GODKJENNING`                                               |
+| Godkjent av risikoeier | `GODKJENT_AV_RISIKOEIER`                                            |
+| Under arbeid           | Everything else (`UNDERARBEID`, ...) — the fallback bucket          |
 
 ### Tema dashboards (`/dashboard/tema`, `/dashboard/tema/:temaCode`)
 
