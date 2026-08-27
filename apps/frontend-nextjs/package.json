@@ -44,7 +44,7 @@
     "@navikt/ds-react": "^8.16.1",
     "@navikt/ds-tailwind": "^8.16.1",
     "@tailwindcss/postcss": "^4.3.3",
-    "@tiptap/core": "^3.30.2",
+    "@tiptap/core": "^3.30.3",
     "@tiptap/extension-image": "^3.30.2",
     "@tiptap/extension-link": "^3.30.2",
     "@tiptap/extension-list": "^3.30.2",
