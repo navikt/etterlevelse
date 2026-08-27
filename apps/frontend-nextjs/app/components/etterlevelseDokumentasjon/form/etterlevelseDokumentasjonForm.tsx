@@ -829,6 +829,11 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             <VarslingsadresserEdit fieldName='varslingsadresser' />
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
+
+          <Heading level='2' size='small' className='mt-5' spacing>
+            Hvem skal ha redigeringstilgang til dokumentet?
+          </Heading>
+
           <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldWrapper marginTop full>
               <Field name='nomAvdelingId'>

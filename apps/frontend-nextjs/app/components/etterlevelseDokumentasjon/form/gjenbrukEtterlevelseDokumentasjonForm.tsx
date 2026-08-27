@@ -15,6 +15,7 @@ import {
   useSearchTeamOptions,
 } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
 import LabelWithTooltip, {
@@ -45,11 +46,30 @@ import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUt
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { Alert, Button, ErrorSummary, Heading, Radio, RadioGroup, ReadMore } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  Button,
+  ErrorSummary,
+  Heading,
+  InfoCard,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  TextField,
+} from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import AsyncSelect from 'react-select/async'
 import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokumentasjonSchema'
 import ROSEdit from './rosEdit'
@@ -78,6 +98,9 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
 
   const formRef: RefObject<any> = useRef(undefined)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+
+  const [customPersonForDev, setCustomPersonForDev] = useState<string>('')
+  const [customRisikoeierForDev, setCustomRisikoeierForDev] = useState<string>('')
 
   const submit = async (
     etterlevelseDokumentasjonWithRelation: IEtterlevelseDokumentasjonWithRelation
@@ -276,11 +299,68 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             </FieldArray>
           </ReadMore>
 
+          {env.isDev && (
+            <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5'>
+              <FieldArray name='ardoqSystemData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter system'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => {
+                          return noOptionMessage(inputValue)
+                        }}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={useArdoqSearch}
+                        onChange={(value: any) => {
+                          if (
+                            value &&
+                            fieldArrayRenderProps.form.values.ardoqSystemData.filter(
+                              (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                            ).length === 0
+                          ) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
+                          (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </div>
+                  </div>
+                )}
+              </FieldArray>
+              <div className='flex-1' />
+            </div>
+          )}
+
           <ROSEdit />
 
           <Heading level='2' size='small' spacing>
-            Legg til minst et team og/eller en person
+            Hvem skal ha redigeringstilgang til dokumentet?
           </Heading>
+
+          <InfoCard data-color='info' className=' max-w-[70ch]' size='small'>
+            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+              <InfoCard.Title>
+                Hvis du velger team, trenger du ikke legge inn teammedlemmene som enkeltpersoner. Er
+                du i tvil på hvem som er med i teamet,{' '}
+                <ExternalLink href='https://teamkatalogen.nav.no/'>
+                  sjekk Teamkatalogen
+                </ExternalLink>
+              </InfoCard.Title>
+            </InfoCard.Header>
+          </InfoCard>
 
           <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
             <FieldArray name='teamsData'>
@@ -360,6 +440,43 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                       onRemove={fieldArrayRenderProps.remove}
                     />
                   </div>
+
+                  {env.isDev && (
+                    <ReadMore header='Hva hvis jeg ikke finner person'>
+                      <div className='flex gap-2 items-end my-2'>
+                        <TextField
+                          label='Skriv inn Nav ident dersom du ikke finner person over'
+                          value={customPersonForDev}
+                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                            setCustomPersonForDev(event.target.value)
+                          }
+                        />
+                        <div>
+                          <Button
+                            type='button'
+                            onClick={() => {
+                              fieldArrayRenderProps.push({
+                                navIdent: customPersonForDev,
+                                givenName: customPersonForDev,
+                                familyName: customPersonForDev,
+                                fullName: customPersonForDev,
+                                email: customPersonForDev,
+                                resourceType: customPersonForDev,
+                              })
+                            }}
+                          >
+                            Legg til
+                          </Button>
+                        </div>
+                      </div>
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.resourcesData.map(
+                          (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </ReadMore>
+                  )}
                 </div>
               )}
             </FieldArray>
@@ -373,15 +490,16 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
           </div>
 
+          <Heading level='2' size='small' className='mt-5' spacing>
+            Hvem skal ha redigeringstilgang til dokumentet?
+          </Heading>
+
           <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldWrapper>
+            <FieldWrapper full>
               <Field name='nomAvdelingId'>
                 {(fieldProps: FieldProps) => (
                   <div>
-                    <LabelWithDescription
-                      label='Avdeling'
-                      description='Angi hvilken avdeling som er ansvarlig for etterlevelsen og som er risikoeier.'
-                    />
+                    <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
                     <OptionList
                       label='Avdeling'
                       options={alleAvdelingOptions}
@@ -470,51 +588,6 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
               )
             })()}
 
-          {env.isDev && (
-            <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-              <FieldArray name='ardoqSystemData'>
-                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className='flex-1'>
-                    <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
-                    <div className='w-full'>
-                      <AsyncSelect
-                        aria-label='Søk etter system'
-                        placeholder=''
-                        tabSelectsValue={false}
-                        components={{ DropdownIndicator }}
-                        noOptionsMessage={({ inputValue }) => {
-                          return noOptionMessage(inputValue)
-                        }}
-                        controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
-                        isClearable={false}
-                        loadOptions={useArdoqSearch}
-                        onChange={(value: any) => {
-                          if (
-                            value &&
-                            fieldArrayRenderProps.form.values.ardoqSystemData.filter(
-                              (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
-                            ).length === 0
-                          ) {
-                            fieldArrayRenderProps.push(value)
-                          }
-                        }}
-                        styles={selectOverrides}
-                      />
-                      <RenderTagList
-                        list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
-                          (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
-                        )}
-                        onRemove={fieldArrayRenderProps.remove}
-                      />
-                    </div>
-                  </div>
-                )}
-              </FieldArray>
-              <div className='flex-1' />
-            </div>
-          )}
-
           <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
             <FieldArray name='risikoeiereData'>
               {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -552,6 +625,43 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                       onRemove={fieldArrayRenderProps.remove}
                     />
                   </div>
+
+                  {env.isDev && (
+                    <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
+                      <div className='flex gap-2 items-end my-2'>
+                        <TextField
+                          label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
+                          value={customRisikoeierForDev}
+                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                            setCustomRisikoeierForDev(event.target.value)
+                          }
+                        />
+                        <div>
+                          <Button
+                            type='button'
+                            onClick={() => {
+                              fieldArrayRenderProps.push({
+                                navIdent: customRisikoeierForDev,
+                                givenName: customRisikoeierForDev,
+                                familyName: customRisikoeierForDev,
+                                fullName: customRisikoeierForDev,
+                                email: customRisikoeierForDev,
+                                resourceType: customRisikoeierForDev,
+                              })
+                            }}
+                          >
+                            Legg til
+                          </Button>
+                        </div>
+                      </div>
+                      <RenderTagList
+                        list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                          (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
+                        )}
+                        onRemove={fieldArrayRenderProps.remove}
+                      />
+                    </ReadMore>
+                  )}
                 </div>
               )}
             </FieldArray>
