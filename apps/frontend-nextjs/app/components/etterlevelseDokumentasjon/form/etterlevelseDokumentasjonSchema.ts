@@ -8,8 +8,8 @@ export enum EEtterlevelseDokumentSchemaMelding {
   TITLE = 'Etterlevelsesdokumentasjon trenger en tittel',
   BESKRIVELSE = 'Etterlevelsesdokumentasjon trenger en beskrivelse',
   VARSLINGSADRESSER = 'Påkrevd minst 1 varslingsadresse',
-  TEAMDATA = EPaKrevdMember.PAKREVD,
-  RESOURCEDATA = EPaKrevdMember.PAKREVD,
+  TEAMDATA = 'Påkrevd minst 1 team',
+  RESOURCEDATA = 'Påkrevd minst 1 person',
   NOM_AVDELING_ID = 'Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen',
 }
 
