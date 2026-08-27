@@ -1,17 +1,18 @@
 package no.nav.data.common.auditing.domain;
 
-import lombok.RequiredArgsConstructor;
-import no.nav.data.common.security.SecurityUtils;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import no.nav.data.common.security.SecurityUtils;
 
 @Repository
 @RequiredArgsConstructor
