@@ -1800,13 +1800,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-list@npm:3.30.2, @tiptap/extension-list@npm:^3.30.2":
+"@tiptap/extension-list@npm:3.30.2":
   version: 3.30.2
   resolution: "@tiptap/extension-list@npm:3.30.2"
   peerDependencies:
     "@tiptap/core": 3.30.2
     "@tiptap/pm": 3.30.2
   checksum: 10c0/ac14173cf54d971720fdd067b6d22fe953feff5b67a9f9825c05a479ff994ae24867d175e406d2b11bad8a40dc70ba52e5fffffaf58597d0c10dfde8dcfea078
+  languageName: node
+  linkType: hard
+
+"@tiptap/extension-list@npm:^3.30.3":
+  version: 3.30.3
+  resolution: "@tiptap/extension-list@npm:3.30.3"
+  peerDependencies:
+    "@tiptap/core": 3.30.3
+    "@tiptap/pm": 3.30.3
+  checksum: 10c0/21a3952ab6e33a3a1c6dceb055ed6bd28fb9ae65fdc6692fe7400ed2ac74207048eefaf9a9c72a58517908c976a944d188dfc77a34fd2165a8531c4c3690cc2c
   languageName: node
   linkType: hard
 
@@ -3832,7 +3842,7 @@ __metadata:
     "@tiptap/core": "npm:^3.30.2"
     "@tiptap/extension-image": "npm:^3.30.2"
     "@tiptap/extension-link": "npm:^3.30.2"
-    "@tiptap/extension-list": "npm:^3.30.2"
+    "@tiptap/extension-list": "npm:^3.30.3"
     "@tiptap/extension-ordered-list": "npm:^3.30.2"
     "@tiptap/extension-underline": "npm:^3.30.2"
     "@tiptap/pm": "npm:^3.30.2"
