@@ -3863,7 +3863,7 @@ __metadata:
     lodash: "npm:^4.18.1"
     marked: "npm:^18.0.11"
     moment: "npm:^2.30.1"
-    next: "npm:^16.3.2"
+    next: "npm:^16.3.3"
     postcss: "npm:^8.5.26"
     prettier: "npm:^3.9.6"
     react: "npm:^19.2.8"
@@ -5764,7 +5764,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:^16.3.2":
+"next@npm:^16.3.3":
   version: 16.3.3
   resolution: "next@npm:16.3.3"
   dependencies:
