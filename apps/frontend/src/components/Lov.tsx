@@ -121,7 +121,7 @@ const legalBasisLinkProcessor = (
       ),
     },
     {
-      regex: /(.*) art(ikkel)?\s*(\d+) ?([aA-zZ]?)( *\([0-9]*\))*/gi,
+      regex: /(.*) art(ikkel)?\s*(\d+) ?([A-Za-z]?)( *\([0-9]*\))*/gi,
       fn: (key: string, result: string[]) => (
         <Link
           key={key}
