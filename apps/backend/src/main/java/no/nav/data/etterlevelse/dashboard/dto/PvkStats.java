@@ -15,6 +15,7 @@ public class PvkStats {
     private int underArbeid;
     private int tilBehandlingHosPvo;
     private int tilbakemeldingFraPvo;
+    private int sendtTilGodkjenning;
     private int godkjentAvRisikoeier;
     private int pvkIWord;
 }

@@ -117,6 +117,9 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
             <span className='font-bold'>{stats.pvk.tilbakemeldingFraPvo}</span>
           </BodyShort>
           <BodyShort>
+            Sendt til godkjenning <span className='font-bold'>{stats.pvk.sendtTilGodkjenning}</span>
+          </BodyShort>
+          <BodyShort>
             Godkjent av risikoeier{' '}
             <span className='font-bold'>{stats.pvk.godkjentAvRisikoeier}</span>
           </BodyShort>
