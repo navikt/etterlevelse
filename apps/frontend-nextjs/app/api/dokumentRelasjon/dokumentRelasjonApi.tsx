@@ -19,19 +19,6 @@ export const getDocumentRelationPage = async (pageNumber: number, pageSize: numb
   ).data
 }
 
-export const getDocumentRelationByFromIdAndRelationType = async (
-  fromId: string,
-  relationType?: ERelationType
-) => {
-  let url = `${env.backendBaseUrl}/documentrelation/fromdocument/${fromId}`
-
-  if (relationType) {
-    url += `?relationType=${relationType}`
-  }
-
-  return (await axios.get<IDocumentRelation[]>(url)).data
-}
-
 export const getDocumentRelationByToIdAndRelationType = async (
   fromId: string,
   relationType?: ERelationType

@@ -2,16 +2,18 @@
 
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
-import { adminDokumentrelasjonUrl } from '@/routes/admin/dokumentrelasjon/adminDokumentrelasjonRoutes'
+import {
+  adminAuditUrl,
+  adminCodelistUrl,
+  adminDokumentrelasjonUrl,
+  adminKravUrl,
+  adminMaillog,
+  adminMessagesLogUrl,
+  adminPvkUrl,
+  adminVarselUrl,
+} from '@/routes/admin/adminRoutes'
 import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/adminEtterlevelseDokumentasjonRoutes'
 import { adminEtterlevelseUrl } from '@/routes/admin/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
-import { adminCodelistUrl } from '@/routes/admin/kodeverk.ts/kodeverkRoutes'
-import { adminKravUrl } from '@/routes/admin/krav/adminKravRoutes'
-import { adminMaillog } from '@/routes/admin/maillog/maillogRoutes'
-import { adminMessagesLogUrl } from '@/routes/admin/messagesLog/messagesLogRoutes'
-import { adminPvkUrl } from '@/routes/admin/personvernkonsekvensvurdering/adminPersonvernkonsekvensvurderingRoutes'
-import { adminVarselUrl } from '@/routes/admin/varsel/varselRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'

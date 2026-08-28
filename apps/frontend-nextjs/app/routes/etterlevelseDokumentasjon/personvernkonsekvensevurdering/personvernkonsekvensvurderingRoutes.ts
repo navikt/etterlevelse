@@ -1,5 +1,9 @@
 'use client'
 
+import {
+  behandlingensArtOgOmfang,
+  behandlingensLivslop,
+} from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjonRoutes'
 
 export const personvernKonsekvensvurderingUrl = '/pvkdokument'
@@ -63,25 +67,25 @@ export const pvkDokumentasjonBehandlingsenLivslopUrl = (
   etterlevelseDokumentId: string,
   behandlingensLivslopId?: string
 ): string =>
-  `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-livslop/${behandlingensLivslopId}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}${behandlingensLivslop}/${behandlingensLivslopId}`
 
 export const pvkDokumentasjonBehandlingsenLivslopReadOnlyUrl = (
   etterlevelseDokumentId: string,
   behandlingensLivslopId?: string
 ): string =>
-  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent/behandlingens-livslop/${behandlingensLivslopId}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent${behandlingensLivslop}/${behandlingensLivslopId}`
 
 export const pvkDokumentasjonBehandlingsenArtOgOmfangUrl = (
   etterlevelseDokumentId: string,
   behandlingensArtOgOmfangId: string
 ): string =>
-  `${dokumentasjonUrl}/${etterlevelseDokumentId}/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}${behandlingensArtOgOmfang}/${behandlingensArtOgOmfangId}`
 
 export const pvkDokumentasjonBehandlingsenArtOgOmfangReadOnlyUrl = (
   etterlevelseDokumentId: string,
   behandlingensArtOgOmfangId: string
 ): string =>
-  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent/behandlingens-art-og-omfang/${behandlingensArtOgOmfangId}`
+  `${dokumentasjonUrl}/${etterlevelseDokumentId}/godkjent${behandlingensArtOgOmfang}/${behandlingensArtOgOmfangId}`
 
 export const pvkDokumentasjonPvkBehovUrl = (
   etterlevelseDokumentId: string,
@@ -93,18 +97,6 @@ export const risikoscenarioUrl = (risikoId: string, steg?: string): string => {
     return `${window.location.pathname}?steg=${steg}&risikoscenario=${risikoId}`
   } else {
     return `${window.location.pathname}?risikoscenario=${risikoId}`
-  }
-}
-
-export const risikoscenarioTiltakUrl = (
-  steg: string,
-  activeRisikoscenarioId: string,
-  tiltakId: string
-): string => {
-  if (steg !== undefined) {
-    return `${window.location.pathname}?steg=${steg}&risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
-  } else {
-    return `${window.location.pathname}?srisikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
   }
 }
 
