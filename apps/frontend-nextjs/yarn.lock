@@ -3882,7 +3882,7 @@ __metadata:
     rxjs: "npm:^7.8.2"
     tailwindcss: "npm:^4.3.3"
     turndown: "npm:^7.2.4"
-    typescript: "npm:^6.0.3"
+    typescript: "npm:^7.0.2"
     yup: "npm:^1.7.1"
   languageName: unknown
   linkType: soft
