@@ -12,7 +12,7 @@
     "test": "yarn lint-staged",
     "start": "next start",
     "prettier:check": "prettier -c ./app",
-    "eslint:check": "eslint . --cache --max-warnings=0",
+    "eslint:check": "eslint . --no-cache --max-warnings=0",
     "knip:test": "yarn knip --max-show-issues 5",
     "knip:cachetest": "yarn knip --cache --max-issues=0",
     "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
