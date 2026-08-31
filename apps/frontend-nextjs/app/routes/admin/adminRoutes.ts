@@ -14,6 +14,7 @@ export const adminMessagesLogUrl: string = `${adminUrl}/messageslog`
 export const adminVarselUrl: string = `${adminUrl}/varsel`
 export const adminPvkUrl: string = `${adminUrl}/pvk`
 export const adminMaillog = `${adminUrl}/maillog`
+export const adminGjenopprettUrl: string = `${adminUrl}/gjenopprett`
 export const forbiddenUrl: string = '/forbidden'
 
 export const adminAuditUrl = (id?: string): string => {

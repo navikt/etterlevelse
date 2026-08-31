@@ -22,6 +22,52 @@ public class AuditVersionCustomRepo {
     private final AuditVersionRepository repository;
 
     @Transactional
+    public List<AuditVersion> findLatestDeletedByTable(String tableName) {
+        String query = """
+                with ranked as (
+                    select audit_id, rank() over (partition by table_id order by time desc) table_rank, action
+                    from audit_version where table_name = :tableName
+                )
+                select audit_id as id from ranked where table_rank = 1 and action = 'DELETE'
+                """;
+        var par = new MapSqlParameterSource();
+        par.addValue("tableName", tableName);
+
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
+    @Transactional
+    public List<AuditVersion> findLatestDeletedByTableAndFk(String tableName, String fkField, String fkValue) {
+        String query = """
+                with ranked as (
+                    select audit_id, rank() over (partition by table_id order by time desc) table_rank, action
+                    from audit_version where table_name = :tableName and data ->> :fkField = :fkValue
+                )
+                select audit_id as id from ranked where table_rank = 1 and action = 'DELETE'
+                """;
+        var par = new MapSqlParameterSource();
+        par.addValue("tableName", tableName);
+        par.addValue("fkField", fkField);
+        par.addValue("fkValue", fkValue);
+
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
+    @Transactional
+    public List<AuditVersion> findLatestDeletedByTableId(String tableName, String tableId) {
+        String query = """
+                select audit_id as id from audit_version
+                where table_name = :tableName and table_id = :tableId and action = 'DELETE'
+                order by time desc limit 1
+                """;
+        var par = new MapSqlParameterSource();
+        par.addValue("tableName", tableName);
+        par.addValue("tableId", tableId);
+
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
+    @Transactional
     public List<AuditVersion> findLatestByTableIdAndTimeStamp(String tableId, String timestamps) {
         String query = "select audit_id as id from audit_version where table_id = :tableId and time <= :timestamps::timestamp order by time desc limit 1";
         var par = new MapSqlParameterSource();
