@@ -138,7 +138,7 @@ public class RestoreService {
         }
 
         if (result.getRestoredRisikoscenario() > 0 && result.getRestoredTiltak() > 0) {
-            result.getWarnings().add("Koblinger mellom risikoscenario og tiltak kan ikke gjenopprettes automatisk og må settes opp på nytt manuelt.");
+            result.setWarnings(List.of("Koblinger mellom risikoscenario og tiltak kan ikke gjenopprettes automatisk og må settes opp på nytt manuelt."));
         }
 
         return result;
