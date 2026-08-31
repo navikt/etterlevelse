@@ -2,6 +2,7 @@
 
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { adminGjenopprettUrl } from '@/routes/admin/adminRoutes'
 import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
 import { adminDokumentrelasjonUrl } from '@/routes/admin/dokumentrelasjon/adminDokumentrelasjonRoutes'
 import { adminDokumentasjonUrl } from '@/routes/admin/etterlevelseDokumentasjon/adminEtterlevelseDokumentasjonRoutes'
@@ -77,6 +78,7 @@ export const LoggedInHeader = () => {
         { label: 'Administrere dokument relasjon', href: adminDokumentrelasjonUrl },
         { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
         { label: 'Administrere pvk dokument', href: adminPvkUrl },
+        { label: 'Gjenopprett slettede dokumenter', href: adminGjenopprettUrl },
         { label: 'Versjonering', href: adminAuditUrl() },
         { label: 'Kodeverk', href: adminCodelistUrl },
         { label: 'Spørsmål og svar', href: adminMessagesLogUrl },

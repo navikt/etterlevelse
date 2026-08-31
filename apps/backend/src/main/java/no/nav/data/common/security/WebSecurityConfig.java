@@ -1,8 +1,5 @@
 package no.nav.data.common.security;
 
-import no.nav.data.common.security.azure.AADStatelessAuthenticationFilter;
-import no.nav.data.common.security.dto.AppRole;
-import no.nav.data.common.web.UserFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +9,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import no.nav.data.common.security.azure.AADStatelessAuthenticationFilter;
+import no.nav.data.common.security.dto.AppRole;
+import no.nav.data.common.web.UserFilter;
 
 @Configuration
 @EnableMethodSecurity(jsr250Enabled = true)
@@ -88,7 +89,8 @@ public class WebSecurityConfig {
                     "/audit/maillog/**",
                     "/settings/**",
                     "/codelist/**",
-                    "/export/codelist/**"
+                    "/export/codelist/**",
+                    "/restore/**"
             );
 
             http.authorizeHttpRequests(auth -> auth.requestMatchers("/krav/**").hasAnyRole(AppRole.KRAVEIER.name(), AppRole.ADMIN.name()));
