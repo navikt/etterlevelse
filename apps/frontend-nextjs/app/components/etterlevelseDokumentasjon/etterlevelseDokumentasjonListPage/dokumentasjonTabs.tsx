@@ -42,7 +42,7 @@ export const DokumentasjonTabs = () => {
       case ETab.MINE:
         return { mineEtterlevelseDokumentasjoner: true }
       case ETab.SISTE:
-        return { sistRedigert: 20 }
+        return { sistRedigert: 100000 }
       default:
         return {}
     }

@@ -12,16 +12,21 @@ import {
 } from '@/query/personvernombudet/pvoTilbakemeldingQuery'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { useQuery } from '@apollo/client/react'
-import { Label, List } from '@navikt/ds-react'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Label, List, Loader } from '@navikt/ds-react'
 import moment from 'moment'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+
+const PAGE_SIZE = 20
 
 export const PvoSistRedigertView = () => {
+  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE)
+
   const { data, loading: isLoading } = useQuery<
     { pvoTilbakemeldinger: IPageResponse<TPvoTilbakemeldingQL> },
     TPvoVariables
   >(getPvoTilbakemeldingListQuery, {
-    variables: { sistRedigert: 20, pageSize: 200 },
+    variables: { sistRedigert: 100000, pageSize: 0 },
   })
 
   const sortedPvoTilbakemelding = useMemo<TPvoTilbakemeldingQL[]>(() => {
@@ -34,6 +39,11 @@ export const PvoSistRedigertView = () => {
         b.sistEndretAvMeg.localeCompare(a.sistEndretAvMeg)
     )
   }, [isLoading, data])
+
+  const visiblePvoTilbakemelding = useMemo<TPvoTilbakemeldingQL[]>(
+    () => sortedPvoTilbakemelding.slice(0, visibleCount),
+    [sortedPvoTilbakemelding, visibleCount]
+  )
 
   return (
     <div>
@@ -51,8 +61,8 @@ export const PvoSistRedigertView = () => {
             </div>
           </div>
           <List className='mb-2.5 flex flex-col gap-2'>
-            {sortedPvoTilbakemelding.length !== 0 &&
-              sortedPvoTilbakemelding.map((pvoTilbakemelding: TPvoTilbakemeldingQL) => {
+            {visiblePvoTilbakemelding.length !== 0 &&
+              visiblePvoTilbakemelding.map((pvoTilbakemelding: TPvoTilbakemeldingQL) => {
                 const latestVurdering = pvoTilbakemelding.vurderinger.reduce((prev, current) => {
                   return prev.innsendingId > current.innsendingId ? prev : current
                 })
@@ -79,6 +89,30 @@ export const PvoSistRedigertView = () => {
                 )
               })}
           </List>
+
+          {sortedPvoTilbakemelding.length !== 0 && (
+            <div className='flex justify-between mt-10'>
+              <div className='flex items-center'>
+                <Button
+                  onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
+                  icon={<PlusIcon title='' aria-label='' aria-hidden />}
+                  variant='secondary'
+                  disabled={visibleCount >= sortedPvoTilbakemelding.length}
+                >
+                  Vis flere
+                </Button>
+
+                {isLoading && (
+                  <div className='ml-2.5'>
+                    <Loader size='large' />
+                  </div>
+                )}
+              </div>
+              <Label className='mr-2.5'>
+                Viser {visiblePvoTilbakemelding.length}/{sortedPvoTilbakemelding.length}
+              </Label>
+            </div>
+          )}
         </div>
       )}
     </div>

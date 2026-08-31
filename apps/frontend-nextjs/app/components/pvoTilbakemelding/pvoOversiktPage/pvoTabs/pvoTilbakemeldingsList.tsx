@@ -11,9 +11,12 @@ import {
   IPvoTilbakemelding,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Label, List, Search, Select, Skeleton } from '@navikt/ds-react'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Label, List, Loader, Search, Select, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
+
+const PAGE_SIZE = 20
 
 interface IAnsvarligItem {
   key: string
@@ -26,6 +29,7 @@ export const PvoTilbakemeldingsList = () => {
   const [statusFilter, setStatusFilter] = useState<string>('alle')
   const [ansvarligFilter, setAnsvarligFilter] = useState<string>('')
   const [searchPvk, setSearchPvk] = useState<string>('')
+  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -188,6 +192,18 @@ export const PvoTilbakemeldingsList = () => {
     return filteredData
   }, [sortedPvkDokument, allPvoTilbakemelding, statusFilter, ansvarligFilter, searchPvk])
 
+  const filterKey = `${statusFilter}|${ansvarligFilter}|${searchPvk}`
+  const [prevFilterKey, setPrevFilterKey] = useState<string>(filterKey)
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey)
+    setVisibleCount(PAGE_SIZE)
+  }
+
+  const visiblePvkDokument = useMemo<IPvkDokumentListItem[]>(
+    () => filteredPvkDokument.slice(0, visibleCount),
+    [filteredPvkDokument, visibleCount]
+  )
+
   const getLatestVurderingSendtDato = (pvoTilbakemelding: IPvoTilbakemelding) => {
     const sortedVurderinger = pvoTilbakemelding.vurderinger.sort(
       (a, b) => b.innsendingId - a.innsendingId
@@ -251,8 +267,8 @@ export const PvoTilbakemeldingsList = () => {
             </div>
           </div>
           <List className='mb-2.5 flex flex-col gap-2'>
-            {filteredPvkDokument &&
-              filteredPvkDokument.map((pvkDokument: IPvkDokumentListItem) => {
+            {visiblePvkDokument &&
+              visiblePvkDokument.map((pvkDokument: IPvkDokumentListItem) => {
                 const pvoTilbakemelding = allPvoTilbakemelding.filter(
                   (pvo: IPvoTilbakemelding) => pvo.pvkDokumentId === pvkDokument.id
                 )
@@ -293,6 +309,30 @@ export const PvoTilbakemeldingsList = () => {
                 )
               })}
           </List>
+
+          {filteredPvkDokument.length !== 0 && (
+            <div className='flex justify-between mt-10 pl-7'>
+              <div className='flex items-center'>
+                <Button
+                  onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
+                  icon={<PlusIcon title='' aria-label='' aria-hidden />}
+                  variant='secondary'
+                  disabled={visibleCount >= filteredPvkDokument.length}
+                >
+                  Vis flere
+                </Button>
+
+                {isLoading && (
+                  <div className='ml-2.5'>
+                    <Loader size='large' />
+                  </div>
+                )}
+              </div>
+              <Label className='mr-2.5'>
+                Viser {visiblePvkDokument.length}/{filteredPvkDokument.length}
+              </Label>
+            </div>
+          )}
         </div>
       )}
     </div>
