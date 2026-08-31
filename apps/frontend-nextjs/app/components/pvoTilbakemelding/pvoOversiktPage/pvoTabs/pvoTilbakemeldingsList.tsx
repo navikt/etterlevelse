@@ -11,8 +11,7 @@ import {
   IPvoTilbakemelding,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { PlusIcon } from '@navikt/aksel-icons'
-import { Button, Label, List, Loader, Search, Select, Skeleton } from '@navikt/ds-react'
+import { Label, List, Pagination, Search, Select, Skeleton } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -29,7 +28,7 @@ export const PvoTilbakemeldingsList = () => {
   const [statusFilter, setStatusFilter] = useState<string>('alle')
   const [ansvarligFilter, setAnsvarligFilter] = useState<string>('')
   const [searchPvk, setSearchPvk] = useState<string>('')
-  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE)
+  const [page, setPage] = useState<number>(1)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -110,7 +109,7 @@ export const PvoTilbakemeldingsList = () => {
     ]
 
     return unsortedData
-      .sort((a: any, b: any) => a.dateToCompare.localeCompare(b.dateToCompare))
+      .sort((a: any, b: any) => b.dateToCompare.localeCompare(a.dateToCompare))
       .map((data: any) => {
         return {
           id: data.id,
@@ -196,12 +195,14 @@ export const PvoTilbakemeldingsList = () => {
   const [prevFilterKey, setPrevFilterKey] = useState<string>(filterKey)
   if (filterKey !== prevFilterKey) {
     setPrevFilterKey(filterKey)
-    setVisibleCount(PAGE_SIZE)
+    setPage(1)
   }
 
+  const pageCount = Math.max(1, Math.ceil(filteredPvkDokument.length / PAGE_SIZE))
+
   const visiblePvkDokument = useMemo<IPvkDokumentListItem[]>(
-    () => filteredPvkDokument.slice(0, visibleCount),
-    [filteredPvkDokument, visibleCount]
+    () => filteredPvkDokument.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [filteredPvkDokument, page]
   )
 
   const getLatestVurderingSendtDato = (pvoTilbakemelding: IPvoTilbakemelding) => {
@@ -311,23 +312,14 @@ export const PvoTilbakemeldingsList = () => {
           </List>
 
           {filteredPvkDokument.length !== 0 && (
-            <div className='flex justify-between mt-10 pl-7'>
-              <div className='flex items-center'>
-                <Button
-                  onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
-                  icon={<PlusIcon title='' aria-label='' aria-hidden />}
-                  variant='secondary'
-                  disabled={visibleCount >= filteredPvkDokument.length}
-                >
-                  Vis flere
-                </Button>
-
-                {isLoading && (
-                  <div className='ml-2.5'>
-                    <Loader size='large' />
-                  </div>
-                )}
-              </div>
+            <div className='flex justify-between items-center mt-10 pl-7'>
+              <Pagination
+                page={page}
+                onPageChange={setPage}
+                count={pageCount}
+                prevNextTexts
+                size='small'
+              />
               <Label className='mr-2.5'>
                 Viser {visiblePvkDokument.length}/{filteredPvkDokument.length}
               </Label>

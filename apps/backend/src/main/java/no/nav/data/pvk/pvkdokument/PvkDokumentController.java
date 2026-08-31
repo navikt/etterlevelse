@@ -1,5 +1,25 @@
 package no.nav.data.pvk.pvkdokument;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +45,6 @@ import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -74,17 +86,13 @@ public class PvkDokumentController {
             PageParameters pageParameters
     ) {
         log.info("Get all Pvk Document for PVO oversikt page");
-        List<PvkDokumentListItemResponse> pvkDokumentListItemResponses = new ArrayList<>();
         Page<PvkDokument> page = pvkDokumentService.getAll(pageParameters);
-
-        page.forEach(pvkDokument -> {
+        Page<PvkDokumentListItemResponse> responses = page.map(pvkDokument -> {
             var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
-            pvkDokumentListItemResponses.add(
-                    PvkDokumentListItemResponse.buildFrom(pvkDokument, etterlevelseDokumentasjon)
-            );
+            return PvkDokumentListItemResponse.buildFrom(pvkDokument, etterlevelseDokumentasjon);
         });
 
-        return ResponseEntity.ok(new RestResponsePage<>(pvkDokumentListItemResponses));
+        return ResponseEntity.ok(new RestResponsePage<>(responses));
     }
 
     @Operation(summary = "Get One Pvk Document")
