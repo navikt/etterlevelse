@@ -84,6 +84,7 @@ export const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
                 setSavedSuccessful={setSavedSuccessful}
                 setIsPvoAlertModalOpen={setIsPvoAlertModalOpen}
                 formRef={formRef}
+                hideUnsavedChangesGuard
               />
               {isPvoAlertModalOpen && (
                 <AlertPvoUnderArbeidModal

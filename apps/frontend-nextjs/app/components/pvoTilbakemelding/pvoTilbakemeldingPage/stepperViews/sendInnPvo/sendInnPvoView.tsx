@@ -25,15 +25,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
 import { AxiosError } from 'axios'
 import { Form, Formik } from 'formik'
-import {
-  FunctionComponent,
-  RefObject,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useMemo, useState } from 'react'
 import SendInnPvoViewFerdig from './sendInnPvoViewFerdig'
 import SendInnPvoViewIkkeFerdig from './sendInnPvoViewIkkeFerdig'
 
@@ -50,6 +42,7 @@ type TProps = {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   codelistUtils: ICodelistProps
+  formRef: RefObject<any>
 }
 
 export const SendInnPvoView: FunctionComponent<TProps> = ({
@@ -62,6 +55,7 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
   setActiveStep,
   setSelectedStep,
   codelistUtils,
+  formRef,
 }) => {
   const user = useContext(UserContext)
   const [submittedStatus, setSubmittedStatus] = useState<EPvoTilbakemeldingStatus>(
@@ -75,7 +69,6 @@ export const SendInnPvoView: FunctionComponent<TProps> = ({
       .sort((a, b) => a.shortName.localeCompare(b.shortName)) as ICode[]
   }, [codelistUtils])
   const [sucessSubmit, setSuccessSubmit] = useState<boolean>(false)
-  const formRef: RefObject<any> = useRef(undefined)
 
   useEffect(() => {
     if (sucessSubmit) {

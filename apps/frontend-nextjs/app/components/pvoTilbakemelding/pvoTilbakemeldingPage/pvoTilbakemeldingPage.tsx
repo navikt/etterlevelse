@@ -6,6 +6,7 @@ import { usePvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingA
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import ForbiddenAlert from '@/components/common/forbiddenAlert'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import {
   IDataBehandler,
   IExternalCode,
@@ -368,6 +369,7 @@ export const PvoTilbakemeldingPage = () => {
                       setActiveStep={updateTitleUrlAndStep}
                       codelistUtils={codelist.utils}
                       setPvoTilbakemelding={setPvoTilbakemelding}
+                      formRef={formRef}
                     />
                   )}
                 </div>
@@ -421,6 +423,7 @@ export const PvoTilbakemeldingPage = () => {
                 </Button>
               </Modal.Footer>
             </Modal>
+            <UnsavedChangesGuard formRef={formRef} navigateUrl={pvoOversiktUrl} />
           </div>
         )}
     </div>

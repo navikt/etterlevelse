@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 
 type TProps = {
-  isDirty: boolean
+  isDirty?: boolean
   navigateUrl: string
   formRef?: RefObject<FormikProps<any> | null>
 }
@@ -18,12 +18,15 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
 }) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const isDirtyRef = useRef<boolean>(isDirty)
+  const isDirtyRef = useRef<boolean>(!!isDirty)
   const isLeavingRef = useRef<boolean>(false)
   const navigateUrlRef = useRef<string>(navigateUrl)
 
+  // Prefer live Formik dirty via formRef (container usage doesn't re-render per keystroke)
+  const getIsDirty = (): boolean => (formRef ? !!formRef.current?.dirty : isDirtyRef.current)
+
   useEffect(() => {
-    isDirtyRef.current = isDirty
+    isDirtyRef.current = !!isDirty
   }, [isDirty])
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent): void => {
-      if (!isDirtyRef.current || isLeavingRef.current) {
+      if (!getIsDirty() || isLeavingRef.current) {
         return
       }
       event.preventDefault()
@@ -61,7 +64,7 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
       // Re-hold position so the back press never actually leaves the page unguarded
       window.history.pushState(window.history.state, '', window.location.href)
 
-      if (isDirtyRef.current) {
+      if (getIsDirty()) {
         setIsOpen(true)
       } else {
         leave()
@@ -92,7 +95,18 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
         <Button
           type='button'
           onClick={async () => {
-            await formRef?.current?.submitForm()
+            const form = formRef?.current
+            if (!form) {
+              leave()
+              return
+            }
+            // submitForm() resolves even when validation fails, so check validity before leaving
+            const errors = await form.validateForm()
+            await form.submitForm()
+            if (errors && Object.keys(errors).length > 0) {
+              setIsOpen(false)
+              return
+            }
             leave()
           }}
         >

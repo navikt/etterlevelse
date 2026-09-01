@@ -145,6 +145,7 @@ export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
             pvkDokumentId: pvkDokument.id,
             generelScenario: true,
           }}
+          formRef={formRef}
         />
       )}
     </div>

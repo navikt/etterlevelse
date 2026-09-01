@@ -403,6 +403,7 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           setIsOpen={setIsEditModalOpen}
           submit={submit}
           initialValues={activeRisikoscenario}
+          formRef={formRef}
         />
       )}
 

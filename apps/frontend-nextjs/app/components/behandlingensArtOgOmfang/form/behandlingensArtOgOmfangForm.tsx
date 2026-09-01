@@ -48,6 +48,7 @@ type TProps = {
   setIsPvoAlertModalOpen: (state: boolean) => void
   formRef: RefObject<any>
   pvkDokument?: IPvkDokument
+  hideUnsavedChangesGuard?: boolean
 }
 
 export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
@@ -60,6 +61,7 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
   setSavedSuccessful,
   setIsPvoAlertModalOpen,
   formRef,
+  hideUnsavedChangesGuard,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isNullStilModalOpen, setIsNullStilModalOpen] = useState<boolean>(false)
@@ -417,11 +419,13 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
               </div>
             </div>
           </Form>
-          <UnsavedChangesGuard
-            isDirty={dirty}
-            formRef={formRef}
-            navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
-          />
+          {!hideUnsavedChangesGuard && (
+            <UnsavedChangesGuard
+              isDirty={dirty}
+              formRef={formRef}
+              navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
+            />
+          )}
         </>
       )}
     </Formik>

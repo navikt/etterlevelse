@@ -8,6 +8,7 @@ import InvolveringAvEksterneView from '@/components/PVK/pvkDokumentPage/stepperV
 import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import ForbiddenAlert from '@/components/common/forbiddenAlert'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import {
   IDataBehandler,
   IExternalCode,
@@ -381,6 +382,7 @@ export const PvkDokumentPage = () => {
                       pvkKrav={pvkKrav}
                       isPvkKravLoading={isPvkKravLoading}
                       refetchPvkKrav={refetchPvkKrav}
+                      formRef={formRef}
                     />
                   )}
                 </div>
@@ -434,6 +436,10 @@ export const PvkDokumentPage = () => {
                 </Button>
               </Modal.Footer>
             </Modal>
+            <UnsavedChangesGuard
+              formRef={formRef}
+              navigateUrl={etterlevelseDokumentasjonIdUrl(params.etterlevelseDokumentasjonId)}
+            />
           </div>
         )}
     </div>
