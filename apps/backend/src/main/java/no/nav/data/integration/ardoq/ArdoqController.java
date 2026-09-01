@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,6 +68,16 @@ public class ArdoqController {
         log.info("Returned {} systems", systems.size());
         return ResponseEntity.ok(systems);
     }
+
+    @Operation(summary = "Export Systems relations with etterlevelses document")
+    @ApiResponse(description = "test endpoint for exporting ardoq with etterlevelses document relations")
+    @GetMapping("/export")
+    public ResponseEntity<List<ArdoqSystemResponse>> ExportRelations() {
+        log.info("Exporting ardoq with etterlevelses document relations");
+        List<ArdoqSystemResponse> systems = new ArrayList<>();
+        return ResponseEntity.ok(systems);
+    }
+
 
 
     private void validateLen(String name) {
