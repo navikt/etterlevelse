@@ -307,16 +307,6 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                                       )
                                     }
                                     submitForm()
-                                  } else {
-                                    setTimeout(
-                                      () =>
-                                        router.push(
-                                          etterlevelseDokumentasjonIdUrl(
-                                            etterlevelseDokumentasjon?.id
-                                          )
-                                        ),
-                                      1
-                                    )
                                   }
                                 } else {
                                   if (
