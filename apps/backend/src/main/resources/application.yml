@@ -95,6 +95,8 @@ etterlev:
     pvo-groups: ${AZURE_CLIENT_GROUPS_PVO:teamdatajegerne}
     redirectUris: http://localhost:3000
     write-groups: ${AZURE_CLIENT_GROUPS:teamdatajegerne}
+  frontend:
+    url: ${ETTERLEV_FRONTEND_URL:http://localhost:3000}
 
 graphql:
   servlet:

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.integration.ardoq.domain.ArdoqExportField;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,6 +69,16 @@ public class ArdoqController {
         log.info("Returned {} systems", systems.size());
         return ResponseEntity.ok(systems);
     }
+
+    @Operation(summary = "Export Systems relations with etterlevelses document")
+    @ApiResponse(description = "test endpoint for exporting ardoq with etterlevelses document relations")
+    @GetMapping("/export")
+    public ResponseEntity<List<ArdoqExportField>> ExportRelations() {
+        log.info("Exporting ardoq with etterlevelses document relations");
+        List<ArdoqExportField> systems = new ArrayList<>();
+        return ResponseEntity.ok(systems);
+    }
+
 
 
     private void validateLen(String name) {
