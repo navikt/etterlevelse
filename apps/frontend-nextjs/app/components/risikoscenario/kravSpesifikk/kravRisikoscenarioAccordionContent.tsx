@@ -251,22 +251,26 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
         etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
       />
 
-      {!isIngenTiltakFormDirty &&
-        !isCreateTiltakFormActive &&
+      {!isCreateTiltakFormActive &&
         !isEditTiltakFormActive &&
         !isAddExistingMode &&
         !isCreateMode && (
-          <RedigerRisikoscenarioButtons
-            setIsEditModalOpen={setIsEditModalOpen}
-            kravnummer={kravnummer}
-            risikoscenario={risikoscenario}
-            risikoscenarioer={risikoscenarioer}
-            setRisikoscenarioer={setRisikoscenarioer}
-            risikoscenarioForKrav={risikoscenarioForKrav}
-            setRisikoscenarioForKrav={setRisikoscenarioForKrav}
-            tiltakList={tiltakList}
-            setTiltakList={setTiltakList}
-          />
+          <div
+            className={isIngenTiltakFormDirty ? 'invisible pointer-events-none' : undefined}
+            aria-hidden={isIngenTiltakFormDirty}
+          >
+            <RedigerRisikoscenarioButtons
+              setIsEditModalOpen={setIsEditModalOpen}
+              kravnummer={kravnummer}
+              risikoscenario={risikoscenario}
+              risikoscenarioer={risikoscenarioer}
+              setRisikoscenarioer={setRisikoscenarioer}
+              risikoscenarioForKrav={risikoscenarioForKrav}
+              setRisikoscenarioForKrav={setRisikoscenarioForKrav}
+              tiltakList={tiltakList}
+              setTiltakList={setTiltakList}
+            />
+          </div>
         )}
 
       <div className='mt-12'>
@@ -314,12 +318,16 @@ export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               />
             )}
 
-            {!isIngenTiltakFormDirty &&
-              !isCreateTiltakFormActive &&
+            {!isCreateTiltakFormActive &&
               !isEditTiltakFormActive &&
               !isAddExistingMode &&
               !isCreateMode && (
-                <div className='mt-5 flex gap-2 lg:flex-row flex-col'>
+                <div
+                  className={`mt-5 flex gap-2 lg:flex-row flex-col${
+                    isIngenTiltakFormDirty ? ' invisible pointer-events-none' : ''
+                  }`}
+                  aria-hidden={isIngenTiltakFormDirty}
+                >
                   <Button
                     size='small'
                     type='button'

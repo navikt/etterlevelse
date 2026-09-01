@@ -335,36 +335,38 @@ export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               />
             )}
 
-            {!isIngenTilgangFormDirty &&
-              !isCreateTiltakFormActive &&
-              !isEditTiltakFormActive &&
-              !isAddExistingMode && (
-                <div className='mt-5 flex gap-2'>
-                  <Button
-                    type='button'
-                    onClick={async () =>
-                      await activeFormButton(() => {
-                        setIsCreateTiltakFormActive(true)
-                        setIsTiltakFormActive(true)
-                      })
-                    }
-                  >
-                    Opprett nytt tiltak
-                  </Button>
-                  <Button
-                    type='button'
-                    variant='secondary'
-                    onClick={async () =>
-                      await activeFormButton(() => {
-                        setIsAddExisitingMode(true)
-                        setIsTiltakFormActive(true)
-                      })
-                    }
-                  >
-                    Legg til eksisterende tiltak
-                  </Button>
-                </div>
-              )}
+            {!isCreateTiltakFormActive && !isEditTiltakFormActive && !isAddExistingMode && (
+              <div
+                className={`mt-5 flex gap-2${
+                  isIngenTilgangFormDirty ? ' invisible pointer-events-none' : ''
+                }`}
+                aria-hidden={isIngenTilgangFormDirty}
+              >
+                <Button
+                  type='button'
+                  onClick={async () =>
+                    await activeFormButton(() => {
+                      setIsCreateTiltakFormActive(true)
+                      setIsTiltakFormActive(true)
+                    })
+                  }
+                >
+                  Opprett nytt tiltak
+                </Button>
+                <Button
+                  type='button'
+                  variant='secondary'
+                  onClick={async () =>
+                    await activeFormButton(() => {
+                      setIsAddExisitingMode(true)
+                      setIsTiltakFormActive(true)
+                    })
+                  }
+                >
+                  Legg til eksisterende tiltak
+                </Button>
+              </div>
+            )}
           </div>
         )}
 
