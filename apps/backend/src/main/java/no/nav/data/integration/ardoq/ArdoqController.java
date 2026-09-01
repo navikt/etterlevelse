@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.integration.ardoq.dto.ArdoqExportField;
+import no.nav.data.integration.ardoq.domain.ArdoqExportField;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
