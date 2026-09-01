@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +35,7 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 public class ArdoqController {
 
     private final ArdoqClient ardoqClient;
+    private final ArdoqExportService ardoqExportService;
 
 
     @Operation(summary = "Get all ardoq system")
@@ -75,7 +75,7 @@ public class ArdoqController {
     @GetMapping("/export")
     public ResponseEntity<List<ArdoqExportField>> ExportRelations() {
         log.info("Exporting ardoq with etterlevelses document relations");
-        List<ArdoqExportField> systems = new ArrayList<>();
+        List<ArdoqExportField> systems = ardoqExportService.getColumnData();
         return ResponseEntity.ok(systems);
     }
 
