@@ -6,6 +6,7 @@ import {
   mapEtterlevelseToFormValue,
 } from '@/api/etterlevelse/etterlevelseApi'
 import { DateField } from '@/components/common/inputs'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { EtterlevelseCard } from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
 import {
   ERelationType,
@@ -407,6 +408,11 @@ export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                     </div>
                   </div>
                 </Form>
+                <UnsavedChangesGuard
+                  isDirty={dirty}
+                  formRef={formRef}
+                  navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)}
+                />
               </div>
             )}
             {isPreview && (

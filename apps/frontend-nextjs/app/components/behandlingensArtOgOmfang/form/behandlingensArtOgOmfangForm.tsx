@@ -8,6 +8,7 @@ import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDok
 import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
 import { BoolField } from '@/components/common/inputs'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -15,7 +16,10 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { dokumentasjonUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import {
+  dokumentasjonUrl,
+  etterlevelseDokumentasjonIdUrl,
+} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ExclamationmarkTriangleIcon, LightBulbIcon } from '@navikt/aksel-icons'
 import {
@@ -142,275 +146,283 @@ export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
       innerRef={formRef}
     >
       {({ submitForm, values, resetForm, setFieldValue, initialValues, dirty }) => (
-        <Form>
-          <div className='flex justify-center'>
-            <div className='max-w-[75ch] w-full'>
-              <Heading level='1' size='medium' className='mb-7'>
-                Behandlingens art og omfang
-              </Heading>
+        <>
+          <Form>
+            <div className='flex justify-center'>
+              <div className='max-w-[75ch] w-full'>
+                <Heading level='1' size='medium' className='mb-7'>
+                  Behandlingens art og omfang
+                </Heading>
 
-              {pvkDokument && <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />}
+                {pvkDokument && <InfoChangesMadeAfterApproval pvkDokument={pvkDokument} />}
 
-              <Heading level='2' size='small' className='mb-5'>
-                Personkategorier
-              </Heading>
+                <Heading level='2' size='small' className='mb-5'>
+                  Personkategorier
+                </Heading>
 
-              <List as='ul' className='mb-5'>
-                <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
-                {!brukerAlleOpplysningstyperCheck() && personkategorier.length === 0 && (
-                  <List.Item>Ikke utfylt</List.Item>
-                )}
-                {brukerAlleOpplysningstyperCheck() && (
-                  <List.Item>Bruker potensielt alle opplysningstyper</List.Item>
-                )}
-                {personkategorier.length > 0 &&
-                  personkategorier.map((personkategori) => (
-                    <List.Item key={personkategori}>{personkategori}</List.Item>
-                  ))}
-              </List>
+                <List as='ul' className='mb-5'>
+                  <Label>{EPVK.behandlingAvPersonopplysninger}</Label>
+                  {!brukerAlleOpplysningstyperCheck() && personkategorier.length === 0 && (
+                    <List.Item>Ikke utfylt</List.Item>
+                  )}
+                  {brukerAlleOpplysningstyperCheck() && (
+                    <List.Item>Bruker potensielt alle opplysningstyper</List.Item>
+                  )}
+                  {personkategorier.length > 0 &&
+                    personkategorier.map((personkategori) => (
+                      <List.Item key={personkategori}>{personkategori}</List.Item>
+                    ))}
+                </List>
 
-              <BoolField
-                label='1. Stemmer denne lista over personkategorier?'
-                name='stemmerPersonkategorier'
-                horizontal
-              />
+                <BoolField
+                  label='1. Stemmer denne lista over personkategorier?'
+                  name='stemmerPersonkategorier'
+                  horizontal
+                />
 
-              <Field>
-                {(fieldProps: FieldProps) => (
-                  <>
-                    {fieldProps.form.values.stemmerPersonkategorier === false && (
-                      <div>
-                        <InlineMessage status='warning' className='mt-5 mb-10'>
-                          Dere må oppdatere personkategori(er) i Behandlingskatalogen. Hvis dere
-                          ikke finner riktig personkategori(er), ta kontakt på{' '}
-                          <Link
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            href='https://nav-it.slack.com/archives/CR1B19E6L'
-                            className='inline'
-                          >
-                            #behandlingskatalogen på Slack (åpner i en ny fane)
-                          </Link>
-                          , eller på epost: teamdatajegerne@nav.no.
-                        </InlineMessage>
-                      </div>
-                    )}
-                  </>
-                )}
-              </Field>
+                <Field>
+                  {(fieldProps: FieldProps) => (
+                    <>
+                      {fieldProps.form.values.stemmerPersonkategorier === false && (
+                        <div>
+                          <InlineMessage status='warning' className='mt-5 mb-10'>
+                            Dere må oppdatere personkategori(er) i Behandlingskatalogen. Hvis dere
+                            ikke finner riktig personkategori(er), ta kontakt på{' '}
+                            <Link
+                              target='_blank'
+                              rel='noopener noreferrer'
+                              href='https://nav-it.slack.com/archives/CR1B19E6L'
+                              className='inline'
+                            >
+                              #behandlingskatalogen på Slack (åpner i en ny fane)
+                            </Link>
+                            , eller på epost: teamdatajegerne@nav.no.
+                          </InlineMessage>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </Field>
 
-              <Heading level='2' size='small' className='mb-5 mt-7'>
-                Behandlingens omfang
-              </Heading>
+                <Heading level='2' size='small' className='mb-5 mt-7'>
+                  Behandlingens omfang
+                </Heading>
 
-              <ReadMore
-                className='my-5'
-                header='Hvordan kan vi komme med gode estimater på art og omfang?'
-              >
-                Art og omfang skal hjelpe oss å vurdere risiko. Det er ofte vanskelig å gi presise
-                anslag. Det holder å estimere ca antall.
-                <br />
-                <br />
-                For antall personer vi behandler opplysninger om kan publisert statistikk brukes for
-                å estimere. På spørsmålet om hvem som har tilgang må hele behandlingsløpet vurderes,
-                inkludert f.eks. utviklere av applikasjonen og eventuelle underleverandører.
-              </ReadMore>
-
-              <InfoCard data-color='info' size='small'>
-                <InfoCard.Message
-                  icon={<LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />}
+                <ReadMore
+                  className='my-5'
+                  header='Hvordan kan vi komme med gode estimater på art og omfang?'
                 >
-                  Husk å ikke legge inn personopplysninger når dere svarer.
-                </InfoCard.Message>
-              </InfoCard>
+                  Art og omfang skal hjelpe oss å vurdere risiko. Det er ofte vanskelig å gi presise
+                  anslag. Det holder å estimere ca antall.
+                  <br />
+                  <br />
+                  For antall personer vi behandler opplysninger om kan publisert statistikk brukes
+                  for å estimere. På spørsmålet om hvem som har tilgang må hele behandlingsløpet
+                  vurderes, inkludert f.eks. utviklere av applikasjonen og eventuelle
+                  underleverandører.
+                </ReadMore>
 
-              <div className='mt-5'>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='2. For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.'
-                  name='personkategoriAntallBeskrivelse'
-                />
-              </div>
+                <InfoCard data-color='info' size='small'>
+                  <InfoCard.Message
+                    icon={<LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />}
+                  >
+                    Husk å ikke legge inn personopplysninger når dere svarer.
+                  </InfoCard.Message>
+                </InfoCard>
 
-              <div className='mt-5'>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='3. Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.'
-                  caption='Dette kan for eksempel være saksbehandlere, utviklere, produktteammedlemmer ellers, …'
-                  name='tilgangsBeskrivelsePersonopplysningene'
-                />
-              </div>
-
-              <div className='mt-5'>
-                <TextAreaField
-                  rows={3}
-                  noPlaceholder
-                  label='4. Beskriv hvordan og hvor lenge personopplysningene skal lagres.'
-                  name='lagringsBeskrivelsePersonopplysningene'
-                />
-              </div>
-
-              {savedSuccessful && !dirty && (
                 <div className='mt-5'>
-                  <LocalAlert status='success'>
-                    <LocalAlert.Header>
-                      <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
-                      <LocalAlert.CloseButton onClick={() => setSavedSuccessful(false)} />
-                    </LocalAlert.Header>
-                  </LocalAlert>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='2. For hver av personkategoriene over, beskriv hvor mange personer dere behandler personopplysninger om.'
+                    name='personkategoriAntallBeskrivelse'
+                  />
                 </div>
-              )}
 
-              <div className='mt-5 flex gap-2'>
-                <Button
-                  type='button'
-                  onClick={async () => {
-                    await submitForm()
-                    resetForm({ values })
-                  }}
-                >
-                  Lagre
-                </Button>
+                <div className='mt-5'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='3. Beskriv hvilke roller som skal ha tilgang til personopplysningene. For hver av rollene, beskriv hvor mange som har tilgang.'
+                    caption='Dette kan for eksempel være saksbehandlere, utviklere, produktteammedlemmer ellers, …'
+                    name='tilgangsBeskrivelsePersonopplysningene'
+                  />
+                </div>
 
-                <Button
-                  type='button'
-                  variant='secondary'
-                  onClick={async () => {
-                    setIsModalOpen(true)
-                  }}
-                >
-                  Forkast endringer
-                </Button>
+                <div className='mt-5'>
+                  <TextAreaField
+                    rows={3}
+                    noPlaceholder
+                    label='4. Beskriv hvordan og hvor lenge personopplysningene skal lagres.'
+                    name='lagringsBeskrivelsePersonopplysningene'
+                  />
+                </div>
 
-                <Button
-                  type='button'
-                  variant='tertiary'
-                  onClick={async () => {
-                    setIsNullStilModalOpen(true)
-                  }}
-                >
-                  Nullstill svar
-                </Button>
-              </div>
+                {savedSuccessful && !dirty && (
+                  <div className='mt-5'>
+                    <LocalAlert status='success'>
+                      <LocalAlert.Header>
+                        <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                        <LocalAlert.CloseButton onClick={() => setSavedSuccessful(false)} />
+                      </LocalAlert.Header>
+                    </LocalAlert>
+                  </div>
+                )}
 
-              {isNullStilModalOpen && (
-                <Modal
-                  open={isNullStilModalOpen}
-                  onClose={() => setIsNullStilModalOpen(false)}
-                  header={{
-                    heading: 'Er du sikker på at du vil nullstille svarene?',
-                    icon: <ExclamationmarkTriangleIcon />,
-                  }}
-                >
-                  <Modal.Body>
-                    <BodyLong>
-                      Når du nullstiller svar, vil alle felt på denne siden tommes og endringen
-                      lagres. Det vil ikke være mulig å gjenopprette svar du har lagret tidligere.
-                    </BodyLong>
+                <div className='mt-5 flex gap-2'>
+                  <Button
+                    type='button'
+                    onClick={async () => {
+                      await submitForm()
+                      resetForm({ values })
+                    }}
+                  >
+                    Lagre
+                  </Button>
 
-                    <BodyLong className='mt-3'>Som alternativ er det mulig å velge:</BodyLong>
-                    <List as='ul'>
-                      <List.Item>
-                        Forkast endringer, som tilbakestiller svarene slik de så ut siste gang de
-                        ble lagret.
-                      </List.Item>
-                      <List.Item>Avbryt, og manuelt fjerne enkelte svar selv.</List.Item>
-                    </List>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      type='button'
-                      onClick={async () => {
-                        await setFieldValue('stemmerPersonkategorier', null)
-                        await setFieldValue('personkategoriAntallBeskrivelse', '')
-                        await setFieldValue('tilgangsBeskrivelsePersonopplysningene', '')
-                        await setFieldValue('lagringsBeskrivelsePersonopplysningene', '')
-                        await submitForm().then(() => {
-                          resetForm({
-                            values: {
-                              ...artOgOmfang,
-                              stemmerPersonkategorier: undefined,
-                              personkategoriAntallBeskrivelse: '',
-                              tilgangsBeskrivelsePersonopplysningene: '',
-                              lagringsBeskrivelsePersonopplysningene: '',
-                            },
+                  <Button
+                    type='button'
+                    variant='secondary'
+                    onClick={async () => {
+                      setIsModalOpen(true)
+                    }}
+                  >
+                    Forkast endringer
+                  </Button>
+
+                  <Button
+                    type='button'
+                    variant='tertiary'
+                    onClick={async () => {
+                      setIsNullStilModalOpen(true)
+                    }}
+                  >
+                    Nullstill svar
+                  </Button>
+                </div>
+
+                {isNullStilModalOpen && (
+                  <Modal
+                    open={isNullStilModalOpen}
+                    onClose={() => setIsNullStilModalOpen(false)}
+                    header={{
+                      heading: 'Er du sikker på at du vil nullstille svarene?',
+                      icon: <ExclamationmarkTriangleIcon />,
+                    }}
+                  >
+                    <Modal.Body>
+                      <BodyLong>
+                        Når du nullstiller svar, vil alle felt på denne siden tommes og endringen
+                        lagres. Det vil ikke være mulig å gjenopprette svar du har lagret tidligere.
+                      </BodyLong>
+
+                      <BodyLong className='mt-3'>Som alternativ er det mulig å velge:</BodyLong>
+                      <List as='ul'>
+                        <List.Item>
+                          Forkast endringer, som tilbakestiller svarene slik de så ut siste gang de
+                          ble lagret.
+                        </List.Item>
+                        <List.Item>Avbryt, og manuelt fjerne enkelte svar selv.</List.Item>
+                      </List>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        type='button'
+                        onClick={async () => {
+                          await setFieldValue('stemmerPersonkategorier', null)
+                          await setFieldValue('personkategoriAntallBeskrivelse', '')
+                          await setFieldValue('tilgangsBeskrivelsePersonopplysningene', '')
+                          await setFieldValue('lagringsBeskrivelsePersonopplysningene', '')
+                          await submitForm().then(() => {
+                            resetForm({
+                              values: {
+                                ...artOgOmfang,
+                                stemmerPersonkategorier: undefined,
+                                personkategoriAntallBeskrivelse: '',
+                                tilgangsBeskrivelsePersonopplysningene: '',
+                                lagringsBeskrivelsePersonopplysningene: '',
+                              },
+                            })
+                            setIsNullStilModalOpen(false)
+                            setSavedSuccessful(false)
                           })
+                        }}
+                      >
+                        Nullstill svar
+                      </Button>
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={() => {
+                          resetForm()
                           setIsNullStilModalOpen(false)
-                          setSavedSuccessful(false)
-                        })
-                      }}
-                    >
-                      Nullstill svar
-                    </Button>
-                    <Button
-                      type='button'
-                      variant='secondary'
-                      onClick={() => {
-                        resetForm()
-                        setIsNullStilModalOpen(false)
-                      }}
-                    >
-                      Forkast ulagrede endringer
-                    </Button>
-                    <Button
-                      type='button'
-                      variant='tertiary'
-                      onClick={() => {
-                        setIsNullStilModalOpen(false)
-                      }}
-                    >
-                      Avbryt
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-              )}
+                        }}
+                      >
+                        Forkast ulagrede endringer
+                      </Button>
+                      <Button
+                        type='button'
+                        variant='tertiary'
+                        onClick={() => {
+                          setIsNullStilModalOpen(false)
+                        }}
+                      >
+                        Avbryt
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                )}
 
-              {isModalOpen && (
-                <Modal
-                  open={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
-                  header={{
-                    heading: 'Er du sikker på at du vil forkaste endringene?',
-                    icon: <ExclamationmarkTriangleIcon />,
-                  }}
-                >
-                  <Modal.Body>
-                    <BodyLong>
-                      Når du forkaster endringer, vil alle svarene tilbakestilles slik de så ut
-                      siste gang de ble lagret.
-                    </BodyLong>
-                    <BodyLong className='mt-3'>
-                      Alternativt kan man velge Avbryt, og manuelt fjerne enkelte svar selv.
-                    </BodyLong>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      type='button'
-                      onClick={() => {
-                        resetForm({ values: initialValues })
-                        setSavedSuccessful(false)
-                        setIsModalOpen(false)
-                      }}
-                    >
-                      Forkast ulagrede endringer
-                    </Button>
-                    <Button
-                      type='button'
-                      variant='secondary'
-                      onClick={() => {
-                        setIsModalOpen(false)
-                      }}
-                    >
-                      Avbryt
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-              )}
+                {isModalOpen && (
+                  <Modal
+                    open={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    header={{
+                      heading: 'Er du sikker på at du vil forkaste endringene?',
+                      icon: <ExclamationmarkTriangleIcon />,
+                    }}
+                  >
+                    <Modal.Body>
+                      <BodyLong>
+                        Når du forkaster endringer, vil alle svarene tilbakestilles slik de så ut
+                        siste gang de ble lagret.
+                      </BodyLong>
+                      <BodyLong className='mt-3'>
+                        Alternativt kan man velge Avbryt, og manuelt fjerne enkelte svar selv.
+                      </BodyLong>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        type='button'
+                        onClick={() => {
+                          resetForm({ values: initialValues })
+                          setSavedSuccessful(false)
+                          setIsModalOpen(false)
+                        }}
+                      >
+                        Forkast ulagrede endringer
+                      </Button>
+                      <Button
+                        type='button'
+                        variant='secondary'
+                        onClick={() => {
+                          setIsModalOpen(false)
+                        }}
+                      >
+                        Avbryt
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                )}
+              </div>
             </div>
-          </div>
-        </Form>
+          </Form>
+          <UnsavedChangesGuard
+            isDirty={dirty}
+            formRef={formRef}
+            navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
+          />
+        </>
       )}
     </Formik>
   )

@@ -16,6 +16,7 @@ import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
 import {
@@ -53,7 +54,7 @@ import {
 } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 import { GodkjenningAvRisikoeierKravFormSummary } from './common/godkjenningAvRisikoeierKravFormSummary'
 import { GodkjenningAvRisikoeierPvkFormSummary } from './common/godkjenningAvRisikoeierPvkFormSummary'
@@ -98,6 +99,7 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
   ]
 
   const [saveSuccessfull, setSaveSuccessfull] = useState<boolean>(false)
+  const formRef: RefObject<any> = useRef(undefined)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -339,79 +341,89 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
                 validateOnBlur={false}
                 initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
                 onSubmit={submit}
+                innerRef={formRef}
               >
-                {({ submitForm, setFieldValue }) => (
-                  <Form>
-                    <div className='mt-3 max-w-[75ch]'>
-                      <TextAreaField
-                        rows={5}
-                        height='12.5rem'
-                        noPlaceholder
-                        label='Risikoeiers begrunnelse for godkjenningen'
-                        name='meldingRisikoeierTilEtterleveler'
-                        markdown
-                      />
-                    </div>
-
-                    {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
-                      <div>
-                        {saveSuccessfull && (
-                          <div className='my-5'>
-                            <LocalAlert size='small' status='success'>
-                              <LocalAlert.Header>
-                                <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
-                                <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
-                              </LocalAlert.Header>
-                            </LocalAlert>
-                          </div>
-                        )}
-
-                        {errorMessage !== '' && (
-                          <div className='my-5'>
-                            <Alert
-                              size='small'
-                              variant='error'
-                              closeButton
-                              onClose={() => setErrorMessage('')}
-                            >
-                              {errorMessage}
-                            </Alert>
-                          </div>
-                        )}
-
-                        <div className='flex items-center mt-5 gap-2'>
-                          <Button
-                            type='button'
-                            variant='secondary'
-                            onClick={async () => {
-                              await setFieldValue(
-                                'status',
-                                EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                              )
-                              await submitForm()
-                            }}
-                          >
-                            Lagre og fortsett senere
-                          </Button>
-
-                          <Button
-                            type='button'
-                            variant='primary'
-                            loading={isSubmitting}
-                            onClick={async () => {
-                              await setFieldValue(
-                                'status',
-                                EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
-                              )
-                              await submitForm()
-                            }}
-                          >
-                            Godkjenn og arkiver i Public360
-                          </Button>
-                        </div>
+                {({ submitForm, setFieldValue, dirty }) => (
+                  <>
+                    <Form>
+                      <div className='mt-3 max-w-[75ch]'>
+                        <TextAreaField
+                          rows={5}
+                          height='12.5rem'
+                          noPlaceholder
+                          label='Risikoeiers begrunnelse for godkjenningen'
+                          name='meldingRisikoeierTilEtterleveler'
+                          markdown
+                        />
                       </div>
-                    )}
-                  </Form>
+
+                      {etterlevelseDokumentasjon.risikoeiere.length > 0 && (
+                        <div>
+                          {saveSuccessfull && (
+                            <div className='my-5'>
+                              <LocalAlert size='small' status='success'>
+                                <LocalAlert.Header>
+                                  <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                                  <LocalAlert.CloseButton
+                                    onClick={() => setSaveSuccessfull(false)}
+                                  />
+                                </LocalAlert.Header>
+                              </LocalAlert>
+                            </div>
+                          )}
+
+                          {errorMessage !== '' && (
+                            <div className='my-5'>
+                              <Alert
+                                size='small'
+                                variant='error'
+                                closeButton
+                                onClose={() => setErrorMessage('')}
+                              >
+                                {errorMessage}
+                              </Alert>
+                            </div>
+                          )}
+
+                          <div className='flex items-center mt-5 gap-2'>
+                            <Button
+                              type='button'
+                              variant='secondary'
+                              onClick={async () => {
+                                await setFieldValue(
+                                  'status',
+                                  EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                                )
+                                await submitForm()
+                              }}
+                            >
+                              Lagre og fortsett senere
+                            </Button>
+
+                            <Button
+                              type='button'
+                              variant='primary'
+                              loading={isSubmitting}
+                              onClick={async () => {
+                                await setFieldValue(
+                                  'status',
+                                  EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
+                                )
+                                await submitForm()
+                              }}
+                            >
+                              Godkjenn og arkiver i Public360
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </Form>
+                    <UnsavedChangesGuard
+                      isDirty={dirty}
+                      formRef={formRef}
+                      navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)}
+                    />
+                  </>
                 )}
               </Formik>
             )}
