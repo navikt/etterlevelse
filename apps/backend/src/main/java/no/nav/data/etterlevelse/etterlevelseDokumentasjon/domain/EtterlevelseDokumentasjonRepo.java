@@ -22,7 +22,7 @@ public interface EtterlevelseDokumentasjonRepo extends JpaRepository<Etterlevels
     @Query(value = "select * from etterlevelse_dokumentasjon where data ->> 'title' ilike %?1% or data ->> 'etterlevelseNummer' ilike %?1%", nativeQuery = true)
     List<EtterlevelseDokumentasjon> searchEtterlevelseDokumentasjon(String searchParam);
 
-    @Query(value = "select * from etterlevelse_dokumentasjon where data -> 'ardoqSystemIds' is not null or cardinality(data-> 'ardoqSystemIds') > 0", nativeQuery = true)
+    @Query(value = "SELECT * FROM etterlevelse_dokumentasjon WHERE data -> 'ardoqSystemIds' @> '[]'::jsonb AND data -> 'ardoqSystemIds' != '[]'::jsonb", nativeQuery = true)
     List<EtterlevelseDokumentasjon> getEtterlevelseDokumentasjonWithSystem();
 
     @Query(value = "select nextVal('etterlevelse_nummer')", nativeQuery = true)
