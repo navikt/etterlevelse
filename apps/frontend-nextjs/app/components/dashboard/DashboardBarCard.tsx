@@ -78,7 +78,11 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
       value: stats.dokumenter.sendtTilGodkjenning,
       color: DOK_COLORS[1],
     },
-    { name: 'Godkjent', value: stats.dokumenter.godkjentAvRisikoeier, color: DOK_COLORS[2] },
+    {
+      name: 'Godkjent av risikoeier',
+      value: stats.dokumenter.godkjentAvRisikoeier,
+      color: DOK_COLORS[2],
+    },
   ]
 
   const suksessData: IBarSegment[] = [

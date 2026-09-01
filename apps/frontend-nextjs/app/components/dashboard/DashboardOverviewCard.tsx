@@ -169,7 +169,7 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
     { name: 'Ikke påbegynt', value: agg.dok.ikkePaabegynt, color: '#8a3ffc' },
     { name: 'Under arbeid', value: agg.dok.underArbeid, color: DOK_COLORS[0] },
     { name: 'Sendt til godkjenning', value: agg.dok.sendtTilGodkjenning, color: DOK_COLORS[1] },
-    { name: 'Godkjent', value: agg.dok.godkjentAvRisikoeier, color: DOK_COLORS[2] },
+    { name: 'Godkjent av risikoeier', value: agg.dok.godkjentAvRisikoeier, color: DOK_COLORS[2] },
   ]
 
   const suksessTotal =
