@@ -83,7 +83,7 @@ public class ArdoqController {
         log.info("Generating excel file");
         ByteArrayOutputStream excelFile = ardoqExportService.ardoqExportDataToExcel(systems);
         log.info("Successfully generated excel file");
-        String filename = "UsersReport.xlsx";
+        String filename = "ArdoqSystemRaport.xlsx";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDispositionFormData("attachment", filename);
         headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));

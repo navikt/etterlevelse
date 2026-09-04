@@ -126,6 +126,13 @@ public class ArdoqExportService {
 
             sheet.autoSizeColumn(0);
             sheet.autoSizeColumn(1);
+            sheet.autoSizeColumn(2);
+            sheet.autoSizeColumn(3);
+            sheet.autoSizeColumn(4);
+            sheet.autoSizeColumn(5);
+            sheet.autoSizeColumn(6);
+            sheet.autoSizeColumn(7);
+            sheet.autoSizeColumn(8);
 
             workbook.write(out);
             log.info("Excel file generated successfully!");
