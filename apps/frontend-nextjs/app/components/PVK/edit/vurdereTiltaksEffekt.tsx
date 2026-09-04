@@ -13,7 +13,6 @@ import RisikoscenarioKonsekvensnivaaReadMore from '@/components/risikoscenario/c
 import RisikoscenarioSannsynlighetReadMore from '@/components/risikoscenario/common/risikoscenarioSannsynlighetReadMore'
 import RisikoscenarioTag from '@/components/risikoscenario/common/risikoscenarioTag'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import {
   getKonsekvenssnivaaText,
@@ -27,8 +26,6 @@ import {
   Heading,
   InlineMessage,
   Label,
-  Link,
-  LocalAlert,
   Radio,
   RadioGroup,
 } from '@navikt/ds-react'
@@ -55,7 +52,6 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
   allRisikoscenarioList,
   setAllRisikoscenarioList,
   formRef,
-  etterlevelseDokumentasjonId,
 }) => {
   const [isFormActive, setIsFormActive] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
@@ -152,34 +148,6 @@ export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                 effekt. Dere kan enten redigere deres opprinnelige vurdering, eller bekrefte at den
                 fortsatt er aktuell.
               </Alert>
-            )}
-
-            {revurdertEffektCheck && (
-              <LocalAlert className='mt-3' status='warning'>
-                <LocalAlert.Header>
-                  <LocalAlert.Title>Dette risikoscenariet savner tiltak</LocalAlert.Title>
-                </LocalAlert.Header>
-                <LocalAlert.Content>
-                  <span>
-                    Dere kan ikke vurdere tiltakenes effekt uten tiltak! <br />
-                  </span>
-                  <Link
-                    href={pvkDokumentasjonStepUrl(
-                      etterlevelseDokumentasjonId,
-                      risikoscenario.pvkDokumentId,
-                      6,
-                      `?risikoscenario=${risikoscenario.id}`
-                    )}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    aria-label='redigere etterlevelsesdokumentasjon'
-                    className='mt-3'
-                  >
-                    Legg inn tiltak under Identifisering av risikoscenarioer og tiltak. (åpner i en
-                    ny fane).
-                  </Link>
-                </LocalAlert.Content>
-              </LocalAlert>
             )}
 
             {!revurdertEffektCheck && (
