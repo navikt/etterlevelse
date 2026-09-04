@@ -13,9 +13,13 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.integration.ardoq.domain.ArdoqExportField;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -88,5 +92,47 @@ public class ArdoqExportService {
         });
 
         return ardoqExportFields;
+    }
+
+    public ByteArrayOutputStream ardoqExportDataToExcel(List<ArdoqExportField> ardoqExportFields) {
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+            var sheet = workbook.createSheet("Ardoq system relasjon med etterlevelse dokumentasjon");
+            var headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Ardoq_id");
+            headerRow.createCell(1).setCellValue("System_name");
+            headerRow.createCell(2).setCellValue("Etterlevelsesdokument nummer");
+            headerRow.createCell(3).setCellValue("Dokumentnavn");
+            headerRow.createCell(4).setCellValue("Antall krav");
+            headerRow.createCell(5).setCellValue("Krav ikke startet");
+            headerRow.createCell(6).setCellValue("Krav under arbeid");
+            headerRow.createCell(7).setCellValue("Krav ferdig");
+            headerRow.createCell(8).setCellValue("Link til etterlevelsesdokument");
+
+            int rowIndex = 1;
+            for (ArdoqExportField ardoqExportField : ardoqExportFields) {
+                var row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(ardoqExportField.getArdoqId());
+                row.createCell(1).setCellValue(ardoqExportField.getSystemNavn());
+                row.createCell(2).setCellValue(ardoqExportField.getEtterlevelseDokumentNummer());
+                row.createCell(3).setCellValue(ardoqExportField.getEtterlevelseDokumentNavn());
+                row.createCell(4).setCellValue(ardoqExportField.getAntallKrav());
+                row.createCell(5).setCellValue(ardoqExportField.getKravIkkeStartet());
+                row.createCell(6).setCellValue(ardoqExportField.getKravUnderArbeid());
+                row.createCell(7).setCellValue(ardoqExportField.getKravFerdig());
+                row.createCell(8).setCellValue(ardoqExportField.getLinkTilEtterlevelsesDokument());
+            }
+
+            sheet.autoSizeColumn(0);
+            sheet.autoSizeColumn(1);
+
+            workbook.write(out);
+            log.info("Excel file generated successfully!");
+            return out;
+        } catch (IOException e) {
+            log.error("Error creating Excel file: {}", e.getMessage());
+        }
+        return null;
     }
 }

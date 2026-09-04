@@ -262,6 +262,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- excel export -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.5.1</version>
+        </dependency>
+
         <!-- Prometheus metrics-->
         <dependency>
             <groupId>io.micrometer</groupId>
