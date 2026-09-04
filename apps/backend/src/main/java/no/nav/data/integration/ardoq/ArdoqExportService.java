@@ -13,7 +13,7 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.integration.ardoq.domain.ArdoqExportField;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -99,16 +99,22 @@ public class ArdoqExportService {
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
             var sheet = workbook.createSheet("Ardoq system relasjon med etterlevelse dokumentasjon");
+
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+            headerStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            String[] headers = {"Ardoq_id", "System_name", "Etterlevelsesdokument nummer", "Dokumentnavn", "Antall krav", "Krav ikke startet", "Krav under arbeid", "Krav ferdig", "Link til etterlevelsesdokument"};
+
             var headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("Ardoq_id");
-            headerRow.createCell(1).setCellValue("System_name");
-            headerRow.createCell(2).setCellValue("Etterlevelsesdokument nummer");
-            headerRow.createCell(3).setCellValue("Dokumentnavn");
-            headerRow.createCell(4).setCellValue("Antall krav");
-            headerRow.createCell(5).setCellValue("Krav ikke startet");
-            headerRow.createCell(6).setCellValue("Krav under arbeid");
-            headerRow.createCell(7).setCellValue("Krav ferdig");
-            headerRow.createCell(8).setCellValue("Link til etterlevelsesdokument");
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headers[i]);
+                cell.setCellStyle(headerStyle);
+            }
 
             int rowIndex = 1;
             for (ArdoqExportField ardoqExportField : ardoqExportFields) {
@@ -124,15 +130,9 @@ public class ArdoqExportService {
                 row.createCell(8).setCellValue(ardoqExportField.getLinkTilEtterlevelsesDokument());
             }
 
-            sheet.autoSizeColumn(0);
-            sheet.autoSizeColumn(1);
-            sheet.autoSizeColumn(2);
-            sheet.autoSizeColumn(3);
-            sheet.autoSizeColumn(4);
-            sheet.autoSizeColumn(5);
-            sheet.autoSizeColumn(6);
-            sheet.autoSizeColumn(7);
-            sheet.autoSizeColumn(8);
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
 
             workbook.write(out);
             log.info("Excel file generated successfully!");
