@@ -1,37 +1,11 @@
 package no.nav.data.etterlevelse.dashboard;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.dashboard.dto.BehovForPvkStats;
-import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
-import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
-import no.nav.data.etterlevelse.dashboard.dto.DokumenterStats;
-import no.nav.data.etterlevelse.dashboard.dto.KravDashboardResponse;
-import no.nav.data.etterlevelse.dashboard.dto.PvkStats;
-import no.nav.data.etterlevelse.dashboard.dto.SeksjonOption;
-import no.nav.data.etterlevelse.dashboard.dto.SuksesskriterierStats;
-import no.nav.data.etterlevelse.dashboard.dto.TemaDashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.*;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
@@ -58,6 +32,13 @@ import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -286,10 +267,10 @@ public class DashboardService {
                     LocalDateTime sistOppdatertEtterlevelse = LocalDateTime.of(2000, 1, 1, 0, 0);
 
                     var oppfyltEtterlevelseList = aktivEtterlevelserForDok.stream()
-                            .filter(e -> e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT)
+                            .filter(e -> e.getStatus() == EtterlevelseStatus.FERDIG_DOKUMENTERT || e.getStatus() == EtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT)
                             .toList();
 
-                    for (Etterlevelse etterlevelse : etterlevelserForDok) {
+                    for (Etterlevelse etterlevelse : aktivEtterlevelserForDok) {
                         if(etterlevelse.getLastModifiedDate().isAfter(sistOppdatertEtterlevelse)) {
                             sistOppdatertEtterlevelse = etterlevelse.getLastModifiedDate();
                         }
@@ -300,7 +281,7 @@ public class DashboardService {
 
                     int antallSuksesskriterierOppfylt = 0;
                     int antallSuksesskriterierIkkeOppfylt = 0;
-                    for (Etterlevelse e : oppfyltEtterlevelseList) {
+                    for (Etterlevelse e : aktivEtterlevelserForDok) {
                         for (var begrunnelse : e.getSuksesskriterieBegrunnelser()) {
                             if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
                                 antallSuksesskriterierOppfylt++;
