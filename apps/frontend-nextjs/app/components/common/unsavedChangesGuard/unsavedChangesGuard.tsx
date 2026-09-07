@@ -18,12 +18,50 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
 }) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const isOpenRef = useRef<boolean>(false)
   const isDirtyRef = useRef<boolean>(!!isDirty)
+  const dirtyLatchRef = useRef<boolean>(false)
+  const dirtySentinelPushedRef = useRef<boolean>(false)
+  const formBagRef = useRef<FormikProps<any> | null>(null)
+  const missCountRef = useRef<number>(0)
   const isLeavingRef = useRef<boolean>(false)
   const navigateUrlRef = useRef<string>(navigateUrl)
 
-  // Prefer live Formik dirty via formRef (container usage doesn't re-render per keystroke)
-  const getIsDirty = (): boolean => (formRef ? !!formRef.current?.dirty : isDirtyRef.current)
+  // A browser-back press can unmount/reset the active form before the popstate handler reads it,
+  // so latch the last-seen dirty state and fall back to it when the live Formik bag is gone.
+  const getIsDirty = (): boolean =>
+    formRef ? !!formRef.current?.dirty || dirtyLatchRef.current : isDirtyRef.current
+
+  useEffect(() => {
+    isOpenRef.current = isOpen
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!formRef) {
+      return
+    }
+    const intervalId = window.setInterval(() => {
+      if (formRef.current) {
+        const dirtyNow = !!formRef.current.dirty
+        dirtyLatchRef.current = dirtyNow
+        formBagRef.current = formRef.current
+        missCountRef.current = 0
+        if (dirtyNow && !dirtySentinelPushedRef.current) {
+          // Hold the CURRENT url so a back press stays on this view and the form stays mounted
+          window.history.pushState(window.history.state, '', window.location.href)
+          dirtySentinelPushedRef.current = true
+        } else if (!dirtyNow) {
+          dirtySentinelPushedRef.current = false
+        }
+      } else if (!isOpenRef.current && ++missCountRef.current >= 2) {
+        // No form mounted for a moment (e.g. after an in-app save) → stop guarding.
+        // Frozen while the guard is open so its save handler keeps the latched bag.
+        dirtyLatchRef.current = false
+        formBagRef.current = null
+      }
+    }, 100)
+    return () => window.clearInterval(intervalId)
+  }, [formRef])
 
   useEffect(() => {
     isDirtyRef.current = !!isDirty
@@ -95,19 +133,23 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
         <Button
           type='button'
           onClick={async () => {
-            const form = formRef?.current
+            const form = formRef?.current ?? formBagRef.current
             if (!form) {
               leave()
               return
             }
             // submitForm() resolves even when validation fails, so check validity before leaving
             const errors = await form.validateForm()
-            await form.submitForm()
             if (errors && Object.keys(errors).length > 0) {
+              // validateForm() populated the form's errors → close guard so its ErrorSummary shows
               setIsOpen(false)
               return
             }
-            leave()
+            // Suppress beforeunload before submit: some submit handlers do window.location.reload()
+            isLeavingRef.current = true
+            await form.submitForm()
+            // Hard navigation overrides any window.location.reload() the submit handler queued
+            window.location.assign(navigateUrlRef.current)
           }}
         >
           Lagre og fortsette

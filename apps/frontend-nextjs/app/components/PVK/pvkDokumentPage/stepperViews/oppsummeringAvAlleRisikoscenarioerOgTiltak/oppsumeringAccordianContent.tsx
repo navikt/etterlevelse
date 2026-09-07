@@ -218,6 +218,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
           setIsOpen={setIsEditModalOpen}
           submit={submit}
           initialValues={activeRisikoscenario}
+          formRef={formRef}
         />
       )}
 
