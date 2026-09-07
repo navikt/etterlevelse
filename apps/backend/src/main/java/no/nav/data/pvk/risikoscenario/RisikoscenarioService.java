@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -94,7 +95,7 @@ public class RisikoscenarioService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario addTiltak(UUID risikoscenarioId, List<UUID> tiltakIds) {
         for (UUID tiltakId : tiltakIds) {
-            tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
+            tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
         }
 
         Risikoscenario risikoscenario = get(risikoscenarioId);

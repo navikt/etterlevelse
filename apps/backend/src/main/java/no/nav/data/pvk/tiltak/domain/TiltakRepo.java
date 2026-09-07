@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,8 +34,8 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
 
     @Transactional(propagation = Propagation.MANDATORY)
     @Modifying
-    @Query(value="insert into risikoscenario_tiltak_relation (risikoscenario_id, tiltak_id) values (?1, ?2)", nativeQuery = true)
-    int insertTiltakRisikoscenarioRelation(UUID risikoscenarioId, UUID tiltakId);
+    @Query(value="insert into risikoscenario_tiltak_relation (risikoscenario_id, tiltak_id, gyldig_dato_fra) values (?1, ?2, ?3)", nativeQuery = true)
+    int insertTiltakRisikoscenarioRelation(UUID risikoscenarioId, UUID tiltakId, LocalDateTime gyldigDatoFra);
 
     @Transactional
     @Modifying
