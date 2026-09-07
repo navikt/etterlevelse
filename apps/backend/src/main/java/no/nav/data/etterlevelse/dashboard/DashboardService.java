@@ -279,21 +279,21 @@ public class DashboardService {
                     dashboardTableResponse.setAntallKrav(totalKravForEdok);
                     dashboardTableResponse.setAntallOppfyltKrav(oppfyltEtterlevelseList.size());
 
-                    int antallSuksesskriterierOppfylt = 0;
-                    int antallSuksesskriterierIkkeOppfylt = 0;
-                    for (Etterlevelse e : aktivEtterlevelserForDok) {
+                    int antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav = 0;
+                    int antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav = 0;
+                    for (Etterlevelse e : oppfyltEtterlevelseList) {
                         for (var begrunnelse : e.getSuksesskriterieBegrunnelser()) {
                             if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
-                                antallSuksesskriterierOppfylt++;
+                                antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav++;
                             } else if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT) {
-                                antallSuksesskriterierIkkeOppfylt++;
+                                antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav++;
                             }
                         }
                     }
-                    dashboardTableResponse.setAntallSuksesskriterierOppfylt(antallSuksesskriterierOppfylt);
-                    dashboardTableResponse.setAntallSuksesskriterierIkkeOppfylt(antallSuksesskriterierIkkeOppfylt);
-                    int totalSuksesskriterier = antallSuksesskriterierOppfylt + antallSuksesskriterierIkkeOppfylt;
-                    double prosent = totalSuksesskriterier > 0 ? ((double) antallSuksesskriterierOppfylt / totalSuksesskriterier) * 100 : 0;
+                    dashboardTableResponse.setAntallSuksesskriterierOppfylt(antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav);
+                    dashboardTableResponse.setAntallSuksesskriterierIkkeOppfylt(antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav);
+                    int totalSuksesskriterier = antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav + antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav;
+                    double prosent = totalSuksesskriterier > 0 ? ((double) antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav / totalSuksesskriterier) * 100 : 0;
                     dashboardTableResponse.setOppfyltKravProsent((int) Math.floor(prosent));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
 
