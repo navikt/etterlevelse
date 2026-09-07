@@ -390,8 +390,8 @@ export const PvoTilbakemeldingPage = () => {
               <Modal.Footer>
                 <Button
                   type='button'
-                  onClick={() => {
-                    formRef.current?.submitForm()
+                  onClick={async () => {
+                    await formRef.current?.submitForm()
                     setActiveStep(selectedStep)
                     updateUrlOnStepChange(selectedStep)
                     setCurrentPage(StepTitle[selectedStep - 1])
