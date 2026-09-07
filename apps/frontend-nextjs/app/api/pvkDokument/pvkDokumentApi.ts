@@ -9,6 +9,8 @@ import {
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
+import { getAuditByTableIdAndTimeStamp } from '../audit/auditApi'
+import { getEtterlevelseDokumentasjon } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 
 export const getAllPvkDokument = async () => {
   const pageSize = 100
@@ -142,6 +144,60 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
       abortedRef.current = true
     }
   }, [pvkDokumentId])
+
+  return [data, setData, isLoading] as [
+    IPvkDokument | undefined,
+    (pvkDokument: IPvkDokument) => void,
+    boolean,
+  ]
+}
+
+export const useLastApprovedPvkDokument = (etterlevelseDokumentasjonId: string) => {
+  const [data, setData] = useState<IPvkDokument>(mapPvkDokumentToFormValue({}))
+  const [isLoading, setIsLoading] = useState<boolean>(!etterlevelseDokumentasjonId)
+  const abortedRef = useRef(false)
+
+  useEffect(() => {
+    abortedRef.current = false
+    ;(async () => {
+      await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(
+        async (etterlevelseDokumentasjon) => {
+          await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
+            async (pvkDokument) => {
+              if (pvkDokument) {
+                if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                  setData(pvkDokument)
+                } else if (etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1) {
+                  const nyVersjonOpprettetDato = etterlevelseDokumentasjon.versjonHistorikk.find(
+                    (historikk) =>
+                      historikk.versjon ===
+                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon - 1
+                  )?.nyVersjonOpprettetDato
+
+                  await getAuditByTableIdAndTimeStamp(
+                    pvkDokument.id,
+                    nyVersjonOpprettetDato || ''
+                  ).then((auditData) => {
+                    if (auditData.length !== 0) {
+                      const pvkUpperAuditData = auditData[0].data as IPvkDokument
+                      const previousData = (auditData[0].data as { pvkData: IPvkDokument }).pvkData
+                      console.debug(pvkUpperAuditData)
+                      setData(mapPvkDokumentToFormValue({ ...pvkUpperAuditData, ...previousData }))
+                    }
+                  })
+                }
+              }
+            }
+          )
+          setIsLoading(false)
+        }
+      )
+    })()
+
+    return () => {
+      abortedRef.current = true
+    }
+  }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [
     IPvkDokument | undefined,
