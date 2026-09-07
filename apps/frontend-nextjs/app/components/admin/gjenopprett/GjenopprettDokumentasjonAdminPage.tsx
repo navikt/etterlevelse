@@ -31,6 +31,7 @@ const GjenopprettDokumentasjonAdminPage = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [restoringId, setRestoringId] = useState<string>('')
   const [result, setResult] = useState<IRestoreResult>()
+  const [restoredDokument, setRestoredDokument] = useState<IDeletedEtterlevelseDokumentasjon>()
   const [error, setError] = useState<string>('')
   const [search, setSearch] = useState<string>('')
   const [page, setPage] = useState<number>(1)
@@ -55,13 +56,15 @@ const GjenopprettDokumentasjonAdminPage = () => {
 
   useEffect(fetchDeleted, [])
 
-  const onRestore = (id: string): void => {
+  const onRestore = (dokument: IDeletedEtterlevelseDokumentasjon): void => {
     setError('')
     setResult(undefined)
-    setRestoringId(id)
-    restoreEtterlevelseDokumentasjon(id)
+    setRestoredDokument(undefined)
+    setRestoringId(dokument.id)
+    restoreEtterlevelseDokumentasjon(dokument.id)
       .then((response) => {
         setResult(response)
+        setRestoredDokument(dokument)
         setRestoringId('')
         load()
       })
@@ -109,6 +112,12 @@ const GjenopprettDokumentasjonAdminPage = () => {
           <Heading size='xsmall' level='2' spacing>
             Gjenoppretting fullført
           </Heading>
+          {restoredDokument && (
+            <BodyShort spacing>
+              E{restoredDokument.etterlevelseNummer}.{restoredDokument.etterlevelseDokumentVersjon}{' '}
+              {restoredDokument.title}
+            </BodyShort>
+          )}
           <BodyShort>Etterlevelser: {result.restoredEtterlevelser}</BodyShort>
           <BodyShort>Etterlevelse metadata: {result.restoredEtterlevelseMetadata}</BodyShort>
           <BodyShort>Behandlingens livsløp: {result.restoredBehandlingensLivslop}</BodyShort>
@@ -186,7 +195,7 @@ const GjenopprettDokumentasjonAdminPage = () => {
                           variant='secondary'
                           loading={restoringId === dokument.id}
                           disabled={restoringId !== '' && restoringId !== dokument.id}
-                          onClick={() => onRestore(dokument.id)}
+                          onClick={() => onRestore(dokument)}
                         >
                           Gjenopprett
                         </Button>
