@@ -1,18 +1,17 @@
 package no.nav.data.common.auditing.domain;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
+import no.nav.data.common.security.SecurityUtils;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-import no.nav.data.common.security.SecurityUtils;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Repository
 @RequiredArgsConstructor
@@ -73,6 +72,37 @@ public class AuditVersionCustomRepo {
         var par = new MapSqlParameterSource();
 
         par.addValue("tableId", tableId);
+        par.addValue("timestamps", timestamps);
+
+        return fetch(jdbcTemplate.queryForList(query, par));
+    }
+
+    @Transactional
+    public List<AuditVersion> findByTableNameFkFieldAndTimeStamp(String tableName, String fkField, String fkValue, String timestamps) {
+        String query = """
+                WITH ranked AS (
+                    SELECT
+                        *,
+                        action,
+                        RANK() OVER (
+                            PARTITION BY table_id
+                            ORDER BY time DESC
+                        ) AS table_rank
+                    FROM audit_version
+                    WHERE table_name IN (:tableName)
+                      AND data ->> :fkField = :fkValue
+                      AND time <= :timestamp
+                )
+                SELECT *
+                FROM ranked
+                WHERE table_rank = 1
+                AND action <> 'DELETE'
+                """;
+        var par = new MapSqlParameterSource();
+
+        par.addValue("tableName", tableName);
+        par.addValue("fkField", fkField);
+        par.addValue("fkValue", fkValue);
         par.addValue("timestamps", timestamps);
 
         return fetch(jdbcTemplate.queryForList(query, par));
