@@ -1,0 +1,4 @@
+alter table risikoscenario_tiltak_relation
+DROP CONSTRAINT risikoscenario_tiltak_relation_risikoscenario_id_tiltak_id_key
+ADD COLUMN gyldigDatoFra timestamp
+ADD COLUMN gyldigDatoTil timestamp;
