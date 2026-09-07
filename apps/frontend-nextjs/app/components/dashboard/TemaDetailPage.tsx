@@ -159,7 +159,9 @@ const KravStatsCard = ({ krav }: { krav: IKravDashboardStats }) => {
           </Tag>
         </div>
       )}
-      <Detail className='uppercase mt-2'>{krav.etterlevelseTotal} etterlevelsesdokumenter</Detail>
+      <Detail className='uppercase mt-2'>
+        {krav.etterlevelseTotal + krav.antallIkkePaabegynt} etterlevelsesdokumenter
+      </Detail>
 
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4'>
         <div>
