@@ -180,7 +180,8 @@ export const useLastApprovedPvkDokument = (etterlevelseDokumentasjonId: string) 
                   ).then((auditData) => {
                     if (auditData.length !== 0) {
                       const pvkUpperAuditData = auditData[0].data as IPvkDokument
-                      const previousData = (auditData[0].data as { pvkData: IPvkDokument }).pvkData
+                      const previousData = (auditData[0].data as { pvkDokumentData: IPvkDokument })
+                        .pvkDokumentData
                       console.debug(pvkUpperAuditData)
                       setData(mapPvkDokumentToFormValue({ ...pvkUpperAuditData, ...previousData }))
                     }
