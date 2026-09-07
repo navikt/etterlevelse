@@ -1800,12 +1800,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-image@npm:^3.30.2":
-  version: 3.30.2
-  resolution: "@tiptap/extension-image@npm:3.30.2"
+"@tiptap/extension-image@npm:^3.31.3":
+  version: 3.31.3
+  resolution: "@tiptap/extension-image@npm:3.31.3"
   peerDependencies:
-    "@tiptap/core": 3.30.2
-  checksum: 10c0/9a07b9f172d292d6985082f55109bb697e931788c2afcc6aaeedfa73c3e0909f2274ae17aa9281e4f253d5a27be778b59e56ecceff9675e6f43c3598313856a9
+    "@tiptap/core": 3.31.3
+  checksum: 10c0/c7cf7bb8412558e52677115507ff960155c53808cddaddc707b0f4c24cbf2522d6d44c042cbfd150388b751b336835863995617e6dfbbdb7de7d78b2d6788680
   languageName: node
   linkType: hard
 
@@ -3893,7 +3893,7 @@ __metadata:
     "@next/eslint-plugin-next": "npm:^16.3.4"
     "@tailwindcss/postcss": "npm:^4.3.3"
     "@tiptap/core": "npm:^3.30.2"
-    "@tiptap/extension-image": "npm:^3.30.2"
+    "@tiptap/extension-image": "npm:^3.31.3"
     "@tiptap/extension-link": "npm:^3.30.2"
     "@tiptap/extension-list": "npm:^3.30.2"
     "@tiptap/extension-ordered-list": "npm:^3.30.2"
