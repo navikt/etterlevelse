@@ -1,8 +1,12 @@
-import { IPageResponse } from '@/constants/commonConstants'
+import { IChangeStamp, IPageResponse } from '@/constants/commonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
+import moment from 'moment'
+import { useEffect, useRef, useState } from 'react'
+import { getAuditByTableIdAndTimeStamp } from '../audit/auditApi'
 
 export const getAllTiltak = async (): Promise<ITiltak[]> => {
   const pageSize = 100
@@ -71,6 +75,61 @@ const tiltakTotiltakDto = (tiltak: ITiltak) => {
   delete dto.version
   delete dto.risikoscenarioIds
   return dto
+}
+
+export const useLastApprovedTiltakByPvkDokumentId = (pvkDokument: IPvkDokument) => {
+  const [alleTiltak, setAlleTiltak] = useState<ITiltak[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const abortedRef = useRef(false)
+
+  useEffect(() => {
+    abortedRef.current = false
+    ;(async () => {
+      await getTiltakByPvkDokumentId(pvkDokument.id).then(
+        async (response: IPageResponse<ITiltak>) => {
+          const sistGodkjentTiltak = response.content.filter((tiltak: ITiltak) =>
+            moment(tiltak.changeStamp.createdDate).isBefore(pvkDokument.godkjentAvRisikoeierDato)
+          )
+
+          const alleSisGodkjentTiltak: ITiltak[] = []
+
+          await Promise.all(
+            sistGodkjentTiltak.map(async (tiltak: ITiltak) => {
+              const auditData = await getAuditByTableIdAndTimeStamp(
+                tiltak.id,
+                pvkDokument.godkjentAvRisikoeierDato
+              )
+              if (auditData.length !== 0) {
+                const tiltakUpperAuditData = auditData[0].data as ITiltak
+                const timeStampData = auditData[0].data as IChangeStamp
+                const previousData = (auditData[0].data as { tiltakData: ITiltak }).tiltakData
+
+                alleSisGodkjentTiltak.push(
+                  mapTiltakToFormValue({
+                    ...tiltakUpperAuditData,
+                    ...previousData,
+                    changeStamp: {
+                      lastModifiedBy: timeStampData.lastModifiedBy,
+                      lastModifiedDate: timeStampData.lastModifiedDate,
+                    },
+                  })
+                )
+              }
+            })
+          )
+
+          setAlleTiltak(alleSisGodkjentTiltak)
+          setIsLoading(false)
+        }
+      )
+    })()
+
+    return () => {
+      abortedRef.current = true
+    }
+  }, [pvkDokument])
+
+  return [alleTiltak, isLoading] as [ITiltak[], boolean]
 }
 
 export const mapTiltakToFormValue = (tiltak: Partial<ITiltak>): ITiltak => {

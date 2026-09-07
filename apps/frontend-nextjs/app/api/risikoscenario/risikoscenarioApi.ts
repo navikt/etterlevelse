@@ -1,4 +1,5 @@
-import { IPageResponse } from '@/constants/commonConstants'
+import { IChangeStamp, IPageResponse } from '@/constants/commonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
   IKravRisikoscenarioRelasjon,
@@ -7,6 +8,9 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
+import moment from 'moment'
+import { useEffect, useRef, useState } from 'react'
+import { getAuditByTableIdAndTimeStamp } from '../audit/auditApi'
 
 export const getAllRisikoscenario = async () => {
   const pageSize = 100
@@ -47,6 +51,80 @@ export const getRisikoscenarioByPvkDokumentId = async (
       `${env.backendBaseUrl}/risikoscenario/pvkdokument/${pvkDokumentId}/${scenarioType}`
     )
   ).data
+
+export const useLastApprovedRisikoscenarioByPvkDokumentId = (
+  pvkDokument: IPvkDokument,
+  isForGenerelScenario: boolean
+) => {
+  const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
+  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const abortedRef = useRef(false)
+
+  useEffect(() => {
+    abortedRef.current = false
+    ;(async () => {
+      await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
+        async (risikoscenarioer: IPageResponse<IRisikoscenario>) => {
+          const sistGodkjentRisikosenario = risikoscenarioer.content.filter(
+            (risikoscenario: IRisikoscenario) =>
+              moment(risikoscenario.changeStamp.createdDate).isBefore(
+                pvkDokument.godkjentAvRisikoeierDato
+              )
+          )
+
+          const alleSisGodkjentRisikoscenario: IRisikoscenario[] = []
+
+          await Promise.all(
+            sistGodkjentRisikosenario.map(async (risikoscenario) => {
+              const auditData = await getAuditByTableIdAndTimeStamp(
+                risikoscenario.id,
+                pvkDokument.godkjentAvRisikoeierDato
+              )
+              if (auditData.length !== 0) {
+                const risikoscenarioUpperAuditData = auditData[0].data as IRisikoscenario
+                const timeStampData = auditData[0].data as IChangeStamp
+                const previousData = (auditData[0].data as { risikoscenarioData: IRisikoscenario })
+                  .risikoscenarioData
+
+                alleSisGodkjentRisikoscenario.push(
+                  mapRisikoscenarioToFormValue({
+                    ...risikoscenarioUpperAuditData,
+                    ...previousData,
+                    tiltakIds: risikoscenario.tiltakIds,
+                    changeStamp: {
+                      lastModifiedBy: timeStampData.lastModifiedBy,
+                      lastModifiedDate: timeStampData.lastModifiedDate,
+                    },
+                  })
+                )
+              }
+            })
+          )
+
+          setAlleRisikoscenario(alleSisGodkjentRisikoscenario)
+          setRisikoscenarioList(
+            alleSisGodkjentRisikoscenario.filter(
+              (risikoscenario: IRisikoscenario) =>
+                risikoscenario.generelScenario === isForGenerelScenario
+            )
+          )
+          setIsLoading(false)
+        }
+      )
+    })()
+
+    return () => {
+      abortedRef.current = true
+    }
+  }, [pvkDokument])
+
+  return [alleRisikoscenario, risikoscenarioList, isLoading] as [
+    IRisikoscenario[],
+    IRisikoscenario[],
+    boolean,
+  ]
+}
 
 export const getRisikoscenarioByKravnummer = async (
   kravnummer: string
