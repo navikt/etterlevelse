@@ -4,6 +4,7 @@ import { GetKravData } from '@/api/krav/edit/kravEditApi'
 import { createKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
@@ -18,13 +19,14 @@ import { Form, Formik } from 'formik'
 import { Params } from 'next/dist/server/request/params'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useParams, useRouter } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
+import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { KravFormFields } from '../form/kravFormFields/kravFormFields'
 import { KravStandardButtons } from '../form/kravStandardButtons/kravStandardButtons'
 
 export const KravNyVersjonPage = () => {
   const router: AppRouterInstance = useRouter()
   const params: Params = useParams()
+  const formRef: RefObject<any> = useRef(undefined)
   const [krav, setKrav] = useState<TKravQL | undefined>()
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
     krav?.varselMelding ? ['VarselMelding'] : []
@@ -94,74 +96,83 @@ export const KravNyVersjonPage = () => {
               validationSchema={kravNewVersionValidation()}
               validateOnChange={false}
               validateOnBlur={false}
+              innerRef={formRef}
             >
               {({ values, errors, isSubmitting, submitForm }) => (
-                <Form>
-                  <div>
-                    <div className='w-full'>
-                      <Heading level='1' size='medium'>
-                        Ny versjon
-                      </Heading>
-                      <Heading
-                        level='2'
-                        size='small'
-                      >{`K${krav?.kravNummer}.${krav?.kravVersjon} ${krav?.navn}`}</Heading>
-                      <Alert variant='warning'>
-                        <Heading spacing size='small' level='3'>
-                          Sikker på at du vil opprette en ny versjon?
+                <>
+                  <Form>
+                    <div>
+                      <div className='w-full'>
+                        <Heading level='1' size='medium'>
+                          Ny versjon
                         </Heading>
-                        Ny versjon av kravet skal opprettes når det er{' '}
-                        <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
-                        <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
-                        mindre justeringer, endre i det aktive kravet, og da slipper teamene å
-                        revurdere sin besvarelse.
-                      </Alert>
-                    </div>
+                        <Heading
+                          level='2'
+                          size='small'
+                        >{`K${krav?.kravNummer}.${krav?.kravVersjon} ${krav?.navn}`}</Heading>
+                        <Alert variant='warning'>
+                          <Heading spacing size='small' level='3'>
+                            Sikker på at du vil opprette en ny versjon?
+                          </Heading>
+                          Ny versjon av kravet skal opprettes når det er{' '}
+                          <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
+                          <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
+                          mindre justeringer, endre i det aktive kravet, og da slipper teamene å
+                          revurdere sin besvarelse.
+                        </Alert>
+                      </div>
 
-                    <KravFormFields
-                      mode='edit'
-                      kravVersjon={values.kravVersjon}
-                      errors={errors}
-                      varselMeldingActive={varselMeldingActive}
-                      setVarselMeldingActive={setVarselMeldingActive}
-                    />
-
-                    <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
-                      {errors.status && (
-                        <div className='mb-3'>
-                          <FormError fieldName='status' />
-                        </div>
-                      )}
-
-                      <ContentLayout>
-                        <KravStandardButtons
-                          submitCancelButton={() => {
-                            router.push(kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1))
-                          }}
-                          submitSaveButton={() => {
-                            values.status = EKravStatus.UTKAST
-                            submitForm()
-                          }}
-                          createMode
-                          kravStatus={values.status}
-                          submitAktivButton={() => {
-                            values.status = EKravStatus.AKTIV
-                            submitForm()
-                          }}
-                          isSubmitting={isSubmitting}
-                        />
-                      </ContentLayout>
-                    </div>
-                    <div className='py-12'>
-                      <TextAreaField
-                        label='Notater (Kun synlig for kraveier)'
-                        name='notat'
-                        height='15.625rem'
-                        markdown
+                      <KravFormFields
+                        mode='edit'
+                        kravVersjon={values.kravVersjon}
+                        errors={errors}
+                        varselMeldingActive={varselMeldingActive}
+                        setVarselMeldingActive={setVarselMeldingActive}
                       />
+
+                      <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
+                        {errors.status && (
+                          <div className='mb-3'>
+                            <FormError fieldName='status' />
+                          </div>
+                        )}
+
+                        <ContentLayout>
+                          <KravStandardButtons
+                            submitCancelButton={() => {
+                              router.push(
+                                kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1)
+                              )
+                            }}
+                            submitSaveButton={() => {
+                              values.status = EKravStatus.UTKAST
+                              submitForm()
+                            }}
+                            createMode
+                            kravStatus={values.status}
+                            submitAktivButton={() => {
+                              values.status = EKravStatus.AKTIV
+                              submitForm()
+                            }}
+                            isSubmitting={isSubmitting}
+                          />
+                        </ContentLayout>
+                      </div>
+                      <div className='py-12'>
+                        <TextAreaField
+                          label='Notater (Kun synlig for kraveier)'
+                          name='notat'
+                          height='15.625rem'
+                          markdown
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Form>
+                  </Form>
+                  <UnsavedChangesGuard
+                    formRef={formRef}
+                    navigateUrl={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1)}
+                  />
+                </>
               )}
             </Formik>
           </div>
