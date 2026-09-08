@@ -60,12 +60,13 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
       )}
 
       <Heading spacing size='small' level='2' className='mb-5 mt-10'>
-        Legg til risikoscenarioer og tiltak med en tilknytning til etterlevelseskrav
+        Gå til PVK-relaterte kravsider, og legg inn risikoscenarioer side om side med
+        kravdokumentasjonen deres
       </Heading>
 
       <BodyLong className='mb-5'>
-        Disse vil nok utgjøre hovedparten av deres PVK. Slike risikoscenarioer, samt motvirkende
-        tiltak, beskriver dere på den aktuelle kravsiden.
+        Dere beskriver kravspesifikke risikoscenarioer og tiltak på den aktuelle kravsiden. Disse
+        vil nok utgjøre hoveddelen av deres PVK.
       </BodyLong>
 
       <Button
@@ -76,17 +77,17 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakContent: FunctionComponent<
             router.push(etterlevelseDokumentasjonPvkTabUrl(etterlevelseDokumentasjonId))
         }}
       >
-        Vurder risikoscenarioer ved PVK-relaterte krav
+        Legg til risikoscenarioer ved PVK-relaterte krav
       </Button>
 
       <Heading level='2' size='small' className='mb-5 mt-10'>
-        Legg til øvrige risikoscenarioer
+        Legg til ikke-kravspesifikke risikoscenarioer her
       </Heading>
 
       <BodyLong>
-        Noen risikoscenarioer vil ikke har en direkte tilknytning til etterlevelseskrav. Disse, samt
-        motvirkende tiltak, legger dere inn på denne siden. Vi anbefaler at dette gjøres etter at
-        dere har vurdert kravspesifikke risikoscenarioer.
+        Noen risikoscenarioer vil ikke har en direkte tilknytning til etterlevelseskrav. Dere kan
+        legge inn slike risikoscenarier og tiltak på denne siden. Vi anbefaler at dette gjøres etter
+        at dere har vurdert kravspesifikke risikoscenarioer.
       </BodyLong>
 
       {risikoscenarioList.length === 0 && (
