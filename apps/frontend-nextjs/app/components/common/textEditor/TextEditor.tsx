@@ -73,6 +73,24 @@ export const TextEditor = ({
     onFocus: () => setIsFocused(true),
     onBlur: () => setIsFocused(false),
     editorProps: {
+      transformPastedHTML: (html: string) => {
+        if (withTextColor && withHighlight) {
+          return html
+        }
+        const doc = new DOMParser().parseFromString(html, 'text/html')
+        doc.querySelectorAll<HTMLElement>('[style]').forEach((element) => {
+          if (!withTextColor) {
+            element.style.removeProperty('color')
+          }
+          if (!withHighlight) {
+            element.style.removeProperty('background-color')
+          }
+          if (!element.getAttribute('style')) {
+            element.removeAttribute('style')
+          }
+        })
+        return doc.body.innerHTML
+      },
       attributes: {
         role: 'textbox',
         'aria-label': '',

@@ -336,7 +336,6 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                 name='tilbakemeldingTilEtterlevere'
                 label='Skriv tilbakemelding til etterleveren'
                 withUnderline={true}
-                withTextColor={true}
               />
             </div>
           </Form>
