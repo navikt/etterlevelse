@@ -100,7 +100,6 @@ export const TilbakemeldingField: FunctionComponent<TProps> = ({
           name={textAreaFieldName}
           label='Skriv tilbakemelding til etterleveren'
           withUnderline={true}
-          withTextColor={true}
         />
       </div>
     </div>
