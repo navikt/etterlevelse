@@ -2,6 +2,7 @@ export interface IBarSegment {
   name: string
   value: number
   color: string
+  rawValue?: number
 }
 
 export const KRAV_COLORS = {

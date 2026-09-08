@@ -9,6 +9,9 @@ interface IProps {
   subHeadingLevel?: '3' | '4'
 }
 
+const formatProsent = (antall: number, prosent: number): string =>
+  antall > 0 && prosent === 0 ? '<1%' : `${prosent}%`
+
 export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IProps) => {
   return (
     <div>
@@ -51,22 +54,48 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
           </Heading>
           <BodyShort>
             Ikke påbegynt{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkePaabegyntProsent}%</span>
+            <span className='font-bold'>
+              {formatProsent(
+                stats.suksesskriterier.ikkePaabegyntAntall,
+                stats.suksesskriterier.ikkePaabegyntProsent
+              )}
+            </span>
           </BodyShort>
           <BodyShort>
             Under arbeid{' '}
-            <span className='font-bold'>{stats.suksesskriterier.underArbeidProsent}%</span>
+            <span className='font-bold'>
+              {formatProsent(
+                stats.suksesskriterier.underArbeidAntall,
+                stats.suksesskriterier.underArbeidProsent
+              )}
+            </span>
           </BodyShort>
           <BodyShort>
-            Oppfylt <span className='font-bold'>{stats.suksesskriterier.oppfyltProsent}%</span>
+            Oppfylt{' '}
+            <span className='font-bold'>
+              {formatProsent(
+                stats.suksesskriterier.oppfyltAntall,
+                stats.suksesskriterier.oppfyltProsent
+              )}
+            </span>
           </BodyShort>
           <BodyShort>
             Ikke oppfylt{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkeOppfyltProsent}%</span>
+            <span className='font-bold'>
+              {formatProsent(
+                stats.suksesskriterier.ikkeOppfyltAntall,
+                stats.suksesskriterier.ikkeOppfyltProsent
+              )}
+            </span>
           </BodyShort>
           <BodyShort>
             Ikke relevant{' '}
-            <span className='font-bold'>{stats.suksesskriterier.ikkeRelevantProsent}%</span>
+            <span className='font-bold'>
+              {formatProsent(
+                stats.suksesskriterier.ikkeRelevantAntall,
+                stats.suksesskriterier.ikkeRelevantProsent
+              )}
+            </span>
           </BodyShort>
         </div>
 

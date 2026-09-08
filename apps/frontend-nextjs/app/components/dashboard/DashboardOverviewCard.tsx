@@ -9,6 +9,7 @@ import {
   DOK_COLORS,
   IBarSegment,
   PVK_COLORS,
+  formatPct,
   roundedPercentages,
 } from './chartUtils'
 
@@ -59,7 +60,10 @@ const OverviewStackedBar = ({
               }}
             />
             <BodyShort size='small'>
-              {d.name} <strong>{isPercentage ? `${d.value}%` : d.value}</strong>
+              {d.name}{' '}
+              <strong>
+                {isPercentage ? `${formatPct(d.value, d.rawValue ?? d.value)}%` : d.value}
+              </strong>
             </BodyShort>
           </div>
         ))}
@@ -84,7 +88,10 @@ const OverviewKeyMetrics = ({
       </BodyShort>
       {data.map((d) => (
         <BodyShort key={d.name}>
-          {d.name} <span className='font-bold'>{isPercentage ? `${d.value}%` : d.value}</span>
+          {d.name}{' '}
+          <span className='font-bold'>
+            {isPercentage ? `${formatPct(d.value, d.rawValue ?? d.value)}%` : d.value}
+          </span>
         </BodyShort>
       ))}
     </div>
@@ -190,11 +197,36 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
       : [0, 0, 0, 0, 0]
 
   const suksessData: IBarSegment[] = [
-    { name: 'Ikke påbegynt', value: suksessPcts[0], color: AVDELING_SUKSESS_COLORS[0] },
-    { name: 'Under arbeid', value: suksessPcts[1], color: AVDELING_SUKSESS_COLORS[1] },
-    { name: 'Oppfylt', value: suksessPcts[2], color: AVDELING_SUKSESS_COLORS[2] },
-    { name: 'Ikke oppfylt', value: suksessPcts[3], color: AVDELING_SUKSESS_COLORS[3] },
-    { name: 'Ikke relevant', value: suksessPcts[4], color: AVDELING_SUKSESS_COLORS[4] },
+    {
+      name: 'Ikke påbegynt',
+      value: suksessPcts[0],
+      rawValue: agg.suksess.ikkePaabegynt,
+      color: AVDELING_SUKSESS_COLORS[0],
+    },
+    {
+      name: 'Under arbeid',
+      value: suksessPcts[1],
+      rawValue: agg.suksess.underArbeid,
+      color: AVDELING_SUKSESS_COLORS[1],
+    },
+    {
+      name: 'Oppfylt',
+      value: suksessPcts[2],
+      rawValue: agg.suksess.oppfylt,
+      color: AVDELING_SUKSESS_COLORS[2],
+    },
+    {
+      name: 'Ikke oppfylt',
+      value: suksessPcts[3],
+      rawValue: agg.suksess.ikkeOppfylt,
+      color: AVDELING_SUKSESS_COLORS[3],
+    },
+    {
+      name: 'Ikke relevant',
+      value: suksessPcts[4],
+      rawValue: agg.suksess.ikkeRelevant,
+      color: AVDELING_SUKSESS_COLORS[4],
+    },
   ]
 
   const behovData: IBarSegment[] = [

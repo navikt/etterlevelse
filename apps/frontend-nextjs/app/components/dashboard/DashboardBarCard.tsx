@@ -8,6 +8,7 @@ import {
   DOK_COLORS,
   IBarSegment,
   PVK_COLORS,
+  formatPct,
 } from './chartUtils'
 
 interface IProps {
@@ -60,7 +61,8 @@ const StackedBar = ({
               }}
             />
             <BodyShort size='small'>
-              {d.name} {isPercentage ? `${d.value}%` : `(${d.value})`}
+              {d.name}{' '}
+              {isPercentage ? `${formatPct(d.value, d.rawValue ?? d.value)}%` : `(${d.value})`}
             </BodyShort>
           </div>
         ))}
@@ -89,26 +91,31 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
     {
       name: 'Ikke påbegynt',
       value: stats.suksesskriterier.ikkePaabegyntProsent,
+      rawValue: stats.suksesskriterier.ikkePaabegyntAntall,
       color: AVDELING_SUKSESS_COLORS[0],
     },
     {
       name: 'Under arbeid',
       value: stats.suksesskriterier.underArbeidProsent,
+      rawValue: stats.suksesskriterier.underArbeidAntall,
       color: AVDELING_SUKSESS_COLORS[1],
     },
     {
       name: 'Oppfylt',
       value: stats.suksesskriterier.oppfyltProsent,
+      rawValue: stats.suksesskriterier.oppfyltAntall,
       color: AVDELING_SUKSESS_COLORS[2],
     },
     {
       name: 'Ikke oppfylt',
       value: stats.suksesskriterier.ikkeOppfyltProsent,
+      rawValue: stats.suksesskriterier.ikkeOppfyltAntall,
       color: AVDELING_SUKSESS_COLORS[3],
     },
     {
       name: 'Ikke relevant',
       value: stats.suksesskriterier.ikkeRelevantProsent,
+      rawValue: stats.suksesskriterier.ikkeRelevantAntall,
       color: AVDELING_SUKSESS_COLORS[4],
     },
   ]
