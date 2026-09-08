@@ -2,6 +2,7 @@
 
 import { createKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
@@ -14,13 +15,14 @@ import { Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { useContext, useState } from 'react'
+import { RefObject, useContext, useRef, useState } from 'react'
 import { KravFormFields } from '../form/kravFormFields/kravFormFields'
 import { KravStandardButtons } from '../form/kravStandardButtons/kravStandardButtons'
 import ErrorModal from '../kravEditPage/errorModal/errorModal'
 
 export const KravCreatePage = () => {
   const router: AppRouterInstance = useRouter()
+  const formRef: RefObject<any> = useRef(undefined)
 
   const [loading, setLoading] = useState(false)
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>([])
@@ -72,58 +74,62 @@ export const KravCreatePage = () => {
           validationSchema={kravCreateValidation()}
           validateOnChange={false}
           validateOnBlur={false}
+          innerRef={formRef}
         >
           {({ values, errors, isSubmitting, submitForm }) => (
-            <Form>
-              <Heading className='mb-6' level='1' size='medium'>
-                Opprett nytt krav
-              </Heading>
-              <div>
-                <KravFormFields
-                  mode='create'
-                  kravVersjon={values.kravVersjon}
-                  errors={errors}
-                  varselMeldingActive={varselMeldingActive}
-                  setVarselMeldingActive={setVarselMeldingActive}
-                />
-
-                <div className='button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-white'>
-                  <ContentLayout>
-                    <KravStandardButtons
-                      submitCancelButton={() => {
-                        router.push(kravlisteUrl)
-                      }}
-                      submitSaveButton={() => {
-                        values.status = EKravStatus.UTKAST
-                        submitForm()
-                      }}
-                      createMode
-                      kravStatus={values.status}
-                      submitAktivButton={() => {
-                        values.status = EKravStatus.AKTIV
-                        submitForm()
-                      }}
-                      isSubmitting={isSubmitting}
-                    />
-                  </ContentLayout>
-                </div>
-
-                <div className=' py-12'>
-                  <TextAreaField
-                    label='Notater (Kun synlig for kraveier)'
-                    name='notat'
-                    height='15.625rem'
-                    markdown
+            <>
+              <Form>
+                <Heading className='mb-6' level='1' size='medium'>
+                  Opprett nytt krav
+                </Heading>
+                <div>
+                  <KravFormFields
+                    mode='create'
+                    kravVersjon={values.kravVersjon}
+                    errors={errors}
+                    varselMeldingActive={varselMeldingActive}
+                    setVarselMeldingActive={setVarselMeldingActive}
                   />
-                </div>
-              </div>
 
-              <ErrorModal
-                isOpen={showErrorModal}
-                errorMessage={errorModalMessage}
-                submit={setShowErrorModal}
-              />
-            </Form>
+                  <div className='button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-white'>
+                    <ContentLayout>
+                      <KravStandardButtons
+                        submitCancelButton={() => {
+                          router.push(kravlisteUrl)
+                        }}
+                        submitSaveButton={() => {
+                          values.status = EKravStatus.UTKAST
+                          submitForm()
+                        }}
+                        createMode
+                        kravStatus={values.status}
+                        submitAktivButton={() => {
+                          values.status = EKravStatus.AKTIV
+                          submitForm()
+                        }}
+                        isSubmitting={isSubmitting}
+                      />
+                    </ContentLayout>
+                  </div>
+
+                  <div className=' py-12'>
+                    <TextAreaField
+                      label='Notater (Kun synlig for kraveier)'
+                      name='notat'
+                      height='15.625rem'
+                      markdown
+                    />
+                  </div>
+                </div>
+
+                <ErrorModal
+                  isOpen={showErrorModal}
+                  errorMessage={errorModalMessage}
+                  submit={setShowErrorModal}
+                />
+              </Form>
+              <UnsavedChangesGuard formRef={formRef} navigateUrl={kravlisteUrl} />
+            </>
           )}
         </Formik>
       )}

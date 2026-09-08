@@ -10,6 +10,7 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
 import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
@@ -417,6 +418,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
         setIsOpen={setIsUnsavedModalOpen}
         urlToNavigate={urlToNavigate}
         formRef={formRef}
+      />
+
+      <UnsavedChangesGuard
+        formRef={formRef}
+        navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
       />
     </>
   )

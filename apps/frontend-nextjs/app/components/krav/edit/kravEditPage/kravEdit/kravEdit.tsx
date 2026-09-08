@@ -3,6 +3,7 @@
 import { getEtterlevelserByKravNumberKravVersion } from '@/api/etterlevelse/etterlevelseApi'
 import { kravMapToFormVal, updateKrav } from '@/api/krav/kravApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
@@ -16,7 +17,7 @@ import { Heading } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, useContext, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
 import { KravFormFields } from '../../form/kravFormFields/kravFormFields'
 import ErrorModal from '../errorModal/errorModal'
 import { KravEditButtons } from '../kravEditButtons/kravEditButtons'
@@ -33,6 +34,7 @@ export const KravEdit: FunctionComponent<TProps> = ({
   isEditingUtgaattKrav,
 }) => {
   const router: AppRouterInstance = useRouter()
+  const formRef: RefObject<any> = useRef(undefined)
   const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
     krav?.varselMelding ? ['VarselMelding'] : []
   )
@@ -94,49 +96,56 @@ export const KravEdit: FunctionComponent<TProps> = ({
           validationSchema={kravEditValidation({ alleKravVersjoner, isEditingUtgaattKrav })}
           validateOnChange={false}
           validateOnBlur={false}
+          innerRef={formRef}
         >
           {({ values, errors, isSubmitting, submitForm, initialValues, setFieldValue }) => (
-            <Form>
-              <div>
-                <div className='w-full'>
-                  <Heading level='1' size='medium'>
-                    Rediger krav
-                  </Heading>
-                  <Heading level='2' size='small'>
-                    {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}
-                  </Heading>
-                </div>
-                <KravFormFields
-                  mode='edit'
-                  kravVersjon={values.kravVersjon}
-                  errors={errors}
-                  varselMeldingActive={varselMeldingActive}
-                  setVarselMeldingActive={setVarselMeldingActive}
-                  isEditingUtgaattKrav={isEditingUtgaattKrav}
-                />
-                <KravEditButtons
-                  krav={krav}
-                  values={values}
-                  setFieldValue={setFieldValue}
-                  isSubmitting={isSubmitting}
-                  submitForm={submitForm}
-                  initialValues={initialValues}
-                />
-                <div className='py-12'>
-                  <TextAreaField
-                    label='Notater (Kun synlig for kraveier)'
-                    name='notat'
-                    height='15.625rem'
-                    markdown
+            <>
+              <Form>
+                <div>
+                  <div className='w-full'>
+                    <Heading level='1' size='medium'>
+                      Rediger krav
+                    </Heading>
+                    <Heading level='2' size='small'>
+                      {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}
+                    </Heading>
+                  </div>
+                  <KravFormFields
+                    mode='edit'
+                    kravVersjon={values.kravVersjon}
+                    errors={errors}
+                    varselMeldingActive={varselMeldingActive}
+                    setVarselMeldingActive={setVarselMeldingActive}
+                    isEditingUtgaattKrav={isEditingUtgaattKrav}
+                  />
+                  <KravEditButtons
+                    krav={krav}
+                    values={values}
+                    setFieldValue={setFieldValue}
+                    isSubmitting={isSubmitting}
+                    submitForm={submitForm}
+                    initialValues={initialValues}
+                  />
+                  <div className='py-12'>
+                    <TextAreaField
+                      label='Notater (Kun synlig for kraveier)'
+                      name='notat'
+                      height='15.625rem'
+                      markdown
+                    />
+                  </div>
+                  <ErrorModal
+                    isOpen={showErrorModal}
+                    errorMessage={errorModalMessage}
+                    submit={setShowErrorModal}
                   />
                 </div>
-                <ErrorModal
-                  isOpen={showErrorModal}
-                  errorMessage={errorModalMessage}
-                  submit={setShowErrorModal}
-                />
-              </div>
-            </Form>
+              </Form>
+              <UnsavedChangesGuard
+                formRef={formRef}
+                navigateUrl={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon)}
+              />
+            </>
           )}
         </Formik>
       </div>

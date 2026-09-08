@@ -17,6 +17,7 @@ type TProps = {
   setIsOpen: (open: boolean) => void
   initialValues: Partial<IRisikoscenario>
   submit: (risikoscenario: IRisikoscenario) => void
+  formRef?: RefObject<any>
 }
 
 export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
@@ -26,18 +27,30 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
   setIsOpen,
   submit,
   initialValues,
+  formRef,
 }) => {
   const errorSummaryRef = useRef<HTMLDivElement>(null)
-  const formRef: RefObject<any> = useRef(undefined)
+  const localFormRef: RefObject<any> = useRef(undefined)
+  // Use the shared stepper formRef when provided so the page-level unsaved guard sees this modal
+  const activeFormRef: RefObject<any> = formRef ?? localFormRef
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const formId = useId()
 
   useEffect(() => {
-    if (!_.isEmpty(formRef?.current.errors) && errorSummaryRef.current) {
+    if (!_.isEmpty(activeFormRef?.current?.errors) && errorSummaryRef.current) {
       errorSummaryRef.current.focus()
     }
   }, [submitClick])
+
+  useEffect(() => {
+    // Clear the shared ref on close so a closed modal's stale dirty state isn't read later
+    return () => {
+      if (formRef) {
+        formRef.current = undefined
+      }
+    }
+  }, [formRef])
 
   return (
     <Modal
@@ -52,7 +65,7 @@ export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
         onSubmit={submit}
         validationSchema={risikoscenarioCreateValidation()}
         initialValues={mapRisikoscenarioToFormValue(initialValues)}
-        innerRef={formRef}
+        innerRef={activeFormRef}
       >
         {({ errors, values }) => (
           <>

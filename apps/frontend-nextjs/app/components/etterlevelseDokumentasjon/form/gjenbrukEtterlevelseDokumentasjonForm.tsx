@@ -24,6 +24,7 @@ import LabelWithTooltip, {
 import { Error, FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
 import { IArdoqSystem } from '@/constants/ardoqSystem/ardoqSystemConstants'
 import {
@@ -173,141 +174,245 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
       validateOnChange={false}
       validateOnBlur={false}
     >
-      {({ values, errors, submitForm }) => (
-        <Form className='flex flex-col gap-3'>
-          <FieldWrapper marginBottom>
-            <Field name='relationType'>
-              {(fp: FieldProps) => (
-                <RadioGroup
-                  legend='Hvordan ønsker du å gjenbruke dette dokumentet?'
-                  onChange={(value) => fp.form.setFieldValue('relationType', value)}
-                  description={
-                    isInheritingFrom ? 'Kan ikke arve fra dette etterlevelsesdokumentet' : null
-                  }
-                  error={
-                    fp.form.errors['relationType'] ? (
-                      <FormError fieldName='relationType' />
-                    ) : undefined
-                  }
-                >
-                  {!isInheritingFrom && (
-                    <Radio value={ERelationType.ARVER}>
-                      Beholde relasjonen, og arve endringer i veiledning skrevet av dokumenteieren
+      {({ values, errors, submitForm, dirty }) => (
+        <>
+          <Form className='flex flex-col gap-3'>
+            <FieldWrapper marginBottom>
+              <Field name='relationType'>
+                {(fp: FieldProps) => (
+                  <RadioGroup
+                    legend='Hvordan ønsker du å gjenbruke dette dokumentet?'
+                    onChange={(value) => fp.form.setFieldValue('relationType', value)}
+                    description={
+                      isInheritingFrom ? 'Kan ikke arve fra dette etterlevelsesdokumentet' : null
+                    }
+                    error={
+                      fp.form.errors['relationType'] ? (
+                        <FormError fieldName='relationType' />
+                      ) : undefined
+                    }
+                  >
+                    {!isInheritingFrom && (
+                      <Radio value={ERelationType.ARVER}>
+                        Beholde relasjonen, og arve endringer i veiledning skrevet av dokumenteieren
+                      </Radio>
+                    )}
+                    <Radio value={ERelationType.ENGANGSKOPI}>
+                      Lage en engangskopi som uavhengig dokument
                     </Radio>
-                  )}
-                  <Radio value={ERelationType.ENGANGSKOPI}>
-                    Lage en engangskopi som uavhengig dokument
-                  </Radio>
-                </RadioGroup>
-              )}
-            </Field>
-          </FieldWrapper>
+                  </RadioGroup>
+                )}
+              </Field>
+            </FieldWrapper>
 
-          <TextAreaField
-            rows={2}
-            noPlaceholder
-            label='Navngi ditt nye dokument'
-            caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
-            name='title'
-          />
-
-          <div className='mt-5'>
             <TextAreaField
-              rows={5}
+              rows={2}
               noPlaceholder
-              label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
-              name='beskrivelse'
+              label='Navngi ditt nye dokument'
+              caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+              name='title'
             />
-          </div>
 
-          <FieldWrapper>
-            <FieldArray name='behandlinger'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='my-3'>
-                  <LabelWithDescription
-                    label={'Legg til behandlinger fra Behandlingskatalogen'}
-                    description='Skriv minst 3 tegn for å søke'
-                  />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter behandlinger'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={searchBehandlingOptions}
-                      onChange={(value) => {
-                        if (value) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                  </div>
-                  <RenderTagList
-                    list={fieldArrayRenderProps.form.values.behandlinger.map(
-                      (behandling: IBehandling) => behandlingName(behandling)
-                    )}
-                    onRemove={fieldArrayRenderProps.remove}
-                  />
-                </div>
-              )}
-            </FieldArray>
-          </FieldWrapper>
+            <div className='mt-5'>
+              <TextAreaField
+                rows={5}
+                noPlaceholder
+                label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+                name='beskrivelse'
+              />
+            </div>
 
-          <ReadMore
-            header='Dersom Nav er databehandler'
-            defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
-          >
-            <FieldArray name='dpBehandlinger'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='my-3'>
-                  <LabelWithDescription
-                    label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen'
-                    description='Skriv minst 3 tegn for å søke'
-                  />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter behandlinger'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={searchDpBehandlingOptions}
-                      onChange={(value: any) => {
-                        if (value) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                  </div>
-                  <RenderTagList
-                    list={fieldArrayRenderProps.form.values.dpBehandlinger.map(
-                      (dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling)
-                    )}
-                    onRemove={fieldArrayRenderProps.remove}
-                  />
-                </div>
-              )}
-            </FieldArray>
-          </ReadMore>
-
-          {env.isDev && (
-            <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5'>
-              <FieldArray name='ardoqSystemData'>
+            <FieldWrapper>
+              <FieldArray name='behandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                  <div className='flex-1'>
-                    <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                  <div className='my-3'>
+                    <LabelWithDescription
+                      label={'Legg til behandlinger fra Behandlingskatalogen'}
+                      description='Skriv minst 3 tegn for å søke'
+                    />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter system'
+                        aria-label='Søk etter behandlinger'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={searchBehandlingOptions}
+                        onChange={(value) => {
+                          if (value) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
+                    </div>
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.behandlinger.map(
+                        (behandling: IBehandling) => behandlingName(behandling)
+                      )}
+                      onRemove={fieldArrayRenderProps.remove}
+                    />
+                  </div>
+                )}
+              </FieldArray>
+            </FieldWrapper>
+
+            <ReadMore
+              header='Dersom Nav er databehandler'
+              defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
+            >
+              <FieldArray name='dpBehandlinger'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='my-3'>
+                    <LabelWithDescription
+                      label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen'
+                      description='Skriv minst 3 tegn for å søke'
+                    />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter behandlinger'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={searchDpBehandlingOptions}
+                        onChange={(value: any) => {
+                          if (value) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
+                    </div>
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.dpBehandlinger.map(
+                        (dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling)
+                      )}
+                      onRemove={fieldArrayRenderProps.remove}
+                    />
+                  </div>
+                )}
+              </FieldArray>
+            </ReadMore>
+
+            {env.isDev && (
+              <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5'>
+                <FieldArray name='ardoqSystemData'>
+                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                    <div className='flex-1'>
+                      <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                      <div className='w-full'>
+                        <AsyncSelect
+                          aria-label='Søk etter system'
+                          placeholder=''
+                          tabSelectsValue={false}
+                          components={{ DropdownIndicator }}
+                          noOptionsMessage={({ inputValue }) => {
+                            return noOptionMessage(inputValue)
+                          }}
+                          controlShouldRenderValue={false}
+                          loadingMessage={() => 'Søker...'}
+                          isClearable={false}
+                          loadOptions={useArdoqSearch}
+                          onChange={(value: any) => {
+                            if (
+                              value &&
+                              fieldArrayRenderProps.form.values.ardoqSystemData.filter(
+                                (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                              ).length === 0
+                            ) {
+                              fieldArrayRenderProps.push(value)
+                            }
+                          }}
+                          styles={selectOverrides}
+                        />
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
+                            (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </FieldArray>
+                <div className='flex-1' />
+              </div>
+            )}
+
+            <ROSEdit />
+
+            <Heading level='2' size='small' spacing>
+              Hvem skal ha redigeringstilgang til dokumentet?
+            </Heading>
+
+            <InfoCard data-color='info' className=' max-w-[70ch]' size='small'>
+              <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                <InfoCard.Title>
+                  Hvis du velger team, trenger du ikke legge inn teammedlemmene som enkeltpersoner.
+                  Er du i tvil på hvem som er med i teamet,{' '}
+                  <ExternalLink href='https://teamkatalogen.nav.no/'>
+                    sjekk Teamkatalogen
+                  </ExternalLink>
+                </InfoCard.Title>
+              </InfoCard.Header>
+            </InfoCard>
+
+            <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldArray name='teamsData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter team'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={useSearchTeamOptions}
+                        onChange={(value: any) => {
+                          if (
+                            value &&
+                            fieldArrayRenderProps.form.values.teamsData.filter(
+                              (team: ITeam) => team.id === value.id
+                            ).length === 0
+                          ) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
+                    </div>
+                    <RenderTagList
+                      list={fieldArrayRenderProps.form.values.teamsData.map(
+                        (tema: ITeam) => tema.name
+                      )}
+                      onRemove={fieldArrayRenderProps.remove}
+                    />
+                  </div>
+                )}
+              </FieldArray>
+              <div className='flex-1' />
+            </div>
+
+            <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldArray name='resourcesData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithTooltip label='Søk etter person' tooltip='' />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter person'
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
@@ -317,12 +422,12 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                         controlShouldRenderValue={false}
                         loadingMessage={() => 'Søker...'}
                         isClearable={false}
-                        loadOptions={useArdoqSearch}
+                        loadOptions={searchResourceByNameOptions}
                         onChange={(value: any) => {
                           if (
                             value &&
-                            fieldArrayRenderProps.form.values.ardoqSystemData.filter(
-                              (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                            fieldArrayRenderProps.form.values.resourcesData.filter(
+                              (team: ITeamResource) => team.navIdent === value.navIdent
                             ).length === 0
                           ) {
                             fieldArrayRenderProps.push(value)
@@ -331,392 +436,297 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                         styles={selectOverrides}
                       />
                       <RenderTagList
-                        list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
-                          (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
-                        )}
-                        onRemove={fieldArrayRenderProps.remove}
-                      />
-                    </div>
-                  </div>
-                )}
-              </FieldArray>
-              <div className='flex-1' />
-            </div>
-          )}
-
-          <ROSEdit />
-
-          <Heading level='2' size='small' spacing>
-            Hvem skal ha redigeringstilgang til dokumentet?
-          </Heading>
-
-          <InfoCard data-color='info' className=' max-w-[70ch]' size='small'>
-            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-              <InfoCard.Title>
-                Hvis du velger team, trenger du ikke legge inn teammedlemmene som enkeltpersoner. Er
-                du i tvil på hvem som er med i teamet,{' '}
-                <ExternalLink href='https://teamkatalogen.nav.no/'>
-                  sjekk Teamkatalogen
-                </ExternalLink>
-              </InfoCard.Title>
-            </InfoCard.Header>
-          </InfoCard>
-
-          <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldArray name='teamsData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter team'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={useSearchTeamOptions}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.teamsData.filter(
-                            (team: ITeam) => team.id === value.id
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                  </div>
-                  <RenderTagList
-                    list={fieldArrayRenderProps.form.values.teamsData.map(
-                      (tema: ITeam) => tema.name
-                    )}
-                    onRemove={fieldArrayRenderProps.remove}
-                  />
-                </div>
-              )}
-            </FieldArray>
-            <div className='flex-1' />
-          </div>
-
-          <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldArray name='resourcesData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithTooltip label='Søk etter person' tooltip='' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter person'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        return noOptionMessage(inputValue)
-                      }}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={searchResourceByNameOptions}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.resourcesData.filter(
-                            (team: ITeamResource) => team.navIdent === value.navIdent
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.resourcesData.map(
-                        (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
-                    />
-                  </div>
-
-                  {env.isDev && (
-                    <ReadMore header='Hva hvis jeg ikke finner person'>
-                      <div className='flex gap-2 items-end my-2'>
-                        <TextField
-                          label='Skriv inn Nav ident dersom du ikke finner person over'
-                          value={customPersonForDev}
-                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                            setCustomPersonForDev(event.target.value)
-                          }
-                        />
-                        <div>
-                          <Button
-                            type='button'
-                            onClick={() => {
-                              fieldArrayRenderProps.push({
-                                navIdent: customPersonForDev,
-                                givenName: customPersonForDev,
-                                familyName: customPersonForDev,
-                                fullName: customPersonForDev,
-                                email: customPersonForDev,
-                                resourceType: customPersonForDev,
-                              })
-                            }}
-                          >
-                            Legg til
-                          </Button>
-                        </div>
-                      </div>
-                      <RenderTagList
                         list={fieldArrayRenderProps.form.values.resourcesData.map(
                           (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                         )}
                         onRemove={fieldArrayRenderProps.remove}
                       />
-                    </ReadMore>
-                  )}
-                </div>
-              )}
-            </FieldArray>
-            <div className='flex-1' />
-          </div>
+                    </div>
 
-          {errors.teamsData && <Error message={errors.teamsData as string} />}
-
-          <div id='varslingsadresser' className='mt-5'>
-            <VarslingsadresserEdit fieldName='varslingsadresser' />
-            {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
-          </div>
-
-          <Heading level='2' size='small' className='mt-5' spacing>
-            Hvem skal ha redigeringstilgang til dokumentet?
-          </Heading>
-
-          <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldWrapper full>
-              <Field name='nomAvdelingId'>
-                {(fieldProps: FieldProps) => (
-                  <div>
-                    <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
-                    <OptionList
-                      label='Avdeling'
-                      options={alleAvdelingOptions}
-                      value={fieldProps.field.value}
-                      onChange={async (value: any) => {
-                        setSelectedAvdeling(value)
-
-                        if (value !== fieldProps.form.values.nomAvdelingId) {
-                          await fieldProps.form.setFieldValue('seksjoner', [])
-                        }
-                        await fieldProps.form.setFieldValue('nomAvdelingId', value)
-                        await fieldProps.form.setFieldValue(
-                          'avdelingNavn',
-                          alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
-                            .label
-                        )
-                      }}
-                      error={
-                        fieldProps.form.errors && fieldProps.form.errors.nomAvdelingId ? (
-                          <FormError fieldName='nomAvdelingId' />
-                        ) : undefined
-                      }
-                    />
+                    {env.isDev && (
+                      <ReadMore header='Hva hvis jeg ikke finner person'>
+                        <div className='flex gap-2 items-end my-2'>
+                          <TextField
+                            label='Skriv inn Nav ident dersom du ikke finner person over'
+                            value={customPersonForDev}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                              setCustomPersonForDev(event.target.value)
+                            }
+                          />
+                          <div>
+                            <Button
+                              type='button'
+                              onClick={() => {
+                                fieldArrayRenderProps.push({
+                                  navIdent: customPersonForDev,
+                                  givenName: customPersonForDev,
+                                  familyName: customPersonForDev,
+                                  fullName: customPersonForDev,
+                                  email: customPersonForDev,
+                                  resourceType: customPersonForDev,
+                                })
+                              }}
+                            >
+                              Legg til
+                            </Button>
+                          </div>
+                        </div>
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.resourcesData.map(
+                            (resource: ITeamResource) =>
+                              `${resource.fullName} (${resource.navIdent})`
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </ReadMore>
+                    )}
                   </div>
                 )}
-              </Field>
-            </FieldWrapper>
-            <div className='flex-1' />
-          </div>
+              </FieldArray>
+              <div className='flex-1' />
+            </div>
 
-          {selectedAvdeling !== '' &&
-            selectedAvdeling !== undefined &&
-            (() => {
-              const filteredSeksjoner = seksjonerByAvdeling.filter(
-                (s) => s.value !== selectedAvdeling
-              )
-              if (filteredSeksjoner.length === 0) return null
-              return (
-                <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                  <FieldWrapper marginTop full>
-                    <FieldArray name='seksjoner'>
-                      {(fieldProps: FieldArrayRenderProps) => (
-                        <div>
-                          <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
-                          <OptionList
-                            label='Seksjon'
-                            options={filteredSeksjoner}
-                            onChange={async (value: any) => {
-                              if (value) {
-                                const selectedSeksjon = filteredSeksjoner.find(
-                                  (seksjon) => seksjon.value === value
-                                )
+            {errors.teamsData && <Error message={errors.teamsData as string} />}
 
-                                if (!selectedSeksjon) return
+            <div id='varslingsadresser' className='mt-5'>
+              <VarslingsadresserEdit fieldName='varslingsadresser' />
+              {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
+            </div>
 
-                                const ikkeFinnesAlleredeIListe =
-                                  fieldProps.form.values.seksjoner.filter(
-                                    (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
-                                  ).length === 0
+            <Heading level='2' size='small' className='mt-5' spacing>
+              Hvem skal ha redigeringstilgang til dokumentet?
+            </Heading>
 
-                                if (ikkeFinnesAlleredeIListe) {
-                                  await fieldProps.form.setFieldValue('seksjoner', [
-                                    ...fieldProps.form.values.seksjoner,
-                                    {
-                                      nomSeksjonId: selectedSeksjon.value,
-                                      nomSeksjonName: selectedSeksjon.label,
-                                    },
-                                  ])
-                                }
-                              }
-                            }}
-                          />
-                          <RenderTagList
-                            list={fieldProps.form.values.seksjoner.map(
-                              (seksjon: INomSeksjon) => seksjon.nomSeksjonName
-                            )}
-                            onRemove={fieldProps.remove}
-                          />
-                        </div>
-                      )}
-                    </FieldArray>
-                  </FieldWrapper>
+            <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldWrapper full>
+                <Field name='nomAvdelingId'>
+                  {(fieldProps: FieldProps) => (
+                    <div>
+                      <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
+                      <OptionList
+                        label='Avdeling'
+                        options={alleAvdelingOptions}
+                        value={fieldProps.field.value}
+                        onChange={async (value: any) => {
+                          setSelectedAvdeling(value)
 
-                  <div className='flex-1' />
-                </div>
-              )
-            })()}
-
-          <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
-            <FieldArray name='risikoeiereData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter risikoeier'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        return noOptionMessage(inputValue)
-                      }}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={searchResourceByNameOptions}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.risikoeiereData.filter(
-                            (team: ITeamResource) => team.navIdent === value.navIdent
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
-                    <RenderTagList
-                      list={fieldArrayRenderProps.form.values.risikoeiereData.map(
-                        (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
-                      )}
-                      onRemove={fieldArrayRenderProps.remove}
-                    />
-                  </div>
-
-                  {env.isDev && (
-                    <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
-                      <div className='flex gap-2 items-end my-2'>
-                        <TextField
-                          label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
-                          value={customRisikoeierForDev}
-                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                            setCustomRisikoeierForDev(event.target.value)
+                          if (value !== fieldProps.form.values.nomAvdelingId) {
+                            await fieldProps.form.setFieldValue('seksjoner', [])
                           }
-                        />
-                        <div>
-                          <Button
-                            type='button'
-                            onClick={() => {
-                              fieldArrayRenderProps.push({
-                                navIdent: customRisikoeierForDev,
-                                givenName: customRisikoeierForDev,
-                                familyName: customRisikoeierForDev,
-                                fullName: customRisikoeierForDev,
-                                email: customRisikoeierForDev,
-                                resourceType: customRisikoeierForDev,
-                              })
-                            }}
-                          >
-                            Legg til
-                          </Button>
-                        </div>
-                      </div>
+                          await fieldProps.form.setFieldValue('nomAvdelingId', value)
+                          await fieldProps.form.setFieldValue(
+                            'avdelingNavn',
+                            alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
+                              .label
+                          )
+                        }}
+                        error={
+                          fieldProps.form.errors && fieldProps.form.errors.nomAvdelingId ? (
+                            <FormError fieldName='nomAvdelingId' />
+                          ) : undefined
+                        }
+                      />
+                    </div>
+                  )}
+                </Field>
+              </FieldWrapper>
+              <div className='flex-1' />
+            </div>
+
+            {selectedAvdeling !== '' &&
+              selectedAvdeling !== undefined &&
+              (() => {
+                const filteredSeksjoner = seksjonerByAvdeling.filter(
+                  (s) => s.value !== selectedAvdeling
+                )
+                if (filteredSeksjoner.length === 0) return null
+                return (
+                  <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
+                    <FieldWrapper marginTop full>
+                      <FieldArray name='seksjoner'>
+                        {(fieldProps: FieldArrayRenderProps) => (
+                          <div>
+                            <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
+                            <OptionList
+                              label='Seksjon'
+                              options={filteredSeksjoner}
+                              onChange={async (value: any) => {
+                                if (value) {
+                                  const selectedSeksjon = filteredSeksjoner.find(
+                                    (seksjon) => seksjon.value === value
+                                  )
+
+                                  if (!selectedSeksjon) return
+
+                                  const ikkeFinnesAlleredeIListe =
+                                    fieldProps.form.values.seksjoner.filter(
+                                      (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
+                                    ).length === 0
+
+                                  if (ikkeFinnesAlleredeIListe) {
+                                    await fieldProps.form.setFieldValue('seksjoner', [
+                                      ...fieldProps.form.values.seksjoner,
+                                      {
+                                        nomSeksjonId: selectedSeksjon.value,
+                                        nomSeksjonName: selectedSeksjon.label,
+                                      },
+                                    ])
+                                  }
+                                }
+                              }}
+                            />
+                            <RenderTagList
+                              list={fieldProps.form.values.seksjoner.map(
+                                (seksjon: INomSeksjon) => seksjon.nomSeksjonName
+                              )}
+                              onRemove={fieldProps.remove}
+                            />
+                          </div>
+                        )}
+                      </FieldArray>
+                    </FieldWrapper>
+
+                    <div className='flex-1' />
+                  </div>
+                )
+              })()}
+
+            <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
+              <FieldArray name='risikoeiereData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter risikoeier'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => {
+                          return noOptionMessage(inputValue)
+                        }}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={searchResourceByNameOptions}
+                        onChange={(value: any) => {
+                          if (
+                            value &&
+                            fieldArrayRenderProps.form.values.risikoeiereData.filter(
+                              (team: ITeamResource) => team.navIdent === value.navIdent
+                            ).length === 0
+                          ) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
                       <RenderTagList
                         list={fieldArrayRenderProps.form.values.risikoeiereData.map(
                           (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                         )}
                         onRemove={fieldArrayRenderProps.remove}
                       />
-                    </ReadMore>
-                  )}
-                </div>
-              )}
-            </FieldArray>
-            <div className='flex-1' />
-          </div>
+                    </div>
 
-          {!_.isEmpty(errors) && (
-            <ErrorSummary
-              ref={errorSummaryRef}
-              heading='Du må rette disse feilene før du kan fortsette'
-            >
-              {Object.entries(errors)
-                .filter(([, error]) => error)
-                .map(([key, error]) => (
-                  <ErrorSummary.Item href={`#${key}`} key={key}>
-                    {error as string}
-                  </ErrorSummary.Item>
-                ))}
-            </ErrorSummary>
-          )}
-
-          {isSubmitSuccess && (
-            <Alert variant='success' className='mb-5'>
-              Dokumentet ble opprettet. Du blir straks sendt videre.
-            </Alert>
-          )}
-
-          <div className='button_container flex flex-col mt-40 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
-            <div className='flex flex-row-reverse'>
-              <Button
-                type='button'
-                loading={isSubmitting}
-                disabled={isSubmitting || isSubmitSuccess}
-                onClick={async () => {
-                  errorSummaryRef.current?.focus()
-                  await submitForm()
-                  setSubmitClick(!submitClick)
-                }}
-                className='ml-2.5'
-              >
-                Opprett
-              </Button>
-              <Button
-                type='button'
-                variant='secondary'
-                disabled={isSubmitting}
-                onClick={() => {
-                  router.back()
-                }}
-              >
-                Avbryt
-              </Button>
+                    {env.isDev && (
+                      <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
+                        <div className='flex gap-2 items-end my-2'>
+                          <TextField
+                            label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
+                            value={customRisikoeierForDev}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                              setCustomRisikoeierForDev(event.target.value)
+                            }
+                          />
+                          <div>
+                            <Button
+                              type='button'
+                              onClick={() => {
+                                fieldArrayRenderProps.push({
+                                  navIdent: customRisikoeierForDev,
+                                  givenName: customRisikoeierForDev,
+                                  familyName: customRisikoeierForDev,
+                                  fullName: customRisikoeierForDev,
+                                  email: customRisikoeierForDev,
+                                  resourceType: customRisikoeierForDev,
+                                })
+                              }}
+                            >
+                              Legg til
+                            </Button>
+                          </div>
+                        </div>
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.risikoeiereData.map(
+                            (resource: ITeamResource) =>
+                              `${resource.fullName} (${resource.navIdent})`
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </ReadMore>
+                    )}
+                  </div>
+                )}
+              </FieldArray>
+              <div className='flex-1' />
             </div>
-          </div>
-        </Form>
+
+            {!_.isEmpty(errors) && (
+              <ErrorSummary
+                ref={errorSummaryRef}
+                heading='Du må rette disse feilene før du kan fortsette'
+              >
+                {Object.entries(errors)
+                  .filter(([, error]) => error)
+                  .map(([key, error]) => (
+                    <ErrorSummary.Item href={`#${key}`} key={key}>
+                      {error as string}
+                    </ErrorSummary.Item>
+                  ))}
+              </ErrorSummary>
+            )}
+
+            {isSubmitSuccess && (
+              <Alert variant='success' className='mb-5'>
+                Dokumentet ble opprettet. Du blir straks sendt videre.
+              </Alert>
+            )}
+
+            <div className='button_container flex flex-col mt-40 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
+              <div className='flex flex-row-reverse'>
+                <Button
+                  type='button'
+                  loading={isSubmitting}
+                  disabled={isSubmitting || isSubmitSuccess}
+                  onClick={async () => {
+                    errorSummaryRef.current?.focus()
+                    await submitForm()
+                    setSubmitClick(!submitClick)
+                  }}
+                  className='ml-2.5'
+                >
+                  Opprett
+                </Button>
+                <Button
+                  type='button'
+                  variant='secondary'
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    router.back()
+                  }}
+                >
+                  Avbryt
+                </Button>
+              </div>
+            </div>
+          </Form>
+          <UnsavedChangesGuard
+            isDirty={dirty}
+            formRef={formRef}
+            navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
+          />
+        </>
       )}
     </Formik>
   )

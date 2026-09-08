@@ -41,6 +41,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import ForbiddenAlert from '../common/forbiddenAlert'
 import { TextAreaField } from '../common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '../common/unsavedChangesGuard/unsavedChangesGuard'
 import UnsavedModalAlert from '../common/unsavedModalAlert/unsavedModalAlert'
 import {
   ContentLayout,
@@ -234,83 +235,90 @@ export const BehandlingensLivslopPage = () => {
                     innerRef={formRef}
                   >
                     {({ submitForm, initialValues, errors, isSubmitting, dirty }) => (
-                      <Form>
-                        <div>
-                          <BehandlingensLivslopTextContent />
+                      <>
+                        <Form>
+                          <div>
+                            <BehandlingensLivslopTextContent />
 
-                          <BodyShort className='mb-3 mt-8'>
-                            Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
-                            oversikt.
-                          </BodyShort>
+                            <BodyShort className='mb-3 mt-8'>
+                              Dere kan velge å lage og laste opp flere tegninger hvis det gir bedre
+                              oversikt.
+                            </BodyShort>
 
-                          <CustomFileUpload
-                            initialValues={initialValues.filer}
-                            rejectedFiles={rejectedFiles}
-                            setRejectedFiles={setRejectedFiles}
-                            setFilesToUpload={setFilesToUpload}
-                          />
-
-                          <div className='mt-8'>
-                            <TextAreaField
-                              markdown
-                              noPlaceholder
-                              label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
-                              name='beskrivelse'
-                              height='5.75rem'
+                            <CustomFileUpload
+                              initialValues={initialValues.filer}
+                              rejectedFiles={rejectedFiles}
+                              setRejectedFiles={setRejectedFiles}
+                              setFilesToUpload={setFilesToUpload}
                             />
+
+                            <div className='mt-8'>
+                              <TextAreaField
+                                markdown
+                                noPlaceholder
+                                label='Legg eventuelt inn en beskrivelse av behandlingens livsløp'
+                                name='beskrivelse'
+                                height='5.75rem'
+                              />
+                            </div>
+
+                            {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
+                              <ErrorSummary className='mt-3' ref={errorSummaryRef}>
+                                <ErrorSummary.Item href={'#vedleggMedFeil'}>
+                                  Vedlegg med feil
+                                </ErrorSummary.Item>
+                              </ErrorSummary>
+                            )}
+
+                            {savedSuccessful && !dirty && (
+                              <div className='mt-5'>
+                                <LocalAlert status='success'>
+                                  <LocalAlert.Header>
+                                    <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                                    <LocalAlert.CloseButton
+                                      onClick={() => setSavedSuccessful(false)}
+                                    />
+                                  </LocalAlert.Header>
+                                </LocalAlert>
+                              </div>
+                            )}
+
+                            {!isSubmitting && (
+                              <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
+                                <Button
+                                  type='button'
+                                  onClick={async () => {
+                                    await submitForm()
+                                  }}
+                                >
+                                  Lagre
+                                </Button>
+
+                                <Button
+                                  type='button'
+                                  variant='tertiary'
+                                  onClick={() => {
+                                    window.location.reload()
+                                  }}
+                                >
+                                  Forkast tekstendringer
+                                </Button>
+                              </div>
+                            )}
+
+                            {isSubmitting && (
+                              <div className='flex mt-5 justify-center items-center'>
+                                <Loader size='large' />
+                              </div>
+                            )}
                           </div>
-
-                          {!_.isEmpty(errors) && rejectedFiles.length > 0 && (
-                            <ErrorSummary className='mt-3' ref={errorSummaryRef}>
-                              <ErrorSummary.Item href={'#vedleggMedFeil'}>
-                                Vedlegg med feil
-                              </ErrorSummary.Item>
-                            </ErrorSummary>
-                          )}
-
-                          {savedSuccessful && !dirty && (
-                            <div className='mt-5'>
-                              <LocalAlert status='success'>
-                                <LocalAlert.Header>
-                                  <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
-                                  <LocalAlert.CloseButton
-                                    onClick={() => setSavedSuccessful(false)}
-                                  />
-                                </LocalAlert.Header>
-                              </LocalAlert>
-                            </div>
-                          )}
-
-                          {!isSubmitting && (
-                            <div className='flex gap-2 mt-5 lg:flex-row flex-col'>
-                              <Button
-                                type='button'
-                                onClick={async () => {
-                                  await submitForm()
-                                }}
-                              >
-                                Lagre
-                              </Button>
-
-                              <Button
-                                type='button'
-                                variant='tertiary'
-                                onClick={() => {
-                                  window.location.reload()
-                                }}
-                              >
-                                Forkast tekstendringer
-                              </Button>
-                            </div>
-                          )}
-
-                          {isSubmitting && (
-                            <div className='flex mt-5 justify-center items-center'>
-                              <Loader size='large' />
-                            </div>
-                          )}
-                        </div>
-                      </Form>
+                        </Form>
+                        <UnsavedChangesGuard
+                          isDirty={dirty}
+                          formRef={formRef}
+                          navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}
+                        />
+                      </>
                     )}
                   </Formik>
                   {pvkDokument && (

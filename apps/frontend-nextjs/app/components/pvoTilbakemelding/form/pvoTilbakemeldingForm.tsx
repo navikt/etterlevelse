@@ -224,9 +224,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
       <Formik
         validateOnChange={false}
         validateOnBlur={false}
-        onSubmit={(values: ITilbakemeldingsinnhold) => {
-          submit(values)
-        }}
+        onSubmit={(values: ITilbakemeldingsinnhold) => submit(values)}
         initialValues={initialValue}
         innerRef={formRef}
       >

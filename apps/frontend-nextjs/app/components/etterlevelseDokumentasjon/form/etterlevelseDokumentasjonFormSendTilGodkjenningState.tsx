@@ -29,6 +29,7 @@ import { Error } from '@/components/common/modalSchema/ModalSchema'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
 import { IArdoqSystem } from '@/constants/ardoqSystem/ardoqSystemConstants'
 import {
@@ -251,534 +252,262 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
       validateOnBlur={validateOnBlur}
       innerRef={formRef}
     >
-      {({ values, submitForm, setFieldValue, errors }) => (
-        <Form>
-          <Heading size='medium' level='1' spacing>
-            Rediger etterlevelsesdokumentet
-          </Heading>
+      {({ values, submitForm, setFieldValue, errors, dirty }) => (
+        <>
+          <Form>
+            <Heading size='medium' level='1' spacing>
+              Rediger etterlevelsesdokumentet
+            </Heading>
 
-          <InfoCard data-color='warning' className='mb-5' size='small'>
-            <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-              <InfoCard.Title>
-                Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det
-                ikke være mulig å redigere følgende dokumentegenskaper fram til at dokumentet er
-                godkjent:
-              </InfoCard.Title>
-            </InfoCard.Header>
-            <InfoCard.Content>
-              <List as='ul'>
-                <List.Item>Egenskaper som gjelder for etterlevelsen</List.Item>
-                <List.Item>Behandlinger</List.Item>
-                <List.Item>Annen dokumentasjon</List.Item>
-                <List.Item>Risikoeier</List.Item>
-              </List>
-            </InfoCard.Content>
-          </InfoCard>
+            <InfoCard data-color='warning' className='mb-5' size='small'>
+              <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                <InfoCard.Title>
+                  Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier, vil det
+                  ikke være mulig å redigere følgende dokumentegenskaper fram til at dokumentet er
+                  godkjent:
+                </InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
+                <List as='ul'>
+                  <List.Item>Egenskaper som gjelder for etterlevelsen</List.Item>
+                  <List.Item>Behandlinger</List.Item>
+                  <List.Item>Annen dokumentasjon</List.Item>
+                  <List.Item>Risikoeier</List.Item>
+                </List>
+              </InfoCard.Content>
+            </InfoCard>
 
-          {dokumentRelasjon && (
-            <Alert contentMaxWidth={false} variant='info' className='mb-5'>
-              <Label>Du kan gjenbruke dette etterlevelsesdokumentet</Label>
+            {dokumentRelasjon && (
+              <Alert contentMaxWidth={false} variant='info' className='mb-5'>
+                <Label>Du kan gjenbruke dette etterlevelsesdokumentet</Label>
 
-              <div className='mb-5'>
-                <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
-              </div>
-            </Alert>
-          )}
+                <div className='mb-5'>
+                  <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
+                </div>
+              </Alert>
+            )}
 
-          <TextAreaField
-            rows={2}
-            noPlaceholder
-            label={labelNavngiDokument}
-            caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
-            name='title'
-          />
-
-          <div className='mt-5'>
             <TextAreaField
-              height='150px'
+              rows={2}
               noPlaceholder
-              label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
-              name='beskrivelse'
-              markdown
+              label={labelNavngiDokument}
+              caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+              name='title'
             />
-          </div>
 
-          {!dokumentRelasjon && (
-            <FieldArray name='test'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='h-full pt-5 w-[calc(100% - 1rem)]'>
-                  <Heading size='small' level='2' spacing>
-                    Velg egenskaper
-                  </Heading>
-                  <CheckboxGroup
-                    readOnly
-                    legend='Hvilke egenskaper gjelder for etterlevelsen?'
-                    description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
-                    value={selectedFilter}
-                    onChange={(selected: number[]) => {
-                      setSelectedFilter(selected)
-                      const irrelevansListe = relevansOptions.filter(
-                        (_irrelevans: IGetParsedOptionsProps, index: number) =>
-                          !selected.includes(index)
-                      )
+            <div className='mt-5'>
+              <TextAreaField
+                height='150px'
+                noPlaceholder
+                label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+                name='beskrivelse'
+                markdown
+              />
+            </div>
 
-                      fieldArrayRenderProps.form.setFieldValue(
-                        'irrelevansFor',
-                        irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
-                          codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
+            {!dokumentRelasjon && (
+              <FieldArray name='test'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='h-full pt-5 w-[calc(100% - 1rem)]'>
+                    <Heading size='small' level='2' spacing>
+                      Velg egenskaper
+                    </Heading>
+                    <CheckboxGroup
+                      readOnly
+                      legend='Hvilke egenskaper gjelder for etterlevelsen?'
+                      description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
+                      value={selectedFilter}
+                      onChange={(selected: number[]) => {
+                        setSelectedFilter(selected)
+                        const irrelevansListe = relevansOptions.filter(
+                          (_irrelevans: IGetParsedOptionsProps, index: number) =>
+                            !selected.includes(index)
                         )
-                      )
-                    }}
-                  >
-                    <DataTextWrapper>
-                      {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => (
-                        <Checkbox
-                          key={'relevans_' + relevans.value}
-                          value={index}
-                          description={relevans.description}
-                        >
-                          {relevans.label}
-                        </Checkbox>
-                      ))}
-                    </DataTextWrapper>
-                  </CheckboxGroup>
-                </div>
-              )}
-            </FieldArray>
-          )}
 
-          <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
-            Velg behandlinger
-          </Heading>
-
-          <FieldWrapper>
-            <FieldArray name='behandlinger'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='my-3'>
-                  <LabelWithDescription label='Legg til behandlinger fra Behandlingskatalogen' />
-
-                  <DataTextWrapper>
-                    {fieldArrayRenderProps.form.values.behandlinger.length === 0 && (
-                      <BodyLong>Ingen behandlinger</BodyLong>
-                    )}
-
-                    {fieldArrayRenderProps.form.values.behandlinger.length !== 0 && (
-                      <List className='mt-2' as='ul'>
-                        {fieldArrayRenderProps.form.values.behandlinger
-                          .map((behandling: IBehandling) => behandlingName(behandling))
-                          .map((item: string, index: number) => (
-                            <List.Item key={`tags_${item}_${index}`}>{item}</List.Item>
-                          ))}
-                      </List>
-                    )}
-                  </DataTextWrapper>
-                </div>
-              )}
-            </FieldArray>
-          </FieldWrapper>
-
-          <ReadMore
-            header='Dersom Nav er databehandler'
-            defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
-          >
-            <FieldArray name='dpBehandlinger'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='my-3'>
-                  <LabelWithDescription label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen' />
-
-                  <DataTextWrapper>
-                    {fieldArrayRenderProps.form.values.dpBehandlinger.length === 0 && (
-                      <BodyLong>Ingen behandlinger der Nav er databehandler</BodyLong>
-                    )}
-
-                    {fieldArrayRenderProps.form.values.dpBehandlinger.length !== 0 && (
-                      <List className='mt-2' as='ul'>
-                        {fieldArrayRenderProps.form.values.dpBehandlinger
-                          .map((dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling))
-                          .map((item: string, index: number) => (
-                            <List.Item key={`tags_${item}_${index}`}>{item}</List.Item>
-                          ))}
-                      </List>
-                    )}
-                  </DataTextWrapper>
-                </div>
-              )}
-            </FieldArray>
-          </ReadMore>
-
-          <FieldWrapper marginBottom id='risikovurderinger'>
-            <FieldArray name='risikovurderinger'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='my-8'>
-                  <Heading level='2' size='small' spacing>
-                    Legg til annen aktuell dokumentasjon. ROS som er aktuell(e), skal dere legge til
-                    her.
-                  </Heading>
-                  <DataTextWrapper>
-                    <Table className='mt-2.5 w-3/5' size='small'>
-                      <Table.Body>
-                        {fieldArrayRenderProps.form.values.risikovurderinger &&
-                          fieldArrayRenderProps.form.values.risikovurderinger.length !== 0 &&
-                          fieldArrayRenderProps.form.values.risikovurderinger.map((ros: string) => {
-                            const rosReg: RegExp = /\[(.+)]\((.+)\)/i
-                            const rosParts: RegExpMatchArray | null = ros.match(rosReg)
-
-                            if (rosParts)
-                              return (
-                                <Table.Row key={ros}>
-                                  <Table.DataCell>
-                                    <ExternalLink key={ros} href={rosParts[2]}>
-                                      {rosParts[1]}
-                                    </ExternalLink>
-                                  </Table.DataCell>
-                                </Table.Row>
-                              )
-                            return (
-                              <span className='flex' key={ros}>
-                                {ros}
-                              </span>
-                            )
-                          })}
-
-                        {fieldArrayRenderProps.form.values.risikovurderinger.length === 0 && (
-                          <BodyLong>Ingen aktuell dokumentasjon</BodyLong>
-                        )}
-                      </Table.Body>
-                    </Table>
-                  </DataTextWrapper>
-                </div>
-              )}
-            </FieldArray>
-          </FieldWrapper>
-
-          <Heading level='2' size='small' spacing>
-            Legg til minst et team og/eller en person
-          </Heading>
-
-          <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldArray name='teamsData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter team'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={useSearchTeamOptions}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.teamsData.filter(
-                            (team: ITeam) => team.id === value.id
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
+                        fieldArrayRenderProps.form.setFieldValue(
+                          'irrelevansFor',
+                          irrelevansListe.map((irrelevans: IGetParsedOptionsProps) =>
+                            codelist.utils.getCode(EListName.RELEVANS, irrelevans.value)
+                          )
+                        )
                       }}
-                      styles={selectOverrides}
-                    />
+                    >
+                      <DataTextWrapper>
+                        {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => (
+                          <Checkbox
+                            key={'relevans_' + relevans.value}
+                            value={index}
+                            description={relevans.description}
+                          >
+                            {relevans.label}
+                          </Checkbox>
+                        ))}
+                      </DataTextWrapper>
+                    </CheckboxGroup>
                   </div>
-                  <RenderTagList
-                    list={fieldArrayRenderProps.form.values.teamsData.map(
-                      (tema: ITeam) => tema.name
-                    )}
-                    onRemove={fieldArrayRenderProps.remove}
-                  />
-                </div>
-              )}
-            </FieldArray>
-            <div className='flex-1' />
-          </div>
+                )}
+              </FieldArray>
+            )}
 
-          <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldArray name='resourcesData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithTooltip label='Søk etter person' tooltip='' />
-                  <div className='w-full'>
-                    <AsyncSelect
-                      aria-label='Søk etter person'
-                      placeholder=''
-                      tabSelectsValue={false}
-                      components={{ DropdownIndicator }}
-                      noOptionsMessage={({ inputValue }) => {
-                        return noOptionMessage(inputValue)
-                      }}
-                      controlShouldRenderValue={false}
-                      loadingMessage={() => 'Søker...'}
-                      isClearable={false}
-                      loadOptions={searchResourceByNameOptions}
-                      onChange={(value: any) => {
-                        if (
-                          value &&
-                          fieldArrayRenderProps.form.values.resourcesData.filter(
-                            (team: ITeamResource) => team.navIdent === value.navIdent
-                          ).length === 0
-                        ) {
-                          fieldArrayRenderProps.push(value)
-                        }
-                      }}
-                      styles={selectOverrides}
-                    />
+            <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
+              Velg behandlinger
+            </Heading>
+
+            <FieldWrapper>
+              <FieldArray name='behandlinger'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='my-3'>
+                    <LabelWithDescription label='Legg til behandlinger fra Behandlingskatalogen' />
+
+                    <DataTextWrapper>
+                      {fieldArrayRenderProps.form.values.behandlinger.length === 0 && (
+                        <BodyLong>Ingen behandlinger</BodyLong>
+                      )}
+
+                      {fieldArrayRenderProps.form.values.behandlinger.length !== 0 && (
+                        <List className='mt-2' as='ul'>
+                          {fieldArrayRenderProps.form.values.behandlinger
+                            .map((behandling: IBehandling) => behandlingName(behandling))
+                            .map((item: string, index: number) => (
+                              <List.Item key={`tags_${item}_${index}`}>{item}</List.Item>
+                            ))}
+                        </List>
+                      )}
+                    </DataTextWrapper>
+                  </div>
+                )}
+              </FieldArray>
+            </FieldWrapper>
+
+            <ReadMore
+              header='Dersom Nav er databehandler'
+              defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
+            >
+              <FieldArray name='dpBehandlinger'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='my-3'>
+                    <LabelWithDescription label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen' />
+
+                    <DataTextWrapper>
+                      {fieldArrayRenderProps.form.values.dpBehandlinger.length === 0 && (
+                        <BodyLong>Ingen behandlinger der Nav er databehandler</BodyLong>
+                      )}
+
+                      {fieldArrayRenderProps.form.values.dpBehandlinger.length !== 0 && (
+                        <List className='mt-2' as='ul'>
+                          {fieldArrayRenderProps.form.values.dpBehandlinger
+                            .map((dpBehandling: IDpBehandling) => dpBehandlingName(dpBehandling))
+                            .map((item: string, index: number) => (
+                              <List.Item key={`tags_${item}_${index}`}>{item}</List.Item>
+                            ))}
+                        </List>
+                      )}
+                    </DataTextWrapper>
+                  </div>
+                )}
+              </FieldArray>
+            </ReadMore>
+
+            <FieldWrapper marginBottom id='risikovurderinger'>
+              <FieldArray name='risikovurderinger'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='my-8'>
+                    <Heading level='2' size='small' spacing>
+                      Legg til annen aktuell dokumentasjon. ROS som er aktuell(e), skal dere legge
+                      til her.
+                    </Heading>
+                    <DataTextWrapper>
+                      <Table className='mt-2.5 w-3/5' size='small'>
+                        <Table.Body>
+                          {fieldArrayRenderProps.form.values.risikovurderinger &&
+                            fieldArrayRenderProps.form.values.risikovurderinger.length !== 0 &&
+                            fieldArrayRenderProps.form.values.risikovurderinger.map(
+                              (ros: string) => {
+                                const rosReg: RegExp = /\[(.+)]\((.+)\)/i
+                                const rosParts: RegExpMatchArray | null = ros.match(rosReg)
+
+                                if (rosParts)
+                                  return (
+                                    <Table.Row key={ros}>
+                                      <Table.DataCell>
+                                        <ExternalLink key={ros} href={rosParts[2]}>
+                                          {rosParts[1]}
+                                        </ExternalLink>
+                                      </Table.DataCell>
+                                    </Table.Row>
+                                  )
+                                return (
+                                  <span className='flex' key={ros}>
+                                    {ros}
+                                  </span>
+                                )
+                              }
+                            )}
+
+                          {fieldArrayRenderProps.form.values.risikovurderinger.length === 0 && (
+                            <BodyLong>Ingen aktuell dokumentasjon</BodyLong>
+                          )}
+                        </Table.Body>
+                      </Table>
+                    </DataTextWrapper>
+                  </div>
+                )}
+              </FieldArray>
+            </FieldWrapper>
+
+            <Heading level='2' size='small' spacing>
+              Legg til minst et team og/eller en person
+            </Heading>
+
+            <div id='teamsData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldArray name='teamsData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                    <div className='w-full'>
+                      <AsyncSelect
+                        aria-label='Søk etter team'
+                        placeholder=''
+                        tabSelectsValue={false}
+                        components={{ DropdownIndicator }}
+                        noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
+                        controlShouldRenderValue={false}
+                        loadingMessage={() => 'Søker...'}
+                        isClearable={false}
+                        loadOptions={useSearchTeamOptions}
+                        onChange={(value: any) => {
+                          if (
+                            value &&
+                            fieldArrayRenderProps.form.values.teamsData.filter(
+                              (team: ITeam) => team.id === value.id
+                            ).length === 0
+                          ) {
+                            fieldArrayRenderProps.push(value)
+                          }
+                        }}
+                        styles={selectOverrides}
+                      />
+                    </div>
                     <RenderTagList
-                      list={fieldArrayRenderProps.form.values.resourcesData.map(
-                        (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
+                      list={fieldArrayRenderProps.form.values.teamsData.map(
+                        (tema: ITeam) => tema.name
                       )}
                       onRemove={fieldArrayRenderProps.remove}
                     />
                   </div>
-
-                  {env.isDev && (
-                    <ReadMore header='Hva hvis jeg ikke finner person'>
-                      <div className='flex gap-2 items-end my-2'>
-                        <TextField
-                          label='Skriv inn Nav ident dersom du ikke finner person over'
-                          value={customPersonForDev}
-                          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                            setCustomPersonForDev(event.target.value)
-                          }
-                        />
-                        <div>
-                          <Button
-                            type='button'
-                            onClick={() => {
-                              fieldArrayRenderProps.push({
-                                navIdent: customPersonForDev,
-                                givenName: customPersonForDev,
-                                familyName: customPersonForDev,
-                                fullName: customPersonForDev,
-                                email: customPersonForDev,
-                                resourceType: customPersonForDev,
-                              })
-                            }}
-                          >
-                            Legg til
-                          </Button>
-                        </div>
-                      </div>
-                      <RenderTagList
-                        list={fieldArrayRenderProps.form.values.resourcesData.map(
-                          (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
-                        )}
-                        onRemove={fieldArrayRenderProps.remove}
-                      />
-                    </ReadMore>
-                  )}
-                </div>
-              )}
-            </FieldArray>
-            <div className='flex-1' />
-          </div>
-
-          {errors.teamsData && <Error message={errors.teamsData as string} />}
-
-          <div id='varslingsadresser' className='mt-5'>
-            <VarslingsadresserEdit fieldName='varslingsadresser' />
-            {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
-          </div>
-
-          <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
-            <FieldWrapper marginTop full>
-              <Field name='nomAvdelingId'>
-                {(fieldProps: FieldProps) => (
-                  <div>
-                    <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
-                    <OptionList
-                      label='Avdeling'
-                      options={alleAvdelingOptions}
-                      value={fieldProps.field.value}
-                      onChange={async (value: any) => {
-                        setSelectedAvdeling(value)
-
-                        if (value !== fieldProps.form.values.nomAvdelingId) {
-                          await fieldProps.form.setFieldValue('seksjoner', [])
-                          await fieldProps.form.setFieldValue('enheter', [])
-                          setEnheterBySeksjon(new Map())
-                        }
-
-                        await fieldProps.form.setFieldValue('nomAvdelingId', value)
-                        await fieldProps.form.setFieldValue(
-                          'avdelingNavn',
-                          alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
-                            .label
-                        )
-                      }}
-                      error={
-                        fieldProps.form.errors && fieldProps.form.errors.nomAvdelingId ? (
-                          <FormError fieldName='nomAvdelingId' />
-                        ) : undefined
-                      }
-                    />
-                  </div>
                 )}
-              </Field>
-            </FieldWrapper>
+              </FieldArray>
+              <div className='flex-1' />
+            </div>
 
-            <div className='flex-1' />
-          </div>
-
-          {selectedAvdeling !== '' &&
-            selectedAvdeling !== undefined &&
-            (() => {
-              const filteredSeksjoner = seksjonerByAvdeling.filter(
-                (s) => s.value !== selectedAvdeling
-              )
-              if (filteredSeksjoner.length === 0) return null
-              return (
-                <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                  <FieldWrapper marginTop full>
-                    <FieldArray name='seksjoner'>
-                      {(fieldProps: FieldArrayRenderProps) => (
-                        <div>
-                          <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
-                          <OptionList
-                            label='Seksjon'
-                            options={filteredSeksjoner}
-                            onChange={async (value: any) => {
-                              if (value) {
-                                const selectedSeksjon = filteredSeksjoner.find(
-                                  (seksjon) => seksjon.value === value
-                                )
-
-                                if (!selectedSeksjon) return
-
-                                const ikkeFinnesAlleredeIListe =
-                                  fieldProps.form.values.seksjoner.filter(
-                                    (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
-                                  ).length === 0
-
-                                if (ikkeFinnesAlleredeIListe) {
-                                  await fieldProps.form.setFieldValue('seksjoner', [
-                                    ...fieldProps.form.values.seksjoner,
-                                    {
-                                      nomSeksjonId: selectedSeksjon.value,
-                                      nomSeksjonName: selectedSeksjon.label,
-                                    },
-                                  ])
-
-                                  getEnheterBySeksjonId(String(selectedSeksjon.value))
-                                    .then((enheter) => {
-                                      if (enheter.length > 0) {
-                                        setEnheterBySeksjon((prev) => {
-                                          const next = new Map(prev)
-                                          next.set(
-                                            String(selectedSeksjon.value),
-                                            enheter.map((e) => ({ value: e.id, label: e.navn }))
-                                          )
-                                          return next
-                                        })
-                                      }
-                                    })
-                                    .catch(() => {})
-                                }
-                              }
-                            }}
-                          />
-                          <RenderTagList
-                            list={fieldProps.form.values.seksjoner.map(
-                              (seksjon: INomSeksjon) => seksjon.nomSeksjonName
-                            )}
-                            onRemove={(index: number) => {
-                              const removedSeksjon = fieldProps.form.values.seksjoner[index]
-                              fieldProps.remove(index)
-                              const removedEnheter = fieldProps.form.values.enheter.filter(
-                                (e: INomEnhet) => {
-                                  const enhetOptions = enheterBySeksjon.get(
-                                    removedSeksjon.nomSeksjonId
-                                  )
-                                  return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
-                                }
-                              )
-                              if (removedEnheter.length > 0) {
-                                fieldProps.form.setFieldValue(
-                                  'enheter',
-                                  fieldProps.form.values.enheter.filter(
-                                    (e: INomEnhet) => !removedEnheter.includes(e)
-                                  )
-                                )
-                              }
-                              setEnheterBySeksjon((prev) => {
-                                const next = new Map(prev)
-                                next.delete(removedSeksjon.nomSeksjonId)
-                                return next
-                              })
-                            }}
-                          />
-                        </div>
-                      )}
-                    </FieldArray>
-                  </FieldWrapper>
-
-                  <div className='flex-1' />
-                </div>
-              )
-            })()}
-
-          {(() => {
-            const allEnhetOptions = Array.from(enheterBySeksjon.values()).flat()
-            if (allEnhetOptions.length === 0) return null
-            return (
-              <div id='enhet' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                <FieldWrapper marginTop full>
-                  <FieldArray name='enheter'>
-                    {(fieldProps: FieldArrayRenderProps) => (
-                      <div>
-                        <LabelWithDescription label='Angi hvilken enhet som er ansvarlig for etterlevelsen' />
-                        <OptionList
-                          label='Enhet'
-                          options={allEnhetOptions}
-                          onChange={async (value: any) => {
-                            if (value) {
-                              const selectedEnhet = allEnhetOptions.find(
-                                (enhet) => enhet.value === value
-                              )
-                              if (!selectedEnhet) return
-                              const ikkeFinnesAlleredeIListe =
-                                fieldProps.form.values.enheter.filter(
-                                  (enhet: INomEnhet) => enhet.nomEnhetId === value
-                                ).length === 0
-                              if (ikkeFinnesAlleredeIListe) {
-                                await fieldProps.form.setFieldValue('enheter', [
-                                  ...fieldProps.form.values.enheter,
-                                  {
-                                    nomEnhetId: selectedEnhet.value,
-                                    nomEnhetName: selectedEnhet.label,
-                                  },
-                                ])
-                              }
-                            }
-                          }}
-                        />
-                        <RenderTagList
-                          list={fieldProps.form.values.enheter.map(
-                            (enhet: INomEnhet) => enhet.nomEnhetName
-                          )}
-                          onRemove={fieldProps.remove}
-                        />
-                      </div>
-                    )}
-                  </FieldArray>
-                </FieldWrapper>
-                <div className='flex-1' />
-              </div>
-            )
-          })()}
-
-          {env.isDev && (
-            <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-              <FieldArray name='ardoqSystemData'>
+            <div id='resourcesData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldArray name='resourcesData'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='flex-1'>
-                    <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                    <LabelWithTooltip label='Søk etter person' tooltip='' />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter system'
+                        aria-label='Søk etter person'
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
@@ -788,12 +517,12 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                         controlShouldRenderValue={false}
                         loadingMessage={() => 'Søker...'}
                         isClearable={false}
-                        loadOptions={useArdoqSearch}
+                        loadOptions={searchResourceByNameOptions}
                         onChange={(value: any) => {
                           if (
                             value &&
-                            fieldArrayRenderProps.form.values.ardoqSystemData.filter(
-                              (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                            fieldArrayRenderProps.form.values.resourcesData.filter(
+                              (team: ITeamResource) => team.navIdent === value.navIdent
                             ).length === 0
                           ) {
                             fieldArrayRenderProps.push(value)
@@ -802,161 +531,445 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
                         styles={selectOverrides}
                       />
                       <RenderTagList
-                        list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
-                          (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                        list={fieldArrayRenderProps.form.values.resourcesData.map(
+                          (resource: ITeamResource) => `${resource.fullName} (${resource.navIdent})`
                         )}
                         onRemove={fieldArrayRenderProps.remove}
                       />
                     </div>
+
+                    {env.isDev && (
+                      <ReadMore header='Hva hvis jeg ikke finner person'>
+                        <div className='flex gap-2 items-end my-2'>
+                          <TextField
+                            label='Skriv inn Nav ident dersom du ikke finner person over'
+                            value={customPersonForDev}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                              setCustomPersonForDev(event.target.value)
+                            }
+                          />
+                          <div>
+                            <Button
+                              type='button'
+                              onClick={() => {
+                                fieldArrayRenderProps.push({
+                                  navIdent: customPersonForDev,
+                                  givenName: customPersonForDev,
+                                  familyName: customPersonForDev,
+                                  fullName: customPersonForDev,
+                                  email: customPersonForDev,
+                                  resourceType: customPersonForDev,
+                                })
+                              }}
+                            >
+                              Legg til
+                            </Button>
+                          </div>
+                        </div>
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.resourcesData.map(
+                            (resource: ITeamResource) =>
+                              `${resource.fullName} (${resource.navIdent})`
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </ReadMore>
+                    )}
                   </div>
                 )}
               </FieldArray>
               <div className='flex-1' />
             </div>
-          )}
 
-          <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
-            <FieldArray name='risikoeiereData'>
-              {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                <div className='flex-1'>
-                  <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
-                  <div>
-                    <DataTextWrapper>
-                      {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
-                        'Ingen risikoeier satt'}
+            {errors.teamsData && <Error message={errors.teamsData as string} />}
 
-                      {fieldArrayRenderProps.form.values.risikoeiereData.length !== 0 && (
-                        <List as='ul'>
-                          {fieldArrayRenderProps.form.values.risikoeiereData.map(
-                            (resource: ITeamResource) => (
-                              <List.Item key={resource.fullName}>{resource.fullName}</List.Item>
-                            )
-                          )}
-                        </List>
-                      )}
-                    </DataTextWrapper>
-                  </div>
-                </div>
-              )}
-            </FieldArray>
+            <div id='varslingsadresser' className='mt-5'>
+              <VarslingsadresserEdit fieldName='varslingsadresser' />
+              {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
+            </div>
 
-            <div className='flex-1' />
-          </div>
+            <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
+              <FieldWrapper marginTop full>
+                <Field name='nomAvdelingId'>
+                  {(fieldProps: FieldProps) => (
+                    <div>
+                      <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
+                      <OptionList
+                        label='Avdeling'
+                        options={alleAvdelingOptions}
+                        value={fieldProps.field.value}
+                        onChange={async (value: any) => {
+                          setSelectedAvdeling(value)
 
-          {user.isAdmin() && (
-            <InfoCard data-color='meta-purple' className='my-7'>
-              <InfoCard.Header>
-                <InfoCard.Title>ADMIN STUFFSSSS</InfoCard.Title>
-              </InfoCard.Header>
-              <InfoCard.Content>
-                {env.isDev && (
-                  <>
-                    <div className='mt-5'>
-                      <TextAreaField
-                        rows={1}
-                        noPlaceholder
-                        label='P360 recnummer KUN I DEV'
-                        name='p360Recno'
+                          if (value !== fieldProps.form.values.nomAvdelingId) {
+                            await fieldProps.form.setFieldValue('seksjoner', [])
+                            await fieldProps.form.setFieldValue('enheter', [])
+                            setEnheterBySeksjon(new Map())
+                          }
+
+                          await fieldProps.form.setFieldValue('nomAvdelingId', value)
+                          await fieldProps.form.setFieldValue(
+                            'avdelingNavn',
+                            alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
+                              .label
+                          )
+                        }}
+                        error={
+                          fieldProps.form.errors && fieldProps.form.errors.nomAvdelingId ? (
+                            <FormError fieldName='nomAvdelingId' />
+                          ) : undefined
+                        }
                       />
+                    </div>
+                  )}
+                </Field>
+              </FieldWrapper>
 
+              <div className='flex-1' />
+            </div>
+
+            {selectedAvdeling !== '' &&
+              selectedAvdeling !== undefined &&
+              (() => {
+                const filteredSeksjoner = seksjonerByAvdeling.filter(
+                  (s) => s.value !== selectedAvdeling
+                )
+                if (filteredSeksjoner.length === 0) return null
+                return (
+                  <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
+                    <FieldWrapper marginTop full>
+                      <FieldArray name='seksjoner'>
+                        {(fieldProps: FieldArrayRenderProps) => (
+                          <div>
+                            <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
+                            <OptionList
+                              label='Seksjon'
+                              options={filteredSeksjoner}
+                              onChange={async (value: any) => {
+                                if (value) {
+                                  const selectedSeksjon = filteredSeksjoner.find(
+                                    (seksjon) => seksjon.value === value
+                                  )
+
+                                  if (!selectedSeksjon) return
+
+                                  const ikkeFinnesAlleredeIListe =
+                                    fieldProps.form.values.seksjoner.filter(
+                                      (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
+                                    ).length === 0
+
+                                  if (ikkeFinnesAlleredeIListe) {
+                                    await fieldProps.form.setFieldValue('seksjoner', [
+                                      ...fieldProps.form.values.seksjoner,
+                                      {
+                                        nomSeksjonId: selectedSeksjon.value,
+                                        nomSeksjonName: selectedSeksjon.label,
+                                      },
+                                    ])
+
+                                    getEnheterBySeksjonId(String(selectedSeksjon.value))
+                                      .then((enheter) => {
+                                        if (enheter.length > 0) {
+                                          setEnheterBySeksjon((prev) => {
+                                            const next = new Map(prev)
+                                            next.set(
+                                              String(selectedSeksjon.value),
+                                              enheter.map((e) => ({ value: e.id, label: e.navn }))
+                                            )
+                                            return next
+                                          })
+                                        }
+                                      })
+                                      .catch(() => {})
+                                  }
+                                }
+                              }}
+                            />
+                            <RenderTagList
+                              list={fieldProps.form.values.seksjoner.map(
+                                (seksjon: INomSeksjon) => seksjon.nomSeksjonName
+                              )}
+                              onRemove={(index: number) => {
+                                const removedSeksjon = fieldProps.form.values.seksjoner[index]
+                                fieldProps.remove(index)
+                                const removedEnheter = fieldProps.form.values.enheter.filter(
+                                  (e: INomEnhet) => {
+                                    const enhetOptions = enheterBySeksjon.get(
+                                      removedSeksjon.nomSeksjonId
+                                    )
+                                    return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
+                                  }
+                                )
+                                if (removedEnheter.length > 0) {
+                                  fieldProps.form.setFieldValue(
+                                    'enheter',
+                                    fieldProps.form.values.enheter.filter(
+                                      (e: INomEnhet) => !removedEnheter.includes(e)
+                                    )
+                                  )
+                                }
+                                setEnheterBySeksjon((prev) => {
+                                  const next = new Map(prev)
+                                  next.delete(removedSeksjon.nomSeksjonId)
+                                  return next
+                                })
+                              }}
+                            />
+                          </div>
+                        )}
+                      </FieldArray>
+                    </FieldWrapper>
+
+                    <div className='flex-1' />
+                  </div>
+                )
+              })()}
+
+            {(() => {
+              const allEnhetOptions = Array.from(enheterBySeksjon.values()).flat()
+              if (allEnhetOptions.length === 0) return null
+              return (
+                <div id='enhet' className='flex flex-col lg:flex-row gap-5 mb-5'>
+                  <FieldWrapper marginTop full>
+                    <FieldArray name='enheter'>
+                      {(fieldProps: FieldArrayRenderProps) => (
+                        <div>
+                          <LabelWithDescription label='Angi hvilken enhet som er ansvarlig for etterlevelsen' />
+                          <OptionList
+                            label='Enhet'
+                            options={allEnhetOptions}
+                            onChange={async (value: any) => {
+                              if (value) {
+                                const selectedEnhet = allEnhetOptions.find(
+                                  (enhet) => enhet.value === value
+                                )
+                                if (!selectedEnhet) return
+                                const ikkeFinnesAlleredeIListe =
+                                  fieldProps.form.values.enheter.filter(
+                                    (enhet: INomEnhet) => enhet.nomEnhetId === value
+                                  ).length === 0
+                                if (ikkeFinnesAlleredeIListe) {
+                                  await fieldProps.form.setFieldValue('enheter', [
+                                    ...fieldProps.form.values.enheter,
+                                    {
+                                      nomEnhetId: selectedEnhet.value,
+                                      nomEnhetName: selectedEnhet.label,
+                                    },
+                                  ])
+                                }
+                              }
+                            }}
+                          />
+                          <RenderTagList
+                            list={fieldProps.form.values.enheter.map(
+                              (enhet: INomEnhet) => enhet.nomEnhetName
+                            )}
+                            onRemove={fieldProps.remove}
+                          />
+                        </div>
+                      )}
+                    </FieldArray>
+                  </FieldWrapper>
+                  <div className='flex-1' />
+                </div>
+              )
+            })()}
+
+            {env.isDev && (
+              <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+                <FieldArray name='ardoqSystemData'>
+                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                    <div className='flex-1'>
+                      <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                      <div className='w-full'>
+                        <AsyncSelect
+                          aria-label='Søk etter system'
+                          placeholder=''
+                          tabSelectsValue={false}
+                          components={{ DropdownIndicator }}
+                          noOptionsMessage={({ inputValue }) => {
+                            return noOptionMessage(inputValue)
+                          }}
+                          controlShouldRenderValue={false}
+                          loadingMessage={() => 'Søker...'}
+                          isClearable={false}
+                          loadOptions={useArdoqSearch}
+                          onChange={(value: any) => {
+                            if (
+                              value &&
+                              fieldArrayRenderProps.form.values.ardoqSystemData.filter(
+                                (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                              ).length === 0
+                            ) {
+                              fieldArrayRenderProps.push(value)
+                            }
+                          }}
+                          styles={selectOverrides}
+                        />
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
+                            (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </FieldArray>
+                <div className='flex-1' />
+              </div>
+            )}
+
+            <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
+              <FieldArray name='risikoeiereData'>
+                {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                  <div className='flex-1'>
+                    <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
+                    <div>
+                      <DataTextWrapper>
+                        {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
+                          'Ingen risikoeier satt'}
+
+                        {fieldArrayRenderProps.form.values.risikoeiereData.length !== 0 && (
+                          <List as='ul'>
+                            {fieldArrayRenderProps.form.values.risikoeiereData.map(
+                              (resource: ITeamResource) => (
+                                <List.Item key={resource.fullName}>{resource.fullName}</List.Item>
+                              )
+                            )}
+                          </List>
+                        )}
+                      </DataTextWrapper>
+                    </div>
+                  </div>
+                )}
+              </FieldArray>
+
+              <div className='flex-1' />
+            </div>
+
+            {user.isAdmin() && (
+              <InfoCard data-color='meta-purple' className='my-7'>
+                <InfoCard.Header>
+                  <InfoCard.Title>ADMIN STUFFSSSS</InfoCard.Title>
+                </InfoCard.Header>
+                <InfoCard.Content>
+                  {env.isDev && (
+                    <>
                       <div className='mt-5'>
                         <TextAreaField
                           rows={1}
                           noPlaceholder
-                          label='P360 saknummer  KUN I DEV'
-                          name='p360CaseNumber'
+                          label='P360 recnummer KUN I DEV'
+                          name='p360Recno'
                         />
+
+                        <div className='mt-5'>
+                          <TextAreaField
+                            rows={1}
+                            noPlaceholder
+                            label='P360 saknummer  KUN I DEV'
+                            name='p360CaseNumber'
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </>
-                )}
+                    </>
+                  )}
 
-                <div className='mt-5'>
-                  <Select
-                    label='Oppdater status'
-                    value={values.status}
-                    onChange={(event) => {
-                      if (event.target.value) {
-                        setFieldValue('status', event.target.value)
-                      }
-                    }}
-                  >
-                    <option value={EEtterlevelseDokumentasjonStatus.UNDER_ARBEID}>
-                      under arbeid
-                    </option>
-                    <option
-                      value={EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER}
-                    >
-                      Sendt til godkjenning til risikoeier
-                    </option>
-                    <option value={EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER}>
-                      Godkjent av risikoeier
-                    </option>
-                  </Select>
-                </div>
-
-                {!dokumentRelasjon && (
                   <div className='mt-5'>
-                    <CheckboxGroup
-                      legend='Skal dette dokumentet kunne gjenbrukes av andre?'
-                      onChange={(value: boolean[]) =>
-                        setFieldValue('forGjenbruk', value.length !== 0)
-                      }
-                      value={[values.forGjenbruk]}
-                      description='Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk.'
+                    <Select
+                      label='Oppdater status'
+                      value={values.status}
+                      onChange={(event) => {
+                        if (event.target.value) {
+                          setFieldValue('status', event.target.value)
+                        }
+                      }}
                     >
-                      <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
-                    </CheckboxGroup>
+                      <option value={EEtterlevelseDokumentasjonStatus.UNDER_ARBEID}>
+                        under arbeid
+                      </option>
+                      <option
+                        value={
+                          EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                        }
+                      >
+                        Sendt til godkjenning til risikoeier
+                      </option>
+                      <option value={EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER}>
+                        Godkjent av risikoeier
+                      </option>
+                    </Select>
                   </div>
-                )}
-              </InfoCard.Content>
-            </InfoCard>
-          )}
 
-          {!_.isEmpty(errors) && (
-            <ErrorSummary
-              ref={errorSummaryRef}
-              heading='Du må rette disse feilene før du kan fortsette'
-            >
-              {Object.entries(errors)
-                .filter(([, error]) => error)
-                .map(([key, error]) => (
-                  <ErrorSummary.Item href={`#${key}`} key={key}>
-                    {error as string}
-                  </ErrorSummary.Item>
-                ))}
-            </ErrorSummary>
-          )}
+                  {!dokumentRelasjon && (
+                    <div className='mt-5'>
+                      <CheckboxGroup
+                        legend='Skal dette dokumentet kunne gjenbrukes av andre?'
+                        onChange={(value: boolean[]) =>
+                          setFieldValue('forGjenbruk', value.length !== 0)
+                        }
+                        value={[values.forGjenbruk]}
+                        description='Velger du gjenbruk, får du mulighet til å legge inn vurderinger og veiledning. Du får velge selv når du vil tillate gjenbruk.'
+                      >
+                        <Checkbox value={true}>Ja, dette dokumentet skal gjenbrukes</Checkbox>
+                      </CheckboxGroup>
+                    </div>
+                  )}
+                </InfoCard.Content>
+              </InfoCard>
+            )}
 
-          <div className='button_container flex flex-col mt-40 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-white'>
-            <div className='flex flex-row-reverse'>
-              <Button
-                type='button'
-                onClick={async () => {
-                  errorSummaryRef.current?.focus()
-                  setValidateOnBlur(true)
-                  await submitForm()
-                  setSubmitClick(!submitClick)
-                }}
-                className='ml-2.5'
+            {!_.isEmpty(errors) && (
+              <ErrorSummary
+                ref={errorSummaryRef}
+                heading='Du må rette disse feilene før du kan fortsette'
               >
-                Lagre
-              </Button>
-              <Button
-                type='button'
-                variant='secondary'
-                onClick={() => {
-                  // ampli.logEvent('knapp trykket', {
-                  //   tekst: 'Avbryt opprett etterlevelsesdokument',
-                  // })
-                  router.back()
-                }}
-              >
-                Avbryt
-              </Button>
+                {Object.entries(errors)
+                  .filter(([, error]) => error)
+                  .map(([key, error]) => (
+                    <ErrorSummary.Item href={`#${key}`} key={key}>
+                      {error as string}
+                    </ErrorSummary.Item>
+                  ))}
+              </ErrorSummary>
+            )}
+
+            <div className='button_container flex flex-col mt-40 py-4 px-4 sticky bottom-0 border-t-2 z-2 bg-white'>
+              <div className='flex flex-row-reverse'>
+                <Button
+                  type='button'
+                  onClick={async () => {
+                    errorSummaryRef.current?.focus()
+                    setValidateOnBlur(true)
+                    await submitForm()
+                    setSubmitClick(!submitClick)
+                  }}
+                  className='ml-2.5'
+                >
+                  Lagre
+                </Button>
+                <Button
+                  type='button'
+                  variant='secondary'
+                  onClick={() => {
+                    // ampli.logEvent('knapp trykket', {
+                    //   tekst: 'Avbryt opprett etterlevelsesdokument',
+                    // })
+                    router.back()
+                  }}
+                >
+                  Avbryt
+                </Button>
+              </div>
             </div>
-          </div>
-        </Form>
+          </Form>
+          <UnsavedChangesGuard
+            isDirty={dirty}
+            formRef={formRef}
+            navigateUrl={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon?.id)}
+          />
+        </>
       )}
     </Formik>
   )

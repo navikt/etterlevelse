@@ -2,6 +2,7 @@
 
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { Markdown } from '@/components/common/markdown/markdown'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
 import KravRisikoscenarioGodkjentAccordianList from '@/components/risikoscenario/kravSpesifikk/KravRisikoscenarioGodkjentAccordianList'
 import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/kravRisikoscenarioer'
@@ -19,6 +20,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { FileTextIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
 import {
   Dispatch,
   FunctionComponent,
@@ -60,6 +62,7 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
+  const pathName = usePathname()
 
   const userHasAccess = () => {
     return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
@@ -212,6 +215,8 @@ export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
           setActiveTab(selectedTab)
         }}
       />
+
+      {isPvkFormActive && <UnsavedChangesGuard formRef={formRef} navigateUrl={pathName} />}
     </div>
   )
 }

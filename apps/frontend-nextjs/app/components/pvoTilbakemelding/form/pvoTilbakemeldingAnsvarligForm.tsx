@@ -144,9 +144,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
     <Formik
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={(values: IVurdering) => {
-        submit(values)
-      }}
+      onSubmit={(values: IVurdering) => submit(values)}
       initialValues={initialValue}
       innerRef={formRef}
     >

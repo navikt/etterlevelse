@@ -168,9 +168,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
       <Formik
         validateOnChange={false}
         validateOnBlur={false}
-        onSubmit={(values: ITilhorendeDokumentasjonTilbakemelding) => {
-          submit(values)
-        }}
+        onSubmit={(values: ITilhorendeDokumentasjonTilbakemelding) => submit(values)}
         initialValues={initialValue}
         innerRef={formRef}
       >

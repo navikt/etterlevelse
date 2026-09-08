@@ -87,6 +87,7 @@ type TProps = {
   isPvkKravLoading: boolean
   refetchPvkKrav: () => Promise<{ data?: { krav: IPageResponse<TKravQL> } }>
   pvoTilbakemelding?: IPvoTilbakemelding
+  formRef: RefObject<any>
 }
 
 export const SendInnView: FunctionComponent<TProps> = ({
@@ -104,9 +105,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
   isPvkKravLoading,
   refetchPvkKrav,
   pvoTilbakemelding,
+  formRef,
 }) => {
   const errorSummaryRef: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null)
-  const formRef: RefObject<any> = useRef(undefined)
   // Synchronous flag so submit() sees the result of the latest validate() run, avoiding a race
   // with React state updates not yet re-rendered when Formik calls onSubmit.
   const hasBlockingErrorsRef = useRef<boolean>(false)
