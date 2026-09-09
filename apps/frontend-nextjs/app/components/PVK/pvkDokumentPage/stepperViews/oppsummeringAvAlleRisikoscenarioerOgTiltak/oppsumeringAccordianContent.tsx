@@ -7,6 +7,7 @@ import {
 } from '@/api/risikoscenario/risikoscenarioApi'
 import VurdereTiltaksEffekt from '@/components/PVK/edit/vurdereTiltaksEffekt'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { bypassUnsavedGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '@/components/risikoscenario/common/risikoscenarioTiltakHeader'
@@ -68,7 +69,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
 
     setActiveRisikoscenario(response)
     setIsEditModalOpen(false)
-    formRef.current?.resetForm()
+    bypassUnsavedGuard()
     window.location.reload()
   }
 

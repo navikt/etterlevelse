@@ -7,6 +7,7 @@ import {
   mapPvoTilbakemeldingToFormValue,
   updatePvoTilbakemelding,
 } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
+import { bypassUnsavedGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -187,7 +188,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                     type='button'
                     variant='secondary'
                     onClick={() => {
-                      formRef.current?.resetForm()
+                      bypassUnsavedGuard()
                       window.location.reload()
                     }}
                   >

@@ -11,6 +11,15 @@ type TProps = {
   formRef?: RefObject<FormikProps<any> | null>
 }
 
+const UNSAVED_GUARD_BYPASS_EVENT = 'unsavedChangesGuard:bypass'
+
+// Call right before an intentional reload/navigation so the guard skips its unsaved prompt.
+export const bypassUnsavedGuard = (): void => {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(UNSAVED_GUARD_BYPASS_EVENT))
+  }
+}
+
 export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
   isDirty,
   navigateUrl,
@@ -70,6 +79,14 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
   useEffect(() => {
     navigateUrlRef.current = navigateUrl
   }, [navigateUrl])
+
+  useEffect(() => {
+    const handleBypassRequest = (): void => {
+      isLeavingRef.current = true
+    }
+    window.addEventListener(UNSAVED_GUARD_BYPASS_EVENT, handleBypassRequest)
+    return () => window.removeEventListener(UNSAVED_GUARD_BYPASS_EVENT, handleBypassRequest)
+  }, [])
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent): void => {

@@ -8,6 +8,7 @@ import {
   updatePvoTilbakemelding,
 } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { bypassUnsavedGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -243,7 +244,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                     type='button'
                     variant='secondary'
                     onClick={() => {
-                      formRef.current?.resetForm()
+                      bypassUnsavedGuard()
                       window.location.reload()
                     }}
                   >

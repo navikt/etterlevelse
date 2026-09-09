@@ -11,6 +11,7 @@ import { searchResourceByNameOptions } from '@/api/teamkatalogen/teamkatalogenAp
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
+import { bypassUnsavedGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -113,7 +114,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                     : selectedStatus,
               }
               await updatePvoTilbakemelding(updatedValues).then(() => {
-                formRef.current?.resetForm()
+                bypassUnsavedGuard()
                 window.location.reload()
               })
             }
@@ -136,7 +137,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               status: pvoTilbakemelding.status,
             })
             await createPvoTilbakemelding(createValue).then(() => {
-              formRef.current?.resetForm()
+              bypassUnsavedGuard()
               window.location.reload()
             })
           } else {
@@ -281,7 +282,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                   type='button'
                   variant='secondary'
                   onClick={() => {
-                    formRef.current?.resetForm()
+                    bypassUnsavedGuard()
                     window.location.reload()
                   }}
                 >

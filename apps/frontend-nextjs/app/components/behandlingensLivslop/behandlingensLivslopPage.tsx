@@ -41,7 +41,10 @@ import { useParams, useRouter } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import ForbiddenAlert from '../common/forbiddenAlert'
 import { TextAreaField } from '../common/textAreaField/textAreaField'
-import { UnsavedChangesGuard } from '../common/unsavedChangesGuard/unsavedChangesGuard'
+import {
+  UnsavedChangesGuard,
+  bypassUnsavedGuard,
+} from '../common/unsavedChangesGuard/unsavedChangesGuard'
 import UnsavedModalAlert from '../common/unsavedModalAlert/unsavedModalAlert'
 import {
   ContentLayout,
@@ -298,7 +301,7 @@ export const BehandlingensLivslopPage = () => {
                                   type='button'
                                   variant='tertiary'
                                   onClick={() => {
-                                    formRef.current?.resetForm()
+                                    bypassUnsavedGuard()
                                     window.location.reload()
                                   }}
                                 >

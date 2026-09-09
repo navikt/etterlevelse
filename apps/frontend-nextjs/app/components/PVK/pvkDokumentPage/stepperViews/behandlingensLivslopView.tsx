@@ -15,6 +15,7 @@ import behandlingensLivslopSchema from '@/components/behandlingensLivslop/form/b
 import BehandlingensLivsLopSidePanel from '@/components/behandlingensLivslop/sidePanel/BehandlingensLivsLopSidePanel'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { bypassUnsavedGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
@@ -272,7 +273,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                                 type='button'
                                 variant='tertiary'
                                 onClick={() => {
-                                  formRef.current?.resetForm()
+                                  bypassUnsavedGuard()
                                   window.location.reload()
                                 }}
                               >
