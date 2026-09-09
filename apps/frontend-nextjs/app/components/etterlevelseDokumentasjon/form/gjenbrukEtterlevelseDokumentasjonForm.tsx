@@ -222,6 +222,10 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
               />
             </div>
 
+            <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
+              Velg behandlinger og systemer
+            </Heading>
+
             <FieldWrapper>
               <FieldArray name='behandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -494,7 +498,7 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
             </div>
 
             <Heading level='2' size='small' className='mt-5' spacing>
-              Hvem skal ha redigeringstilgang til dokumentet?
+              Ansvar for etterlevelsen
             </Heading>
 
             <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>

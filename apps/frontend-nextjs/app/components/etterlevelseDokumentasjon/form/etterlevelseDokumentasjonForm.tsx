@@ -842,7 +842,7 @@ export const EtterlevelseDokumentasjonForm: FunctionComponent<
             </div>
 
             <Heading level='2' size='small' className='mt-5' spacing>
-              Hvem skal ha redigeringstilgang til dokumentet?
+              Ansvar for etterlevelsen
             </Heading>
 
             <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
