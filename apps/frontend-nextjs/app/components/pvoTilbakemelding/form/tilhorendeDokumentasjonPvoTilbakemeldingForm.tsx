@@ -187,6 +187,7 @@ export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TPr
                     type='button'
                     variant='secondary'
                     onClick={() => {
+                      formRef.current?.resetForm()
                       window.location.reload()
                     }}
                   >

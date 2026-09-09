@@ -272,6 +272,7 @@ export const BehandlingensLivslopView: FunctionComponent<TProps> = ({
                                 type='button'
                                 variant='tertiary'
                                 onClick={() => {
+                                  formRef.current?.resetForm()
                                   window.location.reload()
                                 }}
                               >

@@ -68,6 +68,7 @@ export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
 
     setActiveRisikoscenario(response)
     setIsEditModalOpen(false)
+    formRef.current?.resetForm()
     window.location.reload()
   }
 

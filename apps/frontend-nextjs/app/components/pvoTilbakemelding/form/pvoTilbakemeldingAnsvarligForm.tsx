@@ -112,7 +112,10 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                     ? EPvoTilbakemeldingStatus.TRENGER_REVURDERING
                     : selectedStatus,
               }
-              await updatePvoTilbakemelding(updatedValues).then(() => window.location.reload())
+              await updatePvoTilbakemelding(updatedValues).then(() => {
+                formRef.current?.resetForm()
+                window.location.reload()
+              })
             }
           }
         })
@@ -132,7 +135,10 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
               ],
               status: pvoTilbakemelding.status,
             })
-            await createPvoTilbakemelding(createValue).then(() => window.location.reload())
+            await createPvoTilbakemelding(createValue).then(() => {
+              formRef.current?.resetForm()
+              window.location.reload()
+            })
           } else {
             console.debug(error)
           }
@@ -275,6 +281,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                   type='button'
                   variant='secondary'
                   onClick={() => {
+                    formRef.current?.resetForm()
                     window.location.reload()
                   }}
                 >

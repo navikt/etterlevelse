@@ -298,6 +298,7 @@ export const BehandlingensLivslopPage = () => {
                                   type='button'
                                   variant='tertiary'
                                   onClick={() => {
+                                    formRef.current?.resetForm()
                                     window.location.reload()
                                   }}
                                 >

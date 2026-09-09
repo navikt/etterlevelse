@@ -243,6 +243,7 @@ export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
                     type='button'
                     variant='secondary'
                     onClick={() => {
+                      formRef.current?.resetForm()
                       window.location.reload()
                     }}
                   >
