@@ -121,6 +121,11 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   }
 
   const handleStateChangeOnEtterlevelseResponse = (res: IEtterlevelse) => {
+    // Mark the form clean after a successful save so the unsaved-changes guard
+    // does not block the navigation modal's hard navigation/reload
+    if (etterlevelseFormRef.current) {
+      etterlevelseFormRef.current.resetForm({ values: etterlevelseFormRef.current.values })
+    }
     if (nextKravToDocument !== '') {
       setStatustext(res.status)
       setHasNextKrav(true)

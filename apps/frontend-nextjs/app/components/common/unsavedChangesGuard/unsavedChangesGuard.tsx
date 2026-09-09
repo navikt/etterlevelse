@@ -94,8 +94,20 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
     // Sentinel entry so a browser-back press is caught instead of leaving the page
     window.history.pushState(window.history.state, '', window.location.href)
 
+    let hashNavUntil = 0
+
+    const handleHashChange = (): void => {
+      // In-page anchor jumps (e.g. error-summary links) must not trip the leave guard
+      hashNavUntil = Date.now() + 500
+    }
+
     const handlePopState = (): void => {
       if (isLeavingRef.current) {
+        return
+      }
+
+      // Ignore in-page fragment navigation (anchor links), which never leaves the page
+      if (Date.now() < hashNavUntil || window.location.hash) {
         return
       }
 
@@ -109,8 +121,12 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
       }
     }
 
+    window.addEventListener('hashchange', handleHashChange)
     window.addEventListener('popstate', handlePopState)
-    return () => window.removeEventListener('popstate', handlePopState)
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+      window.removeEventListener('popstate', handlePopState)
+    }
   }, [])
 
   if (!isOpen) {
