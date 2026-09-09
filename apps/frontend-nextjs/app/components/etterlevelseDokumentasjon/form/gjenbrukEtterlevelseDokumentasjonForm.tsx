@@ -14,6 +14,7 @@ import {
   searchResourceByNameOptions,
   useSearchTeamOptions,
 } from '@/api/teamkatalogen/teamkatalogenApi'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
@@ -40,7 +41,9 @@ import {
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
@@ -51,6 +54,8 @@ import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Alert,
   Button,
+  Checkbox,
+  CheckboxGroup,
   ErrorSummary,
   Heading,
   InfoCard,
@@ -95,7 +100,20 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
   )
   const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
   const user = useContext(UserContext)
+  const codelist = useContext(CodelistContext)
   const router = useRouter()
+
+  const relevansOptions: IGetParsedOptionsProps[] = codelist.utils.getParsedOptions(
+    EListName.RELEVANS
+  )
+  const gjeldendeEgenskaperIndexes: number[] = relevansOptions
+    .map((_relevans: IGetParsedOptionsProps, index: number) => index)
+    .filter(
+      (index: number) =>
+        !etterlevelseDokumentasjon.irrelevansFor.some(
+          (irrelevans: ICode) => irrelevans.code === relevansOptions[index].value
+        )
+    )
 
   const formRef: RefObject<any> = useRef(undefined)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
@@ -220,6 +238,32 @@ export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = 
                 label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
                 name='beskrivelse'
               />
+            </div>
+
+            <div className='pt-5'>
+              <Heading size='small' level='2' spacing>
+                Egenskaper
+              </Heading>
+              <InfoCard data-color='info' className='mb-5 max-w-[70ch]' size='small'>
+                <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                  <InfoCard.Title>
+                    Egenskaper kan ikke redigeres når du gjenbruker et dokument
+                  </InfoCard.Title>
+                </InfoCard.Header>
+              </InfoCard>
+              <CheckboxGroup
+                readOnly
+                legend='Hvilke egenskaper gjelder for etterlevelsen?'
+                value={gjeldendeEgenskaperIndexes}
+              >
+                {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => (
+                  <DataTextWrapper key={'relevans_' + relevans.value} className='mt-0 max-w-[75ch]'>
+                    <Checkbox value={index} description={relevans.description}>
+                      {relevans.label}
+                    </Checkbox>
+                  </DataTextWrapper>
+                ))}
+              </CheckboxGroup>
             </div>
 
             <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
