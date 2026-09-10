@@ -784,8 +784,7 @@ public class WordDocUtils {
         var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
         var valgteEgenskaper = pvkDokument.getPvkDokumentData().getYtterligereEgenskaper();
 
-        addLabel("Gjeldende egenskaper:");
-        newLine();
+        addLabel("Øvrige egenskaper for behandlingene:");
 
         var gjelderFor = allYtterligeEgenskaper.stream()
                 .filter(egenskap -> valgteEgenskaper != null && valgteEgenskaper.contains(egenskap.getCode()))
@@ -842,7 +841,6 @@ public class WordDocUtils {
         boolean saerligGjelderIkke = !manglerOpplysningstyper.get() && saerligKategorierOppsumert.isEmpty();
 
         addLabel("Følgende informasjon er hentet fra Behandlingskatalogen:");
-        newLine();
 
         List<String> gjeldendeEgenskaper = new ArrayList<>();
         if (profileringGjelder) gjeldendeEgenskaper.add("profilering");
