@@ -22,7 +22,7 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
 }) => (
   <>
     <div id='ytterligere-egenskaper' className='mt-5'>
-      <Label>Øvrige egenskaper for behandlingene:</Label>
+      <Label>Gjeldende egenskaper:</Label>
       <DataTextWrapper>
         <List>
           {harKunDpBehandlinger(etterlevelseDokumentasjon) && (
@@ -72,7 +72,7 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
             ).length === 0
         ) && (
           <div>
-            <strong>Det gjelder ikke for:</strong>
+            <strong>Disse egenskapene gjelder ikke:</strong>
             <List className='ml-6'>
               {ytterligereEgenskaper
                 .filter(
