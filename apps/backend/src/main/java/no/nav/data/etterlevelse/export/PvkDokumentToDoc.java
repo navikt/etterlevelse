@@ -159,12 +159,16 @@ public class PvkDokumentToDoc {
     }
 
     public void generateBehovForPvkSection(EtterlevelseDokumentasjonToDoc.EtterlevelseDocumentBuilder doc, PvkDokument pvkDokument, EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
+        doc.addText("En PVK skal gjennomføres når vi ønsker å starte eller endre en behandling av personopplysninger som sannsynligvis vil medføre høy risiko for den registrertes rettigheter og friheter.");
+        doc.newLine();
+
+        doc.addHeading3("Egenskaper som gjelder for behandlingene deres");
         doc.generateEgenskaperFraBehandlinger(etterlevelseDokumentasjonResponse.getBehandlinger());
         doc.newLine();
         doc.generateOvrigeEgenskaperFraBehandlinger(pvkDokument);
         doc.newLine();
 
-        doc.addLabel("Hvilken vurdering har dere kommet fram til?");
+        doc.addHeading3("Vurdering av behov for PVK");
         if (etterlevelseDokumentasjonResponse.getIrrelevansFor().stream().map(CodelistResponse::getCode).toList().contains("PERSONOPPLYSNINGER")) {
             doc.addText("Dokumentasjonen behandler ikke personopplysninger.");
             doc.pageBreak();
