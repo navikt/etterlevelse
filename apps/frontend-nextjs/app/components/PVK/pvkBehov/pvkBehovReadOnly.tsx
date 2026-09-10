@@ -6,7 +6,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { harKunDpBehandlinger } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { BodyShort, Label, List } from '@navikt/ds-react'
+import { BodyShort, Heading, Label, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 
 type TProps = {
@@ -93,7 +93,9 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
     </div>
 
     <div className='my-5'>
-      <Label>Hvilken vurdering har dere kommet fram til?</Label>
+      <Heading level='2' size='medium' spacing>
+        Vurdering av behov for PVK
+      </Heading>
       <DataTextWrapper>
         {(pvkDokument.pvkVurdering === undefined ||
           pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED) &&

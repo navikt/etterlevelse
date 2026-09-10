@@ -14,6 +14,7 @@ import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/uns
 import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
 import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkVurdering,
@@ -26,6 +27,8 @@ import {
   etterlevelsesDokumentasjonEditUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
@@ -43,7 +46,9 @@ import {
   Checkbox,
   CheckboxGroup,
   CopyButton,
+  Heading,
   InfoCard,
+  InlineMessage,
   Link,
   List,
   LocalAlert,
@@ -72,6 +77,8 @@ type TProps = {
   automatiskBehandling: boolean | null
   saerligKategorier: boolean
   ytterligereEgenskaper: ICode[]
+  behandlingensLivslop?: IBehandlingensLivslop
+  artOgOmfangId?: string
 }
 
 export const PvkBehovForm: FunctionComponent<TProps> = ({
@@ -82,6 +89,8 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
   automatiskBehandling,
   saerligKategorier,
   ytterligereEgenskaper,
+  behandlingensLivslop,
+  artOgOmfangId,
 }) => {
   const router = useRouter()
   const formRef: RefObject<any> = useRef(undefined)
@@ -165,11 +174,42 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
 
           return (
             <Form>
+              <Heading level='2' size='small' spacing>
+                Velg eventuelt øvrige egenskaper som gjelder for behandlingene
+              </Heading>
+
+              <InlineMessage status='info' className='mb-4'>
+                Disse egenskapene blir enklere å vurdere hvis dere har tegnet{' '}
+                <Link
+                  href={pvkDokumentasjonBehandlingsenLivslopUrl(
+                    etterlevelseDokumentasjon.id,
+                    behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny'
+                  )}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='inline'
+                >
+                  behandlingens livsløp (åpner i en ny fane)
+                </Link>{' '}
+                og{' '}
+                <Link
+                  href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
+                    etterlevelseDokumentasjon.id,
+                    artOgOmfangId || 'ny'
+                  )}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='inline'
+                >
+                  vurdert behandlingens art og omfang (åpner i en ny fane).
+                </Link>
+              </InlineMessage>
+
               <div id='ytterligere-egenskaper'>
                 <FieldArray name='ytterligereEgenskaper'>
                   {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                     <CheckboxGroup
-                      legend='Les igjennom og velg eventuelt øvrige egenskaper som gjelder for behandlingene deres:'
+                      legend='Velg egenskaper:'
                       value={checkedYtterligereEgenskaper}
                       onChange={(selected: string[]) => {
                         fieldArrayRenderProps.form.setFieldValue(
@@ -202,10 +242,11 @@ export const PvkBehovForm: FunctionComponent<TProps> = ({
                 </InfoCard>
               )}
 
-              <ReadMore
-                className='mt-10 mb-4'
-                header='Lurer dere fortsatt på om det er behov for PVK?'
-              >
+              <Heading level='2' size='medium' className='mt-10' spacing>
+                Vurdering av behov for PVK
+              </Heading>
+
+              <ReadMore className='mb-4' header='Lurer dere fortsatt på om det er behov for PVK?'>
                 <div className='mb-5'>
                   <ExternalLink href='https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/vurdering-av-personvernkonsekvenser/nar-er-risiko-hoy/'>
                     Les Datatilsynets veiledning om Når risiko er høy

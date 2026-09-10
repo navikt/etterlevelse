@@ -1,5 +1,47 @@
 package no.nav.data.common.utils;
 
+import static no.nav.data.common.utils.StreamUtils.filter;
+
+import java.io.ByteArrayOutputStream;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.commons.lang3.BooleanUtils;
+import org.docx4j.model.table.TblFactory;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.docx4j.wml.BooleanDefaultTrue;
+import org.docx4j.wml.Br;
+import org.docx4j.wml.CTBorder;
+import org.docx4j.wml.CTLanguage;
+import org.docx4j.wml.Color;
+import org.docx4j.wml.HdrFtrRef;
+import org.docx4j.wml.HpsMeasure;
+import org.docx4j.wml.JcEnumeration;
+import org.docx4j.wml.ObjectFactory;
+import org.docx4j.wml.P;
+import org.docx4j.wml.PPr;
+import org.docx4j.wml.PPrBase;
+import org.docx4j.wml.R;
+import org.docx4j.wml.RFonts;
+import org.docx4j.wml.RPr;
+import org.docx4j.wml.STBrType;
+import org.docx4j.wml.Styles;
+import org.docx4j.wml.Tbl;
+import org.docx4j.wml.Text;
+
 import com.vladsch.flexmark.docx.converter.DocxRenderer;
 import com.vladsch.flexmark.ext.definition.DefinitionExtension;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughSubscriptExtension;
@@ -10,6 +52,7 @@ import com.vladsch.flexmark.ext.toc.SimTocExtension;
 import com.vladsch.flexmark.ext.toc.TocExtension;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.data.MutableDataSet;
+
 import lombok.SneakyThrows;
 import no.nav.data.common.storage.domain.ChangeStamp;
 import no.nav.data.etterlevelse.codelist.CodelistService;
@@ -24,25 +67,13 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
-import no.nav.data.pvk.pvotilbakemelding.domain.*;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
+import no.nav.data.pvk.pvotilbakemelding.domain.Tilbakemeldingsinnhold;
+import no.nav.data.pvk.pvotilbakemelding.domain.TilhorendeDokumentasjonTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.Vurdering;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
-import org.apache.commons.lang3.BooleanUtils;
-import org.docx4j.model.table.TblFactory;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.docx4j.wml.*;
-
-import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static no.nav.data.common.utils.StreamUtils.filter;
 
 public class WordDocUtils {
 
@@ -751,17 +782,27 @@ public class WordDocUtils {
 
     public void generateOvrigeEgenskaperFraBehandlinger(PvkDokument pvkDokument) {
         var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
+        var valgteEgenskaper = pvkDokument.getPvkDokumentData().getYtterligereEgenskaper();
 
         addLabel("Øvrige egenskaper for behandlingene:");
         newLine();
-        allYtterligeEgenskaper.forEach(egenskap -> {
-            if (pvkDokument.getPvkDokumentData().getYtterligereEgenskaper() != null && pvkDokument.getPvkDokumentData().getYtterligereEgenskaper().contains(egenskap.getCode())) {
-                addMarkdownText("- **Det gjelder for** " + egenskap.getShortName().toLowerCase());
-            } else {
-                addMarkdownText("- **Det gjelder ikke for** " + egenskap.getShortName().toLowerCase());
-            }
-        });
 
+        var gjelderFor = allYtterligeEgenskaper.stream()
+                .filter(egenskap -> valgteEgenskaper != null && valgteEgenskaper.contains(egenskap.getCode()))
+                .toList();
+        var gjelderIkkeFor = allYtterligeEgenskaper.stream()
+                .filter(egenskap -> valgteEgenskaper == null || !valgteEgenskaper.contains(egenskap.getCode()))
+                .toList();
+
+        if (!gjelderFor.isEmpty()) {
+            addLabel("Det gjelder for:");
+            gjelderFor.forEach(egenskap -> addMarkdownText("- " + egenskap.getShortName().toLowerCase()));
+        }
+
+        if (!gjelderIkkeFor.isEmpty()) {
+            addLabel("Det gjelder ikke for:");
+            gjelderIkkeFor.forEach(egenskap -> addMarkdownText("- " + egenskap.getShortName().toLowerCase()));
+        }
     }
 
     public void generateEgenskaperFraBehandlinger(List<Behandling> behandlingList) {
@@ -791,30 +832,46 @@ public class WordDocUtils {
 
         var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
 
-        addLabel("Følgende egenskaper er hentet fra Behandlingskatalogen:");
+        boolean profileringGjelder = alleProfilering.contains(true);
+        boolean profileringGjelderIkke = !alleProfilering.isEmpty() && alleProfilering.stream().allMatch(value -> value != null && value.equals(false));
+
+        boolean automatiskGjelder = alleAutomatiskBehandling.contains(true);
+        boolean automatiskGjelderIkke = !alleAutomatiskBehandling.isEmpty() && alleAutomatiskBehandling.stream().allMatch(value -> value != null && value.equals(false));
+
+        boolean saerligGjelder = !manglerOpplysningstyper.get() && !saerligKategorierOppsumert.isEmpty();
+        boolean saerligGjelderIkke = !manglerOpplysningstyper.get() && saerligKategorierOppsumert.isEmpty();
+
+        addLabel("Følgende informasjon er hentet fra Behandlingskatalogen:");
         newLine();
-        if (alleProfilering.contains(true)) {
-            addMarkdownText("- **Det gjelder** profilering");
-        } else if (alleProfilering.stream().filter(value -> value != null && value.equals(false)).toList().size() == alleProfilering.size()) {
-            addMarkdownText("- **Det gjelder ikke** profilering");
-        } else if (alleProfilering.contains(null)) {
-            addMarkdownText("- Mangler informasjon for å vite om profilering benyttes");
+
+        List<String> gjeldendeEgenskaper = new ArrayList<>();
+        if (profileringGjelder) gjeldendeEgenskaper.add("profilering");
+        if (automatiskGjelder) gjeldendeEgenskaper.add("helautomatisert behandling");
+        if (saerligGjelder) gjeldendeEgenskaper.add("særlige kategorier av personopplysninger");
+
+        List<String> ikkeGjeldendeEgenskaper = new ArrayList<>();
+        if (profileringGjelderIkke) ikkeGjeldendeEgenskaper.add("profilering");
+        if (automatiskGjelderIkke) ikkeGjeldendeEgenskaper.add("helautomatisert behandling");
+        if (saerligGjelderIkke) ikkeGjeldendeEgenskaper.add("særlige kategorier av personopplysninger");
+
+        List<String> ikkeVurderteEgenskaper = new ArrayList<>();
+        if (!profileringGjelder && !profileringGjelderIkke) ikkeVurderteEgenskaper.add("profilering");
+        if (!automatiskGjelder && !automatiskGjelderIkke) ikkeVurderteEgenskaper.add("helautomatisert behandling");
+        if (manglerOpplysningstyper.get()) ikkeVurderteEgenskaper.add("særlige kategorier av personopplysninger");
+
+        if (!gjeldendeEgenskaper.isEmpty()) {
+            addLabel("Gjeldende egenskaper:");
+            gjeldendeEgenskaper.forEach(egenskap -> addMarkdownText("- " + egenskap));
         }
 
-        if (alleAutomatiskBehandling.contains(true)) {
-            addMarkdownText("- **Det gjelder** helautomatisert behandling");
-        } else if (alleAutomatiskBehandling.stream().filter(value -> value != null && value.equals(false)).toList().size() == alleAutomatiskBehandling.size()) {
-            addMarkdownText("- **Det gjelder ikke** helautomatisert behandling");
-        } else if (alleAutomatiskBehandling.contains(null)) {
-            addMarkdownText("- Mangler informasjon for å vite om helautomatisert behandling benyttes");
+        if (!ikkeGjeldendeEgenskaper.isEmpty()) {
+            addLabel("Disse egenskapene gjelder ikke:");
+            ikkeGjeldendeEgenskaper.forEach(egenskap -> addMarkdownText("- " + egenskap));
         }
 
-        if (!manglerOpplysningstyper.get() && !saerligKategorierOppsumert.isEmpty()) {
-            addMarkdownText("- **Det gjelder** saerlig kategorier");
-        } else if (!manglerOpplysningstyper.get() && saerligKategorierOppsumert.isEmpty()) {
-            addMarkdownText("- **Det gjelder ikke** saerlig kategorier");
-        } else if (manglerOpplysningstyper.get()) {
-            addMarkdownText("- Mangler informasjon for å vite om saerlige kategorier av personopplysninger benyttes");
+        if (!ikkeVurderteEgenskaper.isEmpty()) {
+            addLabel("Dere har ikke vurdert følgende egenskaper i Behandlingskatalogen:");
+            ikkeVurderteEgenskaper.forEach(egenskap -> addMarkdownText("- " + egenskap));
         }
 
     }
