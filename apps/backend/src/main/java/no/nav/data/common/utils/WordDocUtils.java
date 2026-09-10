@@ -784,7 +784,7 @@ public class WordDocUtils {
         var allYtterligeEgenskaper = CodelistService.getCodelist(ListName.YTTERLIGERE_EGENSKAPER);
         var valgteEgenskaper = pvkDokument.getPvkDokumentData().getYtterligereEgenskaper();
 
-        addLabel("Øvrige egenskaper for behandlingene:");
+        addLabel("Gjeldende egenskaper:");
         newLine();
 
         var gjelderFor = allYtterligeEgenskaper.stream()
@@ -795,12 +795,12 @@ public class WordDocUtils {
                 .toList();
 
         if (!gjelderFor.isEmpty()) {
-            addLabel("Det gjelder for:");
+            addLabel("Gjeldende egenskaper:");
             gjelderFor.forEach(egenskap -> addMarkdownText("- " + egenskap.getShortName().toLowerCase()));
         }
 
         if (!gjelderIkkeFor.isEmpty()) {
-            addLabel("Det gjelder ikke for:");
+            addLabel("Disse egenskapene gjelder ikke:");
             gjelderIkkeFor.forEach(egenskap -> addMarkdownText("- " + egenskap.getShortName().toLowerCase()));
         }
     }
