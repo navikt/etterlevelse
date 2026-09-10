@@ -159,7 +159,7 @@ export const PvkBehovPage = () => {
       currentPage='Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?'
       breadcrumbPaths={breadcrumbPaths}
     >
-      <Heading level='1' size='medium' className='mb-5'>
+      <Heading level='1' size='large' className='mb-5'>
         Bør vi gjøre en Personvernkonsekvensvurdering (PVK) ?
       </Heading>
       {isEtterlevelseDokumentasjonLoading && <CenteredLoader />}
@@ -173,8 +173,6 @@ export const PvkBehovPage = () => {
               automatiskBehandling={automatiskBehandling}
               opplysningstyperMangler={opplysningstyperMangler}
               saerligKategorier={saerligKategorier}
-              behandlingensLivslop={behandlingensLivslop}
-              artOgOmfangId={artOgOmfang?.id}
             />
 
             {harBehandlinger(etterlevelseDokumentasjon) &&
@@ -189,6 +187,8 @@ export const PvkBehovPage = () => {
                   automatiskBehandling={automatiskBehandling}
                   saerligKategorier={saerligKategorier}
                   ytterligereEgenskaper={ytterligereEgenskaper}
+                  behandlingensLivslop={behandlingensLivslop}
+                  artOgOmfangId={artOgOmfang?.id}
                 />
               )}
 

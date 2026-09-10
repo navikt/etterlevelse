@@ -1,20 +1,15 @@
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import {
-  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
-  pvkDokumentasjonBehandlingsenLivslopUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import {
   harBehandlinger,
   harKunDpBehandlinger,
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Heading, InfoCard, Label, Link, List } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Heading, InfoCard, Label, List } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
@@ -23,14 +18,10 @@ type TProps = {
   automatiskBehandling: boolean | null
   opplysningstyperMangler: boolean
   saerligKategorier: boolean
-  behandlingensLivslop?: IBehandlingensLivslop
-  artOgOmfangId?: string
 }
 
 export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
-  behandlingensLivslop,
-  artOgOmfangId,
   profilering,
   opplysningstyperMangler,
   saerligKategorier,
@@ -46,7 +37,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
       </BodyLong>
 
       {(etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-        <Heading level='2' size='small' className='mb-5'>
+        <Heading level='2' size='medium' className='mb-5'>
           Egenskaper som gjelder for behandlingene deres
         </Heading>
       )}
@@ -79,49 +70,18 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
           </div>
         )}
 
-      {etterlevelseDokumentasjon &&
-        (harBehandlinger(etterlevelseDokumentasjon) ||
-          harKunDpBehandlinger(etterlevelseDokumentasjon)) &&
-        (etterlevelseDokumentasjon.hasCurrentUserAccess || user.isAdmin()) && (
-          <BodyShort>
-            Disse egenskapene blir enklere å vurdere hvis{' '}
-            <Link
-              href={pvkDokumentasjonBehandlingsenLivslopUrl(
-                etterlevelseDokumentasjon.id,
-                behandlingensLivslop?.id ? behandlingensLivslop.id : 'ny'
-              )}
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label='redigere etterlevelsesdokumentasjon'
-              className='inline'
-            >
-              dere har tegnet behandlingens livsløp (åpner i en ny fane)
-            </Link>{' '}
-            og{' '}
-            <Link
-              href={pvkDokumentasjonBehandlingsenArtOgOmfangUrl(
-                etterlevelseDokumentasjon.id,
-                artOgOmfangId || 'ny'
-              )}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='inline'
-            >
-              vurdert behandlingens art og omfang (åpner i en ny fane).
-            </Link>
-          </BodyShort>
-        )}
-
       {harBehandlinger(etterlevelseDokumentasjon) && (
         <>
           <div>
-            <Label>Følgende informasjon er hentet fra Behandlingskatalogen:</Label>
+            <Heading level='3' size='small' spacing>
+              Følgende informasjon er hentet fra Behandlingskatalogen:
+            </Heading>
             <DataTextWrapper>
               {(profilering === true ||
                 automatiskBehandling === true ||
                 saerligKategorier === true) && (
                 <div className='pb-3'>
-                  <strong>Gjeldende egenskaper:</strong>
+                  <Label as='p'>Gjeldende egenskaper:</Label>
                   <List className='ml-6'>
                     {profilering === true && <List.Item>profilering</List.Item>}
                     {automatiskBehandling === true && (
@@ -138,7 +98,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
                 automatiskBehandling === false ||
                 (!opplysningstyperMangler && saerligKategorier === false)) && (
                 <div>
-                  <strong>Disse egenskapene gjelder ikke:</strong>
+                  <Label as='p'>Disse egenskapene gjelder ikke:</Label>
                   <List className='ml-6'>
                     {profilering === false && <List.Item>profilering</List.Item>}
                     {automatiskBehandling === false && (
@@ -183,7 +143,9 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
 
       {harKunDpBehandlinger(etterlevelseDokumentasjon) && (
         <div>
-          <Label>Følgende informasjon er hentet fra Behandlingskatalogen:</Label>
+          <Heading level='3' size='small' spacing>
+            Følgende informasjon er hentet fra Behandlingskatalogen:
+          </Heading>
           <DataTextWrapper>
             <List>
               <List.Item>
