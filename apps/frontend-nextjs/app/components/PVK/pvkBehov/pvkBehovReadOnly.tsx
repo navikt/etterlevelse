@@ -49,7 +49,7 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
             ).length !== 0
         ) && (
           <div className='pb-3'>
-            <strong>Det gjelder for:</strong>
+            <strong>Gjeldende egenskaper:</strong>
             <List className='ml-6'>
               {ytterligereEgenskaper
                 .filter(
