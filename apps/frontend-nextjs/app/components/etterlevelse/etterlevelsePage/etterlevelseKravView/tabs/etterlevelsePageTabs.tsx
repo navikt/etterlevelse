@@ -126,16 +126,10 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     if (etterlevelseFormRef.current) {
       etterlevelseFormRef.current.resetForm({ values: etterlevelseFormRef.current.values })
     }
-    if (nextKravToDocument !== '') {
-      setStatustext(res.status)
-      setHasNextKrav(true)
-      activeAlertModalController()
-    } else {
-      setStatustext(res.status)
-      setHasNextKrav(false)
-      activeAlertModalController()
-      setEtterlevelse(res)
-    }
+    setStatustext(res.status)
+    setHasNextKrav(nextKravToDocument !== '')
+    setEtterlevelse(res)
+    activeAlertModalController()
   }
 
   const upsertEtterlevelse = async (
