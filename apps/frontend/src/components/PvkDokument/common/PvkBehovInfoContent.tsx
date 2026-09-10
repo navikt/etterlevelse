@@ -87,7 +87,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
         <>
           <List className='py-5'>
             <div className='pb-3'>
-              <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+              <Label>Følgende informasjon er hentet fra Behandlingskatalogen:</Label>
             </div>
             {profilering !== null && (
               <List.Item>

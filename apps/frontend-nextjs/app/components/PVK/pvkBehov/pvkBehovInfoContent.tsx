@@ -115,13 +115,13 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
       {harBehandlinger(etterlevelseDokumentasjon) && (
         <>
           <div>
-            <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+            <Label>Følgende informasjon er hentet fra Behandlingskatalogen:</Label>
             <DataTextWrapper>
               {(profilering === true ||
                 automatiskBehandling === true ||
                 saerligKategorier === true) && (
                 <div className='pb-3'>
-                  <strong>Det gjelder:</strong>
+                  <strong>Gjeldende egenskaper:</strong>
                   <List className='ml-6'>
                     {profilering === true && <List.Item>profilering</List.Item>}
                     {automatiskBehandling === true && (
@@ -138,7 +138,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
                 automatiskBehandling === false ||
                 (!opplysningstyperMangler && saerligKategorier === false)) && (
                 <div>
-                  <strong>Det gjelder ikke:</strong>
+                  <strong>Disse egenskapene gjelder ikke:</strong>
                   <List className='ml-6'>
                     {profilering === false && <List.Item>profilering</List.Item>}
                     {automatiskBehandling === false && (
@@ -183,7 +183,7 @@ export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
 
       {harKunDpBehandlinger(etterlevelseDokumentasjon) && (
         <div>
-          <Label>Følgende egenskaper er hentet fra Behandlingskatalogen:</Label>
+          <Label>Følgende informasjon er hentet fra Behandlingskatalogen:</Label>
           <DataTextWrapper>
             <List>
               <List.Item>

@@ -791,7 +791,7 @@ public class WordDocUtils {
 
         var saerligKategorierOppsumert = alleOpplysningstyper.stream().filter(type -> type.getSensitivity().getCode().equals("SAERLIGE")).toList();
 
-        addLabel("Følgende egenskaper er hentet fra Behandlingskatalogen:");
+        addLabel("Følgende informasjon er hentet fra Behandlingskatalogen:");
         newLine();
         if (alleProfilering.contains(true)) {
             addMarkdownText("- **Det gjelder** profilering");
