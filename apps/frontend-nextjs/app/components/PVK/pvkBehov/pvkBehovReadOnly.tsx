@@ -96,7 +96,6 @@ export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
       <Heading level='2' size='medium' spacing>
         Vurdering av behov for PVK
       </Heading>
-      <Label>Hvilken vurdering har dere kommet fram til?</Label>
       <DataTextWrapper>
         {(pvkDokument.pvkVurdering === undefined ||
           pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED) &&
