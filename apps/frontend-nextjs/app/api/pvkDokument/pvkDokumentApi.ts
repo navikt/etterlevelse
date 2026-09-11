@@ -126,16 +126,20 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
       //double check that pvkdokument doesnt not exist
       ;(async () => {
-        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
-          async (pvkDokument) => {
+        await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId)
+          .then(async (pvkDokument) => {
             if (!abortedRef.current) {
               if (pvkDokument) {
                 setData(mapPvkDokumentToFormValue(pvkDokument))
               }
               setIsLoading(false)
             }
-          }
-        )
+          })
+          .catch(() => {
+            if (!abortedRef.current) {
+              setIsLoading(false)
+            }
+          })
       })()
     }
     return () => {

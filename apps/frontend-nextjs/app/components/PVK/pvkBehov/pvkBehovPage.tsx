@@ -137,13 +137,13 @@ export const PvkBehovPage = () => {
   useEffect(() => {
     ;(async () => {
       if (etterlevelseDokumentasjon) {
-        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon?.id).then(
-          (response: IBehandlingensLivslop) => {
+        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon?.id)
+          .then((response: IBehandlingensLivslop) => {
             if (response) {
               setBehandlingensLivslop(response)
             }
-          }
-        )
+          })
+          .catch(() => undefined)
       }
     })()
   }, [etterlevelseDokumentasjon])
