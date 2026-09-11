@@ -1,7 +1,7 @@
 'use client'
 
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
+import { useLastApprovedPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
@@ -61,9 +61,8 @@ export const PvkDokumentReadOnlyPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
   )
-  const [pvkDokument, setPvkDokument] = usePvkDokument(
-    params.pvkDokumentId,
-    params.etterlevelseDokumentasjonId
+  const [pvkDokument, setPvkDokument] = useLastApprovedPvkDokument(
+    params.etterlevelseDokumentasjonId || ''
   )
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [activeStep, setActiveStep] = useState<number>(

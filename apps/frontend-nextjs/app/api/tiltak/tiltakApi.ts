@@ -1,8 +1,10 @@
 import { IPageResponse } from '@/constants/commonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
+import { useEffect, useRef, useState } from 'react'
 
 export const getAllTiltak = async (): Promise<ITiltak[]> => {
   const pageSize = 100
@@ -71,6 +73,48 @@ const tiltakTotiltakDto = (tiltak: ITiltak) => {
   delete dto.version
   delete dto.risikoscenarioIds
   return dto
+}
+
+export const getApprovedTiltakByPvkDokumentIdAndTimestamp = async (
+  pvkDokumentId: string,
+  timestamp: string
+) => {
+  return (
+    await axios.get<ITiltak[]>(
+      `${env.backendBaseUrl}/tiltak/approved/pvkDokument/${pvkDokumentId}/${timestamp}`
+    )
+  ).data
+}
+
+export const useLastApprovedTiltakByPvkDokumentId = (pvkDokument: IPvkDokument) => {
+  const [alleTiltak, setAlleTiltak] = useState<ITiltak[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const abortedRef = useRef(false)
+
+  useEffect(() => {
+    abortedRef.current = false
+    ;(async () => {
+      await getApprovedTiltakByPvkDokumentIdAndTimestamp(
+        pvkDokument.id,
+        pvkDokument.godkjentAvRisikoeierDato
+      ).then(async (response: ITiltak[]) => {
+        const alleTiltak: ITiltak[] = []
+
+        response.forEach((tiltak) => {
+          alleTiltak.push(mapTiltakToFormValue(tiltak))
+        })
+
+        setAlleTiltak(alleTiltak)
+        setIsLoading(false)
+      })
+    })()
+
+    return () => {
+      abortedRef.current = true
+    }
+  }, [pvkDokument])
+
+  return [alleTiltak, isLoading] as [ITiltak[], boolean]
 }
 
 export const mapTiltakToFormValue = (tiltak: Partial<ITiltak>): ITiltak => {

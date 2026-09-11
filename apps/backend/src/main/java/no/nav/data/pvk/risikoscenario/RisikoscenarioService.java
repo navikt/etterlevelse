@@ -2,7 +2,10 @@ package no.nav.data.pvk.risikoscenario;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,6 +32,7 @@ public class RisikoscenarioService {
     private final RisikoscenarioRepo risikoscenarioRepo;
     private final TiltakRepo tiltakRepo;
     private final RisikoscenarioRepoCustom risikoscenarioRepoCustom;
+    private final AuditVersionService auditVersionService;
 
     public Risikoscenario get(UUID uuid) {
         return risikoscenarioRepo.findById(uuid).orElse(null);
@@ -94,7 +99,15 @@ public class RisikoscenarioService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario addTiltak(UUID risikoscenarioId, List<UUID> tiltakIds) {
         for (UUID tiltakId : tiltakIds) {
-            tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
+            var tiltak = tiltakRepo.findById(tiltakId);
+            var relation = tiltakRepo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId);
+            if (tiltak.isEmpty()) {
+                throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " does not exist");
+            } if (!relation.isEmpty()) {
+                throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " is already related to Risikoscenario with id " + risikoscenarioId);
+            } else {
+                tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
+            }
         }
 
         Risikoscenario risikoscenario = get(risikoscenarioId);
@@ -114,12 +127,16 @@ public class RisikoscenarioService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean removeTiltak(UUID id, UUID tiltakId) {
-        int removed = tiltakRepo.deleteTiltakRisikoscenarioRelation(id, tiltakId);
+        int removed = tiltakRepo.updateTiltakRisikoscenarioRelationWithGyldigDatoTil(id, tiltakId, LocalDateTime.now());
         return removed > 0;
     }
     
     public List<UUID> getTiltak(UUID uuid) {
         return tiltakRepo.getTiltakForRisikoscenario(uuid);
+    }
+
+    public List<UUID> getApprovedTiltak(UUID risikoscenarioId, String timestamp) {
+        return tiltakRepo.getApprovedTiltakForRisikoscenario(risikoscenarioId, timestamp);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -129,4 +146,13 @@ public class RisikoscenarioService {
         risikoscenarioRepo.deleteAll(risikoscenarioList);
     }
 
+    public List<Risikoscenario> getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
+        List<AuditVersion> auditRisikoscenario = auditVersionService.findByTableNameFkFieldAndTimeStamp("RISIKOSCENARIO", "pvkDokumentId", pvkDokumentId, timestamp);
+        List<Risikoscenario> risikoscenarioList = new ArrayList<>();
+
+        auditRisikoscenario.forEach(audit -> {
+            risikoscenarioList.add(JsonUtils.toObject(audit.getData(), Risikoscenario.class));
+        });
+        return risikoscenarioList;
+    }
 }

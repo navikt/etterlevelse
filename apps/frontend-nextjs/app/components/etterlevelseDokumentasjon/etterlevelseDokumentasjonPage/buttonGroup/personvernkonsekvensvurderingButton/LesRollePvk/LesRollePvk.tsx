@@ -2,11 +2,10 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
-  EPVKTilstandStatus,
+  EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { getPvkTilstand } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import moment from 'moment'
 import { FunctionComponent } from 'react'
 import { PvkGodkjentReadOnlyActionMenuVariant } from '../commonActionMenuPVK/etterleverCommonPVK'
 
@@ -15,7 +14,6 @@ type TProps = {
   pvkDokument?: IPvkDokument
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
   behandlingsLivslop?: IBehandlingensLivslop
-  pvoTilbakemelding?: IPvoTilbakemelding
 }
 
 const LesRollePvk: FunctionComponent<TProps> = ({
@@ -23,21 +21,42 @@ const LesRollePvk: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingensArtOgOmfang,
   behandlingsLivslop,
-  pvoTilbakemelding,
 }) => {
-  switch (getPvkTilstand(pvkDokument, pvoTilbakemelding)) {
-    case EPVKTilstandStatus.TILSTAND_STATUS_NINE:
-      return (
-        <PvkGodkjentReadOnlyActionMenuVariant
-          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-          pvkDokument={pvkDokument}
-          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
-          behandlingsLivslop={behandlingsLivslop}
-        />
-      )
-    default:
-      return undefined
+  if (!pvkDokument) {
+    return undefined
   }
+
+  const { etterlevelseDokumentVersjon, versjonHistorikk } = etterlevelseDokumentasjon
+  const erGodkjent = pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+
+  let kanVises = false
+
+  if (etterlevelseDokumentVersjon === 1 && erGodkjent) {
+    kanVises = true
+  } else if (etterlevelseDokumentVersjon > 1) {
+    const nyVersjonOpprettetDato = versjonHistorikk.find(
+      (historikk) => historikk.versjon === etterlevelseDokumentVersjon - 1
+    )?.nyVersjonOpprettetDato
+
+    if (erGodkjent) {
+      kanVises = true
+    } else if (moment(pvkDokument.changeStamp.createdDate).isBefore(nyVersjonOpprettetDato)) {
+      kanVises = true
+    }
+  }
+
+  if (!kanVises) {
+    return undefined
+  }
+
+  return (
+    <PvkGodkjentReadOnlyActionMenuVariant
+      etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+      pvkDokument={pvkDokument}
+      behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+      behandlingsLivslop={behandlingsLivslop}
+    />
+  )
 }
 
 export default LesRollePvk

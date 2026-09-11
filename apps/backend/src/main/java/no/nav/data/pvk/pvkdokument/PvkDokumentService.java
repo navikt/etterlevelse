@@ -2,9 +2,13 @@ package no.nav.data.pvk.pvkdokument;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +31,7 @@ public class PvkDokumentService {
     private final RisikoscenarioService risikoscenarioService;
     private final TiltakService tiltakService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
+    private final AuditVersionService auditVersionService;
 
     public PvkDokument get(UUID uuid) {
         return pvkDokumentRepo.findById(uuid).orElse(null);
@@ -85,5 +91,24 @@ public class PvkDokumentService {
         pvoTilbakemeldingService.deleteByPvkDokumentId(id);
 
         return delete(id);
+    }
+
+
+    public PvkDokument getApprovedPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
+        List<AuditVersion> auditPvkDokument = auditVersionService.getByTableIdAndTimestamp(pvkDokumentId, timestamp);
+        if (!auditPvkDokument.isEmpty()) {
+            var pvkDokument = JsonUtils.toObject(
+                    auditPvkDokument.getFirst().getData(),
+                    PvkDokument.class
+            );
+            if(pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+                log.info("Found approved pvk dokument with id = {} and timestamp = {}", pvkDokumentId, timestamp);
+                return pvkDokument;
+            } else {
+                log.warn("Could not find approved pvk dokument with id = {} and timestamp = {}", pvkDokumentId, timestamp);
+                return null;
+            }
+        }
+        return null;
     }
 }

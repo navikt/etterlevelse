@@ -17,7 +17,9 @@ import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
@@ -97,6 +99,11 @@ public class TiltakController {
                 request.setIverksattDato(LocalDate.now());
             }
             hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
+            Risikoscenario risikoscenario = risikoscenarioService.get(risikoscenarioId);
+            if (risikoscenario == null) {
+                log.warn("Could not find Risikoscenario with id = {}", risikoscenarioId);
+                throw new NotFoundException(String.format("Could not find Risikoscenario with id = %s", risikoscenarioId));
+            }
             Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
             TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
             risikoscenarioService.updateTiltakOppdatertField(risikoscenarioId, true);
@@ -139,23 +146,52 @@ public class TiltakController {
     @DeleteMapping("/{id}")
     public ResponseEntity<TiltakResponse> deleteTiltakById(@PathVariable UUID id) {
         log.info("Delete tiltak id={}", id);
+        List<UUID> risikoscenarioIds = service.getRisikoscenarioer(id);
         Tiltak tiltak;
-        try {
-            tiltak = service.delete(id);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Could delete Tiltak with id = {}: Tiltak is related to one or more Risikoscenario", id);
-            throw new ValidationException("Could delete Tiltak: Tiltak is related to one or more Risikoscenario");
-        }
-        if (tiltak == null) {
-            log.warn("Could not find tiltak with id = {} to delete", id);
-            return ResponseEntity.ok(null);
+
+        if(!risikoscenarioIds.isEmpty()) {
+            log.warn("Could not delete Tiltak with id = {}: Tiltak is related to one or more Risikoscenario", id);
+            throw new ValidationException("Could not delete Tiltak: Tiltak is related to one or more Risikoscenario");
         } else {
-            return ResponseEntity.ok(TiltakResponse.buildFrom(tiltak));
+
+            tiltak = service.delete(id);
+
+            if (tiltak == null) {
+                log.warn("Could not find tiltak with id = {} to delete", id);
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(TiltakResponse.buildFrom(tiltak));
+            }
         }
+
+    }
+
+    @Operation(summary = "Get last approved tiltak by Pvk Document and timestamp")
+    @ApiResponse(description = "ok")
+    @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
+    public ResponseEntity<List<TiltakResponse>> getApprovedTiltakByPvkDokumentAndIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
+        log.info("Get approved Tiltak by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+        if (approvedPvkDokument != null) {
+            List<Tiltak> tiltakList = service.getApprovedTiltakPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+            List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
+            tiltakResponseList.forEach(tiltakResponse -> {
+                addApprovedRisikoscenarioer(tiltakResponse, timestamp);
+                addResourceData(tiltakResponse);
+                addTeamData(tiltakResponse);
+            });
+            return ResponseEntity.ok(tiltakResponseList);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private TiltakResponse addRisikoscenarioer(TiltakResponse res) {
         res.setRisikoscenarioIds(service.getRisikoscenarioer(res.getId()));
+        return res;
+    }
+
+    private TiltakResponse addApprovedRisikoscenarioer(TiltakResponse res, String timestamp) {
+        res.setRisikoscenarioIds(service.getApprovedRisikoscenarioer(res.getId(), timestamp));
         return res;
     }
 

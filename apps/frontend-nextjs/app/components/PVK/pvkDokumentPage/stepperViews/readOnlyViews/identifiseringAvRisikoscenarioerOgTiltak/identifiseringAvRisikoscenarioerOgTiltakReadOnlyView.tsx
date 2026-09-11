@@ -1,17 +1,11 @@
 'use client'
 
-import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
-import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import { useLastApprovedRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
+import { useLastApprovedTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import { RisikoscenarioAccordianListReadOnlyView } from '@/components/risikoscenario/readOnly/risikoscenarioAccordianListReadOnlyView'
-import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import {
-  ERisikoscenarioType,
-  IRisikoscenario,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent } from 'react'
 import InfoChangesMadeAfterApproval from '../../../../common/infoChangesMadeAfterApproval'
 import FormButtons from '../../../../edit/formButtons'
 import { IdentifiseringAvRisikoscenarioerOgTiltakReadOnlyContent } from './identifiseringAvRisikoscenarioerOgTiltakReadOnlyContent'
@@ -31,29 +25,11 @@ export const IdentifiseringAvRisikoscenarioerOgTiltakReadOnlyView: FunctionCompo
   setActiveStep,
   setSelectedStep,
 }) => {
-  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
-  const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
-  const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
-
-  useEffect(() => {
-    if (pvkDokument) {
-      ;(async () => {
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (risikoscenarioer: IPageResponse<IRisikoscenario>) => {
-            setAllRisikoscenarioList(risikoscenarioer.content)
-            setRisikoscenarioList(
-              risikoscenarioer.content.filter(
-                (risikoscenario: IRisikoscenario) => risikoscenario.generelScenario
-              )
-            )
-          }
-        )
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
-          setTiltakList(response.content)
-        })
-      })()
-    }
-  }, [pvkDokument])
+  const [allRisikoscenarioList, risikoscenarioList] = useLastApprovedRisikoscenarioByPvkDokumentId(
+    pvkDokument,
+    true
+  )
+  const [tiltakList] = useLastApprovedTiltakByPvkDokumentId(pvkDokument)
 
   return (
     <div className='flex justify-center w-full'>
