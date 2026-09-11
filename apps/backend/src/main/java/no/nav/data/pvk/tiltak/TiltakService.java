@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,7 @@ public class TiltakService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void addRisikoscenarioTiltakRelasjon(UUID risikoscenarioId, UUID tiltakId) {
-        repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
+        repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
     }
 
     public List<Tiltak> getByPvkDokument(UUID pvkDokumentId) {

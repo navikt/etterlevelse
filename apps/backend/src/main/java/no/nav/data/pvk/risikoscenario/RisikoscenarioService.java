@@ -115,7 +115,7 @@ public class RisikoscenarioService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean removeTiltak(UUID id, UUID tiltakId) {
-        int removed = tiltakRepo.deleteTiltakRisikoscenarioRelation(id, tiltakId);
+        int removed = tiltakRepo.updateTiltakRisikoscenarioRelationWithGyldigDatoTil(id, tiltakId, LocalDateTime.now());
         return removed > 0;
     }
     

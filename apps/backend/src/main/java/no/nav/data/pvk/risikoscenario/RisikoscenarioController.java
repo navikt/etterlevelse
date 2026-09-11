@@ -174,18 +174,19 @@ public class RisikoscenarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id) {
         log.info("Delete Risikoscenario id={}", id);
+        List<UUID> tiltakIds = risikoscenarioService.getTiltak(id);
         Risikoscenario risikoscenario;
-        try {
-            risikoscenario = risikoscenarioService.delete(id);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Could delete Risikoscenario with id = {}: Risikoscenario is related to one or more Tiltak", id);
-            throw new ValidationException("Could delete Risikoscenario: Risikoscenario is related to one or more Tiltak");
-        }
-        if (risikoscenario == null) {
-            log.warn("Could not find risikoscenario with id = {} to delete", id);
-            return ResponseEntity.ok(null);
+        if (!tiltakIds.isEmpty()) {
+            log.warn("Could not delete Risikoscenario with id = {}: Risikoscenario is related to one or more Tiltak", id);
+            throw new ValidationException("Could not delete Risikoscenario: Risikoscenario is related to one or more Tiltak");
         } else {
-            return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
+            risikoscenario = risikoscenarioService.delete(id);
+            if (risikoscenario == null) {
+                log.warn("Could not find risikoscenario with id = {} to delete", id);
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
+            }
         }
     }
 
