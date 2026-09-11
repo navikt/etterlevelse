@@ -95,7 +95,15 @@ public class RisikoscenarioService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario addTiltak(UUID risikoscenarioId, List<UUID> tiltakIds) {
         for (UUID tiltakId : tiltakIds) {
-            tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
+            var tiltak = tiltakRepo.findById(tiltakId);
+            var relation = tiltakRepo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId);
+            if (tiltak.isEmpty()) {
+                throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " does not exist");
+            } if (!relation.isEmpty()) {
+                throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " is already related to Risikoscenario with id " + risikoscenarioId);
+            } else {
+                tiltakRepo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
+            }
         }
 
         Risikoscenario risikoscenario = get(risikoscenarioId);

@@ -68,6 +68,10 @@ public class TiltakService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void addRisikoscenarioTiltakRelasjon(UUID risikoscenarioId, UUID tiltakId) {
+        var relation = repo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId);
+        if (!relation.isEmpty()) {
+            throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " is already related to Risikoscenario with id " + risikoscenarioId);
+        }
         repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
     }
 

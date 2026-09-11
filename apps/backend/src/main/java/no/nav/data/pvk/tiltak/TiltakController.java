@@ -18,6 +18,7 @@ import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
@@ -97,6 +98,11 @@ public class TiltakController {
                 request.setIverksattDato(LocalDate.now());
             }
             hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
+            Risikoscenario risikoscenario = risikoscenarioService.get(risikoscenarioId);
+            if (risikoscenario == null) {
+                log.warn("Could not find Risikoscenario with id = {}", risikoscenarioId);
+                throw new NotFoundException(String.format("Could not find Risikoscenario with id = %s", risikoscenarioId));
+            }
             Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
             TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
             risikoscenarioService.updateTiltakOppdatertField(risikoscenarioId, true);

@@ -242,6 +242,9 @@ public class RisikoscenarioController {
             var risko =  risikoscenarioService.get(request.getRisikoscenarioId());
             if (risko != null) {
                 hasUserWriteAccessCheck(risko.getPvkDokumentId());
+            } else {
+                log.warn("Could not find risikoscenario with id = {} to add Tiltak", request.getRisikoscenarioId());
+                throw new DataIntegrityViolationException(String.format("Could not find risikoscenario with id = %s to add Tiltak", request.getRisikoscenarioId()));
             }
             Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRisikoscenarioId(), request.getTiltakIds());
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
