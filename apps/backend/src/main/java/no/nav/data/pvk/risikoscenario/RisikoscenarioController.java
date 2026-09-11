@@ -17,6 +17,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravReference;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
@@ -275,30 +276,57 @@ public class RisikoscenarioController {
         }
     }
 
+    @Operation(summary = "Get last approved risikoscenario by Pvk Document and timestamp")
+    @ApiResponse(description = "ok")
+    @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
+    public ResponseEntity<List<RisikoscenarioResponse>> getApprovedRisikoscenarioByPvkDokumentAndIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
+        log.info("Get approved Risikoscneario by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+        if (approvedPvkDokument != null) {
+            List<Risikoscenario> risikoscenarioList = risikoscenarioService.getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+            List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
+            risikoscenarioResponseList.forEach(r -> setApprovedTiltakAndKravDataForRelevantKravList(r, timestamp));
+            return ResponseEntity.ok(risikoscenarioResponseList);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     public void setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
         // Set Tiltak...
         risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
 
         // Set KravData...
-            risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
-                List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
-                if (kravList.isEmpty()) {
-                    kravShort.setNavn("Utgatt krav");
-                } else {
-                    try {
-                        RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
-                        JsonNode lovData = regelverk.getLov().getData();
-                        kravShort.setTemaCode(lovData.get("tema").asText());
-                    } catch (RuntimeException e) {
-                        // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
-                    }
-                    kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
-                    kravShort.setNavn(kravList.get(0).getNavn());
-                }
-            });
+        setRelevanteKravDataForRisikoscenario(risikoscenario);
+    }
 
-            List<KravReference> filteredKravReference = risikoscenario.getRelevanteKravNummer().stream().filter(kravReference -> !Objects.equals(kravReference.getNavn(), "Utgatt krav")).toList();
-            risikoscenario.setRelevanteKravNummer(filteredKravReference);
+    public void setApprovedTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario, String timestamp) {
+        // Set Tiltak...
+        risikoscenario.setTiltakIds(risikoscenarioService.getApprovedTiltak(risikoscenario.getId(), timestamp));
+
+        // Set KravData...
+        setRelevanteKravDataForRisikoscenario(risikoscenario);
+    }
+
+    public void setRelevanteKravDataForRisikoscenario(RisikoscenarioResponse risikoscenario) {
+        risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
+            List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+            if (kravList.isEmpty()) {
+                kravShort.setNavn("Utgatt krav");
+            } else {
+                try {
+                    RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+                    JsonNode lovData = regelverk.getLov().getData();
+                    kravShort.setTemaCode(lovData.get("tema").asText());
+                } catch (RuntimeException e) {
+                    // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
+                }
+                kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
+                kravShort.setNavn(kravList.get(0).getNavn());
+            }
+        });
+
+        List<KravReference> filteredKravReference = risikoscenario.getRelevanteKravNummer().stream().filter(kravReference -> !Objects.equals(kravReference.getNavn(), "Utgatt krav")).toList();
+        risikoscenario.setRelevanteKravNummer(filteredKravReference);
     }
 
 

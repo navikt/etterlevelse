@@ -17,6 +17,7 @@ import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
@@ -165,8 +166,32 @@ public class TiltakController {
 
     }
 
+    @Operation(summary = "Get last approved tiltak by Pvk Document and timestamp")
+    @ApiResponse(description = "ok")
+    @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
+    public ResponseEntity<List<TiltakResponse>> getApprovedTiltakByPvkDokumentAndIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
+        log.info("Get approved Tiltak by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+        if (approvedPvkDokument != null) {
+            List<Tiltak> tiltakList = service.getApprovedTiltakPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+            List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
+            tiltakResponseList.forEach(tiltakResponse -> {
+                addApprovedRisikoscenarioer(tiltakResponse, timestamp);
+                addResourceData(tiltakResponse);
+                addTeamData(tiltakResponse);
+            });
+            return ResponseEntity.ok(tiltakResponseList);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     private TiltakResponse addRisikoscenarioer(TiltakResponse res) {
         res.setRisikoscenarioIds(service.getRisikoscenarioer(res.getId()));
+        return res;
+    }
+
+    private TiltakResponse addApprovedRisikoscenarioer(TiltakResponse res, String timestamp) {
+        res.setRisikoscenarioIds(service.getApprovedRisikoscenarioer(res.getId(), timestamp));
         return res;
     }
 

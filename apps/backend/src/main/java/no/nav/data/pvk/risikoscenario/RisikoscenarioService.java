@@ -2,7 +2,10 @@ package no.nav.data.pvk.risikoscenario;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
@@ -29,6 +32,7 @@ public class RisikoscenarioService {
     private final RisikoscenarioRepo risikoscenarioRepo;
     private final TiltakRepo tiltakRepo;
     private final RisikoscenarioRepoCustom risikoscenarioRepoCustom;
+    private final AuditVersionService auditVersionService;
 
     public Risikoscenario get(UUID uuid) {
         return risikoscenarioRepo.findById(uuid).orElse(null);
@@ -131,6 +135,10 @@ public class RisikoscenarioService {
         return tiltakRepo.getTiltakForRisikoscenario(uuid);
     }
 
+    public List<UUID> getApprovedTiltak(UUID risikoscenarioId, String timestamp) {
+        return tiltakRepo.getApprovedTiltakForRisikoscenario(risikoscenarioId, timestamp);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteByPvkDokumentId(UUID pvkDokumentId) {
         List<Risikoscenario> risikoscenarioList = risikoscenarioRepo.findByPvkDokumentId(pvkDokumentId);
@@ -138,4 +146,13 @@ public class RisikoscenarioService {
         risikoscenarioRepo.deleteAll(risikoscenarioList);
     }
 
+    public List<Risikoscenario> getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
+        List<AuditVersion> auditRisikoscenario = auditVersionService.findByTableNameFkFieldAndTimeStamp("RISIKOSCENARIO", "pvkDokumentId", pvkDokumentId, timestamp);
+        List<Risikoscenario> risikoscenarioList = new ArrayList<>();
+
+        auditRisikoscenario.forEach(audit -> {
+            risikoscenarioList.add(JsonUtils.toObject(audit.getData(), Risikoscenario.class));
+        });
+        return risikoscenarioList;
+    }
 }

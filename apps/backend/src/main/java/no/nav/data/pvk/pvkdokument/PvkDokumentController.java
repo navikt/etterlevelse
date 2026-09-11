@@ -274,7 +274,7 @@ public class PvkDokumentController {
     @ApiResponse(description = "ok")
     @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
     public ResponseEntity<PvkDokumentResponse> getApprovedPvkDokumentByIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
-        log.info("Get approved Pvk Document by timestamp={}", timestamp);
+        log.info("Get approved Pvk Document {} by timestamp={}", pvkDokumentId, timestamp);
         PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
         if (approvedPvkDokument != null) {
             return ResponseEntity.ok(PvkDokumentResponse.buildFrom(approvedPvkDokument));
