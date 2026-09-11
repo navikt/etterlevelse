@@ -97,10 +97,6 @@ public class AuditVersionService {
         return repository.findByTableIdOrderByTimeDesc(id);
     }
 
-    public List<AuditVersion> findByTableIdOrderByTimeDesc(UUID id) {
-        return findByTableIdOrderByTimeDesc(id.toString());
-    }
-
     public Page<GenericStorage<MailLog>> findAllMailLog(Pageable pageable) {
         return mailLogRepository.findAll(pageable);
     }
@@ -135,5 +131,9 @@ public class AuditVersionService {
 
     public List<AuditVersion> findLatestPvoTilbakemeldingIdAndCurrentUser(String pvoTilbakemeldingId) {
         return customRepo.findLatestPvoTilbakemeldingIdAndCurrentUser(pvoTilbakemeldingId);
+    }
+
+    public List<AuditVersion> findByTableNameFkFieldAndTimeStamp(String tableName, String fkField, String fkValue, String timestamps) {
+        return customRepo.findByTableNameFkFieldAndTimeStamp(tableName, fkField, fkValue, timestamps);
     }
 }
