@@ -9,7 +9,6 @@ import {
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
-import { getAuditByTableIdAndTimeStamp } from '../audit/auditApi'
 import { getEtterlevelseDokumentasjon } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 
 export const getAllPvkDokument = async () => {
@@ -85,6 +84,17 @@ export const updatePvkDokument = async (pvkDokument: IPvkDokument): Promise<IPvk
   const dto = pvkDokumentToPvkDokumentDto(pvkDokument)
   return (await axios.put<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${pvkDokument.id}`, dto))
     .data
+}
+
+export const getApprovedPvkDokumentByIdAndTimestamp = async (
+  pvkDokumentId: string,
+  timestamp: string
+) => {
+  return (
+    await axios.get<IPvkDokument>(
+      `${env.backendBaseUrl}/pvkdokument/approved/pvkDokument/${pvkDokumentId}/${timestamp}`
+    )
+  ).data
 }
 
 export const godkjenOgArkiverPvkDokument = async (
@@ -174,16 +184,11 @@ export const useLastApprovedPvkDokument = (etterlevelseDokumentasjonId: string) 
                       etterlevelseDokumentasjon.etterlevelseDokumentVersjon - 1
                   )?.nyVersjonOpprettetDato
 
-                  await getAuditByTableIdAndTimeStamp(
+                  await getApprovedPvkDokumentByIdAndTimestamp(
                     pvkDokument.id,
                     nyVersjonOpprettetDato || ''
-                  ).then((auditData) => {
-                    if (auditData.length !== 0) {
-                      const pvkUpperAuditData = auditData[0].data as IPvkDokument
-                      const previousData = (auditData[0].data as { pvkDokumentData: IPvkDokument })
-                        .pvkDokumentData
-                      setData(mapPvkDokumentToFormValue({ ...pvkUpperAuditData, ...previousData }))
-                    }
+                  ).then((approvedPvkDokument) => {
+                    setData(mapPvkDokumentToFormValue(approvedPvkDokument))
                   })
                 }
               }

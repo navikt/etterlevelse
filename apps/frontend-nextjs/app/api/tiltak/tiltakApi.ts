@@ -1,12 +1,10 @@
-import { IChangeStamp, IPageResponse } from '@/constants/commonConstants'
+import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
-import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
-import { getAuditByTableIdAndTimeStamp } from '../audit/auditApi'
 
 export const getAllTiltak = async (): Promise<ITiltak[]> => {
   const pageSize = 100
@@ -77,6 +75,17 @@ const tiltakTotiltakDto = (tiltak: ITiltak) => {
   return dto
 }
 
+export const getApprovedTiltakByPvkDokumentIdAndTimestamp = async (
+  pvkDokumentId: string,
+  timestamp: string
+) => {
+  return (
+    await axios.get<ITiltak[]>(
+      `${env.backendBaseUrl}/tiltak/approved/pvkDokument/${pvkDokumentId}/${timestamp}`
+    )
+  ).data
+}
+
 export const useLastApprovedTiltakByPvkDokumentId = (pvkDokument: IPvkDokument) => {
   const [alleTiltak, setAlleTiltak] = useState<ITiltak[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -85,43 +94,19 @@ export const useLastApprovedTiltakByPvkDokumentId = (pvkDokument: IPvkDokument) 
   useEffect(() => {
     abortedRef.current = false
     ;(async () => {
-      await getTiltakByPvkDokumentId(pvkDokument.id).then(
-        async (response: IPageResponse<ITiltak>) => {
-          const sistGodkjentTiltak = response.content.filter((tiltak: ITiltak) =>
-            moment(tiltak.changeStamp.createdDate).isBefore(pvkDokument.godkjentAvRisikoeierDato)
-          )
+      await getApprovedTiltakByPvkDokumentIdAndTimestamp(
+        pvkDokument.id,
+        pvkDokument.godkjentAvRisikoeierDato
+      ).then(async (response: ITiltak[]) => {
+        const alleTiltak: ITiltak[] = []
 
-          const alleSisGodkjentTiltak: ITiltak[] = []
+        response.forEach((tiltak) => {
+          alleTiltak.push(mapTiltakToFormValue(tiltak))
+        })
 
-          await Promise.all(
-            sistGodkjentTiltak.map(async (tiltak: ITiltak) => {
-              const auditData = await getAuditByTableIdAndTimeStamp(
-                tiltak.id,
-                pvkDokument.godkjentAvRisikoeierDato
-              )
-              if (auditData.length !== 0) {
-                const tiltakUpperAuditData = auditData[0].data as ITiltak
-                const timeStampData = auditData[0].data as IChangeStamp
-                const previousData = (auditData[0].data as { tiltakData: ITiltak }).tiltakData
-
-                alleSisGodkjentTiltak.push(
-                  mapTiltakToFormValue({
-                    ...tiltakUpperAuditData,
-                    ...previousData,
-                    changeStamp: {
-                      lastModifiedBy: timeStampData.lastModifiedBy,
-                      lastModifiedDate: timeStampData.lastModifiedDate,
-                    },
-                  })
-                )
-              }
-            })
-          )
-
-          setAlleTiltak(alleSisGodkjentTiltak)
-          setIsLoading(false)
-        }
-      )
+        setAlleTiltak(alleTiltak)
+        setIsLoading(false)
+      })
     })()
 
     return () => {
