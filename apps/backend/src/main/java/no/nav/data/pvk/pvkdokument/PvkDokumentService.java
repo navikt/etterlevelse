@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -97,10 +96,7 @@ public class PvkDokumentService {
     public PvkDokument getApprovedPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
         List<AuditVersion> auditPvkDokument = auditVersionService.getByTableIdAndTimestamp(pvkDokumentId, timestamp);
         if (!auditPvkDokument.isEmpty()) {
-            var pvkDokument = JsonUtils.toObject(
-                    auditPvkDokument.getFirst().getData(),
-                    PvkDokument.class
-            );
+            var pvkDokument = auditPvkDokument.getFirst().getDomainObjectData(PvkDokument.class);
             if(pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
                 log.info("Found approved pvk dokument with id = {} and timestamp = {}", pvkDokumentId, timestamp);
                 return pvkDokument;

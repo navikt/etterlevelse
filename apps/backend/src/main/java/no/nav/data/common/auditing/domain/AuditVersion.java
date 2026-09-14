@@ -1,13 +1,7 @@
 package no.nav.data.common.auditing.domain;
 
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -76,6 +70,10 @@ public class AuditVersion {
             domainObjectCache = JsonUtils.toObject(genStorage.getData(), type);
         }
         return (T) domainObjectCache;
+    }
+
+    public <T> T getDomainObjectData(Class<T> type) {
+        return JsonUtils.toObject(data, type);
     }
 
     public AuditResponse toResponse() {

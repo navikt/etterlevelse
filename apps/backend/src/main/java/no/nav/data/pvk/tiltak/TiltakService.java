@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
@@ -110,7 +109,7 @@ public class TiltakService {
         List<Tiltak> tiltakList = new ArrayList<>();
 
         auditTiltak.forEach(audit -> {
-            tiltakList.add(JsonUtils.toObject(audit.getData(), Tiltak.class));
+            tiltakList.add(audit.getDomainObjectData(Tiltak.class));
         });
         return tiltakList;
     }

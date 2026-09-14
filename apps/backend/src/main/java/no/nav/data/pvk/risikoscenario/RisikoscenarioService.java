@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
-import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
@@ -151,7 +150,7 @@ public class RisikoscenarioService {
         List<Risikoscenario> risikoscenarioList = new ArrayList<>();
 
         auditRisikoscenario.forEach(audit -> {
-            risikoscenarioList.add(JsonUtils.toObject(audit.getData(), Risikoscenario.class));
+            risikoscenarioList.add(audit.getDomainObjectData(Risikoscenario.class));
         });
         return risikoscenarioList;
     }
