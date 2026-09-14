@@ -100,7 +100,7 @@ public class RisikoscenarioService {
     public Risikoscenario addTiltak(UUID risikoscenarioId, List<UUID> tiltakIds) {
         for (UUID tiltakId : tiltakIds) {
             var tiltak = tiltakRepo.findById(tiltakId);
-            var relation = tiltakRepo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId);
+            var relation = tiltakRepo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId, LocalDateTime.now());
             if (tiltak.isEmpty()) {
                 throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " does not exist");
             } if (!relation.isEmpty()) {
@@ -132,11 +132,11 @@ public class RisikoscenarioService {
     }
     
     public List<UUID> getTiltak(UUID uuid) {
-        return tiltakRepo.getTiltakForRisikoscenario(uuid);
+        return tiltakRepo.getTiltakForRisikoscenario(uuid, LocalDateTime.now());
     }
 
     public List<UUID> getApprovedTiltak(UUID risikoscenarioId, String timestamp) {
-        return tiltakRepo.getApprovedTiltakForRisikoscenario(risikoscenarioId, timestamp);
+        return tiltakRepo.getTiltakForRisikoscenario(risikoscenarioId, LocalDateTime.parse(timestamp));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

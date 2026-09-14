@@ -69,7 +69,7 @@ public class TiltakService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void addRisikoscenarioTiltakRelasjon(UUID risikoscenarioId, UUID tiltakId) {
-        var relation = repo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId);
+        var relation = repo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId, LocalDateTime.now());
         if (!relation.isEmpty()) {
             throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " is already related to Risikoscenario with id " + risikoscenarioId);
         }
@@ -83,11 +83,11 @@ public class TiltakService {
     }
 
     public List<UUID> getRisikoscenarioer(UUID id) {
-        return repo.getRisikoscenarioForTiltak(id);
+        return repo.getRisikoscenarioForTiltak(id, LocalDateTime.now());
     }
 
     public List<UUID> getApprovedRisikoscenarioer(UUID tiltakId, String timestamp) {
-        return repo.getApprovedRisikoscenarioForTiltak(tiltakId, timestamp);
+        return repo.getRisikoscenarioForTiltak(tiltakId, LocalDateTime.parse(timestamp));
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

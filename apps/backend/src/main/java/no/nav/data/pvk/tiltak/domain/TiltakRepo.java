@@ -15,22 +15,15 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
 
     @Query(value = "select * from tiltak where pvk_dokument_id = ?1", nativeQuery = true)
     List<Tiltak> findByPvkDokumentId(UUID pvkDokumentId);
-    
-    @Query(value="select risikoscenario_id from risikoscenario_tiltak_relation where tiltak_id = ?1 and gyldig_dato_til = 'infinity'", nativeQuery = true)
-    List<UUID> getRisikoscenarioForTiltak(UUID tiltakId);
-    
-    @Query(value="select tiltak_id from risikoscenario_tiltak_relation where risikoscenario_id = ?1 and gyldig_dato_til = 'infinity'", nativeQuery = true)
-    List<UUID> getTiltakForRisikoscenario(UUID risikoscenarioId);
 
     @Query(value="select tiltak_id from risikoscenario_tiltak_relation where risikoscenario_id = ?1 and gyldig_dato_til >= ?2 and gyldig_dato_fra <= ?2", nativeQuery = true)
-    List<UUID> getApprovedTiltakForRisikoscenario(UUID risikoscenarioId, String timestamp);
+    List<UUID> getTiltakForRisikoscenario(UUID risikoscenarioId, LocalDateTime timestamp);
 
     @Query(value="select risikoscenario_id from risikoscenario_tiltak_relation where tiltak_id = ?1 and gyldig_dato_til >= ?2 and gyldig_dato_fra <= ?2", nativeQuery = true)
-    List<UUID> getApprovedRisikoscenarioForTiltak(UUID tiltakId, String timestamp);
+    List<UUID> getRisikoscenarioForTiltak(UUID tiltakId, LocalDateTime timestamp);
 
-    @Query(value="select tiltak_id from risikoscenario_tiltak_relation where risikoscenario_id = ?1 and tiltak_id = ?2 and gyldig_dato_til = 'infinity'", nativeQuery = true)
-    List<UUID> getRelationByRisikoscenarioIdAndTiltakId(UUID risikoscenarioId, UUID tiltakId);
-
+    @Query(value="select tiltak_id from risikoscenario_tiltak_relation where risikoscenario_id = ?1 and tiltak_id = ?2 and gyldig_dato_til > ?3", nativeQuery = true)
+    List<UUID> getRelationByRisikoscenarioIdAndTiltakId(UUID risikoscenarioId, UUID tiltakId, LocalDateTime timestamp);
     
     @Transactional(propagation = Propagation.MANDATORY)
     @Modifying
@@ -49,7 +42,7 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
 
     @Transactional(propagation = Propagation.MANDATORY)
     @Modifying
-    @Query(value="update risikoscenario_tiltak_relation set gyldig_dato_til = ?3 where risikoscenario_id = ?1 and tiltak_id = ?2 and gyldig_dato_til = 'infinity'", nativeQuery = true)
+    @Query(value="update risikoscenario_tiltak_relation set gyldig_dato_til = ?3 where risikoscenario_id = ?1 and tiltak_id = ?2 and gyldig_dato_til > ?3", nativeQuery = true)
     int updateTiltakRisikoscenarioRelationWithGyldigDatoTil(UUID risikoscenarioId, UUID tiltakId, LocalDateTime gyldigDatoTil);
 
     @Transactional
