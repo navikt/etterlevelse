@@ -1080,13 +1080,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:^16.3.4":
-  version: 16.3.4
-  resolution: "@next/eslint-plugin-next@npm:16.3.4"
+"@next/eslint-plugin-next@npm:^16.3.5":
+  version: 16.3.5
+  resolution: "@next/eslint-plugin-next@npm:16.3.5"
   dependencies:
     "@eslint-community/eslint-utils": "npm:4.9.1"
     fast-glob: "npm:3.3.1"
-  checksum: 10c0/66ed6384cab5c13d09eff544a596e676b9ad7614a311f30366f273d29df569dfab007606a2e32ceba968bd1a61f505782b5aab1fd656b06503abf1912ec97573
+  checksum: 10c0/c5b9facd82c30d6fd37c5ff0c6ad137e0194963b9b0842a42746814d72c43e05289a6bf30384a180d5b22645a720e7f311e1073c9083db082ab3c524f39d76b6
   languageName: node
   linkType: hard
 
@@ -3899,7 +3899,7 @@ __metadata:
     "@navikt/ds-css": "npm:^8.16.2"
     "@navikt/ds-react": "npm:^8.16.2"
     "@navikt/ds-tailwind": "npm:^8.16.2"
-    "@next/eslint-plugin-next": "npm:^16.3.4"
+    "@next/eslint-plugin-next": "npm:^16.3.5"
     "@tailwindcss/postcss": "npm:^4.3.3"
     "@tiptap/core": "npm:^3.31.3"
     "@tiptap/extension-image": "npm:^3.31.3"
