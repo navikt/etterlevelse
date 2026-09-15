@@ -283,7 +283,8 @@ export const SendInnView: FunctionComponent<TProps> = ({
   const artOgOmfangFieldCheck = (): boolean => {
     const stemmerPersonkategorier =
       artOgOmfang.stemmerPersonkategorier === undefined ||
-      artOgOmfang.stemmerPersonkategorier === null
+      artOgOmfang.stemmerPersonkategorier === null ||
+      artOgOmfang.stemmerPersonkategorier === false
     const personkategoriAntallBeskrivelse =
       artOgOmfang.personkategoriAntallBeskrivelse === '' ||
       artOgOmfang.personkategoriAntallBeskrivelse === undefined
@@ -651,7 +652,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   legge til ytterligere informasjon dersom det er aktuelt.
                 </BodyLong>
                 <CopyButton
-                  variant='action'
+                  data-color='accent'
                   copyText={window.location.href}
                   text='Kopier lenken til denne siden'
                   activeText='Lenken er kopiert'
