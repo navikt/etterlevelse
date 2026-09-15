@@ -272,6 +272,7 @@ export const MultiInputField = (props: IPropsMultiInputField) => {
                 >
                   <LabelWithTooltip label={label} tooltip={tooltip} />
                   <TextField
+                    type='url'
                     label={label}
                     hideLabel
                     onKeyDown={onKey}

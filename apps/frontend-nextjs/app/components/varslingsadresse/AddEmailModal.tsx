@@ -69,6 +69,7 @@ export const AddEmailModal = (props: IProps) => {
           <div className='w-full pl-8'>
             <Label className='mb-2 block'>Skriv Epost adresse</Label>
             <TextField
+              type='email'
               label=''
               hideLabel
               value={val}
