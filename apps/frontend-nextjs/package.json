@@ -16,7 +16,7 @@
     "knip:test": "yarn knip --max-show-issues 5",
     "knip:cachetest": "yarn knip --cache --max-issues=0",
     "playwright:check": "yarn playwright test",
-    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn playwright test && yarn run build",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
