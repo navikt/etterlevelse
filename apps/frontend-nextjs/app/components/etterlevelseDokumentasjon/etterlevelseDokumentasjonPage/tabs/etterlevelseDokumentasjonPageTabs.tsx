@@ -3,6 +3,7 @@
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { usePvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -15,7 +16,8 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
-import { Button, ReadMore, Tabs } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { Button, InfoCard, List, ReadMore, Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { ArkiveringModal } from '../arkivering/arkiveringModal'
@@ -148,11 +150,40 @@ export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       <Tabs.Panel value='prioritertKravliste'>
         <div className='pt-4 flex flex-col gap-4'>
           {morDokumentRelasjon && (
-            <ReadMore header='Slik bruker du disse vurderingene' className='my-1'>
-              Dokumenteieren har allerede besvart flere av suksesskriteriene for deg. Disse
-              suksesskriteriene er merket med &#34;ikke relevant&#34; eller &#34;oppfylt&#34;, og du
-              kan gjenbruke vurderingene. De øvrige suksesskriteriene må du ta stilling til. Noen av
-              disse inneholder veiledning til hvordan du skal svare ut spørsmålene.
+            <ReadMore
+              header='Spesielt for dere som har tatt gjenbrukskopi'
+              className='max-w-[75ch]  my-1'
+            >
+              Dokumenteiere som tillater gjenbruk, kan velge om de vil tilpasse
+              etterlevelsesdokumentet som arves. Dette innebærer at de kan:
+              <List className='my-5' as='ul'>
+                <List.Item>Skrive veiledning på kravsider, ved enkelte suksesskriterier.</List.Item>
+                <List.Item>
+                  Forhåndsvurdere enkelte suksesskriterier for dere, for eksempel ved å sette noen
+                  til “ikke relevant”.
+                </List.Item>
+                <List.Item>Kladde svar som dere skal skrive ferdig.</List.Item>
+              </List>
+              Dokumenteierne velger også om de vil samle slike tilpassede krav her, under
+              Prioriterte krav.{' '}
+              <ExternalLink href='https://etterlevelse.ansatt.nav.no/omstottetiletterlevelse#slik-gjenbruker-du-et-etterlevelsesdokument'>
+                Les mer om hvordan gjenbruke et etterlevelsesdokument.
+              </ExternalLink>
+              <InfoCard data-color='warning' className='my-5'>
+                <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+                  <InfoCard.Title>
+                    Dere er ansvarlige for at deres etterlevelsesdokumentasjon stemmer
+                  </InfoCard.Title>
+                </InfoCard.Header>
+                <InfoCard.Content>
+                  Selv om dere kan ha arvet noen forhåndsvurderinger, må dere ta stilling til alle
+                  krav og suksesskriterier, og dokumentere det som gjelder for deres etterlevelse.
+                  Likeledes må dere vurdere og dokumentere alle etterlevelseskrav, ikke bare de som
+                  står i Prioritert kravliste. Hvis dere senere arver endringer i veiledning, er
+                  dere ansvarlige for å ta stilling til endringene og holde
+                  etterlevelsesdokumentasjonen oppdatert.
+                </InfoCard.Content>
+              </InfoCard>
             </ReadMore>
           )}
           <PrioritertKravListe

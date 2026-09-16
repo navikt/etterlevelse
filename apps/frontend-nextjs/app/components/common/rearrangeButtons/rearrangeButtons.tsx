@@ -70,6 +70,7 @@ export const RearrangeButtons: FunctionComponent<TProps> = ({
           </Tooltip>
           <Dropdown.Menu>
             <TextField
+              type='number'
               label='Angi ønsket plassering'
               value={plassering}
               onChange={(event: ChangeEvent<HTMLInputElement>) => setPlassering(event.target.value)}

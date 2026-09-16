@@ -147,7 +147,7 @@ export const SendInnErrorSummary: FunctionComponent<TProps> = ({
               )}
               className='max-w-[75ch]'
             >
-              Dere må oppgi om lista over personkategorier stemmer. (åpner i ny fane)
+              Dere må bekrefte at personkategorier stemmer. (åpner i ny fane)
             </ErrorSummary.Item>
           )}
 
