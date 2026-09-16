@@ -1,38 +1,34 @@
 version: 2
 updates:
   - package-ecosystem: docker
-    directory: "/apps/backend"
+    directory: '/apps/backend'
     schedule:
       interval: daily
-      time: "04:00"
+      time: '04:00'
     open-pull-requests-limit: 10
   - package-ecosystem: docker
-    directory: "/apps/frontend-nextjs"
+    directory: '/apps/frontend-nextjs'
     schedule:
       interval: daily
-      time: "04:00"
+      time: '04:00'
     open-pull-requests-limit: 10
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     schedule:
       interval: daily
-      time: "04:00"
+      time: '04:00'
     open-pull-requests-limit: 10
   - package-ecosystem: npm
-    directory: "/apps/frontend-nextjs"
+    directory: '/apps/frontend-nextjs'
     schedule:
       interval: daily
-      time: "04:00"
+      time: '04:00'
     open-pull-requests-limit: 10
     commit-message:
-      prefix: "npm"
-  #   groups:
-  #     all:
-  #       patterns:
-  #         - "*"
-  # - package-ecosystem: maven
-  #   directory: "/apps/backend"
-  #   schedule:
-  #     interval: daily
-  #     time: "04:00"
-  #   open-pull-requests-limit: 10
+      prefix: 'npm'
+  - package-ecosystem: maven
+    directory: '/apps/backend'
+    schedule:
+      interval: daily
+      time: '04:00'
+    open-pull-requests-limit: 10
