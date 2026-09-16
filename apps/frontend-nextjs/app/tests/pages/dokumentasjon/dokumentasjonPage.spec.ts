@@ -167,7 +167,22 @@ test.describe('nagivation to dokumentasjon page', () => {
       'href',
       '/dokumentasjoner'
     )
-    await page.getByRole('link', { name: 'Dokumentere etterlevelse' }).click()
+
+    await Promise.all([
+      page.waitForResponse((response) => {
+        if (!response.url().endsWith('/graphql')) return false
+
+        const requestBody = response.request().postDataJSON() as {
+          operationName?: string
+          variables?: { mineEtterlevelseDokumentasjoner?: boolean }
+        }
+        return (
+          requestBody.operationName === 'getEtterlevelseDokumentasjoner' &&
+          requestBody.variables?.mineEtterlevelseDokumentasjoner === true
+        )
+      }),
+      page.getByRole('link', { name: 'Dokumentere etterlevelse' }).click(),
+    ])
 
     await expect(page.getByRole('heading', { name: 'Dokumentere etterlevelse' })).toBeVisible()
     await expect(
@@ -177,6 +192,7 @@ test.describe('nagivation to dokumentasjon page', () => {
     await expect(page.getByRole('tab', { name: 'Alle', selected: false })).toBeVisible()
 
     await page.getByRole('tab', { name: 'Alle' }).click()
+
     await expect(page).toHaveURL('http://localhost:3000/dokumentasjoner?tab=alle')
     await expect(page.getByRole('tab', { name: 'Alle', selected: true })).toBeVisible()
 
