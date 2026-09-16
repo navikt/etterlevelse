@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { mockIngenEndringerEtterlevelseDokumentasjoner } from '../mocks'
+import { mockIngenEndringerEtterlevelseDokumentasjoner } from '../utils/mocks'
 import {
   mockAdmin,
   mockIdent,
@@ -7,10 +7,13 @@ import {
   mockPersonvernombud,
   mockRead,
   mockWrite,
-} from '../roller'
+} from '../utils/roller'
 
-test.describe('etterlevelse tilganger', () => {
-  test('admin', async ({ context, page }) => {
+test.describe('etterlevelse menu button role tests', () => {
+  test('Ident Button with admin role, should have all menu items and role change button', async ({
+    context,
+    page,
+  }) => {
     await mockAdmin(page)
 
     await context.route('**/graphql', async (route) => {
@@ -57,7 +60,10 @@ test.describe('etterlevelse tilganger', () => {
     await expect(page.getByRole('checkbox', { name: 'Admin' })).toBeVisible()
   })
 
-  test('personvernombud', async ({ page, context }) => {
+  test('Ident Button with personvernombud role, should have 1 menu items and role change button', async ({
+    page,
+    context,
+  }) => {
     await mockPersonvernombud(page)
 
     await context.route('**/graphql', async (route) => {
@@ -95,7 +101,10 @@ test.describe('etterlevelse tilganger', () => {
     await expect(page.getByRole('checkbox', { name: 'Admin' })).toHaveCount(0)
   })
 
-  test('kraveier', async ({ page, context }) => {
+  test('Ident Button with kraveier role, should have 1 menu items and role change button', async ({
+    page,
+    context,
+  }) => {
     await mockKraveier(page)
 
     await context.route('**/graphql', async (route) => {
@@ -133,7 +142,10 @@ test.describe('etterlevelse tilganger', () => {
     await expect(page.getByRole('checkbox', { name: 'Admin' })).toHaveCount(0)
   })
 
-  test('read', async ({ page, context }) => {
+  test('Ident Button with read role, should have no menu items and no role change button', async ({
+    page,
+    context,
+  }) => {
     await mockRead(page)
 
     await context.route('**/graphql', async (route) => {
@@ -171,7 +183,10 @@ test.describe('etterlevelse tilganger', () => {
     await expect(page.getByRole('checkbox', { name: 'Admin' })).toHaveCount(0)
   })
 
-  test('write', async ({ page, context }) => {
+  test('Ident Button with write role, should have no menu items and no role change button', async ({
+    page,
+    context,
+  }) => {
     await mockWrite(page)
 
     await context.route('**/graphql', async (route) => {
