@@ -8,7 +8,6 @@ test.describe('etterlevelse tilganger', () => {
         contentType: 'application/json',
         body: JSON.stringify({
           ...mockUser,
-          groups: ['ADMIN', 'WRITE', 'READ'],
         }),
       })
     })

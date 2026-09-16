@@ -12,8 +12,8 @@ export const mockNyligeEtterlevelseDokumentasjoner = {
       totalElements: 1,
       content: [
         {
-          id: 'front-page-etterlevelse',
-          title: 'test',
+          id: '1234-1234-1234-1234',
+          title: 'Justice League',
           etterlevelseNummer: 716,
           etterlevelseDokumentVersjon: 1,
           sistEndretEtterlevelse: null,
@@ -38,7 +38,7 @@ export const mockIngenEndringerEtterlevelseDokumentasjoner = {
       content: [
         {
           id: 'umami-etterlevelse',
-          title: 'krav',
+          title: 'Fortress of Solitude',
           etterlevelseNummer: 123,
           etterlevelseDokumentVersjon: 1,
           hasCurrentUserAccess: true,

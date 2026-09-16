@@ -29,7 +29,7 @@ test.describe('etterlevelse', () => {
     await expect(
       page.getByRole('combobox', { name: 'Søk etter krav, dokumentasjon eller behandling' })
     ).toBeVisible()
-    await expect(page.getByRole('link', { name: 'E716.1 test' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'E716.1 Justice League' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Nytt etterlevelsesdokument' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Alle etterlevelsesdokumenter' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Forstå kravene' })).toBeVisible()
@@ -133,26 +133,68 @@ test.describe('etterlevelse', () => {
           }),
         })
       })
-      await context.route('**/api/etterlevelsedokumentasjon/umami-etterlevelse', async (route) => {
+      await context.route('**/api/etterlevelsedokumentasjon/1234-1234-1234-1234', async (route) => {
         await route.fulfill({
           contentType: 'application/json',
           body: JSON.stringify({
-            id: 'umami-etterlevelse',
-            title: 'krav',
-            etterlevelseNummer: 123,
-            etterlevelseDokumentVersjon: 1,
-            hasCurrentUserAccess: true,
-            changeStamp: {
-              createdDate: '2026-01-01T00:00:00.000Z',
-              lastModifiedDate: '2026-01-01T00:00:00.000Z',
-              lastModifiedBy: mockIdent,
-            },
+            ...mockNyligeEtterlevelseDokumentasjoner.data.etterlevelseDokumentasjoner.content[0],
+          }),
+        })
+      })
+      await context.route('**/documentrelation/todocument/1234-1234-1234-1234**', async (route) => {
+        await route.fulfill({
+          contentType: 'application/json',
+          body: JSON.stringify([]),
+        })
+      })
+      await context.route(
+        '**/pvkdokument/etterlevelsedokument/1234-1234-1234-1234',
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route(
+        '**/behandlingenslivslop/etterlevelsedokument/1234-1234-1234-1234',
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route(
+        '**/behandlings-art-og-omfang/etterlevelsedokumentasjon/1234-1234-1234-1234',
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route('**/kravprioritylist?pageNumber=0&pageSize=100', async (route) => {
+        await route.fulfill({
+          contentType: 'application/json',
+          body: JSON.stringify({
+            pageNumber: 0,
+            pageSize: 100,
+            pages: 1,
+            numberOfElements: 0,
+            totalElements: 0,
+            content: [],
           }),
         })
       })
       await context.route('**/graphql', async (route) => {
         const request = route.request()
         const requestBody = request.postDataJSON() as { operationName?: string }
+
+        if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
+          await route.fulfill({
+            contentType: 'application/json',
+            body: JSON.stringify({
+              data: {
+                etterlevelseDokumentasjon: {
+                  content: [{ stats: { relevantKrav: [], utgaattKrav: [] } }],
+                },
+              },
+            }),
+          })
+          return
+        }
 
         if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
           await route.continue()
@@ -162,29 +204,7 @@ test.describe('etterlevelse', () => {
         await route.fulfill({
           contentType: 'application/json',
           body: JSON.stringify({
-            data: {
-              etterlevelseDokumentasjoner: {
-                pageNumber: 0,
-                pageSize: 20,
-                pages: 1,
-                numberOfElements: 1,
-                totalElements: 1,
-                content: [
-                  {
-                    id: 'umami-etterlevelse',
-                    title: 'krav',
-                    etterlevelseNummer: 123,
-                    etterlevelseDokumentVersjon: 1,
-                    hasCurrentUserAccess: true,
-                    sistEndretEtterlevelse: null,
-                    sistEndretEtterlevelseAvMeg: null,
-                    sistEndretDokumentasjonAvMeg: null,
-                    changeStamp: { createdDate: '2026-01-01T00:00:00.000Z' },
-                    teamsData: [],
-                  },
-                ],
-              },
-            },
+            ...mockNyligeEtterlevelseDokumentasjoner,
           }),
         })
       })
@@ -209,11 +229,13 @@ test.describe('etterlevelse', () => {
       await page.getByRole('tab', { name: 'Alle' }).click()
       await expect(page).toHaveURL('http://localhost:3000/dokumentasjoner?tab=alle')
       await expect(page.getByRole('tab', { name: 'Alle', selected: true })).toBeVisible()
-      await expect(page.getByRole('link', { name: 'E123.1 krav', exact: true })).toBeVisible()
+      await expect(page.getByRole('link', { name: /^E716\.1 Justice League/ })).toBeVisible()
 
-      await page.getByRole('link', { name: 'E123.1 krav', exact: true }).click()
-      await expect(page).toHaveURL('http://localhost:3000/dokumentasjon/umami-etterlevelse')
-      await expect(page.getByRole('heading', { name: 'E123.1 krav', exact: true })).toBeVisible()
+      await page.getByRole('link', { name: /^E716\.1 Justice League/ }).click()
+      await expect(page).toHaveURL('http://localhost:3000/dokumentasjon/1234-1234-1234-1234')
+      await expect(
+        page.getByRole('heading', { name: 'E716.1 Justice League', exact: true })
+      ).toBeVisible()
     })
   })
 })
