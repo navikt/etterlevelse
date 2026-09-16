@@ -1,16 +1,17 @@
 import { expect, test } from '@playwright/test'
-import { mockIdent, mockIngenEndringerEtterlevelseDokumentasjoner, mockUser } from '../mocks'
+import { mockIngenEndringerEtterlevelseDokumentasjoner } from '../mocks'
+import {
+  mockAdmin,
+  mockIdent,
+  mockKraveier,
+  mockPersonvernombud,
+  mockRead,
+  mockWrite,
+} from '../roller'
 
 test.describe('etterlevelse tilganger', () => {
   test('admin', async ({ context, page }) => {
-    await page.route('**/userinfo', async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({
-          ...mockUser,
-        }),
-      })
-    })
+    await mockAdmin(page)
 
     await context.route('**/graphql', async (route) => {
       const requestBody = route.request().postDataJSON() as { operationName?: string }
@@ -57,15 +58,7 @@ test.describe('etterlevelse tilganger', () => {
   })
 
   test('personvernombud', async ({ page, context }) => {
-    await page.route('**/userinfo', async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({
-          ...mockUser,
-          groups: ['PERSONVERNOMBUD', 'READ'],
-        }),
-      })
-    })
+    await mockPersonvernombud(page)
 
     await context.route('**/graphql', async (route) => {
       const request = route.request()
@@ -103,15 +96,7 @@ test.describe('etterlevelse tilganger', () => {
   })
 
   test('kraveier', async ({ page, context }) => {
-    await page.route('**/userinfo', async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({
-          ...mockUser,
-          groups: ['KRAVEIER', 'READ'],
-        }),
-      })
-    })
+    await mockKraveier(page)
 
     await context.route('**/graphql', async (route) => {
       const request = route.request()
@@ -149,15 +134,7 @@ test.describe('etterlevelse tilganger', () => {
   })
 
   test('read', async ({ page, context }) => {
-    await page.route('**/userinfo', async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({
-          ...mockUser,
-          groups: ['READ'],
-        }),
-      })
-    })
+    await mockRead(page)
 
     await context.route('**/graphql', async (route) => {
       const request = route.request()
@@ -195,15 +172,7 @@ test.describe('etterlevelse tilganger', () => {
   })
 
   test('write', async ({ page, context }) => {
-    await page.route('**/userinfo', async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({
-          ...mockUser,
-          groups: ['WRITE', 'READ'],
-        }),
-      })
-    })
+    await mockWrite(page)
 
     await context.route('**/graphql', async (route) => {
       const request = route.request()

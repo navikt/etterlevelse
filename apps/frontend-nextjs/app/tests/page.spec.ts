@@ -1,16 +1,10 @@
 import { expect, test } from '@playwright/test'
-import { mockIdent, mockNyligeEtterlevelseDokumentasjoner, mockUser } from './mocks'
+import { mockNyligeEtterlevelseDokumentasjoner } from './mocks'
+import { mockAdmin, mockIdent } from './roller'
 
 test.describe('etterlevelse', () => {
   test('front page', async ({ page }) => {
-    await page.route('**/userinfo', async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({
-          ...mockUser,
-        }),
-      })
-    })
+    await mockAdmin(page)
     await page.route('**/graphql', async (route) => {
       const requestBody = route.request().postDataJSON() as { operationName?: string }
 
@@ -50,14 +44,8 @@ test.describe('etterlevelse', () => {
 
   test.describe('nagivation', () => {
     test('dokumentere etterlevelse', async ({ page }) => {
-      await page.route('**/userinfo', async (route) => {
-        await route.fulfill({
-          contentType: 'application/json',
-          body: JSON.stringify({
-            ...mockUser,
-          }),
-        })
-      })
+      await mockAdmin(page)
+
       await page.route('**/api/codelist?refresh=false', async (route) => {
         await route.fulfill({ json: { codelist: {} } })
       })
@@ -106,14 +94,8 @@ test.describe('etterlevelse', () => {
     })
 
     test('krav', async ({ context, page }) => {
-      await context.route('**/userinfo', async (route) => {
-        await route.fulfill({
-          contentType: 'application/json',
-          body: JSON.stringify({
-            ...mockUser,
-          }),
-        })
-      })
+      await mockAdmin(page)
+
       await context.route('**/api/codelist?refresh=false', async (route) => {
         await route.fulfill({
           contentType: 'application/json',

@@ -1,5 +1,3 @@
-export const mockIdent = 'Z123456'
-
 const recentDate = new Date().toISOString()
 
 export const mockNyligeEtterlevelseDokumentasjoner = {
@@ -51,12 +49,4 @@ export const mockIngenEndringerEtterlevelseDokumentasjoner = {
       ],
     },
   },
-}
-
-export const mockUser = {
-  loggedIn: true,
-  ident: mockIdent,
-  name: 'Bat, Man',
-  email: 'bat.man@nav.no',
-  groups: ['ADMIN', 'WRITE', 'READ'],
 }
