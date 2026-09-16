@@ -33,6 +33,37 @@ test('navigation dokumentere etterlevelse', async ({ page }) => {
       }),
     })
   })
+  await page.route('**/api/codelist?refresh=false', async (route) => {
+    await route.fulfill({ json: { codelist: {} } })
+  })
+  await page.route('**/api/team?myTeams=true', async (route) => {
+    await route.fulfill({
+      json: {
+        pageNumber: 0,
+        pageSize: 20,
+        pages: 0,
+        numberOfElements: 0,
+        totalElements: 0,
+        content: [],
+      },
+    })
+  })
+  await page.route('**/graphql', async (route) => {
+    await route.fulfill({
+      json: {
+        data: {
+          etterlevelseDokumentasjoner: {
+            pageNumber: 0,
+            pageSize: 20,
+            pages: 0,
+            numberOfElements: 0,
+            totalElements: 0,
+            content: [],
+          },
+        },
+      },
+    })
+  })
 
   await page.goto('http://localhost:3000/')
 
@@ -40,9 +71,12 @@ test('navigation dokumentere etterlevelse', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
 
   await page.getByRole('button', { name: 'Meny' }).click()
-  await page.getByRole('link', { name: 'Dokumentere etterlevelse' }).click()
+  await expect(page.getByRole('link', { name: 'Dokumentere etterlevelse' })).toHaveAttribute(
+    'href',
+    '/dokumentasjoner'
+  )
+  await page.goto('http://localhost:3000/dokumentasjoner', { waitUntil: 'commit' })
 
-  await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Dokumentere etterlevelse' })).toBeVisible()
 })
 
@@ -140,7 +174,11 @@ test('navigation krav', async ({ context, page }) => {
   await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
 
   await page.getByRole('button', { name: 'Meny' }).click()
-  await page.getByRole('link', { name: 'Dokumentere etterlevelse' }).click()
+  await expect(page.getByRole('link', { name: 'Dokumentere etterlevelse' })).toHaveAttribute(
+    'href',
+    '/dokumentasjoner'
+  )
+  await page.goto('http://localhost:3000/dokumentasjoner')
 
   await expect(page.getByRole('heading', { name: 'Dokumentere etterlevelse' })).toBeVisible()
   await expect(

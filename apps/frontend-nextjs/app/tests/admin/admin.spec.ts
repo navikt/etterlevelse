@@ -26,16 +26,21 @@ const mockEtterlevelseDokumentasjoner = {
   },
 }
 
+const mockUser = {
+  loggedIn: true,
+  ident: 'Z123456',
+  name: 'Test, User',
+  email: 'test.user@nav.no',
+  groups: ['ADMIN', 'WRITE', 'READ'],
+}
+
 test.describe('etterlevelse tilganger', () => {
   test('admin', async ({ context, page }) => {
     await page.route('**/userinfo', async (route) => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({
-          loggedIn: true,
-          ident: 'Z123456',
-          name: 'Test, User',
-          email: 'test.user@nav.no',
+          ...mockUser,
           groups: ['ADMIN', 'WRITE', 'READ'],
         }),
       })
@@ -52,24 +57,6 @@ test.describe('etterlevelse tilganger', () => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify(mockEtterlevelseDokumentasjoner),
-      })
-    })
-
-    await context.route('**/api/etterlevelsedokumentasjon/umami-etterlevelse', async (route) => {
-      await route.fulfill({
-        contentType: 'application/json',
-        body: JSON.stringify({
-          id: 'umami-etterlevelse',
-          title: 'krav',
-          etterlevelseNummer: 123,
-          etterlevelseDokumentVersjon: 1,
-          hasCurrentUserAccess: true,
-          changeStamp: {
-            createdDate: '2026-01-01T00:00:00.000Z',
-            lastModifiedDate: '2026-01-01T00:00:00.000Z',
-            lastModifiedBy: 'Z123456',
-          },
-        }),
       })
     })
 
@@ -108,10 +95,7 @@ test.describe('etterlevelse tilganger', () => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({
-          loggedIn: true,
-          ident: 'Z123456',
-          name: 'Test, User',
-          email: 'test.user@nav.no',
+          ...mockUser,
           groups: ['PERSONVERNOMBUD', 'READ'],
         }),
       })
@@ -157,10 +141,7 @@ test.describe('etterlevelse tilganger', () => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({
-          loggedIn: true,
-          ident: 'Z123456',
-          name: 'Test, User',
-          email: 'test.user@nav.no',
+          ...mockUser,
           groups: ['KRAVEIER', 'READ'],
         }),
       })
@@ -206,10 +187,7 @@ test.describe('etterlevelse tilganger', () => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({
-          loggedIn: true,
-          ident: 'Z123456',
-          name: 'Test, User',
-          email: 'test.user@nav.no',
+          ...mockUser,
           groups: ['READ'],
         }),
       })
@@ -255,10 +233,7 @@ test.describe('etterlevelse tilganger', () => {
       await route.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({
-          loggedIn: true,
-          ident: 'Z123456',
-          name: 'Test, User',
-          email: 'test.user@nav.no',
+          ...mockUser,
           groups: ['WRITE', 'READ'],
         }),
       })
