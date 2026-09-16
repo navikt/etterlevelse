@@ -13,6 +13,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 To check node version:
 
 `node -v`
+
 If node version is wrong, use `nvm`:
 
 `nvm use` or `nvm use <version-number>`
@@ -42,6 +43,16 @@ OR
 OR
 
 `yarn run dev`
+
+### Playwright
+
+`yarn playwright test`
+
+With UI:
+
+`yarn playwright test --ui`
+
+It's important to having `dev-gcp` and `frontend` running locally while committing, otherwise the Playwright tests will fail.
 
 ## Other
 
