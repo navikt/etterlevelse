@@ -1,6 +1,33 @@
 export const mockIdent = 'Z123456'
 
-export const mockEtterlevelseDokumentasjoner = {
+const recentDate = new Date().toISOString()
+
+export const mockNyligeEtterlevelseDokumentasjoner = {
+  data: {
+    etterlevelseDokumentasjoner: {
+      pageNumber: 0,
+      pageSize: 20,
+      pages: 1,
+      numberOfElements: 1,
+      totalElements: 1,
+      content: [
+        {
+          id: 'front-page-etterlevelse',
+          title: 'test',
+          etterlevelseNummer: 716,
+          etterlevelseDokumentVersjon: 1,
+          sistEndretEtterlevelse: null,
+          sistEndretEtterlevelseAvMeg: recentDate,
+          sistEndretDokumentasjonAvMeg: recentDate,
+          changeStamp: { createdDate: recentDate },
+          teamsData: [],
+        },
+      ],
+    },
+  },
+}
+
+export const mockIngenEndringerEtterlevelseDokumentasjoner = {
   data: {
     etterlevelseDokumentasjoner: {
       pageNumber: 0,

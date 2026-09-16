@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { mockEtterlevelseDokumentasjoner, mockIdent, mockUser } from '../mocks'
+import { mockIdent, mockIngenEndringerEtterlevelseDokumentasjoner, mockUser } from '../mocks'
 
 test.describe('etterlevelse tilganger', () => {
   test('admin', async ({ context, page }) => {
@@ -23,7 +23,7 @@ test.describe('etterlevelse tilganger', () => {
 
       await route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify(mockEtterlevelseDokumentasjoner),
+        body: JSON.stringify(mockIngenEndringerEtterlevelseDokumentasjoner),
       })
     })
 
@@ -79,7 +79,7 @@ test.describe('etterlevelse tilganger', () => {
 
       await route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify(mockEtterlevelseDokumentasjoner),
+        body: JSON.stringify(mockIngenEndringerEtterlevelseDokumentasjoner),
       })
     })
 
@@ -125,7 +125,7 @@ test.describe('etterlevelse tilganger', () => {
 
       await route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify(mockEtterlevelseDokumentasjoner),
+        body: JSON.stringify(mockIngenEndringerEtterlevelseDokumentasjoner),
       })
     })
 
@@ -171,7 +171,7 @@ test.describe('etterlevelse tilganger', () => {
 
       await route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify(mockEtterlevelseDokumentasjoner),
+        body: JSON.stringify(mockIngenEndringerEtterlevelseDokumentasjoner),
       })
     })
 
@@ -217,7 +217,7 @@ test.describe('etterlevelse tilganger', () => {
 
       await route.fulfill({
         contentType: 'application/json',
-        body: JSON.stringify(mockEtterlevelseDokumentasjoner),
+        body: JSON.stringify(mockIngenEndringerEtterlevelseDokumentasjoner),
       })
     })
 
