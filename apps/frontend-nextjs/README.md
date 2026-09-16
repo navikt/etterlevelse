@@ -13,7 +13,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 To check node version:
 
 `node -v`
-
+test playwrite trigger
 If node version is wrong, use `nvm`:
 
 `nvm use` or `nvm use <version-number>`
