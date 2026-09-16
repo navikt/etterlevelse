@@ -1,38 +1,5 @@
 import { expect, test } from '@playwright/test'
-
-const mockEtterlevelseDokumentasjoner = {
-  data: {
-    etterlevelseDokumentasjoner: {
-      pageNumber: 0,
-      pageSize: 20,
-      pages: 1,
-      numberOfElements: 1,
-      totalElements: 1,
-      content: [
-        {
-          id: 'umami-etterlevelse',
-          title: 'krav',
-          etterlevelseNummer: 123,
-          etterlevelseDokumentVersjon: 1,
-          hasCurrentUserAccess: true,
-          sistEndretEtterlevelse: null,
-          sistEndretEtterlevelseAvMeg: null,
-          sistEndretDokumentasjonAvMeg: null,
-          changeStamp: { createdDate: '2026-01-01T00:00:00.000Z' },
-          teamsData: [],
-        },
-      ],
-    },
-  },
-}
-
-const mockUser = {
-  loggedIn: true,
-  ident: 'Z123456',
-  name: 'Test, User',
-  email: 'test.user@nav.no',
-  groups: ['ADMIN', 'WRITE', 'READ'],
-}
+import { mockEtterlevelseDokumentasjoner, mockIdent, mockUser } from '../mocks'
 
 test.describe('etterlevelse tilganger', () => {
   test('admin', async ({ context, page }) => {
@@ -63,9 +30,9 @@ test.describe('etterlevelse tilganger', () => {
     await page.goto('http://localhost:3000/')
     await expect(page).toHaveTitle(/Etterlevelse/)
 
-    await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
+    await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()
 
-    await page.getByRole('button', { name: 'Z123456' }).click()
+    await page.getByRole('button', { name: mockIdent }).click()
 
     await expect(page.getByRole('link', { name: 'Forvalte og opprette krav' })).toBeVisible()
     await expect(
@@ -119,9 +86,9 @@ test.describe('etterlevelse tilganger', () => {
     await page.goto('http://localhost:3000/')
     await expect(page).toHaveTitle(/Etterlevelse/)
 
-    await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
+    await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()
 
-    await page.getByRole('button', { name: 'Z123456' }).click()
+    await page.getByRole('button', { name: mockIdent }).click()
 
     await expect(
       page.getByRole('link', { name: 'Oversiktsside for Personvernombudet' })
@@ -165,9 +132,9 @@ test.describe('etterlevelse tilganger', () => {
     await page.goto('http://localhost:3000/')
     await expect(page).toHaveTitle(/Etterlevelse/)
 
-    await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
+    await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()
 
-    await page.getByRole('button', { name: 'Z123456' }).click()
+    await page.getByRole('button', { name: mockIdent }).click()
 
     await expect(page.getByRole('link', { name: 'Forvalte og opprette krav' })).toBeVisible()
     await expect(
@@ -211,9 +178,9 @@ test.describe('etterlevelse tilganger', () => {
     await page.goto('http://localhost:3000/')
     await expect(page).toHaveTitle(/Etterlevelse/)
 
-    await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
+    await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()
 
-    await page.getByRole('button', { name: 'Z123456' }).click()
+    await page.getByRole('button', { name: mockIdent }).click()
 
     await expect(page.getByRole('link', { name: 'Forvalte og opprette krav' })).toHaveCount(0)
     await expect(
@@ -257,9 +224,9 @@ test.describe('etterlevelse tilganger', () => {
     await page.goto('http://localhost:3000/')
     await expect(page).toHaveTitle(/Etterlevelse/)
 
-    await expect(page.getByRole('button', { name: 'Z123456' })).toBeVisible()
+    await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()
 
-    await page.getByRole('button', { name: 'Z123456' }).click()
+    await page.getByRole('button', { name: mockIdent }).click()
 
     await expect(page.getByRole('link', { name: 'Forvalte og opprette krav' })).toHaveCount(0)
     await expect(
