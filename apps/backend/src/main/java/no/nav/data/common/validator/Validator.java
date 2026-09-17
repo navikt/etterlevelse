@@ -7,7 +7,7 @@ import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
