@@ -96,7 +96,7 @@ public class PvkDokumentService {
     public PvkDokument getApprovedPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
         List<AuditVersion> auditPvkDokument = auditVersionService.getByTableIdAndTimestamp(pvkDokumentId, timestamp);
         if (!auditPvkDokument.isEmpty()) {
-            var pvkDokument = auditPvkDokument.getFirst().getObjectData(PvkDokument.class);
+            var pvkDokument = auditPvkDokument.getFirst().getObjectDataByDomain(PvkDokument.class);
             if(pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
                 log.info("Found approved pvk dokument with id = {} and timestamp = {}", pvkDokumentId, timestamp);
                 return pvkDokument;

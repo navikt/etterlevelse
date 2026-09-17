@@ -150,7 +150,7 @@ public class RisikoscenarioService {
         List<Risikoscenario> risikoscenarioList = new ArrayList<>();
 
         auditRisikoscenario.forEach(audit -> {
-            risikoscenarioList.add(audit.getObjectData(Risikoscenario.class));
+            risikoscenarioList.add(audit.getObjectDataByDomain(Risikoscenario.class));
         });
         return risikoscenarioList;
     }
