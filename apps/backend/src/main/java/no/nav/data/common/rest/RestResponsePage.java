@@ -1,8 +1,8 @@
 package no.nav.data.common.rest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.Parameter;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import no.nav.data.common.utils.StreamUtils;
 import org.springframework.data.domain.Page;
@@ -12,18 +12,48 @@ import java.util.List;
 import java.util.function.Function;
 
 @Getter
-@AllArgsConstructor
 @JsonPropertyOrder({"pageNumber", "pageSize", "pages", "numberOfElements", "totalElements", "paged", "content"})
 public class RestResponsePage<T> {
 
-    private final long pageNumber;
-    private final long pageSize;
-    private final long pages;
-    private final long numberOfElements;
-    private final long totalElements;
+    // Fields are deserialized via field injection (see @JsonProperty below) rather than a @JsonCreator
+    // constructor. Jackson 3 dropped Jackson 2's ALLOW_FINAL_FIELDS_AS_MUTATORS default, so final fields
+    // could no longer be populated during deserialization. A constructor-based @JsonCreator only fixes the
+    // base type, but the many empty `... extends RestResponsePage<>` subclasses cannot inherit a creator and
+    // would fall back to the no-arg constructor with empty content. Non-final + @JsonProperty fields are
+    // inherited by every subclass, so they all deserialize correctly.
+    @JsonProperty("pageNumber")
+    private long pageNumber;
+    @JsonProperty("pageSize")
+    private long pageSize;
+    @JsonProperty("pages")
+    private long pages;
+    @JsonProperty("numberOfElements")
+    private long numberOfElements;
+    @JsonProperty("totalElements")
+    private long totalElements;
     @Parameter(description = "False if operation always returns all elements")
-    private final boolean paged;
-    private final List<T> content;
+    @JsonProperty("paged")
+    private boolean paged;
+    @JsonProperty("content")
+    private List<T> content;
+
+    public RestResponsePage(
+            long pageNumber,
+            long pageSize,
+            long pages,
+            long numberOfElements,
+            long totalElements,
+            boolean paged,
+            List<T> content
+    ) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+        this.pages = pages;
+        this.numberOfElements = numberOfElements;
+        this.totalElements = totalElements;
+        this.paged = paged;
+        this.content = content;
+    }
 
     public RestResponsePage(Page<T> page) {
         this.content = page.getContent();
