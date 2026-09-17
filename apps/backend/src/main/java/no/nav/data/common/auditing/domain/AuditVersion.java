@@ -72,7 +72,7 @@ public class AuditVersion {
         return (T) domainObjectCache;
     }
 
-    public <T> T getDomainObjectData(Class<T> type) {
+    public <T> T getObjectData(Class<T> type) {
         return JsonUtils.toObject(data, type);
     }
 

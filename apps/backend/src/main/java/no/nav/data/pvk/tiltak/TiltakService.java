@@ -109,7 +109,7 @@ public class TiltakService {
         List<Tiltak> tiltakList = new ArrayList<>();
 
         auditTiltak.forEach(audit -> {
-            tiltakList.add(audit.getDomainObjectData(Tiltak.class));
+            tiltakList.add(audit.getObjectData(Tiltak.class));
         });
         return tiltakList;
     }
