@@ -4,8 +4,6 @@ import StatusIOrganisasjonen from './components/frontpage/StatusIOrganisasjonen'
 import { EtterlevelseDokumentasjon } from './components/frontpage/etterlevelseDokumentasjon/etterlevelseDokumentasjon'
 import { PageLayout } from './components/others/scaffold/scaffold'
 
-console.debug('test')
-// test
 export default function Home() {
   return (
     <PageLayout noPadding fullWidth>
