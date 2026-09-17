@@ -44,6 +44,16 @@ OR
 
 `yarn run dev`
 
+### Playwright
+
+`yarn playwright test`
+
+With UI:
+
+`yarn playwright test --ui`
+
+It's important to having `dev-gcp` and `frontend` running locally while committing, otherwise the Playwright tests will fail.
+
 ## Other
 
 ### To use Yarn v4 and node you need to

@@ -15,7 +15,9 @@
     "eslint:check": "eslint . --no-cache --max-warnings=0",
     "knip:test": "yarn knip --max-show-issues 5",
     "knip:cachetest": "yarn knip --cache --max-issues=0",
-    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn run build",
+    "playwright:check": "yarn playwright test",
+    "playwright:ui": "yarn playwright test --ui",
+    "verify:deps-upgrade": "yarn run prettier:check && yarn run eslint:check && yarn run type-check && yarn playwright test && yarn run build",
     "pre-commit:deps-check": "node scripts/precommit-deps-check.mjs",
     "lint": "eslint . && prettier -c ./app",
     "lint:fix": "eslint --fix .",
@@ -29,7 +31,8 @@
     "*.{js,jsx,ts,tsx,mjs}": [
       "prettier --list-different --write",
       "eslint --cache --max-warnings=0",
-      "bash -c 'yarn run type-check'"
+      "bash -c 'yarn run type-check'",
+      "bash -c 'yarn playwright test'"
     ]
   },
   "dependencies": {
@@ -79,6 +82,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.3.5",
+    "@playwright/test": "^1.63.0",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/lodash": "^4.17.25",
     "@types/node": "26.5.1",
