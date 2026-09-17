@@ -30,7 +30,7 @@
         <microsoft-kiota.version>1.9.3</microsoft-kiota.version>
         <msal4j.version>1.23.1</msal4j.version>
         <flyway-database-postgresql.version>10.16.0</flyway-database-postgresql.version>
-        <azure-core.version>1.56.0</azure-core.version>
+        <azure-core.version>1.59.1</azure-core.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.28.0</commons-compress.version>
