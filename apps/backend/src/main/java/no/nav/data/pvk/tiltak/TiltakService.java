@@ -89,8 +89,8 @@ public class TiltakService {
         return repo.getRisikoscenarioForTiltak(id, LocalDateTime.now());
     }
 
-    public List<UUID> getApprovedRisikoscenarioer(UUID tiltakId, String timestamp) {
-        return repo.getRisikoscenarioForTiltak(tiltakId, LocalDateTime.parse(timestamp));
+    public List<UUID> getApprovedRisikoscenarioer(UUID tiltakId, LocalDateTime timestamp) {
+        return repo.getRisikoscenarioForTiltak(tiltakId, timestamp);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

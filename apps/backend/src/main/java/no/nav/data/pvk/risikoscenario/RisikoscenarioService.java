@@ -134,8 +134,8 @@ public class RisikoscenarioService {
         return tiltakRepo.getTiltakForRisikoscenario(uuid, LocalDateTime.now());
     }
 
-    public List<UUID> getApprovedTiltak(UUID risikoscenarioId, String timestamp) {
-        return tiltakRepo.getTiltakForRisikoscenario(risikoscenarioId, LocalDateTime.parse(timestamp));
+    public List<UUID> getApprovedTiltak(UUID risikoscenarioId, LocalDateTime timestamp) {
+        return tiltakRepo.getTiltakForRisikoscenario(risikoscenarioId, timestamp);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

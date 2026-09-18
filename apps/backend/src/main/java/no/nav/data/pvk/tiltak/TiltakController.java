@@ -10,6 +10,7 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
@@ -179,12 +180,13 @@ public class TiltakController {
     @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
     public ResponseEntity<List<TiltakResponse>> getApprovedTiltakByPvkDokumentAndIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
         log.info("Get approved Tiltak by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
-        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+        String normalizedTimestamp = UtcDateTimeUtil.stripTrailingZ(timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
         if (approvedPvkDokument != null) {
-            List<Tiltak> tiltakList = service.getApprovedTiltakPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(timestamp));
+            List<Tiltak> tiltakList = service.getApprovedTiltakPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
             List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
             tiltakResponseList.forEach(tiltakResponse -> {
-                addApprovedRisikoscenarioer(tiltakResponse, timestamp);
+                addApprovedRisikoscenarioer(tiltakResponse, LocalDateTime.parse(normalizedTimestamp));
                 addResourceData(tiltakResponse);
                 addTeamData(tiltakResponse);
             });
@@ -198,7 +200,7 @@ public class TiltakController {
         return res;
     }
 
-    private TiltakResponse addApprovedRisikoscenarioer(TiltakResponse res, String timestamp) {
+    private TiltakResponse addApprovedRisikoscenarioer(TiltakResponse res, LocalDateTime timestamp) {
         res.setRisikoscenarioIds(service.getApprovedRisikoscenarioer(res.getId(), timestamp));
         return res;
     }

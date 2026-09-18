@@ -94,8 +94,8 @@ public class PvkDokumentService {
     }
 
 
-    public PvkDokument getApprovedPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
-        List<AuditVersion> auditPvkDokument = auditVersionService.getByTableIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(timestamp));
+    public PvkDokument getApprovedPvkDokumentByIdAndTimestamp(String pvkDokumentId, LocalDateTime timestamp) {
+        List<AuditVersion> auditPvkDokument = auditVersionService.getByTableIdAndTimestamp(pvkDokumentId, timestamp);
         if (!auditPvkDokument.isEmpty()) {
             var pvkDokument = auditPvkDokument.getFirst().getObjectDataByDomain(PvkDokument.class);
 

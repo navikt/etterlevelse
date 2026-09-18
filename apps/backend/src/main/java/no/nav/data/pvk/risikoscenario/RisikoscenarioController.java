@@ -11,6 +11,7 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
@@ -289,11 +290,12 @@ public class RisikoscenarioController {
     @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
     public ResponseEntity<List<RisikoscenarioResponse>> getApprovedRisikoscenarioByPvkDokumentAndIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
         log.info("Get approved Risikoscneario by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
-        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+        String normalizedTimestamp = UtcDateTimeUtil.stripTrailingZ(timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
         if (approvedPvkDokument != null) {
-            List<Risikoscenario> risikoscenarioList = risikoscenarioService.getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(timestamp));
+            List<Risikoscenario> risikoscenarioList = risikoscenarioService.getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
             List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
-            risikoscenarioResponseList.forEach(r -> setApprovedTiltakAndKravDataForRelevantKravList(r, timestamp));
+            risikoscenarioResponseList.forEach(r -> setApprovedTiltakAndKravDataForRelevantKravList(r, LocalDateTime.parse(normalizedTimestamp)));
             return ResponseEntity.ok(risikoscenarioResponseList);
         }
         return ResponseEntity.notFound().build();
@@ -307,7 +309,7 @@ public class RisikoscenarioController {
         setRelevanteKravDataForRisikoscenario(risikoscenario);
     }
 
-    public void setApprovedTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario, String timestamp) {
+    public void setApprovedTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario, LocalDateTime timestamp) {
         // Set Tiltak...
         risikoscenario.setTiltakIds(risikoscenarioService.getApprovedTiltak(risikoscenario.getId(), timestamp));
 

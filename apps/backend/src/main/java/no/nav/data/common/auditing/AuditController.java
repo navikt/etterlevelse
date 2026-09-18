@@ -15,6 +15,7 @@ import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.storage.domain.GenericStorage;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -128,7 +129,7 @@ public class AuditController {
     @GetMapping("/log/{tableId}/{timestamp}")
     public ResponseEntity<List<AuditResponse>> getByTableIdAndTimestamp(@PathVariable String tableId, @PathVariable String timestamp) {
         log.info("Received request for Audit log with table id {} and timestamp {}", tableId, timestamp);
-        var list = service.getByTableIdAndTimestamp(tableId, LocalDateTime.parse(timestamp)).stream().map(AuditVersion:: toResponse).toList();
+        var list = service.getByTableIdAndTimestamp(tableId, LocalDateTime.parse(UtcDateTimeUtil.stripTrailingZ(timestamp))).stream().map(AuditVersion:: toResponse).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -137,7 +138,7 @@ public class AuditController {
     @GetMapping("/log/etterlevelse/{etterlevelseDokumentasjonsId}/{timestamp}")
     public ResponseEntity<List<AuditResponse>> getEtterlevelserByEtterlevelseDokumentasjonsIdAndTimestamp(@PathVariable String etterlevelseDokumentasjonsId, @PathVariable String timestamp) {
         log.info("Received request for Audit log for etterlevelser with etterlevelse document id {} and timestamp {}", etterlevelseDokumentasjonsId, timestamp);
-        var list = service.findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(etterlevelseDokumentasjonsId, LocalDateTime.parse(timestamp)).stream().map(AuditVersion:: toResponse).toList();
+        var list = service.findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(etterlevelseDokumentasjonsId, LocalDateTime.parse(UtcDateTimeUtil.stripTrailingZ(timestamp))).stream().map(AuditVersion:: toResponse).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

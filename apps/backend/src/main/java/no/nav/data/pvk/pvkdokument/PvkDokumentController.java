@@ -10,6 +10,7 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.security.SecurityUtils;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.integration.p360.P360ArkiveringService;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -286,7 +288,7 @@ public class PvkDokumentController {
     @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
     public ResponseEntity<PvkDokumentResponse> getApprovedPvkDokumentByIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
         log.info("Get approved Pvk Document {} by timestamp={}", pvkDokumentId, timestamp);
-        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(UtcDateTimeUtil.stripTrailingZ(timestamp)));
         if (approvedPvkDokument != null) {
             return ResponseEntity.ok(PvkDokumentResponse.buildFrom(approvedPvkDokument));
         }
@@ -300,7 +302,7 @@ public class PvkDokumentController {
 
         if (pvoTilbakmelding != null) {
             if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-                pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.TRENGER_REVURDERING);
+                    pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.TRENGER_REVURDERING);
                 pvoTilbakemeldingService.save(pvoTilbakmelding, true);
             } else if (pvoTilbakmelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING &&
                     (pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID ||
