@@ -17,6 +17,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravReference;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.KravRisikoscenarioRequest;
@@ -27,8 +28,16 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -44,6 +53,7 @@ public class RisikoscenarioController {
     private final PvkDokumentService pvkDokumentService;
     private final KravService kravService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final String UTGATT_KRAV_TAG = "Utgatt krav";
 
     @Operation(summary = "Get All Risikoscenario")
     @ApiResponse(description = "ok")
@@ -175,17 +185,17 @@ public class RisikoscenarioController {
     public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id) {
         log.info("Delete Risikoscenario id={}", id);
         Risikoscenario risikoscenario;
-        try {
-            risikoscenario = risikoscenarioService.delete(id);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Could delete Risikoscenario with id = {}: Risikoscenario is related to one or more Tiltak", id);
-            throw new ValidationException("Could delete Risikoscenario: Risikoscenario is related to one or more Tiltak");
-        }
-        if (risikoscenario == null) {
-            log.warn("Could not find risikoscenario with id = {} to delete", id);
-            return ResponseEntity.ok(null);
+        if (!risikoscenarioService.getTiltak(id).isEmpty()) {
+            log.warn("Could not delete Risikoscenario with id = {}: Risikoscenario is related to one or more Tiltak", id);
+            throw new ValidationException("Could not delete Risikoscenario: Risikoscenario is related to one or more Tiltak");
         } else {
-            return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
+            risikoscenario = risikoscenarioService.delete(id);
+            if (risikoscenario == null) {
+                log.warn("Could not find risikoscenario with id = {} to delete", id);
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(RisikoscenarioResponse.buildFrom(risikoscenario));
+            }
         }
     }
 
@@ -241,6 +251,9 @@ public class RisikoscenarioController {
             var risko =  risikoscenarioService.get(request.getRisikoscenarioId());
             if (risko != null) {
                 hasUserWriteAccessCheck(risko.getPvkDokumentId());
+            } else {
+                log.warn("Could not find risikoscenario with id = {} to add Tiltak", request.getRisikoscenarioId());
+                throw new DataIntegrityViolationException(String.format("Could not find risikoscenario with id = %s to add Tiltak", request.getRisikoscenarioId()));
             }
             Risikoscenario risikoscenario = risikoscenarioService.addTiltak(request.getRisikoscenarioId(), request.getTiltakIds());
             RisikoscenarioResponse response = RisikoscenarioResponse.buildFrom(risikoscenario);
@@ -271,30 +284,57 @@ public class RisikoscenarioController {
         }
     }
 
+    @Operation(summary = "Get last approved risikoscenario by Pvk Document and timestamp")
+    @ApiResponse(description = "ok")
+    @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
+    public ResponseEntity<List<RisikoscenarioResponse>> getApprovedRisikoscenarioByPvkDokumentAndIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
+        log.info("Get approved Risikoscneario by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+        if (approvedPvkDokument != null) {
+            List<Risikoscenario> risikoscenarioList = risikoscenarioService.getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(timestamp));
+            List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
+            risikoscenarioResponseList.forEach(r -> setApprovedTiltakAndKravDataForRelevantKravList(r, timestamp));
+            return ResponseEntity.ok(risikoscenarioResponseList);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     public void setTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario) {
         // Set Tiltak...
         risikoscenario.setTiltakIds(risikoscenarioService.getTiltak(risikoscenario.getId()));
 
         // Set KravData...
-            risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
-                List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
-                if (kravList.isEmpty()) {
-                    kravShort.setNavn("Utgatt krav");
-                } else {
-                    try {
-                        RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
-                        JsonNode lovData = regelverk.getLov().getData();
-                        kravShort.setTemaCode(lovData.get("tema").asText());
-                    } catch (RuntimeException e) {
-                        // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
-                    }
-                    kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
-                    kravShort.setNavn(kravList.get(0).getNavn());
-                }
-            });
+        setRelevanteKravDataForRisikoscenario(risikoscenario);
+    }
 
-            List<KravReference> filteredKravReference = risikoscenario.getRelevanteKravNummer().stream().filter(kravReference -> !Objects.equals(kravReference.getNavn(), "Utgatt krav")).toList();
-            risikoscenario.setRelevanteKravNummer(filteredKravReference);
+    public void setApprovedTiltakAndKravDataForRelevantKravList(RisikoscenarioResponse risikoscenario, String timestamp) {
+        // Set Tiltak...
+        risikoscenario.setTiltakIds(risikoscenarioService.getApprovedTiltak(risikoscenario.getId(), timestamp));
+
+        // Set KravData...
+        setRelevanteKravDataForRisikoscenario(risikoscenario);
+    }
+
+    public void setRelevanteKravDataForRisikoscenario(RisikoscenarioResponse risikoscenario) {
+        risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
+            List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+            if (kravList.isEmpty()) {
+                kravShort.setNavn(UTGATT_KRAV_TAG);
+            } else {
+                try {
+                    RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
+                    JsonNode lovData = regelverk.getLov().getData();
+                    kravShort.setTemaCode(lovData.get("tema").asText());
+                } catch (RuntimeException e) {
+                    // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
+                }
+                kravShort.setKravVersjon(kravList.get(0).getKravVersjon());
+                kravShort.setNavn(kravList.get(0).getNavn());
+            }
+        });
+
+        List<KravReference> filteredKravReference = risikoscenario.getRelevanteKravNummer().stream().filter(kravReference -> !Objects.equals(kravReference.getNavn(), UTGATT_KRAV_TAG)).toList();
+        risikoscenario.setRelevanteKravNummer(filteredKravReference);
     }
 
 

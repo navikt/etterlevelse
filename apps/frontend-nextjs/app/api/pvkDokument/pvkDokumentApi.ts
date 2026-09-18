@@ -9,6 +9,7 @@ import {
 import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
+import { getEtterlevelseDokumentasjon } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 
 export const getAllPvkDokument = async () => {
   const pageSize = 100
@@ -85,6 +86,17 @@ export const updatePvkDokument = async (pvkDokument: IPvkDokument): Promise<IPvk
     .data
 }
 
+export const getApprovedPvkDokumentByIdAndTimestamp = async (
+  pvkDokumentId: string,
+  timestamp: string
+) => {
+  return (
+    await axios.get<IPvkDokument>(
+      `${env.backendBaseUrl}/pvkdokument/approved/pvkDokument/${pvkDokumentId}/${timestamp}`
+    )
+  ).data
+}
+
 export const godkjenOgArkiverPvkDokument = async (
   pvkDokument: IPvkDokument
 ): Promise<IPvkDokument> => {
@@ -146,6 +158,55 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
       abortedRef.current = true
     }
   }, [pvkDokumentId])
+
+  return [data, setData, isLoading] as [
+    IPvkDokument | undefined,
+    (pvkDokument: IPvkDokument) => void,
+    boolean,
+  ]
+}
+
+export const useLastApprovedPvkDokument = (etterlevelseDokumentasjonId: string) => {
+  const [data, setData] = useState<IPvkDokument>(mapPvkDokumentToFormValue({}))
+  const [isLoading, setIsLoading] = useState<boolean>(!etterlevelseDokumentasjonId)
+  const abortedRef = useRef(false)
+
+  useEffect(() => {
+    abortedRef.current = false
+    ;(async () => {
+      await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(
+        async (etterlevelseDokumentasjon) => {
+          await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
+            async (pvkDokument) => {
+              if (pvkDokument) {
+                if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                  setData(pvkDokument)
+                } else if (etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1) {
+                  const nyVersjonOpprettetDato = etterlevelseDokumentasjon.versjonHistorikk.find(
+                    (historikk) =>
+                      historikk.versjon ===
+                      etterlevelseDokumentasjon.etterlevelseDokumentVersjon - 1
+                  )?.nyVersjonOpprettetDato
+
+                  await getApprovedPvkDokumentByIdAndTimestamp(
+                    pvkDokument.id,
+                    nyVersjonOpprettetDato || ''
+                  ).then((approvedPvkDokument) => {
+                    setData(mapPvkDokumentToFormValue(approvedPvkDokument))
+                  })
+                }
+              }
+            }
+          )
+          setIsLoading(false)
+        }
+      )
+    })()
+
+    return () => {
+      abortedRef.current = true
+    }
+  }, [etterlevelseDokumentasjonId])
 
   return [data, setData, isLoading] as [
     IPvkDokument | undefined,

@@ -21,7 +21,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "RISIKOSCENARIO")
+@Table(name = Risikoscenario.TABLENAME)
 public class Risikoscenario extends Auditable {
 
     @Id
@@ -37,4 +37,5 @@ public class Risikoscenario extends Auditable {
     @Column(name = "DATA", nullable = false)
     private RisikoscenarioData risikoscenarioData = new RisikoscenarioData();
 
+    public static final String TABLENAME = "RISIKOSCENARIO";
 }

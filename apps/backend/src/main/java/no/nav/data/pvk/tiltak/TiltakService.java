@@ -2,6 +2,8 @@ package no.nav.data.pvk.tiltak;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +28,7 @@ import java.util.UUID;
 public class TiltakService {
 
     private final TiltakRepo repo;
+    private final AuditVersionService auditVersionService;
     
     public Page<Tiltak> getAll(PageParameters pageParameters) {
         return repo.findAll(pageParameters.createPage());
@@ -67,7 +72,11 @@ public class TiltakService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void addRisikoscenarioTiltakRelasjon(UUID risikoscenarioId, UUID tiltakId) {
-        repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId);
+        var relation = repo.getRelationByRisikoscenarioIdAndTiltakId(risikoscenarioId, tiltakId, LocalDateTime.now());
+        if (!relation.isEmpty()) {
+            throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " is already related to Risikoscenario with id " + risikoscenarioId);
+        }
+        repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
     }
 
     public List<Tiltak> getByPvkDokument(UUID pvkDokumentId) {
@@ -77,9 +86,12 @@ public class TiltakService {
     }
 
     public List<UUID> getRisikoscenarioer(UUID id) {
-        return repo.getRisikoscenarioForTiltak(id);
+        return repo.getRisikoscenarioForTiltak(id, LocalDateTime.now());
     }
 
+    public List<UUID> getApprovedRisikoscenarioer(UUID tiltakId, String timestamp) {
+        return repo.getRisikoscenarioForTiltak(tiltakId, LocalDateTime.parse(timestamp));
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteByPvkDokumentId(UUID pvkDokumentId) {
@@ -94,6 +106,16 @@ public class TiltakService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteTiltakRisikoscenarioRelationByTiltakId(UUID tiltakId) {
         repo.deleteTiltakRisikoscenarioRelationByTiltakId(tiltakId);
+    }
+
+    public List<Tiltak> getApprovedTiltakPvkDokumentByIdAndTimestamp(String pvkDokumentId, LocalDateTime timestamp) {
+        List<AuditVersion> auditTiltak = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp(Tiltak.TABLENAME, "pvkDokumentId", pvkDokumentId, timestamp);
+        List<Tiltak> tiltakList = new ArrayList<>();
+
+        auditTiltak.forEach(audit -> {
+            tiltakList.add(audit.getObjectDataByDomain(Tiltak.class));
+        });
+        return tiltakList;
     }
 
 }

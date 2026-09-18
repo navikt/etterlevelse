@@ -368,7 +368,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
         }
       })
     })()
-  }, [])
+  }, [pvkDokument])
 
   return (
     <div className='flex justify-center'>

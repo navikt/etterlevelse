@@ -1,4 +1,5 @@
 import { IPageResponse } from '@/constants/commonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ERisikoscenarioType,
   IKravRisikoscenarioRelasjon,
@@ -7,6 +8,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
+import { useEffect, useRef, useState } from 'react'
 
 export const getAllRisikoscenario = async () => {
   const pageSize = 100
@@ -47,6 +49,62 @@ export const getRisikoscenarioByPvkDokumentId = async (
       `${env.backendBaseUrl}/risikoscenario/pvkdokument/${pvkDokumentId}/${scenarioType}`
     )
   ).data
+
+export const getApprovedRisikoscenarioByPvkDokumentIdAndTimestamp = async (
+  pvkDokumentId: string,
+  timestamp: string
+) => {
+  return (
+    await axios.get<IRisikoscenario[]>(
+      `${env.backendBaseUrl}/risikoscenario/approved/pvkDokument/${pvkDokumentId}/${timestamp}`
+    )
+  ).data
+}
+
+export const useLastApprovedRisikoscenarioByPvkDokumentId = (
+  pvkDokument: IPvkDokument,
+  isForGenerelScenario: boolean
+) => {
+  const [alleRisikoscenario, setAlleRisikoscenario] = useState<IRisikoscenario[]>([])
+  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const abortedRef = useRef(false)
+
+  useEffect(() => {
+    abortedRef.current = false
+    ;(async () => {
+      await getApprovedRisikoscenarioByPvkDokumentIdAndTimestamp(
+        pvkDokument.id,
+        pvkDokument.godkjentAvRisikoeierDato
+      ).then(async (risikoscenarioer: IRisikoscenario[]) => {
+        const alleRisikoscenario: IRisikoscenario[] = []
+
+        risikoscenarioer.forEach((risiko) => {
+          alleRisikoscenario.push(mapRisikoscenarioToFormValue(risiko))
+        })
+
+        setAlleRisikoscenario(alleRisikoscenario)
+        setRisikoscenarioList(
+          alleRisikoscenario.filter(
+            (risikoscenario: IRisikoscenario) =>
+              risikoscenario.generelScenario === isForGenerelScenario
+          )
+        )
+        setIsLoading(false)
+      })
+    })()
+
+    return () => {
+      abortedRef.current = true
+    }
+  }, [pvkDokument])
+
+  return [alleRisikoscenario, risikoscenarioList, isLoading] as [
+    IRisikoscenario[],
+    IRisikoscenario[],
+    boolean,
+  ]
+}
 
 export const getRisikoscenarioByKravnummer = async (
   kravnummer: string
