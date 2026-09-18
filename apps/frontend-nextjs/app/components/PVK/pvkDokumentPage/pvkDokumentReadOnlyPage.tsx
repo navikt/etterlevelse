@@ -2,7 +2,7 @@
 
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { useLastApprovedPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
+import { getLastPvoByApprovedPvkDokumentIdAndTimestamp } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
@@ -131,10 +131,7 @@ export const PvkDokumentReadOnlyPage = () => {
   const relevantVurdering: IVurdering | undefined = useMemo(() => {
     if (pvkDokument && pvoTilbakemelding && etterlevelseDokumentasjon) {
       const vurdering = pvoTilbakemelding.vurderinger.find(
-        (vurdering) =>
-          vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
-          vurdering.etterlevelseDokumentVersjon ===
-            etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
       )
       if (vurdering) {
         return vurdering
@@ -145,7 +142,7 @@ export const PvkDokumentReadOnlyPage = () => {
         )
       }
     }
-  }, [etterlevelseDokumentasjon, pvoTilbakemelding, pvkDokument])
+  }, [pvoTilbakemelding, pvkDokument])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -176,8 +173,14 @@ export const PvkDokumentReadOnlyPage = () => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
         if (![EPvkDokumentStatus.UNDERARBEID].includes(pvkDokument.status)) {
-          await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
-            .then(setPvoTilbakemelding)
+          await getLastPvoByApprovedPvkDokumentIdAndTimestamp(
+            pvkDokument.id,
+            pvkDokument.changeStamp.lastModifiedDate
+          )
+            .then((resp) => {
+              console.debug(resp)
+              setPvoTilbakemelding(resp)
+            })
             .catch(() => undefined)
         }
       }
