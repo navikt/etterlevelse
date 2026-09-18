@@ -4,7 +4,7 @@ import { BodyLong, Heading, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { bidragsVerdierToText } from '../../readOnly/pvoTilbakemeldingReadOnly'
 
-export enum EBidragVerdier {
+enum EBidragVerdier {
   TILSTREKKELIG = 'TILSTREKELIG',
   TILSTREKKELIG_FORBEHOLDT = 'TILSTREKKELIG_FORBEHOLDT',
   UTILSTREKKELIG = 'UTILSTREKELIG',

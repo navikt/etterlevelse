@@ -25,7 +25,7 @@ import {
 import { useEffect, useState } from 'react'
 import { UpdateMessage } from '../common/commonComponents'
 
-export const EtterlevelseDokumentRelasjonAdminPage = () => {
+const EtterlevelseDokumentRelasjonAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [deleleDokumentRelasjonId, setDeleteDokumentRelasjonId] = useState<string>('')
   const [reloadTable, setReloadTable] = useState(false)

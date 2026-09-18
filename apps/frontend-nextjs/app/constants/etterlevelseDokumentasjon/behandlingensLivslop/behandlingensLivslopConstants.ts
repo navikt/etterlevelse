@@ -8,7 +8,7 @@ export interface IBehandlingensLivslop extends IDomainObject {
   filer: IBehandlingensLivslopFil[]
 }
 
-export interface IBehandlingensLivslopFil {
+interface IBehandlingensLivslopFil {
   filnavn: string
   filtype: string
   fil: string

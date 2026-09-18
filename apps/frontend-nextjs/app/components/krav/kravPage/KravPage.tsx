@@ -24,6 +24,7 @@ const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) =>
     return undefined
   }
 }
+
 export const KravPage = () => {
   const params: Readonly<Partial<TKravIdParams>> = useParams<TKravIdParams>()
   const [kravTema, setKravTema] = useState<TTemaCode>()
@@ -62,5 +63,3 @@ export const KravPage = () => {
     </PageLayout>
   )
 }
-
-export default KravPage

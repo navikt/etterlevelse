@@ -15,7 +15,7 @@ import { useContext } from 'react'
 import EtterlevelseDokumentasjonForm from '../form/etterlevelseDokumentasjonForm'
 import EtterlevelseDokumentasjonFormSendTilGodkjenningState from '../form/etterlevelseDokumentasjonFormSendTilGodkjenningState'
 
-export const EditEtterlevelseDokumentasjonPage = () => {
+const EditEtterlevelseDokumentasjonPage = () => {
   const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
   const user = useContext(UserContext)
   const [etterlevelseDokumentasjon, , isLoading] = useEtterlevelseDokumentasjon(
@@ -68,4 +68,5 @@ export const EditEtterlevelseDokumentasjonPage = () => {
     </>
   )
 }
+
 export default EditEtterlevelseDokumentasjonPage

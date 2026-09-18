@@ -61,9 +61,9 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import {
   etterlevelseDokumentasjonIdUrl,

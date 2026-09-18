@@ -155,5 +155,3 @@ const TemaView: FunctionComponent<TTemaViewProps> = (props) => {
     </PageLayout>
   )
 }
-
-export default TemaPage

@@ -5,6 +5,13 @@ import {
   EListName,
   IAllCodelists,
   ICode,
+  ICodeListFormValues,
+  IGetOptionsForCodeProps,
+  IGetParsedOptionsFilterOutSelectedProps,
+  IGetParsedOptionsForListProps,
+  IGetParsedOptionsForLovProps,
+  IGetParsedOptionsProps,
+  IMakeValueLabelForAllCodeListsProps,
   TLovCode,
   TTemaCode,
 } from '@/constants/kodeverk/kodeverkConstants'
@@ -44,39 +51,6 @@ export interface ICodelistProps {
   isRettskilde: (nationalLawCode?: string) => boolean | '' | undefined
   makeValueLabelForAllCodeLists: () => { value: string; label: string }[]
   gjelderForLov: (tema: TTemaCode, lov: TLovCode) => boolean
-}
-
-export interface IGetParsedOptionsProps {
-  value: string
-  label: string
-  description: string
-}
-
-interface IGetOptionsForCodeProps {
-  id: string
-  label: string
-  description: string
-}
-
-interface IGetParsedOptionsForLovProps {
-  value: string
-  label: string
-  description: string
-}
-
-interface IGetParsedOptionsForListProps {
-  id: string
-  label: string
-}
-
-interface IGetParsedOptionsFilterOutSelectedProps {
-  value: string
-  label: string
-}
-
-interface IMakeValueLabelForAllCodeListsProps {
-  value: string
-  label: string
 }
 
 export const CodelistContext = createContext<{ utils: ICodelistProps; lists: IAllCodelists }>({
@@ -309,47 +283,6 @@ export const CodelistProvider: FunctionComponent<TProps> = ({ children }) => {
   )
 }
 
-export interface IList {
-  [name: string]: ICode[]
-}
-
-export interface ICodeListFormValues {
-  list: string
-  code: string
-  shortName?: string
-  description?: string
-  data?: ILovCodeData | ITemaCodeData
-}
-
-export interface ICodeUsage {
-  listName: EListName
-  code: string
-  inUse: boolean
-  krav: [IUse]
-  etterlevelseDokumentasjoner: [IUse]
-  codelist: [ICode]
-}
-
-export interface IUse {
-  id: string
-  name: string
-  number: string
-}
-
-export interface ICategoryUsage {
-  listName: string
-  codesInUse: ICodeUsage[]
-}
-
-export interface ILovCodeData {
-  lovId?: string
-  underavdeling?: string
-  tema?: string
-}
-export interface ITemaCodeData {
-  image?: string
-  shortDesciption?: string
-}
 const containsLovCodeDataCheck = (data?: string, list?: string): boolean => {
   if (list === EListName.LOV) {
     return data ? true : false

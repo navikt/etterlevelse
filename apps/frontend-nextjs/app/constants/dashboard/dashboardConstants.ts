@@ -1,32 +1,14 @@
 import { IBehandling } from '../behandlingskatalogen/behandlingskatalogConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
-  IEtterlevelseDokumentasjon,
   INomEnhet,
   INomSeksjon,
 } from '../etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   EPvkVurdering,
-  IPvkDokument,
 } from '../etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ITeam, ITeamResource } from '../teamkatalogen/teamkatalogConstants'
-
-export interface IDokKravStats {
-  totalKrav: number
-  ferdigDokumentert: number
-  underArbeid: number
-  ikkePaabegynt: number
-  behandlinger: { id: string; navn: string; nummer: number }[]
-}
-
-export interface IDokPvkStats {
-  antallScenarioer: number
-  hoyRisikoScenarioer: number
-  hoyRisikoEtterTiltak: number
-  ikkeIverksatteTiltak: number
-  tiltakFristPassert: number
-}
 
 export interface ISeksjonOption {
   id: string
@@ -70,18 +52,6 @@ export interface IKravDashboardStats {
   antallFerdigUtfyltKravSuksesskriterierOppfylt: number
   antallFerdigUtfyltKravSuksesskriterierIkkeOppfylt: number
   antallFerdigUtfyltKravSuksesskriterierIkkeRelevant: number
-}
-
-export interface IAvdelingDetailData {
-  avdelingId: string
-  avdelingNavn: string
-  seksjoner: ISeksjonOption[]
-  totalStats: IAvdelingDashboardStats
-  statsBySeksjon: Map<string, IAvdelingDashboardStats>
-  dokumentasjoner: IEtterlevelseDokumentasjon[]
-  pvkByDokId: Map<string, IPvkDokument>
-  kravStatsByDokId: Map<string, IDokKravStats>
-  pvkStatsByDokId: Map<string, IDokPvkStats>
 }
 
 export interface IDashboardDetailResponse extends IAvdelingDashboardStats {

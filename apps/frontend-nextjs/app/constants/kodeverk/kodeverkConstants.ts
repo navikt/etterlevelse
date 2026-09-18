@@ -1,4 +1,5 @@
 import { TReplace } from '../commonConstants'
+import { ITemaCodeData } from '../teamkatalogen/teamkatalogConstants'
 
 export enum EListName {
   AVDELING = 'AVDELING',
@@ -32,7 +33,7 @@ export interface IAllCodelists {
   codelist: IList
 }
 
-export interface IList {
+interface IList {
   [name: string]: ICode[]
 }
 
@@ -52,23 +53,60 @@ export interface ICodeUsage {
   codelist: [ICode]
 }
 
-export interface IUse {
+interface IUse {
   id: string
   name: string
   number: string
 }
 
-export interface ICategoryUsage {
-  listName: string
-  codesInUse: ICodeUsage[]
-}
-
-export interface ITemaCodeData {
-  image?: string
-  shortDesciption?: string
-}
-
 export interface IRegelverk {
   lov: TLovCode
   spesifisering?: string
+}
+
+export interface ICodeListFormValues {
+  list: string
+  code: string
+  shortName?: string
+  description?: string
+  data?: ILovCodeData | ITemaCodeData
+}
+
+export interface ILovCodeData {
+  lovId?: string
+  underavdeling?: string
+  tema?: string
+}
+
+export interface IGetParsedOptionsProps {
+  value: string
+  label: string
+  description: string
+}
+
+export interface IGetOptionsForCodeProps {
+  id: string
+  label: string
+  description: string
+}
+
+export interface IGetParsedOptionsForLovProps {
+  value: string
+  label: string
+  description: string
+}
+
+export interface IGetParsedOptionsForListProps {
+  id: string
+  label: string
+}
+
+export interface IGetParsedOptionsFilterOutSelectedProps {
+  value: string
+  label: string
+}
+
+export interface IMakeValueLabelForAllCodeListsProps {
+  value: string
+  label: string
 }

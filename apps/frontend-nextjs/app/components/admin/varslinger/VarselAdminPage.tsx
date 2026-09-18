@@ -14,7 +14,7 @@ import EditOmEtterlevelse from './EditOmEtterlevelse'
 type TSection =
   'utsendtMelding' | EMeldingType.SYSTEM | EMeldingType.FORSIDE | EMeldingType.OM_ETTERLEVELSE
 
-export const VarselAdminPage = () => {
+const VarselAdminPage = () => {
   const params = useParams<{ tab?: TSection }>()
 
   const [tab, setTab] = useState<TSection>(params.tab || 'utsendtMelding')

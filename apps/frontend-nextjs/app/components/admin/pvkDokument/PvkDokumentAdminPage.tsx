@@ -25,7 +25,7 @@ import {
 import { useEffect, useState } from 'react'
 import { UpdateMessage } from '../common/commonComponents'
 
-export const PvkDokumentAdminPage = () => {
+const PvkDokumentAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [deletePvkDokumentId, setDeletePvkDokumentId] = useState<string>('')
   const [reloadTable, setReloadTable] = useState(false)

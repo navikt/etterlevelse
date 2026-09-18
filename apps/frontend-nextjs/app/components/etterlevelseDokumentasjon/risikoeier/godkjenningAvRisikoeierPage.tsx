@@ -59,7 +59,7 @@ import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevel
 import { GodkjenningAvRisikoeierKravFormSummary } from './common/godkjenningAvRisikoeierKravFormSummary'
 import { GodkjenningAvRisikoeierPvkFormSummary } from './common/godkjenningAvRisikoeierPvkFormSummary'
 
-export const GodkjenningAvEtterlevelsesDokumentPage = () => {
+const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
@@ -481,4 +481,5 @@ export const GodkjenningAvEtterlevelsesDokumentPage = () => {
     </PageLayout>
   )
 }
+
 export default GodkjenningAvEtterlevelsesDokumentPage

@@ -2,7 +2,7 @@ import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasj
 import { PageLayout } from '../../others/scaffold/scaffold'
 import EtterlevelseDokumentasjonForm from '../form/etterlevelseDokumentasjonForm'
 
-export const CreateEtterlevelseDokumentasjon = () => (
+const CreateEtterlevelseDokumentasjon = () => (
   <PageLayout
     pageTitle='Opprett nytt etterlevelsesdokument'
     currentPage='Opprett nytt etterlevelsesdokument'

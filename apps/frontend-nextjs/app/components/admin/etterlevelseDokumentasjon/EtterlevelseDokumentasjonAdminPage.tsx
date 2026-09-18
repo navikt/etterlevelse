@@ -6,7 +6,7 @@ import { Box, Button, Heading, TextField } from '@navikt/ds-react'
 import { useState } from 'react'
 import { UpdateMessage } from '../common/commonComponents'
 
-export const EtterlevelseDokumentasjonAdminPage = () => {
+const EtterlevelseDokumentasjonAdminPage = () => {
   const [etterlevelseDokumentasjonId, setEtterlevelseDokumentasjonId] = useState('')
   const [updateMessage, setUpdateMessage] = useState('')
 

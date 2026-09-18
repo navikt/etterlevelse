@@ -9,7 +9,7 @@ import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbP
 import { useParams } from 'next/navigation'
 import SendTilRisikoeierGodkjenning from './sendTilRisikoeierGodkjenning/sendTilRisikoeierGodkjenning'
 
-export const SendTilRisikoeierGodkjenningPage = () => {
+const SendTilRisikoeierGodkjenningPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
