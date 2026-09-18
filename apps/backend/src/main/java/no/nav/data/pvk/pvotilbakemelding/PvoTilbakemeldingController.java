@@ -9,10 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
@@ -21,9 +23,21 @@ import no.nav.data.pvk.pvotilbakemelding.dto.PvoTilbakemeldingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -82,6 +96,24 @@ public class PvoTilbakemeldingController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @Operation(summary = "Get last pvo tilbakemelding by approved pvk dokument timestamp")
+    @ApiResponse(description = "ok")
+    @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
+    public ResponseEntity<PvoTilbakemeldingResponse> getPvkTilbakemeldingByApprovedPvkDokumentByIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
+        log.info("Get last pvo tilbakemelding by approved Pvk Document {} by timestamp={}", pvkDokumentId, timestamp);
+        String normalizedTimestamp = UtcDateTimeUtil.stripTrailingZ(timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
+        if (approvedPvkDokument != null) {
+            PvoTilbakemelding pvoTilbakemelding = pvoTilbakemeldingService.getLastPvoTilbakemeldingByApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
+            if (pvoTilbakemelding != null) {
+                return ResponseEntity.ok(PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Create PVO tilbakemelding")

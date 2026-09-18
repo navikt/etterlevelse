@@ -2,6 +2,8 @@ package no.nav.data.pvk.pvotilbakemelding;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,6 +29,7 @@ import java.util.UUID;
 public class PvoTilbakemeldingService {
     private final PvoTilbakemeldingRepo pvoTilbakemeldingRepo;
     private final PvoTilbakemeldingRepoCustom pvoTilbakemeldingRepoCustom;
+    private final AuditVersionService auditVersionService;
 
     public PvoTilbakemelding get(UUID uuid) {
         if (uuid == null || !pvoTilbakemeldingRepo.existsById(uuid)) return null;
@@ -57,6 +62,16 @@ public class PvoTilbakemeldingService {
         }
 
         return pvoTilbakemeldingRepoCustom.findBy(filter);
+    }
+
+    public PvoTilbakemelding getLastPvoTilbakemeldingByApprovedPvkDokumentByIdAndTimestamp(String pvkDokumentId, LocalDateTime timestamp) {
+        List<AuditVersion> auditPvoTilbakemelding = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp(PvoTilbakemelding.TABLENAME, "pvkDokumentId", pvkDokumentId, timestamp);
+        List<PvoTilbakemelding> pvoTilbakemeldingList = new ArrayList<>();
+
+        auditPvoTilbakemelding.forEach(audit -> {
+            pvoTilbakemeldingList.add(audit.getObjectDataByDomain(PvoTilbakemelding.class));
+        });
+        return pvoTilbakemeldingList.isEmpty() ? null : pvoTilbakemeldingList.getFirst();
     }
 
 
