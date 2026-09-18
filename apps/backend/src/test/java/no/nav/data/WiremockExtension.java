@@ -30,6 +30,7 @@ public class WiremockExtension implements Extension, BeforeAllCallback, BeforeEa
     @Override
     public void beforeEach(ExtensionContext context) {
         stubCommon();
+        getWiremock().resetRequests();
     }
 
     @Override
@@ -45,7 +46,7 @@ public class WiremockExtension implements Extension, BeforeAllCallback, BeforeEa
         BegrepMocks.mock();
     }
 
-    static WireMockServer getWiremock() {
+    public static WireMockServer getWiremock() {
         return WIREMOCK;
     }
 

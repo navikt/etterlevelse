@@ -22,10 +22,17 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.KravService;
-import no.nav.data.etterlevelse.krav.domain.*;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
+import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.integration.slack.SlackMeldingRepo;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangData;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangRepo;
@@ -35,7 +42,11 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
-import no.nav.data.pvk.pvotilbakemelding.domain.*;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
+import no.nav.data.pvk.pvotilbakemelding.domain.Vurdering;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
@@ -136,6 +147,8 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected TilbakemeldingRepo tilbakemeldingRepo;
     @Autowired
+    protected SlackMeldingRepo slackMeldingRepo;
+    @Autowired
     protected BehandlingensArtOgOmfangRepo behandlingensArtOgOmfangRepo;
 
     @BeforeEach
@@ -152,6 +165,7 @@ public abstract class IntegrationTestBase {
     void tearDownBase() {
         etterlevelseMetadataRepo.deleteAll();
         tilbakemeldingRepo.deleteAll();
+        slackMeldingRepo.deleteAll();
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();
