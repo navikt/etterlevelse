@@ -1,6 +1,6 @@
 'use client'
 
-import { StepTitle } from '@/components/PVK/pvkDokumentPage/pvkDokumentReadOnlyPage'
+import { stepTitle } from '@/components/PVK/pvkDokumentPage/pvkDokumentReadOnlyPage'
 import BodyLongWithLineBreak from '@/components/common/bodyLongWithLineBreak'
 import {
   EPVK,
@@ -34,7 +34,7 @@ export const InvolveringSummaryReadOnly: FunctionComponent<TProps> = ({
   return (
     <FormSummary className='my-3'>
       <FormSummary.Header>
-        <FormSummary.Heading level='2'>{StepTitle[4]}</FormSummary.Heading>
+        <FormSummary.Heading level='2'>{stepTitle[4]}</FormSummary.Heading>
       </FormSummary.Header>
       <FormSummary.Answers>
         <FormSummary.Answer>

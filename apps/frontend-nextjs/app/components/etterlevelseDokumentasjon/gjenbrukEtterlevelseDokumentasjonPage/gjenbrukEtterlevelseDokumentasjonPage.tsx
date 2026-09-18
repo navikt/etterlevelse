@@ -15,7 +15,7 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import GjenbrukEtterlevelseDokumentasjonForm from '../form/gjenbrukEtterlevelseDokumentasjonForm'
 
-export const GjenbrukEtterlevelseDokumentasjonPage = () => {
+const GjenbrukEtterlevelseDokumentasjonPage = () => {
   const params = useParams<{ etterlevelseDokumentasjonId?: string }>()
 
   const [etterlevelseDokumentasjon, , isLoading] = useEtterlevelseDokumentasjon(

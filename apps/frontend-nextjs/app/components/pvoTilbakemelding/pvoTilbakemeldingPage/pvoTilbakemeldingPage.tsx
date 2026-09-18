@@ -36,7 +36,7 @@ import OversiktPvoView from './stepperViews/oversiktPvoView'
 import SendInnPvoView from './stepperViews/sendInnPvo/sendInnPvoView'
 import TilhorendeDokumentasjonPvoView from './stepperViews/tilhorendeDokumentasjonPvoView'
 
-export const StepTitle: string[] = [
+const stepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens livsløp',
   'Behandlingens art og omfang',
@@ -47,7 +47,7 @@ export const StepTitle: string[] = [
   'Send tilbakemelding',
 ]
 
-export const PvoTilbakemeldingPage = () => {
+const PvoTilbakemeldingPage = () => {
   const params: Readonly<
     Partial<{
       pvkDokumentId?: string
@@ -56,7 +56,7 @@ export const PvoTilbakemeldingPage = () => {
   const queryParams = useSearchParams()
   const currentStep = queryParams.get('steg') || '1'
   const [currentPage, setCurrentPage] = useState<string>(
-    currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
+    currentStep !== null ? stepTitle[parseInt(currentStep) - 1] : 'Oversikt'
   )
   const [etterlevelseDokumentasjon, setEtterlevelseDokumentasjon] =
     useState<IEtterlevelseDokumentasjon>()
@@ -172,7 +172,7 @@ export const PvoTilbakemeldingPage = () => {
     } else {
       setActiveStep(step)
       updateUrlOnStepChange(step)
-      setCurrentPage(StepTitle[step - 1])
+      setCurrentPage(stepTitle[step - 1])
     }
   }
 
@@ -231,7 +231,7 @@ export const PvoTilbakemeldingPage = () => {
                       }}
                       orientation='horizontal'
                     >
-                      {StepTitle.map((title) => {
+                      {stepTitle.map((title) => {
                         return (
                           <Stepper.Step key={title} as='button'>
                             {title}
@@ -243,13 +243,13 @@ export const PvoTilbakemeldingPage = () => {
                   <div className='md:hidden'>
                     <FormProgress
                       activeStep={activeStep}
-                      totalSteps={StepTitle.length}
+                      totalSteps={stepTitle.length}
                       onStepChange={(step) => {
                         setSelectedStep(step)
                         updateTitleUrlAndStep(step)
                       }}
                     >
-                      {StepTitle.map((title) => (
+                      {stepTitle.map((title) => (
                         <FormProgress.Step key={title}>{title}</FormProgress.Step>
                       ))}
                     </FormProgress>
@@ -394,7 +394,7 @@ export const PvoTilbakemeldingPage = () => {
                     await formRef.current?.submitForm()
                     setActiveStep(selectedStep)
                     updateUrlOnStepChange(selectedStep)
-                    setCurrentPage(StepTitle[selectedStep - 1])
+                    setCurrentPage(stepTitle[selectedStep - 1])
                     setIsUnsaved(false)
                   }}
                 >
@@ -406,7 +406,7 @@ export const PvoTilbakemeldingPage = () => {
                   onClick={() => {
                     setActiveStep(selectedStep)
                     updateUrlOnStepChange(selectedStep)
-                    setCurrentPage(StepTitle[selectedStep - 1])
+                    setCurrentPage(stepTitle[selectedStep - 1])
                     setIsUnsaved(false)
                   }}
                 >

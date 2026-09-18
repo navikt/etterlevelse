@@ -33,7 +33,7 @@ import PvkBehovInfoContent from './pvkBehovInfoContent'
 import PvkBehovMetadata from './pvkBehovMetadata'
 import PvkBehovReadOnly from './pvkBehovReadOnly'
 
-export const PvkBehovPage = () => {
+const PvkBehovPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string

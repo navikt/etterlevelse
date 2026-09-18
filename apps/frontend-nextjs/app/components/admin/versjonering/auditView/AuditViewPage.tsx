@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import AuditItemList from './AuditItemList'
 import AuditOversiktView from './AuditOversiktView'
 
-export const AuditViewPage = () => {
+const AuditViewPage = () => {
   const params = useParams()
   const searchParams = useSearchParams()
   const auditId = searchParams.get('auditId')

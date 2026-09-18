@@ -18,7 +18,7 @@ import { PageLayout } from '../others/scaffold/scaffold'
 import BehandlingensLivslopReadOnlyContent from './content/behandlingensLivslopReadOnlyContent'
 import BehandlingensLivsLopSidePanel from './sidePanel/BehandlingensLivsLopSidePanel'
 
-export const BehandlingensLivslopReadOnlyPage = () => {
+const BehandlingensLivslopReadOnlyPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string

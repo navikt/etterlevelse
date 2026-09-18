@@ -49,7 +49,7 @@ export const StepTitle: string[] = [
   'Les og send inn',
 ]
 
-export const PvkDokumentPage = () => {
+const PvkDokumentPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
