@@ -27,9 +27,17 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -149,7 +157,7 @@ public class TiltakController {
         List<UUID> risikoscenarioIds = service.getRisikoscenarioer(id);
         Tiltak tiltak;
 
-        if(!risikoscenarioIds.isEmpty()) {
+        if (!risikoscenarioIds.isEmpty()) {
             log.warn("Could not delete Tiltak with id = {}: Tiltak is related to one or more Risikoscenario", id);
             throw new ValidationException("Could not delete Tiltak: Tiltak is related to one or more Risikoscenario");
         } else {
@@ -173,7 +181,7 @@ public class TiltakController {
         log.info("Get approved Tiltak by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
         PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
         if (approvedPvkDokument != null) {
-            List<Tiltak> tiltakList = service.getApprovedTiltakPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+            List<Tiltak> tiltakList = service.getApprovedTiltakPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(timestamp));
             List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
             tiltakResponseList.forEach(tiltakResponse -> {
                 addApprovedRisikoscenarioer(tiltakResponse, timestamp);

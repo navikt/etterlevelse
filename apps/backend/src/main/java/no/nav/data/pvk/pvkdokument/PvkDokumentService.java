@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -94,9 +95,12 @@ public class PvkDokumentService {
 
 
     public PvkDokument getApprovedPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
-        List<AuditVersion> auditPvkDokument = auditVersionService.getByTableIdAndTimestamp(pvkDokumentId, timestamp);
+        List<AuditVersion> auditPvkDokument = auditVersionService.getByTableIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(timestamp));
         if (!auditPvkDokument.isEmpty()) {
             var pvkDokument = auditPvkDokument.getFirst().getObjectDataByDomain(PvkDokument.class);
+
+            //Fordi pvk dokument er låst når det opprettes ny versjon av etterlevelse dokumentasjon
+            //så vet vi at sist redigert basert på datoen det opprettes ny versjon vil alltid gi siste godkjent pvk
             if(pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
                 log.info("Found approved pvk dokument with id = {} and timestamp = {}", pvkDokumentId, timestamp);
                 return pvkDokument;

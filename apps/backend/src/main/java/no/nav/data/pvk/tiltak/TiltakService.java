@@ -16,7 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -104,8 +108,8 @@ public class TiltakService {
         repo.deleteTiltakRisikoscenarioRelationByTiltakId(tiltakId);
     }
 
-    public List<Tiltak> getApprovedTiltakPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
-        List<AuditVersion> auditTiltak = auditVersionService.findByTableNameFkFieldAndTimeStamp("TILTAK", "pvkDokumentId", pvkDokumentId, timestamp);
+    public List<Tiltak> getApprovedTiltakPvkDokumentByIdAndTimestamp(String pvkDokumentId, LocalDateTime timestamp) {
+        List<AuditVersion> auditTiltak = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp("TILTAK", "pvkDokumentId", pvkDokumentId, timestamp);
         List<Tiltak> tiltakList = new ArrayList<>();
 
         auditTiltak.forEach(audit -> {

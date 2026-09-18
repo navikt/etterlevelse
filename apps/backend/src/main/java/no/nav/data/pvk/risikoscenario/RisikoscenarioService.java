@@ -145,8 +145,8 @@ public class RisikoscenarioService {
         risikoscenarioRepo.deleteAll(risikoscenarioList);
     }
 
-    public List<Risikoscenario> getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(String pvkDokumentId, String timestamp) {
-        List<AuditVersion> auditRisikoscenario = auditVersionService.findByTableNameFkFieldAndTimeStamp("RISIKOSCENARIO", "pvkDokumentId", pvkDokumentId, timestamp);
+    public List<Risikoscenario> getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(String pvkDokumentId, LocalDateTime timestamp) {
+        List<AuditVersion> auditRisikoscenario = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp("RISIKOSCENARIO", "pvkDokumentId", pvkDokumentId, timestamp);
         List<Risikoscenario> risikoscenarioList = new ArrayList<>();
 
         auditRisikoscenario.forEach(audit -> {

@@ -28,8 +28,16 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -45,6 +53,7 @@ public class RisikoscenarioController {
     private final PvkDokumentService pvkDokumentService;
     private final KravService kravService;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final String UTGATT_KRAV_TAG = "Utgatt krav";
 
     @Operation(summary = "Get All Risikoscenario")
     @ApiResponse(description = "ok")
@@ -175,9 +184,8 @@ public class RisikoscenarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id) {
         log.info("Delete Risikoscenario id={}", id);
-        List<UUID> tiltakIds = risikoscenarioService.getTiltak(id);
         Risikoscenario risikoscenario;
-        if (!tiltakIds.isEmpty()) {
+        if (!risikoscenarioService.getTiltak(id).isEmpty()) {
             log.warn("Could not delete Risikoscenario with id = {}: Risikoscenario is related to one or more Tiltak", id);
             throw new ValidationException("Could not delete Risikoscenario: Risikoscenario is related to one or more Tiltak");
         } else {
@@ -283,7 +291,7 @@ public class RisikoscenarioController {
         log.info("Get approved Risikoscneario by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
         PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
         if (approvedPvkDokument != null) {
-            List<Risikoscenario> risikoscenarioList = risikoscenarioService.getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(pvkDokumentId, timestamp);
+            List<Risikoscenario> risikoscenarioList = risikoscenarioService.getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(timestamp));
             List<RisikoscenarioResponse> risikoscenarioResponseList = risikoscenarioList.stream().map(RisikoscenarioResponse::buildFrom).toList();
             risikoscenarioResponseList.forEach(r -> setApprovedTiltakAndKravDataForRelevantKravList(r, timestamp));
             return ResponseEntity.ok(risikoscenarioResponseList);
@@ -311,7 +319,7 @@ public class RisikoscenarioController {
         risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
             List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
             if (kravList.isEmpty()) {
-                kravShort.setNavn("Utgatt krav");
+                kravShort.setNavn(UTGATT_KRAV_TAG);
             } else {
                 try {
                     RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
@@ -325,7 +333,7 @@ public class RisikoscenarioController {
             }
         });
 
-        List<KravReference> filteredKravReference = risikoscenario.getRelevanteKravNummer().stream().filter(kravReference -> !Objects.equals(kravReference.getNavn(), "Utgatt krav")).toList();
+        List<KravReference> filteredKravReference = risikoscenario.getRelevanteKravNummer().stream().filter(kravReference -> !Objects.equals(kravReference.getNavn(), UTGATT_KRAV_TAG)).toList();
         risikoscenario.setRelevanteKravNummer(filteredKravReference);
     }
 

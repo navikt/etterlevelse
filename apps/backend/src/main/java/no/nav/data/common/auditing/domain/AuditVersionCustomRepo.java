@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -67,8 +68,8 @@ public class AuditVersionCustomRepo {
     }
 
     @Transactional
-    public List<AuditVersion> findLatestByTableIdAndTimeStamp(String tableId, String timestamps) {
-        String query = "select audit_id as id from audit_version where table_id = :tableId and time <= :timestamps::timestamp order by time desc limit 1";
+    public List<AuditVersion> findLatestByTableIdAndTimeStamp(String tableId, LocalDateTime timestamps) {
+        String query = "select audit_id as id from audit_version where table_id = :tableId and time <= :timestamps order by time desc limit 1";
         var par = new MapSqlParameterSource();
 
         par.addValue("tableId", tableId);
@@ -77,8 +78,7 @@ public class AuditVersionCustomRepo {
         return fetch(jdbcTemplate.queryForList(query, par));
     }
 
-    @Transactional
-    public List<AuditVersion> findByTableNameFkFieldAndTimeStamp(String tableName, String fkField, String fkValue, String timestamps) {
+    public List<AuditVersion> findByTableNameAndFieldNameAndFieldValueAndTimestamp(String tableName, String fieldName, String fieldValue, LocalDateTime timestamps) {
         String query = """
                 WITH ranked AS (
                     SELECT
@@ -90,8 +90,8 @@ public class AuditVersionCustomRepo {
                         ) AS table_rank
                     FROM audit_version
                     WHERE table_name IN (:tableName)
-                      AND data ->> :fkField = :fkValue
-                      AND time <= :timestamp
+                      AND data ->> :fieldName = :fieldValue
+                      AND time <= :timestamps
                 )
                 SELECT *
                 FROM ranked
@@ -101,8 +101,8 @@ public class AuditVersionCustomRepo {
         var par = new MapSqlParameterSource();
 
         par.addValue("tableName", tableName);
-        par.addValue("fkField", fkField);
-        par.addValue("fkValue", fkValue);
+        par.addValue("fieldName", fieldName);
+        par.addValue("fieldValue", fieldValue);
         par.addValue("timestamps", timestamps);
 
         return fetch(jdbcTemplate.queryForList(query, par));
@@ -110,7 +110,7 @@ public class AuditVersionCustomRepo {
 
 
     @Transactional
-    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String dokumentasjonId, String timestamps) {
+    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String dokumentasjonId, LocalDateTime timestamps) {
         String query = """
                 With query as (
                                    select * ,   RANK () OVER (
@@ -121,7 +121,7 @@ public class AuditVersionCustomRepo {
                                     from audit_version where 
                                     table_name= 'Etterlevelse' and 
                                     data -> 'data' ->> 'etterlevelseDokumentasjonId' = :dokumentasjonId and 
-                                    time <= :timestamps ::timestamp
+                                    time <= :timestamps
                                    )
                                     Select * from query where table_rank = 1;             
                 """;
