@@ -82,8 +82,14 @@ public class AuditVersionCustomRepo {
         String query = """
                 WITH ranked AS (
                     SELECT
-                        *,
+                        audit_id,
                         action,
+                        table_name,
+                        table_id,
+                        user_id,
+                        time,
+                        version,
+                        data,
                         RANK() OVER (
                             PARTITION BY table_id
                             ORDER BY time DESC
@@ -96,7 +102,7 @@ public class AuditVersionCustomRepo {
                 SELECT *
                 FROM ranked
                 WHERE table_rank = 1
-                AND action <> 'DELETE'
+                AND ranked.action <> 'DELETE'
                 """;
         var par = new MapSqlParameterSource();
 
