@@ -109,7 +109,7 @@ public class TiltakService {
     }
 
     public List<Tiltak> getApprovedTiltakPvkDokumentByIdAndTimestamp(String pvkDokumentId, LocalDateTime timestamp) {
-        List<AuditVersion> auditTiltak = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp("TILTAK", "pvkDokumentId", pvkDokumentId, timestamp);
+        List<AuditVersion> auditTiltak = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp(Tiltak.TABLENAME, "pvkDokumentId", pvkDokumentId, timestamp);
         List<Tiltak> tiltakList = new ArrayList<>();
 
         auditTiltak.forEach(audit -> {

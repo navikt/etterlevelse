@@ -2,8 +2,17 @@ package no.nav.data.pvk.pvotilbakemelding.domain;
 
 
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
 import org.hibernate.annotations.Type;
 
@@ -15,7 +24,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "PVO_TILBAKEMELDING")
+@Table(name = PvoTilbakemelding.TABLENAME)
 public class PvoTilbakemelding extends Auditable {
 
     @Id
@@ -35,5 +44,7 @@ public class PvoTilbakemelding extends Auditable {
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private PvoTilbakemeldingData pvoTilbakemeldingData = new PvoTilbakemeldingData();
+
+    public static final String TABLENAME = "PVO_TILBAKEMELDING";
 }
 

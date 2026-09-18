@@ -21,7 +21,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TILTAK")
+@Table(name = Tiltak.TABLENAME)
 public class Tiltak extends Auditable {
     
     @Id
@@ -36,5 +36,6 @@ public class Tiltak extends Auditable {
     @Builder.Default
     @Column(name = "DATA", nullable = false)
     private TiltakData tiltakData = new TiltakData();
-    
+
+    public static final String TABLENAME = "TILTAK";
 }

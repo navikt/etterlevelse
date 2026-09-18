@@ -146,7 +146,7 @@ public class RisikoscenarioService {
     }
 
     public List<Risikoscenario> getApprovedRisikoscenarioPvkDokumentByIdAndTimestamp(String pvkDokumentId, LocalDateTime timestamp) {
-        List<AuditVersion> auditRisikoscenario = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp("RISIKOSCENARIO", "pvkDokumentId", pvkDokumentId, timestamp);
+        List<AuditVersion> auditRisikoscenario = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp(Risikoscenario.TABLENAME, "pvkDokumentId", pvkDokumentId, timestamp);
         List<Risikoscenario> risikoscenarioList = new ArrayList<>();
 
         auditRisikoscenario.forEach(audit -> {
