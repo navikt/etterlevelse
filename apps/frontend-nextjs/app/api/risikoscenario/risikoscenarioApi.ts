@@ -75,7 +75,7 @@ export const useLastApprovedRisikoscenarioByPvkDokumentId = (
     ;(async () => {
       await getApprovedRisikoscenarioByPvkDokumentIdAndTimestamp(
         pvkDokument.id,
-        pvkDokument.godkjentAvRisikoeierDato
+        pvkDokument.changeStamp.lastModifiedDate
       ).then(async (risikoscenarioer: IRisikoscenario[]) => {
         const alleRisikoscenario: IRisikoscenario[] = []
 

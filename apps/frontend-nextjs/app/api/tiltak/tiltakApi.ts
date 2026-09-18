@@ -96,7 +96,7 @@ export const useLastApprovedTiltakByPvkDokumentId = (pvkDokument: IPvkDokument) 
     ;(async () => {
       await getApprovedTiltakByPvkDokumentIdAndTimestamp(
         pvkDokument.id,
-        pvkDokument.godkjentAvRisikoeierDato
+        pvkDokument.changeStamp.lastModifiedDate
       ).then(async (response: ITiltak[]) => {
         const alleTiltak: ITiltak[] = []
 
