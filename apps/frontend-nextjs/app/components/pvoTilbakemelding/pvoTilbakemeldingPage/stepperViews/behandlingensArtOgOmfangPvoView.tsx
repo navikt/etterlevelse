@@ -32,7 +32,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
+const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
   personkategorier,
   pvkDokument,
   etterlevelseDokumentasjon,

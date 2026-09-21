@@ -85,7 +85,7 @@ type TProps = {
   isInheritingFrom: boolean
 }
 
-export const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
+const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   isInheritingFrom,
 }) => {

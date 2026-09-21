@@ -31,7 +31,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
+const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   personkategorier,
   databehandlere,
